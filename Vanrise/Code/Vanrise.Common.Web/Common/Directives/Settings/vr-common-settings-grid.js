@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonSettingsGrid", ["UtilsService", "VRNotificationService", "VRCommon_SettingsAPIService", "VRCommon_SettingsService",
-function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCommon_SettingsService) {
+app.directive("vrCommonSettingsGrid", ["UtilsService", "VRNotificationService", "VRCommon_SettingsAPIService", "VRCommon_SettingsService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCommon_SettingsService, VRUIUtilsService) {
     var directiveDefinitionObject = {
 
         restrict: "E",
@@ -25,6 +25,7 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
     function SettingsGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -32,7 +33,8 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
             $scope.settings = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+                var drillDownDefinitions = VRCommon_SettingsService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -47,7 +49,11 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_SettingsAPIService.GetFilteredSettings(dataRetrievalInput)
                     .then(function (response) {
-
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -95,6 +101,7 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
 
         function editSettings(settings) {
             var onSettingsUpdated = function (settingsObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(settingsObj);
                 gridAPI.itemUpdated(settingsObj);
             };
             VRCommon_SettingsService.editSettings(settings.Entity.SettingId, onSettingsUpdated);

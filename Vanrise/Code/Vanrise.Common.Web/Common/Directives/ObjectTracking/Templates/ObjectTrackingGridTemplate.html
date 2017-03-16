@@ -3,7 +3,9 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.VRObjectTrackingId">
+             idfield="Entity.VRObjectTrackingId"
+             defaultsortbyfieldname="'Entity.Time'"
+             defaultsortdirection="'DESC'">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.VRObjectTrackingId'" fixedwidth="60"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Time'" field="'Entity.Time'" type="'LongDatetime'" fixedwidth="120"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'User Name'" field="'UserName'" type="'Text'"></vr-datagridcolumn>

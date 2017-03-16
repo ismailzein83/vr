@@ -39,8 +39,8 @@ namespace Vanrise.Common.Business
         }
         public VRLoggableEntity GetLoggableEntity(string uniqueName)
         {
-            var vrLoggableEntities = GetCachedvrLoggableEntities();
-            return vrLoggableEntities.FindRecord(x=>x.UniqueName == uniqueName);
+            var vrLoggableEntities = GetCachedvrLoggableEntitiesByUniqueName();
+            return vrLoggableEntities.GetRecord(uniqueName);
         }
           private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -65,7 +65,16 @@ namespace Vanrise.Common.Business
                   return loggableEntities.ToDictionary(a => a.VRLoggableEntityId, a => a);
               });
         }
-
+          private Dictionary<string, VRLoggableEntity> GetCachedvrLoggableEntitiesByUniqueName()
+          {
+              return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedLoggableEntitiesByUniqueName",
+                () =>
+                {
+                    IVRLoggableEntityDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLoggableEntityDataManager>();
+                    IEnumerable<VRLoggableEntity> loggableEntities = dataManager.GetAll();
+                    return loggableEntities.ToDictionary(a => a.UniqueName, a => a);
+                });
+          }
         private void LoadAllLoggableEntities()
         {
             IVRLoggableEntityDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLoggableEntityDataManager>();

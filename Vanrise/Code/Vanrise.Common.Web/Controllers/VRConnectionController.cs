@@ -27,7 +27,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetVRConnection")]
         public VRConnection GetVRConnection(Guid vrConnectionId)
         {
-            return _manager.GetVRConnection(vrConnectionId);
+            return _manager.GetVRConnection(vrConnectionId,true);
         }
 
         [HttpPost]

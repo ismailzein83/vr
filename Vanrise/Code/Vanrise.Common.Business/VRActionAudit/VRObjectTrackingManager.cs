@@ -24,14 +24,14 @@ namespace Vanrise.Common.Business
             return s_dataManager.Insert(userId, loggableEntityId, objectId, obj, actionId, actionDescription);
         }
 
-        public IDataRetrievalResult<VRObjectTrackingMetaDataDetail> GetFilteredObjectTracking(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQeury> input)
+        public IDataRetrievalResult<VRObjectTrackingMetaDataDetail> GetFilteredObjectTracking(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQuery> input)
         {
            return BigDataManager.Instance.RetrieveData(input, new VRObjectTrackingHandler());
             
         }
 
 
-        private class VRObjectTrackingHandler : BigDataRequestHandler<VRLoggableEntityQeury, VRObjectTrackingMetaData, VRObjectTrackingMetaDataDetail>
+        private class VRObjectTrackingHandler : BigDataRequestHandler<VRLoggableEntityQuery, VRObjectTrackingMetaData, VRObjectTrackingMetaDataDetail>
         {
             public override VRObjectTrackingMetaDataDetail EntityDetailMapper(VRObjectTrackingMetaData entity)
             {
@@ -39,7 +39,7 @@ namespace Vanrise.Common.Business
                 return manager.VRObjectTrackingDetailMapper(entity);
             }
 
-            public override IEnumerable<VRObjectTrackingMetaData> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQeury> input)
+            public override IEnumerable<VRObjectTrackingMetaData> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQuery> input)
             {
                 IVRObjectTrackingDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRObjectTrackingDataManager>();
                 VRLoggableEntityManager manager = new VRLoggableEntityManager();

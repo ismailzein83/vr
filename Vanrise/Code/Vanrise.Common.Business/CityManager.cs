@@ -25,7 +25,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelHandler = new CityExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(CityLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper), handler);
         }
 
@@ -39,11 +39,18 @@ namespace Vanrise.Common.Business
             return this.GetCachedCities().MapRecords(city => city.CountryId, city => cityIds.Contains(city.CityId)).Distinct();
         }
 
-    
-        public City GetCity(int cityId)
+        public City GetCity(int cityId, bool isViewedFromUI)
         {
             var cities = GetCachedCities();
-            return cities.GetRecord(cityId);
+            var city= cities.GetRecord(cityId);
+            if (city != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(CityLoggableEntity.Instance, city);
+            return city;
+        }
+        public City GetCity(int cityId)
+        {
+            
+            return GetCity(cityId,false);
         }
 
         public Vanrise.Entities.InsertOperationOutput<CityDetail> AddCity(City city)
@@ -59,9 +66,10 @@ namespace Vanrise.Common.Business
             bool insertActionSucc = dataManager.Insert(city, out cityId);
             if (insertActionSucc)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 city.CityId = cityId;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(CityLoggableEntity.Instance, city);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = CityDetailMapper(city);
             }
             else
@@ -85,6 +93,7 @@ namespace Vanrise.Common.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(CityLoggableEntity.Instance, city);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = CityDetailMapper(city);
             }
@@ -149,6 +158,49 @@ namespace Vanrise.Common.Business
             }
         }
 
+        private class CityLoggableEntity : VRLoggableEntityBase
+        {
+            public static CityLoggableEntity Instance = new CityLoggableEntity();
+
+            private CityLoggableEntity()
+            {
+
+            }
+
+            static CityManager s_cityManager = new CityManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_City"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "City"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_City_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                City city = context.Object.CastWithValidate<City>("context.Object");
+                return city.CityId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                City city = context.Object.CastWithValidate<City>("context.Object");
+                return s_cityManager.GetCityName(city.CityId);
+            }
+        }
         #endregion
 
         #region Private Methods

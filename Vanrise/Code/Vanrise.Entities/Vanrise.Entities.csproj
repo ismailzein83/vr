@@ -76,7 +76,7 @@
     <Compile Include="VRActionAudit\VRActionAuditLKUPInfo.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPType.cs" />
     <Compile Include="VRActionAudit\VRLoggableEntityBase.cs" />
-    <Compile Include="VRActionAudit\VRLoggableEntityQeury.cs" />
+    <Compile Include="VRActionAudit\VRLoggableEntityQuery.cs" />
     <Compile Include="VRActionAudit\VRObjectTracking.cs" />
     <Compile Include="VRActionAudit\VRObjectTrackingMetaDataDetail.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibility.cs" />

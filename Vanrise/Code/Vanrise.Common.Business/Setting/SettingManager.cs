@@ -45,10 +45,17 @@ namespace Vanrise.Common.Business
 
                 return true;
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SettingLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allSettings.ToBigResult(input, filterExpression, SettingDetailMapper));
         }
+        public string GetSettingName(Setting setting)
+        {
 
+            if (setting != null)
+                return setting.Name;
+            else
+                return null;
+        }
         public UpdateOperationOutput<SettingDetail> UpdateSetting(Setting setting)
         {
             if (setting.IsTechnical && !HasUpdateTechnicalSettings())
@@ -65,6 +72,7 @@ namespace Vanrise.Common.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SettingLoggableEntity.Instance, setting);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SettingDetailMapper(setting);
             }
@@ -81,15 +89,22 @@ namespace Vanrise.Common.Business
             return allSettings.Select(itm => itm.Value.Category).Distinct().ToList();
         }
 
-        public Setting GetSetting(Guid settingId)
+        public Setting GetSetting(Guid settingId, bool isViewedFromUI)
         {
             var allSettings = GetCachedSettings();
             var setting  =  allSettings.GetRecord(settingId);
             if (setting.IsTechnical && !HasGetTechnicalSettings())
                 throw new UnauthorizedAccessException();
+            if (setting != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(SettingLoggableEntity.Instance, setting);
             return setting;
         }
 
+        public Setting GetSetting(Guid settingId)
+        {
+           
+            return GetSetting(settingId,false);
+        }
         public Setting GetSettingByType(string type)
         {
             var allSettings = GetCachedSettings();
@@ -166,6 +181,50 @@ namespace Vanrise.Common.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreSettingsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class SettingLoggableEntity : VRLoggableEntityBase
+        {
+            public static SettingLoggableEntity Instance = new SettingLoggableEntity();
+
+            private SettingLoggableEntity()
+            {
+
+            }
+
+            static SettingManager s_settingManager = new SettingManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_Setting"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Setting"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_Setting_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Setting setting = context.Object.CastWithValidate<Setting>("context.Object");
+                return setting.SettingId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Setting setting = context.Object.CastWithValidate<Setting>("context.Object");
+                return s_settingManager.GetSettingName(setting);
             }
         }
     }

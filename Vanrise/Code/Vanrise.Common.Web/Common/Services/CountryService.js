@@ -1,13 +1,14 @@
 ﻿
-app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService', 'UtilsService','VRCommon_ObjectTrackingService',
+    function (VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
         return ({
             editCountry: editCountry,
             addCountry: addCountry,
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
-            uploadCountrires: uploadCountrires
+            uploadCountrires: uploadCountrires,
+            registerObjectTrackingDrillDownToCountry: registerObjectTrackingDrillDownToCountry
 
         });
         function editCountry(countryId, onCountryUpdated) {
@@ -45,6 +46,32 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryUploader.html', parameters, settings);
         }
 
+        function getEntityUniqueName() {
+            return "VR_Common_Country";
+        }
+
+        function registerObjectTrackingDrillDownToCountry() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI,countryItem) {
+               
+                countryItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: countryItem.Entity.CountryId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return countryItem.objectTrackingGridAPI.load(query);
+            };
+
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }

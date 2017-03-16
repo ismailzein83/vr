@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-   public class VRLoggableEntityQeury
+   public class VRLoggableEntityQuery
     {
         public string EntityUniqueName { get; set; }
         public string ObjectId { get; set; }

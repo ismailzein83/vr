@@ -42,7 +42,7 @@ namespace Vanrise.Common.Web.Controllers
         public City GetCity(int cityId)
         {
             CityManager manager = new CityManager();
-            return manager.GetCity(cityId);
+            return manager.GetCity(cityId,true);
         }
 
         [HttpPost]

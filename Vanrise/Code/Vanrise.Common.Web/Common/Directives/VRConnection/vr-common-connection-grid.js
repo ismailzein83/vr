@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonConnectionGrid', ['VRCommon_VRConnectionAPIService', 'VRCommon_VRConnectionService', 'VRNotificationService',
-    function (VRCommon_VRConnectionAPIService, VRCommon_VRConnectionService, VRNotificationService) {
+app.directive('vrCommonConnectionGrid', ['VRCommon_VRConnectionAPIService', 'VRCommon_VRConnectionService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VRCommon_VRConnectionAPIService, VRCommon_VRConnectionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrCommonConnectionGrid', ['VRCommon_VRConnectionAPIService', 'VRC
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.scopeModel = {};
@@ -30,11 +30,18 @@ app.directive('vrCommonConnectionGrid', ['VRCommon_VRConnectionAPIService', 'VRC
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRConnectionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRConnectionAPIService.GetFilteredVRConnections(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -52,6 +59,7 @@ app.directive('vrCommonConnectionGrid', ['VRCommon_VRConnectionAPIService', 'VRC
                 };
 
                 api.onVRConnectionAdded = function (addedVRConnection) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRConnection);
                     gridAPI.itemAdded(addedVRConnection);
                 };
 
@@ -69,6 +77,7 @@ app.directive('vrCommonConnectionGrid', ['VRCommon_VRConnectionAPIService', 'VRC
 
             function editVRConnection(vrConnectionItem) {
                 var onVRConnectionUpdated = function (updatedVRConnection) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedVRConnection);
                     gridAPI.itemUpdated(updatedVRConnection);
                 };
 

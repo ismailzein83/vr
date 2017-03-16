@@ -40,7 +40,7 @@ namespace Vanrise.Common.Web.Controllers
 		public Country GetCountry(int countryId)
 		{
 			CountryManager manager = new CountryManager();
-			return manager.GetCountry(countryId);
+			return manager.GetCountry(countryId,true);
 		}
 
 		[HttpPost]

@@ -25,18 +25,34 @@ namespace Vanrise.Common.Business
                     return false;
                 return true;
             };
+            VRActionLogger.Current.LogGetFilteredAction(VRConnectionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRConnections.ToBigResult(input, filterExpression, VRConnectionDetailMapper));
         }
 
-        public VRConnection GetVRConnection(Guid vrConnectionId)
+        public VRConnection GetVRConnection(Guid vrConnectionId, bool isViewedFromUI)
         {
             var vrConnections = GetCachedVRConnections();
             if (vrConnections == null)
                 return null;
-
-            return vrConnections.GetRecord(vrConnectionId);
+           var vrConnection=vrConnections.GetRecord(vrConnectionId);
+           if (vrConnection != null && isViewedFromUI)
+               VRActionLogger.Current.LogObjectViewed(VRConnectionLoggableEntity.Instance, vrConnection);
+           return vrConnection;
         }
 
+        public VRConnection GetVRConnection(Guid vrConnectionId)
+        {
+          
+            return  GetVRConnection(vrConnectionId,false);
+        }
+        public string GetVRConnectionName(VRConnection VRConnection)
+        {
+
+            if (VRConnection != null)
+                return VRConnection.Name;
+            else
+                return null;
+        }
         public VRConnection GetVRConnection<T>(Guid vrConnectionId) where T : VRConnectionSettings
         {
             VRConnection vrConnection = GetVRConnection(vrConnectionId);
@@ -119,6 +135,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(componentType))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRConnectionLoggableEntity.Instance, componentType);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRConnectionDetailMapper(componentType);
             }
@@ -142,6 +159,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(componentType))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRConnectionLoggableEntity.Instance, componentType);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRConnectionDetailMapper(this.GetVRConnection(componentType.VRConnectionId));
             }
@@ -176,6 +194,49 @@ namespace Vanrise.Common.Business
             }
         }
 
+        private class VRConnectionLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRConnectionLoggableEntity Instance = new VRConnectionLoggableEntity();
+
+            private VRConnectionLoggableEntity()
+            {
+
+            }
+
+            static VRConnectionManager s_connectionManager = new VRConnectionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_Connection"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Connection"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_Connection_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRConnection connection = context.Object.CastWithValidate<VRConnection>("context.Object");
+                return connection.VRConnectionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRConnection connection = context.Object.CastWithValidate<VRConnection>("context.Object");
+                return s_connectionManager.GetVRConnectionName(connection);
+            }
+        }
         private VRConnectionInfo VRConnectionInfoMapper(VRConnection vrConnection)
         {
             return new VRConnectionInfo()

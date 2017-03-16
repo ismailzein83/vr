@@ -15,7 +15,7 @@ namespace Vanrise.Common.Web.Controllers
     {
         [HttpPost]
         [Route("GetFilteredObjectTracking")]
-        public object GetFilteredObjectTracking(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQeury> input)
+        public object GetFilteredObjectTracking(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQuery> input)
         {
             VRObjectTrackingManager manager = new VRObjectTrackingManager();
             return GetWebResponse(input, manager.GetFilteredObjectTracking(input));

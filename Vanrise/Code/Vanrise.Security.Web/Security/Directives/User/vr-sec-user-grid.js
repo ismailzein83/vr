@@ -55,6 +55,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                         };
 
                         directiveAPI.onUserAdded = function (userObject) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(userObject);
                             gridAPI.itemAdded(userObject);
                         };
 

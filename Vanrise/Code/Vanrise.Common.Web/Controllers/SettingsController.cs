@@ -43,7 +43,7 @@ namespace Vanrise.Common.Web.Controllers
             SettingManager manager = new SettingManager();
             try
             {
-                return manager.GetSetting(settingId);
+                return manager.GetSetting(settingId,true);
             }
             catch (UnauthorizedAccessException ex)
             {

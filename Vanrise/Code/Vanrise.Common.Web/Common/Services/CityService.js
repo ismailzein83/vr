@@ -1,11 +1,13 @@
 ﻿
-app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService','VRCommon_CountryService', 'VRCommon_CityAPIService',
-    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService) {
+app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService', 'VRCommon_CityAPIService', 'VRCommon_ObjectTrackingService',
+    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
         return ({
             editCity: editCity,
             addCity: addCity,
-            registerDrillDownToCountry: registerDrillDownToCountry
+            registerDrillDownToCountry: registerDrillDownToCountry,
+            registerObjectTrackingDrillDownToCity: registerObjectTrackingDrillDownToCity,
+            getDrillDownDefinition: getDrillDownDefinition
         });
         function editCity(cityId, onCityUpdated) {
             var settings = {
@@ -34,7 +36,39 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }
+        function getEntityUniqueName() {
+            return "VR_Common_City";
+        }
 
+        function registerObjectTrackingDrillDownToCity() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, cityItem) {
+
+                cityItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: cityItem.Entity.CityId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return cityItem.objectTrackingGridAPI.load(query);
+            };
+
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
         function registerDrillDownToCountry() {
             var drillDownDefinition = {};
 

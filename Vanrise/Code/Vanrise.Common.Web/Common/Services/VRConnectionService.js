@@ -3,10 +3,10 @@
 
     "use strict";
 
-    VRConnectionService.$inject = ['VRModalService'];
+    VRConnectionService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function VRConnectionService(VRModalService) {
-
+    function VRConnectionService(VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         function addVRConnection(onVRConnectionAdded) {
             var settings = {};
             var parameters = {
@@ -29,11 +29,44 @@
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRConnection/VRConnectionEditor.html', parameters, settings);
         }
+        function getEntityUniqueName() {
+            return "VR_Common_Connection";
+        }
+        function registerObjectTrackingDrillDownToConnection() {
+            var drillDownDefinition = {};
 
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, connectionItem) {
+
+                connectionItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: connectionItem.Entity.VRConnectionId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return connectionItem.objectTrackingGridAPI.load(query);
+            };
+
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
 
         return {
             addVRConnection: addVRConnection,
-            editVRConnection: editVRConnection
+            editVRConnection: editVRConnection,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToConnection: registerObjectTrackingDrillDownToConnection
         };
     }
 

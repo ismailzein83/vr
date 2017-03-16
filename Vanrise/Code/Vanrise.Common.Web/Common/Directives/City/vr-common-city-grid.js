@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
     function CityGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -34,7 +35,8 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
             $scope.onGridReady = function (api) {
              
                 gridAPI = api;
-
+                var drillDownDefinitions = VRCommon_CityService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -44,6 +46,7 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onCityAdded = function (cityObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(cityObject);
                         gridAPI.itemAdded(cityObject);
                     };
                     return directiveAPI;
@@ -52,6 +55,11 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_CityAPIService.GetFilteredCities(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -75,6 +83,7 @@ function (UtilsService, VRNotificationService, VRCommon_CityAPIService, VRCommon
 
         function editCity(cityObj) {
             var onCityUpdated = function (cityObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(cityObj);
                 gridAPI.itemUpdated(cityObj);
             };
 

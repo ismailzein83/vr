@@ -27,6 +27,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelHandler = new CountryExcelExportHandler()
             };
+            VRActionLogger.Current.LogGetFilteredAction(CountryLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper), handler);
         }
 
@@ -78,12 +79,21 @@ namespace Vanrise.Common.Business
             return allCountries.Values;
         }
 
-        public Country GetCountry(int countryId)
+       
+
+        public Country GetCountry(int countryId, bool isViewedFromUI)
         {
             var countries = GetCachedCountries();
-            return countries.GetRecord(countryId);
+            var country = countries.GetRecord(countryId);
+            if (country != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(CountryLoggableEntity.Instance, country);
+            return country;
         }
-
+        public Country GetCountry(int countryId)
+        {
+           
+            return  GetCountry (countryId,false);
+        }
         public string GetCountryName(int countryId)
         {
             var country = GetCountry(countryId);
@@ -241,6 +251,7 @@ namespace Vanrise.Common.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(CountryLoggableEntity.Instance, country);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = CountryDetailMapper(country);
             }
@@ -285,6 +296,7 @@ namespace Vanrise.Common.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(CountryLoggableEntity.Instance, country);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = CountryDetailMapper(country);
             }
@@ -382,6 +394,50 @@ namespace Vanrise.Common.Business
                     }
                 }
                 context.MainSheet = sheet;
+            }
+        }
+
+        private class CountryLoggableEntity : VRLoggableEntityBase
+        {
+            public static CountryLoggableEntity Instance = new CountryLoggableEntity();
+
+            private CountryLoggableEntity()
+            {
+
+            }
+
+            static CountryManager s_countryManager = new CountryManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_Country"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Country"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_Country_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Country country = context.Object.CastWithValidate<Country>("context.Object");
+                return country.CountryId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Country country = context.Object.CastWithValidate<Country>("context.Object");
+                return s_countryManager.GetCountryName(country.CountryId);
             }
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
