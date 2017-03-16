@@ -54,7 +54,7 @@
 
     <add key="QM_BE_DBConnStringKey"                            value="ConfigurationDBConnString"/>
     <add key="QM_CLITester_DBConnStringKey"                     value="ConfigurationDBConnString"/>
-
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="BIDBConnStringKey"                                value="ConfigurationDBConnString" />
 
     <add key="BICubeName" value="Quality Measurement BI" />
