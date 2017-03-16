@@ -74,7 +74,7 @@
 
         function getGroupTemplate(attrs) {           
 
-            return '<vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="Group Members" ismultipleselection isrequired="true"></vr-sec-user-selector>';
+            return '<vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="Group Members" ismultipleselection ></vr-sec-user-selector>';
         }
 
         return directiveDefinitionObject;
