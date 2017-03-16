@@ -209,7 +209,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     expendableColumn: col.expendableColumn,
                     expendableColumnTitle: col.expendableColumnTitle,
                     expendableColumnDescription: col.expendableColumnDescription,
-                    fixedWidth: col.fixedWidth
+                    fixedWidth: col.fixedWidth,
+                    invisibleHeader: col.invisibleheader,
 
 
                 };

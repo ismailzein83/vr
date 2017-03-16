@@ -32,7 +32,7 @@
         </div>
         <div ng-style="{'display':'inline-flex', 'width': ctrl.dataColumnsSectionWidth}" ng-class="ctrl.isDraggableColumns?'dragcol':''" ng-sortable="ctrl.headerSortableListener">
             <div ng-repeat="colDef in ctrl.columnDefs" ng-hide="colDef.isHidden" ng-style="{'width': colDef.width, 'display':'inline-block'}">
-                <vr-datagridcell htmltemplate='colDef.headerCellTemplate'></vr-datagridcell>
+                <vr-datagridcell htmltemplate='colDef.headerCellTemplate' ng-hide="colDef.invisibleHeader"></vr-datagridcell>
             </div>
         </div>
         <div ng-if="!ctrl.isMainItemsShown" ng-style="{'width': $parent.ctrl.actionTypeColumnWidth, 'display':'inline-flex'}">
