@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService, Qm_BE_ZoneS
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                    
                     return directiveAPI;

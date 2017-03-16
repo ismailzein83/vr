@@ -61,7 +61,7 @@ app.directive("qmBeSourcezonereaderTonev1", [function () {
                     $scope.connectionString = payload.connectionString;
                     $scope.zoneNames = payload.zoneNames;
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

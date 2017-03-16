@@ -15,7 +15,7 @@
 
                 $scope.chartSelectedEntityReady = function (api) {
                     chartApi = api;
-                }
+                };
 
                 function loadCharts() {
                     var groupKeys = [];

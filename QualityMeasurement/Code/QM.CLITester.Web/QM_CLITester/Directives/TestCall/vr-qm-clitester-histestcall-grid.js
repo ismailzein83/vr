@@ -72,7 +72,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             var onSendTestCall = function (testCallObj) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(testCallObj);
                 gridAPI.itemUpdated(testCallObj);
-            }
+            };
 
             var source = "";
             var destination = "";

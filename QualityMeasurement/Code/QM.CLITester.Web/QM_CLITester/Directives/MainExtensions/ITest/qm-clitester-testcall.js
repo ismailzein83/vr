@@ -57,26 +57,26 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
                 profileReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onZoneDirectiveReady = function (api) {
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveAPI = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCountrySelectionChanged = function () {
                 var countries = countryDirectiveAPI.getSelectedIds();
-              
+
                 var setLoader = function (value) { $scope.isLoadingZoneSelector = value };
                 var payload;
                 if (countries != undefined && countries.length > 0)
@@ -84,17 +84,17 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                         filter: {
                             CountryId: countries
                         }
-                    }
+                    };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
-            }
+            };
 
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-            }
+            };
 
 
             defineAPI();
@@ -161,7 +161,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                         if (payload != undefined && payload.data != undefined)
                             directivePayload = {
                                 selectedIds: payload.data.CountryIds
-                            }
+                            };
                         VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
                     });
 
@@ -178,7 +178,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                              filter: {
                                  CountryId: payload.data.CountryIds
                              }
-                         }
+                         };
                          if (payload.data != undefined)
                              directivePayload.selectedIds = payload.data.ZoneIds;
 

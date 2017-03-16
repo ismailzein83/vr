@@ -14,7 +14,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
-            }
+            };
 
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)

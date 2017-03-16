@@ -21,11 +21,11 @@
             $scope.onCountryReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
-               
-            }
+                gridAPI = api;
+
+            };
           
         }
         function load() {

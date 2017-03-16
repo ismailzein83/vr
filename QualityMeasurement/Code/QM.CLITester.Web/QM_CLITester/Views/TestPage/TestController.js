@@ -41,27 +41,27 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid();
-            }
+            };
 
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
                 profileReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onZoneDirectiveReady = function (api) {
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveAPI = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
 
             $scope.onCountrySelectItem = function (selectedItem) {
@@ -71,11 +71,11 @@
                         filter: {
                             CountryId: [selectedItem.CountryId]
                         }
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
                 }
-            }
+            };
         }
 
         function load() {

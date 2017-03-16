@@ -53,7 +53,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="LongName" datadisabledfield="IsDisabled" datavaluefield="ZoneId" '
         + required + ' label="Zones" datasource="ctrl.datasource" on-ready="ctrl.onBaseSelectorReady" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
-           + '</div>'
+           + '</div>';
     }
 
     function zoneCtor(ctrl, $scope, $attrs) {
@@ -65,13 +65,13 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
         function defineAPI() {
             ctrl.onBaseSelectorReady = function (api) {
                 baseApi = api;
-            }
+            };
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('ZoneId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
-                
+
                 var filter;
                 var selectedIds;
                 if (payload != undefined) {
@@ -87,7 +87,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
 
                 return getZonesInfo($attrs, ctrl, selectedIds, serializedFilter, baseApi);
 
-            }
+            };
             
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

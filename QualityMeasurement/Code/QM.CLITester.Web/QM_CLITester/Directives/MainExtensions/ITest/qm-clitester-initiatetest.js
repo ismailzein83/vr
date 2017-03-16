@@ -38,7 +38,7 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
                 sourceTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-            }
+            };
 
             defineAPI();
         }
@@ -59,12 +59,12 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
 
             api.load = function (payload) {
 
-                if (payload != undefined && payload.data != undefined ) 
+                if (payload != undefined && payload.data != undefined)
                     $scope.maximumRetryCount = payload.data.MaximumRetryCount;
-                
+
                 return Qm_CliTester_TestCallAPIService.GetTestTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
-                     var  sourceConfigId = payload.data.CLITestConnector.ConfigId;
+                        var sourceConfigId = payload.data.CLITestConnector.ConfigId;
                     angular.forEach(response, function (item) {
                         $scope.sourceTypeTemplates.push(item);
                     });
@@ -72,7 +72,7 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
                     if (sourceConfigId != undefined)
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
                 });
-            }
+            };
 
 
             if (ctrl.onReady != null)

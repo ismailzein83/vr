@@ -37,9 +37,9 @@
                 api.getData = function () {
                     var data = {
                         $type: "QM.CLITester.Entities.VRObjectTypes.TestResultObjectType, QM.CLITester.Entities"
-                    }
+                    };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

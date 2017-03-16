@@ -45,7 +45,7 @@ app.directive("demoServicesubtypeSms", [function () {
                 if (payload != undefined) {
                     $scope.connectionString = payload.connectionString;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

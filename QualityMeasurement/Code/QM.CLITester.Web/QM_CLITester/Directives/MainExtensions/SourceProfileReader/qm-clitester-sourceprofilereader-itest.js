@@ -49,7 +49,7 @@ app.directive("qmClitesterSourceprofilereaderItest", [function () {
                 if (payload != undefined) {
                     $scope.dummy = payload.Dummy;
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

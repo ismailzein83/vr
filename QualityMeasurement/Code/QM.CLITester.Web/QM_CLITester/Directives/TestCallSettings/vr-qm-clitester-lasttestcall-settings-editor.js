@@ -34,14 +34,14 @@ app.directive('vrQmClitesterLasttestcallSettingsEditor', ['UtilsService', 'VRUIU
                     if (payload != undefined && payload.data != undefined) {
                         ctrl.lastTestCall = payload.data.LastTestCall;
                     }
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: "QM.CLITester.Entities.LastTestCallsSettingsData, QM.CLITester.Entities",
                         LastTestCall: ctrl.lastTestCall
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

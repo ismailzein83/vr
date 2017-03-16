@@ -68,7 +68,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                 }
 
                 var loadSupplierSourcePromise = QM_BE_SupplierAPIService.GetSupplierSourceTemplates().then(function (response) {
-                    
+
                     angular.forEach(response, function (item) {
                         $scope.sourceTypeTemplates.push(item);
                     });
@@ -79,8 +79,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                 });
                 promises.push(loadSupplierSourcePromise);
 
-                if (sourceConfigId != undefined)
-                {
+                if (sourceConfigId != undefined) {
                     sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -98,9 +97,9 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
 
                     promises.push(loadSourceTemplatePromiseDeferred.promise);
                 }
-                
+
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

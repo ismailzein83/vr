@@ -55,11 +55,11 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTypeDirectiveAPI = api;
                 sourceDirectiveReadyPromiseDeferred.resolve();
-            }
-            $scope.onSourceCountryDirectiveReady = function (api) {                
+            };
+            $scope.onSourceCountryDirectiveReady = function (api) {
                 countrySourceTypeDirectiveAPI = api;
                 countrySourceDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
 
             var api = {};
 
@@ -68,7 +68,7 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                 if ($scope.selectedSourceTypeTemplate != undefined) {
                     if (sourceTypeDirectiveAPI != undefined) {
                         schedulerTaskAction = {};
-                        schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
+                        schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business";
                         schedulerTaskAction.SourceZoneReader = sourceTypeDirectiveAPI.getData();
                         schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                         if (countrySourceTypeDirectiveAPI != undefined) {
@@ -112,11 +112,11 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                     });
                     promises.push(loadZoneSourceTemplatePromiseDeferred.promise);
                 }
-                
+
                 var loadCountrySourcePromiseDeferred = UtilsService.createPromiseDeferred();
                 countrySourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var obj ;
-                    if (payload != undefined && payload.data != undefined &&  payload.data.SourceCountryReader != undefined)
+                    var obj;
+                    if (payload != undefined && payload.data != undefined && payload.data.SourceCountryReader != undefined)
                         obj = {
                             connectionString: payload.data.SourceCountryReader.ConnectionString,
                             sourceConfigId: payload.data.SourceCountryReader.ConfigId
@@ -127,7 +127,7 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
 
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
 
             if (ctrl.onReady != null)

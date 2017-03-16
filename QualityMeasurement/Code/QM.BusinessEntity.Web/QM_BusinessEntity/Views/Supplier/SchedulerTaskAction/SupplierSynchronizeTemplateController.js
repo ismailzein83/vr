@@ -21,7 +21,7 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
             if ($scope.selectedSourceTypeTemplate != undefined) {
                 if (sourceTemplateDirectiveAPI != undefined) {
                     schedulerTaskAction = {};
-                    schedulerTaskAction.$type = "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business",
+                    schedulerTaskAction.$type = "QM.BusinessEntity.Business.SupplierSyncTaskActionArgument, QM.BusinessEntity.Business";
                     schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
                     schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                 }

@@ -14,7 +14,7 @@ function TestProgressTemplateController($scope, UtilsService, VRUIUtilsService, 
             sourceTypeDirectiveAPI = api;
             var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-        }
+        };
         $scope.schedulerTaskAction.getData = function () {
             var CLITestConnectorObj = sourceTypeDirectiveAPI.getData();
             CLITestConnectorObj.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;

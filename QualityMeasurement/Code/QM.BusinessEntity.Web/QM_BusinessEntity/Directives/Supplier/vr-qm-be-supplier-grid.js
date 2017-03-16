@@ -42,11 +42,11 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
                     directiveAPI.loadGrid = function (query) {
                         queryGrid = query;
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onSupplierAdded = function (supplierObject) {
                         gridAPI.itemAdded(supplierObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }

@@ -73,7 +73,7 @@ app.directive("vrQmClitesterProfilesettings", ['ProfileTypeEnum', 'UtilsService'
                     $scope.callTime = payload.CallTime;
                     $scope.ringTime = payload.RingTime;
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

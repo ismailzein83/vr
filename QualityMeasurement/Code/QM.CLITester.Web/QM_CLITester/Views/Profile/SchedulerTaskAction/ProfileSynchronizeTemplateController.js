@@ -15,7 +15,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
             loadForm();
-        }
+        };
 
         $scope.schedulerTaskAction.getData = function () {
             var sourceProfileReader;
@@ -41,7 +41,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
         }
 
         if (data.SourceProfileReader && sourceTypeDirectiveAPI != undefined) {
-            sourceTypeDirectiveAPI.load(data.SourceProfileReader)
+            sourceTypeDirectiveAPI.load(data.SourceProfileReader);
             isFormLoaded = true;
         }
         else {

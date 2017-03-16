@@ -42,15 +42,15 @@ function (UtilsService, VRNotificationService, QM_CLITester_ProfileAPIService, Q
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onProfileUpdated = function (profileObject) {
                         gridAPI.itemUpdated(profileObject);
-                    }
+                    };
 
                     directiveAPI.onProfileAdded = function (profileObject) {
                         gridAPI.itemAdded(profileObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }

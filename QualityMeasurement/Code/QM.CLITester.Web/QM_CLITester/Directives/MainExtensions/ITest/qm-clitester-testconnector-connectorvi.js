@@ -46,7 +46,7 @@ app.directive("qmClitesterTestconnectorConnectorvi", [function () {
             api.load = function (payload) {
                 if (payload != undefined) {
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)

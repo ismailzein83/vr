@@ -45,7 +45,7 @@
                 modalScope.title = "Upload Suppliers"
 
 
-            }
+            };
             var parameters = {};
 
 

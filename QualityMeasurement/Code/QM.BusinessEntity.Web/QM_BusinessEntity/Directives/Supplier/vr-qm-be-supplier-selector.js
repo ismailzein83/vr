@@ -45,7 +45,7 @@ function (QM_BE_SupplierAPIService, UtilsService, $compile, VRUIUtilsService) {
 
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+            multipleselection = "ismultipleselection";
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
@@ -53,7 +53,7 @@ function (QM_BE_SupplierAPIService, UtilsService, $compile, VRUIUtilsService) {
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierId" '
         + required + ' label="Suppliers" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
-           + '</div>'
+           + '</div>';
     }
 
     function supplierCtor(ctrl, $scope, $attrs) {
@@ -67,7 +67,7 @@ function (QM_BE_SupplierAPIService, UtilsService, $compile, VRUIUtilsService) {
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('SupplierId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -85,7 +85,7 @@ function (QM_BE_SupplierAPIService, UtilsService, $compile, VRUIUtilsService) {
 
                 });
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -97,7 +97,7 @@
             };
             supplier.Settings = {
                 Prefix: $scope.scopeModal.prefix
-            }
+            };
             return supplier;
         }
 

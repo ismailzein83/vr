@@ -16,19 +16,19 @@ function zoneSynchronizeTemplateController($scope, UtilsService, VRUIUtilsServic
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
             sourceDirectiveReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSourceCountryDirectiveReady = function (api) {
             countrySourceTypeDirectiveAPI = api;
             countrySourceDirectiveReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.schedulerTaskAction.getData = function () {
             var schedulerTaskAction;
             if ($scope.selectedSourceTypeTemplate != undefined) {
                 if (sourceTypeDirectiveAPI != undefined) {
                     schedulerTaskAction = {};
-                    schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business",
+                    schedulerTaskAction.$type = "QM.BusinessEntity.Business.ZoneSyncTaskActionArgument, QM.BusinessEntity.Business";
                     schedulerTaskAction.SourceZoneReader = sourceTypeDirectiveAPI.getData();
                     schedulerTaskAction.SourceZoneReader.ConfigId = $scope.selectedSourceTypeTemplate.ExtensionConfigurationId;
                     if(countrySourceTypeDirectiveAPI != undefined){

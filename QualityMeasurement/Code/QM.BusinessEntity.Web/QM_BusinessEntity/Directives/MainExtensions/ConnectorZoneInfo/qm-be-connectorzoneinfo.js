@@ -55,12 +55,12 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
                 profileReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
             defineAPI();
         }
 
@@ -135,7 +135,7 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                 //    if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
                 //         sourceConfigId = payload.data.CLITestConnector.ConfigId;
 
-                   
+
                 //    if (sourceConfigId != undefined)
                 //        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
 
@@ -147,7 +147,7 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
 
                 //promises.push(loadConnectorZone);
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

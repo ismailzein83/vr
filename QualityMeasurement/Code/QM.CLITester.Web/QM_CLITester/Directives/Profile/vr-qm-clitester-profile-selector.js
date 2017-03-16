@@ -52,7 +52,7 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ProfileId" '
         + required + ' label="Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
-           + '</div>'
+           + '</div>';
     }
 
     function profileCtor(ctrl, $scope, $attrs) {
@@ -65,7 +65,7 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
             var api = {};
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('ProfileId', $attrs, ctrl);
-            }
+            };
             api.load = function (payload) {
 
                 var selectedIds;
@@ -88,7 +88,7 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
 
                 });
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -42,7 +42,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
 
         $scope.loadMoreData = function () {
             return getData();
-        }
+        };
 
         var minId = undefined;
         function buildTestCallObj(dataItem) {

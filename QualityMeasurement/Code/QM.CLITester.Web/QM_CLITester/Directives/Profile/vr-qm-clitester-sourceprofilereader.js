@@ -47,7 +47,7 @@ app.directive("vrQmClitesterSourceprofilereader", ['UtilsService', 'VRUIUtilsSer
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTemplateDirectiveAPI = api;
                 sourceDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
             var api = {};
 
             api.getData = function () {
@@ -89,7 +89,7 @@ app.directive("vrQmClitesterSourceprofilereader", ['UtilsService', 'VRUIUtilsSer
 
                 promises.push(loadSourceTemplatePromiseDeferred.promise);
 
-            }
+            };
 
 
             if (ctrl.onReady != null)

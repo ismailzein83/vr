@@ -66,7 +66,7 @@
                     $scope.directiveTabs[j].directiveAPI.load(profileEntity.Settings.ExtendedSettings[j]);
                     j++;
                 });
-            })
+            });
 
             $scope.isLoading = false;
         }
@@ -93,7 +93,7 @@
             }
             profile.Settings = {
                 ExtendedSettings: extendedSetting
-            }
+            };
             return profile;
         }
 

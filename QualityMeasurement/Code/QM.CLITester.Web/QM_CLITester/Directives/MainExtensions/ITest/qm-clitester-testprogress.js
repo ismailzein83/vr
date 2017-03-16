@@ -37,7 +37,7 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
                 sourceTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-            }
+            };
 
             defineAPI();
         }
@@ -64,7 +64,7 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
                     $scope.maximumRetryCount = payload.data.MaximumRetryCount;
                     $scope.timeOut = payload.data.TimeOut;
                 }
-                    
+
 
                 return Qm_CliTester_TestCallAPIService.GetTestTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)
@@ -77,7 +77,7 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "ExtensionConfigurationId");
                 });
 
-            }
+            };
 
 
             if (ctrl.onReady != null)

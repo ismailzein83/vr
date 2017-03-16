@@ -83,27 +83,27 @@
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveAPI = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
                 profileReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onScheduleDirectiveReady = function (api) {
                 scheduleDirectiveAPI = api;
                 scheduleReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSupplierDirectiveReady = function (api) {
                 supplierDirectiveAPI = api;
                 supplierReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onZoneDirectiveReady = function (api) {
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onCountrySelectionChanged = function () {
                 var countries = countryDirectiveAPI.getSelectedIds();
@@ -114,10 +114,10 @@
                         filter: {
                             CountryId: countries
                         }
-                    }
+                    };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
-            }
+            };
 
         }
 
@@ -177,7 +177,7 @@
                 .then(function () {
                     var directivePayload = {
                         isMySchedule: true
-                    }
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(scheduleDirectiveAPI, directivePayload, scheduleLoadPromiseDeferred);
                 });

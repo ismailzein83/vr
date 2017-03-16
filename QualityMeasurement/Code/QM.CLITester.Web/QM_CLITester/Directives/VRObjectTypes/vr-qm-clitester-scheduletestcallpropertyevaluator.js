@@ -54,7 +54,7 @@
                     var data = {
                         $type: "QM.CLITester.Entities.VRObjectTypes.ScheduleTestCallPropertyEvaluator, QM.CLITester.Entities",
                         TestCallDetailField: $scope.scopeModel.selectedScheduleTestCall.value
-                    }
+                    };
                     return data;
                 };
 

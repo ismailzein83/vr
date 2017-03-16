@@ -46,9 +46,9 @@ app.directive("qmClitesterSourcezonereaderItest", [function () {
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    
+
                 }
-            }
+            };
 
 
             if (ctrl.onReady != null)
