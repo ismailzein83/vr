@@ -603,7 +603,6 @@
     <None Include="TOne_Spactron.PostDeployment.sql" />
     <None Include="CarrierPortal.RetailPortal.PostDeployment.sql" />
     <None Include="CarrierPortal.RetailPortal_Centrex.PostDeployment.sql" />
-    <None Include="CarrierPortal.PartnerPortal.PostDeployment.sql" />
     <None Include="CarrierPortal.SupplierPricelist.PostDeployment.sql" />
     <None Include="WhS_AccountBalance.PostDeployment.sql" />
     <None Include="TOneV1Transition.PostDeployment.sql" />
