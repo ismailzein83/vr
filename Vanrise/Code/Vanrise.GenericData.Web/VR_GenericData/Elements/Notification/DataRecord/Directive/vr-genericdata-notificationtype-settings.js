@@ -100,7 +100,7 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
                         return "Please Add a Column";
 
                     return null;
-                }
+                };
 
                 defineAPI();
             }
