@@ -13,7 +13,14 @@ namespace Vanrise.Notification.Business
 {
     public class VRNotificationManager
     {
+        #region Ctor/Properties
+
         Vanrise.BusinessProcess.Business.BPInstanceManager _bpInstanceManager = new Vanrise.BusinessProcess.Business.BPInstanceManager();
+
+        #endregion
+
+        #region Public Methods
+
         public CreateVRNotificationOutput CreateNotification(CreateVRNotificationInput input)
         {
             long notificationId = 0;
@@ -93,18 +100,23 @@ namespace Vanrise.Notification.Business
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             return dataManager.GetUpdateVRNotifications(input).Select(VRNotificationDetailMapper).ToList();
         }
+
         public List<VRNotificationDetail> GetBeforeIdVRNotifications(VRNotificationBeforeIdQuery input)
         {
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             return dataManager.GetBeforeIdVRNotifications(input).Select(VRNotificationDetailMapper).ToList();
         }
+
+        #endregion
+
+        #region Mappers
+
         VRNotificationDetail VRNotificationDetailMapper(VRNotification vrNotification)
         {
-            VRNotificationDetail vrNotificationDetail = new VRNotificationDetail()
-            {
-                Entity = vrNotification
-            };
-            return vrNotificationDetail;
+            var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(vrNotification.TypeId);
+            return vrNotificationTypeExtendedSettings.GetVRNotificationDetailMapper(new GetVRNotificationDetailMapperContext { VRNotification = vrNotification });
         }
+
+        #endregion
     }
 }

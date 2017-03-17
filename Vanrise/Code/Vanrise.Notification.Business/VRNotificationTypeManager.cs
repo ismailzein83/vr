@@ -11,21 +11,51 @@ namespace Vanrise.Notification.Business
 {
     public class VRNotificationTypeManager
     {
+        #region Ctor/Properties
+
         VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
+
+        #endregion
+
+        #region Public Methods
 
         public VRNotificationType GetNotificationType(Guid notificationTypeId)
         {
             return _vrComponentTypeManager.GetComponentType<VRNotificationTypeSettings, VRNotificationType>(notificationTypeId);
         }
+
         public VRNotificationTypeSettings GetNotificationTypeSettings(Guid notificationTypeId)
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<VRNotificationTypeSettings>(notificationTypeId);
         }
+
+        public VRNotificationTypeExtendedSettings GetVRNotificationTypeExtendedSettings(Guid notificationTypeId)
+        {
+            VRNotificationTypeSettings vrNotificationTypeSettings = this.GetNotificationTypeSettings(notificationTypeId);
+            if (vrNotificationTypeSettings == null)
+                throw new NullReferenceException(string.Format("vrNotificationTypeSettings of vrNotificationTypeId: {0}", notificationTypeId));
+
+            if (vrNotificationTypeSettings.ExtendedSettings == null)
+                throw new NullReferenceException(string.Format("vrNotificationTypeSettings.ExtendedSettings of vrNotificationTypeId: {0}", notificationTypeId));
+
+            return vrNotificationTypeSettings.ExtendedSettings;
+        }
+
+        public T GetVRNotificationTypeExtendedSettings<T>(Guid notificationTypeId) where T : VRNotificationTypeExtendedSettings
+        {
+            T vrNotificationTypeExtendedSettings = this.GetVRNotificationTypeExtendedSettings(notificationTypeId) as T;
+            if (vrNotificationTypeExtendedSettings == null)
+                throw new NullReferenceException(string.Format("vrNotificationTypeExtendedSettings should be of type {0} and not of type {1}", typeof(T), vrNotificationTypeExtendedSettings.GetType()));
+
+            return vrNotificationTypeExtendedSettings;
+        }
+
         public IEnumerable<VRNotificationTypeConfig> GetVRNotificationTypeDefinitionConfigSettings()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<VRNotificationTypeConfig>(VRNotificationTypeConfig.EXTENSION_TYPE);
         }
+
         public IEnumerable<VRNotificationTypeSettingsInfo> GetVRNotificationTypeSettingsInfo(VRNotificationTypeSettingsFilter filter)
         {
             IEnumerable<VRNotificationType> vrNotificationTypeSettings = GetCachedVRNotificationTypeSettingsInfo();
@@ -42,7 +72,12 @@ namespace Vanrise.Notification.Business
             }
             return vrNotificationTypeSettings.MapRecords(VRNotificationTypeSettingInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-        bool CheckIfFilterIsMatch(VRNotificationType notificationType, List<IVRNotificationTypeFilter> filters)
+
+        #endregion
+
+        #region Private Methods
+
+        private bool CheckIfFilterIsMatch(VRNotificationType notificationType, List<IVRNotificationTypeFilter> filters)
         {
             VRNotificationTypeFilterContext context = new VRNotificationTypeFilterContext { VRNotificationType = notificationType };
             foreach (var filter in filters)
@@ -52,12 +87,18 @@ namespace Vanrise.Notification.Business
             }
             return true;
         }
-        IEnumerable<VRNotificationType> GetCachedVRNotificationTypeSettingsInfo()
+
+        private IEnumerable<VRNotificationType> GetCachedVRNotificationTypeSettingsInfo()
         {
             VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
             return vrComponentTypeManager.GetComponentTypes<VRNotificationTypeSettings, VRNotificationType>();
         }
-        VRNotificationTypeSettingsInfo VRNotificationTypeSettingInfoMapper(VRNotificationType vrNotificationType)
+
+        #endregion
+
+        #region Mappers
+
+        private VRNotificationTypeSettingsInfo VRNotificationTypeSettingInfoMapper(VRNotificationType vrNotificationType)
         {
             return new VRNotificationTypeSettingsInfo
             {
@@ -67,5 +108,7 @@ namespace Vanrise.Notification.Business
                 SearchDirective = vrNotificationType.Settings.ExtendedSettings.SearchRuntimeEditor
             };
         }
+
+        #endregion
     }
 }
