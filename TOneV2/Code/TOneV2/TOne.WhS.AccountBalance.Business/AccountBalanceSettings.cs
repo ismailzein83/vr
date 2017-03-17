@@ -10,7 +10,7 @@ namespace TOne.WhS.AccountBalance.Business
 {
     public abstract class AccountBalanceSettings : AccountTypeExtendedSettings
     {
-        public override string AccountSelector { get { return ""; } }
+        public override string AccountSelector { get { return "whs-accountbalance-account-selector"; } }
 
         public abstract bool IsApplicableToCustomer { get; }
 
