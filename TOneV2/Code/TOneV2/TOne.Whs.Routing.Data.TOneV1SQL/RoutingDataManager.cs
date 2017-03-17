@@ -11,6 +11,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Entities;
+using System.Threading;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
@@ -48,6 +49,27 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
             CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
             customerRouteDataManager.FinalizeCurstomerRoute(trackStep, commnadTimeoutInSeconds, maxDOP);
+        }
+
+        public void FinalizeRoutingProcess(IFinalizeRouteContext context)
+        {
+            if (context.UpdateLastRouteBuild)
+            {
+                string routeBuildQuery = string.Format(query_UpdateDateSystemParameter, GetDateTimeForBCP(DateTime.Now), "sys_LastRouteBuild");
+                ExecuteNonQueryText(routeBuildQuery, null);
+            }
+
+            if (context.UpdateLastRouteSync)
+            {
+                Thread.Sleep(5000);
+                string routeSyncQuery = string.Format(query_UpdateDateSystemParameter, GetDateTimeForBCP(DateTime.Now), "sys_LastRouteSynch");
+                ExecuteNonQueryText(routeSyncQuery, null);
+            }
+            else
+            {
+                string routeSyncQuery = string.Format(query_SetNullDateSystemParameter, "sys_LastRouteSynch");
+                ExecuteNonQueryText(routeSyncQuery, null);
+            }
         }
 
         /// <summary>
@@ -271,6 +293,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                              [ID] ASC
                                          )WITH (IGNORE_DUP_KEY = OFF)
                                          )";
+
+        protected const string query_UpdateDateSystemParameter = "Update [dbo].[SystemParameter] set DateTimeValue = '{0}' where Name='{1}'";
+        protected const string query_SetNullDateSystemParameter = "Update [dbo].[SystemParameter] set DateTimeValue = null where Name='{0}'";
         #endregion
     }
 }

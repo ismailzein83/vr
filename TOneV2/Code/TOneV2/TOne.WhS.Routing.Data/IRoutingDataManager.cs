@@ -7,5 +7,6 @@ namespace TOne.WhS.Routing.Data
     {
         RoutingDatabase RoutingDatabase { get; set; }
         void FinalizeCustomerRouteDatabase(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP);
+        void FinalizeRoutingProcess(IFinalizeRouteContext context);
     }
 }

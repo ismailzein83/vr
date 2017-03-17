@@ -28,8 +28,14 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings)
         {
             int databaseId = default(int);
-            RoutingDataManager routingDataManager = new RoutingDataManager();
-            routingDataManager.CreateDatabase(databaseId, processType);
+
+            switch(type)
+            {
+                case RoutingDatabaseType.Current: RoutingDataManager routingDataManager = new RoutingDataManager();
+                    routingDataManager.CreateDatabase(databaseId, processType);
+                    break;
+                default: throw new NotSupportedException("Only Current Route Build is supported.");
+            }
 
             return databaseId;
         }
