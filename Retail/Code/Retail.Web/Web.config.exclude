@@ -79,6 +79,7 @@
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
     <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
 
   <system.web>
