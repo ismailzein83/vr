@@ -23,14 +23,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             Console.WriteLine("{0}: {1}", DateTime.Now, this.Message.Get(context));
             LogEntryType severity = this.Severity.Get(context) ?? LogEntryType.Information;
-            BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
-            {
-                ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
-                ParentProcessId = sharedData.InstanceInfo.ParentProcessID,
-                TrackingMessage = this.Message.Get(context),
-                Severity = severity,
-                EventTime = DateTime.Now
-            });
+            context.WriteTrackingMessage(severity, this.Message.Get(context));
         }
     }
 }

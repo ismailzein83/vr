@@ -11,7 +11,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess
 {
-    public class BPTrackingChannel
+    internal class BPTrackingChannel
     {
         #region Singleton
 
