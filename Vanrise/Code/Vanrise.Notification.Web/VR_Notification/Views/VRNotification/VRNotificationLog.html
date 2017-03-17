@@ -1,16 +1,19 @@
-﻿<vr-panel ng-controller="VR_Notification_VRNotificationLogController" vr-loader="isLoading">
+﻿<vr-panel ng-controller="VR_Notification_VRNotificationLogController" vr-loader="scopeModel.isLoading">
 
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
-                                                                  isrequired="true"
-                                                                  normal-col-num="2"
-                                                                  selectedvalues="scopeModel.selectedNotificationType">
+                                                                  selectedvalues="scopeModel.selectedNotificationType"
+                                                                  onselectionchanged="scopeModel.onNotificationTypeSelectionChanged"
+                                                                  normal-col-num="2" isrequired="true">
                 </vr-notification-notificationtypesetting-selector>
             </vr-row>
-            <vr-directivewrapper directive="scopeModel.selectedNotificationType.SearchDirective" title="Test" on-ready="scopeModel.onSearchDirectiveReady"></vr-directivewrapper>
+            <vr-directivewrapper ng-if="scopeModel.isBodyAndSearchLoaded"
+                                 directive="scopeModel.selectedNotificationType.SearchDirective"
+                                 on-ready="scopeModel.onSearchDirectiveReady">
+            </vr-directivewrapper>
 
         </div>
 
@@ -23,7 +26,10 @@
         </vr-row>
 
         <vr-row>
-            <vr-directivewrapper directive="scopeModel.selectedNotificationType.BodyDirective" title="Test" on-ready="scopeModel.onBodyDirectiveReady"></vr-directivewrapper>
+            <vr-directivewrapper ng-if="scopeModel.isBodyAndSearchLoaded"
+                                 directive="scopeModel.selectedNotificationType.BodyDirective"
+                                 on-ready="scopeModel.onBodyDirectiveReady">
+            </vr-directivewrapper>
         </vr-row>
 
     </vr-form>

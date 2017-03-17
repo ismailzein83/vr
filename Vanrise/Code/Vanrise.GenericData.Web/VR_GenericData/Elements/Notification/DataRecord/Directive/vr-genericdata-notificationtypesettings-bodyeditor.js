@@ -18,19 +18,21 @@ app.directive("vrGenericdataNotificationtypesettingsBodyeditor", ["UtilsService"
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Templates/NotificationTypeSettingsBodyEditorTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsBodyEditorTemplate.html"
         };
 
         function NotificationTypeSettingsBodyEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridAPIDirectiveAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    gridAPIDirectiveAPIReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -40,7 +42,24 @@ app.directive("vrGenericdataNotificationtypesettingsBodyeditor", ["UtilsService"
                 var api = {};
 
                 api.load = function (payload) {
-                    return gridAPI.loadGrid(payload);
+                    var promises = [];
+
+                    //Loading Grid
+                    var gridLoadPromise = getGridLoadPromise();
+                    promises.push(gridLoadPromise);
+
+                    function getGridLoadPromise() {
+                        var gridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        gridAPIDirectiveAPIReadyDeferred.promise.then(function () {
+                            var gridQuery = payload;
+                            VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadPromiseDeferred);
+                        });
+
+                        return gridLoadPromiseDeferred.promise;
+                    }
+
+                    UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

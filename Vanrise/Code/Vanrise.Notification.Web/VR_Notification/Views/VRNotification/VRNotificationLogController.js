@@ -7,6 +7,7 @@
     function VRNotificationLogController($scope, VRCommon_MasterLogAPIService, UtilsService, VRNavigationService, VRUIUtilsService) {
 
         var viewId;
+        var notificationTypeId;
 
         var vrNotificationTypeSettingsSelectorAPI;
         var vrNotificationTypeSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -21,6 +22,7 @@
         defineScope();
         load();
 
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -30,43 +32,78 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.isBodyAndSearchLoaded = false;
 
             $scope.scopeModel.onVRNotificationTypeSettingsSelectorReady = function (api) {
                 vrNotificationTypeSettingsSelectorAPI = api;
                 vrNotificationTypeSettingsSelectorReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onSearchDirectiveReady = function (api) {
                 searchDirectiveAPI = api;
                 searchDirectiveAPIReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onBodyDirectiveReady = function (api) {
+
+                console.log("onBodyDirectiveReady-2");
+
                 bodyDirectiveAPI = api;
                 bodyDirectiveAPIDirectiveAPIReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onNotificationTypeSelectionChanged = function (selectedItem) {
+
+                if (selectedItem != undefined) {
+                    $scope.scopeModel.isBodyAndSearchLoaded = false;
+                    $scope.scopeModel.isBodyAndSearchLoaded = true;
+
+                    notificationTypeId = selectedItem.Id;
+
+                    loadSearchDirective();
+                    loadBodyDirective();
+
+                    function loadSearchDirective() {
+                        var searchDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        var searchDirectivePayload;
+                        VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, searchDirectivePayload, searchDirectiveLoadDeferred);
+
+                        return searchDirectiveLoadDeferred.promise;
+                    }
+                    function loadBodyDirective() {
+                        var bodyDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        var bodyDirectivePayload = {
+                            notificationTypeId: notificationTypeId
+                        };
+                        VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, bodyDirectivePayload, bodyDirectiveLoadDeferred);
+
+                        return bodyDirectiveLoadDeferred.promise;
+                    }
+                }
+            };
+
             $scope.scopeModel.searchClicked = function () {
-                var query = buildQuery();
-             
-                bodyDirectiveAPI.load(query);
+                var bodyDirectivePayload = {
+                    notificationTypeId: notificationTypeId,
+                    searchQuery: searchDirectiveAPI.getData()
+                };
+                buildGridQuery.load(bodyDirectivePayload);
             };
         }
         function load() {
+            $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
         function loadAllControls() {
-            $scope.isLoading = true;
             return UtilsService.waitMultipleAsyncOperations([loadNotificationTypeSelector])
-                  .catch(function (error) {
-                      VRNotificationService.notifyExceptionWithClose(error, $scope);
-                  })
-                 .finally(function () {
-                     $scope.isLoading = false;
-                 });
+                      .catch(function (error) {
+                          VRNotificationService.notifyExceptionWithClose(error, $scope);
+                      })
+                      .finally(function () {
+                          $scope.scopeModel.isLoading = false;
+                      });
         }
-
         function loadNotificationTypeSelector() {
             var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -84,35 +121,6 @@
             });
 
             return selectorLoadDeferred.promise;
-        }
-
-        function loadSearchDirective() {
-            var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            searchDirectiveAPIReadyDeferred.promise.then(function () {
-                var selectorPayload;
-                VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, selectorPayload, selectorLoadDeferred);
-            });
-
-            return selectorLoadDeferred.promise;
-        }
-
-        function loadBodyDirective() {
-            var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            bodyDirectiveAPIReadyDeferred.promise.then(function () {
-                var selectorPayload;
-                VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, selectorPayload, selectorLoadDeferred);
-            });
-
-            return selectorLoadDeferred.promise;
-        }
-
-        function buildQuery() {
-            return {
-                NotificationTypeId: vrNotificationTypeSettingsSelectorAPI.getSelectedIds(),
-                SearchQuery: searchDirectiveAPI.getData()
-            };
         }
     }
 

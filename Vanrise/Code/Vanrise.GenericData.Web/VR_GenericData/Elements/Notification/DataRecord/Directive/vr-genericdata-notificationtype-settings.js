@@ -14,7 +14,7 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Templates/NotificationTypeSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsTemplate.html'
         };
 
         function DataRecordNotificationTypeSettings($scope, ctrl, $attrs) {
@@ -94,6 +94,14 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
                     $scope.scopeModel.gridColumnDefinitions.splice(index, 1);
                 };
 
+                $scope.scopeModel.validateGrid = function () {
+
+                    if ($scope.scopeModel.gridColumnDefinitions == undefined || $scope.scopeModel.gridColumnDefinitions.length == 0)
+                        return "Please Add a Column";
+
+                    return null;
+                }
+
                 defineAPI();
             }
             function defineAPI() {
@@ -166,7 +174,7 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
 
                 api.getData = function () {
                     var obj = {
-                        $type: 'Vanrise.GenericData.Notification.DataRecord.DataRecordNotificationTypeSettings, Vanrise.GenericData.Notification',
+                        $type: 'Vanrise.GenericData.Notification.DataRecordNotificationTypeSettings, Vanrise.GenericData.Notification',
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         GridColumnDefinitions: $scope.scopeModel.gridColumnDefinitions
                     };

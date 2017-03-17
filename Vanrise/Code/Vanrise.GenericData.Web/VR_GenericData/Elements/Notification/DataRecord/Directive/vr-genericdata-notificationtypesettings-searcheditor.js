@@ -18,8 +18,9 @@ app.directive("vrGenericdataNotificationtypesettingsSearcheditor", ["UtilsServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Templates/NotificationTypeSettingsSearchEditorTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsSearchEditorTemplate.html"
         };
+
         function NotificationTypeSettingsSearchEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 

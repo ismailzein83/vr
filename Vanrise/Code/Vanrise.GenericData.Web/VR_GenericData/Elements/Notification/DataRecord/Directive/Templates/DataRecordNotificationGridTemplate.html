@@ -10,7 +10,7 @@
                      hidepaginginfo>
 
             <vr-datagridcolumn headertext="'ID'" field="'Entity.VRNotificationId'" disablesorting="true" fixedwidth="'200'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>
