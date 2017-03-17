@@ -54,7 +54,7 @@ namespace TOne.WhS.Routing.Data.SQL
             customerRouteDataManager.FinalizeCurstomerRoute(trackStep, commandTimeoutInSeconds, maxDOP);
         }
 
-        public void FinalizeRoutingProcess(IFinalizeRouteContext context)
+        public void FinalizeRoutingProcess(IFinalizeRouteContext context, Action<string> trackStep)
         {
 
         }

@@ -34,7 +34,9 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingDatabaseId);
 
-            dataManager.FinalizeRoutingProcess(finalizeRouteContext);
+            dataManager.FinalizeRoutingProcess(finalizeRouteContext, (message) => {
+                context.ActivityContext.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
+            });
         }
     }
 }

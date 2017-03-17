@@ -51,8 +51,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             customerRouteDataManager.FinalizeCurstomerRoute(trackStep, commnadTimeoutInSeconds, maxDOP);
         }
 
-        public void FinalizeRoutingProcess(IFinalizeRouteContext context)
+        public void FinalizeRoutingProcess(IFinalizeRouteContext context, Action<string> trackStep)
         {
+            trackStep("Starting System Paremeters update");
             if (context.UpdateLastRouteBuild)
             {
                 string routeBuildQuery = string.Format(query_UpdateDateSystemParameter, GetDateTimeForBCP(DateTime.Now), "sys_LastRouteBuild");
@@ -70,6 +71,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 string routeSyncQuery = string.Format(query_SetNullDateSystemParameter, "sys_LastRouteSynch");
                 ExecuteNonQueryText(routeSyncQuery, null);
             }
+            trackStep("Finishing System Paremeters update");
         }
 
         /// <summary>
