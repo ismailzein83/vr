@@ -35,14 +35,13 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
             $scope.scopeModel.addFinancialAccount = function () {
                 var onFinancialAccountAdded = function (obj) {
-                    if (context != undefined)
-                    {
+                    if (context != undefined) {
                         context.checkAllowAddFinancialAccount();
                     }
                     gridAPI.onFinancialAccountAdded(obj);
                 };
                 VR_AccountBalance_FinancialAccountService.addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded)
-            }
+            };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;

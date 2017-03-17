@@ -11,7 +11,7 @@
         var financialAccountId;
         var financialAccountTypeSelectorDirectiveAPI;
         var financialAccountTypeSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-        $scope.scopeModel ={}
+        $scope.scopeModel = {};
         var financialAccountEntity;
 
         var directiveAPI;
@@ -131,11 +131,11 @@
                             Filters: [{
                                 $type: "TOne.WhS.AccountBalance.Business.FinancialAccountTypeFilter, TOne.WhS.AccountBalance.Business",
                                 CarrierProfileId: carrierProfileId,
-                                CarrierAccountId:carrierAccountId
+                                CarrierAccountId: carrierAccountId
                             }]
                         },
-                        selectedIds: financialAccountEntity != undefined && financialAccountEntity.Settings != undefined?financialAccountEntity.Settings.AccountTypeId:undefined
-                    }
+                        selectedIds: financialAccountEntity != undefined && financialAccountEntity.Settings != undefined ? financialAccountEntity.Settings.AccountTypeId : undefined
+                    };
                     VRUIUtilsService.callDirectiveLoad(financialAccountTypeSelectorDirectiveAPI, payload, loadFinancialAccountTypeSelectorPromiseDeferred);
                 });
                 return loadFinancialAccountTypeSelectorPromiseDeferred.promise;
