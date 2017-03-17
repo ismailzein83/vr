@@ -23,7 +23,5 @@ namespace Vanrise.BEBridge.Entities
 
         public RequiredPermissionSettings StartInstancePermission { get; set; }
 
-        public RequiredPermissionSettings ScheduleTaskPermission { get; set; }
-
     }
 }

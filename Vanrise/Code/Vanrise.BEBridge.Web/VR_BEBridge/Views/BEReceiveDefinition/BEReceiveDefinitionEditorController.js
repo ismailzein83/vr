@@ -20,9 +20,6 @@
         var startInstancePermissionAPI;
         var startInstancePermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var scheduleTaskPermissionAPI;
-        var scheduleTaskPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -45,7 +42,7 @@
             }
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTSourceReaderDefinitions, loadBESyncSettings , loadViewRequiredPermission , loadStartInstanceRequiredPermission, loadScheduleTaskRequiredPermission]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTSourceReaderDefinitions, loadBESyncSettings , loadViewRequiredPermission , loadStartInstanceRequiredPermission]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -82,8 +79,7 @@
                 EntitySyncDefinitions: GetEntitySyncDefinitions(),
                 Security : {
                     ViewPermission: viewPermissionAPI.getData(),
-                    StartInstancePermission: startInstancePermissionAPI.getData(),
-                    ScheduleTaskPermission: scheduleTaskPermissionAPI.getData()
+                    StartInstancePermission: startInstancePermissionAPI.getData()
                 }
             };
             return {
@@ -177,18 +173,6 @@
             return startInstancePermissionLoadDeferred.promise;
         }
 
-        function loadScheduleTaskRequiredPermission() {
-            var scheduleTaskPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-            scheduleTaskPermissionReadyDeferred.promise.then(function () {
-                var dataPayload = {
-                    data: receveiveDEfinitionEntity && receveiveDEfinitionEntity.Settings && receveiveDEfinitionEntity.Settings.Security && receveiveDEfinitionEntity.Settings.Security.ScheduleTaskPermission || undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(scheduleTaskPermissionAPI, dataPayload, scheduleTaskPermissionLoadDeferred);
-            });
-            return scheduleTaskPermissionLoadDeferred.promise;
-        }
-
-
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.save = function () {
@@ -221,10 +205,10 @@
                 startInstancePermissionAPI = api; 
                 startInstancePermissionReadyDeferred.resolve();
             };
-            $scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
-                scheduleTaskPermissionAPI = api;
-                scheduleTaskPermissionReadyDeferred.resolve();
-            };
+            //$scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
+            //    scheduleTaskPermissionAPI = api;
+            //    scheduleTaskPermissionReadyDeferred.resolve();
+            //};
             $scope.scopeModel.hasSaveBeReceiveDefinitionPermission = function () {
                 if (isEditMode)
                     return beRecieveDefinitionApiService.HasUpdateReceiveDefinitionPermission();

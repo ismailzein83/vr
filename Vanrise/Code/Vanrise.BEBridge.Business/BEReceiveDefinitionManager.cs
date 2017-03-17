@@ -199,12 +199,12 @@ namespace Vanrise.BEBridge.Business
             return DoesUserHaveAccess(userId, beRecieveDefinition, (sec) => sec.StartInstancePermission);
         }
 
-        public bool DoesUserHaveScheduleTaskAccess(Guid beRecieveDefinitionId)
-        {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            var beRecieveDefinition = GetBEReceiveDefinition(beRecieveDefinitionId);
-            return DoesUserHaveAccess(userId, beRecieveDefinition, (sec) => sec.ScheduleTaskPermission);
-        }
+        //public bool DoesUserHaveScheduleTaskAccess(Guid beRecieveDefinitionId)
+        //{
+        //    int userId = SecurityContext.Current.GetLoggedInUserId();
+        //    var beRecieveDefinition = GetBEReceiveDefinition(beRecieveDefinitionId);
+        //    return DoesUserHaveAccess(userId, beRecieveDefinition, (sec) => sec.ScheduleTaskPermission);
+        //}
         public bool DoesUserHaveViewAccess(int userId)
         {
             var allBEdef = GetCachedBEReceiveDefinitions();
@@ -225,18 +225,6 @@ namespace Vanrise.BEBridge.Business
             }
             return false;
         }
-
-        public bool DoesUserHaveScheduleTaskAccess(int userId)
-        {
-            var allBEdef = GetCachedBEReceiveDefinitions();
-            foreach (var bedef in allBEdef)
-            {
-                if (DoesUserHaveAccess(userId, bedef.Value, (sec) => sec.ScheduleTaskPermission))
-                    return true;
-            }
-            return false;
-        }
-
         public bool DoesUserHaveStartSpecificInstanceAccess(int userId, List<Guid> beReceiveDefinitionIds)
         {
             foreach (var be in beReceiveDefinitionIds)

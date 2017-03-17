@@ -46,7 +46,7 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                 var api = {};
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput, Vanrise.BEBridge.BP.Arguments",
+                        $type: "Vanrise.BEBridge.BP.Arguments.BEReceiveDefinitionStartInstanceFilter, Vanrise.BEBridge.BP.Arguments",
                         BEReceiveDefinitionIds: beRecieveDefinitionSelectorAPI.getSelectedIds()
                     };
                 };

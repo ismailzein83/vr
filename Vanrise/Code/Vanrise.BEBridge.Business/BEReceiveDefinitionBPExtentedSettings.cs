@@ -8,29 +8,21 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BEBridge.Business
 {
-    public class SourceBEDefinitionExtentedSettings : BPDefinitionExtendedSettings
+    public class BEReceiveDefinitionBPExtentedSettings : BPDefinitionExtendedSettings
     {
         public override bool DoesUserHaveViewAccess(IBPDefinitionDoesUserHaveViewAccessContext context)
         {
-
             return new BEReceiveDefinitionManager().DoesUserHaveViewAccess(context.UserId);
-           
         }
 
         public override bool DoesUserHaveStartAccess(IBPDefinitionDoesUserHaveStartAccessContext context)
         {
-
             return new BEReceiveDefinitionManager().DoesUserHaveStartNewInstanceAccess(context.UserId);
-
-          
         }
 
         public override bool DoesUserHaveScheduleTaskAccess(IBPDefinitionDoesUserHaveScheduleTaskContext context)
         {
-
             return new BEReceiveDefinitionManager().DoesUserHaveStartNewInstanceAccess(context.UserId);
-
-
         }
         public override bool DoesUserHaveStartSpecificInstanceAccess(IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext context)
         {
