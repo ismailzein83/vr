@@ -182,7 +182,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('9A1C1152-B9DC-4E4C-B2FF-181325CD6D9B','Customer Group','Customer Group','VR_Sec_GroupSettings','{"Editor":"vr-cp-group-customer"}'),
 ('6E558C88-31F8-4EB6-A362-58DB06AB9CC7','Supplier Group','Supplier Group','VR_Sec_GroupSettings','{"Editor":"vr-cp-group-supplier"}'),
-('FCE278EC-410E-4C92-85E0-A9F2E4BB27A8','Carrier Portal Connector','Carrier Portal Connector','CP_SupplierPriceList_ConnectorUploadPriceList','{"Editor":"vr-cp-supplierpricelist-connector"}')
+('69e77c69-b08e-4dfd-8a27-e0912adbabfb','TOne V1 Connector','TOne V1 Connector','CP_SupplierPriceList_CustomerConnector','{"Editor":"vr-cp-supplierpricelist-tonev1integration-customerconnector"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
