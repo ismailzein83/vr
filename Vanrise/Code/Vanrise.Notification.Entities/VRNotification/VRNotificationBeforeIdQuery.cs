@@ -8,9 +8,8 @@ namespace Vanrise.Notification.Entities
 {
     public class VRNotificationBeforeIdQuery
     {
+        public Guid NotificationTypeId { get; set; }
         public long LessThanID { get; set; }
         public int NbOfRows { get; set; }
-        public Guid NotificationTypeId { get; set; }
-
     }
 }

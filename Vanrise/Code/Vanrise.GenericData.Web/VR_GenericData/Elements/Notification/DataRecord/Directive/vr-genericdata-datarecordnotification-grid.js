@@ -22,12 +22,12 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
 
             var reloadColumns;
             var notificationTypeId;
-            var searchQuery;
+            var query;
 
+            var vrNotificationTypeId;
             var lessThanID;
             var greaterThanId;
             var nbOfRows;
-            var vrNotificationTypeId;
 
             var input = {
                 NotificationTypeId: vrNotificationTypeId,
@@ -65,7 +65,7 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
                     if (payload != undefined) {
                         reloadColumns = notificationTypeId != payload.notificationTypeId;
                         notificationTypeId = payload.notificationTypeId;
-                        searchQuery = payload.query;
+                        query = payload.query;
                     }
 
                     if ($scope.scopeModel.columns.length == 0 || reloadColumns) {
@@ -169,10 +169,10 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
             }
             function manipulateDataUpdated(response) {
                 var itemAddedOrUpdatedInThisCall = false;
+
                 if (response != undefined) {
                     for (var i = 0; i < response.length; i++) {
                         var vrNotification = response[i];
-
                         itemAddedOrUpdatedInThisCall = true;
                         $scope.scopeModel.vrNotifications.push(vrNotification);
                     }
