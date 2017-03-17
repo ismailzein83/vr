@@ -8,7 +8,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
 {
     public class SupplierPriceListConnector : SupplierPriceListConnectorBase
     {
-        public override Guid ConfigId { get { return new Guid("fce278ec-410e-4c92-85e0-a9f2e4bb27a8"); } }
+        public override Guid ConfigId { get { return new Guid("69e77c69-b08e-4dfd-8a27-e0912adbabfb"); } }
         public string Url { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
