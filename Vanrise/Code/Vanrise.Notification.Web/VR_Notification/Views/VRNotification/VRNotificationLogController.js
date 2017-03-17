@@ -16,12 +16,11 @@
         var searchDirectiveAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
         var bodyDirectiveAPI;
-        var bodyDirectiveAPIDirectiveAPIReadyDeferred = UtilsService.createPromiseDeferred();
+        var bodyDirectiveAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
         load();
-
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -32,7 +31,6 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.isBodyAndSearchLoaded = false;
 
             $scope.scopeModel.onVRNotificationTypeSettingsSelectorReady = function (api) {
                 vrNotificationTypeSettingsSelectorAPI = api;
@@ -43,19 +41,13 @@
                 searchDirectiveAPIReadyDeferred.resolve();
             };
             $scope.scopeModel.onBodyDirectiveReady = function (api) {
-
-                console.log("onBodyDirectiveReady-2");
-
                 bodyDirectiveAPI = api;
-                bodyDirectiveAPIDirectiveAPIReadyDeferred.resolve();
+                bodyDirectiveAPIReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onNotificationTypeSelectionChanged = function (selectedItem) {
 
                 if (selectedItem != undefined) {
-                    $scope.scopeModel.isBodyAndSearchLoaded = false;
-                    $scope.scopeModel.isBodyAndSearchLoaded = true;
-
                     notificationTypeId = selectedItem.Id;
 
                     loadSearchDirective();
@@ -64,18 +56,22 @@
                     function loadSearchDirective() {
                         var searchDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        var searchDirectivePayload;
-                        VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, searchDirectivePayload, searchDirectiveLoadDeferred);
+                        searchDirectiveAPIReadyDeferred.promise.then(function () {
+                            var searchDirectivePayload;
+                            VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, searchDirectivePayload, searchDirectiveLoadDeferred);
+                        });
 
                         return searchDirectiveLoadDeferred.promise;
                     }
                     function loadBodyDirective() {
                         var bodyDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        var bodyDirectivePayload = {
-                            notificationTypeId: notificationTypeId
-                        };
-                        VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, bodyDirectivePayload, bodyDirectiveLoadDeferred);
+                        bodyDirectiveAPIReadyDeferred.promise.then(function () {
+                            var bodyDirectivePayload = {
+                                notificationTypeId: notificationTypeId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, bodyDirectivePayload, bodyDirectiveLoadDeferred);
+                        });
 
                         return bodyDirectiveLoadDeferred.promise;
                     }
@@ -85,9 +81,9 @@
             $scope.scopeModel.searchClicked = function () {
                 var bodyDirectivePayload = {
                     notificationTypeId: notificationTypeId,
-                    searchQuery: searchDirectiveAPI.getData()
+                    query: searchDirectiveAPI.getData()
                 };
-                buildGridQuery.load(bodyDirectivePayload);
+                bodyDirectiveAPI.load(bodyDirectivePayload);
             };
         }
         function load() {

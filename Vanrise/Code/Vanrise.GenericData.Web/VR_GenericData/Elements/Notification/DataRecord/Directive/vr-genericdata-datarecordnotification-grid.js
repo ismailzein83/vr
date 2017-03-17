@@ -2,7 +2,6 @@
 
 app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_Notification_VRNotificationsAPIService', 'VRTimerService', 'BusinessProcess_GridMaxSize', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService',
     function (UtilsService, VR_Notification_VRNotificationsAPIService, VRTimerService, BusinessProcess_GridMaxSize, VR_GenericData_DataRecordNotificationTypeSettingsAPIService) {
-
         return {
             restrict: 'E',
             scope: {
@@ -21,6 +20,7 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
         function DataRecordNotificationGridDirective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var reloadColumns;
             var notificationTypeId;
             var searchQuery;
 
@@ -44,9 +44,6 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
                 $scope.scopeModel.vrNotifications = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
-
-                    console.log("onGridReady");
-
                     gridAPI = api;
                     defineAPI();
                 };
@@ -62,19 +59,17 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
             function defineAPI() {
                 var api = {};
 
-                api.load = function (query) {
+                api.load = function (payload) {
                     var promises = [];
 
-                    console.log(query);
-
-                    if (query != undefined) {
-                        notificationTypeId = query.notificationTypeId;
-                        searchQuery = query.searchQuery;
+                    if (payload != undefined) {
+                        reloadColumns = notificationTypeId != payload.notificationTypeId;
+                        notificationTypeId = payload.notificationTypeId;
+                        searchQuery = payload.query;
                     }
 
-                    //$scope.scopeModel.columns.length = 0;
-                    if ($scope.scopeModel.columns.length == 0) {
-                        //Loading NotificationGridColumns
+                    if ($scope.scopeModel.columns.length == 0 || reloadColumns) {
+                        $scope.scopeModel.columns.length = 0;
                         var notificationGridColumnsLoadPromise = getNotificationGridColumnsLoadPromise();
                         promises.push(notificationGridColumnsLoadPromise);
                     }
@@ -83,11 +78,9 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
                     var gridLoadDeferred = UtilsService.createPromiseDeferred();
 
                     UtilsService.waitMultiplePromises(promises).then(function () {
-
                         input.NotificationTypeId = notificationTypeId;
                         onInit();
                         gridLoadDeferred.resolve();
-
                     }).catch(function (error) {
                         gridLoadDeferred.reject(error);
                     });

@@ -10,11 +10,7 @@
                                                                   normal-col-num="2" isrequired="true">
                 </vr-notification-notificationtypesetting-selector>
             </vr-row>
-            <vr-directivewrapper ng-if="scopeModel.isBodyAndSearchLoaded"
-                                 directive="scopeModel.selectedNotificationType.SearchDirective"
-                                 on-ready="scopeModel.onSearchDirectiveReady">
-            </vr-directivewrapper>
-
+            <vr-directivewrapper directive="scopeModel.selectedNotificationType.SearchDirective" on-ready="scopeModel.onSearchDirectiveReady"></vr-directivewrapper>
         </div>
 
         <vr-row removeline>
@@ -26,10 +22,7 @@
         </vr-row>
 
         <vr-row>
-            <vr-directivewrapper ng-if="scopeModel.isBodyAndSearchLoaded"
-                                 directive="scopeModel.selectedNotificationType.BodyDirective"
-                                 on-ready="scopeModel.onBodyDirectiveReady">
-            </vr-directivewrapper>
+            <vr-directivewrapper directive="scopeModel.selectedNotificationType.BodyDirective" on-ready="scopeModel.onBodyDirectiveReady"></vr-directivewrapper>
         </vr-row>
 
     </vr-form>

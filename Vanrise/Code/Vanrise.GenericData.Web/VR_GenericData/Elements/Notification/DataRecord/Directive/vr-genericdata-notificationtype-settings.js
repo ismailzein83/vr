@@ -54,8 +54,8 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
                             dataRecordTypeSelectorSelectionChangedDeferred.resolve();
                         }
                         else {
-                            loadDataRecordTypeFieldsSelector();
                             $scope.scopeModel.gridColumnDefinitions = [];
+                            loadDataRecordTypeFieldsSelector();
 
                             function loadDataRecordTypeFieldsSelector() {
                                 var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -142,9 +142,7 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
                         dataRecordTypeSelectorPromiseDeferred.promise.then(function () {
                             var dataRecordTypeSelectorPayload;
                             if (dataRecordTypeId != undefined) {
-                                dataRecordTypeSelectorPayload = {
-                                    selectedIds: dataRecordTypeId
-                                }
+                                dataRecordTypeSelectorPayload = { selectedIds: dataRecordTypeId };
                             }
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadPromiseDeferred);
                         });
@@ -173,13 +171,11 @@ app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUti
                 };
 
                 api.getData = function () {
-                    var obj = {
+                    return {
                         $type: 'Vanrise.GenericData.Notification.DataRecordNotificationTypeSettings, Vanrise.GenericData.Notification',
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         GridColumnDefinitions: $scope.scopeModel.gridColumnDefinitions
                     };
-
-                    return obj;
                 };
 
                 if (ctrl.onReady != null)

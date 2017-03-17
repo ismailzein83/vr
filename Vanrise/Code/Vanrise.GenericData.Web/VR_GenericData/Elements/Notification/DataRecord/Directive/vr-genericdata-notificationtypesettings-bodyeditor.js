@@ -37,7 +37,6 @@ app.directive("vrGenericdataNotificationtypesettingsBodyeditor", ["UtilsService"
 
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -52,8 +51,8 @@ app.directive("vrGenericdataNotificationtypesettingsBodyeditor", ["UtilsService"
                         var gridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         gridAPIDirectiveAPIReadyDeferred.promise.then(function () {
-                            var gridQuery = payload;
-                            VRUIUtilsService.callDirectiveLoad(gridAPI, gridQuery, gridLoadPromiseDeferred);
+                            var gridDirectivePayload = payload;
+                            VRUIUtilsService.callDirectiveLoad(gridAPI, gridDirectivePayload, gridLoadPromiseDeferred);
                         });
 
                         return gridLoadPromiseDeferred.promise;
