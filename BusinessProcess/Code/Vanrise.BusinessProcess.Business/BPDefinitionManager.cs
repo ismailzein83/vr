@@ -97,12 +97,32 @@ namespace Vanrise.BusinessProcess.Business
             var definition = GetDefinition(processName);
             return definition != null ? definition.Title : null;
         }
-        public bool DoesUserHaveViewAccess(int userId)
+        public bool DoesUserHaveViewAccessInManagement(int userId)
         {
             var allPB = GetCachedBPDefinitions().Select(x=>x.Value).Where(x=>!x.Configuration.NotVisibleInManagementScreen);
             foreach (var bp in allPB)
             {
                 if (DoesUserHaveViewAccess(userId, bp))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveViewAccessInSchedule(int userId)
+        {
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x =>x.Configuration.ScheduledExecEditor!=null);
+            foreach (var bp in allPB)
+            {
+                if (DoesUserHaveViewAccess(userId, bp))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveScheduleTaskAccess(int userId)
+        {
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => x.Configuration.ScheduledExecEditor != null);
+            foreach (var bp in allPB)
+            {
+                if (DoesUserHaveScheduleTaskAccess(userId, bp))
                     return true;
             }
             return false;
@@ -178,6 +198,7 @@ namespace Vanrise.BusinessProcess.Business
             SecurityManager secManager = new SecurityManager();
             return secManager.IsAllowed(permission, userId);
         }
+
         private Dictionary<Guid, BPDefinition> GetCachedBPDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
