@@ -12,7 +12,7 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
     public class RetailAccountVRRestAPIRecordQueryInterceptor : Vanrise.GenericData.Entities.VRRestAPIRecordQueryInterceptor
     {
         public override Guid ConfigId { get { return new Guid("B3A94A20-92ED-47BF-86D6-1034B720BE73"); } }
-
+        public string AccountFieldName { get; set; }
         public override void PrepareQuery(Vanrise.GenericData.Entities.IVRRestAPIRecordQueryInterceptorContext context)
         {
             var vrRestAPIRecordQueryInterceptorContext = context as Vanrise.GenericData.Business.VRRestAPIRecordQueryInterceptorContext;
@@ -24,7 +24,7 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
 
             NumberRecordFilter numberRecordFilter = new NumberRecordFilter()
             {
-                FieldName = "FinancialAccountId",
+                FieldName = AccountFieldName,
                 CompareOperator = NumberRecordFilterOperator.Equals,
                 Value = manager.GetRetailAccountId(userId)
             };

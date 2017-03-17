@@ -1,5 +1,5 @@
 ﻿(function (app) {
-     
+
     'use strict';
 
     RestAPIRecordQueryInterceptorDirective.$inject = ['UtilsService'];
@@ -25,6 +25,7 @@
 
         function RestAPIRecordQueryInterceptorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            $scope.scopeModel = {};
 
             function initializeController() {
                 defineAPI();
@@ -33,13 +34,17 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                    if (payload != undefined) {
+                        if (payload.vrRestAPIRecordQueryInterceptor != undefined)
+                            $scope.scopeModel.accountFieldName = payload.vrRestAPIRecordQueryInterceptor.AccountFieldName;
+                    }
                 };
 
                 api.getData = function () {
 
                     return {
-                        $type: 'PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterceptor.RetailAccountVRRestAPIRecordQueryInterceptor, PartnerPortal.CustomerAccess.MainExtensions'
+                        $type: 'PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterceptor.RetailAccountVRRestAPIRecordQueryInterceptor, PartnerPortal.CustomerAccess.MainExtensions',
+                        AccountFieldName: $scope.scopeModel.accountFieldName
                     };
                 };
 
