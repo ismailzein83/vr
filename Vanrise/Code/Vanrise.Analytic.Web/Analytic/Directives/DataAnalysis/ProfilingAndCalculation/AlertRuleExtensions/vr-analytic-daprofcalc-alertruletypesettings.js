@@ -112,7 +112,7 @@
 
                 $scope.scopeModel.onDAProfCalcGridReady = function (api) {
                     daProfCalcGridAPI = api;
-                }
+                };
 
                 $scope.scopeModel.isdaProfCalcItemNotificationGridValid = function () {
 
