@@ -12,16 +12,29 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<SaleRateHistoryRecordDetail> GetFilteredSaleRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
         {
-            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new SaleRateHistoryRequestHandler());
+            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new SaleRateHistoryRequestHandler(input.Query.CurrencyId));
         }
 
         private class SaleRateHistoryRequestHandler : Vanrise.Common.Business.BigDataRequestHandler<SaleRateHistoryQuery, SaleRateHistoryRecord, SaleRateHistoryRecordDetail>
         {
-            #region Fields
+            #region Fields / Constructors
 
-            private SaleRateManager _saleRateManager = new SaleRateManager();
-            private Vanrise.Common.Business.CurrencyManager _currencyManager = new Vanrise.Common.Business.CurrencyManager();
-            private SellingProductManager _sellingProductManager = new SellingProductManager();
+            private int _currencyId;
+            private string _currencySymbol;
+
+            private SaleRateManager _saleRateManager;
+            private Vanrise.Common.Business.CurrencyExchangeRateManager _currencyExchangeRateManager;
+            private SellingProductManager _sellingProductManager;
+
+            public SaleRateHistoryRequestHandler(int currencyId)
+            {
+                _currencyId = currencyId;
+                _currencySymbol = new Vanrise.Common.Business.CurrencyManager().GetCurrencySymbol(currencyId);
+
+                _saleRateManager = new SaleRateManager();
+                _currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+                _sellingProductManager = new SellingProductManager();
+            }
 
             #endregion
 
@@ -40,7 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new SaleRateHistoryRecordDetail()
                 {
                     Entity = entity,
-                    CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId),
+                    ConvertedToCurrencySymbol = _currencySymbol,
                     SellingProductName = (entity.SellingProductId.HasValue) ? _sellingProductManager.GetSellingProductName(entity.SellingProductId.Value) : null
                 };
             }
@@ -68,11 +81,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     var record = new SaleRateHistoryRecord()
                     {
                         Rate = rate.Rate,
-                        ChangeType = GetSaleRateChangeType(rate.Rate, previousRateValue),
                         CurrencyId = _saleRateManager.GetCurrencyId(rate),
                         BED = rate.BED,
                         EED = rate.EED
                     };
+
+                    record.ConvertedRate = _currencyExchangeRateManager.ConvertValueToCurrency(record.Rate, record.CurrencyId, _currencyId, record.BED);
+                    record.ChangeType = GetSaleRateChangeType(record.ConvertedRate, previousRateValue);
 
                     records.Add(record);
                 }
@@ -87,12 +102,10 @@ namespace TOne.WhS.BusinessEntity.Business
             private IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistoryRecords(int customerId, IEnumerable<long> zoneIds, int countryId)
             {
                 IEnumerable<SaleRateHistoryRecord> spIntersectedRates = GetSPIntersectedRates(customerId, zoneIds);
-                if (spIntersectedRates == null || spIntersectedRates.Count() == 0)
-                    return null;
 
-                IEnumerable<SaleRateHistoryRecord> countryIntersectedRates = GetCountryIntersectedRates(customerId, countryId, spIntersectedRates);
-                if (countryIntersectedRates == null || countryIntersectedRates.Count() == 0)
-                    return null;
+                IEnumerable<SaleRateHistoryRecord> countryIntersectedRates = null;
+                if (spIntersectedRates != null && spIntersectedRates.Count() > 0)
+                    countryIntersectedRates = GetCountryIntersectedRates(customerId, countryId, spIntersectedRates);
 
                 IEnumerable<SaleRateHistoryRecord> customerIntersectedRates = GetCustomerIntersectedRates(customerId, zoneIds, countryIntersectedRates);
                 if (customerIntersectedRates == null || customerIntersectedRates.Count() == 0)
@@ -198,8 +211,25 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (customerRates == null || customerRates.Count() == 0)
                     return countryIntersectedRates;
 
+                if (countryIntersectedRates == null || countryIntersectedRates.Count() == 0)
+                {
+                    Func<SaleRate, SaleRateHistoryRecord> saleRateMapper = (saleRate) =>
+                    {
+                        return new SaleRateHistoryRecord()
+                        {
+                            Rate = saleRate.Rate,
+                            CurrencyId = _saleRateManager.GetCurrencyId(saleRate),
+                            SellingProductId = null,
+                            BED = saleRate.BED,
+                            EED = saleRate.EED
+                        };
+                    };
+
+                    return customerRates.MapRecords(saleRateMapper);
+                }
+
                 List<SaleRate> customerRatesAsList = customerRates.OrderBy(x => x.BED).ToList();
-                List<SaleRateHistoryRecord> countryIntersectedRatesAsList = countryIntersectedRates.ToList();
+                List<SaleRateHistoryRecord> countryIntersectedRatesAsList = (countryIntersectedRates != null) ? countryIntersectedRates.ToList() : null;
 
                 Action<SaleRate, SaleRateHistoryRecord> mapSaleRateAction = (rate, record) =>
                 {
@@ -216,11 +246,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 for (int i = 0; i < records.Count; i++)
                 {
                     SaleRateHistoryRecord record = records.ElementAt(i);
+                    record.ConvertedRate = _currencyExchangeRateManager.ConvertValueToCurrency(record.Rate, record.CurrencyId, _currencyId, record.BED);
 
-                    decimal? previousRateValue = null;
-                    if (i > 0) previousRateValue = records.ElementAt(i - 1).Rate;
+                    SaleRateHistoryRecord previousRecord = null;
+                    decimal? previousConvertedRateValue = null;
 
-                    record.ChangeType = GetSaleRateChangeType(record.Rate, previousRateValue);
+                    if (i > 0)
+                    {
+                        previousRecord = records.ElementAt(i - 1);
+                        previousConvertedRateValue = previousRecord.ConvertedRate;
+                    }
+
+                    record.ChangeType = GetSaleRateChangeType(record.ConvertedRate, previousConvertedRateValue);
                 }
             }
 

@@ -2,10 +2,9 @@
 
     "use strict";
 
-    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService'];
+    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService'];
 
-    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSaleRateApiService) {
-
+    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSaleRateApiService, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService) {
 
         var gridAPI;
         var sellingNumberPlanDirectiveAPI;
@@ -21,15 +20,19 @@
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var primarySaleEntity;
 
+        var gridPayload = {};
+
+        var systemCurrencyId;
+        var customerCurrencyId;
+
         defineScope();
         load();
-        var filter = {};
 
         function defineScope() {
             $scope.effectiveOn = UtilsService.getDateFromDateTime(new Date());
             $scope.searchClicked = function () {
-                setFilterObject();
-                return gridAPI.loadGrid(filter);
+                setGridPayload();
+                return gridAPI.load(gridPayload);
             };
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
@@ -91,7 +94,6 @@
                 }
             };
 
-
             $scope.onSellingProductSelectorReady = function (api) {
                 sellingProductSelectorAPI = api;
                 sellingProductSelectorReadyDeferred.resolve();
@@ -104,22 +106,29 @@
                 gridAPI = api;
             };
 
+            $scope.onCustomerSelected = function (selectedCustomer) {
+                $scope.isLoadingFilter = true;
+                getCustomerCurrencyId(selectedCustomer.CarrierAccountId).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilter = false;
+                });
+            };
         }
         function load() {
             $scope.isLoadingFilter = true;
             loadAllControls();
         }
+
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadPrimarySaleEntity])
-              .catch(function (error) {
-                  VRNotificationService.notifyExceptionWithClose(error, $scope);
-              })
-             .finally(function () {
-                 $scope.isLoadingFilter = false;
-             });
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadPrimarySaleEntity, getSystemCurrencyId])
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoadingFilter = false;
+            });
         }
-
-
         function loadSellingNumberPlan() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
@@ -143,23 +152,42 @@
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
-        function setFilterObject() {
-            filter = {
-                EffectiveOn: $scope.effectiveOn,
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
-                OwnerType: $scope.selectedOwnerType.value,
-                OwnerId: ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds(),
-                PrimarySaleEntity: primarySaleEntity
-            };
-
-        }
         function loadPrimarySaleEntity() {
             return whSBeSaleRateApiService.GetPrimarySaleEntity().then(function (response) {
                 primarySaleEntity = response;
             });
         }
 
+        function getSystemCurrencyId() {
+            return VRCommon_CurrencyAPIService.GetSystemCurrencyId().then(function (response) {
+                systemCurrencyId = response;
+            });
+        }
+        function getCustomerCurrencyId(customerId) {
+            return WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(customerId).then(function (response) {
+                customerCurrencyId = response;
+            });
+        }
+
+        function setGridPayload() {
+            gridPayload = {
+                query: {
+                    EffectiveOn: $scope.effectiveOn,
+                    ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
+                    OwnerType: $scope.selectedOwnerType.value,
+                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
+                }
+            };
+            if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                gridPayload.query.OwnerId = sellingProductSelectorAPI.getSelectedIds();
+                gridPayload.query.CurrencyId = systemCurrencyId;
+            }
+            else {
+                gridPayload.query.OwnerId = carrierAccountSelectorAPI.getSelectedIds();
+                gridPayload.query.CurrencyId = customerCurrencyId;
+            }
+            gridPayload.primarySaleEntity = primarySaleEntity;
+        }
     }
 
     appControllers.controller('WhS_BE_SaleRateManagementController', saleRateManagementController);

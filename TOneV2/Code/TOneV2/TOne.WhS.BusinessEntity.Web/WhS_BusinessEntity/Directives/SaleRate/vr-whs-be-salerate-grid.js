@@ -29,6 +29,8 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
         var gridAPI;
         var gridQuery;
 
+        var primarySaleEntity;
+
         function initializeController() {
             $scope.showGrid = false;
             $scope.salerates = [];
@@ -62,9 +64,12 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
         function defineAPI() {
             var api = {};
 
-            api.loadGrid = function (query) {
-                gridQuery = query;
-                return gridAPI.retrieveData(query);
+            api.load = function (payload) {
+                if (payload != undefined) {
+                    gridQuery = payload.query;
+                    primarySaleEntity = payload.primarySaleEntity;
+                }
+                return gridAPI.retrieveData(gridQuery);
             };
 
             if (ctrl.onReady != null)
@@ -91,12 +96,16 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                 directive: 'vr-whs-be-sale-rate-history-grid',
                 loadDirective: function (directiveAPI, dataItem) {
                     var directivePayload = {
-                        OwnerType: gridQuery.OwnerType,
-                        OwnerId: gridQuery.OwnerId,
-                        SellingNumberPlanId: gridQuery.SellingNumberPlanId,
-                        ZoneName: dataItem.ZoneName,
-                        CountryId: dataItem.CountryId
+                        query: {
+                            OwnerType: gridQuery.OwnerType,
+                            OwnerId: gridQuery.OwnerId,
+                            SellingNumberPlanId: gridQuery.SellingNumberPlanId,
+                            ZoneName: dataItem.ZoneName,
+                            CountryId: dataItem.CountryId,
+                            CurrencyId: gridQuery.CurrencyId
+                        }
                     };
+                    directivePayload.primarySaleEntity = primarySaleEntity;
                     return directiveAPI.load(directivePayload);
                 }
             });
@@ -107,9 +116,9 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
         function setNormalRateIconProperties(dataItem) {
             if (gridQuery.OwnerType === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value)
                 return;
-            if (gridQuery.PrimarySaleEntity == undefined || gridQuery.PrimarySaleEntity == null)
+            if (primarySaleEntity == undefined || primarySaleEntity == null)
                 return;
-            if (gridQuery.PrimarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
+            if (primarySaleEntity === whSBePrimarySaleEntityEnum.SellingProduct.value) {
                 if (dataItem.IsRateInherited === false) {
                     dataItem.iconType = 'explicit';
                     dataItem.iconTooltip = 'Explicit';

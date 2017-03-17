@@ -13,6 +13,7 @@
         var zoneEED;
         var currencyId;
         var countryId;
+        var primarySaleEntity;
 
         loadParameters();
         defineScope();
@@ -29,6 +30,7 @@
                 zoneEED = parameters.zoneEED;
                 currencyId = parameters.currencyId;
                 countryId = parameters.countryId;
+                primarySaleEntity = parameters.primarySaleEntity;
             }
         }
         function defineScope() {
@@ -45,13 +47,17 @@
                 title: 'Rate History',
                 directive: 'vr-whs-be-sale-rate-history-grid',
                 loadDirective: function (directiveAPI) {
-                    var payload = {
-                        OwnerType: ownerType,
-                        OwnerId: ownerId,
-                        ZoneName: zoneName,
-                        CountryId: countryId
+                    var saleRateHistoryGridPayload = {
+                        query: {
+                            OwnerType: ownerType,
+                            OwnerId: ownerId,
+                            ZoneName: zoneName,
+                            CountryId: countryId,
+                            CurrencyId: currencyId
+                        }
                     };
-                    return directiveAPI.load(payload);
+                    saleRateHistoryGridPayload.primarySaleEntity = primarySaleEntity;
+                    return directiveAPI.load(saleRateHistoryGridPayload);
                 }
             }, {
                 title: 'Codes',

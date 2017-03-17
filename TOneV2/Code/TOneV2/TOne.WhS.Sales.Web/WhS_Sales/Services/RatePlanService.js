@@ -103,7 +103,7 @@
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/InvalidRate.html", parameters, settings);
         }
 
-        function viewZoneInfo(ownerType, ownerId, zoneId, zoneName, zoneBED, zoneEED, currencyId, countryId) {
+        function viewZoneInfo(ownerType, ownerId, zoneId, zoneName, zoneBED, zoneEED, currencyId, countryId, primarySaleEntity) {
             var parameters = {
                 ownerType: ownerType,
                 ownerId: ownerId,
@@ -112,7 +112,8 @@
                 zoneBED: zoneBED,
                 zoneEED: zoneEED,
                 currencyId: currencyId,
-                countryId: countryId
+                countryId: countryId,
+                primarySaleEntity: primarySaleEntity
             };
 
             var settings;

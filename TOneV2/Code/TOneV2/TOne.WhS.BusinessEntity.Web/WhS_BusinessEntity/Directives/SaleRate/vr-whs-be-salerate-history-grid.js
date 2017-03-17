@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSaleRateHistoryGrid', ['WhS_BE_SaleRateHistoryAPIService', 'WhS_BE_RateChangeTypeEnum', 'WhS_BE_SalePriceListOwnerTypeEnum', 'VRNotificationService', function (WhS_BE_SaleRateHistoryAPIService, WhS_BE_RateChangeTypeEnum, WhS_BE_SalePriceListOwnerTypeEnum, VRNotificationService) {
+app.directive('vrWhsBeSaleRateHistoryGrid', ['WhS_BE_SaleRateHistoryAPIService', 'WhS_BE_RateChangeTypeEnum', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum', 'VRNotificationService', function (WhS_BE_SaleRateHistoryAPIService, WhS_BE_RateChangeTypeEnum, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -18,8 +18,10 @@ app.directive('vrWhsBeSaleRateHistoryGrid', ['WhS_BE_SaleRateHistoryAPIService',
     function SaleRateHistoryGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
-        var ownerType;
         var gridAPI;
+
+        var ownerType;
+        var primarySaleEntity;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -47,14 +49,15 @@ app.directive('vrWhsBeSaleRateHistoryGrid', ['WhS_BE_SaleRateHistoryAPIService',
         function defineAPI() {
             var api = {};
 
-            api.load = function (query) {
+            api.load = function (payload) {
+                var query;
 
-                var ownerType;
-
-                if (query != undefined) {
-                    ownerType = query.OwnerType;
+                if (payload != undefined) {
+                    query = payload.query;
+                    primarySaleEntity = payload.primarySaleEntity;
                 }
 
+                ownerType = (query != undefined) ? query.OwnerType : null;
                 $scope.scopeModel.isOwnerCustomer = (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value);
 
                 return gridAPI.retrieveData(query);
@@ -95,11 +98,14 @@ app.directive('vrWhsBeSaleRateHistoryGrid', ['WhS_BE_SaleRateHistoryAPIService',
                 }
             }
             function setSourceIconProperties() {
-                if (record.Entity.SellingProductId != undefined) {
-                    record.sourceIconType = 'inherited';
+                if (primarySaleEntity == undefined)
+                    return;
+                if (primarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
+                    if (record.Entity.SellingProductId == null)
+                        record.sourceIconType = 'explicit';
                 }
-                else {
-                    record.sourceIconType = 'explicit';
+                else if (record.Entity.SellingProductId != null) {
+                    record.sourceIconType = 'inherited';
                 }
             }
         }
