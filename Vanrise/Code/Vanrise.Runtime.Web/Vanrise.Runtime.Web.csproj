@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SchedulerTaskActionTypeController.cs" />
     <Compile Include="Controllers\SchedulerTaskController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -120,6 +121,7 @@
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-interval.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
+    <Content Include="Runtime\Services\APIServices\SchedulerTaskActionTypeAPIService.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
