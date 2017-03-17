@@ -454,7 +454,12 @@
                     if (isRoutingInfoDefined())
                         loadRatePlan();
                 };
-                WhS_Sales_RatePlanService.openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, $scope.numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft);
+
+                saveDraft().catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    WhS_Sales_RatePlanService.openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, $scope.numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft);
+                });
             };
             $scope.importRatePlan = function () {
                 var ownerType = ownerTypeSelectorAPI.getSelectedIds();
