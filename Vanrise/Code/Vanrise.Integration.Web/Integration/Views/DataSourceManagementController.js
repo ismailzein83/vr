@@ -113,7 +113,7 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
             showDisableAll: function() {
                 $scope.viewAll = true;
             }
-        }
+        };
         return context;
         };
 }
