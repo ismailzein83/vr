@@ -11,7 +11,7 @@ namespace Vanrise.BusinessProcess.Entities
 
         public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
         {
-            return BusinessManagerFactory.GetManager<IBPDefinitionManager>().DoesUserHaveViewAccess(context.UserId);
+            return BusinessManagerFactory.GetManager<IBPDefinitionManager>().DoesUserHaveViewAccessInManagement(context.UserId);
         }
     }
 }

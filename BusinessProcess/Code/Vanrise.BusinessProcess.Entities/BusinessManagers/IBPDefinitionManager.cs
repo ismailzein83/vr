@@ -8,7 +8,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public interface IBPDefinitionManager : IBusinessManager
     {
-        bool DoesUserHaveViewAccess(int userId);
+        bool DoesUserHaveViewAccessInManagement(int userId);
 
         string GetDefinitionTitle(string processName);
 
