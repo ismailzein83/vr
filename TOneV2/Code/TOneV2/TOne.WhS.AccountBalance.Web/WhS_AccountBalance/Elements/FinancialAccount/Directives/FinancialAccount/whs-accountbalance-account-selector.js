@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('whsAccountbalanceAccountSelector', ['UtilsService', function (UtilsService) {
+app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_FinancialAccountAPIService', 'UtilsService', function (WhS_AccountBalance_FinancialAccountAPIService, UtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -57,6 +57,11 @@ app.directive('whsAccountbalanceAccountSelector', ['UtilsService', function (Uti
             };
 
             api.getData = function () {
+
+            };
+
+            api.getSelectedIds = function () {
+
             };
 
             if (accountSelectorCtrl.onReady != null) {
