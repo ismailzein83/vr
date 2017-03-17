@@ -13,15 +13,15 @@ namespace Vanrise.GenericData.Notification
     {
         public override Guid ConfigId { get { return new Guid("E64C51A2-08E0-4B7D-96F0-9FF1848A72FA"); } }
 
-        public override string SearchRuntimeEditor { get { return "vr-genericdata-notificationtypesettings-searcheditor"; } }
+        public override string SearchRuntimeEditor { get { return "vr-genericdata-datarecordnotificationtypesettings-searcheditor"; } }
 
-        public override string BodyRuntimeEditor { get { return "vr-genericdata-notificationtypesettings-bodyeditor"; } }
+        public override string BodyRuntimeEditor { get { return "vr-genericdata-datarecordnotificationtypesettings-bodyeditor"; } }
 
         public Guid DataRecordTypeId { get; set; }
 
         public List<NotificationGridColumnDefinition> GridColumnDefinitions { get; set; }
 
-        public override VRNotificationDetail GetVRNotificationDetailMapper(IGetVRNotificationDetailMapperContext context)
+        public override VRNotificationDetail MapToNotificationDetail(IMapToNotificationDetailContext context)
         {
             Dictionary<string, NotificationFieldValue> fieldValues = new Dictionary<string, NotificationFieldValue>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();

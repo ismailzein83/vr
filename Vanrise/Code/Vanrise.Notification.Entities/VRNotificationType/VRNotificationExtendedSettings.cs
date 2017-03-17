@@ -11,7 +11,7 @@ namespace Vanrise.Notification.Entities
         public virtual string SearchRuntimeEditor { get; set; }
         public virtual string BodyRuntimeEditor { get; set; }
 
-        public virtual VRNotificationDetail GetVRNotificationDetailMapper(IGetVRNotificationDetailMapperContext context)
+        public virtual VRNotificationDetail MapToNotificationDetail(IMapToNotificationDetailContext context)
         {
             VRNotificationDetail vrNotificationDetail = new VRNotificationDetail()
             {
@@ -21,12 +21,12 @@ namespace Vanrise.Notification.Entities
         }
     }
 
-    public interface IGetVRNotificationDetailMapperContext
+    public interface IMapToNotificationDetailContext
     {
         VRNotification VRNotification { get; }
     }
 
-    public class GetVRNotificationDetailMapperContext : IGetVRNotificationDetailMapperContext
+    public class MapToNotificationDetailContext : IMapToNotificationDetailContext
     {
         public VRNotification VRNotification { get; set; }
     }

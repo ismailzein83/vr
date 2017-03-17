@@ -114,7 +114,7 @@ namespace Vanrise.Notification.Business
         VRNotificationDetail VRNotificationDetailMapper(VRNotification vrNotification)
         {
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(vrNotification.TypeId);
-            return vrNotificationTypeExtendedSettings.GetVRNotificationDetailMapper(new GetVRNotificationDetailMapperContext { VRNotification = vrNotification });
+            return vrNotificationTypeExtendedSettings.MapToNotificationDetail(new MapToNotificationDetailContext { VRNotification = vrNotification });
         }
 
         #endregion

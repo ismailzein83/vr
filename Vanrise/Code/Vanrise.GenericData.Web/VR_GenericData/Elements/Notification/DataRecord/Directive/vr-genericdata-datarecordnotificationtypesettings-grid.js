@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_Notification_VRNotificationsAPIService', 'VRTimerService', 'BusinessProcess_GridMaxSize', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService',
+app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsService', 'VR_Notification_VRNotificationsAPIService', 'VRTimerService', 'BusinessProcess_GridMaxSize', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService',
     function (UtilsService, VR_Notification_VRNotificationsAPIService, VRTimerService, BusinessProcess_GridMaxSize, VR_GenericData_DataRecordNotificationTypeSettingsAPIService) {
         return {
             restrict: 'E',
@@ -14,7 +14,7 @@ app.directive('vrGenericdataDatarecordnotificationGrid', ['UtilsService', 'VR_No
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/DataRecordNotificationGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsGridTemplate.html'
         };
 
         function DataRecordNotificationGridDirective($scope, ctrl, $attrs) {

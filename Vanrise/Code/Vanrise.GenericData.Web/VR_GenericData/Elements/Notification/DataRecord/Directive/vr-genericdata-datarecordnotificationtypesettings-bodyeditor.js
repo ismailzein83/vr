@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataNotificationtypesettingsBodyeditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrGenericdataDatarecordnotificationtypesettingsBodyeditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {

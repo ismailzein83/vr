@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataNotificationtypeSettings', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
