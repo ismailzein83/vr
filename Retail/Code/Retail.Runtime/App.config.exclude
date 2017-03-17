@@ -117,6 +117,7 @@
     <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
     <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
