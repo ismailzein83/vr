@@ -1,4 +1,4 @@
-﻿(function (appService) {
+﻿(function (app) {
 
     'use strict';
     SchedulerTaskActionTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Runtime_ModuleConfig', 'SecurityService'];
@@ -14,5 +14,5 @@
             GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes
         });
     }
-    appService.service('SchedulerTaskActionTypeAPIService', SchedulerTaskActionTypeAPIService);
-})(appService);
+    app.service('SchedulerTaskActionTypeAPIService', SchedulerTaskActionTypeAPIService);
+})(app);
