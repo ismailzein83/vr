@@ -46,7 +46,7 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                 var api = {};
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BEBridge.BP.Arguments.BEReceiveDefinitionStartInstanceFilter, Vanrise.BEBridge.BP.Arguments",
+                        $type: "Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput, Vanrise.BEBridge.BP.Arguments",
                         BEReceiveDefinitionIds: beRecieveDefinitionSelectorAPI.getSelectedIds()
                     };
                 };
@@ -72,7 +72,7 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                     var payload = {
                         filter: {
                             Filters: [{
-                                $type: "Vanrise.BEBridge.Business.BEReceiveDefinitionScheduleTaskFilter, Vanrise.BEBridge.Business",
+                                $type: "Vanrise.BEBridge.Business.BEReceiveDefinitionStartInstanceFilter, Vanrise.BEBridge.Business",
                             }]
                         },
                         selectedIds: beReceiveDefinitionIds
