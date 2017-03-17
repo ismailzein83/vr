@@ -24,10 +24,7 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
             var notificationTypeId;
             var query;
 
-            var vrNotificationTypeId;
-            var lessThanID;
-            var greaterThanId;
-            var nbOfRows;
+            var vrNotificationTypeId, lessThanID, greaterThanId, nbOfRows;
 
             var input = {
                 NotificationTypeId: vrNotificationTypeId,
