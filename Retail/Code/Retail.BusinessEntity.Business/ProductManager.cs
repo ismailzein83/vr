@@ -170,6 +170,12 @@ namespace Retail.BusinessEntity.Business
         public IEnumerable<int> GetProductPackageIds(int productId)
         {
             Product product = new ProductManager().GetProduct(productId);
+            if (product == null)
+                throw new NullReferenceException(string.Format("product of productId: {0}",productId));
+
+            if (product.Settings == null)
+                throw new NullReferenceException(string.Format("product.Settings of productId: {0}", productId));
+
             ProductFamily ProductFamily = new ProductFamilyManager().GetProductFamily(product.Settings.ProductFamilyId);
 
             if (ProductFamily == null || ProductFamily.Settings == null || ProductFamily.Settings.Packages == null || ProductFamily.Settings.Packages.Count == 0)
