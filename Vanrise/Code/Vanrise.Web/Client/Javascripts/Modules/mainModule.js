@@ -60,7 +60,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             $('.dropdown-toggle', $this).dropdown('toggle');
             $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
         }
-    };
+    };   
     $scope.hideMenu = function (e) {
         var $this = angular.element(e.currentTarget);
         dropdownHidingTimeoutHandlerc = setTimeout(function () {
@@ -189,8 +189,6 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         $scope.child = c;
     };
     $rootScope.toggletime = function (e) {
-        //   e.preventDefault();
-        //   e.stopPropagation();
         $('.datetime-controle').data("DateTimePicker").toggle();
         $('.date-section').removeClass('in');
         $('.time-section').addClass('in');
@@ -278,10 +276,10 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
     }
    
-    var pathArray = location.href.split('/');
+    var pathArray = location.href.split("/");
     var protocol = pathArray[0];
     var host = pathArray[2];
-    $scope.baseurl = protocol + '//' + host;
+    $scope.baseurl = protocol + "//" + host;
     $scope.operatorAccountSelectionOption = 1;   
     var numberReg = /^\d+$/;
     $scope.isNumber = function (s) {
