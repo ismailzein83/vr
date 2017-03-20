@@ -365,7 +365,29 @@ when not matched by target then
 	values(s.[ReportDefinitionId],s.[ReportName],s.[Content]);
 set identity_insert [TOneWhS_Billing].[ReportDefinition] off;
 ----------------------------------------------------------------------------------------------------
+end
 
+--[sec].[BusinessEntityModule]-------------1201 to 1300---------------------------------------------------------
+begin
+
+set nocount on;
+;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('82CE204C-05F7-48F1-8F29-A2F41E5C1374',null,'Sale Area'					,'5A9E78AE-229E-41B9-9DBF-492997B42B61',602,0),
+('8EA9F81D-521F-4E84-A60D-5F5D4E45920A',null,'Purchase Area'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])
+	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
+--------------------------------------------------------------------------------------------------------------
 end
 
 --[sec].[BusinessEntity]-------------------3301 to 3600-------------------------------------------------------
@@ -379,32 +401,28 @@ as (select * from (values
 ('71913E18-07A4-4917-A419-80771B448D55',3344,'Whs_BE_ZoneServiceConfig','Zone Service Configuration'		,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',201,0,'["View","Add","Edit"]'),('39388760-8BD4-411A-9BEA-8367FB23884D',3322,'WhS_BE_CodeGroup','Code Group'								,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',201,0,'["View", "Add", "Edit"]'),
 
 ('A7A8B058-A361-4A22-BB0D-4E7DA687DA57',3320,'WhS_BE_Carrier','Carrier'										,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View", "Add", "Edit"]'),
-('DF1DBAF9-3236-4A66-9568-A5EA429976F6',3325,'WhS_BE_SaleRate','Sale Rate'									,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View"]'),
-('09C5BF94-BDD0-4A8A-A4CD-3E524B1A705B',3326,'WhS_BE_SaleZoneAndCode','Sale Zone & Code'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View"]'),
-('8FC751F7-209D-4B9F-B4A7-5B81B7BAD23A',null,'WhS_BE_SaleRoutingProduct','Sale Routing Product'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1201,0,'["View"]'),
 ('18DAE80F-E3FE-4E4B-A92E-1ED8FDC28AB6',3323,'WhS_BE_Switch','Switches'										,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View", "Add", "Edit"]'),
 ('E3CF3CB5-0F44-49B7-87E6-D05B3DE54B8D',3327,'WhS_BE_SwitchReleaseCode','Switch Release Code'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View", "Add", "Edit"]'),
 ('DBCC03FB-EEEE-4C96-962B-5E68CF019771',3305,'WhS_BE_SwitchConnectivity','Switch Connectivity'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View", "Add", "Edit"]'),
-
-('FB962789-B602-46DE-8B1B-A55F64D5AAF3',3342,'WhS_BE_SupplierZoneAndCode','Supplier Zone & Code'			,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View"]'),
-('437F2D7A-5F99-4DD2-834B-BA41E5217478',null,'WhS_BE_SupplierService','Supplier Service'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View"]'),
-('69A42A6E-DDA8-4396-A5A2-1F540D961739',3341,'WhS_BE_SupplierRate','Supplier Rate'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',201,0,'["View"]'),
-
-('124CD5B7-9554-48B2-91CB-6C9F6CCAFF1E',3353,'WhS_BE_SellingNumberPlan','Selling Number Plan'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1201,0,'["View", "Add", "Edit"]'),
-
 ('201D5F13-8740-4C63-B9B5-F3745F6486A7',3343,'Whs_BE_RoutingProduct','Routing Product'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1204,0,'["View","Add","Edit"]'),
-('842A7143-6513-460A-A7CE-5C8D95E84A49',3352,'WhS_BE_SellingProduct','Selling Product'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1201,0,'["View","Add","Edit","View Assigned Customers","Assign Customers"]'),
-
-('6182C49F-5B9C-415C-8E59-2D2430ED3DED',3338,'Whs_CDRRules','CDR Rules'										,'B6B8F582-4759-43FB-9220-AA7662C366EA',403,0,'["View","Add","Edit"]'),
-('93DA33D5-4713-4784-99D2-5055C2468204',3338,'Whs_Purchase_Rules','Purchase Rules'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',403,0,'["View","Add","Edit"]'),
-('2A1AC701-43AE-4AD5-9459-331A394A8DC2',3339,'Whs_Sales_Rules','Sale Rules'									,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',403,0,'["View","Add","Edit"]'),
-
-('DA8ED40F-52E3-4FB8-8192-7B5153FA1CCB',3354,'WhS_Sales_NumberingPlan','Numbering Plan'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1201,0,'["View", "Start Process"]'),
-('36C0C9B0-0FAD-4A87-8A28-D3D43AF12A14',3355,'WhS_Sales_RatePlan','Rate Plan'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1201,0,'["View", "Start Process"]'),
-('F41DAD6A-EE43-4C4A-9F1D-A575F002DF20',3301,'WhS_BE_SupplierPricelist','Supplier PriceList'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',1202,0,'["View", "Start Process"]'),
-
 ('C7596EEC-E524-4E50-8668-7E2A606C75F6',null,'WhS_BE_StateBackup','State Backup'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Restore"]'),
 
+('DF1DBAF9-3236-4A66-9568-A5EA429976F6',3325,'WhS_BE_SaleRate','Sale Rate'									,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',201,0,'["View"]'),
+('09C5BF94-BDD0-4A8A-A4CD-3E524B1A705B',3326,'WhS_BE_SaleZoneAndCode','Sale Zone & Code'					,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',201,0,'["View"]'),
+('8FC751F7-209D-4B9F-B4A7-5B81B7BAD23A',null,'WhS_BE_SaleRoutingProduct','Sale Routing Product'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',1201,0,'["View"]'),
+('124CD5B7-9554-48B2-91CB-6C9F6CCAFF1E',3353,'WhS_BE_SellingNumberPlan','Selling Number Plan'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',1201,0,'["View", "Add", "Edit"]'),
+('842A7143-6513-460A-A7CE-5C8D95E84A49',3352,'WhS_BE_SellingProduct','Selling Product'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',1201,0,'["View","Add","Edit","View Assigned Customers","Assign Customers"]'),
+('DA8ED40F-52E3-4FB8-8192-7B5153FA1CCB',3354,'WhS_Sales_NumberingPlan','Numbering Plan'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',1201,0,'["View", "Start Process"]'),
+('36C0C9B0-0FAD-4A87-8A28-D3D43AF12A14',3355,'WhS_Sales_RatePlan','Rate Plan'								,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',1201,0,'["View", "Start Process"]'),
+('2A1AC701-43AE-4AD5-9459-331A394A8DC2',3339,'Whs_Sales_Rules','Sale Rules'									,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',403,0,'["View","Add","Edit"]'),
+
+('FB962789-B602-46DE-8B1B-A55F64D5AAF3',3342,'WhS_BE_SupplierZoneAndCode','Supplier Zone & Code'			,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',201,0,'["View"]'),
+('437F2D7A-5F99-4DD2-834B-BA41E5217478',null,'WhS_BE_SupplierService','Supplier Service'					,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',201,0,'["View"]'),
+('69A42A6E-DDA8-4396-A5A2-1F540D961739',3341,'WhS_BE_SupplierRate','Supplier Rate'							,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',201,0,'["View"]'),
+('F41DAD6A-EE43-4C4A-9F1D-A575F002DF20',3301,'WhS_BE_SupplierPricelist','Supplier PriceList'				,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',1202,0,'["View", "Start Process"]'),
+('93DA33D5-4713-4784-99D2-5055C2468204',3338,'Whs_Purchase_Rules','Purchase Rules'							,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',403,0,'["View","Add","Edit"]'),
+
+('6182C49F-5B9C-415C-8E59-2D2430ED3DED',3338,'Whs_CDRRules','CDR Rules'										,'B6B8F582-4759-43FB-9220-AA7662C366EA',403,0,'["View","Add","Edit"]'),
 ('FE79D4D7-2351-4B74-B2AB-3E1AAD43908B',3450,'WhS_Routing_RoutingRule','Route Rule'							,'B6B8F582-4759-43FB-9220-AA7662C366EA',1204,0,'["View","Add","Edit"]'),
 ('A596599B-1BAE-4698-827E-E2F5AFD8CF4C',3454,'WhS_Routing_RoutingProcess','Build Route'						,'B6B8F582-4759-43FB-9220-AA7662C366EA',1207,0,'["View Process Logs", "Start Process", "View Routes"]'),
 ('986C3FC1-2FCE-4966-ABF6-900EBCB6306B',3455,'WhS_Routing_CostGenerationProcess','Cost Generation'			,'B6B8F582-4759-43FB-9220-AA7662C366EA',1207,0,'["View Process Logs", "Start Process", "View Costs"]'),
