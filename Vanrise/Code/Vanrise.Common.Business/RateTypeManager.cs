@@ -28,7 +28,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelHandler = new RateTypeExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(RateTypeLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper), handler);
 
         }
@@ -37,10 +37,18 @@ namespace Vanrise.Common.Business
         {
             return this.GetCachedRateTypes().MapRecords(RateTypeInfoMapper).OrderBy(x => x.Name);
         }
-        public Vanrise.Entities.RateType GetRateType(int rateTypeId)
+        public Vanrise.Entities.RateType GetRateType(int rateTypeId, bool isViewedFromUI)
         {
             var allRateTypes = GetCachedRateTypes();
-            return allRateTypes.GetRecord(rateTypeId);
+            var rateType = allRateTypes.GetRecord(rateTypeId);
+            if (rateType != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(RateTypeLoggableEntity.Instance, rateType);
+            return rateType;
+        }
+        public Vanrise.Entities.RateType GetRateType(int rateTypeId)
+        {
+
+            return GetRateType(rateTypeId,false);
         }
         public string GetRateTypeName(int rateTypeId)
         {
@@ -59,10 +67,11 @@ namespace Vanrise.Common.Business
             IRateTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IRateTypeDataManager>();
             bool insertActionSucc = dataManager.Insert(rateType, out rateTypeId);
             if (insertActionSucc)
-            {
+            {   
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 rateType.RateTypeId = rateTypeId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(RateTypeLoggableEntity.Instance, rateType);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = RateTypeDetailMapper(rateType);
             }
             else
@@ -85,6 +94,7 @@ namespace Vanrise.Common.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(RateTypeLoggableEntity.Instance, rateType);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = RateTypeDetailMapper(rateType);
             }
@@ -153,6 +163,50 @@ namespace Vanrise.Common.Business
                });
         }
         #endregion
+
+        private class RateTypeLoggableEntity : VRLoggableEntityBase
+        {
+            public static RateTypeLoggableEntity Instance = new RateTypeLoggableEntity();
+
+            private RateTypeLoggableEntity()
+            {
+
+            }
+
+            static RateTypeManager s_rateTypeManager = new RateTypeManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_RateType"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "RateType"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_RateType_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                RateType rateType = context.Object.CastWithValidate<RateType>("context.Object");
+                return rateType.RateTypeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                RateType rateType = context.Object.CastWithValidate<RateType>("context.Object");
+                return s_rateTypeManager.GetRateTypeName(rateType.RateTypeId);
+            }
+        }
 
         #region  Mappers
         private Vanrise.Entities.RateTypeInfo RateTypeInfoMapper(Vanrise.Entities.RateType rateType)

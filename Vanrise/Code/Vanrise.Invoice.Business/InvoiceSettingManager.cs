@@ -10,15 +10,24 @@ using Vanrise.Invoice.Data;
 using Vanrise.Caching;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Common.Business;
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceSettingManager : IInvoiceSettingManager
     {
         #region Public Methods
-        public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId)
+        public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId, bool isViewedFromUI)
         {
             var invoiceSettings = GetCachedInvoiceSettings();
-            return invoiceSettings.GetRecord(invoiceSettingId);
+            var invoiceSetting= invoiceSettings.GetRecord(invoiceSettingId);
+            if (invoiceSetting != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new InvoiceSettingLoggableEntity(invoiceSetting.InvoiceTypeId), invoiceSetting);
+            return invoiceSetting;
+        }
+
+        public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId)
+        {
+           return  GetInvoiceSetting(invoiceSettingId,false);
         }
         public IDataRetrievalResult<InvoiceSettingDetail> GetFilteredInvoiceSettings(DataRetrievalInput<InvoiceSettingQuery> input)
         {
@@ -53,8 +62,9 @@ namespace Vanrise.Invoice.Business
             invoiceSetting.InvoiceSettingId = Guid.NewGuid();
             if (dataManager.InsertInvoiceSetting(invoiceSetting))
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(new InvoiceSettingLoggableEntity(invoiceSetting.InvoiceTypeId), invoiceSetting);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = InvoiceSettingDetailMapper(invoiceSetting);
             }
             else
@@ -76,8 +86,9 @@ namespace Vanrise.Invoice.Business
 
             if (dataManager.UpdateInvoiceSetting(invoiceSetting))
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new InvoiceSettingLoggableEntity(invoiceSetting.InvoiceTypeId), invoiceSetting);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = InvoiceSettingDetailMapper(invoiceSetting);
             }
             else
@@ -222,6 +233,53 @@ namespace Vanrise.Invoice.Business
             }
         }
 
+
+        private class InvoiceSettingLoggableEntity : VRLoggableEntityBase
+        {
+
+            static InvoiceSettingManager s_invoiceTypeManager = new InvoiceSettingManager();
+            static InvoiceTypeManager _invoiceTypeManager = new InvoiceTypeManager();
+            Guid _invoiceTypeId;
+
+
+            public InvoiceSettingLoggableEntity(Guid invoiceTypeId)
+            {
+                _invoiceTypeId = invoiceTypeId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_Invoice_InvoiceSetting_{0}", _invoiceTypeId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return String.Format(_invoiceTypeManager.GetInvoiceTypeName(_invoiceTypeId), "_InvoiceSettings"); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Invoice_InvoiceSetting_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                InvoiceSetting invoiceSetting = context.Object.CastWithValidate<InvoiceSetting>("context.Object");
+                return invoiceSetting.InvoiceSettingId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                InvoiceSetting invoiceSetting = context.Object.CastWithValidate<InvoiceSetting>("context.Object");
+                return s_invoiceTypeManager.GetInvoiceSettingName(invoiceSetting.InvoiceSettingId);
+            }
+
+            public override string ModuleName
+            {
+                get { return "Invoice"; }
+            }
+        }
         #endregion
 
         #region Private Methods

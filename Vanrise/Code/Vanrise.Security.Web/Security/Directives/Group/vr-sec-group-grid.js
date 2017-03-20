@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_PermissionAPIService', function (VR_Sec_GroupAPIService, VR_Sec_GroupService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_PermissionAPIService) {
+app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_PermissionAPIService', 'VRUIUtilsService', function (VR_Sec_GroupAPIService, VR_Sec_GroupService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_PermissionAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -25,6 +25,7 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
     function GroupGridCtor($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -33,6 +34,8 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = VR_Sec_GroupService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -45,6 +48,7 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
                     };
 
                     directiveAPI.onGroupAdded = function (groupObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(groupObject);
                         gridAPI.itemAdded(groupObject);
                     };
 
@@ -55,6 +59,11 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_Sec_GroupAPIService.GetFilteredGroups(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -91,6 +100,7 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
 
         function editGroup(groupObj) {
             var onGroupUpdated = function (groupObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(groupObj);
                 gridAPI.itemUpdated(groupObj);
             };
 

@@ -281,6 +281,7 @@ namespace Vanrise.Common.Business
             {
                 int currencyExchangeRateId = -1;
                 bool insertActionSucc = dataManager.Insert(exchangeRate, out currencyExchangeRateId);
+                VRActionLogger.Current.LogObjectCustomAction(Vanrise.Common.Business.CurrencyManager.CurrencyLoggableEntity.Instance, "Add Exchange Rate ", false, exchangeRate, String.Format("New exchange rate added of date {0}",exchangeRate.ExchangeDate));
 
             }
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();

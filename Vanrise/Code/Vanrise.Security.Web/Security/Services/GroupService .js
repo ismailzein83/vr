@@ -2,12 +2,15 @@
 
     'use strict';
 
-    GroupService.$inject = ['VRModalService'];
+    GroupService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function GroupService(VRModalService) {
+    function GroupService(VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addGroup: addGroup,
-            editGroup: editGroup
+            editGroup: editGroup,
+            registerObjectTrackingDrillDownToGroup: registerObjectTrackingDrillDownToGroup,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addGroup(onGroupAdded) {
@@ -33,7 +36,42 @@
 
             VRModalService.showModal('/Client/Modules/Security/Views/Group/GroupEditor.html', modalParameters, modalSettings);
         }
-    }
+        function getEntityUniqueName()
+        {
+            return "VR_Security_Group";
+        }
+
+        function registerObjectTrackingDrillDownToGroup() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+            
+
+            drillDownDefinition.loadDirective = function (directiveAPI, groupItem) {
+                groupItem.objectTrackingGridAPI = directiveAPI;
+               
+                var query = {
+                    ObjectId: groupItem.Entity.GroupId,
+                    EntityUniqueName: getEntityUniqueName(),
+                    
+                };
+                return groupItem.objectTrackingGridAPI.load(query);
+            };
+            
+            addDrillDownDefinition(drillDownDefinition);
+           
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+          
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+    };
+    
 
     appControllers.service('VR_Sec_GroupService', GroupService);
 

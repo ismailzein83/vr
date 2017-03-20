@@ -11,19 +11,32 @@ namespace Vanrise.Common.Business
     public class VRMailMessageTemplateManager
     {
         #region Public Methods
-        public VRMailMessageTemplate GetMailMessageTemplate(Guid vrMailMessageTemplateId)
+        public VRMailMessageTemplate GetMailMessageTemplate(Guid vrMailMessageTemplateId, bool isViewedFromUI)
         {
             Dictionary<Guid, VRMailMessageTemplate> cachedVRMailMessageTemplates = this.GetCachedVRMailMessageTemplates();
-            return cachedVRMailMessageTemplates.GetRecord(vrMailMessageTemplateId);
+            VRMailMessageTemplate vrmailMessageTemplate = cachedVRMailMessageTemplates.GetRecord(vrMailMessageTemplateId);
+            if (vrmailMessageTemplate != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(VRMailMessageTemplateLoggableEntity.Instance, vrmailMessageTemplate);
+            return vrmailMessageTemplate;
         }
 
+        public VRMailMessageTemplate GetMailMessageTemplate(Guid vrMailMessageTemplateId)
+        {
+           
+            return GetMailMessageTemplate(vrMailMessageTemplateId,false);
+        }
         public IDataRetrievalResult<VRMailMessageTemplateDetail> GetFilteredMailMessageTemplates(DataRetrievalInput<VRMailMessageTemplateQuery> input)
         {
             var allVRMailMessageTemplates = GetCachedVRMailMessageTemplates();
             Func<VRMailMessageTemplate, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(VRMailMessageTemplateLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRMailMessageTemplates.ToBigResult(input, filterExpression, VRMailMessageTemplateDetailMapper));
         }
+        public string GetMAilMessageTemplateName(VRMailMessageTemplate vrMailMessageTemplateId)
+        {
 
+            return vrMailMessageTemplateId != null ? vrMailMessageTemplateId.Name : null;
+        }
         public Vanrise.Entities.InsertOperationOutput<VRMailMessageTemplateDetail> AddMailMessageTemplate(VRMailMessageTemplate vrMailMessageTemplateItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRMailMessageTemplateDetail>();
@@ -38,6 +51,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(vrMailMessageTemplateItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRMailMessageTemplateLoggableEntity.Instance, vrMailMessageTemplateItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRMailMessageTemplateDetailMapper(vrMailMessageTemplateItem);
             }
@@ -61,6 +75,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(vrMailMessageTemplateItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRMailMessageTemplateLoggableEntity.Instance, vrMailMessageTemplateItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRMailMessageTemplateDetailMapper(this.GetMailMessageTemplate(vrMailMessageTemplateItem.VRMailMessageTemplateId));
             }
@@ -104,6 +119,50 @@ namespace Vanrise.Common.Business
             }
         }
 
+
+        private class VRMailMessageTemplateLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRMailMessageTemplateLoggableEntity Instance = new VRMailMessageTemplateLoggableEntity();
+
+            private VRMailMessageTemplateLoggableEntity()
+            {
+
+            }
+
+            static VRMailMessageTemplateManager s_vrmailMessageTemplateManager = new VRMailMessageTemplateManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_VRMailMessageTemplate"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "VRMailMessageTemplate"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_VRMailMessageTemplate_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRMailMessageTemplate vrmailMessageTemplate = context.Object.CastWithValidate<VRMailMessageTemplate>("context.Object");
+                return vrmailMessageTemplate.VRMailMessageTemplateId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRMailMessageTemplate vrmailMessageTemplate = context.Object.CastWithValidate<VRMailMessageTemplate>("context.Object");
+                return s_vrmailMessageTemplateManager.GetMAilMessageTemplateName(vrmailMessageTemplate);
+            }
+        }
         #endregion
 
         #region Private Methods

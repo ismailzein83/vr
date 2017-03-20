@@ -38,7 +38,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetGroup")]
         public Group GetGroup(int groupId)
         {
-            return _manager.GetGroup(groupId);
+            return _manager.GetGroup(groupId,true);
         }
 
         [HttpPost]

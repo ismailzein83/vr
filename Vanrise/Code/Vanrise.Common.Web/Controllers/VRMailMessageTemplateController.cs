@@ -26,7 +26,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetMailMessageTemplate")]
         public VRMailMessageTemplate GetMailMessageTemplate(Guid VRMailMessageTemplateId)
         {
-            return _manager.GetMailMessageTemplate(VRMailMessageTemplateId);
+            return _manager.GetMailMessageTemplate(VRMailMessageTemplateId,true);
         }
 
         [HttpPost]

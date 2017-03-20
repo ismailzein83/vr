@@ -93,6 +93,7 @@
                 };
 
                 directiveAPI.onGenericRuleAdded = function (addedGenericRule) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedGenericRule);
                     gridAPI.itemAdded(addedGenericRule);
                 };
 

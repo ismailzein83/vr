@@ -3,9 +3,10 @@
 
     "use strict";
 
-    VRMailMessageTemplateService.$inject = ['VRModalService'];
+    VRMailMessageTemplateService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function VRMailMessageTemplateService(VRModalService) {
+    function VRMailMessageTemplateService(VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
 
         function addMailMessageTemplate(onMailMessageTemplateAdded) {
             var settings = {};
@@ -28,11 +29,45 @@
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRMailMessageTemplateEditor.html', parameters, settings);
         }
+        function getEntityUniqueName() {
+            return "VR_Common_VRMailMessageTemplate";
+        }
 
+        function registerObjectTrackingDrillDownToVRMailTemplateMessage() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, mailItem) {
+                mailItem.objectTrackingGridAPI = directiveAPI;
+                
+                var query = {
+                    ObjectId: mailItem.Entity.VRMailMessageTemplateId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return mailItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
 
         return {
             addMailMessageTemplate: addMailMessageTemplate,
-            editMailMessageTemplate: editMailMessageTemplate
+            editMailMessageTemplate: editMailMessageTemplate,
+            registerObjectTrackingDrillDownToVRMailTemplateMessage: registerObjectTrackingDrillDownToVRMailTemplateMessage,
+            getDrillDownDefinition: getDrillDownDefinition
         };
     }
 

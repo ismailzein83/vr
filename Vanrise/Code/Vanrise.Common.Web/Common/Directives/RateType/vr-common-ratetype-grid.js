@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCommonRatetypeGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService", "VRCommon_RateTypeService",
-function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCommon_RateTypeService) {
+app.directive("vrCommonRatetypeGrid", ["UtilsService", "VRNotificationService", "VRCommon_RateTypeAPIService", "VRCommon_RateTypeService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCommon_RateTypeService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -23,7 +23,7 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
     };
 
     function RateTypeGrid($scope, ctrl, $attrs) {
-
+        var gridDrillDownTabsObj;
         var gridAPI;
         this.initializeController = initializeController;
 
@@ -32,7 +32,8 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
             $scope.rateTypes = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+                var drillDownDefinitions = VRCommon_RateTypeService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -44,6 +45,7 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onRateTypeAdded = function (rateTypeObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(rateTypeObject);
                         gridAPI.itemAdded(rateTypeObject);
                     };
                     return directiveAPI;
@@ -52,7 +54,11 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_RateTypeAPIService.GetFilteredRateTypes(dataRetrievalInput)
                     .then(function (response) {
-
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -76,6 +82,7 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
 
         function editRateType(rateType) {
             var onRateTypeUpdated = function (updatedRateType) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(updatedRateType);
                 gridAPI.itemUpdated(updatedRateType);
             };
             VRCommon_RateTypeService.editRateType(rateType.Entity.RateTypeId, onRateTypeUpdated);

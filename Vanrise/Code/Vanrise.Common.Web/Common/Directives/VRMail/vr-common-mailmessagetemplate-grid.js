@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplateAPIService', 'VRCommon_VRMailMessageTemplateService', 'VRNotificationService',
-    function (VRCommon_VRMailMessageTemplateAPIService, VRCommon_VRMailMessageTemplateService, VRNotificationService) {
+app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplateAPIService', 'VRCommon_VRMailMessageTemplateService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VRCommon_VRMailMessageTemplateAPIService, VRCommon_VRMailMessageTemplateService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.mailMessageTemplates = [];
@@ -29,11 +29,18 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRMailMessageTemplateService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRMailMessageTemplateAPIService.GetFilteredMailMessageTemplates(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -47,10 +54,12 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
                 var api = {};
 
                 api.load = function (query) {
+                  
                     return gridAPI.retrieveData(query);
                 };
 
                 api.onMailMessageTemplateAdded = function (addedMailMessageTemplate) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedMailMessageTemplate);
                     gridAPI.itemAdded(addedMailMessageTemplate);
                 };
 
@@ -67,6 +76,7 @@ app.directive('vrCommonMailmessagetemplateGrid', ['VRCommon_VRMailMessageTemplat
             }
             function editMailMessageTemplate(mailMessageTemplateItem) {
                 var onMailMessageTemplateUpdated = function (updatedMailMessageTemplate) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedMailMessageTemplate);
                     gridAPI.itemUpdated(updatedMailMessageTemplate);
                 };
 

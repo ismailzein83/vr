@@ -28,10 +28,13 @@ app.service('VR_Invoice_InvoiceSettingService', ['VRModalService',
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/InvoiceSettingEditor.html', parameters, settings);
         }
-
+        function getEntityUniqueName(invoiceTypeId) {
+            return "VR_Invoice_InvoiceSetting_" + invoiceTypeId;
+        }
 
         return ({
             addInvoiceSetting: addInvoiceSetting,
             editInvoiceSetting: editInvoiceSetting,
+            getEntityUniqueName: getEntityUniqueName,
         });
     }]);

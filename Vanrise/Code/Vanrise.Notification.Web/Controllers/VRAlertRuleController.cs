@@ -26,7 +26,7 @@ namespace Vanrise.Notification.Web.Controllers
         [Route("GetVRAlertRule")]
         public VRAlertRule GetVRAlertRule(long vrAlertRuleId)
         {
-            return _manager.GetVRAlertRule(vrAlertRuleId);
+            return _manager.GetVRAlertRule(vrAlertRuleId,true);
         }
 
         [HttpPost]

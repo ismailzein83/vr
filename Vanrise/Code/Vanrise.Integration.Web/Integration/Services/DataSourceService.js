@@ -2,16 +2,20 @@
 
     'use strict';
 
-    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum','VRNotificationService','VR_Integration_DataSourceAPIService'];
+    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum','VRNotificationService','VR_Integration_DataSourceAPIService','VRCommon_ObjectTrackingService'];
 
-    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_MappingResultEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService) {
+    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_MappingResultEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService,VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions=[];
         return {
+            
             getExecutionStatusDescription: getExecutionStatusDescription,
             getMappingResultDescription: getMappingResultDescription,
             getExecutionStatusColor: getExecutionStatusColor,
             editDataSource: editDataSource,
             addDataSource: addDataSource,
-            deleteDataSource: deleteDataSource
+            deleteDataSource: deleteDataSource,
+            registerObjectTrackingDrillDownToDataSource:registerObjectTrackingDrillDownToDataSource,
+            getDrillDownDefinition:getDrillDownDefinition
         };
 
         function getExecutionStatusDescription(executionStatusValue) {
@@ -84,6 +88,43 @@
                     }
                 });
         }
+
+        function getEntityUniqueName()
+        {
+            return "VR_Integration_DataSource";
+        }
+
+        function registerObjectTrackingDrillDownToDataSource() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+            
+
+            drillDownDefinition.loadDirective = function (directiveAPI, dataSourceItem) {
+                dataSourceItem.objectTrackingGridAPI = directiveAPI;
+                console.log(dataSourceItem);
+                var query = {
+                    ObjectId: dataSourceItem.Entity.DataSourceId,
+                    EntityUniqueName: getEntityUniqueName(),
+                    
+                };
+                return dataSourceItem.objectTrackingGridAPI.load(query);
+            };
+            
+            addDrillDownDefinition(drillDownDefinition);
+           
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+          
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+   
+    
     };
 
     appControllers.service('VR_Integration_DataSourceService', DataSourceService);

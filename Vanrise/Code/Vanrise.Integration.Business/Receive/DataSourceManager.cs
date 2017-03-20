@@ -49,6 +49,7 @@ namespace Vanrise.Integration.Business
                 (input.Query.AdapterTypeIDs == null || input.Query.AdapterTypeIDs.Count() == 0 || input.Query.AdapterTypeIDs.Contains(dataSource.AdapterTypeId))
                 &&
                 (input.Query.IsEnabled == null || input.Query.IsEnabled == dataSource.IsEnabled);
+            VRActionLogger.Current.LogGetFilteredAction(DataSourceLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataSources.ToBigResult(input, filterExpression, DataSourceDetailMapper));
         }
 
@@ -113,6 +114,7 @@ namespace Vanrise.Integration.Business
                 if (dataSourceInsertActionSucc)
                 {
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    VRActionLogger.Current.TrackAndLogObjectAdded(DataSourceLoggableEntity.Instance, dataSourceObject);
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
@@ -141,6 +143,7 @@ namespace Vanrise.Integration.Business
                 if (dataSourceUpdateActionSucc)
                 {
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(DataSourceLoggableEntity.Instance, dataSourceObject);
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
@@ -159,9 +162,11 @@ namespace Vanrise.Integration.Business
 
             if (deleted)
             {
+                var dataSource = GetDataSource(dataSourceId);
                 Vanrise.Runtime.Business.SchedulerTaskManager schedulerTaskManager = new Runtime.Business.SchedulerTaskManager();
                 if ((schedulerTaskManager.DeleteTask(taskId)).Result == DeleteOperationResult.Succeeded)
                 {
+                    VRActionLogger.Current.TrackAndLogObjectDeleted(DataSourceLoggableEntity.Instance, dataSource);
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 }
             }
@@ -233,6 +238,8 @@ namespace Vanrise.Integration.Business
             if (taskUpdated.Result == UpdateOperationResult.Succeeded)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                
+                VRActionLogger.Current.LogObjectCustomAction(DataSourceLoggableEntity.Instance, "Disable", true, dataSource, null);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceId);
             }
@@ -256,6 +263,7 @@ namespace Vanrise.Integration.Business
             if (taskUpdated.Result == UpdateOperationResult.Succeeded)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+               VRActionLogger.Current.LogObjectCustomAction(DataSourceLoggableEntity.Instance, "Enable", true, dataSource, null);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceId);
             }
@@ -346,6 +354,49 @@ namespace Vanrise.Integration.Business
             }
         }
 
+        private class DataSourceLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataSourceLoggableEntity Instance = new DataSourceLoggableEntity();
+
+            private DataSourceLoggableEntity()
+            {
+
+            }
+
+            static DataSourceManager s_dataSourceManager = new DataSourceManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Integration_DataSource"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Integration"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "DataSource"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Integration_DataSource_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataSource dataSource = context.Object.CastWithValidate<DataSource>("context.Object");
+                return dataSource.DataSourceId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataSource dataSource = context.Object.CastWithValidate<DataSource>("context.Object");
+                return s_dataSourceManager.GetDataSourceName(dataSource.DataSourceId);
+            }
+        }
 
         #endregion
 

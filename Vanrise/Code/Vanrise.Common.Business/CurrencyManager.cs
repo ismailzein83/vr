@@ -26,7 +26,7 @@ namespace Vanrise.Common.Business
                     {
                         ExportExcelHandler = new CurrencyExcelExportHandler()
                     };
-
+                    VRActionLogger.Current.LogGetFilteredAction(CurrencyLoggableEntity.Instance, input);
                     return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCurrencies.ToBigResult(input, filterExpression, CurrencyDetailMapper), handler);
                 }
 
@@ -35,12 +35,19 @@ namespace Vanrise.Common.Business
                     return this.GetCachedCurrencies().MapRecords(x => x).OrderBy(x => x.Name);
                 }
 
-                public Currency GetCurrency(int currencyId)
+                public Currency GetCurrency(int currencyId, bool isViewedFromUI)
                 {
                     var currencies = GetCachedCurrencies();
-                    return currencies.GetRecord(currencyId);
+                    var currency = currencies.GetRecord(currencyId);
+                    if (currency != null && isViewedFromUI)
+                        VRActionLogger.Current.LogObjectViewed(CurrencyLoggableEntity.Instance, currency);
+                    return currency;
                 }
-
+                public Currency GetCurrency(int currencyId)
+                {
+                   
+                    return GetCurrency(currencyId, false);
+                }
                 public Currency GetSystemCurrency()
                 {
                     ConfigManager configManager = new ConfigManager();
@@ -92,9 +99,10 @@ namespace Vanrise.Common.Business
                     bool insertActionSucc = dataManager.Insert(currency, out currencyId);
                     if (insertActionSucc)
                     {
-                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                         currency.CurrencyId = currencyId;
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                        VRActionLogger.Current.TrackAndLogObjectAdded(CurrencyLoggableEntity.Instance, currency);
+                        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                         insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);
                     }
                     else
@@ -117,6 +125,7 @@ namespace Vanrise.Common.Business
                     if (updateActionSucc)
                     {
                         Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                        VRActionLogger.Current.TrackAndLogObjectUpdated(CurrencyLoggableEntity.Instance, currency);
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                         updateOperationOutput.UpdatedObject = CurrencyDetailMapper(currency);
                     }
@@ -128,7 +137,49 @@ namespace Vanrise.Common.Business
                 }
 
         #endregion
+                public class CurrencyLoggableEntity : VRLoggableEntityBase
+                {
+                    public static CurrencyLoggableEntity Instance = new CurrencyLoggableEntity();
 
+                    private CurrencyLoggableEntity()
+                    {
+
+                    }
+
+                    static CurrencyManager s_userManager = new CurrencyManager();
+
+                    public override string EntityUniqueName
+                    {
+                        get { return "VR_Common_Currency"; }
+                    }
+
+                    public override string ModuleName
+                    {
+                        get { return "Common"; }
+                    }
+
+                    public override string EntityDisplayName
+                    {
+                        get { return "Currency"; }
+                    }
+
+                    public override string ViewHistoryItemClientActionName
+                    {
+                        get { return "VR_Common_Currency_ViewHistoryItem"; }
+                    }
+
+                    public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+                    {
+                        Currency currency = context.Object.CastWithValidate<Currency>("context.Object");
+                        return currency.CurrencyId;
+                    }
+
+                    public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+                    {
+                        Currency currency = context.Object.CastWithValidate<Currency>("context.Object");
+                        return s_userManager.GetCurrencyName(currency.CurrencyId);
+                    }
+                }
         #region Private Members
 
         private class CurrencyExcelExportHandler : ExcelExportHandler<CurrencyDetail>

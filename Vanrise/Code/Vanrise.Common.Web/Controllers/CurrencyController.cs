@@ -32,7 +32,7 @@ namespace Vanrise.Common.Web.Controllers
        public Currency GetCurrency(int currencyId)
        {
            CurrencyManager manager = new CurrencyManager();
-           return manager.GetCurrency(currencyId);
+           return manager.GetCurrency(currencyId,true);
        }
 
        [HttpGet]

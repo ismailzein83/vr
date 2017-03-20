@@ -34,7 +34,7 @@ namespace Vanrise.Web.Controllers
         public Vanrise.Entities.RateType GetRateType(int rateTypeId)
         {
             RateTypeManager manager = new RateTypeManager();
-            return manager.GetRateType(rateTypeId);
+            return manager.GetRateType(rateTypeId,true);
         }
 
         [HttpPost]

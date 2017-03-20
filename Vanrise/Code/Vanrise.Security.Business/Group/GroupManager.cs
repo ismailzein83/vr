@@ -21,7 +21,7 @@ namespace Vanrise.Security.Business
             var allItems = GetCachedGroups();
 
             Func<Group, bool> filterExpression = (itemObject) => (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(GroupLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, GroupDetailMapper));
         }
 
@@ -44,12 +44,19 @@ namespace Vanrise.Security.Business
             return groups.MapRecords(GroupInfoMapper);
         }
 
-        public Group GetGroup(int groupId)
+        public Group GetGroup(int groupId, bool isViewedFromUI)
         {
             var groups = GetCachedGroups();
-            return groups.GetRecord(groupId);
+            var group=groups.GetRecord(groupId);
+            if (group != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(GroupLoggableEntity.Instance, group);
+            return group;
         }
-
+        public Group GetGroup(int groupId)
+        {
+          
+            return  GetGroup(groupId,false);
+        }
         public string GetGroupName(int groupId)
         {
             Group group = GetGroup(groupId);
@@ -70,8 +77,9 @@ namespace Vanrise.Security.Business
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 groupObj.GroupId = groupId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(GroupLoggableEntity.Instance, groupObj);
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = GroupDetailMapper(groupObj);
             }
             else
@@ -94,6 +102,7 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(GroupLoggableEntity.Instance, groupObj);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GroupDetailMapper(groupObj);
             }
@@ -166,7 +175,50 @@ namespace Vanrise.Security.Business
                 return _dataManager.AreGroupsUpdated(ref _updateHandle);
             }
         }
-        
+
+        private class GroupLoggableEntity : VRLoggableEntityBase
+        {
+            public static GroupLoggableEntity Instance = new GroupLoggableEntity();
+
+            private GroupLoggableEntity()
+            {
+
+            }
+
+            static GroupManager s_groupManager = new GroupManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Security_Group"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Security"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Group"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Security_Group_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Group group = context.Object.CastWithValidate<Group>("context.Object");
+                return group.GroupId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Group group = context.Object.CastWithValidate<Group>("context.Object");
+                return s_groupManager.GetGroupName(group.GroupId);
+            }
+        }
         #endregion
 
         #region Mappers

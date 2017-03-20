@@ -21,10 +21,24 @@ namespace Vanrise.Notification.Business
 
         public VRAlertRule GetVRAlertRule(long vrAlertRuleId)
         {
-            Dictionary<long, VRAlertRule> cachedVRAlertRules = this.GetCachedVRAlertRules();
-            return cachedVRAlertRules.GetRecord(vrAlertRuleId);
-        }
 
+            return GetVRAlertRule(vrAlertRuleId,false);
+        }
+        public VRAlertRule GetVRAlertRule(long vrAlertRuleId, bool isViewedFromUI)
+        {
+            Dictionary<long, VRAlertRule> cachedVRAlertRules = this.GetCachedVRAlertRules();
+          var vrAlertRule =cachedVRAlertRules.GetRecord(vrAlertRuleId);
+          if (vrAlertRule != null && isViewedFromUI)
+              VRActionLogger.Current.LogObjectViewed(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);
+          return vrAlertRule;
+        }
+        public string GetAlertRuleName(long vrAlertRuleId)
+        {
+            var vrAlertRule = GetVRAlertRule(vrAlertRuleId);
+            if (vrAlertRule == null)
+                return null;
+            return vrAlertRule.Name;
+        }
         public IDataRetrievalResult<VRAlertRuleDetail> GetFilteredVRAlertRules(DataRetrievalInput<VRAlertRuleQuery> input)
         {
             var allVRAlertRules = this.GetCachedVRAlertRules();
@@ -45,8 +59,9 @@ namespace Vanrise.Notification.Business
             if (dataManager.Insert(vrAlertRuleItem, out vrAlertRuleId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 vrAlertRuleItem.VRAlertRuleId = vrAlertRuleId;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                VRActionLogger.Current.TrackAndLogObjectAdded(new VRAlertRuleLoggableEntity(vrAlertRuleItem.RuleTypeId),vrAlertRuleItem);
                 insertOperationOutput.InsertedObject = VRAlertRuleDetailMapper(vrAlertRuleItem);
             }
             else
@@ -69,6 +84,7 @@ namespace Vanrise.Notification.Business
             if (dataManager.Update(vrAlertRuleItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new VRAlertRuleLoggableEntity(vrAlertRuleItem.RuleTypeId), vrAlertRuleItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRAlertRuleDetailMapper(this.GetVRAlertRule(vrAlertRuleItem.VRAlertRuleId));
             }
@@ -128,7 +144,56 @@ namespace Vanrise.Notification.Business
         }
 
         #endregion
+        private class VRAlertRuleLoggableEntity : VRLoggableEntityBase
+        {
 
+            Guid _ruleTypeId;
+            static VRAlertRuleTypeManager _vralertRuleTypeManager = new VRAlertRuleTypeManager();
+            static VRAlertRuleManager s_vrruleAlertManager = new VRAlertRuleManager();
+
+            public VRAlertRuleLoggableEntity(Guid ruleTypeId)
+            {
+                _ruleTypeId = ruleTypeId;
+
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_Notification_AlertRule_{0}", _ruleTypeId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get
+                {
+                    return String.Format(_vralertRuleTypeManager.GetVRAlertRuleTypeName(_ruleTypeId), "_AlertRules");
+
+                }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Notification_AlertRule_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRAlertRule vrAlertRule = context.Object.CastWithValidate<VRAlertRule>("context.Object");
+                return vrAlertRule.VRAlertRuleId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRAlertRule vrAlertRule = context.Object.CastWithValidate<VRAlertRule>("context.Object");
+                return s_vrruleAlertManager.GetAlertRuleName(vrAlertRule.VRAlertRuleId);
+            }
+
+            public override string ModuleName
+            {
+                get { return "Notification"; }
+            }
+        }
 
         #region Mappers
 

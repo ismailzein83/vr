@@ -21,6 +21,13 @@ namespace Vanrise.Notification.Business
             return cachedVRAlertRuleTypes.GetRecord(vrAlertRuleTypeId);
         }
 
+        public string GetVRAlertRuleTypeName(Guid vrAlertRuleTypeId)
+        {
+            var vralertRuleType = GetVRAlertRuleType(vrAlertRuleTypeId);
+            if (vralertRuleType == null)
+                return null;
+            return vralertRuleType.Name;
+        }
         public T GetVRAlertRuleTypeSettings<T>(Guid vrAlertRuleTypeId) where T : VRAlertRuleTypeSettings
         {
             var alertRuleType = GetVRAlertRuleType(vrAlertRuleTypeId);

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService","VR_Invoice_PartnerInvoiceSettingService","VR_Invoice_PartnerInvoiceSettingAPIService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService, VR_Invoice_PartnerInvoiceSettingAPIService) {
+app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingAPIService",
+    function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService, VR_Invoice_PartnerInvoiceSettingAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -41,6 +41,7 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
 
                     var drillDownDefinitions = [];
                     var drillDownDefinition = {};
+                    var drillDownDefinitionHistory = {};
 
                     drillDownDefinition.title = "Partner Invoice Setting";
                     drillDownDefinition.directive = "vr-partnerinvoicesetting-grid";
@@ -69,6 +70,19 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
                         }
                     }];
                     drillDownDefinitions.push(drillDownDefinition);
+
+                    drillDownDefinitionHistory.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinitionHistory.directive = "vr-common-objecttracking-grid";
+                    drillDownDefinitionHistory.loadDirective = function (directiveAPI, invoiceSettingItem) {
+                        invoiceSettingItem.objectTrackingGridAPI = directiveAPI; 
+                        var query = {
+                            ObjectId: invoiceSettingItem.Entity.InvoiceSettingId,
+                            EntityUniqueName: VR_Invoice_InvoiceSettingService.getEntityUniqueName(invoiceSettingItem.Entity.InvoiceTypeId)
+                        };
+                        return invoiceSettingItem.objectTrackingGridAPI.load(query);
+                    };
+
+                    drillDownDefinitions.push(drillDownDefinitionHistory);
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions);
 
 
@@ -148,7 +162,6 @@ app.directive("vrInvoicesettingGrid", ["UtilsService", "VRNotificationService", 
             function editInvoiceSetting(dataItem) {
                 var onInvoiceSettingUpdated = function (invoiceSetting) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);
-
                     gridAPI.itemUpdated(invoiceSetting);
                 };
                 VR_Invoice_InvoiceSettingService.editInvoiceSetting(onInvoiceSettingUpdated, dataItem.Entity.InvoiceSettingId, dataItem.Entity.InvoiceTypeId)

@@ -181,6 +181,7 @@
     <Content Include="VR_Notification\Directives\VRNotificationViewDefinition\Templates\VRNotificationViewEditor.html" />
     <Content Include="VR_Notification\Directives\VRNotification\Templates\VRNotificationComponentTypeSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRNotification\vr-notification-vrnotification-componentsettings.js" />
+    <Content Include="VR_Notification\ModuleInitialization.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionDefinitionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />

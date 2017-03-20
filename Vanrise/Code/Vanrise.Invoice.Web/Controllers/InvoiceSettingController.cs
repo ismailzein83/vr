@@ -20,7 +20,7 @@ namespace Vanrise.Invoice.Web.Controllers
         [Route("GetInvoiceSetting")]
         public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId)
         {
-            return _manager.GetInvoiceSetting(invoiceSettingId);
+            return _manager.GetInvoiceSetting(invoiceSettingId,true);
         }
         
         [HttpPost]

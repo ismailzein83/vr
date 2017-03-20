@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationDatasourceGrid", ["UtilsService", "VRNotificationService", "VR_Integration_DataSourceService",'VR_Integration_DataSourceAPIService',
-function (UtilsService, VRNotificationService, VR_Integration_DataSourceService, VR_Integration_DataSourceAPIService) {
+app.directive("vrIntegrationDatasourceGrid", ["UtilsService", "VRNotificationService", "VR_Integration_DataSourceService", 'VR_Integration_DataSourceAPIService', 'VRUIUtilsService',
+function (UtilsService, VRNotificationService, VR_Integration_DataSourceService, VR_Integration_DataSourceAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
     function DataSourceGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         var context;
         this.initializeController = initializeController;
         function initializeController() {
@@ -37,8 +38,8 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             $scope.gridReady = function (api) {
 
                 gridAPI = api;
-
-
+                var drillDownDefinitions = VR_Integration_DataSourceService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -49,7 +50,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                         return gridAPI.retrieveData(payload.query);
                     };
                     directiveAPI.onDataSourceAdded = function (dataSource) {
-
+                      gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
                         gridAPI.itemAdded(dataSource);
 
                     };
@@ -61,6 +62,11 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                 return VR_Integration_DataSourceAPIService.GetFilteredDataSources(dataRetrievalInput)
                     .then(function (response) {
                         enableDisableAll(response.Data);
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -106,6 +112,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
         function editDataSource(dataSourceObj) {
 
             var onDataSourceUpdated = function (dataSource) {
+           gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
                 gridAPI.itemUpdated(dataSource);
             };
 
@@ -118,6 +125,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
+             gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
                 gridAPI.itemDeleted(dataSource);
             };
 
@@ -142,7 +150,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                     AdapterInfo: dataItem.AdapterInfo
                 };
                 gridDataItem.Entity.IsEnabled = false;
-
+                gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
                 $scope.gridMenuActions(gridDataItem);
                 gridAPI.itemUpdated(gridDataItem);
             };
@@ -156,7 +164,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                             enableDisableAll($scope.dataSources);
                         }
                     }).catch(function (error) {
-                        VRNotificationService.notifyException(error, scope);
+                        VRNotificationService.notifyException(error, $scope);
                     });
                 }
             });
@@ -169,7 +177,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                     AdapterInfo: dataItem.AdapterInfo
                 };
                 gridDataItem.Entity.IsEnabled = true;
-
+                gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
                 $scope.gridMenuActions(gridDataItem);
                 gridAPI.itemUpdated(gridDataItem);
             };
@@ -183,7 +191,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                             enableDisableAll($scope.dataSources);
                         }
                     }).catch(function (error) {
-                        VRNotificationService.notifyException(error, scope);
+                        VRNotificationService.notifyException(error, $scope);
                     });
                 }
             });
