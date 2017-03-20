@@ -7,6 +7,7 @@ using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -77,6 +78,69 @@ namespace Vanrise.AccountBalance.Business
             {
                 IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
                 return dataManager.GetFilteredBillingTransactions(input.Query);
+            }
+
+            protected override ResultProcessingHandler<BillingTransactionDetail> GetResultProcessingHandler(DataRetrievalInput<BillingTransactionQuery> input, BigResult<BillingTransactionDetail> bigResult)
+            {
+                return new ResultProcessingHandler<BillingTransactionDetail>
+                {
+                    ExportExcelHandler = new BillingTransactionExcelExportHandler(input.Query)
+                };
+            }
+        }
+
+        private class BillingTransactionExcelExportHandler : ExcelExportHandler<BillingTransactionDetail>
+        {
+            BillingTransactionQuery _query;
+            public BillingTransactionExcelExportHandler(BillingTransactionQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<BillingTransactionDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Financial Transactions",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Type", Width = 20 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Debit" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Credit" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Notes" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Reference" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Balance Updated" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.AccountBillingTransactionId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.TransactionTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.AccountInfo == null ? "" : record.AccountInfo.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.TransactionTypeDescription });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Debit });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Credit });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CurrencyDescription });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Notes });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Reference });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.IsBalanceUpdated });
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
             }
         }
 
