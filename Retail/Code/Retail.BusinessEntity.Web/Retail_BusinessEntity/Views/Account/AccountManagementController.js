@@ -71,9 +71,9 @@
                     Retail_BE_AccountBEAPIService.DoesUserHaveAddAccess(accountBEDefinitionId).then(function (response) {
                         $scope.scopeModel.showAddAccount = response;
                     });
-                    loadAllControls().then(function () {
+                    loadAllControls().then(function() {
                         $scope.scopeModel.isGridLoaded = true;
-                    })
+                    });
                 }
             };
 
@@ -196,7 +196,7 @@
                             fields.push({
                                 FieldName: accountField.Name,
                                 FieldTitle: accountField.Title,
-                                Type: accountField.FieldType,
+                                Type: accountField.FieldType
                             });
                         }
                     }
