@@ -96,6 +96,10 @@ namespace Retail.BusinessEntity.Business
                 accountPackageToAdd.AccountPackageId = accountPackageId;
                 insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd);
             }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
 
             return insertOperationOutput;
         }
