@@ -4,7 +4,7 @@
                  pagingtype="'PagingOnScroll'"
                  on-ready="scopeModel.onGridReady"
                  menuactions="scopeModel.gridMenuActions"
-                 idfield="Entity.AccountServiceId">
+                 idfield="Entity.AccountServiceId" enableautoexport="true">
         <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountServiceId'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Service Type'" field="'ServiceTypeTitle'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Status'" field="'StatusDesciption'" getcolor="scopeModel.getStatusColor"></vr-datagridcolumn>

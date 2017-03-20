@@ -29,8 +29,13 @@ namespace Retail.BusinessEntity.Business
             Func<AccountService, bool> filterExpression = (prod) =>
                  (input.Query.AccountId == null || prod.AccountId == input.Query.AccountId);
 
+            ResultProcessingHandler<AccountServiceDetail> handler = new ResultProcessingHandler<AccountServiceDetail>()
+            {
+                ExportExcelHandler = new AccountServiceExcelExportHandler()
+            };
+
             return DataRetrievalManager.Instance.ProcessResult(input, allAccountServices.ToBigResult(input, filterExpression,
-                       (accountService) => AccountServiceDetailMapper(input.Query.AccountBEDefinitionId, accountService)));
+                       (accountService) => AccountServiceDetailMapper(input.Query.AccountBEDefinitionId, accountService)), handler);
         }
 
         public AccountService GetAccountService(long AccountServiceId)
@@ -222,6 +227,42 @@ namespace Retail.BusinessEntity.Business
 
 
         #region Private Classes
+
+        private class AccountServiceExcelExportHandler : ExcelExportHandler<AccountServiceDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountServiceDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Services",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Service Type", Width = 20 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Charging Policy", Width = 20 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.AccountServiceId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ServiceTypeTitle });
+                            row.Cells.Add(new ExportExcelCell { Value = record.StatusDesciption });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ServiceChargingPolicyName });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
