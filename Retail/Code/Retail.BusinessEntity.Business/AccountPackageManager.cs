@@ -28,9 +28,14 @@ namespace Retail.BusinessEntity.Business
         {
             Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             Func<AccountPackage, bool> filterExpression = (accountPackage) => (accountPackage.AccountId == input.Query.AssignedToAccountId);
-            
-            return DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPackages.ToBigResult(input, filterExpression, 
-                    (accountPackage) => AccountPackageDetailMapper(input.Query.AccountBEDefinitionId, accountPackage)));
+
+            ResultProcessingHandler<AccountPackageDetail> handler = new ResultProcessingHandler<AccountPackageDetail>()
+            {
+                ExportExcelHandler = new AccountPackageExcelExportHandler()
+            };
+
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPackages.ToBigResult(input, filterExpression,
+                    (accountPackage) => AccountPackageDetailMapper(input.Query.AccountBEDefinitionId, accountPackage)), handler);
         }
 
         public AccountPackage GetAccountPackage(int accountPackageId)
@@ -110,6 +115,42 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Classes
+
+
+        private class AccountPackageExcelExportHandler : ExcelExportHandler<AccountPackageDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountPackageDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Packages",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Package", Width = 20 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.AccountPackageId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.PackageName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
