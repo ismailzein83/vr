@@ -10,5 +10,6 @@ namespace Vanrise.Runtime.Data
     public interface ISchedulerTaskActionTypeDataManager : IDataManager
     {
         List<SchedulerTaskActionType> GetAll();
+        bool AreSchedulerTaskActionTypesUpdated(ref object updateHandle);
     }
 }

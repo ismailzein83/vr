@@ -25,10 +25,6 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulerTaskTriggerTypes'));
         }
 
-        function GetSchedulerTaskActionTypes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulerTaskActionTypes'));
-        }
-
         function AddTask(task) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'AddTask'), task);
         }
@@ -52,11 +48,7 @@
         }
 
         function HasAddSchedulerTaskPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['AddTask']));
-        }
-
-        function HasUpdateSchedulerTaskPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['UpdateTask']));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'));
         }
 
         function GetUpdated(input) {
@@ -85,11 +77,9 @@
             DeleteTask: DeleteTask,
             GetSchedulesInfo: GetSchedulesInfo,
             HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
-            HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission,
             GetUpdated: GetUpdated,
             GetFilteredMyTasks: GetFilteredMyTasks,
-            RunSchedulerTask: RunSchedulerTask,
-            HasRunSchedulerTaskPermission: HasRunSchedulerTaskPermission
+            RunSchedulerTask: RunSchedulerTask
         });
     }
 

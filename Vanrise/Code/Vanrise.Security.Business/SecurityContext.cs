@@ -76,7 +76,12 @@ namespace Vanrise.Security.Business
         public bool IsAllowed(RequiredPermissionSettings requiredPermissions)
         {
             SecurityManager manager = new SecurityManager();
-            return manager.IsAllowed(requiredPermissions, GetLoggedInUserId());
+            return IsAllowed(requiredPermissions, GetLoggedInUserId());
+        }
+        public bool IsAllowed(RequiredPermissionSettings requiredPermissions , int userId)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.IsAllowed(requiredPermissions, userId);
         }
 
         public bool IsAllowed(string requiredPermissions)

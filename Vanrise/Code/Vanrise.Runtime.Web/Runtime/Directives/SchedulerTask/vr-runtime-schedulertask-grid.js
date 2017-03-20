@@ -96,7 +96,8 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                     var menuActions = [];
 
                     //Static Menu Actions
-                    var staticMenuActions = defineStaticMenuActions();
+                    var staticMenuActions = defineStaticMenuActions(dataItem);
+                    console.log(staticMenuActions)
                     if (staticMenuActions != undefined) {
                         for (var index = 0; index < staticMenuActions.length; index++) {
                             menuActions.push(staticMenuActions[index]);
@@ -105,12 +106,10 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
 
                     if (dataItem != undefined) {
                         var entity = dataItem.Entity;
-
-                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription)) {
+                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && entity.AllowRun==true) {
                             menuActions.push({
                                 name: "Run",
-                                clicked: runSchedulerTask,
-                                haspermission: hasRunSchedulerTaskPermission
+                                clicked: runSchedulerTask
                             })
                         }
                     }
@@ -126,10 +125,6 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                 }).catch(function (error) {
                     $scope.showLoader = false;
                 });
-            }
-
-            function hasRunSchedulerTaskPermission() {
-                return SchedulerTaskAPIService.HasRunSchedulerTaskPermission();
             }
 
             function isSchedulerTaskRunning(statusDescription) {
@@ -190,9 +185,12 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                                     NextRunTime: schedulerTaskState.Entity.NextRunTime,
                                     StatusDescription: schedulerTaskState.StatusDescription
                                 };
-                                var obj = { Entity: Entity };
+                                var obj = {
+                                    Entity: Entity,
+                                    AllowEdit: $scope.schedulerTasks[j].AllowEdit,
+                                    AllowRun: $scope.schedulerTasks[j].AllowRun
+                                };
                                 $scope.schedulerTasks[j] = obj;
-
                                 if (schedulerTaskState.StatusDescription == VR_Runtime_SchedulerTaskStatusEnum.InProgress.description)
                                     $scope.showLoader = false;
 
@@ -204,14 +202,14 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                 }
             }
 
-            function defineStaticMenuActions() {
+            function defineStaticMenuActions(dataItem) {
 
-                var staticMenuActions = [{
-                    name: "Edit",
-                    clicked: editTask,
-                    haspermission: hasUpdateSchedulerTaskPermission
-                }];
-
+                var staticMenuActions = [];
+                if (dataItem.AllowEdit == true)
+                    staticMenuActions.push({
+                        name: "Edit",
+                        clicked: editTask
+                    });
                 return staticMenuActions;
             }
             function editTask(task) {

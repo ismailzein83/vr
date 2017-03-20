@@ -47,10 +47,11 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-row>
-                                <vr-columns width="1/2row">
-                                    <vr-select label="Type" datatextfield="Name" datavaluefield="ActionTypeId"
-                                               datasource="actionTypes" selectedvalues="scopeModel.selectedActionType" onselectionchanged="onTaskActionSelctionChanged" isrequired
-                                               vr-disabled="scopeModel.disableActionType"></vr-select>
+                                <vr-columns width="1/2row">                                   
+                                    <span vr-disabled="scopeModel.disableActionType">
+                                        <vr-runtime-taskactiontype-selector on-ready="scopeModel.onTaskActionTypeDirectiveReady" selectedvalues="scopeModel.selectedActionType" onselectionchanged="    onTaskActionSelctionChanged" isrequired>
+                                        </vr-runtime-taskactiontype-selector>
+                                    </span>                                   
                                 </vr-columns>
                             </vr-row>
                             <vr-row vr-loader="isLoadingAction">

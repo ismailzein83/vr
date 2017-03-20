@@ -16,10 +16,11 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("GetSchedulerTaskActionTypes")]
-        public List<SchedulerTaskActionType> GetSchedulerTaskActionTypes()
+        public IEnumerable<SchedulerTaskActionType> GetSchedulerTaskActionTypes(string filter = null)
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetSchedulerTaskActionTypes();
+            SchedulerTaskActionTypeFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<SchedulerTaskActionTypeFilter>(filter) : null;
+            SchedulerTaskActionTypeManager manager = new SchedulerTaskActionTypeManager();
+            return manager.GetSchedulerTaskActionTypes(deserializedFilter);
         }
     }
 }

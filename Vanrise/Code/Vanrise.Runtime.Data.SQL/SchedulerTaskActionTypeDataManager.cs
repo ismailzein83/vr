@@ -23,6 +23,11 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("runtime.sp_SchedulerTaskActionType_GetAll", SchedulerTaskActionTypeMapper);
         }
 
+        public bool AreSchedulerTaskActionTypesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[runtime].[SchedulerTaskActionType]", ref updateHandle);
+        }
+
         #region Private Methods
 
         private SchedulerTaskActionType SchedulerTaskActionTypeMapper(IDataReader reader)

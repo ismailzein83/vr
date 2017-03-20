@@ -13,10 +13,14 @@ namespace Vanrise.Runtime.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "SchedulerTask")]
     public class SchedulerTaskController : Vanrise.Web.Base.BaseAPIController
     {
+
+        SchedulerTaskActionTypeManager _taskActionTypeManager = new SchedulerTaskActionTypeManager();
         [HttpPost]
         [Route("GetFilteredTasks")]
         public object GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
+            if (!_taskActionTypeManager.DoesUserHaveViewAccess())
+                return GetUnauthorizedResponse();
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return GetWebResponse(input, manager.GetFilteredTasks(input));
         }
@@ -60,27 +64,31 @@ namespace Vanrise.Runtime.Web.Controllers
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.GetSchedulerTaskTriggerTypes();
         }
-
         [HttpGet]
-        [Route("GetSchedulerTaskActionTypes")]
-        public List<SchedulerTaskActionType> GetSchedulerTaskActionTypes()
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess()
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetSchedulerTaskActionTypes();
+            return _taskActionTypeManager.DoesUserHaveConfigureAccess();
         }
 
         [HttpPost]
         [Route("AddTask")]
-        public Vanrise.Entities.InsertOperationOutput<SchedulerTask> AddTask(SchedulerTask taskObject)
+        public object AddTask(SchedulerTask taskObject)
         {
+            if (!_taskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(taskObject))
+                return GetUnauthorizedResponse();
+
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.AddTask(taskObject);
         }
 
         [HttpPost]
         [Route("UpdateTask")]
-        public Vanrise.Entities.UpdateOperationOutput<SchedulerTask> UpdateTask(SchedulerTask taskObject)
+        public object UpdateTask(SchedulerTask taskObject)
         {
+            if (!_taskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(taskObject))
+                return GetUnauthorizedResponse();
+
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.UpdateTask(taskObject);
         }
@@ -105,6 +113,8 @@ namespace Vanrise.Runtime.Web.Controllers
         [Route("RunSchedulerTask")]
         public void RunSchedulerTask(Guid taskId)
         {
+            if (!_taskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(taskId))
+                 GetUnauthorizedResponse();
             SchedulerTaskStateManager manager = new SchedulerTaskStateManager();
             manager.RunSchedulerTask(taskId);
         }

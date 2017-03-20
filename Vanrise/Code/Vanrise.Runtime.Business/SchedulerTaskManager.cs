@@ -5,17 +5,25 @@ using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
 using Vanrise.Common;
-
+using Vanrise.Security.Entities;
 namespace Vanrise.Runtime.Business
 {
     public class SchedulerTaskManager
     {
+        #region Ctor/Fields
+
+        static SchedulerTaskActionTypeManager _schedulerTaskActionTypeManager = new SchedulerTaskActionTypeManager();
+
+        #endregion
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTaskDetail> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
 
             Func<SchedulerTask, bool> filterExpression = (itm) =>
                 {
+                    if (!_schedulerTaskActionTypeManager.DoesUserHaveViewSpecificTaskAccess(itm))
+                        return false;
+
                     if (itm.ActionTypeId == Guid.Parse("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68"))//1 is for Data Source Tasks
                         return false;
 
@@ -128,25 +136,6 @@ namespace Vanrise.Runtime.Business
         {
             ISchedulerTaskTriggerTypeDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskTriggerTypeDataManager>();
             return datamanager.GetAll();
-        }
-
-        public List<SchedulerTaskActionType> GetSchedulerTaskActionTypes()
-        {
-            ISchedulerTaskActionTypeDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskActionTypeDataManager>();
-            List<SchedulerTaskActionType> lstSchedulerTaskActionTypes = datamanager.GetAll();
-            List<SchedulerTaskActionType> lsSchedulerTaskActionTypesOutput = new List<SchedulerTaskActionType>();
-            foreach (SchedulerTaskActionType actionType in lstSchedulerTaskActionTypes)
-            {
-                if (actionType.Info.RequiredPermissions != null)
-                {
-                    if (Vanrise.Security.Entities.ContextFactory.GetContext().IsAllowed(actionType.Info.RequiredPermissions))
-                        lsSchedulerTaskActionTypesOutput.Add(actionType);
-                }
-                else
-                    lsSchedulerTaskActionTypesOutput.Add(actionType);
-
-            }
-            return lsSchedulerTaskActionTypesOutput;
         }
 
         public Vanrise.Entities.InsertOperationOutput<SchedulerTask> AddTask(SchedulerTask taskObject)
@@ -277,8 +266,14 @@ namespace Vanrise.Runtime.Business
         {
             if (task == null)
                 return null;
-            return new SchedulerTaskDetail() { Entity = task };
+            return new SchedulerTaskDetail() { 
+                Entity = task ,
+                AllowEdit =  _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(task),
+                AllowRun = _schedulerTaskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(task)
+            };
         }
+       
         #endregion
+
     }
 }

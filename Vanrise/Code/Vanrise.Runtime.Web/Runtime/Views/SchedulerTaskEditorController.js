@@ -15,6 +15,9 @@
         var taskActionDirectiveAPI;
         var taskActionDirectiveReadyPromiseDeferred; // = UtilsService.createPromiseDeferred();
 
+        var taskActionTypeDirectiveAPI;
+        var taskActionTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -80,6 +83,10 @@
                 if (api.setAdditionalParamter != undefined && typeof (api.setAdditionalParamter) == "function") {
                     api.setAdditionalParamter(additionalParameter);
                 }
+            };
+            $scope.scopeModel.onTaskActionTypeDirectiveReady = function (api) {
+                taskActionTypeDirectiveAPI = api;
+                taskActionTypeDirectiveReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.validateDates = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.startEffDate, $scope.scopeModel.endEffDate);
@@ -185,27 +192,30 @@
                 };
             }
 
-            var loadActionTypesPromise = SchedulerTaskAPIService.GetSchedulerTaskActionTypes().then(function (response) {
-                angular.forEach(response, function (item) {
-                    if (!item.Info.SystemType) {
-                        $scope.actionTypes.push(item);
-                    }
-                });
-                if (taskObject != undefined && taskObject.ActionTypeId) {
-                    $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, taskObject.ActionTypeId, "ActionTypeId");
-                    $scope.scopeModel.disableActionType = true;
-                }
-                else if (additionalParameter != undefined && additionalParameter.actionTypeId) {
-                    $scope.scopeModel.selectedActionType = UtilsService.getItemByVal($scope.actionTypes, additionalParameter.actionTypeId, "ActionTypeId");
-                    $scope.scopeModel.disableActionType = true;
-                }
-                else {
-                    $scope.scopeModel.selectedActionType = $scope.actionTypes != undefined && $scope.actionTypes.length > 0 ? $scope.actionTypes[0] : undefined;
-                }
+            var loadActionTypesPromise = UtilsService.createPromiseDeferred();
+            var taskTypeActionId;
 
+            if (taskObject != undefined && taskObject.ActionTypeId) {
+                taskTypeActionId =  taskObject.ActionTypeId ;
+                $scope.scopeModel.disableActionType = true;
+            }
+            else if (additionalParameter != undefined && additionalParameter.actionTypeId) {
+                taskTypeActionId =  additionalParameter.actionTypeId;
+                $scope.scopeModel.disableActionType = true;
+            }
+            taskActionTypeDirectiveReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.Runtime.Business.SchedulerTaskActionTypeConfigureFilter, Vanrise.Runtime.Business"
+                        }]
+                    },
+                    selectedIds: taskTypeActionId,
+                    selectFirstItem: true
+                };
+                VRUIUtilsService.callDirectiveLoad(taskActionTypeDirectiveAPI, payload, loadActionTypesPromise);
             });
-
-            promises.push(loadActionTypesPromise);
+            promises.push(loadActionTypesPromise.promise);
 
             if (actionPayload != undefined && actionPayload.data) {
                 taskActionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -247,7 +257,7 @@
                 IsEnabled: $scope.scopeModel.isEnabled,
                 TaskType: 1,
                 TriggerTypeId: $scope.scopeModel.selectedTriggerType.TriggerTypeId,
-                ActionTypeId: $scope.scopeModel.selectedActionType.ActionTypeId,
+                ActionTypeId: taskActionTypeDirectiveAPI.getSelectedIds(),
                 TaskSettings:
                     {
                         TaskTriggerArgument: taskTriggerDirectiveAPI.getData(),
