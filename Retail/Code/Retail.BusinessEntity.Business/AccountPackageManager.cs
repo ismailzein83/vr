@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
 
@@ -21,6 +22,8 @@ namespace Retail.BusinessEntity.Business
         PackageManager _packageManager = new PackageManager();
 
         #endregion
+
+
 
         #region Public Methods
 
@@ -90,10 +93,12 @@ namespace Retail.BusinessEntity.Business
             int accountPackageId = -1;
 
             if (dataManager.Insert(accountPackageToAdd, out accountPackageId))
-            {
+            {var account = _accountBEManager.GetAccount(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd.AccountId);
+                var accountName=_accountBEManager.GetAccountName(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd.AccountId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 accountPackageToAdd.AccountPackageId = accountPackageId;
+                VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountPackageToAdd.AccountBEDefinitionId), "Assign Package", true, account, String.Format("Account -> Package {0} {1} {2}", accountName, accountPackageToAdd.BED, accountPackageToAdd.EED));
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd);
             }
             else
