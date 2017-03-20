@@ -33,16 +33,16 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
             var multipleselection;
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = 'ismultipleselection="true"';
-        }
+            }
             return '<retail-be-account-selector isrequired="accountCtrl.isrequired" normal-col-num="{{accountCtrl.normalColNum}}" ' + multipleselection + ' on-ready="accountCtrl.onDirectiveReady" ></retail-be-account-selector>';
-       }
+        }
 
         function accountsCtor(ctrl, $scope, attrs) {
 
             var directiveReadyAPI;
             var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            function initializeController() {
 
+            function initializeController() {
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
                     directiveReadyPromiseDeferred.resolve();
@@ -54,26 +54,31 @@ app.directive('retailBeExtendedsettingsAccountSelector', ['UtilsService', 'VRUIU
                 var api = {};
 
                 api.load = function (payload) {
+                    var accountTypeId;
+                    var extendedSettings;
                     var selectedIds;
-                    var filter;
+
                     if (payload != undefined) {
+                        accountTypeId = payload.accountTypeId;
+                        extendedSettings = payload.extendedSettings;
                         selectedIds = payload.selectedIds;
-                        filter = payload.filter;
                     }
+
                     var promises = [];
 
                     var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(directiveLoadPromiseDeferred.promise);
 
                     directiveReadyPromiseDeferred.promise.then(function () {
-                        var selectorPayload = { filter: getAccountSelectorFilter() };
-                        if (selectedIds != undefined)
-                            selectorPayload.selectedIds = selectedIds;
-                        if (payload.AccountBEDefinitionId != undefined)
-                            selectorPayload.AccountBEDefinitionId = payload.AccountBEDefinitionId;
-
+                        var selectorPayload = {
+                            filter: getAccountSelectorFilter(),
+                            selectedIds: selectedIds
+                        };
+                        if (extendedSettings != undefined)
+                            selectorPayload.AccountBEDefinitionId = extendedSettings.AccountBEDefinitionId;
                         VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, selectorPayload, directiveLoadPromiseDeferred);
                     });
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
