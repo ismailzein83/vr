@@ -57,11 +57,19 @@ namespace Retail.Invoice.Business
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
-            AccountBEManager accountBEManager = new AccountBEManager();
-            var financialAccounts = accountBEManager.GetFinancialAccounts(this.AcountBEDefinitionId);
-            if (financialAccounts == null)
-                return null;
-            return financialAccounts.Select(x => x.AccountId.ToString());
+            switch (context.PartnerRetrievalType)
+            {
+                case PartnerRetrievalType.GetActive:
+                case PartnerRetrievalType.GetAll:
+                    AccountBEManager accountBEManager = new AccountBEManager();
+                    var financialAccounts = accountBEManager.GetFinancialAccounts(this.AcountBEDefinitionId);
+                    if (financialAccounts == null)
+                        return null;
+                    return financialAccounts.Select(x => x.AccountId.ToString());
+                default:
+                    return null;
+            }
+
         }
     }
 }
