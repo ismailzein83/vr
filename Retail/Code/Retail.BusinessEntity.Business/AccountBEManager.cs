@@ -691,7 +691,7 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        private class AccountBELoggableEntity : VRLoggableEntityBase
+        public class AccountBELoggableEntity : VRLoggableEntityBase
         {
             Guid _accountBEDefinitionId;
             static AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
