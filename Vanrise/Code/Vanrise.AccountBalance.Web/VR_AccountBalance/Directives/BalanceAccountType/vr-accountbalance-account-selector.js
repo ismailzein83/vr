@@ -1,8 +1,7 @@
 ﻿'use strict';
-app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountTypeAPIService', 'VRUIUtilsService', 'UtilsService',
-function (VR_AccountBalance_AccountTypeAPIService, VRUIUtilsService, UtilsService) {
 
-    var directiveDefinitionObject = {
+app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountTypeAPIService', 'VRUIUtilsService', 'UtilsService', function (VR_AccountBalance_AccountTypeAPIService, VRUIUtilsService, UtilsService) {
+    return {
         restrict: 'E',
         scope: {
             onReady: '=',
@@ -24,65 +23,79 @@ function (VR_AccountBalance_AccountTypeAPIService, VRUIUtilsService, UtilsServic
         }
     };
 
-
-    function getTemplate(attrs) {
-        var ismultipleselection = "";
-        if (attrs.ismultipleselection != undefined) {
-            ismultipleselection = "ismultipleselection";
-        }
-        return '<vr-directivewrapper ng-if="scopeModel.editor != undefined" directive="scopeModel.editor" ' + ismultipleselection + ' on-ready="scopeModel.onDirectiveReady"  normal-col-num="{{accountBalanceCtrl.normalColNum}}" isrequired="accountBalanceCtrl.isrequired"  customvalidate="accountBalanceCtrl.customvalidate"></vr-directivewrapper>';
-    }
-
     function BalanceAccount(accountBalanceCtrl, $scope, attrs) {
-
-        var directiveAPI;
-        var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        $scope.scopeModel = {};
-        $scope.scopeModel.onDirectiveReady = function (api) {
-            directiveAPI = api;
-            directiveReadyPromiseDeferred.resolve();
-        };
 
         this.initializeController = initializeController;
 
-        function initializeController() {
-            if (accountBalanceCtrl.onReady != undefined && typeof (accountBalanceCtrl.onReady) == 'function') {
-                accountBalanceCtrl.onReady(defineAPI());
-            }
-        }
+        var directiveAPI;
+        var directiveReadyDeferred;
 
+        function initializeController() {
+            $scope.scopeModel = {};
+
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                directiveReadyDeferred.resolve();
+            };
+
+            defineAPI();
+        }
         function defineAPI() {
             var api = {};
 
-
             api.load = function (payload) {
+
                 $scope.scopeModel.editor = undefined;
+                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
                 var accountTypeId;
 
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
                 }
-                var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSettings(accountTypeId).then(function (response) {
-                    $scope.scopeModel.accountTypeSettings = response;
-                    if ($scope.scopeModel.accountTypeSettings != undefined && $scope.scopeModel.accountTypeSettings.ExtendedSettings != undefined) {
 
-                        $scope.scopeModel.editor = $scope.scopeModel.accountTypeSettings.ExtendedSettings.AccountSelector;
-                        directiveReadyPromiseDeferred.promise.then(function () {
-                            var directivePayload = {
-                                accountTypeId: accountTypeId,
-                                extendedSettigns: response.ExtendedSettings
-                            };
-                            UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directivePayload)).then(function () {
-                                directiveLoadPromiseDeferred.resolve();
-                            }).catch(function (error) {
-                                directiveLoadPromiseDeferred.reject(error);
-                            });
-                        });
-                    }
+                var promises = [];
+                var accountTypeSettings;
+                var extendedSettings;
+
+                var getAccountTypeSettingsPromise = getAccountTypeSettings();
+                promises.push(getAccountTypeSettingsPromise);
+
+                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(directiveLoadDeferred.promise);
+
+                getAccountTypeSettingsPromise.then(function () {
+                    if (accountTypeSettings != undefined)
+                        extendedSettings = accountTypeSettings.ExtendedSettings;
+
+                    if (extendedSettings != undefined)
+                        $scope.scopeModel.editor = extendedSettings.AccountSelector;
+
+                    loadDirective().then(function () {
+                        directiveLoadDeferred.resolve();
+                    }).catch(function (error) {
+                        directiveLoadDeferred.reject(error);
+                    });
                 });
-                return directiveLoadPromiseDeferred.promise;
 
+                function getAccountTypeSettings() {
+                    return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSettings(accountTypeId).then(function (response) {
+                        accountTypeSettings = response;
+                    });
+                }
+                function loadDirective() {
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    directiveReadyDeferred.promise.then(function () {
+                        var directivePayload = {
+                            accountTypeId: accountTypeId,
+                            extendedSettings: extendedSettings
+                        };
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                    });
+
+                    return directiveLoadDeferred.promise;
+                }
             };
 
             api.getData = function () {
@@ -91,11 +104,13 @@ function (VR_AccountBalance_AccountTypeAPIService, VRUIUtilsService, UtilsServic
 
             if (accountBalanceCtrl.onReady != null)
                 accountBalanceCtrl.onReady(api);
-
-            return api;
         }
     }
-
-    return directiveDefinitionObject;
-
+    function getTemplate(attrs) {
+        var ismultipleselection = "";
+        if (attrs.ismultipleselection != undefined) {
+            ismultipleselection = "ismultipleselection";
+        }
+        return '<vr-directivewrapper ng-if="scopeModel.editor != undefined" directive="scopeModel.editor" ' + ismultipleselection + ' on-ready="scopeModel.onDirectiveReady"  normal-col-num="{{accountBalanceCtrl.normalColNum}}" isrequired="accountBalanceCtrl.isrequired"  customvalidate="accountBalanceCtrl.customvalidate"></vr-directivewrapper>';
+    }
 }]);
