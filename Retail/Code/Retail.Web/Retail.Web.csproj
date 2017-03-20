@@ -804,6 +804,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\Retail.pubxml" />
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
