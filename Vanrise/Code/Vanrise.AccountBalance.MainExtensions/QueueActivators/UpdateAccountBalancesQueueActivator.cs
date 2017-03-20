@@ -34,8 +34,11 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
 
         protected override void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context)
         {
-            AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = this.AccountTypeId, TransactionTypeId = this.TransactionTypeId };
-            context.GenerateEmptyBatch(accountBalanceType);
+            if(context.FinalizedAccountBalanceTypes == null)
+            {
+                AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = this.AccountTypeId, TransactionTypeId = this.TransactionTypeId };
+                context.GenerateEmptyBatch(accountBalanceType);
+            }
         }
     }
 }
