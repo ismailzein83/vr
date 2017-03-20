@@ -5,7 +5,7 @@ app.directive('retailBeAccountGrid', ['VRNotificationService', 'UtilsService', '
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
