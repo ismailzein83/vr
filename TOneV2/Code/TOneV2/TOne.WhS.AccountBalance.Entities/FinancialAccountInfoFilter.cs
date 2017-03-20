@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.AccountBalance.Entities
 {
-    class FinancialAccountInfoFilter
+    public class FinancialAccountInfoFilter
     {
     }
 }

@@ -17,6 +17,14 @@ namespace TOne.WhS.AccountBalance.Business
 {
     public class FinancialAccountManager
     {
+        #region Fields
+
+        private CarrierProfileManager _carrierProfileManager = new CarrierProfileManager();
+
+        private CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+
+        #endregion
+
         #region Public Methods
 
         public IDataRetrievalResult<FinancialAccountDetail> GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<FinancialAccountQuery> input)
@@ -79,23 +87,23 @@ namespace TOne.WhS.AccountBalance.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-             string message = null;
+            string message = null;
 
-             if (CheckIsAllowToAddFinancialAccount(financialAccount, true, out message))
-             {
-                 bool updateActionSucc = dataManager.Update(financialAccount);
-                 if (updateActionSucc)
-                 {
-                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                     updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccount);
-                 }
-                 else
-                 {
-                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-                 }
-             }
-             updateOperationOutput.Message = message;
+            if (CheckIsAllowToAddFinancialAccount(financialAccount, true, out message))
+            {
+                bool updateActionSucc = dataManager.Update(financialAccount);
+                if (updateActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccount);
+                }
+                else
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
+            }
+            updateOperationOutput.Message = message;
             return updateOperationOutput;
         }
         public FinancialAccount GetFinancialAccount(int financialAccountId)
@@ -159,20 +167,19 @@ namespace TOne.WhS.AccountBalance.Business
             var financialAccounts = GetCachedFinancialAccounts();
             return financialAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
         }
-
         public string GetAccountCurrencyName(int? carrierProfileId, int? carrierAccountId)
         {
             int currencyId = -1;
             if (carrierProfileId.HasValue)
                 currencyId = new CarrierProfileManager().GetCarrierProfileCurrencyId(carrierProfileId.Value);
             else
-               currencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(carrierAccountId.Value);
+                currencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(carrierAccountId.Value);
             CurrencyManager currencyManager = new CurrencyManager();
             return currencyManager.GetCurrencyName(currencyId);
         }
 
         #region Financial Accounts Validation
-        public bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode,out string message)
+        public bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode, out string message)
         {
             message = null;
             FinancialValidationData financialValidationData = LoadFinancialValidationData(financialAccount.CarrierProfileId, financialAccount.CarrierAccountId, financialAccount.FinancialAccountId);
@@ -189,7 +196,7 @@ namespace TOne.WhS.AccountBalance.Business
                     return false;
 
             }
-            ValidateFinancialAccount(financialAccount,financialValidationData,accountBalanceSettings, out message);
+            ValidateFinancialAccount(financialAccount, financialValidationData, accountBalanceSettings, out message);
             if (message != null)
                 return false;
             return true;
@@ -259,7 +266,7 @@ namespace TOne.WhS.AccountBalance.Business
                 }
                 filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Exchange, accountBalanceSetting, isEditMode);
             }
-           
+
 
             if (profileFinancialAccounts.Any(x => !filterExpression(x)))
                 return false;
@@ -324,44 +331,44 @@ namespace TOne.WhS.AccountBalance.Business
                 return true;
             return false;
         }
-        private bool ValidateFinancialAccount(FinancialAccount financialAccount, FinancialValidationData financialValidationData ,AccountBalanceSettings accountBalanceSettings, out string message)
+        private bool ValidateFinancialAccount(FinancialAccount financialAccount, FinancialValidationData financialValidationData, AccountBalanceSettings accountBalanceSettings, out string message)
         {
             bool result = true;
             if (financialAccount.CarrierAccountId.HasValue)
             {
-                ValidateFinancialAccountforCarrierAccount(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId,  financialAccount.BED, financialAccount.EED, financialValidationData.FinancialCarrierAccount.FinancialAccounts,accountBalanceSettings, out message, out result);
+                ValidateFinancialAccountforCarrierAccount(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.FinancialCarrierAccount.FinancialAccounts, accountBalanceSettings, out message, out result);
                 if (result)
                 {
-                   CheckFinancialAccountProfileOverlapping(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED,financialValidationData.ProfileFinancialAccounts,accountBalanceSettings, out  message, out result);
+                    CheckFinancialAccountProfileOverlapping(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.ProfileFinancialAccounts, accountBalanceSettings, out  message, out result);
                 }
             }
             else
             {
-                ValidateFinancialAccountforCarrierProfile(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED,financialValidationData.ProfileFinancialAccounts,financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount,accountBalanceSettings, out  message, out result);
+                ValidateFinancialAccountforCarrierProfile(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, accountBalanceSettings, out  message, out result);
             }
             return result;
         }
         private void ValidateFinancialAccountforCarrierAccount(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> carrierFinancialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
         {
-            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed,carrierFinancialAccounts,accountBalanceSettings, out message, out result);
+            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts, accountBalanceSettings, out message, out result);
         }
         private void ValidateFinancialAccountforCarrierProfile(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> profileFinancialAccounts, Dictionary<int, IEnumerable<FinancialAccountData>> financialAccountsByAccount, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
         {
-            CheckFinancialAccountProfileOverlapping(accountTypeId, financialAccountId, bed, eed, profileFinancialAccounts,accountBalanceSettings, out message, out result);
+            CheckFinancialAccountProfileOverlapping(accountTypeId, financialAccountId, bed, eed, profileFinancialAccounts, accountBalanceSettings, out message, out result);
             if (!result)
                 return;
             foreach (var carrierFinancialAccounts in financialAccountsByAccount.Values)
             {
-                ValidateFinancialAccountforCarrierAccount(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts,accountBalanceSettings, out message, out result);
+                ValidateFinancialAccountforCarrierAccount(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts, accountBalanceSettings, out message, out result);
                 if (!result)
                     return;
             }
         }
         public void CheckFinancialAccountProfileOverlapping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialCarrierProfiles, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
         {
-            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed,financialCarrierProfiles,accountBalanceSettings, out message, out result);
+            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed, financialCarrierProfiles, accountBalanceSettings, out message, out result);
         }
-        public void CheckFinancialAccountOverlaping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialAccounts,AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        public void CheckFinancialAccountOverlaping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
         {
             foreach (var financialAccount in financialAccounts)
             {
@@ -468,13 +475,26 @@ namespace TOne.WhS.AccountBalance.Business
             return financialAccountsData;
         }
         #endregion
-       
+
         #endregion
 
-      
-      
-     
-      
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBalanceTypeId)
+        {
+            Dictionary<Guid, List<FinancialAccount>> financialAccountsByType = GetCachedFinancialAccountsByAccBalTypeId();
+
+            if (financialAccountsByType == null || financialAccountsByType.Count == 0)
+                return null;
+
+            List<FinancialAccount> financialAccounts;
+
+            if (!financialAccountsByType.TryGetValue(accountBalanceTypeId, out financialAccounts))
+                return null;
+
+            if (financialAccounts == null || financialAccounts.Count == 0)
+                return null;
+
+            return financialAccounts.MapRecords(FinancialAccountInfoMapper);
+        }
         #endregion
 
         #region Private Classes
@@ -507,7 +527,27 @@ namespace TOne.WhS.AccountBalance.Business
 
         Dictionary<Guid, List<FinancialAccount>> GetCachedFinancialAccountsByAccBalTypeId()
         {
-            throw new NotImplementedException();
+            var financialAccountsByType = new Dictionary<Guid, List<FinancialAccount>>();
+
+            Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
+
+            if (cachedFinancialAccounts != null)
+            {
+                foreach (FinancialAccount financialAccount in cachedFinancialAccounts.Values)
+                {
+                    List<FinancialAccount> financialAccounts;
+
+                    if (!financialAccountsByType.TryGetValue(financialAccount.Settings.AccountTypeId, out financialAccounts))
+                    {
+                        financialAccounts = new List<FinancialAccount>();
+                        financialAccountsByType.Add(financialAccount.Settings.AccountTypeId, financialAccounts);
+                    }
+
+                    financialAccounts.Add(financialAccount);
+                }
+            }
+
+            return financialAccountsByType;
         }
 
         Dictionary<int, CarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
@@ -633,11 +673,48 @@ namespace TOne.WhS.AccountBalance.Business
             };
         }
 
-      
         #endregion
 
-        #region Mapper
-        FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
+        #region Mappers
+
+        private FinancialAccountInfo FinancialAccountInfoMapper(FinancialAccount financialAccount)
+        {
+            var financialAccountInfo = new FinancialAccountInfo()
+            {
+                FinancialAccountId = financialAccount.FinancialAccountId,
+                EffectiveStatus = GetFinancialAccountEffectiveStatus(financialAccount.BED, financialAccount.EED)
+            };
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                financialAccountInfo.CarrierType = FinancialAccountCarrierType.Profile;
+                financialAccountInfo.Name = _carrierProfileManager.GetCarrierProfileName(financialAccount.CarrierProfileId.Value);
+                string profilePrefix = Utilities.GetEnumDescription<FinancialAccountCarrierType>(FinancialAccountCarrierType.Profile);
+                financialAccountInfo.Description = string.Format("({0}) {1}", profilePrefix, financialAccountInfo.Name);
+            }
+            else
+            {
+                financialAccountInfo.CarrierType = FinancialAccountCarrierType.Account;
+                financialAccountInfo.Name = _carrierAccountManager.GetCarrierAccountName(financialAccount.CarrierAccountId.Value);
+                string accountPrefix = Utilities.GetEnumDescription<FinancialAccountCarrierType>(FinancialAccountCarrierType.Account);
+                financialAccountInfo.Description = string.Format("({0}) {1}", accountPrefix, financialAccountInfo.Name);
+            }
+            return financialAccountInfo;
+        }
+
+        private FinancialAccountEffectiveStatus GetFinancialAccountEffectiveStatus(DateTime financialAccountBED, DateTime? financialAccountEED)
+        {
+            DateTime today = DateTime.Today;
+
+            if (today < financialAccountBED)
+                return FinancialAccountEffectiveStatus.Recent;
+
+            if (financialAccountEED.HasValue)
+                return (financialAccountEED.Value < today) ? FinancialAccountEffectiveStatus.Future : FinancialAccountEffectiveStatus.Current;
+            else
+                return FinancialAccountEffectiveStatus.Current;
+        }
+
+        private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
             return new FinancialAccountDetail
             {
@@ -645,6 +722,7 @@ namespace TOne.WhS.AccountBalance.Business
                 AccountTypeDescription = new AccountTypeManager().GetAccountTypeName(financialAccount.Settings.AccountTypeId)
             };
         }
+
         #endregion
     }
 }

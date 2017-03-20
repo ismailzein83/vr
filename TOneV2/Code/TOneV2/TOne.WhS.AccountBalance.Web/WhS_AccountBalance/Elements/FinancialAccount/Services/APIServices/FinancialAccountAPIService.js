@@ -7,6 +7,7 @@
     function FinancialAccountAPIService(BaseAPIService, UtilsService, WhS_AccountBalance_ModuleConfig, SecurityService) {
 
         var controllerName = 'FinancialAccount';
+
         function GetFilteredFinancialAccounts(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFilteredFinancialAccounts"), input);
         }
@@ -39,13 +40,20 @@
             });
         }
 
+        function GetFinancialAccountsInfo(accountTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFinancialAccountsInfo"), {
+                accountTypeId: accountTypeId
+            });
+        }
+
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
             UpdateFinancialAccount: UpdateFinancialAccount,
             CheckCarrierAllowAddFinancialAccounts: CheckCarrierAllowAddFinancialAccounts,
             GetFinancialAccount: GetFinancialAccount,
-            GetAccountCurrencyName: GetAccountCurrencyName
+            GetAccountCurrencyName: GetAccountCurrencyName,
+            GetFinancialAccountsInfo: GetFinancialAccountsInfo
         };
     }
 

@@ -14,12 +14,14 @@ namespace TOne.WhS.AccountBalance.Web.Controllers
     public class FinancialAccountController : BaseAPIController
     {
         FinancialAccountManager _manager = new FinancialAccountManager();
+
         [HttpPost]
         [Route("GetFilteredFinancialAccounts")]
         public object GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<FinancialAccountQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input));
         }
+
         [HttpPost]
         [Route("AddFinancialAccount")]
         public Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> AddFinancialAccount(FinancialAccount financialAccount)
@@ -33,23 +35,33 @@ namespace TOne.WhS.AccountBalance.Web.Controllers
         {
             return _manager.UpdateFinancialAccount(financialAccount);
         }
+
         [HttpGet]
         [Route("GetFinancialAccount")]
         public FinancialAccount GetFinancialAccount(int financialAccountId)
         {
             return _manager.GetFinancialAccount(financialAccountId);
         }
+
         [HttpGet]
         [Route("CheckCarrierAllowAddFinancialAccounts")]
         public bool CheckCarrierAllowAddFinancialAccounts(int? carrierProfileId = null, int? carrierAccountId = null)
         {
             return _manager.CheckCarrierAllowAddFinancialAccounts(carrierProfileId, carrierAccountId);
         }
+
         [HttpGet]
         [Route("GetAccountCurrencyName")]
         public string GetAccountCurrencyName(int? carrierProfileId = null, int? carrierAccountId = null)
         {
             return _manager.GetAccountCurrencyName(carrierProfileId, carrierAccountId);
+        }
+
+        [HttpGet]
+        [Route("GetFinancialAccountsInfo")]
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountTypeId)
+        {
+            return _manager.GetFinancialAccountsInfo(accountTypeId);
         }
     }
 }

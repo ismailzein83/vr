@@ -135,6 +135,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_AccountBalance\Constant\FinancialAccountCarrierTypeEnum.js" />
+    <Content Include="WhS_AccountBalance\Constant\FinancialAccountEffectiveStatusEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\ModuleConfig.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidDefinitionSettings.html" />

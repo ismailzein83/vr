@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +11,23 @@ namespace TOne.WhS.AccountBalance.Entities
     {
         public int FinancialAccountId { get; set; }
 
-        public bool IsCarrierProfile { get; set; }
+        public FinancialAccountCarrierType CarrierType { get; set; }
 
-        public string FinancialAccountName { get; set; }
+        public string Name { get; set; }
 
-        public string FinancialAccountDescription { get; set; }
+        public string Description { get; set; }
+
+        public FinancialAccountEffectiveStatus EffectiveStatus { get; set; }
     }
 
-    public enum FinancialAccountEffectiveType { Recent = 1, Current = 2, Future = 3 }
+    public enum FinancialAccountEffectiveStatus { Recent = 0, Current = 1, Future = 2 }
+
+    public enum FinancialAccountCarrierType
+    {
+        [Description("Prof")]
+        Profile = 0,
+
+        [Description("Acc")]
+        Account = 1
+    }
 }
