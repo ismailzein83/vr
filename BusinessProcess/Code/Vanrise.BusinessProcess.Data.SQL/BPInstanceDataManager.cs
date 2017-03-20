@@ -49,7 +49,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             string definitionsIdAsString = null;
             if (input.DefinitionsId != null && input.DefinitionsId.Count() > 0)
-                definitionsIdAsString = string.Join<int>(",", input.DefinitionsId);
+                definitionsIdAsString = string.Join<Guid>(",", input.DefinitionsId);
 
             return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId),input.EntityId);
         }

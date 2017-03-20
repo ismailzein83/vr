@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public long LessThanID { get; set; }
         public int NbOfRows { get; set; }
-        public List<int> DefinitionsId { get; set; }
+        public List<Guid> DefinitionsId { get; set; }
         public int ParentId { get; set; }
         public string EntityId { get; set; }
     }
