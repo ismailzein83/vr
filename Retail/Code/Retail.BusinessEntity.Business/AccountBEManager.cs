@@ -18,12 +18,19 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountBEManager : IBusinessEntityManager, IAccountBEManager
     {
-        #region Public Methods
+        #region Ctor/Properties
+
         static AccountBEDefinitionManager _accountBEDefinitionManager;
+
         public AccountBEManager()
         {
             _accountBEDefinitionManager = new AccountBEDefinitionManager();
         }
+
+        #endregion
+
+        #region Public Methods
+
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
@@ -412,7 +419,10 @@ namespace Retail.BusinessEntity.Business
             return GetCachedAccounts(accountBEDefinitionId);
         }
 
+        #endregion
+
         #region ExtendedSettings
+
         public bool DeleteAccountExtendedSetting<T>(Guid accountBEDefinitionId, long accountId) where T : BaseAccountExtendedSettings
         {
             return UpdateAccountExtendedSetting<T>(accountBEDefinitionId, accountId, null);
@@ -465,7 +475,6 @@ namespace Retail.BusinessEntity.Business
             else
                 return default(T);
         }
-        #endregion
 
         #endregion
 
@@ -553,9 +562,11 @@ namespace Retail.BusinessEntity.Business
 
             return dataManager.Insert(accountToInsert, out accountId);
         }
+
         #endregion
 
         #region Private Classes
+
         public class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
@@ -899,7 +910,6 @@ namespace Retail.BusinessEntity.Business
             };
         }
 
-
         private string BuildAccountFullName(Guid accountBEDefinitionId, long accountId, string name)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
@@ -910,9 +920,11 @@ namespace Retail.BusinessEntity.Business
             }
             return name;
         }
+
         #endregion
 
         #region IBusinessEntityManager
+
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var cachedAccounts = GetCachedAccounts(context.EntityDefinitionId);
