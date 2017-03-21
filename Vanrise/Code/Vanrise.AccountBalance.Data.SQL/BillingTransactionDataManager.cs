@@ -20,6 +20,17 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
         #region Public Methods
+        public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        {
+            string accountsIDs = null;
+            if (accountIds != null && accountIds.Count() > 0)
+                accountsIDs = string.Join<String>(",", accountIds);
+
+            string transactionTypeIDs = null;
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                transactionTypeIDs = string.Join<Guid>(",", transactionTypeIds);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetByAccountIds]", BillingTransactionMetaDataMapper, accountTypeId, accountsIDs, transactionTypeIDs);
+        }
         public IEnumerable<BillingTransaction> GetFilteredBillingTransactions(BillingTransactionQuery query)
         {
             string accountsIds = null;
@@ -106,7 +117,18 @@ namespace Vanrise.AccountBalance.Data.SQL
                 SourceId = reader["SourceId"] as string
             };
         }
-
+        
+        private BillingTransactionMetaData BillingTransactionMetaDataMapper(IDataReader reader)
+        {
+            return new BillingTransactionMetaData
+            {
+                AccountId = reader["AccountID"] as string,
+                Amount = GetReaderValue<Decimal>(reader, "Amount"),
+                CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
+                TransactionTime = GetReaderValue<DateTime>(reader, "TransactionTime"),
+                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
+            };
+        }
         #endregion
 
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBalance_BillingTransactionTypeAPIService', 'VRUIUtilsService','UtilsService',
-    function (VR_AccountBalance_BillingTransactionTypeAPIService, VRUIUtilsService, UtilsService) {
+app.directive('vrAccountbalanceAccounttypeSourcefieldsSelector', ['VRUIUtilsService', 'UtilsService',
+    function (VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -18,7 +18,7 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
 
                 var ctrl = this;
                 ctrl.datasource = [];
-                var ctor = new BillingTransactionTypeSelectorCtor(ctrl, $scope, $attrs);
+                var ctor = new SourceFieldSelectorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             },
@@ -38,10 +38,10 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
 
 
         function getTemplate(attrs) {
-            var label = "Transaction Type";
+            var label = "Field";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "Transaction Types";
+                label = "Fields";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
@@ -50,29 +50,29 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                   + '<vr-select on-ready="ctrl.onSelectorReady"'
+                   +'<vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
                    + '  datasource="ctrl.datasource"`'
                    + ' ' + hideremoveicon 
-                   + '  datavaluefield="Id"'
-                   + '  datatextfield="Name"'
+                   + '  datavaluefield="FieldName"'
+                   + '  datatextfield="FieldTitle"'
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isrequired"'
                    + '  label="' + label + '"'
                    + ' entityName="' + label + '"'
                    + '  >'
                    + '</vr-select>'
-                    + '<vr-columns>';
+                   + '<vr-columns>';
         }
 
-        function BillingTransactionTypeSelectorCtor(ctrl, $scope, attrs) {
+        function SourceFieldSelectorCtor(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
             var filter;
             var selectorAPI;
-
+            var context;
             function initializeController() {
 
                 ctrl.onSelectorReady = function (api) {
@@ -89,28 +89,28 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
+                    ctrl.datasource.length = 0;
                     var selectedIds;
                     var filter;
+                    var sourceId;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
-                    }
-                    return VR_AccountBalance_BillingTransactionTypeAPIService.GetBillingTransactionTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
-                            }
+                        context = payload.context;
+                        sourceId = payload.sourceId
+                    } 
+                    if (context != undefined && context.getSourceFieldsInfo != undefined && sourceId != undefined)
+                    {
+                        ctrl.datasource = context.getSourceFieldsInfo(sourceId);
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'FieldName', attrs, ctrl);
                         }
-                    });
+                    }
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('FieldName', attrs, ctrl);
                 };
 
                 if (ctrl.onReady != null)

@@ -20,7 +20,9 @@ namespace Vanrise.AccountBalance.Entities
         public BalancePeriodSettings BalancePeriodSettings { get; set; }
         public AccountUsagePeriodSettings AccountUsagePeriodSettings { get; set; }
         public AccountTypeExtendedSettings ExtendedSettings { get; set; }
-
+       
+        public AccountBalanceGridSettings AccountBalanceGridSettings { get; set; }
+        public List<AccountBalanceFieldSource> Sources { get; set; }
         public AccountTypeSecurity Security { get; set; }
         public TimeSpan TimeOffset { get; set; }
     }
@@ -56,5 +58,51 @@ namespace Vanrise.AccountBalance.Entities
 
         public RequiredPermissionSettings AddRequiredPermission { get; set; }
 
+    }
+
+
+    public class AccountBalanceGridSettings
+    {
+        public List<AccountBalanceGridField> GridColumns { get; set; }
+    }
+    public class AccountBalanceGridField
+    {
+        public Guid SourceId { get; set; }
+        public string FieldName { get; set; }
+        public string Title { get; set; }
+    }
+    public class AccountBalanceFieldSource
+    {
+        public Guid AccountBalanceFieldSourceId { get; set; }
+        public string Name { get; set; }
+        public AccountBalanceFieldSourceSetting Settings { get; set; }
+    }
+    public abstract class AccountBalanceFieldSourceSetting
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context);
+        public abstract Object PrepareSourceData(IAccountBalanceFieldSourcePrepareSourceDataContext context);
+        public abstract Object GetFieldValue(IAccountBalanceFieldSourceGetFieldValueContext context);
+    }
+    public interface IAccountBalanceFieldSourceGetFieldDefinitionsContext
+    {
+
+    }
+    public interface IAccountBalanceFieldSourcePrepareSourceDataContext
+    {
+        IEnumerable<AccountBalance> AccountBalances { get; }
+        Guid AccountTypeId { get; }
+    }
+    public interface IAccountBalanceFieldSourceGetFieldValueContext
+    {
+        Object PreparedData { get;}
+        Entities.AccountBalance AccountBalance { get; set; }
+        string FieldName { get; }
+    }
+    public class AccountBalanceFieldDefinition
+    {
+        public string Name { get; set; }
+        public string Title { get; set; }
+        public Vanrise.GenericData.Entities.DataRecordFieldType FieldType { get; set; }
     }
 }

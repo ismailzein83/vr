@@ -5,14 +5,21 @@
                 <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
             </vr-columns>
         </vr-row>
-        <vr-accountbalance-accounttype-extendedsettings on-ready="scopeModel.accountTypeSettingsReady" isrequired="true" normal-col-num="6"></vr-accountbalance-accounttype-extendedsettings>
         <vr-accountusage-periodsettings on-ready="scopeModel.accountUsagePeriodSettingsReady" isrequired="true" normal-col-num="6"></vr-accountusage-periodsettings>
         <vr-row>
             <vr-columns width="1/2row" >
                 <vr-timespan value="scopeModel.timeOffset" label="Time Offset"></vr-timespan>
             </vr-columns>
         </vr-row>
-    
+    </vr-tab>
+    <vr-tab header="'Settings'">
+        <vr-accountbalance-accounttype-extendedsettings on-ready="scopeModel.accountTypeSettingsReady" isrequired="true" normal-col-num="6"></vr-accountbalance-accounttype-extendedsettings>
+    </vr-tab>
+    <vr-tab header="'Sources'">
+        <vr-accountbalance-accounttype-sources on-ready="scopeModel.accountTypeSourcesReady" isrequired="true" normal-col-num="6"></vr-accountbalance-accounttype-sources>
+    </vr-tab>
+    <vr-tab header="'Grid Settings'">
+        <vr-accountbalance-accounttype-gridcolumns on-ready="scopeModel.accountTypeGridColumnsReady" isrequired="true" normal-col-num="6"></vr-accountbalance-accounttype-gridcolumns>
     </vr-tab>
     <vr-tab header="'Security'">
         <vr-row>

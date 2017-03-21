@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AccountBalances\AccountBalanceDetail.cs" />
     <Compile Include="AccountBalances\AccountBalance.cs" />
+    <Compile Include="AccountBalances\AccountBalanceEntity.cs" />
     <Compile Include="AccountBalances\AccountBalancesViewSettings.cs" />
     <Compile Include="AccountBalances\AccountBalanceQuery.cs" />
     <Compile Include="AccountStatement\AccountStatementItem.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Account\AccountTypeInfoFilter.cs" />
     <Compile Include="Account\AccountTypeInfo.cs" />
     <Compile Include="Account\AccountTypeSettings.cs" />
+    <Compile Include="Account\AccountTypeSourcesConfig.cs" />
     <Compile Include="Account\IAccountTypeExtendedSettingsFilter.cs" />
     <Compile Include="Account\IAccountTypeInfoFilter.cs" />
     <Compile Include="BalanceClosingPeriod\BalanceClosingPeriod.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="BillingTransaction\BillingTransactionBatch.cs" />
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />
     <Compile Include="BillingTransaction\BillingTransactionQuery.cs" />
+    <Compile Include="BillingTransaction\BillingTransactionMetaData.cs" />
     <Compile Include="BillingTransaction\SourceBillingTransaction.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IAccountTypeManager.cs" />

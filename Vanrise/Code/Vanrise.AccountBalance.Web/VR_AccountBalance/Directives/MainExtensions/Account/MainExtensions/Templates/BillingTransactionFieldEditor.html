@@ -1,0 +1,30 @@
+﻿<div vr-modalcontent ng-controller="VR_AccountBalance_BillingTransactionFieldEditorController" width="'30%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formBillingTransactionFieldEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.fieldName" label="Field Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.fieldTitle" label="Field Title" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.isCredit" label="Is Credit"></vr-switch>
+                        </vr-columns>
+                        <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onTransactionTypeSelectorReady" normal-col-num="4" isrequired="true" ismultipleselection></vr-accountbalance-billingtransactiontype-selector>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formBillingTransactionFieldEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

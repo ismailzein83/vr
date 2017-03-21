@@ -64,6 +64,11 @@ namespace Vanrise.AccountBalance.Business
                 Debit = !isCredit ? (double?)billingTransaction.Amount : null
             };
         }
+        public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetBillingTransactionsByAccountIds(accountTypeId, transactionTypeIds, accountIds);
+        }
 
         #region Private Classes
         private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransaction, BillingTransactionDetail>

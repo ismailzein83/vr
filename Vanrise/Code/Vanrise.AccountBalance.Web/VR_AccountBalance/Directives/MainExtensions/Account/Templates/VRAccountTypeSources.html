@@ -1,0 +1,7 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addSource" standalone></vr-button>
+
+
+<vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeSource" hidegridmenu>
+    <vr-datagridcolumn headertext="'Source Name'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+</vr-datagrid>

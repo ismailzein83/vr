@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -40,31 +41,76 @@ namespace Vanrise.AccountBalance.Business
             return BigDataManager.Instance.RetrieveData(input, new AccountBalanceRequestHandler());
         }
 
-        private AccountBalanceDetail AccountBalanceDetailMapper(Vanrise.AccountBalance.Entities.AccountBalance accountBalance)
+        private AccountBalanceDetail AccountBalanceDetailMapper(AccountBalanceEntity accountBalance)
         {
-            CurrencyManager currencyManager = new CurrencyManager();
-            AccountManager accountManager = new AccountManager();
-            return new AccountBalanceDetail
-            {
-                Entity = accountBalance,
-                CurrencyDescription = currencyManager.GetCurrencyName(accountBalance.CurrencyId),
-                AccountInfo = accountManager.GetAccountInfo(accountBalance.AccountTypeId, accountBalance.AccountId)
+            return new AccountBalanceDetail {
+                Entity = accountBalance
             };
+         
         }
 
         #region Private Classes
-        private class AccountBalanceRequestHandler : BigDataRequestHandler<AccountBalanceQuery, Vanrise.AccountBalance.Entities.AccountBalance, AccountBalanceDetail>
+        private class AccountBalanceRequestHandler : BigDataRequestHandler<AccountBalanceQuery, AccountBalanceEntity, AccountBalanceDetail>
         {
-            public override AccountBalanceDetail EntityDetailMapper(Vanrise.AccountBalance.Entities.AccountBalance entity)
+            public override AccountBalanceDetail EntityDetailMapper(AccountBalanceEntity entity)
             {
                 LiveBalanceManager manager = new LiveBalanceManager();
                 return manager.AccountBalanceDetailMapper(entity);
             }
 
-            public override IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
+            public override IEnumerable<AccountBalanceEntity> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
             {
                 ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-                return dataManager.GetFilteredAccountBalances(input.Query);
+                IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> accountBalances = dataManager.GetFilteredAccountBalances(input.Query);
+                AccountTypeSettings accountTypeSettings = new AccountTypeManager().GetAccountTypeSettings(input.Query.AccountTypeId);
+                List<AccountBalanceEntity> accountBalanceDetails = new List<AccountBalanceEntity>();
+                if (input.SortByColumnName != null && input.SortByColumnName.Contains("Items"))
+                {
+                    string[] itemProperty = input.SortByColumnName.Split('.');
+                    input.SortByColumnName = string.Format(@"Entity.{0}[""{1}""].Description", itemProperty[0], itemProperty[1]);
+                }
+
+                Dictionary<Guid, Object> sourceDataBySourceData = new Dictionary<Guid, Object>();
+
+                foreach (var accountBalance in accountBalances)
+                {
+                    AccountBalanceEntity accountBalanceEntity = new Entities.AccountBalanceEntity();
+                    accountBalanceEntity.Items = new Dictionary<string, AccountBalanceDetailObject>();
+                    if (accountTypeSettings != null && accountTypeSettings.AccountBalanceGridSettings != null && accountTypeSettings.AccountBalanceGridSettings.GridColumns != null)
+                    {
+                        foreach (var gridColumn in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
+                        {
+                            var source = accountTypeSettings.Sources.FirstOrDefault(x => x.AccountBalanceFieldSourceId == gridColumn.SourceId);
+                            if (source != null)
+                            {
+
+                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext());
+                                var field = fields.FirstOrDefault(x => x.Name == gridColumn.FieldName);
+                                if (field != null)
+                                {
+                                    var preparedData = sourceDataBySourceData.GetOrCreateItem(gridColumn.SourceId, () =>
+                                    {
+                                        return source.Settings.PrepareSourceData(new AccountBalanceFieldSourcePrepareSourceDataContext { AccountBalances = accountBalances, AccountTypeId = input.Query.AccountTypeId });
+                                    });
+                                    
+                                    var fieldValue = source.Settings.GetFieldValue(new AccountBalanceFieldSourceGetFieldValueContext
+                                    {
+                                        FieldName = gridColumn.FieldName,
+                                        AccountBalance = accountBalance,
+                                        PreparedData = preparedData,
+                                    });
+                                    accountBalanceEntity.Items.Add(gridColumn.FieldName, new AccountBalanceDetailObject
+                                    {
+                                        Value = fieldValue,
+                                        Description = field.FieldType.GetDescription(fieldValue)
+                                    });
+                                }
+                            }
+                        }
+                        accountBalanceDetails.Add(accountBalanceEntity);
+                    }
+                }
+                return accountBalanceDetails;
             }
         }
 

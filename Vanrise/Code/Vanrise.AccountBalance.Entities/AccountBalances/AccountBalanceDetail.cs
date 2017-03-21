@@ -8,10 +8,8 @@ namespace Vanrise.AccountBalance.Entities
 {
     public class AccountBalanceDetail
     {
-        public AccountBalance Entity { get; set; }
-
-        public string CurrencyDescription { get; set; }
-        public AccountInfo AccountInfo { get; set; }
+        public AccountBalanceEntity Entity { get; set; }
+     //   public AccountInfo AccountInfo { get; set; }
     }
-
+   
 }

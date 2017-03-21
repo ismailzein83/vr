@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Security.Business;
 
 namespace Vanrise.AccountBalance.Business
@@ -103,7 +104,12 @@ namespace Vanrise.AccountBalance.Business
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<AccountTypeSettings>(accountTypeId);
         }
-
+         
+        public IEnumerable<AccountTypeSourcesConfig> GetAccountTypeSourceSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<AccountTypeSourcesConfig>(AccountTypeSourcesConfig.EXTENSION_TYPE);
+        }
         public T GetAccountTypeExtendedSettings<T>(Guid accountTypeId) where T : AccountTypeExtendedSettings
         {
             AccountTypeSettings accountTypeSettings = GetAccountTypeSettings(accountTypeId);
@@ -151,7 +157,70 @@ namespace Vanrise.AccountBalance.Business
             else
                 return true;
         }
+        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountBalanceFieldSource source)
+        {
+            List<AccountBalanceFieldDefinition> fields = new List<AccountBalanceFieldDefinition>();
+           return source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext());
+        }
+        public Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(List<AccountBalanceFieldSource> sources)
+        {
+            Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> fieldsBySourceId = new Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>>();
+            if (sources != null)
+            {
+                foreach(var source in sources)
+                {
+                    if(!fieldsBySourceId.ContainsKey(source.AccountBalanceFieldSourceId))
+                    {
+                        var fields = GetAccountTypeSourceFields(source);
+                        if(fields != null)
+                        {
+                            fieldsBySourceId.Add(source.AccountBalanceFieldSourceId, fields);
+                        }
+                    }
+                }
+            }
+            return fieldsBySourceId;
+        }
 
+        public IEnumerable<GridColumnAttribute> ConvertToGridColumnAttribute(Guid accountTypeId)
+        {
+
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            List<GridColumnAttribute> gridColumnAttributes = null;
+            if (accountTypeSettings.AccountBalanceGridSettings != null && accountTypeSettings.AccountBalanceGridSettings.GridColumns != null)
+            {
+                gridColumnAttributes = new List<GridColumnAttribute>();
+                foreach (var column in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
+                {
+
+                    var source = accountTypeSettings.Sources.FirstOrDefault(x => x.AccountBalanceFieldSourceId == column.SourceId);
+                     if(source != null)
+                     {
+                       var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext());
+                       if (sourceFields != null)
+                       {
+                           var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);
+                           if (matchField.FieldType == null)
+                               throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
+                           var gridAttribute = matchField.FieldType.GetGridColumnAttribute(null);
+                           gridAttribute.HeaderText = column.Title;
+                           gridAttribute.Field = matchField.Name;
+                           gridAttribute.Tag = matchField.Name;
+
+                           //if (column.GridColumnSettings != null)
+                           //{
+                           //    gridAttribute.WidthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(column.GridColumnSettings);
+                           //    if (!gridAttribute.WidthFactor.HasValue)
+                           //        gridAttribute.FixedWidth = column.GridColumnSettings.FixedWidth;
+                           //}
+                           gridColumnAttributes.Add(gridAttribute);
+                       }
+                     }
+                }
+            }
+            return gridColumnAttributes;
+
+        }
         #endregion
 
         #region Private Methods

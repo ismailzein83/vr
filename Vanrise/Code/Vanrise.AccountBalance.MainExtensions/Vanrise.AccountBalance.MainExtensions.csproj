@@ -58,6 +58,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalanceFieldSource\BillingTransactionFieldSourceSetting.cs" />
+    <Compile Include="AccountBalanceFieldSource\LiveBalanceFieldSourceSetting.cs" />
     <Compile Include="AccountBalanceNotification\AccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountUsagePeriods\DailyAccountUsagePeriod.cs" />
     <Compile Include="BalancePeriod\MonthlyBalancePeriodSettings.cs" />
@@ -103,6 +105,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.MainExtensions\Vanrise.GenericData.MainExtensions.csproj">
+      <Project>{9fba4641-edd5-4a59-a053-ce879f31ad14}</Project>
+      <Name>Vanrise.GenericData.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.QueueActivators\Vanrise.GenericData.QueueActivators.csproj">
       <Project>{8fc8aa0b-5ae5-4745-be9c-0e37f8a07ff9}</Project>

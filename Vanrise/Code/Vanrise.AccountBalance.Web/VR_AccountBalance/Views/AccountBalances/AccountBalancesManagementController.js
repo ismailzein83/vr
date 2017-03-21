@@ -117,13 +117,20 @@
             return loadAccountPromiseDeferred.promise;
         }
         function getFilterObject() {
+            var accountData = (accountDirectiveAPI != undefined) ? accountDirectiveAPI.getData() : undefined;
+            var accountsIds;
+            if(accountData != undefined)
+                accountsIds =  accountData.selectedIds;
             return {
-                AccountTypeId: accountTypeAPI.getSelectedIds(),
-                Top: $scope.scopeModel.top,
-                AccountsIds: (accountDirectiveAPI != undefined) ? accountDirectiveAPI.getData().selectedIds : null,
-                Sign: $scope.scopeModel.sign!=undefined ? $scope.scopeModel.sign.value: undefined ,
-                Balance: $scope.scopeModel.sign != undefined ? $scope.scopeModel.balance : undefined,
-                OrderBy:$scope.scopeModel.orderBy.value
+                query:{
+                    AccountTypeId: accountTypeAPI.getSelectedIds(),
+                    Top: $scope.scopeModel.top,
+                    AccountsIds: accountsIds,
+                    Sign: $scope.scopeModel.sign!=undefined ? $scope.scopeModel.sign.value: undefined ,
+                    Balance: $scope.scopeModel.sign != undefined ? $scope.scopeModel.balance : undefined,
+                    OrderBy:$scope.scopeModel.orderBy.value
+                },
+                accountTypeId : accountTypeAPI.getSelectedIds()
             };
         }
     }

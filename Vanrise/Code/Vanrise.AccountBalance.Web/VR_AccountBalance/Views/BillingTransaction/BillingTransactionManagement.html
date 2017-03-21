@@ -11,9 +11,9 @@
                 <vr-columns width="normal" ng-show="scopeModel.accountType">
                     <vr-datetimepicker type="dateTime" label="To" value="scopeModel.toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="scopeModel.accountType">
-                    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" ismultipleselection="true"></vr-accountbalance-billingtransactiontype-selector>
-                </vr-columns>
+                <span ng-show="scopeModel.accountType">
+                    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" ismultipleselection="true" normal-col-num="2"></vr-accountbalance-billingtransactiontype-selector>
+                </span>
                 <vr-accountbalance-account-selector on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
             </vr-row>
         </div>
