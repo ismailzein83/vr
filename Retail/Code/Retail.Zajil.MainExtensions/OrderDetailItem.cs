@@ -12,23 +12,23 @@ namespace Retail.Zajil.MainExtensions
 
         public string Payment { get; set; }
 
-        public decimal ContractPeriod { get; set; }
+        public double ContractPeriod { get; set; }
 
-        public decimal ContractRemain { get; set; }
+        public string ContractRemain { get; set; }
 
-        public decimal ContractDays { get; set; }
+        public double ContractDays { get; set; }
 
-        public decimal TotalContract { get; set; }
+        public double TotalContract { get; set; }
 
-        public decimal ChargesYear1 { get; set; }
+        public double ChargesYear1 { get; set; }
 
-        public decimal ChargesYear2 { get; set; }
+        public double ChargesYear2 { get; set; }
 
-        public decimal ChargesYear3 { get; set; }
+        public double ChargesYear3 { get; set; }
 
-        public decimal Installation { get; set; }
+        public double Installation { get; set; }
 
-        public decimal ThirdParty { get; set; }
+        public double ThirdParty { get; set; }
 
         public string Discount { get; set; }
 

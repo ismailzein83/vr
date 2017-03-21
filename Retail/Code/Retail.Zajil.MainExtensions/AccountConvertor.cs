@@ -180,24 +180,27 @@ namespace Retail.Zajil.MainExtensions
             {
                 Achievement = row["Achievement"] as string,
                 Charges = row["Charges"] as string,
-                ChargesYear1 = GetDecimalValue(row, "Charges_Year1"),
-                ChargesYear2 = GetDecimalValue(row, "Charges_Year2"),
-                ChargesYear3 = GetDecimalValue(row, "Charges_Year3"),
-                ContractDays = GetDecimalValue(row, "contract_days"),
-                ContractPeriod = GetDecimalValue(row, "ContractPeriod"),
-                ContractRemain = GetDecimalValue(row, "ContractRemain"),
+                ChargesYear1 = GetDoubleValue(row, "Charges_Year1"),
+                ChargesYear2 = GetDoubleValue(row, "Charges_Year2"),
+                ChargesYear3 = GetDoubleValue(row, "Charges_Year3"),
+                ContractDays = GetDoubleValue(row, "contract_days"),
+                ContractPeriod = GetDoubleValue(row, "ContractPeriod"),
+                ContractRemain = row["ContractRemain"] as string,
                 Discount = row["Discount"] as string,
-                Installation = GetDecimalValue(row, "Installation"),
+                Installation = GetDoubleValue(row, "Installation"),
                 Payment = row["Payment"] as string,
-                ThirdParty = GetDecimalValue(row, "ThirdParty"),
-                TotalContract = GetDecimalValue(row, "total_contract")
+                ThirdParty = GetDoubleValue(row, "ThirdParty"),
+                TotalContract = GetDoubleValue(row, "total_contract")
             };
         }
         decimal GetDecimalValue(DataRow row, string columnName)
         {
-            decimal result = 0;
-            decimal.TryParse(row[columnName] as string, out result);
-            return result;
+           return row[columnName] == DBNull.Value ? 0 : decimal.Parse(row[columnName].ToString());
+        }
+
+        double GetDoubleValue(DataRow row, string columnName)
+        {
+            return row[columnName] == DBNull.Value ? 0 : double.Parse(row[columnName].ToString());
         }
         Dictionary<string,AccountCompanyContact> GetContactsList(DataRow row)
         {
