@@ -595,6 +595,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appSettings.config" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <None Include="Web.Debug.config">
