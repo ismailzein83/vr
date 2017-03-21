@@ -258,7 +258,7 @@
             vrAlertRuleTypeSettings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
             vrAlertRuleTypeSettings.Security = {
                 ViewPermission: viewPermissionAPI.getData(),
-                AddRPermission: addPermissionAPI.getData(),
+                AddPermission: addPermissionAPI.getData(),
                 EditPermission: editPermissionAPI.getData()
             };
             return vrAlertRuleTypeSettings;
