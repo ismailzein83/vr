@@ -71,7 +71,6 @@
             GetFilteredTasks: GetFilteredTasks,
             GetTask: GetTask,
             GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
-            GetSchedulerTaskActionTypes: GetSchedulerTaskActionTypes,
             AddTask: AddTask,
             UpdateTask: UpdateTask,
             DeleteTask: DeleteTask,
