@@ -12,6 +12,7 @@ CREATE PROCEDURE [bp].[sp_BPInstance_Insert]
 	@ExecutionStatus int,
 	@InitiatorUserId int,
 	@EntityId varchar(255),
+	@ViewRequiredPermissionSetId int,
 	@ID bigint out
 	
 AS
@@ -25,7 +26,8 @@ BEGIN
            ,[ExecutionStatus]
            ,[StatusUpdatedTime]
            ,[InitiatorUserId]
-		   ,EntityId)
+		   ,EntityId
+		   ,ViewRequiredPermissionSetId)
      VALUES
            (@Title
            ,@ParentID
@@ -35,6 +37,7 @@ BEGIN
            ,@ExecutionStatus
            ,GETDATE()
            ,@InitiatorUserId
-		   ,@EntityId)
+		   ,@EntityId
+		   ,@ViewRequiredPermissionSetId)
      SET @ID = SCOPE_IDENTITY()
 END

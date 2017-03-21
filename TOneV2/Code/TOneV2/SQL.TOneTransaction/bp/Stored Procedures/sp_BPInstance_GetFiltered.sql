@@ -1,4 +1,4 @@
-﻿Create PROCEDURE [bp].[sp_BPInstance_GetFiltered]
+﻿CREATE PROCEDURE [bp].[sp_BPInstance_GetFiltered]
 	@ArrDefinitionID nvarchar(max),
 	@ArrStatus nvarchar(max),
 	@EntityID nvarchar(50),
@@ -12,7 +12,7 @@ SET NOCOUNT ON;
 
 BEGIN	
 	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus],
-			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID
+			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID,[ViewRequiredPermissionSetId]
 
 	FROM	bp.[BPInstance] as bps WITH(NOLOCK)
 	WHERE	(@EntityID is null OR EntityID = @EntityID) 

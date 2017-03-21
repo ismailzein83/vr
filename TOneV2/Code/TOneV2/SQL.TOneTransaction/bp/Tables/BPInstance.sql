@@ -1,22 +1,27 @@
-﻿CREATE TABLE [bp].[BPInstance] (
-    [ID]                 BIGINT           IDENTITY (1, 1) NOT NULL,
-    [Title]              NVARCHAR (1000)  NULL,
-    [ParentID]           BIGINT           NULL,
-    [DefinitionID]       UNIQUEIDENTIFIER NOT NULL,
-    [OldDefinitionID]    INT              NULL,
-    [ServiceInstanceID]  UNIQUEIDENTIFIER NULL,
-    [InitiatorUserId]    INT              NOT NULL,
-    [WorkflowInstanceID] UNIQUEIDENTIFIER NULL,
-    [InputArgument]      NVARCHAR (MAX)   NULL,
-    [CompletionNotifier] NVARCHAR (MAX)   NULL,
-    [ExecutionStatus]    INT              NOT NULL,
-    [LastMessage]        NVARCHAR (MAX)   NULL,
-    [EntityId]           VARCHAR (255)    NULL,
-    [CreatedTime]        DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
-    [StatusUpdatedTime]  DATETIME         NULL,
-    [timestamp]          ROWVERSION       NULL,
+CREATE TABLE [bp].[BPInstance] (
+    [ID]                          BIGINT           IDENTITY (1, 1) NOT NULL,
+    [Title]                       NVARCHAR (1000)  NULL,
+    [ParentID]                    BIGINT           NULL,
+    [DefinitionID]                UNIQUEIDENTIFIER NOT NULL,
+    [OldDefinitionID]             INT              NULL,
+    [ServiceInstanceID]           UNIQUEIDENTIFIER NULL,
+    [InitiatorUserId]             INT              NOT NULL,
+    [WorkflowInstanceID]          UNIQUEIDENTIFIER NULL,
+    [InputArgument]               NVARCHAR (MAX)   NULL,
+    [CompletionNotifier]          NVARCHAR (MAX)   NULL,
+    [ExecutionStatus]             INT              NOT NULL,
+    [LastMessage]                 NVARCHAR (MAX)   NULL,
+    [EntityId]                    VARCHAR (255)    NULL,
+    [ViewRequiredPermissionSetId] INT              NULL,
+    [CreatedTime]                 DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
+    [StatusUpdatedTime]           DATETIME         NULL,
+    [timestamp]                   ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
+
+
 
 
 
@@ -59,5 +64,6 @@ CREATE NONCLUSTERED INDEX [IX_BPInstance_ExecutionStatus]
 
 
 GO
-
+CREATE NONCLUSTERED INDEX [IX_BPInstance_ViewReqPrmSet]
+    ON [bp].[BPInstance]([ViewRequiredPermissionSetId] ASC);
 

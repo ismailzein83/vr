@@ -561,6 +561,9 @@
     <Build Include="logging\Stored Procedures\sp_LoggableEntity_InsertOrUpdate.sql" />
     <Build Include="logging\Stored Procedures\sp_LoggableEntity_GetAll.sql" />
     <Build Include="Security\logging.sql" />
+    <Build Include="sec\Tables\RequiredPermissionSet.sql" />
+    <Build Include="sec\Stored Procedures\sp_RequiredPermissionSet_InsertIfNotExists.sql" />
+    <Build Include="sec\Stored Procedures\sp_RequiredPermissionSet_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

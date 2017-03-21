@@ -22,6 +22,7 @@ IF (@TimestampAfter IS NULL)
       ,[ExecutionStatus]
       ,[LastMessage]
 	   ,EntityID
+      ,[ViewRequiredPermissionSetId]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]
@@ -49,6 +50,7 @@ IF (@TimestampAfter IS NULL)
       ,[ExecutionStatus]
       ,[LastMessage]
 	  ,EntityID
+      ,[ViewRequiredPermissionSetId]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]

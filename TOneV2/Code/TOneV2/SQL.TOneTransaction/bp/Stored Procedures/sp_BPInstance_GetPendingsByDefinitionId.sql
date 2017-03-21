@@ -21,6 +21,7 @@ BEGIN
       ,[ExecutionStatus]
       ,[LastMessage]
 	   ,EntityID
+      ,[ViewRequiredPermissionSetId]
       ,[CreatedTime]
       ,[StatusUpdatedTime]      
       ,[InitiatorUserId]
