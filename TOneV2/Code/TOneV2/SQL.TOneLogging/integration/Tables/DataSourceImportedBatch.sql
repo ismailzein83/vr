@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [integration].[DataSourceImportedBatch] (
     [ID]               BIGINT           IDENTITY (1, 1) NOT NULL,
     [DataSourceId]     UNIQUEIDENTIFIER NULL,
-    [OldDataSourceId]  INT              NULL,
     [BatchDescription] NVARCHAR (1000)  NULL,
     [BatchSize]        DECIMAL (18, 5)  NULL,
     [RecordsCount]     INT              NOT NULL,
@@ -25,6 +24,8 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_DataSourceImportedBatch_Time]
     ON [integration].[DataSourceImportedBatch]([LogEntryTime] ASC);
@@ -32,7 +33,9 @@ CREATE CLUSTERED INDEX [IX_DataSourceImportedBatch_Time]
 
 GO
 CREATE NONCLUSTERED INDEX [IX_DataSourceImportedBatch_DataSource]
-    ON [integration].[DataSourceImportedBatch]([OldDataSourceId] ASC);
+    ON [integration].[DataSourceImportedBatch]([DataSourceId] ASC);
+
+
 
 
 
