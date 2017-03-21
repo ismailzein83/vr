@@ -117,10 +117,7 @@
     <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_GetAll.sql" />
     <Build Include="logging\Stored Procedures\sp_ActionAudit_Insert.sql" />
     <Build Include="logging\Tables\ObjectTracking.sql" />
-    <Build Include="logging\Tables\LoggableEntity.sql" />
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_Insert.sql" />
-    <Build Include="logging\Stored Procedures\sp_LoggableEntity_InsertOrUpdate.sql" />
-    <Build Include="logging\Stored Procedures\sp_LoggableEntity_GetAll.sql" />
     <Build Include="logging\Stored Procedures\sp_ActionAudit_GetFilterd.sql" />
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_GetFiltered.sql" />
   </ItemGroup>
