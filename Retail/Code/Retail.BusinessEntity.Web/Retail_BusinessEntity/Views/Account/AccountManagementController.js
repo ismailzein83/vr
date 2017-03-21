@@ -105,7 +105,6 @@
         }
 
         function loadBEDefinitionSelectorLabel() {
-
             return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {              
                 if (response != undefined && response.Settings != undefined) {
                     $scope.scopeModel.BEDefinitionSelectorLabel = response.Settings.AccountDefinitionSelectorLabel;
@@ -180,7 +179,6 @@
         }
 
         function loadAccountFields() {
-
             return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
                 accountFields = response;
             });

@@ -573,10 +573,10 @@ namespace Retail.BusinessEntity.Business
         }
         private class AccountRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
         {
-
             Guid _accountBEDefinitionId;
             Account _account;
             AccountTypeManager _accountTypeManager = new AccountTypeManager();
+
             public AccountRecordFilterGenericFieldMatchContext(Guid accountBEDefinitionId, Account account)
             {
                 this._accountBEDefinitionId = accountBEDefinitionId;
@@ -643,10 +643,10 @@ namespace Retail.BusinessEntity.Business
 
                             foreach (AccountGridExportColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions)
                             {
-                                AccountFieldValue accountValue;
-                                if (accountDetail.FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                                DataRecordFieldValue dataRecordFieldValue;
+                                if (accountDetail.FieldValues.TryGetValue(exportColumn.FieldName, out dataRecordFieldValue))
                                 {
-                                    row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                                    row.Cells.Add(new ExportExcelCell { Value = dataRecordFieldValue.Description });
                                 }
                                 else
                                 {
@@ -673,11 +673,10 @@ namespace Retail.BusinessEntity.Business
 
                             foreach (AccountGridColumnDefinition exportColumn in accountBEDefinitionSettings.GridDefinition.ColumnDefinitions)
                             {
-                                AccountFieldValue accountValue;
-
-                                if (accountDetail.FieldValues.TryGetValue(exportColumn.FieldName, out accountValue))
+                                DataRecordFieldValue dataRecordFieldValue;
+                                if (accountDetail.FieldValues.TryGetValue(exportColumn.FieldName, out dataRecordFieldValue))
                                 {
-                                    row.Cells.Add(new ExportExcelCell { Value = accountValue.Description });
+                                    row.Cells.Add(new ExportExcelCell { Value = dataRecordFieldValue.Description });
                                 }
                                 else
                                 {
@@ -690,7 +689,6 @@ namespace Retail.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-
         public class AccountBELoggableEntity : VRLoggableEntityBase
         {
             Guid _accountBEDefinitionId;
@@ -734,6 +732,7 @@ namespace Retail.BusinessEntity.Business
                 get { return "Account"; }
             }
         }
+
         #endregion
 
         #region Get Account Editor Runtime
@@ -833,7 +832,7 @@ namespace Retail.BusinessEntity.Business
             var accountTreeNode = GetCacheAccountTreeNodes(accountBEDefinitionId).GetRecord(account.AccountId);
 
             //Dynamic Part
-            Dictionary<string, AccountFieldValue> fieldValues = new Dictionary<string, AccountFieldValue>();
+            Dictionary<string, DataRecordFieldValue> fieldValues = new Dictionary<string, DataRecordFieldValue>();
             Dictionary<string, AccountGenericField> accountGenericFields = accountTypeManager.GetAccountGenericFields(accountBEDefinitionId);
 
             foreach (var field in accountGenericFields.Values)
@@ -843,12 +842,13 @@ namespace Retail.BusinessEntity.Business
 
                 object value = field.GetValue(new AccountGenericFieldContext(account));
 
-                AccountFieldValue accountFieldValue = new AccountFieldValue();
-                accountFieldValue.Value = value;
-                accountFieldValue.Description = field.FieldType.GetDescription(value);
+                DataRecordFieldValue dataRecordFieldValue = new DataRecordFieldValue();
+                dataRecordFieldValue.Value = value;
+                dataRecordFieldValue.Description = field.FieldType.GetDescription(value);
 
-                fieldValues.Add(field.Name, accountFieldValue);
+                fieldValues.Add(field.Name, dataRecordFieldValue);
             }
+
             return new AccountDetail()
             {
                 Entity = account,

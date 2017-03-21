@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -19,16 +20,9 @@ namespace Retail.BusinessEntity.Entities
         public int NumberOfServices { get; set; }
         public int NumberOfPackages { get; set; }
 
-        public Dictionary<string, AccountFieldValue> FieldValues { get; set; }
+        public Dictionary<string, DataRecordFieldValue> FieldValues { get; set; }
         public List<Guid> AvailableAccountViews { get; set; }
         public List<Guid> AvailableAccountActions { get; set; }
-    }
-
-    public class AccountFieldValue
-    {
-        public Object Value { get; set; }
-
-        public string Description { get; set; }
     }
 }
         
