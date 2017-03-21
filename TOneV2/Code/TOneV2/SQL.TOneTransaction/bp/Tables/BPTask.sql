@@ -2,7 +2,6 @@
     [ID]                       BIGINT           IDENTITY (1, 1) NOT NULL,
     [ProcessInstanceID]        BIGINT           NOT NULL,
     [TypeID]                   UNIQUEIDENTIFIER NOT NULL,
-    [OldTypeID]                INT              NULL,
     [Title]                    NVARCHAR (255)   NULL,
     [AssignedUsers]            VARCHAR (MAX)    NOT NULL,
     [AssignedUsersDescription] NVARCHAR (MAX)   NOT NULL,
@@ -17,6 +16,8 @@
     [timestamp]                ROWVERSION       NULL,
     CONSTRAINT [PK_BPTask] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

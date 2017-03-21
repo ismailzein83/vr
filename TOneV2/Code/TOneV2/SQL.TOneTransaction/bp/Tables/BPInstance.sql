@@ -1,9 +1,8 @@
-CREATE TABLE [bp].[BPInstance] (
+﻿CREATE TABLE [bp].[BPInstance] (
     [ID]                          BIGINT           IDENTITY (1, 1) NOT NULL,
     [Title]                       NVARCHAR (1000)  NULL,
     [ParentID]                    BIGINT           NULL,
     [DefinitionID]                UNIQUEIDENTIFIER NOT NULL,
-    [OldDefinitionID]             INT              NULL,
     [ServiceInstanceID]           UNIQUEIDENTIFIER NULL,
     [InitiatorUserId]             INT              NOT NULL,
     [WorkflowInstanceID]          UNIQUEIDENTIFIER NULL,
@@ -42,9 +41,13 @@ CREATE TABLE [bp].[BPInstance] (
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_DefinitionID]
-    ON [bp].[BPInstance]([OldDefinitionID] ASC);
+    ON [bp].[BPInstance]([DefinitionID] ASC);
+
+
 
 
 
