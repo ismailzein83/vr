@@ -164,7 +164,13 @@
 
                 if (vrAlertRuleEntity != undefined && vrAlertRuleEntity.RuleTypeId != undefined) {
                     vrAlertRuleTypeSelectorPayload = {
-                        selectedIds: vrAlertRuleEntity.RuleTypeId
+                        selectedIds: vrAlertRuleEntity.RuleTypeId,
+                        filter: {
+                             Filters: [{
+                                 $type: "Vanrise.Notification.Business.VRAlertRuleTypeAddOrEditFilter, Vanrise.Notification.Business",
+                                EditMode: isEditMode
+                            }]
+                        }
                     };
                 }
                 VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, vrAlertRuleTypeSelectorPayload, vrAlertRuleTypeSelectorLoadDeferred);

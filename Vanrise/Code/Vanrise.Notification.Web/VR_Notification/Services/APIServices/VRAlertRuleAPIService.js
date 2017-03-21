@@ -29,21 +29,15 @@
         }
 
         function HasAddVRAlertRulePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['AddVRAlertRule']));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAlertRulePermission'));
         }
-
-        function HasEditVRAlertRulePermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Notification_ModuleConfig.moduleName, controllerName, ['UpdateVRAlertRule']));
-        }
-
 
         return ({
             GetFilteredVRAlertRules: GetFilteredVRAlertRules,
             GetVRAlertRule: GetVRAlertRule,
             AddVRAlertRule: AddVRAlertRule,
             UpdateVRAlertRule: UpdateVRAlertRule,
-            HasAddVRAlertRulePermission: HasAddVRAlertRulePermission,
-            HasEditVRAlertRulePermission: HasEditVRAlertRulePermission,
+            HasAddVRAlertRulePermission: HasAddVRAlertRulePermission
         });
     }
 

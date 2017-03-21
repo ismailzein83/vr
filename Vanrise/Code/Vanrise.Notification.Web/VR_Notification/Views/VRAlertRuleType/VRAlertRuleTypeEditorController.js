@@ -11,6 +11,15 @@
         var directiveAPI;
         var directiveReadyDeferred;
 
+        var viewPermissionAPI;
+        var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var addPermissionAPI;
+        var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var editPermissionAPI;
+        var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
         var selectorAPI;
 
         var vrAlertRuleTypeId;
@@ -61,6 +70,20 @@
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
             };
+
+            $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                viewPermissionAPI = api;
+                viewPermissionReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
+                addPermissionAPI = api;
+                addPermissionReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onEditRequiredPermissionReady = function (api) {
+                editPermissionAPI = api;
+                editPermissionReadyDeferred.resolve();
+            };
         }
 
         function load() {
@@ -87,7 +110,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuleTypeSection]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRuleTypeSection, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -155,6 +178,41 @@
             return directiveLoadDeferred.promise;
         }
 
+        function loadViewRequiredPermission() {
+            var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+            viewPermissionReadyDeferred.promise.then(function () {
+                var dataPayload = {
+                    data: vrAlertRuleTypeSettings && vrAlertRuleTypeSettings.Security && vrAlertRuleTypeSettings.Security.ViewPermission || undefined
+                };
+
+                VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
+            });
+            return viewSettingPermissionLoadDeferred.promise;
+        }
+
+        function loadAddRequiredPermission() {
+            var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+            addPermissionReadyDeferred.promise.then(function () {
+                var dataPayload = {
+                    data: vrAlertRuleTypeSettings && vrAlertRuleTypeSettings.Security && vrAlertRuleTypeSettings.Security.AddPermission || undefined
+                };
+
+                VRUIUtilsService.callDirectiveLoad(addPermissionAPI, dataPayload, addPermissionLoadDeferred);
+            });
+            return addPermissionLoadDeferred.promise;
+        }
+
+        function loadEditRequiredPermission() {
+            var editPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+            editPermissionReadyDeferred.promise.then(function () {
+                var dataPayload = {
+                    data: vrAlertRuleTypeSettings && vrAlertRuleTypeSettings.Security && vrAlertRuleTypeSettings.Security.EditPermission || undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(editPermissionAPI, dataPayload, editPermissionLoadDeferred);
+            });
+            return editPermissionLoadDeferred.promise;
+        }
+
         function insert() {
             $scope.scopeModel.isLoading = true;
             return VR_Notification_VRAlertRuleTypeAPIService.AddVRAlertRuleType(buildVRAlertRuleTypeObjFromScope()).then(function (response) {
@@ -198,6 +256,11 @@
         function buildAlertTypeSettings() {
             var vrAlertRuleTypeSettings = directiveAPI.getData();
             vrAlertRuleTypeSettings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+            vrAlertRuleTypeSettings.Security = {
+                ViewPermission: viewPermissionAPI.getData(),
+                AddRPermission: addPermissionAPI.getData(),
+                EditPermission: editPermissionAPI.getData()
+            };
             return vrAlertRuleTypeSettings;
         }
     }

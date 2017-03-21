@@ -13,6 +13,16 @@ namespace Vanrise.Notification.Business
 {
     public class VRAlertRuleManager
     {
+         #region Ctor/Fields
+
+        static VRAlertRuleTypeManager _alertTypeManager;
+        public VRAlertRuleManager()
+        {
+            _alertTypeManager = new VRAlertRuleTypeManager();
+        }
+
+        #endregion
+
         #region Public Methods
         public List<VRAlertRule> GetActiveRules(Guid ruleTypeId)
         {
@@ -42,7 +52,15 @@ namespace Vanrise.Notification.Business
         public IDataRetrievalResult<VRAlertRuleDetail> GetFilteredVRAlertRules(DataRetrievalInput<VRAlertRuleQuery> input)
         {
             var allVRAlertRules = this.GetCachedVRAlertRules();
-            Func<VRAlertRule, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            var allowedAlertRuleTypeIds = _alertTypeManager.GetAllowedRuleTypeIds();
+            Func<VRAlertRule, bool> filterExpression = (x) =>
+            {
+                if (!allowedAlertRuleTypeIds.Contains(x.RuleTypeId))
+                    return false;
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                return true;
+            };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRules.ToBigResult(input, filterExpression, VRAlertRuleDetailMapper));
         }
 
@@ -203,6 +221,7 @@ namespace Vanrise.Notification.Business
             {
                 Entity = vrAlertRule
             };
+            vrAlertRuleDetail.AllowEdit = _alertTypeManager.DoesUserHaveEditAccess(vrAlertRule.RuleTypeId);
             return vrAlertRuleDetail;
         }
 

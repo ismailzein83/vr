@@ -49,11 +49,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VRAlertRuleTypeAddOrEditFilter.cs" />
     <Compile Include="Context\VRActionExecutionContext.cs" />
     <Compile Include="Filters\IVRNotificationViewFilter\VRNotificationTypeViewFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRActionDefinitionManager.cs" />
     <Compile Include="VRActionManager.cs" />
+    <Compile Include="VRActionRuleViewSettings.cs" />
     <Compile Include="VRAlertRuleManager.cs" />
     <Compile Include="VRAlertRuleNotificationManager.cs" />
     <Compile Include="VRAlertRuleTypeManager.cs" />

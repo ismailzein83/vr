@@ -8,6 +8,7 @@ using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Notification.Business
 {
@@ -154,6 +155,13 @@ namespace Vanrise.Notification.Business
                });
         }
 
+        private bool DoesUserHaveAccess(int userId, VRAlertRuleType alertRuleType, Func<AlertRuleTypeSecurity, RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            if (alertRuleType != null && alertRuleType.Settings != null && alertRuleType.Settings.Security != null && getRequiredPermissionSetting(alertRuleType.Settings.Security) != null)
+                return ContextFactory.GetContext().IsAllowed(getRequiredPermissionSetting(alertRuleType.Settings.Security), userId);
+            else
+                return true;
+        }
         #endregion
 
 
@@ -178,6 +186,73 @@ namespace Vanrise.Notification.Business
             return vrAlertRuleTypeInfo;
         }
 
+        #endregion
+
+        #region Security
+
+        public bool DoesUserHaveViewAccess()
+        {
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId);
+        }
+        public bool DoesUserHaveViewAccess(int userId)
+        {
+            return GetAllowedRuleTypeIds().Count > 0;
+        }
+
+        public HashSet<Guid> GetAllowedRuleTypeIds()
+        {
+            var alertRuleTypes = GetCachedVRAlertRuleTypes();
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            HashSet<Guid> allowedRuleTypeIds = new HashSet<Guid>();
+
+            foreach (var a in alertRuleTypes)
+            {
+                if (DoesUserHaveViewAccess(userId, a.Value))
+                    allowedRuleTypeIds.Add(a.Key);
+            }
+            return allowedRuleTypeIds;
+        }
+        public bool DoesUserHaveAddAccess()
+        {
+            var alertRuleTypes = GetCachedVRAlertRuleTypes().Values;
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+
+            foreach (var a in alertRuleTypes)
+            {
+                if (DoesUserHaveAddAccess(userId, a))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveAddAccess(Guid alertRuleTypeId)
+        {
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            return DoesUserHaveAddAccess(userId, alertRuleTypeId);
+        }
+        public bool DoesUserHaveViewAccess(int userId, VRAlertRuleType alertRuleType)
+        {
+            return DoesUserHaveAccess(userId, alertRuleType, (sec) => sec.ViewPermission);
+        }
+        public bool DoesUserHaveAddAccess(int userId, Guid alertRuleTypeId)
+        {
+            var alertRuleType = GetVRAlertRuleType(alertRuleTypeId);
+            return DoesUserHaveAddAccess(userId, alertRuleType);
+        }
+        public bool DoesUserHaveAddAccess(int userId, VRAlertRuleType alertRuleType)
+        {
+            return DoesUserHaveAccess(userId, alertRuleType, (sec) => sec.AddPermission);
+        }
+        public bool DoesUserHaveEditAccess(Guid alertRuleTypeId)
+        {
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            return DoesUserHaveEditAccess(userId,alertRuleTypeId);
+        }
+        public bool DoesUserHaveEditAccess(int userId, Guid alertRuleTypeId)
+        {
+            var alertRuleType = GetVRAlertRuleType(alertRuleTypeId);
+            return DoesUserHaveAccess(userId, alertRuleType, (sec) => sec.EditPermission);
+        }
         #endregion
     }
 }
