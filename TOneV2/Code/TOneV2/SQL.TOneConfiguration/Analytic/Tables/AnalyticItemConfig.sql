@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [Analytic].[AnalyticItemConfig] (
     [ID]          UNIQUEIDENTIFIER NOT NULL,
-    [OldID]       INT              NULL,
     [TableId]     INT              NOT NULL,
     [ItemType]    INT              NOT NULL,
     [Name]        VARCHAR (255)    NOT NULL,
@@ -12,6 +11,8 @@
     CONSTRAINT [FK_AnalyticItemConfig_AnalyticTable] FOREIGN KEY ([TableId]) REFERENCES [Analytic].[AnalyticTable] ([ID]),
     CONSTRAINT [IX_AnalyticItemConfig_NameInTable] UNIQUE NONCLUSTERED ([TableId] ASC, [Name] ASC, [ItemType] ASC)
 );
+
+
 
 
 
