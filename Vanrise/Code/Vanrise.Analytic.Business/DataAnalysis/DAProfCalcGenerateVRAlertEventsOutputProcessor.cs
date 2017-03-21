@@ -47,7 +47,7 @@ namespace Vanrise.Analytic.Business
 
                     DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings as DAProfCalcAlertRuleSettings;
 
-                    List<DataRecordField> dataRecordFields = daProfCalcOutputSettings.GetOutputFields(null);
+                    List<DAProfCalcOutputField> dataRecordFields = daProfCalcOutputSettings.GetOutputFields(null);
 
                     if (recordFilterManager.IsFilterGroupMatch(daProfCalcAlertRuleSettings.FilterGroup, new DAProfCalcRecordFilterGenericFieldMatchContext(outputRecord.Records, dataRecordFields)))
                     {
@@ -103,8 +103,8 @@ namespace Vanrise.Analytic.Business
     public class DAProfCalcRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
     {
         Dictionary<string, dynamic> _dataRecord;
-        Dictionary<string, DataRecordField> _recordTypeFieldsByName;
-        public DAProfCalcRecordFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, List<DataRecordField> dataRecordFields)
+        Dictionary<string, DAProfCalcOutputField> _recordTypeFieldsByName;
+        public DAProfCalcRecordFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, List<DAProfCalcOutputField> dataRecordFields)
         {
             _dataRecord = dataRecord;
             _recordTypeFieldsByName = dataRecordFields.ToDictionary(itm => itm.Name, itm => itm);
@@ -112,7 +112,7 @@ namespace Vanrise.Analytic.Business
 
         public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
         {
-            DataRecordField field;
+            DAProfCalcOutputField field;
             if (!_recordTypeFieldsByName.TryGetValue(fieldName, out field))
                 throw new NullReferenceException(String.Format("field. fieldName '{0}'", fieldName));
             fieldType = field.Type;

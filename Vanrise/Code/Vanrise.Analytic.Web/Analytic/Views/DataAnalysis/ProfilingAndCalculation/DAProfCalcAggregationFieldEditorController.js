@@ -85,6 +85,7 @@
                 if(aggregationFieldEntity == undefined) return;
 
                 $scope.scopeModel.fieldName = aggregationFieldEntity.FieldName;
+                $scope.scopeModel.fieldTitle = aggregationFieldEntity.FieldTitle;
             }
             function loadRecordAggregateSelective() {
                 var recordAggregateSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -157,6 +158,7 @@
 
             return {
                 FieldName: $scope.scopeModel.fieldName,
+                FieldTitle: $scope.scopeModel.fieldTitle,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                 TimeRangeFilter: timeRangeFilterSelectiveAPI.getData(),
                 RecordAggregate: recordAggregateSelectiveAPI.getData()

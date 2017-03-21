@@ -17,5 +17,7 @@ namespace Vanrise.Analytic.Entities
         public RecordFilterGroup DataAnalysisFilterGroup { get; set; }
 
         public List<VRAction> Actions { get; set; }
+
+        public List<string> GroupingFieldNames { get; set; }
     }
 }

@@ -6,6 +6,8 @@ namespace Vanrise.Analytic.Entities
     {
         public string FieldName { get; set; }
 
+        public string FieldTitle { get; set; }
+
         public DataRecordFieldType FieldType { get; set; }
 
         public string Expression { get; set; }

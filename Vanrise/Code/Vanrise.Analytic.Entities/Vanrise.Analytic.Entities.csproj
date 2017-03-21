@@ -104,6 +104,8 @@
     <Compile Include="Config\Measure\IMeasureEvaluator.cs" />
     <Compile Include="Config\Measure\AnalyticMeasureConfigQuery.cs" />
     <Compile Include="DataAnalysis\Common\DARecordAggregate.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcOutputFieldFilter.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcOutputField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\IDAProfCalcCalculationEvaluator.cs" />
     <Compile Include="DataAnalysis\Common\TimeRangeFilterConfig.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinition.cs" />

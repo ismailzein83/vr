@@ -11,11 +11,15 @@ namespace Vanrise.Analytic.Entities
         public Dictionary<Guid, dynamic> FilterParameterValues { get; set; }
 
         public DAProfCalcExecPayload DAProfCalcPayload { get; set; }
+
+        public RecordFilterGroup DataAnalysisRecordFilter { get; set; }
+
+        public List<string> GroupingFieldNames { get; set; }
     }
 
     public abstract class DAProfCalcExecPayload
     {
-        public RecordFilterGroup DataAnalysisRecordFilter { get; set; }
+
     }
 
     public class DAProfCalcExecInputDetail

@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 {
     public class RecordProfilingOutputSettings : DAProfCalcOutputSettings
     {
-        internal static Guid S_ItemDefinitionTypeId = new Guid("39E04643-3C5C-4D11-9D3C-41611C34F7B3"); 
+        internal static Guid S_ItemDefinitionTypeId = new Guid("39E04643-3C5C-4D11-9D3C-41611C34F7B3");
         public override Guid ItemDefinitionTypeId
         {
             get { return S_ItemDefinitionTypeId; }
@@ -27,12 +27,12 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 
         public FilterParameterCollection FilterParameters { get; set; }
 
-        public override List<DataRecordField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
+        public override List<DAProfCalcOutputField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
         {
-            List<DataRecordField> fields = new List<DataRecordField>();
-            fields.AddRange(this.GroupingFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.FieldType }));
-            fields.AddRange(this.AggregationFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.RecordAggregate.FieldType }));
-            fields.AddRange(this.CalculationFields.Select(itm => new DataRecordField { Name = itm.FieldName, Title = itm.FieldName, Type = itm.FieldType }));
+            List<DAProfCalcOutputField> fields = new List<DAProfCalcOutputField>();
+            fields.AddRange(this.GroupingFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.GroupingField }));
+            fields.AddRange(this.AggregationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.RecordAggregate.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.AggregationField }));
+            fields.AddRange(this.CalculationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.CalculationField }));
 
             return fields;
         }

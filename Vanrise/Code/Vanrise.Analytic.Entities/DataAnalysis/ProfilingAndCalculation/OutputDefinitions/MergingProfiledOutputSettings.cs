@@ -20,7 +20,7 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
 
         public List<DAProfCalcCalculationField> CalculationFields { get; set; }
 
-        public override List<GenericData.Entities.DataRecordField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
+        public override List<DAProfCalcOutputField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context)
         {
             throw new NotImplementedException();
         }

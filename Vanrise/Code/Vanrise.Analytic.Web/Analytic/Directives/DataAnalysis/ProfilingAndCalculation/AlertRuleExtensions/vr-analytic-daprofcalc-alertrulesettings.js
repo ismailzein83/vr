@@ -73,7 +73,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                             if (alertExtendedSettings != undefined) {
                                 criteriapayload.criteria = {
-                                    DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId, FilterGroup: alertExtendedSettings.FilterGroup, DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup
+                                    DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId, FilterGroup: alertExtendedSettings.FilterGroup, DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup, GroupingFieldNames: alertExtendedSettings.GroupingFieldNames
                                 };
                                 $scope.scopeModel.selectedAnalysisTypeId = alertExtendedSettings.OutputItemDefinitionId;
                             }
@@ -96,6 +96,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         FilterGroup: criteria.FilterGroup,
                         DataAnalysisFilterGroup: criteria.DataAnalysisFilterGroup,
                         OutputItemDefinitionId: criteria.DAProfCalcOutputItemDefinitionId,
+                        GroupingFieldNames:criteria.GroupingFieldNames,
                         Actions: vRActionManagementAPI.getData()
                     };
                 };

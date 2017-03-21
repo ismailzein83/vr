@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Entities
     {
         public Guid RecordTypeId { get; set; }
 
-        public abstract List<DataRecordField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context);
+        public abstract List<DAProfCalcOutputField> GetOutputFields(IDAProfCalcOutputSettingsGetOutputFieldsContext context);
     }
 
     public interface IDAProfCalcOutputSettingsGetOutputFieldsContext

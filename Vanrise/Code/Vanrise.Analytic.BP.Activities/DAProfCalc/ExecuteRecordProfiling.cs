@@ -12,6 +12,7 @@ using Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefin
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
+using Vanrise.Common;
 
 namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 {
@@ -77,9 +78,10 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                 dataAnalysisInfos.Add(dataAnalysisUniqueName, new DataAnalysisInfo()
                 {
-                    DARecordFilterGroup = BuildDataAnalysisRecordFilter(daProfCalcPayload != null ? daProfCalcPayload.DataAnalysisRecordFilter : null, recordProfilingOutputSettings.RecordFilter),
+                    DARecordFilterGroup = BuildDataAnalysisRecordFilter(daProfCalcPayload != null ? dAProfCalcExecInputItem.DAProfCalcExecInput.DataAnalysisRecordFilter : null, recordProfilingOutputSettings.RecordFilter),
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
-                    DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor })
+                    DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor }),
+                    GroupingFieldNames = dAProfCalcExecInputItem.DAProfCalcExecInput.GroupingFieldNames
                 });
             }
             RecordFilterManager recordFilterManager = new RecordFilterManager();
@@ -109,7 +111,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                 }
 
                                 Dictionary<string, dynamic> groupingValues;
-                                string groupingKey = BuildGroupingKey(settings, cdr, out groupingValues);
+                                string groupingKey = BuildGroupingKey(settings, cdr, dataAnalysisInfo.Value.GroupingFieldNames, out groupingValues);
                                 ProfilingDGItem profilingDGItem;
                                 if (!profilingDGItems.TryGetValue(groupingKey, out profilingDGItem))
                                 {
@@ -188,14 +190,20 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             return recordProfilingOutputSettings;
         }
 
-        private string BuildGroupingKey(RecordProfilingOutputSettings settings, dynamic cdr, out Dictionary<string, dynamic> groupingValues)
+        private string BuildGroupingKey(RecordProfilingOutputSettings settings, dynamic cdr, List<string> groupingFieldNames, out Dictionary<string, dynamic> groupingValues)
         {
             groupingValues = new Dictionary<string, dynamic>();
             if (settings == null || settings.GroupingFields == null || settings.GroupingFields.Count == 0)
                 return string.Empty;
 
             StringBuilder strBuilder = new StringBuilder();
-            foreach (DAProfCalcGroupingField groupingField in settings.GroupingFields)
+            IEnumerable<DAProfCalcGroupingField> groupingFields;
+            if (groupingFieldNames == null || groupingFieldNames.Count == 0)
+                groupingFields = settings.GroupingFields;
+            else
+                groupingFields = settings.GroupingFields.FindAllRecords(itm => groupingFieldNames.Contains(itm.FieldName));
+
+            foreach (DAProfCalcGroupingField groupingField in groupingFields)
             {
                 var groupingFieldValue = Vanrise.Common.Utilities.GetPropValueReader(groupingField.FieldName).GetPropertyValue(cdr);
                 strBuilder.AppendFormat("{0}@", groupingFieldValue != null ? groupingFieldValue : string.Empty);
@@ -245,6 +253,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             public DistributedDataGrouper DistributedDataGrouper { get; set; }
             public Dictionary<string, ProfilingDGItem> ProfilingDGItems { get; set; }
             public RecordFilterGroup DARecordFilterGroup { get; set; }
+            public List<string> GroupingFieldNames { get; set; }
         }
     }
 }

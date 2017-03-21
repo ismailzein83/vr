@@ -110,6 +110,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytic\Constants\DAProfCalcOutputFieldTypeEnum.js" />
     <Content Include="Analytic\Constants\AccessTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticAggregateTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticItemTypeEnum.js" />
@@ -145,6 +146,7 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulesettings.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-daprofcalc-outputfields-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ProcessInput\Templates\DAProfCalcGenerateAlertProcessInputTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ProcessInput\Templates\DAProfCalcStoreOutputProcessInputTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ProcessInput\vr-analytic-daprofcalc-generatealertprocessinput.js" />

@@ -4,16 +4,33 @@ using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using System.Linq;
+using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcOutputSettingsManager
     {
-        public List<DataRecordField> GetOutputFields(Guid dataAnalysisItemDefinitionId)
+        public List<DAProfCalcOutputField> GetOutputFields(Guid dataAnalysisItemDefinitionId)
         {
             DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
             IDAProfCalcOutputSettingsGetOutputFieldsContext context = null;
             return dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId).GetOutputFields(context);
+        }
+
+        public IEnumerable<DAProfCalcOutputField> GetFilteredOutputFields(Guid dataAnalysisItemDefinitionId, DAProfCalcOutputFieldFilter filter)
+        {
+            List<DAProfCalcOutputField> daProfCalcOutputFields = GetOutputFields(dataAnalysisItemDefinitionId);
+            Func<DAProfCalcOutputField, bool> predicate = (itm) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.DAProfCalcOutputFieldType.HasValue && itm.DAProfCalcOutputFieldType != filter.DAProfCalcOutputFieldType.Value)
+                        return false;
+                }
+                return true;
+            };
+
+            return daProfCalcOutputFields.FindAllRecords(predicate);
         }
 
         public List<DataRecordField> GetInputFields(Guid dataAnalysisDefinitionId)

@@ -70,6 +70,7 @@
                     return;
 
                 $scope.scopeModel.fieldName = calculationFieldEntity.FieldName;
+                $scope.scopeModel.fieldTitle = calculationFieldEntity.FieldTitle;
                 $scope.scopeModel.expression = calculationFieldEntity.Expression;
             }
             function loadFieldTypeSelective() {
@@ -110,6 +111,7 @@
 
             return {
                 FieldName: $scope.scopeModel.fieldName,
+                FieldTitle: $scope.scopeModel.fieldTitle,
                 FieldType: fieldTypeSelectiveAPI.getData(),
                 Expression: $scope.scopeModel.expression
             };

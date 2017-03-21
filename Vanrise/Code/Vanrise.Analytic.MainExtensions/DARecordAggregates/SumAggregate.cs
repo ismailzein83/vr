@@ -15,9 +15,9 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
         {
             get
             {
-                return new GenericData.MainExtensions.DataRecordFields.FieldNumberType 
+                return new GenericData.MainExtensions.DataRecordFields.FieldNumberType
                 {
-                    DataType = GenericData.MainExtensions.DataRecordFields.FieldNumberDataType.Decimal 
+                    DataType = GenericData.MainExtensions.DataRecordFields.FieldNumberDataType.Decimal
                 };
             }
             set
@@ -27,7 +27,7 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
         }
 
         public string SumFieldName { get; set; }
-        
+
         public override DARecordAggregateState CreateState(IDARecordAggregateCreateStateContext context)
         {
             return new SumAggregateState();
@@ -37,7 +37,9 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
         {
             if (context.Record == null)
                 throw new ArgumentNullException("context.Record");
-            (context.State as SumAggregateState).Sum += Vanrise.Common.Utilities.GetPropValueReader(this.SumFieldName).GetPropertyValue(context.Record);
+
+            dynamic sumField = Vanrise.Common.Utilities.GetPropValueReader(this.SumFieldName).GetPropertyValue(context.Record);
+            (context.State as SumAggregateState).Sum += sumField != null ? sumField : 0;
         }
 
         public override dynamic GetResult(IDARecordAggregateGetResultContext context)

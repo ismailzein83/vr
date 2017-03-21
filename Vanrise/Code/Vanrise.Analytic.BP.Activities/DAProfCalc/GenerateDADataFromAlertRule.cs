@@ -66,9 +66,10 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                         OutputItemDefinitionId = daProfCalcAlertRuleSettings.OutputItemDefinitionId,
                         DAProfCalcPayload = new DAProfCalcAlertRuleExecPayload() 
                         { 
-                            AlertRuleId = alertRule.VRAlertRuleId, 
-                            DataAnalysisRecordFilter = daProfCalcAlertRuleSettings.DataAnalysisFilterGroup 
-                        }
+                            AlertRuleId = alertRule.VRAlertRuleId
+                        },
+                        DataAnalysisRecordFilter = daProfCalcAlertRuleSettings.DataAnalysisFilterGroup,
+                        GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames
                     };
                     daProfCalcExecInputs.Add(input);
                 }

@@ -78,6 +78,7 @@
                     return;
 
                 $scope.scopeModel.fieldName = groupingFieldEntity.FieldName;
+                $scope.scopeModel.fieldTitle = groupingFieldEntity.FieldTitle;
             }
             function loadDataRecordTypeFieldsSelector() {
 
@@ -134,6 +135,7 @@
 
             return {
                 FieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                FieldTitle: $scope.scopeModel.fieldTitle,
                 FieldType: fieldTypeSelectiveAPI.getData(),
             };
         }

@@ -21,9 +21,17 @@
             });
         };
 
+        function GetFilteredOutputFields(dataAnalysisItemDefinitionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetFilteredOutputFields'), {
+                dataAnalysisItemDefinitionId: dataAnalysisItemDefinitionId,
+                filter: filter
+            });
+        };
+
         return ({
             GetOutputFields: GetOutputFields,
-            GetInputFields: GetInputFields
+            GetInputFields: GetInputFields,
+            GetFilteredOutputFields: GetFilteredOutputFields
         });
     }
 

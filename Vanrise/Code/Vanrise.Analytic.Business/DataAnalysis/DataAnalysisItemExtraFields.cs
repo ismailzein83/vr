@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
+using System.Linq;
 
 namespace Vanrise.Analytic.Business
 {
@@ -17,20 +18,19 @@ namespace Vanrise.Analytic.Business
         public override List<DataRecordField> GetFields(IDataRecordExtraFieldContext context)
         {
             DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
-            DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(this.DataAnalysisItemDefinitionId);
-
-            if (dataAnalysisItemDefinition == null)
-                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition. DataAnalysisItemDefinitionId: {0}", this.DataAnalysisItemDefinitionId));
-
-            if (dataAnalysisItemDefinition.Settings == null)
-                throw new NullReferenceException(string.Format("dataAnalysisItemDefinition.Settings. DataAnalysisItemDefinitionId: {0}", this.DataAnalysisItemDefinitionId));
-
-            DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinition.Settings as DAProfCalcOutputSettings;
-            if (daProfCalcOutputSettings == null)
-                throw new Exception(String.Format("daProfCalcOutputSettings is not of type DAProfCalcOutputSettings. it is of type {0}", dataAnalysisItemDefinition.Settings.GetType()));
+            DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(this.DataAnalysisItemDefinitionId);
 
             IDAProfCalcOutputSettingsGetOutputFieldsContext outputFieldContext = null;
-            return daProfCalcOutputSettings.GetOutputFields(outputFieldContext);
+            List<DAProfCalcOutputField> daProfCalcOutputFields = daProfCalcOutputSettings.GetOutputFields(outputFieldContext);
+            return BuildDataRecordFields(daProfCalcOutputFields);
+        }
+
+        private List<DataRecordField> BuildDataRecordFields(List<DAProfCalcOutputField> daProfCalcOutputFields)
+        {
+            if (daProfCalcOutputFields == null)
+                return null;
+
+            return daProfCalcOutputFields.Select(itm => new DataRecordField() { Name = itm.Name, Title = itm.Title, Type = itm.Type }).ToList();
         }
     }
 }
