@@ -310,7 +310,7 @@ namespace Vanrise.Security.Business
 
         #region Private Classes
 
-        class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IPermissionDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
             object _updateHandle;

@@ -52,6 +52,7 @@
     <Compile Include="IOrgChartLinkedEntityDataManager.cs" />
     <Compile Include="IPermissionDataManager.cs" />
     <Compile Include="IGroupDataManager.cs" />
+    <Compile Include="IRequiredPermissionSetDataManager.cs" />
     <Compile Include="ISystemActionDataManager.cs" />
     <Compile Include="ITenantDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />

@@ -18,6 +18,8 @@ namespace Vanrise.Logging.SQL
 
         public string EventType { get; set; }
 
+        public int? ViewRequiredPermissionSetId { get; set; }
+
         public LogEntryType EntryType { get; set; }
 
         public string Message { get; set; }

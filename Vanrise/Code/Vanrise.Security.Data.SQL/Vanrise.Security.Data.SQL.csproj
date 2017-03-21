@@ -52,6 +52,7 @@
     <Compile Include="PermissionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GroupDataManager.cs" />
+    <Compile Include="RequiredPermissionSetDataManager.cs" />
     <Compile Include="SystemActionDataManager.cs" />
     <Compile Include="TenantDataManager.cs" />
     <Compile Include="UserDataManager.cs" />

@@ -51,6 +51,7 @@ namespace Vanrise.Logging.SQL
             dt.Columns.Add("MethodNameId", typeof(int));
             dt.Columns.Add("EntryType", typeof(int));
             dt.Columns.Add("EventType", typeof(int));
+            dt.Columns.Add("ViewRequiredPermissionSetId", typeof(int));
             dt.Columns.Add("Message", typeof(string));
             dt.Columns.Add("ExceptionDetail", typeof(string));
             dt.Columns.Add("EventTime", typeof(DateTime));
@@ -65,6 +66,7 @@ namespace Vanrise.Logging.SQL
                 dr["MethodNameId"] = GetAttributeId(LogAttributeType.MethodName, e.MethodName);
                 dr["EntryType"] = (int)e.EntryType;
                 dr["EventType"] = GetAttributeId(LogAttributeType.EventType, e.EventType);
+                dr["ViewRequiredPermissionSetId"] = e.ViewRequiredPermissionSetId.HasValue ? (Object)e.ViewRequiredPermissionSetId.Value : DBNull.Value;
                 dr["Message"] = e.Message;
                 dr["ExceptionDetail"] = e.ExceptionDetail;
                 dr["EventTime"] = e.EventTime;

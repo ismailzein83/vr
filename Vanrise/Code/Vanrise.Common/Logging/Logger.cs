@@ -89,8 +89,8 @@ namespace Vanrise.Common
         
 
         #region Private Methods
-        
-        void PrivateWriteEntry(string eventType, string exceptionDetail, LogEntryType entryType, string messageFormat, params object[] args)
+
+        void PrivateWriteEntry(string eventType, int? viewRequiredPermissionSetId, string exceptionDetail, LogEntryType entryType, string messageFormat, params object[] args)
         {
             if (entryType <= _maxLogLevel)
             {
@@ -107,7 +107,7 @@ namespace Vanrise.Common
                         {
                             try
                             {
-                                handler.WriteEntry(eventType, exceptionDetail, entryType, String.Format(messageFormat, args), type.Assembly.GetName().Name, type.FullName, method.Name);
+                                handler.WriteEntry(eventType, viewRequiredPermissionSetId, exceptionDetail, entryType, String.Format(messageFormat, args), type.Assembly.GetName().Name, type.FullName, method.Name);
                             }
                             catch(Exception ex)
                             {
@@ -119,7 +119,7 @@ namespace Vanrise.Common
             }
         }
 
-        protected override void OnWriteException(string eventType, Exception e)
+        protected override void OnWriteException(string eventType, int? viewRequiredPermissionSetId, Exception e)
         {
             if (_exceptionLoggers != null && _exceptionLoggers.Count > 0)
             {
@@ -127,7 +127,7 @@ namespace Vanrise.Common
                 {
                     try
                     {
-                        exceptionLogger.WriteException(eventType, e);
+                        exceptionLogger.WriteException(eventType, viewRequiredPermissionSetId, e);
                     }
                     catch(Exception ex)
                     {
@@ -149,12 +149,12 @@ namespace Vanrise.Common
 
         public void WriteEntry(LogEntryType entryType, string messageFormat, params object[] args)
         {
-            WriteEntry(null, entryType, messageFormat, args);
+            WriteEntry(null, null, entryType, messageFormat, args);
         }
 
-        public void WriteEntry(string eventType, LogEntryType entryType, string messageFormat, params object[] args)
+        public void WriteEntry(string eventType, int? viewRequiredPermissionSetId, LogEntryType entryType, string messageFormat, params object[] args)
         {
-            PrivateWriteEntry(eventType, null, entryType, messageFormat, args);
+            PrivateWriteEntry(eventType, viewRequiredPermissionSetId, null, entryType, messageFormat, args);
         }
 
         public void WriteVerbose(string messageFormat, params object[] args)
@@ -177,10 +177,10 @@ namespace Vanrise.Common
             WriteEntry(LogEntryType.Error, messageFormat, args);
         }
 
-        internal void WriteException(string eventType, Exception ex)
+        internal void WriteException(string eventType, int? viewRequiredPermissionSetId, Exception ex)
         {
             string message = Utilities.GetExceptionBusinessMessage(ex);
-            PrivateWriteEntry(eventType, ex.ToString(), LogEntryType.Error, message);
+            PrivateWriteEntry(eventType, viewRequiredPermissionSetId, ex.ToString(), LogEntryType.Error, message);
         }
 
         #endregion

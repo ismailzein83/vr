@@ -72,6 +72,7 @@
     <Compile Include="ModuleManager.cs" />
     <Compile Include="OrgChartManager.cs" />
     <Compile Include="EmailContext\PasswordEmailContext.cs" />
+    <Compile Include="RequiredPermissionSetManager.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="SecurityExtensionMethods.cs" />
     <Compile Include="SystemActionManager.cs" />

@@ -8,16 +8,16 @@ namespace Vanrise.Common
 {
     public abstract class ExceptionLogger
     {
-        public void WriteException(string eventType, Exception ex)
+        public void WriteException(string eventType, int? viewRequiredPermissionSetId, Exception ex)
         {
-            OnWriteException(eventType, ex);
+            OnWriteException(eventType, viewRequiredPermissionSetId, ex);
         }
 
         public void WriteException(Exception ex)
         {
-            WriteException(null, ex);
+            WriteException(null, null, ex);
         }
 
-        protected abstract void OnWriteException(string eventType, Exception ex);
+        protected abstract void OnWriteException(string eventType, int? viewRequiredPermissionSetId, Exception ex);
     }
 }

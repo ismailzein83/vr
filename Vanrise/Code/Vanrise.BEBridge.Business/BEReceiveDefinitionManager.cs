@@ -236,6 +236,18 @@ namespace Vanrise.BEBridge.Business
             return true;
         }
 
+        public RequiredPermissionSettings GetViewInstanceRequiredPermissions(List<Guid> beReceiveDefinitionIds)
+        {
+            List<RequiredPermissionSettings> readInstanceRequiredPermissions = new List<RequiredPermissionSettings>();
+            foreach (var be in beReceiveDefinitionIds)
+            {
+                var beDef = GetBEReceiveDefinition(be);
+                if (beDef.Settings.Security != null && beDef.Settings.Security.ViewPermission != null)
+                    readInstanceRequiredPermissions.Add(beDef.Settings.Security.ViewPermission);
+            }
+            return new SecurityManager().MergeRequiredPermissions(readInstanceRequiredPermissions);
+        }
+
         #endregion
     }
 

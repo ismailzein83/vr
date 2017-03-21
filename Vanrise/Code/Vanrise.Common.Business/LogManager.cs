@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Logging.SQL;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -27,6 +28,9 @@ namespace Vanrise.Common.Business
 
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Entities.LogEntryDetail> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
         {
+            List<int> grantedPermissionSetIds;
+            var requiredPermissionSetManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<IRequiredPermissionSetManager>();
+            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
             SQLDataManager manager = GetDataManager();
 
             BigResult<Vanrise.Entities.LogEntry> loggerResult = manager.GetFilteredLogs(input);

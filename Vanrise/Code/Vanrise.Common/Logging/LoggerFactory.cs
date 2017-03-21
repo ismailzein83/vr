@@ -9,6 +9,7 @@ namespace Vanrise.Common
 {
     public static class LoggerFactory
     {
+        public const string LOGGING_REQUIREDPERMISSIONSET_MODULENAME = "VR_GeneralLoggingReqPerm";
         static Logger s_logger;
         
         public static Logger GetLogger()
@@ -41,7 +42,7 @@ namespace Vanrise.Common
 
     public class ConsoleLogger : LogHandler
     {
-        protected internal override void WriteEntry(string eventType, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
+        protected internal override void WriteEntry(string eventType, int? viewRequiredPermissionSetId, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
         {
             Console.WriteLine("{0} - {1}: {2}", entryType, DateTime.Now, message);
         }
@@ -49,7 +50,7 @@ namespace Vanrise.Common
 
     public class ConsoleExceptionLogger : ExceptionLogger
     {
-        protected override void OnWriteException(string eventType, Exception ex)
+        protected override void OnWriteException(string eventType, int? viewRequiredPermissionSetId, Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }
@@ -57,9 +58,9 @@ namespace Vanrise.Common
 
     public class DefaultExceptionLogger : ExceptionLogger
     {
-        protected override void OnWriteException(string eventType, Exception ex)
+        protected override void OnWriteException(string eventType, int? viewRequiredPermissionSetId, Exception ex)
         {
-            LoggerFactory.GetLogger().WriteException(eventType, ex);
+            LoggerFactory.GetLogger().WriteException(eventType, viewRequiredPermissionSetId, ex);
         }
     }
 

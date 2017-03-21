@@ -109,7 +109,7 @@ namespace Vanrise.Security.Business
 
         public bool IsAllowed(RequiredPermissionSettings requiredPermissions, int userId)
         {
-            string requiredPermissionString = RequiredPermissionsToString(requiredPermissions);
+            string requiredPermissionString = RequiredPermissionsToString(requiredPermissions.Entries);
             return IsAllowed(requiredPermissionString, userId);
         }
 
@@ -134,6 +134,24 @@ namespace Vanrise.Security.Business
             }
 
             return result;
+        }
+
+        public RequiredPermissionSettings MergeRequiredPermissions(List<RequiredPermissionSettings> requiredPermissions)
+        {
+            Dictionary<Guid, RequiredPermissionEntry> entitiesPermissions = new Dictionary<Guid, RequiredPermissionEntry>();
+            foreach(var requiredPerm in requiredPermissions)
+            {
+                foreach (var entry in requiredPerm.Entries)
+                {
+                    RequiredPermissionEntry matchEntry = entitiesPermissions.GetOrCreateItem(entry.EntityId, () => new RequiredPermissionEntry { EntityId = entry.EntityId, PermissionOptions = new List<string>() });
+                    foreach(var flag in entry.PermissionOptions)
+                    {
+                        if (!matchEntry.PermissionOptions.Contains(flag))
+                            matchEntry.PermissionOptions.Add(flag);
+                    }
+                }
+            }
+            return new RequiredPermissionSettings { Entries = entitiesPermissions.Values.ToList() };
         }
 
         public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(string oldPassword, string newPassword)
@@ -328,27 +346,32 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        private string RequiredPermissionsToString(RequiredPermissionSettings requirePermissions)
+        internal static string RequiredPermissionsToString(List<RequiredPermissionEntry> requirePermissions)
         {
-            if (requirePermissions == null ||  requirePermissions.Entries.Count == 0 )
+            if (requirePermissions == null || requirePermissions.Count == 0)
                 return null;
-            string rp = "";
-            foreach (var p in requirePermissions.Entries)
+            StringBuilder builder = new StringBuilder();
+            bool isFirstPermission = true;
+            foreach (var p in requirePermissions.OrderBy(itm => itm.EntityId))
             {
+                if (!isFirstPermission)
+                    builder.Append("&");
+                isFirstPermission = false;
                 BusinessEntity be = new BusinessEntityManager().GetBusinessEntityById(p.EntityId);
-                if (be == null)
-                    throw new DataIntegrityValidationException(string.Format("Business Entity with Id {0} is not found", p.EntityId));
-                string beName = be.Name;
-                rp +=  String.Format("{0}: ", beName);
-                foreach (string s in p.PermissionOptions)
+                be.ThrowIfNull("be", p.EntityId);
+                string beName = be.Name.Trim();
+                builder.Append(beName);
+                builder.Append(":");
+                bool isFirstOption = true;
+                foreach (string s in p.PermissionOptions.Select(itm => itm.Trim()).OrderBy(itm => itm))
                 {
-                    rp += String.Format("{0}, ", s);
-                }
-                rp =  rp.Remove(rp.Length - 2,2);
-                rp += String.Format("&");
-
+                    if (!isFirstOption)
+                        builder.Append(",");
+                    isFirstOption = false;
+                    builder.Append(s);
+                }  
             }
-            return rp.Remove(rp.Length - 1, 1);
+            return builder.ToString();
         }
 
         #endregion

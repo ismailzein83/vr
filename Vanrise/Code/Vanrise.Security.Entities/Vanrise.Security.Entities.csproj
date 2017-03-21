@@ -57,6 +57,7 @@
     <Compile Include="BusinessEntity\BusinessEntityQuery.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
+    <Compile Include="BusinessManagers\IRequiredPermissionSetManager.cs" />
     <Compile Include="BusinessManagers\IUserManager.cs" />
     <Compile Include="BusinessManagers\IViewManager.cs" />
     <Compile Include="ChangedPasswordObject.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Group\Group.cs" />
     <Compile Include="Group\GroupDetail.cs" />
     <Compile Include="RequiredPermissionSettings.cs" />
+    <Compile Include="RequiredPermissionSet\RequiredPermissionSet.cs" />
     <Compile Include="ResetPassword.cs" />
     <Compile Include="Settings\MailMessageTemplateSettings.cs" />
     <Compile Include="Settings\SecuritySettings.cs" />
