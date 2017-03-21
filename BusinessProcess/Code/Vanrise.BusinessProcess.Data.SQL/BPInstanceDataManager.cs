@@ -85,13 +85,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
 
-        public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId)
+        public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId,
+            object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId)
         {
             object processInstanceId;
             if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, 
                 inputArguments != null ? Serializer.Serialize(inputArguments) : null,
                 completionNotifier != null ? Serializer.Serialize(completionNotifier) : null,
-                (int)executionStatus, initiatorUserId, entityId) > 0)
+                (int)executionStatus, initiatorUserId, entityId, viewInstanceRequiredPermissionSetId) > 0)
                 return (long)processInstanceId;
             else
                 return 0;
@@ -114,6 +115,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),
                 InitiatorUserId = GetReaderValue<int>(reader, "InitiatorUserId"),
                 EntityId = reader["EntityId"] as string,
+                ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId")
             };
 
             string inputArg = reader["InputArgument"] as string;

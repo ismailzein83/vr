@@ -7,6 +7,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPInstance
     {
+        public const string REQUIREDPERMISSIONSET_MODULENAME = "BP_BPInstanceReqPerm";
         public long ProcessInstanceID { get; set; }
         public string Title { get; set; }
         public long? ParentProcessID { get; set; }
@@ -17,6 +18,8 @@ namespace Vanrise.BusinessProcess.Entities
         public Guid? WorkflowInstanceID { get; set; }
         public BPInstanceStatus Status { get; set; }
         public BaseProcessInputArgument InputArgument { get; set; }
+
+        public int? ViewRequiredPermissionSetId { get; set; }
 
         public ProcessCompletionNotifier CompletionNotifier { get; set; }
 

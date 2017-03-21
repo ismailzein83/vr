@@ -11,6 +11,15 @@ namespace Vanrise.BusinessProcess.Business
 {
     public class DefaultBPDefinitionExtendedSettings : BPDefinitionExtendedSettings
     {
+        public override RequiredPermissionSettings GetViewInstanceRequiredPermissions(IBPDefinitionGetViewInstanceRequiredPermissionsContext context)
+        {
+            var bpDefinition = context.BPDefinition;
+            if (bpDefinition.Configuration.Security != null)
+                return bpDefinition.Configuration.Security.View;
+            else
+                return null;
+        }
+
         public override bool DoesUserHaveViewAccess(IBPDefinitionDoesUserHaveViewAccessContext context)
         {
             var bpDefinition = context.BPDefinition;
@@ -39,6 +48,5 @@ namespace Vanrise.BusinessProcess.Business
             SecurityManager secManager = new SecurityManager();
             return secManager.IsAllowed(permission, userId);
         }
-       
     }
 }

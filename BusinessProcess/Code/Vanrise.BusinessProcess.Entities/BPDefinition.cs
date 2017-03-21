@@ -39,6 +39,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public abstract bool DoesUserHaveViewAccess(IBPDefinitionDoesUserHaveViewAccessContext context);
 
+        public abstract RequiredPermissionSettings GetViewInstanceRequiredPermissions(IBPDefinitionGetViewInstanceRequiredPermissionsContext context);
+
         public abstract bool DoesUserHaveStartAccess(IBPDefinitionDoesUserHaveStartAccessContext context);
 
         public abstract bool DoesUserHaveScheduleTaskAccess(IBPDefinitionDoesUserHaveScheduleTaskContext context);
@@ -52,6 +54,20 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return DoesUserHaveScheduleTaskAccess(context.DefinitionContext);
         }
+    }
+    
+    public interface IBPDefinitionGetViewInstanceRequiredPermissionsContext
+    {
+        BPDefinition BPDefinition { get; }
+
+        BaseProcessInputArgument InputArg { get; }
+    }
+
+    public class BPDefinitionGetViewInstanceRequiredPermissionsContext : IBPDefinitionGetViewInstanceRequiredPermissionsContext
+    {
+        public BPDefinition BPDefinition { get; set; }
+
+        public BaseProcessInputArgument InputArg { get; set; }
     }
 
     public interface IBPDefinitionDoesUserHaveViewAccessContext

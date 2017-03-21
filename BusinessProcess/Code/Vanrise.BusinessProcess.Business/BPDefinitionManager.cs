@@ -138,6 +138,17 @@ namespace Vanrise.BusinessProcess.Business
             var definitionContext = new BPDefinitionDoesUserHaveViewAccessContext { UserId = userId, BPDefinition = bPDefinition };
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveViewAccess(definitionContext);
         }
+
+        public RequiredPermissionSettings GetViewInstanceRequiredPermissions(BPDefinition bpDefinition, BaseProcessInputArgument inputArg)
+        {
+            var getViewInstanceRequiredPermissionsContext = new BPDefinitionGetViewInstanceRequiredPermissionsContext
+            {
+                BPDefinition = bpDefinition,
+                InputArg = inputArg
+            };
+            return GetBPDefinitionExtendedSettings(bpDefinition).GetViewInstanceRequiredPermissions(getViewInstanceRequiredPermissionsContext);
+        }
+
         public bool DoesUserHaveScheduleTaskAccess(int userId, BPDefinition bPDefinition)
         {
             var definitionContext = new BPDefinitionDoesUserHaveScheduleTaskContext { UserId = userId, BPDefinition = bPDefinition };

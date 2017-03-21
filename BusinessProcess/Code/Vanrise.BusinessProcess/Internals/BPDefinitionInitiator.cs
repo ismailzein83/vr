@@ -14,6 +14,8 @@ using Vanrise.Common;
 using Vanrise.Runtime;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess
 {
@@ -167,10 +169,7 @@ namespace Vanrise.BusinessProcess
             bpInstance.InitiatorUserId = bpInstance.InputArgument.UserId;
             _runningInstances.TryAdd(bpInstance.ProcessInstanceID, runningInstance);
 
-            var sharedInstanceData = new BPSharedInstanceData()
-            {
-                InstanceInfo = bpInstance
-            };
+            var sharedInstanceData = new BPSharedInstanceData(bpInstance, _definition);
             wfApp.Extensions.Add(sharedInstanceData);
 
             if (s_AddConsoleTracking)
@@ -203,7 +202,7 @@ namespace Vanrise.BusinessProcess
             wfApp.Run();
             string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
             string processTitle = bpInstance.Title;
-            LoggerFactory.GetLogger().WriteEntry(logEventType, LogEntryType.Information, "Process '{0}' started", processTitle);
+            LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Information, "Process '{0}' started", processTitle);
         }
                 
         void OnWorkflowCompleted(BPInstance bpInstance, WorkflowApplicationCompletedEventArgs e)
@@ -217,7 +216,7 @@ namespace Vanrise.BusinessProcess
             {
                 bpInstance.Status = BPInstanceStatus.Completed;
                 UpdateProcessStatus(bpInstance);
-                LoggerFactory.GetLogger().WriteEntry(logEventType, LogEntryType.Information, "Process '{0}' completed", processTitle);
+                LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Information, "Process '{0}' completed", processTitle);
             }
             else
             {
@@ -228,7 +227,7 @@ namespace Vanrise.BusinessProcess
                 UpdateProcessStatus(bpInstance);
                 
                 Exception finalException = Utilities.WrapException(e.TerminationException, String.Format("Process '{0}' failed", processTitle));
-                LoggerFactory.GetExceptionLogger().WriteException(logEventType, finalException);
+                LoggerFactory.GetExceptionLogger().WriteException(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), finalException);
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
             }
 
@@ -247,6 +246,21 @@ namespace Vanrise.BusinessProcess
             //_instanceDataManager.UnlockProcessInstance(bpInstance.ProcessInstanceID, RunningProcessManager.CurrentProcess.ProcessId);
             RunPendingProcesses(_lastReceivedServiceInstanceId);
             GC.Collect();
+        }
+
+        static RequiredPermissionSetManager s_requiredPermissionSetManager = new RequiredPermissionSetManager();
+        internal static int? GetGeneralLogViewRequiredPermissionSetId(BPInstance bpInstance)
+        {
+            if (bpInstance.ViewRequiredPermissionSetId.HasValue)
+            {
+                RequiredPermissionSet viewRequiredPermissionSet = s_requiredPermissionSetManager.GetRequiredPermissionSet(bpInstance.ViewRequiredPermissionSetId.Value);
+                viewRequiredPermissionSet.ThrowIfNull("viewRequiredPermissionSet", bpInstance.ViewRequiredPermissionSetId.Value);
+                return s_requiredPermissionSetManager.GetRequiredPermissionSetId(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, viewRequiredPermissionSet.RequiredPermissionString);
+            }   
+            else
+            {
+                return null;
+            }
         }
 
         internal static void NotifyParentBPChildCompleted(long bpInstanceId, long parentBPInstanecId, BPInstanceStatus status, string errorMessage, Exception exception, object processOutput)
