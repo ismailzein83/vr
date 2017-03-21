@@ -564,6 +564,7 @@
     <Build Include="sec\Tables\RequiredPermissionSet.sql" />
     <Build Include="sec\Stored Procedures\sp_RequiredPermissionSet_InsertIfNotExists.sql" />
     <Build Include="sec\Stored Procedures\sp_RequiredPermissionSet_GetAll.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByAccountIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
