@@ -1316,7 +1316,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>="Account Payable to " + Parameters!CompanyAddress.Value</Value>
+                              <Value>="Account Payable to " + Parameters!RegAddress.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>

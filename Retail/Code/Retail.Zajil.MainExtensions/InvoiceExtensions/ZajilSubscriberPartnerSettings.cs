@@ -23,6 +23,7 @@ namespace Retail.Zajil.MainExtensions
         Address = 7,
         Phone = 8,
         Fax = 9,
+        CompanyName = 10
     }
 
     public class ZajilSubscriberPartnerSettings : InvoicePartnerManager
@@ -116,7 +117,7 @@ namespace Retail.Zajil.MainExtensions
                         }
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegNo, companySetting.RegistrationNumber, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.RegAddress, companySetting.RegistrationAddress, true);
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Name, companySetting.CompanyName, true);
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyName, companySetting.CompanyName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
 
                     }

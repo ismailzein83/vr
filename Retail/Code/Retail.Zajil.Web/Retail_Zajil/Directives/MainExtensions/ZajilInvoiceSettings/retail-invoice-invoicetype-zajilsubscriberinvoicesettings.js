@@ -32,12 +32,19 @@ app.directive("retailInvoiceInvoicetypeZajilsubscriberinvoicesettings", ["UtilsS
             var beDefinitionSelectorApi;
             var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var companyExtendedInfoSelectorAPI;
+            var companyExtendedInfoReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorApi = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onCompanyExtentedInfoSelectorReady = function (api) {
+                    companyExtendedInfoSelectorAPI = api;
+                    companyExtendedInfoReadyDeferred.resolve();
                 };
                 defineAPI();
             }
@@ -49,6 +56,7 @@ app.directive("retailInvoiceInvoicetypeZajilsubscriberinvoicesettings", ["UtilsS
                     var promises = [];
                     var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
+                    promises.push(loadCompanyExtendedInfoDefinitionSelector());
 
                     function getBusinessEntityDefinitionSelectorLoadPromise() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -68,6 +76,20 @@ app.directive("retailInvoiceInvoicetypeZajilsubscriberinvoicesettings", ["UtilsS
                         });
                         return businessEntityDefinitionSelectorLoadDeferred.promise;
                     }
+
+                    function loadCompanyExtendedInfoDefinitionSelector() {
+                        var extendedInfoSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        companyExtendedInfoReadyDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                filter: {
+                                    AccountPartDefinitionIds: getAccountPartDefinitionIds('F6630722-4E85-4DF2-915F-F9942074743C')
+                                },
+                                selectedIds: payload != undefined && payload.extendedSettingsEntity != undefined? payload.extendedSettingsEntity.CompanyExtendedInfoPartdefinitionId : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(companyExtendedInfoSelectorAPI, selectorPayload, extendedInfoSelectorLoadDeferred);
+                        });
+                        return extendedInfoSelectorLoadDeferred.promise;
+                    };
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
@@ -76,12 +98,18 @@ app.directive("retailInvoiceInvoicetypeZajilsubscriberinvoicesettings", ["UtilsS
                 api.getData = function () {
                     return {
                         $type: "Retail.Zajil.MainExtensions.ZajilSubscriberInvoiceSettings, Retail.Zajil.MainExtensions",
-                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
+                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+                        CompanyExtendedInfoPartdefinitionId: companyExtendedInfoSelectorAPI.getSelectedIds()
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getAccountPartDefinitionIds(id) {
+                var partDefinitionIds = [];
+                partDefinitionIds.push(id);
+                return partDefinitionIds;
             }
         }
 

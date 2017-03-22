@@ -16,9 +16,11 @@ namespace Retail.Zajil.MainExtensions
     public class ZajilSubscriberInvoiceGenerator : InvoiceGenerator
     {
         Guid _acountBEDefinitionId;
-        public ZajilSubscriberInvoiceGenerator(Guid acountBEDefinitionId)
+        Guid _companyExtendedInfoPartdefinitionId;
+        public ZajilSubscriberInvoiceGenerator(Guid acountBEDefinitionId, Guid companyExtendedInfoPartdefinitionId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
+            this._companyExtendedInfoPartdefinitionId = companyExtendedInfoPartdefinitionId;
         }
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
@@ -35,13 +37,6 @@ namespace Retail.Zajil.MainExtensions
                 throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", accountId));
 
             int currencyId = accountPayment.CurrencyId;
-            Account account = accountBEManager.GetAccount(this._acountBEDefinitionId, accountId);
-            AccountPart accountPart;
-            ZajilCompanyExtendedInfo zajilCompanyExtendedInfo = null;
-            if(account.Settings.Parts.TryGetValue(ZajilCompanyExtendedInfo._ConfigId,out accountPart))
-            {
-               zajilCompanyExtendedInfo = accountPart.Settings as ZajilCompanyExtendedInfo;
-            }
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.GeneratedToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
@@ -53,14 +48,19 @@ namespace Retail.Zajil.MainExtensions
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
             InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId);
-            if (zajilCompanyExtendedInfo != null)
+
+            AccountPart accountPart;
+            if (accountBEManager.TryGetAccountPart(_acountBEDefinitionId, accountId, _companyExtendedInfoPartdefinitionId, false, out accountPart))
             {
-                retailSubscriberInvoiceDetails.VoiceCustomerNo = zajilCompanyExtendedInfo.GPVoiceCustomerNo;
-                retailSubscriberInvoiceDetails.SalesAgent = zajilCompanyExtendedInfo.SalesAgent;
-                retailSubscriberInvoiceDetails.CustomerPO = zajilCompanyExtendedInfo.CustomerPO;
-
+                ZajilCompanyExtendedInfo zajilCompanyExtendedInfo = null;
+                zajilCompanyExtendedInfo = accountPart.Settings as ZajilCompanyExtendedInfo;
+                if (zajilCompanyExtendedInfo != null)
+                {
+                    retailSubscriberInvoiceDetails.VoiceCustomerNo = zajilCompanyExtendedInfo.GPVoiceCustomerNo;
+                    retailSubscriberInvoiceDetails.SalesAgent = zajilCompanyExtendedInfo.SalesAgent;
+                    retailSubscriberInvoiceDetails.CustomerPO = zajilCompanyExtendedInfo.CustomerPO;
+                }
             }
-
             context.Invoice = new GeneratedInvoice
             {
                 InvoiceDetails = retailSubscriberInvoiceDetails,
