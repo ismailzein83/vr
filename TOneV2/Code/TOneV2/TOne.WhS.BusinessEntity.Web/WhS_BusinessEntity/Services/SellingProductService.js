@@ -7,7 +7,8 @@
     function SellingProductService(WhS_BE_SellingProductAPIService, VRModalService, VRNotificationService) {
         return ({
             addSellingProduct: addSellingProduct,
-            editSellingProduct: editSellingProduct
+            editSellingProduct: editSellingProduct,
+            getEntityUniqueName: getEntityUniqueName
         });
 
         function addSellingProduct(onSellingProductAdded) {
@@ -32,7 +33,9 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, modalSettings);
         }
-
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_SellingProduct";
+        }
     }
 
     appControllers.service('WhS_BE_SellingProductService', SellingProductService);

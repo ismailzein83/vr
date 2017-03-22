@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCodegroupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CodeGroupAPIService", "WhS_BE_CodeGroupService",
-function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_BE_CodeGroupService) {
+app.directive("vrWhsBeCodegroupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CodeGroupAPIService", "WhS_BE_CodeGroupService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_BE_CodeGroupService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -28,6 +28,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
 
         var gridAPI;
         var disabCountry;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -37,7 +38,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             $scope.codegroups = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+                var drillDownDefinitions = WhS_BE_CodeGroupService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions, true);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -48,6 +50,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onCodeGroupAdded = function (codeGroupObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(codeGroupObject);
                         gridAPI.itemAdded(codeGroupObject);
                     };
                     return directiveAPI;
@@ -56,6 +59,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_CodeGroupAPIService.GetFilteredCodeGroups(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                               
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -81,6 +90,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
 
         function editCodeGroupe(codeGroupObj) {
             var onCodeGroupUpdated = function (codeGroupObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(codeGroupObj);
                 gridAPI.itemUpdated(codeGroupObj);
             };
 

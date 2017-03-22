@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SellingNumberPlan GetSellingNumberPlan(int sellingNumberPlanId)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
-            return manager.GetSellingNumberPlan(sellingNumberPlanId);
+            return manager.GetSellingNumberPlan(sellingNumberPlanId,true);
         }
         [HttpGet]
         [Route("GetMasterSellingNumberPlan")]

@@ -22,7 +22,7 @@ namespace Vanrise.Common.Data.SQL
         {
             ExecuteNonQuerySP("[logging].[sp_ActionAudit_Insert]", userId, urlId, moduleId, entityId, actionId, objectId, objectName, objectTrackingId, actionDescription);
         }
-        public List<VRActionAudit> GetAll(VRActionAuditQuery query)
+        public List<VRActionAudit> GetFilterdActionAudits(VRActionAuditQuery query)
         {
             string userIds = null;
             string moduleIds = null;

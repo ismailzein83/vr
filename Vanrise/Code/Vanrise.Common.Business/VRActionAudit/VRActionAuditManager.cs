@@ -46,7 +46,7 @@ namespace Vanrise.Common.Business
             public override IEnumerable<VRActionAudit> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VRActionAuditQuery> input)
             {
                 IVRActionAuditDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditDataManager>();
-                return dataManager.GetAll(input.Query);
+                return dataManager.GetFilterdActionAudits(input.Query);
             }
         }
         #endregion

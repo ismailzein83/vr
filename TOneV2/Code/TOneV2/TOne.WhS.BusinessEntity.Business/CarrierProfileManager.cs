@@ -40,6 +40,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new CarrierProfileDetailExportExcelHandler()
             };
+            VRActionLogger.Current.LogGetFilteredAction(CarrierProfileLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper), resultProcessingHandler);
         }
         public CarrierProfile GetCarrierProfile(int carrierProfileId)
@@ -77,8 +78,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 carrierProfile.CarrierProfileId = carrierProfileId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(CarrierProfileLoggableEntity.Instance, carrierProfile);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = CarrierProfileDetailMapper(carrierProfile);
             }
             else
@@ -86,13 +88,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfile)
+        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfileToEdit)
         {
-            ValidateCarrierProfileToEdit(carrierProfile);
+            ValidateCarrierProfileToEdit(carrierProfileToEdit);
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
 
-            bool updateActionSucc = dataManager.Update(carrierProfile);
+            bool updateActionSucc = dataManager.Update(carrierProfileToEdit);
             TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierProfileDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -101,8 +103,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var carrierProfile = GetCarrierProfile(carrierProfileToEdit.CarrierProfileId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierProfileLoggableEntity.Instance, carrierProfile);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(this.GetCarrierProfile(carrierProfile.CarrierProfileId));
+                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(this.GetCarrierProfile(carrierProfileToEdit.CarrierProfileId));
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
@@ -393,7 +397,49 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierProfileDetail;
         }
         #endregion
+       public class CarrierProfileLoggableEntity : VRLoggableEntityBase
+        {
+            public static CarrierProfileLoggableEntity Instance = new CarrierProfileLoggableEntity();
 
+            private CarrierProfileLoggableEntity()
+            {
+
+            }
+
+            static CarrierProfileManager s_carrierProfileManager = new CarrierProfileManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_CarrierProfile"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Carrier Profile"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_CarrierProfile_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                CarrierProfile carrierProfile = context.Object.CastWithValidate<CarrierProfile>("context.Object");
+                return carrierProfile.CarrierProfileId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                CarrierProfile carrierProfile = context.Object.CastWithValidate<CarrierProfile>("context.Object");
+                return s_carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
+            }
+        }
         #region IBusinessEntityManager
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

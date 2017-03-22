@@ -8,7 +8,8 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
             uploadCountrires: uploadCountrires,
-            registerObjectTrackingDrillDownToCountry: registerObjectTrackingDrillDownToCountry
+            getEntityUniqueName: getEntityUniqueName
+          
 
         });
         function editCountry(countryId, onCountryUpdated) {
@@ -50,28 +51,7 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             return "VR_Common_Country";
         }
 
-        function registerObjectTrackingDrillDownToCountry() {
-            var drillDownDefinition = {};
-
-            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-            drillDownDefinition.directive = "vr-common-objecttracking-grid";
-
-
-            drillDownDefinition.loadDirective = function (directiveAPI,countryItem) {
-               
-                countryItem.objectTrackingGridAPI = directiveAPI;
-                var query = {
-                    ObjectId: countryItem.Entity.CountryId,
-                    EntityUniqueName: getEntityUniqueName(),
-
-                };
-                return countryItem.objectTrackingGridAPI.load(query);
-            };
-
-
-            addDrillDownDefinition(drillDownDefinition);
-
-        }
+       
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }

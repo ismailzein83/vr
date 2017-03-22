@@ -2,13 +2,16 @@
 
     'use strict';
 
-    SwitchService.$inject = ['WhS_BE_SwitchAPIService', 'VRModalService', 'VRNotificationService'];
+    SwitchService.$inject = ['WhS_BE_SwitchAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
 
-    function SwitchService(WhS_BE_SwitchAPIService, VRModalService, VRNotificationService) {
+    function SwitchService(WhS_BE_SwitchAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addSwitch: addSwitch,
             editSwitch: editSwitch,
-            deleteSwitch: deleteSwitch
+            deleteSwitch: deleteSwitch,
+            registerObjectTrackingDrillDownToSwitch: registerObjectTrackingDrillDownToSwitch,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addSwitch(onSwitchAdded) {
@@ -54,6 +57,39 @@
                     }
                 });
         }
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_Switch";
+        }
+
+        function registerObjectTrackingDrillDownToSwitch() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, switchItem) {
+                switchItem.objectTrackingGridAPI = directiveAPI;
+
+                var query = {
+                    ObjectId: switchItem.Entity.SwitchId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return switchItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
     }
 
     appControllers.service('WhS_BE_SwitchService', SwitchService);

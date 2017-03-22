@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetSwitchConnectivity")]
         public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId)
         {
-            return _manager.GetSwitchConnectivity(switchConnectivityId);
+            return _manager.GetSwitchConnectivity(switchConnectivityId,true);
         }
 
         [HttpPost]

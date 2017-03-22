@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -245,6 +246,7 @@ namespace TOne.WhS.BusinessEntity.Business
             bool insertActionSucc = dataManager.Insert(customerSellingProductObject, out  insertedObjects);
             if (insertActionSucc)
             {
+                CarrierAccount carrierAccount;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 foreach (CustomerSellingProduct customerSellingProduct in insertedObjects)
                 {
@@ -255,6 +257,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         CustomerName = obj.CustomerName,
                         SellingProductName = obj.SellingProductName
                     });
+                    carrierAccount= _carrierAccountManager.GetCarrierAccount(customerSellingProduct.CustomerId);
+                    VRActionLogger.Current.LogObjectCustomAction(TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CarrierAccountLoggableEntity.Instance, "Assign Customer", true, carrierAccount, null);
                 }
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = returnedData;

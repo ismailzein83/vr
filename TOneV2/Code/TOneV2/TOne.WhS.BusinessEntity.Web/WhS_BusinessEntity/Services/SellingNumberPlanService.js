@@ -11,7 +11,8 @@
             addSellingNumberPlan: addSellingNumberPlan,
             editSellingNumberPlan: editSellingNumberPlan,
             addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            getEntityUniqueName: getEntityUniqueName
         });
 
         function addSellingNumberPlan(onSellingNumberPlanAdded) {
@@ -40,6 +41,9 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanEditor.html', parameters, settings);
+        }
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_SellingNumberPlan";
         }
 
         function addDrillDownDefinition(drillDownDefinition) {

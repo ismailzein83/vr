@@ -8,4 +8,7 @@
     <vr-datagridcolumn headertext="'ID'" field="'Entity.CodeGroupId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Code Group'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'" ng-if="!hidecountrycolumn"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

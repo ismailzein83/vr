@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
@@ -37,14 +38,22 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SwitchConnectivityExportExcelHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SwitchConnectivityLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, SwitchConnectivityDetailMapper), resultProcessingHandler);
         }
 
         public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId)
         {
+          return GetSwitchConnectivity(switchConnectivityId,false);
+        }
+
+        public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId, bool isViewedFromUI)
+        {
             Dictionary<int, SwitchConnectivity> cachedEntities = this.GetCachedSwitchConnectivities();
-            return cachedEntities.GetRecord(switchConnectivityId);
+          var switchConnectivity =cachedEntities.GetRecord(switchConnectivityId);
+          if (switchConnectivity != null && isViewedFromUI)
+              VRActionLogger.Current.LogObjectViewed(SwitchConnectivityLoggableEntity.Instance, switchConnectivity);
+          return switchConnectivity;
         }
 
         public string GetSwitchConnectivityName(int switchConnectivityId)
@@ -75,8 +84,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (dataManager.Insert(switchConnectivity, out insertedId))
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 switchConnectivity.SwitchConnectivityId = insertedId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(SwitchConnectivityLoggableEntity.Instance, switchConnectivity);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SwitchConnectivityDetailMapper(switchConnectivity);
             }
             else
@@ -87,9 +97,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail> UpdateSwitchConnectivity(SwitchConnectivityToEdit switchConnectivity)
+        public Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail> UpdateSwitchConnectivity(SwitchConnectivityToEdit switchConnectivityToEdit)
         {
-            ValidateSwitchConnectivityToEdit(switchConnectivity);
+            ValidateSwitchConnectivityToEdit(switchConnectivityToEdit);
 
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SwitchConnectivityDetail>();
 
@@ -98,11 +108,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ISwitchConnectivityDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchConnectivityDataManager>();
 
-            if (dataManager.Update(switchConnectivity))
+            if (dataManager.Update(switchConnectivityToEdit))
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var switchConnectivity = GetSwitchConnectivity(switchConnectivityToEdit.SwitchConnectivityId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SwitchConnectivityLoggableEntity.Instance, switchConnectivity);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SwitchConnectivityDetailMapper(this.GetSwitchConnectivity(switchConnectivity.SwitchConnectivityId));
+                updateOperationOutput.UpdatedObject = SwitchConnectivityDetailMapper(this.GetSwitchConnectivity(switchConnectivityToEdit.SwitchConnectivityId));
             }
             else
             {
@@ -249,7 +261,49 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+        private class SwitchConnectivityLoggableEntity : VRLoggableEntityBase
+        {
+            public static SwitchConnectivityLoggableEntity Instance = new SwitchConnectivityLoggableEntity();
 
+            private SwitchConnectivityLoggableEntity()
+            {
+
+            }
+
+            static SwitchConnectivityManager s_switchConnectivityManager = new SwitchConnectivityManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SwitchConnectivity"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Switch Connectivity"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SwitchConnectivity_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SwitchConnectivity switchConnectivity = context.Object.CastWithValidate<SwitchConnectivity>("context.Object");
+                return switchConnectivity.SwitchConnectivityId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SwitchConnectivity switchConnectivity = context.Object.CastWithValidate<SwitchConnectivity>("context.Object");
+                return s_switchConnectivityManager.GetSwitchConnectivityName(switchConnectivity.SwitchConnectivityId);
+            }
+        }
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             DateTime? _carrierAccountLastCheck;

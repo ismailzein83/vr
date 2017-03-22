@@ -71,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new CodeGroupExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(CodeGroupLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper), handler);
         }
 
@@ -116,17 +116,30 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedCodeGroups().MapRecords(CodeGroupInfoMapper).OrderBy(x => x.Name);
         }
-        public CodeGroup GetCodeGroup(int codeGroupId)
+        public CodeGroup GetCodeGroup(int codeGroupId, bool isViewedFromUI)
         {
             var codeGroups = GetCachedCodeGroups();
-            return codeGroups.GetRecord(codeGroupId);
+           CodeGroup codeGroup=codeGroups.GetRecord(codeGroupId);
+           if (codeGroup != null && isViewedFromUI)
+               VRActionLogger.Current.LogObjectViewed(CodeGroupLoggableEntity.Instance, codeGroup);
+           return codeGroup;
         }
+        public CodeGroup GetCodeGroup(int codeGroupId)
+        {
 
+            return GetCodeGroup(codeGroupId, false);
+        }
         public IEnumerable<CodeGroup> GetCountryCodeGroups(int countryId)
         {
             return GetCachedCodeGroupsByCountry().GetRecord(countryId);
         }
+        public string GetCode(CodeGroup codeGroup)
+        {
+            if(codeGroup==null)
+                return null;
+            return codeGroup.Code;
 
+        }
         public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
             ValidateCodeGroupToAdd(codeGroup);
@@ -143,8 +156,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 codeGroup.CodeGroupId = coudeGroupId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(CodeGroupLoggableEntity.Instance, codeGroup);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+               
                 insertOperationOutput.InsertedObject = CodeGroupDetailMapper(codeGroup);
             }
             else
@@ -153,13 +168,13 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroup)
+        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroupToEdit)
         {
-            ValidateCodeGroupToEdit(codeGroup);
+            ValidateCodeGroupToEdit(codeGroupToEdit);
 
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
 
-            bool updateActionSucc = dataManager.Update(codeGroup);
+            bool updateActionSucc = dataManager.Update(codeGroupToEdit);
             TOne.Entities.UpdateOperationOutput<CodeGroupDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CodeGroupDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -168,8 +183,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                CodeGroup codeGroup = GetCodeGroup(codeGroupToEdit.CodeGroupId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(CodeGroupLoggableEntity.Instance, codeGroup);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = CodeGroupDetailMapper(this.GetCodeGroup(codeGroup.CodeGroupId));
+                updateOperationOutput.UpdatedObject = CodeGroupDetailMapper(this.GetCodeGroup(codeGroupToEdit.CodeGroupId));
             }
             else
             {
@@ -421,7 +438,49 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
         }
         #endregion
+        private class CodeGroupLoggableEntity : VRLoggableEntityBase
+        {
+            public static CodeGroupLoggableEntity Instance = new CodeGroupLoggableEntity();
 
+            private CodeGroupLoggableEntity()
+            {
+
+            }
+
+            static CodeGroupManager s_codeGroupManager = new CodeGroupManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_CodeGroup"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "CodeGroup"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_CodeGroup_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                CodeGroup codeGroup = context.Object.CastWithValidate<CodeGroup>("context.Object");
+                return codeGroup.CodeGroupId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                CodeGroup codeGroup = context.Object.CastWithValidate<CodeGroup>("context.Object");
+                return s_codeGroupManager.GetCode(codeGroup);
+            }
+        }
         #region  Mappers
         private CodeGroupDetail CodeGroupDetailMapper(CodeGroup codeGroup)
         {

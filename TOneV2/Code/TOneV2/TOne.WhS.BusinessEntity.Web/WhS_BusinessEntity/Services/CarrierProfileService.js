@@ -2,16 +2,17 @@
 
     'use strict';
 
-    CarrierProfileService.$inject = ['VRModalService'];
+    CarrierProfileService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function CarrierProfileService(VRModalService) {
+    function CarrierProfileService(VRModalService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
 
         return ({
             addCarrierProfile: addCarrierProfile,
             editCarrierProfile: editCarrierProfile,
             addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            getEntityUniqueName: getEntityUniqueName
         });
 
         function addCarrierProfile(onCarrierProfileAdded) {
@@ -38,6 +39,11 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
         }
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_CarrierProfile";
+        }
+
+      
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }

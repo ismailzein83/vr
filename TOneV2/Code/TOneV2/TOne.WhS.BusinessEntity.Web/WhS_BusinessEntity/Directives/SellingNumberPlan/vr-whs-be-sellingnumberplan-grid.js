@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSellingnumberplanGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingNumberPlanAPIService", "WhS_BE_SellingNumberPlanService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIService, WhS_BE_SellingNumberPlanService, VRUIUtilsService) {
+app.directive("vrWhsBeSellingnumberplanGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "WhS_BE_SellingNumberPlanAPIService", "WhS_BE_SellingNumberPlanService", "VRUIUtilsService",
+function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIService, WhS_BE_SellingNumberPlanService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -28,6 +28,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
 
         var gridAPI;
         var gridDrillDownTabsObj;
+        var drilldwonDefinitionArray = [];
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -37,8 +38,33 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
                 gridAPI = api;
 
                 var drillDownDefinitions = WhS_BE_SellingNumberPlanService.getDrillDownDefinition();
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                AddObjectTrackingDrillDown();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drilldwonDefinitionArray, gridAPI, $scope.gridMenuActions);
 
+                function AddObjectTrackingDrillDown() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, sellingNumberPlanItem) {
+                        sellingNumberPlanItem.objectTrackingGridAPI = directiveAPI;
+
+                        var query = {
+                            ObjectId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
+                            EntityUniqueName: WhS_BE_SellingNumberPlanService.getEntityUniqueName(),
+
+                        };
+                        return sellingNumberPlanItem.objectTrackingGridAPI.load(query);
+                    };
+                    for(var i=0;i<drillDownDefinitions.length;i++)
+                    {
+                        drilldwonDefinitionArray.push(drillDownDefinitions[i]);
+                    }
+                    drilldwonDefinitionArray.push(drillDownDefinition);
+
+                }
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {

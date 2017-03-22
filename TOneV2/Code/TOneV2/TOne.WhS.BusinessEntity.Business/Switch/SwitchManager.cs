@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SwitchExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SwitchLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper), handler);
         }
         private class SwitchExcelExportHandler : ExcelExportHandler<SwitchDetail>
@@ -60,12 +60,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        public Switch GetSwitch(int switchId)
+        public Switch GetSwitch(int switchId, bool isViewedFromUI)
         {
             var switchs = GetCachedSwitches();
-            return switchs.GetRecord(switchId);
+           var swicth= switchs.GetRecord(switchId);
+           if (swicth != null && isViewedFromUI)
+               VRActionLogger.Current.LogObjectViewed(SwitchLoggableEntity.Instance, swicth);
+           return swicth;
         }
-
+        public Switch GetSwitch(int switchId)
+        {
+            return GetSwitch(switchId, false);
+        }
         public List<Switch> GetAllSwitches()
         {
             var cachedSwitches = GetCachedSwitches();
@@ -103,8 +109,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 whsSwitch.SwitchId = switchId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(SwitchLoggableEntity.Instance, whsSwitch);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SwitchDetailMapper(whsSwitch);
             }
             else
@@ -128,6 +135,8 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var switchItem = GetSwitch(whsSwitch.SwitchId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SwitchLoggableEntity.Instance, switchItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SwitchDetailMapper(this.GetSwitch(whsSwitch.SwitchId));
             }
@@ -251,7 +260,49 @@ namespace TOne.WhS.BusinessEntity.Business
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _SettingsCacheLastCheck);
             }
         }
+        private class SwitchLoggableEntity : VRLoggableEntityBase
+        {
+            public static SwitchLoggableEntity Instance = new SwitchLoggableEntity();
 
+            private SwitchLoggableEntity()
+            {
+
+            }
+
+            static SwitchManager s_switchManager = new SwitchManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_Switch"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Switch"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_Switch_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Switch switchItem = context.Object.CastWithValidate<Switch>("context.Object");
+                return switchItem.SwitchId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Switch switchItem = context.Object.CastWithValidate<Switch>("context.Object");
+                return s_switchManager.GetSwitchName(switchItem.SwitchId);
+            }
+        }
         #endregion
 
         #region Private Methods

@@ -2,16 +2,17 @@
 
     'use strict';
 
-    CarrierAccountService.$inject = ['VRModalService', 'UtilsService'];
+    CarrierAccountService.$inject = ['VRModalService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function CarrierAccountService(VRModalService, UtilsService) {
+    function CarrierAccountService(VRModalService, UtilsService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
         return ({
             addCarrierAccount: addCarrierAccount,
             editCarrierAccount: editCarrierAccount,
             viewCarrierAccount: viewCarrierAccount,
             addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToCarrierAccount: registerObjectTrackingDrillDownToCarrierAccount
         });
 
         function addCarrierAccount(onCarrierAccountAdded, dataItem) {
@@ -53,6 +54,30 @@
                 UtilsService.setContextReadOnly(modalScope)
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
+        }
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_CarrierAccount";
+        }
+
+        function registerObjectTrackingDrillDownToCarrierAccount() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
+                carrierAccountItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: carrierAccountItem.Entity.CarrierAccountId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return carrierAccountItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
         }
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);

@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -20,9 +21,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper).OrderBy(x => x.Name);
         }
 
+        public SellingNumberPlan GetSellingNumberPlan(int numberPlanId, bool isViewedFromUI)
+        {
+            var sellingNumberPlan= GetCachedSellingNumberPlans().GetRecord(numberPlanId);
+
+            if (sellingNumberPlan != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(SellingNumberPlanLoggableEntity.Instance, sellingNumberPlan);
+            return sellingNumberPlan;
+        }
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId)
         {
-            return GetCachedSellingNumberPlans().GetRecord(numberPlanId);
+            return  GetSellingNumberPlan(numberPlanId, false);
         }
 
         public IDataRetrievalResult<SellingNumberPlanDetail> GetFilteredSellingNumberPlans(DataRetrievalInput<SellingNumberPlanQuery> input)
@@ -34,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SellingNumberPlanExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SellingNumberPlanLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingNumberPlans.ToBigResult(input, filterExpression, SellingNumberPlanDetailMapper), handler);
 
         }
@@ -55,8 +64,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 sellingNumberPlan.SellingNumberPlanId = sellingNumberPlanId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(SellingNumberPlanLoggableEntity.Instance, sellingNumberPlan);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SellingNumberPlanDetailMapper(sellingNumberPlan);
             }
             else
@@ -67,13 +77,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
+        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlanToEdit)
         {
-            ValidateSellingNumberPlanToEdit(sellingNumberPlan);
+            ValidateSellingNumberPlanToEdit(sellingNumberPlanToEdit);
 
             ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
 
-            bool updateActionSucc = dataManager.Update(sellingNumberPlan);
+            bool updateActionSucc = dataManager.Update(sellingNumberPlanToEdit);
             TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -82,8 +92,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var sellingNumberPlan = GetSellingNumberPlan(sellingNumberPlanToEdit.SellingNumberPlanId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SellingNumberPlanLoggableEntity.Instance, sellingNumberPlan);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingNumberPlanDetailMapper(this.GetSellingNumberPlan(sellingNumberPlan.SellingNumberPlanId));
+                updateOperationOutput.UpdatedObject = SellingNumberPlanDetailMapper(this.GetSellingNumberPlan(sellingNumberPlanToEdit.SellingNumberPlanId));
             }
             else
             {
@@ -197,6 +209,50 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+
+        private class SellingNumberPlanLoggableEntity : VRLoggableEntityBase
+        {
+            public static SellingNumberPlanLoggableEntity Instance = new SellingNumberPlanLoggableEntity();
+
+            private SellingNumberPlanLoggableEntity()
+            {
+
+            }
+
+            static SellingNumberPlanManager s_sellingNumberPlanManager = new SellingNumberPlanManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SellingNumberPlan"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Selling Number Plan"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SellingNumberPlan_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SellingNumberPlan sellingNumberPlan = context.Object.CastWithValidate<SellingNumberPlan>("context.Object");
+                return sellingNumberPlan.SellingNumberPlanId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SellingNumberPlan sellingNumberPlan = context.Object.CastWithValidate<SellingNumberPlan>("context.Object");
+                return s_sellingNumberPlanManager.GetSellingNumberPlanName(sellingNumberPlan.SellingNumberPlanId);
+            }
+        }
         #endregion
 
         #region Private Methods

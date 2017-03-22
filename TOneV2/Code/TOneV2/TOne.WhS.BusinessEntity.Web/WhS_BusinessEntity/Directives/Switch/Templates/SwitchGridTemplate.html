@@ -6,4 +6,7 @@
              idfield="Entity.SwitchId" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.SwitchId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Switch Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

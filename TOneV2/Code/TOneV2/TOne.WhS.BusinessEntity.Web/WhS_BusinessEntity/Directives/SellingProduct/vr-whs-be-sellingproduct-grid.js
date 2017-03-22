@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService", "WhS_BE_SellingProductService", "WhS_BE_CustomerSellingProductService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, WhS_BE_CustomerSellingProductService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService) {
+app.directive("vrWhsBeSellingproductGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService", "WhS_BE_SellingProductService", "WhS_BE_CustomerSellingProductService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService",
+function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, WhS_BE_CustomerSellingProductService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -29,6 +29,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
         var gridAPI;
         this.initializeController = initializeController;
         var gridDrillDownTabsObj;
+        var drilldwonDefinitionArray = [];
         function initializeController() {
             $scope.sellingProducts = [];
 
@@ -53,9 +54,33 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                     };
                     return dataItem.custormerSellingProductGridAPI.loadGrid(payload);
                 };
-                drillDownDefinitions.push(drillDownDefinition);
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
+                drillDownDefinitions.push(drillDownDefinition);
+                AddObjectTrackingDrillDown();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drilldwonDefinitionArray, gridAPI, $scope.gridMenuActions);
+
+                function AddObjectTrackingDrillDown() {
+                    var drillDownDefinition = {};
+                    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, sellingProductItem) {
+                        sellingProductItem.objectTrackingGridAPI = directiveAPI;
+
+                        var query = {
+                            ObjectId: sellingProductItem.Entity.SellingProductId,
+                            EntityUniqueName: WhS_BE_SellingProductService.getEntityUniqueName(),
+
+                        };
+                        return sellingProductItem.objectTrackingGridAPI.load(query);
+                    };
+                    for (var i = 0; i < drillDownDefinitions.length; i++) {
+                        drilldwonDefinitionArray.push(drillDownDefinitions[i]);
+                    }
+                    drilldwonDefinitionArray.push(drillDownDefinition);
+
+                }
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -111,6 +136,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
 
         function editSellingProduct(sellingProductObj) {
             var onSellingProductUpdated = function (sellingProduct) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(sellingProduct);
                 gridAPI.itemUpdated(sellingProduct);
             };
 
@@ -121,7 +147,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
             var query = {
                 SellingProductsIds: [dataItem.Entity.SellingProductId]
             };
-
+            gridDrillDownTabsObj.setDrillDownExtensionObject(dataItem);
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
                 if (dataItem.custormerSellingProductGridAPI != undefined) {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {

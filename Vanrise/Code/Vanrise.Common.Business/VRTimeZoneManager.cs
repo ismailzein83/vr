@@ -27,7 +27,7 @@ namespace Vanrise.Common.Business
             {
                 ExportExcelHandler = new VRTimeZoneExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(VRTimeZoneLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTimeZones.ToBigResult(input, filterExpression, VRTimeZoneDetailMapper), handler);
         }
 
@@ -41,12 +41,18 @@ namespace Vanrise.Common.Business
             var timeZone =  GetVRTimeZone(timeZoneId);
             return (timeZone != null) ? timeZone.Name : null ;
         }
+        public VRTimeZone GetVRTimeZone(int timeZoneId, bool isViewedFromUI)
+        {
+            var timeZones = GetCachedVRTimeZones();
+           var timeZone = timeZones.GetRecord(timeZoneId);
+           if (timeZone != null && isViewedFromUI)
+               VRActionLogger.Current.LogObjectViewed(VRTimeZoneLoggableEntity.Instance, timeZone);
+           return timeZone;
+        }
         public VRTimeZone GetVRTimeZone(int timeZoneId)
         {
-            var TimeZones = GetCachedVRTimeZones();
-            return TimeZones.GetRecord(timeZoneId);
+           return GetVRTimeZone(timeZoneId,false);
         }
-
         public Vanrise.Entities.InsertOperationOutput<VRTimeZoneDetail> AddVRTimeZone(VRTimeZone timeZone)
         {
             Vanrise.Entities.InsertOperationOutput<VRTimeZoneDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRTimeZoneDetail>();
@@ -61,8 +67,9 @@ namespace Vanrise.Common.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 timeZone.TimeZoneId = timeZoneId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRTimeZoneLoggableEntity.Instance, timeZone);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRTimeZoneDetailMapper(timeZone);
             }
             else
@@ -86,6 +93,7 @@ namespace Vanrise.Common.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRTimeZoneLoggableEntity.Instance, timeZone);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRTimeZoneDetailMapper(timeZone);
             }
@@ -152,7 +160,49 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreVRTimeZonesUpdated(ref _updateHandle);
             }
         }
+        private class VRTimeZoneLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRTimeZoneLoggableEntity Instance = new VRTimeZoneLoggableEntity();
 
+            private VRTimeZoneLoggableEntity()
+            {
+
+            }
+
+            static VRTimeZoneManager s_timeZoneManager = new VRTimeZoneManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_TimeZone"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Time Zone"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_TimeZone_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRTimeZone vrtimeZone = context.Object.CastWithValidate<VRTimeZone>("context.Object");
+                return vrtimeZone.TimeZoneId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRTimeZone vrtimeZone = context.Object.CastWithValidate<VRTimeZone>("context.Object");
+                return s_timeZoneManager.GetVRTimeZoneName(vrtimeZone.TimeZoneId);
+            }
+        }
         #endregion
 
         #region Private Methods

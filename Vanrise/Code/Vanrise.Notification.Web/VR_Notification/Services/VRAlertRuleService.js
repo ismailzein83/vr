@@ -36,7 +36,7 @@
             return "VR_Notification_AlertRule_" + ruleTypeId;
         }
 
-        function registerObjectTrackingDrillDownToAlertRule(ruleTypeId) {
+        function registerObjectTrackingDrillDownToAlertRule() {
             var drillDownDefinition = {};
 
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();

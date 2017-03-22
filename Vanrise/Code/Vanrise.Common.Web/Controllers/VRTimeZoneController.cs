@@ -34,7 +34,7 @@ namespace Vanrise.Common.Web.Controllers
         public VRTimeZone GetVRTimeZone(int timeZoneId)
         {
             VRTimeZoneManager manager = new VRTimeZoneManager();
-            return manager.GetVRTimeZone(timeZoneId);
+            return manager.GetVRTimeZone(timeZoneId,true);
         }
 
         [HttpPost]

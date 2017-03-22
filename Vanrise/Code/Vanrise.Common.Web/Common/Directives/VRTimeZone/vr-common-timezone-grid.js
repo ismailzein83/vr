@@ -34,7 +34,8 @@ function (UtilsService, VRNotificationService, VRCommon_VRTimeZoneAPIService, VR
             $scope.timeZones = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-          
+                var drillDownDefinitions = VRCommon_VRTimeZoneService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions, true);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -45,6 +46,7 @@ function (UtilsService, VRNotificationService, VRCommon_VRTimeZoneAPIService, VR
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onVRTimeZoneAdded = function (timeZoneObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(timeZoneObject);
                         gridAPI.itemAdded(timeZoneObject);
                     };
                     return directiveAPI;
@@ -52,7 +54,13 @@ function (UtilsService, VRNotificationService, VRCommon_VRTimeZoneAPIService, VR
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_VRTimeZoneAPIService.GetFilteredVRTimeZones(dataRetrievalInput)
-                    .then(function (response) {                          
+                    .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -76,6 +84,7 @@ function (UtilsService, VRNotificationService, VRCommon_VRTimeZoneAPIService, VR
 
         function editVRTimeZone(timeZoneObj) {
             var onVRTimeZoneUpdated = function (timeZoneObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(timeZoneObj);
                 gridAPI.itemUpdated(timeZoneObj);
             };
 

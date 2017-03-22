@@ -10,6 +10,6 @@ namespace Vanrise.Common.Data
     public interface IVRActionAuditDataManager : IDataManager
     {
         void Insert(int? userId, int? urlId, int moduleId, int entityId, int actionId, string objectId, string objectName, long? objectTrackingId, string actionDescription);
-        List<VRActionAudit> GetAll(VRActionAuditQuery query);
+        List<VRActionAudit> GetFilterdActionAudits(VRActionAuditQuery query);
     }
 }

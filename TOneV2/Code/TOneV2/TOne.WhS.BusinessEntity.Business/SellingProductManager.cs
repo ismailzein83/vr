@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -31,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SellingProductExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SellingProductLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression, SellingProductDetailMapper), handler);
         }
 
@@ -73,10 +74,17 @@ namespace TOne.WhS.BusinessEntity.Business
             var sellingProducts = GetCachedSellingProducts();
             return sellingProducts.MapRecords(SellingProductInfoMapper).OrderBy(x => x.Name);
         }
-        public SellingProduct GetSellingProduct(int sellingProductId)
+        public SellingProduct GetSellingProduct(int sellingProductId, bool isViewedFromUI)
         {
             var sellingProducts = GetCachedSellingProducts();
-            return sellingProducts.GetRecord(sellingProductId);
+            var sellingProduct= sellingProducts.GetRecord(sellingProductId);
+            if (sellingProduct != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(SellingProductLoggableEntity.Instance, sellingProduct);
+            return sellingProduct;
+        }
+        public SellingProduct GetSellingProduct(int sellingProductId)
+        {
+            return GetSellingProduct(sellingProductId, false);
         }
         public string GetSellingProductName(int sellingProductId)
         {
@@ -108,8 +116,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 sellingProduct.SellingProductId = sellingProductId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(SellingProductLoggableEntity.Instance, sellingProduct);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SellingProductDetailMapper(sellingProduct);
             }
             else
@@ -120,13 +129,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProduct)
+        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProductToEdit)
         {
-            ValidateSellingProductToEdit(sellingProduct);
+            ValidateSellingProductToEdit(sellingProductToEdit);
 
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
 
-            bool updateActionSucc = dataManager.Update(sellingProduct);
+            bool updateActionSucc = dataManager.Update(sellingProductToEdit);
             TOne.Entities.UpdateOperationOutput<SellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<SellingProductDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -135,8 +144,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var sellingProduct = GetSellingProduct(sellingProductToEdit.SellingProductId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SellingProductLoggableEntity.Instance, sellingProduct);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(this.GetSellingProduct(sellingProduct.SellingProductId));
+                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(this.GetSellingProduct(sellingProductToEdit.SellingProductId));
             }
             else
             {
@@ -262,7 +273,49 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #endregion
+        public class SellingProductLoggableEntity : VRLoggableEntityBase
+        {
+            public static SellingProductLoggableEntity Instance = new SellingProductLoggableEntity();
 
+            private SellingProductLoggableEntity()
+            {
+
+            }
+
+            static SellingProductManager s_sellingProductManager = new SellingProductManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SellingProduct"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Selling Product"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SellingProduct_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SellingProduct sellingProduct = context.Object.CastWithValidate<SellingProduct>("context.Object");
+                return sellingProduct.SellingProductId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SellingProduct sellingProduct = context.Object.CastWithValidate<SellingProduct>("context.Object");
+                return s_sellingProductManager.GetSellingProductName(sellingProduct.SellingProductId);
+            }
+        }
         #region  Mappers
         private SellingProductDetail SellingProductDetailMapper(SellingProduct sellingProduct)
         {

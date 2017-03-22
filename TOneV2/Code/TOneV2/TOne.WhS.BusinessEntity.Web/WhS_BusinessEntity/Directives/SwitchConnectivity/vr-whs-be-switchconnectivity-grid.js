@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwitchConnectivityGridDirective.$inject = ['WhS_BE_SwitchConnectivityAPIService', 'WhS_BE_SwitchConnectivityService', 'VRNotificationService'];
+    SwitchConnectivityGridDirective.$inject = ['WhS_BE_SwitchConnectivityAPIService', 'WhS_BE_SwitchConnectivityService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function SwitchConnectivityGridDirective(WhS_BE_SwitchConnectivityAPIService, WhS_BE_SwitchConnectivityService, VRNotificationService) {
+    function SwitchConnectivityGridDirective(WhS_BE_SwitchConnectivityAPIService, WhS_BE_SwitchConnectivityService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,18 +25,26 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dataSource = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = WhS_BE_SwitchConnectivityService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions, true);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_BE_SwitchConnectivityAPIService.GetFilteredSwitchConnectivities(dataRetrievalInput).then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -54,6 +62,7 @@
                 };
 
                 api.onSwitchConnectivityAdded = function (addedSwitchConnectivity) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedSwitchConnectivity);
                     gridAPI.itemAdded(addedSwitchConnectivity);
                 };
 
@@ -70,6 +79,7 @@
 
                 function editSwitchConnectivity(dataItem) {
                     var onSwitchConnectivityUpdated = function (updatedSwitchConnectivity) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(updatedSwitchConnectivity);
                         gridAPI.itemUpdated(updatedSwitchConnectivity);
                     };
                     WhS_BE_SwitchConnectivityService.editSwitchConnectivity(dataItem.Entity.SwitchConnectivityId, onSwitchConnectivityUpdated);

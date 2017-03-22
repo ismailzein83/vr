@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonCountryGrid", ["UtilsService", "VRNotificationService", "VRCommon_CountryAPIService", "VRCommon_CountryService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCommon_CountryService, VRUIUtilsService) {
+app.directive("vrCommonCountryGrid", ["UtilsService", "VRNotificationService", "VRCommon_CountryAPIService", "VRCommon_CountryService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
+function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCommon_CountryService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
 
@@ -27,6 +27,7 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
 
         var gridAPI;
         var gridDrillDownTabsObj;
+        var DrillDownDefinitionsArray = [];
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -34,9 +35,35 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
             $scope.countries = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+               
                 var drillDownDefinitions = VRCommon_CountryService.getDrillDownDefinition();
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                registerObjectTrackingDrillDownToCountry();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(DrillDownDefinitionsArray, gridAPI, $scope.gridMenuActions);
+
+                function registerObjectTrackingDrillDownToCountry() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
+
+                        countryItem.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: countryItem.Entity.CountryId,
+                            EntityUniqueName: VRCommon_CountryService.getEntityUniqueName(),
+
+                        };
+                        return countryItem.objectTrackingGridAPI.load(query);
+                    };
+
+                    for (var i = 0; i < drillDownDefinitions.length; i++)
+                    {
+                        DrillDownDefinitionsArray.push(drillDownDefinitions[i]);
+                    }
+                    DrillDownDefinitionsArray.push(drillDownDefinition);
+                }
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());

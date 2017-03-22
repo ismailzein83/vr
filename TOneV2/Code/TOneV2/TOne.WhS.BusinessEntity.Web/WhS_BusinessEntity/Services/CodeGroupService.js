@@ -2,14 +2,17 @@
 
     'use strict';
 
-    CodeGroupService.$inject = ['VRCommon_CountryService', 'VRModalService'];
+    CodeGroupService.$inject = ['VRCommon_CountryService', 'VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function CodeGroupService(VRCommon_CountryService, VRModalService) {
+    function CodeGroupService(VRCommon_CountryService, VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addCodeGroup: addCodeGroup,
             editCodeGroup: editCodeGroup,
             registerDrillDownToCountry: registerDrillDownToCountry,
-            uploadCodeGroup: uploadCodeGroup
+            uploadCodeGroup: uploadCodeGroup,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToCodeGroupe: registerObjectTrackingDrillDownToCodeGroupe
         });
 
         function addCodeGroup(onCodeGroupAdded, countryId) {
@@ -76,7 +79,38 @@
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
         }
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_CodeGroup";
+        }
 
+        function registerObjectTrackingDrillDownToCodeGroupe() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, CodeGroupItem) {
+                CodeGroupItem.objectTrackingGridAPI = directiveAPI;
+            
+                var query = {
+                    ObjectId: CodeGroupItem.Entity.CodeGroupId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return CodeGroupItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
         function uploadCodeGroup(onCodeGroupUploaded) {
             var settings = {
 

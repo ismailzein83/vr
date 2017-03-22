@@ -19,6 +19,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region ctor/Local Variables
         CarrierProfileManager _carrierProfileManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
+        
         public CarrierAccountManager()
         {
             _carrierProfileManager = new CarrierProfileManager();
@@ -115,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new CarrierAccountDetailExportExcelHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(CarrierAccountLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper), resultProcessingHandler);
         }
         public IEnumerable<CarrierAccount> GetAllCarriers()
@@ -237,6 +238,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierAccount.CarrierAccountId = carrierAccountId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
+               
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
@@ -247,31 +250,35 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccount)
+        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit)
         {
             int carrierProfileId;
-            ValidateCarrierAccountToEdit(carrierAccount, out carrierProfileId);
+            ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId);
 
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
-            bool updateActionSucc = dataManager.Update(carrierAccount, carrierProfileId);
+            bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
             TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccount.CarrierAccountId);
+            CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
 
             if (CarrierAccountManager.IsSupplier(cachedAccount.AccountType))
             {
                 SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
-                zoneServiceManager.UpdateSupplierDefaultService(carrierAccount.CarrierAccountId, carrierAccount.SupplierSettings.DefaultServices);
+                zoneServiceManager.UpdateSupplierDefaultService(carrierAccountToEdit.CarrierAccountId, carrierAccountToEdit.SupplierSettings.DefaultServices);
             }
 
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccount.CarrierAccountId));
+                var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, carrierAccount);
+              
+                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
+                
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
             }
@@ -583,6 +590,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
+
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             DateTime? _carrierProfileLastCheck;
@@ -766,7 +774,49 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
         #endregion
+        public class CarrierAccountLoggableEntity : VRLoggableEntityBase
+        {
+            public static CarrierAccountLoggableEntity Instance = new CarrierAccountLoggableEntity();
 
+            private CarrierAccountLoggableEntity()
+            {
+
+            }
+
+            static CarrierAccountManager s_carrierAccountManager = new CarrierAccountManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_CarrierAccount"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "WhS_BusinessEntity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Carrier Account"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_CarrierAccount_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                CarrierAccount carrierAccount = context.Object.CastWithValidate<CarrierAccount>("context.Object");
+                return carrierAccount.CarrierAccountId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                CarrierAccount carrierAccount = context.Object.CastWithValidate<CarrierAccount>("context.Object");
+                return s_carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
+            }
+        }
         #region  Mappers
 
         private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)

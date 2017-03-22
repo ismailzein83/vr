@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSwitchGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SwitchAPIService", "WhS_BE_SwitchService",
-function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_SwitchService) {
+app.directive("vrWhsBeSwitchGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SwitchAPIService", "WhS_BE_SwitchService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_SwitchService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -27,12 +27,14 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
 
     function SwitchGrid($scope, ctrl, $attrs) {
         var gridAPI;
-
+        var gridDrillDownTabsObj;
         function initializeController() {
             $scope.switches = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = WhS_BE_SwitchService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions, true);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -51,6 +53,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
                     };
 
                     directiveAPI.onSwitchAdded = function (switchObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(switchObject);
                         gridAPI.itemAdded(switchObject);
                     };
 
@@ -62,6 +65,12 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SwitchAPIService.GetFilteredSwitches(dataRetrievalInput)
                    .then(function (response) {
+                       if (response && response.Data) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+
+                           }
+                       }
                        onResponseReady(response);
                    })
                    .catch(function (error) {
@@ -91,6 +100,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
 
         function editSwitch(whsSwitch) {
             var onSwitchUpdated = function (updatedItem) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
             };
             WhS_BE_SwitchService.editSwitch(whsSwitch.Entity.SwitchId, onSwitchUpdated);

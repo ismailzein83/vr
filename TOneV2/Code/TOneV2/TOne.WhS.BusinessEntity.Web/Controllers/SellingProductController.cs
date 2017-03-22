@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SellingProduct GetSellingProduct(int sellingProductId)
         {
             SellingProductManager manager = new SellingProductManager();
-            return manager.GetSellingProduct(sellingProductId);
+            return manager.GetSellingProduct(sellingProductId,true);
         }
 
         [HttpPost]

@@ -39,7 +39,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public CodeGroup GetCodeGroup(int codeGroupId)
         {
             CodeGroupManager manager = new CodeGroupManager();
-            return manager.GetCodeGroup(codeGroupId);
+            return manager.GetCodeGroup(codeGroupId,true);
         }
 
         [HttpPost]
