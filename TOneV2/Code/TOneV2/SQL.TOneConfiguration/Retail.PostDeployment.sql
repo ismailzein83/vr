@@ -212,15 +212,15 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('0B08F2E1-6518-46FF-B669-0256CF9BB7D4','Retail_BE_Subscriber','Subscriber'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
-('A2DE8C67-B8AE-4520-BB48-448EE98B7251','Retail_BE_Dealer','Dealer'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
-('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('0B08F2E1-6518-46FF-B669-0256CF9BB7D4','Retail_BE_Subscriber','Subscriber'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('A2DE8C67-B8AE-4520-BB48-448EE98B7251','Retail_BE_Dealer','Dealer'									,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
 
---('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+--('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'			,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
 ('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
-('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Retail_BE_Package'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
+('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Retail_BE_Package'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
 
-('3ABA6D5B-03AC-4EE5-A3EC-AAC6D9C55621','Retail_BE_Switches','Switches'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('3ABA6D5B-03AC-4EE5-A3EC-AAC6D9C55621','Retail_BE_Switches','Switches'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
 
 ('1B380EE1-16E1-4A9B-9165-55252E333E9E','Retail_BE_ServiceType','Service Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Edit"]'),
 ('A8B32E85-079D-4376-BA28-67468B27BDC8','Retail_BE_AccountPartDefinition','Account Part Definition','FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
@@ -241,7 +241,7 @@ as (select * from (values
 ('FDB996F9-9157-4778-897E-3F2DED954297','BusinessProcess_BP_Source_BE_Sync','Source BE Sync'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),
 ('08FB93FA-0719-4385-AD9E-0513E3966B26','BusinessProcess_BP_Account_Balance','Account Balance'		,'692D0589-D764-4DF5-857B-52A98D89FFD6',0,'["View", "StartInstance", "ScheduleTask"]'),
 
-('E4186240-7525-4B39-9B4D-48CCDE5F2590','Retail_Pricing_Rule','Pricing'							,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
+('E4186240-7525-4B39-9B4D-48CCDE5F2590','Retail_Pricing_Rule','Pricing'								,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
 ('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_Identification_Rule','Identification'				,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
 
 ('C0C98E3B-12C8-4805-93D4-F4289C21C6B8','VRCommon_ApplicationVisibility','Application Visibility'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
