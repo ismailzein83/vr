@@ -97,7 +97,6 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
 
                     //Static Menu Actions
                     var staticMenuActions = defineStaticMenuActions(dataItem);
-                    console.log(staticMenuActions)
                     if (staticMenuActions != undefined) {
                         for (var index = 0; index < staticMenuActions.length; index++) {
                             menuActions.push(staticMenuActions[index]);
