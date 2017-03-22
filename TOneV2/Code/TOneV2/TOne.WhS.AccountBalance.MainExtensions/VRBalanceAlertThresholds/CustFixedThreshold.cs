@@ -10,7 +10,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds
     /// <summary>
     /// only applicable for PrePaid Customer AccountType
     /// </summary>
-    public class CustFixedBalAlertThreshold : VRBalanceAlertThreshold
+    public class CustFixedThreshold : VRBalanceAlertThreshold
     {
         public override Guid ConfigId
         {

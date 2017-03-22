@@ -83,12 +83,12 @@
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
     <Compile Include="QueueActivators\UpdateWhSBalancesQueueActivator.cs" />
-    <Compile Include="VRBalanceAlertActions\BlockCustomerBalAlertAction.cs" />
-    <Compile Include="VRBalanceAlertActions\BlockCustomerBalAlertActionDefinitionSettings.cs" />
-    <Compile Include="VRBalanceAlertActions\SendCustomerEmailBalAlertAction.cs" />
-    <Compile Include="VRBalanceAlertActions\SendCustomerEmailBalAlertActionDefinitionSettings.cs" />
-    <Compile Include="VRBalanceAlertThresholds\CustFixedBalAlertThreshold.cs" />
-    <Compile Include="VRBalanceAlertThresholds\CustTolerancePercBalAlertThreshold.cs" />
+    <Compile Include="VRBalanceAlertActions\BlockCustomerAction.cs" />
+    <Compile Include="VRBalanceAlertActions\BlockCustomerActionDefinition.cs" />
+    <Compile Include="VRBalanceAlertActions\SendCustomerEmailAction.cs" />
+    <Compile Include="VRBalanceAlertActions\SendCustomerEmailActionDefinition.cs" />
+    <Compile Include="VRBalanceAlertThresholds\CustFixedThreshold.cs" />
+    <Compile Include="VRBalanceAlertThresholds\CustTolerancePercThreshold.cs" />
     <Compile Include="VRBalanceAlertThresholds\SuppTolerancePercBalAlertThreshold.cs" />
   </ItemGroup>
   <ItemGroup>

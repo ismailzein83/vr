@@ -7,13 +7,8 @@ using Vanrise.Notification.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
-    public class BlockCustomerBalAlertAction : VRAction
+    public class BlockCustomerAction : VRAction
     {
-        //public override Guid ConfigId
-        //{
-        //    get { throw new NotImplementedException(); }
-        //}
-
         public override void Execute(IVRActionExecutionContext context)
         {
             throw new NotImplementedException();

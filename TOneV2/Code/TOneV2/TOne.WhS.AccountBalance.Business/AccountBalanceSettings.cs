@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Entities;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Notification.Entities;
 
 namespace TOne.WhS.AccountBalance.Business
 {
@@ -18,6 +19,16 @@ namespace TOne.WhS.AccountBalance.Business
 
         public virtual string RuntimeEditor { get; set; }
 
-        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); } 
+        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); }
+
+        public override VRActionTargetType GetActionTargetType()
+        {
+            return new CustomerAccountBalanceRuleTargetType();
+        }
+    }
+
+    public class CustomerAccountBalanceRuleTargetType : VRActionTargetType
+    {
+
     }
 }
