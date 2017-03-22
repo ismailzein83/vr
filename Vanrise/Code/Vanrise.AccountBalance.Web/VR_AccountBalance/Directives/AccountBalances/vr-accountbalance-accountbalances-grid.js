@@ -63,7 +63,7 @@ app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBal
                     });
 
                     return promiseDeferred.promise;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

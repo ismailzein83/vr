@@ -47,18 +47,17 @@
             };
             $scope.scopeModel.onSourceSelectionChanged = function () {
                 var sourceId = sourceSelectorAPI.getSelectedIds();
-                if(sourceId != undefined)
-                {
+                if (sourceId != undefined) {
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var payload = {
                         sourceId: sourceId,
-                        context:getContext()
+                        context: getContext()
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceFieldsSelectorAPI, payload, setLoader, sourceFieldsSelectorReadyPromiseDeferred);
                 }
-            }
+            };
             function builGridColumnObjFromScope() {
                 return {
                     Title: $scope.scopeModel.title,

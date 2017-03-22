@@ -158,7 +158,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             function loadAccountTypeGridColumns() {
                 var accountTypeGridColumnsLoadDeferred = UtilsService.createPromiseDeferred();
                 accountTypeGridColumnsReadyDeferred.promise.then(function () {
-                    var accountTypeGridColumnsPayload = { context: getContext() }
+                    var accountTypeGridColumnsPayload = { context: getContext() };
                     if (accountTypeEntity != undefined && accountTypeEntity.Settings != undefined && accountTypeEntity.Settings.AccountBalanceGridSettings != undefined) {
                         accountTypeGridColumnsPayload.gridColumns = accountTypeEntity.Settings.AccountBalanceGridSettings.GridColumns;
                     }
