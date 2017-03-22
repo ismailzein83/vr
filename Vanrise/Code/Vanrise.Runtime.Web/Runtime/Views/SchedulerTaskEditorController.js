@@ -102,13 +102,6 @@
                 }
 
             };
-
-            $scope.hasSavePermission = function () {
-                if (editMode)
-                    return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
-                else
-                    return SchedulerTaskAPIService.HasAddSchedulerTaskPermission();
-            };
         }
 
         function load() {
