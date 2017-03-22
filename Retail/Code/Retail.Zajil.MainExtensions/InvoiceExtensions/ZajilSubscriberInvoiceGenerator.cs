@@ -48,7 +48,7 @@ namespace Retail.Zajil.MainExtensions
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
             InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId);
-
+            retailSubscriberInvoiceDetails.DuePeriod = context.GetDuePeriod();
             AccountPart accountPart;
             if (accountBEManager.TryGetAccountPart(_acountBEDefinitionId, accountId, _companyExtendedInfoPartdefinitionId, false, out accountPart))
             {

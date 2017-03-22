@@ -25,13 +25,11 @@ namespace Vanrise.Invoice.Entities
     {
         Guid InvoiceTypeId { get; }
         string PartnerId { get; }
-
         DateTime FromDate { get; }
-
         DateTime ToDate { get; }
         DateTime GeneratedToDate { get; }
         dynamic CustomSectionPayload { get; }
-
+        int GetDuePeriod();
         GeneratedInvoice Invoice { set; }
     }
     public interface IInvoiceTypeExtendedSettingsInfoContext

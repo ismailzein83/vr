@@ -13,7 +13,7 @@ namespace Retail.Zajil.Entities
         public decimal TotalDuration { get; set; }
 
         public int CountCDRs { get; set; }
-
+        public int DuePeriod { get; set; }
         public int CurrencyId { get; set; }
         public string VoiceCustomerNo { get; set; }
         public string SalesAgent { get; set; }

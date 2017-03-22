@@ -16,6 +16,10 @@ namespace Vanrise.Invoice.Business
         public GeneratedInvoice Invoice { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public DateTime GeneratedToDate { get; set; }
-       
+        public int DuePeriod { get; set; }
+        public int GetDuePeriod()
+        {
+            return DuePeriod;
+        }
     }
 }

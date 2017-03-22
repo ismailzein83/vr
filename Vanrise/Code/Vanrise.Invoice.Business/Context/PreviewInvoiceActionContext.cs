@@ -38,6 +38,9 @@ namespace Vanrise.Invoice.Business
                     toDate = this.ToDate.Add(-timeZone.Settings.Offset);
                 }
             }
+            PartnerManager partnerManager = new PartnerManager();
+
+            var duePeriod = partnerManager.GetPartnerDuePeriod(this.InvoiceTypeId, this.PartnerId);
 
             InvoiceGenerationContext context = new InvoiceGenerationContext
             {
@@ -47,11 +50,10 @@ namespace Vanrise.Invoice.Business
                 PartnerId = this.PartnerId,
                 ToDate = toDate,
                 GeneratedToDate = this.ToDate,
+                DuePeriod = duePeriod
             };
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             invoiceGenerator.GenerateInvoice(context);
-            PartnerManager partnerManager = new PartnerManager();
-            var duePeriod = partnerManager.GetPartnerDuePeriod(this.InvoiceTypeId, this.PartnerId);
             
             this.GeneratedInvoice = context.Invoice;
 
