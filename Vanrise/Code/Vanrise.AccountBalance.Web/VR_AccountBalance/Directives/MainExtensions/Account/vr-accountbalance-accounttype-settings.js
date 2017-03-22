@@ -183,7 +183,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             {
                 if(accountTypeEntity != undefined && accountTypeEntity.Settings != undefined && accountTypeEntity.Settings.Sources != undefined)
                 {
-                    return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourcesFields({ Sources: accountTypeEntity.Settings.Sources }).then(function (response) {
+                    return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourcesFields({ Sources: accountTypeEntity.Settings.Sources, ExtendedSettings: accountTypeEntity.Settings.ExtendedSettings }).then(function (response) {
                         fieldsBySourceId = response;
                     });
                 }
@@ -238,9 +238,14 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     },
                     loadSourceFields:function(source)
                     {
-                        if (source != undefined)
+                        var settings = accountTypeSettingsAPI.getData();
+                        if (source != undefined && settings != undefined)
                         {
-                            return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourceFields(source).then(function (response) {
+                            var input = {
+                                Source:source,
+                                ExtendedSettings: settings
+                            };
+                            return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourceFields(input).then(function (response) {
                                 if (fieldsBySourceId == undefined)
                                     fieldsBySourceId = {};
                                 fieldsBySourceId[source.AccountBalanceFieldSourceId] = response;

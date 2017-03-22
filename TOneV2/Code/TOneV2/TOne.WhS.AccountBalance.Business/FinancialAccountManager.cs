@@ -552,12 +552,77 @@ namespace TOne.WhS.AccountBalance.Business
 
         Dictionary<int, CarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
         {
-            throw new NotImplementedException();
+            var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+
+            Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
+            if (cachedFinancialAccounts != null)
+            {
+
+                foreach (var financialAccount in cachedFinancialAccounts.Values)
+                {
+                    if (financialAccount.Settings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    if (financialAccount.Settings.ExtendedSettings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    FinancialAccountIsCustomerAccountContext context = new FinancialAccountIsCustomerAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
+
+                    if (financialAccount.Settings.ExtendedSettings.IsCustomerAccount(context))// IsCustomerAccount will set CreditLimit on context
+                    {
+                        carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
+                        {
+                            return new CarrierFinancialAccountData
+                            {
+                                AccountTypeId = financialAccount.Settings.AccountTypeId,
+                                BED = financialAccount.BED,
+                                CreditLimit = context.CreditLimit,
+                                EED = financialAccount.EED,
+                                FinancialAccountId = financialAccount.FinancialAccountId,
+                                UsageTransactionTypeId = context.UsageTransactionTypeId
+                            };
+                        });
+                    }
+                }
+            }
+            return carrierDataByFinancialAccountId;
         }
 
         Dictionary<int, CarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
-            throw new NotImplementedException();
+           var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+
+            Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
+            if (cachedFinancialAccounts != null)
+            {
+                foreach (var financialAccount in cachedFinancialAccounts.Values)
+                {
+                    if (financialAccount.Settings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    if (financialAccount.Settings.ExtendedSettings == null)
+                        throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+                    FinancialAccountIsSupplierAccountContext context = new FinancialAccountIsSupplierAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
+
+                    if (financialAccount.Settings.ExtendedSettings.IsSupplierAccount(context))// IsSupplierAccount will set CreditLimit on context
+                    {
+                        carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
+                        {
+                            return new CarrierFinancialAccountData
+                            {
+                                AccountTypeId = financialAccount.Settings.AccountTypeId,
+                                BED = financialAccount.BED,
+                                CreditLimit = context.CreditLimit,
+                                EED = financialAccount.EED,
+                                FinancialAccountId = financialAccount.FinancialAccountId,
+                                UsageTransactionTypeId = context.UsageTransactionTypeId
+                            };
+                        });
+                    }
+                }
+            }
+            return carrierDataByFinancialAccountId;
         }
 
         /// <summary>

@@ -88,7 +88,7 @@ namespace Vanrise.AccountBalance.Entities
     }
     public interface IAccountBalanceFieldSourceGetFieldDefinitionsContext
     {
-
+        AccountTypeExtendedSettings ExtendedSettings { get;}
     }
     public interface IAccountBalanceFieldSourcePrepareSourceDataContext
     {

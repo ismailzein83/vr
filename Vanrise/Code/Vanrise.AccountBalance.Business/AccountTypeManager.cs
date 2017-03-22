@@ -157,12 +157,12 @@ namespace Vanrise.AccountBalance.Business
             else
                 return true;
         }
-        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountBalanceFieldSource source)
+        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountBalanceFieldSource source, AccountTypeExtendedSettings extendedSettings)
         {
             List<AccountBalanceFieldDefinition> fields = new List<AccountBalanceFieldDefinition>();
-           return source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext());
+            return source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { ExtendedSettings = extendedSettings });
         }
-        public Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(List<AccountBalanceFieldSource> sources)
+        public Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(List<AccountBalanceFieldSource> sources, AccountTypeExtendedSettings extendedSettings)
         {
             Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> fieldsBySourceId = new Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>>();
             if (sources != null)
@@ -171,7 +171,7 @@ namespace Vanrise.AccountBalance.Business
                 {
                     if(!fieldsBySourceId.ContainsKey(source.AccountBalanceFieldSourceId))
                     {
-                        var fields = GetAccountTypeSourceFields(source);
+                        var fields = GetAccountTypeSourceFields(source, extendedSettings);
                         if(fields != null)
                         {
                             fieldsBySourceId.Add(source.AccountBalanceFieldSourceId, fields);
@@ -196,7 +196,7 @@ namespace Vanrise.AccountBalance.Business
                     var source = accountTypeSettings.Sources.FirstOrDefault(x => x.AccountBalanceFieldSourceId == column.SourceId);
                      if(source != null)
                      {
-                       var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext());
+                         var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { ExtendedSettings = accountTypeSettings.ExtendedSettings });
                        if (sourceFields != null)
                        {
                            var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);

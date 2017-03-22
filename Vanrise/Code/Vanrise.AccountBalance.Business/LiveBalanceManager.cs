@@ -84,7 +84,7 @@ namespace Vanrise.AccountBalance.Business
                             if (source != null)
                             {
 
-                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext());
+                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext { ExtendedSettings = accountTypeSettings.ExtendedSettings});
                                 var field = fields.FirstOrDefault(x => x.Name == gridColumn.FieldName);
                                 if (field != null)
                                 {

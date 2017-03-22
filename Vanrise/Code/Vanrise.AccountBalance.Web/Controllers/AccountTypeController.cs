@@ -36,15 +36,15 @@ namespace Vanrise.AccountBalance.Web.Controllers
         }
         [HttpPost]
         [Route("GetAccountTypeSourcesFields")]
-        public Dictionary<Guid,IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(AccountTypeSourceQuery query)
+        public Dictionary<Guid,IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(AccountTypeSourcesQuery query)
         {
-            return _accountTypeManager.GetAccountTypeSourcesFields(query.Sources);
+            return _accountTypeManager.GetAccountTypeSourcesFields(query.Sources, query.ExtendedSettings);
         }
         [HttpPost]
         [Route("GetAccountTypeSourceFields")]
-        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountBalanceFieldSource source)
+        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountTypeSourceQuery query)
         {
-            return _accountTypeManager.GetAccountTypeSourceFields(source);
+            return _accountTypeManager.GetAccountTypeSourceFields(query.Source,query.ExtendedSettings);
         }
 
         [HttpGet]
@@ -54,8 +54,14 @@ namespace Vanrise.AccountBalance.Web.Controllers
             return _accountTypeManager.ConvertToGridColumnAttribute(accountTypeId);
         }
     }
-    public class AccountTypeSourceQuery
+    public class AccountTypeSourcesQuery
     {
         public List<AccountBalanceFieldSource> Sources { get; set; }
+        public AccountTypeExtendedSettings ExtendedSettings { get; set; }
+    }
+    public class AccountTypeSourceQuery
+    {
+        public AccountBalanceFieldSource Source { get; set; }
+        public AccountTypeExtendedSettings ExtendedSettings { get; set; }
     }
 }

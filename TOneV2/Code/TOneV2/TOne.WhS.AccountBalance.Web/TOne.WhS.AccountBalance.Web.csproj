@@ -142,6 +142,8 @@
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\BlockCustomerAction\Directives\whs-accountbalance-action-customer-sendemail.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\SendCustomerEmailAction\Directives\Templates\BlockCustomerAction.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\SendCustomerEmailAction\Directives\whs-accountbalance-action-customer-block.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountType\Directives\AccountTypeFieldSources\Templates\TOneCustomFieldSourceSetting.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountType\Directives\AccountTypeFieldSources\whs-accountbalance-accounttype-source-tonecustomfield.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidDefinitionSettings.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\whs-accountbalance-runtime-customerpostpaid.js" />

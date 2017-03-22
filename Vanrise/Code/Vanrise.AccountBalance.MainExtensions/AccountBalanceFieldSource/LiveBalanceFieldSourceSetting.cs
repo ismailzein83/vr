@@ -35,6 +35,11 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
                     Name = "CurrencyId",
                     Title = "Currency",
                     FieldType = new FieldBusinessEntityType { BusinessEntityDefinitionId = Currency.BUSINESSENTITY_DEFINITION_ID,},
+                }, 
+                new AccountBalanceFieldDefinition { 
+                    Name = "AccountName",
+                    Title = "Account Name",
+                    FieldType = new FieldTextType(),
                 }
             };
             return accountBalanceFieldDefinitions;
@@ -48,11 +53,18 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
         public override object GetFieldValue(IAccountBalanceFieldSourceGetFieldValueContext context)
         {
             AccountBalanceFieldSourceGetFieldDefinitionsContext fieldsContext = new AccountBalanceFieldSourceGetFieldDefinitionsContext();
-            var fields = this.GetFieldDefinitions(fieldsContext);
-            var field = fields.FirstOrDefault(x => x.Name == context.FieldName);
-            if (field == null)
-                return null;
-           return Vanrise.Common.Utilities.GetPropValue(field.Name,context.AccountBalance);
+
+            if (context.FieldName == null)
+                throw new NullReferenceException("context.FieldName");
+
+            switch(context.FieldName)
+            {
+                case "ID": return context.AccountBalance.AccountBalanceId;
+                case "CurrentBalance": return context.AccountBalance.CurrentBalance;
+                case "CurrencyId": return context.AccountBalance.CurrencyId;
+                case "AccountName": return new AccountManager().GetAccountName(context.AccountBalance.AccountTypeId, context.AccountBalance.AccountId);
+                default: return null;
+            }
         }
     }
 }

@@ -59,6 +59,13 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
@@ -83,6 +90,7 @@
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
     <Compile Include="QueueActivators\UpdateWhSBalancesQueueActivator.cs" />
+    <Compile Include="TOneCustomFieldSourceSetting.cs" />
     <Compile Include="VRBalanceAlertActions\BlockCustomerAction.cs" />
     <Compile Include="VRBalanceAlertActions\BlockCustomerActionDefinition.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailAction.cs" />
