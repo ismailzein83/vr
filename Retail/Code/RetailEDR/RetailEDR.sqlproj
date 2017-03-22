@@ -75,6 +75,7 @@
     <Folder Include="Retail_CDR\Tables\" />
     <Folder Include="Retail_CDR\User Defined Types\" />
     <Folder Include="Retail_EDR\Stored Procedures\" />
+    <Folder Include="Retail_EDR\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -115,5 +116,6 @@
     <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_GetTotal.sql" />
     <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_FilterdBySenderNetwork_GroupedByRecipient.sql" />
     <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_FilterdByRecipientNetwork_GroupedBySender.sql" />
+    <Build Include="Retail_EDR\Views\vw_EDRs.sql" />
   </ItemGroup>
 </Project>
