@@ -54,6 +54,9 @@
   <ItemGroup>
     <Compile Include="CustomerInvoiceDetails.cs" />
     <Compile Include="CustomerInvoiceItemDetails.cs" />
+    <Compile Include="InvoiceAccount\CarrierInvoiceAccountData.cs" />
+    <Compile Include="InvoiceAccount\InvoiceAccount.cs" />
+    <Compile Include="InvoiceAccount\InvoiceAccountSettings.cs" />
     <Compile Include="InvoiceCarrier.cs" />
     <Compile Include="InvoiceCarrierFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +70,7 @@
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

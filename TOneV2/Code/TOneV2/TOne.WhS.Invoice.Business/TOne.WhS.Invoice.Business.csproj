@@ -47,6 +47,10 @@
     <Reference Include="Vanrise.Analytic.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
@@ -76,7 +80,9 @@
     <Compile Include="Extensions\CarrierInvoiceSettings.cs" />
     <Compile Include="Extensions\InvoiceGeneratorActionPartnerCondition.cs" />
     <Compile Include="Extensions\SupplierInvoiceGenerator.cs" />
+    <Compile Include="InvoiceAccountManager.cs" />
     <Compile Include="InvoiceManager.cs" />
+    <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
