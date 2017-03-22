@@ -152,8 +152,8 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 				        datatextfield="{{scopeModel.accountDataTextField}}"\
 				        isrequired="accountSelectorCtrl.isrequired"\
 				        hideremoveicon="accountSelectorCtrl.isrequired"\
-                        ' + isMultipleSelection + '>'
-        '</vr-select>\
+                        ' + isMultipleSelection + '>\
+                    </vr-select>\
                 </vr-columns>';
     }
 }]);
