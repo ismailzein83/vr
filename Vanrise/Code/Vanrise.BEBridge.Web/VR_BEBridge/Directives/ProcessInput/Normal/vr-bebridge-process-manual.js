@@ -67,12 +67,12 @@ app.directive("vrBebridgeProcessManual", ["VRUIUtilsService", "UtilsService",
                 var beRecieveDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 beRecieveDefinitionSelectorAPIReadyDeferred.promise.then(function () {
                     var payload = {
-                        filter:{
+                        filter: {
                             Filters: [{
                                 $type: "Vanrise.BEBridge.Business.BEReceiveDefinitionStartInstanceFilter, Vanrise.BEBridge.Business",
                             }]
                         }
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(beRecieveDefinitionSelectorAPI, payload, beRecieveDefinitionSelectorLoadDeferred);
                 });
 

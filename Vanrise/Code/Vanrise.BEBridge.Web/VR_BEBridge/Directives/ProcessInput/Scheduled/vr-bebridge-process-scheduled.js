@@ -76,7 +76,7 @@ app.directive("vrBebridgeProcessScheduled", ["VRUIUtilsService", "UtilsService",
                             }]
                         },
                         selectedIds: beReceiveDefinitionIds
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(beRecieveDefinitionSelectorAPI, payload, beRecieveDefinitionSelectorLoadDeferred);
                 });
 
