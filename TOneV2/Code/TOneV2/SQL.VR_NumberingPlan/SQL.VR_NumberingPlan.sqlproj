@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SQL.VR_NumberingPlan</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{a172e80a-2bea-40b6-ac24-ec554441ad47}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SQL.VR_NumberingPlan</RootNamespace>
+    <AssemblyName>SQL.VR_NumberingPlan</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="VR_NumberingPlan\" />
+    <Folder Include="VR_NumberingPlan\Tables\" />
+    <Folder Include="VR_NumberingPlan\Functions\" />
+    <Folder Include="VR_NumberingPlan\Stored Procedures\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="VR_NumberingPlan\Tables\CodePreparation.sql" />
+    <Build Include="VR_NumberingPlan\Tables\CP_SaleZone_New.sql" />
+    <Build Include="VR_NumberingPlan\Tables\CP_SaleZone_Changed.sql" />
+    <Build Include="VR_NumberingPlan\Tables\CP_SaleCode_New.sql" />
+    <Build Include="VR_NumberingPlan\Tables\CP_SaleCode_Changed.sql" />
+    <Build Include="VR_NumberingPlan\Tables\SaleZone.sql" />
+    <Build Include="VR_NumberingPlan\Tables\SaleCode.sql" />
+    <Build Include="VR_NumberingPlan\Tables\SellingNumberPlan.sql" />
+    <Build Include="VR_NumberingPlan\Tables\CodeGroup.sql" />
+    <Build Include="VR_NumberingPlan\Tables\SaleZone_Preview.sql" />
+    <Build Include="VR_NumberingPlan\Tables\SaleCode_Preview.sql" />
+    <Build Include="VR_NumberingPlan\Functions\ParseStringList.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SellingNumberPlan_Update.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SellingNumberPlan_Insert.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SellingNumberPlan_GetAll.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodeGroup_Update.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodeGroup_Insert.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodeGroup_GetAll.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleZone_GetAll.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleZone_Preview_GetFiltered.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetSpecificCodePrefixes.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetFilteredByZone.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetFiltered.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetEffectiveByZoneId.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetDistinctCodePrefixes.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByZoneName.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByZoneIds.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByZoneId.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetBySellingNumberPlan.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByEffective.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByDate.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByCountry.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByCodePrefix.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetByCodeGroupIds.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_GetAll.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCountry_Preview_GetFiltered.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SaleCode_Preview_GetFiltered.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_CheckCodePreparationState.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_UpdateStatus.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_SalePriceList_SyncWithImportedData.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_InsertOrUpdateChanges.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_GetChanges.sql" />
+    <Build Include="Security\VR_NumberingPlan.sql" />
+  </ItemGroup>
+</Project>

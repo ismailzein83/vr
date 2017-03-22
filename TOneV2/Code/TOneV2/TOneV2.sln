@@ -362,9 +362,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.TOneV1Transition.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.TOneV1Transition.Business", "TOne.WhS.TOneV1Transition.Business\TOne.WhS.TOneV1Transition.Business.csproj", "{421018BA-CEFC-42EA-8490-41E7933650EB}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.VR_NumberingPlan", "SQL.VR_NumberingPlan\SQL.VR_NumberingPlan.sqlproj", "{A172E80A-2BEA-40B6-AC24-EC554441AD47}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 150
+		SccNumberOfProjects = 151
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -964,6 +966,10 @@ Global
 		SccProjectTopLevelParentUniqueName149 = TOneV2.sln
 		SccProjectName149 = TOne.WhS.TOneV1Transition.Business
 		SccLocalPath149 = TOne.WhS.TOneV1Transition.Business
+		SccProjectUniqueName150 = SQL.VR_NumberingPlan\\SQL.VR_NumberingPlan.sqlproj
+		SccProjectTopLevelParentUniqueName150 = TOneV2.sln
+		SccProjectName150 = SQL.VR_NumberingPlan
+		SccLocalPath150 = SQL.VR_NumberingPlan
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -6473,6 +6479,54 @@ Global
 		{421018BA-CEFC-42EA-8490-41E7933650EB}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{421018BA-CEFC-42EA-8490-41E7933650EB}.SingleImage|x64.ActiveCfg = Release|Any CPU
 		{421018BA-CEFC-42EA-8490-41E7933650EB}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|Any CPU.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|Any CPU.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|Any CPU.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|x64.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.CD_ROM|x86.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|Any CPU.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|Any CPU.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|Any CPU.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|Any CPU.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|x64.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Optimized|x86.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|x64.ActiveCfg = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.Release|x86.ActiveCfg = Release|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|Any CPU.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|Any CPU.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|Any CPU.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|x64.ActiveCfg = Debug|Any CPU
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47}.SingleImage|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -6650,5 +6704,6 @@ Global
 		{A522F8B1-8653-4033-A1F5-AE0BA9669061} = {6D78D7AC-7CB9-4FE1-A4E8-7ED9270E4826}
 		{63F67A7E-5CD0-4620-B785-326FE7E90E9D} = {6D78D7AC-7CB9-4FE1-A4E8-7ED9270E4826}
 		{421018BA-CEFC-42EA-8490-41E7933650EB} = {6D78D7AC-7CB9-4FE1-A4E8-7ED9270E4826}
+		{A172E80A-2BEA-40B6-AC24-EC554441AD47} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 	EndGlobalSection
 EndGlobal

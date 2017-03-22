@@ -1,0 +1,6 @@
+﻿CREATE TABLE [VR_NumberingPlan].[CP_SaleZone_Changed] (
+    [ID]                BIGINT   NOT NULL,
+    [ProcessInstanceID] BIGINT   NOT NULL,
+    [EED]               DATETIME NULL
+);
+
