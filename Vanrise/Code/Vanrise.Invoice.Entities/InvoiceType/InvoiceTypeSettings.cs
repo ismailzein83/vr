@@ -25,6 +25,7 @@ namespace Vanrise.Invoice.Entities
         public bool UseTimeZone { get; set; }
         public List<InvoiceAttachment> InvoiceAttachments { get; set; }
 
+        public Guid? InvToAccBalanceRelationId { get; set; }
     }
 
 
