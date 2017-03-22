@@ -148,7 +148,7 @@
                                         </asp:Repeater>
                                     </select>
 
-                                    <asp:TextBox ID="txtNumber"  onkeypress='return isNumber(event)' class="span4 m-wrap disableValidation"  runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txtNumber"  onkeypress='return isNumberSemiColumn(event)' class="span4 m-wrap disableValidation"  runat="server"></asp:TextBox>
 
                                     <a class="btn green span1" onclick="addToTable()"><i class="icon-plus"></i></a>
                                 </div>
@@ -319,6 +319,15 @@
             return true;
         }
 
+        function isNumberSemiColumn(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && (charCode !== 59)) {
+                    return false;
+            }
+            return true;
+        }
+
         function isDate(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -477,10 +486,20 @@
 
             request1.done(function (msg) {
 
-                $('#myTable > tbody').append('<tr>' +
-                                '<td style="display:none;">' + msg.Id + '</td>' +
-                                '<td>' + msg.Number + '</td>' +
-                                '<td><a href="#" class="btn mini black  pull-right deleteRow" ><i class="icon-trash"></i> Remove</a></td></tr>');
+                var partsOfStr = msg.Number.split(';');
+                var idOfStr = msg.Id.split(';');
+                var i = 0;
+
+                idOfStr.forEach(function (item) {
+                    if (item !== '' && item !== undefined) {
+                        $('#myTable > tbody').append('<tr>' +
+                            '<td style="display:none;">' + item + '</td>' +
+                            '<td>' + partsOfStr[i] + '</td>' +
+                            '<td><a href="#" class="btn mini black  pull-right deleteRow" ><i class="icon-trash"></i> Remove</a></td></tr>');
+                        
+                    }
+                    i = i + 1;
+                });
 
             });
             request1.error(function (msg) {

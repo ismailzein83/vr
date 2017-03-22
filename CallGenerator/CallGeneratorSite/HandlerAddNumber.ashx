@@ -46,16 +46,30 @@ public class HandlerAddNumber : IHttpHandler, System.Web.SessionState.IRequiresS
 
         int groupId = 0;
         int.TryParse(resp.Id, out groupId);
+        string ids = "";
+        string numbersResponse = "";
         
-        //Add Group ID , Number
-        TestNumber t = new TestNumber();
-        t.Number = resp.Number;
-        t.GroupId = groupId;
-        //t.CreatedBy = Current.User.Id;
-        TestNumberRepository.Save(t);
+        string[] numbers = resp.Number.Split(';');
+        foreach (string number in numbers)
+        {
+            if (!string.IsNullOrEmpty(number))
+            {
+                //Add Group ID , Number
+                TestNumber t = new TestNumber()
+                {
+                    Number = number,
+                    GroupId = groupId
+                };
+                TestNumberRepository.Save(t);
+                ids = t.Id + ";";
+                numbersResponse = number + ";";
+            }
+        }
+        
+
         ResponseNumber num = new ResponseNumber();
-        num.Number = resp.Number;
-        num.Id = t.Id.ToString();
+        num.Number = numbersResponse;
+        num.Id = ids;
         
         
         context.Response.ContentType = "application/json";
