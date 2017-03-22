@@ -278,7 +278,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override string ModuleName
             {
-                get { return "WhS_BusinessEntity"; }
+                get { return "Business Entity"; }
             }
 
             public override string EntityDisplayName

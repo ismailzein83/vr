@@ -45,6 +45,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
+            VRActionLogger.Current.LogGetFilteredAction(SaleRateLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());
         }
         public RateChangeType GetSaleRateChange(DateTime fromTime, DateTime tillTime, long rateId)
@@ -104,7 +105,12 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetExistingRatesByZoneIds(ownerType, ownerId, zoneIds, minEED);
         }
-
+        public string GetSaleRateSourceId(SaleRate saleRate)
+        {
+            if (saleRate == null)
+                return null;
+            return saleRate.SourceId;
+        }
         public int GetSaleRateTypeId()
         {
             return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleRateType());
@@ -442,7 +448,48 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _currencyManager.GetCurrencySymbol(currencyId);
             }
         }
+        private class SaleRateLoggableEntity : VRLoggableEntityBase
+        {
+            public static SaleRateLoggableEntity Instance = new SaleRateLoggableEntity();
 
+            private SaleRateLoggableEntity()
+            {
+
+            }
+
+            static SaleRateManager s_saleRateManager = new SaleRateManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SaleRate"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Sale Rate"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SaleRate_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SaleRate saleRate = context.Object.CastWithValidate<SaleRate>("context.Object");
+                return saleRate.SaleRateId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
         #endregion
 
         #region Private Methods

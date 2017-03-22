@@ -56,7 +56,7 @@ app.directive('vrCommonActionauditlkupSelector', ['VRCommon_ActionAuditLKUPAPISe
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="VRActionAuditLKUPId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="VRActionAuditLKUP" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select></vr-columns>';
+            + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="'+label+'" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select></vr-columns>';
     }
 
     function SelectorCtor(ctrl, $scope, attrs) {

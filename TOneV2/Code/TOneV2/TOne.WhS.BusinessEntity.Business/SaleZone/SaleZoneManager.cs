@@ -56,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SaleZoneDetailExportExcelHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SaleZoneLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZones.ToBigResult(input, filterFunc, SaleZoneDetailMapper), resultProcessingHandler);
         }
 
@@ -452,7 +452,49 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+        private class SaleZoneLoggableEntity : VRLoggableEntityBase
+        {
+            public static SaleZoneLoggableEntity Instance = new SaleZoneLoggableEntity();
 
+            private SaleZoneLoggableEntity()
+            {
+
+            }
+
+            static SaleZoneManager s_saleZoneManager = new SaleZoneManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SaleZone"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Sale Zone"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SaleZone_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SaleZone saleZone = context.Object.CastWithValidate<SaleZone>("context.Object");
+                return saleZone.SaleZoneId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SaleZone saleZone = context.Object.CastWithValidate<SaleZone>("context.Object");
+                return s_saleZoneManager.GetSaleZoneName(saleZone.SaleZoneId);
+            }
+        }
 
         #endregion
 

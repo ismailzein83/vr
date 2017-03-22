@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SupplierZoneExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SupplierZoneLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper), handler);
         }
         
@@ -255,7 +255,48 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+        private class SupplierZoneLoggableEntity : VRLoggableEntityBase
+        {
+            public static SupplierZoneLoggableEntity Instance = new SupplierZoneLoggableEntity();
 
+            private SupplierZoneLoggableEntity()
+            {
+
+            }
+
+          
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SupplierZone"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Supplier Zone"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SupplierZone_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SupplierZone supplierZone = context.Object.CastWithValidate<SupplierZone>("context.Object");
+                return supplierZone.SupplierZoneId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
         #region IBusinessEntityManager
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

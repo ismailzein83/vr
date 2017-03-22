@@ -740,7 +740,7 @@ namespace Retail.BusinessEntity.Business
 
             public override string ModuleName
             {
-                get { return "Account"; }
+                get { return "Business Entity"; }
             }
         }
 

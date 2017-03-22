@@ -17,6 +17,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SaleCodeDetail> GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<BaseSaleCodeQueryHandler> input)
         {
+            VRActionLogger.Current.LogGetFilteredAction(SaleCodeLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SaleCodeRequestHandler());
         }
 
@@ -32,6 +33,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByCodeGroups(codeGroupsIds);
         }
 
+        public string GetCode(SaleCode saleCode)
+        {
+            if (saleCode == null)
+                return null;
+            return saleCode.Code;
+        }
+       
         public List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
@@ -186,6 +194,49 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
 
                 context.MainSheet = sheet;
+            }
+        }
+        private class  SaleCodeLoggableEntity : VRLoggableEntityBase
+        {
+            public static SaleCodeLoggableEntity Instance = new SaleCodeLoggableEntity();
+
+            private SaleCodeLoggableEntity()
+            {
+
+            }
+
+            static SaleCodeManager s_saleCodeManager = new SaleCodeManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SaleCode"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Sale Code"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SaleCode_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SaleCode saleCode = context.Object.CastWithValidate<SaleCode>("context.Object");
+                return saleCode.SaleCodeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SaleCode saleCode = context.Object.CastWithValidate<SaleCode>("context.Object");
+                return s_saleCodeManager.GetCode(saleCode);
             }
         }
         #endregion

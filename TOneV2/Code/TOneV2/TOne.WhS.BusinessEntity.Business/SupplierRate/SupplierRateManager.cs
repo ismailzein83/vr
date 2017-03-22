@@ -5,7 +5,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
-
+using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateManager
@@ -14,6 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(DataRetrievalInput<BaseSupplierRateQueryHandler> input)
         {
+            VRActionLogger.Current.LogGetFilteredAction(SupplierRateLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SupplierRateRequestHandler());
         }
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
@@ -215,7 +216,48 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+        private class SupplierRateLoggableEntity : VRLoggableEntityBase
+        {
+            public static SupplierRateLoggableEntity Instance = new SupplierRateLoggableEntity();
 
+            private SupplierRateLoggableEntity()
+            {
+
+            }
+
+
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SupplierRate"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Supplier Rate"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SupplierRate_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SupplierRate supplierRate = context.Object.CastWithValidate<SupplierRate>("context.Object");
+                return supplierRate.SupplierRateId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
         #endregion
     }
 }

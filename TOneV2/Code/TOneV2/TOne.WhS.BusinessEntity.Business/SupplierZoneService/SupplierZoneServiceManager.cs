@@ -24,6 +24,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<SupplierEntityServiceDetail> GetFilteredSupplierZoneServices(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
         {
+            VRActionLogger.Current.LogGetFilteredAction(SupplierZoneServiceLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SupplierZoneServiceRequestHandler());
         }
 
@@ -72,7 +73,48 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+        private class SupplierZoneServiceLoggableEntity : VRLoggableEntityBase
+        {
+            public static SupplierZoneServiceLoggableEntity Instance = new SupplierZoneServiceLoggableEntity();
 
+            private SupplierZoneServiceLoggableEntity()
+            {
+
+            }
+
+
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SupplierZoneService"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Supplier Zone Service"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SupplierZoneService_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SupplierZoneService supplierZoneSrvice = context.Object.CastWithValidate<SupplierZoneService>("context.Object");
+                return supplierZoneSrvice.SupplierZoneServiceId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
         #region Private Methods
         private SupplierEntityServiceDetail SupplierEntityServiceDetailMapper(SupplierEntityService supplierEntityService)
         {

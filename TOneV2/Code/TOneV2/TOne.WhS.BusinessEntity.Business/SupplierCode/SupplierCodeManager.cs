@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanrise.Common;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
@@ -36,6 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.IDataRetrievalResult<SupplierCodeDetail> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
         {
+            VRActionLogger.Current.LogGetFilteredAction(SupplierCodeLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SupplierCodeRequestHandler());
         }
 
@@ -141,6 +143,48 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+        private class SupplierCodeLoggableEntity : VRLoggableEntityBase
+        {
+            public static SupplierCodeLoggableEntity Instance = new SupplierCodeLoggableEntity();
+
+            private SupplierCodeLoggableEntity()
+            {
+
+            }
+
+
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SupplierCode"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Supplier Code"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SupplierCode_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SupplierCode supplierCode = context.Object.CastWithValidate<SupplierCode>("context.Object");
+                return supplierCode.SupplierCodeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
         #endregion
 
 

@@ -33,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SupplierPriceListExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SupplierPriceListLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper), handler);
         }
 
@@ -142,6 +142,47 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+        private class SupplierPriceListLoggableEntity : VRLoggableEntityBase
+        {
+            public static SupplierPriceListLoggableEntity Instance = new SupplierPriceListLoggableEntity();
 
+            private SupplierPriceListLoggableEntity()
+            {
+
+            }
+
+
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SupplierPriceList"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Supplier Price List"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SupplierPriceList_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SupplierPriceList supplierPriceList = context.Object.CastWithValidate<SupplierPriceList>("context.Object");
+                return supplierPriceList.PriceListId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
     }
 }

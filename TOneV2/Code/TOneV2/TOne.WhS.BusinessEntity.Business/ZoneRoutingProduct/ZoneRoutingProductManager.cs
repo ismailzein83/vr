@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region public Methods
         public IDataRetrievalResult<ZoneRoutingProductDetail> GetFilteredZoneRoutingProducts(DataRetrievalInput<ZoneRoutingProductQuery> input)
         {
+            VRActionLogger.Current.LogGetFilteredAction(ZoneRoutingProductLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new ZoneRoutingProductHandler());
         }
         #endregion
@@ -156,5 +157,48 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
         #endregion
+
+        private class ZoneRoutingProductLoggableEntity : VRLoggableEntityBase
+        {
+            public static ZoneRoutingProductLoggableEntity Instance = new ZoneRoutingProductLoggableEntity();
+
+            private ZoneRoutingProductLoggableEntity()
+            {
+
+            }
+
+            static ZoneRoutingProductManager s_zoneRoutingProductManager = new ZoneRoutingProductManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_ZoneRoutingProduct"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Zone Routing Product"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_ZoneRoutingProduct_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                ZoneRoutingProduct zoneRoutingProduct = context.Object.CastWithValidate<ZoneRoutingProduct>("context.Object");
+                return zoneRoutingProduct.ZoneRoutingProductId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
     }
 }
