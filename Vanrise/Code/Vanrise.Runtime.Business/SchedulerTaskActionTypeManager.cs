@@ -18,6 +18,8 @@ namespace Vanrise.Runtime.Business
             {
                 filterExpression = (schedulerTaskActionType) =>
                 {
+                    if (schedulerTaskActionType.Info.Editor == null)
+                        return false;
 
                     if (filter.Filters != null && !CheckIfFilterIsMatch(schedulerTaskActionType, filter.Filters))
                         return false;
@@ -52,7 +54,7 @@ namespace Vanrise.Runtime.Business
         }
         private ActionTypeExtendedSettings GetTaskActionExtendedSettings(ActionTypeInfo actionTypeInfo)
         {
-            if (actionTypeInfo != null & actionTypeInfo.ExtendedSettings != null)
+            if (actionTypeInfo != null && actionTypeInfo.ExtendedSettings != null)
                 return actionTypeInfo.ExtendedSettings;
             return new DefaultTaskActionExtentedSettings();
         }
