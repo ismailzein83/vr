@@ -791,7 +791,7 @@
                     }).catch(function (error) {
                         getCustomerCurrencyIdDeferred.reject(error);
                     });
-                    getCountryChanges().then(function () {
+                    getCountryChanges(customerId).then(function () {
                         getCountryChangesDeferred.resolve();
                     }).catch(function (error) {
                         getCountryChangesDeferred.reject(error, $scope);
@@ -822,13 +822,13 @@
                     currencySelectorAPI.selectedCurrency(response);
                 });
             }
-            function getCountryChanges() {
-                return WhS_Sales_RatePlanAPIService.GetCountryChanges(customerId).then(function (response) {
-                    countryChanges = response;
-                });
-            }
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+        function getCountryChanges(customerId) {
+            return WhS_Sales_RatePlanAPIService.GetCountryChanges(customerId).then(function (response) {
+                countryChanges = response;
+            });
         }
 
         function resetRatePlan() {
@@ -876,10 +876,14 @@
             promises.push(createProcessDeferred.promise);
 
             saveChangesPromise.then(function () {
+
+                var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
+                var ownerId = getOwnerId();
+
                 var inputArguments = {
                     $type: 'TOne.WhS.Sales.BP.Arguments.RatePlanInput, TOne.WhS.Sales.BP.Arguments',
-                    OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
-                    OwnerId: getOwnerId(),
+                    OwnerType: ownerTypeValue,
+                    OwnerId: ownerId,
                     CurrencyId: getCurrencyId(),
                     EffectiveDate: UtilsService.getDateFromDateTime(new Date())
                 };
@@ -894,11 +898,34 @@
 
                         var processTrackingContext = {
                             onClose: function () {
-                                countryChanges = undefined;
-                                $scope.showCancelButton = false;
+                                $scope.isLoading = true;
+                                var promises = [];
 
-                                if (isRoutingInfoDefined())
-                                    loadRatePlan();
+                                if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+
+                                    var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
+                                    promises.push(doesOwnerDraftExistDeferred.promise);
+
+                                    var getCountryChangesPromise = getCountryChanges(ownerId);
+                                    promises.push(getCountryChangesPromise);
+
+                                    getCountryChangesPromise.then(function () {
+                                        doesOwnerDraftExist().then(function () {
+                                            doesOwnerDraftExistDeferred.resolve();
+                                        }).catch(function (error) {
+                                            doesOwnerDraftExistDeferred.reject(error);
+                                        });
+                                    });
+                                }
+
+                                if (isRoutingInfoDefined()) {
+                                    var loadRatePlanPromise = loadRatePlan();
+                                    promises.push(loadRatePlanPromise);
+                                }
+
+                                UtilsService.waitMultiplePromises(promises).finally(function () {
+                                    $scope.isLoading = false;
+                                });
                             }
                         };
 
