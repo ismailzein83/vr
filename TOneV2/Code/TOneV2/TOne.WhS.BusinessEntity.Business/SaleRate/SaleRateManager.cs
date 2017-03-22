@@ -135,6 +135,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePriceList.CurrencyId;
         }
 
+        public IEnumerable<SaleRate> GetZoneRateBySellingProduct(int sellingProductId, List<long> zoneIds, DateTime effectiveOn)
+        {
+            var dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetSaleRatesEffectiveAfterByOwnerAndZones(SalePriceListOwnerType.SellingProduct, sellingProductId, zoneIds, effectiveOn);
+        }
         public OverlappedRatesByZone GetCustomerOverlappedRatesByZone(int customerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
         {
             if (zoneIds == null || zoneIds.Count() == 0)
