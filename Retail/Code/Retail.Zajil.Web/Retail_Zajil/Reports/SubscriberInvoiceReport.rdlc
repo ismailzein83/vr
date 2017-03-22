@@ -2069,10 +2069,10 @@ not receive anything in writing with in a week starting from invoice delivery</V
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>Retail.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>RDLCRetailSubscriberInvoiceDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetRDLCSubscriberInvoiceDetailsSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>Retail.Invoice.Entities.RDLCRetailSubscriberInvoiceDetails, Retail.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:DataSetName>Retail.Zajil.Entities</rd:DataSetName>
+        <rd:TableName>RDLCInvoiceDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCInvoiceDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>Retail.Zajil.Entities.RDLCInvoiceDetails, Retail.Zajil.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

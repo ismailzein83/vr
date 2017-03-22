@@ -45,6 +45,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BEBridge.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
     </Reference>
@@ -67,9 +75,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountConvertor.cs" />
+    <Compile Include="Account\InvoiceEnabledAccountFilter.cs" />
+    <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceGenerator.cs" />
+    <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceSettings.cs" />
+    <Compile Include="InvoiceExtensions\ZajilSubscriberPartnerSettings.cs" />
     <Compile Include="ZajilCompanyExtendedInfo.cs" />
     <Compile Include="ZajilCompanyExtendedInfoDefinition.cs" />
     <Compile Include="AccountPartOrderDetail.cs" />
@@ -90,6 +105,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
       <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
       <Name>Retail.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Entities\Retail.Zajil.Entities.csproj">
+      <Project>{cb49d2bd-4f30-4841-92ca-c98a1b9128df}</Project>
+      <Name>Retail.Zajil.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
