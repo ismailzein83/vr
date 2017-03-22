@@ -1,17 +1,16 @@
-﻿
-CREATE VIEW Retail_EDR.[vw_EDRs]
+﻿CREATE VIEW Retail_EDR.vw_EDRs
 AS
 WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, 
                                                                   TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, 
                                                                   OriginatingZoneID, TerminatingZoneID, AirtimeRate, AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, 
                                                                   MTAmount, Profit, TypeCalled
-                                        FROM            Retail_EDR.Voice
+                                        FROM            Retail_EDR.Voice WITH (NOLOCK)
                                         UNION ALL
                                         SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, 
                                                                  TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, AgentID AS Agent, AgentCommission, AccountID, 
                                                                  OriginatingZoneID, TerminatingZoneID, AirtimeRate, AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, 
                                                                  MTAmount, Profit, TypeMessage AS TypeCalled
-                                        FROM            Retail_EDR.Message)
+                                        FROM            Retail_EDR.Message WITH (NOLOCK))
     SELECT        StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, TypeConsumed, Bag, 
                               PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, OriginatingZoneID, TerminatingZoneID, AirtimeRate, 
                               AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, MTAmount, Profit, TypeCalled
@@ -30,7 +29,7 @@ Begin DesignProperties =
       End
       Begin PaneConfiguration = 1
          NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
+         Configuration = "(H (1[50] 4[25] 3) )"
       End
       Begin PaneConfiguration = 2
          NumPanes = 3
@@ -46,7 +45,7 @@ Begin DesignProperties =
       End
       Begin PaneConfiguration = 5
          NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
+         Configuration = "(H (2[66] 3) )"
       End
       Begin PaneConfiguration = 6
          NumPanes = 2
@@ -82,11 +81,12 @@ Begin DesignProperties =
       End
       Begin PaneConfiguration = 14
          NumPanes = 1
-         Configuration = "(V (2))"
+         Configuration = "(V (2) )"
       End
-      ActivePaneConfig = 0
+      ActivePaneConfig = 5
    End
    Begin DiagramPane = 
+      PaneHidden = 
       Begin Origin = 
          Top = 0
          Left = 0
@@ -152,6 +152,7 @@ Begin DesignProperties =
       End
    End
    Begin CriteriaPane = 
+      PaneHidden = 
       Begin ColumnWidths = 11
          Column = 1440
          Alias = 900
@@ -170,4 +171,6 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
