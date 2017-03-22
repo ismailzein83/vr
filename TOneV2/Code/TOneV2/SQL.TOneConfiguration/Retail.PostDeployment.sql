@@ -153,110 +153,110 @@ delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],[IsDeleted])
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement'									,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B',null,null,null,'{"$type":"Retail.BusinessEntity.Business.PackageViewSettings, Retail.BusinessEntity.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,4,null),
+('9F5B379C-1576-4078-9999-3218B329FEAC','Packages','Packages Management','#/view/Retail_BusinessEntity/Views/Package/PackageManagement'									,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B',null,null,null,'{"$type":"Retail.BusinessEntity.Business.PackageViewSettings, Retail.BusinessEntity.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4,0),
 
-('E68EFF9C-879E-4A6C-B412-8E225A966571','Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement'	,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
-('D3799B4D-5B86-4665-BF03-94AFF7F00E21','Product Families','Product Families','#/view/Retail_BusinessEntity/Views/ProductFamily/ProductFamilyManagement'				,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B',null,null,null,'{"$type":"Retail.BusinessEntity.Business.ProductViewSettings, Retail.BusinessEntity.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,2,null),
+('E68EFF9C-879E-4A6C-B412-8E225A966571','Charging Policies','Charging Policies Management','#/view/Retail_BusinessEntity/Views/ChargingPolicy/ChargingPolicyManagement'	,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Retail_BE/ChargingPolicy/GetFilteredChargingPolicies',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2,0),
+('D3799B4D-5B86-4665-BF03-94AFF7F00E21','Product Families','Product Families','#/view/Retail_BusinessEntity/Views/ProductFamily/ProductFamilyManagement'				,'66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B',null,null,null,'{"$type":"Retail.BusinessEntity.Business.ProductViewSettings, Retail.BusinessEntity.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2,0),
 
-('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"VR_Integration_DataProcesses: View Logs", "Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-useractionaudit-search","Title":"User Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',0,5,null),
+('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"VR_Integration_DataProcesses: View Logs", "Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-useractionaudit-search","Title":"User Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,0),
 
-('D4385711-5F67-4EC4-BBEC-B5B1BF767188','Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement'	,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,5,null),
-('296B2785-172C-4332-9846-D32FE3166C62','Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement'			,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/ServiceType/GetFilteredServiceTypes',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,3,null),
-('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement'						,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ed3cb-4b7b-4464-9abf-59cd7b08bd23',0,2,null),
+('D4385711-5F67-4EC4-BBEC-B5B1BF767188','Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement'	,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,0),
+('296B2785-172C-4332-9846-D32FE3166C62','Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement'			,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/ServiceType/GetFilteredServiceTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3,0),
+('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement'						,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2,0),
 
 --should be remove to common in a later stage
-('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',null,26,null)
+('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],[IsDeleted]))
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[OldType] = s.[OldType],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
 when not matched by target then
-	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[OldType],[Rank],[IsDeleted])
-	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[OldType],s.[Rank],s.[IsDeleted]);
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
 ----------------------------------------------------------------------------------------------------
 END
 
 --[sec].[BusinessEntityModule]--------------------1701 to 1800--------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])
+;with cte_data([ID],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('520558FA-CF2F-440B-9B58-09C23B6A2E9B',null,'Billing'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),
-('16419FE1-ED56-49BA-B609-284A5E21FC07',null,'Traffic'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1,0),
-('FC73B0DB-502B-4739-AB3B-AE680F0DAD58',null,'Entities Definition'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',-1,0)
+('520558FA-CF2F-440B-9B58-09C23B6A2E9B','Billing'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
+('16419FE1-ED56-49BA-B609-284A5E21FC07','Traffic'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
+('FC73B0DB-502B-4739-AB3B-AE680F0DAD58','Entities Definition'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance]))
+)c([ID],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[OldId] = s.[OldId],[Name] = s.[Name],[ParentId] = s.[ParentId],[OldParentId] = s.[OldParentId],[BreakInheritance] = s.[BreakInheritance]
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
 when not matched by target then
-	insert([ID],[OldId],[Name],[ParentId],[OldParentId],[BreakInheritance])
-	values(s.[ID],s.[OldId],s.[Name],s.[ParentId],s.[OldParentId],s.[BreakInheritance]);
+	insert([ID],[Name],[ParentId],[BreakInheritance])
+	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
 ----------------------------------------------------------------------------------------------------
 END
 
 --[sec].[BusinessEntity]-------------------5401 to 5700-------------------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('0B08F2E1-6518-46FF-B669-0256CF9BB7D4',null,'Retail_BE_Subscriber','Subscriber'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
-('A2DE8C67-B8AE-4520-BB48-448EE98B7251',null,'Retail_BE_Dealer','Dealer'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
-('0E89CCF7-9240-4D1B-8A01-F91957ECA321',null,'Retail_BE_Operator','Operator'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+('0B08F2E1-6518-46FF-B669-0256CF9BB7D4','Retail_BE_Subscriber','Subscriber'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('A2DE8C67-B8AE-4520-BB48-448EE98B7251','Retail_BE_Dealer','Dealer'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
 
 --('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
-('2045E39B-B9AA-4720-AD1E-7DEF11985335',5406,'Retail_BE_ChargingPolicy','Charging Policy'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
-('BE4E62AA-CCE6-48AD-94ED-87D54A605D35',5403,'Retail_BE_Package','Retail_BE_Package'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
+('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Retail_BE_Package'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
 
-('3ABA6D5B-03AC-4EE5-A3EC-AAC6D9C55621',null,'Retail_BE_Switches','Switches'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
+('3ABA6D5B-03AC-4EE5-A3EC-AAC6D9C55621','Retail_BE_Switches','Switches'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
 
-('1B380EE1-16E1-4A9B-9165-55252E333E9E',5408,'Retail_BE_ServiceType','Service Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',null,0,'["View","Edit"]'),
-('A8B32E85-079D-4376-BA28-67468B27BDC8',5410,'Retail_BE_AccountPartDefinition','Account Part Definition','FC73B0DB-502B-4739-AB3B-AE680F0DAD58',null,0,'["View","Add","Edit"]'),
-('45729623-D9B0-401C-8F23-7656ED03AB61',5407,'Retail_BE_AccountType','Account Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',null,0,'["View","Add","Edit"]'),
-('5790CCC4-5B3F-4AD3-8EB5-BBC7EE977D25',5411,'Retail_BE_ActionDefinition','Action Definition'			,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',null,0,'["View","Add","Edit"]'),
-('503E011C-3311-43C2-92D7-EA515D790479',5409,'Retail_BE_StatusDefinition','Status Definition'			,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',null,0,'["View","Add","Edit"]'),
+('1B380EE1-16E1-4A9B-9165-55252E333E9E','Retail_BE_ServiceType','Service Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Edit"]'),
+('A8B32E85-079D-4376-BA28-67468B27BDC8','Retail_BE_AccountPartDefinition','Account Part Definition','FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
+('45729623-D9B0-401C-8F23-7656ED03AB61','Retail_BE_AccountType','Account Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
+('5790CCC4-5B3F-4AD3-8EB5-BBC7EE977D25','Retail_BE_ActionDefinition','Action Definition'			,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
+('503E011C-3311-43C2-92D7-EA515D790479','Retail_BE_StatusDefinition','Status Definition'			,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
 
-('32E40D20-A8B9-4286-AADE-F4E229D054A9',null,'Retail_BE_CreditClasses','Credit Classes'					,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',null,0,'["View","Add","Edit"]'),
-('AB794846-853C-4402-A8E4-6F5C3A75F5F2',3304,'BillingStatistic','Billing Statistic'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',1205,0,'["View"]'),
-('9AABB14D-B3B2-4CA2-93F9-9FFAE606336B',3310,'BillingCDR','Billing CDR'									,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',1205,0,'["View"]'),
+('32E40D20-A8B9-4286-AADE-F4E229D054A9','Retail_BE_CreditClasses','Credit Classes'					,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Add","Edit"]'),
+('AB794846-853C-4402-A8E4-6F5C3A75F5F2','BillingStatistic','Billing Statistic'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
+('9AABB14D-B3B2-4CA2-93F9-9FFAE606336B','BillingCDR','Billing CDR'									,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
 
-('A611A651-B60B-483D-BC83-1C2B667A120A',3309,'TrafficStatistic','Traffic Statistic'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',1206,0,'["View"]'),
-('CF09B199-2DA3-4CA2-B243-E83A1338FB27',3311,'RawCDR','Raw CDR'											,'16419FE1-ED56-49BA-B609-284A5E21FC07',1206,0,'["View"]'),
-('583CC2A2-1BBC-44D7-A7AF-923996CD72A9',3312,'FailedCDR','Failed CDR'									,'16419FE1-ED56-49BA-B609-284A5E21FC07',1206,0,'["View"]'),
-('73F17C8C-EC3E-46B5-8B53-83CCE74F5C89',3313,'InvalidCDR','Invalid CDR'									,'16419FE1-ED56-49BA-B609-284A5E21FC07',1206,0,'["View"]'),
+('A611A651-B60B-483D-BC83-1C2B667A120A','TrafficStatistic','Traffic Statistic'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
+('CF09B199-2DA3-4CA2-B243-E83A1338FB27','RawCDR','Raw CDR'											,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
+('583CC2A2-1BBC-44D7-A7AF-923996CD72A9','FailedCDR','Failed CDR'									,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
+('73F17C8C-EC3E-46B5-8B53-83CCE74F5C89','InvalidCDR','Invalid CDR'									,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
 
-('0B0572AC-ABFB-4267-8F51-D2480851D14A',5401,'BusinessProcess_BP_Account_Action','Account Action'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',null,0,'["View", "StartInstance", "ScheduleTask"]'),
-('FDB996F9-9157-4778-897E-3F2DED954297',5402,'BusinessProcess_BP_Source_BE_Sync','Source BE Sync'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',null,0,'["View", "StartInstance", "ScheduleTask"]'),
-('08FB93FA-0719-4385-AD9E-0513E3966B26',5701,'BusinessProcess_BP_Account_Balance','Account Balance'		,'692D0589-D764-4DF5-857B-52A98D89FFD6',1801,0,'["View", "StartInstance", "ScheduleTask"]'),
+('0B0572AC-ABFB-4267-8F51-D2480851D14A','BusinessProcess_BP_Account_Action','Account Action'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),
+('FDB996F9-9157-4778-897E-3F2DED954297','BusinessProcess_BP_Source_BE_Sync','Source BE Sync'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),
+('08FB93FA-0719-4385-AD9E-0513E3966B26','BusinessProcess_BP_Account_Balance','Account Balance'		,'692D0589-D764-4DF5-857B-52A98D89FFD6',0,'["View", "StartInstance", "ScheduleTask"]'),
 
-('E4186240-7525-4B39-9B4D-48CCDE5F2590',null,'Retail_Pricing_Rule','Pricing'							,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',null,0,'["View","Add","Edit"]'),
-('B5634DD0-11C7-4074-B902-8A7C0B68E5AC',null,'Retail_Identification_Rule','Identification'				,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',null,0,'["View","Add","Edit"]'),
+('E4186240-7525-4B39-9B4D-48CCDE5F2590','Retail_Pricing_Rule','Pricing'							,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
+('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_Identification_Rule','Identification'				,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
 
-('C0C98E3B-12C8-4805-93D4-F4289C21C6B8',null,'VRCommon_ApplicationVisibility','Application Visibility'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',null,0,'["View","Add","Edit"]'),
-('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C',null,'Retail_BE_Product','Product'					,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]')
+('C0C98E3B-12C8-4805-93D4-F4289C21C6B8','VRCommon_ApplicationVisibility','Application Visibility'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
+('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C','Retail_BE_Product','Product'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[OldId] = s.[OldId],[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[OleModuleId] = s.[OleModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
-	insert([Id],[OldId],[Name],[Title],[ModuleId],[OleModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[OldId],s.[Name],s.[Title],s.[ModuleId],s.[OleModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 END
 
@@ -347,39 +347,32 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[genericdata].[DataRecordType]--------------------------------------------------------------------
-Delete From [genericdata].[DataRecordType] Where [ID] in ('548613D7-17EE-41FD-A3C3-0D82357EE5E7','A2913B86-CA10-422F-A8BE-30D9CC2AD115','7F3EEA5C-6480-4FDE-AE26-448EA83035DE','4F694A53-D78A-4BAA-8C60-47DC8B01D607','976B6B04-BD15-4200-BB18-4859D8F2F33B','92010E40-1EF1-41C0-9DBF-533883F7D5F9','C4FAD850-CADE-4AA3-88FF-4FC028833904','7FF7337E-FC95-4E8D-BEBD-564BE6DF0395','D221198E-3CC7-4102-BC63-56944DCDAD35','8EE3A64D-6CC7-4C2A-9F41-5AC71E1272ED','4A7F1894-6B33-466B-80D1-74CE46631ABC','C8074CA2-B6F8-4865-B356-74DBAB201220','D0D7E57B-798E-4946-80AF-774BC65923C4','0AB64C3F-A35F-4E8B-9B0F-8CB0440C3554','B7688C91-8B68-4070-8505-9C5DC4B6C656','4ACBF7A3-E000-47F0-AAFC-AD7A9C3EF421','387BCE79-42C8-4EF2-9830-D6E97FA0FCED')
-
-
 --[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
 BEGIN
-set nocount on;;with cte_data([ID],[OldID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('D0EE9BF8-385E-48EF-B989-A87666A00072',-2002,'Retail_BE_ChargingPolicy','Charging Policy'									,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-chargingpolicy-selector","ManagerFQTN":"Retail.BusinessEntity.Business.ChargingPolicyManager, Retail.BusinessEntity.Business","IdType":"System.Int32"}'),('1BC07506-D535-4FF8-AC61-C8FDAAF37038',null,'Retail_BE_AccountType','Account Type'											,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-accounttype-selector","GroupSelectorUIControl":"","ManagerFQTN":"Retail.BusinessEntity.Business.AccountTypeManager, Retail.BusinessEntity.Business","IdType":"System.Guid"}'),('C0C76DB1-4876-4E0D-9B59-CA89120E6BE9',-2003,'Retail_BE_Package','Package'													,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-package-selector","ManagerFQTN":"Retail.BusinessEntity.Business.PackageManager, Retail.BusinessEntity.Business","IdType":"System.Int32"}'),('BFAD446F-7129-45B1-94BF-FEBD290F394D',-2004,'Retail_BE_ServiceType','Service Type'										,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-servicetype-selector","ManagerFQTN":"Retail.BusinessEntity.Business.ServiceTypeManager, Retail.BusinessEntity.Business","IdType":"System.Guid"}'),('41767702-B520-4811-96BE-103F96B81177',null,'Retail_BusinessEntity_Product','Product'										,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-product-selector","GroupSelectorUIControl":"","ManagerFQTN":"Retail.BusinessEntity.Business.ProductManager,Retail.BusinessEntity.Business","IdType":"System.Int32"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[OldID],[Name],[Title],[Settings])	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[Settings]);
+set nocount on;;with cte_data([ID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('D0EE9BF8-385E-48EF-B989-A87666A00072','Retail_BE_ChargingPolicy','Charging Policy'									,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-chargingpolicy-selector","ManagerFQTN":"Retail.BusinessEntity.Business.ChargingPolicyManager, Retail.BusinessEntity.Business","IdType":"System.Int32"}'),('1BC07506-D535-4FF8-AC61-C8FDAAF37038','Retail_BE_AccountType','Account Type'											,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-accounttype-selector","GroupSelectorUIControl":"","ManagerFQTN":"Retail.BusinessEntity.Business.AccountTypeManager, Retail.BusinessEntity.Business","IdType":"System.Guid"}'),('C0C76DB1-4876-4E0D-9B59-CA89120E6BE9','Retail_BE_Package','Package'													,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-package-selector","ManagerFQTN":"Retail.BusinessEntity.Business.PackageManager, Retail.BusinessEntity.Business","IdType":"System.Int32"}'),('BFAD446F-7129-45B1-94BF-FEBD290F394D','Retail_BE_ServiceType','Service Type'											,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-servicetype-selector","ManagerFQTN":"Retail.BusinessEntity.Business.ServiceTypeManager, Retail.BusinessEntity.Business","IdType":"System.Guid"}'),('41767702-B520-4811-96BE-103F96B81177','Retail_BusinessEntity_Product','Product'										,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"retail-be-product-selector","GroupSelectorUIControl":"","ManagerFQTN":"Retail.BusinessEntity.Business.ProductManager,Retail.BusinessEntity.Business","IdType":"System.Int32"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 END
 
-
-
 --[Retail_BE].[AccountPartDefinition]---------------------------------------------------------------
-Delete From [Retail_BE].[AccountPartDefinition] Where [ID] in ('A4198D5C-B09F-455B-AAC6-0BF9C2572527','A153EA40-E2B8-4D50-A569-B117F64BB2EC')
 BEGIN
 set nocount on;
-;with cte_data([ID],[OldID],[Title],[Name],[Details])
+;with cte_data([ID],[Title],[Name],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('05FECF19-6413-402F-BD65-64B0EEF1FB52',22,'Residential Profile','Residential Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"05fecf19-6413-402f-bd65-64b0eef1fb52","Name":"Residential Profile","Title":"Residential Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartResidentialProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"747d0c68-a508-4aa3-8d02-0d3cdfe72149"}}'),
-('82228BE2-E633-4EF8-B383-9894F28C8CB0',14,'Financial','Financial','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0","Name":"Financial","Title":"Financial","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"ba425fa1-13ca-4f44-883a-2a12b7e3f988"}}'),
-('A46ABF18-DEEC-4F78-9178-F433790B5AEB',27,'Personal Info','Personal Info','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"a46abf18-deec-4f78-9178-f433790b5aeb","Name":"Personal Info","Title":"Personal Info","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartPersonalInfoDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"3900317c-b982-4d8b-bd0d-01215ac1f3d9"}}')
+('05FECF19-6413-402F-BD65-64B0EEF1FB52','Residential Profile','Residential Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"05fecf19-6413-402f-bd65-64b0eef1fb52","Name":"Residential Profile","Title":"Residential Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartResidentialProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"747d0c68-a508-4aa3-8d02-0d3cdfe72149"}}'),
+('82228BE2-E633-4EF8-B383-9894F28C8CB0','Financial','Financial','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0","Name":"Financial","Title":"Financial","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"ba425fa1-13ca-4f44-883a-2a12b7e3f988"}}'),
+('A46ABF18-DEEC-4F78-9178-F433790B5AEB','Personal Info','Personal Info','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"a46abf18-deec-4f78-9178-f433790b5aeb","Name":"Personal Info","Title":"Personal Info","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartPersonalInfoDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"3900317c-b982-4d8b-bd0d-01215ac1f3d9"}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[OldID],[Title],[Name],[Details]))
+)c([ID],[Title],[Name],[Details]))
 merge	[Retail_BE].[AccountPartDefinition] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[OldID] = s.[OldID],[Title] = s.[Title],[Name] = s.[Name],[Details] = s.[Details]
+	[Title] = s.[Title],[Name] = s.[Name],[Details] = s.[Details]
 when not matched by target then
-	insert([ID],[OldID],[Title],[Name],[Details])
-	values(s.[ID],s.[OldID],s.[Title],s.[Name],s.[Details]);
+	insert([ID],[Title],[Name],[Details])
+	values(s.[ID],s.[Title],s.[Name],s.[Details]);
 ----------------------------------------------------------------------------------------------------
 END
 
@@ -413,47 +406,44 @@ END
 --[bp].[BPDefinition]----------------------5001 to 6000---------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([ID],[OldID],[Name],[Title],[FQTN],[Config])
+;with cte_data([ID],[Name],[Title],[FQTN],[Config])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('049A1012-A30B-457D-96AE-51E1CA388191',5001,'Retail_BE_ActionBPInputArgument_17817576-4de9-4c00-9bef-0505007b4f53','Account Action','Retail.BusinessEntity.MainActionBPs.RegularActionBP,Retail.BusinessEntity.MainActionBPs','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"IsPersistable":false,"HasChildProcesses":true,"HasBusinessRules":false,"NotVisibleInManagementScreen":true,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"0B0572AC-ABFB-4267-8F51-D2480851D14A","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"0B0572AC-ABFB-4267-8F51-D2480851D14A","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["StartInstance"]}}]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"0B0572AC-ABFB-4267-8F51-D2480851D14A","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["ScheduleTask"]}}]}}}}'),
-('DD5BEB84-AAA3-4777-AF2F-A20BACBA5C07',5020,'Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput','Source BE Sync','Vanrise.BEBridge.BP.BEBridgeProcess,Vanrise.BEBridge.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ManualExecEditor":"vr-bebridge-process-manual","ScheduledExecEditor":"vr-bebridge-process-scheduled","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"FDB996F9-9157-4778-897E-3F2DED954297","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"FDB996F9-9157-4778-897E-3F2DED954297","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["StartInstance"]}}]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"FDB996F9-9157-4778-897E-3F2DED954297","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["ScheduleTask"]}}]}}}}')
+('049A1012-A30B-457D-96AE-51E1CA388191','Retail_BE_ActionBPInputArgument_17817576-4de9-4c00-9bef-0505007b4f53','Account Action','Retail.BusinessEntity.MainActionBPs.RegularActionBP,Retail.BusinessEntity.MainActionBPs','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"IsPersistable":false,"HasChildProcesses":true,"HasBusinessRules":false,"NotVisibleInManagementScreen":true,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"0B0572AC-ABFB-4267-8F51-D2480851D14A","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"0B0572AC-ABFB-4267-8F51-D2480851D14A","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["StartInstance"]}}]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"0B0572AC-ABFB-4267-8F51-D2480851D14A","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["ScheduleTask"]}}]}}}}'),
+('DD5BEB84-AAA3-4777-AF2F-A20BACBA5C07','Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput','Source BE Sync','Vanrise.BEBridge.BP.BEBridgeProcess,Vanrise.BEBridge.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ManualExecEditor":"vr-bebridge-process-manual","ScheduledExecEditor":"vr-bebridge-process-scheduled","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"FDB996F9-9157-4778-897E-3F2DED954297","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"FDB996F9-9157-4778-897E-3F2DED954297","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["StartInstance"]}}]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"FDB996F9-9157-4778-897E-3F2DED954297","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["ScheduleTask"]}}]}}}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[OldID],[Name],[Title],[FQTN],[Config]))
+)c([ID],[Name],[Title],[FQTN],[Config]))
 merge	[bp].[BPDefinition] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[OldID] = s.[OldID],[Name] = s.[Name],[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config]
+	[Name] = s.[Name],[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config]
 when not matched by target then
-	insert([ID],[OldID],[Name],[Title],[FQTN],[Config])
-	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
+	insert([ID],[Name],[Title],[FQTN],[Config])
+	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 END
 
-Delete from [common].[Setting] where [ID] in ('682c68ef-5687-47f1-957c-0150a6132f7e','547C43CD-58D2-45A3-BF87-F97E93C1DB9A')--old Product Info GUID
 --[common].[Setting]---------------------------201 to 300-------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('509E467B-4562-4CA6-A32E-E50473B74D2C',108,'Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Retail","VersionNumber":"version 0.9"}}',1)
+('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Retail","VersionNumber":"version 0.9 ~ 2017-03-22"}}',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[OldID] = s.[OldID],[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
 when not matched by target then
-	insert([ID],[OldID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-	values(s.[ID],s.[OldID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 ----------------------------------------------------------------------------------------------------
 END
-
-
 
 Delete from [runtime].[SchedulerTaskActionType] where Id='0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9' --Exchange Rate

@@ -12,7 +12,6 @@ Post-Deployment Script Template
 --[sec].[Module]---------------------------801 to 900---------------------------------------------------------
 begin
 set nocount on;
---set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,15 +27,12 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
---set identity_insert [sec].[Module] off;
 --------------------------------------------------------------------------------------------------------------
 end
 
 --[sec].[View]-----------------------------8001 to 9000-------------------------------------------------------
 begin
-
 set nocount on;
---set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,9 +51,7 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
---set identity_insert [sec].[View] off;
 --------------------------------------------------------------------------------------------------------------
-
 end
 
 --[sec].[BusinessEntityModule]-------------801 to 900---------------------------------------------------------
@@ -81,7 +75,6 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
-
 --[sec].[BusinessEntity]-------------------2101 to 2400-------------------------------------------------------
 begin
 set nocount on;
@@ -103,13 +96,10 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
-
 end
-
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
 begin
-
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +141,6 @@ GO
 --[common].[Setting]---------------------------801 to 900-------------------------------------------
 begin
 set nocount on;
---set identity_insert [common].[Setting] on;
 ;with cte_data([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,12 +156,8 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
---set identity_insert [common].[Setting] off;
-
 ----------------------------------------------------------------------------------------------------
-
 end
-
 
 --[common].[ExtensionConfiguration]---------------------------------------------------------------------
 begin
@@ -199,4 +184,4 @@ end
 
 Delete from [runtime].[SchedulerTaskActionType] where Id in ('0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9','7A35F562-319B-47B3-8258-EC1A704A82EB') --Exchange Rate, workflow
 
---[runtime].[SchedulerTaskActionType]-------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[OldID],[Name],[ActionTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('307E6F87-5958-457D-91F9-15567F437894',null,'Upload PriceList','{"URL":"","SystemType":false,"Editor":"cp-supplierpricelist-uploadsupplierpricelist","FQTN":"CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskAction, CP.SupplierPricelist.Business"}'),('C184EFE9-07C4-4306-A971-7405E994281C',null,'Get PriceList Result','{"URL":"","SystemType":false,"Editor":"cp-supplierpricelist-resultsupplierpricelist","FQTN":"CP.SupplierPricelist.Business.PriceListTasks.ResultTaskAction, CP.SupplierPricelist.Business"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[OldID],[Name],[ActionTypeInfo]))merge	[runtime].[SchedulerTaskActionType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[OldID] = s.[OldID],[Name] = s.[Name],[ActionTypeInfo] = s.[ActionTypeInfo]when not matched by target then	insert([ID],[OldID],[Name],[ActionTypeInfo])	values(s.[ID],s.[OldID],s.[Name],s.[ActionTypeInfo]);
+--[runtime].[SchedulerTaskActionType]-------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[ActionTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('307E6F87-5958-457D-91F9-15567F437894','Upload PriceList','{"URL":"","SystemType":false,"Editor":"cp-supplierpricelist-uploadsupplierpricelist","FQTN":"CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskAction, CP.SupplierPricelist.Business"}'),('C184EFE9-07C4-4306-A971-7405E994281C','Get PriceList Result','{"URL":"","SystemType":false,"Editor":"cp-supplierpricelist-resultsupplierpricelist","FQTN":"CP.SupplierPricelist.Business.PriceListTasks.ResultTaskAction, CP.SupplierPricelist.Business"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[ActionTypeInfo]))merge	[runtime].[SchedulerTaskActionType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[ActionTypeInfo] = s.[ActionTypeInfo]when not matched by target then	insert([ID],[Name],[ActionTypeInfo])	values(s.[ID],s.[Name],s.[ActionTypeInfo]);
