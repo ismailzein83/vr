@@ -46,13 +46,13 @@ app.directive("vrGenericdataDatarecordnotificationtypesettingsSearcheditor", ["U
                         return false;
 
                     return context.isNotificationTypeSettingSelected();
-                }
+                };
                 $scope.scopeModel.showAdvancedTab = function () {
                     if (context == undefined)
                         return false;
 
                     return context.isNotificationTypeSettingSelected() && context.isAdvancedTabSelected();
-                }
+                };
 
                 defineAPI();
             }
