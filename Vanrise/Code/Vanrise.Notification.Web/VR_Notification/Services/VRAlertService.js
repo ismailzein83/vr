@@ -15,7 +15,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/Notification/Views/VRAlertLevel/VRALertLevelEditor.html', null, settings);
-        };
+        }
 
         function editAlertLevel(alertLevelId, onAlertLevelUpdated) {
             var settings = {};
@@ -37,6 +37,6 @@
         };
     }
 
-    appControllers.service('VR_Notifictation_AlertLevelService', StatusDefinitionService);
+    appControllers.service('VR_Notifictation_AlertLevelService', VRAlertLevelService);
 
 })(appControllers);

@@ -4,7 +4,7 @@
     "use strict";
     VRAlertLevelAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRNotification_ModuleConfig', 'SecurityService'];
 
-    function StatusDefinitionAPIService(BaseAPIService, UtilsService, VRNotification_ModuleConfig, SecurityService) {
+    function VRAlertLevelAPIService(BaseAPIService, UtilsService, VRNotification_ModuleConfig, SecurityService) {
 
         var controllerName = "VRAlertLevel";
 
