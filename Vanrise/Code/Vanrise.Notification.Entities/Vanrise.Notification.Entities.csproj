@@ -61,6 +61,11 @@
     <Compile Include="BalanceAlertRule\IVREntityBalanceInfo.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateLastAlertInfoPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateRuleInfoPayload.cs" />
+    <Compile Include="VRAlertLevel\VRAlertLevel.cs" />
+    <Compile Include="VRAlertLevel\VRAlertLevelDetail.cs" />
+    <Compile Include="VRAlertLevel\VRAlertLevelInfo.cs" />
+    <Compile Include="VRAlertLevel\VRAlertLevelInfoFilter.cs" />
+    <Compile Include="VRAlertLevel\VRAlertLevelQuery.cs" />
     <Compile Include="VRNotificationType\IVRNotificationTypeIsMatchedContext.cs" />
     <Compile Include="VRAction\VRActionDefinitionFilter.cs" />
     <Compile Include="VRAction\VRActionDefinitionConfig.cs" />

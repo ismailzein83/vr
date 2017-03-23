@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\VRActionDefinitionController.cs" />
+    <Compile Include="Controllers\VRAlertLevelController.cs" />
     <Compile Include="Controllers\VRNotificationController.cs" />
     <Compile Include="Controllers\VRActionController.cs" />
     <Compile Include="Controllers\VRAlertRuleController.cs" />
@@ -159,6 +160,11 @@
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinition-settings.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction-management.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vraction.js" />
+    <Content Include="VR_Notification\Directives\VRAlertLevel\Templates\AlertLevelGridTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertLevel\vr-notification-alertlevel-grid.js" />
+    <Content Include="VR_Notification\Directives\VRAlertLevel\vr-notification-alertlevel-selector.js" />
+    <Content Include="VR_Notification\Directives\VRAlertLevel\VRAlertLevelDefinition\Templates\AlertLevelBEDefinitionEditor.html" />
+    <Content Include="VR_Notification\Directives\VRAlertLevel\VRAlertLevelDefinition\vr-notification-alertleveldefinitionbe-editor.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleSettings\Templates\VRAlertRuleSettingsTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRuleSettings\vr-notification-alertrulesettings.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeGridTemplate.html" />
@@ -198,6 +204,10 @@
     <Content Include="VR_Notification\Services\VRAlertRuleTypeService.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditorController.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditor.html" />
+    <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelEditor.html" />
+    <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelEditorController.js" />
+    <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelManagement.html" />
+    <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelManagementController.js" />
     <Content Include="VR_Notification\Views\VRAlertRuleSettings\AlertRuleSettingsEditor.html" />
     <Content Include="VR_Notification\Views\VRAlertRuleSettings\AlertRuleSettingsEditorController.js" />
     <Content Include="VR_Notification\Views\VRAlertRuleType\VRAlertRuleTypeEditor.html" />
