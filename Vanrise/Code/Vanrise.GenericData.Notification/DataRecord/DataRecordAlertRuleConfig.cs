@@ -1,4 +1,5 @@
-﻿using Vanrise.Entities;
+﻿using System;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Notification
 {
@@ -7,5 +8,10 @@ namespace Vanrise.GenericData.Notification
         public const string EXTENSION_TYPE = "VR_GenericData_DataRecordAlertRuleConfig";
 
         public string Editor { get; set; }
+    }
+
+    public abstract class DataRecordAlertRuleSettings
+    {
+        public abstract Guid ConfigId { get; }
     }
 }

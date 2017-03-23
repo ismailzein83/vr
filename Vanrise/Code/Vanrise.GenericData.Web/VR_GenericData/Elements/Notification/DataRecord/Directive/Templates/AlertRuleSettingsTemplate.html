@@ -1,0 +1,7 @@
+﻿<vr-row>
+    <vr-genericdata-datarecordalertruleconfig-selector normal-col-num="3" isrequired="true" on-ready="scopeModel.onDataRecordAlertRuleConfigSelectorReady" hideremoveicon
+                                                       selectedvalues="scopeModel.selectedDataRecordAlertRuleConfig"></vr-genericdata-datarecordalertruleconfig-selector>
+</vr-row>
+<vr-directivewrapper ng-if="scopeModel.selectedDataRecordAlertRuleConfig != undefined" directive="scopeModel.selectedDataRecordAlertRuleConfig.Editor"
+                     on-ready="scopeModel.onDirectiveReady" vr-loader="scopeModel.isDirectiveLoading">
+</vr-directivewrapper>

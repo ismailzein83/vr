@@ -44,21 +44,28 @@ app.directive('vrGenericdataDatarecordVractionSendemail', ['UtilsService', 'VRUI
                 api.load = function (payload) {
                     var promises = [];
                     var mailMessageTemplate;
+                    var mailMessageTypeId;
 
-                    if (payload != undefined && payload.vrActionEntity != undefined) {
-                        mailMessageTemplate = payload.vrActionEntity.MailMessageTemplateId;
+                    if (payload != undefined) {
+
+                        if (payload.vrActionEntity != undefined)
+                            mailMessageTemplate = payload.vrActionEntity.MailMessageTemplateId;
+
+                        if (payload.selectedVRActionDefinition != undefined && payload.selectedVRActionDefinition.Settings != undefined && payload.selectedVRActionDefinition.Settings.ExtendedSettings != undefined)
+                            mailMessageTypeId = payload.selectedVRActionDefinition.Settings.ExtendedSettings.MailMessageTypeId;
                     }
+
 
                     //Loading Mail Message Template Selector
                     var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     var mailMessageTemplatePayload = {
                         selectedIds: mailMessageTemplate,
-                        filter: { VRMailMessageTypeId: payload.selectedVRActionDefinition.Settings.ExtendedSettings.MailMessageTypeId }
+                        filter: { VRMailMessageTypeId: mailMessageTypeId }
                     };
                     VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorReadyAPI, mailMessageTemplatePayload, mailMessageTemplateSelectorLoadPromiseDeferred);
                     promises.push(mailMessageTemplateSelectorLoadPromiseDeferred.promise);
 
-                    return UtilsService.waitMultiplePromises(promises); 
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

@@ -31,9 +31,6 @@
             var dataAnalysisItemDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
             var dataAnalysisItemDefinitionSelectionChangedDeferred;
 
-            var recordFilterDirectiveAPI;
-            var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
             var groupingOutputFiledsAPI;
             var groupingOutputFiledsReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,7 +38,7 @@
             var dataAnalysisRecordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                var promises = [dataAnalysisItemDefinitionSelectoReadyDeferred.promise, recordFilterDirectiveReadyDeferred.promise, dataAnalysisRecordFilterDirectiveReadyDeferred.promise, groupingOutputFiledsReadyDeferred.promise];
+                var promises = [dataAnalysisItemDefinitionSelectoReadyDeferred.promise, dataAnalysisRecordFilterDirectiveReadyDeferred.promise, groupingOutputFiledsReadyDeferred.promise];
 
                 $scope.scopeModel = {};
 
@@ -50,56 +47,31 @@
                     dataAnalysisItemDefinitionSelectoReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (selectedItem) {
-                    daProfCalcOutputItemDefinitionId = dataAnalysisItemDefinitionSelectorAPI.getSelectedIds();
 
-                    if (daProfCalcOutputItemDefinitionId != undefined) {
-                        VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(daProfCalcOutputItemDefinitionId).then(function (response) {
+                    if (selectedItem != undefined) {
+                        $scope.scopeModel.isDataanalysisitemdefinitionSelected = true;
 
-                            dataAnalysisItemOutputFields = response;
-                            if (dataAnalysisItemDefinitionSelectionChangedDeferred != undefined) {
-                                dataAnalysisItemDefinitionSelectionChangedDeferred.resolve();
+                        if (dataAnalysisItemDefinitionSelectionChangedDeferred != undefined) {
+                            dataAnalysisItemDefinitionSelectionChangedDeferred.resolve();
+                        }
+                        else {
+                            if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
+                                ctrl.onCriteriaSelectionChanged(selectedItem);
                             }
-                            else {
-                                if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
-                                    ctrl.onCriteriaSelectionChanged(selectedItem);
-                                }
-                                var recordFilterDirectivePayload = {};
-                                recordFilterDirectivePayload.context = buildRecordFilterContext(dataAnalysisItemOutputFields);
-                                var setLoader = function (value) {
-                                    $scope.scopeModel.isRecordFilterDirectiveLoading = value;
-                                };
 
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader);
+                            getGroupingOutputFieldsPromise();
 
-                                $scope.scopeModel.isDataanalysisitemdefinitionSelected = true;
-                            }
-                        });
+                            function getGroupingOutputFieldsPromise() {
+                                var groupingOutputFieldsLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        if (dataAnalysisItemDefinitionSelectionChangedDeferred == undefined) {
-                            var filter = { DAProfCalcOutputFieldType: VR_Analytic_DAProfCalcOutputFieldTypeEnum.GroupingField.value };
-                            var groupingOutputFieldsPayload = { dataAnalysisItemDefinitionId: daProfCalcOutputItemDefinitionId, filter: filter };
-                            var setGroupingOutputFieldsLoader = function (value) {
-                                $scope.scopeModel.isGroupingOutputFieldsLoading = value;
+                                var filter = { DAProfCalcOutputFieldType: VR_Analytic_DAProfCalcOutputFieldTypeEnum.GroupingField.value };
+                                var groupingOutputFieldsPayload = { dataAnalysisItemDefinitionId: selectedItem.DataAnalysisItemDefinitionId, filter: filter };
+                                VRUIUtilsService.callDirectiveLoad(groupingOutputFiledsAPI, groupingOutputFieldsPayload, groupingOutputFieldsLoadDeferred);
+
+                                return groupingOutputFieldsLoadDeferred.promise;
                             };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupingOutputFiledsAPI, groupingOutputFieldsPayload, setGroupingOutputFieldsLoader);
                         }
                     }
-                };
-
-                $scope.scopeModel.validateRecordFilter = function () {
-                    if (recordFilterDirectiveAPI != undefined) {
-                        var filterObj = recordFilterDirectiveAPI.getData().filterObj;
-                        if (filterObj != undefined && filterObj != {})
-                            return null;
-                        else
-                            return 'Record Filter is required';
-                    }
-                    return null;
-                };
-
-                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
-                    recordFilterDirectiveAPI = api;
-                    recordFilterDirectiveReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onDataAnalaysisRecordFilterDirectiveReady = function (api) {
@@ -137,70 +109,46 @@
                         }
                     }
 
+                    var dataAnalysisRecordFilterDirectiveLoadPromise = getDataAnalysisRecordFilterDirectiveLoadPromise();
+                    promises.push(dataAnalysisRecordFilterDirectiveLoadPromise);
+
                     //Loading Data Analysis Item Definition Selector
                     var dataAnalysisItemDefinitionSelectorLoadPromise = getDataAnalysisItemDefinitionSelectorLoadPromise();
                     promises.push(dataAnalysisItemDefinitionSelectorLoadPromise);
 
-                    var dataAnalysisRecordFilterDirectiveLoadPromise = getDataAnalysisRecordFilterDirectiveLoadPromise();
-                    promises.push(dataAnalysisRecordFilterDirectiveLoadPromise);
-
                     //Loading Record Filter Directive
                     if (daProfCalcOutputItemDefinitionId != undefined) {
-                        dataAnalysisItemDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
-                        var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
-                        promises.push(recordFilterDirectiveLoadPromise);
-
                         var groupingOutputFieldsLoadPromise = getGroupingOutputFieldsPromise();
                         promises.push(groupingOutputFieldsLoadPromise);
-
-                        UtilsService.waitMultiplePromises([recordFilterDirectiveLoadPromise, groupingOutputFieldsLoadPromise]).then(function () {
-                            $scope.scopeModel.isDataanalysisitemdefinitionSelected = true;
-                        });
                     }
 
                     function getDataAnalysisItemDefinitionSelectorLoadPromise() {
+                        if (daProfCalcOutputItemDefinitionId != undefined)
+                            dataAnalysisItemDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
                         var dataAnalysisItemDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         var dataAnalysisItemDefinitionSelectorPayload = {};
                         dataAnalysisItemDefinitionSelectorPayload.dataAnalysisDefinitionId = dataAnalysisDefinitionId;
                         if (criteria != undefined) {
-                            dataAnalysisItemDefinitionSelectorPayload.selectedIds = criteria.DAProfCalcOutputItemDefinitionId
+                            dataAnalysisItemDefinitionSelectorPayload.selectedIds = daProfCalcOutputItemDefinitionId;
                         }
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisItemDefinitionSelectorAPI, dataAnalysisItemDefinitionSelectorPayload, dataAnalysisItemDefinitionSelectorLoadDeferred);
 
                         return dataAnalysisItemDefinitionSelectorLoadDeferred.promise;
                     };
-                    function getRecordFilterDirectiveLoadPromise() {
-                        var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        recordFilterDirectiveReadyDeferred.promise.then(function () {
-
-                            dataAnalysisItemDefinitionSelectionChangedDeferred.promise.then(function () {
-                                dataAnalysisItemDefinitionSelectionChangedDeferred = undefined;
-                                var recordFilterDirectivePayload = {};
-                                recordFilterDirectivePayload.context = buildRecordFilterContext(dataAnalysisItemOutputFields);
-                                if (criteria != undefined) {
-                                    recordFilterDirectivePayload.FilterGroup = criteria.FilterGroup;
-                                }
-
-                                VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
-                            });
-                        });
-                        return recordFilterDirectiveLoadDeferred.promise;
-                    };
 
                     function getGroupingOutputFieldsPromise() {
-
                         var groupingOutputFieldsLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        groupingOutputFiledsReadyDeferred.promise.then(function () {
+                        dataAnalysisItemDefinitionSelectionChangedDeferred.promise.then(function () {
+                            dataAnalysisItemDefinitionSelectionChangedDeferred = undefined;
 
                             var filter = { DAProfCalcOutputFieldType: VR_Analytic_DAProfCalcOutputFieldTypeEnum.GroupingField.value };
                             var groupingOutputFieldsPayload = { dataAnalysisItemDefinitionId: daProfCalcOutputItemDefinitionId, filter: filter, selectedIds: criteria.GroupingFieldNames };
                             VRUIUtilsService.callDirectiveLoad(groupingOutputFiledsAPI, groupingOutputFieldsPayload, groupingOutputFieldsLoadDeferred);
                         });
+
                         return groupingOutputFieldsLoadDeferred.promise;
                     };
 
@@ -228,7 +176,6 @@
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleCriteria, Vanrise.Analytic.Entities",
                         DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds(),
-                        FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
                         DataAnalysisFilterGroup: dataAnalysisRecordFilterDirectiveAPI.getData().filterObj,
                         GroupingFieldNames: groupingOutputFiledsAPI.getSelectedIds()
                     };

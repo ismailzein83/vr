@@ -170,6 +170,10 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Notification\Vanrise.GenericData.Notification.csproj">
+      <Project>{bddd1fac-ea45-4291-9f64-d749d47a97ba}</Project>
+      <Name>Vanrise.GenericData.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
       <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
       <Name>Vanrise.Notification.Entities</Name>

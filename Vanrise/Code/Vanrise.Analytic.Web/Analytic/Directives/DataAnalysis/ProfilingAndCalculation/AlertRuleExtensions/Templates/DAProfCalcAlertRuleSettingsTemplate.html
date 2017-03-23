@@ -5,6 +5,7 @@
         </vr-columns>
     </vr-row>
 </vr-tab>
-<vr-tab header="'Actions'" ng-if="scopeModel.selectedAnalysisTypeId!=undefined">
-    <vr-notification-vraction-management on-ready="scopeModel.onVRActionManagementDirectiveReady" vr-loader="scopeModel.isActionLoading"></vr-notification-vraction-management>
+
+<vr-tab header="'Settings'" ng-if="scopeModel.selectedAnalysisTypeId!=undefined">
+    <vr-genericdata-datarecordalertrule-settings on-ready="scopeModel.onDataRecordAlertRuleSettingsReady" vr-loader="scopeModel.isSettingsLoading"></vr-genericdata-datarecordalertrule-settings>
 </vr-tab>

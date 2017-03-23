@@ -52,10 +52,12 @@
     <Compile Include="DataRecord\DataRecordAlertRuleConfig.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleManager.cs" />
     <Compile Include="DataRecord\DataRecordNotificationTypeSettings.cs" />
+    <Compile Include="DataRecord\DataRecordAlertRuleController.cs" />
     <Compile Include="DataRecord\DataRecordNotificationTypeSettingsContorller.cs" />
     <Compile Include="DataRecord\DataRecordNotificationTypeSettingsManager.cs" />
     <Compile Include="DataRecord\DataRecordSendEmailDefinitionSettings.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleActionEventPayload.cs" />
+    <Compile Include="DataRecord\RecordFilterAlertRuleConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,11 +90,7 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataRecord\Controllers\" />
-    <Folder Include="DataRecord\Entities\" />
-    <Folder Include="DataRecord\Manager\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

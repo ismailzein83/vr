@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
     {
         public Guid MailMessageTemplateId { get; set; }
         const string MAILTEMPLATE_USEROBJECTNAME = "User";
-        const string MAILTEMPLATE_ACCOUNTOBJECTNAME = "Account";
+        const string MAILTEMPLATE_DATARECORDOBJECTNAME = "DataRecord";
 
         public override void Execute(IVRActionExecutionContext context)
         {
@@ -29,7 +29,7 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
 
             Dictionary<string, dynamic> mailTemplateObjects = new Dictionary<string, dynamic>();
             mailTemplateObjects.Add(MAILTEMPLATE_USEROBJECTNAME, user);
-            mailTemplateObjects.Add(MAILTEMPLATE_ACCOUNTOBJECTNAME, record);
+            mailTemplateObjects.Add(MAILTEMPLATE_DATARECORDOBJECTNAME, record);
 
             new VRMailManager().SendMail(this.MailMessageTemplateId, mailTemplateObjects);
         }

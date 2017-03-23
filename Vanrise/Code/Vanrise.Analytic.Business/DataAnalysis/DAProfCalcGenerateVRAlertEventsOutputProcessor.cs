@@ -25,56 +25,56 @@ namespace Vanrise.Analytic.Business
 
         public void ProcessOutputRecords(IDAProfCalcOutputRecordProcessorProcessContext context)
         {
-            if (context.OutputRecords != null)
-            {
-                VRAlertRuleManager alertRuleManager = new VRAlertRuleManager();
-                RecordFilterManager recordFilterManager = new RecordFilterManager();
+            //if (context.OutputRecords != null)
+            //{
+            //    VRAlertRuleManager alertRuleManager = new VRAlertRuleManager();
+            //    RecordFilterManager recordFilterManager = new RecordFilterManager();
 
-                VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
+            //    VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
 
-                DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
-                VRAlertRuleTypeManager vrAlertRuleTypeManager = new VRAlertRuleTypeManager();
+            //    DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
+            //    VRAlertRuleTypeManager vrAlertRuleTypeManager = new VRAlertRuleTypeManager();
 
-                foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
-                {
-                    Guid dataAnalysisItemDefinitionId = outputRecord.DAProfCalcExecInput.OutputItemDefinitionId;
+            //    foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
+            //    {
+            //        Guid dataAnalysisItemDefinitionId = outputRecord.DAProfCalcExecInput.OutputItemDefinitionId;
 
-                    DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId);
+            //        DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId);
 
-                    DAProfCalcAlertRuleExecPayload payload = outputRecord.DAProfCalcExecInput.DAProfCalcPayload as DAProfCalcAlertRuleExecPayload;
-                    long alertRuleId = payload.AlertRuleId;
-                    VRAlertRule alertRule = alertRuleManager.GetVRAlertRule(alertRuleId);
+            //        DAProfCalcAlertRuleExecPayload payload = outputRecord.DAProfCalcExecInput.DAProfCalcPayload as DAProfCalcAlertRuleExecPayload;
+            //        long alertRuleId = payload.AlertRuleId;
+            //        VRAlertRule alertRule = alertRuleManager.GetVRAlertRule(alertRuleId);
 
-                    DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings as DAProfCalcAlertRuleSettings;
+            //        DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings as DAProfCalcAlertRuleSettings;
 
-                    List<DAProfCalcOutputField> dataRecordFields = daProfCalcOutputSettings.GetOutputFields(null);
+            //        List<DAProfCalcOutputField> dataRecordFields = daProfCalcOutputSettings.GetOutputFields(null);
 
-                    if (recordFilterManager.IsFilterGroupMatch(daProfCalcAlertRuleSettings.FilterGroup, new DAProfCalcRecordFilterGenericFieldMatchContext(outputRecord.Records, dataRecordFields)))
-                    {
-                        DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
-                        CreateAlertRuleNotificationInput notificationInput = new CreateAlertRuleNotificationInput()
-                        {
-                            Actions = daProfCalcAlertRuleSettings.Actions,
-                            AlertRuleId = alertRuleId,
-                            AlertRuleTypeId = alertRule.RuleTypeId,
-                            Description = string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name),
-                            EventKey = outputRecord.GroupingKey,
-                            EventPayload = new DataRecordAlertRuleActionEventPayload()
-                            {
-                                AlertRuleId = alertRuleId,
-                                AlertRuleTypeId = alertRule.RuleTypeId,
-                                GroupingKey = outputRecord.GroupingKey,
-                                UserId = UserId,
-                                DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId,
-                                OutputRecords = outputRecord.Records
-                            },
-                            UserId = UserId,
-                            NotificationTypeId = GetNotificationTypeId(vrAlertRuleTypeManager, alertRule.RuleTypeId, dataAnalysisItemDefinitionId)
-                        };
-                        alertRuleNotificationManager.CreateNotification(notificationInput);
-                    }
-                }
-            }
+            //        if (recordFilterManager.IsFilterGroupMatch(daProfCalcAlertRuleSettings.FilterGroup, new DAProfCalcRecordFilterGenericFieldMatchContext(outputRecord.Records, dataRecordFields)))
+            //        {
+            //            DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
+            //            CreateAlertRuleNotificationInput notificationInput = new CreateAlertRuleNotificationInput()
+            //            {
+            //                Actions = daProfCalcAlertRuleSettings.Actions,
+            //                AlertRuleId = alertRuleId,
+            //                AlertRuleTypeId = alertRule.RuleTypeId,
+            //                Description = string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name),
+            //                EventKey = outputRecord.GroupingKey,
+            //                EventPayload = new DataRecordAlertRuleActionEventPayload()
+            //                {
+            //                    AlertRuleId = alertRuleId,
+            //                    AlertRuleTypeId = alertRule.RuleTypeId,
+            //                    GroupingKey = outputRecord.GroupingKey,
+            //                    UserId = UserId,
+            //                    DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId,
+            //                    OutputRecords = outputRecord.Records
+            //                },
+            //                UserId = UserId,
+            //                NotificationTypeId = GetNotificationTypeId(vrAlertRuleTypeManager, alertRule.RuleTypeId, dataAnalysisItemDefinitionId)
+            //            };
+            //            alertRuleNotificationManager.CreateNotification(notificationInput);
+            //        }
+            //    }
+            //}
         }
 
         private Guid GetNotificationTypeId(VRAlertRuleTypeManager vrAlertRuleTypeManager, Guid alertRuleTypeId, Guid dataAnalysisItemDefinitionId)
