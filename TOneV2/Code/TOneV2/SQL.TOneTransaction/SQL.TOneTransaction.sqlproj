@@ -218,6 +218,7 @@
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetUpdated.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetBeforeID.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_RunSchedulerTask.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetFirstPage.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
