@@ -12,10 +12,11 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.AccountBalance.Business
 {
-    public class FinancialAccountManager
+    public class FinancialAccountManager : IBusinessEntityManager
     {
         #region Fields
 
@@ -162,6 +163,13 @@ namespace TOne.WhS.AccountBalance.Business
             var financialAccounts = GetCachedFinancialAccounts();
             return financialAccounts.Values.FindAllRecords(x => x.CarrierAccountId.HasValue && x.CarrierAccountId.Value == carrierAccountId);
         }
+
+        public IEnumerable<FinancialAccount> GetFinancialAccountsByCarrierAccountTypeId(Guid accountTypeId)
+        {
+            var financialAccountsByAccTypeId = GetCachedFinancialAccountsByAccBalTypeId();
+            return financialAccountsByAccTypeId.GetRecord(accountTypeId);
+        }
+
         public IEnumerable<FinancialAccount> GetCarrierProfileFinancialAccounts(int carrierProfileId)
         {
             var financialAccounts = GetCachedFinancialAccounts();
@@ -786,6 +794,51 @@ namespace TOne.WhS.AccountBalance.Business
                 Entity = financialAccount,
                 AccountTypeDescription = new AccountTypeManager().GetAccountTypeName(financialAccount.Settings.AccountTypeId)
             };
+        }
+
+        #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            var settings = context.EntityDefinition.Settings.CastWithValidate<FinancialAccountBESettings>("EntityDefinition.Settings", context.EntityDefinitionId);
+            return this.GetFinancialAccountsByCarrierAccountTypeId(settings.AccountTypeId).Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

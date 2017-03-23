@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="AccountBalanceManager.cs" />
     <Compile Include="AccountBalanceSettings.cs" />
+    <Compile Include="FinancialAccountBESettings.cs" />
     <Compile Include="FinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccountManager.cs" />
     <Compile Include="IAccountTypeInfoFilter\FinancialAccountTypeFilter.cs" />
