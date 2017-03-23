@@ -146,13 +146,13 @@
 
         function buildSearchEditorContext() {
             var context = {
-                isNotificationTypeSettingSelected: function () {
+                    isNotificationTypeSettingSelected: function () {
                     return $scope.scopeModel.isNotificationTypeSettingSelected;
-                },
-                isAdvancedTabSelected: function () {
+            },
+                    isAdvancedTabSelected: function () {
                     return $scope.advancedSelected;
-                }
             }
+        };
             return context;
         }
 
