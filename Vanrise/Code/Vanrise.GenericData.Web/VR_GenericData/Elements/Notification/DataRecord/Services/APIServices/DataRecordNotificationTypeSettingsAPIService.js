@@ -14,9 +14,16 @@
             });
         }
 
+        function GetNotificationDataRecordFieldsInfo(notificationTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetNotificationDataRecordFieldsInfo"), {
+                notificationTypeId: notificationTypeId
+            });
+        }
+
 
         return {
-            GetNotificationGridColumnAttributes: GetNotificationGridColumnAttributes
+            GetNotificationGridColumnAttributes: GetNotificationGridColumnAttributes,
+            GetNotificationDataRecordFieldsInfo: GetNotificationDataRecordFieldsInfo
         };
     }
 

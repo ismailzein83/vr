@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceNotification
@@ -28,6 +24,11 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceNotification
             {
                 return "vr-accountbalance-notification-bodyeditor";
             }
+        }
+
+        public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

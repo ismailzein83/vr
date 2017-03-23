@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
@@ -20,6 +17,13 @@ namespace Vanrise.GenericData.Notification
         public List<DataRecordGridColumnAttribute> GetNotificationGridColumnAttributes(Guid notificationTypeId)
         {
             return _manager.GetNotificationGridColumnAttributes(notificationTypeId);
+        }
+
+        [HttpGet]
+        [Route("GetNotificationDataRecordFieldsInfo")]
+        public IEnumerable<DataRecordFieldInfo> GetNotificationDataRecordFieldsInfo(Guid notificationTypeId)
+        {
+            return _manager.GetNotificationDataRecordFieldsInfo(notificationTypeId);
         }
     }
 }

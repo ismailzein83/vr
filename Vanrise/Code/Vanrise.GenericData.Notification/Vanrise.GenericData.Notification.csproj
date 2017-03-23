@@ -51,9 +51,10 @@
     <Compile Include="DataRecord\DataRecordActionTargetType.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleConfig.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleManager.cs" />
+    <Compile Include="DataRecord\DataRecordNotificationExtendedQuery.cs" />
     <Compile Include="DataRecord\DataRecordNotificationTypeSettings.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleController.cs" />
-    <Compile Include="DataRecord\DataRecordNotificationTypeSettingsContorller.cs" />
+    <Compile Include="DataRecord\DataRecordNotificationTypeSettingsController.cs" />
     <Compile Include="DataRecord\DataRecordNotificationTypeSettingsManager.cs" />
     <Compile Include="DataRecord\DataRecordSendEmailDefinitionSettings.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleActionEventPayload.cs" />

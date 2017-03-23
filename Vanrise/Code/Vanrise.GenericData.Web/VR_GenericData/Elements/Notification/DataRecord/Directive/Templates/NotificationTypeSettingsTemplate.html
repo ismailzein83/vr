@@ -24,6 +24,7 @@
         <vr-validator validate="scopeModel.validateGrid()">
             <vr-datagrid datasource="scopeModel.gridColumnDefinitions"
                          ondeleterow="scopeModel.onDeleteRow"
+                         enabledraggablerow="true"
                          hidegridmenu>
 
                 <vr-datagridcolumn field="'FieldName'" headertext="'Grid Column Name'" disablesorting></vr-datagridcolumn>

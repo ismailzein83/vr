@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Business;
-using Vanrise.Notification.Entities;
 
 namespace Vanrise.GenericData.Notification
 {
-    public class DataRecordNotificationTypeSettingsManager 
+    public class DataRecordNotificationTypeSettingsManager
     {
         public List<DataRecordGridColumnAttribute> GetNotificationGridColumnAttributes(Guid notificationTypeId)
         {
@@ -41,6 +37,14 @@ namespace Vanrise.GenericData.Notification
             }
 
             return results;
+        }
+
+        public IEnumerable<DataRecordFieldInfo> GetNotificationDataRecordFieldsInfo(Guid notificationTypeId)
+        {
+            var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings<DataRecordNotificationTypeSettings>(notificationTypeId);
+            Guid dataRecordTypeId = vrNotificationTypeExtendedSettings.DataRecordTypeId;
+
+            return new DataRecordFieldManager().GetDataRecordFieldsInfo(new DataRecordFieldInfoFilter() { DataRecordTypeId = dataRecordTypeId });
         }
     }
 }

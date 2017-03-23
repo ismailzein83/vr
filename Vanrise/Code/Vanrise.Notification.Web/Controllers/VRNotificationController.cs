@@ -12,12 +12,12 @@ namespace Vanrise.Notification.Web.Controllers
     {
         VRNotificationManager _manager = new VRNotificationManager();
 
-        //[HttpPost]
-        //[Route("GetFirstPageVRNotifications")]
-        //public VRNotificationUpdateOutput GetFirstPageVRNotifications(VRNotificationFirstPageInput input)
-        //{
-        //    return _manager.GetFirstPageVRNotifications(input);
-        //}
+        [HttpPost]
+        [Route("GetFirstPageVRNotifications")]
+        public VRNotificationUpdateOutput GetFirstPageVRNotifications(VRNotificationFirstPageInput input)
+        {
+            return _manager.GetFirstPageVRNotifications(input);
+        }
 
         [HttpPost]
         [Route("GetUpdatedVRNotifications")]
