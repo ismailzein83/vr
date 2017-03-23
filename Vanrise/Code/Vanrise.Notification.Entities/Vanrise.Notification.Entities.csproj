@@ -61,6 +61,7 @@
     <Compile Include="BalanceAlertRule\IVREntityBalanceInfo.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateLastAlertInfoPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateRuleInfoPayload.cs" />
+    <Compile Include="VRNotificationType\IVRNotificationTypeIsMatchedContext.cs" />
     <Compile Include="VRAction\VRActionDefinitionFilter.cs" />
     <Compile Include="VRAction\VRActionDefinitionConfig.cs" />
     <Compile Include="VRAction\CreateVRActionInput.cs" />
@@ -88,6 +89,11 @@
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeDetail.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeQuery.cs" />
     <Compile Include="VRAlertRuleType\VRAlertRuleTypeSettings.cs" />
+    <Compile Include="VRNotificationType\IVRNotificationTypeMapToDetailContext.cs" />
+    <Compile Include="VRNotification\VRNotificationExtendedQuery.cs" />
+    <Compile Include="VRNotification\VRNotificationFirstPageInput.cs" />
+    <Compile Include="VRNotification\VRNotificationInput.cs" />
+    <Compile Include="VRNotification\VRNotificationQuery.cs" />
     <Compile Include="VRNotificationType\VRNotificationTypeSettingsFilter.cs" />
     <Compile Include="VRNotificationType\VRNotificationTypeSettingsInfo.cs" />
     <Compile Include="VRNotificationType\IVRNotificationTypeFilter.cs" />
@@ -96,12 +102,13 @@
     <Compile Include="VRNotification\CreateVRNotificationInput.cs" />
     <Compile Include="VRNotification\CreateVRNotificationOutput.cs" />
     <Compile Include="VRNotification\VRNotification.cs" />
-    <Compile Include="VRNotification\VRNotificationBeforeIdQuery.cs" />
-    <Compile Include="VRNotificationType\VRNotificationExtendedSettings.cs" />
+    <Compile Include="VRNotification\VRNotificationBeforeIdInput.cs" />
+    <Compile Include="VRNotificationType\VRNotificationTypeExtendedSettings.cs" />
     <Compile Include="VRNotificationType\VRNotificationType.cs" />
     <Compile Include="VRNotificationType\VRNotificationTypeConfig.cs" />
     <Compile Include="VRNotificationType\VRNotificationTypeSettings.cs" />
-    <Compile Include="VRNotification\VRNotificationUpdateQuery.cs" />
+    <Compile Include="VRNotification\VRNotificationUpdateInput.cs" />
+    <Compile Include="VRNotification\VRNotificationUpdateOutput.cs" />
     <Compile Include="VRNotificationView\VRNotificationViewSettings.cs" />
   </ItemGroup>
   <ItemGroup>

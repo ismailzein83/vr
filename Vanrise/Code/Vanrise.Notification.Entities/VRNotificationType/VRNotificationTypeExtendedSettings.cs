@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Vanrise.Notification.Entities
 {
@@ -11,7 +8,9 @@ namespace Vanrise.Notification.Entities
         public virtual string SearchRuntimeEditor { get; set; }
         public virtual string BodyRuntimeEditor { get; set; }
 
-        public virtual VRNotificationDetail MapToNotificationDetail(IMapToNotificationDetailContext context)
+        public abstract bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context);
+
+        public virtual VRNotificationDetail MapToNotificationDetail(IVRNotificationTypeMapToDetailContext context)
         {
             VRNotificationDetail vrNotificationDetail = new VRNotificationDetail()
             {
@@ -19,15 +18,5 @@ namespace Vanrise.Notification.Entities
             };
             return vrNotificationDetail;
         }
-    }
-
-    public interface IMapToNotificationDetailContext
-    {
-        VRNotification VRNotification { get; }
-    }
-
-    public class MapToNotificationDetailContext : IMapToNotificationDetailContext
-    {
-        public VRNotification VRNotification { get; set; }
     }
 }

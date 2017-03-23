@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
@@ -29,6 +26,8 @@ namespace Vanrise.Notification.Entities
         public Guid AlertLevelId { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public DateTime CreationTime { get; set; }
 
         public VRNotificationData Data { get; set; }
     }

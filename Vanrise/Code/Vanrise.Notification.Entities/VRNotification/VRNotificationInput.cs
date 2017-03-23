@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    public class VRNotificationBeforeIdQuery
+    public abstract class VRNotificationInput
     {
         public Guid NotificationTypeId { get; set; }
-        public long LessThanID { get; set; }
-        public int NbOfRows { get; set; }
+        public long NbOfRows { get; set; }
+        public VRNotificationQuery Query { get; set; }
+        public VRNotificationExtendedQuery ExtendedQuery { get; set; }
     }
 }
