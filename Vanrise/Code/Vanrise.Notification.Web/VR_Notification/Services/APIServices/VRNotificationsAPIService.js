@@ -8,6 +8,10 @@
 
         var controllerName = "VRNotification";
 
+        function GetFirstPageVRNotifications(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetFirstPageVRNotifications'), input);
+        }
+
         function GetUpdatedVRNotifications(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'GetUpdatedVRNotifications'), input);
         }
@@ -17,6 +21,7 @@
         }
 
         return ({
+            GetFirstPageVRNotifications: GetFirstPageVRNotifications,
             GetUpdatedVRNotifications: GetUpdatedVRNotifications,
             GetBeforeIdVRNotifications: GetBeforeIdVRNotifications
         });

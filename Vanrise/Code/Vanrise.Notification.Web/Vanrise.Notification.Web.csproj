@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
+    <Content Include="VR_Notification\Constants\VRNotificationStatusEnum.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinitionconfig-selector.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRNotificationType\vr-notification-vrnotifivationtype-settings.js" />
     <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionDefinitionSettingsTemplate.html" />
@@ -180,6 +181,7 @@
     <Content Include="VR_Notification\Directives\VRNotificationViewDefinition\vr-notification-notification-vieweditor.js" />
     <Content Include="VR_Notification\Directives\VRNotificationViewDefinition\Templates\VRNotificationViewEditor.html" />
     <Content Include="VR_Notification\Directives\VRNotification\Templates\VRNotificationComponentTypeSettingsTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRNotification\vr-notification-notificationstatus-selector.js" />
     <Content Include="VR_Notification\Directives\VRNotification\vr-notification-vrnotification-componentsettings.js" />
     <Content Include="VR_Notification\ModuleInitialization.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionDefinitionAPIService.js" />
