@@ -64,7 +64,7 @@
         }
         function addDrillDownDefinition(drillDownDefinition) {
 
-            drillDownDefinitions.push(drillDownDefinition);
+           // drillDownDefinitions.push(drillDownDefinition);
         }
 
         function getDrillDownDefinition() {
