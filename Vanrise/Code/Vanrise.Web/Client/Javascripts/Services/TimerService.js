@@ -55,7 +55,7 @@
         function executeJob(job) {
             var secondsDiff = job.lastRun != undefined ? (new Date().getTime() - job.lastRun.getTime()) / 1000 : 0;
             if (secondsDiff >= job.jobInterval || job.lastRun == undefined) {
-                job.onTimerElapsed().finally(function () {
+                job.onTimerElapsed(job.id).finally(function () {
                     job.lastRun = new Date();
                     executeNextJob();
                 });
