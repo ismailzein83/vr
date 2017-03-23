@@ -151,6 +151,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_Notification\Constants\GridMaxSize.js" />
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
     <Content Include="VR_Notification\Constants\VRNotificationStatusEnum.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinitionconfig-selector.js" />

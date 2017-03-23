@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsService', 'VR_Notification_VRNotificationsAPIService', 'VRTimerService', 'BusinessProcess_GridMaxSize', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService', 'VR_GenericData_DataRecordNotificationTypeSettingsService',
-    function (UtilsService, VR_Notification_VRNotificationsAPIService, VRTimerService, BusinessProcess_GridMaxSize, VR_GenericData_DataRecordNotificationTypeSettingsAPIService, VR_GenericData_DataRecordNotificationTypeSettingsService) {
+app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsService', 'VR_Notification_VRNotificationsAPIService', 'VRTimerService', 'VR_Notification_GridMaxSize', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService', 'VR_GenericData_DataRecordNotificationTypeSettingsService',
+    function (UtilsService, VR_Notification_VRNotificationsAPIService, VRTimerService, VR_Notification_GridMaxSize, VR_GenericData_DataRecordNotificationTypeSettingsAPIService, VR_GenericData_DataRecordNotificationTypeSettingsService) {
         return {
             restrict: 'E',
             scope: {
@@ -72,8 +72,10 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                     var gridLoadDeferred = UtilsService.createPromiseDeferred();
 
                     UtilsService.waitMultiplePromises(promises).then(function () {
-                        onInit();
-                        gridLoadDeferred.resolve();
+                        onInitialization().then(function () {
+                            $scope.scopeModel.isLoading = false;
+                            gridLoadDeferred.resolve();
+                        });
                     }).catch(function (error) {
                         gridLoadDeferred.reject(error);
                     });
@@ -93,8 +95,6 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
 
             function getData() {
                 lessThanID = minId;
-                var pageInfo = gridAPI.getPageInfo();
-                nbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
 
                 return VR_Notification_VRNotificationsAPIService.GetBeforeIdVRNotifications(buildVRNotificationBeforeIdInput()).then(function (response) {
                     if (response != undefined) {
@@ -132,7 +132,7 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                 return notificationGridColumnAttributesLoadPromiseDeferred.promise;
             }
 
-            function onInit() {
+            function onInitialization() {
                 $scope.scopeModel.vrNotifications.length = 0;
                 isGettingDataFirstTime = true;
                 minId = undefined;
@@ -143,28 +143,22 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                 var pageInfo = gridAPI.getPageInfo();
                 nbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
 
-                return VR_Notification_VRNotificationsAPIService.GetFirstPageVRNotifications(buildVRNotificationFirstPageInput()).then(function (response) {
-
-                    console.log(response);
-
-                    manipulateDataUpdated(response);
-                    $scope.scopeModel.isLoading = false;
-                    createTimer();
-                });
+                return createTimer();
             }
             function createTimer() {
                 if ($scope.job) {
                     VRTimerService.unregisterJob($scope.job);
                 }
 
-                VRTimerService.registerJob(onTimerElapsed, $scope);
-            }
-            function onTimerElapsed() {
-                return VR_Notification_VRNotificationsAPIService.GetUpdatedVRNotifications(buildVRNotificationUpdateInput()).then(function (response) {
-
-                    console.log(response);
-
+                return VR_Notification_VRNotificationsAPIService.GetFirstPageVRNotifications(buildVRNotificationFirstPageInput()).then(function (response) {
                     manipulateDataUpdated(response);
+                    VRTimerService.registerJob(onTimerElapsed, $scope);
+                });
+            }
+            function onTimerElapsed(jobId) {
+                return VR_Notification_VRNotificationsAPIService.GetUpdatedVRNotifications(buildVRNotificationUpdateInput()).then(function (response) {
+                    if ($scope.job.id == jobId)
+                        manipulateDataUpdated(response);
                 });
             }
             function manipulateDataUpdated(response) {
@@ -206,8 +200,8 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                                 return b.Entity.VRNotificationId - a.Entity.VRNotificationId;
                             });
 
-                            if ($scope.scopeModel.vrNotifications.length > BusinessProcess_GridMaxSize.maximumCount) {
-                                $scope.scopeModel.vrNotifications.length = BusinessProcess_GridMaxSize.maximumCount;
+                            if ($scope.scopeModel.vrNotifications.length > VR_Notification_GridMaxSize.maximumCount) {
+                                $scope.scopeModel.vrNotifications.length = VR_Notification_GridMaxSize.maximumCount;
                             }
                             var minIdIndex = $scope.scopeModel.vrNotifications.length - 1;
                             minId = $scope.scopeModel.vrNotifications[minIdIndex].Entity.VRNotificationId;

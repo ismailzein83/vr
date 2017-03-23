@@ -34,7 +34,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.isNotificationTypeSettingSelected = true;
+            $scope.scopeModel.isNotificationTypeSettingSelected = false;
 
             $scope.scopeModel.onVRNotificationTypeSettingsSelectorReady = function (api) {
                 notificationTypeSettingsSelectorAPI = api;
