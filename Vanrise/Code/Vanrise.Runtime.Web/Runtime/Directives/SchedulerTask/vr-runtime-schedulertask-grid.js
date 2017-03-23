@@ -205,6 +205,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                                     AllowEdit: $scope.schedulerTasks[j].AllowEdit,
                                     AllowRun: $scope.schedulerTasks[j].AllowRun
                                 };
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(obj);
                                 $scope.schedulerTasks[j] = obj;
                                 if (schedulerTaskState.StatusDescription == VR_Runtime_SchedulerTaskStatusEnum.InProgress.description)
                                     $scope.showLoader = false;
