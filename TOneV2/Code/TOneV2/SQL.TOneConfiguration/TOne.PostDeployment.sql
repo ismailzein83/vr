@@ -1527,7 +1527,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[ActionTypeInfo])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('612AEF49-567E-4FE5-8687-1BC6384C67FF','Migrate from Tone V1','{"URL":"","SystemType":false,"Editor":"whs-be-sourcemigrationreader","FQTN":"TOne.WhS.DBSync.Business.DBSyncTaskAction, TOne.WhS.DBSync.Business"}')
+('612AEF49-567E-4FE5-8687-1BC6384C67FF','Migrate from Tone V1','{"URL":"","SystemType":false,"Editor":"whs-be-sourcemigrationreader","FQTN":"TOne.WhS.DBSync.Business.DBSyncTaskAction, TOne.WhS.DBSync.Business","Security":{"$type":"Vanrise.Runtime.Entities.ActionTypeInfoSecurity, Vanrise.Runtime.Entities","ViewPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"361B017B-9344-4292-9E48-D9AD056D5528","PermissionOptions":["View"]}]},"ConfigurePermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"361B017B-9344-4292-9E48-D9AD056D5528","PermissionOptions":["Configure"]}]},"RunPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"361B017B-9344-4292-9E48-D9AD056D5528","PermissionOptions":["Run"]}]}}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ActionTypeInfo]))
 merge	[runtime].[SchedulerTaskActionType] as t
