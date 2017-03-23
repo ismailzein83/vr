@@ -134,12 +134,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            return new ObjectListRecordFilter
+            List<Object> nonNullValues = new List<object>();
+            if (filterValues != null)
+                nonNullValues.AddRange(filterValues.Where(itm => itm != null));
+            if (nonNullValues.Count > 0)
             {
-                CompareOperator = ListRecordFilterOperator.In,
-                Values = filterValues.Select(value => value).ToList(),
-                FieldName = fieldName
-            };
+                return new ObjectListRecordFilter
+                {
+                    CompareOperator = ListRecordFilterOperator.In,
+                    Values = filterValues.Select(value => value).ToList(),
+                    FieldName = fieldName
+                };
+            }
+            else
+            {
+                return new EmptyRecordFilter { FieldName = fieldName };
+            }
         }
 
         #endregion

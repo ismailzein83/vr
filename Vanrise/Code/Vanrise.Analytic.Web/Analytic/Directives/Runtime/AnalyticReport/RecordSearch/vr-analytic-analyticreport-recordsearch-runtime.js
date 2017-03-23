@@ -45,10 +45,7 @@
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-                    if (autoSearch) {
-                        setGridQuery();
-                        gridAPI.loadGrid(gridQuery);
-                    }
+                    defineAPI();
                 };
 
                 $scope.onDRSearchPageStorageSourceChanged = function () {
@@ -98,7 +95,7 @@
                     return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
                 };
 
-                defineAPI();
+                
             }
             function defineAPI() {
                 var api = {};
@@ -147,16 +144,20 @@
                             loadPromiseDeffer.resolve();
                         }
 
-                        if (autoSearch && gridAPI != undefined) {
-                            gridAPI.loadGrid(gridQuery);
-                        }
+                        
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
                     });
-
+                    loadPromiseDeffer.promise.finally(function () {
+                        if (autoSearch) {
+                            setGridQuery();
+                            gridAPI.loadGrid(gridQuery);
+                        }
+                    });
                     return loadPromiseDeffer.promise;
                 };
-
+               
+               
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
@@ -197,7 +198,7 @@
             }
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
-                $scope.selectedOrderDirection = $scope.orderDirectionList[0];
+                $scope.selectedOrderDirection = $scope.orderDirectionList[1];
                 //   $scope.fromDate = new Date();
                 $scope.limit = settings != undefined ? settings.NumberOfRecords : 100;
                 $scope.maxNumberOfRecords = settings != undefined ? settings.MaxNumberOfRecords : undefined;
