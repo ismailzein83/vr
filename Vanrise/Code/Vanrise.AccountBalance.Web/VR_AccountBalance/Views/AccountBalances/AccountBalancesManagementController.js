@@ -63,6 +63,7 @@
                     $scope.scopeModel.gridloadded = false;
                     loadAllControls().then(function () {
                         $scope.scopeModel.gridloadded = true;
+                        gridAPI.loadGrid(getFilterObject());
                     });
                 }
             };

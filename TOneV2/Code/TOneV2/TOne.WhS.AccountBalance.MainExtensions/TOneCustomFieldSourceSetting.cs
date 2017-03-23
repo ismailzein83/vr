@@ -33,29 +33,43 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 
         public override object PrepareSourceData(IAccountBalanceFieldSourcePrepareSourceDataContext context)
         {
-         
-            return null;
-        }
+            Dictionary<string, TOneCustomFieldsData> toneCustomFieldsDataByAccountId = new Dictionary<string, TOneCustomFieldsData>();
+            foreach(var item in context.AccountBalances)
+            {
+                int accountId = Convert.ToInt32(item.AccountId);
+                TOneCustomFieldsData toneCustomFieldsData;
+                if (!toneCustomFieldsDataByAccountId.TryGetValue(item.AccountId, out toneCustomFieldsData))
+                {
+                    var customerCreditLimit =  GetCustomerCreditLimit(accountId);
+                    var supplierCreditLimit =  GetSupplierCreditLimit(accountId);
 
+                    toneCustomFieldsDataByAccountId.Add(item.AccountId, new TOneCustomFieldsData
+                    {
+                        CustomerCreditLimit =customerCreditLimit,
+                        CustomerTolerance= customerCreditLimit.HasValue ? (customerCreditLimit.Value + item.CurrentBalance) : item.CurrentBalance,
+                        SupplierCreditLimit=supplierCreditLimit,
+                        SupplierTolerance = supplierCreditLimit.HasValue ? (supplierCreditLimit.Value - item.CurrentBalance) : item.CurrentBalance,
+                    });
+                }
+            }
+            return toneCustomFieldsDataByAccountId;
+        }
         public override object GetFieldValue(IAccountBalanceFieldSourceGetFieldValueContext context)
         {
             if(context.FieldName == null)
                 throw new NullReferenceException("context.FieldName");
-              
-            switch(context.FieldName)
+            Dictionary<string, TOneCustomFieldsData> toneCustomFieldsDataByAccountId = context.PreparedData as Dictionary<string, TOneCustomFieldsData>;
+
+            TOneCustomFieldsData toneCustomFieldsData;
+            if (toneCustomFieldsDataByAccountId.TryGetValue(context.AccountBalance.AccountId, out toneCustomFieldsData))
             {
-                case "CutomerCreditLimit": return GetCustomerCreditLimit(Convert.ToInt32(context.AccountBalance.AccountId));
-                case "CutomerTolerance":
-                    var customerCreditLimit = GetCustomerCreditLimit(Convert.ToInt32(context.AccountBalance.AccountId));
-                    if (customerCreditLimit.HasValue)
-                        return customerCreditLimit.Value + context.AccountBalance.CurrentBalance;
-                    return context.AccountBalance.CurrentBalance;
-                case "SupplierCreditLimit": return GetSupplierCreditLimit(Convert.ToInt32(context.AccountBalance.AccountId));
-                case "SupplierTolerance":
-                    var supplierCreditLimit = GetSupplierCreditLimit(Convert.ToInt32(context.AccountBalance.AccountId));
-                    if (supplierCreditLimit.HasValue)
-                        return supplierCreditLimit.Value - context.AccountBalance.CurrentBalance;
-                    return context.AccountBalance.CurrentBalance;
+                switch (context.FieldName)
+                {
+                    case "CutomerCreditLimit": return toneCustomFieldsData.CustomerCreditLimit;
+                    case "CutomerTolerance": return toneCustomFieldsData.CustomerTolerance;
+                    case "SupplierCreditLimit": return toneCustomFieldsData.SupplierCreditLimit;
+                    case "SupplierTolerance": return toneCustomFieldsData.SupplierTolerance;
+                }
             }
             return null;
         }
@@ -94,7 +108,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                 FieldType = new FieldNumberType { DataType = FieldNumberDataType.Decimal, DataPrecision = FieldNumberPrecision.Normal },
             });
         }
-
         private decimal? GetCustomerCreditLimit(int accountId)
         {
              FinancialAccountManager financialAccountManager = new FinancialAccountManager();
@@ -106,6 +119,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
             CarrierFinancialAccountData carrierFinancialAccountData = financialAccountManager.GetSuppCarrierFinancialByFinAccId(accountId);
             return carrierFinancialAccountData.CreditLimit;
+        }
+        public class TOneCustomFieldsData
+        {
+            public decimal? CustomerCreditLimit { get; set; }
+            public decimal  CustomerTolerance { get; set; }
+            public decimal? SupplierCreditLimit { get; set; }
+            public decimal  SupplierTolerance { get; set; }
         }
     }
 
