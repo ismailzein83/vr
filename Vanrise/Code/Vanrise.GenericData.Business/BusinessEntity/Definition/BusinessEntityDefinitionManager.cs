@@ -224,7 +224,7 @@ namespace Vanrise.GenericData.Business
             return s_cacheManager.GetOrCreateObject(cacheName, createObject);
         }
 
-        private Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
+        public Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
         {
             return s_cacheManager.GetOrCreateObject("GetBusinessEntityDefinitions",
                 () =>
