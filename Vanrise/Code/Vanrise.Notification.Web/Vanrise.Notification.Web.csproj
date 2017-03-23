@@ -192,6 +192,7 @@
     <Content Include="VR_Notification\ModuleInitialization.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionDefinitionAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRActionAPIService.js" />
+    <Content Include="VR_Notification\Services\APIServices\VRAlertLevelAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRAlertRuleTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRBalanceAlertRuleAPIService.js" />
@@ -202,6 +203,7 @@
     <Content Include="VR_Notification\Services\VRAlertRuleService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleSettingsService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleTypeService.js" />
+    <Content Include="VR_Notification\Services\VRAlertService.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditorController.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditor.html" />
     <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelEditor.html" />
