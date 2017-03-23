@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.InvToAccBalanceRelation.Entities
 {
-    public abstract class InvToAccBalanceRelationDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
+    public class InvToAccBalanceRelationDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
     {
         public override Guid VRComponentTypeConfigId
         {
