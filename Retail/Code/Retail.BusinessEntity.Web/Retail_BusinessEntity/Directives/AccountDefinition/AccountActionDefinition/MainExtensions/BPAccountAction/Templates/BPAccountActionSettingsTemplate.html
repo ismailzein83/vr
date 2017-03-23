@@ -1,2 +1,21 @@
-﻿
-<retail-be-bpaccountaction-selective on-ready="scopeModel.onBPAccountActionSelectiveReady" normal-col-num="6"></retail-be-bpaccountaction-selective>
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <retail-be-bpaccountaction-selective on-ready="scopeModel.onBPAccountActionSelectiveReady" normal-col-num="6"></retail-be-bpaccountaction-selective>
+    </vr-tab>
+    <vr-tab header="'Security'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-section header="View Log" >
+                    <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewLogRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-section header="Start Action" >
+                    <vr-sec-requiredpermission-grid on-ready="scopeModel.onStartActionRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>

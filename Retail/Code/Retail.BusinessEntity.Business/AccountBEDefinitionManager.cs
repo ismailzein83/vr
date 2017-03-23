@@ -380,6 +380,24 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
+
+        public List<AccountActionDefinition>  GetAllAccountActionDefinitions()
+        {
+
+            return s_businessEntityDefinitionManager.GetCachedOrCreate("AccountBEDefinitionManager_GetAllAccountActionDefinitions", () =>
+            {
+                var accountBeDefinitions = s_businessEntityDefinitionManager.GetCachedBusinessEntityDefinitions().Where(x => x.Value.Settings.ConfigId == AccountBEDefinitionSettings.s_configId);
+
+                List<AccountActionDefinition> accountActionDefinitions = new List<AccountActionDefinition>();
+                foreach (var def in accountBeDefinitions)
+                {
+                    var accountBeActions = GetAccountActionDefinitions(def.Key);
+                    accountActionDefinitions.AddRange(accountBeActions);
+                }
+                return accountActionDefinitions;
+            });
+        }
+
         private bool IsViewVisible(Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> visibleViews, AccountViewDefinition accountViewDefinition)
         {
             if (!visibleViews.ContainsKey(accountViewDefinition.AccountViewDefinitionId))

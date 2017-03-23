@@ -20,8 +20,17 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
 
         function BPAccountActionDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+
             var bPDefinitionSettingsApi;
             var bPDefinitionSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var viewLogPermissionAPI;
+            var viewLogPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var startActionPermissionAPI;
+            var startActionPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -30,6 +39,15 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
                     bPDefinitionSettingsApi = api;
                     bPDefinitionSettingsPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onViewLogRequiredPermissionReady = function (api) {
+                    viewLogPermissionAPI = api;
+                    viewLogPermissionReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onStartActionRequiredPermissionReady = function (api) {
+                    startActionPermissionAPI = api;
+                    startActionPermissionReadyDeferred.resolve();
+                };
+
 
                 defineAPI();
             }
@@ -43,9 +61,9 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
                         accountActionDefinitionSettings = payload.accountActionDefinitionSettings;
                     }
                     var promises = [];
-
-
                     promises.push(loadBusinessEntityDefinitionSelector());
+                    promises.push(loadViewLogRequiredPermission());
+                    promises.push(loadStartActionRequiredPermission());
 
                     function loadBusinessEntityDefinitionSelector() {
                         var bPDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
@@ -57,7 +75,30 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
 
                         return bPDefinitionSettingsLoadDeferred.promise;
                     }
+                    function loadViewLogRequiredPermission() {
+                        var viewLogSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewLogPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: accountActionDefinitionSettings && accountActionDefinitionSettings.Security && accountActionDefinitionSettings.Security.ViewLogPermission || undefined
+                            };
 
+                            VRUIUtilsService.callDirectiveLoad(viewLogPermissionAPI, dataPayload, viewLogSettingPermissionLoadDeferred);
+                        });
+                        return viewLogSettingPermissionLoadDeferred.promise;
+                    }
+
+
+                    function loadStartActionRequiredPermission() {
+                        var startActionPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        startActionPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: accountActionDefinitionSettings && accountActionDefinitionSettings.Security && accountActionDefinitionSettings.Security.StartActionPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(startActionPermissionAPI, dataPayload, startActionPermissionLoadDeferred);
+                        });
+                        return startActionPermissionLoadDeferred.promise;
+                    }
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
@@ -65,7 +106,11 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
                 api.getData = function () {
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.BPAccountActionSettings, Retail.BusinessEntity.MainExtensions',
-                        BPDefinitionSettings: bPDefinitionSettingsApi.getData()
+                        BPDefinitionSettings: bPDefinitionSettingsApi.getData(),
+                        Security: {
+                            ViewLogPermission: viewLogPermissionAPI.getData(),
+                            StartActionPermission: startActionPermissionAPI.getData()
+                        }
                     };
                 };
 
