@@ -2,17 +2,22 @@
 
     'use strict';
 
-    GenericBusinessEntityService.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRModalService', 'VRNotificationService'];
+    GenericBusinessEntityService.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
 
-    function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService) {
+    function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addGenericBusinessEntity: addGenericBusinessEntity,
             editGenericBusinessEntity: editGenericBusinessEntity,
-            deleteGenericBusinessEntity: deleteGenericBusinessEntity
+            deleteGenericBusinessEntity: deleteGenericBusinessEntity,
+            registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity,
+            getDrillDownDefinition: getDrillDownDefinition
+
         });
 
         function addGenericBusinessEntity(businessEntityDefinitionId, onGenericBusinessEntityAdded) {
             var parameters = {
+
                 businessEntityDefinitionId: businessEntityDefinitionId
             };
 
@@ -55,6 +60,39 @@
                     });
                 }
             });
+        }
+        function getEntityUniqueName(businessEntityDefinitionId) {
+            return "VR_GenericData_GenericBusinessEntity_"+businessEntityDefinitionId;
+        }
+
+        function registerObjectTrackingDrillDownToGenericBusinessEntity() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, genericBusinessEntityItem) {
+               
+                genericBusinessEntityItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: genericBusinessEntityItem.Entity.GenericBusinessEntityId,
+                    EntityUniqueName: getEntityUniqueName(genericBusinessEntityItem.Entity.BusinessEntityDefinitionId),
+
+                };
+                return genericBusinessEntityItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
     };
 

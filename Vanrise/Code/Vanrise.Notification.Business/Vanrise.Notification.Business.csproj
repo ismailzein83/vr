@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VRAlertLevelBEDefinitionSettings.cs" />
     <Compile Include="VRAlertRuleTypeAddOrEditFilter.cs" />
     <Compile Include="Context\VRActionExecutionContext.cs" />
     <Compile Include="Filters\IVRNotificationViewFilter\VRNotificationTypeViewFilter.cs" />

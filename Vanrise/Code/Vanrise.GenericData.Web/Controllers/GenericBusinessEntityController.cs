@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-            return manager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+            return manager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId,true);
         }
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]

@@ -704,7 +704,8 @@ namespace Retail.BusinessEntity.Business
         {
             Guid _accountBEDefinitionId;
             static AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
-          
+            static AccountBEManager s_accountBEManager = new AccountBEManager();
+
             public AccountBELoggableEntity(Guid accountBEDefinitionId)
             {
                 _accountBEDefinitionId = accountBEDefinitionId;
@@ -735,7 +736,7 @@ namespace Retail.BusinessEntity.Business
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
             {
                 Account account = context.Object.CastWithValidate<Account>("context.Object");
-                return !String.IsNullOrWhiteSpace(account.Name) ? account.Name : account.Name.ToString();
+                return s_accountBEManager.GetAccountName(_accountBEDefinitionId, account.AccountId);
             }
 
             public override string ModuleName

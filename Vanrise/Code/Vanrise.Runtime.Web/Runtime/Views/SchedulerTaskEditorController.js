@@ -92,7 +92,7 @@
                 return VRValidationService.validateTimeRange($scope.scopeModel.startEffDate, $scope.scopeModel.endEffDate);
             };
 
-            $scope.onTaskActionSelctionChanged = function () {
+            $scope.onTaskActionSelectionChanged = function () {
                 var payload;
                 if (taskObject && taskObject.TaskSettings != undefined && taskActionDirectiveAPI != undefined) {
                     payload = {

@@ -2,12 +2,15 @@
 
     'use strict';
 
-    SchedulerTaskService.$inject = ['VRModalService', 'UtilsService'];
+    SchedulerTaskService.$inject = ['VRModalService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function SchedulerTaskService(VRModalService, UtilsService) {
+    function SchedulerTaskService(VRModalService, UtilsService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addTask: addTask,
-            editTask: editTask
+            editTask: editTask,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToSchedulerTaskService: registerObjectTrackingDrillDownToSchedulerTaskService
         });
 
         function addTask(onTaskAdded) {
@@ -33,8 +36,43 @@
             };
             VRModalService.showModal(editor, parameters, modalSettings);
         }
+
+        function getEntityUniqueName() {
+            return "VR_Runtime_SchedulerTask";
+        }
+
+        function registerObjectTrackingDrillDownToSchedulerTaskService() {
+           
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+            drillDownDefinition.loadDirective = function (directiveAPI, ScheduelerItem) {
+                ScheduelerItem.objectTrackingGridAPI = directiveAPI;
+                
+                var query = {
+                    ObjectId: ScheduelerItem.Entity.TaskId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return ScheduelerItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
     }
 
     appControllers.service('VR_Runtime_SchedulerTaskService', SchedulerTaskService);
 
 })(appControllers);
+

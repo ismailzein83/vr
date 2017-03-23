@@ -38,7 +38,7 @@ namespace Vanrise.Runtime.Web.Controllers
         public SchedulerTask GetTask(Guid taskId)
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetTask(taskId);
+            return manager.GetTask(taskId,true);
         }
 
         [HttpGet]

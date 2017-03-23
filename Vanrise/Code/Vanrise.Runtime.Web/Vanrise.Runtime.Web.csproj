@@ -122,6 +122,7 @@
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-interval.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
+    <Content Include="Runtime\ModuleInitialization.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskActionTypeAPIService.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
     <Content Include="Runtime\Services\SchedulerTaskService.js" />

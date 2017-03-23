@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -32,6 +33,7 @@ namespace Vanrise.GenericData.Business
 
         #region Public Methods
 
+
         public Vanrise.Entities.IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(Vanrise.Entities.DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(input.Query.BusinessEntityDefinitionId);
@@ -45,13 +47,20 @@ namespace Vanrise.GenericData.Business
             {
                 ExportExcelHandler = new GenericBusinessEntityExportExcelHandler(definitionSettings)
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(input.Query.BusinessEntityDefinitionId), input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericBusinessEntities.ToBigResult(input, filterExpression, GenericBusinessEntityDetailMapper), resultProcessingHandler);
+        }
+        public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId, bool isViewedFromUI)
+        {
+            var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
+            var genericBusinessEntity = cachedGenericBusinessEntities.GetRecord(genericBusinessEntityId);
+            if (genericBusinessEntity != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new GenericBusinessEntityLoggableEntity(businessEntityDefinitionId), genericBusinessEntity);
+            return genericBusinessEntity;
         }
         public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
-            var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
-            return cachedGenericBusinessEntities.GetRecord(genericBusinessEntityId);
+            return GetGenericBusinessEntity(genericBusinessEntityId,businessEntityDefinitionId,false);
         }
         public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
@@ -68,6 +77,7 @@ namespace Vanrise.GenericData.Business
 
                 if (updated)
                 {
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntity.BusinessEntityDefinitionId), genericBusinessEntity);
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
                     updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
@@ -96,10 +106,12 @@ namespace Vanrise.GenericData.Business
 
                 if (inserted)
                 {
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
-                    insertOperationOutput.InsertedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
+                    genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
+                    VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntity.BusinessEntityDefinitionId), genericBusinessEntity);
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertOperationOutput.InsertedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
+                   
                 }
             }
             else
@@ -223,6 +235,8 @@ namespace Vanrise.GenericData.Business
             }
             return true;
         }
+
+       
         public bool DoesUserHaveEditAccess(Guid genericBEDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(genericBEDefinitionId);
@@ -447,6 +461,51 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        public class GenericBusinessEntityLoggableEntity : VRLoggableEntityBase
+        {
+            Guid _businessEntityDefinitionId;
+            static BusinessEntityDefinitionManager s_BusinessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+            static GenericBusinessEntityManager s_genericBusinessEntityManager = new GenericBusinessEntityManager();
+            public GenericBusinessEntityLoggableEntity(Guid businessEntityDefinitionId)
+            {
+                _businessEntityDefinitionId = businessEntityDefinitionId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_GenericData_GenericBusinessEntity_{0}", _businessEntityDefinitionId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return s_BusinessEntityDefinitionManager.GetBusinessEntityDefinitionName(_businessEntityDefinitionId); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_GenericBusinessEntity_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                GenericBusinessEntity genericBusinessEntity = context.Object.CastWithValidate<GenericBusinessEntity>("context.Object");
+                return genericBusinessEntity.GenericBusinessEntityId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+
+                GenericBusinessEntity genericBusinessEntity = context.Object.CastWithValidate<GenericBusinessEntity>("context.Object");
+                var businessEntityTitle = s_genericBusinessEntityManager.GetBusinessEntityTitle( genericBusinessEntity.BusinessEntityDefinitionId,genericBusinessEntity.GenericBusinessEntityId);
+                return (businessEntityTitle != null) ? businessEntityTitle.EntityName : null;
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+        }
         #endregion
 
         #region Mappers

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService", "VRTimerService", "VR_Runtime_SchedulerTaskStatusEnum",
-    function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService, VR_Runtime_SchedulerTaskStatusEnum) {
+app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService", "VRTimerService", "VR_Runtime_SchedulerTaskStatusEnum",
+    function (VRUIUtilsService,UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService, VR_Runtime_SchedulerTaskStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -37,14 +37,16 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
 
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.schedulerTasks = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-
+                    var drillDownDefinitions = VR_Runtime_SchedulerTaskService.getDrillDownDefinition();
+                    
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -58,6 +60,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                         };
 
                         directiveAPI.onTaskAdded = function (taskObject) {
+                          gridDrillDownTabsObj.setDrillDownExtensionObject(taskObject);
                             gridAPI.itemAdded(taskObject);
                         };
 
@@ -72,9 +75,16 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                    
                     if (isMyTaskSelected) {
                         return SchedulerTaskAPIService.GetFilteredMyTasks(dataRetrievalInput)
                             .then(function (response) {
+                                if (response.Data != undefined) {
+                                    for (var i = 0; i < response.Data.length; i++) {
+
+                                        gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                    }
+                                }
                                 onResponseReady(response);
                             })
                             .catch(function (error) {
@@ -84,6 +94,12 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
                     else {
                         return SchedulerTaskAPIService.GetFilteredTasks(dataRetrievalInput)
                             .then(function (response) {
+                                if (response.Data != undefined) {
+                                    for (var i = 0; i < response.Data.length; i++) {
+
+                                        gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                    }
+                                }
                                 onResponseReady(response);
                             })
                             .catch(function (error) {
@@ -213,7 +229,9 @@ app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationServ
             }
             function editTask(task) {
                 var onTaskUpdated = function (updatedItem) {
+                 
                     var updatedItemObj = { Entity: updatedItem };
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
                     gridAPI.itemUpdated(updatedItemObj);
                 };
 

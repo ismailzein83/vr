@@ -2,14 +2,15 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = [ 'VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService','VR_GenericData_GenericBusinessEntityService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VRUIUtilsService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
             },
+
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var genericBusinessEntityGrid = new GenericBusinessEntityGrid($scope, ctrl, $attrs);
@@ -24,7 +25,7 @@
             this.initializeController = initializeController;
             
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 ctrl.dataSource = [];
                 ctrl.columns = [];
@@ -46,6 +47,9 @@
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_GenericData_GenericBusinessEntityService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
@@ -53,6 +57,11 @@
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -75,6 +84,7 @@
             }
             function editGenericBusinessEntity(genericBusinessEntity) {
                 var onGenericBusinessEntityUpdated = function (updatedGenericBusinessEntity) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedGenericBusinessEntity);
                     gridAPI.itemUpdated(updatedGenericBusinessEntity);
                 };
                 VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(genericBusinessEntity.Entity.GenericBusinessEntityId, genericBusinessEntity.Entity.BusinessEntityDefinitionId, onGenericBusinessEntityUpdated);
@@ -112,6 +122,7 @@
                 };
 
                 api.onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedGenericBusinessEntity);
                     gridAPI.itemAdded(addedGenericBusinessEntity);
                 };
 
