@@ -121,7 +121,8 @@ as (select * from (values
 ('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities'		,null,null,'/Client/Images/menu-icons/Business Entities.png',10,0),
 ('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'					,null,null,'/Client/Images/menu-icons/other.png',11,0),
 ('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups'				,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,1,1),
-('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition'	,null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0)
+('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition'	,null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0),
+('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'	,null,null,'/images/menu-icons/busines intel.png',35,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
