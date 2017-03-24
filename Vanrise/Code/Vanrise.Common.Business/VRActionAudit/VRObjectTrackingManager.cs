@@ -46,7 +46,51 @@ namespace Vanrise.Common.Business
                 Guid loggableEntityId = manager.GetLoggableEntityId(input.Query.EntityUniqueName);
                 return dataManager.GetAll(loggableEntityId, input.Query.ObjectId);
             }
+
+            protected override ResultProcessingHandler<VRObjectTrackingMetaDataDetail> GetResultProcessingHandler(DataRetrievalInput<VRLoggableEntityQuery> input, BigResult<VRObjectTrackingMetaDataDetail> bigResult)
+            {
+                return new ResultProcessingHandler<VRObjectTrackingMetaDataDetail>
+                {
+                    ExportExcelHandler = new VRObjectTrackingExcelExportHandler()
+                };
+            }
         }
+
+
+        private class VRObjectTrackingExcelExportHandler : ExcelExportHandler<VRObjectTrackingMetaDataDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRObjectTrackingMetaDataDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "History",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "User name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Action name" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null )
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Time });
+                            row.Cells.Add(new ExportExcelCell { Value = record.UserName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ActionName });
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
 
         private VRObjectTrackingMetaDataDetail VRObjectTrackingDetailMapper(VRObjectTrackingMetaData objectTrackingMetaData)
         {
