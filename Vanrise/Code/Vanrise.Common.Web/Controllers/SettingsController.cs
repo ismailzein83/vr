@@ -25,14 +25,11 @@ namespace Vanrise.Common.Web.Controllers
         [Route("UpdateSetting")]
         public object UpdateSetting(Setting setting)
         {
+           
             SettingManager manager = new SettingManager();
-            try {
-                return manager.UpdateSetting(setting);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
+            if (!manager.DoesUserHaveUpdatePermission(setting))
                 return GetUnauthorizedResponse();
-            }
+            return manager.UpdateSetting(setting);
                 
         }
 
@@ -41,16 +38,9 @@ namespace Vanrise.Common.Web.Controllers
         public object GetSetting(Guid settingId)
         {
             SettingManager manager = new SettingManager();
-            try
-            {
-                return manager.GetSetting(settingId,true);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
+            if (!manager.DoesUserHaveGetSettings(settingId))
                 return GetUnauthorizedResponse();
-            }
-
-           
+            return manager.GetSetting(settingId,true);
         }
 
         [HttpGet]

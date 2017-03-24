@@ -58,17 +58,12 @@ namespace Vanrise.Common.Business
         }
         public UpdateOperationOutput<SettingDetail> UpdateSetting(Setting setting)
         {
-            if (setting.IsTechnical && !HasUpdateTechnicalSettings())
-                throw new UnauthorizedAccessException();  
-
             ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
-
             bool updateActionSucc = dataManager.UpdateSetting(setting);
             UpdateOperationOutput<SettingDetail> updateOperationOutput = new UpdateOperationOutput<SettingDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -77,9 +72,10 @@ namespace Vanrise.Common.Business
                 updateOperationOutput.UpdatedObject = SettingDetailMapper(setting);
             }
             return updateOperationOutput;
-
         }
 
+
+        
         public List<string> GetDistinctSettingCategories()
         {
             var allSettings = GetCachedSettings();
@@ -92,9 +88,7 @@ namespace Vanrise.Common.Business
         public Setting GetSetting(Guid settingId, bool isViewedFromUI)
         {
             var allSettings = GetCachedSettings();
-            var setting  =  allSettings.GetRecord(settingId);
-            if (setting.IsTechnical && !HasGetTechnicalSettings())
-                throw new UnauthorizedAccessException();
+            var setting  =  allSettings.GetRecord(settingId);          
             if (setting != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SettingLoggableEntity.Instance, setting);
             return setting;
@@ -159,18 +153,7 @@ namespace Vanrise.Common.Business
                 Entity = setting
             };
         }
-        private bool HasViewTechnicalSettings()
-        {
-            return  _securityContext.HasPermissionToActions("VRCommon/Settings/GetFilteredTechnicalSettings");
-        }
-        private bool HasUpdateTechnicalSettings()
-        {
-            return _securityContext.HasPermissionToActions("VRCommon/Settings/UpdateTechnicalSetting");
-        }
-        private bool HasGetTechnicalSettings()
-        {
-            return _securityContext.HasPermissionToActions("VRCommon/Settings/GetTechnicalSetting");
-        }
+    
 
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -226,6 +209,33 @@ namespace Vanrise.Common.Business
                 Setting setting = context.Object.CastWithValidate<Setting>("context.Object");
                 return s_settingManager.GetSettingName(setting);
             }
+            
         }
+
+        #region Security
+        public bool DoesUserHaveUpdatePermission(Setting setting)
+        {
+            return setting.IsTechnical && !HasUpdateTechnicalSettings();
+        }
+
+        public bool DoesUserHaveGetSettings(Guid settingId)
+        {
+            var setting = GetSetting(settingId);
+            return setting.IsTechnical && !HasGetTechnicalSettings();
+        }
+
+        private bool HasViewTechnicalSettings()
+        {
+            return _securityContext.HasPermissionToActions("VRCommon/Settings/GetFilteredTechnicalSettings");
+        }
+        private bool HasUpdateTechnicalSettings()
+        {
+            return _securityContext.HasPermissionToActions("VRCommon/Settings/UpdateTechnicalSetting");
+        }
+        private bool HasGetTechnicalSettings()
+        {
+            return _securityContext.HasPermissionToActions("VRCommon/Settings/GetTechnicalSetting");
+        }
+        #endregion
     }
 }
