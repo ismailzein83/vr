@@ -277,12 +277,13 @@ namespace Vanrise.Common.Business
         public void InsertExchangeRates(List<CurrencyExchangeRate> exchangeRates)
         {
             ICurrencyExchangeRateDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
+             CurrencyManager manager = new CurrencyManager();
             foreach (var exchangeRate in exchangeRates)
             {
                 int currencyExchangeRateId = -1;
                 bool insertActionSucc = dataManager.Insert(exchangeRate, out currencyExchangeRateId);
-                VRActionLogger.Current.LogObjectCustomAction(Vanrise.Common.Business.CurrencyManager.CurrencyLoggableEntity.Instance, "Add Exchange Rate ", false, exchangeRate, String.Format("New exchange rate added of date {0}",exchangeRate.ExchangeDate));
-
+                var currency = manager.GetCurrency(exchangeRate.CurrencyId);
+                VRActionLogger.Current.LogObjectCustomAction(Vanrise.Common.Business.CurrencyManager.CurrencyLoggableEntity.Instance, "Add Exchange Rate ", false, currency, String.Format("New exchange rate added of date {0}", exchangeRate.ExchangeDate));
             }
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
