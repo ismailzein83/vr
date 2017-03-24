@@ -137,6 +137,10 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
       <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>
       <Name>Vanrise.Notification.Business</Name>
@@ -201,10 +205,10 @@
     <Content Include="VR_Notification\Services\APIServices\VRNotificationTypeAPIService.js" />
     <Content Include="VR_Notification\Services\APIServices\VRNotificationViewAPIService.js" />
     <Content Include="VR_Notification\Services\VRActionService.js" />
+    <Content Include="VR_Notification\Services\VRAlertLevelService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleSettingsService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleTypeService.js" />
-    <Content Include="VR_Notification\Services\VRAlertService.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditorController.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditor.html" />
     <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelEditor.html" />
