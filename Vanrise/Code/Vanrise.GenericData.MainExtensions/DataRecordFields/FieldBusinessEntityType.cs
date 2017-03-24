@@ -142,7 +142,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return new ObjectListRecordFilter
                 {
                     CompareOperator = ListRecordFilterOperator.In,
-                    Values = filterValues.Select(value => value).ToList(),
+                    Values = nonNullValues,
                     FieldName = fieldName
                 };
             }
