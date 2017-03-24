@@ -10,6 +10,8 @@ using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
+using Retail.Teles.Business.AccountBEActionTypes;
 
 namespace Retail.Teles.Business
 {
@@ -166,6 +168,17 @@ namespace Retail.Teles.Business
             });
         }
 
+        public bool DosesuserHaveExecutePermission(Guid accountBEDefinitionId)
+        {
+            var accountDefinitionActions = new AccountBEDefinitionManager().GetAccountActionDefinitions(accountBEDefinitionId);
+            foreach (var a in accountDefinitionActions)
+            {
+                var settings = a.ActionDefinitionSettings as MappingTelesAccountActionSettings;
+                if (settings != null)
+                    return settings.DoesUserHaveExecutePermission();
+            }
+            return false;
+        }
         #endregion
 
         #region Private Classes

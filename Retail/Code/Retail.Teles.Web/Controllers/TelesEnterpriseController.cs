@@ -24,8 +24,10 @@ namespace Retail.Teles.Web.Controllers
         }
         [HttpPost]
         [Route("MapEnterpriseToAccount")]
-        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
+        public object MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
+            if (!_manager.DosesuserHaveExecutePermission(input.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.MapEnterpriseToAccount(input);
         }
     }

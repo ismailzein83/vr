@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Retail.Teles.Business.AccountBEActionTypes
 {
@@ -19,5 +20,24 @@ namespace Retail.Teles.Business.AccountBEActionTypes
             get { return "MappingTelesAccount"; }
         }
         public Guid VRConnectionId { get; set; }
+
+        public MappingTelesAccountActionSecurity Security { get; set; }
+
+        public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
+        {
+            return DoesUserHaveExecutePermission();
+        }
+
+        public bool DoesUserHaveExecutePermission()
+        {
+            if (this.Security != null && this.Security.ExecutePermission != null)
+                return ContextFactory.GetContext().IsAllowed(this.Security.ExecutePermission, ContextFactory.GetContext().GetLoggedInUserId());
+            return true;
+        }
+    }
+
+    public class MappingTelesAccountActionSecurity
+    {
+        public RequiredPermissionSettings ExecutePermission { get; set; }
     }
 }

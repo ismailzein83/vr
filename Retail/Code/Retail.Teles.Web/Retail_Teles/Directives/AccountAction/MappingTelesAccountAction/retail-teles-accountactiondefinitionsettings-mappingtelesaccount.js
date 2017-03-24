@@ -22,11 +22,17 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
             this.initializeController = initializeController;
             var conectionTypeAPI;
             var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
+            var executePermissionAPI;
+            var executePermissionReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onConectionTypeReady = function (api) {
                     conectionTypeAPI = api;
                     conectionTypeReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onExecuteRequiredPermissionReady = function (api) {
+                    executePermissionAPI = api;
+                    executePermissionReadyDeferred.resolve();
                 };
                 defineAPI();
             }
@@ -40,6 +46,8 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
                     var promises = [];
 
                     promises.push(loadConectionTypes());
+                    promises.push(loadExecuteRequiredPermission());
+
                     function loadConectionTypes() {
                         var conectionTypeLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -52,6 +60,17 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
                         });
                         return conectionTypeLoadDeferred.promise
                     }
+                    function loadExecuteRequiredPermission() {
+                        var executePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        executePermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: payload != undefined && payload.accountActionDefinitionSettings && payload.accountActionDefinitionSettings.Security != undefined && payload.accountActionDefinitionSettings.Security.ExecutePermission || undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(executePermissionAPI, dataPayload, executePermissionLoadDeferred);
+                        });
+                        return executePermissionLoadDeferred.promise
+                    }
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
@@ -60,6 +79,9 @@ app.directive('retailTelesAccountactiondefinitionsettingsMappingtelesaccount', [
                     return {
                         $type: 'Retail.Teles.Business.AccountBEActionTypes.MappingTelesAccountActionSettings, Retail.Teles.Business',
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
+                        Security:{
+                            ExecutePermission: executePermissionAPI.getData()
+                        }
                     };
                 };
 
