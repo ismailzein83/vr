@@ -10,7 +10,8 @@
 		<vr-row removeline>
 			<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 				<div transclude-to="buttons">
-					<vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Download" data-onclick="scopeModel.download"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
 					<vr-button type="Add" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddPermission"></vr-button>
 				</div>
 			</vr-actionbar>

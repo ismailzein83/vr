@@ -1,73 +1,81 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	SalePriceListTemplateAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig', 'SecurityService'];
+    SalePriceListTemplateAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig', 'SecurityService'];
 
-	function SalePriceListTemplateAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
+    function SalePriceListTemplateAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
 
-		var controllerName = 'SalePriceListTemplate';
+        var controllerName = 'SalePriceListTemplate';
 
-		function GetFilteredSalePriceListTemplates(input) {
-			return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredSalePriceListTemplates'), input);
-		}
+        function GetFilteredSalePriceListTemplates(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetFilteredSalePriceListTemplates'), input);
+        }
 
-		function GetSalePriceListTemplate(salePriceListTemplateId) {
-			return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplate'), {
-				salePriceListTemplateId: salePriceListTemplateId
-			});
-		}
+        function GetSalePriceListTemplate(salePriceListTemplateId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplate'), {
+                salePriceListTemplateId: salePriceListTemplateId
+            });
+        }
 
-		function GetSalePriceListTemplatesInfo(filter) {
-			return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplatesInfo'), {
-				filter: filter
-			});
-		}
+        function GetSalePriceListTemplatesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplatesInfo'), {
+                filter: filter
+            });
+        }
 
-		function GetSalePriceListTemplateSettingsExtensionConfigs() {
-			return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplateSettingsExtensionConfigs'));
-		}
+        function GetSalePriceListTemplateSettingsExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplateSettingsExtensionConfigs'));
+        }
 
-		function GetMappedTablesExtensionConfigs() {
-		    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetMappedTablesExtensionConfigs'));
-		}
+        function GetMappedTablesExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetMappedTablesExtensionConfigs'));
+        }
 
-		function GetBasicSettingsMappedValueExtensionConfigs(priceListType) {
-		    return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetBasicSettingsMappedValueExtensionConfigs'), {
-		        priceListType: priceListType
-		    });
-		}
+        function GetBasicSettingsMappedValueExtensionConfigs(priceListType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetBasicSettingsMappedValueExtensionConfigs'), {
+                priceListType: priceListType
+            });
+        }
 
-		function AddSalePriceListTemplate(salePriceListTemplate) {
-			return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'AddSalePriceListTemplate'), salePriceListTemplate);
-		}
+        function AddSalePriceListTemplate(salePriceListTemplate) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'AddSalePriceListTemplate'), salePriceListTemplate);
+        }
 
-		function UpdateSalePriceListTemplate(salePriceListTemplate) {
-			return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'UpdateSalePriceListTemplate'), salePriceListTemplate);
-		}
+        function UpdateSalePriceListTemplate(salePriceListTemplate) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'UpdateSalePriceListTemplate'), salePriceListTemplate);
+        }
 
-		function HasAddSalePriceListTemplatePermission() {
-			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddSalePriceListTemplate']));
-		}
+        function DownloadSalePriceListTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "DownloadSalePriceListTemplate"), {}, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
 
-		function HasEditSalePriceListTemplatePermission() {
-			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSalePriceListTemplate']));
-		}
+        function HasAddSalePriceListTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddSalePriceListTemplate']));
+        }
 
-		return ({
-			GetFilteredSalePriceListTemplates: GetFilteredSalePriceListTemplates,
-			GetSalePriceListTemplate: GetSalePriceListTemplate,
-			GetSalePriceListTemplatesInfo: GetSalePriceListTemplatesInfo,
-			GetSalePriceListTemplateSettingsExtensionConfigs: GetSalePriceListTemplateSettingsExtensionConfigs,
-			GetBasicSettingsMappedValueExtensionConfigs: GetBasicSettingsMappedValueExtensionConfigs,
-			GetMappedTablesExtensionConfigs : GetMappedTablesExtensionConfigs,
-			AddSalePriceListTemplate: AddSalePriceListTemplate,
-			UpdateSalePriceListTemplate: UpdateSalePriceListTemplate,
-			HasAddSalePriceListTemplatePermission: HasAddSalePriceListTemplatePermission,
-			HasEditSalePriceListTemplatePermission: HasEditSalePriceListTemplatePermission
-		});
-	}
+        function HasEditSalePriceListTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSalePriceListTemplate']));
+        }
 
-	appControllers.service('WhS_BE_SalePriceListTemplateAPIService', SalePriceListTemplateAPIService);
+        return ({
+            GetFilteredSalePriceListTemplates: GetFilteredSalePriceListTemplates,
+            GetSalePriceListTemplate: GetSalePriceListTemplate,
+            GetSalePriceListTemplatesInfo: GetSalePriceListTemplatesInfo,
+            GetSalePriceListTemplateSettingsExtensionConfigs: GetSalePriceListTemplateSettingsExtensionConfigs,
+            GetBasicSettingsMappedValueExtensionConfigs: GetBasicSettingsMappedValueExtensionConfigs,
+            GetMappedTablesExtensionConfigs: GetMappedTablesExtensionConfigs,
+            AddSalePriceListTemplate: AddSalePriceListTemplate,
+            UpdateSalePriceListTemplate: UpdateSalePriceListTemplate,
+            DownloadSalePriceListTemplate: DownloadSalePriceListTemplate,
+            HasAddSalePriceListTemplatePermission: HasAddSalePriceListTemplatePermission,
+            HasEditSalePriceListTemplatePermission: HasEditSalePriceListTemplatePermission
+        });
+    }
+
+    appControllers.service('WhS_BE_SalePriceListTemplateAPIService', SalePriceListTemplateAPIService);
 
 })(appControllers);

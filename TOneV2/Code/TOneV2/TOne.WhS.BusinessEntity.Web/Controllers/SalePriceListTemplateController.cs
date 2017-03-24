@@ -76,5 +76,19 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             var manager = new SalePriceListTemplateManager();
             return manager.UpdateSalePriceListTemplate(salePriceListTemplate);
         }
+
+        [HttpGet]
+        [Route("DownloadSalePriceListTemplate")]
+        public object DownloadSalePriceListTemplate()
+        {
+            string templateRelativePath = "~/Client/Modules/WhS_BusinessEntity/Templates/Sale Pricelist Template.xlsx";
+            string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
+            byte[] bytes = System.IO.File.ReadAllBytes(templateAbsolutePath);
+
+            var memoryStream = new System.IO.MemoryStream();
+            memoryStream.Write(bytes, 0, bytes.Length);
+            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memoryStream, "Sale Pricelist Template.xlsx");
+        }
     }
 }

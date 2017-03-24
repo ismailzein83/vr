@@ -41,6 +41,12 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                 cacheObjectName = UtilsService.guid();
             };
 
+            $scope.scopeModel.download = function () {
+                WhS_Sales_RatePlanAPIService.DownloadImportRatePlanTemplate().then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            };
+
             defineAPI();
         }
         function defineAPI() {
@@ -89,8 +95,11 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
                         <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
-                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 3}}">\
                         <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
+                    </vr-columns>\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}" withemptyline>\
+                        <vr-button type="Download" data-onclick="scopeModel.download" standalone></vr-button>\
                     </vr-columns>\
                 </span>';
     }

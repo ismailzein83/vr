@@ -245,14 +245,14 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("DownloadImportRatePlanTemplate")]
         public object DownloadImportRatePlanTemplate()
         {
-            string templateRelativePath = "~/Client/Modules/WhS_Sales/Templates/Import Rate Plan Template.xls";
+            string templateRelativePath = "~/Client/Modules/WhS_Sales/Templates/Import Rate Plan Template.xlsx";
             string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
             byte[] bytes = File.ReadAllBytes(templateAbsolutePath);
 
             MemoryStream memoryStream = new System.IO.MemoryStream();
             memoryStream.Write(bytes, 0, bytes.Length);
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-            return GetExcelResponse(memoryStream, "Import Rate Plan Template.xls");
+            return GetExcelResponse(memoryStream, "Import Rate Plan Template.xlsx");
         }
 
         [HttpPost]

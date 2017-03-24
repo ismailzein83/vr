@@ -1,52 +1,58 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	SalePriceListTemplateManagementController.$inject = ['$scope', 'WhS_BE_SalePriceListTemplateService', 'WhS_BE_SalePriceListTemplateAPIService', 'UtilsService', 'VRNotificationService'];
+    SalePriceListTemplateManagementController.$inject = ['$scope', 'WhS_BE_SalePriceListTemplateService', 'WhS_BE_SalePriceListTemplateAPIService', 'UtilsService', 'VRNotificationService'];
 
-	function SalePriceListTemplateManagementController($scope, WhS_BE_SalePriceListTemplateService, WhS_BE_SalePriceListTemplateAPIService, UtilsService, VRNotificationService) {
+    function SalePriceListTemplateManagementController($scope, WhS_BE_SalePriceListTemplateService, WhS_BE_SalePriceListTemplateAPIService, UtilsService, VRNotificationService) {
 
-		var gridAPI;
+        var gridAPI;
 
-		defineScope();
-		load();
+        defineScope();
+        load();
 
-		function defineScope() {
+        function defineScope() {
 
-			$scope.scopeModel = {};
+            $scope.scopeModel = {};
 
-			$scope.scopeModel.onGridReady = function (api) {
-				gridAPI = api;
-				gridAPI.load(getGridQuery());
-			};
+            $scope.scopeModel.onGridReady = function (api) {
+                gridAPI = api;
+                gridAPI.load(getGridQuery());
+            };
 
-			$scope.scopeModel.search = function () {
-				return gridAPI.load(getGridQuery());
-			};
+            $scope.scopeModel.search = function () {
+                return gridAPI.load(getGridQuery());
+            };
 
-			$scope.scopeModel.add = function () {
-				var onSalePriceListTemplateAdded = function (addedSalePriceListTemplate) {
-					gridAPI.onSalePriceListTemplateAdded(addedSalePriceListTemplate);
-				};
-				WhS_BE_SalePriceListTemplateService.addSalePriceListTemplate(onSalePriceListTemplateAdded);
-			};
+            $scope.scopeModel.add = function () {
+                var onSalePriceListTemplateAdded = function (addedSalePriceListTemplate) {
+                    gridAPI.onSalePriceListTemplateAdded(addedSalePriceListTemplate);
+                };
+                WhS_BE_SalePriceListTemplateService.addSalePriceListTemplate(onSalePriceListTemplateAdded);
+            };
 
-			$scope.scopeModel.hasAddPermission = function () {
-				return WhS_BE_SalePriceListTemplateAPIService.HasAddSalePriceListTemplatePermission();
-			};
-		}
+            $scope.scopeModel.download = function () {
+                return WhS_BE_SalePriceListTemplateAPIService.DownloadSalePriceListTemplate().then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            };
 
-		function load() {
+            $scope.scopeModel.hasAddPermission = function () {
+                return WhS_BE_SalePriceListTemplateAPIService.HasAddSalePriceListTemplatePermission();
+            };
+        }
 
-		}
+        function load() {
 
-		function getGridQuery() {
-			return {
-				Name: $scope.scopeModel.name
-			};
-		}
-	}
+        }
 
-	appControllers.controller('WhS_BE_SalePriceListTemplateManagementController', SalePriceListTemplateManagementController);
+        function getGridQuery() {
+            return {
+                Name: $scope.scopeModel.name
+            };
+        }
+    }
+
+    appControllers.controller('WhS_BE_SalePriceListTemplateManagementController', SalePriceListTemplateManagementController);
 
 })(appControllers);

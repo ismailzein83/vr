@@ -285,7 +285,7 @@
     <Content Include="WhS_Sales\Views\ZoneInfoController.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WhS_Sales\Templates\Import Rate Plan Template.xls" />
+    <Content Include="WhS_Sales\Templates\Import Rate Plan Template.xlsx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
