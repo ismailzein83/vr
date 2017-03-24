@@ -216,13 +216,19 @@ namespace Vanrise.Common.Business
         public bool DoesUserHaveUpdatePermission(Guid settingId)
         {
             var setting = GetSetting(settingId);
-            return setting.IsTechnical && !HasUpdateTechnicalSettings();
+            if (setting.IsTechnical && !HasUpdateTechnicalSettings())
+                return false;
+            else
+                return true;
         }
 
         public bool DoesUserHaveGetSettings(Guid settingId)
         {
             var setting = GetSetting(settingId);
-            return setting.IsTechnical && !HasGetTechnicalSettings();
+            if (setting.IsTechnical && !HasGetTechnicalSettings())
+                return false;
+            else
+                return true;
         }
 
         private bool HasViewTechnicalSettings()
