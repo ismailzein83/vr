@@ -64,11 +64,12 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SwapDealAnalysisInboundRateCalcMethodContext.cs" />
     <Compile Include="Context\SwapDealAnalysisOutboundRateCalcMethodContext.cs" />
+    <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="VolCommitmentDealManager.cs" />
-    <Compile Include="SwapDealManager.cs" />
+    <Compile Include="SwapDeals\SwapDealManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseDealManager.cs" />
-    <Compile Include="SwapDealAnalysisManager.cs" />
+    <Compile Include="SwapDeals\SwapDealAnalysisManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
@@ -87,10 +88,12 @@
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
       <Name>TOne.WhS.Deal.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
+      <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
+      <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SwapDeals\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

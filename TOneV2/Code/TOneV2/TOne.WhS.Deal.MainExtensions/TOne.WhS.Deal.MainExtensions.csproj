@@ -65,6 +65,8 @@
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateFixed.cs" />
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateSuppliers.cs" />
+    <Compile Include="SwapDealBuyRouteRules\FixedSwapDealBuyRouteRule.cs" />
+    <Compile Include="SwapDealBuyRouteRules\BySaleDealSwapDealBuyRouteRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
