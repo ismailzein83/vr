@@ -39,3 +39,5 @@
 	WhS_AccountBalance      C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.AccountBalance.Web\WhS_AccountBalance
 	NP_IVSwitch				C:\TFS\NetworkProvisioning\Code\NP.IVSwitch.Web\NP_IVSwitch
 	WhS_TOneV1Transition	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.TOneV1Transition\WhS_TOneV1Transition
+	WhS_InvToAccBalanceRelation C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.InvToAccBalanceRelation.Web\WhS_InvToAccBalanceRelation
+	VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
