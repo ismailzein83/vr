@@ -13,7 +13,9 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                                         FROM            Retail_EDR.Message WITH (NOLOCK))
     SELECT        StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, TypeConsumed, Bag, 
                               PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, OriginatingZoneID, TerminatingZoneID, AirtimeRate, 
-                              AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, MTAmount, Profit, TypeCalled
+                              AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, MTAmount, Profit, TypeCalled, CONVERT(datetime, 
+                              CONVERT(varchar(10), StartDate, 121)) AS Day, 'Week ' + RIGHT('00' + CONVERT(VARCHAR, DATEPART(wk, StartDate)), 2) + ' ' + CONVERT(VARCHAR, 
+                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month
      FROM            AllEDRs AS AllEDRs_1
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
@@ -146,7 +148,7 @@ Begin DesignProperties =
          Width = 1500
          Width = 1500
          Width = 1500
-         Width = 1500
+         Width = 1980
          Width = 1500
          Width = 1500
       End
@@ -171,6 +173,8 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 
