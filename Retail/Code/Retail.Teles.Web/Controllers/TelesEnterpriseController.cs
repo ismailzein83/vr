@@ -26,7 +26,7 @@ namespace Retail.Teles.Web.Controllers
         [Route("MapEnterpriseToAccount")]
         public object MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
-            if (!_manager.DosesuserHaveExecutePermission(input.AccountBEDefinitionId))
+            if (!_manager.DoesUserHaveExecutePermission(input.AccountBEDefinitionId))
                 return GetUnauthorizedResponse();
             return _manager.MapEnterpriseToAccount(input);
         }

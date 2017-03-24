@@ -168,7 +168,7 @@ namespace Retail.Teles.Business
             });
         }
 
-        public bool DosesuserHaveExecutePermission(Guid accountBEDefinitionId)
+        public bool DoesUserHaveExecutePermission(Guid accountBEDefinitionId)
         {
             var accountDefinitionActions = new AccountBEDefinitionManager().GetAccountActionDefinitions(accountBEDefinitionId);
             foreach (var a in accountDefinitionActions)
@@ -185,7 +185,7 @@ namespace Retail.Teles.Business
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected virtual bool IsTimeExpirable
+            protected override bool IsTimeExpirable
             {
                 get
                 {
