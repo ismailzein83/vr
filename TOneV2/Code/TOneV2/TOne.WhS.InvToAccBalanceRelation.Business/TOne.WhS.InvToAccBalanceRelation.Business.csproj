@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4AD88D82-1C71-4D5C-9C02-1EBD6EA1FE60}</ProjectGuid>
+    <ProjectGuid>{F99ABD6C-3D5C-40C2-8D37-DE2F9707B038}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TOne.WhS.InvToAccBalanceRelation.Business</RootNamespace>

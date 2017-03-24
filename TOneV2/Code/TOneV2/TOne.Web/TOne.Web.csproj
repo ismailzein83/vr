@@ -438,6 +438,15 @@
     <Reference Include="Vanrise.Invoice.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
@@ -922,6 +931,14 @@
     <ProjectReference Include="..\TOne.WhS.Invoice.Web\TOne.WhS.Invoice.Web.csproj">
       <Project>{b4780a4b-c94d-4c68-91d3-6c27e9ca6804}</Project>
       <Name>TOne.WhS.Invoice.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.InvToAccBalanceRelation.Business\TOne.WhS.InvToAccBalanceRelation.Business.csproj">
+      <Project>{f99abd6c-3d5c-40c2-8d37-de2f9707b038}</Project>
+      <Name>TOne.WhS.InvToAccBalanceRelation.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.InvToAccBalanceRelation.Web\TOne.WhS.InvToAccBalanceRelation.Web.csproj">
+      <Project>{3576c635-48b8-47b2-ac5d-6117110f3ccf}</Project>
+      <Name>TOne.WhS.InvToAccBalanceRelation.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Arguments\TOne.WhS.RouteSync.BP.Arguments.csproj">
       <Project>{c5c38b71-3244-4bc0-bdbf-31b7a5e71c74}</Project>

@@ -118,14 +118,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="VR_InvToAccBalanceRelation\Constant\" />
-    <Folder Include="VR_InvToAccBalanceRelation\Elements\" />
+    <Folder Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RelationDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="VR_InvToAccBalanceRelation\Constant\ModuleConfig.js" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\Templates\VRInvToAccBalanceRelationDefinitionSettings.html" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\vr-invtoaccbalancerelation-definition-extendedsettings.js" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\vr-invtoaccbalancerelation-definition-settings.js" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Services\APIServies\InvToAccBalanceRelationDefinitionAPIService.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.InvToAccBalanceRelation.Business\Vanrise.InvToAccBalanceRelation.Business.csproj">
+      <Project>{fd744119-7b12-4e47-916d-b503995458b8}</Project>
+      <Name>Vanrise.InvToAccBalanceRelation.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.InvToAccBalanceRelation.Entities\Vanrise.InvToAccBalanceRelation.Entities.csproj">
+      <Project>{40e7f748-caef-4dab-a955-e2b62cb5db79}</Project>
+      <Name>Vanrise.InvToAccBalanceRelation.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -154,6 +178,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

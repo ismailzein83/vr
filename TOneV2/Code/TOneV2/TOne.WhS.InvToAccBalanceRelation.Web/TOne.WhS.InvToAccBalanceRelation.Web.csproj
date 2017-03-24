@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C7EDD6B8-6C10-4581-9BB1-07C5A5F13AA8}</ProjectGuid>
+    <ProjectGuid>{3576C635-48B8-47B2-AC5D-6117110F3CCF}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -120,12 +120,14 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="WhS_InvToAccBalanceRelation\Constant\" />
-    <Folder Include="WhS_InvToAccBalanceRelation\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="WhS_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\Templates\CarrierInvToAccBalanceDefinitionExtendedSettings.html" />
+    <Content Include="WhS_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\whs-invtoaccbalancerelation-definition-carrierextendedsettings.js" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -142,9 +144,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>47963</DevelopmentServerPort>
+          <DevelopmentServerPort>64181</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:47963/</IISUrl>
+          <IISUrl>http://localhost:64181/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

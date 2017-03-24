@@ -46,6 +46,7 @@
     <Compile Include="BalanceAccountInfo.cs" />
     <Compile Include="InvoiceAccountInfo.cs" />
     <Compile Include="InvToAccBalanceRelationDefinition.cs" />
+    <Compile Include="RelationDefinitionExtendedSettingsConfig.cs" />
     <Compile Include="InvToAccBalanceRelationDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
