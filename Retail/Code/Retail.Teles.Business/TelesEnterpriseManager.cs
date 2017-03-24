@@ -19,7 +19,7 @@ namespace Retail.Teles.Business
 
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, false);
 
             Func<TelesEnterpriseInfo, bool> filterFunc = null;
             if (filter != null)
@@ -39,20 +39,30 @@ namespace Retail.Teles.Business
 
             }
 
-            if (cachedEnterprises == null)
-                return null;
             return cachedEnterprises.Values.OrderBy(x => x.Name);
         }
         public TelesEnterpriseInfo GetEnterprise(Guid vrConnectionId, dynamic enterpriseId)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId);
-            var enterprise = cachedEnterprises.FindRecord(x => x.Key == enterpriseId);
-            return enterprise.Value;
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, false);
+            TelesEnterpriseInfo enterpriseInfo;
+            cachedEnterprises.TryGetValue(enterpriseId, out enterpriseInfo);
+            return enterpriseInfo;
         }
         public string GetEnterpriseName(Guid vrConnectionId, dynamic enterpriseId)
         {
-            TelesEnterpriseInfo telesEnterpriseInfo = this.GetEnterprise(vrConnectionId, enterpriseId);
-            return (telesEnterpriseInfo != null) ? telesEnterpriseInfo.Name : null;
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, true);
+            if (cachedEnterprises != null)
+            {
+                TelesEnterpriseInfo enterpriseInfo;
+                if (cachedEnterprises.TryGetValue(enterpriseId, out enterpriseInfo))
+                    return enterpriseInfo.Name;
+                else
+                    return null;
+            }
+            else
+            {
+                return string.Format("{0} (Name unavailable)", enterpriseId);
+            }
         }
         public IEnumerable<dynamic> GetSites(Guid vrConnectionId, dynamic telesEnterpriseId)
         {
@@ -159,6 +169,7 @@ namespace Retail.Teles.Business
         #endregion
 
         #region Private Classes
+
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             protected virtual bool IsTimeExpirable
@@ -169,41 +180,73 @@ namespace Retail.Teles.Business
                 }
             }
         }
+
+        private class CachedEnterprisesInfo
+        {
+            public bool IsValid { get; set; }
+
+            public Dictionary<dynamic, TelesEnterpriseInfo> EnterpriseInfos { get; set; }
+        }
+
         #endregion
 
         #region Private Methods
-        private Dictionary<dynamic, TelesEnterpriseInfo> GetCachedEnterprises(Guid vrConnectionId)
+        private Dictionary<dynamic, TelesEnterpriseInfo> GetCachedEnterprises(Guid vrConnectionId, bool handleTelesNotAvailable)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesInfo_{0}", vrConnectionId),
+            CachedEnterprisesInfo enterpriseInfos = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesInfo_{0}", vrConnectionId),
                () =>
                {
-                   TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-
-                   var actionPath = string.Format("/domain/{0}/sub", telesRestConnection.DefaultDomainId);
-                   List<dynamic> enterprises = telesRestConnection.Get<List<dynamic>>(actionPath);
-                   List<TelesEnterpriseInfo> telesEnterpriseInfo = new List<TelesEnterpriseInfo>();
-                   if (enterprises != null)
+                   try
                    {
-                       foreach (var enterprise in enterprises)
+                       TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+
+                       var actionPath = string.Format("/domain/{0}/sub", telesRestConnection.DefaultDomainId);
+                       List<dynamic> enterprises = telesRestConnection.Get<List<dynamic>>(actionPath);
+                       List<TelesEnterpriseInfo> telesEnterpriseInfo = new List<TelesEnterpriseInfo>();
+                       if (enterprises != null)
                        {
-                           telesEnterpriseInfo.Add(new TelesEnterpriseInfo
+                           foreach (var enterprise in enterprises)
                            {
-                               Name = enterprise.name,
-                               TelesEnterpriseId = enterprise.id.Value
-                           });
+                               telesEnterpriseInfo.Add(new TelesEnterpriseInfo
+                               {
+                                   Name = enterprise.name,
+                                   TelesEnterpriseId = enterprise.id.Value
+                               });
+                           }
                        }
+                       return new CachedEnterprisesInfo
+                       {
+                           EnterpriseInfos = telesEnterpriseInfo.ToDictionary(x => x.TelesEnterpriseId, x => x),
+                           IsValid = true
+                       };
                    }
-                   return telesEnterpriseInfo.ToDictionary(x=>x.TelesEnterpriseId,x=>x);
+                   catch (Exception ex)//handle the case where Teles API is not available
+                   {
+                       LoggerFactory.GetExceptionLogger().WriteException(ex);
+                       return new CachedEnterprisesInfo
+                       {
+                           IsValid = false
+                       };
+                   }
                });
+            if (enterpriseInfos.IsValid)
+            {
+                return enterpriseInfos.EnterpriseInfos;
+            }
+            else
+            {
+                if (handleTelesNotAvailable)
+                    return null;
+                else
+                    throw new VRBusinessException("Cannot connect to Teles API");
+            }
         }
+
         private TelesRestConnection GetTelesRestConnection(Guid vrConnectionId)
         {
             VRConnectionManager vrConnectionManager = new VRConnectionManager();
             VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(vrConnectionId);
-            var telesRestConnection = vrConnection.Settings as TelesRestConnection;
-            if (telesRestConnection == null)
-                throw new NullReferenceException("telesRestConnection");
-            return telesRestConnection;
+            return vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", vrConnectionId);
         }
         #endregion
 
@@ -211,13 +254,11 @@ namespace Retail.Teles.Business
 
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
-            var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
+            var telesBEDefinitionSettings = context.EntityDefinition.Settings.CastWithValidate<TelesEnterpriseBEDefinitionSettings>("context.EntityDefinition.Settings");
 
-            var cachedEnterprises = GetCachedEnterprises(telesBEDefinitionSettings.VRConnectionId);
-            if (cachedEnterprises != null)
-                return cachedEnterprises.Select(itm => itm as dynamic).ToList();
-            else
-                return null;
+            var cachedEnterprises = GetCachedEnterprises(telesBEDefinitionSettings.VRConnectionId, false);
+
+            return cachedEnterprises.Values.Select(itm => itm as dynamic).ToList();
         }
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
