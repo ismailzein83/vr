@@ -29,6 +29,7 @@ namespace Vanrise.Notification.Business
                 return null;
             return vralertRuleType.Name;
         }
+
         public T GetVRAlertRuleTypeSettings<T>(Guid vrAlertRuleTypeId) where T : VRAlertRuleTypeSettings
         {
             var alertRuleType = GetVRAlertRuleType(vrAlertRuleTypeId);
@@ -126,7 +127,6 @@ namespace Vanrise.Notification.Business
 
         #endregion
 
-
         #region Private Classes
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -142,10 +142,9 @@ namespace Vanrise.Notification.Business
 
         #endregion
 
-
         #region Private Methods
 
-        Dictionary<Guid, VRAlertRuleType> GetCachedVRAlertRuleTypes()
+        private Dictionary<Guid, VRAlertRuleType> GetCachedVRAlertRuleTypes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRuleTypes",
                () =>
@@ -162,8 +161,8 @@ namespace Vanrise.Notification.Business
             else
                 return true;
         }
-        #endregion
 
+        #endregion
 
         #region Mappers
 
@@ -190,16 +189,6 @@ namespace Vanrise.Notification.Business
 
         #region Security
 
-        public bool DoesUserHaveViewAccess()
-        {
-            int userId = ContextFactory.GetContext().GetLoggedInUserId();
-            return DoesUserHaveViewAccess(userId);
-        }
-        public bool DoesUserHaveViewAccess(int userId)
-        {
-            return GetAllowedRuleTypeIds().Count > 0;
-        }
-
         public HashSet<Guid> GetAllowedRuleTypeIds()
         {
             var alertRuleTypes = GetCachedVRAlertRuleTypes();
@@ -213,6 +202,7 @@ namespace Vanrise.Notification.Business
             }
             return allowedRuleTypeIds;
         }
+
         public bool DoesUserHaveAddAccess()
         {
             var alertRuleTypes = GetCachedVRAlertRuleTypes().Values;
@@ -253,6 +243,16 @@ namespace Vanrise.Notification.Business
             var alertRuleType = GetVRAlertRuleType(alertRuleTypeId);
             return DoesUserHaveAccess(userId, alertRuleType, (sec) => sec.EditPermission);
         }
+        public bool DoesUserHaveViewAccess()
+        {
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId);
+        }
+        public bool DoesUserHaveViewAccess(int userId)
+        {
+            return GetAllowedRuleTypeIds().Count > 0;
+        }
+
         #endregion
     }
 }
