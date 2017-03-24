@@ -213,8 +213,9 @@ namespace Vanrise.Common.Business
         }
 
         #region Security
-        public bool DoesUserHaveUpdatePermission(Setting setting)
+        public bool DoesUserHaveUpdatePermission(Guid settingId)
         {
+            var setting = GetSetting(settingId);
             return setting.IsTechnical && !HasUpdateTechnicalSettings();
         }
 

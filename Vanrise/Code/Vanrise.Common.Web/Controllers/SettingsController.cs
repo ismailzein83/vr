@@ -27,7 +27,7 @@ namespace Vanrise.Common.Web.Controllers
         {
            
             SettingManager manager = new SettingManager();
-            if (!manager.DoesUserHaveUpdatePermission(setting))
+            if (!manager.DoesUserHaveUpdatePermission(setting.SettingId))
                 return GetUnauthorizedResponse();
             return manager.UpdateSetting(setting);
                 
