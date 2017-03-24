@@ -34,7 +34,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
 
             var alertExtendedSettings;
             var alertTypeSettings;
-
+            var vrAlertRuleTypeId;
             var context;
 
             this.initializeController = initializeController;
@@ -68,6 +68,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
 
                         alertExtendedSettings = payload.alertExtendedSettings;
                         alertTypeSettings = payload.alertTypeSettings;
+                        vrAlertRuleTypeId = payload.vrAlertRuleTypeId;
                     }
 
                     if (alertExtendedSettings != undefined && alertExtendedSettings.Criteria != undefined) {
@@ -96,6 +97,7 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                         var payload = {
                             settings: alertExtendedSettings,
                             alertTypeSettings: alertTypeSettings,
+                            vrAlertRuleTypeId: vrAlertRuleTypeId,
                             context: getContext()
                         };
                         VRUIUtilsService.callDirectiveLoad(vrAlertRuleSettingsDirectiveAPI, payload, loadRuleSettingsSectionPromiseDeferred);
@@ -115,13 +117,12 @@ app.directive('vrNotificationVrbalancealertruleSettings', ['UtilsService', 'VRUI
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            function getContext()
-            {
+            function getContext() {
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
                 currentContext.getAlertRuleTypeSettings = function () {
-                        return alertTypeSettings;
+                    return alertTypeSettings;
                 };
                 return currentContext;
             }

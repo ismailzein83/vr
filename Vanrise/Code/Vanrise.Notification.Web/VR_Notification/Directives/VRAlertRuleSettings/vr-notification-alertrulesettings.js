@@ -27,6 +27,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
         var actionExtensionType;
         var thresholdExtensionType;
         var balanceAlertThresholdConfigs = [];
+        var vrActionTarget;
         var context;
         function initializeController() {
 
@@ -45,7 +46,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
                     balanceAlertThreshold.RollbackActionNames = getActionNames(balanceAlertThreshold.RollbackActions);
                     ctrl.datasource.push({ Entity: balanceAlertThreshold });
                 };
-                VR_Notification_AlertRuleSettingsService.addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType, thresholdExtensionType, getContext());
+                VR_Notification_AlertRuleSettingsService.addAlertRuleThreshold(onAlertRuleSettingsAdded, actionExtensionType, thresholdExtensionType, vrActionTarget, getContext());
             };
 
             ctrl.removeThresholdAction = function (dataItem) {
@@ -71,7 +72,10 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
             };
 
             api.load = function (payload) {
+                var promises = [];
+                var vrAlertRuleTypeId;
                 if (payload != undefined) {
+                    vrAlertRuleTypeId = payload.vrAlertRuleTypeId;
                     if (payload.alertTypeSettings != undefined) {
                         actionExtensionType = payload.alertTypeSettings.VRActionExtensionType;
                         thresholdExtensionType = payload.alertTypeSettings.ThresholdExtensionType;
@@ -90,11 +94,18 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
                                 }
                             }
                         }
-
                     }
                 }
 
+                promises.push(loadActionTargetType());
 
+                function loadActionTargetType() {
+                    return VR_Notification_VRBalanceAlertRuleAPIService.GetVRBalanceActionTargetTypeByRuleTypeId(vrAlertRuleTypeId).then(function (response) {
+                        vrActionTarget = response;
+                    });
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             if (ctrl.onReady != null)
@@ -132,7 +143,7 @@ function (UtilsService, VR_Notification_AlertRuleSettingsService, VR_Notificatio
                 thresholdActionObj.RollbackActionNames = getActionNames(thresholdActionObj.RollbackActions);
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = { Entity: thresholdActionObj };
             };
-            VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType, getContext());
+            VR_Notification_AlertRuleSettingsService.editAlertRuleThreshold(dataItem.Entity, onThresholdActionUpdated, actionExtensionType, thresholdExtensionType, vrActionTarget, getContext());
         }
 
         function getVRBalanceAlertThresholdConfigs() {

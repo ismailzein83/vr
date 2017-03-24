@@ -13,7 +13,7 @@
         var thresholdActionExtensionType;
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var vrActionTargetType;
         var context;
         var rollBackVRActionManagementAPI;
         var rollBackVRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
@@ -30,6 +30,7 @@
                 balanceAlertActionExtensionType = parameters.actionExtensionType;
                 thresholdActionExtensionType = parameters.thresholdExtensionType;
                 context = parameters.context;
+                vrActionTargetType = parameters.vrActionTargetType;
                 isEditMode = (thresholdEntity != undefined);
             }
         }
@@ -90,7 +91,7 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = { context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: true };
+                var vrActionPayload = { vrActionTargetType: vrActionTargetType, context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: true };
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;
@@ -99,7 +100,7 @@
         function loadRollBackVRActionManagement() {
             var rollBackVRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             rollBackVRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = { context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.RollbackActions : undefined, isRequired: false };
+                var vrActionPayload = { vrActionTargetType: vrActionTargetType, context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.RollbackActions : undefined, isRequired: false };
                 VRUIUtilsService.callDirectiveLoad(rollBackVRActionManagementAPI, vrActionPayload, rollBackVRActionManagementLoadDeferred);
             });
             return rollBackVRActionManagementLoadDeferred.promises;

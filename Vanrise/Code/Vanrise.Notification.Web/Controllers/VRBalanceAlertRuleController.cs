@@ -20,5 +20,15 @@ namespace Vanrise.Notification.Web.Controllers
         {
             return _manager.GetVRBalanceAlertThresholdConfigs(extensionType);
         }
+
+
+        [HttpGet]
+        [Route("GetVRBalanceActionTargetTypeByRuleTypeId")]
+        public VRActionTargetType GetVRBalanceActionTargetTypeByRuleTypeId(Guid alertRuleTypeId)
+        {
+            VRAlertRuleTypeManager manager = new VRAlertRuleTypeManager();
+            return manager.GetVRAlertRuleTypeSettings<VRBalanceAlertRuleTypeSettings>(alertRuleTypeId).GetActionTargetType();
+
+        }
     }
 }

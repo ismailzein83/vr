@@ -13,9 +13,14 @@
                 extensionType: extensionType
             });
         }
-
+        function GetVRBalanceActionTargetTypeByRuleTypeId(alertRuleTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetVRBalanceActionTargetTypeByRuleTypeId"), {
+                alertRuleTypeId: alertRuleTypeId
+            });
+        }
         return ({
             GetVRBalanceAlertThresholdConfigs: GetVRBalanceAlertThresholdConfigs,
+            GetVRBalanceActionTargetTypeByRuleTypeId: GetVRBalanceActionTargetTypeByRuleTypeId
         });
     }
 
