@@ -643,6 +643,7 @@ namespace Retail.BusinessEntity.Business
                     {
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = exportColumn.Header });
                     }
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account Type" });
                     sheet.Rows = new List<ExportExcelRow>();
 
                     if (context.BigResult != null && context.BigResult.Data != null)
@@ -664,6 +665,7 @@ namespace Retail.BusinessEntity.Business
                                     row.Cells.Add(new ExportExcelCell { Value = "" });
                                 }
                             }
+                            row.Cells.Add(new ExportExcelCell { Value = accountDetail.AccountTypeTitle });
                         }
                     }
                 }
