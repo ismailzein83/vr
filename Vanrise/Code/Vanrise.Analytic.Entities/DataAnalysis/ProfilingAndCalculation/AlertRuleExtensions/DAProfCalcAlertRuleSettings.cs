@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Notification;
 using Vanrise.Notification.Entities;
@@ -15,5 +16,7 @@ namespace Vanrise.Analytic.Entities
         public DataRecordAlertRuleSettings Settings { get; set; }
 
         public List<string> GroupingFieldNames { get; set; }
+
+        public TimeSpan MinNotificationInterval { get; set; }
     }
 }

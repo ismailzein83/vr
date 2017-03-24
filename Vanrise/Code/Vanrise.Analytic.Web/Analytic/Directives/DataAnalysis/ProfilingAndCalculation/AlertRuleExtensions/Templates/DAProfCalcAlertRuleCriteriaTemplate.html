@@ -7,14 +7,17 @@
 </vr-row>
 
 <vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
+        <vr-timespan label="Min Notification Interval" isrequired="true" value="scopeModel.minNotificationInterval"></vr-timespan>
+    </vr-columns>
+    <vr-columns width="1/3row">
         <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"
                                                          onselectionchanged="scopeModel.onDataAnalysisItemDefinitionSelectionChanged"
                                                          customlabel="Analysis Type" isrequired="true">
 
         </vr-analytic-dataanalysisitemdefinition-selector>
     </vr-columns>
-    <vr-columns width="1/2row" ng-show="scopeModel.isDataanalysisitemdefinitionSelected">
+    <vr-columns width="1/3row" ng-show="scopeModel.isDataanalysisitemdefinitionSelected">
         <vr-analytic-daprofcalc-outputfields-selector on-ready="scopeModel.onDataAnalysisItemOutputFieldsSelectorReady" ismultipleselection
                                                       customlabel="Grouping Fields">
 

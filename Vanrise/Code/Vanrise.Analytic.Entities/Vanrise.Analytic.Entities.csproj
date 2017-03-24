@@ -124,7 +124,6 @@
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionQuery.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionSettings.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinition\IDataAnalysisItemDefinitionFilter.cs" />
-    <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleCriteria.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleExecPayload.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleTypeSettings.cs" />

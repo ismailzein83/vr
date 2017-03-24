@@ -96,7 +96,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         DataAnalysisFilterGroup: criteria.DataAnalysisFilterGroup,
                         OutputItemDefinitionId: criteria.DAProfCalcOutputItemDefinitionId,
                         GroupingFieldNames: criteria.GroupingFieldNames,
-                        Settings: dataRecordAlertRuleSettingsAPI.getData()
+                        Settings: dataRecordAlertRuleSettingsAPI.getData(),
+                        MinNotificationInterval: criteria.MinNotificationInterval
                     };
                 };
 
@@ -112,7 +113,10 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                     if (alertExtendedSettings != undefined) {
                         criteriapayload.criteria = {
-                            DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId, FilterGroup: alertExtendedSettings.FilterGroup, DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup, GroupingFieldNames: alertExtendedSettings.GroupingFieldNames
+                            DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId,
+                            MinNotificationInterval: alertExtendedSettings.MinNotificationInterval,
+                            DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup,
+                            GroupingFieldNames: alertExtendedSettings.GroupingFieldNames
                         };
                         $scope.scopeModel.selectedAnalysisTypeId = alertExtendedSettings.OutputItemDefinitionId;
                     }

@@ -106,6 +106,10 @@
 
                         if (criteria != undefined) {
                             daProfCalcOutputItemDefinitionId = criteria.DAProfCalcOutputItemDefinitionId;
+                            $scope.scopeModel.minNotificationInterval = criteria.MinNotificationInterval;
+                        }
+                        else {
+                            $scope.scopeModel.minNotificationInterval = '0.01:00:00';
                         }
                     }
 
@@ -174,10 +178,10 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleCriteria, Vanrise.Analytic.Entities",
                         DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds(),
                         DataAnalysisFilterGroup: dataAnalysisRecordFilterDirectiveAPI.getData().filterObj,
-                        GroupingFieldNames: groupingOutputFiledsAPI.getSelectedIds()
+                        GroupingFieldNames: groupingOutputFiledsAPI.getSelectedIds(),
+                        MinNotificationInterval: $scope.scopeModel.minNotificationInterval
                     };
                     return data;
                 };
