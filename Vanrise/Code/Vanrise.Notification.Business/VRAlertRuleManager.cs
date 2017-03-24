@@ -13,9 +13,10 @@ namespace Vanrise.Notification.Business
 {
     public class VRAlertRuleManager
     {
-         #region Ctor/Fields
+        #region Ctor/Fields
 
         static VRAlertRuleTypeManager _alertTypeManager;
+
         public VRAlertRuleManager()
         {
             _alertTypeManager = new VRAlertRuleTypeManager();
@@ -24,6 +25,7 @@ namespace Vanrise.Notification.Business
         #endregion
 
         #region Public Methods
+
         public List<VRAlertRule> GetActiveRules(Guid ruleTypeId)
         {
             return GetCachedRulesByType().GetRecord(ruleTypeId);
@@ -32,16 +34,18 @@ namespace Vanrise.Notification.Business
         public VRAlertRule GetVRAlertRule(long vrAlertRuleId)
         {
 
-            return GetVRAlertRule(vrAlertRuleId,false);
+            return GetVRAlertRule(vrAlertRuleId, false);
         }
+
         public VRAlertRule GetVRAlertRule(long vrAlertRuleId, bool isViewedFromUI)
         {
             Dictionary<long, VRAlertRule> cachedVRAlertRules = this.GetCachedVRAlertRules();
-          var vrAlertRule =cachedVRAlertRules.GetRecord(vrAlertRuleId);
-          if (vrAlertRule != null && isViewedFromUI)
-              VRActionLogger.Current.LogObjectViewed(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);
-          return vrAlertRule;
+            var vrAlertRule = cachedVRAlertRules.GetRecord(vrAlertRuleId);
+            if (vrAlertRule != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);
+            return vrAlertRule;
         }
+
         public string GetAlertRuleName(long vrAlertRuleId)
         {
             var vrAlertRule = GetVRAlertRule(vrAlertRuleId);
@@ -49,6 +53,7 @@ namespace Vanrise.Notification.Business
                 return null;
             return vrAlertRule.Name;
         }
+
         public IDataRetrievalResult<VRAlertRuleDetail> GetFilteredVRAlertRules(DataRetrievalInput<VRAlertRuleQuery> input)
         {
             var allVRAlertRules = this.GetCachedVRAlertRules();
@@ -79,7 +84,7 @@ namespace Vanrise.Notification.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 vrAlertRuleItem.VRAlertRuleId = vrAlertRuleId;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                VRActionLogger.Current.TrackAndLogObjectAdded(new VRAlertRuleLoggableEntity(vrAlertRuleItem.RuleTypeId),vrAlertRuleItem);
+                VRActionLogger.Current.TrackAndLogObjectAdded(new VRAlertRuleLoggableEntity(vrAlertRuleItem.RuleTypeId), vrAlertRuleItem);
                 insertOperationOutput.InsertedObject = VRAlertRuleDetailMapper(vrAlertRuleItem);
             }
             else
@@ -123,7 +128,6 @@ namespace Vanrise.Notification.Business
 
         #endregion
 
-
         #region Private Classes
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -137,31 +141,6 @@ namespace Vanrise.Notification.Business
             }
         }
 
-        #endregion
-
-
-        #region Private Methods
-
-        private Dictionary<Guid, List<VRAlertRule>> GetCachedRulesByType()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRulesByTypeId",
-               () =>
-               {
-                   return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.ToList());
-               });
-        }
-
-        Dictionary<long, VRAlertRule> GetCachedVRAlertRules()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRules",
-               () =>
-               {
-                   IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
-                   return dataManager.GetVRAlertRules().ToDictionary(x => x.VRAlertRuleId, x => x);
-               });
-        }
-
-        #endregion
         private class VRAlertRuleLoggableEntity : VRLoggableEntityBase
         {
 
@@ -212,6 +191,31 @@ namespace Vanrise.Notification.Business
                 get { return "Notification"; }
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<Guid, List<VRAlertRule>> GetCachedRulesByType()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRulesByTypeId",
+               () =>
+               {
+                   return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.ToList());
+               });
+        }
+
+        Dictionary<long, VRAlertRule> GetCachedVRAlertRules()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRules",
+               () =>
+               {
+                   IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
+                   return dataManager.GetVRAlertRules().ToDictionary(x => x.VRAlertRuleId, x => x);
+               });
+        }
+
+        #endregion
 
         #region Mappers
 
