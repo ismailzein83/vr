@@ -11,7 +11,7 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
     {
         public override Guid ConfigId
         {
-            get { return new Guid("F744297A-A379-4B2D-B912-1988C5F93F55"); }
+            get { return new Guid("F5CD8367-A6DC-421E-B93C-0567ED769150"); }
         }
 
         public override List<InvoiceAccountInfo> GetBalanceInvoiceAccounts(IInvToAccBalanceRelGetBalanceInvoiceAccountsContext context)
