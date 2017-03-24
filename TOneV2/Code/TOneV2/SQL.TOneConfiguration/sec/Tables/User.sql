@@ -12,8 +12,11 @@
     [EnabledTill]           DATETIME        NULL,
     [ExtendedSettings]      NVARCHAR (MAX)  NULL,
     [CreatedTime]           DATETIME        CONSTRAINT [DF_User_CreatedTime] DEFAULT (getdate()) NULL,
-    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [IX_User_Email] UNIQUE NONCLUSTERED ([Email] ASC)
 );
+
+
 
 
 
