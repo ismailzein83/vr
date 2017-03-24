@@ -161,7 +161,7 @@
                 promises.push(directivePromise);
             }
 
-            UtilsService.waitMultiplePromises(promises);
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function loadDirective() {

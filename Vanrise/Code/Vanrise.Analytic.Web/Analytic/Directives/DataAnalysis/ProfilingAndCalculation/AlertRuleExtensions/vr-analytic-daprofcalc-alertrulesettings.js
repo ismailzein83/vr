@@ -20,8 +20,12 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
         };
 
         function AlertRuleSettings($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
+
             var analysisTypeId;
             var outputFields;
+            var alertExtendedSettings;
+            var alertTypeSettings;
 
             var criteriaDirectiveAPI;
             var criteriaDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -30,13 +34,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
             var dataRecordAlertRuleSettingsAPI;
             var dataRecordAlertRuleSettingReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var alertExtendedSettings;
-            var alertTypeSettings;
-
-            this.initializeController = initializeController;
-
             function initializeController() {
-
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
@@ -50,18 +48,24 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 };
 
                 $scope.scopeModel.onCriteriaSelectionChanged = function (daProfCalcOutputItemDefinition) {
+                    $scope.scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading = true;
+
                     analysisTypeId = $scope.scopeModel.selectedAnalysisTypeId = daProfCalcOutputItemDefinition.DataAnalysisItemDefinitionId;
 
                     VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(analysisTypeId).then(function (response) {
                         outputFields = response;
+
                         var dataRecordAlertRuleSettingsPayload = {
                             settings: undefined,
                             context: buildContext()
                         };
-
-                        VRUIUtilsService.callDirectiveLoad(dataRecordAlertRuleSettingsAPI, dataRecordAlertRuleSettingsPayload, undefined);
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordAlertRuleSettingsAPI, dataRecordAlertRuleSettingsPayload, setLoader, undefined);
                     });
                 };
+
                 defineAPI();
             };
 
@@ -70,26 +74,30 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                 api.load = function (payload) {
                     var promises = [];
+
                     if (payload != undefined) {
                         alertTypeSettings = payload.alertTypeSettings;
                         alertExtendedSettings = payload.alertExtendedSettings;
+
                         if (alertExtendedSettings != undefined) {
                             analysisTypeId = alertExtendedSettings.OutputItemDefinitionId;
                         }
-
-                        var loadCriteriaSectionPromise = getCriteriaSectionPromise();
-                        promises.push(loadCriteriaSectionPromise);
-
-                        if (alertExtendedSettings != undefined) {
-                            var loadDataRecordAlertRuleSettingsLoadPromise = loadDataRecordAlertRuleSettingsPromise();
-                            promises.push(loadDataRecordAlertRuleSettingsLoadPromise);
-                        }
                     }
+
+                    var loadCriteriaSectionPromise = getCriteriaSectionPromise();
+                    promises.push(loadCriteriaSectionPromise);
+
+                    if (alertExtendedSettings != undefined) {
+                        var loadDataRecordAlertRuleSettingsLoadPromise = loadDataRecordAlertRuleSettingsPromise();
+                        promises.push(loadDataRecordAlertRuleSettingsLoadPromise);
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var criteria = criteriaDirectiveAPI.getData();
+
                     return {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleSettings,Vanrise.Analytic.Entities",
                         FilterGroup: criteria.FilterGroup,
@@ -132,7 +140,9 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                 VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(analysisTypeId).then(function (response) {
                     outputFields = response;
+
                     dataRecordAlertRuleSettingReadyDeferred.promise.then(function () {
+
                         var dataRecordAlertRuleSettingsPayload = {
                             settings: alertExtendedSettings != undefined ? alertExtendedSettings.Settings : undefined,
                             context: buildContext()
@@ -157,8 +167,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     var field = fields[i];
                     recordFields.push({
                         Name: field.Name,
-                        Type: field.Type,
-                        Title: field.Title
+                        Title: field.Title,
+                        Type: field.Type
                     });
                 };
                 return recordFields;
@@ -166,7 +176,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
             function buildDAProfCalcTargetType(selectedAnalysisTypeId) {
                 return {
-                    $type: "Vanrise.Analytic.Business.DAProfCalcActionTargetType,Vanrise.Analytic.Business",
+                    $type: "Vanrise.Analytic.Business.DAProfCalcActionTargetType, Vanrise.Analytic.Business",
                     DataAnalysisItemDefinitionId: selectedAnalysisTypeId
                 };
             };

@@ -21,7 +21,6 @@
         defineScope();
         load();
 
-
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
@@ -35,7 +34,6 @@
             }
             isEditMode = dataRecordAlertRuleEntity != undefined;
         };
-
         function defineScope() {
             $scope.scopeModel = {};
 
@@ -73,7 +71,6 @@
                 $scope.modalContext.closeModal()
             };
         };
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -86,7 +83,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         };
-
         function setTitle() {
             if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor('Record Alert Rule');
@@ -95,14 +91,13 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('Record Alert Rule');
             }
         };
-
         function loadStaticData() {
             if (dataRecordAlertRuleEntity == undefined)
                 return;
         };
-
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
+
             vRActionManagementReadyDeferred.promise.then(function () {
                 var vrActionPayload = {
                     isRequired: false,
@@ -112,9 +107,9 @@
 
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
+
             return vRActionManagementLoadDeferred.promise;
         };
-
         function loadRecordFilterDirective() {
             var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -136,7 +131,6 @@
                 $scope.onDataRecordAlertRuleAdded(buildDataRecordAlertRuleObjFromScope());
             $scope.modalContext.closeModal();
         };
-
         function update() {
             if ($scope.onDataRecordAlertRuleUpdated != undefined) {
                 $scope.onDataRecordAlertRuleUpdated(buildDataRecordAlertRuleObjFromScope());
@@ -147,12 +141,12 @@
         function buildDataRecordAlertRuleObjFromScope() {
             var recordFilterData = recordFilterDirectiveAPI.getData();
             var actions = vRActionManagementAPI.getData();
-            var entity = {
-                FilterGroup: recordFilterData.filterObj,
-                Actions: actions
-            };
+
             return {
-                Entity: entity,
+                Entity: {
+                    FilterGroup: recordFilterData.filterObj,
+                    Actions: actions
+                },
                 FilterExpression: recordFilterData.expression,
                 ActionNames: buildActionNames(actions)
             }
@@ -160,19 +154,23 @@
 
         function getContext() {
             var currentContext = context;
+
             if (currentContext == undefined)
                 currentContext = {};
+
             return currentContext;
         };
 
         function buildActionNames(actions) {
             if (actions == undefined || actions == null || actions.length == 0)
                 return null;
+
             var actionNames = [];
             for (var x = 0; x < actions.length; x++) {
                 var currentAction = actions[x];
                 actionNames.push(currentAction.ActionName);
             }
+
             return actionNames.join();
         };
 
@@ -180,7 +178,6 @@
             var context = {
                 getFields: function () {
                     var fields = [];
-
                     if (outputFields) {
                         for (var i = 0 ; i < outputFields.length; i++) {
                             var field = outputFields[i];

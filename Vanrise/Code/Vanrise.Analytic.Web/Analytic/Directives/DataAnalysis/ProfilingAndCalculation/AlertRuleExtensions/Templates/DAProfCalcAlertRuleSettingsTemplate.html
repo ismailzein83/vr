@@ -1,11 +1,14 @@
 ﻿<vr-tab header="'Criteria'">
     <vr-row>
         <vr-columns width="fullrow">
-            <vr-analytic-daprofcalc-alertrulecriteria on-ready="scopeModel.onCriteriaDirectiveReady" on-criteria-selection-changed="scopeModel.onCriteriaSelectionChanged"></vr-analytic-daprofcalc-alertrulecriteria>
+            <vr-analytic-daprofcalc-alertrulecriteria on-ready="scopeModel.onCriteriaDirectiveReady"
+                                                      on-criteria-selection-changed="scopeModel.onCriteriaSelectionChanged">
+            </vr-analytic-daprofcalc-alertrulecriteria>
         </vr-columns>
     </vr-row>
 </vr-tab>
-
 <vr-tab header="'Settings'" ng-if="scopeModel.selectedAnalysisTypeId!=undefined">
-    <vr-genericdata-datarecordalertrule-settings on-ready="scopeModel.onDataRecordAlertRuleSettingsReady" vr-loader="scopeModel.isSettingsLoading"></vr-genericdata-datarecordalertrule-settings>
+    <span vr-loader="scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading">
+        <vr-genericdata-datarecordalertrule-settings on-ready="scopeModel.onDataRecordAlertRuleSettingsReady"></vr-genericdata-datarecordalertrule-settings>
+    </span>
 </vr-tab>

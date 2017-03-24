@@ -45,7 +45,7 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
                         context: context
                     };
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
+                        $scope.scopeModel.isDirectiveLoading = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -92,7 +92,6 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
 
                         return dataRecordAlertRuleConfigSelectorLoadPromiseDeferred.promise;
                     };
-
                     function getDirectiveLoadPromise() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
