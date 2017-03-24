@@ -117,5 +117,8 @@
     <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_FilterdBySenderNetwork_GroupedByRecipient.sql" />
     <Build Include="Retail_EDR\Stored Procedures\sp_RingoMessage_FilterdByRecipientNetwork_GroupedBySender.sql" />
     <Build Include="Retail_EDR\Views\vw_EDRs.sql" />
+    <Build Include="Retail_EDR\Tables\EDR.sql" />
+    <Build Include="Retail_EDR\User Defined Types\vw_EDRsType.sql" />
+    <Build Include="Retail_EDR\User Defined Types\EDRType.sql" />
   </ItemGroup>
 </Project>
