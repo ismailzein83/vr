@@ -54,7 +54,7 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
 
     function addTask() {
         var onTaskAdded = function (addedItem) {
-            var addedItemObj = { Entity: addedItem };
+            var addedItemObj = addedItem;
             gridAPI.onTaskAdded(addedItemObj);
         };
 

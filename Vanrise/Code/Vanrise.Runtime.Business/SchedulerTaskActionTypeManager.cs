@@ -106,7 +106,7 @@ namespace Vanrise.Runtime.Business
             var items = GetCachedSchedulerTaskActionTypes().Values;
             foreach (var item in items)
             {
-                if (DoesUserHaveViewAccess(userId, item.Info) && (!item.Info.IsUserTask) )
+                if (DoesUserHaveViewAccess(userId, item.Info) && (!item.Info.IsUserTask) && item.Info.Editor!=null)
                     actionTypeIds.Add(item.ActionTypeId);
             }
 

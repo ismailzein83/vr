@@ -102,11 +102,11 @@ namespace Vanrise.Integration.Business
             Vanrise.Runtime.Business.SchedulerTaskManager schedulerManager = new Runtime.Business.SchedulerTaskManager();
             taskObject.ActionTypeId = new Guid("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68");
             taskObject.TriggerTypeId = new Guid("295B4FAC-DBF9-456F-855E-60D0B176F86B");
-            Vanrise.Entities.InsertOperationOutput<Vanrise.Runtime.Entities.SchedulerTask> taskAdded = schedulerManager.AddTask(taskObject);
+            Vanrise.Entities.InsertOperationOutput<Vanrise.Runtime.Entities.SchedulerTaskDetail> taskAdded = schedulerManager.AddTask(taskObject);
             dataSourceObject.DataSourceId = Guid.NewGuid();
             if (taskAdded.Result == InsertOperationResult.Succeeded)
             {
-                dataSourceObject.TaskId = taskAdded.InsertedObject.TaskId;
+                dataSourceObject.TaskId = taskAdded.InsertedObject.Entity.TaskId;
 
                 IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
                 bool dataSourceInsertActionSucc = dataManager.AddDataSource(dataSourceObject);
@@ -136,7 +136,7 @@ namespace Vanrise.Integration.Business
             taskObject.ActionTypeId = new Guid("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68");
             taskObject.TriggerTypeId = new Guid("295B4FAC-DBF9-456F-855E-60D0B176F86B");
             Vanrise.Runtime.Business.SchedulerTaskManager schedulerManager = new Runtime.Business.SchedulerTaskManager();
-            Vanrise.Entities.UpdateOperationOutput<Vanrise.Runtime.Entities.SchedulerTask> taskUpdated = schedulerManager.UpdateTask(taskObject);
+            Vanrise.Entities.UpdateOperationOutput<Vanrise.Runtime.Entities.SchedulerTaskDetail> taskUpdated = schedulerManager.UpdateTask(taskObject);
 
             if (taskUpdated.Result == UpdateOperationResult.Succeeded)
             {
@@ -182,12 +182,12 @@ namespace Vanrise.Integration.Business
             updateOperationOutput.UpdatedObject = null;
 
             Vanrise.Runtime.Business.SchedulerTaskManager schedulerManager = new Runtime.Business.SchedulerTaskManager();
-            Vanrise.Entities.InsertOperationOutput<Vanrise.Runtime.Entities.SchedulerTask> taskAdded = schedulerManager.AddTask(task);
+            Vanrise.Entities.InsertOperationOutput<Vanrise.Runtime.Entities.SchedulerTaskDetail> taskAdded = schedulerManager.AddTask(task);
 
             if (taskAdded.Result == InsertOperationResult.Succeeded)
             {
                 IDataSourceDataManager dataSourceDataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-                bool updateActionSucc = dataSourceDataManager.UpdateTaskId(dataSourceId, taskAdded.InsertedObject.TaskId);
+                bool updateActionSucc = dataSourceDataManager.UpdateTaskId(dataSourceId, taskAdded.InsertedObject.Entity.TaskId);
 
                 if (updateActionSucc)
                 {

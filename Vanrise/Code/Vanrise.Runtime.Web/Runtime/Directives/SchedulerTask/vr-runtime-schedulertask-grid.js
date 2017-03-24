@@ -231,7 +231,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
             function editTask(task) {
                 var onTaskUpdated = function (updatedItem) {
                  
-                    var updatedItemObj = { Entity: updatedItem };
+                    var updatedItemObj = updatedItem ;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
                     gridAPI.itemUpdated(updatedItemObj);
                 };
