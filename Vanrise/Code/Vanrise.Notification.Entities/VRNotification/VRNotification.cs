@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Notification.Entities
 {
-    public enum VRNotificationStatus { New = 0, Executing = 10, Completed = 20, Cleared = 30, Suspended = 40 }
+    public enum VRNotificationStatus { New = 0, Executing = 10, Executed = 20, Cleared = 30, Suspended = 40 }
 
     public class VRNotification
     {

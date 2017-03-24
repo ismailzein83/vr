@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.Notification.BP.Arguments;
 using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Notification.Business
 {
@@ -94,25 +95,20 @@ namespace Vanrise.Notification.Business
         public VRNotificationUpdateOutput GetFirstPageVRNotifications(VRNotificationFirstPageInput input)
         {
             List<VRNotification> vrNotifications = new List<VRNotification>();
-            byte[] maxTimestamp = null;
-
-            long? nbOfRows = null;
-            if (input.ExtendedQuery == null)
-                nbOfRows = input.NbOfRows;
 
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(input.NotificationTypeId);
 
-            Func<VRNotification, bool> filterExpression = (vrNotification) =>
+            Func<VRNotification, bool> isNotificationMatched = (vrNotification) =>
             {
-                var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
-                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
+                var vrNotificationTypeIsMatchedContext = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
+                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(vrNotificationTypeIsMatchedContext);
             };
 
             Func<VRNotification, bool> onItemReady = (vrNotification) =>
             {
                 bool isFinalRow = false;
 
-                if (filterExpression(vrNotification))
+                if (isNotificationMatched(vrNotification))
                 {
                     vrNotifications.Add(vrNotification);
 
@@ -123,41 +119,48 @@ namespace Vanrise.Notification.Business
                 return isFinalRow;
             };
 
+            VRNotificationFirstPageContext vrNotificationFirstPageContext = new VRNotificationFirstPageContext()
+            {
+                NotificationTypeId = input.NotificationTypeId,
+                NbOfRows = input.ExtendedQuery == null ? input.NbOfRows : long.MaxValue,
+                Query = input.Query,
+                onItemReady = onItemReady
+            };
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            dataManager.GetFirstPageVRNotifications(input, nbOfRows, ref maxTimestamp, onItemReady);
+            dataManager.GetFirstPageVRNotifications(vrNotificationFirstPageContext);
 
             VRNotificationUpdateOutput vrNotificationUpdateOutput = new VRNotificationUpdateOutput();
             vrNotificationUpdateOutput.VRNotificationDetails = vrNotifications.Select(VRNotificationDetailMapper).ToList(); ;
-            vrNotificationUpdateOutput.MaxTimeStamp = maxTimestamp;
+            vrNotificationUpdateOutput.MaxTimeStamp = vrNotificationFirstPageContext.MaxTimeStamp;
 
             return vrNotificationUpdateOutput;
         }
 
         public VRNotificationUpdateOutput GetUpdatedVRNotifications(VRNotificationUpdateInput input)
         {
-            List<VRNotification> vrNotifications = new List<VRNotification>();
-            byte[] maxTimestamp = null;
-
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(input.NotificationTypeId);
 
-            Func<VRNotification, bool> filterExpression = (vrNotification) =>
-                {
-                    var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
-                    return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
-                };
+            Func<VRNotification, bool> isNotificationMatched = (vrNotification) =>
+            {
+                var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
+                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
+            };
 
-            Action<VRNotification> onItemReady = (vrNotification) =>
-                {
-                    if (filterExpression(vrNotification))
-                        vrNotifications.Add(vrNotification);
-                };
-
+            VRNotificationUpdateContext vrNotificationUpdateContext = new VRNotificationUpdateContext()
+            {
+                NotificationTypeId = input.NotificationTypeId,
+                NbOfRows = input.ExtendedQuery == null ? input.NbOfRows : long.MaxValue,
+                Query = input.Query,
+                MaxTimeStamp = input.LastUpdateHandle
+            };
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            dataManager.GetUpdateVRNotifications(input, ref maxTimestamp, onItemReady);
+            List<VRNotification> getUpdatedNotifications = dataManager.GetUpdateVRNotifications(vrNotificationUpdateContext);
+
+            IEnumerable<VRNotification> matchedVRNotification = getUpdatedNotifications.FindAllRecords(isNotificationMatched);
 
             VRNotificationUpdateOutput vrNotificationUpdateOutput = new VRNotificationUpdateOutput();
-            vrNotificationUpdateOutput.VRNotificationDetails = vrNotifications.Select(VRNotificationDetailMapper).ToList(); ;
-            vrNotificationUpdateOutput.MaxTimeStamp = maxTimestamp;
+            vrNotificationUpdateOutput.VRNotificationDetails = matchedVRNotification != null ? matchedVRNotification.Select(VRNotificationDetailMapper).ToList() : null;
+            vrNotificationUpdateOutput.MaxTimeStamp = vrNotificationUpdateContext.MaxTimeStamp;
 
             return vrNotificationUpdateOutput;
         }
@@ -166,35 +169,39 @@ namespace Vanrise.Notification.Business
         {
             List<VRNotification> vrNotifications = new List<VRNotification>();
 
-            long? nbOfRows = null;
-            if (input.ExtendedQuery == null)
-                nbOfRows = input.NbOfRows;
-
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(input.NotificationTypeId);
 
-            Func<VRNotification, bool> filterExpression = (vrNotification) =>
-                {
-                    var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
-                    return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
-                };
+            Func<VRNotification, bool> isNotificationMatched = (vrNotification) =>
+            {
+                var context = new VRNotificationTypeIsMatchedContext() { VRNotification = vrNotification, ExtendedQuery = input.ExtendedQuery };
+                return vrNotificationTypeExtendedSettings.IsVRNotificationMatched(context);
+            };
 
             Func<VRNotification, bool> onItemReady = (vrNotification) =>
+            {
+                bool isFinalRow = false;
+
+                if (isNotificationMatched(vrNotification))
                 {
-                    bool isFinalRow = false;
+                    vrNotifications.Add(vrNotification);
 
-                    if (filterExpression(vrNotification))
-                    {
-                        vrNotifications.Add(vrNotification);
+                    if (vrNotifications.Count == input.NbOfRows)
+                        isFinalRow = true;
+                }
 
-                        if (vrNotifications.Count == input.NbOfRows)
-                            isFinalRow = true;
-                    }
+                return isFinalRow;
+            };
 
-                    return isFinalRow;
-                };
-
+            VRNotificationBeforeIdContext vrNotificationBeforeIdContext = new VRNotificationBeforeIdContext()
+            {
+                NotificationTypeId = input.NotificationTypeId,
+                NbOfRows = input.ExtendedQuery == null ? input.NbOfRows : long.MaxValue,
+                LessThanID = input.LessThanID,
+                Query = input.Query,
+                onItemReady = onItemReady
+            };
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            dataManager.GetBeforeIdVRNotifications(input, nbOfRows, onItemReady);
+            dataManager.GetBeforeIdVRNotifications(vrNotificationBeforeIdContext);
 
             return vrNotifications.Select(VRNotificationDetailMapper).ToList();
         }

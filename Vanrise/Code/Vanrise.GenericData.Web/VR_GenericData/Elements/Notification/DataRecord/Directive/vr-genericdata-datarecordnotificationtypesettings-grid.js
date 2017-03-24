@@ -164,7 +164,7 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
             function manipulateDataUpdated(response) {
                 var itemAddedOrUpdatedInThisCall = false;
 
-                if (response != undefined && response.VRNotificationDetails.length > 0) {
+                if (response != undefined && response.VRNotificationDetails != undefined && response.VRNotificationDetails.length > 0) {
                     itemAddedOrUpdatedInThisCall = true;
 
                     for (var i = 0; i < response.VRNotificationDetails.length; i++) {

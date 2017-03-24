@@ -55,91 +55,81 @@ namespace Vanrise.Notification.Data.SQL
             ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus);
         }
 
-        public void GetFirstPageVRNotifications(VRNotificationFirstPageInput input, long? nbOfRows, ref byte[] maxTimeStamp, Func<VRNotification, bool> onItemReady)
+        public void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context)
         {
-            byte[] timestamp = null;
             bool isFinalRow = false;
 
-            if (!nbOfRows.HasValue)
-                nbOfRows = long.MaxValue;
+            string description = null;
+            if (context.Query != null && !string.IsNullOrEmpty(context.Query.Description))
+                description = context.Query.Description;
 
-            object description = DBNull.Value;
-            if (input.Query != null && !string.IsNullOrEmpty(input.Query.Description))
-                description = input.Query.Description;
+            string statusIds = null;
+            if (context.Query != null && context.Query.StatusIds != null && context.Query.StatusIds.Count > 0)
+                statusIds = string.Join<int>(",", context.Query.StatusIds);
 
-            object statusIds = DBNull.Value;
-            if (input.Query != null && input.Query.StatusIds != null && input.Query.StatusIds.Count > 0)
-                statusIds = string.Join<int>(",", input.Query.StatusIds);
-
-            object alerttLevelIds = DBNull.Value;
-            if (input.Query != null && input.Query.AlertLevelIds != null && input.Query.AlertLevelIds.Count > 0)
-                alerttLevelIds = string.Join<Guid>(",", input.Query.AlertLevelIds);
+            string alerttLevelIds = null;
+            if (context.Query != null && context.Query.AlertLevelIds != null && context.Query.AlertLevelIds.Count > 0)
+                alerttLevelIds = string.Join<Guid>(",", context.Query.AlertLevelIds);
 
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetFirstPage]", (reader) =>
             {
                 while (reader.Read() && !isFinalRow)
-                    isFinalRow = onItemReady(VRNotificationMapper(reader));
+                    isFinalRow = context.onItemReady(VRNotificationMapper(reader));
 
                 if (reader.NextResult())
                     while (reader.Read())
-                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                        context.MaxTimeStamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
 
-            }, input.NotificationTypeId, nbOfRows.Value, description, statusIds, alerttLevelIds);
-
-            maxTimeStamp = timestamp;
+            }, context.NotificationTypeId, context.NbOfRows, description, statusIds, alerttLevelIds);
         }
 
-        public void GetUpdateVRNotifications(VRNotificationUpdateInput input, ref byte[] maxTimeStamp, Action<VRNotification> onItemReady)
+        public List<VRNotification> GetUpdateVRNotifications(IVRNotificationUpdateContext context)
         {
-            byte[] timestamp = null;
+            string description = null;
+            if (context.Query != null && !string.IsNullOrEmpty(context.Query.Description))
+                description = context.Query.Description;
 
-            object description = DBNull.Value;
-            if (input.Query != null && !string.IsNullOrEmpty(input.Query.Description))
-                description = input.Query.Description;
+            string alerttLevelIds = null;
+            if (context.Query != null && context.Query.AlertLevelIds != null && context.Query.AlertLevelIds.Count > 0)
+                alerttLevelIds = string.Join<Guid>(",", context.Query.AlertLevelIds);
 
-            object alerttLevelIds = DBNull.Value;
-            if (input.Query != null && input.Query.AlertLevelIds != null && input.Query.AlertLevelIds.Count > 0)
-                alerttLevelIds = string.Join<Guid>(",", input.Query.AlertLevelIds);
-
+            List<VRNotification> notifications = new List<VRNotification>();
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetUpdated]", (reader) =>
             {
                 while (reader.Read())
-                    onItemReady(VRNotificationMapper(reader));
+                    notifications.Add(VRNotificationMapper(reader));
 
                 if (reader.NextResult())
                     while (reader.Read())
-                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                        context.MaxTimeStamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
 
-            }, input.NotificationTypeId, input.NbOfRows, input.LastUpdateHandle, description, alerttLevelIds);
+            }, context.NotificationTypeId, context.NbOfRows, context.MaxTimeStamp, description, alerttLevelIds);
 
-            maxTimeStamp = timestamp;
+            return notifications;
         }
 
-        public void GetBeforeIdVRNotifications(VRNotificationBeforeIdInput input, long? nbOfRows, Func<VRNotification, bool> onItemReady)
+        public void GetBeforeIdVRNotifications(IVRNotificationBeforeIdContext context)
         {
             bool isFinalRow = false;
 
-            if (!nbOfRows.HasValue)
-                nbOfRows = long.MaxValue;
+            string description = null;
+            if (context.Query != null && !string.IsNullOrEmpty(context.Query.Description))
+                description = context.Query.Description;
 
-            object description = DBNull.Value;
-            if (input.Query != null && !string.IsNullOrEmpty(input.Query.Description))
-                description = input.Query.Description;
+            string statusIds = null;
+            if (context.Query != null && context.Query.StatusIds != null && context.Query.StatusIds.Count > 0)
+                statusIds = string.Join<int>(",", context.Query.StatusIds);
 
-            object statusIds = DBNull.Value;
-            if (input.Query != null && input.Query.StatusIds != null && input.Query.StatusIds.Count > 0)
-                statusIds = string.Join<int>(",", input.Query.StatusIds);
-
-            object alerttLevelIds = DBNull.Value;
-            if (input.Query != null && input.Query.AlertLevelIds != null && input.Query.AlertLevelIds.Count > 0)
-                alerttLevelIds = string.Join<Guid>(",", input.Query.AlertLevelIds);
+            string alerttLevelIds = null;
+            if (context.Query != null && context.Query.AlertLevelIds != null && context.Query.AlertLevelIds.Count > 0)
+                alerttLevelIds = string.Join<Guid>(",", context.Query.AlertLevelIds);
 
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetBeforeID]", (reader) =>
             {
                 while (reader.Read() && !isFinalRow)
-                    isFinalRow = onItemReady(VRNotificationMapper(reader));
+                    isFinalRow = context.onItemReady(VRNotificationMapper(reader));
 
-            }, input.NotificationTypeId, nbOfRows.Value, input.LessThanID, description, statusIds, alerttLevelIds);
+            }, context.NotificationTypeId, context.NbOfRows, context.LessThanID, description, statusIds, alerttLevelIds);
         }
 
         #endregion
@@ -171,8 +161,5 @@ namespace Vanrise.Notification.Data.SQL
         }
 
         #endregion
-
-
-
     }
 }

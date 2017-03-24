@@ -5,18 +5,13 @@ namespace Vanrise.Notification.Entities
     public abstract class VRNotificationTypeExtendedSettings
     {
         public abstract Guid ConfigId { get; }
+
         public virtual string SearchRuntimeEditor { get; set; }
+
         public virtual string BodyRuntimeEditor { get; set; }
 
         public abstract bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context);
 
-        public virtual VRNotificationDetail MapToNotificationDetail(IVRNotificationTypeMapToDetailContext context)
-        {
-            VRNotificationDetail vrNotificationDetail = new VRNotificationDetail()
-            {
-                Entity = context.VRNotification
-            };
-            return vrNotificationDetail;
-        }
+        public abstract VRNotificationDetail MapToNotificationDetail(IVRNotificationTypeMapToDetailContext context);
     }
 }

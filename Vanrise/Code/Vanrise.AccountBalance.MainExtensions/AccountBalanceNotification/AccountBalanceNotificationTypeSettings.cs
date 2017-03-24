@@ -26,6 +26,15 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceNotification
             }
         }
 
+        public override VRNotificationDetail MapToNotificationDetail(IVRNotificationTypeMapToDetailContext context)
+        {
+            VRNotificationDetail vrNotificationDetail = new VRNotificationDetail()
+            {
+                Entity = context.VRNotification
+            };
+            return vrNotificationDetail;
+        }
+
         public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
         {
             throw new NotImplementedException();
