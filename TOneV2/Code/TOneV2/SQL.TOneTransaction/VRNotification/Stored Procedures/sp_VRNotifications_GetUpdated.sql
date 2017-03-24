@@ -8,7 +8,7 @@ AS
 BEGIN
 	DECLARE @NotificationAlertLevelIDsTable TABLE (AlertLevelId uniqueidentifier)
 	INSERT INTO @NotificationAlertLevelIDsTable (AlertLevelId)
-	SELECT Convert(uniqueidentifier, ParsedString) FROM [bp].[ParseStringList](@AlertLevelIds)
+	SELECT Convert(uniqueidentifier, ParsedString) FROM [VRNotification].[ParseStringList](@AlertLevelIds)
 	
 	SELECT TOP(@NbOfRows) [ID]
 	  ,[UserID]
@@ -26,12 +26,14 @@ BEGIN
 	  ,[timestamp]
 	INTO #temptable2_VRNotifications_GetUpdated
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK) 
-	WHERE  TypeID = @NotificationTypeID AND (@Description is null or [Description] like '%' + @Description + '%')
+	WHERE  TypeID = @NotificationTypeID 
+		   AND (@Description is null or [Description] like '%' + @Description + '%')
 		   AND (@AlertLevelIds is null or [AlertLevelId] in (SELECT AlertLevelId FROM @NotificationAlertLevelIDsTable)) 
 		   AND ([timestamp] > @TimestampAfter) 
 	ORDER BY [timestamp]
 	
-	SELECT * FROM #temptable2_VRNotifications_GetUpdated
+	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] 
+	FROM #temptable2_VRNotifications_GetUpdated
 	  
 	IF((SELECT COUNT(*) FROM #temptable2_VRNotifications_GetUpdated) = 0)
 		SELECT @TimestampAfter AS MaxTimestamp

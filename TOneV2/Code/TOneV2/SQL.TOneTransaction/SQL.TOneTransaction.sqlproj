@@ -98,6 +98,7 @@
     <Folder Include="VRNotification\" />
     <Folder Include="VRNotification\Tables\" />
     <Folder Include="VRNotification\Stored Procedures\" />
+    <Folder Include="VRNotification\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -219,6 +220,7 @@
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetBeforeID.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_RunSchedulerTask.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetFirstPage.sql" />
+    <Build Include="VRNotification\Functions\ParseStringList.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
