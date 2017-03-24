@@ -6,14 +6,6 @@ namespace Vanrise.GenericData.Notification
 {
     public class DataRecordAlertRuleActionEventPayload : IVRActionEventPayload
     {
-        public Guid AlertRuleTypeId { get; set; }
-
-        public long AlertRuleId { get; set; }
-
-        public string GroupingKey { get; set; }
-
-        public int UserId { get; set; }
-
         public Guid DataRecordTypeId { get; set; }
 
         public Dictionary<string, dynamic> OutputRecords { get; set; }

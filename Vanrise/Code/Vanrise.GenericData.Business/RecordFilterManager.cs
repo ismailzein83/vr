@@ -203,4 +203,28 @@ namespace Vanrise.GenericData.Business
         }
     }
 
+    public class DataRecordDictFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
+    {
+        Dictionary<string, dynamic> _dataRecord;
+        Dictionary<string, DataRecordField> _recordTypeFieldsByName;
+        public DataRecordDictFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, Guid recordTypeId)
+        {
+            if (dataRecord == null)
+                throw new ArgumentNullException("dataRecord");
+            _dataRecord = dataRecord;
+            _recordTypeFieldsByName = (new DataRecordTypeManager()).GetDataRecordTypeFields(recordTypeId);
+            if (_recordTypeFieldsByName == null)
+                throw new NullReferenceException("_recordTypeFieldsByName");
+        }
+
+        public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
+        {
+            DataRecordField field;
+            if (!_recordTypeFieldsByName.TryGetValue(fieldName, out field))
+                throw new NullReferenceException(String.Format("field. fieldName '{0}'", fieldName));
+            fieldType = field.Type;
+            return _dataRecord[fieldName];
+        }
+    }
+
 }
