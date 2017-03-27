@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.Business
 {
     public class BillingTransactionManager
     {
-
+         
         public Vanrise.Entities.IDataRetrievalResult<BillingTransactionDetail> GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new BillingTransactionRequestHandler());
@@ -74,6 +74,7 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByTransactionTypes(accountTypeId, billingTransactionsByTime, transactionTypeIds);
         }
+         
 
         #region Private Classes
         private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransaction, BillingTransactionDetail>
