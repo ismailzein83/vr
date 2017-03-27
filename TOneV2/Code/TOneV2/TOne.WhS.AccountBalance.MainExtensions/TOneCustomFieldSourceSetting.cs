@@ -28,6 +28,12 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             {
                 GetSupplierFields(definitionFields);
             }
+            definitionFields.Add(new AccountBalanceFieldDefinition
+            {
+                Name = "Consumed",
+                Title = "Consumed",
+                FieldType = new FieldNumberType { DataType = FieldNumberDataType.Decimal, DataPrecision = FieldNumberPrecision.Normal },
+            });
             return definitionFields;
         }
 
@@ -42,13 +48,32 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                 {
                     var customerCreditLimit =  GetCustomerCreditLimit(accountId);
                     var supplierCreditLimit =  GetSupplierCreditLimit(accountId);
+                    decimal consumed = 0;
+                    if (customerCreditLimit.HasValue && supplierCreditLimit.HasValue)
+                    {
+                        var sumOfCreditLimit = customerCreditLimit.Value + supplierCreditLimit.Value;
+                        if (sumOfCreditLimit > 0 )
+                         consumed = item.CurrentBalance * 100 / sumOfCreditLimit;
+                    }
+                    else if (customerCreditLimit.HasValue)
+                    {
+                       if (customerCreditLimit.Value > 0)
+                         consumed = item.CurrentBalance * 100 / customerCreditLimit.Value;
 
+                    }
+                    else if (supplierCreditLimit.HasValue)
+                    {
+                        if (customerCreditLimit.Value > 0)
+                             consumed = item.CurrentBalance * 100 / supplierCreditLimit.Value;
+
+                    }
                     toneCustomFieldsDataByAccountId.Add(item.AccountId, new TOneCustomFieldsData
                     {
                         CustomerCreditLimit =customerCreditLimit,
                         CustomerTolerance= customerCreditLimit.HasValue ? (customerCreditLimit.Value + item.CurrentBalance) : item.CurrentBalance,
                         SupplierCreditLimit=supplierCreditLimit,
                         SupplierTolerance = supplierCreditLimit.HasValue ? (supplierCreditLimit.Value - item.CurrentBalance) : item.CurrentBalance,
+                        Consumed = consumed
                     });
                 }
             }
@@ -69,6 +94,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     case "CutomerTolerance": return toneCustomFieldsData.CustomerTolerance;
                     case "SupplierCreditLimit": return toneCustomFieldsData.SupplierCreditLimit;
                     case "SupplierTolerance": return toneCustomFieldsData.SupplierTolerance;
+                    case "Consumed": return toneCustomFieldsData.Consumed;
                 }
             }
             return null;
@@ -124,6 +150,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
         {
             public decimal? CustomerCreditLimit { get; set; }
             public decimal  CustomerTolerance { get; set; }
+            public decimal Consumed { get; set; }
             public decimal? SupplierCreditLimit { get; set; }
             public decimal  SupplierTolerance { get; set; }
         }

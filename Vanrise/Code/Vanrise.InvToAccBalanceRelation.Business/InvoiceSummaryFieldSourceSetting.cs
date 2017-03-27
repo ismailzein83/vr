@@ -135,18 +135,24 @@ namespace Vanrise.InvToAccBalanceRelation.Business
 
         private void UpdatBillingTransactionValues(Guid accountTypeId, Dictionary<string, decimal> existingRecords, BillingTransactionMetaData billingTransaction)
         {
-
-            decimal finalAmountValue = existingRecords.GetOrCreateItem(billingTransaction.AccountId, () =>
-            {
-                return billingTransaction.Amount;
-            });
-
             var transactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
             var accountInfo = accountManager.GetAccountInfo(accountTypeId, billingTransaction.AccountId);
-            decimal amount = 0;
+            decimal amount = billingTransaction.Amount;
             if (billingTransaction.CurrencyId != accountInfo.CurrencyId)
                 amount = ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime);
-            finalAmountValue += transactionType != null && transactionType.IsCredit ? amount : -amount;
+
+            decimal finalAmountValue;
+            if(existingRecords.TryGetValue(billingTransaction.AccountId, out finalAmountValue))
+            {
+                finalAmountValue += transactionType != null && transactionType.IsCredit ? amount : -amount;
+                existingRecords[billingTransaction.AccountId] = finalAmountValue;
+            }
+            else
+            {
+                finalAmountValue = transactionType != null && transactionType.IsCredit ? amount : -amount;
+                existingRecords.Add(billingTransaction.AccountId, finalAmountValue);
+            }
+      
         }
         private decimal ConvertValueToCurrency(decimal amount, int fromCurrencyId, int currencyId, DateTime effectiveOn)
         {

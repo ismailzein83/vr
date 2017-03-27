@@ -47,13 +47,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                            dtPrm.Value = billingTransactionsByTimeTable;
                            cmd.Parameters.Add(dtPrm);
 
-                           var accountTypeIdPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", SqlDbType.Variant);
-                           accountTypeIdPrm.Value = accountTypeId;
-                           cmd.Parameters.Add(dtPrm);
+                           var accountTypeIdPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", accountTypeId);
+                           cmd.Parameters.Add(accountTypeIdPrm);
 
-                           var transactionTypeIdsPrm = new System.Data.SqlClient.SqlParameter("@TransactionTypeIds", SqlDbType.Variant);
-                           transactionTypeIdsPrm.Value = transactionTypeIDs;
-                           cmd.Parameters.Add(dtPrm);
+                           var transactionTypeIdsPrm = new System.Data.SqlClient.SqlParameter("@TransactionTypeIds", transactionTypeIDs);
+                           cmd.Parameters.Add(transactionTypeIdsPrm);
                        });
             return null;
         }
