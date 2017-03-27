@@ -49,10 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Filters\BEAlertLevelDefinitionFilter.cs" />
     <Compile Include="Filters\VRAlertLevelBEDefinitionFilter.cs" />
     <Compile Include="VRAlertLevelBEDefinitionSettings.cs" />
-    <Compile Include="VRAlertLevelFilterContext.cs" />
     <Compile Include="VRAlertLevelManager.cs" />
     <Compile Include="VRAlertRuleTypeAddOrEditFilter.cs" />
     <Compile Include="Context\VRActionExecutionContext.cs" />

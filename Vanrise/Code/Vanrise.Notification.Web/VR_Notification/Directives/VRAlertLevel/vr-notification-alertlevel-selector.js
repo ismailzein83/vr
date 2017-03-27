@@ -59,17 +59,6 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
-                        var businessEntityDefinitionId = payload.businessEntityDefinitionId;
-                        if (businessEntityDefinitionId != undefined) {
-                            if (filter == undefined)
-                                filter = {};
-                            if (filter.Filters == undefined)
-                                filter.Filters = [];
-                            filter.Filters.push({
-                                $type: "Vanrise.Notification.Business.BEAlertLevelDefinitionFilter ,Vanrise.Notification.Business",
-                                BusinessEntityDefinitionId: businessEntityDefinitionId
-                            });
-                        }
 
                     }
 

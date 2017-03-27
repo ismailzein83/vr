@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    public interface IVRALertFilter
+    public interface IVRAlertLevelFilter
     {
-        bool IsMatched(IVRALertLevelFilterContext context);
+        bool IsMatched(IVRAlertLevelFilterContext context);
     }
-        public interface IVRALertLevelFilterContext
+        public interface IVRAlertLevelFilterContext
         {
             VRAlertLevel VRAlertLevel { get; }
         }

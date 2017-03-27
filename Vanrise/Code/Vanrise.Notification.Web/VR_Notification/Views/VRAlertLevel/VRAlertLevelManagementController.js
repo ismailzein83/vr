@@ -7,11 +7,10 @@
     function AlertLevelManagementController($scope, VR_Notification_AlertLevelService, VR_Notification_AlertLevelAPIService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
-
         var beDefinitionSelectorApi;
-       // var beSelectorApi;
         var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-       // var beSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+        var beSelectorApi;
+        var beSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
@@ -25,10 +24,10 @@
                 beDefinitionSelectorApi = api;
                 beDefinitionSelectorPromiseDeferred.resolve();
             };
-            //$scope.onAlertLevelSelectorReady = function (api) {
-            //    beSelectorApi = api;
-            //    beSelectorPromiseDeferred.resolve();
-            //}
+            $scope.onAlertLevelSelectorReady = function (api) {
+                beSelectorApi = api;
+                beSelectorPromiseDeferred.resolve();
+            }
             $scope.add = function () {
                 var onAlertLevelAdded = function (addedAlertLevel) {
                     
@@ -69,24 +68,21 @@
                 });
                 return businessEntityDefinitionSelectorLoadDeferred.promise;
             }
-            //function loadBusinessEntitySelector() {
-            //    var businessEntitySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            function loadBusinessEntitySelector() {
+                var businessEntitySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            //    beSelectorPromiseDeferred.promise.then(function () {
-            //        var payloadSelector = {
-            //            filter: {
-            //                Filters: [{
-            //                    $type: "Vanrise.Notification.Business.BEAlertLevelDefinitionFilter ,Vanrise.Notification.Business",
-            //                    BusinessEntityDefinitionId: '43D17D21-8A2D-4E6B-BDF1-94764AE63D5F'
-            //                }],
-            //                BusinessEntityDefinitionId: '43D17D21-8A2D-4E6B-BDF1-94764AE63D5F'
-            //            }
-            //        };
-            //        VRUIUtilsService.callDirectiveLoad(beSelectorApi, payloadSelector, businessEntitySelectorLoadDeferred);
-            //    });
-            //    return businessEntitySelectorLoadDeferred.promise;
-            //}
-            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector]).catch(function (error) {
+                beSelectorPromiseDeferred.promise.then(function () {
+                    var payloadSelector = {
+                        filter: {
+  
+                            BusinessEntityDefinitionId: 'F5EF1553-856D-454A-8B28-6F6A8008EC79'
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(beSelectorApi, payloadSelector, businessEntitySelectorLoadDeferred);
+                });
+                return businessEntitySelectorLoadDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector, loadBusinessEntitySelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
@@ -94,7 +90,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.name,
-                BusinessEntityDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+                BusinessEntityDefinitionIds : beDefinitionSelectorApi.getSelectedIds()
             };
         }
     }

@@ -10,7 +10,7 @@ namespace Vanrise.Notification.Entities
     {
         
        public VRAlertLevel Entity { get; set; }
-       
-       public string AlertLevelGroupDescription { get; set; }
+
+       public string BusinessEntityDefinitionName { get; set; }
     }
 }

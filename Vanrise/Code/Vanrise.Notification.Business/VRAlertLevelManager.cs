@@ -31,7 +31,7 @@ namespace Vanrise.Notification.Business
              var allAlertLevels = GetCachedAlertLevels();
              Func<VRAlertLevel, bool> filterExpression = (x) =>
              {
-                 if (input.Query.BusinessEntityDefinitionId.HasValue && input.Query.BusinessEntityDefinitionId != x.BusinessEntityDefinitionId)
+                 if (input.Query.BusinessEntityDefinitionIds!=null && !input.Query.BusinessEntityDefinitionIds.Contains(x.BusinessEntityDefinitionId) )
                      return false;
                  if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                      return false;
@@ -94,19 +94,16 @@ namespace Vanrise.Notification.Business
          {
              Func<VRAlertLevel, bool> filterExpression = null;
 
-             if (filter != null)
-             {
+            
                  filterExpression = (x) =>
                  {
-                     if (filter.Filters != null)
+                     if (filter.BusinessEntityDefinitionId!=x.BusinessEntityDefinitionId )
                      {
-                         var context = new VRAlertLevelFilterContext() { VRAlertLevel = x};
-                         if (!filter.Filters.Any(y => y.IsMatched(context)))
                              return false;
                      }
                      return true;
                  };
-             }
+             
              return this.GetCachedAlertLevels().MapRecords(VRAlertLevelInfoMapper, filterExpression).OrderBy(x => x.Name);
          }
          private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -134,7 +131,7 @@ namespace Vanrise.Notification.Business
             VRAlertLevelDetail alertLevelDetail = new VRAlertLevelDetail()
             {
                 Entity = alertLevel,
-                AlertLevelGroupDescription = manager.GetBusinessEntityDefinitionName(alertLevel.BusinessEntityDefinitionId)
+                BusinessEntityDefinitionName = manager.GetBusinessEntityDefinitionName(alertLevel.BusinessEntityDefinitionId)
             };
             return alertLevelDetail;
         }
