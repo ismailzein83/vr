@@ -13,6 +13,8 @@ namespace Vanrise.AccountBalance.Data.SQL
     public class BillingTransactionDataManager : BaseSQLDataManager, IBillingTransactionDataManager
     {
         #region ctor/Local Variables
+        const string BillingTransactionByTime_TABLENAME = "BillingTransactionByTime";
+
         public BillingTransactionDataManager()
             : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
@@ -20,6 +22,54 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByTransactionTypes(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime, List<Guid> transactionTypeIds)
+        {
+
+            string transactionTypeIDs = null;
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                transactionTypeIDs = string.Join<Guid>(",", transactionTypeIds);
+
+
+            DataTable billingTransactionsByTimeTable = GetBillingTransactionsByTimeTable();
+            foreach (var billingTransactionByTime in billingTransactionsByTime)
+            {
+                DataRow dr = billingTransactionsByTimeTable.NewRow();
+                FillBillingTransactionsByTimeRow(dr, billingTransactionByTime);
+                billingTransactionsByTimeTable.Rows.Add(dr);
+            }
+            billingTransactionsByTimeTable.EndLoadData();
+            if (billingTransactionsByTimeTable.Rows.Count > 0)
+                return GetItemsSPCmd("[VR_AccountBalance].[sp_BillingTransaction_GetByTime]", BillingTransactionMetaDataMapper,
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@BillingTransactionsByTimeTable", SqlDbType.Structured);
+                           dtPrm.Value = billingTransactionsByTimeTable;
+                           cmd.Parameters.Add(dtPrm);
+
+                           var accountTypeIdPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", SqlDbType.Variant);
+                           accountTypeIdPrm.Value = accountTypeId;
+                           cmd.Parameters.Add(dtPrm);
+
+                           var transactionTypeIdsPrm = new System.Data.SqlClient.SqlParameter("@TransactionTypeIds", SqlDbType.Variant);
+                           transactionTypeIdsPrm.Value = transactionTypeIDs;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+            return null;
+        }
+        DataTable GetBillingTransactionsByTimeTable()
+        {
+            DataTable dt = new DataTable(BillingTransactionByTime_TABLENAME);
+            dt.Columns.Add("AccountID", typeof(String));
+            dt.Columns.Add("TransactionTime", typeof(DateTime));
+            return dt;
+        }
+        void FillBillingTransactionsByTimeRow(DataRow dr, BillingTransactionByTime billingTransactionByTime)
+        {
+            dr["AccountID"] = billingTransactionByTime.AccountId;
+            dr["TransactionTime"] = billingTransactionByTime.TransactionTime;
+        }
+
         public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
             string accountsIDs = null;
@@ -132,5 +182,8 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
 
+
+
+       
     }
 }

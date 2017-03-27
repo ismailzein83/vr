@@ -1,1 +1,6 @@
-﻿
+﻿<vr-columns width="1/3row">
+    <vr-switch value="scopeModel.calculateDueAmount" label="Calculate Due Amount"></vr-switch>
+</vr-columns>
+<span ng-show="scopeModel.calculateDueAmount" vr-loader="scopeModel.isLoadingDirective">
+    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onTransactionTypeSelectorReady" normal-col-num="4" isrequired="true" ismultipleselection></vr-accountbalance-billingtransactiontype-selector>
+</span>
