@@ -78,7 +78,7 @@ namespace Vanrise.Common.Business
 
             long objectTrackingId = s_objectTrackingManager.TrackObjectAction(loggableEntity, objectId, saveObject ? obj : null, action, actionDescription);
 
-            LogAction(loggableEntity, action, objectId, objectName, actionDescription, objectTrackingId);
+            LogAction(loggableEntity, action, objectId, objectName, actionDescription, saveObject ? objectTrackingId : default(long?));
         }
 
         private void LogAction(VRLoggableEntityBase loggableEntity, string action, string objectId, string objectName, string actionDescription, long? objectTrackingId)
