@@ -8,5 +8,6 @@ namespace TOne.WhS.AccountBalance.Entities
 {
     public class FinancialAccountInfoFilter
     {
+        public Guid AccountBalanceTypeId { get; set; }
     }
 }

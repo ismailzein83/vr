@@ -486,22 +486,24 @@ namespace TOne.WhS.AccountBalance.Business
 
         #endregion
 
-        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBalanceTypeId)
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(FinancialAccountInfoFilter filter)
         {
-            Dictionary<Guid, List<FinancialAccount>> financialAccountsByType = GetCachedFinancialAccountsByAccBalTypeId();
+            Dictionary<int, FinancialAccount> allFinancialAccounts = GetCachedFinancialAccounts();
 
-            if (financialAccountsByType == null || financialAccountsByType.Count == 0)
-                return null;
+            Func<FinancialAccount, bool> filterFunc = null;
 
-            List<FinancialAccount> financialAccounts;
+            if (filter != null)
+            {
+                filterFunc = (financialAccount) =>
+                {
+                    if (financialAccount.Settings.AccountTypeId != filter.AccountBalanceTypeId)
+                        return false;
 
-            if (!financialAccountsByType.TryGetValue(accountBalanceTypeId, out financialAccounts))
-                return null;
+                    return true;
+                };
+            }
 
-            if (financialAccounts == null || financialAccounts.Count == 0)
-                return null;
-
-            return financialAccounts.MapRecords(FinancialAccountInfoMapper);
+            return allFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterFunc);
         }
         #endregion
 
@@ -598,7 +600,7 @@ namespace TOne.WhS.AccountBalance.Business
 
         Dictionary<int, CarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
-           var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+            var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
 
             Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
             if (cachedFinancialAccounts != null)
@@ -778,13 +780,21 @@ namespace TOne.WhS.AccountBalance.Business
         {
             DateTime today = DateTime.Today;
 
-            if (today < financialAccountBED)
-                return FinancialAccountEffectiveStatus.Recent;
-
             if (financialAccountEED.HasValue)
-                return (financialAccountEED.Value < today) ? FinancialAccountEffectiveStatus.Future : FinancialAccountEffectiveStatus.Current;
+            {
+                if (financialAccountBED > today)
+                    return FinancialAccountEffectiveStatus.Future;
+                else if (financialAccountBED == today)
+                    return FinancialAccountEffectiveStatus.Current;
+                else
+                {
+                    return (financialAccountEED.Value > today) ? FinancialAccountEffectiveStatus.Current : FinancialAccountEffectiveStatus.Recent;
+                }
+            }
             else
-                return FinancialAccountEffectiveStatus.Current;
+            {
+                return (financialAccountBED > today) ? FinancialAccountEffectiveStatus.Future : FinancialAccountEffectiveStatus.Current;
+            }
         }
 
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)

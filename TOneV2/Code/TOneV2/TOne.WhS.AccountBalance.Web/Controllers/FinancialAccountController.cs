@@ -59,9 +59,10 @@ namespace TOne.WhS.AccountBalance.Web.Controllers
 
         [HttpGet]
         [Route("GetFinancialAccountsInfo")]
-        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountTypeId)
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(string filter = null)
         {
-            return _manager.GetFinancialAccountsInfo(accountTypeId);
+            FinancialAccountInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<FinancialAccountInfoFilter>(filter) : null;
+            return _manager.GetFinancialAccountsInfo(deserializedFilter);
         }
     }
 }

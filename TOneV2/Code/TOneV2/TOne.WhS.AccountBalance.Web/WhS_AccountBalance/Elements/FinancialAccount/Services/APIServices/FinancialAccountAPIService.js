@@ -40,9 +40,9 @@
             });
         }
 
-        function GetFinancialAccountsInfo(accountTypeId) {
+        function GetFinancialAccountsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFinancialAccountsInfo"), {
-                accountTypeId: accountTypeId
+                filter: filter
             });
         }
 

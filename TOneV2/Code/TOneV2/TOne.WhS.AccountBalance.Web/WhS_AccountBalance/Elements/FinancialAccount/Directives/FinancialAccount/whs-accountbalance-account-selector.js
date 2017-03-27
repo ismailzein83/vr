@@ -80,18 +80,26 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                     extendedSettings = payload.extendedSettings;
                 }
 
-                $scope.scopeModel.carrierTypes = UtilsService.getArrayEnum(WhS_AccountBalance_FinancialAccountCarrierTypeEnum);
-
-                return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccountsInfo(accountTypeId).then(function (response) {
-                    if (response != undefined) {
-                        for (var i = 0; i < response.length; i++) {
-                            var account = response[i];
-                            allAccounts.push(account);
-                            $scope.scopeModel.filteredAccounts.push(account);
+                function loadCarrierTypes() {
+                    $scope.scopeModel.carrierTypes = UtilsService.getArrayEnum(WhS_AccountBalance_FinancialAccountCarrierTypeEnum);
+                }
+                function loadFinancialAccounts() {
+                    var filter = {
+                        AccountBalanceTypeId: accountTypeId
+                    };
+                    return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccountsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        if (response != undefined) {
+                            for (var i = 0; i < response.length; i++) {
+                                var account = response[i];
+                                allAccounts.push(account);
+                                $scope.scopeModel.filteredAccounts.push(account);
+                            }
                         }
-                    }
-                    filterAccounts();
-                });
+                        filterAccounts();
+                    });
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([loadCarrierTypes, loadFinancialAccounts]);
             };
 
             api.getData = function () {
