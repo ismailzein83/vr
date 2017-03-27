@@ -13,10 +13,6 @@ namespace Vanrise.GenericData.Notification
 
         RecordFilterManager recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
 
-        #endregion
-
-        #region Public Methods
-
         public override Guid ConfigId { get { return new Guid("E64C51A2-08E0-4B7D-96F0-9FF1848A72FA"); } }
 
         public override string SearchRuntimeEditor { get { return "vr-genericdata-datarecordnotificationtypesettings-searcheditor"; } }
@@ -26,6 +22,10 @@ namespace Vanrise.GenericData.Notification
         public Guid DataRecordTypeId { get; set; }
 
         public List<NotificationGridColumnDefinition> GridColumnDefinitions { get; set; }
+
+        #endregion
+
+        #region Public Methods
 
         public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
         {
