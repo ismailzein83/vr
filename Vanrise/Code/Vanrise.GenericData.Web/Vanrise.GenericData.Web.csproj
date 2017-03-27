@@ -457,6 +457,10 @@
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\DataRecordActionRuleExtendedSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\DataRecordActionRuleTypeSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordactionrule-extendedsettings.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordactionruletype-settings.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Services\DataRecordNotificationTypeSettingsService.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Views\AlertRuleRecordEditor.html" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\AlertRuleRecordFilterManagementTemplate.html" />
