@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    class VRAlertLevelDetail
+   public class VRAlertLevelDetail
     {
+        
+       public VRAlertLevel Entity { get; set; }
+       
+       public string AlertLevelGroupDescription { get; set; }
     }
 }

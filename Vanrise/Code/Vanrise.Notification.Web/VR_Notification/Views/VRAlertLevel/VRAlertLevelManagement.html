@@ -1,9 +1,33 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-panel ng-controller="VR_Notification_AlertLevelManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox label="Name" value="name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-genericdata-businessentitydefinition-selector customlabel="Alert Level Group" on-ready="onBusinessEntityDefinitionSelectorReady">
+                    </vr-genericdata-businessentitydefinition-selector>                    
+                </vr-columns>
+                <!--<vr-columns width="normal">
+                    <vr-notification-alertlevel-selector on-ready="onAlertLevelSelectorReady"
+                                                       
+                                                         customlabel="AlertLevel Selector"></vr-notification-alertlevel-selector>
+                </vr-columns>-->
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="add" haspermission="hasAddStatusDefinitionPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-notification-alertlevel-grid on-ready="onGridReady"> </vr-notification-alertlevel-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

@@ -8,5 +8,7 @@ namespace Vanrise.Notification.Entities
 {
     public class VRAlertLevelInfo
     {
+        public Guid VRAlertLevelId { get; set; }
+        public string Name { get; set; }
     }
 }

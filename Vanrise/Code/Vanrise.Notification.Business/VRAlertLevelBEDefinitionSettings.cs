@@ -10,24 +10,25 @@ namespace Vanrise.Notification.Business
     public class VRAlertLevelBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
 
-        public static Guid s_configId = Guid.Empty;
-        public override Guid ConfigId { get { throw new NotImplementedException(); } }
+        public static Guid s_configId = new Guid("0B44D3F3-AA62-4289-8EB3-D93269515036");
+        public override Guid ConfigId { get { return s_configId; } }
         public override string SelectorFilterEditor { get; set; }
         public override string DefinitionEditor
         {
-            get { throw new NotImplementedException(); }
+            get { return "vr-notification-alertleveldefinitionbe-editor"; }
         }
         public override string IdType
         {
-            get { throw new NotImplementedException(); }
+
+            get { return "System.Guid"; }
         }
         public override string ManagerFQTN
         {
-            get { throw new NotImplementedException(); }
+            get { return "Vanrise.Notification.Business.VRAlertLevelManager,Vanrise.Notification.Business"; }
         }
         public override string SelectorUIControl
         {
-            get { throw new NotImplementedException(); }
+            get { return "vr-notification-alertlevel-selector"; }
         }
     }
 }

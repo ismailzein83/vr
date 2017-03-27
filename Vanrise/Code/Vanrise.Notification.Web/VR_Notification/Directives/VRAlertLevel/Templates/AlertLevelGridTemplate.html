@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-datagrid datasource="scopeModel.alertLevel"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.VRAlertLevelId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRAlertLevelId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Alert Level Group'" field="'AlertLevelGroupDescription'"></vr-datagridcolumn>
 
-</body>
-</html>
+</vr-datagrid>

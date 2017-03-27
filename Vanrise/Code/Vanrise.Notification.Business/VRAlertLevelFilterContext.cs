@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
-namespace Vanrise.Notification.Entities
+namespace Vanrise.Notification.Business
 {
-   public class VRAlertLevelInfoFilter
+  public  class VRAlertLevelFilterContext : IVRALertLevelFilterContext
     {
-        public List<IVRALertFilter> Filters { get; set; }
+      public VRAlertLevel VRAlertLevel { get; set; }
     }
 }

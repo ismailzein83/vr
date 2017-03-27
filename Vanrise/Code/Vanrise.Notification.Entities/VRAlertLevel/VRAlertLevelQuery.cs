@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
-    class VRAlertLevelQuery
+  public  class VRAlertLevelQuery
     {
+        public string Name { get; set; }
+        public Guid? BusinessEntityDefinitionId { get; set; }
     }
 }

@@ -17,7 +17,7 @@
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertLevel/VRAlertLevelEditor.html', null, settings);
         }
 
-        function editAlertLEvel(alertLevelId, onAlertLevelUpdated) {
+        function editAlertLevel(alertLevelId, onAlertLevelUpdated) {
             var settings = {};
 
             var parameters = {
@@ -27,13 +27,14 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onAlertLevelUpdated = onAlertLevelUpdated;
             };
+            
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertLevel/VRAlertLevelEditor.html', parameters, settings);
         }
 
 
         return {
             addAlertLevel: addAlertLevel,
-            editAlertLEvel: editAlertLEvel
+            editAlertLevel: editAlertLevel
         };
     }
 
