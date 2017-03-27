@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RingoAgentNumberRequestController.cs" />
     <Compile Include="Controllers\RingoMessageController.cs" />
     <Compile Include="Controllers\RingoReportSheetController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -127,7 +128,12 @@
     <Content Include="Retail_Ringo\Directives\MainExtensions\Distributor\Templates\DistributorConvertorEditor.html" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\retail-ringo-pos-convertor-editor.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\Templates\PosConvertorEditor.html" />
+    <Content Include="Retail_Ringo\Directives\AgentRequestNumber\retail-ringo-agentrequestnumber-grid.js" />
+    <Content Include="Retail_Ringo\Directives\AgentRequestNumber\Templates\AgentRequestNumberGridTemplate.html" />
+    <Content Include="Retail_Ringo\Services\APIServices\RingoAgentNumberRequestAPIService.js" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoReportSheetAPIService.js" />
+    <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagement.html" />
+    <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagementController.js" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagement.html" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagementController.js" />
   </ItemGroup>

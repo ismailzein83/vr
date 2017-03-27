@@ -1,0 +1,29 @@
+﻿<vr-panel ng-controller="Retail_Ringo_AgentRequestNumberManagementController">
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <retail-be-account-selector normal-col-num="3"
+                                            on-ready="scopeModel.onAgentSelectorDirectiveReady"
+                                            customlabel="Agents"
+                                            isrequired
+                                            ismultipleselection>
+
+                </retail-be-account-selector>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <retail-ringo-agentrequestnumber-grid on-ready="scopeModel.onGridReady"></retail-ringo-agentrequestnumber-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

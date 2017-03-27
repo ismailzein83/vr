@@ -1,0 +1,12 @@
+﻿<span vr-loader="scopeModel.isloadingGrid">
+    <vr-datagrid datasource="scopeModel.agentNumberRequests"
+                 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="scopeModel.onGridReady"
+                 menuactions="scopeModel.menuActions"
+                 idfield="Entity.Id" enableautoexport="true">
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Agent'" field="'AgentName'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'"></vr-datagridcolumn>
+    </vr-datagrid>
+</span>

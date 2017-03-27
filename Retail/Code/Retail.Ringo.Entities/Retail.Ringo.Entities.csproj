@@ -46,6 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentNumber\AgentNumber.cs" />
+    <Compile Include="AgentNumber\AgentNumberRequest.cs" />
+    <Compile Include="AgentNumber\AgentNumberRequestDetail.cs" />
+    <Compile Include="AgentNumber\AgentNumberRequestQuery.cs" />
+    <Compile Include="AgentNumber\AgentNumberSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RingoMessageCountEntity.cs" />
     <Compile Include="RingoMessageFilter.cs" />
