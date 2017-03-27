@@ -134,7 +134,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Query = new AnalyticQuery
                     {
                         DimensionFields = new List<string> { "SaleZone", "Supplier" },
-                        MeasureFields = new List<string> { "DurationInMinutes", "ASR", "ACD" },
+                        MeasureFields = new List<string> { "DurationInMinutes", "ASR", "ACD", "NER" },
                         TableId = 4,
                         FromTime = parameters.FromTime,
                         ToTime = parameters.ToTime,
@@ -246,6 +246,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                             analyticRecord.MeasureValues.TryGetValue("ACD", out acdMeasure);
                             routingAnalysis.ACD = Convert.ToDecimal(acdMeasure.Value ?? 0.0);
                             routingAnalysis.ACDFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.ACD);
+
+                            MeasureValue nerMeasure;
+                            analyticRecord.MeasureValues.TryGetValue("NER", out nerMeasure);
+                            routingAnalysis.NER = Convert.ToDecimal(nerMeasure.Value ?? 0.0);
+                            routingAnalysis.NERFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.NER);
                         }
                     }
 

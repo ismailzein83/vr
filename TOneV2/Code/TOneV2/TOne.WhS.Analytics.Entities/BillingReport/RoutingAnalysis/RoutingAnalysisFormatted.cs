@@ -28,6 +28,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport.RoutingAnalysis
         public string AVGCostFormatted { get; set; }
         public double AVGSale { get; set; }
         public string AVGSaleFormatted { get; set; }
+        public decimal NER { get; set; }
+        public string NERFormatted { get; set; }
 
          /// <summary>
         /// DO NOT REMOVE
