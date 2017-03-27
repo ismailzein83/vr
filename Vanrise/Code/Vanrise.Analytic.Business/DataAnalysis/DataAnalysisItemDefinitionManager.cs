@@ -8,16 +8,19 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 
-
 namespace Vanrise.Analytic.Business
 {
     public class DataAnalysisItemDefinitionManager
     {
+        #region Ctor/Properties
+
         static DataAnalysisItemDefinitionManager()
         {
             DataRecordTypeManager instance = new DataRecordTypeManager();
             instance.AddDataRecordTypeCachingExpirationChecker(new DataAnalysisItemDataRecordTypeCachingExpirationChecker());
         }
+
+        #endregion
 
         #region Public Methods
 
@@ -164,7 +167,6 @@ namespace Vanrise.Analytic.Business
 
         #endregion
 
-
         #region Private Classes
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -190,7 +192,6 @@ namespace Vanrise.Analytic.Business
 
         #endregion
 
-
         #region Private Methods
 
         Dictionary<Guid, DataAnalysisItemDefinition> GetCachedDataAnalysisItemDefinitions()
@@ -204,7 +205,6 @@ namespace Vanrise.Analytic.Business
         }
 
         #endregion
-
 
         #region Mappers
 
