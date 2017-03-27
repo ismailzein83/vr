@@ -39,7 +39,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('FDD73530-067F-4160-AB71-7852303C785C','VR_Notification_NotificationComponentType_Settings','Notification Component Type','VR_Common_VRComponentType'						,'{"Editor":"vr-notification-vrnotification-componentsettings"}'),
 ('A196C40A-30B5-4297-B7B0-4344C41CE5A2','VR_Notification_NotificationDefinition','Notification','VR_Security_ViewTypeConfig'												,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-notification-notification-vieweditor"}'),
-('E64C51A2-08E0-4B7D-96F0-9FF1848A72FA','VR_GenericData_DataRecordNotificationTypeSettings','Data Analysis Notification','VR_Notification_VRNotificationTypeSettings'		,'{"Editor" : "vr-genericdata-datarecordnotificationtype-settings"}')
+('E64C51A2-08E0-4B7D-96F0-9FF1848A72FA','VR_GenericData_DataRecordNotificationTypeSettings','Data Analysis Notification','VR_Notification_VRNotificationTypeSettings'		,'{"Editor" : "vr-genericdata-datarecordnotificationtype-settings"}'),
+('d96f17c8-29d7-4c0c-88dc-9d5fbca2178f','VR_Notification_VRActionDefinition','Action Definition','VR_Common_VRComponentType'		,'{"Editor":"vr-notification-vractiondefinition-settings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

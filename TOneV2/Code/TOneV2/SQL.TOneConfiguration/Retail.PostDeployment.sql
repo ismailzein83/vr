@@ -104,7 +104,10 @@ as (select * from (values
 
 ('70CF19AC-B860-4010-A544-B6D41F94F505','Retail_BE_AccountBEDefinition','Account BE','VR_Security_ViewTypeConfig'				,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"retail-be-accountbedefinition-vieweditor"}'),
 
-('EB85EE78-78CE-437D-B13E-18DD15EABE54','Retail_BE_Visibility','Retail Business Entity','VRCommon_ModuleVisibility'							,'{"Editor":"retail-be-visibilityaccountdefinitions-management"}')
+('EB85EE78-78CE-437D-B13E-18DD15EABE54','Retail_BE_Visibility','Retail Business Entity','VRCommon_ModuleVisibility'							,'{"Editor":"retail-be-visibilityaccountdefinitions-management"}'),
+('1bdacfe6-f050-4187-9e96-9647049605d3','RetailBE_VRNotification_VRAction_BalanceRetailAccountEMail','Balance Retail Account Email ','VR_Notification_VRActionDefinition'							,'{"Editor":"retail-be-actiondefinition-sendemailsettings"}'),
+('820856b8-c29d-43d9-9950-18ae7af22bb9','RetailBE_VRNotification_VRAction_BalanceRetailAccountAction','Balance Retail Account Action','VR_Notification_VRActionDefinition'							,'{"Editor":"retail-be-actiondefinition-balancealertsettings"}'),
+('fb232763-6ac1-49b5-a410-fa792980055c','RetailBE_AccountView_AccountHistory','Account History','Retail_BE_AccountViewDefinitionConfig'							,'{"Editor":"retail-be-accountviewdefinitionsettings-acounthistory"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -119,6 +122,33 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 
 END
+
+
+
+--[common].[VRComponentType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+BEGIN
+
+set nocount on;
+;with cte_data([ID],[Name],[ConfigID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('DBE3F2D8-1148-49B9-AC33-F2CDD87C1496','Account Action','D96F17C8-29D7-4C0C-88DC-9D5FBCA2178F','{"$type":"Vanrise.Notification.Entities.VRActionDefinitionSettings, Vanrise.Notification.Entities","VRComponentTypeConfigId":"d96f17c8-29d7-4c0c-88dc-9d5fbca2178f","ExtendedSettings":{"$type":"Retail.BusinessEntity.Business.Extensions.BalanceAlertActionDefinitionSettings, Retail.BusinessEntity.Business","AccountBEDefinitionId":"9a427357-cf55-4f33-99f7-745206dee7cd","ConfigId":"820856b8-c29d-43d9-9950-18ae7af22bb9","RuntimeEditor":"retail-be-action-balancealertaccount"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigID],[Settings]))
+merge	[common].[VRComponentType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigID],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
+END
+
+
 
 --[sec].[Module]------------------------------------------------------------------------------------
 BEGIN
@@ -165,10 +195,8 @@ as (select * from (values
 
 ('D4385711-5F67-4EC4-BBEC-B5B1BF767188','Account Parts','Account Parts','#/view/Retail_BusinessEntity/Views/AccountPartDefinition/AccountPartDefinitionManagement'	,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,0),
 ('296B2785-172C-4332-9846-D32FE3166C62','Service Types','Service Type Management','#/view/Retail_BusinessEntity/Views/ServiceType/ServiceTypeManagement'			,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/ServiceType/GetFilteredServiceTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3,0),
-('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement'						,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2,0),
+('9C3BE71A-81D8-4A02-A1F7-FBBE6536BBBB','Account Types','Account Types','#/view/Retail_BusinessEntity/Views/AccountType/AccountTypeManagement'						,'A459D3D0-35AE-4B0E-B267-54436FDA729A','Retail_BE/AccountType/GetFilteredAccountTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2,0)
 
---should be remove to common in a later stage
-('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -183,28 +211,14 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[sec].[BusinessEntityModule]--------------------1701 to 1800--------------------------------------
-BEGIN
-set nocount on;
-;with cte_data([ID],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('520558FA-CF2F-440B-9B58-09C23B6A2E9B','Billing'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
-('16419FE1-ED56-49BA-B609-284A5E21FC07','Traffic'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
-('FC73B0DB-502B-4739-AB3B-AE680F0DAD58','Entities Definition'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([ID],[Name],[ParentId],[BreakInheritance])
-	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
-----------------------------------------------------------------------------------------------------
-END
+
+--[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
+begin
+set nocount on;;with cte_data([ID],[Name],[ParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('FC455C73-490D-48F2-A2B8-C2385137DE0F','Business CRM'			,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1),
+('783139D6-4BC9-4EC5-8191-A809937E590D','Pricing'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[ParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[Name],[ParentId],[BreakInheritance])	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
+--------------------------------------------------------------------------------------------------------------
+end
+
 
 --[sec].[BusinessEntity]-------------------5401 to 5700-------------------------------------------------------
 BEGIN
@@ -212,40 +226,16 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('0B08F2E1-6518-46FF-B669-0256CF9BB7D4','Retail_BE_Subscriber','Subscriber'							,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
-('A2DE8C67-B8AE-4520-BB48-448EE98B7251','Retail_BE_Dealer','Dealer'									,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
-('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('0B08F2E1-6518-46FF-B669-0256CF9BB7D4','Retail_BE_Subscriber','Subscriber'							,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit","Provision","Block","Unblock"]'),
+('A2DE8C67-B8AE-4520-BB48-448EE98B7251','Retail_BE_Dealer','Dealer'									,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
+('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'								,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
 
---('4218FCD0-466A-47A9-80DC-3BA20BCF56C4',5405,'Retail_BE_AccountPackage','Account Package'			,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',null,0,'["View","Add","Edit"]'),
-('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
-('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Retail_BE_Package'						,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
+('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C','Retail_BE_Product','Product'								,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
+('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Retail_BE_Package'						,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
+('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
 
-('3ABA6D5B-03AC-4EE5-A3EC-AAC6D9C55621','Retail_BE_Switches','Switches'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]'),
+('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_CDRRules','CDR Rules'								,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]')
 
-('1B380EE1-16E1-4A9B-9165-55252E333E9E','Retail_BE_ServiceType','Service Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Edit"]'),
-('A8B32E85-079D-4376-BA28-67468B27BDC8','Retail_BE_AccountPartDefinition','Account Part Definition','FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
-('45729623-D9B0-401C-8F23-7656ED03AB61','Retail_BE_AccountType','Account Type'						,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
-('5790CCC4-5B3F-4AD3-8EB5-BBC7EE977D25','Retail_BE_ActionDefinition','Action Definition'			,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
-('503E011C-3311-43C2-92D7-EA515D790479','Retail_BE_StatusDefinition','Status Definition'			,'FC73B0DB-502B-4739-AB3B-AE680F0DAD58',0,'["View","Add","Edit"]'),
-
-('32E40D20-A8B9-4286-AADE-F4E229D054A9','Retail_BE_CreditClasses','Credit Classes'					,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Add","Edit"]'),
-('AB794846-853C-4402-A8E4-6F5C3A75F5F2','BillingStatistic','Billing Statistic'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
-('9AABB14D-B3B2-4CA2-93F9-9FFAE606336B','BillingCDR','Billing CDR'									,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
-
-('A611A651-B60B-483D-BC83-1C2B667A120A','TrafficStatistic','Traffic Statistic'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-('CF09B199-2DA3-4CA2-B243-E83A1338FB27','RawCDR','Raw CDR'											,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-('583CC2A2-1BBC-44D7-A7AF-923996CD72A9','FailedCDR','Failed CDR'									,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-('73F17C8C-EC3E-46B5-8B53-83CCE74F5C89','InvalidCDR','Invalid CDR'									,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View"]'),
-
-('0B0572AC-ABFB-4267-8F51-D2480851D14A','BusinessProcess_BP_Account_Action','Account Action'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),
-('FDB996F9-9157-4778-897E-3F2DED954297','BusinessProcess_BP_Source_BE_Sync','Source BE Sync'		,'04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),
-('08FB93FA-0719-4385-AD9E-0513E3966B26','BusinessProcess_BP_Account_Balance','Account Balance'		,'692D0589-D764-4DF5-857B-52A98D89FFD6',0,'["View", "StartInstance", "ScheduleTask"]'),
-
-('E4186240-7525-4B39-9B4D-48CCDE5F2590','Retail_Pricing_Rule','Pricing'								,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
-('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_Identification_Rule','Identification'				,'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["View","Add","Edit"]'),
-
-('C0C98E3B-12C8-4805-93D4-F4289C21C6B8','VRCommon_ApplicationVisibility','Application Visibility'	,'7913ACD9-38C5-43B3-9612-BEFF66606F22',0,'["View","Add","Edit"]'),
-('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C','Retail_BE_Product','Product'								,'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -286,51 +276,49 @@ as (select * from (values
 ('Retail_BE/ChargingPolicy/GetChargingPolicy',null),
 ('Retail_BE/ChargingPolicy/AddChargingPolicy','Retail_BE_ChargingPolicy: Add'),
 ('Retail_BE/ChargingPolicy/UpdateChargingPolicy','Retail_BE_ChargingPolicy: Edit'),
-('Retail_BE/AccountType/GetFilteredAccountTypes','Retail_BE_AccountType: View'),
+('Retail_BE/AccountType/GetFilteredAccountTypes','VR_SystemConfiguration: View'),
 ('Retail_BE/AccountType/GetAccountType',null),
 ('Retail_BE/AccountType/GetAccountTypesInfo',null),
 ('Retail_BE/AccountType/GetAccountTypePartDefinitionExtensionConfigs',null),
-('Retail_BE/AccountType/AddAccountType','Retail_BE_AccountType: Add'),
-('Retail_BE/AccountType/UpdateAccountType','Retail_BE_AccountType: Edit'),
-('Retail_BE/ServiceType/GetFilteredServiceTypes','Retail_BE_ServiceType: View'),
+('Retail_BE/AccountType/AddAccountType','VR_SystemConfiguration: Add'),
+('Retail_BE/AccountType/UpdateAccountType','VR_SystemConfiguration: Edit'),
+('Retail_BE/ServiceType/GetFilteredServiceTypes','VR_SystemConfiguration: View'),
 ('Retail_BE/ServiceType/GetServiceTypesInfo',null),
 ('Retail_BE/ServiceType/GetServiceType',null),
 ('Retail_BE/ServiceType/GetServiceTypeChargingPolicyDefinitionSettings',null),
-('Retail_BE/ServiceType/UpdateServiceType','Retail_BE_ServiceType: Edit'),
-('Retail_BE/StatusDefinition/GetFilteredStatusDefinitions','Retail_BE_StatusDefinition: View'),
-('Retail_BE/StatusDefinition/AddStatusDefinition','Retail_BE_StatusDefinition: Add'),
-('Retail_BE/StatusDefinition/UpdateStatusDefinition','Retail_BE_StatusDefinition: Edit'),
+('Retail_BE/ServiceType/UpdateServiceType','VR_SystemConfiguration: Edit'),
+('Retail_BE/StatusDefinition/GetFilteredStatusDefinitions','VR_SystemConfiguration: View'),
+('Retail_BE/StatusDefinition/AddStatusDefinition','VR_SystemConfiguration: Add'),
+('Retail_BE/StatusDefinition/UpdateStatusDefinition','VR_SystemConfiguration: Edit'),
 ('Retail_BE/StatusDefinition/GetStatusDefinition',null),
 ('Retail_BE/StatusDefinition/GetStatusDefinitionsInfo',null),
 
-('Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions','Retail_BE_AccountPartDefinition: View'),
+('Retail_BE/AccountPartDefinition/GetFilteredAccountPartDefinitions','VR_SystemConfiguration: View'),
 ('Retail_BE/AccountPartDefinition/GetAccountPartDefinition',null),
 ('Retail_BE/AccountPartDefinition/GetAccountPartDefinitionsInfo',null),
 ('Retail_BE/AccountPartDefinition/GetAccountPartDefinitionExtensionConfigs',null),
-('Retail_BE/AccountPartDefinition/AddAccountPartDefinition','Retail_BE_AccountPartDefinition: Add'),
-('Retail_BE/AccountPartDefinition/UpdateAccountPartDefinition','Retail_BE_AccountPartDefinition: Edit'),
+('Retail_BE/AccountPartDefinition/AddAccountPartDefinition','VR_SystemConfiguration: Add'),
+('Retail_BE/AccountPartDefinition/UpdateAccountPartDefinition','VR_SystemConfiguration: Edit'),
 
-('Retail_BE/ActionDefinition/AddActionDefinition','Retail_BE_ActionDefinition: Add'),
-('Retail_BE/ActionDefinition/UpdateActionDefinition','Retail_BE_ActionDefinition: Edit'),
-('Retail_BE/ActionDefinition/GetFilteredActionDefinitions','Retail_BE_ActionDefinition: View'),
+('Retail_BE/ActionDefinition/AddActionDefinition','VR_SystemConfiguration: Add'),
+('Retail_BE/ActionDefinition/UpdateActionDefinition','VR_SystemConfiguration: Edit'),
+('Retail_BE/ActionDefinition/GetFilteredActionDefinitions','VR_SystemConfiguration: View'),
 ('Retail_BE/ActionDefinition/GetActionDefinition',null),
 ('Retail_BE/ActionDefinition/GetActionBPDefinitionExtensionConfigs',null),
 ('Retail_BE/ActionDefinition/GetProvisionerDefinitionExtensionConfigs',null),
 ('Retail_BE/ActionDefinition/GetActionDefinitionsInfo',null),
 
-('Retail_BE/CreditClass/GetFilteredCreditClasses','Retail_BE_CreditClasses: View'),
+('Retail_BE/CreditClass/GetFilteredCreditClasses',null),
 ('Retail_BE/CreditClass/GetCreditClass',null),
-('Retail_BE/CreditClass/AddCreditClass','Retail_BE_CreditClasses: Add'),
-('Retail_BE/CreditClass/UpdateCreditClass','Retail_BE_CreditClasses: Edit'),
+('Retail_BE/CreditClass/AddCreditClass',null),
+('Retail_BE/CreditClass/UpdateCreditClass',null),
 ('Retail_BE/CreditClass/GetCreditClassesInfo',null),
 
-('Retail_BE/Switch/GetFilteredSwitches','Retail_BE_Switches: View'),
+('Retail_BE/Switch/GetFilteredSwitches',null),
 ('Retail_BE/Switch/GetSwitchSettingsTemplateConfigs',null),
-('Retail_BE/Switch/AddSwitch','Retail_BE_Switches: Add'),
-('Retail_BE/Switch/UpdateSwitch','Retail_BE_Switches: Edit'),
+('Retail_BE/Switch/AddSwitch',null),
+('Retail_BE/Switch/UpdateSwitch',null),
 ('Retail_BE/Switch/GetSwitch',null),
-
-('VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities','VRCommon_ApplicationVisibility: View'),('VRCommon/VRApplicationVisibility/GetVRApplicationVisibilityEditorRuntime',null),('VRCommon/VRApplicationVisibility/AddVRApplicationVisibility','VRCommon_ApplicationVisibility: Add'),('VRCommon/VRApplicationVisibility/UpdateVRApplicationVisibility','VRCommon_ApplicationVisibility: Edit'),('VRCommon/VRApplicationVisibility/GetVRApplicationVisibiltiesInfo',null),('VRCommon/VRApplicationVisibility/GetVRModuleVisibilityExtensionConfigs',null),('VRCommon/VRApplicationVisibility/GetVRApplicationVisibilitiesInfo',null),
 
 ('Retail_BE/ProductFamily/GetFilteredProductFamilies',null),('Retail_BE/ProductFamily/GetProductFamilyEditorRuntime',null),('Retail_BE/ProductFamily/AddProductFamily',null),('Retail_BE/ProductFamily/UpdateProductFamily',null),('Retail_BE/ProductFamily/GetProductFamiliesInfo',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
