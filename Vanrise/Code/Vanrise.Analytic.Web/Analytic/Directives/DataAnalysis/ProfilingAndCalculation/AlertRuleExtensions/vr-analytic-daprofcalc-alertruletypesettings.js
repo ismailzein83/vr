@@ -8,7 +8,7 @@
         return {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -18,20 +18,19 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/AlertRuleExtensions/Templates/DAProfCalcAlertRuleTypeSettingsTemplate.html"
-
         };
+
         function VRDAProfCalcAlertRuleTypeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var dataAnalysisDefinitionSelectorAPI;
             var dataAnalysisDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
+            var dataAnalysisDefinitionSelectionChangedDeferred;
 
             var sourceDataRecordStorageSelectorAPI;
             var sourceDataRecordStorageSelectorReadyDeferred;
 
             var daProfCalcGridAPI;
-
-            var selectedDataAnalysisDefinitionSelectoReadyDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -41,9 +40,9 @@
                     dataAnalysisDefinitionSelectorAPI = api;
                     dataAnalysisDefinitionSelectoReadyDeferred.resolve();
                 };
-
-                $scope.onSourceDataRecordStorageSelectorReady = function (api) {
+                $scope.scopeModel.onSourceDataRecordStorageSelectorReady = function (api) {
                     sourceDataRecordStorageSelectorAPI = api;
+
                     var filters = [];
                     var daProfCalcDataRecordStorageFilter = {
                         $type: 'Vanrise.Analytic.Business.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.Business',
@@ -51,11 +50,17 @@
                     };
                     filters.push(daProfCalcDataRecordStorageFilter);
 
-                    var setSourceLoader = function (value) { $scope.scopeModel.isLoadingSourceDataRecordStorage = value };
                     var payload = {
                         filters: filters
                     };
+
+                    var setSourceLoader = function (value) {
+                        $scope.scopeModel.isLoadingSourceDataRecordStorage = value;
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceDataRecordStorageSelectorAPI, payload, setSourceLoader, sourceDataRecordStorageSelectorReadyDeferred);
+                };
+                $scope.scopeModel.onDAProfCalcGridReady = function (api) {
+                    daProfCalcGridAPI = api;
                 };
 
                 $scope.scopeModel.onDataAnalysisDefinitionSelectionChanged = function (dataItem) {
@@ -68,30 +73,40 @@
                             };
                             filters.push(daProfCalcDataRecordStorageFilter);
 
-                            var setSourceLoader = function (value) { $scope.scopeModel.isLoadingSourceDataRecordStorage = value };
                             var payload = {
                                 filters: filters
+                            };
+
+                            var setSourceLoader = function (value) {
+                                $scope.scopeModel.isLoadingSourceDataRecordStorage = value;
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceDataRecordStorageSelectorAPI, payload, setSourceLoader, sourceDataRecordStorageSelectorReadyDeferred);
                         }
 
-                        if (selectedDataAnalysisDefinitionSelectoReadyDeferred == undefined) {
+                        if (dataAnalysisDefinitionSelectionChangedDeferred != undefined) {
+                            dataAnalysisDefinitionSelectionChangedDeferred.resolve();
+                        }
+                        else {
                             var filters = [];
                             var daProfCalcDataAnalysisItemDefinitionFilter = {
                                 $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisItemDefinitionFilter, Vanrise.Analytic.Entities"
                             };
                             filters.push(daProfCalcDataAnalysisItemDefinitionFilter);
+
                             var filter = {
                                 Filters: filters
                             };
 
                             $scope.scopeModel.daProfCalcItemNotifications.length = 0;
+                            $scope.scopeModel.isLoadingGrid = true;
+
                             var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
+
                             var dataAnalysisItemPromise = VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinitionsInfo(serializedFilter, dataItem.DataAnalysisDefinitionId).then(function (response) {
                                 $scope.scopeModel.selectedDataAnalysisItems = response;
-                            });
 
-                            dataAnalysisItemPromise.then(function () {
+                                var _promises = [];
+
                                 if ($scope.scopeModel.selectedDataAnalysisItems != null) {
                                     for (var i = 0; i < $scope.scopeModel.selectedDataAnalysisItems.length; i++) {
                                         var selectedDataAnalysisItem = $scope.scopeModel.selectedDataAnalysisItems[i];
@@ -100,24 +115,129 @@
                                             Name: selectedDataAnalysisItem.Name
                                         };
                                         $scope.scopeModel.daProfCalcItemNotifications.push(dataAnalysisNotificationItem);
-                                        extendDataAnalysisNotificationItemObject(dataAnalysisNotificationItem, undefined);
+                                        _promises.push(extendDataAnalysisNotificationItemObject(dataAnalysisNotificationItem, undefined));
                                     }
                                 }
+
+                                UtilsService.waitMultiplePromises(_promises).then(function () {
+                                    $scope.scopeModel.isLoadingGrid = false;
+                                });
                             });
                         }
-                        else
-                            selectedDataAnalysisDefinitionSelectoReadyDeferred = undefined;
                     }
                 };
 
-                $scope.scopeModel.onDAProfCalcGridReady = function (api) {
-                    daProfCalcGridAPI = api;
-                };
-
-                $scope.scopeModel.isdaProfCalcItemNotificationGridValid = function () {
-
-                };
                 defineAPI();
+            };
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+
+                    var vrAlertRuleTypeSettings;
+
+                    if (payload != undefined)
+                        vrAlertRuleTypeSettings = payload.settings;
+
+                    if (vrAlertRuleTypeSettings != undefined) {
+                        $scope.scopeModel.rawRecordFilterLabel = vrAlertRuleTypeSettings.RawRecordFilterLabel;
+                        dataAnalysisDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(dataAnalysisDefinitionSelectionChangedDeferred.promise);
+                    }
+
+                    //Loading DataAnalysisDefinition Selector
+                    var dataAnalysisDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    dataAnalysisDefinitionSelectoReadyDeferred.promise.then(function () {
+                        
+                        var dataAnalysisDefinitionSelectorPayload;
+                        if (vrAlertRuleTypeSettings != undefined) {
+                            var dataAnalysisDefinitionSelectorPayload = {
+                                selectedIds: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, dataAnalysisDefinitionSelectorPayload, dataAnalysisDefinitionSelectorLoadDeferred);
+                    });
+                    promises.push(dataAnalysisDefinitionSelectorLoadDeferred.promise);
+
+                    if (vrAlertRuleTypeSettings != undefined) {
+                        var filters = [];
+                        var daProfCalcDataAnalysisItemDefinitionFilter = {
+                            $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisItemDefinitionFilter, Vanrise.Analytic.Entities"
+                        };
+                        filters.push(daProfCalcDataAnalysisItemDefinitionFilter);
+                        var filter = {
+                            Filters: filters
+                        };
+                        var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
+
+                        var dataAnalysisItemPromise = VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinitionsInfo(serializedFilter, vrAlertRuleTypeSettings.DataAnalysisDefinitionId).then(function (response) {
+                            $scope.scopeModel.selectedDataAnalysisItems = response;
+                        });
+                        promises.push(dataAnalysisItemPromise);
+
+                        UtilsService.waitMultiplePromises([dataAnalysisItemPromise, dataAnalysisDefinitionSelectionChangedDeferred.promise]).then(function () {
+                            dataAnalysisDefinitionSelectionChangedDeferred = undefined;
+
+                            if ($scope.scopeModel.selectedDataAnalysisItems != null) {
+                                for (var i = 0; i < $scope.scopeModel.selectedDataAnalysisItems.length; i++) {
+                                    var selectedDataAnalysisItem = $scope.scopeModel.selectedDataAnalysisItems[i];
+
+                                    var dataAnalysisNotificationItem = {
+                                        DataAnalysisItemDefinitionId: selectedDataAnalysisItem.DataAnalysisItemDefinitionId,
+                                        Name: selectedDataAnalysisItem.Name
+                                    };
+
+                                    var daProfCalcItemNotification;
+                                    if (vrAlertRuleTypeSettings.DAProfCalcItemNotifications != undefined) {
+                                        daProfCalcItemNotification = UtilsService.getItemByVal(vrAlertRuleTypeSettings.DAProfCalcItemNotifications, selectedDataAnalysisItem.DataAnalysisItemDefinitionId, 'DataAnalysisItemDefinitionId');
+                                    }
+
+                                    $scope.scopeModel.daProfCalcItemNotifications.push(dataAnalysisNotificationItem);
+                                    promises.push(extendDataAnalysisNotificationItemObject(dataAnalysisNotificationItem, daProfCalcItemNotification));
+                                }
+                            }
+                        });
+
+                        sourceDataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+                        var sourceDataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        sourceDataRecordStorageSelectorReadyDeferred.promise.then(function () {
+                            sourceDataRecordStorageSelectorReadyDeferred = undefined;
+
+                            var filters = [];
+                            var daProfCalcDataRecordStorageFilter = {
+                                $type: 'Vanrise.Analytic.Business.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.Business',
+                                DataAnalysisDefinitionId: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
+                            };
+                            filters.push(daProfCalcDataRecordStorageFilter);
+
+                            var recordStoragePayload = {
+                                filters: filters,
+                                selectedIds: getSelectedSourceRecordStorageIds(vrAlertRuleTypeSettings.SourceRecordStorages)
+                            };
+                            VRUIUtilsService.callDirectiveLoad(sourceDataRecordStorageSelectorAPI, recordStoragePayload, sourceDataRecordStorageSelectorLoadDeferred);
+                        });
+                        promises.push(sourceDataRecordStorageSelectorLoadDeferred.promise);
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+                    var data = {
+                        $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
+                        DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
+                        SourceRecordStorages: buildSourceRecordStorages(),
+                        DAProfCalcItemNotifications: buildDAProfCalcItemNotifications(),
+                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel
+                    };
+                    return data;
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
             };
 
             function extendDataAnalysisNotificationItemObject(dataAnalysisNotificationItem, daProfCalcItemNotification) {
@@ -144,118 +264,6 @@
                     VRUIUtilsService.callDirectiveLoad(dataAnalysisNotificationItem.dataRecordFieldSelectorAPI, dataAnalysisNotificationPayload, dataAnalysisNotificationItem.dataRecordFieldSelectorLoadDeferred);
                 };
                 return dataAnalysisNotificationItem.dataRecordFieldSelectorLoadDeferred.promise;
-            };
-
-            function defineAPI() {
-                var api = {};
-
-                api.load = function (payload) {
-                    var promises = [];
-
-                    var vrAlertRuleTypeSettings;
-
-                    if (payload != undefined)
-                        vrAlertRuleTypeSettings = payload.settings;
-
-                    if (vrAlertRuleTypeSettings != undefined) {
-                        $scope.scopeModel.rawRecordFilterLabel = vrAlertRuleTypeSettings.RawRecordFilterLabel;
-                        selectedDataAnalysisDefinitionSelectoReadyDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(selectedDataAnalysisDefinitionSelectoReadyDeferred.promise);
-                    }
-
-                    var dataAnalysisDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    dataAnalysisDefinitionSelectoReadyDeferred.promise.then(function () {
-                        if (selectedDataAnalysisDefinitionSelectoReadyDeferred != undefined)
-                            selectedDataAnalysisDefinitionSelectoReadyDeferred.resolve();
-
-                        var dataAnalysisDefinitionSelectorPayload;
-
-                        if (vrAlertRuleTypeSettings != undefined) {
-                            dataAnalysisDefinitionSelectorPayload = {
-                                selectedIds: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, dataAnalysisDefinitionSelectorPayload, dataAnalysisDefinitionSelectorLoadDeferred);
-                    });
-                    promises.push(dataAnalysisDefinitionSelectorLoadDeferred.promise);
-
-                    if (vrAlertRuleTypeSettings != undefined) {
-                        var filters = [];
-                        var daProfCalcDataAnalysisItemDefinitionFilter = {
-                            $type: "Vanrise.Analytic.Entities.DAProfCalcDataAnalysisItemDefinitionFilter, Vanrise.Analytic.Entities"
-                        };
-                        filters.push(daProfCalcDataAnalysisItemDefinitionFilter);
-                        var filter = {
-                            Filters: filters
-                        };
-                        var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
-                        var dataAnalysisItemPromise = VR_Analytic_DataAnalysisItemDefinitionAPIService.GetDataAnalysisItemDefinitionsInfo(serializedFilter, vrAlertRuleTypeSettings.DataAnalysisDefinitionId).then(function (response) {
-                            $scope.scopeModel.selectedDataAnalysisItems = response;
-                        });
-
-                        promises.push(dataAnalysisItemPromise);
-
-                        UtilsService.waitMultiplePromises([dataAnalysisItemPromise, selectedDataAnalysisDefinitionSelectoReadyDeferred.promise]).then(function () {
-                            if ($scope.scopeModel.selectedDataAnalysisItems != null) {
-                                for (var i = 0; i < $scope.scopeModel.selectedDataAnalysisItems.length; i++) {
-                                    var selectedDataAnalysisItem = $scope.scopeModel.selectedDataAnalysisItems[i];
-
-                                    var dataAnalysisNotificationItem = {
-                                        DataAnalysisItemDefinitionId: selectedDataAnalysisItem.DataAnalysisItemDefinitionId,
-                                        Name: selectedDataAnalysisItem.Name
-                                    };
-
-                                    var daProfCalcItemNotification;
-                                    if (vrAlertRuleTypeSettings.DAProfCalcItemNotifications != undefined) {
-                                        daProfCalcItemNotification = UtilsService.getItemByVal(vrAlertRuleTypeSettings.DAProfCalcItemNotifications, selectedDataAnalysisItem.DataAnalysisItemDefinitionId, 'DataAnalysisItemDefinitionId');
-                                    }
-
-                                    $scope.scopeModel.daProfCalcItemNotifications.push(dataAnalysisNotificationItem);
-                                    promises.push(extendDataAnalysisNotificationItemObject(dataAnalysisNotificationItem, daProfCalcItemNotification));
-                                }
-                            }
-                        });
-
-                        sourceDataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-                        var sourceDataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        sourceDataRecordStorageSelectorReadyDeferred.promise.then(function () {
-                            sourceDataRecordStorageSelectorReadyDeferred = undefined;
-
-                            var filters = [];
-                            var daProfCalcDataRecordStorageFilter = {
-                                $type: 'Vanrise.Analytic.Business.DAProfCalcDataRecordStorageFilter,Vanrise.Analytic.Business',
-                                DataAnalysisDefinitionId: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
-                            };
-                            filters.push(daProfCalcDataRecordStorageFilter);
-
-                            var recordStoragePayload = {
-                                filters: filters,
-                                selectedIds: getSelectedSourceRecordStorageIds(vrAlertRuleTypeSettings.SourceRecordStorages)
-                            };
-
-                            VRUIUtilsService.callDirectiveLoad(sourceDataRecordStorageSelectorAPI, recordStoragePayload, sourceDataRecordStorageSelectorLoadDeferred);
-                        });
-
-                        promises.push(sourceDataRecordStorageSelectorLoadDeferred.promise);
-                    }
-
-                    return UtilsService.waitMultiplePromises(promises);
-                };
-
-                api.getData = function () {
-                    var data = {
-                        $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
-                        DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
-                        SourceRecordStorages: buildSourceRecordStorages(),
-                        DAProfCalcItemNotifications: buildDAProfCalcItemNotifications(),
-                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel
-                    };
-                    return data;
-                };
-
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    ctrl.onReady(api);
-                }
             };
 
             function buildSourceRecordStorages() {

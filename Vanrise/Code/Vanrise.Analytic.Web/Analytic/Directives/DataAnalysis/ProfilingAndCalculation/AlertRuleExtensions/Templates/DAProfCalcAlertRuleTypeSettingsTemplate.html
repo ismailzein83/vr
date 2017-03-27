@@ -1,27 +1,33 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
         <vr-columns width="1/3row">
-            <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedDataAnalysisDefinition"
-                                                         onselectionchanged="scopeModel.onDataAnalysisDefinitionSelectionChanged"></vr-analytic-dataanalysisdefinition-selector>
+            <vr-analytic-dataanalysisdefinition-selector on-ready="scopeModel.onDataAnalysisDefinitionSelectorReady"
+                                                         onselectionchanged="scopeModel.onDataAnalysisDefinitionSelectionChanged"
+                                                         selectedvalues="scopeModel.selectedDataAnalysisDefinition" isrequired="true">
+            </vr-analytic-dataanalysisdefinition-selector>
         </vr-columns>
         <vr-columns width="1/3row">
             <vr-textbox value="scopeModel.rawRecordFilterLabel" type="text" label="Raw Record Filter Label" isrequired="true"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/3row" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
-            <vr-genericdata-datarecordstorage-selector on-ready="onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages" isrequired="true"
-                                                       customlabel="Source Record Storages" ismultipleselection="true" vr-loader="scopeModel.isLoadingSourceDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
+            <vr-span vr-loader="scopeModel.isLoadingSourceDataRecordStorage">
+                <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages"
+                                                           customlabel="Source Record Storages" ismultipleselection="true" isrequired="true">
+                </vr-genericdata-datarecordstorage-selector>
+            </vr-span>
         </vr-columns>
     </vr-row>
-
     <vr-row>
-        <vr-columns width="fullrow" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
-            <vr-datagrid datasource="scopeModel.daProfCalcItemNotifications"
-                         hidegridmenu on-ready="scopeModel.onDAProfCalcGridReady">
+        <vr-columns width="fullrow" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined" vr-loader="scopeModel.isLoadingGrid">
+            <vr-datagrid on-ready="scopeModel.onDAProfCalcGridReady"
+                         datasource="scopeModel.daProfCalcItemNotifications"
+                         hidegridmenu>
 
                 <vr-datagridcolumn headertext="'Analaysis Type'" field="'Name'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Notification Type'">
-                    <vr-notification-notificationtypesetting-selector on-ready="dataItem.onVRNotificationTypeSettingsSelectorReady" hidelabel haschildcolumns
-                                                                      isrequired="true" selectedvalues="dataItem.selectedNotificationType">
+                    <vr-notification-notificationtypesetting-selector on-ready="dataItem.onVRNotificationTypeSettingsSelectorReady"
+                                                                      selectedvalues="dataItem.selectedNotificationType"
+                                                                      isrequired="true" hidelabel haschildcolumns>
                     </vr-notification-notificationtypesetting-selector>
                 </vr-datagridcolumn>
             </vr-datagrid>
