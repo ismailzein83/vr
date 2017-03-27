@@ -63,7 +63,7 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
                    + ' entityName="' + label + '"'
                    + '  >'
                    + '</vr-select>'
-                    + '<vr-columns>';
+                    + '</vr-columns>';
         }
 
         function BillingTransactionTypeSelectorCtor(ctrl, $scope, attrs) {
