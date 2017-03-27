@@ -231,7 +231,7 @@ as (select * from (values
 ('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'								,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
 
 ('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C','Retail_BE_Product','Product'								,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
-('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Retail_BE_Package'						,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
+('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Package'						,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
 ('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
 
 ('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_CDRRules','CDR Rules'								,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]')
@@ -435,3 +435,4 @@ when not matched by target then
 END
 
 Delete from [runtime].[SchedulerTaskActionType] where Id='0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9' --Exchange Rate
+

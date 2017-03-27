@@ -109,7 +109,7 @@ as (select * from (values
 
 ('VR_Sec/View/AddView','VR_Sec_View: Add'),
 ('VR_Sec/View/UpdateView','VR_Sec_View: Edit'),
-('VR_Sec/View/GetView','VR_Sec_View: View'),
+('VR_Sec/View/GetView',null),
 ('VR_Sec/View/DeleteView','VR_Sec_View: Delete'),
 ('VR_Sec/View/GetFilteredViews','VR_Sec_View: View'),
 ('VR_Sec/View/GetFilteredDynamicViews','VR_Sec_View: View'),
