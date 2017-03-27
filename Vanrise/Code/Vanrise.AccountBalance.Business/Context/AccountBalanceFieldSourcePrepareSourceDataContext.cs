@@ -11,7 +11,8 @@ namespace Vanrise.AccountBalance.Business
     {
         public IEnumerable<Entities.AccountBalance> AccountBalances { get; set; }
 
-
         public Guid AccountTypeId { get; set; }
+
+        public AccountTypeSettings AccountTypeSettings { get; set; }
     }
 }

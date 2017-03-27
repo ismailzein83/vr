@@ -10,9 +10,14 @@
         function GetRelationDefinitionExtendedSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_InvToAccBalanceRelation_ModuleConfig.moduleName, controllerName, "GetRelationDefinitionExtendedSettingsConfigs"));
         }
-
+        function GetRelationDefinitionInfos(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_InvToAccBalanceRelation_ModuleConfig.moduleName, controllerName, "GetRelationDefinitionInfos"), {
+                filter:filter
+            });
+        }
         return {
             GetRelationDefinitionExtendedSettingsConfigs: GetRelationDefinitionExtendedSettingsConfigs,
+            GetRelationDefinitionInfos: GetRelationDefinitionInfos
         };
     }
 

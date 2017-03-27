@@ -9,6 +9,6 @@ namespace Vanrise.AccountBalance.Business
 {
     public class AccountBalanceFieldSourceGetFieldDefinitionsContext : IAccountBalanceFieldSourceGetFieldDefinitionsContext
     {
-        public AccountTypeExtendedSettings ExtendedSettings { get; set; }
+        public AccountTypeSettings AccountTypeSettings { get; set; }
     }
 }

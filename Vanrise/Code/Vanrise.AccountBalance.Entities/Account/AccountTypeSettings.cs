@@ -14,30 +14,25 @@ namespace Vanrise.AccountBalance.Entities
         {
             get { return new Guid("7824DFFA-0EBF-4939-93E8-DEC6E5EDFA10"); }
         }
-
         public Guid AccountBusinessEntityDefinitionId { get; set; }
         public Guid AlertMailMessageTypeId { get; set; }
         public BalancePeriodSettings BalancePeriodSettings { get; set; }
         public AccountUsagePeriodSettings AccountUsagePeriodSettings { get; set; }
         public AccountTypeExtendedSettings ExtendedSettings { get; set; }
-       
         public AccountBalanceGridSettings AccountBalanceGridSettings { get; set; }
         public List<AccountBalanceFieldSource> Sources { get; set; }
         public AccountTypeSecurity Security { get; set; }
         public TimeSpan TimeOffset { get; set; }
-
         public Guid? InvToAccBalanceRelationId { get; set; }
     }
     public abstract class AccountTypeExtendedSettings
     {
         public abstract Guid ConfigId { get;}
         public abstract string AccountSelector { get;}
-
         public virtual VRActionTargetType GetActionTargetType()
         {
             return null;
         }
-
         public abstract IAccountManager GetAccountManager();
     }
     public interface IAccountManager
@@ -88,10 +83,11 @@ namespace Vanrise.AccountBalance.Entities
     }
     public interface IAccountBalanceFieldSourceGetFieldDefinitionsContext
     {
-        AccountTypeExtendedSettings ExtendedSettings { get;}
+        AccountTypeSettings AccountTypeSettings { get; }
     }
     public interface IAccountBalanceFieldSourcePrepareSourceDataContext
     {
+        AccountTypeSettings AccountTypeSettings { get; }
         IEnumerable<AccountBalance> AccountBalances { get; }
         Guid AccountTypeId { get; }
     }

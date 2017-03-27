@@ -4,6 +4,7 @@
             <vr-columns width="1/2row">
                 <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
             </vr-columns>
+            <vr-invtoaccbalancerelation-definition-selector on-ready="scopeModel.relationDefinitionSelectorReady"  normal-col-num="6"></vr-invtoaccbalancerelation-definition-selector>
         </vr-row>
         <vr-accountusage-periodsettings on-ready="scopeModel.accountUsagePeriodSettingsReady" isrequired="true" normal-col-num="6"></vr-accountusage-periodsettings>
         <vr-row>

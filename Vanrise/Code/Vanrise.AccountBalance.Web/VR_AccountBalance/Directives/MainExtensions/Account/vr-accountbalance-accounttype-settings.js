@@ -24,6 +24,9 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             var accountTypeSettingsAPI;
             var accountTypeSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var relationDefinitionSelectorAPI;
+            var relationDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var accountTypeSourcesAPI;
             var accountTypeSourcesReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -48,6 +51,11 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
 
                 $scope.scopeModel.selectedBusinessEntity;
 
+                $scope.scopeModel.relationDefinitionSelectorReady = function (api) {
+                    relationDefinitionSelectorAPI = api;
+                    relationDefinitionSelectorReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.accountTypeSourcesReady = function (api) {
                     accountTypeSourcesAPI = api;
                     accountTypeSourcesReadyDeferred.resolve();
@@ -64,12 +72,10 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     accountUsagePeriodSettingsAPI = api;
                     accountUsagePeriodSettingsReadyDeferred.resolve();
                 };
-
                 $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
                     viewPermissionAPI = api;
                     viewPermissionReadyDeferred.resolve();
                 };
-
                 $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
                     addPermissionAPI = api;
                     addPermissionReadyDeferred.resolve();
@@ -89,7 +95,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                         }
 
                     }
-                    return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSettings, loadAllControls, loadAccountUsagePeriodSettings, loadSourcesFields,loadAccountTypeGridColumns, loadViewRequiredPermission, loadAccountTypeSources, loadAddRequiredPermission]).catch(function (error) {
+                    return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSettings, loadAllControls, loadAccountUsagePeriodSettings,loadRelationDefinitionSelector, loadSourcesFields,loadAccountTypeGridColumns, loadViewRequiredPermission, loadAccountTypeSources, loadAddRequiredPermission]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;
@@ -121,7 +127,8 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                     Security: {
                         ViewRequiredPermission: viewPermissionAPI.getData(),
                         AddRequiredPermission: addPermissionAPI.getData(),
-                    }
+                    },
+                    InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds()
                 };
             }
 
@@ -131,6 +138,17 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                 }
             }
 
+            function loadRelationDefinitionSelector() {
+                var relationDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                relationDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var relationDefinitionSelectorPayload;
+                    if (accountTypeEntity != undefined) {
+                        relationDefinitionSelectorPayload = { selectedIds: accountTypeEntity.Settings.InvToAccBalanceRelationId };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(relationDefinitionSelectorAPI, relationDefinitionSelectorPayload, relationDefinitionSelectorLoadDeferred);
+                });
+                return relationDefinitionSelectorLoadDeferred.promises;
+            }
             function loadAccountTypeSettings() {
                 var accountTypeSettingsDeferred = UtilsService.createPromiseDeferred();
                 accountTypeSettingsReadyDeferred.promise.then(function () {
@@ -183,7 +201,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
             {
                 if(accountTypeEntity != undefined && accountTypeEntity.Settings != undefined && accountTypeEntity.Settings.Sources != undefined)
                 {
-                    return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourcesFields({ Sources: accountTypeEntity.Settings.Sources, ExtendedSettings: accountTypeEntity.Settings.ExtendedSettings }).then(function (response) {
+                    return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourcesFields({ Sources: accountTypeEntity.Settings.Sources, AccountTypeSettings: accountTypeEntity.Settings }).then(function (response) {
                         fieldsBySourceId = response;
                     });
                 }
@@ -243,7 +261,7 @@ app.directive('vrAccountbalanceAccounttypeSettings', ['UtilsService', 'VRUIUtils
                         {
                             var input = {
                                 Source:source,
-                                ExtendedSettings: settings
+                                AccountTypeSettings: GetAccountSettings()
                             };
                             return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSourceFields(input).then(function (response) {
                                 if (fieldsBySourceId == undefined)

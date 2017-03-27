@@ -13,12 +13,19 @@ namespace Vanrise.InvToAccBalanceRelation.Web.Controllers
     [JSONWithTypeAttribute]
     public class RelationDefinitionController:BaseAPIController
     {
-        RelationDefinitionManager _relationDefinitionEManager = new RelationDefinitionManager();
+        InvToAccBalanceRelationDefinitionManager _relationDefinitionEManager = new InvToAccBalanceRelationDefinitionManager();
         [HttpGet]
         [Route("GetRelationDefinitionExtendedSettingsConfigs")]
         public IEnumerable<RelationDefinitionExtendedSettingsConfig> GetRelationDefinitionExtendedSettingsConfigs()
         {
             return _relationDefinitionEManager.GetRelationDefinitionExtendedSettingsConfigs();
+        }
+        [HttpGet]
+        [Route("GetRelationDefinitionInfos")]
+        public object GetRelationDefinitionInfos(string filter = null)
+        {
+            InvToAccBalanceRelationDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<InvToAccBalanceRelationDefinitionInfoFilter>(filter) : null;
+            return _relationDefinitionEManager.GetRelationDefinitionInfos(deserializedFilter);
         }
     }
 }

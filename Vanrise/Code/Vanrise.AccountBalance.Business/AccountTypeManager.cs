@@ -27,6 +27,12 @@ namespace Vanrise.AccountBalance.Business
                 throw new NullReferenceException("accountTypeSettings.ExtendedSettings");
             return accountTypeSettings.ExtendedSettings.AccountSelector;
         }
+        public Guid? GetInvToAccBalanceRelationId(Guid accountTypeId)
+        {
+            var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.InvToAccBalanceRelationId;
+        }
         public string GetAccountTypeName(Guid accountTypeId)
         {
             var accountType = _vrComponentTypeManager.GetComponentType<AccountTypeSettings, AccountType>(accountTypeId);
@@ -157,12 +163,12 @@ namespace Vanrise.AccountBalance.Business
             else
                 return true;
         }
-        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountBalanceFieldSource source, AccountTypeExtendedSettings extendedSettings)
+        public IEnumerable<AccountBalanceFieldDefinition> GetAccountTypeSourceFields(AccountBalanceFieldSource source, AccountTypeSettings accountTypeSettings)
         {
             List<AccountBalanceFieldDefinition> fields = new List<AccountBalanceFieldDefinition>();
-            return source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { ExtendedSettings = extendedSettings });
+            return source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings });
         }
-        public Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(List<AccountBalanceFieldSource> sources, AccountTypeExtendedSettings extendedSettings)
+        public Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> GetAccountTypeSourcesFields(List<AccountBalanceFieldSource> sources, AccountTypeSettings accountTypeSettings)
         {
             Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> fieldsBySourceId = new Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>>();
             if (sources != null)
@@ -171,7 +177,7 @@ namespace Vanrise.AccountBalance.Business
                 {
                     if(!fieldsBySourceId.ContainsKey(source.AccountBalanceFieldSourceId))
                     {
-                        var fields = GetAccountTypeSourceFields(source, extendedSettings);
+                        var fields = GetAccountTypeSourceFields(source, accountTypeSettings);
                         if(fields != null)
                         {
                             fieldsBySourceId.Add(source.AccountBalanceFieldSourceId, fields);
@@ -196,7 +202,7 @@ namespace Vanrise.AccountBalance.Business
                     var source = accountTypeSettings.Sources.FirstOrDefault(x => x.AccountBalanceFieldSourceId == column.SourceId);
                      if(source != null)
                      {
-                         var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { ExtendedSettings = accountTypeSettings.ExtendedSettings });
+                         var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings });
                        if (sourceFields != null)
                        {
                            var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);

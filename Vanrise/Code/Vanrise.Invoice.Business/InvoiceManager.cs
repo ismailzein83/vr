@@ -363,6 +363,24 @@ namespace Vanrise.Invoice.Business
             }
             return null;
         }
+
+        public Dictionary<InvoiceByPartnerInvoiceType,List<Entities.Invoice>> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            var invoices =  dataManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
+            if(invoices == null)
+                return null;
+            Dictionary<InvoiceByPartnerInvoiceType,List<Entities.Invoice>> invoicesByPartnerInvoiceType = new Dictionary<InvoiceByPartnerInvoiceType,List<Entities.Invoice>>();
+            foreach(var invoice in invoices)
+            {
+                var partnerInvoices = invoicesByPartnerInvoiceType.GetOrCreateItem(new InvoiceByPartnerInvoiceType {InvoiceTypeId= invoice.InvoiceTypeId , PartnerId = invoice.PartnerId},()=>{
+                    return new List<Entities.Invoice>();
+                });
+                partnerInvoices.Add(invoice);
+            }
+            return invoicesByPartnerInvoiceType;
+        }
+
         #endregion
 
         #region Mappers
@@ -484,6 +502,8 @@ namespace Vanrise.Invoice.Business
                 return _dataManager.GetFilteredInvoices(input);
             }
         }
+
+     
         #endregion
 
         #region Private Methods

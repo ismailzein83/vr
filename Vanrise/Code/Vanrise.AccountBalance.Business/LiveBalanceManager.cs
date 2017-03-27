@@ -84,13 +84,13 @@ namespace Vanrise.AccountBalance.Business
                             if (source != null)
                             {
 
-                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext { ExtendedSettings = accountTypeSettings.ExtendedSettings});
+                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings});
                                 var field = fields.FirstOrDefault(x => x.Name == gridColumn.FieldName);
                                 if (field != null)
                                 {
                                     var preparedData = sourceDataBySourceData.GetOrCreateItem(gridColumn.SourceId, () =>
                                     {
-                                        return source.Settings.PrepareSourceData(new AccountBalanceFieldSourcePrepareSourceDataContext { AccountBalances = accountBalances, AccountTypeId = input.Query.AccountTypeId });
+                                        return source.Settings.PrepareSourceData(new AccountBalanceFieldSourcePrepareSourceDataContext { AccountTypeSettings = accountTypeSettings, AccountBalances = accountBalances, AccountTypeId = input.Query.AccountTypeId });
                                     });
                                     
                                     var fieldValue = source.Settings.GetFieldValue(new AccountBalanceFieldSourceGetFieldValueContext

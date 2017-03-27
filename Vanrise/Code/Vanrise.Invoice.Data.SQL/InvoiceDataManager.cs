@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Data.SQL
     {
 
         #region ctor
+        const string PartnerInvoiceType_TABLENAME = "PartnerInvoiceTypeTable";
         public InvoiceDataManager()
             : base(GetConnectionStringName("InvoiceDBConnStringKey", "InvoiceDBConnString"))
         {
@@ -54,6 +55,26 @@ namespace Vanrise.Invoice.Data.SQL
                 partnerIds = string.Join<string>(",", input.Query.PartnerIds);
 
             return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate);
+        }
+        public IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
+        {
+            DataTable partnerInvoiceTypeTable = GetPartnerInvoiceTypeTable();
+            foreach (var partnerInvoiceType in partnerInvoiceTypes)
+            {
+                DataRow dr = partnerInvoiceTypeTable.NewRow();
+                FillPartnerInvoiceTypeRow(dr, partnerInvoiceType.InvoiceTypeId, partnerInvoiceType.PartnerId);
+                partnerInvoiceTypeTable.Rows.Add(dr);
+            }
+            partnerInvoiceTypeTable.EndLoadData();
+            if (partnerInvoiceTypeTable.Rows.Count > 0)
+             return  GetItemsSPCmd("[VR_Invoice].[sp_Invoice_GetUnpaidByPartner]",InvoiceMapper,
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@PartnerInvoiceTypeTable", SqlDbType.Structured);
+                           dtPrm.Value = partnerInvoiceTypeTable;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+            return null;
         }
 
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
@@ -95,6 +116,21 @@ namespace Vanrise.Invoice.Data.SQL
         public bool AreInvoicesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
+        }
+        #endregion
+
+        #region Private Methods
+        private void FillPartnerInvoiceTypeRow(DataRow dr, Guid invoiceTypeId, string partnerId)
+        {
+            dr["InvoiceTypeId"] = invoiceTypeId;
+            dr["PartnerId"] = partnerId;
+        }
+        private DataTable GetPartnerInvoiceTypeTable()
+        {
+            DataTable dt = new DataTable(PartnerInvoiceType_TABLENAME);
+            dt.Columns.Add("InvoiceTypeId", typeof(Guid));
+            dt.Columns.Add("PartnerId", typeof(string));
+            return dt;
         }
         #endregion
 
