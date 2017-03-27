@@ -214,7 +214,7 @@ END
 
 --[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
 begin
-set nocount on;;with cte_data([ID],[Name],[ParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('FC455C73-490D-48F2-A2B8-C2385137DE0F','Business CRM'			,'5A9E78AE-229E-41B9-9DBF-492997B42B61',1),
+set nocount on;;with cte_data([ID],[Name],[ParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('FC455C73-490D-48F2-A2B8-C2385137DE0F','Business CRM'			,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
 ('783139D6-4BC9-4EC5-8191-A809937E590D','Pricing'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[ParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[Name],[ParentId],[BreakInheritance])	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
 --------------------------------------------------------------------------------------------------------------
 end
