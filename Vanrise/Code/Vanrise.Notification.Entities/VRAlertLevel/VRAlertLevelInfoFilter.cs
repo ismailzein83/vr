@@ -9,6 +9,7 @@ namespace Vanrise.Notification.Entities
 {
    public class VRAlertLevelInfoFilter
     {
-       public Guid BusinessEntityDefinitionId { get; set; }
+       public Guid? BusinessEntityDefinitionId { get; set; }
+       public Guid? VRNotificationTypeId { get; set; }
     }
 }

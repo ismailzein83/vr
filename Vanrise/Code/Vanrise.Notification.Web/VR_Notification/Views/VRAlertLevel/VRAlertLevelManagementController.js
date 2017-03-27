@@ -9,8 +9,7 @@
         var gridAPI;
         var beDefinitionSelectorApi;
         var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-        var beSelectorApi;
-        var beSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+       
         defineScope();
         load();
 
@@ -24,10 +23,7 @@
                 beDefinitionSelectorApi = api;
                 beDefinitionSelectorPromiseDeferred.resolve();
             };
-            $scope.onAlertLevelSelectorReady = function (api) {
-                beSelectorApi = api;
-                beSelectorPromiseDeferred.resolve();
-            }
+           
             $scope.add = function () {
                 var onAlertLevelAdded = function (addedAlertLevel) {
                     
@@ -68,21 +64,8 @@
                 });
                 return businessEntityDefinitionSelectorLoadDeferred.promise;
             }
-            function loadBusinessEntitySelector() {
-                var businessEntitySelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                beSelectorPromiseDeferred.promise.then(function () {
-                    var payloadSelector = {
-                        filter: {
-  
-                            BusinessEntityDefinitionId: 'F5EF1553-856D-454A-8B28-6F6A8008EC79'
-                        }
-                    };
-                    VRUIUtilsService.callDirectiveLoad(beSelectorApi, payloadSelector, businessEntitySelectorLoadDeferred);
-                });
-                return businessEntitySelectorLoadDeferred.promise;
-            }
-            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector, loadBusinessEntitySelector]).catch(function (error) {
+           
+            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }

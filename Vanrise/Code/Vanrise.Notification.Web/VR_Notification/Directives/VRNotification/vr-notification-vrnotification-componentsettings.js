@@ -22,7 +22,8 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
 
             var vrNotificationTypeSettingsSelectorAPI;
             var vrNotificationTypeSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+            var businessEntityDefinitionSelectorAPI;
+            var businessEntityDefinitionSelectorReadyDeffered = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -30,7 +31,10 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     vrNotificationTypeSettingsSelectorAPI = api;
                     vrNotificationTypeSettingsSelectorReadyDeferred.resolve();
                 };
-
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                    businessEntityDefinitionSelectorAPI = api;
+                    businessEntityDefinitionSelectorReadyDeffered.resolve();
+                };
                 defineAPI();
             }
             function defineAPI() {
@@ -42,9 +46,11 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     if (payload != undefined && payload.componentType != undefined) {
                         $scope.scopeModel.name = payload.componentType.Name;
                         settings = payload.componentType.Settings;
+                      
                     }
 
                     function loadNotificationTypeSelector() {
+                        console.log(payload);
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         vrNotificationTypeSettingsSelectorReadyDeferred.promise.then(function () {
@@ -61,18 +67,42 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                         return selectorLoadDeferred.promise;
                     }
 
-                    promises.push(loadNotificationTypeSelector());
+                    function loadBusinessEntityDefinitionSelector() {
+                        console.log(payload);
+                        var selectorLoadBEDeferred = UtilsService.createPromiseDeferred();
 
-                    return UtilsService.waitMultiplePromises(promises);
+                        businessEntityDefinitionSelectorReadyDeffered.promise.then(function () {
+                            console.log(settings);
+                            var payloadSelector = { 
+                                selectedIds: settings != undefined ? settings.VRAlertLevelDefinitionId : undefined,
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Notification.Business.VRAlertLevelBEDefinitionFilter, Vanrise.Notification.Business"
+                                    }]
+                                }
+                            };
+                            VRUIUtilsService.callDirectiveLoad(businessEntityDefinitionSelectorAPI, payloadSelector, selectorLoadBEDeferred);
+                        });
+
+                        return selectorLoadBEDeferred.promise;
+                    }
+                   
+                    return UtilsService.waitMultipleAsyncOperations([loadNotificationTypeSelector,loadBusinessEntityDefinitionSelector]).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                       
+                    });
+                
                 };
 
                 api.getData = function () {
-
+                  
                     return {
                         Name: $scope.scopeModel.name,
                         Settings: {
                             $type: "Vanrise.Notification.Entities.VRNotificationTypeSettings, Vanrise.Notification.Entities",
-                            ExtendedSettings: vrNotificationTypeSettingsSelectorAPI.getData()
+                            ExtendedSettings: vrNotificationTypeSettingsSelectorAPI.getData(),
+                            VRAlertLevelDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
                         }
                     };
                 };
