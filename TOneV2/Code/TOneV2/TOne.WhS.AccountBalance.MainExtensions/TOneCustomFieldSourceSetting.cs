@@ -19,7 +19,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
         public override List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context)
         {
             List<AccountBalanceFieldDefinition> definitionFields = new List<AccountBalanceFieldDefinition>();
-            AccountBalanceSettings accountBalanceSettings = context.ExtendedSettings as AccountBalanceSettings;
+            AccountBalanceSettings accountBalanceSettings = context.AccountTypeSettings.ExtendedSettings as AccountBalanceSettings;
             if (accountBalanceSettings.IsApplicableToCustomer)
             {
                 GetCustomerFields(definitionFields);
