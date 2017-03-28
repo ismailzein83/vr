@@ -61,7 +61,7 @@ namespace Vanrise.BusinessProcess.Business
                 throw new ArgumentNullException("createProcessInput");
             if (createProcessInput.InputArguments == null)
                 throw new ArgumentNullException("createProcessInput.InputArguments");
-            if (createProcessInput.InputArguments.UserId <= 0)
+            if (createProcessInput.InputArguments.UserId == 0)
                 throw new ArgumentException("createProcessInput.InputArguments.UserId");
 
             BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
