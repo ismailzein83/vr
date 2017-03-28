@@ -34,6 +34,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 
         var accountSelectorAPI;
         var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var context;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -58,6 +59,10 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                 accountSelectorAPI = api;
                 accountSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.onAccountSelected = function (selectedAccount) {
+                if (context != undefined && context.onAccountSelected != undefined)
+                    context.onAccountSelected(selectedAccount.FinancialAccountId);
+            };
 
             UtilsService.waitMultiplePromises([accountSelectorReadyDeferred.promise, carrierTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -78,6 +83,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
                     extendedSettings = payload.extendedSettings;
+                    context = payload.context;
                 }
 
                 function loadCarrierTypes() {
@@ -158,6 +164,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
 				        datavaluefield="FinancialAccountId"\
 				        datatextfield="{{scopeModel.accountDataTextField}}"\
+                        onselectitem="scopeModel.onAccountSelected"\
 				        isrequired="accountSelectorCtrl.isrequired"\
 				        hideremoveicon="accountSelectorCtrl.isrequired"\
                         ' + isMultipleSelection + '>\
