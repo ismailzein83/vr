@@ -84,12 +84,12 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         }
                     }
 
-                    var loadCriteriaSectionPromise = getCriteriaSectionPromise();
-                    promises.push(loadCriteriaSectionPromise);
+                    var criteriaSectionLoadPromise = getCriteriaSectionLoadPromise();
+                    promises.push(criteriaSectionLoadPromise);
 
                     if (alertExtendedSettings != undefined) {
-                        var loadDataRecordAlertRuleSettingsLoadPromise = loadDataRecordAlertRuleSettingsPromise();
-                        promises.push(loadDataRecordAlertRuleSettingsLoadPromise);
+                        var dataRecordAlertRuleSettingsLoadPromise = getDataRecordAlertRuleSettingsLoadPromise();
+                        promises.push(dataRecordAlertRuleSettingsLoadPromise);
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -113,7 +113,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     ctrl.onReady(api);
             };
 
-            function getCriteriaSectionPromise() {
+            function getCriteriaSectionLoadPromise() {
                 var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
@@ -135,7 +135,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 return loadCriteriaSectionPromiseDeferred.promise;
             };
 
-            function loadDataRecordAlertRuleSettingsPromise() {
+            function getDataRecordAlertRuleSettingsLoadPromise() {
                 var dataRecordAlertRuleSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
                 VR_Analytic_DAProfCalcOutputSettingsAPIService.GetOutputFields(analysisTypeId).then(function (response) {
@@ -156,8 +156,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
             function buildContext() {
                 return {
-                    vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId),
                     recordfields: buildRecordFields(outputFields),
+                    vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId)
                 };
             };
 
