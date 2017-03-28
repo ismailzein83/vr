@@ -71,8 +71,9 @@
     <Compile Include="DataRecord\DataRecordNotificationTypeSettingsManager.cs" />
     <Compile Include="DataRecord\DataRecordSendEmailDefinitionSettings.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleActionEventPayload.cs" />
+    <Compile Include="DataRecord\Filters\IVRAlertRuleTypeFilter\DataRecordAlertRuleTypeFilter.cs" />
     <Compile Include="DataRecord\RecordFilterAlertRuleConfig.cs" />
-    <Compile Include="Filters\IVRNotificationTypeFilter\DataRecordNotificationTypeFilter.cs" />
+    <Compile Include="DataRecord\Filters\IVRNotificationTypeFilter\DataRecordNotificationTypeFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRecord\QueueActivators\DataRecordCheckActionRulesQueueActivator.cs" />
   </ItemGroup>
@@ -114,7 +115,9 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Filters\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
