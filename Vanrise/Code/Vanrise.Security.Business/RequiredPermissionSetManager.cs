@@ -9,7 +9,7 @@ using Vanrise.Common;
 
 namespace Vanrise.Security.Business
 {
-    public class RequiredPermissionSetManager : IRequiredPermissionSetManager
+    public class RequiredPermissionSetManager : IRequiredPermissionSetManager, Vanrise.Common.ISecurityRequiredPermissionSetManager
     {
         #region Public Methods
         public int GetRequiredPermissionSetId(string module, RequiredPermissionSettings requiredPermission)

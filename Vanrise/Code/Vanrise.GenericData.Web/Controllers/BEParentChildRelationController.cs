@@ -41,7 +41,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("AddBEParentChildRelation")]
         public object AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
-            if (DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
+            if (!DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
                 return GetUnauthorizedResponse();
 
             return _manager.AddBEParentChildRelation(beParentChildRelationItem);
@@ -50,7 +50,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("UpdateBEParentChildRelation")]
         public object UpdateBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
-            if (DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
+            if (!DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
                 return GetUnauthorizedResponse();
             return _manager.UpdateBEParentChildRelation(beParentChildRelationItem);
         }

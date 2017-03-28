@@ -97,7 +97,10 @@ namespace Vanrise.Common
                 if (_handlers != null && _handlers.Count > 0)
                 {
                     if (eventType == null)
+                    {
                         eventType = "Technical";
+                        viewRequiredPermissionSetId = SecBusinessManagerFactory.GetManager<ISecurityRequiredPermissionSetManager>().GetRequiredPermissionSetId(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, "VRCommon_System_Log:View Technical Logs");
+                    }
                     StackFrame frame = new StackFrame(2);
                     var method = frame.GetMethod();
                     var type = method.DeclaringType;
