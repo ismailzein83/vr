@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Business;
 using TOne.WhS.AccountBalance.Entities;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
 
@@ -16,6 +18,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions
         {
             get { return new Guid("BD8DB941-019D-40C2-9E9A-DEBA0F567878"); }
         }
+        CarrierAccountManager carrierAccountManager;
+        FinancialAccountManager financialAccountManager;
         public override List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context)
         {
             List<AccountBalanceFieldDefinition> definitionFields = new List<AccountBalanceFieldDefinition>();
@@ -39,10 +43,15 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 
         public override object PrepareSourceData(IAccountBalanceFieldSourcePrepareSourceDataContext context)
         {
+            AccountBalanceSettings accountBalanceSettings = context.AccountTypeSettings.ExtendedSettings as AccountBalanceSettings;
+             financialAccountManager = new FinancialAccountManager();
+             carrierAccountManager = new CarrierAccountManager();
             Dictionary<string, TOneCustomFieldsData> toneCustomFieldsDataByAccountId = new Dictionary<string, TOneCustomFieldsData>();
             foreach(var item in context.AccountBalances)
             {
                 int accountId = Convert.ToInt32(item.AccountId);
+               
+
                 TOneCustomFieldsData toneCustomFieldsData;
                 if (!toneCustomFieldsDataByAccountId.TryGetValue(item.AccountId, out toneCustomFieldsData))
                 {
@@ -64,17 +73,34 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     else if (supplierCreditLimit.HasValue)
                     {
                         if (customerCreditLimit.Value > 0)
-                             consumed = item.CurrentBalance * 100 / supplierCreditLimit.Value;
+                            consumed = item.CurrentBalance * 100 / supplierCreditLimit.Value;
 
                     }
-                    toneCustomFieldsDataByAccountId.Add(item.AccountId, new TOneCustomFieldsData
+                    toneCustomFieldsData = new TOneCustomFieldsData
                     {
-                        CustomerCreditLimit =customerCreditLimit,
-                        CustomerTolerance= customerCreditLimit.HasValue ? (customerCreditLimit.Value + item.CurrentBalance) : item.CurrentBalance,
-                        SupplierCreditLimit=supplierCreditLimit,
+                        CustomerCreditLimit = customerCreditLimit,
+                        CustomerTolerance = customerCreditLimit.HasValue ? (customerCreditLimit.Value + item.CurrentBalance) : item.CurrentBalance,
+                        SupplierCreditLimit = supplierCreditLimit,
                         SupplierTolerance = supplierCreditLimit.HasValue ? (supplierCreditLimit.Value - item.CurrentBalance) : item.CurrentBalance,
                         Consumed = consumed
-                    });
+                    };
+                     var financialAccount = financialAccountManager.GetFinancialAccount(accountId);
+                     if (accountBalanceSettings.IsApplicableToCustomer)
+                     {
+                         if (IsRoutingStatusEnabled(financialAccount, true))
+                             toneCustomFieldsData.CustomerRoutingStatus = Vanrise.Common.Utilities.GetEnumDescription(RoutingStatus.Enabled);
+                         else
+                             toneCustomFieldsData.CustomerRoutingStatus = Vanrise.Common.Utilities.GetEnumDescription(RoutingStatus.Blocked);
+                        
+                     }
+                     if (accountBalanceSettings.IsApplicableToSupplier)
+                     {
+                         if (IsRoutingStatusEnabled(financialAccount, false))
+                             toneCustomFieldsData.SupplierRoutingStatus = Vanrise.Common.Utilities.GetEnumDescription(RoutingStatus.Enabled);
+                         else
+                             toneCustomFieldsData.SupplierRoutingStatus = Vanrise.Common.Utilities.GetEnumDescription(RoutingStatus.Blocked);
+                     }
+                     toneCustomFieldsDataByAccountId.Add(item.AccountId,toneCustomFieldsData);
                 }
             }
             return toneCustomFieldsDataByAccountId;
@@ -95,6 +121,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     case "SupplierCreditLimit": return toneCustomFieldsData.SupplierCreditLimit;
                     case "SupplierTolerance": return toneCustomFieldsData.SupplierTolerance;
                     case "Consumed": return toneCustomFieldsData.Consumed;
+                    case "CustomerRoutingStatus": return toneCustomFieldsData.CustomerRoutingStatus;
+                    case "SupplierRoutingStatus": return toneCustomFieldsData.SupplierRoutingStatus;
                 }
             }
             return null;
@@ -116,6 +144,12 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                 Title = "Cutomer Tolerance",
                 FieldType = new FieldNumberType { DataType = FieldNumberDataType.Decimal, DataPrecision = FieldNumberPrecision.Normal },
             });
+            definitionFields.Add(new AccountBalanceFieldDefinition
+            {
+                Name = "CustomerRoutingStatus",
+                Title = "Customer Routing Status",
+                FieldType = new FieldTextType (),
+            });
         }
         private void GetSupplierFields(List<AccountBalanceFieldDefinition> definitionFields)
         {
@@ -133,6 +167,12 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                 Title = "Supplier Tolerance",
                 FieldType = new FieldNumberType { DataType = FieldNumberDataType.Decimal, DataPrecision = FieldNumberPrecision.Normal },
             });
+            definitionFields.Add(new AccountBalanceFieldDefinition
+            {
+                Name = "SupplierRoutingStatus",
+                Title = "Supplier Routing Status",
+                FieldType = new FieldTextType(),
+            });
         }
         private decimal? GetCustomerCreditLimit(int accountId)
         {
@@ -146,6 +186,58 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             CarrierFinancialAccountData carrierFinancialAccountData = financialAccountManager.GetSuppCarrierFinancialByFinAccId(accountId);
             return carrierFinancialAccountData.CreditLimit;
         }
+
+        private bool IsRoutingStatusEnabled(FinancialAccount financialAccount, bool isCustomerApplicable)
+        {
+
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                var carrierAccount = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
+                if (isCustomerApplicable)
+                {
+                    return IsCustomerRoutingStatusEnabled(carrierAccount);
+                }
+                else if (!isCustomerApplicable)
+                {
+                    return IsSupplierRoutingStatusEnabled(carrierAccount);
+                }
+            }
+            else
+            {
+                var carrierAccounts = carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, isCustomerApplicable, !isCustomerApplicable);
+                bool routingStatus = false;
+                foreach (var account in carrierAccounts)
+                {
+                    if (isCustomerApplicable)
+                    {
+                        routingStatus = IsCustomerRoutingStatusEnabled(account);
+                        if (routingStatus)
+                            break;
+                    }
+                    else if (!isCustomerApplicable)
+                    {
+                        routingStatus = IsSupplierRoutingStatusEnabled(account);
+                        if (routingStatus)
+                            break;
+                    }
+                }
+                return routingStatus;
+            }
+            return false;
+        }
+        private bool IsCustomerRoutingStatusEnabled(CarrierAccount carrierAccount)
+        {
+            if (carrierAccount.CustomerSettings.RoutingStatus == RoutingStatus.Enabled)
+                return true;
+            return false;
+
+        }
+        private bool IsSupplierRoutingStatusEnabled(CarrierAccount carrierAccount)
+        {
+            if (carrierAccount.SupplierSettings.RoutingStatus == RoutingStatus.Enabled)
+                return true;
+            return false;
+        }
         public class TOneCustomFieldsData
         {
             public decimal? CustomerCreditLimit { get; set; }
@@ -153,6 +245,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             public decimal Consumed { get; set; }
             public decimal? SupplierCreditLimit { get; set; }
             public decimal  SupplierTolerance { get; set; }
+            public string CustomerRoutingStatus { get; set; }
+            public string SupplierRoutingStatus{ get; set; }
+
         }
     }
 

@@ -37,7 +37,6 @@ app.directive('vrAccountbalanceAccounttypeSourceInvoicesummary', ['UtilsService'
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    console.log(payload);
                     var invoiceSource;
                     if (payload != undefined) {
                         invoiceSource = payload.sourceSettingEntity;

@@ -93,16 +93,16 @@ namespace TOne.WhS.DBSync.Business
                 switch (sourceItem.RoutingStatus)
                 {
                     case SourceRoutingStatus.Blocked:
-                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
-                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.Blocked;
+                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.Blocked;
                         break;
                     case SourceRoutingStatus.BlockedInbound:
-                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.Blocked;
                         carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.Enabled;
                         break;
                     case SourceRoutingStatus.BlockedOutbound:
                         carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.Enabled;
-                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.BlockedOutBound;
+                        carrierAccountSupplierSettings.RoutingStatus = RoutingStatus.Blocked;
                         break;
                     case SourceRoutingStatus.Enabled:
                         carrierAccountCustomerSettings.RoutingStatus = RoutingStatus.Enabled;
