@@ -52,10 +52,11 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("GetDefinitions")]
-        public IEnumerable<BPDefinition> GetDefinitions()
+        public IEnumerable<BPDefinition> GetDefinitions(string serializedFilter)
         {
+            BPDefinitionInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<BPDefinitionInfoFilter>(serializedFilter) : null;
             BPDefinitionManager manager = new BPDefinitionManager();
-            return manager.GetBPDefinitions();
+            return manager.GetBPDefinitions(filter);
         }
     }
 }

@@ -24,8 +24,11 @@
             });
         }
 
-        function GetBPDefinitions() {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetDefinitions"));
+        function GetBPDefinitions(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetDefinitions"),
+                {
+                    serializedFilter: serializedFilter
+                });
         }
         function UpdateBPDefinition(BPDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", 'UpdateBPDefinition'), BPDefinition);

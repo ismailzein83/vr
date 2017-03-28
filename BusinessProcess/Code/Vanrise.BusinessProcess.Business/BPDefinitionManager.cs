@@ -22,7 +22,25 @@ namespace Vanrise.BusinessProcess.Business
             else
                 return null;
         }
+        public IEnumerable<BPDefinition> GetBPDefinitions(BPDefinitionInfoFilter filter)
+        {
+            var cachedDefinitions = GetCachedBPDefinitions();
+            Func<BPDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (prod) =>
+                {
+                    if (prod.Configuration.ScheduledExecEditor == null)
+                        return false;
+                    if (filter != null && filter.Filters != null && !CheckIfFilterIsMatch(prod, filter.Filters))
+                        return false;
+                    return true;
+                };
+            }
+           
 
+            return cachedDefinitions.FindAllRecords(filterExpression);
+        }
         public Vanrise.Entities.IDataRetrievalResult<BPDefinitionDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input, int? viewableByUserId = null)
         {
             var allBPDefinitions = GetCachedBPDefinitions();
@@ -52,6 +70,9 @@ namespace Vanrise.BusinessProcess.Business
             {
                
                 if (!DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), prod))
+                    return false;
+
+                if (prod.Configuration.ScheduledExecEditor == null)
                     return false;
 
                 return true;
@@ -149,12 +170,19 @@ namespace Vanrise.BusinessProcess.Business
             return GetBPDefinitionExtendedSettings(bpDefinition).GetViewInstanceRequiredPermissions(getViewInstanceRequiredPermissionsContext);
         }
 
+        public bool DoesUserHaveScheduleTaskAccess(int userId, Guid bPDefinitionId)
+        {
+            var bPDefinition = GetBPDefinition(bPDefinitionId);
+            return DoesUserHaveScheduleTaskAccess( userId,bPDefinition);
+        }
+
         public bool DoesUserHaveScheduleTaskAccess(int userId, BPDefinition bPDefinition)
         {
             var definitionContext = new BPDefinitionDoesUserHaveScheduleTaskContext { UserId = userId, BPDefinition = bPDefinition };
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveScheduleTaskAccess(definitionContext);
 
         }
+
         public bool DoesUserHaveStartNewInstanceAccess(int userId,  BPDefinition bPDefinition)
         {
             var definitionContext = new BPDefinitionDoesUserHaveStartAccessContext { UserId = userId, BPDefinition = bPDefinition };
@@ -235,6 +263,17 @@ namespace Vanrise.BusinessProcess.Business
             {
                 return dataManager.AreBPDefinitionsUpdated(ref _updateHandle);
             }
+        }
+
+        private bool CheckIfFilterIsMatch(BPDefinition BPDefinition, List<IBPDefinitionFilter> filters)
+        {
+            var context = new BPDefinitionFilterContext { BPDefinitionId = BPDefinition.BPDefinitionID };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
         #endregion
 
