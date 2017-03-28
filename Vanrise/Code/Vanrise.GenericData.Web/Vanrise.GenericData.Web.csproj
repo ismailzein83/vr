@@ -461,8 +461,8 @@
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\DataRecordActionRuleTypeSettingsTemplate.html" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordactionrule-extendedsettings.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordactionruletype-settings.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\QueueActivatorDataRecordCheckActionRulesTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\vr-genericdata-queueactivator-datarecordcheckactionrules.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\Template\QueueActivatorDataRecordCheckActionRulesTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\vr-genericdata-queueactivator-datarecordcheckactionrules.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Services\DataRecordNotificationTypeSettingsService.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Views\AlertRuleRecordEditor.html" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\AlertRuleRecordFilterManagementTemplate.html" />
