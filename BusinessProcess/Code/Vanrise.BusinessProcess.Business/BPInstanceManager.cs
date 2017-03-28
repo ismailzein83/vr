@@ -30,6 +30,10 @@ namespace Vanrise.BusinessProcess.Business
         {
             BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
 
+            var requiredPermissionSetManager = new RequiredPermissionSetManager();
+            List<int> grantedPermissionSetIds;
+            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
             List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityId);
