@@ -1,7 +1,7 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
-    function (VRModalService) {
-
+app.service('VR_Invoice_InvoiceTypeService', ['VRModalService', 'VRCommon_ObjectTrackingService',
+    function (VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         function addInvoiceType(onInvoiceTypeAdded) {
             var settings = {
 
@@ -226,7 +226,37 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceSettingDefinition/Templates/InvoiceSettingDefinitionPartEditor.html', parameters, modalSettings);
         }
+        function getEntityUniqueName() {
+            return "VR_Invoice_InvoiceType";
+        }
+        function registerObjectTrackingDrillDownToInvoiceType() {
+            var drillDownDefinition = {};
 
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, invoiceTypeItem) {
+                invoiceTypeItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: invoiceTypeItem.Entity.InvoiceTypeId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return invoiceTypeItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
         return ({
             addInvoiceType: addInvoiceType,
             editInvoiceType: editInvoiceType,
@@ -244,6 +274,8 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService',
             addInvoiceSettingSection: addInvoiceSettingSection,
             editInvoiceSettingSection:editInvoiceSettingSection,
             addInvoiceSettingPart: addInvoiceSettingPart,
-            editInvoiceSettingPart: editInvoiceSettingPart
+            editInvoiceSettingPart: editInvoiceSettingPart,
+            registerObjectTrackingDrillDownToInvoiceType: registerObjectTrackingDrillDownToInvoiceType,
+            getDrillDownDefinition: getDrillDownDefinition
         });
     }]);

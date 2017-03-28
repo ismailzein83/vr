@@ -13,19 +13,31 @@ namespace Vanrise.Common.Business
     {
         #region Public Methods
 
-        public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId)
+        public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId, bool isViewedFromUI)
         {
             Dictionary<Guid, VRMailMessageType> cachedVRMailMessageTypes = this.GetCachedVRMailMessageTypes();
-            return cachedVRMailMessageTypes.GetRecord(vrMailMessageTypeId);
+            var mailMessageType= cachedVRMailMessageTypes.GetRecord(vrMailMessageTypeId);
+            if (mailMessageType != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(VRMailMessageTypeLoggableEntity.Instance, mailMessageType);
+            return mailMessageType;
         }
-
+        public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId)
+        {
+            return GetMailMessageType(vrMailMessageTypeId, false);
+        }
         public IDataRetrievalResult<VRMailMessageTypeDetail> GetFilteredMailMessageTypes(DataRetrievalInput<VRMailMessageTypeQuery> input)
         {
             var allVRMailMessageTypes = GetCachedVRMailMessageTypes();
             Func<VRMailMessageType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(VRMailMessageTypeLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRMailMessageTypes.ToBigResult(input, filterExpression, VRMailMessageTypeDetailMapper));
         }
-
+        public string GetMailMessageTypeName(VRMailMessageType vrMailMessageType)
+        {
+            if (vrMailMessageType != null)
+                return vrMailMessageType.Name;
+            return null;
+        }
         public Vanrise.Entities.InsertOperationOutput<VRMailMessageTypeDetail> AddMailMessageType(VRMailMessageType vrMailMessageTypeItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRMailMessageTypeDetail>();
@@ -40,6 +52,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(vrMailMessageTypeItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRMailMessageTypeLoggableEntity.Instance, vrMailMessageTypeItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRMailMessageTypeDetailMapper(vrMailMessageTypeItem);
             }
@@ -63,6 +76,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(vrMailMessageTypeItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRMailMessageTypeLoggableEntity.Instance, vrMailMessageTypeItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRMailMessageTypeDetailMapper(this.GetMailMessageType(vrMailMessageTypeItem.VRMailMessageTypeId));
             }
@@ -97,6 +111,49 @@ namespace Vanrise.Common.Business
             }
         }
 
+        private class VRMailMessageTypeLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRMailMessageTypeLoggableEntity Instance = new VRMailMessageTypeLoggableEntity();
+
+            private VRMailMessageTypeLoggableEntity()
+            {
+
+            }
+
+            static VRMailMessageTypeManager s_VRMailMessageTypeManager = new VRMailMessageTypeManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_MailMessageType"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Mail Message Type"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_MailMessageType_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRMailMessageType vrMailMessageType = context.Object.CastWithValidate<VRMailMessageType>("context.Object");
+                return vrMailMessageType.VRMailMessageTypeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRMailMessageType vrMailMessageType = context.Object.CastWithValidate<VRMailMessageType>("context.Object");
+                return s_VRMailMessageTypeManager.GetMailMessageTypeName(vrMailMessageType);
+            }
+        }
         #endregion
 
 

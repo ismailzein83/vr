@@ -50,6 +50,7 @@
         }
         function addInvoiceType() {
             var onInvoiceTypeAdded = function (invoice) {
+                gridAPI.onInvoiceTypeAdded(invoice);
             };
             VR_Invoice_InvoiceTypeService.addInvoiceType(onInvoiceTypeAdded);
         }

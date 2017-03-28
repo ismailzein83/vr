@@ -27,7 +27,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetMailMessageType")]
         public VRMailMessageType GetMailMessageType(Guid VRMailMessageTypeId)
         {
-            return _manager.GetMailMessageType(VRMailMessageTypeId);
+            return _manager.GetMailMessageType(VRMailMessageTypeId,true);
         }
 
         [HttpPost]

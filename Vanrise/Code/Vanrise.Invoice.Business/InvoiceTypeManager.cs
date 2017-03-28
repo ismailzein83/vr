@@ -19,12 +19,18 @@ namespace Vanrise.Invoice.Business
     {
 
         #region Public Methods
-        public InvoiceType GetInvoiceType(Guid invoiceTypeId)
+        public InvoiceType GetInvoiceType(Guid invoiceTypeId, bool isViewedFromUI)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
-            return invoiceTypes.GetRecord(invoiceTypeId);
+            var invoiceType= invoiceTypes.GetRecord(invoiceTypeId);
+            if (invoiceType != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(InvoiceTypeLoggableEntity.Instance, invoiceType);
+            return invoiceType;
         }
-
+        public InvoiceType GetInvoiceType(Guid invoiceTypeId)
+        {
+           return GetInvoiceType(invoiceTypeId, false);
+        }
         public string GetInvoiceTypeName(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);
@@ -189,7 +195,7 @@ namespace Vanrise.Invoice.Business
 
             Func<InvoiceType, bool> filterExpression = (itemObject) =>
                  (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(InvoiceTypeLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, InvoiceTypeDetailMapper));
         }
         public Vanrise.Entities.InsertOperationOutput<InvoiceTypeDetail> AddInvoiceType(InvoiceType invoiceType)
@@ -203,6 +209,7 @@ namespace Vanrise.Invoice.Business
             invoiceType.InvoiceTypeId = Guid.NewGuid();
             if (dataManager.InsertInvoiceType(invoiceType))
             {
+                VRActionLogger.Current.TrackAndLogObjectAdded(InvoiceTypeLoggableEntity.Instance, invoiceType);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = InvoiceTypeDetailMapper(invoiceType);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -225,6 +232,7 @@ namespace Vanrise.Invoice.Business
 
             if (dataManager.UpdateInvoiceType(invoiceType))
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(InvoiceTypeLoggableEntity.Instance, invoiceType);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = InvoiceTypeDetailMapper(invoiceType);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -423,6 +431,49 @@ namespace Vanrise.Invoice.Business
             }
         }
 
+        private class InvoiceTypeLoggableEntity : VRLoggableEntityBase
+        {
+            public static InvoiceTypeLoggableEntity Instance = new InvoiceTypeLoggableEntity();
+
+            private InvoiceTypeLoggableEntity()
+            {
+
+            }
+
+            static InvoiceTypeManager s_invoiceTypeManager = new InvoiceTypeManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Invoice_InvoiceType"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Invoice"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Invoice Type"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Invoice_InvoiceType_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                InvoiceType invoiceType = context.Object.CastWithValidate<InvoiceType>("context.Object");
+                return invoiceType.InvoiceTypeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                InvoiceType invoiceType = context.Object.CastWithValidate<InvoiceType>("context.Object");
+                return s_invoiceTypeManager.GetInvoiceTypeName(invoiceType.InvoiceTypeId);
+            }
+        }
         #endregion
 
         #region Private Methods

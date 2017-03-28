@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIService', 'VRCommon_VRMailMessageTypeService', 'VRNotificationService',
-    function (VRCommon_VRMailMessageTypeAPIService, VRCommon_VRMailMessageTypeService, VRNotificationService) {
+app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIService', 'VRCommon_VRMailMessageTypeService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VRCommon_VRMailMessageTypeAPIService, VRCommon_VRMailMessageTypeService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIServ
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.mailMessageTypes = [];
@@ -29,11 +29,19 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIServ
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRMailMessageTypeService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRMailMessageTypeAPIService.GetFilteredMailMessageTypes(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +59,7 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIServ
                 };
 
                 api.onMailMessageTypeAdded = function (addedMailMessageType) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedMailMessageType);
                     gridAPI.itemAdded(addedMailMessageType);
                 };
 
@@ -67,6 +76,7 @@ app.directive('vrCommonMailmessagetypeGrid', ['VRCommon_VRMailMessageTypeAPIServ
             }
             function editMailMessageType(mailMessageTypeItem) {
                 var onMailMessageTypeUpdated = function (updatedMailMessageType) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedMailMessageType);
                     gridAPI.itemUpdated(updatedMailMessageType);
                 };
 

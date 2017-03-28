@@ -6,4 +6,7 @@
              idfield="Entity.InvoiceTypeId">
     <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceTypeId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>
