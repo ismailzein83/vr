@@ -78,7 +78,8 @@ namespace Retail.BusinessEntity.Business
                     SourceId = accountData.Account.SourceId,
                     AccountBEDefinitionId = this.AccountBEDefinitionId
                 };
-                accountManager.TryUpdateAccount(editAccount);
+                Account accountUpdated;
+                accountManager.TryUpdateAccount(editAccount, out accountUpdated);
                 context.WriteBusinessTrackingMsg(LogEntryType.Information, "Account '{0}' updated", accountData.Account.Name);
             }
         }
@@ -95,7 +96,8 @@ namespace Retail.BusinessEntity.Business
                 ApplyHandlersPreInsert(context, accountData.Account, handlersToExecute);
             }
             long accountId;
-            s_accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true);
+            Account accountInserted;
+            s_accountManager.TryAddAccount(GetAccountToInsert(accountData.Account), out accountId, true, out accountInserted);
             if (accountId > 0)
             {
                 AccountBEManager accountManager = new AccountBEManager();

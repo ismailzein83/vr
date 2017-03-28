@@ -167,14 +167,12 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             long accountId;
 
-            if (TryAddAccount(accountToInsert, out accountId, false))
+            Account accountBE;
+            if (TryAddAccount(accountToInsert, out accountId, false, out accountBE))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 accountToInsert.AccountId = accountId;
-                var accountBE = GetAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.AccountId);
-                VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), accountBE);
-                insertOperationOutput.InsertedObject = AccountDetailMapper(this.GetAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.AccountId));
+                insertOperationOutput.InsertedObject = AccountDetailMapper(accountBE);
             }
             else
             {
@@ -190,11 +188,9 @@ namespace Retail.BusinessEntity.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            if (TryUpdateAccount(accountToEdit))
+            Account account;
+            if (TryUpdateAccount(accountToEdit, out account))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);
-                var account = GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
-                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountBELoggableEntity(accountToEdit.AccountBEDefinitionId), account);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AccountDetailMapper(account);
             }
@@ -537,13 +533,24 @@ namespace Retail.BusinessEntity.Business
                     return treeNodes;
                 });
         }
-        internal bool TryUpdateAccount(AccountToEdit accountToEdit)
+        internal bool TryUpdateAccount(AccountToEdit accountToEdit, out Account account)
         {
             ValidateAccountToEdit(accountToEdit);
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            return dataManager.Update(accountToEdit);
+            if( dataManager.Update(accountToEdit))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);                
+                account = GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountBELoggableEntity(accountToEdit.AccountBEDefinitionId), account);
+                return true;
+            }
+            else
+            {
+                account = null;
+                return false;
+            }
         }
-        internal bool TryAddAccount(AccountToInsert accountToInsert, out long accountId, bool donotValidateParent)
+        internal bool TryAddAccount(AccountToInsert accountToInsert, out long accountId, bool donotValidateParent, out Account account)
         {
             ValidateAccountToAdd(accountToInsert, donotValidateParent);
 
@@ -561,7 +568,18 @@ namespace Retail.BusinessEntity.Business
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
 
-            return dataManager.Insert(accountToInsert, out accountId);
+            if(dataManager.Insert(accountToInsert, out accountId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
+                account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
+                VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), account);
+                return true;
+            }
+            else
+            {
+                account = null;
+                return false;
+            }
         }
 
         #endregion
