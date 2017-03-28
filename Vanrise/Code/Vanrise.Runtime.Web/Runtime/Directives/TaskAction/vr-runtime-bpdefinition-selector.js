@@ -73,11 +73,13 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcess_BPDefinitionAPI
                 api.load = function (payload) {
 
                     var selectedIds;
+                    var filter;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        filter = payload.filter;
                     }
 
-                    return getBPDefenitionsInfo(attrs, ctrl, selectedIds);
+                    return getBPDefenitionsInfo(attrs, ctrl, selectedIds , filter);
 
                 };
 
@@ -92,8 +94,8 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcess_BPDefinitionAPI
             this.initializeController = initializeController;
         }
 
-        function getBPDefenitionsInfo(attrs, ctrl, selectedIds) {
-            return BusinessProcess_BPDefinitionAPIService.GetBPDefinitions().then(function (response) {
+        function getBPDefenitionsInfo(attrs, ctrl, selectedIds,filter) {
+            return BusinessProcess_BPDefinitionAPIService.GetBPDefinitions(filter).then(function (response) {
                 ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);

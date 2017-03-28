@@ -38,7 +38,7 @@ function (UtilsService, VRUIUtilsService) {
 
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefenitionDirectiveAPI = api;
-
+             
                 var setLoader = function (value) {
                     $scope.isLoadingAction = value;
                 };
@@ -80,18 +80,20 @@ function (UtilsService, VRUIUtilsService) {
 
                 var loadBPDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 bpDefenitionSelectorReadyPromiseDeferred.promise.then(function () {
-                    var payloadSelector;
+                    var payloadSelector = {
+                        filter: {
+                            Filters: [{
+                                $type: "Vanrise.BusinessProcess.Business.BPDefinitionScheduleTaskFilter, Vanrise.BusinessProcess.Business",
+                            }]
+                        }
+                    };
                     if (data != undefined) {
                         $scope.disableBPDefinitionColumn = true;
-                        payloadSelector = {
-                            selectedIds: (data != undefined) ? data.BPDefinitionID : null
-                        };
+                        payloadSelector.selectedIds =  (data != undefined) ? data.BPDefinitionID : null;
                     }
                     else if (bpDefinitionId != undefined) {
                         $scope.disableBPDefinitionColumn = true;
-                        payloadSelector = {
-                            selectedIds: bpDefinitionId
-                        };
+                        payloadSelector.selectedIds = bpDefinitionId;
                     }
                     VRUIUtilsService.callDirectiveLoad(bpDefenitionSelectorAPI, payloadSelector, loadBPDefinitionSelectorPromiseDeferred);
                 });
