@@ -223,6 +223,7 @@
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertchecker-process.js" />
     <Content Include="VR_AccountBalance\Directives\ProcessInput\vr-balancealertthreshold-updateprocess.js" />
     <Content Include="VR_AccountBalance\Services\AccountTypeService.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\AccountAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountStatementAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountUsageAPIService.js" />

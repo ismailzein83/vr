@@ -44,14 +44,15 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
             var api = {};
 
             api.load = function (payload) {
-
                 $scope.scopeModel.editor = undefined;
                 directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
                 var accountTypeId;
+                var accountSelectorContext;
 
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
+                    accountSelectorContext = payload.context;
                 }
 
                 var promises = [];
@@ -89,6 +90,7 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
                     directiveReadyDeferred.promise.then(function () {
                         var directivePayload = {
                             accountTypeId: accountTypeId,
+                            context: accountSelectorContext,
                             extendedSettings: extendedSettings
                         };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
