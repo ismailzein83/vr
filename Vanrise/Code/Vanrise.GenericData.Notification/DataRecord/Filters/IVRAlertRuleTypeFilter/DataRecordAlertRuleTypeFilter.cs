@@ -8,5 +8,6 @@ namespace Vanrise.GenericData.Notification
 {
     public class DataRecordAlertRuleTypeFilter //: IVRAlertRuleTypeFilter
     {
+
     }
 }
