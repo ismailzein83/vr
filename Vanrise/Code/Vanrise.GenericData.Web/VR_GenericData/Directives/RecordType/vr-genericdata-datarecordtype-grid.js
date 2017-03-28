@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordTypeAPIService", "VR_GenericData_DataRecordTypeService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordTypeService) {
+app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordTypeAPIService", "VR_GenericData_DataRecordTypeService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordTypeService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -29,12 +29,15 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.datarecordTypes = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_GenericData_DataRecordTypeService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -44,6 +47,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                             return gridAPI.retrieveData(query);
                         };
                         directiveAPI.onDataRecordTypeAdded = function (onDataRecordTypeObj) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(onDataRecordTypeObj);
                             gridAPI.itemAdded(onDataRecordTypeObj);
                         };
                         return directiveAPI;
@@ -54,6 +58,9 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                     return VR_GenericData_DataRecordTypeAPIService.GetFilteredDataRecordTypes(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
                             }
                             onResponseReady(response);
                         })
@@ -83,6 +90,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             }
             function editDataRecordField(dataItem) {
                 var onDataRecordFieldUpdated = function (dataRecordFieldObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(dataRecordFieldObj);
                     gridAPI.itemUpdated(dataRecordFieldObj);
                 };
 

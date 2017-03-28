@@ -2,13 +2,16 @@
 
     'use strict';
 
-    DataRecordTypeService.$inject = ['VRModalService'];
+    DataRecordTypeService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function DataRecordTypeService(VRModalService) {
+    function DataRecordTypeService(VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addDataRecordType: addDataRecordType,
             editDataRecordType: editDataRecordType,
-            addDataRecordTypeFieldFilter: addDataRecordTypeFieldFilter
+            addDataRecordTypeFieldFilter: addDataRecordTypeFieldFilter,
+            registerObjectTrackingDrillDownToDataRecordType: registerObjectTrackingDrillDownToDataRecordType,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addDataRecordType(onDataRecordTypeAdded) {
@@ -48,6 +51,38 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordTypeField/DataRecordTypeFieldFilterEditor.html', modalParameters, modalSettings);
+        }
+        function getEntityUniqueName() {
+            return "VR_GenericData_DataRecordType";
+        }
+
+        function registerObjectTrackingDrillDownToDataRecordType() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, dataRecordTypeItem) {
+                dataRecordTypeItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: dataRecordTypeItem.Entity.DataRecordTypeId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return dataRecordTypeItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
     };
 

@@ -41,20 +41,29 @@ namespace Vanrise.GenericData.Business
 
             Func<DataRecordType, bool> filterExpression = (itemObject) =>
                  (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(DataRecordTypeLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataRecordTypeDetailMapper));
+        }
+        public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId, bool isViewedFromUI)
+        {
+            var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
+            var dataRecordTypeToEdit= dataRecordTypes.GetRecord(dataRecordTypeId);
+            if (dataRecordTypeToEdit != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(DataRecordTypeLoggableEntity.Instance, dataRecordTypeToEdit);
+            return dataRecordTypeToEdit;
         }
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
-            var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
-            return dataRecordTypes.GetRecord(dataRecordTypeId);
+           return GetDataRecordTypeToEdit(dataRecordTypeId,false);
         }
-
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
-            return dataRecordTypes.GetRecord(dataRecordTypeId);
+           var dataRecordType= dataRecordTypes.GetRecord(dataRecordTypeId);
+           
+           return dataRecordType;
         }
+        
         public string GetDataRecordTypeName(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -138,6 +147,7 @@ namespace Vanrise.GenericData.Business
             if (insertActionSucc)
             {
                 GetCacheManager().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(DataRecordTypeLoggableEntity.Instance, dataRecordType);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataRecordTypeDetailMapper(dataRecordType);
             }
@@ -160,6 +170,7 @@ namespace Vanrise.GenericData.Business
             if (updateActionSucc)
             {
                 GetCacheManager().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DataRecordTypeLoggableEntity.Instance, dataRecordType);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataRecordTypeDetailMapper(dataRecordType);
             }
@@ -418,6 +429,50 @@ namespace Vanrise.GenericData.Business
                 }
 
                 return false;
+            }
+        }
+
+        private class DataRecordTypeLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataRecordTypeLoggableEntity Instance = new DataRecordTypeLoggableEntity();
+
+            private DataRecordTypeLoggableEntity()
+            {
+
+            }
+
+            static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_DataRecordType"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Data Record Type"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_DataRecordType_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataRecordType dataRecordType = context.Object.CastWithValidate<DataRecordType>("context.Object");
+                return dataRecordType.DataRecordTypeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataRecordType dataRecordType = context.Object.CastWithValidate<DataRecordType>("context.Object");
+                return s_dataRecordTypeManager.GetDataRecordTypeName(dataRecordType.DataRecordTypeId);
             }
         }
 
