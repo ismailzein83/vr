@@ -1,83 +1,121 @@
 ﻿'use strict';
 
-app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_FinancialAccountAPIService', 'VRNotificationService','VR_AccountBalance_FinancialAccountService',
-    function (WhS_AccountBalance_FinancialAccountAPIService, VRNotificationService, VR_AccountBalance_FinancialAccountService) {
-        return {
-            restrict: 'E',
-            scope: {
-                onReady: '=',
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                ctrl.showAccount = true;
-                var financialAccountGrid = new FinancialAccountGrid($scope, ctrl, $attrs);
-                financialAccountGrid.initializeController();
-            },
-            controllerAs: 'ctrl',
-            bindToController: true,
-            templateUrl: '/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Directives/Templates/FinancialAccountGridTemplate.html'
-        };
+app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_FinancialAccountAPIService', 'VRNotificationService', 'VR_AccountBalance_FinancialAccountService', 'VRUIUtilsService', function (WhS_AccountBalance_FinancialAccountAPIService, VRNotificationService, VR_AccountBalance_FinancialAccountService, VRUIUtilsService) {
+    return {
+        restrict: 'E',
+        scope: {
+            onReady: '=',
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            ctrl.showAccount = true;
+            var financialAccountGrid = new FinancialAccountGrid($scope, ctrl, $attrs);
+            financialAccountGrid.initializeController();
+        },
+        controllerAs: 'ctrl',
+        bindToController: true,
+        templateUrl: '/Client/Modules/WhS_AccountBalance/Elements/FinancialAccount/Directives/Templates/FinancialAccountGridTemplate.html'
+    };
 
-        function FinancialAccountGrid($scope, ctrl, $attrs) {
-            this.initializeController = initializeController;
+    function FinancialAccountGrid($scope, ctrl, $attrs) {
 
-            var gridAPI;
-            var context;
-            function initializeController() {
-                $scope.scopeModel = {};
-                $scope.scopeModel.financialAccounts = [];
-                $scope.scopeModel.menuActions = [];
+        this.initializeController = initializeController;
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-                };
+        var context;
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_AccountBalance_FinancialAccountAPIService.GetFilteredFinancialAccounts(dataRetrievalInput).then(function (response) {
-                        onResponseReady(response);
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    });
-                };
+        var gridAPI;
+        var gridDrillDownTabManager;
 
-                defineMenuActions();
-            }   
+        function initializeController() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.financialAccounts = [];
+            $scope.scopeModel.menuActions = [];
 
-            function defineAPI() {
-                var api = {};
+            $scope.scopeModel.onGridReady = function (api) {
+                gridAPI = api;
+                var gridDrillDownTabDefinitions = getGridDrillDownTabDefinitions();
+                gridDrillDownTabManager = VRUIUtilsService.defineGridDrillDownTabs(gridDrillDownTabDefinitions, gridAPI, undefined);
+                defineAPI();
+            };
 
-                api.loadGrid = function (payload) {
-                    if (payload != undefined)
-                    {
-                        context = payload.context;
-                        return gridAPI.retrieveData(payload.query);
+            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return WhS_AccountBalance_FinancialAccountAPIService.GetFilteredFinancialAccounts(dataRetrievalInput).then(function (response) {
+                    if (response != undefined && response.Data != null) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            var financialAccount = response.Data[i];
+                            gridDrillDownTabManager.setDrillDownExtensionObject(financialAccount);
+                        }
                     }
-                };
-                api.onFinancialAccountAdded = function (financialAccount) {
-                   
-                    return gridAPI.itemAdded(financialAccount);
-                };
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
+                    onResponseReady(response);
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+            };
 
-
-            function defineMenuActions() {
-                $scope.scopeModel.gridMenuActions = [{
-                    name: "Edit",
-                    clicked: editFinancialAccount,
-                }];
-            }
-
-            function editFinancialAccount(dataItem) {
-                var onFinancialAccountUpdated = function (financialAccount) {
-                    if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
-                        context.checkAllowAddFinancialAccount();
-                    gridAPI.itemUpdated(financialAccount);
-                };
-                VR_AccountBalance_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, dataItem.Entity.FinancialAccountId);
-            }
-
+            defineMenuActions();
         }
-    }]);
+        function defineAPI() {
+            var api = {};
+
+            api.loadGrid = function (payload) {
+
+                var query;
+
+                if (payload != undefined) {
+                    context = payload.context;
+                    query = payload.query;
+                }
+
+                return gridAPI.retrieveData(query);
+            };
+
+            api.onFinancialAccountAdded = function (financialAccount) {
+                gridDrillDownTabManager.setDrillDownExtensionObject(financialAccount);
+                return gridAPI.itemAdded(financialAccount);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        function getGridDrillDownTabDefinitions() {
+            var drillDownTabDefinitions = [];
+
+            var transactionTab = {
+                title: "Financial Transactions",
+                directive: "vr-accountbalance-billingtransaction-search",
+                loadDirective: function (billingTransactionSearchAPI, financialAccount) {
+                    financialAccount.billingTransactionSearchAPI = billingTransactionSearchAPI;
+
+                    var financialAccountId = financialAccount.Entity.FinancialAccountId;
+                    var accountTypeId = (financialAccount.Entity.Settings != null) ? financialAccount.Entity.Settings.AccountTypeId : undefined;
+
+                    var billingTransactionSearchPayload = {
+                        AccountTypeId: accountTypeId,
+                        AccountsIds: [financialAccountId]
+                    };
+
+                    return billingTransactionSearchAPI.loadDirective(billingTransactionSearchPayload);
+                }
+            };
+
+            drillDownTabDefinitions.push(transactionTab);
+
+            return drillDownTabDefinitions;
+        }
+        function defineMenuActions() {
+            $scope.scopeModel.gridMenuActions = [{
+                name: "Edit",
+                clicked: editFinancialAccount,
+            }];
+        }
+        function editFinancialAccount(dataItem) {
+            var onFinancialAccountUpdated = function (financialAccount) {
+                if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
+                    context.checkAllowAddFinancialAccount();
+                gridAPI.itemUpdated(financialAccount);
+            };
+            VR_AccountBalance_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, dataItem.Entity.FinancialAccountId);
+        }
+    }
+}]);
