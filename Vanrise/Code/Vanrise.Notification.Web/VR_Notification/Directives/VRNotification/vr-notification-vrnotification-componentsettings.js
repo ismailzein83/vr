@@ -50,7 +50,7 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     }
 
                     function loadNotificationTypeSelector() {
-                        console.log(payload);
+                      
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         vrNotificationTypeSettingsSelectorReadyDeferred.promise.then(function () {
@@ -68,11 +68,11 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     }
 
                     function loadBusinessEntityDefinitionSelector() {
-                        console.log(payload);
+                        
                         var selectorLoadBEDeferred = UtilsService.createPromiseDeferred();
 
                         businessEntityDefinitionSelectorReadyDeffered.promise.then(function () {
-                            console.log(settings);
+                           
                             var payloadSelector = { 
                                 selectedIds: settings != undefined ? settings.VRAlertLevelDefinitionId : undefined,
                                 filter: {
