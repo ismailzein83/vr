@@ -22,15 +22,22 @@ namespace Vanrise.GenericData.Business
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
             Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) => (input.Query.Name == null || genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            VRActionLogger.Current.LogGetFilteredAction(GenericRuleDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression));
         }
 
-        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
+        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId, bool isViewedFromUI)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
-            return cachedGenericRuleDefinitions.GetRecord(genericRuleDefinitionId);
+            var genericRuleDefinition= cachedGenericRuleDefinitions.GetRecord(genericRuleDefinitionId);
+            if (genericRuleDefinition != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(GenericRuleDefinitionLoggableEntity.Instance, genericRuleDefinition);
+            return genericRuleDefinition;
         }
-
+        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
+        {
+            return GetGenericRuleDefinition(genericRuleDefinitionId,false);
+        }
         public IEnumerable<GenericRuleDefinition> GetGenericRulesDefinitons()
         {
             return this.GetCachedGenericRuleDefinitions().Values;
@@ -49,6 +56,7 @@ namespace Vanrise.GenericData.Business
 
             if (added)
             {
+                VRActionLogger.Current.TrackAndLogObjectAdded(GenericRuleDefinitionLoggableEntity.Instance, genericRuleDefinition);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = genericRuleDefinition;
 
@@ -74,6 +82,7 @@ namespace Vanrise.GenericData.Business
 
             if (added)
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(GenericRuleDefinitionLoggableEntity.Instance, genericRuleDefinition);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -212,6 +221,50 @@ namespace Vanrise.GenericData.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreGenericRuleDefinitionsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class GenericRuleDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static GenericRuleDefinitionLoggableEntity Instance = new GenericRuleDefinitionLoggableEntity();
+
+            private GenericRuleDefinitionLoggableEntity()
+            {
+
+            }
+
+            static GenericRuleDefinitionManager s_genericRuleDefintionManager = new GenericRuleDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_GenericRuleDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Generic  Rule Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_GenericRuleDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                GenericRuleDefinition genericRuleDefinition = context.Object.CastWithValidate<GenericRuleDefinition>("context.Object");
+                return genericRuleDefinition.GenericRuleDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                GenericRuleDefinition genericRuleDefinition = context.Object.CastWithValidate<GenericRuleDefinition>("context.Object");
+                return s_genericRuleDefintionManager.GetGenericRuleDefinitionName(genericRuleDefinition.GenericRuleDefinitionId);
             }
         }
 
