@@ -68,7 +68,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@TopDestination", topDestination));
                 cmd.Parameters.Add(new SqlParameter("@FromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day)));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(_toTodate.Year, _toTodate.Month, _toTodate.Day)));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", new DateTime(_toTodate.Year, _toTodate.Month, _toTodate.Day, 23, 59, 59)));
                 cmd.Parameters.Add(new SqlParameter("@CustomerId", carrierAccountId));
             });
         }
