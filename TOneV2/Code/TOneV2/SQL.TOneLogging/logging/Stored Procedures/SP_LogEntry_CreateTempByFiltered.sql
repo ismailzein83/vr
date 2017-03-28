@@ -14,7 +14,8 @@ CREATE PROCEDURE [logging].[SP_LogEntry_CreateTempByFiltered]
 @AssemblyIds VARCHAR(500) = NULL,
 @TypeIds VARCHAR(500) = NULL,
 @MethodIds VARCHAR(500) = NULL,
-@EventIds  VARCHAR(500) = NULL
+@EventIds  VARCHAR(500) = NULL,
+@ViewRequiredPermissionSetIds varchar(max)
 
 AS
 BEGIN
@@ -53,6 +54,10 @@ BEGIN
 			INSERT INTO @EventTable (EventTypeId)
 			SELECT CONVERT(INT, ParsedString) FROM [bp].[ParseStringList](@EventIds)
 
+			DECLARE @ViewRequiredPermissionSetTable TABLE (ViewRequiredPermissionSetId int)
+			INSERT INTO @ViewRequiredPermissionSetTable (ViewRequiredPermissionSetId)
+			select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
+
 			SELECT [ID]
 				  ,[MachineNameId]
 				  ,[ApplicationNameId]
@@ -74,6 +79,7 @@ BEGIN
 				  (@TypeIds IS NULL OR TypeNameId IN (SELECT TypeId FROM @TypeTable)) AND
 				  (@MethodIds IS NULL OR MethodNameId IN (SELECT MethodId FROM @MethodTable)) AND
 				  (@EventIds IS NULL OR EventType IN (SELECT EventTypeId FROM @EventTable)) AND
+				  (ViewRequiredPermissionSetId is null or ViewRequiredPermissionSetId in (select ViewRequiredPermissionSetId from @ViewRequiredPermissionSetTable)) AND
 				  (@FromDate IS NULL OR EventTime >= @FromDate) AND
 				  (@ToDate IS NULL OR EventTime <= @ToDate) AND
 				  (@Message IS NULL OR [Message] LIKE '%'+@Message+'%')

@@ -3,12 +3,16 @@
 	@NbOfRows INT,
 	@DefinitionsId varchar(max),
 	@ParentId int,
-	@EntityID varchar(50)
+	@EntityID varchar(50),
+	@ViewRequiredPermissionSetIds varchar(max)
 AS
 BEGIN
 	DECLARE @BPDefinitionIDsTable TABLE (BPDefinitionId uniqueidentifier)
             INSERT INTO @BPDefinitionIDsTable (BPDefinitionId)
             select Convert(uniqueidentifier, ParsedString) from [bp].[ParseStringList](@DefinitionsId)
+	DECLARE @ViewRequiredPermissionSetTable TABLE (ViewRequiredPermissionSetId int)
+            INSERT INTO @ViewRequiredPermissionSetTable (ViewRequiredPermissionSetId)
+            select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
 
 IF (@TimestampAfter IS NULL)
 	BEGIN
@@ -18,7 +22,7 @@ IF (@TimestampAfter IS NULL)
       ,[DefinitionID]
       ,[WorkflowInstanceID]
       ,[InputArgument]
-	  , [CompletionNotifier]
+	  ,[CompletionNotifier]
       ,[ExecutionStatus]
       ,[LastMessage]
 	   ,EntityID
@@ -29,7 +33,9 @@ IF (@TimestampAfter IS NULL)
 	  ,[timestamp]
             INTO #temp_table
             FROM [BP].[BPInstance] WITH(NOLOCK)
-            WHERE (@EntityID is null or EntityID = @EntityID) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))
+            WHERE (@EntityID is null or EntityID = @EntityID)
+			and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))
+			and (ViewRequiredPermissionSetId is null  or ViewRequiredPermissionSetId in (select ViewRequiredPermissionSetId from @ViewRequiredPermissionSetTable))
             AND (@ParentId is null or ParentID = @ParentId) 
             ORDER BY ID DESC
             
