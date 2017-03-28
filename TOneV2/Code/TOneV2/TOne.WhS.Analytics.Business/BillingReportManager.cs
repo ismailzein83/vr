@@ -280,7 +280,7 @@ namespace TOne.WhS.Analytics.Business
                 chart.Title.Text = chartTitle;
                 chart.Title.TextHorizontalAlignment = TextAlignmentType.Right;
                 chart.Title.X = 2000;
-                chart.Title.Y = 100;
+                chart.Title.Y = 50;
             }
         }
 
