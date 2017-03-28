@@ -4,11 +4,23 @@
             <vr-columns width="1/2row">
                 <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
             </vr-columns>
-            <vr-invtoaccbalancerelation-definition-selector on-ready="scopeModel.relationDefinitionSelectorReady"  normal-col-num="6"></vr-invtoaccbalancerelation-definition-selector>
+            <vr-invtoaccbalancerelation-definition-selector on-ready="scopeModel.relationDefinitionSelectorReady" normal-col-num="6"></vr-invtoaccbalancerelation-definition-selector>
         </vr-row>
-        <vr-accountusage-periodsettings on-ready="scopeModel.accountUsagePeriodSettingsReady" isrequired="true" normal-col-num="6"></vr-accountusage-periodsettings>
+
+        <vr-accountusage-periodsettings on-ready="scopeModel.accountUsagePeriodSettingsReady"
+                                        isrequired="true"
+                                        normal-col-num="6">
+        </vr-accountusage-periodsettings>
+
         <vr-row>
-            <vr-columns width="1/2row" >
+            <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeSelectorReady"
+                                                               customlabel="Allowed Transaction Types"
+                                                               normal-col-num="6"
+                                                               isrequired="true"
+                                                               ismultipleselection>
+            </vr-accountbalance-billingtransactiontype-selector>
+
+            <vr-columns width="1/2row">
                 <vr-timespan value="scopeModel.timeOffset" label="Time Offset"></vr-timespan>
             </vr-columns>
         </vr-row>

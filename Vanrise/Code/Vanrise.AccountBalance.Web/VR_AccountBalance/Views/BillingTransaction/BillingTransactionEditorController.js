@@ -106,6 +106,7 @@
             transactionTypeDirectiveReadyDeferred.promise.then(function () {
                 var payload = {
                     filter: {
+                        AccountTypeId: accountTypeId,
                         Filters: [{
                             $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
                         }]

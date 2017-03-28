@@ -110,7 +110,7 @@ namespace Vanrise.AccountBalance.Business
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<AccountTypeSettings>(accountTypeId);
         }
-         
+
         public IEnumerable<AccountTypeSourcesConfig> GetAccountTypeSourceSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
@@ -173,12 +173,12 @@ namespace Vanrise.AccountBalance.Business
             Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>> fieldsBySourceId = new Dictionary<Guid, IEnumerable<AccountBalanceFieldDefinition>>();
             if (sources != null)
             {
-                foreach(var source in sources)
+                foreach (var source in sources)
                 {
-                    if(!fieldsBySourceId.ContainsKey(source.AccountBalanceFieldSourceId))
+                    if (!fieldsBySourceId.ContainsKey(source.AccountBalanceFieldSourceId))
                     {
                         var fields = GetAccountTypeSourceFields(source, accountTypeSettings);
-                        if(fields != null)
+                        if (fields != null)
                         {
                             fieldsBySourceId.Add(source.AccountBalanceFieldSourceId, fields);
                         }
@@ -200,32 +200,38 @@ namespace Vanrise.AccountBalance.Business
                 {
 
                     var source = accountTypeSettings.Sources.FirstOrDefault(x => x.AccountBalanceFieldSourceId == column.SourceId);
-                     if(source != null)
-                     {
-                         var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings });
-                       if (sourceFields != null)
-                       {
-                           var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);
-                           if (matchField.FieldType == null)
-                               throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
-                           var gridAttribute = matchField.FieldType.GetGridColumnAttribute(null);
-                           gridAttribute.HeaderText = column.Title;
-                           gridAttribute.Field = matchField.Name;
-                           gridAttribute.Tag = matchField.Name;
+                    if (source != null)
+                    {
+                        var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings });
+                        if (sourceFields != null)
+                        {
+                            var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);
+                            if (matchField.FieldType == null)
+                                throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
+                            var gridAttribute = matchField.FieldType.GetGridColumnAttribute(null);
+                            gridAttribute.HeaderText = column.Title;
+                            gridAttribute.Field = matchField.Name;
+                            gridAttribute.Tag = matchField.Name;
 
-                           //if (column.GridColumnSettings != null)
-                           //{
-                           //    gridAttribute.WidthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(column.GridColumnSettings);
-                           //    if (!gridAttribute.WidthFactor.HasValue)
-                           //        gridAttribute.FixedWidth = column.GridColumnSettings.FixedWidth;
-                           //}
-                           gridColumnAttributes.Add(gridAttribute);
-                       }
-                     }
+                            //if (column.GridColumnSettings != null)
+                            //{
+                            //    gridAttribute.WidthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(column.GridColumnSettings);
+                            //    if (!gridAttribute.WidthFactor.HasValue)
+                            //        gridAttribute.FixedWidth = column.GridColumnSettings.FixedWidth;
+                            //}
+                            gridColumnAttributes.Add(gridAttribute);
+                        }
+                    }
                 }
             }
             return gridColumnAttributes;
 
+        }
+
+        public IEnumerable<Guid> GetAllowedBillingTransactionTypeIds(Guid accountTypeId)
+        {
+            AccountTypeSettings accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            return (accountTypeSettings != null) ? accountTypeSettings.AllowedBillingTransactionTypeIds : null;
         }
         #endregion
 

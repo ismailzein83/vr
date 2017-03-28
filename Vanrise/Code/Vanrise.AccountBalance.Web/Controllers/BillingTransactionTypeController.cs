@@ -14,7 +14,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
     {
         [HttpGet]
         [Route("GetBillingTransactionTypesInfo")]
-        public object GetBillingTransactionTypesInfo(string filter = null)
+        public IEnumerable<BillingTransactionTypeInfo> GetBillingTransactionTypesInfo(string filter = null)
         {
             BillingTransactionTypeInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<BillingTransactionTypeInfoFilter>(filter) : null;
             BillingTransactionTypeManager manager = new BillingTransactionTypeManager();

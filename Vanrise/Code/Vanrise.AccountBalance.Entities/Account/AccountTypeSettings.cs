@@ -24,6 +24,7 @@ namespace Vanrise.AccountBalance.Entities
         public AccountTypeSecurity Security { get; set; }
         public TimeSpan TimeOffset { get; set; }
         public Guid? InvToAccBalanceRelationId { get; set; }
+        public IEnumerable<Guid> AllowedBillingTransactionTypeIds { get; set; }
     }
     public abstract class AccountTypeExtendedSettings
     {

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace Vanrise.AccountBalance.Entities
 {
     public class BillingTransactionTypeInfoFilter
-    {   
+    {
+        public Guid? AccountTypeId { get; set; }
+
         public List<IBillingTransactionTypeFilter> Filters { get; set; }
     }
 }

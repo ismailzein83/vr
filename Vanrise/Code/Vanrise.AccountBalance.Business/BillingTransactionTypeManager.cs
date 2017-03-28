@@ -34,27 +34,37 @@ namespace Vanrise.AccountBalance.Business
             return billingTransactionType.IsCredit;
         }
 
-        public object GetBillingTransactionTypesInfo(BillingTransactionTypeInfoFilter filter)
+        public IEnumerable<BillingTransactionTypeInfo> GetBillingTransactionTypesInfo(BillingTransactionTypeInfoFilter filter)
         {
-            var cachedBillingTransactionTypes = GetCachedBillingTransactionTypes();
+            Dictionary<Guid, BillingTransactionType> cachedBillingTransactionTypes = GetCachedBillingTransactionTypes();
+
             Func<BillingTransactionType, bool> filterExpression = null;
 
             if (filter != null)
             {
-                filterExpression = (item) => (filter.Filters != null && CheckIfFilterIsMatch(item.Settings, filter.Filters));
+                IEnumerable<Guid> allowedBillingTransactionTypeIds = null;
+
+                if (filter.AccountTypeId.HasValue)
+                {
+                    allowedBillingTransactionTypeIds = new AccountTypeManager().GetAllowedBillingTransactionTypeIds(filter.AccountTypeId.Value);
+
+                    if (allowedBillingTransactionTypeIds == null || allowedBillingTransactionTypeIds.Count() == 0)
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("AllowedBillingTransactionTypes of AccountType '{0}' where not found", filter.AccountTypeId.Value));
+                }
+
+                filterExpression = (billingTransactionType) =>
+                {
+                    if (allowedBillingTransactionTypeIds != null && !allowedBillingTransactionTypeIds.Contains(billingTransactionType.BillingTransactionTypeId))
+                        return false;
+
+                    if (filter.Filters != null && filter.Filters.Any(x => !x.IsMatched(billingTransactionType.Settings)))
+                        return false;
+
+                    return true;
+                };
             }
 
             return cachedBillingTransactionTypes.MapRecords(BillingTransactionTypeInfoMapper, filterExpression);
-        }
-
-        public bool CheckIfFilterIsMatch(BillingTransactionTypeSettings settings, List<IBillingTransactionTypeFilter> filters)
-        {
-            foreach (var filter in filters)
-            {
-                if (!filter.IsMatched(settings))
-                    return false;
-            }
-            return true;
         }
 
         #endregion
