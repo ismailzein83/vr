@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRUIUtilsService','VR_Analytic_AnalyticItemConfigService' ,function (VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService) {
+app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 'VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRUIUtilsService', 'VR_Analytic_AnalyticItemConfigService', function (VRCommon_ObjectTrackingService, VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService) {
 
     var directiveDefinitionObject = {
 
@@ -98,6 +98,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
             drillDownDefinitions.push(getMeasureDrillDownDefinition());
             drillDownDefinitions.push(getJoinDrillDownDefinition());
             drillDownDefinitions.push(getAggregateDrillDownDefinition());
+            drillDownDefinitions.push(getDrillDownToAnalyticTable());
             return drillDownDefinitions;
         }
         function getDimensionDrillDownDefinition() {
@@ -158,6 +159,28 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                 },
             }];
             return drillDownDefinition;
+        }
+        function getDrillDownToAnalyticTable() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, analyticTableItem) {
+
+                analyticTableItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: analyticTableItem.Entity.AnalyticTableId,
+                    EntityUniqueName: VR_Analytic_AnalyticTableService.getEntityUniqueName(),
+
+                };
+
+                return analyticTableItem.objectTrackingGridAPI.load(query);
+            };
+
+            return drillDownDefinition;
+
         }
         function getJoinDrillDownDefinition() {
             var drillDownDefinition = {};

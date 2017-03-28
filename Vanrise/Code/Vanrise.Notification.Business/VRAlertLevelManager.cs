@@ -8,18 +8,25 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Notification.Business
 {
    public  class VRAlertLevelManager: IBusinessEntityManager
    {
        VRNotificationTypeManager _vrnotificationTypeManager = new VRNotificationTypeManager();
-       public VRAlertLevel GetAlertLevel(Guid alertLevelId)
+       public VRAlertLevel GetAlertLevel(Guid alertLevelId, bool isViewedFromUI)
        {
            Dictionary<Guid, VRAlertLevel> cachedAlertLevels = this.GetCachedAlertLevels();
-           return cachedAlertLevels.GetRecord(alertLevelId);
+           var vralertLevel= cachedAlertLevels.GetRecord(alertLevelId);
+           if (vralertLevel != null && isViewedFromUI)
+               VRActionLogger.Current.LogObjectViewed(VRAlertLevelLoggableEntity.Instance, vralertLevel);
+           return vralertLevel;
        }
-
+       public VRAlertLevel GetAlertLevel(Guid alertLevelId)
+       {
+          return GetAlertLevel(alertLevelId,false);
+       }
        public string GetAlertLevelName(Guid alertLevelId)
        {
            VRAlertLevel alertLevel = this.GetAlertLevel(alertLevelId);
@@ -38,6 +45,7 @@ namespace Vanrise.Notification.Business
                      return false;
                  return true;
              };
+             VRActionLogger.Current.LogGetFilteredAction(VRAlertLevelLoggableEntity.Instance, input);
              return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<VRAlertLevelDetail>(input, allAlertLevels.ToBigResult(input, filterExpression, VRAlertLevelDetailMapper));
          }
          public Vanrise.Entities.InsertOperationOutput<VRAlertLevelDetail> AddAlertLevel(VRAlertLevel alertLevelItem)
@@ -54,6 +62,7 @@ namespace Vanrise.Notification.Business
              if (dataManager.Insert(alertLevelItem))
              {
                  Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                 VRActionLogger.Current.TrackAndLogObjectAdded(VRAlertLevelLoggableEntity.Instance, alertLevelItem);
                  insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                  insertOperationOutput.InsertedObject = VRAlertLevelDetailMapper(alertLevelItem);
              }
@@ -77,6 +86,7 @@ namespace Vanrise.Notification.Business
              if (dataManager.Update(alertLevelItem))
              {
                  Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                 VRActionLogger.Current.TrackAndLogObjectUpdated(VRAlertLevelLoggableEntity.Instance, alertLevelItem);
                  updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                  updateOperationOutput.UpdatedObject = VRAlertLevelDetailMapper(this.GetAlertLevel(alertLevelItem.VRAlertLevelId));
              }
@@ -151,6 +161,49 @@ namespace Vanrise.Notification.Business
                 Name = alertLevel.Name
             };
             return alertLevelInfo;
+        }
+        private class VRAlertLevelLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRAlertLevelLoggableEntity Instance = new VRAlertLevelLoggableEntity();
+
+            private VRAlertLevelLoggableEntity()
+            {
+
+            }
+
+            static VRAlertLevelManager s_vrAlertLevelManager = new VRAlertLevelManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Notification_AlertLevel"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Notification"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Alert Level"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Notification_AlertLevel_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRAlertLevel vrAlertLevel = context.Object.CastWithValidate<VRAlertLevel>("context.Object");
+                return vrAlertLevel.VRAlertLevelId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRAlertLevel vrAlertLevel = context.Object.CastWithValidate<VRAlertLevel>("context.Object");
+                return s_vrAlertLevelManager.GetAlertLevelName(vrAlertLevel.VRAlertLevelId);
+            }
         }
         #region IBusinessEntityManager
 

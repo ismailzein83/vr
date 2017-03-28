@@ -40,7 +40,7 @@ namespace Vanrise.Notification.Web.Controllers
         [Route("GetAlertLevel")]
         public VRAlertLevel GetAlertLevel(Guid alertLevelId)
         {
-            return _manager.GetAlertLevel(alertLevelId);
+            return _manager.GetAlertLevel(alertLevelId,true);
         }
         [HttpGet]
         [Route("GetAlertLevelsInfo")]

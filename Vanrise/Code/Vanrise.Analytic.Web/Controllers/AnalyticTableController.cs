@@ -34,7 +34,7 @@ namespace Vanrise.Analytic.Web.Controllers
         public AnalyticTable GetTableById(int tableId)
         {
             AnalyticTableManager manager = new AnalyticTableManager();
-            return manager.GetAnalyticTableById(tableId);
+            return manager.GetAnalyticTableById(tableId,true);
         }
         [HttpPost]
         [Route("UpdateAnalyticTable")]

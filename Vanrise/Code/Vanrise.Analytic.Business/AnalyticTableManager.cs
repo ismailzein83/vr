@@ -21,7 +21,7 @@ namespace Vanrise.Analytic.Business
 
             Func<AnalyticTable, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(AnalyticTableLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticTables.ToBigResult(input, filterExpression, AnalyticTableDetailMapper));
         }
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
@@ -34,11 +34,24 @@ namespace Vanrise.Analytic.Business
            
             return analyticTables.MapRecords(AnalyticTableInfoMapper);
         }
-        public AnalyticTable GetAnalyticTableById(int analyticTableId)
+        public AnalyticTable GetAnalyticTableById(int analyticTableId, bool isViewedFromUI)
         {
             var analyticTables = GetCachedAnalyticTables();
-            return analyticTables.GetRecord(analyticTableId);
-        } 
+          var analyticTable= analyticTables.GetRecord(analyticTableId);
+          if (analyticTable != null && isViewedFromUI)
+              VRActionLogger.Current.LogObjectViewed(AnalyticTableLoggableEntity.Instance, analyticTable);
+          return analyticTable;
+        }
+        public AnalyticTable GetAnalyticTableById(int analyticTableId)
+        {
+            return GetAnalyticTableById(analyticTableId, false);
+        }
+        public string GetAnalyticTableName(AnalyticTable analyticTable)
+        {
+            if (analyticTable != null)
+                return analyticTable.Name;
+            return null;
+        }
         public Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail> AddAnalyticTable(AnalyticTable analyticTable)
         {
             InsertOperationOutput<AnalyticTableDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail>();
@@ -53,8 +66,9 @@ namespace Vanrise.Analytic.Business
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 analyticTable.AnalyticTableId = analyticTableId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(AnalyticTableLoggableEntity.Instance, analyticTable);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = AnalyticTableDetailMapper(analyticTable);
             }
             else
@@ -76,6 +90,7 @@ namespace Vanrise.Analytic.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(AnalyticTableLoggableEntity.Instance, analyticTable);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AnalyticTableDetailMapper(analyticTable);
             }
@@ -99,7 +114,7 @@ namespace Vanrise.Analytic.Business
         }
 
         #endregion
-
+       
         #region Private Methods
 
         Dictionary<int, AnalyticTable> GetCachedAnalyticTables()
@@ -125,6 +140,50 @@ namespace Vanrise.Analytic.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAnalyticTableUpdated(ref _updateHandle);
+            }
+        }
+
+        private class AnalyticTableLoggableEntity : VRLoggableEntityBase
+        {
+            public static AnalyticTableLoggableEntity Instance = new AnalyticTableLoggableEntity();
+
+            private AnalyticTableLoggableEntity()
+            {
+
+            }
+
+            static AnalyticTableManager s_AnalyticTableManager = new AnalyticTableManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Analytic_AnalyticTable"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Analytic"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Analytic Table"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Analytic_AnalyticTable_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                AnalyticTable analyticTable = context.Object.CastWithValidate<AnalyticTable>("context.Object");
+                return analyticTable.AnalyticTableId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                AnalyticTable analyticTable = context.Object.CastWithValidate<AnalyticTable>("context.Object");
+                return s_AnalyticTableManager.GetAnalyticTableName(analyticTable);
             }
         }
 

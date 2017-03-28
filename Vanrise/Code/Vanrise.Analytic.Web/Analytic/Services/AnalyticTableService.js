@@ -5,9 +5,12 @@
     AnalyticTableService.$inject = ['VRModalService'];
 
     function AnalyticTableService(VRModalService) {
+        var drillDownDefinitions = [];
         return ({
             addAnalyticTable: addAnalyticTable,
             editAnalyticTable: editAnalyticTable,
+            getEntityUniqueName: getEntityUniqueName
+            
         });
 
         function addAnalyticTable(onAnalyticTableAdded) {
@@ -33,6 +36,12 @@
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticTableEditor.html', modalParameters, modalSettings);
         }
+        function getEntityUniqueName() {
+            return "VR_Analytic_AnalyticTable";
+        }
+
+       
+        
 
     };
 
