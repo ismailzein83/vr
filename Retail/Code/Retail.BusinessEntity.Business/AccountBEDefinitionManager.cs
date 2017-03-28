@@ -545,7 +545,21 @@ namespace Retail.BusinessEntity.Business
             return DoesUserHaveAccess(userId, accountBeDefinitionId, (sec) => sec.EditProductRequiredPermission);
 
         }
-
+        public bool DoesUserHaveViewsAccess(int userId, Guid accountBEDefinitionId)
+        {
+            var viewDefinitions = GetAccountViewDefinitions(accountBEDefinitionId);
+            var viewcontext = new AccountViewDefinitionCheckAccessContext
+            {
+                UserId = userId,
+                AccountBEDefinitionId = accountBEDefinitionId
+            };
+            foreach (var v in viewDefinitions)
+            {
+                if (v != null && v.Settings != null && v.Settings.DoesUserHaveAccess(viewcontext) == true)
+                    return true;
+            }
+            return false;
+        }
         #endregion
     }
 }

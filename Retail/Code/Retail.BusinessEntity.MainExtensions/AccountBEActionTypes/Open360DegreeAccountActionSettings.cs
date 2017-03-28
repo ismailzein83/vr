@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         public override string ClientActionName
         {
             get { return "Open360Degree"; }
+        }
+
+        public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
+        {
+            return new AccountBEDefinitionManager().DoesUserHaveViewsAccess(context.UserId,context.AccountBEDefinitionId);
         }
     }
 }
