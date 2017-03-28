@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinitionAPIService', 'VRCommon_VRObjectTypeDefinitionService', 'VRNotificationService',
-    function (VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, VRNotificationService) {
+app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinitionAPIService', 'VRCommon_VRObjectTypeDefinitionService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VRCommon_VRObjectTypeDefinitionAPIService, VRCommon_VRObjectTypeDefinitionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.vrObjectTypeDefinition = [];
@@ -29,11 +29,18 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRObjectTypeDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRObjectTypeDefinitionAPIService.GetFilteredVRObjectTypeDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -50,6 +57,7 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
                 };
 
                 api.onVRObjectTypeDefinitionAdded = function (addedVRObjectTypeDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRObjectTypeDefinition);
                     gridAPI.itemAdded(addedVRObjectTypeDefinition);
                 };
 
@@ -66,6 +74,7 @@ app.directive('vrCommonObjecttypedefinitionGrid', ['VRCommon_VRObjectTypeDefinit
             }
             function editVRObjectTypeDefinition(vrObjectTypeDefinitionItem) {
                 var onVRObjectTypeDefinitionUpdated = function (updatedVRObjectTypeDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedVRObjectTypeDefinition);
                     gridAPI.itemUpdated(updatedVRObjectTypeDefinition);
                 };
 

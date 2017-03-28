@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
-using Vanrise.Entities;
+
 
 namespace Vanrise.Common.Business
 {
@@ -13,17 +13,35 @@ namespace Vanrise.Common.Business
     {
         #region Public Methods
 
-        public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId)
+       
+        public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId, bool isViewedFromUI)
         {
             Dictionary<Guid, VRObjectTypeDefinition> cachedVRObjectTypeDefinitions = this.GetCachedVRObjectTypeDefinitions();
-            return cachedVRObjectTypeDefinitions.GetRecord(styleDefinitionId);
+            var vrObjectTypeDefinition= cachedVRObjectTypeDefinitions.GetRecord(styleDefinitionId);
+            if (vrObjectTypeDefinition != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(VRObjectTypeDefinitionLoggableEntity.Instance, vrObjectTypeDefinition);
+            return vrObjectTypeDefinition;
         }
 
+        public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId)
+        {
+          return GetVRObjectTypeDefinition(styleDefinitionId,false);
+        }
+
+        public string GetObjectTypeDefinitionName(VRObjectTypeDefinition vrObjectTypeDefinition)
+        {
+            if (vrObjectTypeDefinition != null)
+               return  vrObjectTypeDefinition.Name;
+            return null;
+        
+        }
         public IDataRetrievalResult<VRObjectTypeDefinitionDetail> GetFilteredVRObjectTypeDefinitions(DataRetrievalInput<VRObjectTypeDefinitionQuery> input)
         {
             var allVRObjectTypeDefinitions = GetCachedVRObjectTypeDefinitions();
             Func<VRObjectTypeDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(VRObjectTypeDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRObjectTypeDefinitions.ToBigResult(input, filterExpression, VRObjectTypeDefinitionDetailMapper));
+
         }
 
         public Vanrise.Entities.InsertOperationOutput<VRObjectTypeDefinitionDetail> AddVRObjectTypeDefinition(VRObjectTypeDefinition styleDefinitionItem)
@@ -40,6 +58,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(styleDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRObjectTypeDefinitionLoggableEntity.Instance, styleDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRObjectTypeDefinitionDetailMapper(styleDefinitionItem);
             }
@@ -63,6 +82,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(styleDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRObjectTypeDefinitionLoggableEntity.Instance, styleDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRObjectTypeDefinitionDetailMapper(this.GetVRObjectTypeDefinition(styleDefinitionItem.VRObjectTypeDefinitionId));
             }
@@ -94,6 +114,50 @@ namespace Vanrise.Common.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreVRObjectTypeDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
+        private class VRObjectTypeDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRObjectTypeDefinitionLoggableEntity Instance = new VRObjectTypeDefinitionLoggableEntity();
+
+            private VRObjectTypeDefinitionLoggableEntity()
+            {
+
+            }
+
+            static VRObjectTypeDefinitionManager s_VRObjectTypeDefinitionManager = new VRObjectTypeDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_ObjectTypeDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Object Type Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_ObjectTypeDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRObjectTypeDefinition vrObjectTypeDefinition = context.Object.CastWithValidate<VRObjectTypeDefinition>("context.Object");
+                return vrObjectTypeDefinition.VRObjectTypeDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRObjectTypeDefinition vrObjectTypeDefinition = context.Object.CastWithValidate<VRObjectTypeDefinition>("context.Object");
+                return s_VRObjectTypeDefinitionManager.GetObjectTypeDefinitionName(vrObjectTypeDefinition);
             }
         }
 
