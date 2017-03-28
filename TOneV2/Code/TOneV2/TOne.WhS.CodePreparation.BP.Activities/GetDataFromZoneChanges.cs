@@ -70,7 +70,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                             BED = Utilities.Max(saleCode.BED,minimumDate),
                             EED = saleCode.EED.HasValue ? saleCode.EED : null,
                             ZoneName = renamedZone.NewZoneName,
-                            OldZoneName = oldZoneName
+                            OldZoneName = oldZoneName,
+                            OldCodeBED = saleCode.BED
                         });
                     }
                 }
