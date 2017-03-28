@@ -61,7 +61,9 @@
     <Compile Include="DataRecord\DataRecordActionRuleTypeSettings.cs" />
     <Compile Include="DataRecord\DataRecordActionTargetType.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleConfig.cs" />
+    <Compile Include="DataRecord\DataRecordAlertRuleNotificationManager.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleManager.cs" />
+    <Compile Include="DataRecord\DataRecordAlertRuleNotification.cs" />
     <Compile Include="DataRecord\DataRecordNotificationExtendedQuery.cs" />
     <Compile Include="DataRecord\DataRecordNotificationTypeSettings.cs" />
     <Compile Include="DataRecord\DataRecordAlertRuleController.cs" />

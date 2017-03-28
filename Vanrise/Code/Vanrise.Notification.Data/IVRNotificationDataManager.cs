@@ -13,5 +13,6 @@ namespace Vanrise.Notification.Data
         void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context);
         List<VRNotification> GetUpdateVRNotifications(IVRNotificationUpdateContext context);
         void GetBeforeIdVRNotifications(IVRNotificationBeforeIdContext context);
+        List<VRNotification> GetNotClearedNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, List<string> eventKeys, DateTime? notificationCreatedAfter);
     }
 }

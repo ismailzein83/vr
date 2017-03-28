@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemail', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemail', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRMailMessageTypeAPIService',
+    function (UtilsService, VRUIUtilsService, VRCommon_VRMailMessageTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,14 +20,24 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
         function sendEmailActionDefinition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var selectedDataRecordTypeId;
+            var selectedMailMessageTypeId;
+
             var dataRecordTypeAPI;
             var dataRecordTypeReadyDeferred = UtilsService.createPromiseDeferred();
+            var dataRecordTypeSelectionChanged;
 
             var mailMessageTypeAPI;
             var mailMessageTypeReadyDeferred = UtilsService.createPromiseDeferred();
+            var mailMessageTypeSelectionChanged;
+
+            var objectTypeDefinitionSelectorAPI;
+            var objectTypeDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.objectTypeDefinitions = [];
+                $scope.scopeModel.objectVariables = [];
 
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeAPI = api;
@@ -37,6 +47,59 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                 $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
                     mailMessageTypeAPI = api;
                     mailMessageTypeReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onObjectTypeDefinitionSelectorReady = function (api) {
+                    objectTypeDefinitionSelectorAPI = api;
+                    objectTypeDefinitionSelectorReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onMailMessageTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem != undefined) {
+                        selectedMailMessageTypeId = selectedItem.VRMailMessageTypeId;
+                        if (mailMessageTypeSelectionChanged != undefined)
+                            mailMessageTypeSelectionChanged.resolve();
+                        else {
+                            getMailMessageTypePromise();
+                        }
+                    }
+                };
+
+                $scope.scopeModel.onDataRecordTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem != undefined) {
+                        selectedDataRecordTypeId = selectedItem.DataRecordTypeId;
+                        if (dataRecordTypeSelectionChanged != undefined)
+                            dataRecordTypeSelectionChanged.resolve();
+                        else {
+                            getMailMessageTypePromise();
+                        }
+                    }
+                };
+
+                function getMailMessageTypePromise() {
+                    if (selectedMailMessageTypeId == undefined || selectedDataRecordTypeId == undefined)
+                        return;
+
+                    $scope.scopeModel.onObjectTypeDefinitionsLoading = true;
+                    $scope.scopeModel.objectTypeDefinitions.length = 0;
+                    $scope.scopeModel.objectVariables.length = 0;
+                    VRCommon_VRMailMessageTypeAPIService.GetMailMessageType(selectedMailMessageTypeId).then(function (response) {
+                        var settings = response.Settings;
+                        var objects = settings.Objects;
+                        var prop;
+                        for (prop in objects) {
+                            if (prop != '$type') {
+                                var obj = objects[prop];
+                                $scope.scopeModel.objectTypeDefinitions.push({ ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId });
+
+                                var objectVariable = { ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId };
+                                $scope.scopeModel.objectVariables.push(objectVariable);
+                                extendObjectVariableItemObject(objectVariable, undefined);
+                            }
+                        }
+
+                        $scope.scopeModel.onObjectTypeDefinitionsLoading = false;
+                    });
                 };
 
                 defineAPI();
@@ -50,6 +113,11 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                     if (payload != undefined && payload.Settings != undefined && payload.Settings.ExtendedSettings != undefined) {
                         extendedSettings = payload.Settings.ExtendedSettings;
                     }
+                    if (extendedSettings != undefined) {
+                        mailMessageTypeSelectionChanged = UtilsService.createPromiseDeferred();
+                        dataRecordTypeSelectionChanged = UtilsService.createPromiseDeferred();
+                    }
+
                     var promises = [];
 
                     var dataRecordTypeLoadDeferred = UtilsService.createPromiseDeferred();
@@ -72,6 +140,29 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                     });
                     promises.push(mailMessageTypeLoadDeferred.promise);
 
+                    if (extendedSettings != undefined) {
+                        var getMailMessageTypePromise = VRCommon_VRMailMessageTypeAPIService.GetMailMessageType(extendedSettings.MailMessageTypeId).then(function (response) {
+
+                            UtilsService.waitMultiplePromises([mailMessageTypeSelectionChanged.promise, dataRecordTypeSelectionChanged.promise]).then(function () {
+                                mailMessageTypeSelectionChanged = undefined;
+                                dataRecordTypeSelectionChanged = undefined;
+                                var settings = response.Settings;
+                                var objects = settings.Objects;
+                                var prop;
+                                for (prop in objects) {
+                                    if (prop != '$type') {
+                                        var obj = objects[prop];
+                                        $scope.scopeModel.objectTypeDefinitions.push({ ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId });
+
+                                        var objectVariable = { ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId };
+                                        $scope.scopeModel.objectVariables.push(objectVariable);
+                                        promises.push(extendObjectVariableItemObject(objectVariable, undefined));
+                                    }
+                                }
+                            });
+                        });
+                        promises.push(getMailMessageTypePromise);
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -85,6 +176,24 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
+            };
+
+            function extendObjectVariableItemObject(objectVariable, selectedObjectVariable) {
+                objectVariable.dataRecordFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                objectVariable.onDataRecordFieldSelectorReady = function (api) {
+                    objectVariable.dataRecordFieldSelectorAPI = api;
+
+                    var filters = [];
+                    var dataRecordFieldPayload = {
+                        dataRecordTypeId: selectedDataRecordTypeId
+                    };
+
+                    if (selectedObjectVariable != undefined) {
+                        dataRecordFieldPayload.selectedIds = selectedObjectVariable.DataRecordFieldName;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(objectVariable.dataRecordFieldSelectorAPI, dataRecordFieldPayload, objectVariable.dataRecordFieldSelectorLoadDeferred);
+                };
+                return objectVariable.dataRecordFieldSelectorLoadDeferred.promise;
+            };
         }
     }]);

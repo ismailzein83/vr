@@ -48,25 +48,18 @@ namespace Vanrise.Notification.Business
             _vrNofiticationManager.ClearNotifications(clearNotificationInput);
         }
 
-        public List<string> GetNotClearedNotificationsEventKeys(Guid alertRuleTypeId, Guid notificationTypeId, long? alertRuleId, DateTime? notificationCreatedAfter)
+        public Dictionary<string, VRNotification> GetNotClearedAlertRuleNotifications(Guid alertRuleTypeId, Guid notificationTypeId, long? alertRuleId, List<string> eventKeys, DateTime? notificationCreatedAfter)
         {
             var notificationParentTypes = BuildNotificationParentTypes(alertRuleTypeId, alertRuleId);
-            return _vrNofiticationManager.GetNotClearedNotificationsEventKeys(notificationTypeId, notificationParentTypes, notificationCreatedAfter);
+            return _vrNofiticationManager.GetNotClearedNotifications(notificationTypeId, notificationParentTypes, eventKeys, notificationCreatedAfter);
         }
 
-        public List<string> GetNotClearedNotificationsEventKeys(Guid alertRuleTypeId, Guid notificationTypeId)
+        public Dictionary<string, VRNotification> GetNotClearedAlertRuleNotifications(Guid alertRuleTypeId, Guid notificationTypeId)
         {
-            return GetNotClearedNotificationsEventKeys(alertRuleTypeId, notificationTypeId, null, null);
+            return GetNotClearedAlertRuleNotifications(alertRuleTypeId, notificationTypeId, null, null, null);
         }
 
         #region Private Methods
-
-        //static VRAlertRuleTypeManager s_alertRuleTypeManager = new VRAlertRuleTypeManager();
-
-        //private Guid GetNotificationTypeId(Guid alertRuleTypeId)
-        //{
-        //    return s_alertRuleTypeManager.GetVRAlertRuleTypeSettings<VRAlertRuleTypeSettings>(alertRuleTypeId).NotificationTypeId;
-        //}
 
         private VRNotificationParentTypes BuildNotificationParentTypes(Guid alertRuleTypeId, long? alertRuleId)
         {

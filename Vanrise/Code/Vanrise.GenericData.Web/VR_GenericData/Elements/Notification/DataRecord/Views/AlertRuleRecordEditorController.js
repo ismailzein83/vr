@@ -10,9 +10,13 @@
         var dataRecordAlertRuleEntity;
         var vrActionTargetType;
         var recordfields;
+        var notificationTypeId;
 
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var vrNotificationAlertlevelSelectorAPI;
+        var vrNotificationAlertlevelSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -30,6 +34,7 @@
                 if (parameters.context != undefined) {
                     vrActionTargetType = parameters.context.vrActionTargetType;
                     recordfields = parameters.context.recordfields;
+                    notificationTypeId = parameters.context.notificationTypeId;
                 }
             }
             isEditMode = dataRecordAlertRuleEntity != undefined;
@@ -49,6 +54,11 @@
             $scope.scopeModel.onVRActionManagementDirectiveReady = function (api) {
                 vRActionManagementAPI = api;
                 vRActionManagementReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onVRNotificationAlertlevelSelectorReady = function (api) {
+                vrNotificationAlertlevelSelectorAPI = api;
+                vrNotificationAlertlevelSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.validateRecordFilter = function () {
@@ -77,7 +87,7 @@
         };
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRActionManagement, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRActionManagement, loadRecordFilterDirective, loadVRNotificationAlertlevelSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -110,6 +120,27 @@
 
             return vRActionManagementLoadDeferred.promise;
         };
+
+        function loadVRNotificationAlertlevelSelector() {
+            var vrNotificationAlertlevelSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            vrNotificationAlertlevelSelectorReadyDeferred.promise.then(function () {
+                var vrNotificationAlertlevelSelectorPayload = {
+                    filter: {
+                        VRNotificationTypeId: notificationTypeId
+                    }
+                };
+
+                if (dataRecordAlertRuleEntity != undefined) {
+                    vrNotificationAlertlevelSelectorPayload.selectedIds = dataRecordAlertRuleEntity.AlertLevelId;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(vrNotificationAlertlevelSelectorAPI, vrNotificationAlertlevelSelectorPayload, vrNotificationAlertlevelSelectorLoadDeferred);
+            });
+
+            return vrNotificationAlertlevelSelectorLoadDeferred.promise;
+        };
+
         function loadRecordFilterDirective() {
             var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -145,7 +176,8 @@
             return {
                 Entity: {
                     FilterGroup: recordFilterData.filterObj,
-                    Actions: actions
+                    Actions: actions,
+                    AlertLevelId: vrNotificationAlertlevelSelectorAPI.getSelectedIds()
                 },
                 FilterExpression: recordFilterData.expression,
                 ActionNames: buildActionNames(actions)

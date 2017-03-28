@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputDefinitions;
@@ -43,7 +39,6 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                 aggregationField.RecordAggregate.UpdateExistingFromNew(new DARecordAggregateUpdateExistingFromNewContext(existingItemAggregateState, newItemAggregateState));
             }
-
         }
 
         public override void FinalizeGrouping(IDataGroupingHandlerFinalizeGroupingContext context)
@@ -54,7 +49,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
             DAProfCalcOutputRecordProcessorProcessContext daProfCalcOutputRecordProcessorProcessContext = new DAProfCalcOutputRecordProcessorProcessContext()
             {
-                OutputRecords = new List<DAProfCalcOutputRecord>()
+                OutputRecords = new List<DAProfCalcOutputRecord>(),
+                DAProfCalcExecInput = this.DAProfCalcExecInput
             };
 
             RecordProfilingOutputSettingsManager recordProfilingOutputSettingsManager = new RecordProfilingOutputSettingsManager();
@@ -63,17 +59,17 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             foreach (IDataGroupingItem item in context.GroupedItems)
             {
                 ProfilingDGItem profilingDGItem = item as ProfilingDGItem;
-                Dictionary<string, dynamic> groupingValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
+                Dictionary<string, dynamic> fieldValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
 
-                Dictionary<string, dynamic> aggregationValues = new Dictionary<string, dynamic>(profilingDGItem.GroupingValues);
+                Dictionary<string, dynamic> aggregationValues = new Dictionary<string, dynamic>();
 
                 for (var index = 0; index < recordProfilingOutputSettings.AggregationFields.Count; index++)
                 {
                     var aggregationField = recordProfilingOutputSettings.AggregationFields[index];
                     var profilingDGItemAggregateState = profilingDGItem.AggregateStates[index];
-                    var aggregateResult =  aggregationField.RecordAggregate.GetResult(new DARecordAggregateGetResultContext(profilingDGItemAggregateState));
+                    var aggregateResult = aggregationField.RecordAggregate.GetResult(new DARecordAggregateGetResultContext(profilingDGItemAggregateState));
                     aggregationValues.Add(aggregationField.FieldName, aggregateResult);
-                    groupingValues.Add(aggregationField.FieldName, aggregateResult);
+                    fieldValues.Add(aggregationField.FieldName, aggregateResult);
                 }
 
                 if (daProfCalcCalculationFieldDetailDict != null && daProfCalcCalculationFieldDetailDict.Count > 0)
@@ -81,20 +77,15 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     DAProfCalcGetMeasureValueContext daProfCalcGetMeasureValueContext = new DAProfCalcGetMeasureValueContext(profilingDGItem.GroupingValues, aggregationValues);
                     foreach (var daProfCalcCalculationFieldDetail in daProfCalcCalculationFieldDetailDict)
                     {
-                        groupingValues.Add(daProfCalcCalculationFieldDetail.Value.Entity.FieldName, daProfCalcCalculationFieldDetail.Value.Evaluator.GetCalculationValue(daProfCalcGetMeasureValueContext));
+                        fieldValues.Add(daProfCalcCalculationFieldDetail.Value.Entity.FieldName, daProfCalcCalculationFieldDetail.Value.Evaluator.GetCalculationValue(daProfCalcGetMeasureValueContext));
                     }
                 }
 
-                DAProfCalcOutputRecord record = new DAProfCalcOutputRecord() { DAProfCalcExecInput = this.DAProfCalcExecInput, Records = groupingValues, GroupingKey = profilingDGItem.GroupingKey };
+                DAProfCalcOutputRecord record = new DAProfCalcOutputRecord() { FieldValues = fieldValues, GroupingKey = profilingDGItem.GroupingKey };
                 daProfCalcOutputRecordProcessorProcessContext.OutputRecords.Add(record);
             }
 
             OutputRecordProcessor.ProcessOutputRecords(daProfCalcOutputRecordProcessorProcessContext);
-        }
-
-        private dynamic BuildRecord(Dictionary<string, dynamic> groupingValues)
-        {
-            throw new NotImplementedException();
         }
 
         private class DARecordAggregateUpdateExistingFromNewContext : IDARecordAggregateUpdateExistingFromNewContext
@@ -113,6 +104,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         private class DAProfCalcOutputRecordProcessorProcessContext : IDAProfCalcOutputRecordProcessorProcessContext
         {
             public List<DAProfCalcOutputRecord> OutputRecords { get; set; }
+
+            public DAProfCalcExecInput DAProfCalcExecInput { get; set; }
         }
 
         private class DARecordAggregateGetResultContext : IDARecordAggregateGetResultContext

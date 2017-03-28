@@ -17,10 +17,10 @@ namespace Vanrise.GenericData.Notification
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract bool IsRuleMatched(IDAProfCalcAlertRuleIsMatchedContext context);
+        public abstract bool IsRuleMatched(IDataRecordAlertRuleSettingsIsMatchedContext context);
     }
 
-    public interface IDAProfCalcAlertRuleIsMatchedContext
+    public interface IDataRecordAlertRuleSettingsIsMatchedContext
     {
         Guid AlertLevelId { set; }
 
@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.Notification
         Guid DataRecordTypeId { get; }
     }
 
-    public class DAProfCalcAlertRuleIsMatchedContext : IDAProfCalcAlertRuleIsMatchedContext
+    public class DataRecordAlertRuleSettingsIsMatchedContext : IDataRecordAlertRuleSettingsIsMatchedContext
     {
         public Guid AlertLevelId { get; set; }
 

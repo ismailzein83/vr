@@ -81,9 +81,32 @@ namespace Vanrise.Notification.Business
             _bpInstanceManager.CreateNewProcess(createProcessInput);
         }
 
-        public List<string> GetNotClearedNotificationsEventKeys(Guid notificationTypeId, VRNotificationParentTypes parentTypes, DateTime? notificationCreatedAfter)
+        public Dictionary<string, VRNotification> GetNotClearedNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, List<string> eventKeys, DateTime? notificationCreatedAfter)
         {
-            throw new NotImplementedException();
+            IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            List<VRNotification> notClearedNotifications = dataManager.GetNotClearedNotifications(notificationTypeId, parentTypes, eventKeys, notificationCreatedAfter);
+            VRAlertLevelManager vrAlertLevelManager = new VRAlertLevelManager();
+
+            if (notClearedNotifications == null)
+                return null;
+
+            Dictionary<string, VRNotification> notifications = new Dictionary<string, VRNotification>();
+            VRNotification matchedNotification;
+
+            foreach (VRNotification notClearedNotification in notClearedNotifications)
+            {
+                if (notifications.TryGetValue(notClearedNotification.EventKey, out matchedNotification))
+                {
+                    if (vrAlertLevelManager.GetAlertLevelWeight(matchedNotification.AlertLevelId) > vrAlertLevelManager.GetAlertLevelWeight(notClearedNotification.AlertLevelId))
+                    {
+                        matchedNotification = notClearedNotification;
+                    }
+                }
+                else
+                    notifications.Add(notClearedNotification.EventKey, notClearedNotification);
+            }
+
+            return notifications;
         }
 
         public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus)

@@ -53,6 +53,7 @@
     <Compile Include="DataAnalysis\DAGetMeasureValueContext.cs" />
     <Compile Include="DataAnalysis\DAProfCalcDataRecordStorageFilter.cs" />
     <Compile Include="DataAnalysis\DAProfCalcNotificationTypeFilter.cs" />
+    <Compile Include="DataAnalysis\DAProfCalcNotificationManager.cs" />
     <Compile Include="DataAnalysis\DAProfCalcStoreEventsOutputProcessor.cs" />
     <Compile Include="DataAnalysis\DAProfCalcGenerateVRAlertEventsOutputProcessor.cs" />
     <Compile Include="DataAnalysis\DAProfCalcOutputSettingsManager.cs" />

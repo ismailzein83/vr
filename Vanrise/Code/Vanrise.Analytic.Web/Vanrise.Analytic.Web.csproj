@@ -73,6 +73,7 @@
     <Compile Include="Controllers\AnalyticItemConfigController.cs" />
     <Compile Include="Controllers\AnalyticReportController.cs" />
     <Compile Include="Controllers\AnalyticTableController.cs" />
+    <Compile Include="Controllers\DAProfCalcNotificationController.cs" />
     <Compile Include="Controllers\DAProfCalcOutputSettingsController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
@@ -271,6 +272,7 @@
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\DAProfCalcNotitificationAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcOutputSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DataAnalysisDefinitionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DataAnalysisItemDefinitionAPIService.js" />

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.GenericData.Notification
@@ -12,16 +14,17 @@ namespace Vanrise.GenericData.Notification
 
         public List<RecordAlertRuleConfig> RecordAlertRuleConfigs { get; set; }
 
-        public override bool IsRuleMatched(IDAProfCalcAlertRuleIsMatchedContext context)
+        public override bool IsRuleMatched(IDataRecordAlertRuleSettingsIsMatchedContext context)
         {
             if (RecordAlertRuleConfigs == null || RecordAlertRuleConfigs.Count == 0)
                 return false;
 
             DataRecordDictFilterGenericFieldMatchContext filterContext = new DataRecordDictFilterGenericFieldMatchContext(context.OutputRecords, context.DataRecordTypeId);
             RecordFilterManager manager = new RecordFilterManager();
+            VRAlertLevelManager alertLevelManager = new VRAlertLevelManager();
 
-            //TODO: RecordAlertRuleConfigs should be ordered by alert level id
-            foreach (RecordAlertRuleConfig recordAlertRuleConfig in RecordAlertRuleConfigs)
+            IOrderedEnumerable<RecordAlertRuleConfig> orderedRecordAlertRuleConfig = RecordAlertRuleConfigs.OrderByDescending(itm => alertLevelManager.GetAlertLevelWeight(itm.AlertLevelId));
+            foreach (RecordAlertRuleConfig recordAlertRuleConfig in orderedRecordAlertRuleConfig)
             {
                 if (manager.IsFilterGroupMatch(recordAlertRuleConfig.FilterGroup, filterContext))
                 {

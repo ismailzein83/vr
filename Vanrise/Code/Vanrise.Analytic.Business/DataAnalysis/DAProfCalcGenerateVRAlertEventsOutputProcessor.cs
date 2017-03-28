@@ -4,6 +4,8 @@ using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.GenericData.Notification;
 using Vanrise.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Vanrise.Analytic.Business
 {
@@ -22,68 +24,50 @@ namespace Vanrise.Analytic.Business
 
         public void ProcessOutputRecords(IDAProfCalcOutputRecordProcessorProcessContext context)
         {
-            if (context.OutputRecords != null)
+            if (context.OutputRecords != null && context.OutputRecords.Count > 0)
             {
-                VRAlertRuleManager alertRuleManager = new VRAlertRuleManager();
+                DAProfCalcExecInput daProfCalcExecInput = context.DAProfCalcExecInput;
+                daProfCalcExecInput.ThrowIfNull("context.DAProfCalcExecInput");
 
-                VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
+                Guid dataAnalysisItemDefinitionId = daProfCalcExecInput.OutputItemDefinitionId;
 
                 DataAnalysisItemDefinitionManager dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
-                VRAlertRuleTypeManager vrAlertRuleTypeManager = new VRAlertRuleTypeManager();
+
+                DAProfCalcAlertRuleExecPayload daProfCalcAlertRuleExecPayload = daProfCalcExecInput.DAProfCalcPayload.CastWithValidate<DAProfCalcAlertRuleExecPayload>("context.DAProfCalcExecInput.DAProfCalcPayload");
+
+                DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId);
+                DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
+
+                VRAlertRule alertRule = new VRAlertRuleManager().GetVRAlertRule(daProfCalcAlertRuleExecPayload.AlertRuleId);
+                Guid notificationTypeId = new DAProfCalcNotificationManager().GetDAProfCalcNotificationTypeId(alertRule.RuleTypeId, dataAnalysisItemDefinitionId);
+
+                alertRule.Settings.ThrowIfNull("alertRule.Settings", daProfCalcAlertRuleExecPayload.AlertRuleId);
+                DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings.CastWithValidate<DAProfCalcAlertRuleSettings>(string.Format("alertRule.Settings.ExtendedSettings AlertRuleId:{0}", daProfCalcAlertRuleExecPayload.AlertRuleId));
+
+                List<DataRecordAlertRuleNotification> dataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
+                List<string> eventKeys = new List<string>();
 
                 foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
                 {
-                    Guid dataAnalysisItemDefinitionId = outputRecord.DAProfCalcExecInput.OutputItemDefinitionId;
-
-                    DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId);
-
-                    DAProfCalcAlertRuleExecPayload payload = outputRecord.DAProfCalcExecInput.DAProfCalcPayload as DAProfCalcAlertRuleExecPayload;
-                    long alertRuleId = payload.AlertRuleId;
-                    VRAlertRule alertRule = alertRuleManager.GetVRAlertRule(alertRuleId);
-
-                    DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings as DAProfCalcAlertRuleSettings;
-
-                    DAProfCalcAlertRuleIsMatchedContext daProfCalcAlertRuleIsMatchedContext = new DAProfCalcAlertRuleIsMatchedContext() { DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId, OutputRecords = outputRecord.Records };
-                    if (daProfCalcAlertRuleSettings.Settings.IsRuleMatched(daProfCalcAlertRuleIsMatchedContext))
+                    DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext() { DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId, OutputRecords = outputRecord.FieldValues };
+                    if (daProfCalcAlertRuleSettings.Settings.IsRuleMatched(dataRecordAlertRuleSettingsIsMatchedContext))
                     {
-                        DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
-                        CreateAlertRuleNotificationInput notificationInput = new CreateAlertRuleNotificationInput()
+                        DataRecordAlertRuleNotification dataRecordAlertRuleNotification = new DataRecordAlertRuleNotification()
                         {
-                            Actions = daProfCalcAlertRuleIsMatchedContext.Actions,
-                            AlertLevelId = daProfCalcAlertRuleIsMatchedContext.AlertLevelId,
-                            AlertRuleId = alertRuleId,
-                            AlertRuleTypeId = alertRule.RuleTypeId,
-                            Description = string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name),
-                            EventKey = outputRecord.GroupingKey,
-                            EventPayload = new DataRecordAlertRuleActionEventPayload()
-                            {
-                                DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId,
-                                OutputRecords = outputRecord.Records
-                            },
-                            UserId = UserId,
-                            NotificationTypeId = GetNotificationTypeId(vrAlertRuleTypeManager, alertRule.RuleTypeId, dataAnalysisItemDefinitionId)
+                            Actions = dataRecordAlertRuleSettingsIsMatchedContext.Actions,
+                            AlertLevelId = dataRecordAlertRuleSettingsIsMatchedContext.AlertLevelId,
+                            FieldValues = outputRecord.FieldValues,
+                            GroupingKey = outputRecord.GroupingKey
                         };
-                        alertRuleNotificationManager.CreateNotification(notificationInput);
+                        dataRecordAlertRuleNotifications.Add(dataRecordAlertRuleNotification);
+                        eventKeys.Add(outputRecord.GroupingKey);
                     }
                 }
+                DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
+                dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(dataRecordAlertRuleNotifications, eventKeys, alertRule.RuleTypeId, notificationTypeId, alertRule.VRAlertRuleId,
+                     daProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name), UserId);
+
             }
-        }
-
-        private Guid GetNotificationTypeId(VRAlertRuleTypeManager vrAlertRuleTypeManager, Guid alertRuleTypeId, Guid dataAnalysisItemDefinitionId)
-        {
-            VRAlertRuleType alertRuleType = vrAlertRuleTypeManager.GetVRAlertRuleType(alertRuleTypeId);
-            DAProfCalcAlertRuleTypeSettings alertRuleSettings = alertRuleType.Settings as DAProfCalcAlertRuleTypeSettings;
-            if (alertRuleSettings == null)
-                throw new Exception(String.Format("alertRuleType.Settings is not of type DAProfCalcAlertRuleTypeSettings. it is of type '0'", alertRuleSettings.GetType()));
-
-            if (alertRuleSettings.DAProfCalcItemNotifications == null)
-                throw new NullReferenceException(string.Format("alertRuleSettings.DAProfCalcItemNotifications is null for alertRuleTypeId:{0}", alertRuleTypeId));
-
-            DAProfCalcItemNotification daProfCalcItemNotification = alertRuleSettings.DAProfCalcItemNotifications.FindRecord(itm => itm.DataAnalysisItemDefinitionId == dataAnalysisItemDefinitionId);
-            if (daProfCalcItemNotification == null)
-                throw new NullReferenceException(string.Format("daProfCalcItemNotification is null for alertRuleTypeId:{0} and dataAnalysisItemDefinitionId:{1}", alertRuleTypeId, dataAnalysisItemDefinitionId));
-
-            return daProfCalcItemNotification.NotificationTypeId;
         }
 
         public void Finalize(IDAProfCalcOutputRecordProcessorFinalizeContext context)

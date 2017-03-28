@@ -22,6 +22,8 @@ namespace Vanrise.Analytic.Entities
 
     public interface IDAProfCalcOutputRecordProcessorProcessContext
     {
+        DAProfCalcExecInput DAProfCalcExecInput { get; }
+
         List<DAProfCalcOutputRecord> OutputRecords { get; }
     }
 

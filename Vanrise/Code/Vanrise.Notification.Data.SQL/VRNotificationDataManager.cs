@@ -55,6 +55,22 @@ namespace Vanrise.Notification.Data.SQL
             ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus);
         }
 
+        public List<VRNotification> GetNotClearedNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, List<string> eventKeys, DateTime? notificationCreatedAfter)
+        {
+            string eventKeysAsString = null;
+            if (eventKeys != null && eventKeys.Count > 0)
+                eventKeysAsString = string.Join<string>(",", eventKeys);
+
+            string parentType1 = null;
+            string parentType2 = null;
+            if (parentTypes != null)
+            {
+                parentType1 = parentTypes.ParentType1;
+                parentType2 = parentTypes.ParentType2;
+            }
+            return GetItemsSP("[VRNotification].sp_VRNotification_GetNotCleared", VRNotificationMapper, notificationTypeId, parentType1, parentType2, eventKeysAsString, notificationCreatedAfter);
+        }
+
         public void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context)
         {
             bool isFinalRow = false;
@@ -131,7 +147,6 @@ namespace Vanrise.Notification.Data.SQL
 
             }, context.NotificationTypeId, context.NbOfRows, context.LessThanID, description, statusIds, alerttLevelIds);
         }
-
         #endregion
 
         #region Mappers
@@ -161,5 +176,6 @@ namespace Vanrise.Notification.Data.SQL
         }
 
         #endregion
+
     }
 }
