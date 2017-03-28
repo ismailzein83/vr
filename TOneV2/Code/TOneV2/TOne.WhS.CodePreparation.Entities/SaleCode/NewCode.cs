@@ -12,7 +12,7 @@ namespace TOne.WhS.CodePreparation.Entities
         public long? ZoneId { get; set; }
         public string ZoneName { get; set; }
         public string OldZoneName { get; set; }
+        public DateTime OldCodeBED { get; set; }
         public int CountryId { get; set; }
-
     }
 }

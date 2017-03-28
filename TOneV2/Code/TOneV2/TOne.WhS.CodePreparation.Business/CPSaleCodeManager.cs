@@ -108,17 +108,19 @@ namespace TOne.WhS.CodePreparation.Business
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             Changes existingChanges = GetChanges(input.SellingNumberPlanId);
 
-
+            List<NewCode> newelyAddedCodes = new List<NewCode>();
             foreach (var code in input.Codes)
             {
                 NewCode newCode = new NewCode()
                 {
-                    Code = code,
+                    Code = code.Code,
                     ZoneName = input.NewZoneName,
                     ZoneId = input.ZoneId,
                     OldZoneName = input.CurrentZoneName,
+                    OldCodeBED = code.BED,
                     CountryId = input.CountryId
                 };
+                newelyAddedCodes.Add(newCode);
                 existingChanges.NewCodes.Add(newCode);
                 UpdateNewZonesHasChanges(existingChanges.NewZones, input.NewZoneName);
             }
@@ -132,7 +134,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             if (moveActionSucc)
             {
-                output.NewCodes = existingChanges.NewCodes.FindAllRecords(item => input.Codes.Contains(item.Code)).MapRecords(NewCodeToCodeItemMapper);
+                output.NewCodes = newelyAddedCodes.MapRecords(NewCodeToCodeItemMapper);
                 output.Message = string.Format("Codes moved successfully.");
                 output.Result = ValidationOutput.Success;
             }

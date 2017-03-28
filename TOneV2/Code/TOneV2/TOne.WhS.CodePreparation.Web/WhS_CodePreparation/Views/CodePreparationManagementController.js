@@ -141,13 +141,24 @@
 
             $scope.moveCodesClicked = function () {
                 var codes = codesGridAPI.getSelectedCodes();
+                var codesData = [];
+                for (var i = 0; i < codes.length ; i++)
+                {
+                    var codeData = {
+                        Code: codes[i].Code,
+                        BED: codes[i].BED
+                    }
+
+                    codesData.push(codeData);
+                }
+
                 var parameters = {
                     ZoneId: $scope.currentNode.zoneId,
                     ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
                     ZoneDataSource: GetCurrentCountryNodeZones(),
-                    Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
+                    Codes: codesData
                 };
                 var settings = {};
                 settings.onScopeReady = function (modalScope) {

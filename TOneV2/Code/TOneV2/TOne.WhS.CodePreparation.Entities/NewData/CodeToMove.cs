@@ -10,6 +10,8 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
     {
         public string OldZoneName { get; set; }
 
+        public DateTime OldCodeBED { get; set; }
+
         public bool HasOverlapedCodesInOtherZone { get; set; }
     }
 }

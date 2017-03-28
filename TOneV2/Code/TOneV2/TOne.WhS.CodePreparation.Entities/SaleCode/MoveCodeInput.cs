@@ -14,6 +14,13 @@ namespace TOne.WhS.CodePreparation.Entities
         public long ZoneId { get; set; }
         public string CurrentZoneName { get; set; }
         public string NewZoneName { get; set; }
-        public List<string> Codes { get; set; }
+        public List<MovedCodeData> Codes { get; set; }
+    }
+
+    public class MovedCodeData
+    {
+        public string Code { get; set; }
+
+        public DateTime BED { get; set; }
     }
 }

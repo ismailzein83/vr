@@ -58,7 +58,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         BED = minimumDate,
                         EED = null,
                         ZoneName = code.ZoneName,
-                        OldZoneName = code.OldZoneName
+                        OldZoneName = code.OldZoneName,
+                        OldCodeBED = code.OldCodeBED
                     });
                 }
                 else

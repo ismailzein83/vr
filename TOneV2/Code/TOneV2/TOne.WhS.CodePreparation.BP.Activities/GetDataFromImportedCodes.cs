@@ -84,7 +84,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                                BED = code.BED,
                                EED = code.EED,
                                ZoneName = code.Zone,
-                               OldZoneName = deletedCode.Zone
+                               OldZoneName = deletedCode.Zone,
+                               OldCodeBED = deletedCode.BED
                            });
                 }
                 else
