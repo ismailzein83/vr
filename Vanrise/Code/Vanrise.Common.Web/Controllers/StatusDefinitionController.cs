@@ -40,7 +40,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetStatusDefinition")]
         public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
         {
-            return _manager.GetStatusDefinition(statusDefinitionId);
+            return _manager.GetStatusDefinition(statusDefinitionId,true);
         }
 
         [HttpGet]

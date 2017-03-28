@@ -12,10 +12,17 @@ namespace Vanrise.Common.Business
     public class StatusDefinitionManager : IBusinessEntityManager
     {
         #region Public Methods
-        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId, bool isViewedFromUI)
         {
             Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
-            return cachedStatusDefinitions.GetRecord(statusDefinitionId);
+            var statusDefinition= cachedStatusDefinitions.GetRecord(statusDefinitionId);
+            if (statusDefinition != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(StatusDefinitionLoggableEntity.Instance, statusDefinition);
+            return statusDefinition;
+        }
+        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
+        {
+            return GetStatusDefinition(statusDefinitionId,false);
         }
         public string GetStatusDefinitionName(Guid statusDefinitionId)
         {
@@ -34,6 +41,7 @@ namespace Vanrise.Common.Business
                     return false;
                 return true;
             };
+            VRActionLogger.Current.LogGetFilteredAction(StatusDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStatusDefinitions.ToBigResult(input, filterExpression, StatusDefinitionDetailMapper));
         }
 
@@ -51,6 +59,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(statusDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(StatusDefinitionLoggableEntity.Instance, statusDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = StatusDefinitionDetailMapper(statusDefinitionItem);
             }
@@ -74,6 +83,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(statusDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(StatusDefinitionLoggableEntity.Instance, statusDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = StatusDefinitionDetailMapper(this.GetStatusDefinition(statusDefinitionItem.StatusDefinitionId));
             }
@@ -147,6 +157,50 @@ namespace Vanrise.Common.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreStatusDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
+        private class StatusDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static StatusDefinitionLoggableEntity Instance = new StatusDefinitionLoggableEntity();
+
+            private StatusDefinitionLoggableEntity()
+            {
+
+            }
+
+            static StatusDefinitionManager s_StatusDefinitionManager = new StatusDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_StatusDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Status Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_StatusDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                StatusDefinition statusDefinition = context.Object.CastWithValidate<StatusDefinition>("context.Object");
+                return statusDefinition.StatusDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                StatusDefinition statusDefinition = context.Object.CastWithValidate<StatusDefinition>("context.Object");
+                return s_StatusDefinitionManager.GetStatusDefinitionName(statusDefinition.StatusDefinitionId);
             }
         }
 
