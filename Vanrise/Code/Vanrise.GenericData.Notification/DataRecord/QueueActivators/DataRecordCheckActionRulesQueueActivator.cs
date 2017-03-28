@@ -7,7 +7,7 @@ using Vanrise.GenericData.QueueActivators;
 
 namespace Vanrise.GenericData.Notification
 {
-    public class CheckActionRulesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
+    public class DataRecordCheckActionRulesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
         public Guid ActionRuleTypeId { get; set; }
 
