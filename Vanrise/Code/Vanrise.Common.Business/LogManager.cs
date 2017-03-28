@@ -31,9 +31,10 @@ namespace Vanrise.Common.Business
             List<int> grantedPermissionSetIds;
             var requiredPermissionSetManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<IRequiredPermissionSetManager>();
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+                    
             SQLDataManager manager = GetDataManager();
 
-            BigResult<Vanrise.Entities.LogEntry> loggerResult = manager.GetFilteredLogs(input);
+            BigResult<Vanrise.Entities.LogEntry> loggerResult = manager.GetFilteredLogs(input, grantedPermissionSetIds);
 
             BigResult<Vanrise.Entities.LogEntryDetail> loggerDetailResult = new BigResult<Vanrise.Entities.LogEntryDetail>()
             {

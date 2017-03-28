@@ -110,7 +110,7 @@ namespace Vanrise.Logging.SQL
         }
 
 
-        public Vanrise.Entities.BigResult<Vanrise.Entities.LogEntry> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
+        public Vanrise.Entities.BigResult<Vanrise.Entities.LogEntry> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input, List<int> grantedPermissionSetIds)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -143,7 +143,11 @@ namespace Vanrise.Logging.SQL
                 if (input.Query.EventType != null && input.Query.EventType.Count() > 0)
                     eventTypeIds = string.Join<int>(",", input.Query.EventType);
 
-                ExecuteNonQuerySP("[logging].[sp_LogEntry_CreateTempByFiltered]", tempTableName, entryTypeIds, input.Query.Message, input.Query.FromDate, input.Query.ToDate, machineIds, applicationIds, assemblyIds, typeIds, methodIds, eventTypeIds);
+                string grantedPermissionSetIdsAsString = null;
+                if (grantedPermissionSetIds != null )
+                    grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
+
+                ExecuteNonQuerySP("[logging].[sp_LogEntry_CreateTempByFiltered]", tempTableName, entryTypeIds, input.Query.Message, input.Query.FromDate, input.Query.ToDate, machineIds, applicationIds, assemblyIds, typeIds, methodIds, eventTypeIds, grantedPermissionSetIdsAsString);
             };
 
             if (input.SortByColumnName != null)
