@@ -16,8 +16,10 @@ namespace Vanrise.BusinessProcess.Business
         public List<BPInstanceDetail> GetBeforeId(BPInstanceBeforeIdInput input)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-
-            List<BPInstance> bpInstances = dataManager.GetBeforeId(input);
+            var requiredPermissionSetManager = new RequiredPermissionSetManager();
+            List<int> grantedPermissionSetIds;
+            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+            List<BPInstance> bpInstances = dataManager.GetBeforeId(input, grantedPermissionSetIds);           
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -33,10 +35,9 @@ namespace Vanrise.BusinessProcess.Business
             var requiredPermissionSetManager = new RequiredPermissionSetManager();
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
-            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityId);
+            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityId, grantedPermissionSetIds);
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -135,8 +136,11 @@ namespace Vanrise.BusinessProcess.Business
 
             public override IEnumerable<BPInstance> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
             {
+                var requiredPermissionSetManager = new RequiredPermissionSetManager();
+                List<int> grantedPermissionSetIds;
+                bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
                 IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-                return dataManager.GetAllBPInstances(input.Query);
+                return dataManager.GetAllBPInstances(input.Query, grantedPermissionSetIds);
             }
         }
 

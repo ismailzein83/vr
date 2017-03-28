@@ -23,11 +23,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
         #region public methods
-        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, string entityId)
+        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, string entityId, List<int> grantedPermissionSetIds)
         {
             string definitionsIdAsString = null;
             if (definitionsId != null && definitionsId.Count() > 0)
                 definitionsIdAsString = string.Join<Guid>(",", definitionsId);
+            string grantedPermissionSetIdsAsString = null;
+            if (grantedPermissionSetIds != null)
+                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
 
             List<BPInstance> bpInstances = new List<BPInstance>();
             byte[] timestamp = null;
@@ -40,28 +43,37 @@ namespace Vanrise.BusinessProcess.Data.SQL
                     while (reader.Read())
                         timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
             },
-               maxTimeStamp, nbOfRows, definitionsIdAsString, ToDBNullIfDefault(parentId), entityId);
+               maxTimeStamp, nbOfRows, definitionsIdAsString, ToDBNullIfDefault(parentId), entityId, grantedPermissionSetIdsAsString);
             maxTimeStamp = timestamp;
             return bpInstances;
         }
 
-        public List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input)
+        public List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input, List<int> grantedPermissionSetIds)
         {
             string definitionsIdAsString = null;
             if (input.DefinitionsId != null && input.DefinitionsId.Count() > 0)
                 definitionsIdAsString = string.Join<Guid>(",", input.DefinitionsId);
 
-            return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId),input.EntityId);
+            string grantedPermissionSetIdsAsString = null;
+            if (grantedPermissionSetIds != null)
+                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
+
+            return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId), input.EntityId, grantedPermissionSetIdsAsString);
         }
 
-        public List<BPInstance> GetAllBPInstances(BPInstanceQuery query)
+        public List<BPInstance> GetAllBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds)
         {
+            string grantedPermissionSetIdsAsString = null;
+            if (grantedPermissionSetIds != null)
+                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
+
             return GetItemsSP("[bp].[sp_BPInstance_GetFiltered]", BPInstanceMapper,
                        query.DefinitionsId == null ? null : string.Join(",", query.DefinitionsId.Select(n => n.ToString()).ToArray()),
                        query.InstanceStatus == null ? null : string.Join(",", query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()),
                        query.EntityId,
                        query.DateFrom,
-                       query.DateTo
+                       query.DateTo,
+                       grantedPermissionSetIdsAsString
                   );
         }
 
