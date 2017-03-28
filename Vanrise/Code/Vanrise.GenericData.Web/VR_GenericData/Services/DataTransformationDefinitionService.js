@@ -2,16 +2,19 @@
 
     'use strict';
 
-    DataTransformationDefinitionService.$inject = ['VRModalService','VRNotificationService'];
+    DataTransformationDefinitionService.$inject = ['VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
 
-    function DataTransformationDefinitionService(VRModalService, VRNotificationService) {
+    function DataTransformationDefinitionService(VRModalService, VRNotificationService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addDataTransformationDefinition: addDataTransformationDefinition,
             editDataTransformationDefinition: editDataTransformationDefinition,
             addDataRecordType: addDataRecordType,
             editDataRecordType: editDataRecordType,
             deleteDataRecordType: deleteDataRecordType,
-            tryCompilationResult: tryCompilationResult
+            tryCompilationResult: tryCompilationResult,
+            registerObjectTrackingDrillDownToDataTransformationdefinition: registerObjectTrackingDrillDownToDataTransformationdefinition,
+            getDrillDownDefinition: getDrillDownDefinition
 
         });
 
@@ -85,6 +88,38 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/DataTransformationCompilationResult.html', modalParameters, modalSettings);
+        }
+        function getEntityUniqueName() {
+            return "VR_GenericData_DataTransformationDefinition";
+        }
+
+        function registerObjectTrackingDrillDownToDataTransformationdefinition() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, dataTransformationdefinitionItem) {
+                dataTransformationdefinitionItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: dataTransformationdefinitionItem.Entity.DataTransformationDefinitionId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return dataTransformationdefinitionItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
     };
 

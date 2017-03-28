@@ -33,15 +33,21 @@ namespace Vanrise.GenericData.Transformation
 
             Func<DataTransformationDefinition, bool> filterExpression = (itemObject) =>
                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(DataTransformationDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataTransformationDefinitionDetailMapper));
+        }
+        public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId, bool isViewedFromUI)
+        {
+            var dataDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
+            var dataTransformationDefintion= dataDataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
+            if (dataTransformationDefintion != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(DataTransformationDefinitionLoggableEntity.Instance, dataTransformationDefintion);
+            return dataTransformationDefintion;
         }
         public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)
         {
-            var dataDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
-            return dataDataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
+           return GetDataTransformationDefinition(dataTransformationDefinitionId,false);
         }
-
         public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(Guid dataTransformationDefinitionId)
         {
             var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
@@ -75,6 +81,7 @@ namespace Vanrise.GenericData.Transformation
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(DataTransformationDefinitionLoggableEntity.Instance, dataTransformationDefinition);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataTransformationDefinitionDetailMapper(dataTransformationDefinition);
             }
@@ -97,6 +104,7 @@ namespace Vanrise.GenericData.Transformation
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DataTransformationDefinitionLoggableEntity.Instance, dataTransformationDefinition);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataTransformationDefinitionDetailMapper(dataTransformationDefinition);
             }
@@ -201,6 +209,49 @@ namespace Vanrise.GenericData.Transformation
             }
         }
 
+        private class DataTransformationDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataTransformationDefinitionLoggableEntity Instance = new DataTransformationDefinitionLoggableEntity();
+
+            private DataTransformationDefinitionLoggableEntity()
+            {
+
+            }
+
+            static DataTransformationDefinitionManager s_dataTransformationDefinitionManager = new DataTransformationDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_DataTransformationDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Data Transformation Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_DataTransformationDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataTransformationDefinition dataTransformationDefinition = context.Object.CastWithValidate<DataTransformationDefinition>("context.Object");
+                return dataTransformationDefinition.DataTransformationDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataTransformationDefinition dataTransformationDefinition = context.Object.CastWithValidate<DataTransformationDefinition>("context.Object");
+                return s_dataTransformationDefinitionManager.GetDataTransformationDefinitionName(dataTransformationDefinition.DataTransformationDefinitionId);
+            }
+        }
 
         #endregion
 

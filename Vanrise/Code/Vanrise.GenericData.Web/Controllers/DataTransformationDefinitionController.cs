@@ -27,7 +27,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)
         {
             DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
-            return dataRecordTypeManager.GetDataTransformationDefinition(dataTransformationDefinitionId);
+            return dataRecordTypeManager.GetDataTransformationDefinition(dataTransformationDefinitionId,true);
         }
 
         [HttpGet]
