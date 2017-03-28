@@ -90,6 +90,21 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
             {
                 UpdatBillingTransactionValues(accountTypeId, existingRecords, item);
             }
+
+            foreach (var existingRecord in existingRecords)
+            {
+                foreach(var item in this.BillingTransactionFields)
+                {
+                    decimal value;
+                    if(existingRecord.Value.TryGetValue(item.FieldId,out value))
+                    {
+                        if(!item.IsCredit)
+                        {
+                            existingRecord.Value[item.FieldId] = -value;
+                        }
+                    }
+                }
+            }
             return existingRecords;
         }
         private void UpdatBillingTransactionValues(Guid accountTypeId, Dictionary<string, Dictionary<Guid, decimal>> existingRecords, BillingTransactionMetaData billingTransaction)
@@ -114,15 +129,11 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
                     if (valuesByFieldId.TryGetValue(item.FieldId, out value))
                     {
                         value += transactionType != null && transactionType.IsCredit ? amount : -amount;
-                        if (!item.IsCredit)
-                            value = -value;
                         valuesByFieldId[item.FieldId] = value;
                     }
                     else
                     {
                         value = transactionType != null && transactionType.IsCredit ? amount : -amount;
-                        if (!item.IsCredit)
-                            value = -value;
                         valuesByFieldId.Add(item.FieldId, value);
                     }
                    
