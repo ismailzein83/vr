@@ -9,8 +9,11 @@
     [ProcessInstanceID] BIGINT       NULL,
     [FileID]            BIGINT       NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF_SalePriceList_CreatedTime_1] DEFAULT (getdate()) NULL,
-    [StateBackupID]     BIGINT       NOT NULL
+    [StateBackupID]     BIGINT       NOT NULL,
+    [IsSent]            BIT          NULL
 );
+
+
 
 
 
