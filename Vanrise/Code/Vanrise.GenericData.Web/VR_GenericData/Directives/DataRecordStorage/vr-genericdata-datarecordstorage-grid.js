@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageGridDirective.$inject = ['VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataRecordStorageService', 'VRNotificationService'];
+    DataRecordStorageGridDirective.$inject = ['VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataRecordStorageService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function DataRecordStorageGridDirective(VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataRecordStorageService, VRNotificationService) {
+    function DataRecordStorageGridDirective(VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataRecordStorageService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -27,13 +27,14 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 ctrl.dataRecordStorages = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
-
+                    var drillDownDefinitions = VR_GenericData_DataRecordStorageService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
@@ -41,6 +42,11 @@
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_DataRecordStorageAPIService.GetFilteredDataRecordStorages(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -58,6 +64,7 @@
                 };
 
                 api.onDataRecordStorageAdded = function (addedDataRecordStorage) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedDataRecordStorage);
                     gridAPI.itemAdded(addedDataRecordStorage);
                 };
 
@@ -77,6 +84,7 @@
             }
             function editDataRecordStorage(dataRecordStorage) {
                 var onDataRecordStorageUpdated = function (updatedDataRecordStorage) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedDataRecordStorage);
                     gridAPI.itemUpdated(updatedDataRecordStorage);
                 };
                 VR_GenericData_DataRecordStorageService.editDataRecordStorage(dataRecordStorage.Entity.DataRecordStorageId, onDataRecordStorageUpdated);

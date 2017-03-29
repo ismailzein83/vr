@@ -145,8 +145,15 @@ namespace Vanrise.GenericData.Business
                 (input.Query.Name == null || dataRecordStorage.Name.ToUpper().Contains(input.Query.Name.ToUpper()))
                 && (input.Query.DataRecordTypeIds == null || input.Query.DataRecordTypeIds.Contains(dataRecordStorage.DataRecordTypeId))
                 && (input.Query.DataStoreIds == null || input.Query.DataStoreIds.Contains(dataRecordStorage.DataStoreId));
-
+            VRActionLogger.Current.LogGetFilteredAction(DataRecordStorageLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataRecordStorages.ToBigResult(input, filterExpression, DataRecordStorageMapper));
+        }
+
+        public string GetDataRecordStorageName(DataRecordStorage dataRecordStorage)
+        {
+            if (dataRecordStorage != null)
+               return dataRecordStorage.Name;
+            return null;
         }
         public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(DataRecordStorageFilter filter)
         {
@@ -184,9 +191,12 @@ namespace Vanrise.GenericData.Business
         public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)
         {
             var cachedDataRecordStorages = GetCachedDataRecordStorages();
-            return cachedDataRecordStorages.FindRecord(dataRecordStorage => dataRecordStorage.DataRecordStorageId == dataRecordStorageId);
+            var dataRecordStorageItem= cachedDataRecordStorages.FindRecord(dataRecordStorage => dataRecordStorage.DataRecordStorageId == dataRecordStorageId);
+           
+            return dataRecordStorageItem;
         }
 
+      
         public Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail> AddDataRecordStorage(DataRecordStorage dataRecordStorage)
         {
             Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail>();
@@ -200,6 +210,7 @@ namespace Vanrise.GenericData.Business
 
             if (dataManager.AddDataRecordStorage(dataRecordStorage))
             {
+                VRActionLogger.Current.TrackAndLogObjectAdded(DataRecordStorageLoggableEntity.Instance, dataRecordStorage);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataRecordStorageMapper(dataRecordStorage);
 
@@ -225,6 +236,7 @@ namespace Vanrise.GenericData.Business
 
             if (dataManager.UpdateDataRecordStorage(dataRecordStorage))
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DataRecordStorageLoggableEntity.Instance, dataRecordStorage);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
@@ -361,6 +373,49 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        private class DataRecordStorageLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataRecordStorageLoggableEntity Instance = new DataRecordStorageLoggableEntity();
+
+            private DataRecordStorageLoggableEntity()
+            {
+
+            }
+
+            static DataRecordStorageManager s_dataRecordStororageManager = new DataRecordStorageManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_DataRecordStorage"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Data Record Storage"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_DataRecordStorage_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataRecordStorage dataRecordStorage = context.Object.CastWithValidate<DataRecordStorage>("context.Object");
+                return dataRecordStorage.DataRecordStorageId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataRecordStorage dataRecordStorage = context.Object.CastWithValidate<DataRecordStorage>("context.Object");
+                return s_dataRecordStororageManager.GetDataRecordStorageName(dataRecordStorage);
+            }
+        }
         private class DataRecordRequestHandler : BigDataRequestHandler<DataRecordQuery, DataRecord, DataRecordDetail>
         {
             public Guid DataRecordTypeId { get; set; }
