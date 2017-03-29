@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_SummaryTransformationDefinitionAPIService", "VR_GenericData_SummaryTransformationDefinitionService",
-    function (UtilsService, VRNotificationService, VR_GenericData_SummaryTransformationDefinitionAPIService, VR_GenericData_SummaryTransformationDefinitionService) {
+app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_SummaryTransformationDefinitionAPIService", "VR_GenericData_SummaryTransformationDefinitionService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_SummaryTransformationDefinitionAPIService, VR_GenericData_SummaryTransformationDefinitionService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -29,12 +29,15 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.summarytransformationdefinitions = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_GenericData_SummaryTransformationDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -44,6 +47,7 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
                             return gridAPI.retrieveData(query);
                         };
                         directiveAPI.onSummaryTransformationDefinitionAdded = function (onSummaryTransformationDefinitionObj) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(onSummaryTransformationDefinitionObj);
                             gridAPI.itemAdded(onSummaryTransformationDefinitionObj);
                         };
 
@@ -55,6 +59,9 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
                     return VR_GenericData_SummaryTransformationDefinitionAPIService.GetFilteredSummaryTransformationDefinitions(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
                             }
                             onResponseReady(response);
                         })
@@ -84,6 +91,7 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
             }
             function editSummaryTransformationDefinition(dataItem) {
                 var onSummaryTransformationDefinitionUpdated = function (summaryTransformationDefinitionObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(summaryTransformationDefinitionObj);
                     gridAPI.itemUpdated(summaryTransformationDefinitionObj);
                 };
 

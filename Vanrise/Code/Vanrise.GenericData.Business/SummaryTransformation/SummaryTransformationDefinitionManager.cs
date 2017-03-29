@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.Business
 
             Func<SummaryTransformationDefinition, bool> filterExpression = (itemObject) =>
                  (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(SummaryTransformationDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, SummaryTransformationDefinitionDetailMapper));
         }
         public SummaryTransformationDefinition GetSummaryTransformationDefinition(Guid summaryTransformationDefinitionId)
@@ -63,6 +63,7 @@ namespace Vanrise.GenericData.Business
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(SummaryTransformationDefinitionLoggableEntity.Instance, summaryTransformationDefinition);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SummaryTransformationDefinitionDetailMapper(summaryTransformationDefinition);
             }
@@ -72,6 +73,14 @@ namespace Vanrise.GenericData.Business
             }
 
             return insertOperationOutput;
+        }
+
+        public string GetSummaryTransformationDefinitionName(SummaryTransformationDefinition summaryTransformationDefinition)
+        {
+            if (summaryTransformationDefinition != null)
+               return summaryTransformationDefinition.Name;
+
+            return null;
         }
         public Vanrise.Entities.UpdateOperationOutput<SummaryTransformationDefinitionDetail> UpdateSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition)
         {
@@ -85,6 +94,7 @@ namespace Vanrise.GenericData.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SummaryTransformationDefinitionLoggableEntity.Instance, summaryTransformationDefinition);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SummaryTransformationDefinitionDetailMapper(summaryTransformationDefinition);
             }
@@ -125,6 +135,50 @@ namespace Vanrise.GenericData.Business
             protected override bool ShouldSetCacheExpired()
             {
                 return _dataManager.AreSummaryTransformationDefinitionsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class SummaryTransformationDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static SummaryTransformationDefinitionLoggableEntity Instance = new SummaryTransformationDefinitionLoggableEntity();
+
+            private SummaryTransformationDefinitionLoggableEntity()
+            {
+
+            }
+
+            static SummaryTransformationDefinitionManager s_summaryTransformationDefinitionManager = new SummaryTransformationDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_SummaryTransformationDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Summary Transformation Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_SummaryTransformationDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SummaryTransformationDefinition summaryTransformationDefinition = context.Object.CastWithValidate<SummaryTransformationDefinition>("context.Object");
+                return summaryTransformationDefinition.SummaryTransformationDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SummaryTransformationDefinition summaryTransformationDefinition = context.Object.CastWithValidate<SummaryTransformationDefinition>("context.Object");
+                return s_summaryTransformationDefinitionManager.GetSummaryTransformationDefinitionName(summaryTransformationDefinition);
             }
         }
 
