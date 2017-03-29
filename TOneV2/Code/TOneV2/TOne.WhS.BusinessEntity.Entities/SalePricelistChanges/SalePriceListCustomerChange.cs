@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long BatchId { get; set; }
         public int PriceListId { get; set; }
         public int CountryId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

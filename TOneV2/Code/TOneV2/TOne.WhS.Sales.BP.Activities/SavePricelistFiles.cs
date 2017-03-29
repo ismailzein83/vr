@@ -13,102 +13,91 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	public class SavePricelistFiles : CodeActivity
-	{
-		#region Input Arguments
+    public class SavePricelistFiles : CodeActivity
+    {
+        #region Input Arguments
+        public InArgument<int?> RerservedSalePriceListId { get; set; }
+        public InArgument<int> CurrencyId { get; set; }
+        public InArgument<int> OwnerId { get; set; }
+        public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+        public InArgument<IEnumerable<CustomerPriceListChange>> CustomerChanges { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
 
-		#endregion
+        #endregion
 
-		#region Output Arguments
+        #region Output Arguments
 
-		[RequiredArgument]
-		public OutArgument<IEnumerable<int>> CustomerIdsWithPriceList { get; set; }
+        [RequiredArgument]
+        public OutArgument<IEnumerable<int>> CustomerIdsWithPriceList { get; set; }
 
-		#endregion
+        #endregion
 
-		protected override void Execute(CodeActivityContext context)
-		{
-			IRatePlanContext ratePlanContext = context.GetRatePlanContext();
-			IEnumerable<SalePLZoneChange> zoneChanges = SalePLZoneChanges.Get(context);
-			IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
+        protected override void Execute(CodeActivityContext context)
+        {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
+            IEnumerable<CustomerPriceListChange> customerPriceListChanges = CustomerChanges.Get(context);
+            IEnumerable<int> customerIdsWithPriceList;
+            int currencyId = CurrencyId.Get(context);
+            int ownerId = OwnerId.Get(context);
+            SalePriceListOwnerType ownerType = OwnerType.Get(context);
+            int? priceListId = RerservedSalePriceListId.Get(context);
 
-			IEnumerable<int> customerIdsWithPriceList;
-			SalePLChangeType plChangeType;
-			IEnumerable<int> endedCountryIds = null;
-			DateTime? countriesEndedOn = null;
+            SalePLChangeType plChangeType;
+            SalePriceListType salePriceListType;
+            if (countriesToChange != null && countriesToChange.Any())
+            {
+                customerIdsWithPriceList = new List<int> { ratePlanContext.OwnerId };
+                plChangeType = SalePLChangeType.CountryAndRate;
+                salePriceListType = SalePriceListType.Country;
+            }
+            else
+            {
+                customerIdsWithPriceList = customerPriceListChanges.Select(c => c.CustomerId);
+                plChangeType = SalePLChangeType.Rate;
+                salePriceListType = SalePriceListType.RateChange;
+            }
+            var salePricelistFileContext = new SalePricelistFileContext
+            {
+                SellingNumberPlanId = ratePlanContext.OwnerSellingNumberPlanId,
+                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
+                CustomerPriceListChanges = customerPriceListChanges,
+                EffectiveDate = ratePlanContext.EffectiveDate,
+                ChangeType = plChangeType,
+                CurrencyId = currencyId
+            };
+            salePricelistFileContext.SalePriceLists = CreatePriceList(ownerId, ownerType, priceListId, currencyId,
+                salePriceListType, salePricelistFileContext.ProcessInstanceId);
+            var salePricelistManager = new SalePriceListManager();
+            salePricelistManager.SavePricelistFiles(salePricelistFileContext);
+            CustomerIdsWithPriceList.Set(context, customerIdsWithPriceList);
+        }
 
-			if (countriesToChange != null && countriesToChange.Count() > 0)
-			{
-				customerIdsWithPriceList = new List<int>() { ratePlanContext.OwnerId };
-				plChangeType = SalePLChangeType.CountryAndRate;
-				endedCountryIds = countriesToChange.MapRecords(x => x.CountryId);
-				countriesEndedOn = countriesToChange.First().CloseEffectiveDate;
-			}
-			else
-			{
-				customerIdsWithPriceList = GetCustomerIdsWithPriceList(zoneChanges);
-				plChangeType = SalePLChangeType.Rate;
-			}
+        #region Private Methods
 
-			var salePricelistFileContext = new SalePricelistFileContext
-			{
-				SellingNumberPlanId = ratePlanContext.OwnerSellingNumberPlanId,
-				ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
-				CustomerIds = customerIdsWithPriceList,
-				ZoneChanges = zoneChanges,
-				EffectiveDate = ratePlanContext.EffectiveDate,
-				ChangeType = plChangeType,
-				EndedCountryIds = endedCountryIds,
-				CountriesEndedOn = countriesEndedOn
-			};
-
-			var salePricelistManager = new SalePriceListManager();
-			salePricelistManager.SavePricelistFiles(salePricelistFileContext);
-
-			CustomerIdsWithPriceList.Set(context, customerIdsWithPriceList);
-		}
-
-		#region Private Methods
-
-		private IEnumerable<int> GetCustomerIdsWithPriceList(IEnumerable<SalePLZoneChange> zonesChanges)
-		{
-			if (zonesChanges == null || zonesChanges.Count() == 0)
-				return null;
-
-			HashSet<int> countryIds;
-			HashSet<int> customerIds;
-			SetCountryAndCustomerIds(zonesChanges, out countryIds, out customerIds);
-
-			if (customerIds == null || customerIds.Count == 0)
-				return null;
-
-			var customerIdsWithPriceList = new List<int>();
-			var customerCountryManager = new CustomerCountryManager();
-
-			foreach (int customerId in customerIds)
-			{
-				IEnumerable<int> soldCountryIds = customerCountryManager.GetCountryIdsEffectiveAfterByCustomer(customerId, DateTime.Today);
-
-				if (soldCountryIds != null && soldCountryIds.Any(soldCountryId => countryIds.Contains(soldCountryId)))
-					customerIdsWithPriceList.Add(customerId);
-			}
-
-			return customerIdsWithPriceList;
-		}
-
-		private void SetCountryAndCustomerIds(IEnumerable<SalePLZoneChange> zoneChanges, out HashSet<int> countryIds, out HashSet<int> customerIds)
-		{
-			countryIds = new HashSet<int>(zoneChanges.MapRecords(x => x.CountryId));
-			IEnumerable<int> customerIdList = zoneChanges.SelectMany(x => x.CustomersHavingRateChange);
-			customerIds = (customerIdList != null) ? new HashSet<int>(customerIdList) : null;
-		}
-
-		#endregion
-	}
+       private IEnumerable<SalePriceList> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, SalePriceListType salePriceListType, long processInstanceId)
+        {
+            if (!reservedId.HasValue) return new List<SalePriceList>();
+            return new List<SalePriceList>
+            {
+                new SalePriceList
+                {
+                    OwnerId = ownerId,
+                    PriceListId = reservedId.Value,
+                    CurrencyId = currencyId,
+                    OwnerType = ownerType,
+                    PriceListType = salePriceListType,
+                    EffectiveOn = DateTime.Now,
+                    CreatedTime = DateTime.Now,
+                    ProcessInstanceId = processInstanceId
+                }
+            };
+        }
+        #endregion
+    }
 }

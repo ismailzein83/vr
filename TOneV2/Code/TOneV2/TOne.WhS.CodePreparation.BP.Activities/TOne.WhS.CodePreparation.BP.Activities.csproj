@@ -139,6 +139,7 @@
     <Compile Include="SetCPContext.cs" />
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="StructureDataByZones.cs" />
+    <Compile Include="StructureSalePriceListZoneChange.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
     <Compile Include="PrepareChangedCodesForApply.cs" />
     <Compile Include="PrepareChangedZonesForApply.cs" />

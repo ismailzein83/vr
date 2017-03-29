@@ -16,9 +16,15 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CodeChange ChangeType { get; set; }
         public int PricelistId { get; set; }
         public long BatchId { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+
     }
     public enum CodeChange
     {
+        [Description("Not Changed")]
+        NotChanged = 0,
+
         [Description("New")]
         New = 1,
         [Description("Closed")]

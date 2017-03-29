@@ -21,8 +21,13 @@ namespace TOne.WhS.CodePreparation.Business
 
         public SalePLChangeType ChangeType { get; set; }
 
-		public IEnumerable<int> EndedCountryIds { get; set; }
+        public IEnumerable<int> EndedCountryIds { get; set; }
 
-		public DateTime? CountriesEndedOn { get; set; }
+        public DateTime? CountriesEndedOn { get; set; }
+
+        public IEnumerable<CustomerPriceListChange> CustomerPriceListChanges { get; set; }
+
+        public IEnumerable<SalePriceList> SalePriceLists { get; set; }
+        public int? CurrencyId { get; set; }
     }
 }

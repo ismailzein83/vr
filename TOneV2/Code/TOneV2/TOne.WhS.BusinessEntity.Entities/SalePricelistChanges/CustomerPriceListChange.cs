@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CustomerId { get; set; }
         public List<SalePricelistCodeChange> CodeChanges { get; set; }
         public List<SalePricelistRateChange> RateChanges { get; set; }
+        public int PriceListId { get; set; }
     }
 }

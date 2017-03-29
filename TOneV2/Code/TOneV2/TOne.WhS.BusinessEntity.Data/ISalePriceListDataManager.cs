@@ -7,13 +7,15 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
-   public interface ISalePriceListDataManager: IDataManager
+    public interface ISalePriceListDataManager : IDataManager
     {
-       List<SalePriceList> GetPriceLists();
-       bool Update(SalePriceList salePriceList);
+        List<SalePriceList> GetPriceLists();
+        bool Update(SalePriceList salePriceList);
 
-       bool Insert(SalePriceList salePriceList);
-       bool ArGetSalePriceListsUpdated(ref object updateHandle);
+        bool Insert(SalePriceList salePriceList);
+        bool ArGetSalePriceListsUpdated(ref object updateHandle);
+        bool UpdatePriceListNotification(IEnumerable<int> customerIds, int ownerId, long processInstanceId);
+        void SavePriceListsToDb(List<SalePriceList> salePriceLists);
 
     }
 }

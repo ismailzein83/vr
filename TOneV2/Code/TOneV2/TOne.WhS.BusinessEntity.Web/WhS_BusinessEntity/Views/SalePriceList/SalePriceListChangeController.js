@@ -23,11 +23,7 @@
                 rateChangeGridApi = api;
                 rateChangeGridApi.loadGrid(filter);
             };
-            $scope.onCodeCountryReady = function (api) {
-                countryDirectiveApi = api;
-                countryReadyPromiseDeferred.resolve();
-            };
-            $scope.onRateCountryReady = function (api) {
+            $scope.onCountryReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             };

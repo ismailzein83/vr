@@ -7,5 +7,10 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         List<SalePricelistCodeChange> GetFilteredSalePricelistCodeChanges(int pricelistId, List<int> countryIds);
         List<SalePricelistRateChange> GetFilteredSalePricelistRateChanges(int pricelistId, List<int> countryIds);
+        void SaveCustomerChangesToDb(IEnumerable<SalePriceListCustomerChange> salePriceLists);
+        void SaveCustomerCodeChangesToDb(IEnumerable<SalePricelistCodeChange> codeChanges);
+        void SaveCustomerRateChangesToDb(IEnumerable<SalePricelistRateChange> rateChanges, long processInstanceId);
+        List<SalePricelistCodeChange> GetNotSentCodechanges(IEnumerable<int> customerIds);
+        List<SalePricelistRateChange> GetNotSentRatechanges(IEnumerable<int> customerIds);
     }
 }

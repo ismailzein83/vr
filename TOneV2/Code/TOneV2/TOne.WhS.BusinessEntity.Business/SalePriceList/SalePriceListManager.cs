@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
@@ -18,6 +19,435 @@ namespace TOne.WhS.BusinessEntity.Business
         private SaleZoneManager _saleZoneManager = new SaleZoneManager();
 
         private CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+
+        #endregion
+
+        #region new PriceList approach
+        public class CustomerSalePriceListInfo
+        {
+            public int CustomerId { get; set; }
+            public CountryByZone CountryByZone { get; set; }
+            public bool IsCustomerAtoZ { get; set; }
+            public int SellingProductId { get; set; }
+
+        }
+        public class CountryByZone : Dictionary<int, ZoneByZoneName> { }
+        public class ZoneByZoneName : Dictionary<string, ZoneChanges> { }
+        public class ZoneChanges
+        {
+            public string ZoneName { get; set; }
+            public List<SalePricelistRateChange> Ratechanges { get; set; }
+            public List<SalePricelistCodeChange> CodeChanges { get; set; }
+        }
+        public void SavePricelistFiles(ISalePricelistFileContext context)
+        {
+            var toDbPricelList = new List<SalePriceList>();
+            var sellingProductPriceLists = context.SalePriceLists.Where(r => r.OwnerType == SalePriceListOwnerType.SellingProduct);
+            toDbPricelList.AddRange(sellingProductPriceLists);
+
+            if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Count() > 0)
+            {
+                var sellingProductIds = new List<int>();
+                IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, context.EffectiveDate);
+                if (saleCodes == null || !saleCodes.Any())
+                    return;
+
+                var customerChanges = StructureCustomerPriceListChanges(context.CustomerPriceListChanges);
+                IEnumerable<ExistingSaleCodeEntity> existingSaleCodeEntities = saleCodes.MapRecords(ExistingSaleCodeEntityMapper);
+                Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(existingSaleCodeEntities);
+                Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry = StructureZoneWrappersByCountry(existingSaleCodesByZoneName);
+
+                IEnumerable<RoutingCustomerInfoDetails> dataByCustomerList;
+                Dictionary<int, int> dataByCustomerDictionary;
+
+                var customerIdsWithChanges = customerChanges.Select(c => c.CustomerId);
+                SetDataByCustomer(customerIdsWithChanges, context.EffectiveDate, out dataByCustomerList, out dataByCustomerDictionary);
+                var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomerList, context.EffectiveDate, true));
+                var salePriceListChanges = new SalePriceListChangeManager();
+                var notSentChanges = salePriceListChanges.GetNotSentChanges(customerIdsWithChanges);
+
+                var priceListDic = StructureSalePriceListById(context.SalePriceLists);
+                foreach (var customerChange in customerChanges)
+                {
+                    CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerChange.CustomerId);
+                    customerChange.IsCustomerAtoZ = customer.CustomerSettings.IsAToZ;
+                    customerChange.SellingProductId = dataByCustomerDictionary.GetRecord(customerChange.CustomerId);
+                    sellingProductIds.Add(customerChange.SellingProductId);
+                    List<CustomerPriceListChange> notSentPriceListChange;
+                    notSentChanges.TryGetValue(customerChange.CustomerId, out notSentPriceListChange);
+
+                    List<SalePLZoneNotification> customerZoneNotifications = MergeExistingWithChanges(customerChange, context, futureRateLocator, zoneWrappersByCountry, notSentPriceListChange);
+
+                    if (customerZoneNotifications.Count > 0)
+                    {
+                        SalePriceListType customerPlType = GetSalePriceListType(customer.CustomerSettings.IsAToZ,
+                            context.ChangeType);
+                        SalePriceList priceList = GetPriceList(customer, customerPlType, customerZoneNotifications,
+                            priceListDic, context.ProcessInstanceId);
+
+                        if (priceList == null) continue;
+
+                        if (context.CurrencyId.HasValue) priceList.CurrencyId = context.CurrencyId.Value;
+                        toDbPricelList.Add(priceList);
+                        var tempPriceList = context.CustomerPriceListChanges.FirstOrDefault(r => r.CustomerId == customerChange.CustomerId);
+
+                        if (tempPriceList != null)
+                            tempPriceList.PriceListId = priceList.PriceListId;
+                    }
+                }
+                BulkInsertCustomerChanges(context.CustomerPriceListChanges.ToList(), context.ProcessInstanceId);
+            }
+            BulkInsertPriceList(toDbPricelList);
+        }
+
+        private Dictionary<int, SalePriceList> StructureSalePriceListById(IEnumerable<SalePriceList> salePriceLists)
+        {
+            Dictionary<int, SalePriceList> salePriceListDictionary = new Dictionary<int, SalePriceList>();
+            if (salePriceLists == null) return salePriceListDictionary;
+            foreach (var priceList in salePriceLists.Where(p => p.OwnerType == SalePriceListOwnerType.Customer))
+            {
+                if (!salePriceListDictionary.ContainsKey(priceList.OwnerId))
+                    salePriceListDictionary[priceList.OwnerId] = priceList;
+            }
+            return salePriceListDictionary;
+        }
+        private List<CustomerSalePriceListInfo> StructureCustomerPriceListChanges(IEnumerable<CustomerPriceListChange> customerPriceListChanges)
+        {
+            var customers = new List<CustomerSalePriceListInfo>();
+
+            if (customerPriceListChanges == null || !customerPriceListChanges.Any())
+                return null;
+
+            foreach (var customerChanges in customerPriceListChanges)
+            {
+                CountryByZone countryInfo = new CountryByZone();
+                foreach (var codeChange in customerChanges.CodeChanges)
+                {
+                    var zoneInfo = GetZoneChanges(countryInfo, codeChange.CountryId, codeChange.ZoneName);
+                    zoneInfo.CodeChanges.Add(codeChange);
+                }
+                foreach (var rateChange in customerChanges.RateChanges)
+                {
+                    var zoneInfo = GetZoneChanges(countryInfo, rateChange.CountryId, rateChange.ZoneName);
+                    zoneInfo.Ratechanges = new List<SalePricelistRateChange> { rateChange };
+                }
+                customers.Add(new CustomerSalePriceListInfo
+                {
+                    CustomerId = customerChanges.CustomerId,
+                    CountryByZone = countryInfo
+                });
+            }
+            return customers;
+        }
+        private ZoneChanges GetZoneChanges(CountryByZone countryInfo, int countryId, string zoneName)
+        {
+            ZoneByZoneName zoneDictionary;
+            if (!countryInfo.TryGetValue(countryId, out zoneDictionary))
+            {
+                zoneDictionary = new ZoneByZoneName();
+                countryInfo.Add(countryId, zoneDictionary);
+            }
+            ZoneChanges zoneInfo;
+            if (!zoneDictionary.TryGetValue(zoneName, out zoneInfo))
+            {
+                zoneInfo = new ZoneChanges
+                {
+                    ZoneName = zoneName,
+                    CodeChanges = new List<SalePricelistCodeChange>()
+                };
+                zoneDictionary[zoneName] = zoneInfo;
+            }
+            return zoneInfo;
+        }
+        private void BulkInsertCustomerChanges(List<CustomerPriceListChange> customerChanges, long processInstanceId)
+        {
+            SalePriceListChangeManager salePriceListChangeManager = new SalePriceListChangeManager();
+            salePriceListChangeManager.SaveSalePriceListCustomerChanges(customerChanges, processInstanceId);
+        }
+        private void BulkInsertPriceList(List<SalePriceList> salePriceLists)
+        {
+            ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
+            dataManager.SavePriceListsToDb(salePriceLists);
+        }
+        private List<SalePricelistRateChange> MatchRate(List<SalePricelistRateChange> notSentChanges, List<SalePricelistRateChange> currentChanges)
+        {
+            List<SalePricelistRateChange> saleproPricelistRateChanges = new List<SalePricelistRateChange>();
+            if (notSentChanges.Count == 0) return saleproPricelistRateChanges;
+            var orderedNotSentChanges = notSentChanges.OrderByDescending(r => r.PricelistId);
+            foreach (var currentChange in currentChanges)
+            {
+                var matchedRate = orderedNotSentChanges.First();
+                if (currentChange.Rate > matchedRate.Rate) currentChange.ChangeType = RateChangeType.Increase;
+                if (currentChange.Rate < matchedRate.Rate) currentChange.ChangeType = RateChangeType.Decrease;
+                if (currentChange.Rate == matchedRate.Rate) currentChange.ChangeType = RateChangeType.NotChanged;
+                return new List<SalePricelistRateChange> { currentChange };
+            }
+            return saleproPricelistRateChanges;
+        }
+        private List<SalePricelistCodeChange> MatchCode(List<SalePricelistCodeChange> lastChanges, List<SalePricelistCodeChange> currentChanges)
+        {
+            List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
+            var grouppedCode = lastChanges.GroupBy(t => t.Code)
+                    .Select(group => new { Code = group.Key, Items = group.ToList() })
+                    .ToDictionary(c => c.Code, c => c.Items);
+            foreach (var codeChange in currentChanges)
+            {
+                List<SalePricelistCodeChange> salePricelistCodeChanges;
+                if (grouppedCode.TryGetValue(codeChange.Code, out salePricelistCodeChanges))
+                {
+
+                }
+                else
+                {
+                    codeChanges.Add(codeChange);
+                }
+            }
+            return codeChanges;
+        }
+        private CustomerSalePriceListInfo Manage(CustomerSalePriceListInfo customerInfo, List<CustomerPriceListChange> notSentPriceLists)
+        {
+            if (notSentPriceLists == null) return customerInfo;
+
+            var manager = new SalePriceListManager();
+            var salePriceListChangeManager = new SalePriceListChangeManager();
+            IEnumerable<SalePriceList> customerPriceLists = manager.GetCustomerSalePriceListsById(customerInfo.CustomerId).Where(p => p.IsSent);
+            int lastSentPriceListId = 0;
+            if (customerPriceLists.Any())
+                lastSentPriceListId = customerPriceLists.Max(p => p.PriceListId);
+
+            var notSentCustomerChanges = StructureCustomerPriceListChanges(notSentPriceLists.Where(p => p.PriceListId >= lastSentPriceListId)
+                        .OrderByDescending((p => p.PriceListId)));
+
+            var lastSentPriceListChanges = salePriceListChangeManager.GetCustomerChangesByPriceListId(lastSentPriceListId);
+            foreach (var notSentpricelist in notSentCustomerChanges)
+            {
+                foreach (var notSentCountryByZone in notSentpricelist.CountryByZone)
+                {
+                    ZoneByZoneName currentZone;
+                    if (customerInfo.CountryByZone.TryGetValue(notSentCountryByZone.Key, out currentZone))
+                    {
+                        foreach (var notSentZone in notSentCountryByZone.Value)
+                        {
+                            ZoneChanges zoneChanges;
+                            if (currentZone.TryGetValue(notSentZone.Value.ZoneName, out zoneChanges))
+                            {
+                                zoneChanges.Ratechanges = MatchRate(lastSentPriceListChanges.RateChanges,
+                                    zoneChanges.Ratechanges);
+                                zoneChanges.CodeChanges = MatchCode(lastSentPriceListChanges.CodeChanges,
+                                    zoneChanges.CodeChanges);
+                            }
+                            else
+                            {
+                                currentZone.Add(notSentZone.Value.ZoneName, notSentZone.Value);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        customerInfo.CountryByZone.Add(notSentCountryByZone.Key, notSentCountryByZone.Value);
+                    }
+                }
+            }
+            return customerInfo;
+        }
+        private List<SalePLZoneNotification> MergeExistingWithChanges(CustomerSalePriceListInfo customerInfo, ISalePricelistFileContext context, SaleEntityZoneRateLocator locator,
+            Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry, List<CustomerPriceListChange> notSentChanges)
+        {
+            var salePlZoneNotifications = new List<SalePLZoneNotification>();
+            var customerCountryManager = new CustomerCountryManager();
+            var updateCountryByZone = Manage(customerInfo, notSentChanges);
+            salePlZoneNotifications = MapToSalePlZoneNotification(updateCountryByZone.CountryByZone, zoneWrappersByCountry, locator, customerInfo);
+            var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerInfo.CustomerId, context.EffectiveDate);
+
+            if (soldCountries == null) return salePlZoneNotifications;
+
+            if (context.ChangeType == SalePLChangeType.CodeAndRate && !customerInfo.IsCustomerAtoZ)
+            {
+                List<int> tempCountries = updateCountryByZone.CountryByZone.Keys.ToList();
+                soldCountries = soldCountries.Where(c => tempCountries.Contains(c.CountryId)).ToList();
+            }
+            if (context.ChangeType == SalePLChangeType.Rate)
+                return salePlZoneNotifications;
+
+            Dictionary<string, SalePLZoneNotification> grouppedByZoneName = GroupSalePlZoneNotificationByZoneName(salePlZoneNotifications);
+
+            foreach (var soldCountry in soldCountries)
+            {
+                List<ExistingSaleZone> zones = zoneWrappersByCountry.GetRecord(soldCountry.CountryId);
+                if (zones == null) continue;
+                foreach (var zone in zones)
+                {
+                    SalePLZoneNotification zoneChangeNotification;
+                    if (!grouppedByZoneName.TryGetValue(zone.ZoneName, out zoneChangeNotification))
+                    {
+                        SalePLZoneNotification tempZone = CreateZoneNotification(zone, soldCountry, locator,
+                            customerInfo.CustomerId, customerInfo.SellingProductId);
+                        if (tempZone != null) salePlZoneNotifications.Add(tempZone);
+                    }
+                    else
+                    {
+                        List<SalePLCodeNotification> codechanges = new List<SalePLCodeNotification>();
+
+                        foreach (var code in zone.Codes)
+                        {
+                            var match = zoneChangeNotification.Codes.Where(c => c.Code == code.Code);
+                            if (match.Any()) continue;
+                            codechanges.Add(new SalePLCodeNotification
+                                {
+                                    Code = code.Code,
+                                    BED = code.BED,
+                                    EED = code.EED,
+                                    CodeChange = CodeChange.NotChanged
+                                });
+
+                        }
+                        zoneChangeNotification.Codes.AddRange(codechanges);
+                    }
+                }
+            }
+            return salePlZoneNotifications;
+        }
+        private SalePLZoneNotification CreateZoneNotification(ExistingSaleZone zoneWrapper, CustomerCountry2 soldCountry, SaleEntityZoneRateLocator locator, int customerId, int sellingProductId)
+        {
+            SaleEntityZoneRate zoneRate = locator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
+            if (zoneRate == null) return null;
+            var baseRatesByZone = new BaseRatesByZone();
+            var zoneNotification = new SalePLZoneNotification
+            {
+                ZoneName = zoneWrapper.ZoneName,
+                ZoneId = zoneWrapper.ZoneId,
+                Rate = new SalePLRateNotification
+                {
+                    Rate = zoneRate.Rate.Rate,
+                    BED = zoneRate.Rate.BED,
+                }
+            };
+            zoneNotification.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
+
+            if (zoneRate.Source == SalePriceListOwnerType.SellingProduct)
+                baseRatesByZone.AddZoneBaseRate(zoneNotification.ZoneId, zoneNotification, soldCountry.CountryId, null, zoneRate.Rate.BED, zoneRate.Rate.EED);
+            return zoneNotification;
+        }
+        private Dictionary<string, SalePLZoneNotification> GroupSalePlZoneNotificationByZoneName(List<SalePLZoneNotification> salePlZoneNotifications)
+        {
+            Dictionary<string, SalePLZoneNotification> grouppedDictionary = new Dictionary<string, SalePLZoneNotification>();
+            foreach (var zone in salePlZoneNotifications)
+            {
+                if (!grouppedDictionary.ContainsKey(zone.ZoneName))
+                {
+                    grouppedDictionary.Add(zone.ZoneName, zone);
+                }
+            }
+            return grouppedDictionary;
+        }
+        private List<SalePLZoneNotification> MapToSalePlZoneNotification(CountryByZone customerCountryByZone, Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry, SaleEntityZoneRateLocator locator, CustomerSalePriceListInfo customerIfo)
+        {
+            List<SalePLZoneNotification> salePlZoneNotifications = new List<SalePLZoneNotification>();
+            foreach (var country in customerCountryByZone)
+            {
+                List<ExistingSaleZone> existingSaleZones = zoneWrappersByCountry.GetRecord(country.Key);
+                if (existingSaleZones == null) continue;
+                foreach (var zone in country.Value)
+                {
+                    ExistingSaleZone zoneWrapper = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(zone.Value.ZoneName));
+                    SalePLZoneNotification salePlZone = new SalePLZoneNotification
+                    {
+                        ZoneName = zone.Key,
+                        Codes = new List<SalePLCodeNotification>()
+                    };
+                    if (zone.Value.CodeChanges.Count > 0)
+                        salePlZone.Codes.AddRange(zone.Value.CodeChanges.Select(code => new SalePLCodeNotification
+                        {
+                            Code = code.Code,
+                            BED = code.BED,
+                            EED = code.EED,
+                            CodeChange = code.ChangeType
+                        }));
+                    else
+                    {
+                        salePlZone.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
+                    }
+                    if (zone.Value.Ratechanges != null && zone.Value.Ratechanges.Count > 0)
+                    {
+                        SalePricelistRateChange rateChange = zone.Value.Ratechanges.First();
+                        salePlZone.Rate = new SalePLRateNotification
+                        {
+                            Rate = rateChange.Rate,
+                            BED = rateChange.BED,
+                            RateChangeType = rateChange.ChangeType,
+                            EED = rateChange.EED
+                        };
+                    }
+                    else
+                    {
+                        if (zoneWrapper != null)
+                        {
+                            var zoneRate = locator.GetCustomerZoneRate(customerIfo.CustomerId,
+                                customerIfo.SellingProductId,
+                                zoneWrapper.ZoneId);
+                            if (zoneRate != null)
+                                salePlZone.Rate = new SalePLRateNotification
+                                {
+                                    Rate = zoneRate.Rate.Rate,
+                                    BED = zoneRate.Rate.BED,
+                                    RateChangeType = zoneRate.Rate.RateChange,
+                                    EED = zoneRate.Rate.EED
+                                };
+                        }
+
+                    }
+                    salePlZoneNotifications.Add(salePlZone);
+                }
+            }
+            return salePlZoneNotifications;
+        }
+        private SalePriceList GetPriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, List<SalePLZoneNotification> customerZonesNotifications, Dictionary<int, SalePriceList> currentSalePriceLists, long processInstanceId)
+        {
+            SalePriceList salePriceList;
+            var salePriceListTemplateManager = new SalePriceListTemplateManager();
+            var salePriceListManager = new SalePriceListManager();
+            var fileManager = new VRFileManager();
+
+            if (!currentSalePriceLists.TryGetValue(customer.CarrierAccountId, out salePriceList))
+            {
+                int salePriceListId = (int)salePriceListManager.ReserveIdRange(1);
+                salePriceList = new SalePriceList
+                {
+                    OwnerId = customer.CarrierAccountId,
+                    OwnerType = SalePriceListOwnerType.Customer,
+                    PriceListId = salePriceListId,
+                    EffectiveOn = DateTime.Today
+                };
+            }
+            int priceListTemplateId = _carrierAccountManager.GetSalePriceListTemplateId(customer.CarrierAccountId);
+
+            SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(priceListTemplateId);
+
+            if (template == null)
+                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", customer.CarrierAccountId));
+
+            ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext
+            {
+                Zones = customerZonesNotifications
+            };
+            byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
+            string customerName = _carrierAccountManager.GetCarrierAccountName(customer.CarrierAccountId);
+            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xls");
+            VRFile file = new VRFile
+            {
+                Content = salePlTemplateBytes,
+                Name = fileName,
+                ModuleName = "WhS_BE_SalePriceList",
+                Extension = "xls",
+                CreatedTime = DateTime.Today,
+            };
+            salePriceList.PriceListType = customerSalePriceListType;
+            salePriceList.FileId = fileManager.AddFile(file);
+            salePriceList.ProcessInstanceId = processInstanceId;
+            salePriceList.EffectiveOn = DateTime.Today;
+            salePriceList.CurrencyId = customer.CarrierAccountSettings.CurrencyId;
+            return salePriceList;
+        }
 
         #endregion
 
@@ -65,11 +495,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.Update(salePriceList);
         }
 
+        public bool UpdatePriceListNotification(IEnumerable<int> customerIds, int ownerId, long processInstanceId)
+        {
+            ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
+            return dataManager.UpdatePriceListNotification(customerIds, ownerId, processInstanceId);
+        }
         public bool AddSalePriceList(SalePriceList salePriceList)
         {
             ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
             return dataManager.Insert(salePriceList);
         }
+
 
         public IEnumerable<SalePriceList> GetCustomerSalePriceListsByProcessInstanceId(long processInstanceId)
         {
@@ -77,6 +513,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListOwnerType customerOwnerType = SalePriceListOwnerType.Customer;
 
             return allSalePriceLists.Values.FindAllRecords(itm => itm.ProcessInstanceId == processInstanceId && itm.OwnerType == customerOwnerType);
+        }
+        public IEnumerable<SalePriceList> GetCustomerSalePriceListsById(long customerId)
+        {
+            Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceLists();
+            SalePriceListOwnerType customerOwnerType = SalePriceListOwnerType.Customer;
+            return allSalePriceLists.Values.FindAllRecords(itm => itm.OwnerId == customerId && itm.OwnerType == customerOwnerType);
         }
 
         public bool IsSalePriceListDeleted(int priceListId)
@@ -99,7 +541,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return processSalePricelists.FindRecord(itm => itm.OwnerId == customerId);
         }
-
         public Dictionary<int, List<SalePriceList>> GetSalePriceListsBySellingProductId(IEnumerable<int> sellingProductIds)
         {
             if (sellingProductIds == null || sellingProductIds.Count() == 0)
@@ -113,7 +554,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (salePriceList.OwnerType == SalePriceListOwnerType.SellingProduct && sellingProductIds.Contains(salePriceList.OwnerId))
                 {
                     List<SalePriceList> sellingProductPriceLists;
-                    
+
                     if (!salePriceListsBySellingProductId.TryGetValue(salePriceList.OwnerId, out sellingProductPriceLists))
                     {
                         sellingProductPriceLists = new List<SalePriceList>();
@@ -126,12 +567,46 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return salePriceListsBySellingProductId;
         }
-
         #endregion
 
         #region Save Price List Files
 
-        public void SavePricelistFiles(ISalePricelistFileContext context)
+        private List<SalePLZoneNotification> GetCustomerCountryZoneNotifications(IEnumerable<ExistingSaleZone> zonesWrappers, int customerId, int sellingProductId, SaleEntityZoneRateLocator futureRateLocator, BaseRatesByZone baseRatesByZone, int countryId, DateTime? countryEED, IEnumerable<int> endedCountryIds, DateTime? countriesEndedOn, SaleEntityZoneRateLocator rateLocator)
+        {
+            List<SalePLZoneNotification> zoneNotifications = new List<SalePLZoneNotification>();
+            if (zonesWrappers == null)
+                return zoneNotifications;
+            foreach (ExistingSaleZone zoneWrapper in zonesWrappers)
+            {
+                bool isZoneCountryEnded = IsZoneCountryEnded(countryId, endedCountryIds);
+
+                SaleEntityZoneRate zoneRate = isZoneCountryEnded
+                    ? rateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId)
+                    : futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneWrapper.ZoneId);
+
+                if (zoneRate == null || zoneRate.Rate == null)
+                    continue;
+
+                var zoneNotification = new SalePLZoneNotification
+                {
+                    ZoneName = zoneWrapper.ZoneName,
+                    ZoneId = zoneWrapper.ZoneId,
+                    Rate = SalePLRateNotificationMapper(zoneRate, countryEED)
+                };
+                zoneNotification.Codes.AddRange(zoneWrapper.Codes.MapRecords(SalePLCodeNotificationMapper));
+                zoneNotifications.Add(zoneNotification);
+                if (zoneRate.Source == SalePriceListOwnerType.SellingProduct)
+                {
+                    baseRatesByZone.AddZoneBaseRate(zoneNotification.ZoneId, zoneNotification, countryId, null,
+                        zoneRate.Rate.BED, zoneRate.Rate.EED);
+                    if (isZoneCountryEnded)
+                        zoneNotification.Rate.EED = countriesEndedOn;
+                }
+            }
+            return zoneNotifications;
+        }
+
+        public void SavePricelistFilesold(ISalePricelistFileContext context)
         {
             if (context.CustomerIds == null || context.CustomerIds.Count() == 0)
                 return;
@@ -216,9 +691,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, effectiveOn, false);
 
                 if (!sellingProductId.HasValue)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a Selling Product", customerId));
+                    throw new DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a Selling Product", customerId));
 
-                list.Add(new RoutingCustomerInfoDetails()
+                list.Add(new RoutingCustomerInfoDetails
                 {
                     CustomerId = customerId,
                     SellingProductId = sellingProductId.Value
@@ -226,7 +701,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 dictionary.Add(customerId, sellingProductId.Value);
             }
-
             dataByCustomerList = list;
             dataByCustomerDictionary = dictionary;
         }
@@ -235,11 +709,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (isCustomerAToZ || plChangeType == SalePLChangeType.CountryAndRate)
                 return countryZoneWrappers;
-            else if (countryZoneChanges != null)
+            if (countryZoneChanges != null)
             {
                 if (plChangeType == SalePLChangeType.CodeAndRate)
                     return countryZoneWrappers;
-                else if (plChangeType == SalePLChangeType.Rate)
+                if (plChangeType == SalePLChangeType.Rate)
                 {
                     var zoneWrappersWithChanges = new List<ExistingSaleZone>();
                     foreach (ExistingSaleZone zoneWrapper in countryZoneWrappers)
@@ -469,7 +943,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return zonesWrapperByCountry;
         }
-
         private Dictionary<int, List<SalePLZoneChange>> StructureZoneChangesByCountry(IEnumerable<SalePLZoneChange> zoneChanges)
         {
             Dictionary<int, List<SalePLZoneChange>> existingSaleCodesByCountryId = new Dictionary<int, List<SalePLZoneChange>>();
@@ -569,10 +1042,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (isAtoZ || changeType == SalePLChangeType.CountryAndRate)
                 return SalePriceListType.Full;
-            else
-            {
-                return (changeType == SalePLChangeType.CodeAndRate) ? SalePriceListType.Country : SalePriceListType.RateChange;
-            }
+
+            return (changeType == SalePLChangeType.CodeAndRate)
+                ? SalePriceListType.Country
+                : SalePriceListType.RateChange;
         }
 
         #endregion

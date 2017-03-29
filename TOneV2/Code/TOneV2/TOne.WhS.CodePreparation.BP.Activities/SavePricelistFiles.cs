@@ -16,9 +16,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public sealed class SavePricelistFiles : CodeActivity
     {
-        [RequiredArgument]
-        public InArgument<IEnumerable<SalePLZoneChange>> ZonesChanges { get; set; }
+        public InArgument<IEnumerable<SalePLZoneChange>> ZoneChanges { get; set; }
 
+        [RequiredArgument]
+        public InArgument<SalePriceListsByOwner> SalePriceListsByOwner { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<CustomerPriceListChange>> CustomerChanges { get; set; }
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }
 
@@ -30,79 +34,57 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
-            IEnumerable<SalePLZoneChange> zonesChanges = this.ZonesChanges.Get(context);
-            DateTime minimumDate = this.MinimumDate.Get(context);
-
-            IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor = this.GetCustomersToSavePriceListsFor(sellingNumberPlanId, zonesChanges);
-            this.SavePriceLists(sellingNumberPlanId, zonesChanges, context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, customersToSavePricelistsFor, minimumDate);
-
-            CustomersWithPriceListFile.Set(context, customersToSavePricelistsFor);
+            int sellingNumberPlanId = SellingNumberPlanId.Get(context);
+            SalePriceListsByOwner salePriceListByOwner = SalePriceListsByOwner.Get(context);
+            IEnumerable<CustomerPriceListChange> customerPriceListChanges = CustomerChanges.Get(context);
+            DateTime minimumDate = MinimumDate.Get(context);
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            IEnumerable<SalePriceList> salePriceLists = ConvertPriceList(salePriceListByOwner, processInstanceId);
+            SavePriceLists(sellingNumberPlanId, customerPriceListChanges, processInstanceId, minimumDate, salePriceLists);
+            var customersToSave = GetCustomersToSavePriceListsFor(sellingNumberPlanId, customerPriceListChanges);
+            CustomersWithPriceListFile.Set(context, customersToSave);
         }
-
-        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<SalePLZoneChange> zonesChanges)
+        private IEnumerable<SalePriceList> ConvertPriceList(SalePriceListsByOwner salePriceListsByOwner, long processInstanceId)
         {
-            Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = StructureZonesChangesByCountry(zonesChanges);
-
-            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
-
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            IEnumerable<CarrierAccountInfo> customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
-            DateTime today = DateTime.Today;
-
-            List<CarrierAccountInfo> customersToSavePricelistsFor = new List<CarrierAccountInfo>();
-            if (customers != null)
+            return salePriceListsByOwner.GetSalePriceLists().Select(priceListItem => new SalePriceList
             {
-                foreach (CarrierAccountInfo customer in customers)
-                {
-                    IEnumerable<int> customerCountryIds = customerCountryManager.GetCustomerCountryIds(customer.CarrierAccountId, today, false);
-
-                    if (customerCountryIds != null && customerCountryIds.Intersect(zonesChangesByCountry.Keys).Count() > 0)
-                        customersToSavePricelistsFor.Add(customer);
-                }
-            }
-
-            return customersToSavePricelistsFor;
+                OwnerId = priceListItem.OwnerId,
+                PriceListId = priceListItem.PriceListId,
+                CurrencyId = priceListItem.CurrencyId,
+                OwnerType = priceListItem.OwnerType,
+                PriceListType = SalePriceListType.Country,
+                EffectiveOn = priceListItem.EffectiveOn,
+                ProcessInstanceId = processInstanceId
+            });
         }
-
-        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<SalePLZoneChange> zonesChanges, long processInstanceId, IEnumerable<CarrierAccountInfo> customersToSavePricelistsFor, DateTime effectiveOn)
+        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<CustomerPriceListChange> customerPriceListChanges, long processInstanceId, DateTime effectiveOn, IEnumerable<SalePriceList> salePriceLists)
         {
-            ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext()
+            ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext
             {
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = processInstanceId,
-                CustomerIds = customersToSavePricelistsFor.Select(itm => itm.CarrierAccountId),
-                ZoneChanges = zonesChanges,
+                CustomerPriceListChanges = customerPriceListChanges,
                 EffectiveDate = effectiveOn,
                 ChangeType = SalePLChangeType.CodeAndRate,
+                SalePriceLists = salePriceLists
             };
-
             SalePriceListManager salePricelistManager = new SalePriceListManager();
             salePricelistManager.SavePricelistFiles(salePriceListFileContext);
         }
-
-        #region Private Methods
-        private Dictionary<int, List<SalePLZoneChange>> StructureZonesChangesByCountry(IEnumerable<SalePLZoneChange> zonesChanges)
+        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<CustomerPriceListChange> customerPriceListChanges)
         {
-            Dictionary<int, List<SalePLZoneChange>> zonesChangesByCountry = new Dictionary<int, List<SalePLZoneChange>>();
+            var customersToSavePricelistsFor = new List<CarrierAccountInfo>();
+            var carrierAccountManager = new CarrierAccountManager();
+            var customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId).ToDictionary(c => c.CarrierAccountId, c => c);
 
-            List<SalePLZoneChange> zonesChangesList;
-
-            foreach (SalePLZoneChange zoneChange in zonesChanges)
+            foreach (var customer in customerPriceListChanges)
             {
-                if (!zonesChangesByCountry.TryGetValue(zoneChange.CountryId, out zonesChangesList))
-                {
-                    zonesChangesList = new List<SalePLZoneChange>();
-                    zonesChangesList.Add(zoneChange);
-                    zonesChangesByCountry.Add(zoneChange.CountryId, zonesChangesList);
-                }
-                else
-                    zonesChangesList.Add(zoneChange);
+                CarrierAccountInfo accountInfo;
+                if (customers.TryGetValue(customer.CustomerId, out accountInfo))
+                    customersToSavePricelistsFor.Add(accountInfo);
             }
-
-            return zonesChangesByCountry;
+            return customersToSavePricelistsFor;
         }
-        
-        #endregion
     }
 }
+
