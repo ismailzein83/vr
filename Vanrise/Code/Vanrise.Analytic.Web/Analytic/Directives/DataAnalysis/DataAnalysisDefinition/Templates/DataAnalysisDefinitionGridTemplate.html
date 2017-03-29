@@ -4,9 +4,9 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.menuActions"
-             showexpand="scopeModel.showExpandIcon">
+             showexpand="scopeModel.showExpandIcon"
+             idfield="Entity.DataAnalysisDefinitionId">
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
