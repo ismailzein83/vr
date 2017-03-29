@@ -14,10 +14,13 @@ namespace Vanrise.Caching
     public interface ICacheExpirationCheckerContext
     {
         CachedObject CachedObject { get; }
+        bool NeverExpires { set; }
     }
 
     public class CacheExpirationCheckerContext : ICacheExpirationCheckerContext
     {
         public CachedObject CachedObject { get; set; }
+
+        public bool NeverExpires { get; set; }
     }
 }
