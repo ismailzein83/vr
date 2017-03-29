@@ -268,6 +268,7 @@
     <Content Include="Analytic\Directives\Runtime\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\Templates\GenericSearchTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
+    <Content Include="Analytic\ModuleInitialization.js" />
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />

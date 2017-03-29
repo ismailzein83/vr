@@ -25,6 +25,7 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
     function AnalyticReportGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -32,6 +33,8 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
             $scope.gridMenuActions = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = VR_Analytic_AnalyticReportService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -43,6 +46,7 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onAnalyticReportAdded = function (tableObj) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(tableObj);
                         gridAPI.itemAdded(tableObj);
                     };
                     return directiveAPI;
@@ -52,6 +56,11 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_Analytic_AnalyticReportAPIService.GetFilteredAnalyticReports(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -75,6 +84,7 @@ app.directive("vrAnalyticAnalyticreportGrid", ['VRNotificationService', 'VRModal
         }
         function editAnalyticReport(dataItem) {
             var onEditAnalyticReport = function (analyticReportObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(analyticReportObj);
                 gridAPI.itemUpdated(analyticReportObj);
             };
             VR_Analytic_AnalyticReportService.editAnalyticReport(dataItem.Entity.AnalyticReportId, onEditAnalyticReport, dataItem.Entity.Settings.ConfigId);

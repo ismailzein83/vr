@@ -26,7 +26,7 @@ namespace Vanrise.Analytic.Business
 
             Func<AnalyticReport, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(AnalyticReportLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticReports.ToBigResult(input, filterExpression, AnalyticReportDetailMapper));
         }
         public IEnumerable<AnalyticReportInfo> GetAnalyticReportsInfo(AnalyticReportInfoFilter filter)
@@ -42,6 +42,13 @@ namespace Vanrise.Analytic.Business
             }
 
             return analyticReports.MapRecords(AnalyticReportInfoMapper, x => x.AccessType == AccessType.Public || x.UserID == _loggedInUserId);
+        }
+
+        public string GetAnalyticReportName(AnalyticReport analyticReport)
+        {
+            if (analyticReport != null)
+               return analyticReport.Name;
+            return null;
         }
         public AnalyticReport GetAnalyticReportById(Guid analyticReportId)
         {
@@ -61,6 +68,7 @@ namespace Vanrise.Analytic.Business
 
             if (insertActionSucc)
             {
+                VRActionLogger.Current.TrackAndLogObjectAdded(AnalyticReportLoggableEntity.Instance, analyticReport);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = AnalyticReportDetailMapper(analyticReport);
@@ -83,6 +91,7 @@ namespace Vanrise.Analytic.Business
 
             if (updateActionSucc)
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(AnalyticReportLoggableEntity.Instance, analyticReport);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject =AnalyticReportDetailMapper(analyticReport) ;
@@ -134,6 +143,50 @@ namespace Vanrise.Analytic.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAnalyticReportUpdated(ref _updateHandle);
+            }
+        }
+
+        private class AnalyticReportLoggableEntity : VRLoggableEntityBase
+        {
+            public static AnalyticReportLoggableEntity Instance = new AnalyticReportLoggableEntity();
+
+            private AnalyticReportLoggableEntity()
+            {
+
+            }
+
+            static AnalyticReportManager s_AnalyticReportManager = new AnalyticReportManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Analytic_AnalyticReport"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Analytic"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Analytic Report"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Analytic_AnalyticReport_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                AnalyticReport analyticReport = context.Object.CastWithValidate<AnalyticReport>("context.Object");
+                return analyticReport.AnalyticReportId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                AnalyticReport analyticReport = context.Object.CastWithValidate<AnalyticReport>("context.Object");
+                return s_AnalyticReportManager.GetAnalyticReportName(analyticReport);
             }
         }
 
