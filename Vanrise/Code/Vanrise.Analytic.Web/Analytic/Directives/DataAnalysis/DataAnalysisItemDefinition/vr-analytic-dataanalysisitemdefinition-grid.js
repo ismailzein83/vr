@@ -1,8 +1,8 @@
 ﻿
 'use strict';
 
-app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnalysisItemDefinitionAPIService', 'VR_Analytic_DataAnalysisItemDefinitionService', 'VRNotificationService',
-    function (VR_Analytic_DataAnalysisItemDefinitionAPIService, VR_Analytic_DataAnalysisItemDefinitionService, VRNotificationService) {
+app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnalysisItemDefinitionAPIService', 'VR_Analytic_DataAnalysisItemDefinitionService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VR_Analytic_DataAnalysisItemDefinitionAPIService, VR_Analytic_DataAnalysisItemDefinitionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -22,7 +22,7 @@ app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnal
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dataAnalysisItemDefinition = [];
@@ -30,11 +30,18 @@ app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnal
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_Analytic_DataAnalysisItemDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_Analytic_DataAnalysisItemDefinitionAPIService.GetFilteredDataAnalysisItemDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +58,7 @@ app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnal
                 };
 
                 api.onItemAdded = function (addedDataAnalysisItemDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedDataAnalysisItemDefinition);
                     gridAPI.itemAdded(addedDataAnalysisItemDefinition);
                 };
 
@@ -66,6 +74,7 @@ app.directive('vrAnalyticDataanalysisitemdefinitionGrid', ['VR_Analytic_DataAnal
             }
             function editDataAnalysisItemDefinition(dataAnalysisItemDefinition) {
                 var onDataAnalysisItemDefinitionUpdated = function (updatedDataAnalysisItemDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedDataAnalysisItemDefinition);
                     gridAPI.itemUpdated(updatedDataAnalysisItemDefinition);
                 };
 

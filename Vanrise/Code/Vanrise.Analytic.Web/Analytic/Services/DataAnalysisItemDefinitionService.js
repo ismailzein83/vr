@@ -3,10 +3,10 @@
 
     "use strict";
 
-    dataAnalysisItemDefinitionService.$inject = ['VRModalService'];
+    dataAnalysisItemDefinitionService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function dataAnalysisItemDefinitionService(VRModalService) {
-
+    function dataAnalysisItemDefinitionService(VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         function addDataAnalysisItemDefinition(dataAnalysisDefinitionId, itemDefinitionTypeId, onDataAnalysisItemDefinitionAdded) {
             var settings = {};
 
@@ -36,10 +36,44 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/DataAnalysisItemDefinition/DataAnalysisItemDefinitionEditor.html', parameters, settings);
         }
 
+        function getEntityUniqueName() {
+            return "VR_Analytic_DataAnalysisItemDefinition";
+        }
+
+        function registerObjectTrackingDrillDownToDataAnalysisItemDefinition() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, dataAnalysisItemDefinitionItem) {
+                dataAnalysisItemDefinitionItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: dataAnalysisItemDefinitionItem.Entity.DataAnalysisItemDefinitionId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return dataAnalysisItemDefinitionItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
 
         return {
             addDataAnalysisItemDefinition: addDataAnalysisItemDefinition,
-            editDataAnalysisItemDefinition: editDataAnalysisItemDefinition
+            editDataAnalysisItemDefinition: editDataAnalysisItemDefinition,
+            registerObjectTrackingDrillDownToDataAnalysisItemDefinition: registerObjectTrackingDrillDownToDataAnalysisItemDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         };
     }
 

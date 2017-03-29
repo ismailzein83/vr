@@ -77,10 +77,16 @@ namespace Vanrise.Analytic.Business
                 return true;
             };
 
-
+            VRActionLogger.Current.LogGetFilteredAction(DataAnalysisItemDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDataAnalysisItemDefinitions.ToBigResult(input, filterExpression, DataAnalysisItemDefinitionDetailMapper));
         }
 
+        public string GetDataAnalysisItemDefinitionName(DataAnalysisItemDefinition dataAnalysisItemDefinition)
+        {
+            if (dataAnalysisItemDefinition != null)
+                return dataAnalysisItemDefinition.Name;
+            return null;
+        }
         public Vanrise.Entities.InsertOperationOutput<DataAnalysisItemDefinitionDetail> AddDataAnalysisItemDefinition(DataAnalysisItemDefinition dataAnalysisItemDefinitionItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataAnalysisItemDefinitionDetail>();
@@ -95,6 +101,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Insert(dataAnalysisItemDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(DataAnalysisItemDefinitionLoggableEntity.Instance, dataAnalysisItemDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataAnalysisItemDefinitionDetailMapper(dataAnalysisItemDefinitionItem);
             }
@@ -118,6 +125,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Update(dataAnalysisItemDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DataAnalysisItemDefinitionLoggableEntity.Instance, dataAnalysisItemDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataAnalysisItemDefinitionDetailMapper(this.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionItem.DataAnalysisItemDefinitionId));
             }
@@ -187,6 +195,50 @@ namespace Vanrise.Analytic.Business
             public override bool IsDataRecordTypeDependenciesCacheExpired()
             {
                 return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref _lastCheck);
+            }
+        }
+
+        private class DataAnalysisItemDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataAnalysisItemDefinitionLoggableEntity Instance = new DataAnalysisItemDefinitionLoggableEntity();
+
+            private DataAnalysisItemDefinitionLoggableEntity()
+            {
+
+            }
+
+            static DataAnalysisItemDefinitionManager s_dataAnalysisItemDefinitionManager = new DataAnalysisItemDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Analytic_DataAnalysisItemDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Analytic"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Data Analysis Item Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Analytic_DataAnalysisItemDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataAnalysisItemDefinition dataAnalysisItemDefinition = context.Object.CastWithValidate<DataAnalysisItemDefinition>("context.Object");
+                return dataAnalysisItemDefinition.DataAnalysisItemDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataAnalysisItemDefinition dataAnalysisItemDefinition = context.Object.CastWithValidate<DataAnalysisItemDefinition>("context.Object");
+                return s_dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionName(dataAnalysisItemDefinition);
             }
         }
 
