@@ -11,9 +11,9 @@ BEGIN
 Begin Try
 	BEGIN TRAN
 	
-	Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID)
-	Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID 	
-	from TOneWhS_BE.CP_SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
+	Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType)
+	Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType
+	from TOneWhS_BE.SalePriceList_new splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
 	Insert into TOneWhS_BE.SaleZone (ID,SellingNumberPlanID, CountryID, Name, BED, EED)
 	Select sznew.ID,sznew.SellingNumberPlanID, sznew.CountryID, sznew.Name, sznew.BED, sznew.EED 
@@ -26,7 +26,20 @@ Begin Try
 	Insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, Rate, Change, BED, EED)
 	select newRate.ID, newRate.PriceListID, newRate.ZoneID, newRate.CurrencyId, newRate.NormalRate, 1, newRate.BED, newRate.EED
 	from TOneWhS_BE.CP_SaleRate_New newRate WITH(NOLOCK) where newRate.ProcessInstanceID = @ProcessInstanceId
-	
+
+	INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[Change],[BatchID],[BED],[EED],[CountryID])
+    select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[Change],spcc.[BatchID],spcc.BED,spcc.EED,spcc.CountryID
+	from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID
+
+	INSERT INTO [TOneWhS_BE].[SalePricelistCustomerChange] ([BatchID],[PricelistID],[CountryID],[CustomerID])
+	select [BatchID],[PricelistID],[CountryID],[CustomerID]
+	from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc where spcc.[BatchID]= @ProcessInstanceID
+
+	INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED])
+	select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.[BED],sprc.[EED]
+	from [TOneWhS_BE].[SalePricelistRateChange_New] sprc
+	where sprc.ProcessInstanceID = @ProcessInstanceID
+
 	Update ToneWhs_be.SaleZone
 	Set EED = szchanged.EED
 	from ToneWhs_be.SaleZone sz join TOneWhS_BE.CP_SaleZone_Changed szchanged

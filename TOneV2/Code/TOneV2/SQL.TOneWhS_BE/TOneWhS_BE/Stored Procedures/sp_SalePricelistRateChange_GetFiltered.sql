@@ -8,13 +8,14 @@ DECLARE @CountryIDsTable TABLE (CountryID int)
 INSERT INTO @CountryIDsTable (CountryID)
 select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CountryIDs)
 
-SELECT [ID]
-      ,[PricelistId]
+SELECT [PricelistId]
       ,[Rate]
       ,[RecentRate]
       ,[CountryID]
       ,[ZoneName]
-      ,[Change]
+      ,[Change],
+	  BED,
+	  EED
   FROM [TOneWhS_BE].[SalePricelistRateChange] SR
   WHERE SR.PricelistId = @PriceListID
 		AND (@CountryIDs  is null or Sr.CountryID in (select CountryID from @CountryIDsTable))

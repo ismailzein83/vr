@@ -12,9 +12,9 @@ BEGIN
 	DECLARE @CustomerIDsTable TABLE (CustomerID int)
 	INSERT INTO @CustomerIDsTable (CustomerID)
 	SELECT Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CustomerID)
-	--Update TOneWhS_BE.SalePriceList
-	--Set IsSent = 1
-	--Where  (@CustomerID  is null or OwnerID in (select CustomerID from @CustomerIDsTable))
-	--AND ownertype = @OwnerType
+	Update TOneWhS_BE.SalePriceList
+	Set IsSent = 1
+	Where  (@CustomerID  is null or OwnerID in (select CustomerID from @CustomerIDsTable))
+	AND ownertype = @OwnerType
 
 END

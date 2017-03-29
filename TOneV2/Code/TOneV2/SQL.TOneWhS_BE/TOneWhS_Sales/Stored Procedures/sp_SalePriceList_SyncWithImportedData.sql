@@ -15,12 +15,13 @@ BEGIN
 	begin try
 		begin tran
 
+			Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType)
+				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType
+				from TOneWhS_BE.SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
+	
 			if @ReservedSalePriceListId is not null
 			begin
-				-- Sync rates
-
-				insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID)
-				values (@ReservedSalePriceListId, @OwnerType, @OwnerID, @CurrencyID, @EffectiveOn, @ProcessInstanceId)
+				-- Sync rates					
 				
 				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, Change, BED, EED)
 				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, Rate, 1, BED, EED
@@ -57,6 +58,18 @@ BEGIN
 				where changedService.ProcessInstanceID = @ProcessInstanceID
 			end
 			
+				INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[Change],[BatchID], [BED], [EED],[countryid])
+				select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[Change],spcc.[BatchID], spcc.BED, spcc.EED,spcc.[countryid]
+				from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID
+
+				INSERT INTO [TOneWhS_BE].[SalePricelistCustomerChange] ([BatchID],[PricelistID],[CountryID],[CustomerID])
+				select [BatchID],[PricelistID],[CountryID],[CustomerID]
+				from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc where spcc.[BatchID]= @ProcessInstanceID
+
+				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED])
+				select [PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],BED,EED
+				from [TOneWhS_BE].[SalePricelistRateChange_New] sprc
+				where sprc.ProcessInstanceID = @ProcessInstanceID
 			-- Sync default routing product
 			
 			insert into TOneWhS_BE.SaleEntityRoutingProduct (ID, OwnerType, OwnerID, RoutingProductID, BED, EED)

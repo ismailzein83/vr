@@ -5,18 +5,24 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SalePricelistCodeChange_GetFiltered]
 AS
 BEGIN
 
+if(@CountryIDs!=null)
+begin
 DECLARE @CountryIDsTable TABLE (CountryID int)
 INSERT INTO @CountryIDsTable (CountryID)
 select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CountryIDs)
+end
 
 SELECT [PricelistID]
       ,[Code]
-      ,[CountryID]
+      ,spc.[CountryID]
       ,[RecentZoneName]
       ,[ZoneName]
-      ,[Change]
+      ,[Change],
+	  BED,
+	  EED
   FROM [TOneWhS_BE].[SalePricelistCodeChange] SP
-  WHERE SP.PricelistID = @PriceListID
-		AND (@CountryIDs  is null or SP.CountryID in (select CountryID from @CountryIDsTable))
+  JOIN TOneWhS_BE.SalePricelistCustomerChange spc on spc.BatchID = SP.BatchID and spc.CountryID = sp.countryID
+  WHERE spc.PricelistID = @PriceListID
+		AND (@CountryIDs  is null or spc.CountryID in (select CountryID from @CountryIDsTable))
 	
 END

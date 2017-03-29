@@ -346,7 +346,6 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SyncWithImportedData.sql" />
     <Build Include="TOneWhS_RouteSync\Stored Procedures\sp_RouteSyncDefinition_GetAll.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleRate_New.sql" />
-    <Build Include="TOneWhS_BE\Tables\CP_SalePriceList_New.sql" />
     <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_GetById.sql" />
     <Build Include="TOneWhs_CP\Tables\SaleRate_Preview.sql" />
     <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleRate_Preview_GetFiltered.sql" />
@@ -444,19 +443,22 @@
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="Security\TOneWhS_AccBalance.sql" />
     <Build Include="TOneWhS_BE\Tables\SalePricelistCustomerChange_1.sql" />
-    <Build Include="TOneWhS_BE\Tables\CP_SalePriceList_1.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetBySellingProducts_1.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwner_1.sql" />
     <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_Update_1.sql" />
     <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_Insert_1.sql" />
     <Build Include="TOneWhS_AccBalance\Stored Procedures\sp_CarrierFinancialAccount_GetAll_1.sql" />
-    <Build Include="TOneWhS_BE\Tables\CP_SalePricelistRateChange.sql" />
-    <Build Include="TOneWhS_BE\Tables\CP_SalePricelistCustomerChange.sql" />
-    <Build Include="TOneWhS_BE\Tables\CP_SalePricelistCodeChange.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_UpdatePriceListNotification_1.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsBySellingProductsAndCustomer.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwner.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsBySellingProductsAndCustomer.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwner.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistRateChange_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistCustomerChange_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistCodeChange_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePriceList_New.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllBySellingProductsAndCustomer.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListChange_GetNotSentRateChanges.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListChange_GetNotSentCodeChanges.sql" />
   </ItemGroup>
 </Project>
