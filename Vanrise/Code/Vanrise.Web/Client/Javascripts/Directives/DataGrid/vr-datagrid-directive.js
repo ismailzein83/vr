@@ -602,11 +602,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     else
                         return dataItem.CssClass;
                 };
-                ctrl.getCellContainerClass = function (dataItem, colDef) {
-                    if (getRowCSSClass(dataItem) != undefined)
-                        return;
+                ctrl.getCellContainerClass = function (dataItem, colDef) {                   
                     return colDef.cssClass;
-
                 };
                 function getRowCSSClass(dataItem) {
                     if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
