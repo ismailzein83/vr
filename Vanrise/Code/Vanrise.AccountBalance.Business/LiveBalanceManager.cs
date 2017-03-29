@@ -38,6 +38,11 @@ namespace Vanrise.AccountBalance.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AccountBalanceDetail> GetFilteredAccountBalances(Vanrise.Entities.DataRetrievalInput<AccountBalanceQuery> input)
         {
+            if (input.SortByColumnName != null && input.SortByColumnName.Contains("Items"))
+            {
+                string[] itemProperty = input.SortByColumnName.Split('.');
+                input.SortByColumnName = string.Format(@"Entity.{0}[""{1}""].Description", itemProperty[1], itemProperty[2]);
+            }
             return BigDataManager.Instance.RetrieveData(input, new AccountBalanceRequestHandler());
         }
 
@@ -64,18 +69,17 @@ namespace Vanrise.AccountBalance.Business
                 IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> accountBalances = dataManager.GetFilteredAccountBalances(input.Query);
                 AccountTypeSettings accountTypeSettings = new AccountTypeManager().GetAccountTypeSettings(input.Query.AccountTypeId);
                 List<AccountBalanceEntity> accountBalanceDetails = new List<AccountBalanceEntity>();
-                if (input.SortByColumnName != null && input.SortByColumnName.Contains("Items"))
-                {
-                    string[] itemProperty = input.SortByColumnName.Split('.');
-                    input.SortByColumnName = string.Format(@"Entity.{0}[""{1}""].Description", itemProperty[0], itemProperty[1]);
-                }
 
                 Dictionary<Guid, Object> sourceDataBySourceData = new Dictionary<Guid, Object>();
 
                 foreach (var accountBalance in accountBalances)
                 {
-                    AccountBalanceEntity accountBalanceEntity = new Entities.AccountBalanceEntity();
-                    accountBalanceEntity.Items = new Dictionary<string, AccountBalanceDetailObject>();
+                    AccountBalanceEntity accountBalanceEntity = new Entities.AccountBalanceEntity
+                    {
+                        AccountBalanceId = accountBalance.AccountBalanceId,
+                        AccountId = accountBalance.AccountId,
+                        Items = new Dictionary<string, AccountBalanceDetailObject>()
+                    };
                     if (accountTypeSettings != null && accountTypeSettings.AccountBalanceGridSettings != null && accountTypeSettings.AccountBalanceGridSettings.GridColumns != null)
                     {
                         foreach (var gridColumn in accountTypeSettings.AccountBalanceGridSettings.GridColumns)

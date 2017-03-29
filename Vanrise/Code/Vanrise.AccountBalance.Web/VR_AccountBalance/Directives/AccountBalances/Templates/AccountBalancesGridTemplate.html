@@ -1,9 +1,14 @@
 ﻿<vr-datagrid dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             defaultsortbyfieldname="scopeModel.sortField"
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
-             datasource="scopeModel.accountBalances" defaultsortbyfieldname="'Entity.CurrentBalance'" defaultsortdirection="ctrl.orderBy">
+             datasource="scopeModel.accountBalances" 
+             defaultsortbyfieldname="'Entity.AccountBalanceId'" defaultsortdirection="ctrl.orderBy">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBalanceId'" widthfactor="10" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
     </vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+
 </vr-datagrid>

@@ -1,24 +1,25 @@
-﻿<vr-row removeline vr-loader="isLoading">
+﻿<vr-row removeline vr-loader="scopeModel.isLoading">
+    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onTransactionTypeSelectorReady" normal-col-num="2" ismultipleselection></vr-accountbalance-billingtransactiontype-selector>
     <vr-columns width="normal">
-        <vr-datetimepicker type="dateTime" label="From" isrequired="true" value="fromTime" customvalidate="validateDateTime()"></vr-datetimepicker>
+        <vr-datetimepicker type="dateTime" label="From" isrequired="true" value="scopeModel.fromTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
     </vr-columns>
     <vr-columns width="normal">
-        <vr-datetimepicker type="dateTime" label="To" value="toTime" customvalidate="validateDateTime()"></vr-datetimepicker>
+        <vr-datetimepicker type="dateTime" label="To" value="scopeModel.toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
     </vr-columns>
     <vr-columns width="normal" withemptyline>
-        <vr-button type="Search" standalone data-onclick="searchClicked" vr-disabled="fromTime==undefined || fromTime== null ||  validateDateTime()!=null"></vr-button>
-        <vr-button type="Add" standalone data-onclick="addTransaction" ng-show="hasAddTransaction"></vr-button>
+        <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked" vr-disabled="scopeModel.fromTime==undefined || scopeModel.fromTime== null ||  scopeModel.validateDateTime()!=null"></vr-button>
+        <vr-button type="Add" standalone data-onclick="scopeModel.addTransaction" ng-show="scopeModel.hasAddTransaction"></vr-button>
     </vr-columns>
     <vr-columns width="1/2row" withemptyline>
         <div class="pull-right">
             <vr-label isvalue>Current Balance:</vr-label>
-            <vr-label >{{balance |  vrtextOrNumber : 2}}</vr-label>
-            <vr-label isvalue>{{currency}}</vr-label>
+            <vr-label>{{scopeModel.balance |  vrtextOrNumber : 2}}</vr-label>
+            <vr-label isvalue>{{scopeModel.currency}}</vr-label>
         </div>
     </vr-columns>
 </vr-row>
 <vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-accountbalance-billingtransaction-grid on-ready="onGridReady"></vr-accountbalance-billingtransaction-grid>
+        <vr-accountbalance-billingtransaction-grid on-ready="scopeModel.onGridReady"></vr-accountbalance-billingtransaction-grid>
     </vr-columns>
 </vr-row>

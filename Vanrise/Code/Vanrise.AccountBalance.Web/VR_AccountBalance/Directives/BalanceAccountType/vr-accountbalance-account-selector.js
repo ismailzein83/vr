@@ -37,8 +37,8 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
                 directiveAPI = api;
                 directiveReadyDeferred.resolve();
             };
-
             defineAPI();
+           
         }
         function defineAPI() {
             var api = {};
@@ -98,6 +98,8 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
 
                     return directiveLoadDeferred.promise;
                 }
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {

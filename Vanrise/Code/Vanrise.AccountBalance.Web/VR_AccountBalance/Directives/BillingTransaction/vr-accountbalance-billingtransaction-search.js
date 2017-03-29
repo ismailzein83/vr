@@ -11,8 +11,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var logSearch = new LogSearch($scope, ctrl, $attrs);
-            logSearch.initializeController();
+            var billingTransactionSearch = new BillingTransactionSearch($scope, ctrl, $attrs);
+            billingTransactionSearch.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -23,62 +23,54 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
     };
 
-    function LogSearch($scope, ctrl, $attrs) {
-
+    function BillingTransactionSearch($scope, ctrl, $attrs) {
 
         var gridAPI;
         var accountTypeId;
         var accountsIds;
+
+        var transactionTypeSelectorAPI;
+        var transactionTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         this.initializeController = initializeController;
+
         function initializeController() {
+            $scope.scopeModel = {};
 
-            defineScope();
-
-            if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                ctrl.onReady(getDirectiveAPI());
-            function getDirectiveAPI() {
-
-                var directiveAPI = {};
-                directiveAPI.loadDirective = function (payload) {
-                    if (payload != undefined) {
-                        accountTypeId = payload.AccountTypeId;
-                        accountsIds = payload.AccountsIds;
-
-                    }
-
-                    if (accountTypeId)
-                        checkHasAddBillingTransaction(accountTypeId);
-                    return load();
-                };
-                return directiveAPI;
-            }
-        }
-
-        function defineScope() {
             var fromTime = new Date();
             fromTime.setMonth(fromTime.getMonth() - 1);
             fromTime.setHours(0, 0, 0, 0);
-            $scope.fromTime = fromTime;
-            $scope.hasAddTransaction = false;
-            $scope.searchClicked = function () {
+
+            $scope.scopeModel.fromTime = fromTime;
+
+            $scope.scopeModel.onTransactionTypeSelectorReady = function (api) {
+                transactionTypeSelectorAPI = api;
+                transactionTypeSelectorReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.hasAddTransaction = false;
+
+            $scope.scopeModel.searchClicked = function () {
                 var payload = {
                     query: getFilterObject(),
                     showAccount: false,
                 };
-                return gridAPI.loadGrid(payload).then(function () {
-                    load();
-                });
+                return gridAPI.loadGrid(payload);
             };
-            $scope.addTransaction = function () {
+
+            $scope.scopeModel.addTransaction = function () {
                 var onBillingTransacationAdded = function (obj) {
                     gridAPI.onBillingTransactionAdded(obj);
                 };
                 VR_AccountBalance_BillingTransactionService.addBillingTransaction(accountsIds[0], accountTypeId, onBillingTransacationAdded)
             };
-            $scope.validateDateTime = function () {
-                return VRValidationService.validateTimeRange($scope.fromTime, $scope.toTime);
+
+            $scope.scopeModel.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.fromTime, $scope.scopeModel.toTime);
             };
-            $scope.onGridReady = function (api) {
+
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 var payload = {
                     query: getFilterObject(),
@@ -86,33 +78,68 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 };
                 gridAPI.loadGrid(payload);
             };
+
+            defineAPI();
         }
 
-        function load() {
-            $scope.isLoading = true;
+        function defineAPI()
+        {
+            var api = {};
+            api.loadDirective = function (payload) {
+                $scope.scopeModel.isLoading = true;
+                var promises = [];
+                if (payload != undefined) {
+                    accountTypeId = payload.AccountTypeId;
+                    accountsIds = payload.AccountsIds;
+                  
+                    promises.push(getCurrentAccountBalance());
+                    promises.push(loadTransactionTypeSelector());
+                   
+                }
+                if (accountTypeId)
+                    promises.push(checkHasAddBillingTransaction(accountTypeId));
+                return UtilsService.waitMultiplePromises(promises).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            };
+
+            if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                ctrl.onReady(api);
+        }
+
+        function getCurrentAccountBalance()
+        {
             return VR_AccountBalance_LiveBalanceAPIService.GetCurrentAccountBalance(accountsIds[0], accountTypeId).then(function (response) {
                 if (response) {
-                    $scope.balance = response.CurrentBalance;
-                    $scope.currency = response.CurrencyDescription;
+                    $scope.scopeModel.balance = response.CurrentBalance;
+                    $scope.scopeModel.currency = response.CurrencyDescription;
                 }
-
-            }).finally(function () {
-                $scope.isLoading = false;
             });
         }
+
+        function loadTransactionTypeSelector() {
+            var transactionTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            transactionTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                var transactionTypePayload = { AccountTypeId: accountTypeId };
+                VRUIUtilsService.callDirectiveLoad(transactionTypeSelectorAPI, transactionTypePayload, transactionTypeSelectorLoadPromiseDeferred);
+            });
+            return transactionTypeSelectorLoadPromiseDeferred.promise;
+        }
+
         function getFilterObject() {
             var filter = {
+                TransactionTypeIds:transactionTypeSelectorAPI.getSelectedIds(),
                 AccountTypeId: accountTypeId,
                 AccountsIds: accountsIds,
-                FromTime: $scope.fromTime,
-                ToTime: $scope.toTime,
+                FromTime: $scope.scopeModel.fromTime,
+                ToTime: $scope.scopeModel.toTime,
             };
             return filter;
         }
 
         function checkHasAddBillingTransaction(accountTypeId) {
-            VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission(accountTypeId).then(function (response) {
-                $scope.hasAddTransaction = response;
+          return VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission(accountTypeId).then(function (response) {
+                $scope.scopeModel.hasAddTransaction = response;
             });
         }
     }
