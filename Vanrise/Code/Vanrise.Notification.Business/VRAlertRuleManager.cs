@@ -125,7 +125,6 @@ namespace Vanrise.Notification.Business
 
         //    return this.GetCachedVRAlertRules().MapRecords(VRAlertRuleInfoMapper, filterExpression).OrderBy(x => x.Name);
         //}
-
         #endregion
 
         #region Private Classes
@@ -205,7 +204,7 @@ namespace Vanrise.Notification.Business
                });
         }
 
-        Dictionary<long, VRAlertRule> GetCachedVRAlertRules()
+        public Dictionary<long, VRAlertRule> GetCachedVRAlertRules()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRules",
                () =>
