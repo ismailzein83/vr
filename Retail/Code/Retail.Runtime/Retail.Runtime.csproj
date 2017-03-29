@@ -390,6 +390,12 @@
     <Reference Include="Vanrise.Invoice.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.dll</HintPath>
     </Reference>
