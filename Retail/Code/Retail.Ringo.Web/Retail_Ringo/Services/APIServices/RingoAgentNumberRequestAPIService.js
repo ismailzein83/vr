@@ -17,7 +17,7 @@
         }
 
         function UpdateAgentNumberRequest(agentNumberRequest) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAgentNumberRequest'), agentNumberRequest);
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Ringo_ModuleConfig.moduleName, controllerName, 'UpdateAgentNumberRequest'), agentNumberRequest);
         }
         return ({
             GetFilteredAgentNumberRequests: GetFilteredAgentNumberRequests,

@@ -14,26 +14,6 @@ namespace Retail.Ringo.Business
     {
         public IDataRetrievalResult<AgentNumberRequestDetail> GetFilteredAgentNumberRequests(DataRetrievalInput<AgentNumberRequestQuery> input)
         {
-            AgentNumberRequest item = new AgentNumberRequest
-            {
-                AgentId = 422074,
-                Settings = new AgentNumberSetting
-                {
-                    AgentNumbers = new List<AgentNumber>() { 
-                        new AgentNumber{
-                         Number = "353535",
-                         Status = NumberStatus.Pending
-                        },
-                        new AgentNumber{
-                         Number = "45454545",
-                         Status = NumberStatus.Pending
-                        }
-                    }
-                },
-                Status = Status.Pending
-            };
-            string SR = Vanrise.Common.Serializer.Serialize(item);
-
             var allAgentNumberRequests = this.GetCachedAgentNumberRequests();
 
             Func<AgentNumberRequest, bool> filterExpression = (numberRequest) =>

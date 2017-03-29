@@ -27,7 +27,7 @@ namespace Retail.Ringo.Data.SQL
         {
             object agentNumberRequestId;
             string serializedSettings = agentNumberRequest.Settings != null ? Vanrise.Common.Serializer.Serialize(agentNumberRequest.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("[Ringo].[sp_AgentNumberRequest_Insert]", out agentNumberRequestId, agentNumberRequest.AgentId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("[Ringo].[sp_AgentNumberRequest_Insert]", out agentNumberRequestId, agentNumberRequest.AgentId, serializedSettings, agentNumberRequest.Status);
             insertedId = (int)agentNumberRequestId;
             return (affectedRecords > 0);
         }

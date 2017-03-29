@@ -111,6 +111,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Ringo\Constant\AgentNumberStatusEnum.js" />
+    <Content Include="Retail_Ringo\Constant\AgentNumberRequestStatusEnum.js" />
     <Content Include="Retail_Ringo\Constant\ModuleConfig.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-entitiesinfo.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-otherinfo.js" />
@@ -132,6 +134,7 @@
     <Content Include="Retail_Ringo\Directives\AgentRequestNumber\Templates\AgentRequestNumberGridTemplate.html" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoAgentNumberRequestAPIService.js" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoReportSheetAPIService.js" />
+    <Content Include="Retail_Ringo\Services\RingoAgentNumberRequestService.js" />
     <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagement.html" />
     <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagementController.js" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagement.html" />
