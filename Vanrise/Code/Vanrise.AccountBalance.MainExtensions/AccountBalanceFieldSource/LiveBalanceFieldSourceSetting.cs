@@ -7,6 +7,7 @@ using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Vanrise.Notification.Business;
 
 namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
 {
@@ -16,7 +17,7 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
         {
             get { return new Guid("831CB917-CAD7-4BC8-99B8-4B2EB839B647"); }
         }
-
+        VRBalanceAlertRuleManager vrBalanceAlertRuleManager = new VRBalanceAlertRuleManager();
         public override List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context)
         {
             List<AccountBalanceFieldDefinition> accountBalanceFieldDefinitions = new List<AccountBalanceFieldDefinition> {
@@ -39,6 +40,11 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
                 new AccountBalanceFieldDefinition { 
                     Name = "AccountName",
                     Title = "Account Name",
+                    FieldType = new FieldTextType(),
+                },
+                new AccountBalanceFieldDefinition { 
+                    Name = "Actions",
+                    Title = "Actions",
                     FieldType = new FieldTextType(),
                 }
             };
@@ -63,6 +69,7 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
                 case "CurrentBalance": return context.AccountBalance.CurrentBalance;
                 case "CurrencyId": return context.AccountBalance.CurrencyId;
                 case "AccountName": return new AccountManager().GetAccountName(context.AccountBalance.AccountTypeId, context.AccountBalance.AccountId);
+                case "Actions": return vrBalanceAlertRuleManager.GetBalanceAlertRuleSettingDescription(context.AccountBalance.AlertRuleID);
                 default: return null;
             }
         }

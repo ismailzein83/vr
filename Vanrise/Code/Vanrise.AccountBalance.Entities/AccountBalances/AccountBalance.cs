@@ -15,7 +15,7 @@ namespace Vanrise.AccountBalance.Entities
         public String AccountId { get; set; }
 
         public int CurrencyId { get; set; }
-
+        public int AlertRuleID { get; set; }
         public decimal InitialBalance { get; set; }
 
         public decimal CurrentBalance { get; set; }

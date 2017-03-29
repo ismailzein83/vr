@@ -49,7 +49,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
 
         [HttpGet]
         [Route("ConvertToGridColumnAttribute")]
-        public IEnumerable<GridColumnAttribute> ConvertToGridColumnAttribute(Guid accountTypeId)
+        public IEnumerable<AccountTypeGridFieldColumnAttribute> ConvertToGridColumnAttribute(Guid accountTypeId)
         {
             return _accountTypeManager.ConvertToGridColumnAttribute(accountTypeId);
         }

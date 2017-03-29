@@ -189,6 +189,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 CurrentBalance = GetReaderValue<Decimal>(reader, "CurrentBalance"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
+                AlertRuleID = GetReaderValue<int>(reader, "AlertRuleID"),
                
             };
         }
@@ -301,7 +302,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (query.Sign != null)
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign , query.Balance));
 
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance 
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID 
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
                                                                     WHERE  (#WHEREPART#) 
                                                                     ORDER BY  lb.CurrentBalance #ORDERDIRECTION#

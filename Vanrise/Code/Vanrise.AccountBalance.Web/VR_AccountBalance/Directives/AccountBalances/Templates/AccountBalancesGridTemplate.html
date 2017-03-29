@@ -5,7 +5,7 @@
              datasource="scopeModel.accountBalances" 
              defaultsortbyfieldname="'Entity.AccountBalanceId'" defaultsortdirection="ctrl.orderBy">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBalanceId'" widthfactor="10" disablesorting></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
+    <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field" cssclass="field.FieldClassColor">
     </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

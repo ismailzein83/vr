@@ -188,14 +188,14 @@ namespace Vanrise.AccountBalance.Business
             return fieldsBySourceId;
         }
 
-        public IEnumerable<GridColumnAttribute> ConvertToGridColumnAttribute(Guid accountTypeId)
+        public IEnumerable<AccountTypeGridFieldColumnAttribute> ConvertToGridColumnAttribute(Guid accountTypeId)
         {
 
             var accountTypeSettings = GetAccountTypeSettings(accountTypeId);
-            List<GridColumnAttribute> gridColumnAttributes = null;
+            List<AccountTypeGridFieldColumnAttribute> gridColumnAttributes = null;
             if (accountTypeSettings.AccountBalanceGridSettings != null && accountTypeSettings.AccountBalanceGridSettings.GridColumns != null)
             {
-                gridColumnAttributes = new List<GridColumnAttribute>();
+                gridColumnAttributes = new List<AccountTypeGridFieldColumnAttribute>();
                 foreach (var column in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
                 {
 
@@ -209,17 +209,24 @@ namespace Vanrise.AccountBalance.Business
                             if (matchField.FieldType == null)
                                 throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
                             var gridAttribute = matchField.FieldType.GetGridColumnAttribute(null);
-                            gridAttribute.HeaderText = column.Title;
-                            gridAttribute.Field = matchField.Name;
-                            gridAttribute.Tag = matchField.Name;
-
+                            AccountTypeGridFieldColumnAttribute accountTypeGridFieldColumnAttribute = new Entities.AccountTypeGridFieldColumnAttribute
+                            {
+                              Field= matchField.Name,
+                              Tag = matchField.Name,
+                              HeaderText = column.Title,
+                              FieldColor = column.FieldColor,
+                              FixedWidth = gridAttribute.FixedWidth,
+                              NumberPrecision = gridAttribute.NumberPrecision,
+                              Type = gridAttribute.Type,
+                              WidthFactor = gridAttribute.WidthFactor
+                            };
                             //if (column.GridColumnSettings != null)
                             //{
                             //    gridAttribute.WidthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(column.GridColumnSettings);
                             //    if (!gridAttribute.WidthFactor.HasValue)
                             //        gridAttribute.FixedWidth = column.GridColumnSettings.FixedWidth;
                             //}
-                            gridColumnAttributes.Add(gridAttribute);
+                            gridColumnAttributes.Add(accountTypeGridFieldColumnAttribute);
                         }
                     }
                 }

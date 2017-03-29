@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBalanceAPIService', 'VRNotificationService','VR_AccountBalance_AccountTypeAPIService','UtilsService','VRUIUtilsService',
-    function (VR_AccountBalance_LiveBalanceAPIService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBalanceAPIService', 'VRNotificationService','VR_AccountBalance_AccountTypeAPIService','UtilsService','VRUIUtilsService','VR_AccountBalance_AccountBalanceGridFieldColorEnum',
+    function (VR_AccountBalance_LiveBalanceAPIService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService, UtilsService, VRUIUtilsService, VR_AccountBalance_AccountBalanceGridFieldColorEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -98,6 +98,11 @@ app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBal
                             if ($scope.scopeModel.sortField === "" || $scope.scopeModel.sortField === undefined)
                                 $scope.scopeModel.sortField = 'Entity.Items.' + gridAttribute.Field;
                             gridAttribute.Field = "Entity.Items." + gridAttribute.Field + ".Description";
+                            var fieldColor = UtilsService.getEnum(VR_AccountBalance_AccountBalanceGridFieldColorEnum, "value", gridAttribute.FieldColor);
+                            if (fieldColor != undefined)
+                            {
+                                gridAttribute.FieldClassColor = fieldColor.colorClass;
+                            }
                             $scope.gridFields.push(gridAttribute);
                            
                         }

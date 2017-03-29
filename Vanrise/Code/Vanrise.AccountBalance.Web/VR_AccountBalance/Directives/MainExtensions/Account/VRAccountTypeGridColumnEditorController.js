@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountTypeGridColumnEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    AccountTypeGridColumnEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_AccountBalance_AccountBalanceGridFieldColorEnum'];
 
-    function AccountTypeGridColumnEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function AccountTypeGridColumnEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountBalance_AccountBalanceGridFieldColorEnum) {
 
         var context;
         var gridColumnEntity;
@@ -32,6 +32,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.fieldColors = UtilsService.getArrayEnum(VR_AccountBalance_AccountBalanceGridFieldColorEnum);
             $scope.scopeModel.onSourcesSelectorReady = function (api) {
                 sourceSelectorAPI = api;
                 sourceSelectorReadyPromiseDeferred.resolve();
@@ -63,6 +64,7 @@
                     Title: $scope.scopeModel.title,
                     SourceId: sourceSelectorAPI.getSelectedIds(),
                     FieldName: sourceFieldsSelectorAPI.getSelectedIds(),
+                    FieldColor: $scope.scopeModel.selectedFieldColor !=  undefined ? $scope.scopeModel.selectedFieldColor.value : undefined
                 };
             }
 
@@ -95,6 +97,7 @@
                 function loadStaticData() {
                     if (gridColumnEntity != undefined) {
                         $scope.scopeModel.title = gridColumnEntity.Title;
+                        $scope.scopeModel.selectedFieldColor = UtilsService.getItemByVal($scope.scopeModel.fieldColors, gridColumnEntity.FieldColor, "value");
                     }
                 }
                 function loadSourcesSelectorDirective() {
