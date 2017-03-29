@@ -103,7 +103,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
 
                 api.load = function (payload) {
                     var promises = [];
-                    var invoiceViewerTypeSettings
+                    var invoiceViewerTypeSettings;
                     if (payload != undefined) {
                         invoiceViewerTypeSettings = payload.componentType;
                         if (invoiceViewerTypeSettings != undefined)
