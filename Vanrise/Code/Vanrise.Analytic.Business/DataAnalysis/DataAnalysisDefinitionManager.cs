@@ -25,9 +25,16 @@ namespace Vanrise.Analytic.Business
         {
             var allDataAnalysisDefinitions = GetCachedDataAnalysisDefinitions();
             Func<DataAnalysisDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(DataAnalysisDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDataAnalysisDefinitions.ToBigResult(input, filterExpression, DataAnalysisDefinitionDetailMapper));
         }
 
+        public string GetDataAnalysisDefinitionName(DataAnalysisDefinition dataAnalysisDefinition)
+        {
+            if (dataAnalysisDefinition != null)
+              return  dataAnalysisDefinition.Name;
+            return null;
+        }
         public Vanrise.Entities.InsertOperationOutput<DataAnalysisDefinitionDetail> AddDataAnalysisDefinition(DataAnalysisDefinition dataAnalysisDefinitionItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataAnalysisDefinitionDetail>();
@@ -42,6 +49,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Insert(dataAnalysisDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(DataAnalysisDefinitionLoggableEntity.Instance, dataAnalysisDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataAnalysisDefinitionDetailMapper(dataAnalysisDefinitionItem);
             }
@@ -65,6 +73,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Update(dataAnalysisDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DataAnalysisDefinitionLoggableEntity.Instance, dataAnalysisDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataAnalysisDefinitionDetailMapper(this.GetDataAnalysisDefinition(dataAnalysisDefinitionItem.DataAnalysisDefinitionId));
             }
@@ -150,7 +159,49 @@ namespace Vanrise.Analytic.Business
         }
 
         #endregion
+        private class DataAnalysisDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataAnalysisDefinitionLoggableEntity Instance = new DataAnalysisDefinitionLoggableEntity();
 
+            private DataAnalysisDefinitionLoggableEntity()
+            {
+
+            }
+
+            static DataAnalysisDefinitionManager s_dataAnalysisDefinitionManager = new DataAnalysisDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Analytic_DataAnalysisDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Analytic"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Data Analysis Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Analytic_DataAnalysisDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataAnalysisDefinition dataAnalysisDefinition = context.Object.CastWithValidate<DataAnalysisDefinition>("context.Object");
+                return dataAnalysisDefinition.DataAnalysisDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataAnalysisDefinition dataAnalysisDefinition = context.Object.CastWithValidate<DataAnalysisDefinition>("context.Object");
+                return s_dataAnalysisDefinitionManager.GetDataAnalysisDefinitionName(dataAnalysisDefinition);
+            }
+        }
 
         #region Mappers
 

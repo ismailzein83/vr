@@ -3,9 +3,9 @@
 
     "use strict";
 
-    DataAnalysisDefinitionService.$inject = ['VR_Analytic_DataAnalysisItemDefinitionService', 'VRModalService', 'VRUIUtilsService'];
+    DataAnalysisDefinitionService.$inject = ['VR_Analytic_DataAnalysisItemDefinitionService', 'VRModalService', 'VRUIUtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function DataAnalysisDefinitionService(VR_Analytic_DataAnalysisItemDefinitionService, VRModalService, VRUIUtilsService) {
+    function DataAnalysisDefinitionService(VR_Analytic_DataAnalysisItemDefinitionService, VRModalService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
         function addDataAnalysisDefinition(onDataAnalysisDefinitionAdded) {
             var settings = {};
@@ -28,7 +28,9 @@
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/DataAnalysisDefinition/DataAnalysisDefinitionEditor.html', parameters, settings);
         }
-
+        function getEntityUniqueName() {
+            return "VR_Analytic_DataAnalysisDefinition";
+        }
         function defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI) {
             if (dataAnalysisDefinition.Entity.Settings == null || dataAnalysisDefinition.Entity.Settings.ItemsConfig == null)
                 return;
@@ -40,8 +42,10 @@
                 var dataAnalysisItemDefinitionConfig = dataAnalysisDefinition.Entity.Settings.ItemsConfig[i];
 
                 addDrillDownTab(dataAnalysisItemDefinitionConfig);
+               
                 addMenuAction(dataAnalysisItemDefinitionConfig, i);
             }
+          addDrillDownObjectTrackingTab();
 
             setDrillDownTabs();
             setMenuActions();
@@ -52,7 +56,7 @@
 
                 drillDownTab.title = dataAnalysisItemDefinitionConfig.Title;
                 drillDownTab.directive = dataAnalysisItemDefinitionConfig.GridDirective;
-
+                
                 drillDownTab.loadDirective = function (dataAnalysisItemDefinitionGridAPI, dataAnalysisDefinition) {
                     dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI = dataAnalysisItemDefinitionGridAPI;
 
@@ -71,6 +75,28 @@
 
                 drillDownTabs.push(drillDownTab);
             }
+
+            function addDrillDownObjectTrackingTab() {
+
+                var drillDownObjectTrackingDefinition = {};
+
+                drillDownObjectTrackingDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                drillDownObjectTrackingDefinition.directive = "vr-common-objecttracking-grid";
+
+                drillDownObjectTrackingDefinition.loadDirective = function (directiveAPI, dataAnalysisDefinition) {
+
+                    dataAnalysisDefinition.objectTrackingGridAPI = directiveAPI;
+                    var query = {
+                        ObjectId: dataAnalysisDefinition.Entity.DataAnalysisDefinitionId,
+                        EntityUniqueName: getEntityUniqueName(),
+
+                    };
+                    return dataAnalysisDefinition.objectTrackingGridAPI.load(query);
+                };
+
+                drillDownTabs.push(drillDownObjectTrackingDefinition);
+            }
+
             function setDrillDownTabs() {
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
                 drillDownManager.setDrillDownExtensionObject(dataAnalysisDefinition);
