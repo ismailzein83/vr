@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BELookupRuleDefinitionGridDirective.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VR_GenericData_BELookupRuleDefinitionService', 'VRNotificationService'];
+    BELookupRuleDefinitionGridDirective.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VR_GenericData_BELookupRuleDefinitionService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function BELookupRuleDefinitionGridDirective(VR_GenericData_BELookupRuleDefinitionAPIService, VR_GenericData_BELookupRuleDefinitionService, VRNotificationService) {
+    function BELookupRuleDefinitionGridDirective(VR_GenericData_BELookupRuleDefinitionAPIService, VR_GenericData_BELookupRuleDefinitionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,7 +25,7 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController()
             {
                 $scope.scopeModel = {};
@@ -34,12 +34,19 @@
                 $scope.scopeModel.onGridReady = function (api)
                 {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_GenericData_BELookupRuleDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady)
                 {
                     return VR_GenericData_BELookupRuleDefinitionAPIService.GetFilteredBELookupRuleDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -60,6 +67,7 @@
 
                 api.onBELookupRuleDefinitionAdded = function (addedBELookupRuleDefinition)
                 {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedBELookupRuleDefinition);
                     gridAPI.itemAdded(addedBELookupRuleDefinition);
                 };
 
@@ -77,6 +85,7 @@
 
                 function editBELookupRuleDefinition(dataItem) {
                     var onBELookupRuleDefinitionUpdated = function (updatedBELookupRuleDefinition) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(updatedBELookupRuleDefinition);
                         gridAPI.itemUpdated(updatedBELookupRuleDefinition);
                     };
                     VR_GenericData_BELookupRuleDefinitionService.editBELookupRuleDefinition(dataItem.Entity.BELookupRuleDefinitionId, onBELookupRuleDefinitionUpdated);

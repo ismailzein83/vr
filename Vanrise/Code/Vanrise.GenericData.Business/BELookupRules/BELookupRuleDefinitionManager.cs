@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
@@ -28,7 +29,7 @@ namespace Vanrise.GenericData.Business
             Func<BELookupRuleDefinition, bool> filterExpression = (itm) =>
                 (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
                 (input.Query.BusinessEntityDefinitionIds == null || input.Query.BusinessEntityDefinitionIds.Contains(itm.BusinessEntityDefinitionId));
-
+            VRActionLogger.Current.LogGetFilteredAction(BELookupRuleDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, BELookupRuleDefinitionDetailMapper));
         }
 
@@ -43,6 +44,14 @@ namespace Vanrise.GenericData.Business
             return cachedEntities.GetRecord(beLookupRuleDefinitionId);
         }
 
+        public string GetBELookupRuleDefinitionName(BELookupRuleDefinition beLookupRuleDefinition)
+        {
+            if (beLookupRuleDefinition!=null)
+                return beLookupRuleDefinition.Name;
+
+
+            return null;
+        }
         public Vanrise.Entities.InsertOperationOutput<BELookupRuleDefinitionDetail> AddBELookupRuleDefinition(BELookupRuleDefinition beLookupRuleDefinition)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BELookupRuleDefinitionDetail>();
@@ -55,6 +64,7 @@ namespace Vanrise.GenericData.Business
 
             if (dataManager.InsertBELookupRuleDefinition(beLookupRuleDefinition))
             {
+                VRActionLogger.Current.TrackAndLogObjectAdded(BELookupRuleDefinitionLoggableEntity.Instance, beLookupRuleDefinition);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = BELookupRuleDefinitionDetailMapper(beLookupRuleDefinition);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -78,6 +88,7 @@ namespace Vanrise.GenericData.Business
 
             if (dataManager.UpdateBELookupRuleDefinition(beLookupRuleDefinition))
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(BELookupRuleDefinitionLoggableEntity.Instance, beLookupRuleDefinition);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = BELookupRuleDefinitionDetailMapper(beLookupRuleDefinition);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -102,6 +113,50 @@ namespace Vanrise.GenericData.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreBELookupRuleDefinitionsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class BELookupRuleDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static BELookupRuleDefinitionLoggableEntity Instance = new BELookupRuleDefinitionLoggableEntity();
+
+            private BELookupRuleDefinitionLoggableEntity()
+            {
+
+            }
+
+            static BELookupRuleDefinitionManager s_beLookupRuleDefinitionManager = new BELookupRuleDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_BELookupRuleDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "BE Lookup Rule Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_BELookupRuleDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                BELookupRuleDefinition beLookupRuleDefinition = context.Object.CastWithValidate<BELookupRuleDefinition>("context.Object");
+                return beLookupRuleDefinition.BELookupRuleDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                BELookupRuleDefinition beLookupRuleDefinition = context.Object.CastWithValidate<BELookupRuleDefinition>("context.Object");
+                return s_beLookupRuleDefinitionManager.GetBELookupRuleDefinitionName(beLookupRuleDefinition);
             }
         }
 

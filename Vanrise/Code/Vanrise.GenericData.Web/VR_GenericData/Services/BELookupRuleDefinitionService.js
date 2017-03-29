@@ -2,10 +2,11 @@
 
     'use strict';
 
-    BELookupRuleDefinitionService.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VRModalService', 'VRNotificationService'];
+    BELookupRuleDefinitionService.$inject = ['VR_GenericData_BELookupRuleDefinitionAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
 
-    function BELookupRuleDefinitionService(VR_GenericData_BELookupRuleDefinitionAPIService, VRModalService, VRNotificationService)
+    function BELookupRuleDefinitionService(VR_GenericData_BELookupRuleDefinitionAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService)
     {
+        var drillDownDefinitions = [];
         var beLookupRuleDefinitionEditorUrl = '/Client/Modules/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionEditor.html';
         var beLookupRuleDefinitionCriteriaFieldEditorUrl = '/Client/Modules/VR_GenericData/Views/BELookupRuleDefinition/BELookupRuleDefinitionCriteriaFieldEditor.html';
 
@@ -67,12 +68,46 @@
 
             VRModalService.showModal(beLookupRuleDefinitionCriteriaFieldEditorUrl, parameters, settings);
         }
+        function getEntityUniqueName() {
+            return "VR_GenericData_BELookupRuleDefinition";
+        }
+
+        function registerObjectTrackingDrillDownToBELookupRuleDefinition() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, beLookupRuleDefinitionItem) {
+                beLookupRuleDefinitionItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: beLookupRuleDefinitionItem.Entity.BELookupRuleDefinitionId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return beLookupRuleDefinitionItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
 
         return {
             addBELookupRuleDefinition: addBELookupRuleDefinition,
             editBELookupRuleDefinition: editBELookupRuleDefinition,
             addBELookupRuleDefinitionCriteriaField: addBELookupRuleDefinitionCriteriaField,
-            editBELookupRuleDefinitionCriteriaField: editBELookupRuleDefinitionCriteriaField
+            editBELookupRuleDefinitionCriteriaField: editBELookupRuleDefinitionCriteriaField,
+            registerObjectTrackingDrillDownToBELookupRuleDefinition: registerObjectTrackingDrillDownToBELookupRuleDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         };
     }
 
