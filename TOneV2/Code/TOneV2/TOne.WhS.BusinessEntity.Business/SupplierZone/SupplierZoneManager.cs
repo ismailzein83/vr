@@ -20,6 +20,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Dictionary<long, SupplierZone> GetCachedSupplierZones()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
+                SupplierZonesCacheExpirationChecker.Instance,
                () =>
                {
                    ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();

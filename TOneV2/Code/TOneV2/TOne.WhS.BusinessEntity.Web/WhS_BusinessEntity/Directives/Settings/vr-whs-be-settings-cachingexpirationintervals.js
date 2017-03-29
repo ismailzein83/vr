@@ -48,12 +48,16 @@ app.directive('vrWhsBeSettingsCachingexpirationintervals', ['UtilsService', 'VRU
                     if (cachingExpirationIntervals != undefined && cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes != undefined)
                         $scope.scopeModel.previousEntitiesIntervalInMinutes = cachingExpirationIntervals.PreviousEntitiesIntervalInMinutes;
 
+                    if (cachingExpirationIntervals != undefined && cachingExpirationIntervals.SupplierZonesIntevalInMinutes != undefined)
+                        $scope.scopeModel.supplierZonesIntevalInMinutes = cachingExpirationIntervals.SupplierZonesIntevalInMinutes;
+
                 };
 
                 api.getData = function () {
                     return {
                         TodayEntitiesIntervalInMinutes: $scope.scopeModel.todayEntitiesIntervalInMinutes,
-                        PreviousEntitiesIntervalInMinutes: $scope.scopeModel.previousEntitiesIntervalInMinutes
+                        PreviousEntitiesIntervalInMinutes: $scope.scopeModel.previousEntitiesIntervalInMinutes,
+                        SupplierZonesIntevalInMinutes: $scope.scopeModel.supplierZonesIntevalInMinutes
                     };
                 };
 

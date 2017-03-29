@@ -24,7 +24,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (dayFilterCacheName != null && dayFilterCacheName.FilterDay == DateTime.Today)
             {
                 if (!cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.HasValue)
+                {
+                    context.NeverExpires = true;
                     return false;
+                }
                 return IsCacheExpired(context, cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.Value);
             }
             else
@@ -45,4 +48,33 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         DateTime FilterDay { get; }
     }
+
+
+    public class SupplierZonesCacheExpirationChecker : CacheExpirationChecker
+    {
+        static SupplierZonesCacheExpirationChecker s_instance = new SupplierZonesCacheExpirationChecker();
+        public static SupplierZonesCacheExpirationChecker Instance
+        {
+            get
+            {
+                return s_instance;
+            }
+        }
+
+        
+
+        public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
+        {
+            ConfigManager configManager = new ConfigManager();
+            CachingExpirationIntervals cachingExpirationIntervals = configManager.GetCachingExpirationIntervals();
+            if (cachingExpirationIntervals != null && cachingExpirationIntervals.SupplierZonesIntevalInMinutes.HasValue)
+                return new SlidingWindowCacheExpirationChecker(TimeSpan.FromMinutes(cachingExpirationIntervals.SupplierZonesIntevalInMinutes.Value)).IsCacheExpired(context);
+            else
+            {
+                context.NeverExpires = true;
+                return false;
+            }
+        }
+    }
+
 }
