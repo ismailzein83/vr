@@ -247,7 +247,7 @@ namespace Vanrise.GenericData.Business
 
             public override string EntityDisplayName
             {
-                get { return "Generic  Rule Definition"; }
+                get { return "Generic Rule Definition"; }
             }
 
             public override string ViewHistoryItemClientActionName

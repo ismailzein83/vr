@@ -24,6 +24,7 @@ namespace Vanrise.GenericData.Business
 
             Func<BusinessEntityDefinition, bool> filterExpression = (dataRecordStorage) =>
                 (input.Query.Name == null || dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(BusinessEntityDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedBEDefinitions.ToBigResult(input, filterExpression, BusinessEntityDefinitionDetailMapper));
         }
 
@@ -124,8 +125,9 @@ namespace Vanrise.GenericData.Business
 
             if (updateActionSucc)
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(BusinessEntityDefinitionLoggableEntity.Instance, businessEntityDefinition);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
             }
             return updateOperationOutput;
@@ -141,6 +143,7 @@ namespace Vanrise.GenericData.Business
             bool insertActionSucc = dataManager.AddBusinessEntityDefinition(businessEntityDefinition);
             if (insertActionSucc)
             {
+                VRActionLogger.Current.TrackAndLogObjectAdded(BusinessEntityDefinitionLoggableEntity.Instance, businessEntityDefinition);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
 
                 insertOperationOutput.InsertedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
@@ -211,6 +214,50 @@ namespace Vanrise.GenericData.Business
                     return false;
             }
             return true;
+        }
+
+        private class BusinessEntityDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static BusinessEntityDefinitionLoggableEntity Instance = new BusinessEntityDefinitionLoggableEntity();
+
+            private BusinessEntityDefinitionLoggableEntity()
+            {
+
+            }
+
+            static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_BusinessEntityDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Business Entity Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_BusinessEntityDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                BusinessEntityDefinition businessEntityDefinition = context.Object.CastWithValidate<BusinessEntityDefinition>("context.Object");
+                return businessEntityDefinition.BusinessEntityDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                BusinessEntityDefinition businessEntityDefinition = context.Object.CastWithValidate<BusinessEntityDefinition>("context.Object");
+                return s_businessEntityDefinitionManager.GetBusinessEntityDefinitionName(businessEntityDefinition.BusinessEntityDefinitionId);
+            }
         }
 
         #endregion

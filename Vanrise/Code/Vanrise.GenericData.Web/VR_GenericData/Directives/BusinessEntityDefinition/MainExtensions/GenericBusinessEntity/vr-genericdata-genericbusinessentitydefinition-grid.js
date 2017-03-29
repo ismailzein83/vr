@@ -42,31 +42,8 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
 
                 $scope.businessEntityDefinitions = [];
 
-                $scope.isExpandable = function (dataItem) {
-                    if (dataItem.IsExtensible)
-                        return true;
-                    return false
-                };
-
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-
-                    var drillDownDefinitions = [];
-                    var drillDownDefinition = {};
-
-                    drillDownDefinition.title = "Extensible Types";
-                    drillDownDefinition.directive = "vr-genericdata-extensiblebeitem-grid";
-
-                    drillDownDefinition.loadDirective = function (directiveAPI, extensibleBEItem) {
-                        extensibleBEItem.genericEditorGridAPI = directiveAPI;
-                        var payload = {
-                                BusinessEntityDefinitionId: extensibleBEItem.Entity.BusinessEntityDefinitionId
-                        };
-                        return extensibleBEItem.genericEditorGridAPI.loadGrid(payload);
-                    };
-                    drillDownDefinitions.push(drillDownDefinition);
-                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
@@ -77,7 +54,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                             return gridAPI.retrieveData(query);
                         };
                         directiveAPI.onGenericBusinessEntityDefinitionAdded = function (genericBusinessEntityDefinitionObj) {
-                            gridDrillDownTabsObj.setDrillDownExtensionObject(genericBusinessEntityDefinitionObj);
+                            VR_GenericData_BusinessEntityDefinitionService.defineBEDefinitionTabs(genericBusinessEntityDefinitionObj,gridAPI);
                             gridAPI.itemAdded(genericBusinessEntityDefinitionObj);
                         };
                         return directiveAPI;
@@ -89,10 +66,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
                         .then(function (response) {
                             if (response && response.Data) {
                                 for (var i = 0; i < response.Data.length; i++) {
-                                    if (response.Data[i].IsExtensible) {
-                                        gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
-                                   }
-                                    
+                                    VR_GenericData_BusinessEntityDefinitionService.defineBEDefinitionTabs(response.Data[i], gridAPI);
                                 }
                             }
                             onResponseReady(response);
@@ -139,7 +113,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
             function addExtendedSettings(dataItem) {
                 gridAPI.expandRow(dataItem);
                 var onExtendedSettingsAdded = function (extendedSettingsObj) {
-                    gridDrillDownTabsObj.setDrillDownExtensionObject(extendedSettingsObj);
+                    VR_GenericData_BusinessEntityDefinitionService.defineBEDefinitionTabs(extendedSettingsObj, gridAPI);
                     dataItem.genericEditorGridAPI.onExtensibleBEItemAdded(extendedSettingsObj);
                 };
 
@@ -149,6 +123,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
             function editBusinessEntityDefinition(dataItem)
             {
                 var onBusinessEntityDefinitionUpdated = function (businessEntityDefinition) {
+                    VR_GenericData_BusinessEntityDefinitionService.defineBEDefinitionTabs(businessEntityDefinition,gridAPI);
                     gridAPI.itemUpdated(businessEntityDefinition);
                 };
 
