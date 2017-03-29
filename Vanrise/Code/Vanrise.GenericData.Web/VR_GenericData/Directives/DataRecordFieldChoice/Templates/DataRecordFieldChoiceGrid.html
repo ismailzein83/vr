@@ -7,5 +7,8 @@
 
     <vr-datagridcolumn headertext="'ID'" field="'Entity.DataRecordFieldChoiceId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>
 

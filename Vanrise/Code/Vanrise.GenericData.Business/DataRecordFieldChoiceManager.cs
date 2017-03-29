@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.Caching;
+using Vanrise.Common.Business;
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordFieldChoiceManager
@@ -24,13 +25,23 @@ namespace Vanrise.GenericData.Business
         {
             var cachedDataRecordFieldChoice = GetCachedDataRecordFieldChoices();
             Func<DataRecordFieldChoice, bool> filterExpression = (dataRecordFieldChoice) => (input.Query.Name == null || dataRecordFieldChoice.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            VRActionLogger.Current.LogGetFilteredAction(DataRecordFieldChoiceLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataRecordFieldChoice.ToBigResult(input, filterExpression, DataRecordFieldChoiceDetailMapper));
+
         }
 
         public DataRecordFieldChoice GeDataRecordFieldChoice(int dataRecordFieldChoiceId)
         {
             var cachedDataRecordFieldChoice = GetCachedDataRecordFieldChoices();
             return cachedDataRecordFieldChoice.FindRecord((dataRecordFieldChoice) => dataRecordFieldChoice.DataRecordFieldChoiceId == dataRecordFieldChoiceId);
+        }
+
+        public string GetDataRecordFieldChoiceName(DataRecordFieldChoice dataRecordFieldChoice)
+        {
+            if (dataRecordFieldChoice != null)
+                return dataRecordFieldChoice.Name;
+
+            return null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<DataRecordFieldChoiceDetail> AddDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice)
@@ -46,8 +57,9 @@ namespace Vanrise.GenericData.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 dataRecordFieldChoice.DataRecordFieldChoiceId = dataRecordFieldChoiceId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(DataRecordFieldChoiceLoggableEntity.Instance, dataRecordFieldChoice);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataRecordFieldChoiceDetailMapper(dataRecordFieldChoice);
 
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -72,6 +84,7 @@ namespace Vanrise.GenericData.Business
 
             if (updateActionSucc)
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DataRecordFieldChoiceLoggableEntity.Instance, dataRecordFieldChoice);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.UpdatedObject = DataRecordFieldChoiceDetailMapper(dataRecordFieldChoice);
@@ -111,6 +124,50 @@ namespace Vanrise.GenericData.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreDataRecordFieldChoicesUpdated(ref _updateHandle);
+            }
+        }
+
+        private class DataRecordFieldChoiceLoggableEntity : VRLoggableEntityBase
+        {
+            public static DataRecordFieldChoiceLoggableEntity Instance = new DataRecordFieldChoiceLoggableEntity();
+
+            private DataRecordFieldChoiceLoggableEntity()
+            {
+
+            }
+
+            static DataRecordFieldChoiceManager s_dataRecordFieldChoiceManager = new DataRecordFieldChoiceManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_GenericData_DataRecordFieldChoice"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Generic Data"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Data Record Field Choice"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_GenericData_DataRecordFieldChoice_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DataRecordFieldChoice dataRecordFieldChoice = context.Object.CastWithValidate<DataRecordFieldChoice>("context.Object");
+                return dataRecordFieldChoice.DataRecordFieldChoiceId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DataRecordFieldChoice dataRecordFieldChoice = context.Object.CastWithValidate<DataRecordFieldChoice>("context.Object");
+                return s_dataRecordFieldChoiceManager.GetDataRecordFieldChoiceName(dataRecordFieldChoice);
             }
         }
 

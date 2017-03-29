@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldChoiceAPIService", "VR_GenericData_DataRecordFieldChoiceService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldChoiceAPIService, VR_GenericData_DataRecordFieldChoiceService) {
+app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldChoiceAPIService", "VR_GenericData_DataRecordFieldChoiceService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldChoiceAPIService, VR_GenericData_DataRecordFieldChoiceService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -29,12 +29,15 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.dataRecordFieldChoice = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_GenericData_DataRecordFieldChoiceService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -44,6 +47,7 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
                             return gridAPI.retrieveData(query);
                         };
                         directiveAPI.onDataRecordFieldChoiceAdded = function (onDataRecordFieldChoiceObj) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(onDataRecordFieldChoiceObj);
                             gridAPI.itemAdded(onDataRecordFieldChoiceObj);
                         };
                         return directiveAPI;
@@ -54,6 +58,9 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
                     return VR_GenericData_DataRecordFieldChoiceAPIService.GetFilteredDataRecordFieldChoices(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
                             }
                             onResponseReady(response);
                         })
@@ -84,6 +91,7 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
             };
             function editDataRecordFieldChoice(dataItem) {
                 var onDataRecordFieldChoiceUpdated = function (dataRecordFieldChoiceObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(dataRecordFieldChoiceObj);
                     gridAPI.itemUpdated(dataRecordFieldChoiceObj);
                 };
                 VR_GenericData_DataRecordFieldChoiceService.editDataRecordFieldChoice(dataItem.Entity.DataRecordFieldChoiceId, onDataRecordFieldChoiceUpdated);
