@@ -78,6 +78,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\RazorEngine.dll</HintPath>
     </Reference>
+    <Reference Include="Retail.Ringo.Entities">
+      <HintPath>..\..\..\Retail\Code\Output\Retail.Ringo.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -305,6 +308,18 @@
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj">
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CP.Ringo.Business\CP.Ringo.Business.csproj">
+      <Project>{2689b7ef-655c-428e-aaa6-3a15085527d6}</Project>
+      <Name>CP.Ringo.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CP.Ringo.Entities\CP.Ringo.Entities.csproj">
+      <Project>{8c92a372-4b12-498c-a564-42134d532ad1}</Project>
+      <Name>CP.Ringo.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CP.Ringo.Web\CP.Ringo.Web.csproj">
+      <Project>{59731632-b739-420f-bf4c-9d94ff37eb21}</Project>
+      <Name>CP.Ringo.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\CP.SupplierPricelist.Business\CP.SupplierPricelist.Business.csproj">
       <Project>{07c7ef2d-23b5-4eb1-be56-bc5232ca7d72}</Project>

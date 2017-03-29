@@ -1,0 +1,8 @@
+﻿<vr-datagrid datasource="scopeModel.agentNumbers"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions">
+    <vr-datagridcolumn headertext="'Number'" field="'Entity.Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'"></vr-datagridcolumn>
+</vr-datagrid>

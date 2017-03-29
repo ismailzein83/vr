@@ -1,0 +1,22 @@
+﻿<vr-panel ng-controller="CP_Ringo_AgentNumbersManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" formname="formFilter" data-onclick="addNumbers"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <cp-ringo-agentnumbers-grid on-ready="onGridReady"></cp-ringo-agentnumbers-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
