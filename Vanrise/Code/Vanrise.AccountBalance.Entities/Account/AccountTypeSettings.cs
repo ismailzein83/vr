@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Notification.Entities;
 using Vanrise.Security.Entities;
 
@@ -68,7 +69,7 @@ namespace Vanrise.AccountBalance.Entities
         public Guid SourceId { get; set; }
         public string FieldName { get; set; }
         public string Title { get; set; }
-        public int? FieldColor { get; set; }
+        public GridColCSSClassValue? GridColCSSValue { get; set; }
     }
     public class AccountBalanceFieldSource
     {

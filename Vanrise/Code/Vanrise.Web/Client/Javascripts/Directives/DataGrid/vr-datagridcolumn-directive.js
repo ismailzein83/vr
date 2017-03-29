@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
+app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsService', function ($parse, VR_GridColCSSClassEnum, UtilsService) {
     return {
         restrict: 'E',
         require: '^vrDatagrid',
@@ -28,8 +28,14 @@ app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
                             tag: gridColumnAttribute.Tag,
 
                         };
+                        if (gridColumnAttribute.GridColCSSClassValue != undefined)
+                        {
+                            var cssClassObject = UtilsService.getEnum(VR_GridColCSSClassEnum, "value", gridColumnAttribute.GridColCSSClassValue);
+                            if (cssClassObject != undefined)
+                                col.cssclass = cssClassObject.cssClass;
+                        }
+                        
                     }
-
                     if (iAttrs.headertext != undefined)
                         col.headerText = $scope.$eval(iAttrs.headertext);
                     if (iAttrs.disablesorting != undefined)
@@ -79,10 +85,8 @@ app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
                     if (iAttrs.getcolor != undefined)
                         col.getcolor = $scope.$eval(iAttrs.getcolor);
                     col.cellTemplate = cellTemplate;
-
                     if (iAttrs.cssclass != undefined)
                         col.cssclass = $scope.$eval(iAttrs.cssclass);
-
 
 
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;

@@ -61,7 +61,6 @@
     <Compile Include="Account\AccountType.cs" />
     <Compile Include="Account\AccountTypeExtendedSettingsConfig.cs" />
     <Compile Include="Account\AccountTypeFilter.cs" />
-    <Compile Include="Account\AccountTypeGridFieldColumnAttribute.cs" />
     <Compile Include="Account\AccountTypeInfoFilter.cs" />
     <Compile Include="Account\AccountTypeInfo.cs" />
     <Compile Include="Account\AccountTypeSettings.cs" />

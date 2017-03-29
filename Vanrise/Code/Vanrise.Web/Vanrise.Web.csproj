@@ -196,6 +196,7 @@
     <Content Include="Client\Images\true.png" />
     <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeOrientationEnum.js" />
     <Content Include="Client\Javascripts\Constants\DataGridRetrieveDataEventType.js" />
+    <Content Include="Client\Javascripts\Constants\GridColCSSClassEnum.js" />
     <Content Include="Client\Javascripts\Constants\HttpStatusCodeEnum.js" />
     <Content Include="Client\Javascripts\Constants\AuthenticateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeEnum.js" />

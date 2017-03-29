@@ -156,7 +156,6 @@
     <Folder Include="VR_AccountBalance\Views\BalanceAlertRule\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="VR_AccountBalance\Constants\AccountBalanceGridFieldColorEnum.js" />
     <Content Include="VR_AccountBalance\Constants\BalanceOrderByEnum.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notifications-grid.js" />

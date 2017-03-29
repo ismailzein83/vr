@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountTypeGridColumnEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_AccountBalance_AccountBalanceGridFieldColorEnum'];
+    AccountTypeGridColumnEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function AccountTypeGridColumnEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountBalance_AccountBalanceGridFieldColorEnum) {
+    function AccountTypeGridColumnEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var context;
         var gridColumnEntity;
@@ -13,6 +13,9 @@
 
         var sourceSelectorAPI;
         var sourceSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var gridColCSSClassSelectorAPI;
+        var gridColCSSClassSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sourceFieldsSelectorAPI;
         var sourceFieldsSelectorReadyPromiseDeferred;
@@ -32,10 +35,13 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.fieldColors = UtilsService.getArrayEnum(VR_AccountBalance_AccountBalanceGridFieldColorEnum);
             $scope.scopeModel.onSourcesSelectorReady = function (api) {
                 sourceSelectorAPI = api;
                 sourceSelectorReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onGridColCSSClassSelectorReady = function (api) {
+                gridColCSSClassSelectorAPI = api;
+                gridColCSSClassSelectorReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onSourceFieldsSelectorReady = function (api) {
                 sourceFieldsSelectorAPI = api;
@@ -64,7 +70,7 @@
                     Title: $scope.scopeModel.title,
                     SourceId: sourceSelectorAPI.getSelectedIds(),
                     FieldName: sourceFieldsSelectorAPI.getSelectedIds(),
-                    FieldColor: $scope.scopeModel.selectedFieldColor !=  undefined ? $scope.scopeModel.selectedFieldColor.value : undefined
+                    GridColCSSValue: gridColCSSClassSelectorAPI.getSelectedIds()
                 };
             }
 
@@ -97,7 +103,6 @@
                 function loadStaticData() {
                     if (gridColumnEntity != undefined) {
                         $scope.scopeModel.title = gridColumnEntity.Title;
-                        $scope.scopeModel.selectedFieldColor = UtilsService.getItemByVal($scope.scopeModel.fieldColors, gridColumnEntity.FieldColor, "value");
                     }
                 }
                 function loadSourcesSelectorDirective() {
@@ -109,6 +114,18 @@
                         VRUIUtilsService.callDirectiveLoad(sourceSelectorAPI, sourcesSelectorPayload, sourcesSelectorLoadPromiseDeferred);
                     });
                     return sourcesSelectorLoadPromiseDeferred.promise;
+                }
+                function loadGridColCSSClassSelectorDirective() {
+                    var gridColCSSClassSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    gridColCSSClassSelectorReadyPromiseDeferred.promise.then(function () {
+                        var gridColCSSClassSelectorPayload;
+                        if (gridColumnEntity != undefined)
+                            gridColCSSClassSelectorPayload = {
+                                selectedIds: gridColumnEntity.GridColCSSValue
+                            };
+                        VRUIUtilsService.callDirectiveLoad(gridColCSSClassSelectorAPI, gridColCSSClassSelectorPayload, gridColCSSClassSelectorLoadPromiseDeferred);
+                    });
+                    return gridColCSSClassSelectorLoadPromiseDeferred.promise;
                 }
                 function loadSourceFieldSelectorDirective() {
                     if (gridColumnEntity != undefined)
@@ -126,7 +143,7 @@
                         return sourceFieldsSelectorLoadPromiseDeferred.promise;
                     }
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSourcesSelectorDirective, loadSourceFieldSelectorDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSourcesSelectorDirective, loadSourceFieldSelectorDirective, loadGridColCSSClassSelectorDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

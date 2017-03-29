@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
+    public enum GridColCSSClassValue { Green = 0, Yellow = 1, Blue = 2, Red = 3 }
     public class GridColumnAttribute
     {
         public string Type { get; set; }
@@ -19,5 +20,6 @@ namespace Vanrise.Entities
         public string Tag { get; set; }
         public bool? DisableSorting { get; set; }
         public string NumberPrecision { get; set; }
+        public GridColCSSClassValue? GridColCSSClassValue { get; set; }
     }
 }
