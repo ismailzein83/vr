@@ -221,6 +221,7 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_RunSchedulerTask.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetFirstPage.sql" />
     <Build Include="VRNotification\Functions\ParseStringList.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRNotification_GetNotCleared.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
