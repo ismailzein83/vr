@@ -1901,6 +1901,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     background-color: #ddd !important;
     cursor: pointer !important;
 }
+.vr-datagrid-datacells:hover .vr-datagrid-cell-container {
+    background-color: inherit !important;
+}
 
 .vr-datagrid-datacells-click {
     background-color: #ddd !important;

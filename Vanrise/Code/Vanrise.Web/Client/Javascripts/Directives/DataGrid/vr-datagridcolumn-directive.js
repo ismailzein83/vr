@@ -80,6 +80,8 @@ app.directive('vrDatagridcolumn', ['$parse', function ($parse) {
                         col.getcolor = $scope.$eval(iAttrs.getcolor);
                     col.cellTemplate = cellTemplate;
 
+                    if (iAttrs.cssclass != undefined)
+                        col.cssclass = $scope.$eval(iAttrs.cssclass);
 
 
 

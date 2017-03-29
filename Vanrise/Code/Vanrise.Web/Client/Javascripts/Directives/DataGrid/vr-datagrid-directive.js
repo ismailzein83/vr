@@ -211,6 +211,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     expendableColumnDescription: col.expendableColumnDescription,
                     fixedWidth: col.fixedWidth,
                     invisibleHeader: col.invisibleheader,
+                    cssClass: col.cssclass
 
 
                 };
@@ -601,7 +602,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     else
                         return dataItem.CssClass;
                 };
+                ctrl.getCellContainerClass = function (dataItem, colDef) {
+                    if (getRowCSSClass(dataItem) != undefined)
+                        return;
+                    return colDef.cssClass;
 
+                };
                 function getRowCSSClass(dataItem) {
                     if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
                         var object = ctrl.getrowstyle(dataItem);
@@ -653,7 +659,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
                     var dataItemColumnPropertyPath = "dataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
 
-                    ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-flex\', \'vertical-align\':\'top\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"">';
+                    ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.width, \'display\':\'inline-flex\', \'vertical-align\':\'top\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"" ng-class="ctrl.getCellContainerClass(dataItem, ' + currentColumnHtml + ')" class="vr-datagrid-cell-container">';
                     if (currentColumn.type == "MultiProgress") {
                         var values = currentColumn.field.split("|");
                         ctrl.rowHtml += '<vr-progressbar gridvalue="';
