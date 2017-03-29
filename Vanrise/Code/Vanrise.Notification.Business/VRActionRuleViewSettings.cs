@@ -7,7 +7,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Notification.Business
 {
-    public class VRActionRuleViewSettings : ViewSettings
+    public class VRAlertRuleViewSettings : ViewSettings
     {
         public override bool DoesUserHaveAccess(IViewUserAccessContext context)
         {
