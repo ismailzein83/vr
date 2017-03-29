@@ -19,5 +19,10 @@ namespace Vanrise.Common.MainExtensions.VRObjectTypes
 
             return productInfo;
         }
+
+        public override object CreateObject(IVRObjectTypeCreateObjectContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

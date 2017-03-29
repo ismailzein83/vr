@@ -17,11 +17,13 @@
 
 <vr-row>
     <vr-columns colnum="12" ng-if="scopeModel.selectedMailMessageType!=undefined && scopeModel.selectedDataRecordType!=undefined">
-        <vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.objectVariables" hidegridmenu>
-            <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Record Field'" widthfactor="5" disablesorting>
-                <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordFieldSelectorReady" hidelabel></vr-genericdata-datarecordtypefields-selector>
-            </vr-datagridcolumn>
-        </vr-datagrid>
+        <vr-validator validate="scopeModel.validateGrid()">
+            <vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.objectVariables" hidegridmenu>
+                <vr-datagridcolumn headertext="'Object Name'" type="'Text'" field="'ObjectName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Record Field'" widthfactor="5" disablesorting>
+                    <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordFieldSelectorReady" hidelabel></vr-genericdata-datarecordtypefields-selector>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
     </vr-columns>
 </vr-row>

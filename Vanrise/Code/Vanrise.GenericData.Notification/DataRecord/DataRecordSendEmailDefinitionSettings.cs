@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.GenericData.Notification
@@ -13,6 +14,10 @@ namespace Vanrise.GenericData.Notification
 
         public Guid MailMessageTypeId { get; set; }
 
+        public string DataRecordObjectName { get; set; }
+
+        public List<ObjectFieldMapping> ObjectFieldMappings { get; set; }
+
         public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)
         {
             DataRecordActionTargetType dataRecordActionTargetType = context.Target as DataRecordActionTargetType;
@@ -22,7 +27,28 @@ namespace Vanrise.GenericData.Notification
             if (dataRecordActionTargetType.DataRecordTypeId != DataRecordTypeId)
                 return false;
 
+            if (ObjectFieldMappings != null && ObjectFieldMappings.Count > 0)
+            {
+                if (dataRecordActionTargetType.AvailableDataRecordFieldNames == null || dataRecordActionTargetType.AvailableDataRecordFieldNames.Count == 0)
+                    return false;
+
+                foreach (ObjectFieldMapping objectFieldMapping in ObjectFieldMappings)
+                {
+                    if (!dataRecordActionTargetType.AvailableDataRecordFieldNames.Contains(objectFieldMapping.DataRecordFieldName))
+                        return false;
+                }
+            }
+
             return true;
         }
+    }
+
+    public class ObjectFieldMapping
+    {
+        public string ObjectName { get; set; }
+
+        public Guid VRObjectTypeDefinitionId { get; set; }
+
+        public string DataRecordFieldName { get; set; }
     }
 }

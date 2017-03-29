@@ -76,6 +76,20 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                     }
                 };
 
+                $scope.scopeModel.validateGrid = function () {
+                    if ($scope.scopeModel.selectDataRecordObjectType == undefined)
+                        return;
+
+                    for (var x = 0; x < $scope.scopeModel.objectVariables.length; x++) {
+                        var currentObjectVariable = $scope.scopeModel.objectVariables[x];
+                        var currentDataRecordField = currentObjectVariable.dataRecordFieldSelectorAPI != undefined ? currentObjectVariable.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+                        if (currentDataRecordField != undefined && $scope.scopeModel.selectDataRecordObjectType.ObjectName == currentObjectVariable.ObjectName) {
+                            return 'invalid mapping';
+                        }
+                    }
+                    return;
+                };
+
                 function getMailMessageTypePromise() {
                     if (selectedMailMessageTypeId == undefined || selectedDataRecordTypeId == undefined)
                         return;
@@ -152,11 +166,20 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                                 for (prop in objects) {
                                     if (prop != '$type') {
                                         var obj = objects[prop];
+                                        if (extendedSettings.DataRecordObjectName != undefined && extendedSettings.DataRecordObjectName == obj.ObjectName) {
+                                            $scope.scopeModel.selectDataRecordObjectType = { ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId };
+                                        }
                                         $scope.scopeModel.objectTypeDefinitions.push({ ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId });
 
                                         var objectVariable = { ObjectName: obj.ObjectName, VRObjectTypeDefinitionId: obj.VRObjectTypeDefinitionId };
                                         $scope.scopeModel.objectVariables.push(objectVariable);
-                                        promises.push(extendObjectVariableItemObject(objectVariable, undefined));
+
+                                        var selectedObjectVariable;
+                                        if (extendedSettings.ObjectFieldMappings != undefined) {
+                                            selectedObjectVariable = UtilsService.getItemByVal(extendedSettings.ObjectFieldMappings, obj.ObjectName, "ObjectName");
+                                        }
+
+                                        promises.push(extendObjectVariableItemObject(objectVariable, selectedObjectVariable));
                                     }
                                 }
                             });
@@ -170,7 +193,9 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                     return {
                         $type: 'Vanrise.GenericData.Notification.DataRecordSendEmailDefinitionSettings, Vanrise.GenericData.Notification',
                         DataRecordTypeId: dataRecordTypeAPI.getSelectedIds(),
-                        MailMessageTypeId: mailMessageTypeAPI.getSelectedIds()
+                        MailMessageTypeId: mailMessageTypeAPI.getSelectedIds(),
+                        DataRecordObjectName: $scope.scopeModel.selectDataRecordObjectType != undefined ? $scope.scopeModel.selectDataRecordObjectType.ObjectName : undefined,
+                        ObjectFieldMappings: buildObjectFieldMappings()
                     };
                 };
 
@@ -194,6 +219,22 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                     VRUIUtilsService.callDirectiveLoad(objectVariable.dataRecordFieldSelectorAPI, dataRecordFieldPayload, objectVariable.dataRecordFieldSelectorLoadDeferred);
                 };
                 return objectVariable.dataRecordFieldSelectorLoadDeferred.promise;
+            };
+
+            function buildObjectFieldMappings() {
+                var objectFieldMappings = [];
+                for (var x = 0; x < $scope.scopeModel.objectVariables.length; x++) {
+                    var currentObjectVariable = $scope.scopeModel.objectVariables[x];
+                    var currentDataRecordField = currentObjectVariable.dataRecordFieldSelectorAPI.getSelectedIds();
+                    if (currentDataRecordField != undefined) {
+                        objectFieldMappings.push({
+                            ObjectName: currentObjectVariable.ObjectName,
+                            VRObjectTypeDefinitionId: currentObjectVariable.VRObjectTypeDefinitionId,
+                            DataRecordFieldName: currentDataRecordField
+                        });
+                    }
+                }
+                return objectFieldMappings;
             };
         }
     }]);

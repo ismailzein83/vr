@@ -22,7 +22,7 @@
         };
         function DAProfCalcAlertRuleCriteria($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var selectedOutputFields = [];
             var daProfCalcOutputItemDefinitionId;
             var dataAnalysisItemOutputFields;
 
@@ -35,6 +35,8 @@
 
             var groupingOutputFiledsAPI;
             var groupingOutputFiledsReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var dataAnalysisItemObj;
 
             function initializeController() {
                 var promises = [dataAnalysisItemDefinitionSelectoReadyDeferred.promise, dataAnalysisRecordFilterDirectiveReadyDeferred.promise, groupingOutputFiledsReadyDeferred.promise];
@@ -55,7 +57,7 @@
                 };
 
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (selectedItem) {
-
+                    dataAnalysisItemObj = selectedItem;
                     if (selectedItem != undefined) {
                         $scope.scopeModel.isDataAnalysisItemDefinitionSelected = true;
 
@@ -64,7 +66,7 @@
                         }
                         else {
                             if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
-                                ctrl.onCriteriaSelectionChanged(selectedItem);
+                                ctrl.onCriteriaSelectionChanged(selectedItem, undefined);
                             }
 
                             getGroupingOutputFieldsPromise();
@@ -80,6 +82,20 @@
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupingOutputFiledsAPI, groupingOutputFieldsPayload, setLoader, undefined);
                             };
                         }
+                    }
+                };
+
+                $scope.scopeModel.onSelectDataAnalysisItemOutputFields = function (selectedItem) {
+                    if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
+                        selectedOutputFields.push(selectedItem.Name);
+                        ctrl.onCriteriaSelectionChanged(dataAnalysisItemObj, selectedOutputFields);
+                    }
+                };
+
+                $scope.scopeModel.onDeselectDataAnalysisItemOutputFields = function (deselectedItem) {
+                    if (ctrl.onCriteriaSelectionChanged != undefined && typeof (ctrl.onCriteriaSelectionChanged) == 'function') {
+                        selectedOutputFields.splice(selectedOutputFields.indexOf(deselectedItem.Name), 1);
+                        ctrl.onCriteriaSelectionChanged(dataAnalysisItemObj, selectedOutputFields);
                     }
                 };
 
@@ -105,6 +121,12 @@
                         if (criteria != undefined) {
                             daProfCalcOutputItemDefinitionId = criteria.DAProfCalcOutputItemDefinitionId;
                             $scope.scopeModel.minNotificationInterval = criteria.MinNotificationInterval;
+
+                            if (criteria.GroupingFieldNames != undefined) {
+                                for (var x = 0; x < criteria.GroupingFieldNames.length; x++) {
+                                    selectedOutputFields.push(criteria.GroupingFieldNames[x]);
+                                }
+                            }
                         }
                         else {
                             $scope.scopeModel.minNotificationInterval = '0.01:00:00';
@@ -132,7 +154,7 @@
 
                             var dataAnalysisRecordFilterDirectivePayload = {
                                 context: buildRecordFilterContext(response),
-                                criteria: criteria != undefined ? criteria.DataAnalysisFilterGroup: undefined
+                                criteria: criteria != undefined ? criteria.DataAnalysisFilterGroup : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(dataAnalysisRecordFilterDirectiveAPI, dataAnalysisRecordFilterDirectivePayload, dataAnalysisRecordFilterDirectiveLoadDeferred);
                         });

@@ -14,5 +14,11 @@ namespace Vanrise.Entities
         {
             return null;
         }
+        public abstract object CreateObject(IVRObjectTypeCreateObjectContext context);
+    }
+
+    public interface IVRObjectTypeCreateObjectContext
+    {
+        dynamic ObjectId { get; }
     }
 }

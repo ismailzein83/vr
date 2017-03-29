@@ -1,7 +1,7 @@
 ﻿
 'use strict';
 
-app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_DAProfCalcOutputSettingsAPIService','VR_Analytic_DAProfCalcNotificationAPIService',
+app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_DAProfCalcOutputSettingsAPIService', 'VR_Analytic_DAProfCalcNotificationAPIService',
     function (UtilsService, VRUIUtilsService, VR_Analytic_DAProfCalcOutputSettingsAPIService, VR_Analytic_DAProfCalcNotificationAPIService) {
 
         return {
@@ -49,7 +49,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     dataRecordAlertRuleSettingReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onCriteriaSelectionChanged = function (daProfCalcOutputItemDefinition) {
+                $scope.scopeModel.onCriteriaSelectionChanged = function (daProfCalcOutputItemDefinition, selectedGroupingFields) {
                     $scope.scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading = true;
 
                     analysisTypeId = $scope.scopeModel.selectedAnalysisTypeId = daProfCalcOutputItemDefinition.DataAnalysisItemDefinitionId;
@@ -61,7 +61,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                             var dataRecordAlertRuleSettingsPayload = {
                                 settings: undefined,
-                                context: buildContext()
+                                context: buildContext(selectedGroupingFields)
                             };
                             var setLoader = function (value) {
                                 $scope.scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading = value;
@@ -150,9 +150,20 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                         dataRecordAlertRuleSettingReadyDeferred.promise.then(function () {
 
+                            var payloadSettings;
+                            var payloadContext;
+
+                            if (alertExtendedSettings != undefined) {
+                                payloadSettings = alertExtendedSettings.Settings;
+                                payloadContext = buildContext(alertExtendedSettings.GroupingFieldNames);
+                            }
+                            else {
+                                payloadContext = buildContext(undefined);
+                            }
+
                             var dataRecordAlertRuleSettingsPayload = {
-                                settings: alertExtendedSettings != undefined ? alertExtendedSettings.Settings : undefined,
-                                context: buildContext()
+                                settings: payloadSettings,
+                                context: payloadContext
                             };
                             VRUIUtilsService.callDirectiveLoad(dataRecordAlertRuleSettingsAPI, dataRecordAlertRuleSettingsPayload, dataRecordAlertRuleSettingsLoadDeferred);
                         });
@@ -161,10 +172,10 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 return dataRecordAlertRuleSettingsLoadDeferred.promise;
             };
 
-            function buildContext() {
+            function buildContext(groupingFields) {
                 return {
                     recordfields: buildRecordFields(outputFields),
-                    vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId),
+                    vrActionTargetType: buildDAProfCalcTargetType(analysisTypeId, groupingFields),
                     notificationTypeId: notificationTypeId
                 };
             };
@@ -182,10 +193,11 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 return recordFields;
             };
 
-            function buildDAProfCalcTargetType(selectedAnalysisTypeId) {
+            function buildDAProfCalcTargetType(selectedAnalysisTypeId, groupingFields) {
                 return {
                     $type: "Vanrise.Analytic.Business.DAProfCalcActionTargetType, Vanrise.Analytic.Business",
-                    DataAnalysisItemDefinitionId: selectedAnalysisTypeId
+                    DataAnalysisItemDefinitionId: selectedAnalysisTypeId,
+                    AvailableDataRecordFieldNames: groupingFields
                 };
             };
         }

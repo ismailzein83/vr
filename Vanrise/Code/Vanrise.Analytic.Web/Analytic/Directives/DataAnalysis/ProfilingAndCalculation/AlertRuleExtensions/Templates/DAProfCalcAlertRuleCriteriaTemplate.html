@@ -18,8 +18,8 @@
     </vr-columns>
     <vr-columns width="1/3row" ng-show="scopeModel.isDataAnalysisItemDefinitionSelected">
         <span vr-loader="scopeModel.isOutputFieldsSelectorLoading">
-            <vr-analytic-daprofcalc-outputfields-selector on-ready="scopeModel.onDataAnalysisItemOutputFieldsSelectorReady"
-                                                          customlabel="Grouping Fields" ismultipleselection>
+            <vr-analytic-daprofcalc-outputfields-selector on-ready="scopeModel.onDataAnalysisItemOutputFieldsSelectorReady" customlabel="Grouping Fields" ismultipleselection
+                                                          onselectitem="scopeModel.onSelectDataAnalysisItemOutputFields" ondeselectitem="scopeModel.onDeselectDataAnalysisItemOutputFields">
             </vr-analytic-daprofcalc-outputfields-selector>
         </span>
     </vr-columns>

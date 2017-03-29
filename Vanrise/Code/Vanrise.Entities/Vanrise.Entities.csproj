@@ -130,6 +130,7 @@
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
     <Compile Include="VRMail\VRMailEvaluatedTemplate.cs" />
     <Compile Include="VRActionAudit\VRObjectTrackingMetaData.cs" />
+    <Compile Include="VRObject\VRObjectTypeCreateObjectContext.cs" />
     <Compile Include="VRObject\VRRazorCompilationOutput.cs" />
     <Compile Include="VRTax\VRTaxDetail.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />

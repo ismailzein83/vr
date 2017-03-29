@@ -10,5 +10,10 @@ namespace Vanrise.Common.MainExtensions.VRObjectTypes
     public class TextObjectType : VRObjectType
     {
         public override Guid ConfigId { get { return  new Guid("55CC79FE-4569-4D34-A1D2-49FAA6445979"); } }
+
+        public override object CreateObject(IVRObjectTypeCreateObjectContext context)
+        {
+            return context.ObjectId;
+        }
     }
 }
