@@ -54,12 +54,11 @@ app.directive("partnerportalInvoiceGridcolumns", ["UtilsService", "VRNotificatio
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
-                ctrl.disableAddGridColumn = function()
-                {
+                ctrl.disableAddGridColumn = function () {
                     if (context != undefined && context.getConnectionId != undefined)
                         return false;
                     return true;
-                }
+                };
                 defineMenuActions();
                 defineAPI();
             }

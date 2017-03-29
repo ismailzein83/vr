@@ -56,7 +56,7 @@ app.directive('partnerportalInvoiceInvoiceattachmentsRemoteselector', ['UtilsSer
                     var selectedIds;
                     var filter;
                     var connectionId;
-                    var invoiceTypeId
+                    var invoiceTypeId;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;

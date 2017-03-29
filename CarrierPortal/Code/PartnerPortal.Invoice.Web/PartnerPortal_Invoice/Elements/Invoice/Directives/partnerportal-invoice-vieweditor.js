@@ -43,7 +43,7 @@ app.directive("partnerportalInvoiceVieweditor", ["UtilsService", "VRUIUtilsServi
                 api.load = function (payload) {
                     var promises = [];
                     var invoiceViewItems;
-                    var invoiceViewerTypeIds
+                    var invoiceViewerTypeIds;
                     if (payload != undefined) {
                         invoiceViewItems = payload.InvoiceViewItems;
                         if(invoiceViewItems != undefined)
