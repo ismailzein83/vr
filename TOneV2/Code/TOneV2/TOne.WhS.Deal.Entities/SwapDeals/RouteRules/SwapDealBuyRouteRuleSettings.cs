@@ -27,6 +27,8 @@ namespace TOne.WhS.Deal.Entities
     public interface ISwapDealBuyRouteRuleEvaluateContext
     {
         List<SwapDealBuyRouteRuleEvaluationItem> EvaluationItems { set; }
+
+        List<long> SaleZoneIds { get; }
     }
 
     public class SwapDealBuyRouteRuleEvaluationItem

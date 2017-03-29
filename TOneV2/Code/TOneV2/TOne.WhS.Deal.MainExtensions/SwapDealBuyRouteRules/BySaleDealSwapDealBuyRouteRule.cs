@@ -16,20 +16,11 @@ namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
 
         public int SwapDealId { get; set; }
 
-        public List<SaleSwapDealBuyRouteRuleZoneItem> SaleZones { get; set; }
-
-        public Decimal DefaultPercentage { get; set; }
+        public Decimal Percentage { get; set; }
 
         public override void Evaluate(ISwapDealBuyRouteRuleEvaluateContext context)
         {
             throw new NotImplementedException();
         }
-    }
-
-    public class SaleSwapDealBuyRouteRuleZoneItem
-    {
-        public long SaleZoneId { get; set; }
-
-        public Decimal? Percentage { get; set; }
     }
 }
