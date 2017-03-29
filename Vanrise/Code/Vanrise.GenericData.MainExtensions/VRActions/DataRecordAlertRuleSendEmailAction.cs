@@ -16,14 +16,14 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
         {
             DataRecordAlertRuleActionEventPayload payload = context.EventPayload as DataRecordAlertRuleActionEventPayload;
 
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(payload.DataRecordTypeId);
+            //DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            //Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(payload.DataRecordTypeId);
 
-            dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
-            record.FillDataRecordTypeFromDictionary(payload.OutputRecords);
+            //dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
+            //record.FillDataRecordTypeFromDictionary(payload.OutputRecords);
 
             Dictionary<string, dynamic> mailTemplateObjects = new Dictionary<string, dynamic>();
-            mailTemplateObjects.Add(MAILTEMPLATE_DATARECORDOBJECTNAME, record);
+            mailTemplateObjects.Add(MAILTEMPLATE_DATARECORDOBJECTNAME, payload.OutputDataRecord);
 
             new VRMailManager().SendMail(this.MailMessageTemplateId, mailTemplateObjects);
         }
