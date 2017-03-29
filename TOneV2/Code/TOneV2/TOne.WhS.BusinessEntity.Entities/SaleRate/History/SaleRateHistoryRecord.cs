@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleRateHistoryRecord : Vanrise.Entities.IDateEffectiveSettingsEditable
+    public class SaleRateHistoryRecord : Vanrise.Entities.IDateEffectiveSettingsEditable, Vanrise.Entities.IDateEffectiveSettings
     {
+        public long SaleRateId { get; set; }
+
         public decimal Rate { get; set; }
 
         public decimal ConvertedRate { get; set; }
+
+        public int PriceListId { get; set; }
 
         public RateChangeType ChangeType { get; set; }
 
@@ -21,6 +25,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+
+        public string SourceId { get; set; }
     }
 
     public class SaleRateHistoryRecordDetail

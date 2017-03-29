@@ -121,6 +121,11 @@
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="ReleaseCodeManager.cs" />
+    <Compile Include="SaleRate\History\CustomerZoneRateHistoryLocator.cs" />
+    <Compile Include="SaleRate\History\CustomerZoneRateHistoryReader.cs" />
+    <Compile Include="SaleRate\History\SellingProductZoneRateHistoryReader.cs" />
+    <Compile Include="SaleRate\History\SellingProductZoneRateHistoryLocator.cs" />
+    <Compile Include="SaleRate\OtherSaleRateManager.cs" />
     <Compile Include="ZoneRoutingProduct\SaleEntityZoneRoutingProductHistoryManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />
@@ -139,7 +144,7 @@
     <Compile Include="SalePriceListTemplate\Context\SalePriceListTemplateSettingsContext.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateManager.cs" />
     <Compile Include="SaleRate\FutureSaleRateReadWithCache.cs" />
-    <Compile Include="SaleRate\SaleRateHistoryManager.cs" />
+    <Compile Include="SaleRate\History\SaleRateHistoryManager.cs" />
     <Compile Include="SaleRate\ISaleRateReader.cs" />
     <Compile Include="SaleCode\SaleCodeCacheManager.cs" />
     <Compile Include="SaleRate\SaleRateCachedObjectCreationHandler.cs" />

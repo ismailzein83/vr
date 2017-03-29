@@ -43,11 +43,13 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetSaleRatesEffectiveAfter(ownerType, ownerId, minimumDate);
         }
+
         public Vanrise.Entities.IDataRetrievalResult<SaleRateDetail> GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
             VRActionLogger.Current.LogGetFilteredAction(SaleRateLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SaleRateRequestHandler());
         }
+
         public RateChangeType GetSaleRateChange(DateTime fromTime, DateTime tillTime, long rateId)
         {
             Dictionary<long, SaleRate> saleRates = GetCachedSaleRatesInBetweenPeriod(fromTime, tillTime);
@@ -66,6 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             throw new ArgumentNullException(String.Format("SaleRate: {0}", rateId));
         }
+
         private SaleRate GetSaleRateByRateId(long rateId)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
@@ -77,6 +80,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public DateTime FromTime { get; set; }
             public DateTime ToTime { get; set; }
         }
+
         public Dictionary<long, SaleRate> GetCachedSaleRatesInBetweenPeriod(DateTime fromTime, DateTime tillTime)
         {
             var cacheName = new GetCachedSaleRatesInBetweenPeriodCacheName { FromTime = fromTime, ToTime = tillTime };
@@ -105,12 +109,14 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetExistingRatesByZoneIds(ownerType, ownerId, zoneIds, minEED);
         }
+
         public string GetSaleRateSourceId(SaleRate saleRate)
         {
             if (saleRate == null)
                 return null;
             return saleRate.SourceId;
         }
+
         public int GetSaleRateTypeId()
         {
             return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.GetSaleRateType());
@@ -146,6 +152,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
             return dataManager.GetSaleRatesEffectiveAfterByOwnerAndZones(SalePriceListOwnerType.SellingProduct, sellingProductId, zoneIds, effectiveOn);
         }
+
         public OverlappedRatesByZone GetCustomerOverlappedRatesByZone(int customerId, IEnumerable<long> zoneIds, DateTime effectiveOn)
         {
             if (zoneIds == null || zoneIds.Count() == 0)
@@ -271,15 +278,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleRatesBySellingProductId;
         }
 
-        /// <summary>
-        /// Returns the sale rates of all, or some, of the sale zones of the owner
-        /// </summary>
-        /// <param name="saleZoneIds">This parameter is optional. The sale rates of all sale zones will be fetched in case it's null</param>
-        /// <returns></returns>
-        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds, bool getNormalRates, bool getOtherRates)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.GetAllSaleRatesByOwner(ownerType, ownerId, saleZoneIds);
+            return dataManager.GetAllSaleRatesByOwner(ownerType, ownerId, saleZoneIds, getNormalRates, getOtherRates);
+        }
+
+        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductsAndCustomer(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds, int customerId, bool getNormalRates, bool getOtherRates)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetAllSaleRatesBySellingProductsAndCustomer(saleZoneIds, sellingProductIds, customerId, getNormalRates, getOtherRates);
         }
 
         #endregion
@@ -300,124 +308,115 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<SaleRateDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
             {
-                var saleZoneManager = new SaleZoneManager();
-                IEnumerable<SaleZone> saleZones = (input.Query.SellingNumberPlanId.HasValue) ?
-                    saleZoneManager.GetSaleZonesByOwner(input.Query.OwnerType, input.Query.OwnerId, input.Query.SellingNumberPlanId.Value, input.Query.EffectiveOn, false) :
-                    saleZoneManager.GetSaleZonesByOwner(input.Query.OwnerType, input.Query.OwnerId, input.Query.EffectiveOn, false);
+                IEnumerable<long> saleZoneIds;
+                IEnumerable<SaleZone> saleZones = GetFilteredOwnerSaleZones(input.Query.SellingNumberPlanId, input.Query.OwnerType, input.Query.OwnerId, input.Query.EffectiveOn, input.Query.ZonesIds, out saleZoneIds);
 
-                List<SaleRateDetail> ratesFormatted = new List<SaleRateDetail>();
-                DateTime? rateConversionEffectiveDate = null;
-                if (input.Query.CurrencyId.HasValue)
-                    rateConversionEffectiveDate = input.Query.EffectiveOn;
+                if (saleZones == null || saleZones.Count() == 0)
+                    return null;
 
-                var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.Query.EffectiveOn));
+                if (!input.Query.CurrencyId.HasValue)
+                    throw new Vanrise.Entities.MissingArgumentValidationException("input.Query.CurrencyId");
 
-
-                if (saleZones != null)
-                {
-                    var filteredSaleZone = saleZones.FindAllRecords(sz => input.Query.ZonesIds == null || input.Query.ZonesIds.Contains(sz.SaleZoneId));
-                    if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
-                    {
-                        foreach (SaleZone saleZone in filteredSaleZone)
-                        {
-                            SaleEntityZoneRate rate = rateLocator.GetSellingProductZoneRate(input.Query.OwnerId, saleZone.SaleZoneId);
-                            if (rate != null)
-                            {
-                                SaleRateDetail saleRateDetail = SaleRateDetailMapper(rate.Rate, input.Query.CurrencyId, rateConversionEffectiveDate, false, saleZone.CountryId);
-                                saleRateDetail.OtherRates = (rate.RatesByRateType != null) ? rate.RatesByRateType.Values.MapRecords((itm) => SaleOtherRateDetailMapper(itm, input.Query.CurrencyId, rateConversionEffectiveDate, false)).ToList() : null;
-                                ratesFormatted.Add(saleRateDetail);
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        int? sellingProductId = null;
-
-                        var customerSellingProductManager = new CustomerSellingProductManager();
-                        sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId, input.Query.EffectiveOn, false);
-                        if (!sellingProductId.HasValue)
-                            return ratesFormatted;
-
-                        foreach (SaleZone saleZone in filteredSaleZone)
-                        {
-                            SaleEntityZoneRate rate = rateLocator.GetCustomerZoneRate(input.Query.OwnerId, sellingProductId.Value, saleZone.SaleZoneId);
-                            if (rate != null)
-                            {
-                                SaleRateDetail saleRateDetail = SaleRateDetailMapper(rate.Rate, input.Query.CurrencyId, rateConversionEffectiveDate, rate.Source == SalePriceListOwnerType.SellingProduct, saleZone.CountryId);
-                                if (rate.RatesByRateType != null)
-                                {
-                                    if (rate.SourcesByRateType == null)
-                                        throw new NullReferenceException("SourcesByRateType");
-
-                                    saleRateDetail.OtherRates = new List<SaleOtherRateDetail>();
-                                    foreach (var otherRate in rate.RatesByRateType)
-                                    {
-                                        SalePriceListOwnerType otherRateSource;
-                                        if (!rate.SourcesByRateType.TryGetValue(otherRate.Key, out otherRateSource))
-                                            throw new NullReferenceException("otherRateSource");
-
-                                        saleRateDetail.OtherRates.Add(SaleOtherRateDetailMapper(otherRate.Value, input.Query.CurrencyId, rateConversionEffectiveDate, otherRateSource == SalePriceListOwnerType.SellingProduct));
-                                    }
-                                }
-                                ratesFormatted.Add(saleRateDetail);
-                            }
-                        }
-                    }
-                }
-                return ratesFormatted;
-            }
-
-
-
-            //protected override BigResult<SaleRateDetail> AllRecordsToBigResult(DataRetrievalInput<SaleRateQuery> input, IEnumerable<SaleRate> allRecords)
-            //{
-            //    DateTime? rateConversionEffectiveDate = null;
-            //    if (input.Query.CurrencyId.HasValue)
-            //        rateConversionEffectiveDate = (input.Query.EffectiveOn.HasValue) ? input.Query.EffectiveOn.Value : DateTime.Now;
-            //    return allRecords.ToBigResult(input, null, x => ConvertRateToCurrency(SaleRateDetailMapper(x), input.Query.CurrencyId, rateConversionEffectiveDate));
-            //}
-            protected SaleRateDetail SaleRateDetailMapper(SaleRate entity, int? targetCurrencyId, DateTime? rateConversionEffectiveDate, bool isRateInherited, int countryId)
-            {
-                SaleRateDetail saleRateDetail = new SaleRateDetail();
-
-                saleRateDetail.Entity = entity;
-                saleRateDetail.ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId);
-                saleRateDetail.CountryId = countryId;
-                saleRateDetail.IsRateInherited = isRateInherited;
-                saleRateDetail.ConvertedRate = GetConvertedRate(entity, targetCurrencyId, rateConversionEffectiveDate);
-                saleRateDetail.CurrencyName = GetCurrencyName(entity, targetCurrencyId);
-
-                return saleRateDetail;
-            }
-
-            protected SaleOtherRateDetail SaleOtherRateDetailMapper(SaleRate entity, int? targetCurrencyId, DateTime? rateConversionEffectiveDate, bool isRateInherited)
-            {
-                SaleOtherRateDetail saleOtherRateDetail = new SaleOtherRateDetail();
-
-                saleOtherRateDetail.Entity = entity;
-                saleOtherRateDetail.ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId);
-                saleOtherRateDetail.IsRateInherited = isRateInherited;
-                saleOtherRateDetail.ConvertedRate = GetConvertedRate(entity, targetCurrencyId, rateConversionEffectiveDate);
-                saleOtherRateDetail.CurrencyName = GetCurrencyName(entity, targetCurrencyId);
-
-                if (entity.RateTypeId.HasValue)
-                    saleOtherRateDetail.RateTypeName = _rateTypeManager.GetRateTypeName(entity.RateTypeId.Value);
-
-                return saleOtherRateDetail;
+                if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
+                    return GetSellingProductZoneRates(input.Query.OwnerId, saleZones, saleZoneIds, input.Query.EffectiveOn, input.Query.CurrencyId.Value);
+                else
+                    return GetCustomerSaleZoneRates(input.Query.OwnerId, saleZones, saleZoneIds, input.Query.EffectiveOn, input.Query.CurrencyId.Value);
             }
 
             public override SaleRateDetail EntityDetailMapper(SaleRateDetail entity)
             {
-                //SaleRateDetail saleRateDetail = new SaleRateDetail();
-
-                //saleRateDetail.Entity = entity;
-                //saleRateDetail.ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId);
-
-                //if (entity.RateTypeId.HasValue)
-                //    saleRateDetail.RateTypeName = _rateTypeManager.GetRateTypeName(entity.RateTypeId.Value);
-
                 return entity;
+            }
+
+            #region Private / Protected Methods
+
+            private IEnumerable<SaleZone> GetFilteredOwnerSaleZones(int? sellingNumberPlanId, SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, IEnumerable<long> saleZoneIds, out IEnumerable<long> filteredSaleZoneIds)
+            {
+                var saleZoneManager = new SaleZoneManager();
+                filteredSaleZoneIds = null;
+
+                IEnumerable<SaleZone> saleZones =
+                    (sellingNumberPlanId.HasValue) ? saleZoneManager.GetSaleZonesByOwner(ownerType, ownerId, sellingNumberPlanId.Value, effectiveOn, false) : saleZoneManager.GetSaleZonesByOwner(ownerType, ownerId, effectiveOn, false);
+
+                if (saleZones == null || saleZones.Count() == 0)
+                    return null;
+
+                IEnumerable<SaleZone> filteredSaleZones = saleZones.FindAllRecords(x => saleZoneIds == null || saleZoneIds.Contains(x.SaleZoneId));
+
+                if (filteredSaleZones == null || filteredSaleZones.Count() == 0)
+                    return null;
+
+                filteredSaleZoneIds = filteredSaleZones.MapRecords(x => x.SaleZoneId);
+                return filteredSaleZones;
+            }
+
+            private IEnumerable<SaleRateDetail> GetSellingProductZoneRates(int sellingProductId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId)
+            {
+                var saleRates = new List<SaleRateDetail>();
+                var sellingProductZoneRateHistoryLocator = new SellingProductZoneRateHistoryLocator(new SellingProductZoneRateHistoryReader(sellingProductId, saleZoneIds, true, false));
+
+                foreach (SaleZone saleZone in saleZones)
+                {
+                    SaleRateHistoryRecord saleRateHistoryRecord = sellingProductZoneRateHistoryLocator.GetSaleRateHistoryRecord(saleZone.Name, null, currencyId, effectiveOn);
+
+                    if (saleRateHistoryRecord != null)
+                    {
+                        SaleRateDetail saleRate = GetSaleRateDetail(saleZone, saleRateHistoryRecord);
+                        saleRates.Add(saleRate);
+                    }
+                }
+
+                return saleRates;
+            }
+
+            private IEnumerable<SaleRateDetail> GetCustomerSaleZoneRates(int customerId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId)
+            {
+                var saleRates = new List<SaleRateDetail>();
+                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(customerId, saleZoneIds, true, false));
+
+                int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(customerId, effectiveOn, false);
+                if (!sellingProductId.HasValue) return null;
+
+                foreach (SaleZone saleZone in saleZones)
+                {
+                    SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetSaleRateHistoryRecord(saleZone.Name, saleZone.CountryId, null, currencyId, effectiveOn);
+
+                    if (saleRateHistoryRecord != null)
+                    {
+                        SaleRateDetail saleRate = GetSaleRateDetail(saleZone, saleRateHistoryRecord);
+                        saleRates.Add(saleRate);
+                    }
+                }
+
+                return saleRates;
+            }
+
+            private SaleRateDetail GetSaleRateDetail(SaleZone saleZone, SaleRateHistoryRecord saleRateHistoryRecord)
+            {
+                var saleRateDetail = new SaleRateDetail();
+
+                saleRateDetail.Entity = new SaleRate()
+                {
+                    SaleRateId = saleRateHistoryRecord.SaleRateId,
+                    RateTypeId = null,
+                    ZoneId = saleZone.SaleZoneId,
+                    PriceListId = saleRateHistoryRecord.PriceListId,
+                    CurrencyId = saleRateHistoryRecord.CurrencyId, // CustomerZoneRateHistoryLocator gets the pricelist's currency if the rate's currency was not found
+                    Rate = saleRateHistoryRecord.Rate,
+                    BED = saleRateHistoryRecord.BED,
+                    EED = saleRateHistoryRecord.EED,
+                    SourceId = saleRateHistoryRecord.SourceId,
+                    RateChange = saleRateHistoryRecord.ChangeType
+                };
+
+                saleRateDetail.ZoneName = saleZone.Name;
+                saleRateDetail.CountryId = saleZone.CountryId;
+                saleRateDetail.RateTypeName = null;
+                saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(saleRateHistoryRecord.CurrencyId);
+                saleRateDetail.ConvertedRate = saleRateHistoryRecord.ConvertedRate;
+                saleRateDetail.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
+
+                return saleRateDetail;
             }
 
             protected override ResultProcessingHandler<SaleRateDetail> GetResultProcessingHandler(DataRetrievalInput<SaleRateQuery> input, BigResult<SaleRateDetail> bigResult)
@@ -428,26 +427,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
             }
 
-
-            private Decimal GetConvertedRate(SaleRate saleRate, int? targetCurrencyId, DateTime? rateConversionEffectiveDate)
-            {
-                int currencyId = _saleRateManager.GetCurrencyId(saleRate);
-                Decimal convertedRate = 0;
-
-                if (targetCurrencyId.HasValue)
-                    convertedRate = _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, currencyId, targetCurrencyId.Value, rateConversionEffectiveDate.Value);
-                else
-                    convertedRate = saleRate.Rate;
-
-                return convertedRate;
-            }
-
-            private string GetCurrencyName(SaleRate saleRate, int? targetCurrencyId)
-            {
-                int currencyId = targetCurrencyId.HasValue ? targetCurrencyId.Value : _saleRateManager.GetCurrencyId(saleRate);
-                return _currencyManager.GetCurrencySymbol(currencyId);
-            }
+            #endregion
         }
+
         private class SaleRateLoggableEntity : VRLoggableEntityBase
         {
             public static SaleRateLoggableEntity Instance = new SaleRateLoggableEntity();
@@ -490,6 +472,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             }
         }
+
         #endregion
 
         #region Private Methods

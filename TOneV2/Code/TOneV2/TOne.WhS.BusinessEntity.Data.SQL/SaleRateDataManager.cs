@@ -140,10 +140,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetBySellingProducts", SaleRateMapper, sellingProductIdsAsString, saleZoneIdsAsString);
         }
 
-        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds, bool getNormalRates, bool getOtherRates)
         {
             string saleZoneIdsAsString = (saleZoneIds != null) ? string.Join(",", saleZoneIds) : null;
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwner", SaleRateMapper, ownerType, ownerId, saleZoneIdsAsString);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwner", SaleRateMapper, ownerType, ownerId, saleZoneIdsAsString, getNormalRates, getOtherRates);
+        }
+
+        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductsAndCustomer(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds, int customerId, bool getNormalRates, bool getOtherRates)
+        {
+            string saleZoneIdsAsString = (saleZoneIds != null) ? string.Join(",", saleZoneIds) : null;
+            string sellingProductIdsAsString = (sellingProductIds != null) ? string.Join(",", sellingProductIds) : null;
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllBySellingProductsAndCustomer", SaleRateMapper, saleZoneIdsAsString, sellingProductIdsAsString, customerId, getNormalRates, getOtherRates);
         }
 
         #endregion

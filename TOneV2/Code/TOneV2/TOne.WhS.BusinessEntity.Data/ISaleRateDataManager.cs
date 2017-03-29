@@ -23,6 +23,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnerAndZones(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime effectiveOn);
         IEnumerable<SaleRate> GetZoneRatesBySellingProduct(int sellingProductId, IEnumerable<long> saleZoneIds);
         IEnumerable<SaleRate> GetZoneRatesBySellingProducts(IEnumerable<int> sellingProductIds, IEnumerable<long> saleZoneIds);
-        IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds);
+        IEnumerable<SaleRate> GetAllSaleRatesByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds, bool getNormalRates, bool getOtherRates);
+        IEnumerable<SaleRate> GetAllSaleRatesBySellingProductsAndCustomer(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds, int customerId, bool getNormalRates, bool getOtherRates);
     }
 }
