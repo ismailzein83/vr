@@ -39,7 +39,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetDataStore")]
         public DataStore GetDataStore(Guid dataStoreId)
         {
-            return _manager.GetDataStore(dataStoreId);
+            return _manager.GetDataStore(dataStoreId,true);
         }
 
         [HttpPost]

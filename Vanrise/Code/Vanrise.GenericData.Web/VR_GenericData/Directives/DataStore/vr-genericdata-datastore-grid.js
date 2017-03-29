@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataStoreAPIService","VR_GenericData_DataStoreService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataStoreAPIService, VR_GenericData_DataStoreService) {
+app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataStoreAPIService", "VR_GenericData_DataStoreService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataStoreAPIService, VR_GenericData_DataStoreService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -29,12 +29,15 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.datastore = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_GenericData_DataStoreService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -44,6 +47,7 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                             return gridAPI.retrieveData(query);
                         };
                         directiveAPI.onDataStoreAdded = function (onDataStoreObj) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(onDataStoreObj);
                             gridAPI.itemAdded(onDataStoreObj);
                         };
                         return directiveAPI;
@@ -54,6 +58,9 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                     return VR_GenericData_DataStoreAPIService.GetFilteredDataStores(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
                             }
                             onResponseReady(response);
                         })
@@ -84,6 +91,7 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
             };
             function editDataStore(dataItem) {
                 var onDataStoreUpdated = function (dataStoreObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(dataStoreObj);
                     gridAPI.itemUpdated(dataStoreObj);
                 };
                 VR_GenericData_DataStoreService.editDataStore(dataItem.Entity.DataStoreId, onDataStoreUpdated);
