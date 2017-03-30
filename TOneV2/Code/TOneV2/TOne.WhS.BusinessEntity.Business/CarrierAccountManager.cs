@@ -743,11 +743,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
                 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name", Width = 40});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name", Width = 25});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Activation Status" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan", Width = 40});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Services" });
 
                 sheet.Rows = new List<ExportExcelRow>();
