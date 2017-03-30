@@ -44,8 +44,10 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
                    
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query, isChildgrid) {
-                        if (isChildgrid != undefined)
+                        if (isChildgrid != undefined) {
                             $scope.hidecurrencycolumn = true;
+                        }
+                           
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onExchangeRateAdded = function (exchangeRateObject) {
@@ -55,6 +57,10 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                if (dataRetrievalInput.Query.ExchangeDate == undefined || dataRetrievalInput.Query.ExchangeDate == null) {
+                    dataRetrievalInput.IsSortDescending = true;
+                    dataRetrievalInput.SortByColumnName = "Entity.ExchangeDate";
+                }
                 return VRCommon_CurrencyExchangeRateAPIService.GetFilteredExchangeRateCurrencies(dataRetrievalInput)
                     .then(function (response) {
                         
