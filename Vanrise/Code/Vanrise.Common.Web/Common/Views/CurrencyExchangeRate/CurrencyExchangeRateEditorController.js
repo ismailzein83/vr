@@ -37,6 +37,11 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.validateTodayDateTime = function () {
+                if ($scope.exchangeDate > new Date())
+                    return "Date cannot be greater than today";
+                return null;
+            }
             $scope.onCurrencySelectReady = function (api) {
                 currencySelectorAPI = api;
                 currencyReadyPromiseDeferred.resolve();
