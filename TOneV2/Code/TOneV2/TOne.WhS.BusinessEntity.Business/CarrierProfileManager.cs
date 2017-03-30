@@ -339,7 +339,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Carrier Profile Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Carrier Profile Name", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Company" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country" });
 
