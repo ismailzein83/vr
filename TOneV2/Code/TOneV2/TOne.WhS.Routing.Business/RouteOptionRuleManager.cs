@@ -469,11 +469,11 @@ namespace TOne.WhS.Routing.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers", Width = 30 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
