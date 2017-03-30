@@ -8,6 +8,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -21,6 +22,7 @@ namespace Vanrise.Analytic.Business
         public AnalyticDimensionEditorRuntime GetAnalyticDimensionEditorRuntime(AnalyticDimensionEditorInput input)
         {
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
+          
             var analyticTable = analyticTableManager.GetAnalyticTableById(input.TableId);
             AnalyticDimensionEditorRuntime analyticDimensionEditorRuntime = new AnalyticDimensionEditorRuntime();
 
@@ -126,6 +128,14 @@ namespace Vanrise.Analytic.Business
             }
             return analyticJoins;
         }
+
+        public string GetAnalyticItemConfigName<T>(AnalyticItemConfig<T> analyticItemConfig)
+        {
+            if (analyticItemConfig != null)
+                return analyticItemConfig.Name;
+            return null;
+        
+        }
         public IEnumerable<AnalyticDimensionConfigInfo> GetDimensionsInfo(AnalyticDimensionConfigInfoFilter filter)
         {
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
@@ -189,7 +199,7 @@ namespace Vanrise.Analytic.Business
 
             Func<Object, bool> filterExpression = (prod) =>
                  (true);
-
+            
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input, filterExpression));
         }
         public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
@@ -210,6 +220,7 @@ namespace Vanrise.Analytic.Business
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(new AnalyticItemConfigLoggableEntity(analyticItemConfig.ItemType, analyticItemConfig.TableId), analyticItemConfig);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = AnalyticConfigDetailMapper(analyticItemConfig);
             }
@@ -234,6 +245,7 @@ namespace Vanrise.Analytic.Business
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new AnalyticItemConfigLoggableEntity(analyticItemConfig.ItemType, analyticItemConfig.TableId), analyticItemConfig);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AnalyticConfigDetailMapper(analyticItemConfig);
             }
@@ -394,6 +406,84 @@ namespace Vanrise.Analytic.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreAnalyticItemConfigUpdated(ref _updateHandle);
+            }
+        }
+
+        private class AnalyticItemConfigLoggableEntity : VRLoggableEntityBase
+        {
+
+            AnalyticItemType _analyticItemType;
+            int _tableId;
+            public AnalyticItemConfigLoggableEntity(AnalyticItemType analyticItemType,int tableId)
+            {
+                _analyticItemType = analyticItemType;
+                _tableId = tableId;
+            }
+
+            static AnalyticItemConfigManager s_analyticItemConfigManager = new AnalyticItemConfigManager();
+            static AnalyticTableManager s_analyticTableManager = new AnalyticTableManager();
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_Analytic_AnalyticItemConfig_{0:D}", _analyticItemType); }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Analytic"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return String.Format("{0} {1}", s_analyticTableManager.GetAnalyticTableName(s_analyticTableManager.GetAnalyticTableById(_tableId)), Utilities.GetEnumDescription<AnalyticItemType>(_analyticItemType)); }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Analytic_AnalyticItemConfig_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                switch (_analyticItemType)
+                {
+                    case AnalyticItemType.Dimension:
+                        AnalyticItemConfig<AnalyticDimensionConfig> analyticDimensionConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticDimensionConfig>>("context.Object");
+                        return analyticDimensionConfig.AnalyticItemConfigId;
+                    case AnalyticItemType.Measure:
+                        AnalyticItemConfig<AnalyticMeasureConfig> analyticMeasureConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticMeasureConfig>>("context.Object");
+                        return analyticMeasureConfig.AnalyticItemConfigId;
+                    case AnalyticItemType.Join:
+                        AnalyticItemConfig<AnalyticJoinConfig> analyticJoinConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticJoinConfig>>("context.Object");
+                        return analyticJoinConfig.AnalyticItemConfigId;
+                       
+                    case AnalyticItemType.Aggregate:
+                        AnalyticItemConfig<AnalyticAggregateConfig> analyticAggregateConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticAggregateConfig>>("context.Object");
+                        return analyticAggregateConfig.AnalyticItemConfigId;
+                    default: return null;
+                       
+                }
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                switch (_analyticItemType)
+                {
+                    case AnalyticItemType.Dimension:
+                        AnalyticItemConfig<AnalyticDimensionConfig> analyticDimensionConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticDimensionConfig>>("context.Object");
+                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticDimensionConfig);
+                    case AnalyticItemType.Measure:
+                        AnalyticItemConfig<AnalyticMeasureConfig> analyticMeasureConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticMeasureConfig>>("context.Object");
+                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticMeasureConfig);
+                    case AnalyticItemType.Join:
+                        AnalyticItemConfig<AnalyticJoinConfig> analyticJoinConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticJoinConfig>>("context.Object");
+                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticJoinConfig);
+
+                    case AnalyticItemType.Aggregate:
+                        AnalyticItemConfig<AnalyticAggregateConfig> analyticAggregateConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticAggregateConfig>>("context.Object");
+                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticAggregateConfig);
+                    default: return null;
+
+                }
             }
         }
 
