@@ -26,6 +26,7 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
         function ExecutionFlowGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
+            var gridDrillDownTabsObj;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -33,7 +34,8 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
                 $scope.executionFlowDefinitions = [];
                 $scope.ongridReady = function (api) {
                     gridAPI = api;
-
+                    var drillDownDefinitions = VR_Queueing_ExecutionFlowDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
@@ -47,6 +49,7 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
                         };
 
                         directiveAPI.onExecutionFlowDefinitionAdded = function (executionFlowDefinitionObject) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowDefinitionObject);
                             gridAPI.itemAdded(executionFlowDefinitionObject);
                         };
                         return directiveAPI;
@@ -57,6 +60,11 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_Queueing_ExecutionFlowDefinitionAPIService.GetFilteredExecutionFlowDefinitions(dataRetrievalInput)
                         .then(function (response) {
+                            if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
+                            }
                             onResponseReady(response);
                         })
                         .catch(function (error) {
@@ -80,6 +88,7 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
 
             function editExecutionFlowDefinition(executionFlowDefinitionObj) {
                 var onExecutionFlowDefinitionUpdated = function (executionFlowDefinitionObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowDefinitionObj);
                     gridAPI.itemUpdated(executionFlowDefinitionObj);
                 };
 

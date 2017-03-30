@@ -1,3 +1,4 @@
-﻿app.run(['VR_Queueing_QueueInstanceService', function (VR_Queueing_QueueInstanceService) {
+﻿app.run(['VR_Queueing_QueueInstanceService', 'VR_Queueing_ExecutionFlowDefinitionService', function (VR_Queueing_QueueInstanceService, VR_Queueing_ExecutionFlowDefinitionService) {
     VR_Queueing_QueueInstanceService.registerDrillDownToExecutionFlow();
+    VR_Queueing_ExecutionFlowDefinitionService.registerObjectTrackingDrillDownToQueueExecutionFlowDefinition();
 }]);
