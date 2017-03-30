@@ -23,7 +23,12 @@ namespace TOne.WhS.BusinessEntity.Business
 				 &&
 				 (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(prod.SellingNumberPlanId));
 
-			return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression, RoutingProductDetailMapper));
+            ResultProcessingHandler<RoutingProductDetail> handler = new ResultProcessingHandler<RoutingProductDetail>()
+            {
+                ExportExcelHandler = new RoutingProductExcelExportHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression, RoutingProductDetailMapper), handler);
 		}
 
 		public IEnumerable<RoutingProductInfo> GetRoutingProductsInfoBySellingNumberPlan(int sellingNumberPlanId)
@@ -449,7 +454,36 @@ namespace TOne.WhS.BusinessEntity.Business
 		#endregion
 
 		#region Private Classes
+        private class RoutingProductExcelExportHandler : ExcelExportHandler<RoutingProductDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RoutingProductDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Routing Products",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan", Width = 50 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SellingNumberPlan });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 		private class CacheManager : Vanrise.Caching.BaseCacheManager
 		{
 			IRoutingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
