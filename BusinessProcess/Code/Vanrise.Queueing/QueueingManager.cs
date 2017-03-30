@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -109,7 +110,12 @@ namespace Vanrise.Queueing
             returnedResult.ResultKey = data.ResultKey;
             returnedResult.TotalCount = data.TotalCount;
             returnedResult.Data = data.Data.MapRecords(QueueItemHeaderDetailsMapper);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, returnedResult);
+
+            ResultProcessingHandler<QueueItemHeaderDetails> handler = new ResultProcessingHandler<QueueItemHeaderDetails>()
+            {
+                ExportExcelHandler = new QueueingExcelExportHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, returnedResult, handler);
         }
        
               
@@ -121,6 +127,48 @@ namespace Vanrise.Queueing
             return QueueItemStatus.Processed;
         }
 
+        private class QueueingExcelExportHandler : ExcelExportHandler<QueueItemHeaderDetails>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<QueueItemHeaderDetails> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Queue Items",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Item Id" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Stage Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Retry Count" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Error Message" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Updated Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        if (record.Entity != null)
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ItemId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.StageName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
+                            row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.Status) });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.RetryCount });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ErrorMessage });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreatedTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastUpdatedTime });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         #endregion
 
         #region Mappers
