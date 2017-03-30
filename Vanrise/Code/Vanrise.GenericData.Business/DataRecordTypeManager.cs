@@ -47,23 +47,23 @@ namespace Vanrise.GenericData.Business
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId, bool isViewedFromUI)
         {
             var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
-            var dataRecordTypeToEdit= dataRecordTypes.GetRecord(dataRecordTypeId);
+            var dataRecordTypeToEdit = dataRecordTypes.GetRecord(dataRecordTypeId);
             if (dataRecordTypeToEdit != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(DataRecordTypeLoggableEntity.Instance, dataRecordTypeToEdit);
             return dataRecordTypeToEdit;
         }
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
-           return GetDataRecordTypeToEdit(dataRecordTypeId,false);
+            return GetDataRecordTypeToEdit(dataRecordTypeId, false);
         }
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
-           var dataRecordType= dataRecordTypes.GetRecord(dataRecordTypeId);
-           
-           return dataRecordType;
+            var dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
+
+            return dataRecordType;
         }
-        
+
         public string GetDataRecordTypeName(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -73,7 +73,7 @@ namespace Vanrise.GenericData.Business
                 return dataRecordType.Name;
 
             return null;
-        } 
+        }
 
         public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(Guid dataRecordTypeId)
         {
@@ -104,9 +104,9 @@ namespace Vanrise.GenericData.Business
         {
             var dataRecordFields = GetDataRecordTypeFields(dataRecordTypeId);
             DataRecordField dataRecordField = null;
-            if(dataRecordFields != null)
+            if (dataRecordFields != null)
             {
-                dataRecordFields.TryGetValue(fieldName, out dataRecordField); 
+                dataRecordFields.TryGetValue(fieldName, out dataRecordField);
             }
             return dataRecordField;
         }
@@ -309,6 +309,7 @@ namespace Vanrise.GenericData.Business
         {
             string fullTypeName;
             var classDefinition = BuildClassDefinition(dataRecordType, out fullTypeName);
+
             CSharpCompilationOutput compilationOutput;
             if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
@@ -343,6 +344,7 @@ namespace Vanrise.GenericData.Business
                         {
                              Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(#CLASSNAME#) #PROPERTIESTOSETSERIALIZED#);
                         }     
+
                         #GLOBALMEMBERS#
                             
                         public void SetFieldValue(string fieldName, dynamic fieldValue)
@@ -371,6 +373,21 @@ namespace Vanrise.GenericData.Business
                                 SetFieldValue(item.Key, item.Value);
                             }
                         }
+
+                        public Dictionary<string, dynamic> GetDictionaryFromDataRecordType()
+                        {
+                            Dictionary<string, dynamic> results = new Dictionary<string, dynamic>();
+
+                            List<string> fieldNames =  new List<string>() { #FIELDNAMES# };
+
+                            foreach(var fieldName in fieldNames)
+                            {
+                                if (!results.ContainsKey(fieldName))
+                                    results.Add(fieldName, GetFieldValue(fieldName));
+                            }
+
+                            return results;
+                        }
                     }
                 }
                 ");
@@ -381,19 +398,26 @@ namespace Vanrise.GenericData.Business
             StringBuilder setFieldValueBuilder = new StringBuilder();
             StringBuilder getFieldValueBuilder = new StringBuilder();
 
+            List<string> fieldNames = new List<string>();
             foreach (var field in dataRecordType.Fields)
             {
                 globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", CSharpCompiler.TypeToString(field.Type.GetRuntimeType()), field.Name);
                 propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
                 setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); break;", field.Name, field.Type.GetNonNullableRuntimeType());
                 getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
+                fieldNames.Add(field.Name);
             }
+
+            string fieldNamesAsString = string.Format(@"""{0}""", string.Join<string>(@""",""", fieldNames));
 
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersBuilder.ToString());
             classDefinitionBuilder.Replace("#PROPERTIESTOSETSERIALIZED#", propertiesToSetSerializedBuilder.ToString());
 
             classDefinitionBuilder.Replace("#SETFIELDMEMBERS#", setFieldValueBuilder.ToString());
             classDefinitionBuilder.Replace("#GETFIELDMEMBERS#", getFieldValueBuilder.ToString());
+
+            classDefinitionBuilder.Replace("#FIELDNAMES#", fieldNamesAsString);
+            
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
             string className = "DataRecord";
