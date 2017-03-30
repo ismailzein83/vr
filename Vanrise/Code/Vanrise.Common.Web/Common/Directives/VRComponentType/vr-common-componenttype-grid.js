@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService', 'VRCommon_VRComponentTypeService', 'VRNotificationService',
-    function (VRCommon_VRComponentTypeAPIService, VRCommon_VRComponentTypeService, VRNotificationService) {
+app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService', 'VRCommon_VRComponentTypeService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VRCommon_VRComponentTypeAPIService, VRCommon_VRComponentTypeService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService'
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
 
                 $scope.scopeModel = {};
@@ -30,11 +30,18 @@ app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService'
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRComponentTypeService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRComponentTypeAPIService.GetFilteredVRComponentTypes(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -52,6 +59,7 @@ app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService'
                 };
 
                 api.onVRComponentTypeAdded = function (addedVRComponentType) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRComponentType);
                     gridAPI.itemAdded(addedVRComponentType);
                 };
 
@@ -69,6 +77,7 @@ app.directive('vrCommonComponenttypeGrid', ['VRCommon_VRComponentTypeAPIService'
 
             function editVRComponentType(vrComponentTypeItem) {
                 var onVRComponentTypeUpdated = function (updatedVRComponentType) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedVRComponentType);
                     gridAPI.itemUpdated(updatedVRComponentType);
                 };
 

@@ -32,6 +32,7 @@ namespace Vanrise.Common.Business
                     return false;
                 return true;
             };
+           
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRComponentTypes.ToBigResult(input, filterExpression, VRComponentTypeDetailMapper));
         }
 
@@ -41,6 +42,10 @@ namespace Vanrise.Common.Business
             return cachedVRComponentTypes.GetRecord(vrComponentTypeId);
         }
 
+        public string GetVRComponentTypeName(VRComponentType vrComponentType)
+        {
+            return (vrComponentType != null) ? vrComponentType.Name : null;
+        }
         public InsertOperationOutput<VRComponentTypeDetail> AddVRComponentType(VRComponentType componentType)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRComponentTypeDetail>();
@@ -55,6 +60,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(componentType))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(new VRComponentTypeLoggableEntity(componentType.Settings.VRComponentTypeConfigId), componentType);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRComponentTypeDetailMapper(componentType);
             }
@@ -77,6 +83,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(componentType))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new VRComponentTypeLoggableEntity(componentType.Settings.VRComponentTypeConfigId), componentType);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRComponentTypeDetailMapper(this.GetComponentType(componentType.VRComponentTypeId));
             }
@@ -237,6 +244,56 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreVRComponentTypeUpdated(ref _updateHandle);
             }
         }
+
+        private class VRComponentTypeLoggableEntity : VRLoggableEntityBase
+        {
+
+            Guid _vrComponentTypeConfigId;
+            
+            public VRComponentTypeLoggableEntity(Guid vrComponentTypeConfigId)
+            {
+                _vrComponentTypeConfigId=vrComponentTypeConfigId;
+            }
+
+
+            static VRComponentTypeManager s_vrComponentTypeManager = new VRComponentTypeManager();
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_Common_ComponentType_{0}", _vrComponentTypeConfigId); }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return s_vrComponentTypeManager.GetVRComponentTypeExtensionConfigById(_vrComponentTypeConfigId).Name; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_ComponentType__ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+
+                VRComponentType vrComponentType = context.Object.CastWithValidate<VRComponentType>("context.Object");
+                return vrComponentType.VRComponentTypeId;
+
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+
+                VRComponentType vrComponentType = context.Object.CastWithValidate<VRComponentType>("context.Object");
+                return s_vrComponentTypeManager.GetVRComponentTypeName(vrComponentType);
+
+            }
+        }
+
         #endregion
 
         #region Mappers
