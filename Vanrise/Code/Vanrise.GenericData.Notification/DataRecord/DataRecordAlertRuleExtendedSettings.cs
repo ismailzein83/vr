@@ -7,9 +7,9 @@ using Vanrise.Notification.Entities;
 
 namespace Vanrise.GenericData.Notification
 {
-    public class DataRecordActionRuleExtendedSettings : VRAlertRuleExtendedSettings
+    public class DataRecordAlertRuleExtendedSettings : VRAlertRuleExtendedSettings
     {
-        public List<ActionRuleTypeRecordField> AvailableIdentificationFields { get; set;  }
+        public List<AlertRuleTypeRecordField> AvailableIdentificationFields { get; set;  }
 
         public TimeSpan MinNotificationInterval { get; set; }
 
