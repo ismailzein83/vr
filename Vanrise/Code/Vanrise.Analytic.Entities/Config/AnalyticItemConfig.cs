@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace Vanrise.Analytic.Entities
 {
     public enum AnalyticItemType { Dimension = 1, Measure = 2, Join = 3, Aggregate = 4 }
-    
-    public class AnalyticItemConfig<T>
+    public class AnalyticItemConfig
     {
         public Guid AnalyticItemConfigId { get; set; }
 
@@ -19,7 +18,10 @@ namespace Vanrise.Analytic.Entities
         public string Title { get; set; }
 
         public AnalyticItemType ItemType { get; set; }
-
+     
+    }
+    public class AnalyticItemConfig<T> : AnalyticItemConfig
+    {
         public T Config { get; set; }
     }
 }
