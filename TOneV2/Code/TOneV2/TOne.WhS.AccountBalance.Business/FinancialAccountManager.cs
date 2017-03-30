@@ -190,6 +190,12 @@ namespace TOne.WhS.AccountBalance.Business
         public bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode, out string message)
         {
             message = null;
+
+            if (financialAccount.EED.HasValue && financialAccount.EED.Value < new DateTime())
+            {
+                message = "EED must not be less than today.";
+                return false;
+            }
             FinancialValidationData financialValidationData = LoadFinancialValidationData(financialAccount.CarrierProfileId, financialAccount.CarrierAccountId, financialAccount.FinancialAccountId);
             var financialAccountType = financialValidationData.FinancialAccountTypes.FirstOrDefault(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
             var accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
@@ -211,7 +217,11 @@ namespace TOne.WhS.AccountBalance.Business
         }
         public bool CheckFinancialCarrierAccountValidation(Guid accountTypeId, AccountBalanceSettings accountBalanceSetting, CarrierAccount carrierAccount, IEnumerable<FinancialAccountData> profileFinancialAccounts, IEnumerable<FinancialAccountData> carrierFinancialAccounts, bool isEditMode)
         {
+            if (carrierAccount.IsDeleted || carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                return false;
+
             Func<FinancialAccountData, bool> filterExpression = GetFinancialAccountFilterExpression(accountTypeId, carrierAccount.AccountType, accountBalanceSetting, isEditMode);
+        
             switch (carrierAccount.AccountType)
             {
                 case BusinessEntity.Entities.CarrierAccountType.Customer:
@@ -240,9 +250,11 @@ namespace TOne.WhS.AccountBalance.Business
             bool hasCustomers = false;
             bool hasSuppliers = false;
             bool hasExchanges = false;
-
+            bool areCarriersActive = false;
             foreach (var account in carrierAccounts)
             {
+                if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    areCarriersActive = true;
                 if (account.AccountType == CarrierAccountType.Customer)
                     hasCustomers = true;
                 else if (account.AccountType == CarrierAccountType.Supplier)
@@ -250,6 +262,8 @@ namespace TOne.WhS.AccountBalance.Business
                 else if (account.AccountType == CarrierAccountType.Exchange)
                     hasExchanges = true;
             }
+            if (!areCarriersActive)
+                return false;
 
             Func<FinancialAccountData, bool> filterExpression = null;
             if (CheckApplicableAccountTypes(accountBalanceSetting, true, false))
@@ -325,6 +339,7 @@ namespace TOne.WhS.AccountBalance.Business
                 }
                 else
                 {
+                    
                     if (!CheckFinancialCarrierAccountValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, false))
                         return false;
                 }

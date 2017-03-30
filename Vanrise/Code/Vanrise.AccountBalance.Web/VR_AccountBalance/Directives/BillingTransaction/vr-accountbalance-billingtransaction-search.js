@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAccountbalanceBillingtransactionSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_AccountBalance_LiveBalanceAPIService', 'VR_AccountBalance_BillingTransactionService','VR_AccountBalance_BillingTransactionAPIService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_AccountBalance_LiveBalanceAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService) {
+app.directive("vrAccountbalanceBillingtransactionSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_AccountBalance_LiveBalanceAPIService', 'VR_AccountBalance_BillingTransactionService','VR_AccountBalance_BillingTransactionAPIService','PeriodEnum',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VR_AccountBalance_LiveBalanceAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService, PeriodEnum) {
 
     var directiveDefinitionObject = {
 
@@ -32,17 +32,25 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var transactionTypeSelectorAPI;
         var transactionTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var timeRangeDirectiveAPI;
+        var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         this.initializeController = initializeController;
 
         function initializeController() {
             $scope.scopeModel = {};
 
-            var fromTime = new Date();
-            fromTime.setMonth(fromTime.getMonth() - 1);
-            fromTime.setHours(0, 0, 0, 0);
+            //var fromTime = new Date();
+            //fromTime.setMonth(fromTime.getMonth() - 1);
+            //fromTime.setHours(0, 0, 0, 0);
 
-            $scope.scopeModel.fromTime = fromTime;
+
+            //$scope.scopeModel.fromTime = fromTime;
+
+            $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
+                timeRangeDirectiveAPI = api;
+                timeRangeReadyPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.onTransactionTypeSelectorReady = function (api) {
                 transactionTypeSelectorAPI = api;
@@ -98,6 +106,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 }
                 if (accountTypeId)
                     promises.push(checkHasAddBillingTransaction(accountTypeId));
+                promises.push(loadTimeRangeDirective());
                 return UtilsService.waitMultiplePromises(promises).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
@@ -124,6 +133,19 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 VRUIUtilsService.callDirectiveLoad(transactionTypeSelectorAPI, transactionTypePayload, transactionTypeSelectorLoadPromiseDeferred);
             });
             return transactionTypeSelectorLoadPromiseDeferred.promise;
+        }
+
+        function loadTimeRangeDirective() {
+            var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+            timeRangeReadyPromiseDeferred.promise.then(function () {
+                var timeRangePeriod = {
+                    period: PeriodEnum.CurrentYear.value
+                };
+
+                VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
+
+            });
+            return loadTimeDimentionPromiseDeferred.promise;
         }
 
         function getFilterObject() {

@@ -67,7 +67,13 @@
             $scope.scopeModel.validateDates = function (date) {
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
-
+            $scope.scopeModel.validateEEDDate = function (date) {
+                if (!$scope.scopeModel.disableEED && $scope.scopeModel.endEffectiveDate != undefined && UtilsService.getDateFromDateTime($scope.scopeModel.endEffectiveDate) < UtilsService.getDateFromDateTime(new Date()))
+                {
+                    return "EED must not be less than today.";
+                }
+                return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+            };
             $scope.scopeModel.save = function () {
                 if ($scope.scopeModel.isEditMode)
                     return updateFinancialAccount();
@@ -120,6 +126,11 @@
                 {
                     $scope.scopeModel.beginEffectiveDate = financialAccountEntity.BED;
                     $scope.scopeModel.endEffectiveDate = financialAccountEntity.EED;
+
+                    if(financialAccountEntity != undefined )
+                    {
+                        $scope.scopeModel.disableEED = (financialAccountEntity.EED != undefined && UtilsService.getDateFromDateTime(financialAccountEntity.EED) < UtilsService.getDateFromDateTime(new Date()));
+                    }
                 }
             }
 

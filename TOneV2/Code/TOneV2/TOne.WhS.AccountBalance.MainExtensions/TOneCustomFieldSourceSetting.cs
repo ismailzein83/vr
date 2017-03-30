@@ -38,6 +38,12 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                 Title = "Consumed",
                 FieldType = new FieldNumberType { DataType = FieldNumberDataType.Decimal, DataPrecision = FieldNumberPrecision.Normal },
             });
+            definitionFields.Add(new AccountBalanceFieldDefinition
+            {
+                Name = "CarrierType",
+                Title = "Carrier Type",
+                FieldType = new FieldTextType(),
+            });
             return definitionFields;
         }
 
@@ -76,15 +82,17 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                             consumed = item.CurrentBalance * 100 / supplierCreditLimit.Value;
 
                     }
+                    var financialAccount = financialAccountManager.GetFinancialAccount(accountId);
                     toneCustomFieldsData = new TOneCustomFieldsData
                     {
                         CustomerCreditLimit = customerCreditLimit,
                         CustomerTolerance = customerCreditLimit.HasValue ? (customerCreditLimit.Value + item.CurrentBalance) : item.CurrentBalance,
                         SupplierCreditLimit = supplierCreditLimit,
                         SupplierTolerance = supplierCreditLimit.HasValue ? (supplierCreditLimit.Value - item.CurrentBalance) : item.CurrentBalance,
-                        Consumed = consumed
+                        Consumed = consumed,
+                        CarrierType = financialAccount.CarrierAccountId.HasValue? "Account":"Profile"
                     };
-                     var financialAccount = financialAccountManager.GetFinancialAccount(accountId);
+                    
                      if (accountBalanceSettings.IsApplicableToCustomer)
                      {
                          if (IsRoutingStatusEnabled(financialAccount, true))
@@ -123,6 +131,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     case "Consumed": return toneCustomFieldsData.Consumed;
                     case "CustomerRoutingStatus": return toneCustomFieldsData.CustomerRoutingStatus;
                     case "SupplierRoutingStatus": return toneCustomFieldsData.SupplierRoutingStatus;
+                    case "CarrierType": return toneCustomFieldsData.CarrierType;
+
                 }
             }
             return null;
@@ -247,6 +257,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             public decimal  SupplierTolerance { get; set; }
             public string CustomerRoutingStatus { get; set; }
             public string SupplierRoutingStatus{ get; set; }
+            public string CarrierType { get; set; }
 
         }
     }
