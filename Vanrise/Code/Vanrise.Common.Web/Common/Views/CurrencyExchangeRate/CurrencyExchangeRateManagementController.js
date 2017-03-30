@@ -2,9 +2,9 @@
 
     "use strict";
 
-    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService',  'UtilsService', 'VRUIUtilsService'];
+    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService', 'VRCommon_CurrencyExchangeRateAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, UtilsService, VRUIUtilsService) {
+    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, VRCommon_CurrencyExchangeRateAPIService, UtilsService, VRUIUtilsService) {
         var gridAPI;
 
         var currencySelectorAPI;
@@ -33,6 +33,10 @@
                 currencyReadyPromiseDeferred.resolve();
             };
             $scope.addNewCurrencyExchangeRate = addNewCurrencyExchangeRate;
+
+            $scope.hasAddCurrencyExchangeRatePermission = function () {
+                return VRCommon_CurrencyExchangeRateAPIService.HasAddCurrencyExchangeRatePermission();
+            };
         }
 
         function load() {

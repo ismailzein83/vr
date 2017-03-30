@@ -70,8 +70,18 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select  onokhandler="scopeModel.onOKSearch" oncancelhandler="scopeModel.onCancelSearch" on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '>'
+                +'<div><vr-row>'
+                     + '<vr-columns width="fullrow">'
+                        +' <vr-label>Country</vr-label>'
+                        + ' <vr-textbox value="scopeModel.searchcountry"></vr-textbox>'
+                     + '</vr-columns>'
+                     + '<vr-columns width="fullrow">'
+                        + ' <vr-datetimepicker label="Date" isrequired type="date" value="scopeModel.testdate"></vr-datetimepicker>'
+                     + '</vr-columns>'
+                + ' </vr-row></div>'
+            +'</vr-select></vr-columns>';
     }
 
     function countryCtor(ctrl, $scope, attrs) {
@@ -86,6 +96,19 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
         		selectorAPI = api;
         		defineAPI();
         	};
+
+        	$scope.scopeModel.onOKSearch = function (api) {
+        	    console.log($scope.scopeModel.searchcountry);
+        	    console.log($scope.scopeModel.testdate);
+
+        	};
+        	$scope.scopeModel.onCancelSearch = function (api) {
+        	    $scope.scopeModel.searchcountry = undefined;
+        	};
+        	$scope.scopeModel.customdata = [
+                { id: 1, name: "test 1" },
+                { id: 2, name: "test 2" }
+        	];
         }
 
         function defineAPI() {
@@ -102,7 +125,6 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
                 	selectedIds = payload.selectedIds;
                 	filter = payload.filter;
                 }
-
                 return getCountriesInfo(attrs, ctrl, selectedIds, filter);
             };
 

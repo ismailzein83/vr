@@ -270,7 +270,10 @@ namespace Vanrise.Common.Business
                 currencyExchangeRate.CurrencyExchangeRateId = currencyExchangeRateId;
                 insertOperationOutput.InsertedObject = CurrencyExchangeRateDetailMapper(currencyExchangeRate);
             }
-
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
             return insertOperationOutput;
         }
 
@@ -304,7 +307,10 @@ namespace Vanrise.Common.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = CurrencyExchangeRateDetailMapper(currencyExchangeRate);
             }
-
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
             return updateOperationOutput;
         }
 

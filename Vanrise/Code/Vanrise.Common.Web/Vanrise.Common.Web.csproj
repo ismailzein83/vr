@@ -419,9 +419,7 @@
     <Content Include="Common\Views\Country\CountryEditorController.js" />
     <Content Include="Common\Views\Country\CountryManagement.html" />
     <Content Include="Common\Views\Country\CountryManagementController.js" />
-    <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditor.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateEditor.html" />
-    <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateManagement.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\CurrencyExchangeRateManagementController.js" />

@@ -28,8 +28,13 @@ namespace Vanrise.Common.Data.SQL
             object currencyExchangeRateId;
 
             int recordsEffected = ExecuteNonQuerySP("common.sp_CurrencyExchangeRate_Insert", out currencyExchangeRateId, currencyExchangeRate.Rate, currencyExchangeRate.CurrencyId, currencyExchangeRate.ExchangeDate);
-            insertedId = (int)currencyExchangeRateId;
-            return (recordsEffected > 0);
+            if (recordsEffected > 0)
+            {
+                insertedId = (int)currencyExchangeRateId;
+                return true;
+            }
+            insertedId = -1;
+            return false;
         }
         public bool Update(CurrencyExchangeRate currencyExchangeRate)
         {

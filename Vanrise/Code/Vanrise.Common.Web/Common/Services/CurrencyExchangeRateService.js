@@ -17,7 +17,20 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
                 parameters.CurrencyId = currencyId;
             VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateEditor.html', parameters, settings);
         }
+        function editExchangeRate(currencyExchangeRateId, onCurrencyExchangeRateUpdated) {
+            var settings = {
 
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCurrencyExchangeRateUpdated = onCurrencyExchangeRateUpdated;
+            };
+            var parameters = {
+                currencyExchangeRateId: currencyExchangeRateId
+            };
+
+            VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateEditor.html', parameters, settings);
+        }
         function registerDrillDownToCurrency() {
             var drillDownDefinition = {};
 
@@ -53,6 +66,7 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
 
         return ({
             addExchangeRate: addExchangeRate,
+            editExchangeRate:editExchangeRate,
             registerDrillDownToCurrency: registerDrillDownToCurrency
         });
 

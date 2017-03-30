@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonCurrencyexchangerateGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyExchangeRateAPIService", "VRCommon_CurrencyService",
-function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIService, VRCommon_CurrencyService) {
+app.directive("vrCommonCurrencyexchangerateGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyExchangeRateAPIService", "VRCommon_CurrencyExchangeRateService",
+function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIService, VRCommon_CurrencyExchangeRateService) {
     var directiveDefinitionObject = {
 
         restrict: "E",
@@ -70,12 +70,23 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyExchangeRateAPIS
         
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [ ];
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editCurrencyExchangeRate,
+                haspermission: hasEditCurrencyExchangeRateId
+            }];
         }
 
-        
-        
-        
+        function editCurrencyExchangeRate(dataItem) {
+            var onCurrencyExchangeRateUpdated = function (updatedObj) {
+                gridAPI.itemUpdated(updatedObj);
+            };
+            VRCommon_CurrencyExchangeRateService.editExchangeRate(dataItem.Entity.CurrencyExchangeRateId, onCurrencyExchangeRateUpdated);
+        }
+
+        function hasEditCurrencyExchangeRateId() {
+            return VRCommon_CurrencyExchangeRateAPIService.HasEditCurrencyExchangeRatePermission();
+        }
     }
 
     return directiveDefinitionObject;
