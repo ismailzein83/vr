@@ -1,38 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Caching;
-using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
-using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordFieldManager
     {
-        public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(DataRecordFieldInfoFilter filter)
+        #region Public Methods
+
+        public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(Guid dataRecordTypeId, DataRecordFieldInfoFilter filter)
         {
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            Dictionary<string, DataRecordField> dataRecordFields = dataRecordTypeManager.GetDataRecordTypeFields(filter.DataRecordTypeId);
+            Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(dataRecordTypeId);
             if (dataRecordFields == null || dataRecordFields.Count == 0)
                 return null;
-            List<DataRecordFieldInfo> result = new List<DataRecordFieldInfo>();
-            foreach (DataRecordField dataRecordField in dataRecordFields.Values)
-            {
-                result.Add(DataRecordFieldInfoMapper(dataRecordField));
-            }
-            return result;
-        }
 
-        private DataRecordFieldInfo DataRecordFieldInfoMapper(DataRecordField dataRecordField)
-        {
-            return new DataRecordFieldInfo()
+            Func<DataRecordField, bool> filterExpression = filterExpression = (dataRecordField) =>
             {
-                Entity = dataRecordField,
+                if (filter == null)
+                    return true;
+
+                if (filter.IncludedFieldNames != null && !filter.IncludedFieldNames.Contains(dataRecordField.Name))
+                    return false;
+
+                return true;
             };
+
+            return dataRecordFields.Values.MapRecords(DataRecordFieldInfoMapper, filterExpression);
         }
 
         public IEnumerable<DataRecordFieldFormulaConfig> GetDataRecordFieldFormulaExtensionConfigs()
@@ -47,8 +42,18 @@ namespace Vanrise.GenericData.Business
             return manager.GetExtensionConfigurations<DataRecordFieldTypeConfig>(DataRecordFieldTypeConfig.EXTENSION_TYPE);
         }
 
+        #endregion
 
+        #region Mappers
 
+        private DataRecordFieldInfo DataRecordFieldInfoMapper(DataRecordField dataRecordField)
+        {
+            return new DataRecordFieldInfo()
+            {
+                Entity = dataRecordField,
+            };
+        }
 
+#endregion
     }
 }

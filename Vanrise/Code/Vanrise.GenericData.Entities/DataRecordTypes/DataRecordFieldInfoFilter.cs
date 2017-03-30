@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Vanrise.GenericData.Entities
 {
     public class DataRecordFieldInfoFilter
     {
-        public Guid DataRecordTypeId { get; set; }
+        public List<string> IncludedFieldNames { get; set; }
     }
 }

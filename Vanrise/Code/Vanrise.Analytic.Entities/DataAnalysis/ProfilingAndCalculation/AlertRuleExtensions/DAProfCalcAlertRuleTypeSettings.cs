@@ -38,6 +38,8 @@ namespace Vanrise.Analytic.Entities
 
         public override Guid NotificationTypeId { get { return new Guid("6BB06963-AC64-4827-A7FC-EB6892057AD7"); } }
 
+        public override string SettingEditor { get { return "vr-analytic-daprofcalc-alertrulesettings"; } }
+
         public Guid DataAnalysisDefinitionId { get; set; }
 
         public List<DAProfCalcAlertRuleRecordStorage> SourceRecordStorages { get; set; }
@@ -45,18 +47,6 @@ namespace Vanrise.Analytic.Entities
         public List<DAProfCalcItemNotification> DAProfCalcItemNotifications { get; set; }
 
         public string RawRecordFilterLabel { get; set; }
-
-        public override string SettingEditor
-        {
-            get
-            {
-                return "vr-analytic-daprofcalc-alertrulesettings";
-            }
-            set
-            {
-                base.SettingEditor = value;
-            }
-        }
     }
 
     public class DAProfCalcAlertRuleRecordStorage
@@ -67,7 +57,7 @@ namespace Vanrise.Analytic.Entities
     public class DAProfCalcItemNotification
     {
         public Guid DataAnalysisItemDefinitionId { get; set; }
- 
+
         public Guid NotificationTypeId { get; set; }
     }
 }

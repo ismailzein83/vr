@@ -29,5 +29,13 @@ namespace Vanrise.Notification.Web.Controllers
             VRNotificationTypeSettingsFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<VRNotificationTypeSettingsFilter>(serializedFilter) : null;
             return manager.GetVRNotificationTypeSettingsInfo(deserializedFilter);
         }
+
+        [HttpGet]
+        [Route("GetNotificationTypeSettings")]
+        public VRNotificationTypeSettings GetNotificationTypeSettings(Guid notificationTypeId)
+        {
+            VRNotificationTypeManager manager = new VRNotificationTypeManager();
+            return manager.GetNotificationTypeSettings(notificationTypeId);
+        }
     }
 }

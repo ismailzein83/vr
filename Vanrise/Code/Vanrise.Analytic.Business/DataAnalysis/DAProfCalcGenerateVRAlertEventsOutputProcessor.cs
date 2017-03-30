@@ -6,6 +6,7 @@ using Vanrise.GenericData.Notification;
 using Vanrise.Common;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.Analytic.Business
 {
@@ -49,7 +50,11 @@ namespace Vanrise.Analytic.Business
 
                 foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
                 {
-                    DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext() { DataRecordTypeId = daProfCalcOutputSettings.RecordTypeId, OutputRecords = outputRecord.FieldValues };
+                    DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext() 
+                    {
+                        RecordFilterContext = new DataRecordDictFilterGenericFieldMatchContext(outputRecord.FieldValues, daProfCalcOutputSettings.RecordTypeId)
+                    };
+
                     if (daProfCalcAlertRuleSettings.Settings.IsRuleMatched(dataRecordAlertRuleSettingsIsMatchedContext))
                     {
                         DataRecordAlertRuleNotification dataRecordAlertRuleNotification = new DataRecordAlertRuleNotification()
@@ -66,7 +71,6 @@ namespace Vanrise.Analytic.Business
                 DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
                 dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(dataRecordAlertRuleNotifications, eventKeys, alertRule.RuleTypeId, notificationTypeId, alertRule.VRAlertRuleId,
                      daProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name), UserId);
-
             }
         }
 
