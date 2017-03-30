@@ -80,7 +80,13 @@ namespace TOne.WhS.RouteSync.Business
         {
             var allRouteSyncDefinitions = GetCachedRouteSyncDefinitions();
             Func<RouteSyncDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRouteSyncDefinitions.ToBigResult(input, filterExpression, RouteSyncDefinitionDetailMapper));
+
+            ResultProcessingHandler<RouteSyncDefinitionDetail> handler = new ResultProcessingHandler<RouteSyncDefinitionDetail>()
+            {
+                ExportExcelHandler = new RouteSyncDefinitionExcelExportHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRouteSyncDefinitions.ToBigResult(input, filterExpression, RouteSyncDefinitionDetailMapper), handler);
         }
 
         public IEnumerable<RouteReaderConfig> GetRouteReaderExtensionConfigs()
@@ -97,6 +103,39 @@ namespace TOne.WhS.RouteSync.Business
          
 
         #region Private Classes
+
+        private class RouteSyncDefinitionExcelExportHandler : ExcelExportHandler<RouteSyncDefinitionDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RouteSyncDefinitionDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Route Sync Definitions",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 30 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.RouteSyncDefinitionId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+
         class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IRouteSyncDefinitionDataManager _dataManager = RouteSyncDataManagerFactory.GetDataManager<IRouteSyncDefinitionDataManager>();
