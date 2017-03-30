@@ -10,7 +10,7 @@
         <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked" vr-disabled="scopeModel.fromTime==undefined || scopeModel.fromTime== null ||  scopeModel.validateDateTime()!=null"></vr-button>
         <vr-button type="Add" standalone data-onclick="scopeModel.addTransaction" ng-show="scopeModel.hasAddTransaction"></vr-button>
     </vr-columns>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row" withemptyline>
         <div class="pull-right">
             <vr-label isvalue>Current Balance:</vr-label>
             <vr-label>{{scopeModel.balance |  vrtextOrNumber : 2}}</vr-label>
