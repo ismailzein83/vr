@@ -14,19 +14,15 @@ namespace Vanrise.Common.Business
         #region Public Methods
 
        
-        public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId, bool isViewedFromUI)
+        public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId)
         {
             Dictionary<Guid, VRObjectTypeDefinition> cachedVRObjectTypeDefinitions = this.GetCachedVRObjectTypeDefinitions();
             var vrObjectTypeDefinition= cachedVRObjectTypeDefinitions.GetRecord(styleDefinitionId);
-            if (vrObjectTypeDefinition != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(VRObjectTypeDefinitionLoggableEntity.Instance, vrObjectTypeDefinition);
+          
             return vrObjectTypeDefinition;
         }
 
-        public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId)
-        {
-          return GetVRObjectTypeDefinition(styleDefinitionId,false);
-        }
+       
 
         public string GetObjectTypeDefinitionName(VRObjectTypeDefinition vrObjectTypeDefinition)
         {

@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetGenericRuleDefinition")]
         public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
         {
-            return _manager.GetGenericRuleDefinition(genericRuleDefinitionId,true);
+            return _manager.GetGenericRuleDefinition(genericRuleDefinitionId);
         }
 
         [HttpPost]

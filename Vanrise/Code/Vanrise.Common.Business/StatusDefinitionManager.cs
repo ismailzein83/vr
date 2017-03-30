@@ -12,18 +12,14 @@ namespace Vanrise.Common.Business
     public class StatusDefinitionManager : IBusinessEntityManager
     {
         #region Public Methods
-        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId, bool isViewedFromUI)
+        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
         {
             Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
             var statusDefinition= cachedStatusDefinitions.GetRecord(statusDefinitionId);
-            if (statusDefinition != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(StatusDefinitionLoggableEntity.Instance, statusDefinition);
+           
             return statusDefinition;
         }
-        public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
-        {
-            return GetStatusDefinition(statusDefinitionId,false);
-        }
+      
         public string GetStatusDefinitionName(Guid statusDefinitionId)
         {
             StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);

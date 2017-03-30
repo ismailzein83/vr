@@ -26,7 +26,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetVRObjectTypeDefinition")]
         public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid VRObjectTypeDefinitionId)
         {
-            return _manager.GetVRObjectTypeDefinition(VRObjectTypeDefinitionId,true);
+            return _manager.GetVRObjectTypeDefinition(VRObjectTypeDefinitionId);
         }
 
         [HttpPost]

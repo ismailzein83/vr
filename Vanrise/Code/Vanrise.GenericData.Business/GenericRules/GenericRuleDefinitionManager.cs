@@ -26,18 +26,14 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression));
         }
 
-        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId, bool isViewedFromUI)
+        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
             var genericRuleDefinition= cachedGenericRuleDefinitions.GetRecord(genericRuleDefinitionId);
-            if (genericRuleDefinition != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(GenericRuleDefinitionLoggableEntity.Instance, genericRuleDefinition);
+           
             return genericRuleDefinition;
         }
-        public GenericRuleDefinition GetGenericRuleDefinition(Guid genericRuleDefinitionId)
-        {
-            return GetGenericRuleDefinition(genericRuleDefinitionId,false);
-        }
+       
         public IEnumerable<GenericRuleDefinition> GetGenericRulesDefinitons()
         {
             return this.GetCachedGenericRuleDefinitions().Values;

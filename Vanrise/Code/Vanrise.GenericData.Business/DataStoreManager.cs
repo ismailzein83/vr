@@ -34,19 +34,15 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataStore.ToBigResult(input, filterExpression, DataStoreDetailMapper));
         }
 
-        public DataStore GetDataStore(Guid dataStoreId, bool isViewedFromUI)
+        public DataStore GetDataStore(Guid dataStoreId)
         {
             var cachedDataStore = GetCachedDataStores();
             var dataStoreItem= cachedDataStore.FindRecord((dataStore) => dataStore.DataStoreId == dataStoreId);
-            if (dataStoreItem != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(DataStoreLoggableEntity.Instance, dataStoreItem);
+           
             return dataStoreItem;
         }
 
-        public DataStore GetDataStore(Guid dataStoreId)
-        {
-            return GetDataStore(dataStoreId,false);
-        }
+       
         public string GetDataStoreName(DataStore dataStore)
         {
             if (dataStore != null)

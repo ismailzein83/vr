@@ -34,18 +34,14 @@ namespace Vanrise.Analytic.Business
            
             return analyticTables.MapRecords(AnalyticTableInfoMapper);
         }
-        public AnalyticTable GetAnalyticTableById(int analyticTableId, bool isViewedFromUI)
+        public AnalyticTable GetAnalyticTableById(int analyticTableId)
         {
             var analyticTables = GetCachedAnalyticTables();
           var analyticTable= analyticTables.GetRecord(analyticTableId);
-          if (analyticTable != null && isViewedFromUI)
-              VRActionLogger.Current.LogObjectViewed(AnalyticTableLoggableEntity.Instance, analyticTable);
+          
           return analyticTable;
         }
-        public AnalyticTable GetAnalyticTableById(int analyticTableId)
-        {
-            return GetAnalyticTableById(analyticTableId, false);
-        }
+       
         public string GetAnalyticTableName(AnalyticTable analyticTable)
         {
             if (analyticTable != null)

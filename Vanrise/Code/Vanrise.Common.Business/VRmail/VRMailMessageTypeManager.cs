@@ -13,18 +13,14 @@ namespace Vanrise.Common.Business
     {
         #region Public Methods
 
-        public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId, bool isViewedFromUI)
+        public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId)
         {
             Dictionary<Guid, VRMailMessageType> cachedVRMailMessageTypes = this.GetCachedVRMailMessageTypes();
             var mailMessageType= cachedVRMailMessageTypes.GetRecord(vrMailMessageTypeId);
-            if (mailMessageType != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(VRMailMessageTypeLoggableEntity.Instance, mailMessageType);
+            
             return mailMessageType;
         }
-        public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId)
-        {
-            return GetMailMessageType(vrMailMessageTypeId, false);
-        }
+       
         public IDataRetrievalResult<VRMailMessageTypeDetail> GetFilteredMailMessageTypes(DataRetrievalInput<VRMailMessageTypeQuery> input)
         {
             var allVRMailMessageTypes = GetCachedVRMailMessageTypes();

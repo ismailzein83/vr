@@ -13,18 +13,14 @@ namespace Vanrise.Notification.Business
     public class VRAlertLevelManager : IBusinessEntityManager
     {
         VRNotificationTypeManager _vrnotificationTypeManager = new VRNotificationTypeManager();
-        public VRAlertLevel GetAlertLevel(Guid alertLevelId, bool isViewedFromUI)
+        public VRAlertLevel GetAlertLevel(Guid alertLevelId)
         {
             Dictionary<Guid, VRAlertLevel> cachedAlertLevels = this.GetCachedAlertLevels();
             var vralertLevel = cachedAlertLevels.GetRecord(alertLevelId);
-            if (vralertLevel != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(VRAlertLevelLoggableEntity.Instance, vralertLevel);
+            
             return vralertLevel;
         }
-        public VRAlertLevel GetAlertLevel(Guid alertLevelId)
-        {
-            return GetAlertLevel(alertLevelId, false);
-        }
+       
         public string GetAlertLevelName(Guid alertLevelId)
         {
             VRAlertLevel alertLevel = this.GetAlertLevel(alertLevelId);

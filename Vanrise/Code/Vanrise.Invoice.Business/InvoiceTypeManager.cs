@@ -19,18 +19,14 @@ namespace Vanrise.Invoice.Business
     {
 
         #region Public Methods
-        public InvoiceType GetInvoiceType(Guid invoiceTypeId, bool isViewedFromUI)
+        public InvoiceType GetInvoiceType(Guid invoiceTypeId)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
             var invoiceType= invoiceTypes.GetRecord(invoiceTypeId);
-            if (invoiceType != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(InvoiceTypeLoggableEntity.Instance, invoiceType);
+  
             return invoiceType;
         }
-        public InvoiceType GetInvoiceType(Guid invoiceTypeId)
-        {
-           return GetInvoiceType(invoiceTypeId, false);
-        }
+       
         public string GetInvoiceTypeName(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);

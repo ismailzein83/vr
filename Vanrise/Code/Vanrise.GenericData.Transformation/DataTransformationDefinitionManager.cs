@@ -36,18 +36,14 @@ namespace Vanrise.GenericData.Transformation
             VRActionLogger.Current.LogGetFilteredAction(DataTransformationDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataTransformationDefinitionDetailMapper));
         }
-        public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId, bool isViewedFromUI)
+        public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)
         {
             var dataDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
             var dataTransformationDefintion= dataDataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
-            if (dataTransformationDefintion != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(DataTransformationDefinitionLoggableEntity.Instance, dataTransformationDefintion);
+           
             return dataTransformationDefintion;
         }
-        public DataTransformationDefinition GetDataTransformationDefinition(Guid dataTransformationDefinitionId)
-        {
-           return GetDataTransformationDefinition(dataTransformationDefinitionId,false);
-        }
+      
         public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(Guid dataTransformationDefinitionId)
         {
             var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
