@@ -49,7 +49,7 @@ namespace Vanrise.Queueing
             _queueId = queueId;
             _queueSettings = settings;
             if (!int.TryParse(ConfigurationManager.AppSettings["Queue_MaxRetryDequeueTime"], out _maxRetryDequeueTime))
-                _maxRetryDequeueTime = 5;
+                _maxRetryDequeueTime = 0;
             if (!int.TryParse(ConfigurationManager.AppSettings["Queue_NbOfSummaryBatchesToDequeue"], out _nbOfSummaryBatchesToDequeue))
                 _nbOfSummaryBatchesToDequeue = 20;
         }
