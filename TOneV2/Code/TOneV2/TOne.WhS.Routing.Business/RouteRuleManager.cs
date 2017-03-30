@@ -335,7 +335,7 @@ namespace TOne.WhS.Routing.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
