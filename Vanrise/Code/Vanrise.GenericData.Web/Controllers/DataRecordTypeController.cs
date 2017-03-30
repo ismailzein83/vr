@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            return dataRecordTypeManager.GetDataRecordTypeToEdit(dataRecordTypeId,true);
+            return dataRecordTypeManager.GetDataRecordTypeToEdit(dataRecordTypeId);
         }
 
         [HttpGet]

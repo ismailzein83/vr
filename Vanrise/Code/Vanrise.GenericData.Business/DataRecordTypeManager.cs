@@ -44,18 +44,14 @@ namespace Vanrise.GenericData.Business
             VRActionLogger.Current.LogGetFilteredAction(DataRecordTypeLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataRecordTypeDetailMapper));
         }
-        public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId, bool isViewedFromUI)
+        public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
             var dataRecordTypeToEdit = dataRecordTypes.GetRecord(dataRecordTypeId);
-            if (dataRecordTypeToEdit != null && isViewedFromUI)
-                VRActionLogger.Current.LogObjectViewed(DataRecordTypeLoggableEntity.Instance, dataRecordTypeToEdit);
+           
             return dataRecordTypeToEdit;
         }
-        public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
-        {
-            return GetDataRecordTypeToEdit(dataRecordTypeId, false);
-        }
+       
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -259,6 +255,7 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
 
         #region Private Methods
 
