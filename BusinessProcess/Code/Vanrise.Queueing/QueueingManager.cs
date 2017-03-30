@@ -138,7 +138,7 @@ namespace Vanrise.Queueing
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Item Id" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Stage Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Stage Name", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Retry Count" });
