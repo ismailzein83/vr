@@ -21,11 +21,11 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataRecordFieldsInfo")]
-        public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(string serializedFilter)
+        public IEnumerable<DataRecordFieldInfo> GetDataRecordFieldsInfo(Guid dataRecordTypeId, string serializedFilter = null)
         {
             DataRecordFieldInfoFilter filter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<DataRecordFieldInfoFilter>(serializedFilter) : null;
             DataRecordFieldManager manager = new DataRecordFieldManager();
-            return manager.GetDataRecordFieldsInfo(filter);
+            return manager.GetDataRecordFieldsInfo(dataRecordTypeId, filter);
         }
 
         [HttpGet]
