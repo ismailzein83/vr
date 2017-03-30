@@ -7,6 +7,7 @@ using Vanrise.Reprocess.Data;
 using Vanrise.Reprocess.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 
 namespace Vanrise.Reprocess.Business
@@ -19,6 +20,7 @@ namespace Vanrise.Reprocess.Business
         {
             var allReprocessDefinitions = this.GetCachedReprocessDefinitions();
             Func<ReprocessDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(ReprocessDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allReprocessDefinitions.ToBigResult(input, filterExpression, ReprocessDefinitionDetailMapper));
         }
 
@@ -26,6 +28,11 @@ namespace Vanrise.Reprocess.Business
         {
             Dictionary<Guid, ReprocessDefinition> cachedReprocessDefinitions = this.GetCachedReprocessDefinitions();
             return cachedReprocessDefinitions.GetRecord(reprocessDefinitionId);
+        }
+
+        public string GetReprocessDefinitionName(ReprocessDefinition reprocessDefinition)
+        {
+            return (reprocessDefinition != null) ? reprocessDefinition.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<ReprocessDefinitionDetail> AddReprocessDefinition(ReprocessDefinition reprocessDefinitionItem)
@@ -40,6 +47,7 @@ namespace Vanrise.Reprocess.Business
             if (dataManager.Insert(reprocessDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(ReprocessDefinitionLoggableEntity.Instance, reprocessDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = ReprocessDefinitionDetailMapper(reprocessDefinitionItem);
             }
@@ -63,6 +71,7 @@ namespace Vanrise.Reprocess.Business
             if (dataManager.Update(reprocessDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(ReprocessDefinitionLoggableEntity.Instance, reprocessDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ReprocessDefinitionDetailMapper(this.GetReprocessDefinition(reprocessDefinitionItem.ReprocessDefinitionId));
             }
@@ -105,6 +114,50 @@ namespace Vanrise.Reprocess.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreReprocessDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
+        private class ReprocessDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static ReprocessDefinitionLoggableEntity Instance = new ReprocessDefinitionLoggableEntity();
+
+            private ReprocessDefinitionLoggableEntity()
+            {
+
+            }
+
+            static ReprocessDefinitionManager s_reprocessDefinitionManager = new ReprocessDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "Reprocess_ReprocessDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Reprocess"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Reprocess Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "Reprocess_ReprocessDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                ReprocessDefinition reprocessDefinition = context.Object.CastWithValidate<ReprocessDefinition>("context.Object");
+                return reprocessDefinition.ReprocessDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                ReprocessDefinition reprocessDefinition = context.Object.CastWithValidate<ReprocessDefinition>("context.Object");
+                return s_reprocessDefinitionManager.GetReprocessDefinitionName(reprocessDefinition);
             }
         }
 

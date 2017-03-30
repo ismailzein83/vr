@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitionAPIService', 'Reprocess_ReprocessDefinitionService', 'VRNotificationService',
-    function (Reprocess_ReprocessDefinitionAPIService, Reprocess_ReprocessDefinitionService, VRNotificationService) {
+app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitionAPIService', 'Reprocess_ReprocessDefinitionService', 'VRNotificationService', 'VRUIUtilsService',
+    function (Reprocess_ReprocessDefinitionAPIService, Reprocess_ReprocessDefinitionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitio
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.reprocessDefinition = [];
@@ -29,11 +29,18 @@ app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitio
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = Reprocess_ReprocessDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return Reprocess_ReprocessDefinitionAPIService.GetFilteredReprocessDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +58,7 @@ app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitio
                 };
 
                 api.onReprocessDefinitionAdded = function (addedReprocessDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedReprocessDefinition);
                     gridAPI.itemAdded(addedReprocessDefinition);
                 };
 
@@ -71,6 +79,7 @@ app.directive('reprocessReprocessdefinitionGrid', ['Reprocess_ReprocessDefinitio
 
             function editReprocessDefinition(reprocessDefinitionItem) {
                 var onReprocessDefinitionUpdated = function (updatedReprocessDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedReprocessDefinition);
                     gridAPI.itemUpdated(updatedReprocessDefinition);
                 };
 
