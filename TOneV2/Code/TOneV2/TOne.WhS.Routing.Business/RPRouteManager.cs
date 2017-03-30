@@ -59,7 +59,12 @@ namespace TOne.WhS.Routing.Business
 				Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions, null, null, includeBlockedSupplierZones, null))
 			};
 
-			return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
+            ResultProcessingHandler<RPRouteDetail> handler = new ResultProcessingHandler<RPRouteDetail>()
+            {
+                ExportExcelHandler = new RPRouteExcelExportHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult, handler);
 		}
 
 		public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
@@ -210,6 +215,54 @@ namespace TOne.WhS.Routing.Business
 		#endregion
 
 		#region Private Members
+
+        private class RPRouteExcelExportHandler : ExcelExportHandler<RPRouteDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RPRouteDetail> context)
+            {
+                ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Product Cost",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product", Width = 25 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 25 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Route Options", Width = 125 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        row.Cells.Add(new ExportExcelCell { Value = record.RoutingProductName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.SaleZoneServiceIds.ToList()) });
+                        row.Cells.Add(new ExportExcelCell { Value = record.IsBlocked });
+                        if (record.RouteOptionsDetails != null)
+                        {
+                            string routeOptionsDetails = "";
+                            foreach (var customerRouteOptionDetail in record.RouteOptionsDetails)
+                            {
+                                routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.SupplierName + " ";
+                                if (customerRouteOptionDetail.Entity.Percentage != null)
+                                    routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.Entity.Percentage + "% ";
+                            }
+                            row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
+                        }
+                        else
+                            row.Cells.Add(new ExportExcelCell { Value = "" });
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
 
 		private RoutingDatabase GetLatestRoutingDatabase(int routingDatabaseId)
 		{
