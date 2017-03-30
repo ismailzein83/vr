@@ -78,7 +78,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "User" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Module"});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Entity" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Entity", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Action" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Object Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Notes", Width = 120 });
