@@ -65,12 +65,8 @@
     <Folder Include="Retail\Tables\" />
     <Folder Include="Retail\Stored Procedures\" />
     <Folder Include="Security\" />
-    <Folder Include="TOneWhS_BE\" />
-    <Folder Include="TOneWhS_BE\Tables\" />
     <Folder Include="Retail_BE\" />
     <Folder Include="Retail_BE\Tables\" />
-    <Folder Include="TOneWhS_BE\Functions\" />
-    <Folder Include="TOneWhS_BE\Stored Procedures\" />
     <Folder Include="VR_AccountBalance\" />
     <Folder Include="VR_AccountBalance\Tables\" />
     <Folder Include="Retail_BE\Stored Procedures\" />
