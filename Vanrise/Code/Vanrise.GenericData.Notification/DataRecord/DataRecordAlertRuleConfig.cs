@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Entities;
 
@@ -26,9 +27,7 @@ namespace Vanrise.GenericData.Notification
 
         List<VRAction> Actions { set; }
 
-        Dictionary<string, dynamic> OutputRecords { get; }
-
-        Guid DataRecordTypeId { get; }
+        IRecordFilterGenericFieldMatchContext RecordFilterContext { get; }
     }
 
     public class DataRecordAlertRuleSettingsIsMatchedContext : IDataRecordAlertRuleSettingsIsMatchedContext
@@ -37,8 +36,6 @@ namespace Vanrise.GenericData.Notification
 
         public List<VRAction> Actions { get; set; }
 
-        public Dictionary<string, dynamic> OutputRecords { get; set; }
-
-        public Guid DataRecordTypeId { get; set; }
+        public IRecordFilterGenericFieldMatchContext RecordFilterContext { get; set; }
     }
 }

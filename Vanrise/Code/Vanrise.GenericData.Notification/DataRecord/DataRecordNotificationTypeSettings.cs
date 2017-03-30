@@ -4,13 +4,12 @@ using System.Linq;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Notification
 {
     public class DataRecordNotificationTypeSettings : VRNotificationTypeExtendedSettings
     {
-        #region Ctor/Properties
-
         RecordFilterManager recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
 
         public override Guid ConfigId { get { return new Guid("E64C51A2-08E0-4B7D-96F0-9FF1848A72FA"); } }
@@ -23,9 +22,6 @@ namespace Vanrise.GenericData.Notification
 
         public List<NotificationGridColumnDefinition> GridColumnDefinitions { get; set; }
 
-        #endregion
-
-        #region Public Methods
 
         public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
         {
@@ -34,12 +30,19 @@ namespace Vanrise.GenericData.Notification
 
             var extendedQuery = context.ExtendedQuery as DataRecordNotificationExtendedQuery;
             if (extendedQuery == null)
-                return true;
+                return false;
 
             if (extendedQuery.FilterGroup == null)
                 return true;
-            
-            return recordFilterManager.IsFilterGroupMatch(extendedQuery.FilterGroup, new DataRecordNotificationTypeRecordFilterGenericFieldMatchContext(this.DataRecordTypeId, context.VRNotification));
+
+            if (context.VRNotification == null || context.VRNotification.Data == null || context.VRNotification.Data.EventPayload == null)
+                return false;
+
+            DataRecordAlertRuleActionEventPayload dataRecordAlertRuleActionEventPayload = context.VRNotification.Data.EventPayload as DataRecordAlertRuleActionEventPayload;
+            if (dataRecordAlertRuleActionEventPayload == null)
+                return false;
+
+            return recordFilterManager.IsFilterGroupMatch(extendedQuery.FilterGroup, new DataRecordDictFilterGenericFieldMatchContext(dataRecordAlertRuleActionEventPayload.OutputRecords, this.DataRecordTypeId));
         }
 
         public override VRNotificationDetail MapToNotificationDetail(IVRNotificationTypeMapToDetailContext context)
@@ -77,65 +80,21 @@ namespace Vanrise.GenericData.Notification
                 Entity = context.VRNotification,
                 FieldValues = fieldValues
             };
+
             return alertRuleActionEventPayloadDetail;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private static DataRecordAlertRuleActionEventPayload GetDataRecordAlertRuleActionEventPayload(VRNotification vrNotification)
+        private DataRecordAlertRuleActionEventPayload GetDataRecordAlertRuleActionEventPayload(VRNotification vrNotification)
         {
-            if (vrNotification == null)
-                throw new NullReferenceException("vrNotification");
+            vrNotification.ThrowIfNull<VRNotification>("vrNotification");
 
-            VRNotificationData vrNotificationData = vrNotification.Data;
-            if (vrNotificationData == null)
-                throw new NullReferenceException("vrNotificationData");
+            VRNotificationData vrNotificationData = vrNotification.Data.CastWithValidate<VRNotificationData>("vrNotification.Data", vrNotification.VRNotificationId);
 
-            DataRecordAlertRuleActionEventPayload eventPayload = vrNotificationData.EventPayload as DataRecordAlertRuleActionEventPayload;
-            if (eventPayload == null)
-                throw new NullReferenceException("dataRecordAlertRuleActionEventPayload");
+            DataRecordAlertRuleActionEventPayload eventPayload = vrNotificationData.EventPayload.CastWithValidate<DataRecordAlertRuleActionEventPayload>("vrNotificationData.EventPayload", vrNotification.VRNotificationId);
 
             return eventPayload;
         }
 
-        #endregion
-
-        #region Private Classes
-
-        private class DataRecordNotificationTypeRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
-        {
-            Guid _dataRecordType;
-            DataRecordAlertRuleActionEventPayload _eventPayload;
-            static DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-
-            public DataRecordNotificationTypeRecordFilterGenericFieldMatchContext(Guid dataRecordType, VRNotification _vrNotification)
-            {
-                _dataRecordType = dataRecordType;
-                _eventPayload = GetDataRecordAlertRuleActionEventPayload(_vrNotification);
-            }
-
-            public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
-            {
-                DataRecordField dataRecordField = dataRecordTypeManager.GetDataRecordField(_dataRecordType, fieldName);
-                if (dataRecordField == null)
-                    throw new NullReferenceException(string.Format("dataRecordField of DataRecordTypeId: {0} and FieldName: {1}", _dataRecordType, fieldName));
-
-                Dictionary<string, dynamic> outputRecords = _eventPayload.OutputRecords;
-                if (outputRecords == null)
-                    throw new NullReferenceException("dataRecordAlertRuleActionEventPayload.OutputRecords");
-
-                object fieldValue = null;
-                if (!outputRecords.TryGetValue(fieldName, out fieldValue))
-                    throw new Exception(string.Format("dataRecordAlertRuleActionEventPayload.OutputRecords does not contain fieldName: {0}", fieldName));
-
-                fieldType = dataRecordField.Type;
-                return fieldValue;
-            }
-        }
-
-        #endregion
     }
 
     public class NotificationGridColumnDefinition

@@ -38,13 +38,5 @@ namespace Vanrise.GenericData.Notification
 
             return results;
         }
-
-        public IEnumerable<DataRecordFieldInfo> GetNotificationDataRecordFieldsInfo(Guid notificationTypeId)
-        {
-            var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings<DataRecordNotificationTypeSettings>(notificationTypeId);
-            Guid dataRecordTypeId = vrNotificationTypeExtendedSettings.DataRecordTypeId;
-
-            return new DataRecordFieldManager().GetDataRecordFieldsInfo(new DataRecordFieldInfoFilter() { DataRecordTypeId = dataRecordTypeId });
-        }
     }
 }

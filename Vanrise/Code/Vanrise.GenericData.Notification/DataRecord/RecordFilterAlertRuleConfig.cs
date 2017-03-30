@@ -19,14 +19,13 @@ namespace Vanrise.GenericData.Notification
             if (RecordAlertRuleConfigs == null || RecordAlertRuleConfigs.Count == 0)
                 return false;
 
-            DataRecordDictFilterGenericFieldMatchContext filterContext = new DataRecordDictFilterGenericFieldMatchContext(context.OutputRecords, context.DataRecordTypeId);
             RecordFilterManager manager = new RecordFilterManager();
             VRAlertLevelManager alertLevelManager = new VRAlertLevelManager();
 
             IOrderedEnumerable<RecordAlertRuleConfig> orderedRecordAlertRuleConfig = RecordAlertRuleConfigs.OrderByDescending(itm => alertLevelManager.GetAlertLevelWeight(itm.AlertLevelId));
             foreach (RecordAlertRuleConfig recordAlertRuleConfig in orderedRecordAlertRuleConfig)
             {
-                if (manager.IsFilterGroupMatch(recordAlertRuleConfig.FilterGroup, filterContext))
+                if (manager.IsFilterGroupMatch(recordAlertRuleConfig.FilterGroup, context.RecordFilterContext))
                 {
                     context.AlertLevelId = recordAlertRuleConfig.AlertLevelId;
                     context.Actions = recordAlertRuleConfig.Actions;

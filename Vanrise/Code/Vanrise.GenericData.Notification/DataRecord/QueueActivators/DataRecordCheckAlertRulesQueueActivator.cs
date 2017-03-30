@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Notification
 {
     public class DataRecordCheckAlertRulesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
-        public Guid AlertRuleTypeId { get; set; }
+        public Guid AlertRuleTypeId { get; set; } 
 
 
         #region QueueActivator
