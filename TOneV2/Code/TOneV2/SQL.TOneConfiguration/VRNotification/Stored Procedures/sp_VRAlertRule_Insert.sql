@@ -1,15 +1,17 @@
-﻿--Insert
+﻿
 CREATE Procedure [VRNotification].[sp_VRAlertRule_Insert]
 	@Name nvarchar(255),
-	@RuleTypeID uniqueidentifier,
+	@RuleTypeId uniqueidentifier,
+	@UserId int,
 	@Settings nvarchar(MAX),
 	@Id int out
+	
 AS
 BEGIN
 	IF NOT EXISTS(select 1 from [VRNotification].VRAlertRule where Name = @Name)
 	BEGIN
-		insert into [VRNotification].VRAlertRule ([Name], [RuleTypeID], [Settings])
-		values(@Name, @RuleTypeID, @Settings)
+		insert into [VRNotification].VRAlertRule ([Name], [RuleTypeId], [UserId], [Settings])
+		values(@Name, @RuleTypeId, @UserId, @Settings)
 		
 		set @Id = SCOPE_IDENTITY()
 	END

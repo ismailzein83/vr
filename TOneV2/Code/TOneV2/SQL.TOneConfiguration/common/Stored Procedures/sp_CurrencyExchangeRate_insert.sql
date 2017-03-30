@@ -10,9 +10,10 @@ CREATE PROCEDURE [common].[sp_CurrencyExchangeRate_insert]
 	@id INT OUT
 AS
 BEGIN
-
+IF NOT EXISTS(SELECT 1 FROM common.CurrencyExchangeRate WHERE ExchangeDate = @ExchangeDate and CurrencyID= @CurrencyID)
+	BEGIN
 	INSERT INTO common.CurrencyExchangeRate(Rate,CurrencyID,ExchangeDate)
-	VALUES (@Rate,@CurrencyID,@ExchangeDate)
-	
+	VALUES (@Rate,@CurrencyID,@ExchangeDate)	
 	SET @id = SCOPE_IDENTITY()
+END
 END

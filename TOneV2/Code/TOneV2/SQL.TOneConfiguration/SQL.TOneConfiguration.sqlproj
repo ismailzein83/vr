@@ -565,6 +565,14 @@
     <Build Include="sec\Stored Procedures\sp_RequiredPermissionSet_InsertIfNotExists.sql" />
     <Build Include="sec\Stored Procedures\sp_RequiredPermissionSet_GetAll.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByAccountIds.sql" />
+    <Build Include="VRNotification\Tables\VRAlertLevel.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertLevel_Update.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertLevel_Insert.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertLevel_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetUnpaidByPartner.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByTime.sql" />
+    <Build Include="VR_Invoice\User Defined Types\PartnerInvoiceTypeTable.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\BillingTransactionsByTimeTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

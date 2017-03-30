@@ -1,5 +1,5 @@
-﻿--Update
-Create Procedure [VRNotification].[sp_VRAlertRule_Update]
+﻿
+CREATE Procedure [VRNotification].[sp_VRAlertRule_Update]
 	@ID int,
 	@Name nvarchar(255),
 	@RuleTypeID uniqueidentifier,
