@@ -125,6 +125,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_ZoneRateTempTable);
             query.AppendLine(query_CodeMatchTempTable);
+            query.AppendLine(query_ZoneMatchTempTable);
+            query.AppendLine(query_RoutePoolTempTable);
+            query.AppendLine(query_RouteOptionsPoolTempTable);
+            query.AppendLine(query_RouteBlockConcatinatedTempTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -137,6 +141,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_DropCustomerZoneDetailTable);
             query.AppendLine(query_DropZoneRateTempTable);
             query.AppendLine(query_DropCodeMatchTempTable);
+            query.AppendLine(query_DropZoneMatchTempTable);
+            query.AppendLine(query_DropRoutePoolTempTable);
+            query.AppendLine(query_DropRouteOptionsPoolTempTable);
+            query.AppendLine(query_DropRouteBlockConcatinatedTempTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -159,10 +167,20 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         protected const string query_DropCodeMatchTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch_Temp' AND TABLE_SCHEMA = 'dbo')
                                                          drop table dbo.CodeMatch_Temp;";
 
+        protected const string query_DropZoneMatchTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneMatch_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                                drop table dbo.ZoneMatch_Temp;";
 
+        protected const string query_DropRoutePoolTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RoutePool_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                                drop table dbo.RoutePool_Temp;";
+
+        protected const string query_DropRouteOptionsPoolTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOptionsPool_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                                       drop table dbo.RouteOptionsPool_Temp;";
+
+        protected const string query_DropRouteBlockConcatinatedTempTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteBlockConcatinated_Temp' AND TABLE_SCHEMA = 'dbo')
+                                                                             drop table dbo.RouteBlockConcatinated_Temp;";
 
         protected const string query_DropCustomerZoneDetailTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CustomerZoneDetail' AND TABLE_SCHEMA = 'dbo')
-                                                                    drop table dbo.CustomerZoneDetail;";
+                                                                     drop table dbo.CustomerZoneDetail;";
 
         const string query_CodeMatchTempTable = @"CREATE TABLE [dbo].[CodeMatch_Temp](
 	                                              [Code] [varchar](30) NOT NULL,
@@ -171,8 +189,42 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                              [SupplierID] [varchar](5) NULL
                                                   ) ON [PRIMARY];";
 
+        const string query_ZoneMatchTempTable = @"CREATE TABLE [dbo].[ZoneMatch_Temp](
+	                                              [OurZoneID] [int] NOT NULL,
+	                                              [SupplierZoneID] [int] NOT NULL
+                                                  ) ON [PRIMARY];";
 
+        const string query_RoutePoolTempTable = @"CREATE TABLE [dbo].[RoutePool_Temp](
+	                                                [Code] [varchar](20) NOT NULL,
+	                                                [ZoneID] [int] NOT NULL,
+	                                                [IsBlocked] [bit] NULL,
+	                                                [CodeGroup] [varchar](20) NULL
+                                                ) ON [PRIMARY];";
 
+        const string query_RouteOptionsPoolTempTable = @"CREATE TABLE [dbo].[RouteOptionsPool_Temp](
+	                                                        [Code] [varchar](20) NOT NULL,
+	                                                        [SupplierID] [varchar](5) NOT NULL,
+	                                                        [SupplierZoneID] [int] NOT NULL,
+	                                                        [SupplierServicesFlag] [smallint] NOT NULL,
+	                                                        [ProfileId] [int] NULL,
+	                                                        [ActiveRate] [real] NULL,
+	                                                        [IsBlock] [bit] NULL,
+	                                                        [IsTOD] [bit] NULL
+                                                        ) ON [PRIMARY]";
+
+        const string query_RouteBlockConcatinatedTempTable = @"CREATE TABLE [dbo].[RouteBlockConcatinated_Temp](
+	                                                            [RouteBlockID] [int] NULL,
+	                                                            [CustomerID] [varchar](5) NULL,
+	                                                            [SupplierID] [varchar](5) NULL,
+	                                                            [Code] [varchar](20) NULL,
+	                                                            [ZoneID] [int] NULL,
+	                                                            [UpdatedDate] [smalldatetime] NULL,
+	                                                            [IncludeSubCodes] [char](1) NULL,
+	                                                            [ExcludedCodes] [varchar](max) NULL,
+	                                                            [ParentID] [int] NULL,
+	                                                            [OriginalExcluded] [varchar](max) NULL
+                                                            ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]";
+        
 
         const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
 	                                                    [SupplierId] [int] NOT NULL,

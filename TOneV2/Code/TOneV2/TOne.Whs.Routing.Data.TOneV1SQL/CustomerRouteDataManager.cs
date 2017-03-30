@@ -222,14 +222,25 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         public void FinalizeCurstomerRoute(Action<string> trackStep, int commnadTimeoutInSeconds, int? maxDOP)
         {
             StringBuilder query = new StringBuilder();
+            string maxDOPSyntax = maxDOP.HasValue ? string.Format(",MAXDOP={0}", maxDOP.Value) : "";
+
             if (!Routing_TOne_Testing)
             {
-                string maxDOPSyntax = maxDOP.HasValue ? string.Format(",MAXDOP={0}", maxDOP.Value) : "";
-
                 CreateIndex(string.Format(query_CreateZoneRateIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Zone Rate", commnadTimeoutInSeconds);
                 CreateIndex(string.Format(query_CreateCodeMatchIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Code Match", commnadTimeoutInSeconds);
                 CreateIndex(string.Format(query_CreateRouteIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Route", commnadTimeoutInSeconds);
                 CreateIndex(string.Format(query_CreateRouteOptionIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Route Option", commnadTimeoutInSeconds);
+            }
+            FillData(query_FillZoneMacthTemp, trackStep, "Zone Match", commnadTimeoutInSeconds);
+            FillData(query_FillRouteBlockConcatinatedTemp, trackStep, "Route Block Concatinated", commnadTimeoutInSeconds);
+            FillData(query_FillPoolTablesTemp, trackStep, "Route Pool and Route Options Pool", commnadTimeoutInSeconds);
+
+            if (!Routing_TOne_Testing)
+            {
+                CreateIndex(string.Format(query_CreateZoneMatchIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Zone Match", commnadTimeoutInSeconds);
+                CreateIndex(string.Format(query_CreateRouteBlockConcatinatedIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Route Block Concatinated", commnadTimeoutInSeconds);
+                CreateIndex(string.Format(query_CreateRoutePoolIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Route Pool", commnadTimeoutInSeconds);
+                CreateIndex(string.Format(query_CreateRouteOptionsPoolIndexes, maxDOPSyntax, Routing_TOneV1_FileGroup), trackStep, "Route Options Pool", commnadTimeoutInSeconds);
             }
 
             query.AppendLine(query_DropSupplierZoneDetailsTable);
@@ -238,10 +249,20 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine(query_DropCustomerRouteTable);
             query.AppendLine(query_DropZoneRateTable);
             query.AppendLine(query_DropCodeMatchTable);
+            query.AppendLine(query_DropZoneMatchTable);
+            query.AppendLine(query_DropRoutePoolTable);
+            query.AppendLine(query_DropRouteOptionsPoolTable);
+            query.AppendLine(query_DropRouteBlockConcatinatedTable);
             query.AppendLine("EXEC sp_rename 'Route_Temp','Route';");
             query.AppendLine("EXEC sp_rename 'RouteOption_Temp','RouteOption';");
             query.AppendLine("EXEC sp_rename 'ZoneRates_Temp','ZoneRates';");
             query.AppendLine("EXEC sp_rename 'CodeMatch_Temp','CodeMatch';");
+            query.AppendLine("EXEC sp_rename 'ZoneMatch_Temp','ZoneMatch';");
+            query.AppendLine("EXEC sp_rename 'RoutePool_Temp','RoutePool';");
+            query.AppendLine("EXEC sp_rename 'RouteOptionsPool_Temp','RouteOptionsPool';");
+            query.AppendLine("EXEC sp_rename 'RouteBlockConcatinated_Temp','RouteBlockConcatinated';");
+            query.AppendLine("EXEC sp_rename 'PK_ZoneMatch_Temp','PK_ZoneMatch';");
+            
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -254,6 +275,14 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             trackStep(string.Format("Building Indexes for {0} table took {1}", obejctName, endDate.Subtract(startDate)));
         }
 
+        void FillData(string query, Action<string> trackStep, string obejctName, int commandTimeoutInSeconds)
+        {
+            DateTime startDate = DateTime.Now;
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            DateTime endDate = DateTime.Now;
+            trackStep(string.Format("Building {0} table took {1}", obejctName, endDate.Subtract(startDate)));
+        }
+
         #region Queries
 
         const string query_DropCustomerRouteTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'Route' AND TABLE_SCHEMA = 'dbo')
@@ -262,11 +291,23 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                       drop table dbo.RouteOption;";
 
         const string query_DropZoneRateTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneRates' AND TABLE_SCHEMA = 'dbo')
-                                                      drop table dbo.ZoneRates;";
+                                                    drop table dbo.ZoneRates;";
 
         const string query_DropCodeMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'CodeMatch' AND TABLE_SCHEMA = 'dbo')
-                                                      drop table dbo.CodeMatch;";
+                                                     drop table dbo.CodeMatch;";
 
+        const string query_DropRoutePoolTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RoutePool' AND TABLE_SCHEMA = 'dbo')
+                                                    drop table dbo.RoutePool;";
+
+        const string query_DropRouteOptionsPoolTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteOptionsPool' AND TABLE_SCHEMA = 'dbo')
+                                                            drop table dbo.RouteOptionsPool;";
+
+        const string query_DropRouteBlockConcatinatedTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteBlockConcatinated' AND TABLE_SCHEMA = 'dbo')
+                                                                drop table dbo.RouteBlockConcatinated;";
+        
+        const string query_DropZoneMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneMatch' AND TABLE_SCHEMA = 'dbo')
+                                                    drop table dbo.ZoneMatch;";
+        
         const string query_CreateZoneRateIndexes = @"  CREATE NONCLUSTERED INDEX [IX_ZoneRates_ServicesFlag] ON [dbo].[ZoneRates_Temp]
                                                         (
                                                             [ServicesFlag] ASC
@@ -284,17 +325,37 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         const string query_CreateCodeMatchIndexes = @"  CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Code] ON [dbo].[CodeMatch_Temp] 
                                                       (
 	                                                      [Code] ASC
-                                                      )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];;
+                                                      )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];
                                                       
                                                       CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Supplier] ON [dbo].[CodeMatch_Temp] 
                                                       (
 	                                                      [SupplierID] ASC
-                                                      )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];;
+                                                      )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];
 
                                                       CREATE NONCLUSTERED INDEX [IDX_CodeMatch_Zone] ON [dbo].[CodeMatch_Temp] 
                                                       (
 	                                                      [SupplierZoneID] ASC
                                                       )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];";
+
+        const string query_CreateZoneMatchIndexes = @"  ALTER TABLE [dbo].[ZoneMatch_Temp] ADD  CONSTRAINT [PK_ZoneMatch_Temp] PRIMARY KEY CLUSTERED 
+                                                        (
+                                                        	[OurZoneID] ASC,
+                                                        	[SupplierZoneID] ASC
+                                                        )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON {0}) ON [{1}];
+
+                                                        CREATE NONCLUSTERED INDEX [IX_ZoneMatch_SupplierZoneID] ON [dbo].[ZoneMatch_Temp]
+                                                        (
+                                                        	[SupplierZoneID] ASC
+                                                        )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON {0}) ON [{1}];";
+
+        const string query_CreateRouteBlockConcatinatedIndexes = @" CREATE NONCLUSTERED INDEX [IX_RouteBlockConcatinated_multikey] ON [dbo].[RouteBlockConcatinated_Temp]
+                                                                    (
+	                                                                    [CustomerID] ASC,
+	                                                                    [SupplierID] ASC,
+	                                                                    [Code] ASC
+                                                                    )
+                                                                    INCLUDE ([ZoneID]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON {0}) ON [{1}];";
+
 
         const string query_CreateRouteIndexes = @"  CREATE CLUSTERED INDEX [PK_RouteID] ON [dbo].[Route_Temp] 
 			                                        (
@@ -336,6 +397,136 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 				                                            [RouteID] ASC
 			                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];";
 
+        const string query_CreateRoutePoolIndexes = @"CREATE NONCLUSTERED INDEX [IX_RoutePool_ZoneIncCode] ON [dbo].[RoutePool_Temp] 
+                                                    (	
+                                                        [ZoneID] ASC
+                                                    )INCLUDE ( [Code]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];
+		
+                                                    CREATE NONCLUSTERED INDEX [IX_RoutePool_CodeIncZone] ON [dbo].[RoutePool_Temp] (	
+                                                        [Code] ASC
+                                                    )INCLUDE ( [ZoneID]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];";
+
+        const string query_CreateRouteOptionsPoolIndexes = @"CREATE NONCLUSTERED INDEX [IX_RouteOptionsPool_CodeSupplierID] ON [dbo].[RouteOptionsPool_Temp] 
+                                                            (	
+                                                                [SupplierID] ASC,	
+                                                                [Code] ASC
+                                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];
+		
+                                                            CREATE NONCLUSTERED INDEX [IX_RouteCodePool_SupplierZone] ON [dbo].[RouteOptionsPool_Temp] 
+                                                            (	
+                                                                [SupplierID] ASC,	
+                                                                [SupplierZoneID] ASC
+                                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];
+
+                                                            CREATE NONCLUSTERED INDEX [IX_RouteCodePool_Multikeys] ON [dbo].[RouteOptionsPool_Temp]
+                                                            (
+                                                                [SupplierID] ASC,
+                                                                [Code] ASC,
+                                                                [SupplierZoneID] ASC,
+                                                                [ActiveRate] ASC,	
+                                                                [SupplierServicesFlag] ASC
+                                                            )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [{1}];";
+
+        const string query_FillZoneMacthTemp = @" INSERT INTO ZoneMatch_Temp (OurZoneID, SupplierZoneID)
+                                                  SELECT DISTINCT OC.SupplierZoneID, SC.SupplierZoneID 
+                                                  FROM   [dbo].[CodeMatch_Temp] OC WITH(NOLOCK), [dbo].[CodeMatch_Temp] SC WITH(NOLOCK)
+                                                  WHERE  OC.Code = SC.Code 
+                                                  AND OC.SupplierID = 'SYS' 
+                                                  AND SC.SupplierID <> 'SYS'";
+
+        const string query_FillRouteBlockConcatinatedTemp = @"CREATE TABLE #DistinctParentRules (RuleID INT,ParentCode varchar(20), ExcludedCodes VARCHAR(max), MainExcluded varchar(max), GeneratedExcluding varchar(max))
+                                                              
+                                                              INSERT INTO RouteBlockConcatinated_Temp
+                                                              SELECT RouteBlockID, CustomerID, SupplierID, Code, ZoneID, UpdateDate, IncludeSubCodes, ExcludedCodes, NULL parentID, ExcludedCodes								
+							                                  FROM RouteBlock WITH (NOLOCK) 
+							                                  WHERE IsEffective = 'Y' AND CustomerID IS NULL AND SupplierID IS NOT NULL AND ZoneID IS NULL AND Code IS NOT NULL 
+
+
+                                                             UPDATE RouteBlockConcatinated_Temp 
+                                                             SET parentID = (SELECT TOP 1 RouteBlockID FROM RouteBlockConcatinated_Temp cbr2 
+                                                                             WHERE RouteBlockConcatinated_Temp.Code LIKE (cbr2.code + '%') 
+                                                                             AND LEN( RouteBlockConcatinated_Temp.Code) != LEN( cbr2.code) 
+                                                                             AND RouteBlockConcatinated_Temp.SupplierID = cbr2.SupplierID 
+                                                                             ORDER BY code ASC) 
+                                                            WHERE RouteBlockConcatinated_Temp.IncludeSubCodes= 'Y'
+ 
+ 
+                                                            INSERT INTO #DistinctParentRules With(Tablock)
+                                                            SELECT DISTINCT(tor.RouteBlockID), tor.Code, tor.ExcludedCodes, '', tor.OriginalExcluded
+                                                            FROM RouteBlockConcatinated_Temp tor 
+	                                                        WHERE EXISTS (SELECT * FROM RouteBlockConcatinated_Temp ov WHERE tor.RouteBlockID = ov.ParentID)
+	                                                        ORDER BY tor.Code DESC	
+ 
+
+                                                            DECLARE @RuleID INT
+                                                            DECLARE @ExcludedCodes varchar(max)
+                                                            DECLARE	@Result varchar(max)
+                                                            DECLARE @ResultWithSubCode varchar(max)
+                                                            DECLARE @ResultWithOutSubCode varchar(max)
+                                                            DECLARE DistinctRulesCursor CURSOR LOCAL FOR select RuleID from #DistinctParentRules
+                                                            OPEN DistinctRulesCursor
+                                                            FETCH NEXT FROM DistinctRulesCursor into @RuleID
+                                                            
+                                                            WHILE @@FETCH_STATUS = 0
+                                                            BEGIN
+                                                            	
+                                                            	SET @Result = NULL
+                                                            	SET @ResultWithOutSubCode = NULL
+                                                            	SET @ResultWithSubCode = NULL
+
+                                                            	Select @ResultWithOutSubCode = COALESCE(@ResultWithOutSubCode + ',', '') + Code  
+                                                                                               FROM  RouteBlockConcatinated_Temp 
+                                                                                               WHERE ParentID = @RuleID 
+                                                                                               AND IncludeSubCodes = 'N' 
+                                                            	
+                                                            	Select @ResultWithSubCode = COALESCE(@ResultWithSubCode + ',', '') + tor.Code  
+                                                            								FROM  RouteBlockConcatinated_Temp tor 
+                                                            								where routeblockid = @RuleID OR ParentID = @RuleID AND IncludeSubCodes = 'Y' 
+                                                            
+                                                            	
+                                                            	SET @Result =
+                                                            	CASE WHEN  @ResultWithOutSubCode IS Null THEN '' ELSE (@ResultWithOutSubCode + ',') END
+                                                            	 + CASE WHEN @ResultWithSubCode IS NULL THEN '' ELSE (@ResultWithSubCode + ',') END 
+                                                            	
+                                                            	SET @Result = CASE WHEN len(@Result)-1 <=0 THEN ',' ELSE  isnull(substring(','+@Result,1,len(','+@Result)-1),'') END
+                                                            	
+                                                            	UPDATE RouteBlockConcatinated_Temp SET ExcludedCodes = isnull(OriginalExcluded, '') + @Result WHERE routeblockid = @RuleID
+                                                            	
+                                                                FETCH NEXT FROM DistinctRulesCursor into @RuleID
+                                                            END
+                                                            
+                                                            CLOSE DistinctRulesCursor
+                                                            DEALLOCATE DistinctRulesCursor";
+
+
+        const string query_FillPoolTablesTemp = @";WITH BlockedCodesTemp AS (
+                                                    SELECT CM.Code as BlockCode, cm.SupplierID, 1 IsBlock
+                                                    FROM CodeMatch_Temp CM 
+		                                            LEFT JOIN RouteBlockConcatinated_Temp grb ON cm.SupplierID COLLATE DATABASE_DEFAULT  = grb.SupplierID
+                                                    WHERE (grb.SupplierID <> 'Sys' AND grb.IncludeSubCodes = 'Y' AND  CM.Code COLLATE DATABASE_DEFAULT  like (grb.Code + '%') AND CM.Code NOT IN (SELECT * FROM ParseArray(grb.ExcludedCodes,','))) 
+		                                                  OR (grb.SupplierID <> 'Sys' and grb.IncludeSubCodes = 'N' AND CM.Code COLLATE DATABASE_DEFAULT  = grb.Code) 	
+                                                  )			
+		
+                                                INSERT INTO RouteOptionsPool_Temp With(Tablock)
+                                                SELECT CM.Code, CM.SupplierID, CM.SupplierZoneID, ZR.ServicesFlag, ZR.ProfileID, ZR.ActiveRate, ISNULL(bc.IsBlock,zr.IsBlock) IsBlock, ZR.IsTOD
+                                                FROM CodeMatch_Temp CM 
+                                                INNER JOIN ZoneRates_Temp ZR ON CM.SupplierZoneID = ZR.ZoneID AND ZR.SupplierID <> 'SYS'
+		                                        LEFT JOIN BlockedCodesTemp bc ON cm.Code COLLATE DATABASE_DEFAULT = bc.BlockCode COLLATE DATABASE_DEFAULT AND bc.SupplierID COLLATE DATABASE_DEFAULT = ZR.SupplierID COLLATE DATABASE_DEFAULT
+
+                                                ;WITH BlockedCodesPoolTemp AS (
+                                                SELECT CM.Code as	BlockCode ,cm.SupplierID, 1 IsBlock
+                                                FROM CodeMatch_Temp CM 
+		                                        LEFT JOIN RouteBlockConcatinated_Temp grb ON cm.SupplierID COLLATE DATABASE_DEFAULT  = grb.SupplierID
+                                                WHERE (grb.SupplierID = 'Sys' AND  grb.IncludeSubCodes = 'Y' AND  CM.Code COLLATE DATABASE_DEFAULT like (grb.Code + '%') AND CM.Code   NOT IN (SELECT * FROM ParseArray(grb.ExcludedCodes,','))) 
+		                                              OR (grb.SupplierID = 'Sys' AND grb.IncludeSubCodes = 'N' AND CM.Code COLLATE DATABASE_DEFAULT  = grb.Code) 
+                                                )	
+	
+                                                INSERT INTO RoutePool_Temp With(Tablock)
+                                                SELECT CM.Code, CM.SupplierZoneID, ISNULL(bc.IsBlock,0) IsBlock, z.CodeGroup CodeGroup
+                                                FROM CodeMatch_Temp CM 
+		                                        LEFT JOIN BlockedCodesPoolTemp bc ON cm.Code COLLATE DATABASE_DEFAULT = bc.BlockCode
+		                                        LEFT JOIN Zone z ON z.ZoneID = cm.SupplierZoneID
+                                                WHERE	CM.SupplierID = 'sys' AND z.IsEffective = 'y' AND z.SupplierID = 'sys'";
         #endregion
 
         private class CustomerRouteBulkInsert
