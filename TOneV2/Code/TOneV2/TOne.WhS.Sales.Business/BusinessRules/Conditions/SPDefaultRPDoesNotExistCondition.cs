@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
@@ -26,7 +27,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (defaultData.DefaultRoutingProductToAdd == null && defaultData.CurrentDefaultRoutingProduct == null)
             {
-                context.Message = string.Format("SellingProduct '{0}' does not have a default RoutingProduct", ratePlanContext.OwnerId);
+                string sellingProductName = new SellingProductManager().GetSellingProductName(ratePlanContext.OwnerId);
+                context.Message = string.Format("Selling Product '{0}' does not have a default Routing Product", sellingProductName);
                 return false;
             }
 
@@ -35,7 +37,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            throw new NotImplementedException();
+            return "Selling Product does not have a default Routing Product";
         }
     }
 }
