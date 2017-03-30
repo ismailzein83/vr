@@ -43,7 +43,11 @@ namespace Vanrise.Common.Business
                 Data = loggerResult.Data.MapRecords(LoggerDetailMapper)
             };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, loggerDetailResult);
+            ResultProcessingHandler<LogEntryDetail> handler = new ResultProcessingHandler<LogEntryDetail>()
+            {
+                ExportExcelHandler = new LogEntryExcelExportHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, loggerDetailResult, handler);
         }
 
         public IEnumerable<LogAttribute> GeLogAttributesById(int attribute)
@@ -94,6 +98,43 @@ namespace Vanrise.Common.Business
                 return logAttribute.Description;
 
             return null;
+        }
+
+        private class LogEntryExcelExportHandler : ExcelExportHandler<LogEntryDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<LogEntryDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Log Entry",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Level" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message", Width = 120});
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LogEntryId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EventTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.EntryTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.EventTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Message });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
     }
 }

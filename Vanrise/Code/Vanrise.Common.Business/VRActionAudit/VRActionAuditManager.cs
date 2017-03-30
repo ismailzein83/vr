@@ -48,6 +48,64 @@ namespace Vanrise.Common.Business
                 IVRActionAuditDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditDataManager>();
                 return dataManager.GetFilterdActionAudits(input.Query);
             }
+
+            protected override ResultProcessingHandler<VRActionAuditDetail> GetResultProcessingHandler(DataRetrievalInput<VRActionAuditQuery> input, BigResult<VRActionAuditDetail> bigResult)
+            {
+                return new ResultProcessingHandler<VRActionAuditDetail>
+                {
+                    ExportExcelHandler = new VRActionAuditExcelExportHandler(input.Query)
+                };
+            }
+        }
+        private class VRActionAuditExcelExportHandler : ExcelExportHandler<VRActionAuditDetail>
+        {
+            VRActionAuditQuery _query;
+            public VRActionAuditExcelExportHandler(VRActionAuditQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRActionAuditDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Action Audit",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "User" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Module"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Entity" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Action" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Object Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Notes", Width = 120 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.VRActionAuditId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LogTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.UserName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ModuleName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.EntityName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ActionName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ObjectName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ActionDescription });
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
         }
         #endregion
 

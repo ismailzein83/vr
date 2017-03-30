@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
@@ -71,8 +72,56 @@ namespace Vanrise.Integration.Business
                         batch.ExecutionStatus = dicItemExecutionStatus[long.Parse(batch.QueueItemIds)].Status;
                 }
             }
-            
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult);
+
+            ResultProcessingHandler<DataSourceImportedBatch> handler = new ResultProcessingHandler<DataSourceImportedBatch>()
+            {
+                ExportExcelHandler = new DataSourceImportedBatchExcelExportHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
         }
+
+
+        #region Private Classes
+        private class DataSourceImportedBatchExcelExportHandler : ExcelExportHandler<DataSourceImportedBatch>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataSourceImportedBatch> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Data Source Imported Batch",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Batch Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Batch Size" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Records Count" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mapping Result" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mapper Message" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Execution Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Log Entry Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        row.Cells.Add(new ExportExcelCell { Value = record.ID });
+                        row.Cells.Add(new ExportExcelCell { Value = record.BatchDescription });
+                        row.Cells.Add(new ExportExcelCell { Value = record.BatchSize });
+                        row.Cells.Add(new ExportExcelCell { Value = record.RecordsCount });
+                        row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.MappingResult) });
+                        row.Cells.Add(new ExportExcelCell { Value = record.MapperMessage });
+                        row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.ExecutionStatus) });
+                        row.Cells.Add(new ExportExcelCell { Value = record.LogEntryTime });
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+        #endregion
     }
 }
