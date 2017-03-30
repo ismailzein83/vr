@@ -60,7 +60,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('AE487324-A151-478C-B171-67C79E9BA2DA','Business Process Module','5A9E78AE-229E-41B9-9DBF-492997B42B61',0)
+('AE487324-A151-478C-B171-67C79E9BA2DA','Pricelist','5A9E78AE-229E-41B9-9DBF-492997B42B61',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -81,9 +81,9 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('F9AB8A79-7863-44B2-95CD-6587C3939FA1','CP_SupPriceList_Customer','Customer','5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View", "Add","Edit", "Assign/Unassign User"]'),
-('0F757375-F0CC-4011-96FF-7F4A8341AC8D','CP_SupPriceList_SupplierMapping','Supplier Mapping','5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View", "Add/Edit"]'),
-('2796A68C-4A6B-44B2-B2CE-9FBFC2072E24','CP_SupPriceList_PriceList','PriceList','5A9E78AE-229E-41B9-9DBF-492997B42B61',0,'["View", "Upload Pricelist","Search"]')
+('F9AB8A79-7863-44B2-95CD-6587C3939FA1','CP_SupPriceList_Customer','Customer'					,'AE487324-A151-478C-B171-67C79E9BA2DA',0,'["View", "Add","Edit", "Assign/Unassign User"]'),
+('0F757375-F0CC-4011-96FF-7F4A8341AC8D','CP_SupPriceList_SupplierMapping','Supplier Mapping'	,'AE487324-A151-478C-B171-67C79E9BA2DA',0,'["View", "Add/Edit"]'),
+('2796A68C-4A6B-44B2-B2CE-9FBFC2072E24','CP_SupPriceList_PriceList','PriceList'					,'AE487324-A151-478C-B171-67C79E9BA2DA',0,'["View", "Upload Pricelist","Search"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
