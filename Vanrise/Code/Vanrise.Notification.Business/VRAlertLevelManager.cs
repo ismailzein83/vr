@@ -16,9 +16,8 @@ namespace Vanrise.Notification.Business
         public VRAlertLevel GetAlertLevel(Guid alertLevelId)
         {
             Dictionary<Guid, VRAlertLevel> cachedAlertLevels = this.GetCachedAlertLevels();
-            var vralertLevel = cachedAlertLevels.GetRecord(alertLevelId);
-            
-            return vralertLevel;
+
+            return cachedAlertLevels.GetRecord(alertLevelId);
         }
        
         public string GetAlertLevelName(Guid alertLevelId)

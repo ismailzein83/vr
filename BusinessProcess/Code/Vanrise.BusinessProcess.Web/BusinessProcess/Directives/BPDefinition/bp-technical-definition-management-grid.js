@@ -38,7 +38,8 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+                var drillDownDefinitions = BusinessProcess_BPDefinitionService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -54,6 +55,11 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return BusinessProcess_BPDefinitionAPIService.GetFilteredBPDefinitionsForTechnical(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -81,6 +87,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
         }
         function edit(dataItem) {
             var onBPDefinitionUpdated = function (updatedBPDefinition) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(updatedBPDefinition);
                 gridAPI.itemUpdated(updatedBPDefinition);
             };
             BusinessProcess_BPDefinitionService.editBusinessProcessDefinition(dataItem.Entity.BPDefinitionID, onBPDefinitionUpdated);

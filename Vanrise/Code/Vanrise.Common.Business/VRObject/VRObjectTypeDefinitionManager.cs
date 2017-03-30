@@ -17,9 +17,8 @@ namespace Vanrise.Common.Business
         public VRObjectTypeDefinition GetVRObjectTypeDefinition(Guid styleDefinitionId)
         {
             Dictionary<Guid, VRObjectTypeDefinition> cachedVRObjectTypeDefinitions = this.GetCachedVRObjectTypeDefinitions();
-            var vrObjectTypeDefinition= cachedVRObjectTypeDefinitions.GetRecord(styleDefinitionId);
-          
-            return vrObjectTypeDefinition;
+ 
+           return cachedVRObjectTypeDefinitions.GetRecord(styleDefinitionId);
         }
 
        

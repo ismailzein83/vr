@@ -37,9 +37,8 @@ namespace Vanrise.GenericData.Business
         public DataStore GetDataStore(Guid dataStoreId)
         {
             var cachedDataStore = GetCachedDataStores();
-            var dataStoreItem= cachedDataStore.FindRecord((dataStore) => dataStore.DataStoreId == dataStoreId);
-           
-            return dataStoreItem;
+
+            return cachedDataStore.FindRecord((dataStore) => dataStore.DataStoreId == dataStoreId);
         }
 
        

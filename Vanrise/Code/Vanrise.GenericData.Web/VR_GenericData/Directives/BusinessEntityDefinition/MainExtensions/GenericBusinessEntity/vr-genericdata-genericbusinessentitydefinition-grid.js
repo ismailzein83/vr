@@ -113,7 +113,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
             function addExtendedSettings(dataItem) {
                 gridAPI.expandRow(dataItem);
                 var onExtendedSettingsAdded = function (extendedSettingsObj) {
-                    VR_GenericData_BusinessEntityDefinitionService.defineBEDefinitionTabs(extendedSettingsObj, gridAPI);
+                  
                     dataItem.genericEditorGridAPI.onExtensibleBEItemAdded(extendedSettingsObj);
                 };
 

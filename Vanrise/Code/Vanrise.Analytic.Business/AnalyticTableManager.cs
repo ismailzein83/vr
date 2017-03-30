@@ -37,9 +37,8 @@ namespace Vanrise.Analytic.Business
         public AnalyticTable GetAnalyticTableById(int analyticTableId)
         {
             var analyticTables = GetCachedAnalyticTables();
-          var analyticTable= analyticTables.GetRecord(analyticTableId);
-          
-          return analyticTable;
+
+            return analyticTables.GetRecord(analyticTableId); ;
         }
        
         public string GetAnalyticTableName(AnalyticTable analyticTable)

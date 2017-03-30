@@ -15,9 +15,8 @@ namespace Vanrise.Common.Business
         public StatusDefinition GetStatusDefinition(Guid statusDefinitionId)
         {
             Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
-            var statusDefinition= cachedStatusDefinitions.GetRecord(statusDefinitionId);
-           
-            return statusDefinition;
+
+            return cachedStatusDefinitions.GetRecord(statusDefinitionId);
         }
       
         public string GetStatusDefinitionName(Guid statusDefinitionId)

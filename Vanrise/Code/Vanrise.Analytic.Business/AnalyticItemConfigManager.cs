@@ -129,7 +129,7 @@ namespace Vanrise.Analytic.Business
             return analyticJoins;
         }
 
-        public string GetAnalyticItemConfigName<T>(AnalyticItemConfig<T> analyticItemConfig)
+        public string GetAnalyticItemConfigName(AnalyticItemConfig analyticItemConfig)
         {
             if (analyticItemConfig != null)
                 return analyticItemConfig.Name;
@@ -444,46 +444,18 @@ namespace Vanrise.Analytic.Business
 
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
             {
-                switch (_analyticItemType)
-                {
-                    case AnalyticItemType.Dimension:
-                        AnalyticItemConfig<AnalyticDimensionConfig> analyticDimensionConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticDimensionConfig>>("context.Object");
-                        return analyticDimensionConfig.AnalyticItemConfigId;
-                    case AnalyticItemType.Measure:
-                        AnalyticItemConfig<AnalyticMeasureConfig> analyticMeasureConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticMeasureConfig>>("context.Object");
-                        return analyticMeasureConfig.AnalyticItemConfigId;
-                    case AnalyticItemType.Join:
-                        AnalyticItemConfig<AnalyticJoinConfig> analyticJoinConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticJoinConfig>>("context.Object");
-                        return analyticJoinConfig.AnalyticItemConfigId;
-                       
-                    case AnalyticItemType.Aggregate:
-                        AnalyticItemConfig<AnalyticAggregateConfig> analyticAggregateConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticAggregateConfig>>("context.Object");
-                        return analyticAggregateConfig.AnalyticItemConfigId;
-                    default: return null;
-                       
-                }
+              
+           AnalyticItemConfig analyticItemConfig = context.Object.CastWithValidate<AnalyticItemConfig>("context.Object");
+                return analyticItemConfig.AnalyticItemConfigId;
+                  
             }
 
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
             {
-                switch (_analyticItemType)
-                {
-                    case AnalyticItemType.Dimension:
-                        AnalyticItemConfig<AnalyticDimensionConfig> analyticDimensionConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticDimensionConfig>>("context.Object");
-                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticDimensionConfig);
-                    case AnalyticItemType.Measure:
-                        AnalyticItemConfig<AnalyticMeasureConfig> analyticMeasureConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticMeasureConfig>>("context.Object");
-                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticMeasureConfig);
-                    case AnalyticItemType.Join:
-                        AnalyticItemConfig<AnalyticJoinConfig> analyticJoinConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticJoinConfig>>("context.Object");
-                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticJoinConfig);
-
-                    case AnalyticItemType.Aggregate:
-                        AnalyticItemConfig<AnalyticAggregateConfig> analyticAggregateConfig = context.Object.CastWithValidate<AnalyticItemConfig<AnalyticAggregateConfig>>("context.Object");
-                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticAggregateConfig);
-                    default: return null;
-
-                }
+              
+                        AnalyticItemConfig analyticItemConfig = context.Object.CastWithValidate<AnalyticItemConfig>("context.Object");
+                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticItemConfig);
+                   
             }
         }
 

@@ -16,9 +16,8 @@ namespace Vanrise.Common.Business
         public VRMailMessageType GetMailMessageType(Guid vrMailMessageTypeId)
         {
             Dictionary<Guid, VRMailMessageType> cachedVRMailMessageTypes = this.GetCachedVRMailMessageTypes();
-            var mailMessageType= cachedVRMailMessageTypes.GetRecord(vrMailMessageTypeId);
-            
-            return mailMessageType;
+   
+            return cachedVRMailMessageTypes.GetRecord(vrMailMessageTypeId);
         }
        
         public IDataRetrievalResult<VRMailMessageTypeDetail> GetFilteredMailMessageTypes(DataRetrievalInput<VRMailMessageTypeQuery> input)

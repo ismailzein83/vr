@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
@@ -55,7 +56,7 @@ namespace Vanrise.BusinessProcess.Business
 
                 if (viewableByUserId.HasValue && !DoesUserHaveViewAccess((int)viewableByUserId,prod))
                     return false;
-
+                VRActionLogger.Current.LogGetFilteredAction(BPDefinitionLoggableEntity.Instance, input);
                 return true;
             };
 
@@ -94,6 +95,7 @@ namespace Vanrise.BusinessProcess.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(BPDefinitionLoggableEntity.Instance, bPDefinition);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = BPDefinitionDetailMapper(bPDefinition);
             }
@@ -112,7 +114,10 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
         }
-
+      public string  GetBPDefinitionName(BPDefinition bPDefinition)
+      {
+          return (bPDefinition != null) ? bPDefinition.Name : null;
+      }
         public string GetDefinitionTitle(string processName)
         {
             var definition = GetDefinition(processName);
@@ -176,6 +181,7 @@ namespace Vanrise.BusinessProcess.Business
             return DoesUserHaveScheduleTaskAccess( userId,bPDefinition);
         }
 
+
         public bool DoesUserHaveScheduleTaskAccess(int userId, BPDefinition bPDefinition)
         {
             var definitionContext = new BPDefinitionDoesUserHaveScheduleTaskContext { UserId = userId, BPDefinition = bPDefinition };
@@ -226,7 +232,49 @@ namespace Vanrise.BusinessProcess.Business
         }
 
         #endregion
+        private class BPDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static BPDefinitionLoggableEntity Instance = new BPDefinitionLoggableEntity();
 
+            private BPDefinitionLoggableEntity()
+            {
+
+            }
+
+            static BPDefinitionManager s_bPDefinitionManager = new BPDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_BusinessProcess_BPDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Process"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "BPDefinition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_BusinessProcess_BPDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                BPDefinition bPDefinition = context.Object.CastWithValidate<BPDefinition>("context.Object");
+                return bPDefinition.BPDefinitionID;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                BPDefinition bPDefinition = context.Object.CastWithValidate<BPDefinition>("context.Object");
+                return s_bPDefinitionManager.GetBPDefinitionName(bPDefinition);
+            }
+        }
         #region private methods
 
       
