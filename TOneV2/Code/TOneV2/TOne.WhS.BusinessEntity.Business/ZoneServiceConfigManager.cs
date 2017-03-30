@@ -317,7 +317,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Weight" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 35});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Flag" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ParentName" });
 
