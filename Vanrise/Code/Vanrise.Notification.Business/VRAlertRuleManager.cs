@@ -68,7 +68,7 @@ namespace Vanrise.Notification.Business
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRules.ToBigResult(input, filterExpression, VRAlertRuleDetailMapper));
         }
-
+         
         public Vanrise.Entities.InsertOperationOutput<VRAlertRuleDetail> AddVRAlertRule(VRAlertRule vrAlertRuleItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRAlertRuleDetail>();
@@ -76,6 +76,9 @@ namespace Vanrise.Notification.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             long vrAlertRuleId = -1;
+
+            //Adding UserId to VRAlertRule
+            vrAlertRuleItem.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
             IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
 

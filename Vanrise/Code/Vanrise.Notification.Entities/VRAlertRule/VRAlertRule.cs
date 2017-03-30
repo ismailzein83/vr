@@ -14,6 +14,8 @@ namespace Vanrise.Notification.Entities
 
         public Guid RuleTypeId { get; set; }
 
+        public int UserId { get; set; }
+
         public VRAlertRuleSettings Settings { get; set; }
     }
 }
