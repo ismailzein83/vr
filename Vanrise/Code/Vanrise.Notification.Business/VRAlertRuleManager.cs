@@ -66,7 +66,13 @@ namespace Vanrise.Notification.Business
                     return false;
                 return true;
             };
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRules.ToBigResult(input, filterExpression, VRAlertRuleDetailMapper));
+
+            ResultProcessingHandler<VRAlertRuleDetail> handler = new ResultProcessingHandler<VRAlertRuleDetail>()
+            {
+                ExportExcelHandler = new VRAlertRuleExcelExportHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRules.ToBigResult(input, filterExpression, VRAlertRuleDetailMapper), handler);
         }
          
         public Vanrise.Entities.InsertOperationOutput<VRAlertRuleDetail> AddVRAlertRule(VRAlertRule vrAlertRuleItem)
@@ -194,6 +200,36 @@ namespace Vanrise.Notification.Business
             }
         }
 
+        private class VRAlertRuleExcelExportHandler : ExcelExportHandler<VRAlertRuleDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRAlertRuleDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Action Rules",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 35});
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.VRAlertRuleId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         #endregion
 
         #region Private Methods
