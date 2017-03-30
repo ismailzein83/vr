@@ -245,7 +245,7 @@ namespace Vanrise.BusinessProcess.Business
 
             public override string EntityUniqueName
             {
-                get { return "VR_BusinessProcess_BPDefinition"; }
+                get { return "BusinessProcess_BP_BPDefinition"; }
             }
 
             public override string ModuleName
@@ -260,7 +260,7 @@ namespace Vanrise.BusinessProcess.Business
 
             public override string ViewHistoryItemClientActionName
             {
-                get { return "VR_BusinessProcess_BPDefinition_ViewHistoryItem"; }
+                get { return "BusinessProcess_BP_BPDefinition_ViewHistoryItem"; }
             }
 
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)

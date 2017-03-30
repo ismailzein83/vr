@@ -26,7 +26,7 @@
         }
 
         function getEntityUniqueName() {
-            return "VR_BusinessProcess_BPDefinition";
+            return "BusinessProcess_BP_BPDefinition";
         }
 
         function registerObjectTrackingDrillDownToBPDefinition() {
