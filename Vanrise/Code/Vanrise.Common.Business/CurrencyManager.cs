@@ -193,7 +193,7 @@ namespace Vanrise.Common.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency Name", Width = 42});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
 
