@@ -329,7 +329,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Exchange Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 42});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
 
