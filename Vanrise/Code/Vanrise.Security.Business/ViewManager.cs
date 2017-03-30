@@ -7,6 +7,7 @@ using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace Vanrise.Security.Business
 {
     public class ViewManager : IViewManager
@@ -30,8 +31,12 @@ namespace Vanrise.Security.Business
 
             Func<View, bool> filterExpression = (prod) =>
                  (input.Query == null || prod.Name.ToLower().Contains(input.Query.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(ViewLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dynamicViews.ToBigResult(input, filterExpression, ViewDetailMapper));
+        }
+        public string GetViewName(View view)
+        {
+            return view != null ? view.Name : null;
         }
         public Vanrise.Entities.InsertOperationOutput<ViewDetail> AddView(ViewToAdd view)
         {
@@ -52,8 +57,10 @@ namespace Vanrise.Security.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                View viewItem = GetView(view.ViewId);
+                VRActionLogger.Current.TrackAndLogObjectAdded(ViewLoggableEntity.Instance, viewItem);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = ViewDetailMapper(view);
+                insertOperationOutput.InsertedObject = ViewDetailMapper(viewItem);
             }
             else
             {
@@ -74,6 +81,7 @@ namespace Vanrise.Security.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(ViewLoggableEntity.Instance, view);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ViewDetailMapper(view);
             }
@@ -199,6 +207,50 @@ namespace Vanrise.Security.Business
                  );
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, ViewDetailMapper));
+        }
+
+        private class ViewLoggableEntity : VRLoggableEntityBase
+        {
+            public static ViewLoggableEntity Instance = new ViewLoggableEntity();
+
+            private ViewLoggableEntity()
+            {
+
+            }
+
+            static ViewManager s_viewManager = new ViewManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Security_View"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Security"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "View"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Security_View_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                View view = context.Object.CastWithValidate<View>("context.Object");
+                return view.ViewId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                View view = context.Object.CastWithValidate<View>("context.Object");
+                return s_viewManager.GetViewName(view);
+            }
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService', 'VR_Sec_ViewService', 'VRModalService', 'VR_Sec_ViewTypeAPIService', 'UtilsService', function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, VRModalService, VR_Sec_ViewTypeAPIService, UtilsService) {
+app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService', 'VR_Sec_ViewService', 'VRModalService', 'VR_Sec_ViewTypeAPIService', 'UtilsService', 'VRUIUtilsService', function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, VRModalService, VR_Sec_ViewTypeAPIService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -25,6 +25,7 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
     function ViewsGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -33,6 +34,8 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = VR_Sec_ViewService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -51,6 +54,7 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
                         return UtilsService.waitMultiplePromises(promises);
                     };
                     directiveAPI.onViewAdded = function (viewObj) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(viewObj);
                         gridAPI.itemAdded(viewObj);
                     };
                     return directiveAPI;
@@ -60,6 +64,11 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_Sec_ViewAPIService.GetFilteredViews(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -92,6 +101,7 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onViewUpdated = function (viewObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(viewObj);
                     gridAPI.itemUpdated(viewObj);
                 };
             };
