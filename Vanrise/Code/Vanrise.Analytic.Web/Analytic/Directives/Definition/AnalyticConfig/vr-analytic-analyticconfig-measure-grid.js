@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VRUIUtilsService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -25,6 +25,7 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
     function AnalyticMeasureGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
         var tableId;
         var itemType;
@@ -33,6 +34,8 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = VR_Analytic_AnalyticItemConfigService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -48,6 +51,7 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onAnalyticMeasureAdded = function (measureObj) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(measureObj);
                         gridAPI.itemAdded(measureObj);
                     };
                     return directiveAPI;
@@ -57,6 +61,11 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredAnalyticItemConfigs(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -76,6 +85,7 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
 
         function editMeasure(dataItem) {
             var onEditMeasure = function (measureObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(measureObj);
                 gridAPI.itemUpdated(measureObj);
             };
 

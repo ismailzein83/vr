@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
+app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VRUIUtilsService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -25,6 +25,7 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
     function AnalyticJoinGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
         var tableId;
         var itemType;
@@ -33,6 +34,8 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = VR_Analytic_AnalyticItemConfigService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -48,6 +51,7 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onAnalyticJoinAdded = function (joinObj) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(joinObj);
                         gridAPI.itemAdded(joinObj);
                     };
                     return directiveAPI;
@@ -57,6 +61,11 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredAnalyticItemConfigs(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -76,6 +85,7 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
 
         function editJoin(dataItem) {
             var onEditJoin = function (joinObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(joinObj);
                 gridAPI.itemUpdated(joinObj);
             };
 
