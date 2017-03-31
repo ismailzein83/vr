@@ -658,7 +658,7 @@
                         };
 
                         function selectItem(e, item) {
-
+                           
                             if (!ctrl.isMultiple()) {
 
                                 if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
@@ -702,7 +702,19 @@
                         ctrl.selectValue = function (e, item) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
                                 return;
-                            selectItem(e, item);
+                            var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
+                            if (onBeforeSelectionChanged != undefined && typeof (onBeforeSelectionChanged) == 'function') {
+                                onBeforeSelectionChanged().then(function (response) {
+                                    if (response)
+                                        selectItem(e, item);
+                                    else
+                                        return;
+                                }).catch(function () {
+                                    return;
+                                });
+                            }
+                            else 
+                                selectItem(e, item);
                         };
 
 
