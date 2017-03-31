@@ -12,44 +12,57 @@ using Vanrise.Entities;
 namespace Vanrise.Logging.SQL
 {
     public class SQLLogger : LogHandler
-    {        
-         Timer _timer;
-         ConcurrentQueue<LogEntry> _qLogEntries = new ConcurrentQueue<LogEntry>();
-         string _machineName;
-         string _applicationName;
+    {
+        Timer _timer;
+        ConcurrentQueue<LogEntry> _qLogEntries = new ConcurrentQueue<LogEntry>();
+        string _machineName;
+        string _applicationName;
 
-         string _loggingConnectionStringKey;
-         string _configurationConnectionStringKey;
-         public string LoggingConnectionStringKey
-         {
-             set
-             {
-                 _loggingConnectionStringKey = value;
-             }
-         }
-         public string ConfigurationConnectionStringKey
-         {
-             set
-             {
-                 _configurationConnectionStringKey = value;
-             }
-         }
+        string _loggingConnectionStringKey;
+        string _configurationConnectionStringKey;
+        public string LoggingConnectionStringKey
+        {
+            set
+            {
+                _loggingConnectionStringKey = value;
+            }
+        }
+        public string ConfigurationConnectionStringKey
+        {
+            set
+            {
+                _configurationConnectionStringKey = value;
+            }
+        }
+
+        SQLDataManager _loggingDataManager;
+
         public SQLDataManager LoggingDataManager
         {
             get
             {
-                if (String.IsNullOrEmpty(_loggingConnectionStringKey))
-                    throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
-                return new SQLDataManager(_loggingConnectionStringKey);
+                if (_loggingDataManager == null)
+                {
+                    if (String.IsNullOrEmpty(_loggingConnectionStringKey))
+                        throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
+                    _loggingDataManager = new SQLDataManager(_loggingConnectionStringKey);
+                }
+                return _loggingDataManager;
             }
         }
+
+        LogAttributeDataManager _configurationDataManager;
         public LogAttributeDataManager ConfigurationDataManager
         {
             get
             {
-                if (String.IsNullOrEmpty(_configurationConnectionStringKey))
-                    throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
-                return new LogAttributeDataManager(_configurationConnectionStringKey);
+                if (_configurationDataManager == null)
+                {
+                    if (String.IsNullOrEmpty(_configurationConnectionStringKey))
+                        throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
+                    _configurationDataManager = new LogAttributeDataManager(_configurationConnectionStringKey);
+                }
+                return _configurationDataManager;
             }
         }
         public SQLLogger()
@@ -61,8 +74,8 @@ namespace Vanrise.Logging.SQL
             _timer.Start();
         }
 
-         bool s_isRunning;
-         void s_timer_Elapsed(object sender, ElapsedEventArgs e)
+        bool s_isRunning;
+        void s_timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             lock (this)
             {
@@ -99,7 +112,7 @@ namespace Vanrise.Logging.SQL
             }
         }
 
-         protected override void WriteEntry(string eventType, int? viewRequiredPermissionSetId, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
+        protected override void WriteEntry(string eventType, int? viewRequiredPermissionSetId, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
         {
             _qLogEntries.Enqueue(new LogEntry
             {
