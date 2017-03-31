@@ -220,9 +220,7 @@
                 return loadTimeDimentionPromiseDeferred.promise;
             }
             function loadFields() {
-                var obj = { DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId };
-                var serializedFilter = UtilsService.serializetoJson(obj);
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo($scope.selectedDRSearchPageStorageSource.DataRecordTypeId).then(function (response) {
                     if (response) {
                         fields.length = 0;
                         for (var i = 0; i < response.length; i++) {

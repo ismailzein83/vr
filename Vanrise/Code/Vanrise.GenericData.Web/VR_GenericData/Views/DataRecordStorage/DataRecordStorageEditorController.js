@@ -184,17 +184,17 @@
             $scope.scopeModel.selectedDataRecordTypeField = undefined;
             $scope.scopeModel.dataRecordTypeFields.length = 0;
 
-            var obj = undefined;
+            var currentDataRecordTypeId;
             if (dataRecordStorageEntity != undefined) {
-                obj = { DataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId };
+                currentDataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
             }
             else if ($scope.scopeModel.selectedDataRecordType) {
-                obj = { DataRecordTypeId: $scope.scopeModel.selectedDataRecordType.DataRecordTypeId };
+                currentDataRecordTypeId = $scope.scopeModel.selectedDataRecordType.DataRecordTypeId;
             }
 
-            if (obj != undefined) {
-                var serializedFilter = UtilsService.serializetoJson(obj);
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+            if (currentDataRecordTypeId != undefined) {
+
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(currentDataRecordTypeId).then(function (response) {
                     if (response != undefined) {
                         angular.forEach(response, function (item) {
                             $scope.scopeModel.dataRecordTypeFields.push(item);
@@ -313,7 +313,7 @@
             return VR_GenericData_DataRecordStorageAPIService.AddDataRecordStorage(buildDataRecordStorageObjectFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Data Record Storage', response, 'Name')) {
                     if ($scope.onDataRecordStorageAdded != undefined && typeof ($scope.onDataRecordStorageAdded) == 'function') {
-                         $scope.onDataRecordStorageAdded(response.InsertedObject);
+                        $scope.onDataRecordStorageAdded(response.InsertedObject);
                     }
                     $scope.modalContext.closeModal();
                 }

@@ -1,16 +1,14 @@
-﻿
-<div>
+﻿<div>
     <vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
                                             selectedvalues="scopeModel.selectedAccountType"
                                             isrequired="true" normal-col-num="4">
     </vr-accountbalance-accounttype-selector>
 
     <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeSelectorReady"
-                                                        selectedvalues="scopeModel.selectedBillingTransactionType"
-                                                        isrequired="true"
-                                                        normal-col-num="4">
+                                                       selectedvalues="scopeModel.selectedBillingTransactionType"
+                                                       isrequired="true" normal-col-num="4">
     </vr-accountbalance-billingtransactiontype-selector>
-  
+
     <vr-columns width="fullrow">
         <vr-row>
             <vr-columns width="fullrow" vr-loader="scopeModel.isGridLoading">

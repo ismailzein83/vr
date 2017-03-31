@@ -17,9 +17,17 @@
                 serializedFilter: serializedFilter
             });
         }
+
+        function GetNotificationTypeSettings(notificationTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, "GetNotificationTypeSettings"), {
+                notificationTypeId: notificationTypeId
+            });
+        }
+
         return ({
             GetVRNotificationTypeDefinitionConfigSettings: GetVRNotificationTypeDefinitionConfigSettings,
-            GetVRNotificationTypeSettingsInfo: GetVRNotificationTypeSettingsInfo
+            GetVRNotificationTypeSettingsInfo: GetVRNotificationTypeSettingsInfo,
+            GetNotificationTypeSettings: GetNotificationTypeSettings
         });
     }
 

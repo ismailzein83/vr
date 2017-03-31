@@ -1,0 +1,28 @@
+﻿<vr-tab header="'Settings'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                    selectedvalues="scopeModel.selectedDataRecordType"
+                                                    onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
+                                                    isrequired="true" label="Record Type" hideremoveicon>
+            </vr-genericdata-datarecordtype-selector>
+        </vr-columns>
+        <vr-columns width="1/2row" ng-show="scopeModel.selectedDataRecordType != undefined">
+            <vr-span vr-loader="scopeModel.isDataRecordtypeFieldsSelectorLoading">
+                <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                                                              selectedvalues="scopeModel.selectedDataRecordFields"
+                                                              label="Identification Fields" isrequired="true"
+                                                              ismultipleselection hideremoveicon>
+                </vr-genericdata-datarecordtypefields-selector>
+            </vr-span>
+        </vr-columns>
+    </vr-row>
+    <vr-row ng-show="scopeModel.selectedDataRecordType != undefined">
+        <vr-span>
+            <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
+                                                              vr-loader="scopeModel.isNotificationTypeSettingsSelectorLoading"
+                                                              isrequired="true" normal-col-num="6">
+            </vr-notification-notificationtypesetting-selector>
+        </vr-span>
+    </vr-row>
+</vr-tab>

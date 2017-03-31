@@ -16,7 +16,7 @@
                 modalScope.onDataRecordAlertRuleAdded = onDataRecordAlertRuleAdded
             };
             VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Views/AlertRuleRecordEditor.html', parameters, settings);
-        };
+        }
 
         function editDataRecordAlertRule(dataRecordAlertRuleEntity, context, onDataRecordAlertRuleUpdated) {
             var settings = {};
@@ -30,7 +30,7 @@
                 modalScope.onDataRecordAlertRuleUpdated = onDataRecordAlertRuleUpdated;
             };
             VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Views/AlertRuleRecordEditor.html', parameters, settings);
-        };
+        }
 
 
         return {

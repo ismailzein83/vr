@@ -2,9 +2,9 @@
 
     'use strict';
 
-    QueueActivatorDataRecordCheckActionRules.$inject = ['UtilsService', 'VRUIUtilsService'];
+    QueueActivatorDataRecordCheckAlertRules.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function QueueActivatorDataRecordCheckActionRules(UtilsService, VRUIUtilsService) {
+    function QueueActivatorDataRecordCheckAlertRules(UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -13,7 +13,7 @@
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new QueueActivatorDataRecordCheckActionRulesCtor(ctrl, $scope);
+                var ctor = new QueueActivatorDataRecordCheckAlertRulesCtor(ctrl, $scope);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -25,10 +25,10 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/QueueActivators/Directive/Templates/QueueActivatorDataRecordCheckActionRulesTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/QueueActivators/Directive/Templates/QueueActivatorDataRecordCheckAlertRulesTemplate.html'
         };
 
-        function QueueActivatorDataRecordCheckActionRulesCtor(ctrl, $scope) {
+        function QueueActivatorDataRecordCheckAlertRulesCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
             var alertRuleTypeSelectorAPI;
@@ -50,10 +50,15 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    var actionRuleTypeId;
+                    var dataRecordTypeId;
+                    var alertRuleTypeId;
 
-                    if (payload != undefined && payload.QueueActivator) {
-                        actionRuleTypeId = payload.QueueActivator.ActionRuleTypeId;
+                    if (payload != undefined) {
+                        dataRecordTypeId = payload.DataRecordTypeId;
+
+                        if (payload.QueueActivator != undefined) {
+                            alertRuleTypeId = payload.QueueActivator.AlertRuleTypeId;
+                        }
                     }
 
                     //Loading AlertRuleType Selector
@@ -66,14 +71,17 @@
 
                         alertRuleTypeSelectorReadyDeferred.promise.then(function () {
 
-                            var alertRuleTypeSelectorPayload;
-                            //var alertRuleTypeSelectorPayload = {
-                            //    filter: {
-                            //        Filters: [{
-                            //            $type: "Vanrise.Analytic.Entities.DAProfCalcVRAlertRuleTypeFilter, Vanrise.Analytic.Entities"
-                            //        }]
-                            //    }
-                            //};
+                            var alertRuleTypeSelectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.GenericData.Notification.DataRecordAlertRuleTypeFilter, Vanrise.GenericData.Notification",
+                                        DataRecordTypeId: dataRecordTypeId
+                                    }]
+                                }
+                            };
+                            if (alertRuleTypeId != undefined) {
+                                alertRuleTypeSelectorPayload.selectedIds = alertRuleTypeId;
+                            }
                             VRUIUtilsService.callDirectiveLoad(alertRuleTypeSelectorAPI, alertRuleTypeSelectorPayload, alertRuleTypeSelectorLoadDeferred);
                         });
 
@@ -86,8 +94,8 @@
 
                 api.getData = function () {
                     return {
-                        $type: 'Vanrise.GenericData.Notification.QueueActivators.DataRecordCheckActionRulesQueueActivator, Vanrise.GenericData.Notification',
-                        ActionRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
+                        $type: 'Vanrise.GenericData.Notification.DataRecordCheckAlertRulesQueueActivator, Vanrise.GenericData.Notification',
+                        AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
                     };
                 };
 
@@ -97,6 +105,6 @@
         }
     }
 
-    app.directive('vrGenericdataQueueactivatorDatarecordcheckactionrules', QueueActivatorDataRecordCheckActionRules);
+    app.directive('vrGenericdataQueueactivatorDatarecordcheckalertrules', QueueActivatorDataRecordCheckAlertRules);
 
 })(app);

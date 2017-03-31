@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordnotificationtypesettingsSearcheditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_GenericData_DataRecordNotificationTypeSettingsAPIService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_DataRecordNotificationTypeSettingsAPIService) {
+app.directive("vrGenericdataDatarecordnotificationtypesettingsSearcheditor", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Notification_VRNotificationTypeAPIService", 'VR_GenericData_DataRecordFieldAPIService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Notification_VRNotificationTypeAPIService, VR_GenericData_DataRecordFieldAPIService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -107,10 +107,21 @@ app.directive("vrGenericdataDatarecordnotificationtypesettingsSearcheditor", ["U
                 return recordFilterDirectiveLoadDeferred.promise;
             }
             function loadNotificationTypeSettingFields() {
-                return VR_GenericData_DataRecordNotificationTypeSettingsAPIService.GetNotificationDataRecordFieldsInfo(notificationTypeId).then(function (response) {
-                    notificationDataRecordFieldsInfo = response;
+                var loadNotificationTypeSettingFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                VR_Notification_VRNotificationTypeAPIService.GetNotificationTypeSettings(notificationTypeId).then(function (response) {
+                    var notificationTypeSettings = response;
+                    var dataRecordTypeId = notificationTypeSettings.ExtendedSettings.DataRecordTypeId;
+
+                    VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
+                        notificationDataRecordFieldsInfo = response;
+                        loadNotificationTypeSettingFieldsPromiseDeferred.resolve();
+                    });
                 });
-            }
+
+                return loadNotificationTypeSettingFieldsPromiseDeferred.promise;
+            };
+
             function buildContext() {
                 var context = {
                     getFields: function () {

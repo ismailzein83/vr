@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Notification
 {
     public class DataRecordCheckAlertRulesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
-        public Guid AlertRuleTypeId { get; set; } 
+        public Guid AlertRuleTypeId { get; set; }
 
 
         #region QueueActivator
@@ -41,28 +41,31 @@ namespace Vanrise.GenericData.Notification
 
             List<VRAlertRule> vrAlertRules = new VRAlertRuleManager().GetActiveRules(this.AlertRuleTypeId);
 
-            List<DataRecordAlertRuleNotification> dataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
-            List<string> eventKeys = new List<string>();
-
             foreach (var vrAlertRule in vrAlertRules)
             {
+                List<DataRecordAlertRuleNotification> dataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
+                HashSet<string> eventKeys = new HashSet<string>();
+
                 vrAlertRule.Settings.ThrowIfNull("vrAlertRule.Settings", vrAlertRule.VRAlertRuleId);
                 DataRecordAlertRuleExtendedSettings dataRecordAlertRuleExtendedSettings =
                     vrAlertRule.Settings.ExtendedSettings.CastWithValidate<DataRecordAlertRuleExtendedSettings>(string.Format("vrAlertRule.Settings.ExtendedSettings AlertRuleId:{0}", vrAlertRule.VRAlertRuleId));
 
                 dataRecordAlertRuleExtendedSettings.AvailableIdentificationFields.ThrowIfNull("vrAlertRuleSettings.DataRecordAlertRuleExtendedSettings.AvailableIdentificationFields");
                 IEnumerable<string> availableIdentificationFieldNames = dataRecordAlertRuleExtendedSettings.AvailableIdentificationFields.Select(itm => itm.Name);
-
+                
                 foreach (var record in batchRecords)
                 {
                     Dictionary<string, dynamic> fieldValues = record.GetDictionaryFromDataRecordType();
 
                     string groupingKey;
-                    if (ValidateFieldValuesThenBuildGroupingKey(availableIdentificationFieldNames, fieldValues, out groupingKey))
+                    if (AreFieldValuesValid(availableIdentificationFieldNames, fieldValues, out groupingKey))
                     {
+                        if (eventKeys.Contains(groupingKey))
+                            continue;
+
                         DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext()
                         {
-                            RecordFilterContext = new DataRecordFilterGenericFieldMatchContext(record, recordTypeId)
+                            RecordFilterContext = new DataRecordDictFilterGenericFieldMatchContext(fieldValues, recordTypeId)
                         };
 
                         if (dataRecordAlertRuleExtendedSettings.Settings.IsRuleMatched(dataRecordAlertRuleSettingsIsMatchedContext))
@@ -80,13 +83,13 @@ namespace Vanrise.GenericData.Notification
                     }
 
                     DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
-                    dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(dataRecordAlertRuleNotifications, eventKeys, vrAlertRule.RuleTypeId, dataRecordAlertRuleTypeSettings.NotificationTypeId,
+                    dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(dataRecordAlertRuleNotifications, eventKeys.ToList(), vrAlertRule.RuleTypeId, dataRecordAlertRuleTypeSettings.NotificationTypeId,
                         vrAlertRule.VRAlertRuleId, dataRecordAlertRuleExtendedSettings.MinNotificationInterval, recordTypeId, string.Format("Alert Rule {0}", vrAlertRule.Name), vrAlertRule.UserId);
                 }
             }
         }
 
-        private bool ValidateFieldValuesThenBuildGroupingKey(IEnumerable<string> availableIdentificationFieldNames, Dictionary<string, dynamic> fieldValues, out string groupingKey)
+        private bool AreFieldValuesValid(IEnumerable<string> availableIdentificationFieldNames, Dictionary<string, dynamic> fieldValues, out string groupingKey)
         {
             StringBuilder strBuilder = new StringBuilder();
             dynamic fieldValue;

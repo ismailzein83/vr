@@ -2,7 +2,7 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService',  'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum','VRCommon_GridWidthFactorEnum'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum'];
 
     function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum) {
 
@@ -54,8 +54,7 @@
             };
 
             $scope.onDataRecordTypeSelectionChanged = function (option) {
-                if (option != undefined)
-                {
+                if (option != undefined) {
                     if (dataRecordStorageSelectorAPI != undefined) {
                         var setLoader = function (value) { $scope.isRecordStorageLoading = value; };
                         var payload = {
@@ -131,7 +130,7 @@
                 $scope.selectedSortColumnsGrid.splice($scope.selectedSortColumnsGrid.indexOf(sortColumn), 1);
                 $scope.selectedSortColumns.splice(UtilsService.getItemIndexByVal($scope.selectedSortColumns, sortColumn.FieldName, "Name"), 1);
             };
-            
+
             $scope.isFieldGridValid = function () {
                 if ($scope.selectedFieldsGrid.length == 0) {
                     return 'At least one Field must be added.'
@@ -174,7 +173,7 @@
         }
 
         function loadAllControls() {
-          
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector, loadDataRecordFields]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -261,10 +260,8 @@
         }
 
         function loadDataRecord(dataRecordTypeId) {
-           
-            var obj = { DataRecordTypeId: dataRecordTypeId };
-            var serializedFilter = UtilsService.serializetoJson(obj);
-            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+
+            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
                 $scope.dataRecordTypeFields.length = 0;
                 if (response != undefined) {
                     angular.forEach(response, function (item) {
@@ -274,8 +271,7 @@
             });
         }
 
-        function addGridColumnAPI(gridField, payload)
-        {
+        function addGridColumnAPI(gridField, payload) {
             var dataItemPayload = {
                 data: {
                     Width: VRCommon_GridWidthFactorEnum.Normal.value
@@ -285,8 +281,7 @@
                 FieldName: gridField.payload.Name,
                 FieldTitle: gridField.payload.Title,
             };
-            if (payload)
-            {
+            if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItemPayload.data = payload.ColumnSettings;
             }
@@ -327,59 +322,58 @@
         }
 
         function loadDataRecordFields() {
-            if (isEditMode)
-            {
-               var promises = [];
-               loadDataRecord(dataRecordSource.DataRecordTypeId).then(function () {
-                   $scope.selectedFields.length = 0;
-                   $scope.selectedDetails.length = 0;
-                   if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
-                       for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
-                           var currentColumn = dataRecordSource.GridColumns[x];
-                           var selectedField = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentColumn.FieldName, "Name");
-                           if (selectedField != undefined) {
+            if (isEditMode) {
+                var promises = [];
+                loadDataRecord(dataRecordSource.DataRecordTypeId).then(function () {
+                    $scope.selectedFields.length = 0;
+                    $scope.selectedDetails.length = 0;
+                    if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
+                        for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
+                            var currentColumn = dataRecordSource.GridColumns[x];
+                            var selectedField = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentColumn.FieldName, "Name");
+                            if (selectedField != undefined) {
 
-                               $scope.selectedFields.push(selectedField);
-                               
-                               var gridColumnItem = {
-                                   payload: selectedField,
-                                   readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                   loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                               };
-                               promises.push(gridColumnItem.loadPromiseDeferred.promise);
-                               addGridColumnAPI(gridColumnItem, currentColumn);
-                           }
-                       }
-                   }
-                   if (dataRecordSource != undefined && dataRecordSource.ItemDetails) {
-                       for (var y = 0; y < dataRecordSource.ItemDetails.length; y++) {
-                           var currentDetail = dataRecordSource.ItemDetails[y];
-                           var selectedDetail = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentDetail.FieldName, "Name");
-                           if (selectedDetail != undefined) {
-                               $scope.selectedDetails.push(selectedDetail);
-                               var itemDetail = {
-                                   payload: selectedDetail,
-                               };
-                               addGridItemDetailAPI(itemDetail, currentDetail);
-                           }
-                       }
-                   }
-                   if (dataRecordSource != undefined && dataRecordSource.SortColumns) {
-                       for (var z = 0; z < dataRecordSource.SortColumns.length; z++) {
-                           var currentSortColumn = dataRecordSource.SortColumns[z];
-                           var selectedSortColumn = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentSortColumn.FieldName, "Name");
-                           if (selectedSortColumn != undefined) {
-                               $scope.selectedSortColumns.push(selectedSortColumn);
+                                $scope.selectedFields.push(selectedField);
 
-                               var sortColumn = {
-                                   payload: selectedSortColumn,
-                               };
-                               addSortColumnAPI(sortColumn, currentSortColumn);
-                           }
-                       }
-                   }
-               });
-               return UtilsService.waitMultiplePromises(promises);
+                                var gridColumnItem = {
+                                    payload: selectedField,
+                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                promises.push(gridColumnItem.loadPromiseDeferred.promise);
+                                addGridColumnAPI(gridColumnItem, currentColumn);
+                            }
+                        }
+                    }
+                    if (dataRecordSource != undefined && dataRecordSource.ItemDetails) {
+                        for (var y = 0; y < dataRecordSource.ItemDetails.length; y++) {
+                            var currentDetail = dataRecordSource.ItemDetails[y];
+                            var selectedDetail = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentDetail.FieldName, "Name");
+                            if (selectedDetail != undefined) {
+                                $scope.selectedDetails.push(selectedDetail);
+                                var itemDetail = {
+                                    payload: selectedDetail,
+                                };
+                                addGridItemDetailAPI(itemDetail, currentDetail);
+                            }
+                        }
+                    }
+                    if (dataRecordSource != undefined && dataRecordSource.SortColumns) {
+                        for (var z = 0; z < dataRecordSource.SortColumns.length; z++) {
+                            var currentSortColumn = dataRecordSource.SortColumns[z];
+                            var selectedSortColumn = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentSortColumn.FieldName, "Name");
+                            if (selectedSortColumn != undefined) {
+                                $scope.selectedSortColumns.push(selectedSortColumn);
+
+                                var sortColumn = {
+                                    payload: selectedSortColumn,
+                                };
+                                addSortColumnAPI(sortColumn, currentSortColumn);
+                            }
+                        }
+                    }
+                });
+                return UtilsService.waitMultiplePromises(promises);
             }
         }
     }

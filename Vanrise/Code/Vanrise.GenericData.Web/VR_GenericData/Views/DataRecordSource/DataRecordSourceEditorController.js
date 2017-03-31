@@ -170,10 +170,8 @@
             $scope.dataRecordTypeFields.length = 0;
             $scope.selectedFields.length = 0;
             if (option != undefined) {
-                var obj = { DataRecordTypeId: option.DataRecordTypeId };
-
-                var serializedFilter = UtilsService.serializetoJson(obj);
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+                
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(option.DataRecordTypeId).then(function (response) {
                     if (response != undefined) {
                         angular.forEach(response, function (item) {
                             //var found = false;

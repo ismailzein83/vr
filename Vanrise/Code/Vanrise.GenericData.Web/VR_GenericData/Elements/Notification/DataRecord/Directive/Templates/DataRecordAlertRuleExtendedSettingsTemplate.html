@@ -1,0 +1,21 @@
+﻿<vr-tab header="'Criteria'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
+                                                          selectedvalues="scopeModel.selectedDataRecordFields"
+                                                          onselectionchanged="scopeModel.onDataRecordFieldsSelectionChanged"
+                                                          onselectitem="scopeModel.onSelectDataRecordField"
+                                                          ondeselectitem="scopeModel.onDeselectDataRecordField"
+                                                          label="Identification Fields" ismultipleselection hideremoveicon>
+            </vr-genericdata-datarecordtypefields-selector>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-timespan label="Min Notification Interval" value="scopeModel.minNotificationInterval" isrequired="true"></vr-timespan>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+<vr-tab header="'Settings'" tabobject="scopeModel.tabObject">
+    <span vr-loader="scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading">
+        <vr-genericdata-datarecordalertrule-settings on-ready="scopeModel.onDataRecordAlertRuleSettingsReady"></vr-genericdata-datarecordalertrule-settings>
+    </span>
+</vr-tab>
