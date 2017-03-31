@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -27,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new RoutingProductExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(RoutingProductLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRoutingProducts.ToBigResult(input, filterExpression, RoutingProductDetailMapper), handler);
 		}
 
@@ -120,6 +121,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 				insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
 				routingProduct.RoutingProductId = routingProductId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(RoutingProductLoggableEntity.Instance, routingProduct);
 				insertOperationOutput.InsertedObject = RoutingProductDetailMapper(routingProduct);
 			}
 			else
@@ -145,6 +147,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			if (updateActionSucc)
 			{
 				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(RoutingProductLoggableEntity.Instance, GetRoutingProduct(routingProduct.RoutingProductId));
 				updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 				updateOperationOutput.UpdatedObject = RoutingProductDetailMapper(this.GetRoutingProduct(routingProduct.RoutingProductId));
 			}
@@ -173,11 +176,20 @@ namespace TOne.WhS.BusinessEntity.Business
 			return deleteOperationOutput;
 		}
 
-		public RoutingProduct GetRoutingProduct(int routingProductId)
+
+
+        public RoutingProduct GetRoutingProduct(int routingProductId, bool isViewedFromUI)
 		{
 			var allRoutingProducts = GetAllRoutingProducts();
-			return allRoutingProducts.GetRecord(routingProductId);
+			var routingProduct= allRoutingProducts.GetRecord(routingProductId);
+            if (routingProduct != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(RoutingProductLoggableEntity.Instance, routingProduct);
+            return routingProduct;
 		}
+
+        public RoutingProduct GetRoutingProduct(int routingProductId)
+        {return GetRoutingProduct(routingProductId,false);
+        }
 
 		public RoutingProductEditorRuntime GetRoutingProductEditorRuntime(int routingProductId)
 		{
@@ -565,6 +577,52 @@ namespace TOne.WhS.BusinessEntity.Business
 			HashSet<int> RoutingProductIdsWithAllZones { get; set; }
 			Dictionary<long, List<int>> RoutingProductIdsWithSpecificZones { get; set; }
 		}
+
+
+        private class RoutingProductLoggableEntity : VRLoggableEntityBase
+        {
+            public static RoutingProductLoggableEntity Instance = new RoutingProductLoggableEntity();
+
+            private RoutingProductLoggableEntity()
+            {
+
+            }
+
+            static RoutingProductManager s_routingProductManagerManager = new RoutingProductManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_RoutingProduct"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Routing Product"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_RoutingProduct_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                RoutingProduct routingProduct = context.Object.CastWithValidate<RoutingProduct>("context.Object");
+                return routingProduct.RoutingProductId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                RoutingProduct routingProduct = context.Object.CastWithValidate<RoutingProduct>("context.Object");
+                return s_routingProductManagerManager.GetRoutingProductName(routingProduct.RoutingProductId);
+
+            }
+        }
 
 		#endregion
 	}

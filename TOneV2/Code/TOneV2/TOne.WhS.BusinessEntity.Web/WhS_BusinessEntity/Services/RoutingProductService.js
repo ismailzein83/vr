@@ -9,7 +9,8 @@
             addRoutingProduct: addRoutingProduct,
             editRoutingProduct: editRoutingProduct,
             deleteRoutingProduct: deleteRoutingProduct,
-            viewRoutingProduct: viewRoutingProduct
+            viewRoutingProduct: viewRoutingProduct,
+            getEntityUniqueName: getEntityUniqueName
         });
 
         function addRoutingProduct(onRoutingProductAdded) {
@@ -36,6 +37,9 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductEditor.html', parameters, modalSettings);
         }
 
+        function getEntityUniqueName() {
+            return "WhS_BusinessEntity_RoutingProduct";
+        }
 
         function viewRoutingProduct(routingProductId) {
             var modalSettings = {

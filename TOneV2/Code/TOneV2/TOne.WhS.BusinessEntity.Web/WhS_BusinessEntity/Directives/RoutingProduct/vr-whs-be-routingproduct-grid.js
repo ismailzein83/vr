@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeRoutingproductGrid", ["VRNotificationService", "WhS_BE_RoutingProductAPIService", "WhS_Routing_RouteRuleService", "WhS_BE_RoutingProductService", "VRUIUtilsService", "WhS_Routing_RouteRuleAPIService",
-function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, VRUIUtilsService, WhS_Routing_RouteRuleAPIService) {
+app.directive("vrWhsBeRoutingproductGrid", ["VRNotificationService", "WhS_BE_RoutingProductAPIService", "WhS_Routing_RouteRuleService", "WhS_BE_RoutingProductService", "VRUIUtilsService", "WhS_Routing_RouteRuleAPIService", "VRCommon_ObjectTrackingService",
+function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, VRUIUtilsService, WhS_Routing_RouteRuleAPIService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
 
@@ -88,8 +88,27 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                     return routingProductDataItem.routeRuleGridAPI.loadGrid(routeRuleGridPayload);
                 }
             };
-
             directiveTabs.push(directiveTab);
+            var drillDownDefinition = {
+
+               title : VRCommon_ObjectTrackingService.getObjectTrackingGridTitle(),
+           directive : "vr-common-objecttracking-grid",
+
+
+            loadDirective : function (directiveAPI, routingProductItem) {
+                routingProductItem.objectTrackingGridAPI = directiveAPI;
+
+                var query = {
+                    ObjectId: routingProductItem.Entity.RoutingProductId,
+                    EntityUniqueName: WhS_BE_RoutingProductService.getEntityUniqueName(),
+
+                };
+                return routingProductItem.objectTrackingGridAPI.load(query);
+            }
+            };
+
+
+        directiveTabs.push(drillDownDefinition);
 
             return directiveTabs;
         }

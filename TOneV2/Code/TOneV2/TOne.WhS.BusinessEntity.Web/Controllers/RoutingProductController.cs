@@ -44,7 +44,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetRoutingProduct")]
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
-            return _manager.GetRoutingProduct(routingProductId);
+            return _manager.GetRoutingProduct(routingProductId,true);
         }
 
         [HttpGet]
