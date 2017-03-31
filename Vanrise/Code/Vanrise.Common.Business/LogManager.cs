@@ -11,7 +11,7 @@ namespace Vanrise.Common.Business
 {
     public class LogManager
     {
-        internal static SQLDataManager GetDataManager()
+        internal static SQLDataManager GetLoggingDataManager()
         {
             var logHandlers = LoggerFactory.GetLogger().LogHandlers;
             if (logHandlers != null)
@@ -20,19 +20,32 @@ namespace Vanrise.Common.Business
                 {
                     SQLLogger sqlLogger = handler as SQLLogger;
                     if (sqlLogger != null)
-                        return sqlLogger.DataManager;
+                        return sqlLogger.LoggingDataManager;
                 }
             }
             return null;
         }
-
+        internal static LogAttributeDataManager GetConfigurationDataManager()
+        {
+            var logHandlers = LoggerFactory.GetLogger().LogHandlers;
+            if (logHandlers != null)
+            {
+                foreach (var handler in logHandlers)
+                {
+                    SQLLogger sqlLogger = handler as SQLLogger;
+                    if (sqlLogger != null)
+                        return sqlLogger.ConfigurationDataManager;
+                }
+            }
+            return null;
+        }
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Entities.LogEntryDetail> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
         {
             List<int> grantedPermissionSetIds;
             var requiredPermissionSetManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<IRequiredPermissionSetManager>();
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-                    
-            SQLDataManager manager = GetDataManager();
+
+            SQLDataManager manager = GetLoggingDataManager();
 
             BigResult<Vanrise.Entities.LogEntry> loggerResult = manager.GetFilteredLogs(input, grantedPermissionSetIds);
 
@@ -59,7 +72,7 @@ namespace Vanrise.Common.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetLogAttributes"),
                () =>
                {
-                   SQLDataManager dataManager = GetDataManager();
+                   LogAttributeDataManager dataManager = GetConfigurationDataManager();
                    List<LogAttribute> allLogAttributes = dataManager.GetLogAttributes();
                    return allLogAttributes.ToDictionary(l => l.LogAttributeID, l => l);
                });
@@ -67,7 +80,7 @@ namespace Vanrise.Common.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            SQLDataManager _dataManager = GetDataManager();
+            LogAttributeDataManager _dataManager = GetConfigurationDataManager();
             object _updateHandle;
             protected override bool ShouldSetCacheExpired(object parameter)
             {
@@ -85,7 +98,7 @@ namespace Vanrise.Common.Business
                 AssemblyName = this.GetAttributeName(logEntry.AssemblyId),
                 TypeName = this.GetAttributeName(logEntry.TypeId),
                 MethodName = this.GetAttributeName(logEntry.MethodId),
-                EventTypeName = (logEntry.EventType.HasValue)?this.GetAttributeName(logEntry.EventType.Value):null,
+                EventTypeName = (logEntry.EventType.HasValue) ? this.GetAttributeName(logEntry.EventType.Value) : null,
                 EntryTypeName = Vanrise.Common.Utilities.GetEnumDescription(logEntry.EntryType),
             };
         }
@@ -114,7 +127,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Level" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Type" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message", Width = 120});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message", Width = 120 });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)

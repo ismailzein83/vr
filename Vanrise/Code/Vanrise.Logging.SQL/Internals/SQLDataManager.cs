@@ -15,7 +15,6 @@ namespace Vanrise.Logging.SQL
         public SQLDataManager(string connectionStringKey)
             : base(connectionStringKey)
         {
-
         }
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static SQLDataManager()
@@ -30,19 +29,16 @@ namespace Vanrise.Logging.SQL
             _columnMapper.Add("EventTypeName", "EventType");
         }
 
-        LogAttributesByType _logAttributes;
-
-        public void WriteEntries(string machineName, string applicationName, List<LogEntry> entries)
+        public void WriteEntries(Func<LogAttributeType, string, int> getAttributeId, string machineName, string applicationName, List<LogEntry> entries)
         {
-            LoadLogAttributesIfNotLoaded();
-            DataTable dtEntries = ConvertEntriesToTable(machineName, applicationName, entries);
+            DataTable dtEntries = ConvertEntriesToTable(getAttributeId,machineName, applicationName, entries);
             WriteDataTableToDB(dtEntries, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-        private DataTable ConvertEntriesToTable(string machineName, string applicationName, List<LogEntry> entries)
+        private DataTable ConvertEntriesToTable(Func<LogAttributeType, string, int> getAttributeId, string machineName, string applicationName, List<LogEntry> entries)
         {
-            int machineNameId = GetAttributeId(LogAttributeType.MachineName, machineName);
-            int applicationNameId = GetAttributeId(LogAttributeType.ApplicationName, applicationName);
+            int machineNameId = getAttributeId(LogAttributeType.MachineName, machineName);
+            int applicationNameId = getAttributeId(LogAttributeType.ApplicationName, applicationName);
             DataTable dt = new DataTable("logging.LogEntry");
             dt.Columns.Add("MachineNameId", typeof(int));
             dt.Columns.Add("ApplicationNameId", typeof(int));
@@ -61,11 +57,11 @@ namespace Vanrise.Logging.SQL
                 DataRow dr = dt.NewRow();
                 dr["MachineNameId"] = machineNameId;
                 dr["ApplicationNameId"] = applicationNameId;
-                dr["AssemblyNameId"] = GetAttributeId(LogAttributeType.AssemblyName, e.AssemblyName);
-                dr["TypeNameId"] = GetAttributeId(LogAttributeType.TypeName, e.TypeName);
-                dr["MethodNameId"] = GetAttributeId(LogAttributeType.MethodName, e.MethodName);
+                dr["AssemblyNameId"] = getAttributeId(LogAttributeType.AssemblyName, e.AssemblyName);
+                dr["TypeNameId"] = getAttributeId(LogAttributeType.TypeName, e.TypeName);
+                dr["MethodNameId"] = getAttributeId(LogAttributeType.MethodName, e.MethodName);
                 dr["EntryType"] = (int)e.EntryType;
-                dr["EventType"] = GetAttributeId(LogAttributeType.EventType, e.EventType);
+                dr["EventType"] = getAttributeId(LogAttributeType.EventType, e.EventType);
                 dr["ViewRequiredPermissionSetId"] = e.ViewRequiredPermissionSetId.HasValue ? (Object)e.ViewRequiredPermissionSetId.Value : DBNull.Value;
                 dr["Message"] = e.Message;
                 dr["ExceptionDetail"] = e.ExceptionDetail;
@@ -76,39 +72,6 @@ namespace Vanrise.Logging.SQL
 
             return dt;
         }
-
-        void LoadLogAttributesIfNotLoaded()
-        {
-            if (_logAttributes == null)
-            {
-                lock (this)
-                {
-                    if (_logAttributes == null)
-                    {
-                        var logAttributesByType = new LogAttributesByType();
-                        ExecuteReaderSP("[logging].[sp_LogAttribute_GetAll]",
-                            (reader) =>
-                            {
-                                while (reader.Read())
-                                {
-                                    LogAttributeType attributeType = (LogAttributeType)reader["AttributeType"];
-                                    LogAttributesByDescription logAttributesByDescription;
-                                    if (!logAttributesByType.TryGetValue(attributeType, out logAttributesByDescription))
-                                    {
-                                        logAttributesByDescription = new LogAttributesByDescription();
-                                        logAttributesByType.TryAdd(attributeType, logAttributesByDescription);
-                                    }
-                                    string attributeDescription = reader["Description"] as string;
-                                    if (!logAttributesByDescription.ContainsKey(attributeDescription))
-                                        logAttributesByDescription.TryAdd(attributeDescription, (int)reader["ID"]);
-                                }
-                            });
-                        _logAttributes = logAttributesByType;
-                    }
-                }
-            }
-        }
-
 
         public Vanrise.Entities.BigResult<Vanrise.Entities.LogEntry> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input, List<int> grantedPermissionSetIds)
         {
@@ -176,42 +139,6 @@ namespace Vanrise.Logging.SQL
             return logEntry;
         }
 
-        public List<LogAttribute> GetLogAttributes()
-        {
-            return GetItemsSP("[logging].[sp_LogAttribute_GetAll]", LogAttributeMapper);
-        }
-
-        LogAttribute LogAttributeMapper(IDataReader reader)
-        {
-            LogAttribute logAttribute = new LogAttribute
-            {
-                LogAttributeID = (int)reader["ID"],
-                AttributeType = (int)reader["AttributeType"],
-                Description = reader["Description"] as string
-            };
-            return logAttribute;
-        }
-
-        public bool AreLogAttributesUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("[logging].[LogAttribute]", ref updateHandle);
-        }
-
-        int GetAttributeId(LogAttributeType attributeType, string attributeDescription)
-        {
-            LogAttributesByDescription logAttributesByDescription;
-            if (!_logAttributes.TryGetValue(attributeType, out logAttributesByDescription))
-            {
-                logAttributesByDescription = new LogAttributesByDescription();
-                _logAttributes.TryAdd(attributeType, logAttributesByDescription);
-            }
-            int attributeId;
-            if (!logAttributesByDescription.TryGetValue(attributeDescription, out attributeId))
-            {
-                attributeId = (int)ExecuteScalarSP("[logging].[sp_LogAttribute_InsertIfNeededAndGetID]", (int)attributeType, attributeDescription);
-                logAttributesByDescription.TryAdd(attributeDescription, attributeId);
-            }
-            return attributeId;
-        }
+ 
     }
 }

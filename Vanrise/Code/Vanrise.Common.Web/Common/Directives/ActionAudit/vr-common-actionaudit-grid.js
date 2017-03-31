@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonActionauditGrid", ["UtilsService", "VRNotificationService", "VRCommon_ActionAuditAPIService","VRCommon_ActionAuditAPIService",
-function (UtilsService, VRNotificationService, VRCommon_UserActionAuditAPIService, VRCommon_ActionAuditAPIService) {
+app.directive("vrCommonActionauditGrid", ["UtilsService", "VRNotificationService","VRCommon_ActionAuditAPIService",
+function (UtilsService, VRNotificationService, VRCommon_ActionAuditAPIService) {
 
     var directiveDefinitionObject = {
 

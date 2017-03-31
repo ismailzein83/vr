@@ -127,7 +127,6 @@
     <Compile Include="Controllers\CompanySettingsController.cs" />
     <Compile Include="Controllers\MasterLogController.cs" />
     <Compile Include="Controllers\StatusDefinitionController.cs" />
-    <Compile Include="Controllers\UserActionAuditController.cs" />
     <Compile Include="Controllers\VRActionAuditController.cs" />
     <Compile Include="Controllers\VRActionAuditLKUPController.cs" />
     <Compile Include="Controllers\VRApplicationVisibilityController.cs" />
@@ -230,10 +229,6 @@
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionGridTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-grid.js" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-selector.js" />
-    <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditGridTemplate.html" />
-    <Content Include="Common\Directives\UserActionAudit\Templates\UserActionAuditSearch.html" />
-    <Content Include="Common\Directives\UserActionAudit\vr-common-useractionaudit-grid.js" />
-    <Content Include="Common\Directives\UserActionAudit\vr-useractionaudit-search.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilityGridTemplate.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRModuleVisibilityEditor.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilitySettingsTemplate.html" />
@@ -353,7 +348,6 @@
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
     <Content Include="Common\Services\APIServices\StatusDefinitionAPIService.js" />
-    <Content Include="Common\Services\APIServices\UserActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\UISettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
@@ -377,7 +371,6 @@
     <Content Include="Common\Services\BankDetailService.js" />
     <Content Include="Common\Services\ObjectTrackingService.js" />
     <Content Include="Common\Services\StatusDefinitionService.js" />
-    <Content Include="Common\Services\UserActionAuditService.js" />
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRConnectionService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />

@@ -11,7 +11,7 @@ namespace Vanrise.Common.Data.SQL
     public class VRActionAuditLKUPDataManager : BaseSQLDataManager, IVRActionAuditLKUPDataManager
     { 
         public VRActionAuditLKUPDataManager()
-            : base(GetConnectionStringName("LoggingDBConnStringKey", "LogDBConnString"))
+            : base(GetConnectionStringName("LoggingConfigDBConnStringKey", "LoggingConfigDBConnString"))
         {
 
         }

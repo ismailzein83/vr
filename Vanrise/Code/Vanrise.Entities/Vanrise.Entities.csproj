@@ -117,9 +117,6 @@
     <Compile Include="TextManipulation\TextManipulationSettings.cs" />
     <Compile Include="TextManipulation\TextManipulationTarget.cs" />
     <Compile Include="UISettings.cs" />
-    <Compile Include="UserActionAudit\UserActionAudit.cs" />
-    <Compile Include="UserActionAudit\UserActionAuditDetail.cs" />
-    <Compile Include="UserActionAudit\UserActionAuditQuery.cs" />
     <Compile Include="VRButtonType.cs" />
     <Compile Include="VRConnection\VRConnectionFilter.cs" />
     <Compile Include="VRDocument\VRDocumentCategoryDefinition.cs" />

@@ -96,7 +96,6 @@
     <Compile Include="StatusDefinitionManager.cs" />
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
-    <Compile Include="UserActionAudit\UserActionAuditManager.cs" />
     <Compile Include="VRConnections\VRInterAppRestConnection.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />

@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\LogAttribute.cs" />
+    <Compile Include="Internals\LogAttributeDataManager.cs" />
     <Compile Include="Internals\LogEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Internals\SQLDataManager.cs" />

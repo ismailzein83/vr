@@ -18,26 +18,40 @@ namespace Vanrise.Logging.SQL
          string _machineName;
          string _applicationName;
 
-         string _connectionStringKey;
-
-        public string ConnectionStringKey
+         string _loggingConnectionStringKey;
+         string _configurationConnectionStringKey;
+         public string LoggingConnectionStringKey
          {
              set
              {
-                 _connectionStringKey = value;
+                 _loggingConnectionStringKey = value;
              }
          }
-
-        public SQLDataManager DataManager
+         public string ConfigurationConnectionStringKey
+         {
+             set
+             {
+                 _configurationConnectionStringKey = value;
+             }
+         }
+        public SQLDataManager LoggingDataManager
         {
             get
             {
-                if (String.IsNullOrEmpty(_connectionStringKey))
+                if (String.IsNullOrEmpty(_loggingConnectionStringKey))
                     throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
-                return new SQLDataManager(_connectionStringKey);
+                return new SQLDataManager(_loggingConnectionStringKey);
             }
         }
-
+        public LogAttributeDataManager ConfigurationDataManager
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_configurationConnectionStringKey))
+                    throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
+                return new LogAttributeDataManager(_configurationConnectionStringKey);
+            }
+        }
         public SQLLogger()
         {
             _machineName = Environment.MachineName;
@@ -68,8 +82,9 @@ namespace Vanrise.Logging.SQL
                         logEntries.Add(logEntry);
                     }
                     if (logEntries.Count >= 0)
-                    {                        
-                        this.DataManager.WriteEntries(_machineName, _applicationName, logEntries);
+                    {
+                        this.ConfigurationDataManager.LoadLogAttributesIfNotLoaded();
+                        this.LoggingDataManager.WriteEntries(this.ConfigurationDataManager.GetAttributeId, _machineName, _applicationName, logEntries);
                     }
                 }
             }
