@@ -228,8 +228,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
                 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 45});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan", Width = 40});
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
