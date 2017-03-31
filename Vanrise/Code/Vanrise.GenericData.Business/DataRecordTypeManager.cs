@@ -47,17 +47,15 @@ namespace Vanrise.GenericData.Business
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
-            var dataRecordTypeToEdit = dataRecordTypes.GetRecord(dataRecordTypeId);
            
-            return dataRecordTypeToEdit;
+            return dataRecordTypes.GetRecord(dataRecordTypeId); ;
         }
        
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
-            var dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
 
-            return dataRecordType;
+            return dataRecordTypes.GetRecord(dataRecordTypeId); ;
         }
 
         public string GetDataRecordTypeName(Guid dataRecordTypeId)
