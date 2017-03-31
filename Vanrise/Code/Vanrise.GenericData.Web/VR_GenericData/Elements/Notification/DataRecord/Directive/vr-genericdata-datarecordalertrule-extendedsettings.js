@@ -135,7 +135,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                                 filter: {
                                     IncludedFieldNames: _includedFieldNames
                                 }
-                            }
+                            };
 
                             if (availableIdentificationFields != undefined) {
                                 dataRecordTypeFieldsSelectorPayload.selectedIds = UtilsService.getPropValuesFromArray(availableIdentificationFields, 'Name');
