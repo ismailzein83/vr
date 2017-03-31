@@ -111,7 +111,6 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
             }];
 
             $scope.scopeModel.gridMenuActions = function (dataItem) {
-                console.log(dataItem);
                 if (dataItem.IsActive) {
                     return menuActions;
                 }
