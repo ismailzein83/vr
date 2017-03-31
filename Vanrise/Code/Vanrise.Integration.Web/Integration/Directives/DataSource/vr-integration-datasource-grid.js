@@ -125,7 +125,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
-             gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
+             
                 gridAPI.itemDeleted(dataSource);
             };
 
