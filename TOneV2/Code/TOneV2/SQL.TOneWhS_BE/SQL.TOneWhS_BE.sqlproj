@@ -460,5 +460,8 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllBySellingProductsAndCustomer.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListChange_GetNotSentRateChanges.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListChange_GetNotSentCodeChanges.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealSupplierZoneGroup.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealSaleZoneGroup.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealSaleZone.sql" />
   </ItemGroup>
 </Project>
