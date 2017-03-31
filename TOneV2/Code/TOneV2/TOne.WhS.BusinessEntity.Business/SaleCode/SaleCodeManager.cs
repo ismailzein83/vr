@@ -170,7 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
