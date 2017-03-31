@@ -19,13 +19,29 @@ namespace TOne.WhS.RouteSync.Business
             throw new NotImplementedException();
         }
 
-        public RouteSyncDefinition GetRouteSyncDefinitionById(int routeSyncDefinitionId)
+        public RouteSyncDefinition GetRouteSyncDefinitionById(int routeSyncDefinitionId,bool isViewedFromUI)
         {
             RouteSyncDefinition routeSyncDefinition;
             var allRouteSyncDefinitions = GetCachedRouteSyncDefinitions();
             if (!allRouteSyncDefinitions.TryGetValue(routeSyncDefinitionId, out routeSyncDefinition))
                 throw new NullReferenceException(string.Format("GetRouteSyncDefinitionById : {0}", routeSyncDefinitionId));
-            return allRouteSyncDefinitions[routeSyncDefinitionId];
+
+            var routeSyncBPDefinition =allRouteSyncDefinitions[routeSyncDefinitionId];
+
+             if (routeSyncBPDefinition != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(RouteSyncDefinitionLoggableEntity.Instance, routeSyncBPDefinition);
+            return routeSyncBPDefinition;
+        }
+
+        public RouteSyncDefinition GetRouteSyncDefinitionById(int routeSyncDefinitionId)
+        {
+          return GetRouteSyncDefinitionById(routeSyncDefinitionId,false);
+        }
+
+        public string GetRouteSyncDefinitionName(RouteSyncDefinition routeSyncDefinition)
+        {
+
+            return (routeSyncDefinition != null) ? routeSyncDefinition.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<RouteSyncDefinitionDetail> AddRouteSyncDefinition(RouteSyncDefinition routeSyncDefinitionItem)
@@ -43,6 +59,7 @@ namespace TOne.WhS.RouteSync.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 routeSyncDefinitionItem.RouteSyncDefinitionId = reprocessDefintionId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(RouteSyncDefinitionLoggableEntity.Instance, routeSyncDefinitionItem);
                 insertOperationOutput.InsertedObject = RouteSyncDefinitionDetailMapper(routeSyncDefinitionItem);
             }
             else
@@ -65,6 +82,7 @@ namespace TOne.WhS.RouteSync.Business
             if (dataManager.Update(routeSyncDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(RouteSyncDefinitionLoggableEntity.Instance, routeSyncDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = RouteSyncDefinitionDetailMapper(this.GetRouteSyncDefinitionById(routeSyncDefinitionItem.RouteSyncDefinitionId));
             }
@@ -85,7 +103,7 @@ namespace TOne.WhS.RouteSync.Business
             {
                 ExportExcelHandler = new RouteSyncDefinitionExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(RouteSyncDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRouteSyncDefinitions.ToBigResult(input, filterExpression, RouteSyncDefinitionDetailMapper), handler);
         }
 
@@ -146,6 +164,52 @@ namespace TOne.WhS.RouteSync.Business
                 return _dataManager.AreRouteSyncDefinitionsUpdated(ref _updateHandle);
             }
         }
+
+        private class RouteSyncDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static RouteSyncDefinitionLoggableEntity Instance = new RouteSyncDefinitionLoggableEntity();
+
+            private RouteSyncDefinitionLoggableEntity()
+            {
+
+            }
+
+            static RouteSyncDefinitionManager s_routeSyncDefinitionManager = new RouteSyncDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_RouteSync_RouteSyncDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Route Sync"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Route Sync Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_RouteSync_RouteSyncDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                RouteSyncDefinition routeSyncDefinition = context.Object.CastWithValidate<RouteSyncDefinition>("context.Object");
+                return routeSyncDefinition.RouteSyncDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                RouteSyncDefinition routeSyncDefinition = context.Object.CastWithValidate<RouteSyncDefinition>("context.Object");
+                return s_routeSyncDefinitionManager.GetRouteSyncDefinitionName(routeSyncDefinition);
+
+            }
+        }
+
         #endregion
 
 

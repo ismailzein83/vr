@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDefinitionAPIService', 'WhS_RouteSync_RouteSyncDefinitionService', 'VRNotificationService',
-    function (WhS_RouteSync_RouteSyncDefinitionAPIService, WhS_RouteSync_RouteSyncDefinitionService, VRNotificationService) {
+app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDefinitionAPIService', 'WhS_RouteSync_RouteSyncDefinitionService', 'VRNotificationService', 'VRUIUtilsService',
+    function (WhS_RouteSync_RouteSyncDefinitionAPIService, WhS_RouteSync_RouteSyncDefinitionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.routeSyncDefinition = [];
@@ -29,11 +29,18 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = WhS_RouteSync_RouteSyncDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_RouteSync_RouteSyncDefinitionAPIService.GetFilteredRouteSyncDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -50,6 +57,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
                 };
 
                 api.onRouteSyncDefinitionAdded = function (addedRouteSyncDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedRouteSyncDefinition);
                     gridAPI.itemAdded(addedRouteSyncDefinition);
                 };
 
@@ -67,6 +75,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionGrid', ['WhS_RouteSync_RouteSyncDe
 
             function editRouteSyncDefinition(routeSyncDefinitionItem) {
                 var onRouteSyncDefinitionUpdated = function (updatedRouteSyncDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedRouteSyncDefinition);
                     gridAPI.itemUpdated(updatedRouteSyncDefinition);
                 };
 
