@@ -154,6 +154,7 @@ namespace Vanrise.Integration.Business
 
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(Guid dataSourceId, Guid taskId)
         {
+           var dataSource = GetDataSource(dataSourceId);
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
 
@@ -162,11 +163,12 @@ namespace Vanrise.Integration.Business
 
             if (deleted)
             {
-                var dataSource = GetDataSource(dataSourceId);
+               
                 Vanrise.Runtime.Business.SchedulerTaskManager schedulerTaskManager = new Runtime.Business.SchedulerTaskManager();
+                VRActionLogger.Current.TrackAndLogObjectDeleted(DataSourceLoggableEntity.Instance, dataSource);
                 if ((schedulerTaskManager.DeleteTask(taskId)).Result == DeleteOperationResult.Succeeded)
                 {
-                    VRActionLogger.Current.TrackAndLogObjectDeleted(DataSourceLoggableEntity.Instance, dataSource);
+                   
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 }
             }
