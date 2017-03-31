@@ -7,6 +7,7 @@ using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Queueing
 {
@@ -67,6 +68,7 @@ namespace Vanrise.Queueing
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(QueueExecutionFlowLoggableEntity.Instance, executionFlowObj);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = QueueExecutionFlowMapper(executionFlowObj);
             }
@@ -110,15 +112,23 @@ namespace Vanrise.Queueing
                       (input.Query.DefinitionId == null || input.Query.DefinitionId.Contains(priceList.DefinitionId)) &&
                       (input.Query.Name == null || priceList.Name.Contains(input.Query.Name));
 
-
+            VRActionLogger.Current.LogGetFilteredAction(QueueExecutionFlowLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueExecutionFlows.ToBigResult(input, filterExpression, QueueExecutionFlowMapper));
 
         }
 
-        public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId)
+        public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId, bool isViewedFromUI)
         {
             var executionFlows = GetCachedQueueExecutionFlows();
-            return executionFlows.GetRecord(executionFlowId);
+            var executionFlowItem= executionFlows.GetRecord(executionFlowId);
+            if (executionFlowItem != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(QueueExecutionFlowLoggableEntity.Instance, executionFlowItem);
+            return executionFlowItem;
+        }
+
+        public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId)
+        {
+           return GetExecutionFlow(executionFlowId,false);
         }
 
         public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail> UpdateExecutionFlow(QueueExecutionFlow executionFlowObject)
@@ -133,6 +143,7 @@ namespace Vanrise.Queueing
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(QueueExecutionFlowLoggableEntity.Instance, executionFlowObject);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = QueueExecutionFlowMapper(executionFlowObject);
             }
@@ -239,6 +250,50 @@ namespace Vanrise.Queueing
             protected override bool ShouldSetCacheExpired()
             {
                 return _dataManager.AreExecutionFlowsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class QueueExecutionFlowLoggableEntity : VRLoggableEntityBase
+        {
+            public static QueueExecutionFlowLoggableEntity Instance = new QueueExecutionFlowLoggableEntity();
+
+            private QueueExecutionFlowLoggableEntity()
+            {
+
+            }
+
+            static QueueExecutionFlowManager s_QueueExecutionFlowManager = new QueueExecutionFlowManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Queueing_QueueExecutionFlow"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Queueing"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Queue Execution Flow"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Queueing_QueueExecutionFlow_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                QueueExecutionFlow queueExecutionFlow = context.Object.CastWithValidate<QueueExecutionFlow>("context.Object");
+                return queueExecutionFlow.ExecutionFlowId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                QueueExecutionFlow queueExecutionFlow = context.Object.CastWithValidate<QueueExecutionFlow>("context.Object");
+                return s_QueueExecutionFlowManager.GetExecutionFlowName(queueExecutionFlow.ExecutionFlowId);
             }
         }
 

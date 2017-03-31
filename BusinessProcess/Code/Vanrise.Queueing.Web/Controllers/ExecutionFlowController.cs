@@ -35,7 +35,7 @@ namespace Vanrise.Queueing.Web.Controllers
         public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId)
         {
 
-            return _manager.GetExecutionFlow(executionFlowId);
+            return _manager.GetExecutionFlow(executionFlowId,true);
 
         }
 

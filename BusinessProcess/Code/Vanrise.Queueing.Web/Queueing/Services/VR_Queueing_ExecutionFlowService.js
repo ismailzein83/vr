@@ -2,15 +2,17 @@
 
     'use strict';
 
-    ExecutionFlowService.$inject = ['VRModalService'];
+    ExecutionFlowService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function ExecutionFlowService(VRModalService) {
+    function ExecutionFlowService(VRModalService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
         return ({
             addExecutionFlow: addExecutionFlow,
             editExecutionFlow: editExecutionFlow,
             addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToQueueExecutionFlow: registerObjectTrackingDrillDownToQueueExecutionFlow
+
         });
 
         function addExecutionFlow(onExecutionFlowAdded) {
@@ -36,7 +38,30 @@
 
             VRModalService.showModal('/Client/Modules/Queueing/Views/ExecutionFlow/ExecutionFlowEditor.html', modalParameters, modalSettings);
         }
+        function getEntityUniqueName() {
+            return "VR_Queueing_QueueExecutionFlow";
+        }
 
+        function registerObjectTrackingDrillDownToQueueExecutionFlow() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, queueExecutionFlowItem) {
+                queueExecutionFlowItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: queueExecutionFlowItem.Entity.ExecutionFlowId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return queueExecutionFlowItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
