@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeZoneServiceConfigGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneServiceConfigAPIService", "WhS_BE_ZoneServiceConfigService",
-function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIService, WhS_BE_ZoneServiceConfigService) {
+app.directive("vrWhsBeZoneServiceConfigGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneServiceConfigAPIService", "WhS_BE_ZoneServiceConfigService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIService, WhS_BE_ZoneServiceConfigService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -24,7 +24,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
     };
 
     function ZoneServiceConfigGrid($scope, ctrl, $attrs) {
-
+        var gridDrillDownTabsObj;
         var gridAPI;
         this.initializeController = initializeController;
 
@@ -34,7 +34,8 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
             $scope.onGridReady = function (api) {
 
                 gridAPI = api;
-
+                var drillDownDefinitions = WhS_BE_ZoneServiceConfigService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions, true);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
@@ -45,6 +46,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
                         return gridAPI.retrieveData(query);
                     };
                     directiveAPI.onZoneServiceConfigAdded = function (zoneServiceConfigObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(zoneServiceConfigObject);
                         gridAPI.itemAdded(zoneServiceConfigObject);
                     };
                     return directiveAPI;
@@ -56,6 +58,8 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
                         if (response && response.Data) {
                             for (var i = 0 ; i < response.Data.length; i++) {
                                 addReadySericeApi(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+
                             }
                         }
                         onResponseReady(response);
@@ -88,6 +92,7 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
 
         function editZoneServiceConfig(zoneServiceConfigObj) {
             var onZoneServiceConfigUpdated = function (zoneServiceConfigObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(zoneServiceConfigObj);
                 gridAPI.itemUpdated(zoneServiceConfigObj);
                 addReadySericeApi(zoneServiceConfigObj);
             };

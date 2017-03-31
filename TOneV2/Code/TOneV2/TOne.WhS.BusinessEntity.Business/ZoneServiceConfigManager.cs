@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
 using TOne.WhS.BusinessEntity.Data;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -44,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new ZoneServiceConfigExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(ZoneServiceConfigLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allZoneServiceConfigs.ToBigResult(input, filterExpression, ZoneServiceConfigDetailMapper), handler);
         }
 
@@ -59,6 +60,10 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        public string GetZoneServiceConfigName(ZoneServiceConfig zoneServiceConfig)
+        {
+            return (zoneServiceConfig != null) ? zoneServiceConfig.Settings.Name : null;
+        }
 
         public IEnumerable<ZoneServiceConfigInfo> GetAllZoneServiceConfigs(ZoneServiceConfigFilter filter)
         {
@@ -126,12 +131,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZoneServiceConfigs.ToDictionary(x => x.Key, x => x.Value.Symbol);
         }
 
-        public ZoneServiceConfig GetZoneServiceConfig(int ZoneServiceConfigId)
+        public ZoneServiceConfig GetZoneServiceConfig(int zoneServiceConfigId, bool isViewedFromUI)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs();
-            return allZoneServiceConfigs.GetRecord(ZoneServiceConfigId);
+            var zoneServiceConfigItem = allZoneServiceConfigs.GetRecord(zoneServiceConfigId);
+            if (zoneServiceConfigItem != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(ZoneServiceConfigLoggableEntity.Instance, zoneServiceConfigItem);
+            return zoneServiceConfigItem;
         }
-
+        public ZoneServiceConfig GetZoneServiceConfig(int zoneServiceConfigId)
+        {
+            return GetZoneServiceConfig(zoneServiceConfigId,false);
+        }
         public string GetServiceSymbol(int serviceId)
         {
             ZoneServiceConfig zoneServiceConfig = GetZoneServiceConfig(serviceId);
@@ -211,8 +222,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 zoneServiceConfig.ZoneServiceConfigId = ZoneServiceConfigtId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(ZoneServiceConfigLoggableEntity.Instance, zoneServiceConfig);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = ZoneServiceConfigDetailMapper(zoneServiceConfig);
             }
             else
@@ -241,6 +253,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(ZoneServiceConfigLoggableEntity.Instance, zoneServiceConfig);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ZoneServiceConfigDetailMapper(zoneServiceConfig);
             }
@@ -357,6 +370,51 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+
+        private class ZoneServiceConfigLoggableEntity : VRLoggableEntityBase
+        {
+            public static ZoneServiceConfigLoggableEntity Instance = new ZoneServiceConfigLoggableEntity();
+
+            private ZoneServiceConfigLoggableEntity()
+            {
+
+            }
+
+            static ZoneServiceConfigManager s_zoneServiceConfigManager = new ZoneServiceConfigManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_ZoneServiceConfig"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Zone Service Config"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_ZoneServiceConfig_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                ZoneServiceConfig zoneServiceConfig = context.Object.CastWithValidate<ZoneServiceConfig>("context.Object");
+                return zoneServiceConfig.ZoneServiceConfigId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                ZoneServiceConfig zoneServiceConfig = context.Object.CastWithValidate<ZoneServiceConfig>("context.Object");
+                return s_zoneServiceConfigManager.GetZoneServiceConfigName(zoneServiceConfig);
+
+            }
+        }
 
         #region  Mappers
         private ZoneServiceConfigInfo ZoneServiceConfigInfoMapper(ZoneServiceConfig zoneServiceConfig)

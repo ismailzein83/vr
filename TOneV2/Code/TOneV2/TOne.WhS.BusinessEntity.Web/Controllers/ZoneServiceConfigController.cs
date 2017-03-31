@@ -44,7 +44,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public ZoneServiceConfig GetZoneServiceConfig(int zoneServiceConfigId)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
-            return manager.GetZoneServiceConfig(zoneServiceConfigId);
+            return manager.GetZoneServiceConfig(zoneServiceConfigId,true);
         }
 
         [HttpPost]
