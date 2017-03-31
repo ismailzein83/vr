@@ -408,7 +408,6 @@ namespace Vanrise.Common
 
         #endregion
 
-
         #region Miscellaneous
 
         /// <summary>
@@ -423,8 +422,6 @@ namespace Vanrise.Common
             if (obj == null)
                 throw new NullReferenceException(string.Format("{0} '{1}'", objectName, id));
         }
-
-
 
         public static T CastWithValidate<T>(this Object obj, string objectName, object id = null) where T : class
         {
