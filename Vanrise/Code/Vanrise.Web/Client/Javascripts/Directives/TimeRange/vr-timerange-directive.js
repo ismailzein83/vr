@@ -83,17 +83,14 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             $scope.scopeModel.periodSelectionChanged = function () {
                 if (periodSelectedPromiseDeferred == undefined) {
                     if (ctrl.period != undefined && ctrl.period.value != -1) {
-
                         date = ctrl.period.getInterval();
                         ctrl.from = date.from;
                         ctrl.to = date.to;
-
                     }
                 }
                 else {
                     periodSelectedPromiseDeferred.resolve();
                 }
-
             };
 
             var customize = {
@@ -137,29 +134,35 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     };
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
                 });
-
-                return UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
+                var loadTimeRangeSelectorPromise = UtilsService.createPromiseDeferred();
+               UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
                     if (ctrl.period != undefined) {
                         date = periodDirectiveAPI.getData().getInterval();
-                        setTimeout(function () { ctrl.from = date.from; ctrl.to = date.to; UtilsService.safeApply($scope); });
+                        setDateData(date.from, date.to);
                     }
                     if (payload && payload.period != undefined) {
-                        if (payload.fromDate != undefined) {
-                            setTimeout(function () { ctrl.from = payload.fromDate; UtilsService.safeApply($scope); });
-                        }
-                        if (payload.toDate != undefined) {
-                            setTimeout(function () { ctrl.to = payload.toDate; UtilsService.safeApply($scope); });
-                        }
+                        setDateData(payload.fromDate, payload.toDate);
                     }
                     periodSelectedPromiseDeferred = undefined;
+                    loadTimeRangeSelectorPromise.resolve();
+               });
+               function setDateData(fromDate, toDate) {
+                   if (fromDate != undefined)
+                       ctrl.from = fromDate;
+                   if (toDate != undefined)
+                       ctrl.to = toDate;
+                   setTimeout(function () {
+                       UtilsService.safeApply($scope);
+                   });
+               }
 
-                });
+               return loadTimeRangeSelectorPromise.promise;
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
+       
         this.initializeController = initializeController;
     }
     return directiveDefinitionObject;
