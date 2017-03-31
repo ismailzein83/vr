@@ -573,6 +573,11 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByTime.sql" />
     <Build Include="VR_Invoice\User Defined Types\PartnerInvoiceTypeTable.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\BillingTransactionsByTimeTable.sql" />
+    <Build Include="logging\Tables\LogAttribute.sql" />
+    <Build Include="logging\Tables\ActionAuditLKUP.sql" />
+    <Build Include="logging\Stored Procedures\sp_LogAttribute_GetAll.sql" />
+    <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_InsertIfNotExists.sql" />
+    <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
