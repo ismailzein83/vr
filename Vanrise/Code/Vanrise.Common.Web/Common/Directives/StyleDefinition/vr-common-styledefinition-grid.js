@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIService', 'VRCommon_StyleDefinitionService', 'VRNotificationService',
-    function (VRCommon_StyleDefinitionAPIService, VRCommon_StyleDefinitionService, VRNotificationService) {
+app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIService', 'VRCommon_StyleDefinitionService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VRCommon_StyleDefinitionAPIService, VRCommon_StyleDefinitionService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.styleDefinition = [];
@@ -29,11 +29,18 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_StyleDefinitionService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_StyleDefinitionAPIService.GetFilteredStyleDefinitions(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +58,7 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
                 };
 
                 api.onStyleDefinitionAdded = function (addedStyleDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedStyleDefinition);
                     gridAPI.itemAdded(addedStyleDefinition);
                 };
 
@@ -67,6 +75,7 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
             }
             function editStyleDefinition(styleDefinitionItem) {
                 var onStyleDefinitionUpdated = function (updatedStyleDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedStyleDefinition);
                     gridAPI.itemUpdated(updatedStyleDefinition);
                 };
 

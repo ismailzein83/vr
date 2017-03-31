@@ -22,7 +22,14 @@ namespace Vanrise.Common.Business
         {
             var allStyleDefinitions = this.GetCachedStyleDefinitions();
             Func<StyleDefinition, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(StyleDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStyleDefinitions.ToBigResult(input, filterExpression, StyleDefinitionDetailMapper));
+        }
+
+        public string GetStyleDefinitionName(StyleDefinition styleDefinition)
+        {
+            return (styleDefinition != null) ? styleDefinition.Name : null;
+        
         }
 
         public Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail> AddStyleDefinition(StyleDefinition styleDefinitionItem)
@@ -39,6 +46,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(styleDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(StyleDefinitionLoggableEntity.Instance, styleDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = StyleDefinitionDetailMapper(styleDefinitionItem);
             }
@@ -62,6 +70,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(styleDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(StyleDefinitionLoggableEntity.Instance, styleDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = StyleDefinitionDetailMapper(this.GetStyleDefinition(styleDefinitionItem.StyleDefinitionId));
             }
@@ -98,6 +107,50 @@ namespace Vanrise.Common.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreStyleDefinitionUpdated(ref _updateHandle);
+            }
+        }
+
+        private class StyleDefinitionLoggableEntity : VRLoggableEntityBase
+        {
+            public static StyleDefinitionLoggableEntity Instance = new StyleDefinitionLoggableEntity();
+
+            private StyleDefinitionLoggableEntity()
+            {
+
+            }
+
+            static StyleDefinitionManager s_styleDefinitionManager = new StyleDefinitionManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_StyleDefinition"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Style Definition"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_StyleDefinition_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                StyleDefinition styleDefinition = context.Object.CastWithValidate<StyleDefinition>("context.Object");
+                return styleDefinition.StyleDefinitionId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                StyleDefinition styleDefinition = context.Object.CastWithValidate<StyleDefinition>("context.Object");
+                return s_styleDefinitionManager.GetStyleDefinitionName(styleDefinition);
             }
         }
 
