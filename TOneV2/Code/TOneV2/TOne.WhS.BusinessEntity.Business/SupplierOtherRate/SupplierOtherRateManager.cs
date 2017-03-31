@@ -63,6 +63,52 @@ namespace TOne.WhS.BusinessEntity.Business
                 ISupplierOtherRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierOtherRateDataManager>();
                 return dataManager.GetFilteredSupplierOtherRates(input.Query);
             }
+            protected override ResultProcessingHandler<SupplierOtherRateDetail> GetResultProcessingHandler(DataRetrievalInput<SupplierOtherRateQuery> input, BigResult<SupplierOtherRateDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SupplierOtherRateDetail>
+                {
+                    ExportExcelHandler = new SupplierOtherRateExcelExportHandler()
+                };
+            }
+        }
+
+        private class SupplierOtherRateExcelExportHandler : ExcelExportHandler<SupplierOtherRateDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierOtherRateDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Supplier Other Rates",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SupplierRateId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell { Value = record.RateTypeDescription });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         #endregion

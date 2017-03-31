@@ -472,7 +472,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 return true;
             };
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceLists.ToBigResult(input, filterExpression, SalePricelistDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<SalePriceListDetail>()
+            {
+                ExportExcelHandler = new SalePriceListExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceLists.ToBigResult(input, filterExpression, SalePricelistDetailMapper), resultProcessingHandler);
         }
         public SalePriceList GetPriceList(int priceListId)
         {
@@ -730,6 +736,47 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Classes
+
+        private class SalePriceListExportExcelHandler : ExcelExportHandler<SalePriceListDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SalePriceListDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Sale Pricelists",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Owner Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Owner Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Type" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.PriceListId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.OwnerType });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.OwnerName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreatedTime });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.PriceListTypeName });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
         public class CustomerSalePriceListInfo
         {
             public int CustomerId { get; set; }
