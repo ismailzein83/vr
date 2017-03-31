@@ -15,4 +15,7 @@
     <vr-datagridcolumn headertext="'Rule Type'" field="'RouteOptionRuleSettingsTypeName'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.BeginEffectiveTime'" type="'LongDatetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'Entity.EndEffectiveTime'" type="'LongDatetime'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

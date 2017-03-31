@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Rules.Data;
 
@@ -34,6 +35,7 @@ namespace Vanrise.Rules
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 GetCacheManager().SetCacheExpired(GetRuleTypeId());
                 TrackAndLogRuleAdded(rule);
+               
                 insertOperationOutput.InsertedObject = MapToDetails(rule);
             }
             else

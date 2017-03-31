@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingRouteoptionruleGrid', ['VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService', 'WhS_Routing_RouteOptionRuleService',
-function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Routing_RouteOptionRuleService) {
+app.directive('vrWhsRoutingRouteoptionruleGrid', ['VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService', 'WhS_Routing_RouteOptionRuleService', 'VRUIUtilsService',
+function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Routing_RouteOptionRuleService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -26,6 +26,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
 
     function routeOptionRuleGrid($scope, ctrl, $attrs) {
         var gridAPI;
+        var gridDrillDownTabsObj;
         var areRulesLinked = false;
         var linkedCode = undefined;
 
@@ -37,6 +38,8 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = WhS_Routing_RouteOptionRuleService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -56,6 +59,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                     };
 
                     directiveAPI.onRouteOptionRuleAdded = function (routeOptionRuleObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(routeOptionRuleObject);
                         gridAPI.itemAdded(routeOptionRuleObject);
                     };
 
@@ -71,6 +75,11 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Routing_RouteOptionRuleAPIService.GetFilteredRouteOptionRules(dataRetrievalInput)
                    .then(function (response) {
+                       if (response.Data != undefined) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                           }
+                       }
                        onResponseReady(response);
                    })
                    .catch(function (error) {
@@ -114,6 +123,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
 
         function editRouteOptionRule(routeOptionRule) {
             var onRouteOptionRuleUpdated = function (updatedItem) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
             };
 

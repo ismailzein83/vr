@@ -2,9 +2,10 @@
 
     'use strict';
 
-    RouteOptionRuleService.$inject = ['WhS_Routing_RouteOptionRuleAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService'];
+    RouteOptionRuleService.$inject = ['WhS_Routing_RouteOptionRuleAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function RouteOptionRuleService(WhS_Routing_RouteOptionRuleAPIService, VRModalService, VRNotificationService, UtilsService) {
+    function RouteOptionRuleService(WhS_Routing_RouteOptionRuleAPIService, VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addRouteOptionRule: addRouteOptionRule,
             editRouteOptionRule: editRouteOptionRule,
@@ -12,7 +13,9 @@
             viewRouteOptionRule: viewRouteOptionRule,
             addLinkedRouteOptionRule: addLinkedRouteOptionRule,
             viewLinkedRouteOptionRules: viewLinkedRouteOptionRules,
-            editLinkedRouteOptionRule: editLinkedRouteOptionRule
+            editLinkedRouteOptionRule: editLinkedRouteOptionRule,
+            registerObjectTrackingDrillDownToRouteOptionRules: registerObjectTrackingDrillDownToRouteOptionRules,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addRouteOptionRule(onRouteOptionRuleAdded, routingProductId, sellingNumberPlanId) {
@@ -117,6 +120,41 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleEditor.html', parameters, modalSettings);
         };
+
+
+        function getEntityUniqueName() {
+            return "WhS_Routing_RouteOptionRules";
+        }
+
+        function registerObjectTrackingDrillDownToRouteOptionRules() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, routeOptionRulesItem) {
+                routeOptionRulesItem.objectTrackingGridAPI = directiveAPI;
+
+                var query = {
+                    ObjectId: routeOptionRulesItem.Entity.RuleId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return routeOptionRulesItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
     };
 
     appControllers.service('WhS_Routing_RouteOptionRuleService', RouteOptionRuleService);

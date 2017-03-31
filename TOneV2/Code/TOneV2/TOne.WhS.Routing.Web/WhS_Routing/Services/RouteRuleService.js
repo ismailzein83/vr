@@ -2,9 +2,10 @@
 
     'use strict';
 
-    RouteRuleService.$inject = ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService'];
+    RouteRuleService.$inject = ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function RouteRuleService(WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService, UtilsService) {
+    function RouteRuleService(WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addRouteRule: addRouteRule,
             editRouteRule: editRouteRule,
@@ -12,7 +13,9 @@
             viewRouteRule: viewRouteRule,
             addLinkedRouteRule: addLinkedRouteRule,
             viewLinkedRouteRules: viewLinkedRouteRules,
-            editLinkedRouteRule: editLinkedRouteRule
+            editLinkedRouteRule: editLinkedRouteRule,
+            registerObjectTrackingDrillDownToRouteRules: registerObjectTrackingDrillDownToRouteRules,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addRouteRule(onRouteRuleAdded, routingProductId, sellingNumberPlanId) {
@@ -119,6 +122,41 @@
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
         };
+
+        function getEntityUniqueName() {
+            return "WhS_Routing_RouteRules";
+        }
+
+        function registerObjectTrackingDrillDownToRouteRules() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, routeRulesItem) {
+                routeRulesItem.objectTrackingGridAPI = directiveAPI;
+
+                var query = {
+                    ObjectId: routeRulesItem.Entity.RuleId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return routeRulesItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
+
     };
 
     appControllers.service('WhS_Routing_RouteRuleService', RouteRuleService);
