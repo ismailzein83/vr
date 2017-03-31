@@ -204,17 +204,4 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
     }
-
-    public class CustomerZoneRates
-    {
-        public CustomerZoneRates()
-        {
-            SellingProductZoneRatesByType = new Dictionary<RateTypeKey, Dictionary<int, List<SaleRate>>>();
-            CustomerZoneRatesByType = new Dictionary<RateTypeKey, List<SaleRate>>();
-        }
-
-        public Dictionary<RateTypeKey, Dictionary<int, List<SaleRate>>> SellingProductZoneRatesByType { get; set; }
-
-        public Dictionary<RateTypeKey, List<SaleRate>> CustomerZoneRatesByType { get; set; }
-    }
 }

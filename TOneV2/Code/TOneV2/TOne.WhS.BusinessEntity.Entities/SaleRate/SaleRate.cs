@@ -218,4 +218,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         void SetOtherRateBED(int rateTypeId, DateTime beginEffectiveDate);
     }
+
+    public struct RateTypeKey
+    {
+        public int? RateTypeId { get; set; }
+    }
 }

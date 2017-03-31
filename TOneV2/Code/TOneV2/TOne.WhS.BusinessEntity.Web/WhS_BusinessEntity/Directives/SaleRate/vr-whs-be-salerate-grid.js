@@ -28,6 +28,7 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
 
         var gridAPI;
         var gridQuery;
+        var gridDrillDownTabsObj;
 
         var primarySaleEntity;
 
@@ -37,6 +38,8 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = getDrillDownDefinitions();
+                gridDrillDownTabsObj = vruiUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 defineAPI();
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -47,9 +50,6 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                                 var item = response.Data[i];
                                 setNormalRateIconProperties(item);
                                 SetRateChangeIcon(item);
-
-                                var drillDownDefinitions = getDrillDownDefinitions(item);
-                                var gridDrillDownTabsObj = vruiUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(item);
                             }
                         }
@@ -76,37 +76,52 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                 ctrl.onReady(api);
         }
 
-        function getDrillDownDefinitions(dataItem) {
+        function getDrillDownDefinitions() {
 
             var drillDownDefinitions = [];
-
-            if (dataItem.OtherRates != null && dataItem.OtherRates.length > 0) {
-                drillDownDefinitions.push({
-                    title: 'Other Rates',
-                    directive: 'vr-whs-be-saleotherrate-grid',
-                    loadDirective: function (directiveAPI, rateItem) {
-                        rateItem.otherRateGridAPI = directiveAPI;
-                        rateItem.otherRateGridAPI.loadGrid(rateItem.OtherRates);
-                    }
-                });
-            }
 
             drillDownDefinitions.push({
                 title: 'History',
                 directive: 'vr-whs-be-sale-rate-history-grid',
-                loadDirective: function (directiveAPI, dataItem) {
+                loadDirective: function (directiveAPI, saleRate) {
                     var directivePayload = {
                         query: {
                             OwnerType: gridQuery.OwnerType,
                             OwnerId: gridQuery.OwnerId,
                             SellingNumberPlanId: gridQuery.SellingNumberPlanId,
-                            ZoneName: dataItem.ZoneName,
-                            CountryId: dataItem.CountryId,
+                            ZoneName: saleRate.ZoneName,
+                            CountryId: saleRate.CountryId,
                             CurrencyId: gridQuery.CurrencyId
                         }
                     };
                     directivePayload.primarySaleEntity = primarySaleEntity;
                     return directiveAPI.load(directivePayload);
+                }
+            });
+
+            drillDownDefinitions.push({
+                title: 'Other Rates',
+                directive: 'vr-whs-be-othersalerate-grid',
+                loadDirective: function (directiveAPI, saleRate) {
+                    saleRate.otherRateGridAPI = directiveAPI;
+
+                    var otherSaleRateGridPayload = {
+                        query: {
+                            ZoneName: saleRate.ZoneName,
+                            ZoneId: saleRate.Entity.ZoneId,
+                            CountryId: saleRate.CountryId
+                        }
+                    };
+
+                    if (gridQuery != undefined) {
+                        otherSaleRateGridPayload.query.SellingNumberPlanId = gridQuery.SellingNumberPlanId;
+                        otherSaleRateGridPayload.query.OwnerType = gridQuery.OwnerType;
+                        otherSaleRateGridPayload.query.OwnerId = gridQuery.OwnerId;
+                        otherSaleRateGridPayload.query.CurrencyId = gridQuery.CurrencyId;
+                        otherSaleRateGridPayload.query.EffectiveOn = gridQuery.EffectiveOn;
+                    }
+
+                    return directiveAPI.load(otherSaleRateGridPayload);
                 }
             });
 

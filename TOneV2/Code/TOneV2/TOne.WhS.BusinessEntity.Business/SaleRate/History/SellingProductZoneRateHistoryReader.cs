@@ -71,14 +71,4 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
     }
-
-    public class SellingProductZoneRates : Dictionary<RateTypeKey, List<SaleRate>>
-    {
-
-    }
-
-    public struct RateTypeKey
-    {
-        public int? RateTypeId { get; set; }
-    }
 }

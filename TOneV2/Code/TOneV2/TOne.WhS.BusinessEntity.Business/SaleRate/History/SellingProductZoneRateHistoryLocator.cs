@@ -55,10 +55,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 var record = new SaleRateHistoryRecord()
                 {
+                    SaleRateId = rate.SaleRateId,
                     Rate = rate.Rate,
+                    PriceListId = rate.PriceListId,
                     CurrencyId = saleRateManager.GetCurrencyId(rate),
                     BED = rate.BED,
-                    EED = rate.EED
+                    EED = rate.EED,
+                    SourceId = rate.SourceId
                 };
 
                 record.ConvertedRate = currencyExchangeRateManager.ConvertValueToCurrency(record.Rate, record.CurrencyId, currencyId, record.BED);
