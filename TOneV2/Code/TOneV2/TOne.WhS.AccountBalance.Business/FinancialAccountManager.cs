@@ -187,34 +187,6 @@ namespace TOne.WhS.AccountBalance.Business
         }
 
         #region Financial Accounts Validation
-        public bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode, out string message)
-        {
-            message = null;
-
-            if (financialAccount.EED.HasValue && financialAccount.EED.Value < new DateTime())
-            {
-                message = "EED must not be less than today.";
-                return false;
-            }
-            FinancialValidationData financialValidationData = LoadFinancialValidationData(financialAccount.CarrierProfileId, financialAccount.CarrierAccountId, financialAccount.FinancialAccountId);
-            var financialAccountType = financialValidationData.FinancialAccountTypes.FirstOrDefault(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
-            var accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
-            if (financialAccount.CarrierProfileId.HasValue)
-            {
-                if (!CheckFinancialCarrierProfileValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, isEditMode))
-                    return false;
-            }
-            else
-            {
-                if (!CheckFinancialCarrierAccountValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, isEditMode))
-                    return false;
-
-            }
-            ValidateFinancialAccount(financialAccount, financialValidationData, accountBalanceSettings, out message);
-            if (message != null)
-                return false;
-            return true;
-        }
         public bool CheckFinancialCarrierAccountValidation(Guid accountTypeId, AccountBalanceSettings accountBalanceSetting, CarrierAccount carrierAccount, IEnumerable<FinancialAccountData> profileFinancialAccounts, IEnumerable<FinancialAccountData> carrierFinancialAccounts, bool isEditMode)
         {
             if (carrierAccount.IsDeleted || carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
@@ -319,34 +291,6 @@ namespace TOne.WhS.AccountBalance.Business
 
             return true;
         }
-        public Func<FinancialAccountData, bool> GetFinancialAccountFilterExpression(Guid accountTypeId, CarrierAccountType carrierAccountType, AccountBalanceSettings accountBalanceSetting, bool isEditMode)
-        {
-            Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
-            {
-                if (!isEditMode && financialAccountData.FinancialAccount.Settings.AccountTypeId == accountTypeId && !financialAccountData.FinancialAccount.EED.HasValue)
-                    return false;
-
-                switch (carrierAccountType)
-                {
-                    case BusinessEntity.Entities.CarrierAccountType.Customer:
-                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && accountBalanceSetting.IsApplicableToCustomer == financialAccountData.IsApplicableToCustomer)
-                            return false;
-                        break;
-                    case BusinessEntity.Entities.CarrierAccountType.Supplier:
-                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && accountBalanceSetting.IsApplicableToSupplier == financialAccountData.IsApplicableToSupplier)
-                            return false;
-                        break;
-                    case BusinessEntity.Entities.CarrierAccountType.Exchange:
-                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && (accountBalanceSetting.IsApplicableToSupplier == financialAccountData.IsApplicableToSupplier || accountBalanceSetting.IsApplicableToCustomer == financialAccountData.IsApplicableToCustomer))
-                            return false;
-                        break;
-                }
-                return true;
-            };
-
-            return filterExpression;
-        }
-
         public bool CheckCarrierAllowAddFinancialAccounts(int? carrierProfileId, int? carrierAccountId)
         {
             FinancialValidationData financialValidationData = LoadFinancialValidationData(carrierProfileId, carrierAccountId, 0);
@@ -369,66 +313,7 @@ namespace TOne.WhS.AccountBalance.Business
             var applicableFinancialAccountTypes = financialValidationData.FinancialAccountTypes.FindAllRecords(filterExpression);
             return applicableFinancialAccountTypes.Count() > 0;
         }
-        private bool CheckApplicableAccountTypes(AccountBalanceSettings accountBalanceSettings, bool isApplicableToCustomer, bool isApplicableToSupplier)
-        {
-            if (accountBalanceSettings.IsApplicableToSupplier == isApplicableToSupplier && accountBalanceSettings.IsApplicableToCustomer == isApplicableToCustomer)
-                return true;
-            return false;
-        }
-        private bool ValidateFinancialAccount(FinancialAccount financialAccount, FinancialValidationData financialValidationData, AccountBalanceSettings accountBalanceSettings, out string message)
-        {
-            bool result = true;
-            if (financialAccount.CarrierAccountId.HasValue)
-            {
-                ValidateFinancialAccountforCarrierAccount(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.FinancialCarrierAccount.FinancialAccounts, accountBalanceSettings, out message, out result);
-                if (result)
-                {
-                    CheckFinancialAccountProfileOverlapping(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.ProfileFinancialAccounts, accountBalanceSettings, out  message, out result);
-                }
-            }
-            else
-            {
-                ValidateFinancialAccountforCarrierProfile(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, accountBalanceSettings, out  message, out result);
-            }
-            return result;
-        }
-        private void ValidateFinancialAccountforCarrierAccount(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> carrierFinancialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
-        {
-            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts, accountBalanceSettings, out message, out result);
-        }
-        private void ValidateFinancialAccountforCarrierProfile(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> profileFinancialAccounts, Dictionary<int, IEnumerable<FinancialAccountData>> financialAccountsByAccount, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
-        {
-            CheckFinancialAccountProfileOverlapping(accountTypeId, financialAccountId, bed, eed, profileFinancialAccounts, accountBalanceSettings, out message, out result);
-            if (!result)
-                return;
-            foreach (var carrierFinancialAccounts in financialAccountsByAccount.Values)
-            {
-                ValidateFinancialAccountforCarrierAccount(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts, accountBalanceSettings, out message, out result);
-                if (!result)
-                    return;
-            }
-        }
-        public void CheckFinancialAccountProfileOverlapping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialCarrierProfiles, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
-        {
-            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed, financialCarrierProfiles, accountBalanceSettings, out message, out result);
-        }
-        public void CheckFinancialAccountOverlaping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
-        {
-            foreach (var financialAccount in financialAccounts)
-            {
-                if (financialAccount.FinancialAccount.FinancialAccountId != financialAccountId && accountBalanceSettings.IsApplicableToCustomer == financialAccount.IsApplicableToCustomer && accountBalanceSettings.IsApplicableToSupplier == financialAccount.IsApplicableToSupplier)
-                {
-                    if (eed.VRGreaterThan(financialAccount.FinancialAccount.BED) && financialAccount.FinancialAccount.EED.VRGreaterThan(bed))
-                    {
-                        message = string.Format("Financial account must not overlap.");
-                        result = false;
-                        return;
-                    }
-                }
-            }
-            message = null;
-            result = true;
-        }
+    
         #region LoadFinancialValidationData
         public FinancialValidationData LoadFinancialValidationData(int? carrierProfileId, int? carrierAccountId, int financialAccountId)
         {
@@ -474,49 +359,6 @@ namespace TOne.WhS.AccountBalance.Business
             }
             financialValidationData.ProfileFinancialAccounts = LoadProfileFinancialAccounts(carrierProfileID, financialValidationData.FinancialAccountTypes, financialAccountId);
             return financialValidationData;
-        }
-        private List<FinancialAccountData> LoadProfileFinancialAccounts(int carrierProfileId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
-        {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var profileFinancialAccounts = financialAccountManager.GetCarrierProfileFinancialAccounts(carrierProfileId);
-            List<FinancialAccountData> profileFinancialAccountsData = new List<FinancialAccountData>();
-            foreach (var profileFinancialAccount in profileFinancialAccounts)
-            {
-                if (profileFinancialAccount.FinancialAccountId != financialAccountId)
-                {
-                    var financialAccountType = financialAccountTypes.FindRecord(x => x.VRComponentTypeId == profileFinancialAccount.Settings.AccountTypeId);
-                    AccountBalanceSettings accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
-                    profileFinancialAccountsData.Add(new FinancialAccountData
-                    {
-                        FinancialAccount = profileFinancialAccount,
-                        IsApplicableToSupplier = accountBalanceSettings.IsApplicableToSupplier,
-                        IsApplicableToCustomer = accountBalanceSettings.IsApplicableToCustomer
-                    });
-                }
-            }
-            return profileFinancialAccountsData;
-        }
-        private List<FinancialAccountData> LoadFinancialAccountsForCarrierAccount(int carrierAccountId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
-        {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccounts = financialAccountManager.GetFinancialAccountsByCarrierAccountId(carrierAccountId);
-            List<FinancialAccountData> financialAccountsData = new List<FinancialAccountData>();
-            foreach (var financialAccount in financialAccounts)
-            {
-                if (financialAccount.FinancialAccountId != financialAccountId)
-                {
-                    var financialAccountType = financialAccountTypes.FindRecord(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
-                    AccountBalanceSettings accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
-                    financialAccountsData.Add(new FinancialAccountData
-                    {
-                        FinancialAccount = financialAccount,
-                        IsApplicableToSupplier = accountBalanceSettings.IsApplicableToSupplier,
-                        IsApplicableToCustomer = accountBalanceSettings.IsApplicableToCustomer
-                    });
-                }
-
-            }
-            return financialAccountsData;
         }
         #endregion
 
@@ -570,7 +412,6 @@ namespace TOne.WhS.AccountBalance.Business
                    return financialAccounts.ToDictionary(fa => fa.FinancialAccountId, fa => fa);
                });
         }
-
         Dictionary<Guid, List<FinancialAccount>> GetCachedFinancialAccountsByAccBalTypeId()
         {
             var financialAccountsByType = new Dictionary<Guid, List<FinancialAccount>>();
@@ -595,7 +436,6 @@ namespace TOne.WhS.AccountBalance.Business
 
             return financialAccountsByType;
         }
-
         Dictionary<int, CarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
         {
             var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
@@ -633,7 +473,6 @@ namespace TOne.WhS.AccountBalance.Business
             }
             return carrierDataByFinancialAccountId;
         }
-
         Dictionary<int, CarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
             var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
@@ -771,7 +610,6 @@ namespace TOne.WhS.AccountBalance.Business
                 return supplierFinancialAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(financialAccount => financialAccount.BED));
             });
         }
-
         private CarrierFinancialAccountData CreateCarrierFinancialAccountData(FinancialAccount financialAccount, Guid usageTransactionTypeId)
         {
             return new CarrierFinancialAccountData()
@@ -783,6 +621,184 @@ namespace TOne.WhS.AccountBalance.Business
                 EED = financialAccount.EED
             };
         }
+
+        #region Private Validation Methods
+        private bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode, out string message)
+        {
+            message = null;
+
+            if (financialAccount.EED.HasValue && financialAccount.EED.Value < new DateTime())
+            {
+                message = "EED must not be less than today.";
+                return false;
+            }
+            FinancialValidationData financialValidationData = LoadFinancialValidationData(financialAccount.CarrierProfileId, financialAccount.CarrierAccountId, financialAccount.FinancialAccountId);
+            var financialAccountType = financialValidationData.FinancialAccountTypes.FirstOrDefault(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
+            var accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                if (!CheckFinancialCarrierProfileValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, isEditMode))
+                    return false;
+            }
+            else
+            {
+                if (!CheckFinancialCarrierAccountValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, isEditMode))
+                    return false;
+
+            }
+            ValidateFinancialAccount(financialAccount, financialValidationData, accountBalanceSettings, out message);
+            if (message != null)
+                return false;
+            return true;
+        }
+        private bool CheckFinancialAccountActivation(int carrierProfileId, bool isCustomer, bool isSupplier)
+        {
+            var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(carrierProfileId, isCustomer, isSupplier);
+            foreach (var carrierAccount in carrierAccounts)
+            {
+                if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool ValidateFinancialAccount(FinancialAccount financialAccount, FinancialValidationData financialValidationData, AccountBalanceSettings accountBalanceSettings, out string message)
+        {
+            bool result = true;
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                ValidateFinancialAccountforCarrierAccount(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.FinancialCarrierAccount.FinancialAccounts, accountBalanceSettings, out message, out result);
+                if (result)
+                {
+                    CheckFinancialAccountProfileOverlapping(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.ProfileFinancialAccounts, accountBalanceSettings, out  message, out result);
+                }
+            }
+            else
+            {
+                ValidateFinancialAccountforCarrierProfile(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId, financialAccount.BED, financialAccount.EED, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, accountBalanceSettings, out  message, out result);
+            }
+            return result;
+        }
+        private void ValidateFinancialAccountforCarrierProfile(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> profileFinancialAccounts, Dictionary<int, IEnumerable<FinancialAccountData>> financialAccountsByAccount, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            CheckFinancialAccountProfileOverlapping(accountTypeId, financialAccountId, bed, eed, profileFinancialAccounts, accountBalanceSettings, out message, out result);
+            if (!result)
+                return;
+            foreach (var carrierFinancialAccounts in financialAccountsByAccount.Values)
+            {
+                ValidateFinancialAccountforCarrierAccount(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts, accountBalanceSettings, out message, out result);
+                if (!result)
+                    return;
+            }
+        }
+        private bool CheckApplicableAccountTypes(AccountBalanceSettings accountBalanceSettings, bool isApplicableToCustomer, bool isApplicableToSupplier)
+        {
+            if (accountBalanceSettings.IsApplicableToSupplier == isApplicableToSupplier && accountBalanceSettings.IsApplicableToCustomer == isApplicableToCustomer)
+                return true;
+            return false;
+        }
+        private void CheckFinancialAccountOverlaping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            foreach (var financialAccount in financialAccounts)
+            {
+                if (financialAccount.FinancialAccount.FinancialAccountId != financialAccountId && accountBalanceSettings.IsApplicableToCustomer == financialAccount.IsApplicableToCustomer && accountBalanceSettings.IsApplicableToSupplier == financialAccount.IsApplicableToSupplier)
+                {
+                    if (eed.VRGreaterThan(financialAccount.FinancialAccount.BED) && financialAccount.FinancialAccount.EED.VRGreaterThan(bed))
+                    {
+                        message = string.Format("Financial account must not overlap.");
+                        result = false;
+                        return;
+                    }
+                }
+            }
+            message = null;
+            result = true;
+        }
+        private void CheckFinancialAccountProfileOverlapping(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> financialCarrierProfiles, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed, financialCarrierProfiles, accountBalanceSettings, out message, out result);
+        }
+        private void ValidateFinancialAccountforCarrierAccount(Guid accountTypeId, int financialAccountId, DateTime bed, DateTime? eed, IEnumerable<FinancialAccountData> carrierFinancialAccounts, AccountBalanceSettings accountBalanceSettings, out string message, out bool result)
+        {
+            CheckFinancialAccountOverlaping(accountTypeId, financialAccountId, bed, eed, carrierFinancialAccounts, accountBalanceSettings, out message, out result);
+        }
+        private Func<FinancialAccountData, bool> GetFinancialAccountFilterExpression(Guid accountTypeId, CarrierAccountType carrierAccountType, AccountBalanceSettings accountBalanceSetting, bool isEditMode)
+        {
+            Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
+            {
+                if (!isEditMode && financialAccountData.FinancialAccount.Settings.AccountTypeId == accountTypeId && !financialAccountData.FinancialAccount.EED.HasValue)
+                    return false;
+
+                switch (carrierAccountType)
+                {
+                    case BusinessEntity.Entities.CarrierAccountType.Customer:
+                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && accountBalanceSetting.IsApplicableToCustomer == financialAccountData.IsApplicableToCustomer)
+                            return false;
+                        break;
+                    case BusinessEntity.Entities.CarrierAccountType.Supplier:
+                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && accountBalanceSetting.IsApplicableToSupplier == financialAccountData.IsApplicableToSupplier)
+                            return false;
+                        break;
+                    case BusinessEntity.Entities.CarrierAccountType.Exchange:
+                        if (!isEditMode && !financialAccountData.FinancialAccount.EED.HasValue && (accountBalanceSetting.IsApplicableToSupplier == financialAccountData.IsApplicableToSupplier || accountBalanceSetting.IsApplicableToCustomer == financialAccountData.IsApplicableToCustomer))
+                            return false;
+                        break;
+                }
+                return true;
+            };
+
+            return filterExpression;
+        }
+
+        #region LoadFinancialValidationData
+        private List<FinancialAccountData> LoadProfileFinancialAccounts(int carrierProfileId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
+        {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var profileFinancialAccounts = financialAccountManager.GetCarrierProfileFinancialAccounts(carrierProfileId);
+            List<FinancialAccountData> profileFinancialAccountsData = new List<FinancialAccountData>();
+            foreach (var profileFinancialAccount in profileFinancialAccounts)
+            {
+                if (profileFinancialAccount.FinancialAccountId != financialAccountId)
+                {
+                    var financialAccountType = financialAccountTypes.FindRecord(x => x.VRComponentTypeId == profileFinancialAccount.Settings.AccountTypeId);
+                    AccountBalanceSettings accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+                    profileFinancialAccountsData.Add(new FinancialAccountData
+                    {
+                        FinancialAccount = profileFinancialAccount,
+                        IsApplicableToSupplier = accountBalanceSettings.IsApplicableToSupplier,
+                        IsApplicableToCustomer = accountBalanceSettings.IsApplicableToCustomer
+                    });
+                }
+            }
+            return profileFinancialAccountsData;
+        }
+        private List<FinancialAccountData> LoadFinancialAccountsForCarrierAccount(int carrierAccountId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
+        {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccounts = financialAccountManager.GetFinancialAccountsByCarrierAccountId(carrierAccountId);
+            List<FinancialAccountData> financialAccountsData = new List<FinancialAccountData>();
+            foreach (var financialAccount in financialAccounts)
+            {
+                if (financialAccount.FinancialAccountId != financialAccountId)
+                {
+                    var financialAccountType = financialAccountTypes.FindRecord(x => x.VRComponentTypeId == financialAccount.Settings.AccountTypeId);
+                    AccountBalanceSettings accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+                    financialAccountsData.Add(new FinancialAccountData
+                    {
+                        FinancialAccount = financialAccount,
+                        IsApplicableToSupplier = accountBalanceSettings.IsApplicableToSupplier,
+                        IsApplicableToCustomer = accountBalanceSettings.IsApplicableToCustomer
+                    });
+                }
+
+            }
+            return financialAccountsData;
+        }
+
+        #endregion
+        
+        #endregion
 
         #endregion
 
@@ -811,7 +827,6 @@ namespace TOne.WhS.AccountBalance.Business
             }
             return financialAccountInfo;
         }
-
         private FinancialAccountEffectiveStatus GetFinancialAccountEffectiveStatus(DateTime financialAccountBED, DateTime? financialAccountEED)
         {
             DateTime today = DateTime.Today;
@@ -832,16 +847,39 @@ namespace TOne.WhS.AccountBalance.Business
                 return (financialAccountBED > today) ? FinancialAccountEffectiveStatus.Future : FinancialAccountEffectiveStatus.Current;
             }
         }
-
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
+            var accountBalanceSettings = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<AccountBalanceSettings>(financialAccount.Settings.AccountTypeId);
+            var isActive = false;
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
+                if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    isActive = true;
+            }
+            else
+            {
+                if (CheckApplicableAccountTypes(accountBalanceSettings, true, false))
+                {
+                    isActive = CheckFinancialAccountActivation(financialAccount.CarrierProfileId.Value, true, false);
+                }
+                else if (CheckApplicableAccountTypes(accountBalanceSettings, false, true))
+                {
+                    isActive = CheckFinancialAccountActivation(financialAccount.CarrierProfileId.Value, false, true);
+                }
+                else if (CheckApplicableAccountTypes(accountBalanceSettings, true, true))
+                {
+                    isActive = CheckFinancialAccountActivation(financialAccount.CarrierProfileId.Value, true, true);
+                }
+
+            }
             return new FinancialAccountDetail
             {
                 Entity = financialAccount,
-                AccountTypeDescription = new AccountTypeManager().GetAccountTypeName(financialAccount.Settings.AccountTypeId)
+                AccountTypeDescription = new AccountTypeManager().GetAccountTypeName(financialAccount.Settings.AccountTypeId),
+                IsActive = isActive
             };
         }
-
         #endregion
 
         #region IBusinessEntityManager

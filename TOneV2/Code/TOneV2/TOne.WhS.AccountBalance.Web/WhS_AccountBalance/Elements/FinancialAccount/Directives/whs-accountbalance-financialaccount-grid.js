@@ -104,10 +104,19 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
             return drillDownTabDefinitions;
         }
         function defineMenuActions() {
-            $scope.scopeModel.gridMenuActions = [{
+
+            var menuActions = [{
                 name: "Edit",
                 clicked: editFinancialAccount,
             }];
+
+            $scope.scopeModel.gridMenuActions = function (dataItem) {
+                console.log(dataItem);
+                if (dataItem.IsActive) {
+                    return menuActions;
+                }
+                return null;
+            };
         }
         function editFinancialAccount(dataItem) {
             var onFinancialAccountUpdated = function (financialAccount) {
