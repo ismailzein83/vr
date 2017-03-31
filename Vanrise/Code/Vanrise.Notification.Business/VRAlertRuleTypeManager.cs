@@ -47,6 +47,7 @@ namespace Vanrise.Notification.Business
         {
             var allVRAlertRuleTypes = GetCachedVRAlertRuleTypes();
             Func<VRAlertRuleType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            VRActionLogger.Current.LogGetFilteredAction(VRAlertRuleTypeLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRuleTypes.ToBigResult(input, filterExpression, VRAlertRuleTypeDetailMapper));
         }
 
@@ -64,6 +65,7 @@ namespace Vanrise.Notification.Business
             if (dataManager.Insert(vrAlertRuleTypeItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRAlertRuleTypeLoggableEntity.Instance, vrAlertRuleTypeItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRAlertRuleTypeDetailMapper(vrAlertRuleTypeItem);
             }
@@ -87,6 +89,7 @@ namespace Vanrise.Notification.Business
             if (dataManager.Update(vrAlertRuleTypeItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRAlertRuleTypeLoggableEntity.Instance, vrAlertRuleTypeItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRAlertRuleTypeDetailMapper(this.GetVRAlertRuleType(vrAlertRuleTypeItem.VRAlertRuleTypeId));
             }
@@ -137,6 +140,50 @@ namespace Vanrise.Notification.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreVRAlertRuleTypeUpdated(ref _updateHandle);
+            }
+        }
+
+        private class VRAlertRuleTypeLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRAlertRuleTypeLoggableEntity Instance = new VRAlertRuleTypeLoggableEntity();
+
+            private VRAlertRuleTypeLoggableEntity()
+            {
+
+            }
+
+            static VRAlertRuleTypeManager s_vrAlertRuleTypeManager = new VRAlertRuleTypeManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Notification_AlertRuleType"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Notification"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Alert Rule Type"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Notification_AlertRuleType_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRAlertRuleType vrAlertRuleType = context.Object.CastWithValidate<VRAlertRuleType>("context.Object");
+                return vrAlertRuleType.VRAlertRuleTypeId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRAlertRuleType vrAlertRuleType = context.Object.CastWithValidate<VRAlertRuleType>("context.Object");
+                return s_vrAlertRuleTypeManager.GetVRAlertRuleTypeName(vrAlertRuleType.VRAlertRuleTypeId);
             }
         }
 

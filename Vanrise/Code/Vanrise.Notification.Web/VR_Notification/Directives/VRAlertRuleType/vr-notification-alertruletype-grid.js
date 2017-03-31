@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTypeAPIService', 'VR_Notification_VRAlertRuleTypeService', 'VRNotificationService',
-    function (VR_Notification_VRAlertRuleTypeAPIService, VR_Notification_VRAlertRuleTypeService, VRNotificationService) {
+app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTypeAPIService', 'VR_Notification_VRAlertRuleTypeService', 'VRNotificationService', 'VRUIUtilsService',
+    function (VR_Notification_VRAlertRuleTypeAPIService, VR_Notification_VRAlertRuleTypeService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTy
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.vrAlertRuleType = [];
@@ -29,11 +29,18 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTy
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_Notification_VRAlertRuleTypeService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_Notification_VRAlertRuleTypeAPIService.GetFilteredVRAlertRuleTypes(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +58,7 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTy
                 };
 
                 api.onVRAlertRuleTypeAdded = function (addedVRAlertRuleType) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRAlertRuleType);
                     gridAPI.itemAdded(addedVRAlertRuleType);
                 };
 
@@ -67,6 +75,7 @@ app.directive('vrNotificationAlertruletypeGrid', ['VR_Notification_VRAlertRuleTy
             }
             function editVRAlertRuleType(vrAlertRuleTypeItem) {
                 var onVRAlertRuleTypeUpdated = function (updatedVRAlertRuleType) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedVRAlertRuleType);
                     gridAPI.itemUpdated(updatedVRAlertRuleType);
                 };
 
