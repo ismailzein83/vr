@@ -340,6 +340,8 @@ namespace Retail.Runtime.Mappers
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
+
             int rowCount = 0;
             var currentItemCount = 53;
             System.IO.StreamReader sr = ImportedData.StreamReader;
@@ -383,7 +385,7 @@ namespace Retail.Runtime.Mappers
             }
 
             long startingId;
-            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(cdrRuntimeType, rowCount, out startingId);
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
             long currentCDRId = startingId;
 
             foreach (var cdr in cdrs)
