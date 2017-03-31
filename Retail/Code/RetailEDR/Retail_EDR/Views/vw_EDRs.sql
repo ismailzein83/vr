@@ -3,22 +3,24 @@ AS
 WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, 
                                                                   TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, 
                                                                   OriginatingZoneID, TerminatingZoneID, AirtimeRate, AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, 
-                                                                  MTAmount, Profit, TypeCalled
+                                                                  MTAmount, Profit, TypeCalled, Duration
                                         FROM            Retail_EDR.Voice WITH (NOLOCK)
                                         UNION ALL
                                         SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, 
                                                                  TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, AgentID AS Agent, AgentCommission, AccountID, 
                                                                  OriginatingZoneID, TerminatingZoneID, AirtimeRate, AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, 
-                                                                 MTAmount, Profit, TypeMessage AS TypeCalled
+                                                                 MTAmount, Profit, TypeMessage AS TypeCalled, 0 AS Duration
                                         FROM            Retail_EDR.Message WITH (NOLOCK))
     SELECT        StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, TypeConsumed, Bag, 
                               PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, OriginatingZoneID, TerminatingZoneID, AirtimeRate, 
                               AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, MTAmount, Profit, TypeCalled, CONVERT(datetime, 
                               CONVERT(varchar(10), StartDate, 121)) AS Day, 'Week ' + RIGHT('00' + CONVERT(VARCHAR, DATEPART(wk, StartDate)), 2) + ' ' + CONVERT(VARCHAR, 
-                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month
+                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month, Duration, 1 AS NumberOfCalls
      FROM            AllEDRs AS AllEDRs_1
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 GO
@@ -111,7 +113,7 @@ Begin DesignProperties =
    Begin DataPane = 
       Begin ParameterDefaults = ""
       End
-      Begin ColumnWidths = 39
+      Begin ColumnWidths = 41
          Width = 284
          Width = 1500
          Width = 1500
@@ -151,6 +153,8 @@ Begin DesignProperties =
          Width = 1980
          Width = 1500
          Width = 1500
+         Width = 1500
+         Width = 1500
       End
    End
    Begin CriteriaPane = 
@@ -170,11 +174,17 @@ Begin DesignProperties =
          Or = 1350
          Or = 1350
       End
-   End
+   End', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
+
+
+
+
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
-
-
-
-
 
