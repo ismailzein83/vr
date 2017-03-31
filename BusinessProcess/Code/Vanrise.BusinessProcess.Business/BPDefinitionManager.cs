@@ -56,10 +56,10 @@ namespace Vanrise.BusinessProcess.Business
 
                 if (viewableByUserId.HasValue && !DoesUserHaveViewAccess((int)viewableByUserId,prod))
                     return false;
-                VRActionLogger.Current.LogGetFilteredAction(BPDefinitionLoggableEntity.Instance, input);
+               
                 return true;
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(BPDefinitionLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBPDefinitions.ToBigResult(input, filterExpression, (bpDefinition) => { return BPDefinitionDetailMapper(bpDefinition, viewableByUserId); }));
         }
 

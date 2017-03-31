@@ -255,7 +255,7 @@ namespace Vanrise.Common.Business
                 _vrComponentTypeConfigId=vrComponentTypeConfigId;
             }
 
-
+            static ExtensionConfigurationManager s_extensionConfigurationManager = new ExtensionConfigurationManager();
             static VRComponentTypeManager s_vrComponentTypeManager = new VRComponentTypeManager();
             public override string EntityUniqueName
             {
@@ -269,12 +269,12 @@ namespace Vanrise.Common.Business
 
             public override string EntityDisplayName
             {
-                get { return s_vrComponentTypeManager.GetVRComponentTypeExtensionConfigById(_vrComponentTypeConfigId).Name; }
+                get { return s_extensionConfigurationManager.GetExtensionConfigurationName(_vrComponentTypeConfigId); }
             }
 
             public override string ViewHistoryItemClientActionName
             {
-                get { return "VR_Common_ComponentType__ViewHistoryItem"; }
+                get { return "VR_Common_ComponentType_ViewHistoryItem"; }
             }
 
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)

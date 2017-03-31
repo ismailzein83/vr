@@ -21,6 +21,13 @@ namespace Vanrise.Common.Business
             return extensionConfigurations;
         }
 
+        public string GetExtensionConfigurationName(Guid componentTypeConfigId)
+        {
+            var extensionConfig = GetExtensionConfiguration<VRComponentTypeConfig>(componentTypeConfigId, VRComponentTypeConfig.EXTENSION_TYPE);
+            if(extensionConfig!=null)
+               return extensionConfig.Name;
+        return null;
+        }
         public IEnumerable<T> GetExtensionConfigurations<T>(string type) where T : ExtensionConfiguration
         {
             var extensionConfigurations = GetCachedExtensionConfigurations<T>(type);
