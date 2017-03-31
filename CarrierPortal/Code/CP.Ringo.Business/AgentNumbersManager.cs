@@ -49,9 +49,9 @@ namespace CP.Ringo.Business
             List<AgentNumberDetail> agentNumbers = new List<AgentNumberDetail>();
             foreach (var agentNumberDetail in bigResult.Data)
             {
-                if (agentNumberDetail.Entity.Settings.AgentNumbers == null)
+                if (agentNumberDetail.Entity.Settings.AgentNumbers == null || agentNumberDetail.Entity.Status == Status.Rejected)
                     continue;
-                agentNumbers.AddRange(agentNumberDetail.Entity.Settings.AgentNumbers.MapRecords(AgentNumberDetailMapper));
+                agentNumbers.AddRange(agentNumberDetail.Entity.Settings.AgentNumbers.Where(itm => itm.Status != NumberStatus.Rejected).MapRecords(AgentNumberDetailMapper));
             }
             result.Data = agentNumbers;
 
