@@ -143,7 +143,7 @@ namespace Vanrise.Common.Business
 
             public override string EntityDisplayName
             {
-                get { return "VRMailMessageTemplate"; }
+                get { return "Mail Message Template"; }
             }
 
             public override string ViewHistoryItemClientActionName
