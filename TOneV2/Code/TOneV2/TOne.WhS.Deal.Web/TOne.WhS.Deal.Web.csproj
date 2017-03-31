@@ -210,6 +210,7 @@
     <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-avg.js" />
     <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-max.js" />
     <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-traffic.js" />
+    <Content Include="WhS_Deal\ModuleInitialization.js" />
     <Content Include="WhS_Deal\Services\APIServices\VolCommitmentDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAnalysisAPIService.js" />

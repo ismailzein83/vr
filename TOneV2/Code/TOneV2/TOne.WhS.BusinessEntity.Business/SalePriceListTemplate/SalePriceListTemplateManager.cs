@@ -31,11 +31,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper), handler);
 		}
 
-		public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId)
+        public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId, bool isViewedFromUI)
 		{
-			return GetCachedSalePriceListTemplates().GetRecord(salePriceListTemplateId);
+			var salePriceListTemplateItem= GetCachedSalePriceListTemplates().GetRecord(salePriceListTemplateId);
+            if (salePriceListTemplateItem != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(SalePriceListTemplateLoggableEntity.Instance, salePriceListTemplateItem);
+            return salePriceListTemplateItem;
 		}
 
+        public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId)
+        {
+            return GetSalePriceListTemplate(salePriceListTemplateId,false);
+        }
 		public IEnumerable<SalePriceListTemplateInfo> GetSalePriceListTemplatesInfo()
 		{
 			return GetCachedSalePriceListTemplates().MapRecords(SalePriceListTemplateInfoMapper).OrderBy(x => x.Name);

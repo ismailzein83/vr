@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId)
         {
             var manager = new SalePriceListTemplateManager();
-            return manager.GetSalePriceListTemplate(salePriceListTemplateId);
+            return manager.GetSalePriceListTemplate(salePriceListTemplateId,true);
         }
 
         [HttpGet]
