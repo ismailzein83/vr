@@ -14,7 +14,7 @@ namespace TOne.WhS.AccountBalance.Business
     {
         public int? CarrierProfileId { get; set; }
         public int? CarrierAccountId { get; set; }
-
+        public bool IsEditMode { get; set; }
         public bool IsMatched(IAccountTypeInfoFilterContext context)
         {
             var accountBalanceSetting = context.AccountType.Settings.ExtendedSettings as AccountBalanceSettings;
@@ -30,11 +30,11 @@ namespace TOne.WhS.AccountBalance.Business
             }
             if(this.CarrierAccountId.HasValue)
             {
-                return financialAccountManager.CheckFinancialCarrierAccountValidation(context.AccountType.VRComponentTypeId, accountBalanceSetting, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts,false);
+                return financialAccountManager.CheckFinancialCarrierAccountValidation(context.AccountType.VRComponentTypeId, accountBalanceSetting, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, this.IsEditMode);
             }
             else if (this.CarrierProfileId.HasValue)
             {
-                return financialAccountManager.CheckFinancialCarrierProfileValidation(context.AccountType.VRComponentTypeId, accountBalanceSetting, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, false);
+                return financialAccountManager.CheckFinancialCarrierProfileValidation(context.AccountType.VRComponentTypeId, accountBalanceSetting, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, this.IsEditMode);
             }
             return true;
         }

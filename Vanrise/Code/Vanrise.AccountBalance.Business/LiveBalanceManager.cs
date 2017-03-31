@@ -22,7 +22,11 @@ namespace Vanrise.AccountBalance.Business
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             return dataManager.GetLiveBalance(accountTypeId, accountId);
         }
-
+        public bool CheckIfAccountHasTransactions(Guid accountTypeId, String accountId)
+        {
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            return dataManager.CheckIfAccountHasTransactions(accountTypeId, accountId);
+        }
         public CurrentAccountBalance GetCurrentAccountBalance(Guid accountTypeId, String accountId)
         {
             var liveBalance = GetLiveBalance(accountTypeId,accountId);

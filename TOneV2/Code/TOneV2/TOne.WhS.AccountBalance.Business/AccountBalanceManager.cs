@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
@@ -68,7 +69,11 @@ namespace TOne.WhS.AccountBalance.Business
             return financialAccountData.CreditLimit.Value;
         }
 
-
+        public bool CheckFinancialAccountTranasactions(Guid accountTypeId ,int financialAccountId)
+        {
+            LiveBalanceManager liveBalanceManager = new LiveBalanceManager();
+            return liveBalanceManager.CheckIfAccountHasTransactions(accountTypeId, financialAccountId.ToString());
+        }
         #endregion
 
         #region Private Methods

@@ -160,6 +160,12 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             return true;
         }
+        public bool CheckIfAccountHasTransactions(Guid accountTypeId, string accountId)
+        {
+            object hasTransactions;
+            ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_CheckIfHasTransactions]", out hasTransactions, accountTypeId, accountId);
+            return (bool)hasTransactions;
+        }
         #endregion
 
         #region Mappers
@@ -319,5 +325,8 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         #endregion
 
+
+
+     
     }
 }

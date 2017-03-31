@@ -112,6 +112,17 @@ namespace TOne.WhS.AccountBalance.Business
             var allFinancialAccounts = GetCachedFinancialAccounts();
             return allFinancialAccounts.GetRecord(financialAccountId);
         }
+        public FinancialAccountEditorRuntime GetFinancialAccountEditorRuntime(int financialAccountId)
+        {
+            var allFinancialAccounts = GetCachedFinancialAccounts();
+            var financialAccount =  allFinancialAccounts.GetRecord(financialAccountId);
+            bool hasFinancialTransactions = new AccountBalanceManager().CheckFinancialAccountTranasactions(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId);
+            return new FinancialAccountEditorRuntime
+            {
+                FinancialAccount = financialAccount,
+                HasFinancialTransactions = hasFinancialTransactions
+            };
+        }
         public CarrierFinancialAccountData GetCustCarrierFinancialByFinAccId(int financialAccountId)
         {
             CarrierFinancialAccountData carrierFinancialAccountData = GetCachedCustCarrierFinancialsByFinAccId().GetRecord(financialAccountId);
@@ -209,7 +220,7 @@ namespace TOne.WhS.AccountBalance.Business
                         return false;
                     break;
             }
-            if (carrierFinancialAccounts.Any(x => x.FinancialAccount.Settings.AccountTypeId == accountTypeId && !x.FinancialAccount.EED.HasValue))
+            if (carrierFinancialAccounts.Any(x => !isEditMode && x.FinancialAccount.Settings.AccountTypeId == accountTypeId && !x.FinancialAccount.EED.HasValue))
                 return false;
             if (profileFinancialAccounts.Any(x => !filterExpression(x)))
                 return false;
@@ -297,6 +308,8 @@ namespace TOne.WhS.AccountBalance.Business
             Func<AccountType, bool> filterExpression = (financialAccountType) =>
             {
                 var accountBalanceSettings = financialAccountType.Settings.ExtendedSettings as AccountBalanceSettings;
+                if (!CheckAccountBalanceSettingsActivationForCarrier(accountBalanceSettings, carrierAccountId, carrierProfileId))
+                    return false;
                 if (carrierProfileId.HasValue)
                 {
                     if (!CheckFinancialCarrierProfileValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierProfile.ProfileCarrierAccounts, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierProfile.FinancialAccountsByAccount, false))
@@ -438,76 +451,88 @@ namespace TOne.WhS.AccountBalance.Business
         }
         Dictionary<int, CarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
         {
-            var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByFinAccId",
+             () =>
+             {
+                 var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+                 Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
+                 if (cachedFinancialAccounts != null)
+                 {
 
-            Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
-            if (cachedFinancialAccounts != null)
-            {
+                     foreach (var financialAccount in cachedFinancialAccounts.Values)
+                     {
+                         if (financialAccount.Settings == null)
+                             throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
 
-                foreach (var financialAccount in cachedFinancialAccounts.Values)
-                {
-                    if (financialAccount.Settings == null)
-                        throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+                         if (financialAccount.Settings.ExtendedSettings == null)
+                             throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
 
-                    if (financialAccount.Settings.ExtendedSettings == null)
-                        throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+                         FinancialAccountIsCustomerAccountContext context = new FinancialAccountIsCustomerAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
 
-                    FinancialAccountIsCustomerAccountContext context = new FinancialAccountIsCustomerAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
+                         if (financialAccount.Settings.ExtendedSettings.IsCustomerAccount(context))// IsCustomerAccount will set CreditLimit on context
+                         {
+                             carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
+                             {
+                                 return new CarrierFinancialAccountData
+                                 {
+                                     AccountTypeId = financialAccount.Settings.AccountTypeId,
+                                     BED = financialAccount.BED,
+                                     CreditLimit = context.CreditLimit,
+                                     EED = financialAccount.EED,
+                                     FinancialAccountId = financialAccount.FinancialAccountId,
+                                     UsageTransactionTypeId = context.UsageTransactionTypeId
+                                 };
+                             });
+                         }
+                     }
+                 }
+                 return carrierDataByFinancialAccountId;
+             });
 
-                    if (financialAccount.Settings.ExtendedSettings.IsCustomerAccount(context))// IsCustomerAccount will set CreditLimit on context
-                    {
-                        carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
-                        {
-                            return new CarrierFinancialAccountData
-                            {
-                                AccountTypeId = financialAccount.Settings.AccountTypeId,
-                                BED = financialAccount.BED,
-                                CreditLimit = context.CreditLimit,
-                                EED = financialAccount.EED,
-                                FinancialAccountId = financialAccount.FinancialAccountId,
-                                UsageTransactionTypeId = context.UsageTransactionTypeId
-                            };
-                        });
-                    }
-                }
-            }
-            return carrierDataByFinancialAccountId;
+
+           
         }
         Dictionary<int, CarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
-            var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
 
-            Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
-            if (cachedFinancialAccounts != null)
-            {
-                foreach (var financialAccount in cachedFinancialAccounts.Values)
-                {
-                    if (financialAccount.Settings == null)
-                        throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierFinancialsByFinAccId",
+              () =>
+              {
+                  var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+                  Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
+                  if (cachedFinancialAccounts != null)
+                  {
+                      foreach (var financialAccount in cachedFinancialAccounts.Values)
+                      {
+                          if (financialAccount.Settings == null)
+                              throw new NullReferenceException(string.Format("financialAccount.Settings for financial Account Id: {0}", financialAccount.FinancialAccountId));
 
-                    if (financialAccount.Settings.ExtendedSettings == null)
-                        throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
+                          if (financialAccount.Settings.ExtendedSettings == null)
+                              throw new NullReferenceException(string.Format("financialAccount.Settings.ExtendedSettings for financial Account Id: {0}", financialAccount.FinancialAccountId));
 
-                    FinancialAccountIsSupplierAccountContext context = new FinancialAccountIsSupplierAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
+                          FinancialAccountIsSupplierAccountContext context = new FinancialAccountIsSupplierAccountContext() { AccountTypeId = financialAccount.Settings.AccountTypeId };
 
-                    if (financialAccount.Settings.ExtendedSettings.IsSupplierAccount(context))// IsSupplierAccount will set CreditLimit on context
-                    {
-                        carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
-                        {
-                            return new CarrierFinancialAccountData
-                            {
-                                AccountTypeId = financialAccount.Settings.AccountTypeId,
-                                BED = financialAccount.BED,
-                                CreditLimit = context.CreditLimit,
-                                EED = financialAccount.EED,
-                                FinancialAccountId = financialAccount.FinancialAccountId,
-                                UsageTransactionTypeId = context.UsageTransactionTypeId
-                            };
-                        });
-                    }
-                }
-            }
-            return carrierDataByFinancialAccountId;
+                          if (financialAccount.Settings.ExtendedSettings.IsSupplierAccount(context))// IsSupplierAccount will set CreditLimit on context
+                          {
+                              carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
+                              {
+                                  return new CarrierFinancialAccountData
+                                  {
+                                      AccountTypeId = financialAccount.Settings.AccountTypeId,
+                                      BED = financialAccount.BED,
+                                      CreditLimit = context.CreditLimit,
+                                      EED = financialAccount.EED,
+                                      FinancialAccountId = financialAccount.FinancialAccountId,
+                                      UsageTransactionTypeId = context.UsageTransactionTypeId
+                                  };
+                              });
+                          }
+                      }
+                  }
+                  return carrierDataByFinancialAccountId;
+              });
+
+            
         }
 
         /// <summary>
@@ -626,7 +651,11 @@ namespace TOne.WhS.AccountBalance.Business
         private bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode, out string message)
         {
             message = null;
-
+            if(!CheckFinancialAccountActivation(financialAccount))
+            {
+                message = "Financial account is inactive.";
+                return false;
+            }
             if (financialAccount.EED.HasValue && financialAccount.EED.Value < new DateTime())
             {
                 message = "EED must not be less than today.";
@@ -651,7 +680,7 @@ namespace TOne.WhS.AccountBalance.Business
                 return false;
             return true;
         }
-        private bool CheckFinancialAccountActivation(int carrierProfileId, bool isCustomer, bool isSupplier)
+        private bool CheckProfileCarrierAccountsActivation(int carrierProfileId, bool isCustomer, bool isSupplier)
         {
             var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(carrierProfileId, isCustomer, isSupplier);
             foreach (var carrierAccount in carrierAccounts)
@@ -662,6 +691,38 @@ namespace TOne.WhS.AccountBalance.Business
                 }
             }
             return false;
+        }
+        private bool CheckFinancialAccountActivation(FinancialAccount financialAccount)
+        {
+            var accountBalanceSettings = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<AccountBalanceSettings>(financialAccount.Settings.AccountTypeId);
+            return CheckAccountBalanceSettingsActivationForCarrier(accountBalanceSettings, financialAccount.CarrierAccountId, financialAccount.CarrierProfileId);
+        }
+        private bool CheckAccountBalanceSettingsActivationForCarrier(AccountBalanceSettings accountBalanceSettings, int? carrierAccountId, int? carrierProfileId)
+        {
+            var isActive = false;
+            if (carrierAccountId.HasValue)
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
+                if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    isActive = true;
+            }
+            else
+            {
+                if (CheckApplicableAccountTypes(accountBalanceSettings, true, false))
+                {
+                    isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, true, false);
+                }
+                else if (CheckApplicableAccountTypes(accountBalanceSettings, false, true))
+                {
+                    isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, false, true);
+                }
+                else if (CheckApplicableAccountTypes(accountBalanceSettings, true, true))
+                {
+                    isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, true, true);
+                }
+
+            }
+            return isActive;
         }
         private bool ValidateFinancialAccount(FinancialAccount financialAccount, FinancialValidationData financialValidationData, AccountBalanceSettings accountBalanceSettings, out string message)
         {
@@ -849,35 +910,12 @@ namespace TOne.WhS.AccountBalance.Business
         }
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
-            var accountBalanceSettings = new FinancialAccountDefinitionManager().GetFinancialAccountDefinitionExtendedSettings<AccountBalanceSettings>(financialAccount.Settings.AccountTypeId);
-            var isActive = false;
-            if (financialAccount.CarrierAccountId.HasValue)
-            {
-                var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
-                if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
-                    isActive = true;
-            }
-            else
-            {
-                if (CheckApplicableAccountTypes(accountBalanceSettings, true, false))
-                {
-                    isActive = CheckFinancialAccountActivation(financialAccount.CarrierProfileId.Value, true, false);
-                }
-                else if (CheckApplicableAccountTypes(accountBalanceSettings, false, true))
-                {
-                    isActive = CheckFinancialAccountActivation(financialAccount.CarrierProfileId.Value, false, true);
-                }
-                else if (CheckApplicableAccountTypes(accountBalanceSettings, true, true))
-                {
-                    isActive = CheckFinancialAccountActivation(financialAccount.CarrierProfileId.Value, true, true);
-                }
-
-            }
+          
             return new FinancialAccountDetail
             {
                 Entity = financialAccount,
                 AccountTypeDescription = new AccountTypeManager().GetAccountTypeName(financialAccount.Settings.AccountTypeId),
-                IsActive = isActive
+                IsActive = CheckFinancialAccountActivation(financialAccount)
             };
         }
         #endregion

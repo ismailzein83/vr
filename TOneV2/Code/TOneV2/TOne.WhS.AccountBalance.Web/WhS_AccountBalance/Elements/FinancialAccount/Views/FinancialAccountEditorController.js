@@ -7,7 +7,7 @@
     function financialAccountEditorController($scope, WhS_AccountBalance_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService) {
         var carrierAccountId;
         var carrierProfileId;
-
+     
         var financialAccountId;
         var financialAccountTypeSelectorDirectiveAPI;
         var financialAccountTypeSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -106,7 +106,7 @@
         }
 
         function getFinancialAccount() {
-           return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccount(financialAccountId).then(function (response) {
+            return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccountEditorRuntime(financialAccountId).then(function (response) {
                 financialAccountEntity = response;
             });
         }
@@ -124,12 +124,15 @@
             function loadStaticData() {
                 if(financialAccountEntity != undefined)
                 {
-                    $scope.scopeModel.beginEffectiveDate = financialAccountEntity.BED;
-                    $scope.scopeModel.endEffectiveDate = financialAccountEntity.EED;
-
-                    if(financialAccountEntity != undefined )
+                    if (financialAccountEntity.FinancialAccount != undefined)
                     {
-                        $scope.scopeModel.disableEED = (financialAccountEntity.EED != undefined && UtilsService.getDateFromDateTime(financialAccountEntity.EED) < UtilsService.getDateFromDateTime(new Date()));
+                        $scope.scopeModel.beginEffectiveDate = financialAccountEntity.FinancialAccount.BED;
+                        $scope.scopeModel.endEffectiveDate = financialAccountEntity.FinancialAccount.EED;
+                        $scope.scopeModel.disableEED = (financialAccountEntity.FinancialAccount.EED != undefined && UtilsService.getDateFromDateTime(financialAccountEntity.FinancialAccount.EED) < UtilsService.getDateFromDateTime(new Date()));
+                    }
+                    if(financialAccountEntity.HasFinancialTransactions)
+                    {
+                        $scope.scopeModel.disableAccountTypeAndBED = true;
                     }
                 }
             }
@@ -141,11 +144,12 @@
                         filter: {
                             Filters: [{
                                 $type: "TOne.WhS.AccountBalance.Business.FinancialAccountTypeFilter, TOne.WhS.AccountBalance.Business",
-                                CarrierProfileId: carrierProfileId,
-                                CarrierAccountId: carrierAccountId
+                                CarrierProfileId: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined ? financialAccountEntity.FinancialAccount.CarrierProfileId : carrierProfileId,
+                                CarrierAccountId: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined ? financialAccountEntity.FinancialAccount.CarrierAccountId : carrierAccountId,
+                                IsEditMode: $scope.scopeModel.isEditMode
                             }]
                         },
-                        selectedIds: financialAccountEntity != undefined && financialAccountEntity.Settings != undefined ? financialAccountEntity.Settings.AccountTypeId : undefined
+                       selectedIds: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined && financialAccountEntity.FinancialAccount.Settings != undefined ? financialAccountEntity.FinancialAccount.Settings.AccountTypeId : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(financialAccountTypeSelectorDirectiveAPI, payload, loadFinancialAccountTypeSelectorPromiseDeferred);
                 });
@@ -153,7 +157,7 @@
             }
             
             function loadDirective() {
-                if (financialAccountEntity != undefined && financialAccountEntity.Settings != undefined)
+                if (financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined && financialAccountEntity.FinancialAccount.Settings != undefined)
                 {
                     directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -161,7 +165,7 @@
 
                     directiveReadyDeferred.promise.then(function () {
                         directiveReadyDeferred = undefined;
-                        var directivePayload = { extendedSettings: financialAccountEntity.Settings.ExtendedSettings, carrierProfileId: financialAccountEntity.CarrierProfileId, carrierAccountId: financialAccountEntity.CarrierAccountId };
+                        var directivePayload = { extendedSettings: financialAccountEntity.FinancialAccount.Settings.ExtendedSettings, carrierProfileId: financialAccountEntity.FinancialAccount.CarrierProfileId, carrierAccountId: financialAccountEntity.FinancialAccount.CarrierAccountId };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
 
@@ -225,8 +229,8 @@
         function buildFinancialAccountObjFromScope() {
             var obj = {
                 FinancialAccountId:financialAccountId,
-                CarrierAccountId: financialAccountEntity != undefined? financialAccountEntity.CarrierAccountId:carrierAccountId,
-                CarrierProfileId: financialAccountEntity != undefined? financialAccountEntity.CarrierProfileId:carrierProfileId,
+                CarrierAccountId: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined ? financialAccountEntity.FinancialAccount.CarrierAccountId : carrierAccountId,
+                CarrierProfileId: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined ? financialAccountEntity.FinancialAccount.CarrierProfileId : carrierProfileId,
                 Settings: {
                     AccountTypeId: financialAccountTypeSelectorDirectiveAPI.getSelectedIds(),
                     ExtendedSettings: directiveAPI.getData()

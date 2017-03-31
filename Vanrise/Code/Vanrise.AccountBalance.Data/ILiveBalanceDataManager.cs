@@ -21,5 +21,6 @@ namespace Vanrise.AccountBalance.Data
         void UpdateBalanceLastAlertInfos(List<LiveBalanceLastThresholdUpdateEntity> updateEntities);
         void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady);
         void GetLiveBalancesToClearAlert(Action<LiveBalance> onLiveBalanceReady);
+        bool CheckIfAccountHasTransactions(Guid accountTypeId, String accountId);
     }
 }

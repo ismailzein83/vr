@@ -42,6 +42,12 @@ namespace TOne.WhS.AccountBalance.Web.Controllers
         {
             return _manager.GetFinancialAccount(financialAccountId);
         }
+        [HttpGet]
+        [Route("GetFinancialAccountEditorRuntime")]
+        public FinancialAccountEditorRuntime GetFinancialAccountEditorRuntime(int financialAccountId)
+        {
+            return _manager.GetFinancialAccountEditorRuntime(financialAccountId);
+        }
 
         [HttpGet]
         [Route("CheckCarrierAllowAddFinancialAccounts")]
