@@ -6,7 +6,6 @@
 
     function currencyExchangeRateEditorController($scope, VRCommon_CurrencyExchangeRateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
-        
         var currencySelectorAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var editMode;
@@ -23,7 +22,6 @@
                 currencyExchangeRateId = parameters.currencyExchangeRateId;
             }
             editMode = $scope.disableControls = currencyExchangeRateId != undefined ;
-
         }
 
         function defineScope() {
@@ -33,7 +31,6 @@
                 else
                     return insertCurrencyExchangeRate();
             };
-
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -82,7 +79,7 @@
         }
         function setTitle() {
             if (editMode && currencyExchangeRateEntity != undefined)
-                $scope.title = "Edit Currency Exchange Rate"
+                $scope.title = "Edit Currency Exchange Rate";
             else
                 $scope.title = "New Currency Exchange Rate";
         }
@@ -91,7 +88,6 @@
 
             if (currencyExchangeRateEntity == undefined)
                 return;
-
             $scope.rate = currencyExchangeRateEntity.Rate;
             $scope.exchangeDate = currencyExchangeRateEntity.ExchangeDate;
         }
@@ -114,7 +110,7 @@
         function buildCurrencyExchangeRateObjFromScope() {
             var obj = {
                 CurrencyExchangeRateId : currencyExchangeRateId,
-                CurrencyId: currencySelectorAPI.getSelectedIds() ,
+                CurrencyId: currencySelectorAPI.getSelectedIds(),
                 Rate: $scope.rate,
                 ExchangeDate: $scope.exchangeDate
             };
