@@ -26,6 +26,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
     function BillingTransactionSearch($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var accountTypeId;
         var accountsIds;
 
@@ -80,11 +82,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                var payload = {
-                    query: getFilterObject(),
-                    showAccount: false,
-                };
-                gridAPI.loadGrid(payload);
+                gridPromiseDeferred.resolve();
             };
 
             defineAPI();
@@ -108,7 +106,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     promises.push(checkHasAddBillingTransaction(accountTypeId));
                 promises.push(loadTimeRangeDirective());
                 return UtilsService.waitMultiplePromises(promises).finally(function () {
-                   
+                    loadBillingTransactionsGrid();
                     $scope.scopeModel.isLoading = false;
                 });
             };
@@ -159,7 +157,16 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             };
             return filter;
         }
-
+        function loadBillingTransactionsGrid()
+        {
+           return gridPromiseDeferred.promise.then(function () {
+                var payload = {
+                    query: getFilterObject(),
+                    showAccount: false,
+                };
+                gridAPI.loadGrid(payload);
+            });
+        }
         function checkHasAddBillingTransaction(accountTypeId) {
           return VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission(accountTypeId).then(function (response) {
                 $scope.scopeModel.hasAddTransaction = response;

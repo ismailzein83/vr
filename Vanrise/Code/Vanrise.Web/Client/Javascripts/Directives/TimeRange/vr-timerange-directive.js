@@ -68,10 +68,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             var date;
             $scope.scopeModel = {};
             $scope.scopeModel.validateDateTime = function () {
-                if (ctrl.customvalidation != null && VRValidationService.validateTimeRange(ctrl.from, ctrl.to) == null)
-                    return ctrl.customvalidation();
-                else
-                    return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
+                    if (ctrl.customvalidation != null && VRValidationService.validateTimeRange(ctrl.from, ctrl.to) == null)
+                        return ctrl.customvalidation();
+                    else
+                        return VRValidationService.validateTimeRange(ctrl.from, ctrl.to);
             };
 
             $scope.scopeModel.onPeriodDirectiveReady = function (api) {
@@ -135,27 +135,31 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
                 });
                 var loadTimeRangeSelectorPromise = UtilsService.createPromiseDeferred();
-               UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
-                    if (ctrl.period != undefined) {
-                        date = periodDirectiveAPI.getData().getInterval();
-                        setDateData(date.from, date.to);
-                    }
-                    if (payload && payload.period != undefined) {
-                        setDateData(payload.fromDate, payload.toDate);
-                    }
-                    periodSelectedPromiseDeferred = undefined;
-                    loadTimeRangeSelectorPromise.resolve();
+                UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
+                   if (ctrl.period != undefined || (payload && payload.period != undefined)) {
+                       if (ctrl.period != undefined) {
+                           date = periodDirectiveAPI.getData().getInterval();
+                           setDateData(date.from, date.to);
+                       }
+                       if (payload && payload.period != undefined) {
+                           setDateData(payload.fromDate, payload.toDate);
+                       }
+                   }
+                   else {
+                       loadTimeRangeSelectorPromise.resolve();
+                   }
+                   periodSelectedPromiseDeferred = undefined;
                });
                function setDateData(fromDate, toDate) {
-                   if (fromDate != undefined)
-                       ctrl.from = fromDate;
-                   if (toDate != undefined)
-                       ctrl.to = toDate;
                    setTimeout(function () {
+                       if (fromDate != undefined)
+                           ctrl.from = fromDate;
+                       if (toDate != undefined)
+                           ctrl.to = toDate;
                        UtilsService.safeApply($scope);
+                       loadTimeRangeSelectorPromise.resolve();
                    });
                }
-
                return loadTimeRangeSelectorPromise.promise;
             };
 
