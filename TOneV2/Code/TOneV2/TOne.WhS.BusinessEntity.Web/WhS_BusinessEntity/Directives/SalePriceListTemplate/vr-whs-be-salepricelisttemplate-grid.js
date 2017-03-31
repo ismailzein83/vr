@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalepricelisttemplateGrid', ['WhS_BE_SalePriceListTemplateAPIService', 'WhS_BE_SalePriceListTemplateService', 'VRNotificationService', function (WhS_BE_SalePriceListTemplateAPIService, WhS_BE_SalePriceListTemplateService, VRNotificationService) {
+app.directive('vrWhsBeSalepricelisttemplateGrid', ['WhS_BE_SalePriceListTemplateAPIService', 'WhS_BE_SalePriceListTemplateService', 'VRNotificationService', 'VRUIUtilsService', function (WhS_BE_SalePriceListTemplateAPIService, WhS_BE_SalePriceListTemplateService, VRNotificationService, VRUIUtilsService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -21,19 +21,27 @@ app.directive('vrWhsBeSalepricelisttemplateGrid', ['WhS_BE_SalePriceListTemplate
 		this.initializeController = initializeController;
 
 		var gridAPI;
-
+		var gridDrillDownTabsObj;
 		function initializeController() {
 
 			$scope.scopeModel = {};
 			$scope.scopeModel.salePriceListTemplates = [];
 
 			$scope.scopeModel.onGridReady = function (api) {
-				gridAPI = api;
+			    gridAPI = api;
+			    var drillDownDefinitions = WhS_BE_SalePriceListTemplateService.getDrillDownDefinition();
+			    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions, true);
 				defineAPI();
 			};
 
 			$scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-				return WhS_BE_SalePriceListTemplateAPIService.GetFilteredSalePriceListTemplates(dataRetrievalInput).then(function (response) {
+			    return WhS_BE_SalePriceListTemplateAPIService.GetFilteredSalePriceListTemplates(dataRetrievalInput).then(function (response) {
+			        if (response && response.Data) {
+			            for (var i = 0; i < response.Data.length; i++) {
+			                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+
+			            }
+			        }
 					onResponseReady(response);
 				}).catch(function (error) {
 					VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +59,7 @@ app.directive('vrWhsBeSalepricelisttemplateGrid', ['WhS_BE_SalePriceListTemplate
 			};
 
 			api.onSalePriceListTemplateAdded = function (addedSalePriceListTempate) {
+			    gridDrillDownTabsObj.setDrillDownExtensionObject(addedSalePriceListTempate);
 				gridAPI.itemAdded(addedSalePriceListTempate);
 			};
 
@@ -66,7 +75,8 @@ app.directive('vrWhsBeSalepricelisttemplateGrid', ['WhS_BE_SalePriceListTemplate
 			}];
 		}
 		function editSalePriceListTemplate(dataItem) {
-			var onSalePriceListTemplateUpdated = function (updatedSalePriceListTemplate) {
+		    var onSalePriceListTemplateUpdated = function (updatedSalePriceListTemplate) {
+		        gridDrillDownTabsObj.setDrillDownExtensionObject(updatedSalePriceListTemplate);
 				gridAPI.itemUpdated(updatedSalePriceListTemplate);
 			};
 			WhS_BE_SalePriceListTemplateService.editSalePriceListTemplate(dataItem.Entity.SalePriceListTemplateId, onSalePriceListTemplateUpdated);

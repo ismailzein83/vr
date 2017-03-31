@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SalePriceListTemplateExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(SalePriceListTemplateLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper), handler);
 		}
 
@@ -46,6 +46,11 @@ namespace TOne.WhS.BusinessEntity.Business
 			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
 			return extensionConfigManager.GetExtensionConfigurations<SalePriceListTemplateSettingsExtensionConfig>(SalePriceListTemplateSettingsExtensionConfig.EXTENSION_TYPE);
 		}
+
+        public string GetSalePriceListTemplateName(SalePriceListTemplate salePriceListTemplate)
+        {
+            return (salePriceListTemplate != null) ? salePriceListTemplate.Name : null;
+        }
 
         public IEnumerable<SalePriceListTemplateSettingsMappedTableExtensionConfig> GetMappedTablesExtensionConfigs()
 		{
@@ -71,6 +76,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			{
 				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 				salePriceListTemplate.SalePriceListTemplateId = insertedId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(SalePriceListTemplateLoggableEntity.Instance, salePriceListTemplate);
 				insertOperationOutput.InsertedObject = SalePriceListTemplateDetailMapper(salePriceListTemplate);
 				insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
 			}
@@ -93,6 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			if (dataManager.Update(salePriceListTemplate))
 			{
 				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SalePriceListTemplateLoggableEntity.Instance, salePriceListTemplate);
 				updateOperationOutput.UpdatedObject = SalePriceListTemplateDetailMapper(salePriceListTemplate);
 				updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 			}
@@ -147,6 +154,51 @@ namespace TOne.WhS.BusinessEntity.Business
 				return _dataManager.AreSalePriceListTemplatesUpdated(ref _updateHandle);
 			}
 		}
+
+        private class SalePriceListTemplateLoggableEntity : VRLoggableEntityBase
+        {
+            public static SalePriceListTemplateLoggableEntity Instance = new SalePriceListTemplateLoggableEntity();
+
+            private SalePriceListTemplateLoggableEntity()
+            {
+
+            }
+
+            static SalePriceListTemplateManager s_salePriceListTemplateManager = new SalePriceListTemplateManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SalePriceListTemplate"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Sale Price List Template"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SalePriceListTemplate_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SalePriceListTemplate salePriceListTemplate = context.Object.CastWithValidate<SalePriceListTemplate>("context.Object");
+                return salePriceListTemplate.SalePriceListTemplateId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SalePriceListTemplate salePriceListTemplate = context.Object.CastWithValidate<SalePriceListTemplate>("context.Object");
+                return s_salePriceListTemplateManager.GetSalePriceListTemplateName(salePriceListTemplate);
+                
+            }
+        }
 
 		#endregion
 
