@@ -25,7 +25,7 @@ app.directive('retailRingoAgentrequestnumberGrid', ['Retail_Ringo_AgentNumberReq
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.agentNumberRequests = [];
-                
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -56,93 +56,31 @@ app.directive('retailRingoAgentrequestnumberGrid', ['Retail_Ringo_AgentNumberReq
             function defineMenuActions() {
                 $scope.scopeModel.gridMenuActions = function (dataItem) {
                     var menuActions = [];
-                    if (dataItem.Entity.Status == Retail_Ringo_AgentNumberRequestStatusEnum.Pending.value) {
-                        menuActions.push({
-                            name: 'Add Rule',
-                            clicked: addRule
-                        });
-                        menuActions.push({
-                            name: 'Reject Request',
-                            clicked: rejectRequest
-                        });
-                    }
+                    menuActions.push({
+                        name: 'View',
+                        clicked: viewNumbersRequest,
+                        haspermission: hasUpdateAgentNumberRequestPermission
+                    });
+
                     return menuActions;
                 };
             }
 
-            function addRule(numberRequest) {
-
-                var preDefinedData = {
-                    settings: {
-                        Value: numberRequest.Entity.AgentId
-                    },
-                    criteriaFieldsValues: {
-                        Number: {
-                            Values: getCriteriaFieldsValues(numberRequest.Entity)
-                        }
-                    }
+            function viewNumbersRequest(numberRequest) {
+                var onNumberRequestAdded = function (processedRequestNumber) {
+                    console.log(processedRequestNumber);
+                    var itemDetails = {
+                        Entity: processedRequestNumber,
+                        StatusDescription: processedRequestNumber.StatusDescription,
+                        AgentName: numberRequest.AgentName
+                    };
+                    gridAPI.itemUpdated(itemDetails);
                 };
-
-                var onNumberRequestAdded = function (addedRule) {
-                    for (var i = 0; i < numberRequest.Entity.Settings.AgentNumbers.length; i++) {
-                        var agentNumber = numberRequest.Entity.Settings.AgentNumbers[i];
-                        if (UtilsService.contains(addedRule.Entity.Criteria.FieldsValues.Number.Values, agentNumber.Number)) {
-                            agentNumber.Status = Retail_Ringo_AgentNumberStatusEnum.Accepted.value;
-                        }
-                        else
-                            agentNumber.Status = Retail_Ringo_AgentNumberStatusEnum.Rejected.value;
-                    }
-
-                    numberRequest.Entity.Status = Retail_Ringo_AgentNumberRequestStatusEnum.Accepted.value;
-                    numberRequest.StatusDescription = Retail_Ringo_AgentNumberRequestStatusEnum.Accepted.description;
-                    Retail_Ringo_AgentNumberRequestAPIService.UpdateAgentNumberRequest(numberRequest.Entity).then(function () {
-                        gridAPI.itemUpdated(numberRequest);
-                    });
-
-                };
-
-                VR_GenericData_GenericRule.addGenericRule('432d290b-374a-4d50-860f-c8810af9a66d', onNumberRequestAdded, preDefinedData);
+                Retail_Ringo_RingoAgentNumberRequestService.viewNumbersRequest(numberRequest.Entity.Id, onNumberRequestAdded);
             }
 
-            function rejectRequest(numberRequest) {
-                var onNumberRequestUpdated = function () {
-                    gridAPI.itemUpdated(numberRequest);
-                };
-                numberRequest.Entity.Status = Retail_Ringo_AgentNumberRequestStatusEnum.Rejected.value;
-                numberRequest.StatusDescription = Retail_Ringo_AgentNumberRequestStatusEnum.Rejected.description;
-                for (var i = 0; i < numberRequest.Entity.Settings.AgentNumbers.length; i++) {
-                    numberRequest.Entity.Settings.AgentNumbers[i] = Retail_Ringo_AgentNumberStatusEnum.Rejected.value;
-                }
-                Retail_Ringo_RingoAgentNumberRequestService.rejectAgentNumberRequest($scope, numberRequest.Entity, onNumberRequestUpdated);
-            }
-
-            function hasAddRulePermission() {
-                return true;
-            }
-
-            function getRulePredefinedData(numberRequest) {
-                var preDefinedData = {
-                    settings: {
-                        Value: numberRequest.Entity.AgentId
-                    },
-                    criteriaFieldsValues: {
-                        Number: {
-                            Values: getCriteriaFieldsValues(numberRequest.Entity)
-                        }
-                    }
-                };
-                return preDefinedData;
-            }
-
-            function getCriteriaFieldsValues(numberRequest) {
-                var values = [];
-                if (numberRequest != undefined && numberRequest.Settings != undefined && numberRequest.Settings.AgentNumbers != undefined) {
-                    for (var i = 0; i < numberRequest.Settings.AgentNumbers.length; i++) {
-                        var item = numberRequest.Settings.AgentNumbers[i];
-                        values.push(item.Number);
-                    }
-                }
-                return values;
+            function hasUpdateAgentNumberRequestPermission() {
+                return Retail_Ringo_AgentNumberRequestAPIService.HasUpdateAgentNumberRequestPermission();
             }
         }
     }]);

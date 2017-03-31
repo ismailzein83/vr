@@ -376,7 +376,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Actions",
                     class: "glyphicon glyphicon-chevron-down"
                 };
-
+            case "Reject":
+                return {
+                    text: "Reject",
+                    class: "glyphicon  glyphicon-remove-circle"
+                };
                 
         }
     }

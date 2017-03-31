@@ -36,5 +36,13 @@ namespace Retail.Ringo.Web.Controllers
             AgentRequestNumberManager manager = new AgentRequestNumberManager();
             return manager.UpdateAgentNumberRequest(agentNumberRequest);
         }
+
+        [HttpGet]
+        [Route("GetAgentNumberRequest")]
+        public AgentNumberRequest GetAgentNumberRequest(int agentNumberRequestId)
+        {
+            AgentRequestNumberManager manager = new AgentRequestNumberManager();
+            return manager.GetAgentNumberRequest(agentNumberRequestId);
+        }
     }
 }

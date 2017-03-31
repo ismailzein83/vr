@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    AgentRequestNumberManagementController.$inject = ['$scope', 'Retail_Ringo_AgentNumberRequestAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    AgentRequestNumberManagementController.$inject = ['$scope',  'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function AgentRequestNumberManagementController($scope, Retail_Ringo_AgentNumberRequestAPIService, UtilsService, vrUIUtilsService, vrNotificationService) {
+    function AgentRequestNumberManagementController($scope, UtilsService, vrUIUtilsService, vrNotificationService) {
 
         var gridAPI;
 

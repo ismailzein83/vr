@@ -6,9 +6,24 @@
 
     function RingoAgentNumberRequestService(Retail_Ringo_AgentNumberRequestAPIService, VRModalService, VRNotificationService) {
         return {
-            rejectAgentNumberRequest: rejectAgentNumberRequest
+            rejectAgentNumberRequest: rejectAgentNumberRequest,
+            viewNumbersRequest: viewNumbersRequest
         };
 
+        function viewNumbersRequest(agentNumberRequestId, onAgentNumberRequestProcessed)
+        {
+            var modalParameters = {
+                agentNumberRequestId: agentNumberRequestId
+            };
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onAgentNumberRequestProcessed = onAgentNumberRequestProcessed;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_Ringo/Views/RingoAgentRequestNumber/RingoAgentRequestNumbeEditor.html', modalParameters, modalSettings);
+
+        }
 
         // scope is the grid's $scope
         function rejectAgentNumberRequest(scope, object, onAgentNumberRequestRejected) {

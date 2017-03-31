@@ -75,6 +75,12 @@ namespace Retail.Ringo.Business
             return updateOperationOutput;
         }
 
+        public AgentNumberRequest GetAgentNumberRequest(int agentNumberRequestId)
+        {
+            var allAgentNumberRequests = this.GetCachedAgentNumberRequests();
+            return allAgentNumberRequests.GetRecord(agentNumberRequestId);
+        }
+
         Dictionary<int, AgentNumberRequest> GetCachedAgentNumberRequests()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAgentNumberRequests", () =>

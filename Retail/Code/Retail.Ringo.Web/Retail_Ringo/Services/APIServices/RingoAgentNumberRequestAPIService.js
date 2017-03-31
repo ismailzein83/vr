@@ -15,14 +15,24 @@
         function AddAgentNumberRequest(agentNumberRequest) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Ringo_ModuleConfig.moduleName, controllerName, 'AddAgentNumberRequest'), agentNumberRequest);
         }
-
+                
         function UpdateAgentNumberRequest(agentNumberRequest) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Ringo_ModuleConfig.moduleName, controllerName, 'UpdateAgentNumberRequest'), agentNumberRequest);
+        }
+        function HasUpdateAgentNumberRequestPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_Ringo_ModuleConfig.moduleName, controllerName, ['UpdateAgentNumberRequest']));
+        }
+        function GetAgentNumberRequest(agentNumberRequestId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Ringo_ModuleConfig.moduleName, controllerName, 'GetAgentNumberRequest'), {
+                agentNumberRequestId: agentNumberRequestId
+            });
         }
         return ({
             GetFilteredAgentNumberRequests: GetFilteredAgentNumberRequests,
             AddAgentNumberRequest: AddAgentNumberRequest,
-            UpdateAgentNumberRequest: UpdateAgentNumberRequest
+            UpdateAgentNumberRequest: UpdateAgentNumberRequest,
+            HasUpdateAgentNumberRequestPermission: HasUpdateAgentNumberRequestPermission,
+            GetAgentNumberRequest: GetAgentNumberRequest
         });
     }
 

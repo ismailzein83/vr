@@ -135,7 +135,9 @@
     <Content Include="Retail_Ringo\Services\APIServices\RingoAgentNumberRequestAPIService.js" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoReportSheetAPIService.js" />
     <Content Include="Retail_Ringo\Services\RingoAgentNumberRequestService.js" />
+    <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumbeEditor.html" />
     <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagement.html" />
+    <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberEditorController.js" />
     <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagementController.js" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagement.html" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagementController.js" />
