@@ -8,6 +8,7 @@ using Vanrise.Caching;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Security.Business
 {
@@ -19,6 +20,7 @@ namespace Vanrise.Security.Business
         {
             var cachedOrgCharts = GetCachedOrgCharts();
             Func<OrgChart, bool> filterExpression = (orgChart) => (input.Query.Name == null || orgChart.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
+            VRActionLogger.Current.LogGetFilteredAction(OrgChartLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedOrgCharts.Values.ToBigResult(input, filterExpression));
         }
 
@@ -28,10 +30,22 @@ namespace Vanrise.Security.Business
             return cachedOrgCharts.Values.MapRecords(OrgChartInfoMapper);
         }
 
-        public OrgChart GetOrgChartById(int orgChartId)
+        public OrgChart GetOrgChartById(int orgChartId, bool isViewedFromUI)
         {
             var cachedOrgCharts = GetCachedOrgCharts();
-            return cachedOrgCharts.Values.FindRecord(orgChart => orgChart.OrgChartId == orgChartId);
+            var orgChartItem= cachedOrgCharts.Values.FindRecord(orgChart => orgChart.OrgChartId == orgChartId);
+            if (orgChartItem != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(OrgChartLoggableEntity.Instance, orgChartItem);
+            return orgChartItem;
+        }
+
+        public OrgChart GetOrgChartById(int orgChartId)
+        {
+           return GetOrgChartById(orgChartId,false);
+        }
+        public string GetOrgChartName(OrgChart orgChart)
+        {
+            return (orgChart != null) ? orgChart.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<OrgChart> AddOrgChart(OrgChart orgChartObject)
@@ -47,8 +61,9 @@ namespace Vanrise.Security.Business
 
             if (insertActionSucc)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 orgChartObject.OrgChartId = orgChartId;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                VRActionLogger.Current.TrackAndLogObjectAdded(OrgChartLoggableEntity.Instance, orgChartObject);
                 insertOperationOutput.InsertedObject = orgChartObject;
             }
             else
@@ -71,11 +86,13 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(OrgChartLoggableEntity.Instance, orgChartObject);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = orgChartObject;
             }
             else
             {
+                
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
@@ -84,6 +101,7 @@ namespace Vanrise.Security.Business
 
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteOrgChart(int orgChartId)
         {
+            var orgChart = GetOrgChartById(orgChartId);
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
 
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
@@ -97,6 +115,7 @@ namespace Vanrise.Security.Business
 
                 if (updateActionSucc)
                 {
+                    VRActionLogger.Current.TrackAndLogObjectDeleted(OrgChartLoggableEntity.Instance, orgChart);
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 }
             }
@@ -219,6 +238,50 @@ namespace Vanrise.Security.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreOrgChartsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class OrgChartLoggableEntity : VRLoggableEntityBase
+        {
+            public static OrgChartLoggableEntity Instance = new OrgChartLoggableEntity();
+
+            private OrgChartLoggableEntity()
+            {
+
+            }
+
+            static OrgChartManager s_orgChartManager = new OrgChartManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Security_OrgChart"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Security"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Org Chart"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Security_OrgChart_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                OrgChart orgChart = context.Object.CastWithValidate<OrgChart>("context.Object");
+                return orgChart.OrgChartId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                OrgChart orgChart = context.Object.CastWithValidate<OrgChart>("context.Object");
+                return s_orgChartManager.GetOrgChartName(orgChart);
             }
         }
 

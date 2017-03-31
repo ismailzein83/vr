@@ -37,7 +37,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetOrgChartById")]
         public OrgChart GetOrgChartById(int orgChartId)
         {
-            return _manager.GetOrgChartById(orgChartId);
+            return _manager.GetOrgChartById(orgChartId,true);
         }
 
         [HttpPost]

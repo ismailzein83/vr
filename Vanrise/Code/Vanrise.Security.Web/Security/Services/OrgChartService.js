@@ -2,13 +2,15 @@
 
     'use strict';
 
-    OrgChartService.$inject = ['VR_Sec_OrgChartAPIService', 'VRModalService', 'VRNotificationService'];
-
-    function OrgChartService(VR_Sec_OrgChartAPIService, VRModalService, VRNotificationService) {
+    OrgChartService.$inject = ['VR_Sec_OrgChartAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
+    var drillDownDefinitions = [];
+    function OrgChartService(VR_Sec_OrgChartAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService) {
         return {
             addOrgChart: addOrgChart,
             editOrgChart: editOrgChart,
-            deleteOrgChart: deleteOrgChart
+            deleteOrgChart: deleteOrgChart,
+            registerObjectTrackingDrillDownToOrgChart: registerObjectTrackingDrillDownToOrgChart,
+            getDrillDownDefinition: getDrillDownDefinition
         };
 
         function addOrgChart(onOrgChartAdded) {
@@ -53,6 +55,41 @@
                 }
             });
         }
+
+        function getEntityUniqueName() {
+            return "VR_Security_OrgChart";
+        }
+
+        function registerObjectTrackingDrillDownToOrgChart() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, orgChartItem) {
+                orgChartItem.objectTrackingGridAPI = directiveAPI;
+                
+                var query = {
+                    ObjectId: orgChartItem.OrgChartId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return orgChartItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
     }
 
     appControllers.service('VR_Sec_OrgChartService', OrgChartService);
