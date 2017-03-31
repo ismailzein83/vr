@@ -15,8 +15,8 @@
                                                         onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChange" customlabel="Account Type"
                                                         isrequired="true" hideremoveicon></vr-accountbalance-accounttype-selector>
                 <vr-accountbalance-account-selector on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
-                <vr-columns colnum="1" ng-if="scopeModel.accountType && advancedselected">
-                    <vr-select hidefilterbox="true" label="Balance" datatextfield="text" datavaluefield="value"
+                <vr-columns colnum="1" ng-if="scopeModel.accountType && advancedSelected">
+                    <vr-select hidefilterbox="true" label="Balance" datatextfield="text" datavaluefield="signValue"
                                datasource="scopeModel.signs" selectedvalues="scopeModel.sign" onselectionchanged="scopeModel.onSignSelectionChanged"></vr-select>
                 </vr-columns>
                 <vr-columns colnum="1" withemptyline ng-if="scopeModel.accountType && advancedSelected">

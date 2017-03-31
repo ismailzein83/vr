@@ -249,26 +249,43 @@ namespace TOne.WhS.AccountBalance.Business
         {
             bool hasCustomers = false;
             bool hasSuppliers = false;
-            bool hasExchanges = false;
-            bool areCarriersActive = false;
+            bool areCustomersActive = false;
+            bool areSuppliersActive = false;
+
             foreach (var account in carrierAccounts)
             {
-                if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
-                    areCarriersActive = true;
+              
                 if (account.AccountType == CarrierAccountType.Customer)
+                {
                     hasCustomers = true;
+                    if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                        areCustomersActive = true;
+                }
                 else if (account.AccountType == CarrierAccountType.Supplier)
+                {
                     hasSuppliers = true;
+                    if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                        areSuppliersActive = true;
+                }
                 else if (account.AccountType == CarrierAccountType.Exchange)
-                    hasExchanges = true;
-            }
-            if (!areCarriersActive)
-                return false;
+                {
+                    hasSuppliers = true;
+                    hasCustomers = true;
+                    if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    {
+                        areCustomersActive = true;
+                        areSuppliersActive = true;
+                    }
 
+                }
+            }
             Func<FinancialAccountData, bool> filterExpression = null;
             if (CheckApplicableAccountTypes(accountBalanceSetting, true, false))
             {
-                if (!hasExchanges && !hasCustomers)
+                if (!areCustomersActive)
+                    return false;
+
+                if (!hasCustomers)
                     return false;
 
                 filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Customer, accountBalanceSetting, isEditMode);
@@ -276,13 +293,17 @@ namespace TOne.WhS.AccountBalance.Business
             }
             else if (CheckApplicableAccountTypes(accountBalanceSetting, false, true))
             {
-                if (!hasExchanges && !hasSuppliers)
+                if (!areSuppliersActive)
+                    return false;
+                if (!hasSuppliers)
                     return false;
                 filterExpression = GetFinancialAccountFilterExpression(accountTypeId, CarrierAccountType.Supplier, accountBalanceSetting, isEditMode);
             }
             else if (!CheckApplicableAccountTypes(accountBalanceSetting, false, false))
             {
-                if (!hasExchanges && (!hasCustomers || !hasSuppliers))
+                if (!areCustomersActive || !areSuppliersActive)
+                    return false;
+                if (!hasCustomers || !hasSuppliers)
                 {
                     return false;
                 }

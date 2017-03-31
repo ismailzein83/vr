@@ -36,7 +36,7 @@
 
             $scope.scopeModel.top = 1000;
 
-            $scope.scopeModel.signs = [{ text: '>', value: '>' }, { text: '=>', value: '>=' }, { text: '<', value: '<' }, { text: '<=', value: '<=' }];
+            $scope.scopeModel.signs = [{ text: '>', value: '>', signValue: 0 }, { text: '=>', value: '>=', signValue: 1 }, { text: '<', value: '<', signValue: 2 }, { text: '<=', value: '<=', signValue: 3}];
 
             $scope.scopeModel.orderByOptions = UtilsService.getArrayEnum(VR_AccountBalance_BalanceOrderByEnum);
 
@@ -137,7 +137,7 @@
                     AccountTypeId: accountTypeAPI.getSelectedIds(),
                     Top: $scope.scopeModel.top,
                     AccountsIds: accountsIds,
-                    Sign: $scope.scopeModel.sign!=undefined ? $scope.scopeModel.sign.value: undefined ,
+                    Sign: $scope.scopeModel.sign != undefined ? $scope.scopeModel.sign.value : undefined,
                     Balance: $scope.scopeModel.sign != undefined ? $scope.scopeModel.balance : undefined,
                     OrderBy:$scope.scopeModel.orderBy.value
                 },

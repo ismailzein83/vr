@@ -108,6 +108,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     promises.push(checkHasAddBillingTransaction(accountTypeId));
                 promises.push(loadTimeRangeDirective());
                 return UtilsService.waitMultiplePromises(promises).finally(function () {
+                   
                     $scope.scopeModel.isLoading = false;
                 });
             };
