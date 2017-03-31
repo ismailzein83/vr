@@ -129,7 +129,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
