@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService', 'WhS_Deal_VolumeCommitmentService', 'VRNotificationService'];
+    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService', 'WhS_Deal_VolumeCommitmentService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_VolumeCommitmentService, VRNotificationService) {
+    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_VolumeCommitmentService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,18 +25,25 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dataSource = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = WhS_Deal_VolumeCommitmentService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return WhS_Deal_VolCommitmentDealAPIService.GetFilteredVolCommitmentDeals(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -54,6 +61,7 @@
                 };
 
                 api.onVolumeCommitmentAdded = function (addedVolumeCommitment) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVolumeCommitment);
                     gridAPI.itemAdded(addedVolumeCommitment);
                 };
 
@@ -71,6 +79,7 @@
 
             function editVolumeCommitment(dataItem) {
                 var onVolumeCommitmentUpdated = function (updatedVolumeCommitment) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedVolumeCommitment);
                     gridAPI.itemUpdated(updatedVolumeCommitment);
                 };
                 WhS_Deal_VolumeCommitmentService.editVolumeCommitment(dataItem.Entity.DealId, onVolumeCommitmentUpdated);

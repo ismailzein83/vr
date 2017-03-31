@@ -2,9 +2,10 @@
 
     'use strict';
 
-    VolumeCommitmentService.$inject = ['UtilsService', 'VRModalService'];
+    VolumeCommitmentService.$inject = ['UtilsService', 'VRModalService', 'VRCommon_ObjectTrackingService'];
 
-    function VolumeCommitmentService(UtilsService, VRModalService) {
+    function VolumeCommitmentService(UtilsService, VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         return ({
             addVolumeCommitment: addVolumeCommitment,
             editVolumeCommitment: editVolumeCommitment,
@@ -13,7 +14,9 @@
             addVolumeCommitmentItemTier: addVolumeCommitmentItemTier,
             editVolumeCommitmentItemTier: editVolumeCommitmentItemTier,
             addVolumeCommitmentItemTierExRate: addVolumeCommitmentItemTierExRate,
-            editVolumeCommitmentItemTierExRate: editVolumeCommitmentItemTierExRate
+            editVolumeCommitmentItemTierExRate: editVolumeCommitmentItemTierExRate,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToVolCommitmentDeal: registerObjectTrackingDrillDownToVolCommitmentDeal
         });
 
         function addVolumeCommitment(onVolumeCommitmentAdded) {
@@ -126,6 +129,40 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemTierExRateEditor.html', parameters, settings);
+        }
+
+
+        function getEntityUniqueName() {
+            return "WhS_Deal_VolCommitmentDeal";
+        }
+
+        function registerObjectTrackingDrillDownToVolCommitmentDeal() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, volCommitmentDealItem) {
+                volCommitmentDealItem.objectTrackingGridAPI = directiveAPI;
+               
+                var query = {
+                    ObjectId: volCommitmentDealItem.Entity.DealId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return volCommitmentDealItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
 
     }

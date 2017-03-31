@@ -39,7 +39,7 @@ namespace TOne.WhS.Deal.Business
             {
                 ExportExcelHandler = new VolCommitmentDealExcelExportHandler()
             };
-
+            VRActionLogger.Current.LogGetFilteredAction(VolCommitmentDealLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDeinitionDetailMapper), handler);
         }
 
@@ -57,6 +57,11 @@ namespace TOne.WhS.Deal.Business
             detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
             detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
             return detail;
+        }
+
+        public override BaseDealLoggableEntity GetLoggableEntity()
+        {
+            return VolCommitmentDealLoggableEntity.Instance;
         }
         #endregion
 
@@ -106,11 +111,43 @@ namespace TOne.WhS.Deal.Business
             }
         }
         #endregion
+      
+        private class VolCommitmentDealLoggableEntity : BaseDealLoggableEntity
+        {
+            public static VolCommitmentDealLoggableEntity Instance = new VolCommitmentDealLoggableEntity();
+            public VolCommitmentDealLoggableEntity()
+            {
+
+            }
+            static VolCommitmentDealManager s_volCommitmentDealManager = new VolCommitmentDealManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_Deal_VolCommitmentDeal"; }
+            }
+            public override string EntityDisplayName
+            {
+                get { return "Vol Commitment Deal"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_Deal_VolCommitmentDeal_ViewHistoryItem"; }
+            }
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DealDefinition dealDefinition = context.Object.CastWithValidate<DealDefinition>("context.Object");
+                return s_volCommitmentDealManager.GetDealName(dealDefinition);
+            }
+        }
 
         #region Mappers      
 
        
 
-        #endregion
+        
+#endregion
+
+       
     }
 }

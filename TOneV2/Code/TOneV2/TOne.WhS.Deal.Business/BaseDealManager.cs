@@ -26,6 +26,10 @@ namespace TOne.WhS.Deal.Business
             Dictionary<int, DealDefinition> cachedEntities = this.GetCachedDeals();
             return cachedEntities.GetRecord(dealId);
         }
+        public string GetDealName(DealDefinition dealDefinition)
+        {
+            return dealDefinition != null ? dealDefinition.Name : null;
+        }
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
 
@@ -43,6 +47,8 @@ namespace TOne.WhS.Deal.Business
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 deal.DealId = insertedId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(GetLoggableEntity(), deal);
+
                 insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal) ;
             }
             else
@@ -68,7 +74,9 @@ namespace TOne.WhS.Deal.Business
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = DealDeinitionDetailMapper(this.GetDeal(deal.DealId)) ;
+                var dealEntity = this.GetDeal(deal.DealId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(GetLoggableEntity(), dealEntity);
+                updateOperationOutput.UpdatedObject = DealDeinitionDetailMapper(dealEntity);
             }
             else
             {
@@ -80,6 +88,7 @@ namespace TOne.WhS.Deal.Business
 
 
         public abstract DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal);
+        public abstract BaseDealLoggableEntity GetLoggableEntity();
 
         #endregion
 
@@ -107,6 +116,21 @@ namespace TOne.WhS.Deal.Business
             {
                 return _dataManager.AreDealsUpdated(ref _updateHandle);
             }
+        }
+
+        public abstract class BaseDealLoggableEntity : VRLoggableEntityBase
+        {
+            public override string ModuleName
+            {
+                get { return "Deal"; }
+            }
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                DealDefinition dealDefinition = context.Object.CastWithValidate<DealDefinition>("context.Object");
+                return dealDefinition.DealId;
+            }
+
+           
         }
         #endregion
 

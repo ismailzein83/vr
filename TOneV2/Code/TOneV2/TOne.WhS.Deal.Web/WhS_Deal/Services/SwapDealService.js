@@ -2,10 +2,11 @@
 
 	'use strict';
 
-	SwapDealService.$inject = ['VRModalService', 'VRNotificationService',  'UtilsService'];
+	SwapDealService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-	function SwapDealService(VRModalService, VRNotificationService,  UtilsService)
+	function SwapDealService(VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService)
 	{
+	    var drillDownDefinitions = [];
 	    var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
 
 		function analyzeSwapDeal(onSwapDealAnalyzed)
@@ -42,10 +43,46 @@
 
 		    VRModalService.showModal(editorUrl, parameters, settings);
 		}
+
+		function getEntityUniqueName() {
+		    return "WhS_Deal_SwapDeal";
+		}
+
+		function registerObjectTrackingDrillDownToSwapDeal() {
+		    var drillDownDefinition = {};
+
+		    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+		    drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+		    drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
+		        swapDealItem.objectTrackingGridAPI = directiveAPI;
+
+		        var query = {
+		            ObjectId: swapDealItem.Entity.DealId,
+		            EntityUniqueName: getEntityUniqueName(),
+
+		        };
+		        return swapDealItem.objectTrackingGridAPI.load(query);
+		    };
+
+		    addDrillDownDefinition(drillDownDefinition);
+
+		}
+		function addDrillDownDefinition(drillDownDefinition) {
+		    drillDownDefinitions.push(drillDownDefinition);
+		}
+
+		function getDrillDownDefinition() {
+		    return drillDownDefinitions;
+		}
+
 		return {
 		    analyzeSwapDeal: analyzeSwapDeal,
 		    addSwapDeal: addSwapDeal,
-		    editSwapDeal: editSwapDeal
+		    editSwapDeal: editSwapDeal,
+		    registerObjectTrackingDrillDownToSwapDeal: registerObjectTrackingDrillDownToSwapDeal,
+		    getDrillDownDefinition: getDrillDownDefinition
 		};
 	}
 

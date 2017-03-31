@@ -75,6 +75,11 @@ namespace TOne.WhS.Deal.Business
 
             return detail;
         }
+
+        public override BaseDealLoggableEntity GetLoggableEntity()
+        {
+            return SwapDealLoggableEntity.Instance;
+        }
         #endregion
 
 
@@ -133,6 +138,36 @@ namespace TOne.WhS.Deal.Business
                 context.MainSheet = sheet;
             }
         }
+
+        private class SwapDealLoggableEntity : BaseDealLoggableEntity
+        {
+            public static SwapDealLoggableEntity Instance = new SwapDealLoggableEntity();
+            public SwapDealLoggableEntity()
+            {
+
+            }
+            static SwapDealManager s_swapDealManager = new SwapDealManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_Deal_SwapDeal"; }
+            }
+            public override string EntityDisplayName
+            {
+                get { return "Swap Deal"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_Deal_SwapDealManager_ViewHistoryItem"; }
+            }
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                DealDefinition dealDefinition = context.Object.CastWithValidate<DealDefinition>("context.Object");
+                return s_swapDealManager.GetDealName(dealDefinition);
+            }
+        }
+
         #endregion
 
         #region Mappers      
