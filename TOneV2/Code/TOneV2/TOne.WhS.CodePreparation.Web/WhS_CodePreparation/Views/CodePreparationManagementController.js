@@ -147,7 +147,7 @@
                     var codeData = {
                         Code: codes[i].Code,
                         BED: codes[i].BED
-                    }
+                    };
 
                     codesData.push(codeData);
                 }
