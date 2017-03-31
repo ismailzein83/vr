@@ -121,6 +121,8 @@ app.directive('whsAccountbalanceFinancialaccountGrid', ['WhS_AccountBalance_Fina
             var onFinancialAccountUpdated = function (financialAccount) {
                 if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
                     context.checkAllowAddFinancialAccount();
+                gridDrillDownTabManager.setDrillDownExtensionObject(financialAccount);
+
                 gridAPI.itemUpdated(financialAccount);
             };
             VR_AccountBalance_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, dataItem.Entity.FinancialAccountId);
