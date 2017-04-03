@@ -91,7 +91,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Insert(dataAnalysisItemDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                DataRecordTypeManager.CacheManager.SetDataRecordTypeCacheExpired();
+                DataRecordTypeManager.CacheManager.TriggerCacheExpiration();
                 VRActionLogger.Current.TrackAndLogObjectAdded(DataAnalysisItemDefinitionLoggableEntity.Instance, dataAnalysisItemDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataAnalysisItemDefinitionDetailMapper(dataAnalysisItemDefinitionItem);
@@ -116,7 +116,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Update(dataAnalysisItemDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                DataRecordTypeManager.CacheManager.SetDataRecordTypeCacheExpired();
+                DataRecordTypeManager.CacheManager.TriggerCacheExpiration();
                 VRActionLogger.Current.TrackAndLogObjectUpdated(DataAnalysisItemDefinitionLoggableEntity.Instance, dataAnalysisItemDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataAnalysisItemDefinitionDetailMapper(this.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionItem.DataAnalysisItemDefinitionId));

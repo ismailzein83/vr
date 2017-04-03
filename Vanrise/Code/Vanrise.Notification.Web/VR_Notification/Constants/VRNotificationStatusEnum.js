@@ -3,5 +3,6 @@
     Executing: { value: 10, description: 'Executing' },
     Executed: { value: 20, description: 'Executed' },
     Cleared: { value: 30, description: 'Cleared' },
-    Suspended: { value: 40, description: 'Suspended' }
+    ErrorOnExecution: { value: 40, description: 'Error' },
+    ClearanceError: { value: 50, description: 'Error' }
 });

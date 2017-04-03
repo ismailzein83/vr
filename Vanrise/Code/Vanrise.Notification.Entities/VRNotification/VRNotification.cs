@@ -1,9 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Vanrise.Notification.Entities
 {
-    public enum VRNotificationStatus { New = 0, Executing = 10, Executed = 20, Cleared = 30, Suspended = 40 }
+    public enum VRNotificationStatus
+    {
+        [Description("New")]
+        New = 0,
+        [Description("Executing")]
+        Executing = 10,
+        [Description("Executed")]
+        Executed = 20,
+        [Description("Cleared")]
+        Cleared = 30,
+        [Description("Error")]
+        ExecutionError = 40,
+        [Description("Error")]
+        ClearanceError = 50
+    }
 
     public class VRNotification
     {
