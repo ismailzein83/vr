@@ -9,10 +9,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class BEParentChildRelationDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
     {
-        public override Guid VRComponentTypeConfigId
-        {
-            get { return new Guid("82B558C6-CEF2-4318-8819-A8495097E770"); }
-        }
+        public override Guid VRComponentTypeConfigId { get { return new Guid("82B558C6-CEF2-4318-8819-A8495097E770"); } }
 
         public Guid ParentBEDefinitionId { get; set; }
 

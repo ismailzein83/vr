@@ -8,13 +8,11 @@
 
         var isEditMode;
 
-        var beParentChildRelationId;
-        var beParentChildRelationEntity;
         var beParentChildRelationDefinitionId;
         var beParentChildRelationDefinitionEntity;
-        var parentId;
-        var childId;
-        var childFilter;
+        var beParentChildRelationId;
+        var beParentChildRelationEntity;
+        var parentId, childId
 
         var parentBESelectorAPI;
         var parentBESelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -31,9 +29,11 @@
 
             if (parameters != undefined) {
                 beParentChildRelationDefinitionId = parameters.beParentChildRelationDefinitionId;
+                beParentChildRelationId = parameters.beParentChildRelationId
                 parentId = parameters.parentId;
                 childId = parameters.childId;
             }
+
             isEditMode = (beParentChildRelationId != undefined);
         }
         function defineScope() {
@@ -45,14 +45,28 @@
                 parentBESelectorAPI = api;
                 parentBESelectorReadyDeferred.resolve();
             };
-
             $scope.scopeModel.onChildBESelectorReady = function (api) {
                 childBESelectorAPI = api;
                 childBESelectorReadyDeferred.resolve();
             };
 
-            $scope.validateEffectiveDate = function () {
-                return VRValidationService.validateTimeEqualorGreaterthanToday($scope.beginEffectiveDate);
+            $scope.scopeModel.onChildBESelectionChanged = function (selectedItem) {
+                var selectedChildBusinessEntityId = childBESelectorAPI.getSelectedIds();
+                if (!isEditMode && selectedChildBusinessEntityId != undefined) {
+                    $scope.scopeModel.isBeginEffectiveDateLoading = true;
+
+                    VR_GenericData_BEParentChildRelationAPIService.GetLastAssignedEED(beParentChildRelationDefinitionId, selectedChildBusinessEntityId).then(function (response) {
+                        $scope.scopeModel.beginEffectiveDate = response;
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function (error) {
+                        $scope.scopeModel.isBeginEffectiveDateLoading = false;
+                    });
+                }
+            };
+
+            $scope.scopeModel.validateEffectiveDate = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
 
             $scope.scopeModel.save = function () {
@@ -66,23 +80,15 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            //$scope.scopeModel.hasSaveBEParentChildRelationPermission = function () {
-            //    if ($scope.scopeModel.isEditMode)
-            //        return VR_GenericData_BEParentChildRelationAPIService.HasUpdateBEParentChildRelationPermission();
-            //    else
-            //        return VR_GenericData_BEParentChildRelationAPIService.HasAddBEParentChildRelationPermission();
-            //};
         }
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 UtilsService.waitMultiplePromises([getBEParentChildRelationDefinition(), getBEParentChildRelation()]).then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            beParentChildRelationEntity = undefined;
-                        });
+                    loadAllControls().finally(function () {
+                        beParentChildRelationEntity = undefined;
+                    });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
@@ -110,7 +116,6 @@
         }
 
         function loadAllControls() {
-
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParentBESelector, loadChildBESelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -128,6 +133,7 @@
                 return;
 
             $scope.scopeModel.beginEffectiveDate = beParentChildRelationEntity.BED;
+            $scope.scopeModel.endEffectiveDate = beParentChildRelationEntity.EED;
         }
         function loadParentBESelector() {
             var parentBESelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -149,15 +155,19 @@
             childBESelectorReadyDeferred.promise.then(function () {
 
                 var childBESelectorPayload = {
-                    filter: {
+                    businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId
+                };
+                if (childId == undefined) {
+                    childBESelectorPayload.filter = {
                         Filters: [{
                             $type: beParentChildRelationDefinitionEntity.Settings.ChildFilterFQTN,
                             ParentChildRelationDefinitionId: beParentChildRelationDefinitionId
                         }]
-                    },
-                    businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId,
-                    selectedIds: childId
-                };
+                    };
+                } else {
+                    childBESelectorPayload.selectedIds = childId;
+                }
+
                 VRUIUtilsService.callDirectiveLoad(childBESelectorAPI, childBESelectorPayload, childBESelectorLoadDeferred);
             });
 
@@ -204,7 +214,8 @@
                 RelationDefinitionId: beParentChildRelationDefinitionId,
                 ParentBEId: parentBESelectorAPI.getSelectedIds(),
                 ChildBEId: childBESelectorAPI.getSelectedIds(),
-                BED: $scope.scopeModel.beginEffectiveDate
+                BED: $scope.scopeModel.beginEffectiveDate,
+                EED: $scope.scopeModel.endEffectiveDate
             };
             return obj;
         }

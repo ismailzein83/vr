@@ -20,11 +20,10 @@
         }
 
         function HasAddChildRelationPermission(beParentChildRelationDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddccess'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
                 beParentChildRelationDefinitionId: beParentChildRelationDefinitionId
             });
         }
-
 
         function AddBEParentChildRelation(beParentChildRelationItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBEParentChildRelation'), beParentChildRelationItem);
@@ -34,19 +33,21 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateBEParentChildRelation'), beParentChildRelationItem);
         }
 
-        //function GetBEParentChildRelationsInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBEParentChildRelationsInfo'), {
-        //        filter: filter
-        //    });
-        //}
+        function GetLastAssignedEED(beParentChildRelationDefinitionId, beChildId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetLastAssignedEED'), {
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId,
+                beChildId: beChildId
+            });
+        }
+
 
         return {
             GetFilteredBEParentChildRelations: GetFilteredBEParentChildRelations,
             GetBEParentChildRelation: GetBEParentChildRelation,
             AddBEParentChildRelation: AddBEParentChildRelation,
             UpdateBEParentChildRelation: UpdateBEParentChildRelation,
-            HasAddChildRelationPermission: HasAddChildRelationPermission
-            //GetBEParentChildRelationsInfo: GetBEParentChildRelationsInfo
+            HasAddChildRelationPermission: HasAddChildRelationPermission,
+            GetLastAssignedEED: GetLastAssignedEED
         };
     }
 

@@ -22,9 +22,27 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/BEParentChildRelation/BEParentChildRelationEditor.html', parameters, settings);
         }
 
+        function editBEParentChildRelation(onBEParentChildRelationUpdated, beParentChildRelationId, beParentChildRelationDefinitionId, parentId, childId) {
+            var parameters = {
+                beParentChildRelationId: beParentChildRelationId,
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId,
+                parentId: parentId,
+                childId: childId
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onBEParentChildRelationUpdated = onBEParentChildRelationUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/BEParentChildRelation/BEParentChildRelationEditor.html', parameters, settings);
+        }
+
 
         return {
-            addBEParentChildRelation: addBEParentChildRelation
+            addBEParentChildRelation: addBEParentChildRelation,
+            editBEParentChildRelation: editBEParentChildRelation
         };
     }
 

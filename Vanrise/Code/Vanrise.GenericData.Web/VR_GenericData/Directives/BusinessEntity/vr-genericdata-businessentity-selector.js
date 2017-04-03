@@ -12,7 +12,8 @@
                 normalColNum: '@',
                 label: '@',
                 customvalidate: '=',
-                isrequired: '='
+                isrequired: '=',
+                onselectionchanged: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;

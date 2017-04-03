@@ -3,9 +3,11 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              menuactions="scopeModel.menuActions"
              pagingtype="'PagingOnScroll'"
-             idfield="Entity.BEParentChildRelationId">
+             idfield="Entity.BEParentChildRelationId"> 
 
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.BEParentChildRelationId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="scopeModel.ParentBENameHeaderText" field="'ParentBEName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="scopeModel.ChildBENameHeaderText" field="'ChildBEName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

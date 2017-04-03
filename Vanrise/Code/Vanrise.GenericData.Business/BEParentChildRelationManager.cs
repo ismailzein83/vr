@@ -60,18 +60,27 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.InsertedObject = null;
             long beParentChildRelationId = -1;
 
-            IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+            IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.ChildBEId);
 
-            if (_dataManager.Insert(beParentChildRelationItem, out beParentChildRelationId))
+            if (!IsOverlappedWith(beParentChildRelationItem, beParentChildRelations))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                beParentChildRelationItem.BEParentChildRelationId = beParentChildRelationId;
-                insertOperationOutput.InsertedObject = BEParentChildRelationDetailMapper(beParentChildRelationItem);
+                IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+
+                if (_dataManager.Insert(beParentChildRelationItem, out beParentChildRelationId))
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
+                    insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                    beParentChildRelationItem.BEParentChildRelationId = beParentChildRelationId;
+                    insertOperationOutput.InsertedObject = BEParentChildRelationDetailMapper(beParentChildRelationItem);
+                }
+                else
+                {
+                    insertOperationOutput.Result = InsertOperationResult.SameExists;
+                }
             }
             else
             {
-                insertOperationOutput.Result = InsertOperationResult.SameExists;
+                insertOperationOutput.Message = "Specified Interval overlap with another existing one";
             }
 
             return insertOperationOutput;
@@ -84,30 +93,39 @@ namespace Vanrise.GenericData.Business
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+            IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.ChildBEId);
 
-            if (_dataManager.Update(beParentChildRelationItem))
+            if (!IsOverlappedWith(beParentChildRelationItem, beParentChildRelations))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = BEParentChildRelationDetailMapper(this.GetBEParentChildRelation(beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.BEParentChildRelationId));
+                IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+
+                if (_dataManager.Update(beParentChildRelationItem))
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = BEParentChildRelationDetailMapper(this.GetBEParentChildRelation(beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.BEParentChildRelationId));
+                }
+                else
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.SameExists;
+                }
             }
             else
             {
-                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+                updateOperationOutput.Message = "Specified Interval overlap with another one";
             }
 
             return updateOperationOutput;
         }
 
-        public List<BEParentChildRelation> GetParent(Guid beParentChildRelationDefinitionId, string childId)
+        public IOrderedEnumerable<BEParentChildRelation> GetParents(Guid beParentChildRelationDefinitionId, string childId)
         {
-            Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByChildId = this.GetCachedBEParentChildRelationsByChildId(beParentChildRelationDefinitionId);
+            Dictionary<string, IOrderedEnumerable<BEParentChildRelation>> beParentChildRelationsByChildId = this.GetCachedBEParentChildRelationsByChildId(beParentChildRelationDefinitionId);
             return beParentChildRelationsByChildId.GetRecord(childId);
         }
         public BEParentChildRelation GetParent(Guid beParentChildRelationDefinitionId, string childId, DateTime effectiveOn)
         {
-            List<BEParentChildRelation> beParentChildRelations = GetParent(beParentChildRelationDefinitionId, childId);
+            IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = GetParents(beParentChildRelationDefinitionId, childId);
 
             if (beParentChildRelations == null)
                 return null;
@@ -128,8 +146,8 @@ namespace Vanrise.GenericData.Business
 
         public List<BEParentChildRelation> GetChildren(Guid beParentChildRelationDefinitionId, string parentId, DateTime effectiveOn)
         {
-            Dictionary<string, List<BEParentChildRelation>> beParentChildRelationsByParentId = this.GetCachedBEParentChildRelationsByParentId(beParentChildRelationDefinitionId);
-            List<BEParentChildRelation> beParentChildRelations = beParentChildRelationsByParentId.GetRecord(parentId);
+            Dictionary<string, IOrderedEnumerable<BEParentChildRelation>> beParentChildRelationsByParentId = this.GetCachedBEParentChildRelationsByParentId(beParentChildRelationDefinitionId);
+            IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = beParentChildRelationsByParentId.GetRecord(parentId);
 
             if (beParentChildRelations == null)
                 return null;
@@ -152,6 +170,27 @@ namespace Vanrise.GenericData.Business
             return relatedChildren.ToList();
         }
 
+        public bool IsChildAssignedToParentWithoutEED(Guid beParentChildRelationDefinitionId, string childId)
+        {
+            IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildRelationDefinitionId, childId);
+
+            if (beParentChildRelations == null || beParentChildRelations.Count() == 0)
+                return false;
+
+            if (beParentChildRelations.First().EED.HasValue)
+                return false;
+
+            return true;
+        }
+
+        public DateTime? GetLastAssignedEED(Guid beParentChildRelationDefinitionId, string childId)
+        {
+            IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildRelationDefinitionId, childId);
+            if (beParentChildRelations != null && beParentChildRelations.Count() > 0)
+                return beParentChildRelations.First().EED;
+            return null;
+        }
+
         #endregion
 
         #region Private Methods
@@ -166,7 +205,7 @@ namespace Vanrise.GenericData.Business
                });
         }
 
-        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByParentId(Guid beParentChildRelationDefinitionId)
+        private Dictionary<string, IOrderedEnumerable<BEParentChildRelation>> GetCachedBEParentChildRelationsByParentId(Guid beParentChildRelationDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBEParentChildRelationsByParentId", beParentChildRelationDefinitionId,
                 () =>
@@ -180,11 +219,12 @@ namespace Vanrise.GenericData.Business
                         beParentChildRelations = beParentChildRelationsByParentId.GetOrCreateItem(itm.ParentBEId);
                         beParentChildRelations.Add(itm);
                     }
-                    return beParentChildRelationsByParentId;
+
+                    return beParentChildRelationsByParentId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(x => x.BED));
                 });
         }
 
-        private Dictionary<string, List<BEParentChildRelation>> GetCachedBEParentChildRelationsByChildId(Guid beParentChildRelationDefinitionId)
+        private Dictionary<string, IOrderedEnumerable<BEParentChildRelation>> GetCachedBEParentChildRelationsByChildId(Guid beParentChildRelationDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBEParentChildRelationsByChildId", beParentChildRelationDefinitionId,
                 () =>
@@ -198,8 +238,25 @@ namespace Vanrise.GenericData.Business
                         beParentChildRelations = beParentChildRelationsByChildId.GetOrCreateItem(itm.ChildBEId);
                         beParentChildRelations.Add(itm);
                     }
-                    return beParentChildRelationsByChildId;
+
+                    return beParentChildRelationsByChildId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(x => x.BED));
                 });
+        }
+
+        private bool IsOverlappedWith(BEParentChildRelation target, IOrderedEnumerable<BEParentChildRelation> beParentChildRelations)
+        {
+            if (beParentChildRelations != null && beParentChildRelations.Count() > 0)
+            {
+                foreach (var beParentChildRelation in beParentChildRelations)
+                {
+                    if (target.BEParentChildRelationId == beParentChildRelation.BEParentChildRelationId)
+                        continue;
+
+                    if (target.IsOverlappedWith(beParentChildRelation))
+                        return true;
+                }
+            }
+            return false;
         }
 
         #endregion

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class BEParentChildRelation
+    public class BEParentChildRelation : IDateEffectiveSettings
     {
         public long BEParentChildRelationId { get; set; }
 

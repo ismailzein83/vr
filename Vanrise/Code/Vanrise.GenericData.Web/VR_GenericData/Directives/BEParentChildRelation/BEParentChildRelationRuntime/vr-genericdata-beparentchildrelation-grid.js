@@ -45,7 +45,10 @@
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+
+                defineMenuActions();
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -74,6 +77,21 @@
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
+            }
+
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions.push([{
+                    name: 'Edit',
+                    clicked: editBEParentChildRelation
+                }]);
+            }
+            function editBEParentChildRelation(beParentChildRelationItem) {
+                var onBEParentChildRelationUpdated = function (beParentChildRelationItem) {
+                    gridAPI.itemUpdated(beParentChildRelationItem);
+                };
+
+                VR_GenericData_BEParentChildRelationService.editBEParentChildRelation(onBEParentChildRelationUpdated, beParentChildRelationItem.Entity.BEParentChildRelationId, beParentChildRelationDefinitionId,
+                    beParentChildRelationItem.Entity.ParentBEId, beParentChildRelationItem.Entity.ChildBEId);
             }
 
             function getGridColumnNames() {

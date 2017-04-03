@@ -11,14 +11,21 @@
                             </vr-genericdata-businessentity-selector>
                         </span>
                         <span vr-disabled="scopeModel.isChildBESelectorDisabled">
-                            <vr-genericdata-businessentity-selector on-ready="scopeModel.onChildBESelectorReady" selectedvalues="scopeModel.selectedChildBE"
+                            <vr-genericdata-businessentity-selector on-ready="scopeModel.onChildBESelectorReady"
+                                                                    onselectionchanged="scopeModel.onChildBESelectionChanged"
+                                                                    selectedvalues="scopeModel.selectedChildBE"
                                                                     customlabel="Child" normal-col-num="6" isrequired="true" hideremoveicon>
                             </vr-genericdata-businessentity-selector>
                         </span>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-datetimepicker type="date" value="scopeModel.beginEffectiveDate" label="Effective On" customvalidate="validateEffectiveDate()" isrequired></vr-datetimepicker>
+                            <span vr-loader="scopeModel.isBeginEffectiveDateLoading">
+                                <vr-datetimepicker type="date" value="scopeModel.beginEffectiveDate" label="BED" customvalidate="scopeModel.validateEffectiveDate()" isrequired></vr-datetimepicker>
+                            </span>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker type="date" value="scopeModel.endEffectiveDate" label="EED" customvalidate="scopeModel.validateEffectiveDate()"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

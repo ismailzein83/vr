@@ -13,54 +13,59 @@ namespace Vanrise.GenericData.Web.Controllers
     [JSONWithTypeAttribute]
     public class BEParentChildRelationController : BaseAPIController
     {
-        BEParentChildRelationManager _manager = new BEParentChildRelationManager();
-        BEParentChildRelationDefinitionManager _defManager = new BEParentChildRelationDefinitionManager();
+        BEParentChildRelationManager _parentChildRelationManager = new BEParentChildRelationManager();
+        BEParentChildRelationDefinitionManager _parentChildRelationDefinitionManager = new BEParentChildRelationDefinitionManager();
 
         [HttpPost]
         [Route("GetFilteredBEParentChildRelations")]
         public object GetFilteredBEParentChildRelations(Vanrise.Entities.DataRetrievalInput<BEParentChildRelationQuery> input)
         {
-            if (!_defManager.DoesUserHaveViewAccess(input.Query.RelationDefinitionId))
+            if (!_parentChildRelationDefinitionManager.DoesUserHaveViewAccess(input.Query.RelationDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredBEParentChildRelations(input));
+
+            return GetWebResponse(input, _parentChildRelationManager.GetFilteredBEParentChildRelations(input));
         }
 
         [HttpGet]
         [Route("GetBEParentChildRelation")]
         public BEParentChildRelation GetBEParentChildRelation(Guid beParentChildRelationDefinitionId, int beParentChildRelationId)
         {
-            return _manager.GetBEParentChildRelation(beParentChildRelationDefinitionId, beParentChildRelationId);
+            return _parentChildRelationManager.GetBEParentChildRelation(beParentChildRelationDefinitionId, beParentChildRelationId);
         }
+
         [HttpGet]
-        [Route("DoesUserHaveAddccess")]
-        public bool DoesUserHaveAddccess(Guid beParentChildRelationDefinitionId)
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess(Guid beParentChildRelationDefinitionId)
         {
-            return _defManager.DoesUserHaveAddAccess(beParentChildRelationDefinitionId);
+            return _parentChildRelationDefinitionManager.DoesUserHaveAddAccess(beParentChildRelationDefinitionId);
         }
+
         [HttpPost]
         [Route("AddBEParentChildRelation")]
         public object AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
-            if (!DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
+            if (!DoesUserHaveAddAccess(beParentChildRelationItem.RelationDefinitionId))
                 return GetUnauthorizedResponse();
 
-            return _manager.AddBEParentChildRelation(beParentChildRelationItem);
+            return _parentChildRelationManager.AddBEParentChildRelation(beParentChildRelationItem);
         }
+
         [HttpPost]
         [Route("UpdateBEParentChildRelation")]
         public object UpdateBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
-            if (!DoesUserHaveAddccess(beParentChildRelationItem.RelationDefinitionId))
+            if (!DoesUserHaveAddAccess(beParentChildRelationItem.RelationDefinitionId))
                 return GetUnauthorizedResponse();
-            return _manager.UpdateBEParentChildRelation(beParentChildRelationItem);
+
+            return _parentChildRelationManager.UpdateBEParentChildRelation(beParentChildRelationItem);
         }
 
-        //[HttpGet]
-        //[Route("GetBEParentChildRelationesInfo")]
-        //public IEnumerable<BEParentChildRelationInfo> GetBEParentChildRelationesInfo(string filter = null)
-        //{
-        //    BEParentChildRelationFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<BEParentChildRelationFilter>(filter) : null;
-        //    return _manager.GetBEParentChildRelationesInfo(deserializedFilter);
-        //}
+        [HttpGet]
+        [Route("GetLastAssignedEED")]
+        public DateTime? GetLastAssignedEED(Guid beParentChildRelationDefinitionId, string beChildId)
+        {
+            return _parentChildRelationManager.GetLastAssignedEED(beParentChildRelationDefinitionId, beChildId);
+        }
+
     }
 }
