@@ -18,7 +18,6 @@ namespace Vanrise.AccountBalance.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new BillingTransactionRequestHandler());
         }
-
         public Vanrise.Entities.InsertOperationOutput<BillingTransactionDetail> AddBillingTransaction(BillingTransaction billingTransaction)
         {
 
@@ -32,7 +31,7 @@ namespace Vanrise.AccountBalance.Business
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 billingTransaction.AccountBillingTransactionId = billingTransactionId;
-                insertOperationOutput.InsertedObject = BillingTransactionDetailMapper(billingTransaction);
+                insertOperationOutput.InsertedObject = BillingTransactionDetailMapper(billingTransaction, BillingTransactionSource.BillingTransaction);
             }
             else
             {
@@ -41,14 +40,12 @@ namespace Vanrise.AccountBalance.Business
 
             return insertOperationOutput;
         }
-
         public bool TryAddBillingTransaction(BillingTransaction billingTransaction, out long billingTransactionId)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.Insert(billingTransaction, out billingTransactionId);
         }
-
-        private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction)
+        private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction, BillingTransactionSource billingTransactionSource)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
@@ -61,7 +58,9 @@ namespace Vanrise.AccountBalance.Business
                 TransactionTypeDescription = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId),
                 AccountInfo = accountManager.GetAccountInfo(billingTransaction.AccountTypeId, billingTransaction.AccountId),
                 Credit = isCredit ? (double?)billingTransaction.Amount : null,
-                Debit = !isCredit ? (double?)billingTransaction.Amount : null
+                Debit = !isCredit ? (double?)billingTransaction.Amount : null,
+                BillingTransactionSource = billingTransactionSource,
+                DisplayId = string.Format("{0}_{1}", Utilities.GetEnumDescription(billingTransactionSource), billingTransaction.AccountBillingTransactionId)
             };
         }
         public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
@@ -74,23 +73,72 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByTransactionTypes(accountTypeId, billingTransactionsByTime, transactionTypeIds);
         }
-         
+        public BillingTransaction ConvertAccountUsageToBillingTransaction(AccountUsage accountUsage)
+        {
+            return new BillingTransaction
+            {
+                AccountTypeId = accountUsage.AccountTypeId,
+                AccountId = accountUsage.AccountId,
+                AccountBillingTransactionId = accountUsage.AccountUsageId ,
+                Amount = accountUsage.UsageBalance,
+                CurrencyId =accountUsage.CurrencyId ,
+                TransactionTime = accountUsage.PeriodEnd <= DateTime.Now ? accountUsage.PeriodEnd : DateTime.Now,
+                TransactionTypeId = accountUsage.TransactionTypeId,
+                Notes = string.Format("Usage From {0:yyyy-MM-dd HH:mm} to {1:yyyy-MM-dd HH:mm}", accountUsage.PeriodStart, accountUsage.PeriodEnd),
+                IsBalanceUpdated = true,
+            };
+        }
+        public IEnumerable<BillingTransaction> ConvertAccountUsagesToBillingTransactions(IEnumerable<AccountUsage> accountUsages)
+        {
+            List<BillingTransaction> billingTransactions = new List<BillingTransaction>();
+            if (accountUsages != null)
+            {
+                foreach (var accountUsage in accountUsages)
+                {
+                    billingTransactions.Add(ConvertAccountUsageToBillingTransaction(accountUsage));
+                }
+            }
+            return billingTransactions;
+        }
+
+        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
+        }
 
         #region Private Classes
         private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransaction, BillingTransactionDetail>
         {
             public override BillingTransactionDetail EntityDetailMapper(BillingTransaction entity)
             {
-                BillingTransactionManager manager = new BillingTransactionManager();
-                return manager.BillingTransactionDetailMapper(entity);
+                return null;
             }
 
             public override IEnumerable<BillingTransaction> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
             {
                 IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
                 return dataManager.GetFilteredBillingTransactions(input.Query);
+            
             }
+            protected override BigResult<BillingTransactionDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input, IEnumerable<BillingTransaction> allRecords)
+            {
+                AccountUsageManager accountUsageManager = new AccountUsageManager();
+                var accountUsages = accountUsageManager.GetAccountUsageForBillingTransactions(input.Query.AccountTypeId, input.Query.TransactionTypeIds, input.Query.AccountsIds, input.Query.FromTime, input.Query.ToTime);
+                BillingTransactionManager manager = new BillingTransactionManager();
+                var convertedBillingTransactions = manager.ConvertAccountUsagesToBillingTransactions(accountUsages);
 
+                List<BillingTransactionDetail> billingTransactionDetails = new List<BillingTransactionDetail>();
+                billingTransactionDetails.AddRange(allRecords.MapRecords(x => manager.BillingTransactionDetailMapper(x, BillingTransactionSource.BillingTransaction)));
+                billingTransactionDetails.AddRange(convertedBillingTransactions.MapRecords(x => manager.BillingTransactionDetailMapper(x, BillingTransactionSource.AccountUsage)));
+
+                return new BigResult<BillingTransactionDetail>
+                {
+                    ResultKey = input.ResultKey,
+                    Data = billingTransactionDetails,
+                    TotalCount = billingTransactionDetails.Count
+                };
+            }
             protected override ResultProcessingHandler<BillingTransactionDetail> GetResultProcessingHandler(DataRetrievalInput<BillingTransactionQuery> input, BigResult<BillingTransactionDetail> bigResult)
             {
                 return new ResultProcessingHandler<BillingTransactionDetail>
@@ -99,7 +147,6 @@ namespace Vanrise.AccountBalance.Business
                 };
             }
         }
-
         private class BillingTransactionExcelExportHandler : ExcelExportHandler<BillingTransactionDetail>
         {
             BillingTransactionQuery _query;

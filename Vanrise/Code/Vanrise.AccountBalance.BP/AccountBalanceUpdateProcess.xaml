@@ -161,12 +161,12 @@
         </vaba1:ProcessUpdatesUsageBalance.PreviousActivityStatus>
       </vaba1:ProcessUpdatesUsageBalance>
     </Parallel>
-    <Parallel>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_5">
       <Parallel.Variables>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCorrectUsageBalanceStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(vae:BalanceUsageQueue(vae:CorrectUsageBalancePayload))" Name="correctUsageBalanceQueue" />
       </Parallel.Variables>
-      <vaba1:LoadCorrectUsageBalance>
+      <vaba1:LoadCorrectUsageBalance sap2010:WorkflowViewState.IdRef="LoadCorrectUsageBalance_1">
         <vaba1:LoadCorrectUsageBalance.AccountTypeId>
           <InArgument x:TypeArguments="s:Guid">
             <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountTypeId</mca:CSharpValue>
@@ -182,9 +182,8 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCorrectUsageBalanceStatus</mca:CSharpReference>
           </OutArgument>
         </vaba1:LoadCorrectUsageBalance.Status>
-        <sap2010:WorkflowViewState.IdRef>LoadCorrectUsageBalance_1</sap2010:WorkflowViewState.IdRef>
       </vaba1:LoadCorrectUsageBalance>
-      <vaba1:ProcessCorrectUsageBalance Status="{x:Null}">
+      <vaba1:ProcessCorrectUsageBalance Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCorrectUsageBalance_1">
         <vaba1:ProcessCorrectUsageBalance.AcountBalanceUpdateHandler>
           <InArgument x:TypeArguments="vab:AccountBalanceUpdateHandler">
             <mca:CSharpValue x:TypeArguments="vab:AccountBalanceUpdateHandler">accountBalanceUpdateHandler</mca:CSharpValue>
@@ -200,18 +199,9 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCorrectUsageBalanceStatus</mca:CSharpValue>
           </InArgument>
         </vaba1:ProcessCorrectUsageBalance.PreviousActivityStatus>
-        <sap2010:WorkflowViewState.IdRef>ProcessCorrectUsageBalance_1</sap2010:WorkflowViewState.IdRef>
       </vaba1:ProcessCorrectUsageBalance>
-      <sap2010:WorkflowViewState.IdRef>Parallel_5</sap2010:WorkflowViewState.IdRef>
     </Parallel>
-    <vaba1:InsertBillingTransactionFromAccountUsageAndUpdate sap2010:WorkflowViewState.IdRef="InsertBillingTransactionFromAccountUsageAndUpdate_1">
-      <vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountTypeId</mca:CSharpValue>
-        </InArgument>
-      </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate.AccountTypeId>
-    </vaba1:InsertBillingTransactionFromAccountUsageAndUpdate>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwiPgPXAQ4CAQFEBVQtAwGJAVUFexACAWJ8BaMBEAIBNaQBBc4BEAIBCM8BBdUBPwIBAkwLTIMBAwGUAUcLR1oDAY8BUQtRXAMBigFZB2kqAgF2agd6LQIBY4EBB5EBJwIBTJIBB6IBKgIBNqkBB7oBJwIBH7sBB8wBKgIBCdIBC9IBWgIBA1wNXFwDAYMBZg1mfgIBfWENYZUBAgF3dw13dgIBcHINcpUBAgFqbQ1tfQIBZIQBDYQBXAIBW44BDY4BfgIBVIkBDYkBpQECAU2fAQ2fAXYCAUWaAQ2aAaUBAgE+lQENlQF9AgE3rAENrAFcAgEutgENtgF+AgEnsQENsQGmAQIBIMgBDcgBdgIBGMMBDcMBpgECARG+AQ2+AX0CAQo=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQWNjb3VudEJhbGFuY2UuQlBcQWNjb3VudEJhbGFuY2VVcGRhdGVQcm9jZXNzLnhhbWwgPgPNAQ4CAQFEBVQtAwGDAVUFexACAVx8BaMBEAIBL6QBBcsBEAIBAkwLTIMBAwGOAUcLR1oDAYkBUQtRXAMBhAFZB2kqAgFwagd6LQIBXYEBB5EBJwIBRpIBB6IBKgIBMKkBB7kBJwIBGboBB8oBKgIBA1wNXFwCAX1mDWZ+AgF3YQ1hlQECAXF3DXd2AgFqcg1ylQECAWRtDW19AgFehAENhAFcAgFVjgENjgF+AgFOiQENiQGlAQIBR58BDZ8BdgIBP5oBDZoBpQECATiVAQ2VAX0CATGsAQ2sAVwCASi2AQ22AX4CASGxAQ2xAaYBAgEaxwENxwF2AgESwgENwgGmAQIBC70BDb0BfQIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -225,15 +215,14 @@
       <sap2010:ViewStateData Id="LoadCorrectUsageBalance_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessCorrectUsageBalance_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="InsertBillingTransactionFromAccountUsageAndUpdate_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,586">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,524">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,666" />
+      <sap2010:ViewStateData Id="Vanrise.AccountBalance.BP.AccountBalanceUpdateProcess_1" sap:VirtualizedContainerService.HintSize="616,604" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

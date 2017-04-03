@@ -55,6 +55,10 @@
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
+                var payload = {
+                    query: getFilterObject()
+                };
+                return gridAPI.loadGrid(payload);
             };
             $scope.scopeModel.onAccountDirectiveReady = function (api) {
                 accountDirectiveAPI = api;

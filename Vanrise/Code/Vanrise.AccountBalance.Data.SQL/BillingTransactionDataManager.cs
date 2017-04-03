@@ -55,6 +55,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                        });
             return null;
         }
+       
         DataTable GetBillingTransactionsByTimeTable()
         {
             DataTable dt = new DataTable(BillingTransactionByTime_TABLENAME);
@@ -133,9 +134,10 @@ namespace Vanrise.AccountBalance.Data.SQL
             billingTransactionId = -1;
             return false;
         }
-        public bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId, TimeSpan timeOffset)
+       
+        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, string accountId )
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_InsertFromAccountUsageAndUpdate]", accountTypeId, timeOffset.TotalSeconds) > 0);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetByAccount]", BillingTransactionMapper, accountTypeId, accountId);
         }
         public IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionTypeIds, Guid accountTypeId)
         {
@@ -182,6 +184,9 @@ namespace Vanrise.AccountBalance.Data.SQL
 
 
 
-       
+
+
+
+     
     }
 }

@@ -65,7 +65,6 @@
     <Compile Include="AccountBalanceUpdate\ProcessCorrectUsageBalance.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessNewBillingTransactions.cs" />
     <Compile Include="AccountBalanceUpdate\ProcessUpdatesUsageBalance.cs" />
-    <Compile Include="AccountBalanceUpdate\InsertBillingTransactionFromAccountUsageAndUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

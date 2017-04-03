@@ -237,8 +237,7 @@ namespace Vanrise.AccountBalance.Business
         }
         private AccountUsageInfo TryAddAccountUsageAndGet(Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId)
         {
-            string billingTransactionNote = string.Format("Usage From {0:yyyy-MM-dd HH:mm} to {1:yyyy-MM-dd HH:mm}", periodStart, periodEnd);
-            return accountUsageDataManager.TryAddAccountUsageAndGet(_accountTypeId, transactionTypeId, accountId, periodStart, periodEnd, currencyId, 0, billingTransactionNote);
+            return accountUsageDataManager.TryAddAccountUsageAndGet(_accountTypeId, transactionTypeId, accountId, periodStart, periodEnd, currencyId, 0);
         }
         private void GroupAccountUsageToUpdateById(Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate, DateTime effectiveOn, int usageCurrencyId, int liveBalanceCurrencyId, decimal value, AccountUsageInfo accountUsageInfo)
         {

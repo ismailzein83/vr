@@ -12,9 +12,9 @@ namespace Vanrise.AccountBalance.Data
         IEnumerable<BillingTransaction> GetFilteredBillingTransactions(BillingTransactionQuery query);
         bool Insert(BillingTransaction billingTransaction, out long billingTransactionId);
         void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady);
-        bool InsertBillingTransactionFromAccountUsageAndUpdate(Guid accountTypeId, TimeSpan timeOffset);
         IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionIds, Guid accountTypeId);
         IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds);
         IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByTransactionTypes(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime, List<Guid> transactionTypeIds);
+        IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId);
     }
 }

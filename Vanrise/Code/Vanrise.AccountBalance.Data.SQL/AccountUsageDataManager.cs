@@ -28,9 +28,9 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByPeriod]", AccountUsageInfoMapper, accountTypeId, periodStart, transactionTypeId);
         }
-        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance, string billingTransactionNote)
+        public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId, String accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId,transactionTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance, billingTransactionNote);
+            return GetItemSP("[VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]", AccountUsageInfoMapper, accountTypeId,transactionTypeId, accountId, periodStart, periodEnd, currencyId, usageBalance);
         }
         public bool UpdateAccountUsageFromBalanceUsageQueue(IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
@@ -59,10 +59,7 @@ namespace Vanrise.AccountBalance.Data.SQL
               
             return true;
         }
-        public IEnumerable<AccountUsage> GetPendingAccountUsages(Guid accountTypeId, String accountId)
-        {
-            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetAccountPendingUsage]", AccountUsageMapper, accountTypeId, accountId);
-        }
+     
         public IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<String> accountIds)
         {
             string accountIdsString = null;
@@ -72,8 +69,24 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]", AccountUsageMapper, accountTypeId, transactionTypeId, datePeriod, accountIdsString);
         }
-
-
+        public IEnumerable<AccountUsage> GetAccountUsageForBillingTransactions(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds, DateTime fromTime, DateTime? toTime)
+        {
+            string accountIdsString = null;
+            if (accountIds != null)
+            {
+                accountIdsString = string.Join<String>(",", accountIds);
+            }
+            string transactionTypeIdsString = null;
+            if (transactionTypeIds != null)
+            {
+                transactionTypeIdsString = string.Join<Guid>(",", transactionTypeIds);
+            }
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForFilteredForBillingTransaction]", AccountUsageMapper, accountTypeId, transactionTypeIdsString, accountIdsString, fromTime, toTime);
+        }
+        public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId)
+        {
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByAccount]", AccountUsageMapper, accountTypeId, accountId);
+        }
         public List<AccountUsage> GetAccountUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
         {
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetErrorData]", AccountUsageMapper, accountTypeId, transactionTypeId, correctionProcessId, periodDate);
@@ -101,12 +114,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                 AccountId = reader["AccountId"] as string,
                 TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeId"),
                 AccountTypeId = GetReaderValue<Guid>(reader, "AccountTypeId"),
-                BillingTransactionId = GetReaderValue<long?>(reader, "BillingTransactionId"),
-                ShouldRecreateTransaction = GetReaderValue<Boolean>(reader, "ShouldRecreateTransaction"),
                 PeriodStart = GetReaderValue<DateTime>(reader, "PeriodStart"),
                 PeriodEnd = GetReaderValue<DateTime>(reader, "PeriodEnd"),
                 UsageBalance = GetReaderValue<Decimal>(reader, "UsageBalance"),
-                BillingTransactionNote = reader["BillingTransactionNote"] as string,
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
             };
         }
@@ -123,6 +133,9 @@ namespace Vanrise.AccountBalance.Data.SQL
 
 
 
-   
+
+
+
+       
     }
 }
