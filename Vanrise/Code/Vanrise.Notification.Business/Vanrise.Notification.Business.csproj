@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPDefinitionExtendedSettings\ExecuteNotificationBPDefinitionExtendedSettings.cs" />
     <Compile Include="Filters\VRAlertLevelBEDefinitionFilter.cs" />
     <Compile Include="VRAlertLevelBEDefinitionSettings.cs" />
     <Compile Include="VRAlertLevelManager.cs" />
