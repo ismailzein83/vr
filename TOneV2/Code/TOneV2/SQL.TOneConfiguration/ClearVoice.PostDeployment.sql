@@ -48,7 +48,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('21e542bb-6bfb-4dbb-b359-ea50e3b42c57','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0)
+('21e542bb-6bfb-4dbb-b359-ea50e3b42c57','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',20,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

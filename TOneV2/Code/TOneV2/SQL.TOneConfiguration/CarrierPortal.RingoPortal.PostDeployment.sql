@@ -4,8 +4,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('F2094983-385D-4A5C-A1CA-DE3E94A19966','Activities'			,null,null,'/Client/Images/menu-icons/Business Entities.png',10,0),
-('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing'				,null,null,'/images/menu-icons/billing.png',9,0)
+('F2094983-385D-4A5C-A1CA-DE3E94A19966','Activities'			,null,null,'/Client/Images/menu-icons/Business Entities.png',10,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

@@ -113,19 +113,25 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'	,null,null,'/Client/Images/menu-icons/Administration.png',1,0),
-('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null	,null,'/Client/Images/menu-icons/admin.png',5,0),
-('BAAF681E-AB1C-4A64-9A35-3F3951398881','System',null			,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,1,0),
-('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null			,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0),
+('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'			,null,null,'/Client/Images/menu-icons/Administration.png',1,0),
 
-('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null			,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0),
-('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes'		,null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0),
-('1037157D-BBC9-4B28-B53F-908936CEC137','System Processes'		,null,null,'/Client/Images/menu-icons/SystemProcesses.png',7,null),
-('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities'		,null,null,'/Client/Images/menu-icons/Business Entities.png',10,0),
-('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'					,null,null,'/Client/Images/menu-icons/other.png',11,0),
+('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0),
+('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes',null		,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0),
+('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0),
+
+('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null,null,'/Client/Images/menu-icons/admin.png',5,0),
+('BAAF681E-AB1C-4A64-9A35-3F3951398881','System',null				,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,1,0),
+('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null				,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,5,0),
+
+('1037157D-BBC9-4B28-B53F-908936CEC137','System Processes'		,null,null,'/Client/Images/menu-icons/SystemProcesses.png',10,null),
+
+('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities'		,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0),
 ('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups'				,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,1,1),
-('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition'	,null,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0),
-('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'	,null,null,'/images/menu-icons/busines intel.png',35,1)
+
+('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'					,null,null,'/Client/Images/menu-icons/other.png',25,0),
+('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing'				,null,null,'/images/menu-icons/billing.png',50,0),
+
+('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'	,null,null,'/images/menu-icons/busines intel.png',75,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

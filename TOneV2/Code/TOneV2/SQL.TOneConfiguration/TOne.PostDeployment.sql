@@ -193,28 +193,25 @@ as (select * from (values
 ('7EEDFB12-C71A-4EE0-AC97-0B553B4A0ED1','Carriers',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,5,0),
 ('9A21CD8B-67FA-4DCD-8852-616A99E42C82','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,4,0),
 
-('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',15,0),
+('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',35,0),
 ('8F443685-3AC6-4C48-9298-017D74221EAF','Entities',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,2,0),
 
-('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',20,0),
+('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',40,0),
 ('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,2,0),
 
-('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',25,0),
+('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',45,0),
 
-('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing',null,null,'/images/menu-icons/billing.png',30,0),
 ('DEF902AB-B628-4B3F-9A6E-1A0E9B012428','Reports',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,3,0),
 ('4AB7951A-3659-4A36-9C9F-627E638F3CC7','Invoices',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,2,0),
 
-('B8A1B5F8-BA13-4232-AF84-7DD255FCED20','Routing',null,null,'/images/menu-icons/Routing.png',35,0),
+('B8A1B5F8-BA13-4232-AF84-7DD255FCED20','Routing',null,null,'/images/menu-icons/Routing.png',55,0),
 ('5EA95F6C-D3C8-426D-A8F0-8F4B0ECE478C','Routing',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,20,0),--routing rules
 
-('65CB7925-20DD-4C57-BCD0-8FA4A48EFD01','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',40,0),
+('65CB7925-20DD-4C57-BCD0-8FA4A48EFD01','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',60,0),
 
-('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',45,1),
+('3246CCB2-88D4-473E-A229-DC1C7DE22F8C','Traffic Analysis',null,null,'/images/menu-icons/NOC.png',70,1),
 
---('BE6A7ADC-F901-4113-8840-ABC499307908','CDR Process',null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,25,0),
-
-('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',50,0)
+('CC10CB4C-9A52-46BF-88E1-3F2CEFB93F44','Plugins',null,null,'/images/menu-icons/plug.png',100,0)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
