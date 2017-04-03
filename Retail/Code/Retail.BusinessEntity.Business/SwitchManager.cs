@@ -126,12 +126,12 @@ namespace Retail.BusinessEntity.Business
         {
             if (switchItem.Settings == null)
                 throw new NullReferenceException("switch.Settings");
-            if (switchItem.Settings.SwitchIntegration == null)
-                throw new NullReferenceException("switch.Settings.SwitchIntegration");
+            //if (switchItem.Settings.SwitchIntegration == null)
+            //    throw new NullReferenceException("switch.Settings.SwitchIntegration");
             return new SwitchDetail()
             {
                 Entity = switchItem,
-                SwitchSettingsTypeName = this.GetSwitchSettingsTypeName(switchItem.Settings.SwitchIntegration.ConfigId)
+                //SwitchSettingsTypeName = this.GetSwitchSettingsTypeName(switchItem.Settings.SwitchIntegration.ConfigId)
             };
         }
 
