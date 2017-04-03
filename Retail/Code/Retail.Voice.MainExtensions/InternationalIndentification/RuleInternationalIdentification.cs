@@ -19,7 +19,8 @@ namespace Retail.Voice.MainExtensions
                 GenericRuleTarget target = new GenericRuleTarget()
                 {
                     Objects = new System.Collections.Generic.Dictionary<string, dynamic>(),
-                    TargetFieldValues = new System.Collections.Generic.Dictionary<string, object>()
+                    TargetFieldValues = new System.Collections.Generic.Dictionary<string, object>(),
+                    EffectiveOn = context.RawCDR.AttemptDateTime
                 };
 
                 target.Objects.Add("RawCDR", context.RawCDR);
