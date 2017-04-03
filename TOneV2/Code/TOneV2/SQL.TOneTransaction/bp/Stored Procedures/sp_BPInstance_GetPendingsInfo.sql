@@ -8,11 +8,20 @@ BEGIN
 	SELECT Convert(int, ParsedString) FROM bp.[ParseStringList](@Statuses)
 
     SELECT top(@MaxNbOfInstances) bp.[ID]
-		,ParentID
-	  ,DefinitionID
-	  ,ExecutionStatus
-	  ,ServiceInstanceID
+	  ,[Title]
+      ,[ParentID]
+      ,[DefinitionID]
+      ,[WorkflowInstanceID]
+      ,[InputArgument]
 	  , [CompletionNotifier]
+      ,[ExecutionStatus]
+      ,[LastMessage]
+	   ,EntityID
+      ,[ViewRequiredPermissionSetId]
+      ,[CreatedTime]
+      ,[StatusUpdatedTime]      
+      ,[InitiatorUserId]
+	  ,[ServiceInstanceID]
 	FROM bp.[BPInstance] bp WITH(NOLOCK)
 	JOIN @StatusesTable statuses ON bp.ExecutionStatus = statuses.[Status]
 	ORDER BY ID

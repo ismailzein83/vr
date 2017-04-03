@@ -30,6 +30,7 @@ IF (@TimestampAfter IS NULL)
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]
+	  ,[ServiceInstanceID]
 	  ,[timestamp]
             INTO #temp_table
             FROM [BP].[BPInstance] WITH(NOLOCK)
@@ -60,6 +61,7 @@ IF (@TimestampAfter IS NULL)
       ,[CreatedTime]
       ,[StatusUpdatedTime]
       ,[InitiatorUserId]
+	  ,[ServiceInstanceID]
 	  ,[timestamp]
             INTO #temp2_table
             FROM [BP].[BPInstance] WITH(NOLOCK) 

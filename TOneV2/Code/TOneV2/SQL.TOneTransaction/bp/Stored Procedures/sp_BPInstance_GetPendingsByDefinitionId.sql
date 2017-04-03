@@ -25,6 +25,7 @@ BEGIN
       ,[CreatedTime]
       ,[StatusUpdatedTime]      
       ,[InitiatorUserId]
+	  ,[ServiceInstanceID]
 	FROM bp.[BPInstance] bp WITH(NOLOCK)
 	JOIN @StatusesTable statuses ON bp.ExecutionStatus = statuses.[Status]
 	WHERE

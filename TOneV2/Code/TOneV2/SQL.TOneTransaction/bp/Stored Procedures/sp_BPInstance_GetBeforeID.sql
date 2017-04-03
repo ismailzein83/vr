@@ -15,7 +15,7 @@ BEGIN
             select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
             
 	SELECT TOP(@NbOfRows) [ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus],[LastMessage]
-			,EntityID,[ViewRequiredPermissionSetId],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],[timestamp]
+			,EntityID,[ViewRequiredPermissionSetId],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],[timestamp],[ServiceInstanceID]
 	FROM	[BP].[BPInstance] with(nolock)
 	WHERE	(@EntityID is null or EntityID= @EntityID)
 			and ID < @LessThanID
