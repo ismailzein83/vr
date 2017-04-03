@@ -20,7 +20,12 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" ng-if="scopeModel.selectedSetingsTypeConfig != undefined" directive="scopeModel.selectedSetingsTypeConfig.Editor" on-ready="scopeModel.onSettingDirectiveReady"></vr-directivewrapper>
+                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"
+                                     ng-if="scopeModel.selectedSetingsTypeConfig != undefined"
+                                     directive="scopeModel.selectedSetingsTypeConfig.Editor"
+                                     on-ready="scopeModel.onSettingDirectiveReady"
+                                     normal-col-num="4">
+                </vr-directivewrapper>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
