@@ -25,9 +25,10 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Save Price List Files
         public void SavePricelistFiles(ISalePricelistFileContext context)
         {
-            var toDbPricelList = new List<SalePriceList>();
-            var sellingProductPriceLists = context.SalePriceLists.Where(r => r.OwnerType == SalePriceListOwnerType.SellingProduct);
-            toDbPricelList.AddRange(sellingProductPriceLists);
+            var priceListsToSave = new List<SalePriceList>();
+
+            if (context.SalePriceLists != null && context.SalePriceLists.Count() > 0)
+                priceListsToSave.AddRange(context.SalePriceLists);
 
             if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Any())
             {
@@ -50,7 +51,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 var salePriceListChanges = new SalePriceListChangeManager();
                 var notSentChanges = salePriceListChanges.GetNotSentChanges(customerIdsWithChanges);
 
-                var priceListDic = StructureSalePriceListById(context.SalePriceLists);
+                Dictionary<int, SalePriceList> contextPriceListsByPriceListId;
+                Dictionary<int, SalePriceList> customerPriceListsByCustomerId;
+                StructureSalePriceLists(context.SalePriceLists, out contextPriceListsByPriceListId, out customerPriceListsByCustomerId);
+
                 foreach (var customerChange in customerChanges)
                 {
                     CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerChange.CustomerId);
@@ -64,15 +68,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (customerZoneNotifications.Count > 0)
                     {
-                        SalePriceListType customerPlType = GetSalePriceListType(customer.CustomerSettings.IsAToZ,
-                            context.ChangeType);
-                        SalePriceList priceList = GetPriceList(customer, customerPlType, customerZoneNotifications,
-                            priceListDic, context.ProcessInstanceId);
+                        SalePriceListType customerPlType = GetSalePriceListType(customer.CustomerSettings.IsAToZ, context.ChangeType);
+                        SalePriceList priceList = GetPriceList(customer, customerPlType, customerZoneNotifications, customerPriceListsByCustomerId, context.ProcessInstanceId);
 
-                        if (priceList == null) continue;
+                        if (priceList == null)
+                            continue;
 
-                        if (context.CurrencyId.HasValue) priceList.CurrencyId = context.CurrencyId.Value;
-                        toDbPricelList.Add(priceList);
+                        if (!contextPriceListsByPriceListId.ContainsKey(priceList.PriceListId))
+                            priceListsToSave.Add(priceList);
+
+                        if (context.CurrencyId.HasValue)
+                            priceList.CurrencyId = context.CurrencyId.Value;
+
                         var tempPriceList = context.CustomerPriceListChanges.FirstOrDefault(r => r.CustomerId == customerChange.CustomerId);
 
                         if (tempPriceList != null)
@@ -81,19 +88,45 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 BulkInsertCustomerChanges(context.CustomerPriceListChanges.ToList(), context.ProcessInstanceId);
             }
-            BulkInsertPriceList(toDbPricelList);
+            BulkInsertPriceList(priceListsToSave);
         }
-        private Dictionary<int, SalePriceList> StructureSalePriceListById(IEnumerable<SalePriceList> salePriceLists)
+        private void StructureSalePriceLists(IEnumerable<SalePriceList> salePriceLists, out Dictionary<int, SalePriceList> priceListsByPriceListId, out Dictionary<int, SalePriceList> customerPriceListsByCustomerId)
         {
-            Dictionary<int, SalePriceList> salePriceListDictionary = new Dictionary<int, SalePriceList>();
-            if (salePriceLists == null) return salePriceListDictionary;
-            foreach (var priceList in salePriceLists.Where(p => p.OwnerType == SalePriceListOwnerType.Customer))
+            priceListsByPriceListId = new Dictionary<int, SalePriceList>();
+            customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
+
+            if (salePriceLists == null || salePriceLists.Count() == 0)
+                return;
+
+            foreach (SalePriceList salePriceList in salePriceLists)
             {
-                if (!salePriceListDictionary.ContainsKey(priceList.OwnerId))
-                    salePriceListDictionary[priceList.OwnerId] = priceList;
+                priceListsByPriceListId.Add(salePriceList.PriceListId, salePriceList);
+
+                if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
+                {
+                    if (!customerPriceListsByCustomerId.ContainsKey(salePriceList.OwnerId))
+                        customerPriceListsByCustomerId.Add(salePriceList.OwnerId, salePriceList);
+                }
             }
-            return salePriceListDictionary;
         }
+        //private Dictionary<int, SalePriceList> StructureCustomerPriceListsByCustomerId(IEnumerable<SalePriceList> priceLists)
+        //{
+        //    Dictionary<int, SalePriceList> customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
+
+        //    if (priceLists == null)
+        //        return customerPriceListsByCustomerId;
+
+        //    foreach (SalePriceList priceList in priceLists)
+        //    {
+        //        if (priceList.OwnerType == SalePriceListOwnerType.Customer)
+        //        {
+        //            if (!customerPriceListsByCustomerId.ContainsKey(priceList.OwnerId))
+        //                customerPriceListsByCustomerId.Add(priceList.OwnerId, priceList);
+        //        }
+        //    }
+
+        //    return customerPriceListsByCustomerId;
+        //}
         private List<CustomerSalePriceListInfo> StructureCustomerPriceListChanges(IEnumerable<CustomerPriceListChange> customerPriceListChanges)
         {
             var customers = new List<CustomerSalePriceListInfo>();
@@ -535,7 +568,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return processSalePricelists.FindRecord(itm => itm.OwnerId == customerId);
         }
-      
+
         #endregion
 
         #region Structuring Methods
