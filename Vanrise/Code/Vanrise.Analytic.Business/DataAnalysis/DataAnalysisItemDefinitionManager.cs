@@ -12,16 +12,6 @@ namespace Vanrise.Analytic.Business
 {
     public class DataAnalysisItemDefinitionManager
     {
-        #region Ctor/Properties
-
-        static DataAnalysisItemDefinitionManager()
-        {
-            DataRecordTypeManager instance = new DataRecordTypeManager();
-            instance.AddDataRecordTypeCachingExpirationChecker(new DataAnalysisItemDataRecordTypeCachingExpirationChecker());
-        }
-
-        #endregion
-
         #region Public Methods
 
         public DataAnalysisItemDefinition GetDataAnalysisItemDefinition(Guid dataAnalysisItemDefinitionId)
@@ -101,6 +91,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Insert(dataAnalysisItemDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                DataRecordTypeManager.CacheManager.SetDataRecordTypeCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectAdded(DataAnalysisItemDefinitionLoggableEntity.Instance, dataAnalysisItemDefinitionItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataAnalysisItemDefinitionDetailMapper(dataAnalysisItemDefinitionItem);
@@ -125,6 +116,7 @@ namespace Vanrise.Analytic.Business
             if (dataManager.Update(dataAnalysisItemDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                DataRecordTypeManager.CacheManager.SetDataRecordTypeCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectUpdated(DataAnalysisItemDefinitionLoggableEntity.Instance, dataAnalysisItemDefinitionItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataAnalysisItemDefinitionDetailMapper(this.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionItem.DataAnalysisItemDefinitionId));
@@ -185,16 +177,6 @@ namespace Vanrise.Analytic.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreDataAnalysisItemDefinitionUpdated(ref _updateHandle);
-            }
-        }
-
-        private class DataAnalysisItemDataRecordTypeCachingExpirationChecker : DataRecordTypeCachingExpirationChecker
-        {
-            DateTime? _lastCheck;
-
-            public override bool IsDataRecordTypeDependenciesCacheExpired()
-            {
-                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref _lastCheck);
             }
         }
 

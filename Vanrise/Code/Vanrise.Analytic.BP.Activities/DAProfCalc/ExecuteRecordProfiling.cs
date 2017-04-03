@@ -199,7 +199,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             StringBuilder strBuilder = new StringBuilder();
             IEnumerable<DAProfCalcGroupingField> groupingFields;
             if (groupingFieldNames == null || groupingFieldNames.Count == 0)
-                groupingFields = settings.GroupingFields;
+                return string.Empty;
             else
                 groupingFields = settings.GroupingFields.FindAllRecords(itm => groupingFieldNames.Contains(itm.FieldName));
 

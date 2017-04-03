@@ -30,11 +30,6 @@ namespace Vanrise.GenericData.Business
             return s_cacheManager;
         }
 
-        public void AddDataRecordTypeCachingExpirationChecker(DataRecordTypeCachingExpirationChecker dataRecordTypeCachingExpirationChecker)
-        {
-            GetCacheManager().DataRecordTypeCachingExpirationCheckers.Add(dataRecordTypeCachingExpirationChecker);
-        }
-
         public IDataRetrievalResult<DataRecordTypeDetail> GetFilteredDataRecordTypes(DataRetrievalInput<DataRecordTypeQuery> input)
         {
             var allItems = GetCachedDataRecordTypes();
@@ -431,23 +426,11 @@ namespace Vanrise.GenericData.Business
         {
             IDataRecordTypeDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
             object _updateHandle;
-            public ConcurrentBag<DataRecordTypeCachingExpirationChecker> DataRecordTypeCachingExpirationCheckers = new ConcurrentBag<DataRecordTypeCachingExpirationChecker>();
-            protected override bool ShouldSetCacheExpired()
+
+            public static void SetDataRecordTypeCacheExpired()
             {
-                bool isDataRecordTypeUpdated = _dataManager.AreDataRecordTypeUpdated(ref _updateHandle);
-                if (isDataRecordTypeUpdated)
-                    return true;
-
-                if (DataRecordTypeCachingExpirationCheckers == null)
-                    return false;
-
-                foreach (DataRecordTypeCachingExpirationChecker dataRecordTypeCachingExpirationChecker in DataRecordTypeCachingExpirationCheckers)
-                {
-                    if (dataRecordTypeCachingExpirationChecker.IsDataRecordTypeDependenciesCacheExpired())
-                        return true;
-                }
-
-                return false;
+                IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
+                dataManager.SetDataRecordTypeCacheExpired();
             }
         }
 
@@ -541,10 +524,5 @@ namespace Vanrise.GenericData.Business
             }
             return properties;
         }
-    }
-
-    public abstract class DataRecordTypeCachingExpirationChecker
-    {
-        public abstract bool IsDataRecordTypeDependenciesCacheExpired();
     }
 }

@@ -76,19 +76,6 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                     }
                 };
 
-                $scope.scopeModel.validateGrid = function () {
-                    if ($scope.scopeModel.selectDataRecordObjectType == undefined)
-                        return;
-
-                    for (var x = 0; x < $scope.scopeModel.objectVariables.length; x++) {
-                        var currentObjectVariable = $scope.scopeModel.objectVariables[x];
-                        var currentDataRecordField = currentObjectVariable.dataRecordFieldSelectorAPI != undefined ? currentObjectVariable.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
-                        if (currentDataRecordField != undefined && $scope.scopeModel.selectDataRecordObjectType.ObjectName == currentObjectVariable.ObjectName) {
-                            return 'invalid mapping';
-                        }
-                    }
-                    return;
-                };
 
                 function getMailMessageTypePromise() {
                     if (selectedMailMessageTypeId == undefined || selectedDataRecordTypeId == undefined)
@@ -207,6 +194,20 @@ app.directive('vrGenericdataDatarecordVractiondefinitionExtendedsettingsSendemai
                 objectVariable.dataRecordFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 objectVariable.onDataRecordFieldSelectorReady = function (api) {
                     objectVariable.dataRecordFieldSelectorAPI = api;
+
+                    objectVariable.validate = function () {
+                        var selectedObjectType = $scope.scopeModel.selectDataRecordObjectType != undefined ? $scope.scopeModel.selectDataRecordObjectType.ObjectName : undefined;
+                        if (selectedObjectType == undefined)
+                            return;
+
+                        if (api.getSelectedIds() == undefined)
+                            return;
+
+                        if(objectVariable.ObjectName!=selectedObjectType)
+                            return;
+
+                        return 'Object already mapped in Output Record Field';
+                    };
 
                     var filters = [];
                     var dataRecordFieldPayload = {

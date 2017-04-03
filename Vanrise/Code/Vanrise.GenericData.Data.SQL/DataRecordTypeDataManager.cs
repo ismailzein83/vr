@@ -43,6 +43,11 @@ namespace Vanrise.GenericData.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator);
             return (recordesEffected > 0);
         }
+
+        public void SetDataRecordTypeCacheExpired()
+        {
+            ExecuteNonQuerySP("genericdata.sp_DataRecordType_SetCacheExpired");
+        }
         #endregion
 
         #region Mappers
@@ -60,8 +65,5 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #endregion
-
-
-
     }
 }
