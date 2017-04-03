@@ -43,7 +43,7 @@ namespace Vanrise.BusinessProcess
 
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
 
-        
+
 
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
         Guid _definitionId;
@@ -105,7 +105,7 @@ namespace Vanrise.BusinessProcess
                 return;
             Task task = new Task(() =>
             {
-                lock(this)
+                lock (this)
                 {
                     if (_isTriggerPendingEventsRunning)
                         return;
@@ -159,7 +159,7 @@ namespace Vanrise.BusinessProcess
             }
 
             WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(_workflowDefinition, inputs) : new WorkflowApplication(_workflowDefinition);
-            
+
             bpInstance.WorkflowInstanceID = wfApp.Id;
             BPRunningInstance runningInstance = new BPRunningInstance
             {
@@ -189,7 +189,7 @@ namespace Vanrise.BusinessProcess
                         runningInstance.IsIdle = true;
                     }
                 };
-                       
+
 
             //wfApp.InstanceStore = s_InstanceStore;
             //wfApp.PersistableIdle = delegate(WorkflowApplicationIdleEventArgs e)
@@ -204,7 +204,7 @@ namespace Vanrise.BusinessProcess
             string processTitle = bpInstance.Title;
             LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Information, "Process '{0}' started", processTitle);
         }
-                
+
         void OnWorkflowCompleted(BPInstance bpInstance, WorkflowApplicationCompletedEventArgs e)
         {
             BPRunningInstance dummy;
@@ -222,10 +222,10 @@ namespace Vanrise.BusinessProcess
             {
                 terminationException = e.TerminationException;
                 BPTrackingChannel.Current.WriteException(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID, e.TerminationException);
-                bpInstance.LastMessage = String.Format("Workflow Finished Unsuccessfully. Status: {0}. Error: {1}", e.CompletionState, e.TerminationException);                
+                bpInstance.LastMessage = String.Format("Workflow Finished Unsuccessfully. Status: {0}. Error: {1}", e.CompletionState, e.TerminationException);
                 bpInstance.Status = BPInstanceStatus.Aborted;
                 UpdateProcessStatus(bpInstance);
-                
+
                 Exception finalException = Utilities.WrapException(e.TerminationException, String.Format("Process '{0}' failed", processTitle));
                 LoggerFactory.GetExceptionLogger().WriteException(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), finalException);
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
@@ -239,8 +239,9 @@ namespace Vanrise.BusinessProcess
 
                 if (bpInstance.ParentProcessID.HasValue)
                     NotifyParentBPChildCompleted(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID.Value, bpInstance.Status, bpInstance.LastMessage, terminationException, processOutput);
-                if (bpInstance.CompletionNotifier != null)
-                    NotifyBPCompleted(bpInstance.ProcessInstanceID, bpInstance.CompletionNotifier, bpInstance.Status, bpInstance.LastMessage, processOutput);
+
+                //if (bpInstance.CompletionNotifier != null)
+                NotifyBPCompleted(_definition, bpInstance, processOutput);
             }
 
             //_instanceDataManager.UnlockProcessInstance(bpInstance.ProcessInstanceID, RunningProcessManager.CurrentProcess.ProcessId);
@@ -256,7 +257,7 @@ namespace Vanrise.BusinessProcess
                 RequiredPermissionSet viewRequiredPermissionSet = s_requiredPermissionSetManager.GetRequiredPermissionSet(bpInstance.ViewRequiredPermissionSetId.Value);
                 viewRequiredPermissionSet.ThrowIfNull("viewRequiredPermissionSet", bpInstance.ViewRequiredPermissionSetId.Value);
                 return s_requiredPermissionSetManager.GetRequiredPermissionSetId(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, viewRequiredPermissionSet.RequiredPermissionString);
-            }   
+            }
             else
             {
                 return null;
@@ -276,15 +277,25 @@ namespace Vanrise.BusinessProcess
             s_eventDataManager.InsertEvent(parentBPInstanecId, bpInstanceId.ToString(), eventData);
         }
 
-        internal static void NotifyBPCompleted(long bpInstanceId, ProcessCompletionNotifier completionNotifier, BPInstanceStatus status, string errorMessage, object processOutput)
+        internal static void NotifyBPCompleted(BPInstance bpInstance, object processOutput)
         {
-            var eventData = new Entities.ProcessCompletedEventPayload
+            NotifyBPCompleted(new BPDefinitionManager().GetBPDefinition(bpInstance.DefinitionID), bpInstance, processOutput);
+        }
+
+        internal static void NotifyBPCompleted(BPDefinition bpDefinition, BPInstance bpInstance, object processOutput)
+        {
+            if (bpInstance.CompletionNotifier != null)
             {
-                ProcessStatus = status,
-                LastProcessMessage = errorMessage,
-                ProcessOutput = processOutput
-            };
-            completionNotifier.OnProcessInstanceCompleted(eventData);
+                var eventData = new Entities.ProcessCompletedEventPayload
+                {
+                    ProcessStatus = bpInstance.Status,
+                    LastProcessMessage = bpInstance.LastMessage,
+                    ProcessOutput = processOutput
+                };
+                bpInstance.CompletionNotifier.OnProcessInstanceCompleted(eventData);
+            }
+            BPDefinitionBPExecutionCompletedContext context = new BPDefinitionBPExecutionCompletedContext() { BPInstance = bpInstance };
+            new BPDefinitionManager().GetBPDefinitionExtendedSettings(bpDefinition).OnBPExecutionCompleted(context);
         }
 
         void TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)

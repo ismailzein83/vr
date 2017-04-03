@@ -31,9 +31,9 @@ namespace Vanrise.BusinessProcess
                 var bpServiceInstances = GetRunningServiceInstances();
                 if (bpServiceInstances == null)
                     return;
-                List<BPPendingInstanceInfo> runningInstances;
+                List<BPInstance> runningInstances;
                 AssignPendingInstancesToServices(bpServiceInstances, out runningInstances);
-                if(runningInstances != null && runningInstances.Count > 0)
+                if (runningInstances != null && runningInstances.Count > 0)
                 {
                     CheckAndNotifyPendingBPEvents(bpServiceInstances, runningInstances);
                 }
@@ -41,13 +41,13 @@ namespace Vanrise.BusinessProcess
         }
 
         private List<Runtime.Entities.RuntimeServiceInstance> GetRunningServiceInstances()
-        {            
+        {
             return _serviceInstanceManager.GetServices(BusinessProcessService.SERVICE_TYPE_UNIQUE_NAME);
         }
 
         static List<BPInstanceStatus> s_pendingStatuses = new List<BPInstanceStatus> { BPInstanceStatus.New, BPInstanceStatus.Running };
 
-        private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPPendingInstanceInfo> runningInstances)
+        private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPInstance> runningInstances)
         {
             int nbOfInstancesToRetrieve = s_minimumPendingInstancesToRetrieve + (bpServiceInstances.Count * s_maxWorkflowsPerServiceInstance);
             var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses, nbOfInstancesToRetrieve);
@@ -62,8 +62,8 @@ namespace Vanrise.BusinessProcess
                         ServiceInstance = serviceInstance,
                         ItemsCountByBPDefinition = BuildItemsCountByBPDefinition(bpDefinitionsList)
                     });
-                List<BPPendingInstanceInfo> terminatedPendingInstances = new List<BPPendingInstanceInfo>();
-                foreach (var pendingInstanceInfo in pendingInstancesInfo.OrderBy(itm => itm.ProcessInstanceId))
+                List<BPInstance> terminatedPendingInstances = new List<BPInstance>();
+                foreach (var pendingInstanceInfo in pendingInstancesInfo.OrderBy(itm => itm.ProcessInstanceID))
                 {
                     if (pendingInstanceInfo.ServiceInstanceId.HasValue)
                     {
@@ -71,7 +71,7 @@ namespace Vanrise.BusinessProcess
                         if (serviceInstancesInfo.TryGetValue(pendingInstanceInfo.ServiceInstanceId.Value, out serviceInstanceInfo))
                         {
                             serviceInstanceInfo.TotalItemsCount++;
-                            var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.BPDefinitionId);
+                            var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
                             bpDefinitionInfo.ItemsCount++;
                             if (pendingInstanceInfo.Status == BPInstanceStatus.New)
                             {
@@ -84,11 +84,11 @@ namespace Vanrise.BusinessProcess
                             SuspendPendingInstance(pendingInstanceInfo, pendingInstancesInfo, terminatedPendingInstances, true);
                         }
                     }
-                    else if (pendingInstanceInfo.ParentProcessInstanceId.HasValue)
+                    else if (pendingInstanceInfo.ParentProcessID.HasValue)
                     {
-                        long parentProcessInstanceId = pendingInstanceInfo.ParentProcessInstanceId.Value;
-                        if (!pendingInstancesInfo.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId)
-                            || terminatedPendingInstances.Any(pendingInstance => pendingInstance.ProcessInstanceId == parentProcessInstanceId))
+                        long parentProcessInstanceId = pendingInstanceInfo.ParentProcessID.Value;
+                        if (!pendingInstancesInfo.Any(pendingInstance => pendingInstance.ProcessInstanceID == parentProcessInstanceId)
+                            || terminatedPendingInstances.Any(pendingInstance => pendingInstance.ProcessInstanceID == parentProcessInstanceId))
                         {
                             SuspendPendingInstance(pendingInstanceInfo, pendingInstancesInfo, terminatedPendingInstances, false, "Parent Process is not running anymore");
                         }
@@ -96,21 +96,21 @@ namespace Vanrise.BusinessProcess
                 }
 
                 List<ServiceInstanceBPDefinitionInfo> servicesToAssign = serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount < s_maxWorkflowsPerServiceInstance).ToList();
-                List<BPPendingInstanceInfo> pendingInstancesToUpdate = new List<BPPendingInstanceInfo>();
+                List<BPInstance> pendingInstancesToUpdate = new List<BPInstance>();
 
-                foreach (var pendingInstanceInfo in pendingInstancesInfo.Where(itm => !itm.ServiceInstanceId.HasValue && !terminatedPendingInstances.Contains(itm)).OrderBy(itm => itm.ProcessInstanceId))
+                foreach (var pendingInstanceInfo in pendingInstancesInfo.Where(itm => !itm.ServiceInstanceId.HasValue && !terminatedPendingInstances.Contains(itm)).OrderBy(itm => itm.ProcessInstanceID))
                 {
                     if (servicesToAssign.Count == 0)
                         break;
 
-                    var bpDefinition = FindBPDefinition(bpDefinitions, pendingInstanceInfo.BPDefinitionId);
+                    var bpDefinition = FindBPDefinition(bpDefinitions, pendingInstanceInfo.DefinitionID);
                     int maxInstancesPerBPDefinition = bpDefinition.Configuration != null && bpDefinition.Configuration.MaxConcurrentWorkflows.HasValue ?
                         bpDefinition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
                     maxInstancesPerBPDefinition += s_moreAssignableItemsToMaxConcurrentPerBPDefinition;
 
                     foreach (var serviceInstanceInfo in servicesToAssign.OrderBy(itm => itm.TotalItemsCount))
                     {
-                        var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.BPDefinitionId);
+                        var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
                         if (bpDefinitionInfo.ItemsCount < maxInstancesPerBPDefinition)
                         {
                             pendingInstanceInfo.ServiceInstanceId = serviceInstanceInfo.ServiceInstance.ServiceInstanceId;
@@ -160,56 +160,55 @@ namespace Vanrise.BusinessProcess
             });
         }
 
-        private void SuspendPendingInstance(BPPendingInstanceInfo pendingInstanceInfo, List<BPPendingInstanceInfo> pendingInstancesInfo, List<BPPendingInstanceInfo> terminatedPendingInstances, bool notifyParentIfAny, string errorMessage = null)
+        private void SuspendPendingInstance(BPInstance pendingInstanceInfo, List<BPInstance> pendingInstancesInfo, List<BPInstance> terminatedPendingInstances, bool notifyParentIfAny, string errorMessage = null)
         {
             if (errorMessage == null)
                 errorMessage = "Runtime is no longer available";
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
                 {
-                    ProcessInstanceId = pendingInstanceInfo.ProcessInstanceId,
-                    ParentProcessId = pendingInstanceInfo.ParentProcessInstanceId,
+                    ProcessInstanceId = pendingInstanceInfo.ProcessInstanceID,
+                    ParentProcessId = pendingInstanceInfo.ParentProcessID,
                     Severity = Vanrise.Entities.LogEntryType.Error,
                     TrackingMessage = errorMessage,
                     EventTime = DateTime.Now
                 });
             var status = BPInstanceStatus.Suspended;
-            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId, status, errorMessage, null);
+            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID, status, errorMessage, null);
             terminatedPendingInstances.Add(pendingInstanceInfo);
-            if (pendingInstanceInfo.ParentProcessInstanceId.HasValue)
+            if (pendingInstanceInfo.ParentProcessID.HasValue)
             {
-                var parentInstanceInfo = pendingInstancesInfo.FirstOrDefault(itm => itm.ProcessInstanceId == pendingInstanceInfo.ParentProcessInstanceId.Value);
+                var parentInstanceInfo = pendingInstancesInfo.FirstOrDefault(itm => itm.ProcessInstanceID == pendingInstanceInfo.ParentProcessID.Value);
                 if (parentInstanceInfo != null && parentInstanceInfo.Status == BPInstanceStatus.Running && !terminatedPendingInstances.Contains(parentInstanceInfo))
                 {
-                    BPDefinitionInitiator.NotifyParentBPChildCompleted(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.ParentProcessInstanceId.Value,
+                    BPDefinitionInitiator.NotifyParentBPChildCompleted(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID.Value,
                         status, errorMessage, null, null);
                 }
             }
-            if (pendingInstanceInfo.CompletionNotifier != null)
-                BPDefinitionInitiator.NotifyBPCompleted(pendingInstanceInfo.ProcessInstanceId, pendingInstanceInfo.CompletionNotifier,
-                        status, errorMessage, null);
+            //if (pendingInstanceInfo.CompletionNotifier != null)
+            BPDefinitionInitiator.NotifyBPCompleted(pendingInstanceInfo, null);
         }
 
-        private void CheckAndNotifyPendingBPEvents(List<RuntimeServiceInstance> bpServiceInstances, List<BPPendingInstanceInfo> runningInstances)
-        {            
+        private void CheckAndNotifyPendingBPEvents(List<RuntimeServiceInstance> bpServiceInstances, List<BPInstance> runningInstances)
+        {
             List<long> processInstanceIdsHavingEvents = _bpEventDataManager.GetEventsDistinctProcessInstanceIds();
-            if(processInstanceIdsHavingEvents != null && processInstanceIdsHavingEvents.Count > 0)
+            if (processInstanceIdsHavingEvents != null && processInstanceIdsHavingEvents.Count > 0)
             {
                 Dictionary<Guid, HashSet<Guid>> bpDefinitionsIdsHavingEventsByServiceInstanceIds = new Dictionary<Guid, HashSet<Guid>>();
-                foreach(var processInstanceId in processInstanceIdsHavingEvents)
+                foreach (var processInstanceId in processInstanceIdsHavingEvents)
                 {
-                    var matchRunningInstance = runningInstances.FirstOrDefault(itm => itm.ProcessInstanceId == processInstanceId);
+                    var matchRunningInstance = runningInstances.FirstOrDefault(itm => itm.ProcessInstanceID == processInstanceId);
                     if (matchRunningInstance != null)
                     {
                         if (matchRunningInstance.ServiceInstanceId.HasValue)
                         {
-                            bpDefinitionsIdsHavingEventsByServiceInstanceIds.GetOrCreateItem(matchRunningInstance.ServiceInstanceId.Value).Add(matchRunningInstance.BPDefinitionId);
+                            bpDefinitionsIdsHavingEventsByServiceInstanceIds.GetOrCreateItem(matchRunningInstance.ServiceInstanceId.Value).Add(matchRunningInstance.DefinitionID);
                         }
                     }
                     else
                         _bpEventDataManager.DeleteProcessInstanceEvents(processInstanceId);
                 }
 
-                if(bpDefinitionsIdsHavingEventsByServiceInstanceIds.Count > 0)
+                if (bpDefinitionsIdsHavingEventsByServiceInstanceIds.Count > 0)
                 {
                     var interRuntimeServiceManager = new InterRuntimeServiceManager();
 

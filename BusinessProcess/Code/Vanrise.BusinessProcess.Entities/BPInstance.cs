@@ -26,5 +26,6 @@ namespace Vanrise.BusinessProcess.Entities
         public string LastMessage { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime? StatusUpdatedTime { get; set; }
+        public Guid? ServiceInstanceId { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace Vanrise.BusinessProcess.Business
                     return true;
                 };
             }
-           
+
 
             return cachedDefinitions.FindAllRecords(filterExpression);
         }
@@ -54,9 +54,9 @@ namespace Vanrise.BusinessProcess.Business
                 if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
                     return false;
 
-                if (viewableByUserId.HasValue && !DoesUserHaveViewAccess((int)viewableByUserId,prod))
+                if (viewableByUserId.HasValue && !DoesUserHaveViewAccess((int)viewableByUserId, prod))
                     return false;
-               
+
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(BPDefinitionLoggableEntity.Instance, input);
@@ -69,7 +69,7 @@ namespace Vanrise.BusinessProcess.Business
 
             Func<BPDefinition, bool> filterExpression = (prod) =>
             {
-               
+
                 if (!DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), prod))
                     return false;
 
@@ -80,7 +80,7 @@ namespace Vanrise.BusinessProcess.Business
             };
 
             return bpDefinitions.FindAllRecords(filterExpression).MapRecords(BPDefinitionInfoMapper);
-            
+
         }
 
         public UpdateOperationOutput<BPDefinitionDetail> UpdateBPDefinition(BPDefinition bPDefinition)
@@ -114,10 +114,10 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
         }
-      public string  GetBPDefinitionName(BPDefinition bPDefinition)
-      {
-          return (bPDefinition != null) ? bPDefinition.Name : null;
-      }
+        public string GetBPDefinitionName(BPDefinition bPDefinition)
+        {
+            return (bPDefinition != null) ? bPDefinition.Name : null;
+        }
         public string GetDefinitionTitle(string processName)
         {
             var definition = GetDefinition(processName);
@@ -125,7 +125,7 @@ namespace Vanrise.BusinessProcess.Business
         }
         public bool DoesUserHaveViewAccessInManagement(int userId)
         {
-            var allPB = GetCachedBPDefinitions().Select(x=>x.Value).Where(x=>!x.Configuration.NotVisibleInManagementScreen);
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => !x.Configuration.NotVisibleInManagementScreen);
             foreach (var bp in allPB)
             {
                 if (DoesUserHaveViewAccess(userId, bp))
@@ -135,7 +135,7 @@ namespace Vanrise.BusinessProcess.Business
         }
         public bool DoesUserHaveViewAccessInSchedule(int userId)
         {
-            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x =>x.Configuration.ScheduledExecEditor!=null);
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => x.Configuration.ScheduledExecEditor != null);
             foreach (var bp in allPB)
             {
                 if (DoesUserHaveViewAccess(userId, bp))
@@ -153,7 +153,7 @@ namespace Vanrise.BusinessProcess.Business
             }
             return false;
         }
-        public bool DoesUserHaveViewAccess( string bPDefinitionName)
+        public bool DoesUserHaveViewAccess(string bPDefinitionName)
         {
             var bPDefinition = GetDefinition(bPDefinitionName);
             return DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), bPDefinition);
@@ -178,7 +178,7 @@ namespace Vanrise.BusinessProcess.Business
         public bool DoesUserHaveScheduleTaskAccess(int userId, Guid bPDefinitionId)
         {
             var bPDefinition = GetBPDefinition(bPDefinitionId);
-            return DoesUserHaveScheduleTaskAccess( userId,bPDefinition);
+            return DoesUserHaveScheduleTaskAccess(userId, bPDefinition);
         }
 
 
@@ -189,28 +189,29 @@ namespace Vanrise.BusinessProcess.Business
 
         }
 
-        public bool DoesUserHaveStartNewInstanceAccess(int userId,  BPDefinition bPDefinition)
+        public bool DoesUserHaveStartNewInstanceAccess(int userId, BPDefinition bPDefinition)
         {
             var definitionContext = new BPDefinitionDoesUserHaveStartAccessContext { UserId = userId, BPDefinition = bPDefinition };
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveStartAccess(definitionContext);
 
         }
-        
-        public bool DoesUserHaveStartNewInstanceAccess(int userId,CreateProcessInput processInput)
+
+        public bool DoesUserHaveStartNewInstanceAccess(int userId, CreateProcessInput processInput)
         {
             var bPDefinition = GetDefinition(processInput.InputArguments.ProcessName);
 
             var context = new BPDefinitionDoesUserHaveStartSpecificInstanceAccessContext
             {
-                DefinitionContext = new BPDefinitionDoesUserHaveStartAccessContext {
+                DefinitionContext = new BPDefinitionDoesUserHaveStartAccessContext
+                {
                     UserId = userId,
-                    BPDefinition = bPDefinition 
+                    BPDefinition = bPDefinition
                 },
                 InputArg = processInput.InputArguments
 
             };
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveStartSpecificInstanceAccess(context);
-            
+
         }
 
         public bool DoesUserHaveScheduleSpecificTaskAccess(int userId, BaseProcessInputArgument inputArgument)
@@ -229,6 +230,13 @@ namespace Vanrise.BusinessProcess.Business
             };
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveScheduleSpecificTaskAccess(context);
 
+        }
+
+        public BPDefinitionExtendedSettings GetBPDefinitionExtendedSettings(BPDefinition bPDefinition)
+        {
+            if (bPDefinition != null && bPDefinition.Configuration != null && bPDefinition.Configuration.ExtendedSettings != null)
+                return bPDefinition.Configuration.ExtendedSettings;
+            return new DefaultBPDefinitionExtendedSettings();
         }
 
         #endregion
@@ -277,9 +285,6 @@ namespace Vanrise.BusinessProcess.Business
         }
         #region private methods
 
-      
-
-
         private bool DoesUserHaveBPPermission(int userId, RequiredPermissionSettings permission)
         {
             SecurityManager secManager = new SecurityManager();
@@ -296,12 +301,7 @@ namespace Vanrise.BusinessProcess.Business
                    return accounts.ToDictionary(cn => cn.BPDefinitionID, cn => cn);
                });
         }
-        private BPDefinitionExtendedSettings GetBPDefinitionExtendedSettings(BPDefinition bPDefinition)
-        {
-            if (bPDefinition != null && bPDefinition.Configuration != null && bPDefinition.Configuration.ExtendedSettings != null)
-                return bPDefinition.Configuration.ExtendedSettings;
-            return new DefaultBPDefinitionExtendedSettings();
-        }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
@@ -327,7 +327,7 @@ namespace Vanrise.BusinessProcess.Business
 
         #region mapper
 
-        private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition , int? userID = null)
+        private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition, int? userID = null)
         {
             if (bpDefinition == null)
                 return null;
@@ -341,7 +341,7 @@ namespace Vanrise.BusinessProcess.Business
             if (userID.HasValue)
             {
 
-                bpDefinitionDetail.ScheduleTaskAccess = DoesUserHaveScheduleTaskAccess(userID.Value, bpDefinition) ; // bpDefinition.Configuration.Security !=null ? DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.ScheduleTask) : true;
+                bpDefinitionDetail.ScheduleTaskAccess = DoesUserHaveScheduleTaskAccess(userID.Value, bpDefinition); // bpDefinition.Configuration.Security !=null ? DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.ScheduleTask) : true;
                 bpDefinitionDetail.StartNewInstanceAccess = DoesUserHaveStartNewInstanceAccess(userID.Value, bpDefinition);//bpDefinition.Configuration.Security !=null ?  DoesUserHaveBPPermission((int)userID, bpDefinition.Configuration.Security.StartNewInstance) : true;
 
             }
@@ -360,7 +360,7 @@ namespace Vanrise.BusinessProcess.Business
             };
         }
 
-    
+
         #endregion
     }
 }

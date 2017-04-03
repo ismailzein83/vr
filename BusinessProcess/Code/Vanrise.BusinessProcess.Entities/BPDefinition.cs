@@ -54,8 +54,23 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return DoesUserHaveScheduleTaskAccess(context.DefinitionContext);
         }
+
+        public virtual void OnBPExecutionCompleted(IBPDefinitionBPExecutionCompletedContext context)
+        {
+
+        }
     }
-    
+
+    public interface IBPDefinitionBPExecutionCompletedContext
+    {
+        BPInstance BPInstance { get; }
+    }
+
+    public class BPDefinitionBPExecutionCompletedContext : IBPDefinitionBPExecutionCompletedContext
+    {
+        public BPInstance BPInstance { get; set; }
+    }
+
     public interface IBPDefinitionGetViewInstanceRequiredPermissionsContext
     {
         BPDefinition BPDefinition { get; }

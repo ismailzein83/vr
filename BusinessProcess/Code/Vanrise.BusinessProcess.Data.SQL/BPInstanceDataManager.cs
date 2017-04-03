@@ -82,9 +82,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, serviceInstanceId);
         }
 
-        public List<BPPendingInstanceInfo> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses, int nbOfInstancesToRetrieve)
+        public List<BPInstance> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses, int nbOfInstancesToRetrieve)
         {
-            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsInfo]", BPPendingInstanceInfoMapper, String.Join(",", statuses.Select(itm => (int)itm)), nbOfInstancesToRetrieve);
+            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsInfo]", BPInstanceMapper, String.Join(",", statuses.Select(itm => (int)itm)), nbOfInstancesToRetrieve);
         }
 
         public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId)
@@ -127,7 +127,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),
                 InitiatorUserId = GetReaderValue<int>(reader, "InitiatorUserId"),
                 EntityId = reader["EntityId"] as string,
-                ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId")
+                ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId"),
+                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID")
             };
 
             string inputArg = reader["InputArgument"] as string;
@@ -140,33 +141,16 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             return instance;
         }
-
-        private BPPendingInstanceInfo BPPendingInstanceInfoMapper(IDataReader reader)
-        {
-            BPPendingInstanceInfo instance = new BPPendingInstanceInfo
-            {
-                BPDefinitionId = GetReaderValue<Guid>(reader,"DefinitionID"),
-                ProcessInstanceId = (long)reader["ID"],
-                ParentProcessInstanceId = GetReaderValue<long?>(reader, "ParentID"),
-                Status = (BPInstanceStatus)reader["ExecutionStatus"],
-                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID")
-            };
-
-            string completionNotifier = reader["CompletionNotifier"] as string;
-            if (!string.IsNullOrWhiteSpace(completionNotifier))
-                instance.CompletionNotifier = Serializer.Deserialize(completionNotifier) as ProcessCompletionNotifier;
-            return instance;
-        }
            
         #endregion
         
-        public void SetServiceInstancesOfBPInstances(List<BPPendingInstanceInfo> pendingInstancesToUpdate)
+        public void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate)
         {
             foreach (var pendingInstance in pendingInstancesToUpdate)
             {
                 if (!pendingInstance.ServiceInstanceId.HasValue)
-                    throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceId));
-                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceID]", pendingInstance.ProcessInstanceId, pendingInstance.ServiceInstanceId.Value);
+                    throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceID));
+                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceID]", pendingInstance.ProcessInstanceID, pendingInstance.ServiceInstanceId.Value);
             }
         }
     }
