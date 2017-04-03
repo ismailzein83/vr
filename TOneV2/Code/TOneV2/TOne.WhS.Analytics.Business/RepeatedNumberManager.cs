@@ -79,9 +79,9 @@ namespace TOne.WhS.Analytics.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
                 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Phone Number" });

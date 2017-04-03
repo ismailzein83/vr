@@ -57,6 +57,59 @@ namespace TOne.WhS.Analytics.Business
                 IBlockedAttemptDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IBlockedAttemptDataManager>();
                 return dataManager.GetAllFilteredBlockedAttempts(input);
             }
+
+            protected override ResultProcessingHandler<BlockedAttemptDetail> GetResultProcessingHandler(DataRetrievalInput<BlockedAttemptQuery> input, BigResult<BlockedAttemptDetail> bigResult)
+            {
+                return new ResultProcessingHandler<BlockedAttemptDetail>
+                {
+                    ExportExcelHandler = new BlockedAttemptsExcelExportHandler()
+                };
+            }
+        }
+
+        private class BlockedAttemptsExcelExportHandler : ExcelExportHandler<BlockedAttemptDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<BlockedAttemptDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Blocked Attempts",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 40 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked Attempts" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Caller Number" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dialed Number" });
+                
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BlockedAttempts });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseCode });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.FirstAttempt });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastAttempt });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CGPN });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CDPN });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         #endregion

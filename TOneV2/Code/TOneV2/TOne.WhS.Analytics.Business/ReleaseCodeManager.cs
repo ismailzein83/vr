@@ -120,7 +120,6 @@ namespace TOne.WhS.Analytics.Business
                 }
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code Description" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
@@ -160,7 +159,6 @@ namespace TOne.WhS.Analytics.Business
                             }
                             
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseCode });
-                            row.Cells.Add(new ExportExcelCell { Value = record.ReleaseCodeDescription });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
                             row.Cells.Add(new ExportExcelCell { Value = record.SwitchName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });

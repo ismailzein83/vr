@@ -53,7 +53,12 @@ namespace TOne.WhS.Routing.Business
                 Data = customerRouteResult.Data.MapRecords(CustomerRouteDetailMapper)
             };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult);
+            ResultProcessingHandler<CustomerRouteDetail> handler = new ResultProcessingHandler<CustomerRouteDetail>()
+            {
+                ExportExcelHandler = new CustomerRouteExcelExportHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult, handler);
         }
 
         private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
@@ -103,6 +108,63 @@ namespace TOne.WhS.Routing.Business
             }
 
             return optionDetails;
+        }
+
+        private class CustomerRouteExcelExportHandler : ExcelExportHandler<CustomerRouteDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CustomerRouteDetail> context)
+            {
+                ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Customer Routes",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 45 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 25 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", Width = 8 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Linked Rules" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Route Options", Width = 125 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Code });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Entity.SaleZoneServiceIds.ToList()) });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.IsBlocked });
+                            row.Cells.Add(new ExportExcelCell { Value = record.LinkedRouteRuleCount });
+                            if (record.RouteOptionDetails != null)
+                            {
+                                string routeOptionsDetails = "";
+                                foreach (var customerRouteOptionDetail in record.RouteOptionDetails)
+                                {
+                                    routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.SupplierName + " ";
+                                    if (customerRouteOptionDetail.Percentage != null)
+                                        routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.Percentage + "% ";
+                                }
+                                row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
+                            }
+                            else
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
