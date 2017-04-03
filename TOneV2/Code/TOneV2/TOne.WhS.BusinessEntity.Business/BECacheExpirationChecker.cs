@@ -24,10 +24,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (dayFilterCacheName != null && dayFilterCacheName.FilterDay == DateTime.Today)
             {
                 if (!cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.HasValue)
-                {
-                    context.NeverExpires = true;
                     return false;
-                }
                 return IsCacheExpired(context, cachingExpirationIntervals.TodayEntitiesIntervalInMinutes.Value);
             }
             else
