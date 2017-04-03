@@ -118,9 +118,9 @@ namespace Vanrise.AccountBalance.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Type", Width = 20 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime, Width = 25});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Type", Width = 22 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Debit" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Credit" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
