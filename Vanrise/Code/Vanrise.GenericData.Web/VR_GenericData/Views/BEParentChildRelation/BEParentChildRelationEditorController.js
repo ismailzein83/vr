@@ -12,7 +12,7 @@
         var beParentChildRelationDefinitionEntity;
         var beParentChildRelationId;
         var beParentChildRelationEntity;
-        var parentId, childId
+        var parentId, childId;
 
         var parentBESelectorAPI;
         var parentBESelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -29,7 +29,7 @@
 
             if (parameters != undefined) {
                 beParentChildRelationDefinitionId = parameters.beParentChildRelationDefinitionId;
-                beParentChildRelationId = parameters.beParentChildRelationId
+                beParentChildRelationId = parameters.beParentChildRelationId;
                 parentId = parameters.parentId;
                 childId = parameters.childId;
             }
