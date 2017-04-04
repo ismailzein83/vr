@@ -393,7 +393,7 @@ namespace Vanrise.Common
 
         public static bool IsInTimeRange(this IDateEffectiveSettings entity, DateTime date)
         {
-            return entity.BED < date && entity.EED.VRGreaterThan(date);
+            return entity.BED <= date && entity.EED.VRGreaterThan(date);
         }
 
         #endregion
