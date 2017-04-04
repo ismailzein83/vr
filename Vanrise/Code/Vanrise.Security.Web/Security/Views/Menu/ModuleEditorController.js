@@ -115,7 +115,7 @@
             var moduleObject = {
                 ModuleId: moduleId,
                 Name: $scope.scopeModel.name,
-                AllowDynamic: moduleEntity.isDynamic,
+                AllowDynamic:moduleEntity && moduleEntity.isDynamic || false,
                 DefaultViewId : viewSelectorAPI.getSelectedIds(),
                 ParentId: moduleEntity != undefined ? moduleEntity.ParentId : parentId
             };
