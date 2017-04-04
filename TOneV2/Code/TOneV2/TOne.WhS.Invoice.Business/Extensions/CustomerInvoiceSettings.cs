@@ -14,7 +14,7 @@ using Vanrise.Invoice.Entities;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public  enum InvoiceType  { Customer = 0, Supplier = 1 }
-    public class CarrierInvoiceSettings : InvoiceTypeExtendedSettings
+    public class CustomerInvoiceSettings : InvoiceTypeExtendedSettings
     {
         public override Guid ConfigId
         {
@@ -134,5 +134,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return carriers.Select(x => x.InvoiceCarrierId);
         }
 
+        //public override bool IsApplicableToCustomer
+        //{
+        //    get { return true; }
+        //}
+        //public override bool IsApplicableToSupplier
+        //{
+        //    get { return false; }
+        //}
+        //public override string RuntimeEditor
+        //{
+        //    get
+        //    {
+        //        return "whs-invoicetype-runtime-customerinvoicesettings";
+        //    }
+        //}
     }
 }
