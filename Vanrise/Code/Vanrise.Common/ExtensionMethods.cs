@@ -385,9 +385,16 @@ namespace Vanrise.Common
 
         public static bool IsOverlappedWith(this IDateEffectiveSettings entity, IDateEffectiveSettings target)
         {
+            if (entity.BED == entity.EED || target.BED == target.EED)
+                return false;
+
             return entity.EED.VRGreaterThan(target.BED) && target.EED.VRGreaterThan(entity.BED);
         }
 
+        public static bool IsInTimeRange(this IDateEffectiveSettings entity, DateTime date)
+        {
+            return entity.BED < date && entity.EED.VRGreaterThan(date);
+        }
 
         #endregion
 
