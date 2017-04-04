@@ -7,8 +7,8 @@
 	@Id int out
 AS
 BEGIN
-	IF NOT EXISTS(select 1 from [genericdata].[BEParentChildRelation] 
-			      where RelationDefinitionID = @RelationDefinitionID and ParentBEID = @ParentBEID and ChildBEID = @ChildBEID)
+	--IF NOT EXISTS(select 1 from [genericdata].[BEParentChildRelation] 
+	--		      where RelationDefinitionID = @RelationDefinitionID and ParentBEID = @ParentBEID and ChildBEID = @ChildBEID)
 	BEGIN
 		insert into [genericdata].[BEParentChildRelation] ([RelationDefinitionID],[ParentBEID],[ChildBEID],[BED],[EED])
 		values(@RelationDefinitionID, @ParentBEID, @ChildBEID, @BED, @EED)

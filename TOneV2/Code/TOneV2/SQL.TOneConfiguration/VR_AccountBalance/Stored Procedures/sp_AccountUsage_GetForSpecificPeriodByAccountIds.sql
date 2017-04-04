@@ -18,12 +18,9 @@ BEGIN
 	SELECT  au.ID,
 			au.AccountTypeID,
 			au.AccountID,
-			au.BillingTransactionID,
-			au.BillingTransactionNote,
 			au.CurrencyId,
 			au.PeriodEnd,
 			au.PeriodStart,
-			au.ShouldRecreateTransaction,
 			au.TransactionTypeID,
 			au.UsageBalance
 FROM	VR_AccountBalance.AccountUsage au WITH(NOLOCK) 

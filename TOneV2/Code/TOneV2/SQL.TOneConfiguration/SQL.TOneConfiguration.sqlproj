@@ -529,11 +529,9 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalance.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryAddAndGet.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_GetBalancesToClearAlert.sql" />
-    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_InsertFromAccountUsageAndUpdate.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_UpdateBalance.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_TryAddAndGet.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByPeriod.sql" />
-    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetAccountPendingUsage.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceLastThreshold.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_UpdateBalanceThresholdAndRule.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_InsertIfNotExists.sql" />
@@ -579,6 +577,11 @@
     <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_InsertIfNotExists.sql" />
     <Build Include="logging\Stored Procedures\sp_ActionAuditLKUP_GetAll.sql" />
     <Build Include="logging\Stored Procedures\sp_LogAttribute_InsertIfNeededAndGetID_1.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_CheckIfHasTransactions.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByAccount.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetForFilteredForBillingTransaction.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccount.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordType_SetCacheExpired.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -7,7 +7,6 @@ BEGIN
 	UPDATE au
 	SET 
 	UsageBalance += bt.UpdateValue,
-	ShouldRecreateTransaction = 1,
 	CorrectionProcessID = @CorrectionProcessID
 	FROM [VR_AccountBalance].AccountUsage au
 	inner join @BalanceTable as bt ON  au.ID = bt.ID
