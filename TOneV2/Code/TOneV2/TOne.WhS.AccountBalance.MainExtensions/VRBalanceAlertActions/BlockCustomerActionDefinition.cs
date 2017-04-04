@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Business;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
+namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class BlockCustomerActionDefinition : VRActionDefinitionExtendedSettings
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("55E97A73-994A-4D60-9A9E-BBD04D08929D"); }
         }
 
         public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)

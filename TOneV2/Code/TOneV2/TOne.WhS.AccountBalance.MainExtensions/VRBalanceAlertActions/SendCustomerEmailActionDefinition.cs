@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Business;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
+namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class SendCustomerEmailActionDefinition : VRActionDefinitionExtendedSettings
     {
@@ -14,7 +14,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("DA72C2E9-4321-4C0C-8FCA-B8A363F6B480"); }
         }
 
         public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)
