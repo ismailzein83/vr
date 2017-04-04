@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Retail.BusinessEntity.Data;
@@ -140,6 +139,16 @@ namespace Retail.BusinessEntity.Business
             }
 
             return GetCachedDIDs().MapRecords(DIDInfoMapper, filterExpression);
+        }
+
+        public Guid GetAccountDIDRelationDefinitionId()
+        {
+            return _accountDIDRelationDefinitionId;
+        }
+
+        public bool IsDIDAssignedToParentWithoutEED(Guid accountDIDRelationDefinitionId, string childId)
+        {
+            return new BEParentChildRelationManager().IsChildAssignedToParentWithoutEED(accountDIDRelationDefinitionId, childId);
         }
 
         #endregion

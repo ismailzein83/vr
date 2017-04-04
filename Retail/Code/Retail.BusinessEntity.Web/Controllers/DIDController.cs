@@ -51,5 +51,19 @@ namespace Retail.BusinessEntity.Web.Controllers
             DIDFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<DIDFilter>(serializedFilter) : null;
             return manager.GetDIDsInfo(filter);
         }
+
+        [HttpGet]
+        [Route("GetAccountDIDRelationDefinitionId")]
+        public Guid GetAccountDIDRelationDefinitionId()
+        {
+            return manager.GetAccountDIDRelationDefinitionId();
+        }
+
+        [HttpGet]
+        [Route("IsDIDAssignedToParentWithoutEED")]
+        public bool IsDIDAssignedToParentWithoutEED(Guid accountDIDRelationDefinitionId, string childId)
+        {
+            return manager.IsDIDAssignedToParentWithoutEED(accountDIDRelationDefinitionId, childId);
+        }
     }
 }

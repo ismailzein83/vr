@@ -42,6 +42,17 @@
             });
         }
 
+        function GetAccountDIDRelationDefinitionId() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountDIDRelationDefinitionId"));
+        }
+
+        function IsDIDAssignedToParentWithoutEED(accountDIDRelationDefinitionId, childId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "IsDIDAssignedToParentWithoutEED"), {
+                accountDIDRelationDefinitionId: accountDIDRelationDefinitionId,
+                childId: childId
+            });
+        }
+
         return ({
             GetFilteredDIDs: GetFilteredDIDs,
             GetDID: GetDID,
@@ -49,7 +60,9 @@
             HasAddDIDPermission: HasAddDIDPermission,
             UpdateDID: UpdateDID,
             HasUpdateDIDPermission: HasUpdateDIDPermission,
-            GetDIDsInfo: GetDIDsInfo
+            GetDIDsInfo: GetDIDsInfo,
+            GetAccountDIDRelationDefinitionId: GetAccountDIDRelationDefinitionId,
+            IsDIDAssignedToParentWithoutEED: IsDIDAssignedToParentWithoutEED
         });
     }
 

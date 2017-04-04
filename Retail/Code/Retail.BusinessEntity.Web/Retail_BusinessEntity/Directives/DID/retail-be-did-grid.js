@@ -22,6 +22,7 @@ app.directive('retailBeDidGrid', ['VRNotificationService', 'Retail_BE_DIDAPIServ
 
             var gridAPI;
             var gridDrillDownTabsObj;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dids = [];
@@ -29,8 +30,8 @@ app.directive('retailBeDidGrid', ['VRNotificationService', 'Retail_BE_DIDAPIServ
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
-                    var drillDownDefinitions = Retail_BE_DIDService.getDrillDownDefinition();
-                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                    var drillDownDefinitions = defineDrillDownDefinitions();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI);
                     defineAPI();
                 };
 
@@ -49,7 +50,6 @@ app.directive('retailBeDidGrid', ['VRNotificationService', 'Retail_BE_DIDAPIServ
 
                 defineMenuActions();
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -68,6 +68,36 @@ app.directive('retailBeDidGrid', ['VRNotificationService', 'Retail_BE_DIDAPIServ
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function defineDrillDownDefinitions() {
+                var drillDownDefinitions = [];
+                drillDownDefinitions.push(getDIDAccountRelationsDrillDownDefinition());
+
+                var dynamicDrillDownDefinitions = Retail_BE_DIDService.getDrillDownDefinition();
+                for (var index = 0; index < dynamicDrillDownDefinitions.length; index++)
+                    drillDownDefinitions.push(dynamicDrillDownDefinitions[index]);
+
+
+                function getDIDAccountRelationsDrillDownDefinition() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = "Subscribers";
+
+                    drillDownDefinition.directive = "retail-be-didaccountrelations-view";
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, didItem) {
+                        didItem.didAccountBERelationsGridAPI = directiveAPI;
+                        var payload = {
+                            didId: didItem.Entity.DIDId
+                        };
+                        return didItem.didAccountBERelationsGridAPI.load(payload);
+                    };
+
+                    return drillDownDefinition;
+                }
+
+                return drillDownDefinitions;
             }
 
             function defineMenuActions() {
