@@ -28,7 +28,6 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
             //API
             var gridAPI;
 
-
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.columns = [];
@@ -43,9 +42,13 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                     return getData();
                 };
 
-                $scope.getStatusColor = function (dataItem) {
+                $scope.scopeModel.getStatusColor = function (dataItem) {
                     return VR_GenericData_DataRecordNotificationTypeSettingsService.getStatusColor(dataItem.Entity.Status);
                 };
+
+                $scope.scopeModel.getAlertLevelStyleColor = function (dataItem) {
+                    return dataItem.AlertLevelStyle;
+                }
             }
             function defineAPI() {
                 var api = {};

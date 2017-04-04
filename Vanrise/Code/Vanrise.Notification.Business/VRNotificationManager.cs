@@ -5,6 +5,8 @@ using Vanrise.Notification.BP.Arguments;
 using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Notification.Business
 {
@@ -235,8 +237,23 @@ namespace Vanrise.Notification.Business
 
         VRNotificationDetail VRNotificationDetailMapper(VRNotification vrNotification)
         {
+            VRNotificationDetail vrNotificationDetail = new VRNotificationDetail();
+            vrNotificationDetail.Entity = vrNotification;
+
+            VRAlertLevel vrAlertLevel = new VRAlertLevelManager().GetAlertLevel(vrNotification.AlertLevelId);
+            vrAlertLevel.ThrowIfNull<VRAlertLevel>("vrAlertLevel", vrNotification.AlertLevelId);
+            vrAlertLevel.Settings.ThrowIfNull<VRAlertLevelSettings>("vrAlertLevel.Settings", vrNotification.AlertLevelId);
+            vrNotificationDetail.AlertLevelDescription = vrAlertLevel.Name;
+
+            StyleDefinition styleDefinition = new StyleDefinitionManager().GetStyleDefinition(vrAlertLevel.Settings.StyleDefinitionId);
+            styleDefinition.ThrowIfNull<StyleDefinition>("styleDefinition", styleDefinition.StyleDefinitionId);
+            styleDefinition.ThrowIfNull<StyleDefinition>("styleDefinition.StyleDefinitionSettings", styleDefinition.StyleDefinitionId);
+            vrNotificationDetail.AlertLevelStyle = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings;
+
             var vrNotificationTypeExtendedSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings(vrNotification.TypeId);
-            return vrNotificationTypeExtendedSettings.MapToNotificationDetail(new VRNotificationTypeMapToDetailContext { VRNotification = vrNotification });
+            vrNotificationDetail.VRNotificationEventPayload = vrNotificationTypeExtendedSettings.GetNotificationDetailEventPayload(new VRNotificationTypeGetNotificationEventPayloadContext { VRNotification = vrNotification });
+
+            return vrNotificationDetail;
         }
 
         #endregion

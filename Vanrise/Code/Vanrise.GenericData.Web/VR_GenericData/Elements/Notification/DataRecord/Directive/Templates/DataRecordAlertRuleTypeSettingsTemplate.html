@@ -18,11 +18,9 @@
         </vr-columns>
     </vr-row>
     <vr-row ng-show="scopeModel.selectedDataRecordType != undefined">
-        <vr-span>
-            <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
-                                                              vr-loader="scopeModel.isNotificationTypeSettingsSelectorLoading"
-                                                              isrequired="true" normal-col-num="6">
-            </vr-notification-notificationtypesetting-selector>
-        </vr-span>
+        <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
+                                                          isloading="scopeModel.isNotificationTypeSettingsSelectorLoading"
+                                                          isrequired="true" normal-col-num="6">
+        </vr-notification-notificationtypesetting-selector>
     </vr-row>
 </vr-tab>

@@ -15,7 +15,7 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
                 hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '=',
-                vrLoader: '='
+                isloading: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -107,7 +107,7 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
             var haschildcolumns = attrs.haschildcolumns != undefined ? " haschildcolumns " : "";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >'
-                        + '<span vr-loader="ctrl.vrLoader">'
+                        + '<span vr-loader="ctrl.isloading">'
                             + '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
                                 + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label
                                 + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate" '

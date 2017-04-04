@@ -12,6 +12,9 @@
         var notificationTypeSettingsSelectorAPI;
         var notificationTypeSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var notificationAlertlevelSelectorAPI;
+        var notificationAlertlevelSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var notificationStatusSelectorAPI;
         var notificationStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -40,6 +43,10 @@
                 notificationTypeSettingsSelectorAPI = api;
                 notificationTypeSettingsSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.onVRNotificationAlertlevelSelectorReady = function (api) {
+                notificationAlertlevelSelectorAPI = api;
+                notificationAlertlevelSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onNotificationStatusSelectorReady = function (api) {
                 notificationStatusSelectorAPI = api;
                 notificationStatusSelectorReadyDeferred.resolve();
@@ -59,34 +66,41 @@
                     $scope.scopeModel.isNotificationTypeSettingSelected = true;
                     notificationTypeId = selectedItem.Id;
 
+                    loadNotificationAlertlevelSelector();
                     loadSearchDirective();
                     loadBodyDirective();
 
-                    function loadSearchDirective() {
-                        var searchDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    function loadNotificationAlertlevelSelector() {
+                        notificationAlertlevelSelectorReadyDeferred.promise.then(function () {
 
+                            var notificationAlertlevelSelectorPayload = {
+                                filter: {
+                                    VRNotificationTypeId: notificationTypeId
+                                }
+                            };
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isAlertLevelSelectorLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, notificationAlertlevelSelectorAPI, notificationAlertlevelSelectorPayload, setLoader, undefined);
+                        });
+                    }
+                    function loadSearchDirective() {
                         searchDirectiveAPIReadyDeferred.promise.then(function () {
                             var searchDirectivePayload = {
                                 notificationTypeId: notificationTypeId,
                                 context: buildSearchEditorContext()
                             };
-                            VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, searchDirectivePayload, searchDirectiveLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(searchDirectiveAPI, searchDirectivePayload, undefined);
                         });
-
-                        return searchDirectiveLoadDeferred.promise;
                     }
                     function loadBodyDirective() {
-                        var bodyDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
                         bodyDirectiveAPIReadyDeferred.promise.then(function () {
                             var bodyDirectivePayload = {
                                 notificationTypeId: notificationTypeId,
                                 query: buildBodyDirectiveQuery()
                             };
-                            VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, bodyDirectivePayload, bodyDirectiveLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(bodyDirectiveAPI, bodyDirectivePayload, undefined);
                         });
-
-                        return bodyDirectiveLoadDeferred.promise;
                     }
                 }
             };
@@ -158,9 +172,9 @@
 
         function buildBodyDirectiveQuery() {
             return {
+                AlertLevelIds: notificationAlertlevelSelectorAPI.getSelectedIds(),
                 Description: $scope.scopeModel.description,
-                StatusIds: notificationStatusSelectorAPI.getSelectedIds(),
-                AlertLevelIds: undefined
+                StatusIds: notificationStatusSelectorAPI.getSelectedIds()
             };
         }
     }

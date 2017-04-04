@@ -23,8 +23,8 @@ namespace Vanrise.GenericData.Notification
                     throw new NullReferenceException(string.Format("dataRecordField of DataRecordTypeId: {0} and FieldName: {1}", dataRecordTypeId, gridColumnDefinition.FieldName));
 
                 FieldTypeGetGridColumnAttributeContext context = new FieldTypeGetGridColumnAttributeContext();
-                context.ValueFieldPath = "FieldValues." + gridColumnDefinition.FieldName + ".Value";
-                context.DescriptionFieldPath = "FieldValues." + gridColumnDefinition.FieldName + ".Description";
+                context.ValueFieldPath = "VRNotificationEventPayload.FieldValues." + gridColumnDefinition.FieldName + ".Value";
+                context.DescriptionFieldPath = "VRNotificationEventPayload.FieldValues." + gridColumnDefinition.FieldName + ".Description";
 
                 DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute()
                 {

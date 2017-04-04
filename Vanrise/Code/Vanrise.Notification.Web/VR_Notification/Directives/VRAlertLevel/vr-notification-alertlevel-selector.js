@@ -15,7 +15,8 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
                 isrequired: '=',
                 hideremoveicon: '@',
                 normalColNum: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isloading: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -98,10 +99,12 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                   '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRAlertLevelId" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                   '</vr-select>' +
+                     '<span vr-loader="ctrl.isloading">' +
+                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRAlertLevelId" isrequired="ctrl.isrequired" label="' + label +
+                           '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
+                           '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '</vr-select>' +
+                     '</span>' +
                    '</vr-columns>';
         }
 

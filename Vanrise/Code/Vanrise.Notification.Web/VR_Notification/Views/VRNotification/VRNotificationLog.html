@@ -11,12 +11,13 @@
         </vr-row>
 
         <vr-row removeline>
-            <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady"
-                                                              selectedvalues="scopeModel.selectedNotificationType"
-                                                              onselectionchanged="scopeModel.onNotificationTypeSelectionChanged"
-                                                              normal-col-num="2" isrequired="true">
+            <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady" selectedvalues="scopeModel.selectedNotificationType"
+                                                              onselectionchanged="scopeModel.onNotificationTypeSelectionChanged" normal-col-num="2" isrequired="true">
             </vr-notification-notificationtypesetting-selector>
             <span ng-show="scopeModel.isNotificationTypeSettingSelected">
+                <vr-notification-alertlevel-selector on-ready="scopeModel.onVRNotificationAlertlevelSelectorReady" normal-col-num="2"
+                                                     isloading="scopeModel.isAlertLevelSelectorLoading" ismultipleselection>
+                </vr-notification-alertlevel-selector>
                 <vr-columns colnum="2">
                     <vr-textbox value="scopeModel.description" label="Description"></vr-textbox>
                 </vr-columns>

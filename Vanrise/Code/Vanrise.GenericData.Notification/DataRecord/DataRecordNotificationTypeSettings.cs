@@ -45,7 +45,7 @@ namespace Vanrise.GenericData.Notification
             return recordFilterManager.IsFilterGroupMatch(extendedQuery.FilterGroup, new DataRecordDictFilterGenericFieldMatchContext(dataRecordAlertRuleActionEventPayload.OutputRecords, this.DataRecordTypeId));
         }
 
-        public override VRNotificationDetail MapToNotificationDetail(IVRNotificationTypeMapToDetailContext context)
+        public override VRNotificationDetailEventPayload GetNotificationDetailEventPayload(IVRNotificationTypeGetNotificationEventPayloadContext context)
         {
             Dictionary<string, DataRecordFieldValue> fieldValues = new Dictionary<string, DataRecordFieldValue>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
@@ -75,13 +75,7 @@ namespace Vanrise.GenericData.Notification
                 fieldValues.Add(fieldName, dataRecordFieldValue);
             }
 
-            AlertRuleActionEventPayloadDetail alertRuleActionEventPayloadDetail = new AlertRuleActionEventPayloadDetail()
-            {
-                Entity = context.VRNotification,
-                FieldValues = fieldValues
-            };
-
-            return alertRuleActionEventPayloadDetail;
+            return new AlertRuleActionEventPayload() { FieldValues = fieldValues };
         }
 
         private DataRecordAlertRuleActionEventPayload GetDataRecordAlertRuleActionEventPayload(VRNotification vrNotification)
@@ -104,7 +98,7 @@ namespace Vanrise.GenericData.Notification
         public string Header { get; set; }
     }
 
-    public class AlertRuleActionEventPayloadDetail : VRNotificationDetail
+    public class AlertRuleActionEventPayload : VRNotificationDetailEventPayload
     {
         public Dictionary<string, DataRecordFieldValue> FieldValues { get; set; }
     }
