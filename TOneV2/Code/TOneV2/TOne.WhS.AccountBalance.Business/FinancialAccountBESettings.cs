@@ -15,7 +15,7 @@ namespace TOne.WhS.AccountBalance.Business
 
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("44EC183A-5FC9-447A-BB63-80237ED5F558"); }
         }
 
         public override string IdType
