@@ -14,7 +14,7 @@ using Vanrise.Invoice.Entities;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public  enum InvoiceType  { Customer = 0, Supplier = 1 }
-    public class CustomerInvoiceSettings : InvoiceSetting
+    public class CustomerInvoiceSettings : InvoiceSettings
     {
         public override Guid ConfigId
         {
