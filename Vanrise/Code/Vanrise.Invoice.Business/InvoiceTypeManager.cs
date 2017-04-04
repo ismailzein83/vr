@@ -25,7 +25,12 @@ namespace Vanrise.Invoice.Business
 
             return invoiceTypes.GetRecord(invoiceTypeId);
         }
-       
+       public InvoiceTypeExtendedSettings GetInvoiceTypeExtendedSettings(Guid invoiceTypeId)
+       {
+           var invoiceType = GetInvoiceType(invoiceTypeId);
+           invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+           return invoiceType.Settings.ExtendedSettings;
+       }
         public string GetInvoiceTypeName(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);

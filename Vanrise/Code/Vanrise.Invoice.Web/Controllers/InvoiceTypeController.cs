@@ -30,6 +30,12 @@ namespace Vanrise.Invoice.Web.Controllers
             return _manager.GetInvoiceTypeRuntime(invoiceTypeId);
         }
         [HttpGet]
+        [Route("GetInvoiceTypeExtendedSettings")]
+        public InvoiceTypeExtendedSettings GetInvoiceTypeExtendedSettings(Guid invoiceTypeId)
+        {
+            return _manager.GetInvoiceTypeExtendedSettings(invoiceTypeId);
+        }
+        [HttpGet]
         [Route("GetGeneratorInvoiceTypeRuntime")]
         public GeneratorInvoiceTypeRuntime GetGeneratorInvoiceTypeRuntime(Guid invoiceTypeId)
         {
