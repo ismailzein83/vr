@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
@@ -12,7 +9,12 @@ namespace Vanrise.GenericData.Business
 {
     public class BEParentChildRelationDefinitionManager
     {
+        #region Ctor/Properties
+
         static SecurityManager s_securityManager = new SecurityManager();
+
+        #endregion
+
         #region Public Methods
 
         public BEParentChildRelationDefinition GetBEParentChildRelationDefinition(Guid beParentChildRelationDefinitionId)
