@@ -90,11 +90,10 @@ namespace TOne.WhS.DBSync.Business
         }
         SourceRule BuildSourceRule(IEnumerable<SourceRouteOptionBlockRule> rules)
         {
-            List<long> lstZoneIds = null;
+            List<long> lstZoneIds = new List<long>();
             SourceRouteOptionBlockRule sourceRule = rules.First();
             if (sourceRule.SupplierZoneId.HasValue)
             {
-                lstZoneIds = new List<long>();
                 foreach (var rule in rules)
                     if (!_allSupplierZones.ContainsKey(rule.SupplierZoneId.ToString()))
                         this.TotalRowsFailed++;
@@ -102,7 +101,7 @@ namespace TOne.WhS.DBSync.Business
                         lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
             }
             var settings = GetRouteOptionRuleSettings(rules, sourceRule, lstZoneIds);
-            if (settings == null)
+            if (settings == null || (lstZoneIds.Count == 0 && sourceRule.SupplierZoneId.HasValue))
                 return null;
 
             return new SourceRule

@@ -175,8 +175,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     else
                         zoneIds.Add(_allSaleZones[zoneId.ToString()].SaleZoneId);
                 }
-
-
+                if (zoneIds.Count == 0)
+                    return null;
                 settings.Criteria.SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = zoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId };
 
             }

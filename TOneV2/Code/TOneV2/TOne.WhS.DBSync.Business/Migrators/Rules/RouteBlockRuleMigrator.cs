@@ -105,7 +105,7 @@ namespace TOne.WhS.DBSync.Business
                     lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
 
             var ruleDetails = GetRuleDetailsFromZone(rules, sourceRule, lstZoneIds);
-            if (ruleDetails == null)
+            if (ruleDetails == null || lstZoneIds.Count == 0)
                 return null;
             else
             {

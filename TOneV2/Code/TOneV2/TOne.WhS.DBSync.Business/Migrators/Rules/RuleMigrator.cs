@@ -23,12 +23,13 @@ namespace TOne.WhS.DBSync.Business
         RuleBaseMigrator _rulesBaseMigrator;
         CurrencySettingData _currencySettingData;
         internal static DateTime s_defaultRuleBED = DateTime.Parse("2000-01-01");
+
         public RuleMigrator(MigrationContext context)
             : base(context)
         {
 
             _dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
-
+            TableName = "Rules";
             SettingManager settingManager = new SettingManager();
             var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
             _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;

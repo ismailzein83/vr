@@ -31,7 +31,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             + " delete from [TOneWhS_SPL].[SupplierZoneRate_Preview] "
             + " delete from [TOneWhS_BE].[CP_SaleCode_Changed] "
             + " delete from [TOneWhS_BE].[CP_SaleCode_New] "
-            + " delete from [TOneWhS_BE].[CP_SalePriceList_New] "
+            + " delete from [TOneWhS_BE].[SalePriceList_New] "
             + " delete from [TOneWhS_BE].[CP_SaleRate_Changed] "
             + " delete from [TOneWhS_BE].[CP_SaleRate_New] "
             + " delete from [TOneWhS_BE].[CP_SaleZone_Changed] "
