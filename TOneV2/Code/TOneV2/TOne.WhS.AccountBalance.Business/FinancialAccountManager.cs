@@ -427,27 +427,31 @@ namespace TOne.WhS.AccountBalance.Business
         }
         Dictionary<Guid, List<FinancialAccount>> GetCachedFinancialAccountsByAccBalTypeId()
         {
-            var financialAccountsByType = new Dictionary<Guid, List<FinancialAccount>>();
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsByAccBalTypeId",
+                 () =>
+                 {
+                     var financialAccountsByType = new Dictionary<Guid, List<FinancialAccount>>();
 
-            Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
+                     Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
 
-            if (cachedFinancialAccounts != null)
-            {
-                foreach (FinancialAccount financialAccount in cachedFinancialAccounts.Values)
-                {
-                    List<FinancialAccount> financialAccounts;
+                     if (cachedFinancialAccounts != null)
+                     {
+                         foreach (FinancialAccount financialAccount in cachedFinancialAccounts.Values)
+                         {
+                             List<FinancialAccount> financialAccounts;
 
-                    if (!financialAccountsByType.TryGetValue(financialAccount.Settings.AccountTypeId, out financialAccounts))
-                    {
-                        financialAccounts = new List<FinancialAccount>();
-                        financialAccountsByType.Add(financialAccount.Settings.AccountTypeId, financialAccounts);
-                    }
+                             if (!financialAccountsByType.TryGetValue(financialAccount.Settings.AccountTypeId, out financialAccounts))
+                             {
+                                 financialAccounts = new List<FinancialAccount>();
+                                 financialAccountsByType.Add(financialAccount.Settings.AccountTypeId, financialAccounts);
+                             }
 
-                    financialAccounts.Add(financialAccount);
-                }
-            }
+                             financialAccounts.Add(financialAccount);
+                         }
+                     }
 
-            return financialAccountsByType;
+                     return financialAccountsByType;
+                 });
         }
         Dictionary<int, CarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
         {
