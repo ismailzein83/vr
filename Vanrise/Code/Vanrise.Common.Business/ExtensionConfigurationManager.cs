@@ -21,13 +21,6 @@ namespace Vanrise.Common.Business
             return extensionConfigurations;
         }
 
-        public string GetExtensionConfigurationName(Guid componentTypeConfigId)
-        {
-            var extensionConfig = GetExtensionConfiguration<VRComponentTypeConfig>(componentTypeConfigId, VRComponentTypeConfig.EXTENSION_TYPE);
-            if(extensionConfig!=null)
-               return extensionConfig.Name;
-        return null;
-        }
         public IEnumerable<T> GetExtensionConfigurations<T>(string type) where T : ExtensionConfiguration
         {
             var extensionConfigurations = GetCachedExtensionConfigurations<T>(type);
@@ -44,7 +37,11 @@ namespace Vanrise.Common.Business
             return extensionConfigurations.Values.FirstOrDefault(x=>x.Name==name);
         }
 
-
+        public string GetExtensionConfigurationTitle<T>(Guid extensionConfigId, string type) where T : ExtensionConfiguration
+        {
+            var extensionConfig = GetExtensionConfiguration<T>(extensionConfigId, type) ;
+            return extensionConfig != null? extensionConfig.Title: null;
+        }
         public T GetExtensionConfiguration<T>(Guid extensionConfigId, string type) where T : ExtensionConfiguration
         {
             return GetCachedExtensionConfigurations<T>(type).GetRecord(extensionConfigId);
