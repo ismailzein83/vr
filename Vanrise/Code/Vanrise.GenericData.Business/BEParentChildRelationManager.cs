@@ -220,7 +220,7 @@ namespace Vanrise.GenericData.Business
                         beParentChildRelations.Add(itm);
                     }
 
-                    return beParentChildRelationsByParentId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(x => x.BED));
+                    return beParentChildRelationsByParentId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(x => x.BED).ThenByDescending(x => x.EED.HasValue ? x.EED.Value : DateTime.MaxValue));
                 });
         }
 
@@ -239,7 +239,7 @@ namespace Vanrise.GenericData.Business
                         beParentChildRelations.Add(itm);
                     }
 
-                    return beParentChildRelationsByChildId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(x => x.BED));
+                    return beParentChildRelationsByChildId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(x => x.BED).ThenByDescending(x => x.EED.HasValue ? x.EED.Value : DateTime.MaxValue));
                 });
         }
 

@@ -8,7 +8,8 @@
         return {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                onEdit: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,6 +33,7 @@
                 $scope.scopeModel.ParentBENameHeaderText = "";
                 $scope.scopeModel.ChildBENameHeaderText = "";
                 $scope.scopeModel.dataSource = [];
+                $scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -80,14 +82,15 @@
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions.push([{
+                $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editBEParentChildRelation
-                }]);
+                });
             }
             function editBEParentChildRelation(beParentChildRelationItem) {
                 var onBEParentChildRelationUpdated = function (beParentChildRelationItem) {
                     gridAPI.itemUpdated(beParentChildRelationItem);
+                    onEditParentChildRelation();
                 };
 
                 VR_GenericData_BEParentChildRelationService.editBEParentChildRelation(onBEParentChildRelationUpdated, beParentChildRelationItem.Entity.BEParentChildRelationId, beParentChildRelationDefinitionId,
@@ -103,6 +106,11 @@
 
             function buildGridQuery(payload) {
                 return payload;
+            }
+
+            function onEditParentChildRelation() {
+                if (ctrl.onEdit != undefined && typeof (ctrl.onEdit) == 'function')
+                    ctrl.onEdit();
             }
         }
     }
