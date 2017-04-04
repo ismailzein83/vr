@@ -242,6 +242,6 @@
         }
     }
 
-    appControllers.controller('VR_AccountBalance_FinancialAccountEditorController', financialAccountEditorController);
+    appControllers.controller('WhS_AccountBalance_FinancialAccountEditorController', financialAccountEditorController);
 
 })(appControllers);

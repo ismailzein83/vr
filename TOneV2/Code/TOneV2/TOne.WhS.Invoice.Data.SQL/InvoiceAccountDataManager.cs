@@ -18,7 +18,7 @@ namespace TOne.WhS.Invoice.Data.SQL
         }
         public List<InvoiceAccount> GetInvoiceAccounts()
         {
-            return GetItemsSP("[TOneWhS_AccBalance].[sp_CarrierInvoiceAccount_GetAll]", InvoiceAccountMapper);
+            return GetItemsSP("[TOneWhS_Invoice].[sp_CarrierInvoiceAccount_GetAll]", InvoiceAccountMapper);
         }
 
         public bool Update(InvoiceAccount InvoiceAccount)
@@ -26,7 +26,7 @@ namespace TOne.WhS.Invoice.Data.SQL
             string serializedSettings = null;
             if (InvoiceAccount.Settings != null)
                 serializedSettings = Vanrise.Common.Serializer.Serialize(InvoiceAccount.Settings);
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_AccBalance].[sp_CarrierInvoiceAccount_Update]", InvoiceAccount.InvoiceAccountId, InvoiceAccount.CarrierProfileId, InvoiceAccount.CarrierAccountId, serializedSettings,InvoiceAccount.BED, InvoiceAccount.EED);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_Invoice].[sp_CarrierInvoiceAccount_Update]", InvoiceAccount.InvoiceAccountId, InvoiceAccount.CarrierProfileId, InvoiceAccount.CarrierAccountId, serializedSettings, InvoiceAccount.BED, InvoiceAccount.EED);
             return (recordsEffected > 0);
         }
 
@@ -38,14 +38,14 @@ namespace TOne.WhS.Invoice.Data.SQL
             if (InvoiceAccount.Settings != null)
                 serializedSettings = Vanrise.Common.Serializer.Serialize(InvoiceAccount.Settings);
 
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_AccBalance].[sp_CarrierInvoiceAccount_Insert]", out InvoiceAccountId, InvoiceAccount.CarrierProfileId, InvoiceAccount.CarrierAccountId, serializedSettings, InvoiceAccount.BED, InvoiceAccount.EED);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_Invoice].[sp_CarrierInvoiceAccount_Insert]", out InvoiceAccountId, InvoiceAccount.CarrierProfileId, InvoiceAccount.CarrierAccountId, serializedSettings, InvoiceAccount.BED, InvoiceAccount.EED);
             insertedId = (int)InvoiceAccountId;
             return (recordsEffected > 0);
         }
 
         public bool AreInvoiceAccountsUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("[TOneWhS_AccBalance].[CarrierInvoiceAccount]", ref updateHandle);
+            return base.IsDataUpdated("[TOneWhS_Invoice].[CarrierInvoiceAccount]", ref updateHandle);
         }
 
 

@@ -10,6 +10,7 @@ using TOne.WhS.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Invoice.Business;
+using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business
 {
@@ -164,8 +165,205 @@ namespace TOne.WhS.Invoice.Business
         {
             throw new NotImplementedException();
         }
+        public InvoiceAccountEditorRuntime GetInvoiceAccountEditorRuntime(int invoiceAccountId)
+        {
+            var allInvoiceAccounts = GetCachedInvoiceAccounts();
+            var invoiceAccount = allInvoiceAccounts.GetRecord(invoiceAccountId);
+            return new InvoiceAccountEditorRuntime
+            {
+                InvoiceAccount = invoiceAccount,
+            };
+        }
+
+        public IEnumerable<InvoiceAccount> GetInvoiceAccountsByCarrierAccountId(int carrierAccountId)
+        {
+            var invoiceAccounts = GetCachedInvoiceAccounts();
+            return invoiceAccounts.Values.FindAllRecords(x => x.CarrierAccountId.HasValue && x.CarrierAccountId.Value == carrierAccountId);
+        }
+        public IEnumerable<InvoiceAccount> GetCarrierProfileInvoiceAccounts(int carrierProfileId)
+        {
+            var invoiceAccounts = GetCachedInvoiceAccounts();
+            return invoiceAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
+        }
+
+        #region LoadInvoiceValidationData
+        public InvoiceValidationData LoadInvoiceValidationData(int? carrierProfileId, int? carrierAccountId, int invoiceAccountId)
+        {
+
+            InvoiceValidationData invoiceValidationData = new InvoiceValidationData();
+
+            InvoiceAccountManager invoiceAccountManager = new InvoiceAccountManager();
+            invoiceValidationData.InvoiceTypes = new InvoiceTypeManager().GetInvoiceTypes();
 
 
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            int carrierProfileID = -1;
+            if (carrierAccountId.HasValue)
+            {
+                var carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
+                carrierProfileID = carrierAccount.CarrierProfileId;
+
+                invoiceValidationData.InvoiceCarrierAccount = new InvoiceCarrierAccount
+                {
+                    CarrierAccount = carrierAccount
+                };
+                var carrierInvoiceAccounts = GetInvoiceAccountsByCarrierAccountId(carrierAccountId.Value);
+                invoiceValidationData.InvoiceCarrierAccount.InvoiceAccounts = LoadInvoiceAccountsForCarrierAccount(carrierAccountId.Value, invoiceValidationData.InvoiceTypes, invoiceAccountId);
+            }
+            else if (carrierProfileId.HasValue)
+            {
+                carrierProfileID = carrierProfileId.Value;
+
+                var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId.Value, true, true);
+                invoiceValidationData.InvoiceCarrierProfile = new InvoiceCarrierProfile
+                {
+                    ProfileCarrierAccounts = profileCarrierAccounts,
+                    InvoiceAccountsByAccount = new Dictionary<int, IEnumerable<InvoiceAccountData>>(),
+                };
+                foreach (var carrierAccount in profileCarrierAccounts)
+                {
+                    var invoiceAccounts = LoadInvoiceAccountsForCarrierAccount(carrierAccount.CarrierAccountId, invoiceValidationData.InvoiceTypes, invoiceAccountId);
+                    if (invoiceAccounts != null && invoiceAccounts.Count() > 0)
+                    {
+                        invoiceValidationData.InvoiceCarrierProfile.InvoiceAccountsByAccount.Add(carrierAccount.CarrierAccountId, invoiceAccounts);
+                    }
+                }
+            }
+            invoiceValidationData.ProfileInvoiceAccounts = LoadProfileInvoiceAccounts(carrierProfileID, invoiceValidationData.InvoiceTypes, invoiceAccountId);
+            return invoiceValidationData;
+        }
+        #endregion
+
+        public bool CheckInvoiceCarrierAccountValidation(Guid invoiceTypeId, InvoiceSettings invoiceSettings, CarrierAccount carrierAccount, IEnumerable<InvoiceAccountData> profileinvoiceAccounts, IEnumerable<InvoiceAccountData> carrierInvoiceAccounts, bool isEditMode)
+        {
+            if (carrierAccount.IsDeleted || carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                return false;
+
+            Func<InvoiceAccountData, bool> filterExpression = GetInvoiceAccountFilterExpression(invoiceTypeId, carrierAccount.AccountType, invoiceSettings, isEditMode);
+
+            switch (carrierAccount.AccountType)
+            {
+                case BusinessEntity.Entities.CarrierAccountType.Customer:
+                    if (!CheckApplicableInvoiceTypes(invoiceSettings, true, false))
+                        return false;
+                    break;
+                case BusinessEntity.Entities.CarrierAccountType.Supplier:
+                    if (!CheckApplicableInvoiceTypes(invoiceSettings, false, true))
+                        return false;
+                    break;
+                case BusinessEntity.Entities.CarrierAccountType.Exchange:
+                    if (CheckApplicableInvoiceTypes(invoiceSettings, false, false))
+                        return false;
+                    break;
+            }
+            if (carrierInvoiceAccounts.Any(x => !isEditMode && x.InvoiceAccount.Settings.InvoiceTypeId == invoiceTypeId && !x.InvoiceAccount.EED.HasValue))
+                return false;
+            if (carrierInvoiceAccounts.Any(x => !filterExpression(x)))
+                return false;
+            if (carrierInvoiceAccounts.Any(x => !filterExpression(x)))
+                return false;
+            return true;
+        }
+        public bool CheckInvoiceCarrierProfileValidation(Guid accountTypeId, InvoiceSettings invoiceSettings, IEnumerable<CarrierAccount> carrierAccounts, IEnumerable<InvoiceAccountData> profileInvoiceAccounts, Dictionary<int, IEnumerable<InvoiceAccountData>> invoiceAccountsByAccount, bool isEditMode)
+        {
+            bool hasCustomers = false;
+            bool hasSuppliers = false;
+            bool areCustomersActive = false;
+            bool areSuppliersActive = false;
+
+            foreach (var account in carrierAccounts)
+            {
+
+                if (account.AccountType == CarrierAccountType.Customer)
+                {
+                    hasCustomers = true;
+                    if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                        areCustomersActive = true;
+                }
+                else if (account.AccountType == CarrierAccountType.Supplier)
+                {
+                    hasSuppliers = true;
+                    if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                        areSuppliersActive = true;
+                }
+                else if (account.AccountType == CarrierAccountType.Exchange)
+                {
+                    hasSuppliers = true;
+                    hasCustomers = true;
+                    if (!account.IsDeleted && account.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    {
+                        areCustomersActive = true;
+                        areSuppliersActive = true;
+                    }
+
+                }
+            }
+            Func<InvoiceAccountData, bool> filterExpression = null;
+            if (CheckApplicableInvoiceTypes(invoiceSettings, true, false))
+            {
+                if (!areCustomersActive)
+                    return false;
+
+                if (!hasCustomers)
+                    return false;
+
+                filterExpression = GetInvoiceAccountFilterExpression(accountTypeId, CarrierAccountType.Customer, invoiceSettings, isEditMode);
+
+            }
+            else if (CheckApplicableInvoiceTypes(invoiceSettings, false, true))
+            {
+                if (!areSuppliersActive)
+                    return false;
+                if (!hasSuppliers)
+                    return false;
+                filterExpression = GetInvoiceAccountFilterExpression(accountTypeId, CarrierAccountType.Supplier, invoiceSettings, isEditMode);
+            }
+            else if (!CheckApplicableInvoiceTypes(invoiceSettings, false, false))
+            {
+                if (!areCustomersActive || !areSuppliersActive)
+                    return false;
+                if (!hasCustomers || !hasSuppliers)
+                {
+                    return false;
+                }
+                filterExpression = GetInvoiceAccountFilterExpression(accountTypeId, CarrierAccountType.Exchange, invoiceSettings, isEditMode);
+            }
+
+
+            if (profileInvoiceAccounts.Any(x => !filterExpression(x)))
+                return false;
+
+            if (invoiceAccountsByAccount.Values.Any(x => x.Any(y => !filterExpression(y))))
+                return false;
+
+            return true;
+        }
+        public bool CheckCarrierAllowAddInvoiceAccounts(int? carrierProfileId, int? carrierAccountId)
+        {
+            InvoiceValidationData invoiceValidationData = LoadInvoiceValidationData(carrierProfileId, carrierAccountId, 0);
+            Func<InvoiceType, bool> filterExpression = (invoiceType) =>
+            {
+                var invoiceSettings = invoiceType.Settings.ExtendedSettings as InvoiceSettings;
+                if (invoiceSettings == null)
+                    return false;
+                if (!CheckInvoiceTypeSettingsActivationForCarrier(invoiceSettings, carrierAccountId, carrierProfileId))
+                    return false;
+                if (carrierProfileId.HasValue)
+                {
+                    if (!CheckInvoiceCarrierProfileValidation(invoiceType.InvoiceTypeId, invoiceSettings, invoiceValidationData.InvoiceCarrierProfile.ProfileCarrierAccounts, invoiceValidationData.ProfileInvoiceAccounts, invoiceValidationData.InvoiceCarrierProfile.InvoiceAccountsByAccount, false))
+                        return false;
+                }
+                else
+                {
+
+                    if (!CheckInvoiceCarrierAccountValidation(invoiceType.InvoiceTypeId, invoiceSettings, invoiceValidationData.InvoiceCarrierAccount.CarrierAccount, invoiceValidationData.ProfileInvoiceAccounts, invoiceValidationData.InvoiceCarrierAccount.InvoiceAccounts, false))
+                        return false;
+                }
+                return true;
+            };
+            var applicableInvoiceAccountTypes = invoiceValidationData.InvoiceTypes.FindAllRecords(filterExpression);
+            return applicableInvoiceAccountTypes.Count() > 0;
+        }
 
         public IEnumerable<InvoiceAccountInfo> GetInvoiceAccountsInfo(InvoiceAccountInfoFilter filter)
         {
@@ -340,7 +538,7 @@ namespace TOne.WhS.Invoice.Business
                         continue;
 
                     if (!invoiceAccount.CarrierAccountId.HasValue && !invoiceAccount.CarrierProfileId.HasValue)
-                        throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for financial Account Id: {0}", invoiceAccount.InvoiceAccountId));
+                        throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
 
                     if (invoiceAccount.CarrierAccountId.HasValue)
                     {
@@ -392,7 +590,7 @@ namespace TOne.WhS.Invoice.Business
                       continue;
 
                   if (!invoiceAccount.CarrierAccountId.HasValue && !invoiceAccount.CarrierProfileId.HasValue)
-                      throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for financial Account Id: {0}", invoiceAccount.InvoiceAccountId));
+                      throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
 
                   if (invoiceAccount.CarrierAccountId.HasValue)
                   {
@@ -422,16 +620,6 @@ namespace TOne.WhS.Invoice.Business
                 BED = invoiceAccount.BED,
                 EED = invoiceAccount.EED,
             };
-        }
-        private bool CheckIsAllowToAddInvoiceAccount(InvoiceAccount invoiceAccount, bool isEditMode, out string message)
-        {
-            message = null;
-            if (!CheckInvoiceAccountActivation(invoiceAccount))
-            {
-                message = "Financial account is inactive.";
-                return false;
-            }
-            return true;
         }
 
         #endregion
@@ -492,24 +680,41 @@ namespace TOne.WhS.Invoice.Business
                 IsActive = CheckInvoiceAccountActivation(InvoiceAccount)
             };
         }
-        private bool CheckInvoiceAccountActivation(InvoiceAccount invoiceAccount)
+
+
+
+        #region Private Validation Methods
+        private bool CheckIsAllowToAddInvoiceAccount(InvoiceAccount invoiceAccount, bool isEditMode, out string message)
         {
-            return CheckActivationForCarrier(invoiceAccount.CarrierAccountId, invoiceAccount.CarrierProfileId);
-        }
-        private bool CheckActivationForCarrier(int? carrierAccountId, int? carrierProfileId)
-        {
-            var isActive = false;
-            if (carrierAccountId.HasValue)
+            message = null;
+            if (!CheckInvoiceAccountActivation(invoiceAccount))
             {
-                var carrierAccount = _carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
-                if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
-                    isActive = true;
+                message = "Invoice account is inactive.";
+                return false;
+            }
+            if (invoiceAccount.EED.HasValue && invoiceAccount.EED.Value < new DateTime())
+            {
+                message = "EED must not be less than today.";
+                return false;
+            }
+            InvoiceValidationData invoiceValidationData = LoadInvoiceValidationData(invoiceAccount.CarrierProfileId, invoiceAccount.CarrierAccountId, invoiceAccount.InvoiceAccountId);
+            var invoiceType = invoiceValidationData.InvoiceTypes.FirstOrDefault(x => x.InvoiceTypeId == invoiceAccount.Settings.InvoiceTypeId);
+            var invoiceSettings = invoiceType.Settings.ExtendedSettings as InvoiceSettings;
+            if (invoiceAccount.CarrierProfileId.HasValue)
+            {
+                if (!CheckInvoiceCarrierProfileValidation(invoiceType.InvoiceTypeId, invoiceSettings, invoiceValidationData.InvoiceCarrierProfile.ProfileCarrierAccounts, invoiceValidationData.ProfileInvoiceAccounts, invoiceValidationData.InvoiceCarrierProfile.InvoiceAccountsByAccount, isEditMode))
+                    return false;
             }
             else
             {
-               isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, true, true);
+                if (!CheckInvoiceCarrierAccountValidation(invoiceType.InvoiceTypeId, invoiceSettings, invoiceValidationData.InvoiceCarrierAccount.CarrierAccount, invoiceValidationData.ProfileInvoiceAccounts, invoiceValidationData.InvoiceCarrierAccount.InvoiceAccounts, isEditMode))
+                    return false;
+
             }
-            return isActive;
+            ValidateInvoiceAccount(invoiceAccount, invoiceValidationData, invoiceSettings, out message);
+            if (message != null)
+                return false;
+            return true;
         }
         private bool CheckProfileCarrierAccountsActivation(int carrierProfileId, bool isCustomer, bool isSupplier)
         {
@@ -523,7 +728,175 @@ namespace TOne.WhS.Invoice.Business
             }
             return false;
         }
+        private bool CheckInvoiceAccountActivation(InvoiceAccount invoiceAccount)
+        {
+            var invoiceSettings = new InvoiceTypeManager().GetInvoiceTypeExtendedSettings(invoiceAccount.Settings.InvoiceTypeId) as InvoiceSettings;
+            return CheckInvoiceTypeSettingsActivationForCarrier(invoiceSettings, invoiceAccount.CarrierAccountId, invoiceAccount.CarrierProfileId);
+        }
+        private bool CheckInvoiceTypeSettingsActivationForCarrier(InvoiceSettings invoiceSettings, int? carrierAccountId, int? carrierProfileId)
+        {
+            var isActive = false;
+            if (carrierAccountId.HasValue)
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
+                if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    isActive = true;
+            }
+            else
+            {
+                if (CheckApplicableInvoiceTypes(invoiceSettings, true, false))
+                {
+                    isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, true, false);
+                }
+                else if (CheckApplicableInvoiceTypes(invoiceSettings, false, true))
+                {
+                    isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, false, true);
+                }
+                else if (CheckApplicableInvoiceTypes(invoiceSettings, true, true))
+                {
+                    isActive = CheckProfileCarrierAccountsActivation(carrierProfileId.Value, true, true);
+                }
 
+            }
+            return isActive;
+        }
+        private bool ValidateInvoiceAccount(InvoiceAccount invoiceAccount, InvoiceValidationData invoiceValidationData, InvoiceSettings invoiceSettings, out string message)
+        {
+            bool result = true;
+            if (invoiceAccount.CarrierAccountId.HasValue)
+            {
+                ValidateInvoiceAccountforCarrierAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId, invoiceAccount.BED, invoiceAccount.EED, invoiceValidationData.InvoiceCarrierAccount.InvoiceAccounts, invoiceSettings, out message, out result);
+                if (result)
+                {
+                    CheckInvoiceAccountProfileOverlapping(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId, invoiceAccount.BED, invoiceAccount.EED, invoiceValidationData.ProfileInvoiceAccounts, invoiceSettings, out  message, out result);
+                }
+            }
+            else
+            {
+                ValidateInvoiceAccountforCarrierProfile(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId, invoiceAccount.BED, invoiceAccount.EED, invoiceValidationData.ProfileInvoiceAccounts, invoiceValidationData.InvoiceCarrierProfile.InvoiceAccountsByAccount, invoiceSettings, out  message, out result);
+            }
+            return result;
+        }
+        private void ValidateInvoiceAccountforCarrierProfile(Guid invoiceTypeId, int invoiceAccountId, DateTime bed, DateTime? eed, IEnumerable<InvoiceAccountData> profileInvoiceAccounts, Dictionary<int, IEnumerable<InvoiceAccountData>> invoiceAccountsByAccount, InvoiceSettings invoiceSettings, out string message, out bool result)
+        {
+            CheckInvoiceAccountProfileOverlapping(invoiceTypeId, invoiceAccountId, bed, eed, profileInvoiceAccounts, invoiceSettings, out message, out result);
+            if (!result)
+                return;
+            foreach (var carrierInvoiceAccounts in invoiceAccountsByAccount.Values)
+            {
+                ValidateInvoiceAccountforCarrierAccount(invoiceTypeId, invoiceAccountId, bed, eed, carrierInvoiceAccounts, invoiceSettings, out message, out result);
+                if (!result)
+                    return;
+            }
+        }
+        private bool CheckApplicableInvoiceTypes(InvoiceSettings invoiceSettings, bool isApplicableToCustomer, bool isApplicableToSupplier)
+        {
+            if (invoiceSettings.IsApplicableToSupplier == isApplicableToSupplier && invoiceSettings.IsApplicableToCustomer == isApplicableToCustomer)
+                return true;
+            return false;
+        }
+        private void CheckInvoiceAccountOverlaping(Guid invoiceTypeId, int invoiceAccountId, DateTime bed, DateTime? eed, IEnumerable<InvoiceAccountData> invoiceAccounts, InvoiceSettings invoiceSettings, out string message, out bool result)
+        {
+            foreach (var invoiceAccount in invoiceAccounts)
+            {
+                if (invoiceAccount.InvoiceAccount.InvoiceAccountId != invoiceAccountId && invoiceSettings.IsApplicableToCustomer == invoiceAccount.IsApplicableToCustomer && invoiceSettings.IsApplicableToSupplier == invoiceAccount.IsApplicableToSupplier)
+                {
+                    if (eed.VRGreaterThan(invoiceAccount.InvoiceAccount.BED) && invoiceAccount.InvoiceAccount.EED.VRGreaterThan(bed))
+                    {
+                        message = string.Format("Invoice account must not overlap.");
+                        result = false;
+                        return;
+                    }
+                }
+            }
+            message = null;
+            result = true;
+        }
+        private void CheckInvoiceAccountProfileOverlapping(Guid invoiceTypeId, int invoiceAccountId, DateTime bed, DateTime? eed, IEnumerable<InvoiceAccountData> invoiceCarrierProfiles, InvoiceSettings invoiceSettings, out string message, out bool result)
+        {
+            CheckInvoiceAccountOverlaping(invoiceTypeId, invoiceAccountId, bed, eed, invoiceCarrierProfiles, invoiceSettings, out message, out result);
+        }
+        private void ValidateInvoiceAccountforCarrierAccount(Guid invoiceTypeId, int invoiceAccountId, DateTime bed, DateTime? eed, IEnumerable<InvoiceAccountData> carrierInvoiceAccounts, InvoiceSettings invoiceSettings, out string message, out bool result)
+        {
+            CheckInvoiceAccountOverlaping(invoiceTypeId, invoiceAccountId, bed, eed, carrierInvoiceAccounts, invoiceSettings, out message, out result);
+        }
+        private Func<InvoiceAccountData, bool> GetInvoiceAccountFilterExpression(Guid invoiceTypeId, CarrierAccountType carrierAccountType, InvoiceSettings invoiceSettings, bool isEditMode)
+        {
+            Func<InvoiceAccountData, bool> filterExpression = (invoiceAccountData) =>
+            {
+                if (!isEditMode && invoiceAccountData.InvoiceAccount.Settings.InvoiceTypeId == invoiceTypeId && !invoiceAccountData.InvoiceAccount.EED.HasValue)
+                    return false;
+
+                switch (carrierAccountType)
+                {
+                    case BusinessEntity.Entities.CarrierAccountType.Customer:
+                        if (!isEditMode && !invoiceAccountData.InvoiceAccount.EED.HasValue && invoiceSettings.IsApplicableToCustomer == invoiceAccountData.IsApplicableToCustomer)
+                            return false;
+                        break;
+                    case BusinessEntity.Entities.CarrierAccountType.Supplier:
+                        if (!isEditMode && !invoiceAccountData.InvoiceAccount.EED.HasValue && invoiceSettings.IsApplicableToSupplier == invoiceAccountData.IsApplicableToSupplier)
+                            return false;
+                        break;
+                    case BusinessEntity.Entities.CarrierAccountType.Exchange:
+                        if (!isEditMode && !invoiceAccountData.InvoiceAccount.EED.HasValue && (invoiceSettings.IsApplicableToSupplier == invoiceAccountData.IsApplicableToSupplier || invoiceSettings.IsApplicableToCustomer == invoiceAccountData.IsApplicableToCustomer))
+                            return false;
+                        break;
+                }
+                return true;
+            };
+
+            return filterExpression;
+        }
+
+        #region LoadInvoiceValidationData
+        private List<InvoiceAccountData> LoadProfileInvoiceAccounts(int carrierProfileId, IEnumerable<InvoiceType> invoiceTypes, int invoiceAccountId)
+        {
+            var profileInvoiceAccounts = GetCarrierProfileInvoiceAccounts(carrierProfileId);
+            List<InvoiceAccountData> profileInvoiceAccountsData = new List<InvoiceAccountData>();
+            foreach (var profileInvoiceAccount in profileInvoiceAccounts)
+            {
+                if (profileInvoiceAccount.InvoiceAccountId != invoiceAccountId)
+                {
+                    var invoiceType = invoiceTypes.FindRecord(x => x.InvoiceTypeId == profileInvoiceAccount.Settings.InvoiceTypeId);
+                    InvoiceSettings invoiceSettings = invoiceType.Settings.ExtendedSettings as InvoiceSettings;
+                    profileInvoiceAccountsData.Add(new InvoiceAccountData
+                    {
+                        InvoiceAccount = profileInvoiceAccount,
+                        IsApplicableToSupplier = invoiceSettings.IsApplicableToSupplier,
+                        IsApplicableToCustomer = invoiceSettings.IsApplicableToCustomer
+                    });
+                }
+            }
+            return profileInvoiceAccountsData;
+        }
+        private List<InvoiceAccountData> LoadInvoiceAccountsForCarrierAccount(int carrierAccountId, IEnumerable<InvoiceType> invoiceTypes, int invoiceAccountId)
+        {
+            var invoiceAccounts = GetInvoiceAccountsByCarrierAccountId(carrierAccountId);
+            List<InvoiceAccountData> invoiceAccountsData = new List<InvoiceAccountData>();
+            foreach (var invoiceAccount in invoiceAccounts)
+            {
+                if (invoiceAccount.InvoiceAccountId != invoiceAccountId)
+                {
+                    var invoiceType = invoiceTypes.FindRecord(x => x.InvoiceTypeId == invoiceAccount.Settings.InvoiceTypeId);
+                    InvoiceSettings invoiceSettings = invoiceType.Settings.ExtendedSettings as InvoiceSettings;
+                    invoiceAccountsData.Add(new InvoiceAccountData
+                    {
+                        InvoiceAccount = invoiceAccount,
+                        IsApplicableToSupplier = invoiceSettings.IsApplicableToSupplier,
+                        IsApplicableToCustomer = invoiceSettings.IsApplicableToCustomer
+                    });
+                }
+
+            }
+            return invoiceAccountsData;
+        }
+
+        #endregion
+
+        #endregion
+
+
+       
         #endregion
     }
 }
