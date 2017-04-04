@@ -82,7 +82,7 @@ app.directive('retailBeDidGrid', ['VRNotificationService', 'Retail_BE_DIDAPIServ
                 function getDIDAccountRelationsDrillDownDefinition() {
                     var drillDownDefinition = {};
 
-                    drillDownDefinition.title = "Subscribers";
+                    drillDownDefinition.title = "Accounts";
 
                     drillDownDefinition.directive = "retail-be-didaccountrelations-view";
 
