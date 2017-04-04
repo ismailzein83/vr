@@ -125,8 +125,10 @@
                });
         }
         function setTitle() {
+            var relationName = beParentChildRelationDefinitionEntity.Name;
+
             $scope.title =
-                isEditMode ? UtilsService.buildTitleForUpdateEditor(beParentChildRelationEntity ? beParentChildRelationEntity.Name : undefined, 'BEParentChildRelation') : UtilsService.buildTitleForAddEditor('BEParentChildRelation');
+                isEditMode ? UtilsService.buildTitleForUpdateEditor(beParentChildRelationEntity ? beParentChildRelationEntity.Name : undefined, relationName) : UtilsService.buildTitleForAddEditor(relationName);
         }
         function loadStaticData() {
             if (beParentChildRelationEntity == undefined)
@@ -179,7 +181,7 @@
 
             return VR_GenericData_BEParentChildRelationAPIService.AddBEParentChildRelation(buildBEParentChildRelationObjFromScope())
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("BEParentChildRelation", response, "Name")) {
+                    if (VRNotificationService.notifyOnItemAdded(beParentChildRelationDefinitionEntity.Name, response, "Name")) {
                         if ($scope.onBEParentChildRelationAdded != undefined)
                             $scope.onBEParentChildRelationAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
@@ -195,7 +197,7 @@
 
             return VR_GenericData_BEParentChildRelationAPIService.UpdateBEParentChildRelation(buildBEParentChildRelationObjFromScope())
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("BEParentChildRelation", response, "Name")) {
+                    if (VRNotificationService.notifyOnItemUpdated(beParentChildRelationDefinitionEntity.Name, response, "Name")) {
                         if ($scope.onBEParentChildRelationUpdated != undefined)
                             $scope.onBEParentChildRelationUpdated(response.UpdatedObject);
 

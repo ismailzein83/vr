@@ -62,7 +62,7 @@ namespace Vanrise.GenericData.Business
 
             IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildRelationItem.RelationDefinitionId, beParentChildRelationItem.ChildBEId);
 
-            if (!IsOverlappedWith(beParentChildRelationItem, beParentChildRelations))
+            if (beParentChildRelationItem.BED != beParentChildRelationItem.EED && !IsOverlappedWith(beParentChildRelationItem, beParentChildRelations))
             {
                 IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
 
@@ -80,7 +80,7 @@ namespace Vanrise.GenericData.Business
             }
             else
             {
-                insertOperationOutput.Message = "Specified Interval overlap with another existing one";
+                insertOperationOutput.Message = "Specified Interval overlaps with another existing one";
             }
 
             return insertOperationOutput;
@@ -112,7 +112,7 @@ namespace Vanrise.GenericData.Business
             }
             else
             {
-                updateOperationOutput.Message = "Specified Interval overlap with another one";
+                updateOperationOutput.Message = "Specified Interval overlaps with another one";
             }
 
             return updateOperationOutput;
