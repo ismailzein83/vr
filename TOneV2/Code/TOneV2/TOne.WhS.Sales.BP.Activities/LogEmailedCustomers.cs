@@ -36,7 +36,7 @@ namespace TOne.WhS.Sales.BP.Activities
 				customerNames.Add(customerName);
 			}
 
-			string message = (customerNames.Count > 1) ? "Sale Pricelists have been emailed to Customers: {0}" : "Sale Pricelist has been emailed to Customer: {0}";
+			string message = (customerNames.Count > 1) ? "Sale Pricelists have been sent to Customers: {0}" : "Sale Pricelist has been sent to Customer: {0}";
 			context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, string.Join(",", customerNames));
 		}
 	}

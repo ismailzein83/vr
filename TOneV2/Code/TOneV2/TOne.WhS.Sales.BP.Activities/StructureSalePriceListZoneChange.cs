@@ -26,438 +26,627 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            #region Getting Arguments From Context
+
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             IEnumerable<DataByZone> dataByZones = DataByZone.Get(context);
             IEnumerable<CustomerCountryToAdd> customerCountriesToAdd = CustomerCountriesToAdd.Get(context);
-            IEnumerable<CustomerCountryToChange> customerCountriesToChange = CustomerCountriesToChange.Get(context);
+            IEnumerable<CustomerCountryToChange> customerCountriesToClose = CustomerCountriesToChange.Get(context);
             IEnumerable<SaleZone> saleZones = SaleZones.Get(context);
             IEnumerable<SaleRate> saleRates = SaleRates.Get(context);
-            DateTime minimumDateTime = MinimumDateTime.Get(context);
-            IEnumerable<CustomerPriceListChange> customerPriceListChanges;
+            DateTime minimumDate = MinimumDateTime.Get(context);
 
+            #endregion
+
+            Dictionary<int, List<DataByZone>> importedZonesByCountryId = this.StructureImportedZonesByCountryId(dataByZones);
+
+            List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate);
+
+            #region Getting Pricelist Changes
 
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
             {
+                #region Selling Product
+
                 var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
-                customerPriceListChanges = ManageSellingProductRateChange(dataByZones, dataByCustomer, futureRateLocator, minimumDateTime);
+                SellingProductChangesContext sellingProductContext = new SellingProductChangesContext()
+                {
+                    ImportedZonesByCountryId = importedZonesByCountryId,
+                    Customers = dataByCustomer,
+                    FutureLocator = futureRateLocator,
+                    MinimumDate = minimumDate
+                };
+
+                customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext);
+
+                #endregion
             }
             else
             {
-                Dictionary<long, List<SaleCode>> saleCodesByZoneId;
-                SaleEntityZoneRateLocator rateChangeLocator = null;
+                #region Customer
 
-                LocatorContext locatorContext = PrepareContext(saleRates, saleZones, customerCountriesToAdd, customerCountriesToChange, dataByZones);
+                #region Preparing Data for Processing
+
                 RoutingCustomerInfoDetails customerInfo = dataByCustomer.FirstOrDefault();
 
-                if (locatorContext.ZoneIds != null && locatorContext.ZoneIds.Any())
-                    rateChangeLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(locatorContext.SaleRates, customerInfo, locatorContext.ZoneIds, minimumDateTime, locatorContext.SaleZonesWithBED));
-                saleCodesByZoneId = GetSaleCodes(customerCountriesToAdd, customerCountriesToChange, locatorContext.SaleZonesByCountryId, minimumDateTime);
+                Dictionary<int, CustomerCountryToAdd> countriesToAddByCountryId = customerCountriesToAdd.ToDictionary(x => x.CountryId);
+                Dictionary<int, CustomerCountryToChange> countriesToCloseByCountryId = customerCountriesToClose.ToDictionary(x => x.CountryId);
+                StructuredRateActions structuredRateActions = this.GetRateActions(importedZonesByCountryId, countriesToAddByCountryId, countriesToCloseByCountryId);
 
-                InputContext inputContext = new InputContext
-                {
-                    CustomerCountriesToAdd = customerCountriesToAdd,
-                    CustomerCountriesToChange = customerCountriesToChange,
-                    CountryToAddByCountryId = locatorContext.CountryToAddByCountryId,
-                    CustomerInfo = customerInfo,
-                    DataByZones = dataByZones,
-                    ZonesByCountryId = locatorContext.SaleZonesByCountryId,
-                    SalecodesByZoneId = saleCodesByZoneId,
-                    RateChangeLocator = rateChangeLocator,
-                    MinimumDateTime = minimumDateTime
-                };
-                customerPriceListChanges = ManageCustomerRateChange(inputContext);
-            }
-            CustomerChange.Set(context, customerPriceListChanges);
-        }
+                Dictionary<int, List<SaleZone>> existingZonesByCountryId = this.StructureExistingZonesByCountryId(saleZones);
+                ExistingDataInfo existingDataInfo = this.BuildExistingDataInfo(structuredRateActions, customerCountriesToAdd, customerCountriesToClose, existingZonesByCountryId, saleRates);
 
-        #region Selling Product Changes
-        private List<CustomerPriceListChange> ManageSellingProductRateChange(IEnumerable<DataByZone> dataByZones, IEnumerable<RoutingCustomerInfoDetails> customers, SaleEntityZoneRateLocator locator, DateTime effectiveDate)
-        {
-            List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
-            foreach (var customer in customers)
-            {
-                List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
-                Dictionary<int, int> soldcountryIds = GroupByCountryId(customer.CustomerId, effectiveDate);
-                if (soldcountryIds == null) continue;
-                foreach (var zone in dataByZones)
+                CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange();
+                changesForThisCustomer.CustomerId = customerInfo.CustomerId;
+
+                #endregion
+
+                #region Preparing Rate Change Locator
+
+                SaleEntityZoneRateLocator rateChangeLocator = null;
+                if (customerCountriesToClose.Any() || structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any())
                 {
-                    if (!soldcountryIds.ContainsKey(zone.CountryId)) continue; // make sure that the country is sold to this customer
-                    SaleEntityZoneRate zoneRate = locator.GetCustomerZoneRate(customer.CustomerId, customer.SellingProductId, zone.ZoneId);
-                    if (zoneRate != null) continue; // customer has explicit rate
-                    AddSalePricelistRateChange(zone, rateChanges);
+                    List<long> zoneIds = new List<long>();
+                    zoneIds.AddRange(existingDataInfo.CountriesToCloseExistingZoneIds);
+                    zoneIds.AddRange(existingDataInfo.RateActionsExistingZoneIds);
+
+                    rateChangeLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(existingDataInfo.CustomerRates, customerInfo,
+                        zoneIds, minimumDate, existingDataInfo.ActionDatesByZoneId));
                 }
-                if (rateChanges.Any())
-                    customerPriceListChanges.Add(new CustomerPriceListChange
+
+                #endregion
+
+                #region Processing Countries Actions
+
+                #region Get Existing Sale Codes for Sold and Close Countries
+
+                Dictionary<long, List<SaleCode>> saleCodesByZoneId = null;
+                if(customerCountriesToAdd.Any() || customerCountriesToClose.Any())
+                {
+                    IEnumerable<SaleCode> existingSaleCodes = this.GetExistingSaleCodes(existingDataInfo, minimumDate);
+                    saleCodesByZoneId = this.StructureExistingSaleCodesByZoneId(existingSaleCodes);
+                }
+
+                #endregion
+
+                #region Get Changes from New Countries
+
+                if (customerCountriesToAdd.Any())
+                {
+                    CustomerNewCountriesChangesContext customerNewCountriesContext = new CustomerNewCountriesChangesContext()
                     {
-                        CustomerId = customer.CustomerId,
-                        RateChanges = rateChanges,
-                        CodeChanges = new List<SalePricelistCodeChange>()
-                    });
+                        CountriesToAdd = customerCountriesToAdd,
+                        CountriesToAddExistingZoneIds = existingDataInfo.CountriesToAddExistingZoneIds,
+                        CustomerInfo = customerInfo,
+                        MinimumDate = minimumDate,
+                        RatesToAddForNewCountriesbyCountryId = structuredRateActions.RatesToAddForNewCountriesbyCountryId,
+                        SaleCodesByZoneId = saleCodesByZoneId
+                    };
+
+                    this.GetChangesForNewCountries(customerNewCountriesContext);
+                    
+                    changesForThisCustomer.RateChanges.AddRange(customerNewCountriesContext.RateChangesOutArgument);
+                    changesForThisCustomer.CodeChanges.AddRange(customerNewCountriesContext.CodeChangesOutArgument);
+                }
+
+                #endregion
+
+                #region Get Changes from Closed Countries
+
+                if (customerCountriesToClose.Any())
+                {
+                    CustomerCountriesToCloseChangesContext customerCountriesToCloseContext = new CustomerCountriesToCloseChangesContext()
+                    {
+                        CountriesToClose = customerCountriesToClose,
+                        CountriesToCloseExistingZoneIds = existingDataInfo.CountriesToCloseExistingZoneIds,
+                        CustomerInfo = customerInfo,
+                        ProcessEffectiveDate = ratePlanContext.EffectiveDate,
+                        RateChangeLocator = rateChangeLocator,
+                        SaleCodesByZoneId = saleCodesByZoneId
+                    };
+
+                    this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
+
+                    changesForThisCustomer.RateChanges.AddRange(customerCountriesToCloseContext.RateChangesOutArgument);
+                    changesForThisCustomer.CodeChanges.AddRange(customerCountriesToCloseContext.CodeChangesOutArgument);
+                }
+
+                #endregion
+
+                #endregion
+
+                #region Processing Rates Actions
+
+                if(structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any() || structuredRateActions.RatesToChange.Any())
+                {
+                    CustomerRateActionChangesContext customerRateActionContext = new CustomerRateActionChangesContext()
+                    {
+                        CustomerInfo = customerInfo,
+                        RateChangeLocator = rateChangeLocator,
+                        StructuredRateActions = structuredRateActions
+                    };
+
+                    this.GetChangesForRateActions(customerRateActionContext);
+                    changesForThisCustomer.RateChanges.AddRange(customerRateActionContext.RateChangesOutArgument);
+                }
+
+                #endregion
+
+                customerPriceListChanges.Add(changesForThisCustomer);
+
+                #endregion
             }
-            return customerPriceListChanges;
+
+            CustomerChange.Set(context, customerPriceListChanges);
+
+            #endregion
         }
-        private Dictionary<int, int> GroupByCountryId(int customerId, DateTime effectiveDatetTme)
+
+        #region Get Pricelist Changes from Selling Product Methods
+
+        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context)
         {
             var customerCountryManager = new CustomerCountryManager();
-            var countryIds = new Dictionary<int, int>();
-            var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveDatetTme);
-            if (soldCountries == null || !soldCountries.Any()) return null;
-            foreach (var country in soldCountries)
-            {
-                if (!countryIds.ContainsKey(country.CountryId))
-                    countryIds.Add(country.CountryId, country.CountryId);
-            }
-            return countryIds;
-        }
-        private void AddSalePricelistRateChange(DataByZone zone, List<SalePricelistRateChange> rateChanges)
-        {
-            if (zone.NormalRateToChange != null)
-            {
-                SalePricelistRateChange rateChange = new SalePricelistRateChange
-                {
-                    CountryId = zone.CountryId,
-                    ZoneName = zone.ZoneName,
-                    Rate = zone.NormalRateToChange.NormalRate,
-                    ChangeType = zone.NormalRateToChange.ChangeType,
-                    BED = zone.BED,
-                    EED = zone.EED
-                };
-                if (zone.NormalRateToChange.RecentExistingRate != null)
-                    rateChange.RecentRate = zone.NormalRateToChange.RecentExistingRate.ConvertedRate;
-                rateChanges.Add(rateChange);
-            }
-        }
-        #endregion
+            List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
 
-        #region Customer Change
-        private List<CustomerPriceListChange> ManageCustomerRateChange(InputContext context)
-        {
-            var customerInfo = context.CustomerInfo;
-            var customerPriceListChange = new CustomerPriceListChange
+            foreach (var customer in context.Customers)
             {
-                CustomerId = customerInfo.CustomerId,
-                CodeChanges = new List<SalePricelistCodeChange>(),
-                RateChanges = new List<SalePricelistRateChange>()
-            };
-            var newRatesForNewCountryToAdd = new Dictionary<string, DataByZone>();
-            SetZoneChanges(context, newRatesForNewCountryToAdd, customerInfo, customerPriceListChange);
-            SetCountryToCloseChanges(context, customerInfo, customerPriceListChange, context.SalecodesByZoneId);
-            SetCountryToAddChanges(context, newRatesForNewCountryToAdd, customerPriceListChange, customerInfo, context.SalecodesByZoneId);
-            return new List<CustomerPriceListChange> { customerPriceListChange };
-        }
-        private void SetZoneChanges(InputContext context, Dictionary<string, DataByZone> newRatesForNewCountryToAdd, RoutingCustomerInfoDetails customerInfo,
-            CustomerPriceListChange customerPriceListChange)
-        {
-            foreach (var zoneToChange in context.DataByZones)
-            {
-                SalePricelistRateChange salePricelistRate = new SalePricelistRateChange
-                {
-                    CountryId = zoneToChange.CountryId,
-                    ZoneName = zoneToChange.ZoneName,
-                    BED = zoneToChange.BED,
-                    EED = zoneToChange.EED
-                };
-                if (zoneToChange.NormalRateToChange != null)
-                {
-                    var rate = zoneToChange.NormalRateToChange;
-                    salePricelistRate.Rate = rate.NormalRate;
-                    switch (rate.ChangeType)
-                    {
-                        case RateChangeType.Decrease:
-                        case RateChangeType.Increase:
-                            salePricelistRate.RecentRate = rate.RecentExistingRate.ConvertedRate;
-                            salePricelistRate.ChangeType = rate.ChangeType;
-                            customerPriceListChange.RateChanges.Add(salePricelistRate);
-                            break;
-                        case RateChangeType.New:
-                            if (context.CountryToAddByCountryId.ContainsKey(zoneToChange.CountryId))
-                            {
-                                newRatesForNewCountryToAdd.Add(zoneToChange.ZoneName, zoneToChange);
-                                break;
-                            }
-                            var zoneRate =
-                                context.RateChangeLocator.GetSellingProductZoneRate(customerInfo.SellingProductId,
-                                    zoneToChange.ZoneId);
-                            if (zoneRate != null)
-                            {
-                                salePricelistRate.ChangeType = salePricelistRate.Rate > zoneRate.Rate.Rate
-                                    ? RateChangeType.Increase
-                                    : RateChangeType.Decrease;
-                                salePricelistRate.RecentRate = zoneRate.Rate.Rate;
-                            }
-                            else
-                                salePricelistRate.ChangeType = RateChangeType.New;
-                            customerPriceListChange.RateChanges.Add(salePricelistRate);
-                            break;
-                        //case RateChangeType.Deleted:
-                        //    var sellingProductRate =
-                        //        context.RateChangeLocator.GetSellingProductZoneRate(customerInfo.SellingProductId,
-                        //            zoneToChange.ZoneId);
-                        //    salePricelistRate.ChangeType = sellingProductRate.Rate.Rate > salePricelistRate.Rate
-                        //        ? RateChangeType.Increase
-                        //        : RateChangeType.Decrease;
-                        //    salePricelistRate.RecentRate = salePricelistRate.Rate;
-                        //    salePricelistRate.Rate = sellingProductRate.Rate.Rate;
-                        //    customerPriceListChange.RateChanges.Add(salePricelistRate);
-                        //    break;
-                    }
-                }
-                if (zoneToChange.NormalRateToClose != null)
-                {
-                    var sellingProductRate =
-                        context.RateChangeLocator.GetSellingProductZoneRate(customerInfo.SellingProductId,
-                            zoneToChange.ZoneId);
-                    salePricelistRate.ChangeType = sellingProductRate.Rate.Rate > salePricelistRate.Rate
-                        ? RateChangeType.Increase
-                        : RateChangeType.Decrease;
-                    salePricelistRate.BED = zoneToChange.NormalRateToClose.CloseEffectiveDate;
-                    salePricelistRate.EED = null;
-                    salePricelistRate.RecentRate = salePricelistRate.Rate;
-                    salePricelistRate.Rate = sellingProductRate.Rate.Rate;
-                    customerPriceListChange.RateChanges.Add(salePricelistRate);
-                    break;
-                }
-            }
-        }
-        private void SetCountryToCloseChanges(InputContext context, RoutingCustomerInfoDetails customerInfo, CustomerPriceListChange customerPriceListChange, Dictionary<long, List<SaleCode>> saleCodesByZoneId)
-        {
-            foreach (var countryToClose in context.CustomerCountriesToChange)
-            {
-                List<SaleZone> zonesToClose;
-                if (!context.ZonesByCountryId.TryGetValue(countryToClose.CountryId, out zonesToClose)) continue;
+                var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customer.CustomerId, context.MinimumDate);
+                if (soldCountries == null)
+                    continue;
 
-                foreach (var zone in zonesToClose)
-                {
-                    var customerRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId,
-                        customerInfo.SellingProductId, zone.SaleZoneId);
-                    if (customerRate == null) continue;
-                    customerPriceListChange.RateChanges.Add(new SalePricelistRateChange
-                    {
-                        CountryId = zone.CountryId,
-                        ZoneName = zone.Name,
-                        Rate = customerRate.Rate.Rate,
-                        ChangeType = RateChangeType.Deleted,
-                        BED = customerRate.Rate.BED,
-                        EED = countryToClose.CloseEffectiveDate
-                    });
-                    customerPriceListChange.CodeChanges.AddRange(GetSalePricelistCodeChange(saleCodesByZoneId,
-                         zone.SaleZoneId, countryToClose.CountryId, zone.Name, CodeChange.Closed,
-                         zone.BED, countryToClose.CloseEffectiveDate));
-                }
-            }
-        }
-        private void SetCountryToAddChanges(InputContext context, Dictionary<string, DataByZone> newRatesForNewCountryToAdd, CustomerPriceListChange customerPriceListChange, RoutingCustomerInfoDetails customerInfo,
-            Dictionary<long, List<SaleCode>> saleCodesByZoneId)
-        {
-            if (!context.CustomerCountriesToAdd.Any()) return;
-            var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(new List<RoutingCustomerInfoDetails> { context.CustomerInfo }, context.MinimumDateTime, true));
-            foreach (var countryToAdd in context.CustomerCountriesToAdd)
-            {
-                List<SaleZone> zonesToAdd;
-                if (!context.ZonesByCountryId.TryGetValue(countryToAdd.CountryId, out zonesToAdd)) continue;
+                List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
 
-                foreach (var zone in zonesToAdd)
+                foreach (var country in soldCountries)
                 {
-                    DateTime bed = new DateTime();
-                    DataByZone dataByZone;
-                    if (newRatesForNewCountryToAdd.TryGetValue(zone.Name, out dataByZone))
+                    IEnumerable<DataByZone> zones = context.ImportedZonesByCountryId.GetRecord(country.CountryId);
+
+                    if (zones == null)
+                        continue;
+
+                    foreach (var zone in zones)
                     {
-                        customerPriceListChange.RateChanges.Add(
-                            new SalePricelistRateChange
-                            {
-                                CountryId = countryToAdd.CountryId,
-                                ZoneName = zone.Name,
-                                BED = dataByZone.NormalRateToChange.BED,
-                                Rate = dataByZone.NormalRateToChange.NormalRate,
-                                ChangeType = RateChangeType.New
-                            });
-                        bed = dataByZone.NormalRateToChange.BED;
-                    }
-                    else
-                    {
-                        var zoneRate = futureRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, zone.SaleZoneId);
-                        if (zoneRate != null)
+                        SaleEntityZoneRate zoneRate = context.FutureLocator.GetCustomerZoneRate(customer.CustomerId, customer.SellingProductId, zone.ZoneId);
+
+                        if (zoneRate != null && zoneRate.Source == SalePriceListOwnerType.Customer)
+                            continue; // customer has explicit rate and no need to notify him with this change
+
+                        if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null)
                         {
-                            customerPriceListChange.RateChanges.Add(
-                                new SalePricelistRateChange
-                                {
-                                    CountryId = countryToAdd.CountryId,
-                                    ZoneName = zone.Name,
-                                    BED = countryToAdd.BED,
-                                    ChangeType = RateChangeType.New,
-                                    Rate = zoneRate.Rate.Rate
-                                }
-                                );
-                            bed = countryToAdd.BED;
+                            SalePricelistRateChange rateChange = new SalePricelistRateChange
+                            {
+                                CountryId = zone.CountryId,
+                                ZoneName = zone.ZoneName,
+                                Rate = zone.NormalRateToChange.NormalRate,
+                                ChangeType = zone.NormalRateToChange.ChangeType,
+                                BED = zone.NormalRateToChange.BED,
+                                EED = zone.NormalRateToChange.EED
+                            };
+
+                            if (zone.NormalRateToChange.RecentExistingRate != null)
+                                rateChange.RecentRate = zone.NormalRateToChange.RecentExistingRate.ConvertedRate;
+
+                            rateChanges.Add(rateChange);
                         }
                     }
-                    customerPriceListChange.CodeChanges.AddRange(GetSalePricelistCodeChange(saleCodesByZoneId,
-                        zone.SaleZoneId, countryToAdd.CountryId, zone.Name, CodeChange.New,
-                        bed, null));
                 }
-            }
-        }
-        private List<SalePricelistCodeChange> GetSalePricelistCodeChange(Dictionary<long, List<SaleCode>> saleCodesByZoneId, long zoneId, int countryId, string name, CodeChange codeChange, DateTime bed, DateTime? eed)
-        {
-            List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
-            List<SaleCode> saleCodes;
 
-            if (!saleCodesByZoneId.TryGetValue(zoneId, out saleCodes))
-                return codeChanges;
+                if (rateChanges.Any())
+                {
+                    CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange();
+                    changesForThisCustomer.CustomerId = customer.CustomerId;
+                    changesForThisCustomer.RateChanges.AddRange(rateChanges);
 
-            codeChanges.AddRange(
-               saleCodes.Select(c => new SalePricelistCodeChange
-               {
-                   CountryId = countryId,
-                   ZoneName = name,
-                   ChangeType = codeChange,
-                   Code = c.Code,
-                   BED = bed,
-                   EED = eed
-               }));
-            return codeChanges;
-        }
-        private LocatorContext PrepareContext(IEnumerable<SaleRate> saleRates, IEnumerable<SaleZone> saleZones, IEnumerable<CustomerCountryToAdd> customerCountriesToAdd, IEnumerable<CustomerCountryToChange> customerCountriesToChange,
-           IEnumerable<DataByZone> dataByZones)
-        {
-            var zoneIdsWithBED = new Dictionary<long, DateTime>();
-            var zoneIds = new List<long>();
-            var customerRates = new List<SaleRate>();
-            var newCountryByCountryId = customerCountriesToAdd.ToDictionary(c => c.CountryId, c => c.CountryId);
+                    customerPriceListChanges.Add(changesForThisCustomer);
+                }
+            }
 
-            var ratesByZoneId = StructureSaleRateByZoneId(saleRates);
-            foreach (var dataByZone in dataByZones)
-            {
-                if (dataByZone.NormalRateToChange != null)
-                {
-                    switch (dataByZone.NormalRateToChange.ChangeType)
-                    {
-                        case RateChangeType.New:
-                            if (!newCountryByCountryId.ContainsKey(dataByZone.CountryId))
-                            {
-                                zoneIds.Add(dataByZone.ZoneId);
-                                customerRates.Add(SaleRateMapper(dataByZone.NormalRateToChange));
-                                zoneIdsWithBED.Add(dataByZone.ZoneId, dataByZone.BED);
-                            }
-                            break;
-                        case RateChangeType.Deleted:
-                            List<SaleRate> zoneRates;
-                            if (!ratesByZoneId.TryGetValue(dataByZone.ZoneId, out zoneRates))
-                            {
-                                //data integirty exception
-                            }
-                            else
-                            {
-                                customerRates.AddRange(zoneRates);
-                                zoneIds.Add(dataByZone.ZoneId);
-                                zoneIdsWithBED.Add(dataByZone.ZoneId, dataByZone.BED);
-                            }
-                            break;
-                    }
-                }
-                if (dataByZone.NormalRateToClose != null)
-                {
-                    zoneIds.Add(dataByZone.ZoneId);
-                    zoneIdsWithBED.Add(dataByZone.ZoneId, dataByZone.BED);
-                }
-            }
-            var zonesByCountryId = StructureSaleZoneByCountryId(saleZones);
-            foreach (var countryToClose in customerCountriesToChange)
-            {
-                List<SaleZone> zonesToClose;
-                if (!zonesByCountryId.TryGetValue(countryToClose.CountryId, out zonesToClose))
-                    //data integrity exception
-                    continue;
-                foreach (var zone in zonesToClose)
-                {
-                    zoneIds.Add(zone.SaleZoneId);
-                    zoneIdsWithBED.Add(zone.SaleZoneId, zone.BED);
-                    List<SaleRate> zoneRates;
-                    if (!ratesByZoneId.TryGetValue(zone.SaleZoneId, out zoneRates)) continue;
-                    customerRates.AddRange(zoneRates);
-                }
-            }
-            return new LocatorContext
-            {
-                ZoneIds = zoneIds,
-                SaleZonesWithBED = zoneIdsWithBED,
-                SaleRates = customerRates,
-                SaleZonesByCountryId = zonesByCountryId,
-                CountryToAddByCountryId = newCountryByCountryId
-            };
-        }
-        private Dictionary<long, List<SaleCode>> GetSaleCodes(IEnumerable<CustomerCountryToAdd> customerCountriesToAdd, IEnumerable<CustomerCountryToChange> customerCountriesToChange, Dictionary<int, List<SaleZone>> saleZonesByCountryId, DateTime minimumDateTime)
-        {
-            var zoneIds = new List<long>();
-            foreach (var countryToClose in customerCountriesToChange)
-            {
-                List<SaleZone> zonesToClose;
-                if (saleZonesByCountryId.TryGetValue(countryToClose.CountryId, out zonesToClose))
-                    zoneIds.AddRange(zonesToClose.Select(zone => zone.SaleZoneId));
-            }
-            foreach (var countryToAdd in customerCountriesToAdd)
-            {
-                List<SaleZone> zonesToAdd;
-                if (saleZonesByCountryId.TryGetValue(countryToAdd.CountryId, out zonesToAdd))
-                    zoneIds.AddRange(zonesToAdd.Select(zone => zone.SaleZoneId));
-            }
-            SaleCodeManager saleCodeManager = new SaleCodeManager();
-            var saleCodes = saleCodeManager.GetSaleCodesByZoneIDs(zoneIds, minimumDateTime);
-            return StructureSaleCodeByZoneId(saleCodes);
+            return customerPriceListChanges;
         }
 
         #endregion
 
-        #region structuring methodes
+        #region Get Pricelist Changes from Customer Methods
 
-        private Dictionary<int, List<SaleZone>> StructureSaleZoneByCountryId(IEnumerable<SaleZone> saleZones)
+        private void GetChangesForNewCountries(CustomerNewCountriesChangesContext context)
         {
-            var salezonesByCountryId = new Dictionary<int, List<SaleZone>>();
-            foreach (var saleZone in saleZones)
+            context.RateChangesOutArgument = new List<SalePricelistRateChange>();
+            context.CodeChangesOutArgument = new List<SalePricelistCodeChange>();
+
+            var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(new List<RoutingCustomerInfoDetails> { context.CustomerInfo }, context.MinimumDate, true));
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+
+            foreach (var countryToAdd in context.CountriesToAdd)
             {
-                List<SaleZone> zonesToAdd;
-                if (!salezonesByCountryId.TryGetValue(saleZone.CountryId, out zonesToAdd))
+                #region Get Customer Rate Changes
+
+                List<RateToChange> explicitRates = context.RatesToAddForNewCountriesbyCountryId.GetRecord(countryToAdd.CountryId);
+                List<long> zoneIdsWithExplicitRates = new List<long>();
+                if (explicitRates != null)
                 {
-                    zonesToAdd = new List<SaleZone>();
-                    salezonesByCountryId.Add(saleZone.CountryId, zonesToAdd);
+                    //These are the rates that are added explicitly for this customer after selling the country
+                    foreach (var rate in explicitRates)
+                    {
+                        zoneIdsWithExplicitRates.Add(rate.ZoneId);
+                        context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                        {
+                            CountryId = countryToAdd.CountryId,
+                            ZoneName = rate.ZoneName,
+                            Rate = rate.NormalRate,
+                            ChangeType = RateChangeType.New,
+                            BED = rate.BED,
+                            EED = rate.EED
+                        });
+                    }
                 }
-                zonesToAdd.Add(saleZone);
+
+                #endregion
+
+                #region Get Selling Product Rate and Code Changes
+
+                foreach (var zoneId in context.CountriesToAddExistingZoneIds)
+                {
+                    string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
+
+                    if(!zoneIdsWithExplicitRates.Contains(zoneId))
+                    {
+                        //Ignore zones that have explicit rates
+                        var zoneRate = futureRateLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, zoneId);
+                        if (zoneRate == null)
+                            throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneName));
+
+                        context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                        {
+                            CountryId = countryToAdd.CountryId,
+                            ZoneName = zoneName,
+                            Rate = zoneRate.Rate.Rate,
+                            ChangeType = RateChangeType.New,
+                            BED = countryToAdd.BED
+                        });
+
+                    }
+                    
+                    IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
+                    if(zoneCodes == null)
+                        throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zoneName));
+
+                    foreach (var existingCode in zoneCodes)
+                    {
+                        context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
+                        {
+                            CountryId = countryToAdd.CountryId,
+                            ZoneName = zoneName,
+                            Code = existingCode.Code,
+                            ChangeType = CodeChange.New,
+                            BED = countryToAdd.BED
+                        });
+                    }
+                }
+
+                #endregion
             }
-            return salezonesByCountryId;
         }
 
-        private Dictionary<long, List<SaleRate>> StructureSaleRateByZoneId(IEnumerable<SaleRate> saleRates)
+        private IEnumerable<SaleCode> GetExistingSaleCodes(ExistingDataInfo existingDataInfo, DateTime minimumDate)
         {
-            var saleRatesByZoneId = new Dictionary<long, List<SaleRate>>();
-            foreach (var rate in saleRates)
-            {
-                List<SaleRate> saleRate;
-                if (!saleRatesByZoneId.TryGetValue(rate.ZoneId, out saleRate))
-                {
-                    saleRate = new List<SaleRate>();
-                    saleRatesByZoneId.Add(rate.ZoneId, saleRate);
-                }
-                saleRate.Add(rate);
-            }
-            return saleRatesByZoneId;
+            var zoneIds = new List<long>();
+            zoneIds.AddRange(existingDataInfo.CountriesToAddExistingZoneIds);
+            zoneIds.AddRange(existingDataInfo.CountriesToCloseExistingZoneIds);
+
+            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            var saleCodes = saleCodeManager.GetSaleCodesByZoneIDs(zoneIds, minimumDate);
+            return saleCodes;
         }
 
-        private Dictionary<long, List<SaleCode>> StructureSaleCodeByZoneId(IEnumerable<SaleCode> saleCodes)
+        private void GetChangesForCountriesToClose(CustomerCountriesToCloseChangesContext context)
         {
-            Dictionary<long, List<SaleCode>> saleCodeByZoneId = new Dictionary<long, List<SaleCode>>();
-            foreach (var saleCode in saleCodes)
+            context.RateChangesOutArgument = new List<SalePricelistRateChange>();
+            context.CodeChangesOutArgument = new List<SalePricelistCodeChange>();
+
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+
+            foreach (var countryToClose in context.CountriesToClose)
             {
-                List<SaleCode> tempSaleCodes;
-                if (!saleCodeByZoneId.TryGetValue(saleCode.ZoneId, out tempSaleCodes))
+                CustomerCountry2 soldCountry = customerCountryManager.GetCustomerCountry(context.CustomerInfo.CustomerId, countryToClose.CountryId, context.ProcessEffectiveDate, true);
+
+                foreach (var zoneId in context.CountriesToCloseExistingZoneIds)
                 {
-                    tempSaleCodes = new List<SaleCode>();
-                    saleCodeByZoneId.Add(saleCode.ZoneId, tempSaleCodes);
+                    string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
+
+                    #region Get Rate Changes
+
+                    var zoneRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
+                    if (zoneRate == null)
+                        throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", zoneName));
+
+                    context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                    {
+                        CountryId = countryToClose.CountryId,
+                        ZoneName = zoneName,
+                        Rate = zoneRate.Rate.Rate,
+                        ChangeType = RateChangeType.Deleted,
+                        BED = zoneRate.Rate.BED, //TODO: There is a gap here that we need to fix, if the rate is got from selling product BED is not exaclty the one we sent to customer
+                        EED = countryToClose.CloseEffectiveDate
+                    });
+
+                    #endregion
+
+                    #region Get Code Changes
+
+                    IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
+                    if (zoneCodes == null)
+                        throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zoneName));
+
+                    foreach (var existingCode in zoneCodes)
+                    {
+                        context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
+                        {
+                            CountryId = countryToClose.CountryId,
+                            ZoneName = zoneName,
+                            Code = existingCode.Code,
+                            ChangeType = CodeChange.Closed,
+                            BED = existingCode.BED > soldCountry.BED ? existingCode.BED : soldCountry.BED,
+                            EED =  countryToClose.CloseEffectiveDate
+                        });
+                    }
+
+                    #endregion
                 }
-                tempSaleCodes.Add(saleCode);
             }
-            return saleCodeByZoneId;
         }
+
+        private void GetChangesForRateActions(CustomerRateActionChangesContext context)
+        {
+            context.RateChangesOutArgument = new List<SalePricelistRateChange>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+
+            #region Processing Rate To Change Increase and Decrease
+
+            foreach (var rateToChange in context.StructuredRateActions.RatesToChange)
+            {
+                int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToChange.ZoneId);
+                if (countryId == null)
+                    throw new DataIntegrityValidationException(string.Format("Zone with Id {0} is not assigned to any country", rateToChange.ZoneId));
+
+                context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                {
+                    CountryId = countryId.Value,
+                    ZoneName = rateToChange.ZoneName,
+                    Rate = rateToChange.NormalRate,
+                    RecentRate = rateToChange.RecentExistingRate.ConvertedRate,
+                    ChangeType = rateToChange.ChangeType,
+                    BED = rateToChange.BED,
+                    EED = rateToChange.EED
+                });
+            }
+
+            #endregion
+
+            #region Processing Rate To Add
+
+            foreach (var rateToAdd in context.StructuredRateActions.RatesToAdd)
+            {
+                int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToAdd.ZoneId);
+                if (countryId == null)
+                    throw new DataIntegrityValidationException(string.Format("Zone with Id {0} is not assigned to any country", rateToAdd.ZoneId));
+
+                var recentRate = context.RateChangeLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, rateToAdd.ZoneId);
+                if(recentRate == null)
+                    throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToAdd.ZoneName));
+
+                context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                {
+                    CountryId = countryId.Value,
+                    ZoneName = rateToAdd.ZoneName,
+                    Rate = rateToAdd.NormalRate,
+                    RecentRate = recentRate.Rate.Rate,
+                    ChangeType = recentRate.Rate.Rate > rateToAdd.NormalRate ? RateChangeType.Decrease : RateChangeType.Increase,
+                    BED = rateToAdd.BED,
+                    EED = null
+                });
+            }
+
+            #endregion
+
+            #region Processing Rate To Close
+
+            foreach (var rateToClose in context.StructuredRateActions.RatesToClose)
+            {
+                int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToClose.ZoneId);
+                if (countryId == null)
+                    throw new DataIntegrityValidationException(string.Format("Zone with Id {0} is not assigned to any country", rateToClose.ZoneId));
+
+                var newRate = context.RateChangeLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, rateToClose.ZoneId);
+                if (newRate == null)
+                    throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToClose.ZoneName));
+
+                var recentRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, rateToClose.ZoneId);
+
+                context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                {
+                    CountryId = countryId.Value,
+                    ZoneName = rateToClose.ZoneName,
+                    Rate = newRate.Rate.Rate,
+                    RecentRate = recentRate.Rate.Rate,
+                    ChangeType = recentRate.Rate.Rate > newRate.Rate.Rate ? RateChangeType.Decrease : RateChangeType.Increase,
+                    BED = rateToClose.CloseEffectiveDate,
+                    EED = null
+                });
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private StructuredRateActions GetRateActions(Dictionary<int, List<DataByZone>> importedZonesByCountryId, Dictionary<int, CustomerCountryToAdd> countriesToAdd, Dictionary<int, CustomerCountryToChange> countriesToClose)
+        {
+            StructuredRateActions ratesActions = new StructuredRateActions();
+
+            foreach (KeyValuePair<int, List<DataByZone>> kvp in importedZonesByCountryId)
+            {
+                int countryId = kvp.Key;
+                IEnumerable<DataByZone> importedZones = kvp.Value;
+
+                if (countriesToClose.ContainsKey(countryId))
+                {
+                    //If country is closed ignore all rate actions
+                    continue;
+                }
+                else if (countriesToAdd.ContainsKey(countryId))
+                {
+                    //It is a new country, get only new rates added for this country
+                    ratesActions.RatesToAddForNewCountriesbyCountryId.Add(countryId, this.GetRatesToAddFromImportedZones(importedZones));
+                }
+                else
+                {
+                    //Get all rates changes and closed rates for this country
+                    ratesActions.RatesToAdd.AddRange(this.GetRatesToAddFromImportedZones(importedZones));
+                    ratesActions.RatesToChange.AddRange(this.GetRatesToChangeFromImportedZones(importedZones));
+                    ratesActions.RatesToClose.AddRange(this.GetRatestoCloseFromImportedZones(importedZones));
+                }
+            }
+
+            return ratesActions;
+        }
+
+        private List<RateToChange> GetRatesToAddFromImportedZones(IEnumerable<DataByZone> importedZones)
+        {
+            List<RateToChange> ratesToChange = new List<RateToChange>();
+
+            foreach (var zone in importedZones)
+            {
+                if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null && zone.NormalRateToChange.ChangeType == RateChangeType.New)
+                    ratesToChange.Add(zone.NormalRateToChange);
+            }
+
+            return ratesToChange;
+        }
+
+        private List<RateToChange> GetRatesToChangeFromImportedZones(IEnumerable<DataByZone> importedZones)
+        {
+            List<RateToChange> ratesToChange = new List<RateToChange>();
+
+            foreach (var zone in importedZones)
+            {
+                if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null && 
+                    (zone.NormalRateToChange.ChangeType == RateChangeType.Increase || zone.NormalRateToChange.ChangeType == RateChangeType.Decrease))
+                {
+                    ratesToChange.Add(zone.NormalRateToChange);
+                }
+            }
+
+            return ratesToChange;
+        }
+
+        private IEnumerable<RateToClose> GetRatestoCloseFromImportedZones(IEnumerable<DataByZone> importedZones)
+        {
+            List<RateToClose> ratesToClose = new List<RateToClose>();
+
+            foreach (var zone in importedZones)
+            {
+                if (zone.NormalRateToClose != null && zone.NormalRateToClose.RateTypeId == null)
+                    ratesToClose.Add(zone.NormalRateToClose);
+            }
+
+            return ratesToClose;
+        }
+
+        private ExistingDataInfo BuildExistingDataInfo(StructuredRateActions structuredRateActions, IEnumerable<CustomerCountryToAdd> countriesToAdd,
+            IEnumerable<CustomerCountryToChange> countriesToClose, Dictionary<int, List<SaleZone>> existingZonesByCountryId, IEnumerable<SaleRate> saleRates)
+        {
+            ExistingDataInfo Info = new ExistingDataInfo();
+            Dictionary<long, List<SaleRate>> existingRatesByZoneId = this.StructureExistingRatesByZoneId(saleRates);
+
+
+            #region Fill Info from Rates to Add
+
+            foreach (var rateToAdd in structuredRateActions.RatesToAdd)
+            {
+                Info.RateActionsExistingZoneIds.Add(rateToAdd.ZoneId);
+                Info.ActionDatesByZoneId.Add(rateToAdd.ZoneId, rateToAdd.BED);
+            }
+
+            #endregion
+
+            #region Fill Info from Rates to Close
+
+            foreach (var rateToClose in structuredRateActions.RatesToClose)
+            {
+                Info.RateActionsExistingZoneIds.Add(rateToClose.ZoneId);
+                Info.ActionDatesByZoneId.Add(rateToClose.ZoneId, rateToClose.CloseEffectiveDate);
+
+                IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(rateToClose.ZoneId);
+                
+                SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(rateToClose.CloseEffectiveDate));
+                if (customerRateatClosingDate == null)
+                    throw new DataIntegrityValidationException(string.Format("Trying to close a rate for zone {0} that has no existing rate", rateToClose.ZoneName));
+                
+                Info.CustomerRates.Add(customerRateatClosingDate);
+            }
+
+            #endregion
+
+            #region Fill Info from New Countries
+
+            if (countriesToAdd.Any())
+            {
+                foreach (var countryToAdd in countriesToAdd)
+                {
+                    List<SaleZone> countryExistingZones = existingZonesByCountryId.GetRecord(countryToAdd.CountryId);
+
+                    if (countryExistingZones == null)
+                        throw new DataIntegrityValidationException(string.Format("Trying to sell a new country with no zones. Country Id {0}", countryToAdd.CountryId));
+
+                    foreach (var zone in countryExistingZones)
+                    {
+                        if (zone.IsInTimeRange(countryToAdd.BED))
+                        {
+                            Info.CountriesToAddExistingZoneIds.Add(zone.SaleZoneId);
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Fill Info from Close Countries
+
+            if (countriesToClose.Any())
+            {
+                foreach (var countryToClose in countriesToClose)
+                {
+                    List<SaleZone> countryExistingZones = existingZonesByCountryId.GetRecord(countryToClose.CountryId);
+
+                    if (countryExistingZones == null)
+                        throw new DataIntegrityValidationException(string.Format("Trying to stop selling a country with no zones. Country Id {0}", countryToClose.CountryId));
+
+                    foreach (var zone in countryExistingZones)
+                    {
+                        if (zone.IsInTimeRange(countryToClose.CloseEffectiveDate))
+                        {
+                            Info.CountriesToCloseExistingZoneIds.Add(zone.SaleZoneId);
+                            Info.ActionDatesByZoneId.Add(zone.SaleZoneId, countryToClose.CloseEffectiveDate);
+
+                            //Get the customer rate at the time of closure. These rates will be used by rate plan locator when getting rates for each zone related to a closed country
+                            IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(zone.SaleZoneId);
+                            SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(countryToClose.CloseEffectiveDate));
+                            if (customerRateatClosingDate != null)
+                                Info.CustomerRates.Add(customerRateatClosingDate);
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            return Info;
+        }
+
         private IEnumerable<RoutingCustomerInfoDetails> GetDataByCustomer(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveDate)
         {
             var customerIds = new List<int>();
@@ -488,47 +677,180 @@ namespace TOne.WhS.Sales.BP.Activities
                 SellingProductId = sellingProductId
             });
         }
+        
 
         #endregion
 
-        #region Mapper
-        private SaleRate SaleRateMapper(RateToChange rate)
+        #region Structuring Methods
+
+        private Dictionary<int, List<DataByZone>> StructureImportedZonesByCountryId(IEnumerable<DataByZone> dataByZones)
         {
-            return new SaleRate
+            Dictionary<int, List<DataByZone>> importedZonesByCountryId = new Dictionary<int, List<DataByZone>>();
+            foreach (var zone in dataByZones)
             {
-                Rate = rate.NormalRate,
-                CurrencyId = rate.CurrencyId,
-                SaleRateId = 0,
-                ZoneId = rate.ZoneId,
-                EED = rate.EED,
-                BED = rate.BED,
-                RateChange = rate.ChangeType
-            };
+                List<DataByZone> zones = importedZonesByCountryId.GetOrCreateItem(zone.CountryId);
+                zones.Add(zone);
+            }
+
+            return importedZonesByCountryId;
         }
+
+        private Dictionary<int, List<SaleZone>> StructureExistingZonesByCountryId(IEnumerable<SaleZone> saleZones)
+        {
+            Dictionary<int, List<SaleZone>> existingZonesByCountryId = new Dictionary<int, List<SaleZone>>();
+            foreach (var zone in saleZones)
+            {
+                List<SaleZone> zones = existingZonesByCountryId.GetOrCreateItem(zone.CountryId);
+                zones.Add(zone);
+            }
+
+            return existingZonesByCountryId;
+        }
+
+        private Dictionary<long, List<SaleRate>> StructureExistingRatesByZoneId(IEnumerable<SaleRate> saleRates)
+        {
+            var saleRatesByZoneId = new Dictionary<long, List<SaleRate>>();
+            foreach (var rate in saleRates)
+            {
+                List<SaleRate> rates = saleRatesByZoneId.GetOrCreateItem(rate.ZoneId);
+                rates.Add(rate);
+            }
+            return saleRatesByZoneId;
+        }
+
+        private Dictionary<long, List<SaleCode>> StructureExistingSaleCodesByZoneId(IEnumerable<SaleCode> saleCodes)
+        {
+            var saleCodesByZoneId = new Dictionary<long, List<SaleCode>>();
+            foreach (var code in saleCodes)
+            {
+                List<SaleCode> codes = saleCodesByZoneId.GetOrCreateItem(code.ZoneId);
+                codes.Add(code);
+            }
+            return saleCodesByZoneId;
+        }
+
+
         #endregion
 
-        #region private class
-        public class InputContext
+        #region Private Classes
+
+        public class ExistingDataInfo
         {
-            public IEnumerable<DataByZone> DataByZones { get; set; }
-            public IEnumerable<CustomerCountryToAdd> CustomerCountriesToAdd { get; set; }
-            public IEnumerable<CustomerCountryToChange> CustomerCountriesToChange { get; set; }
-            public Dictionary<int, List<SaleZone>> ZonesByCountryId { get; set; }
-            public Dictionary<long, List<SaleCode>> SalecodesByZoneId { get; set; }
-            public RoutingCustomerInfoDetails CustomerInfo { get; set; }
-            public SaleEntityZoneRateLocator RateChangeLocator { get; set; }
-            public Dictionary<int, int> CountryToAddByCountryId { get; set; }
-            public DateTime MinimumDateTime { get; set; }
+            private List<long> _countriesToAddExistingZoneIds = new List<long>();
+            public List<long> CountriesToAddExistingZoneIds { get { return this._countriesToAddExistingZoneIds; } }
+
+            private List<long> _countriesToCloseExistingZoneIds = new List<long>();
+            public List<long> CountriesToCloseExistingZoneIds { get { return this._countriesToCloseExistingZoneIds; } }
+
+            private List<long> _rateActionsExistingZoneIds = new List<long>();
+            public List<long> RateActionsExistingZoneIds { get { return this._rateActionsExistingZoneIds; } }
+
+            private Dictionary<long, DateTime> _actionDatesByZoneId = new Dictionary<long, DateTime>();
+            public Dictionary<long, DateTime> ActionDatesByZoneId { get { return this._actionDatesByZoneId; } }
+
+            private List<SaleRate> _customerRates = new List<SaleRate>();
+            public List<SaleRate> CustomerRates { get { return this._customerRates; } }
         }
 
-        public class LocatorContext
+        private class StructuredRateActions
         {
-            public List<long> ZoneIds { get; set; }
-            public Dictionary<long, DateTime> SaleZonesWithBED { get; set; }
-            public List<SaleRate> SaleRates { get; set; }
-            public Dictionary<int, List<SaleZone>> SaleZonesByCountryId { get; set; }
-            public Dictionary<int, int> CountryToAddByCountryId { get; set; }
+            private Dictionary<int, List<RateToChange>> _ratesToAddForNewCountriesbyCountryId = new Dictionary<int, List<RateToChange>>();
+            public Dictionary<int, List<RateToChange>> RatesToAddForNewCountriesbyCountryId { get { return this._ratesToAddForNewCountriesbyCountryId; } }
+
+            private List<RateToChange> _ratesToAdd = new List<RateToChange>();
+            public List<RateToChange> RatesToAdd { get { return this._ratesToAdd; } }
+
+            private List<RateToChange> _ratesToChange = new List<RateToChange>();
+            public List<RateToChange> RatesToChange { get { return this._ratesToChange; } }
+
+            private List<RateToClose> _ratesToClose = new List<RateToClose>();
+            public List<RateToClose> RatesToClose { get { return this._ratesToClose; } }
         }
+
+        private class SellingProductChangesContext
+        {
+            public Dictionary<int, List<DataByZone>> ImportedZonesByCountryId { get; set; }
+
+            public IEnumerable<RoutingCustomerInfoDetails> Customers {get; set;}
+
+            public SaleEntityZoneRateLocator FutureLocator { get; set; }
+
+            public DateTime MinimumDate { get; set; }
+        }
+
+        private class CustomerNewCountriesChangesContext
+        {
+            #region Input Arguments
+
+            public IEnumerable<CustomerCountryToAdd> CountriesToAdd { get; set; }
+
+            public Dictionary<long, List<SaleCode>> SaleCodesByZoneId { get; set; }
+
+            public RoutingCustomerInfoDetails CustomerInfo { get; set; }
+
+            public List<long> CountriesToAddExistingZoneIds { get; set; }
+
+            public Dictionary<int, List<RateToChange>> RatesToAddForNewCountriesbyCountryId { get; set; }
+
+            public DateTime MinimumDate { get; set; }
+
+            #endregion
+
+            #region Output Arguments
+
+            public List<SalePricelistRateChange> RateChangesOutArgument { get; set; }
+
+            public List<SalePricelistCodeChange> CodeChangesOutArgument { get; set; }
+
+            #endregion
+        }
+
+        private class CustomerCountriesToCloseChangesContext
+        {
+            #region Input Arguments
+
+            public IEnumerable<CustomerCountryToChange> CountriesToClose { get; set; }
+
+            public List<long> CountriesToCloseExistingZoneIds { get; set; }
+
+            public SaleEntityZoneRateLocator RateChangeLocator { get; set; }
+
+            public RoutingCustomerInfoDetails CustomerInfo { get; set; }
+
+            public Dictionary<long, List<SaleCode>> SaleCodesByZoneId { get; set; }
+
+            public DateTime ProcessEffectiveDate { get; set; }
+
+            #endregion
+
+            #region Output Arguments
+
+            public List<SalePricelistRateChange> RateChangesOutArgument { get; set; }
+
+            public List<SalePricelistCodeChange> CodeChangesOutArgument { get; set; }
+
+            #endregion
+        }
+
+        private class CustomerRateActionChangesContext
+        {
+            #region Input Arguments
+
+            public StructuredRateActions StructuredRateActions { get; set; }
+
+            public SaleEntityZoneRateLocator RateChangeLocator { get; set; }
+            
+            public RoutingCustomerInfoDetails CustomerInfo { get; set; }
+
+            #endregion 
+
+            #region Output Arguments
+
+            public List<SalePricelistRateChange> RateChangesOutArgument { get; set; }
+
+            #endregion
+        }
+
         #endregion
     }
 }

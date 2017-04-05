@@ -70,12 +70,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }
                 if (countryRateChanges.Count == 0 && countryCodeChanges.Count == 0) continue;
 
-                customerPriceListChanges.Add(new CustomerPriceListChange
-                {
-                    RateChanges = countryRateChanges,
-                    CodeChanges = countryCodeChanges,
-                    CustomerId = customer.CarrierAccountId
-                });
+                CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange();
+                changesForThisCustomer.CustomerId = customer.CarrierAccountId;
+                changesForThisCustomer.CodeChanges.AddRange(countryCodeChanges);
+                changesForThisCustomer.RateChanges.AddRange(countryRateChanges);
+
+                customerPriceListChanges.Add(changesForThisCustomer);
             }
             return customerPriceListChanges;
         }

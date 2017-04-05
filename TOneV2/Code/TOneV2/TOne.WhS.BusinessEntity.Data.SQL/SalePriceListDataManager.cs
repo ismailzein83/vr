@@ -38,12 +38,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_Update", salePriceList.PriceListId, salePriceList.FileId, (int)salePriceList.PriceListType);
             return (recordsEffected > 0);
         }
-        public bool UpdatePriceListNotification(IEnumerable<int> customerIds, int ownerId, long processInstanceId)
+        public bool SetCustomerPricelistsAsSent(IEnumerable<int> customerIds)
         {
             string customerIdsStr = null;
             if (customerIds != null && customerIds.Any())
                 customerIdsStr = string.Join(",", customerIds);
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_UpdatePriceListNotification", customerIdsStr, ownerId, processInstanceId);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_SetCustomerPricelistsAsSent", customerIdsStr);
             return (recordsEffected > 0);
         }
         public bool Insert(SalePriceList salePriceList)

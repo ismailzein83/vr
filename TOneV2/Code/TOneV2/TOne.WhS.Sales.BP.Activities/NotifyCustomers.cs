@@ -9,6 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -29,6 +30,13 @@ namespace TOne.WhS.Sales.BP.Activities
 
 			NotificationManager notificationManager = new NotificationManager();
             IEnumerable<int> failedCustomerIdsToSendEmailFor = notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
+            IEnumerable<int> customersToUpdatePricelistsFor = customerIds.FindAllRecords(x => !failedCustomerIdsToSendEmailFor.Contains(x));
+
+            if (customersToUpdatePricelistsFor != null && customersToUpdatePricelistsFor.Any())
+            {
+                SalePriceListManager salePriceListManager = new SalePriceListManager();
+                salePriceListManager.SetCustomerPricelistsAsSent(customersToUpdatePricelistsFor);
+            }
 
             if (failedCustomerIdsToSendEmailFor.Count() > 0)
             {

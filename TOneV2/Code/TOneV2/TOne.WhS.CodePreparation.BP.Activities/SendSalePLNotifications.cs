@@ -28,7 +28,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             NotificationManager notificationManager = new NotificationManager();
             IEnumerable<int> failedCustomerIdsToSendEmailFor = notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
-            UpdatePriceListNotification(customerIds, processInstanceId);
+
+            IEnumerable<int> customersToUpdatePricelistsFor = customerIds.FindAllRecords(x => !failedCustomerIdsToSendEmailFor.Contains(x));
+
+            if (customersToUpdatePricelistsFor != null && customersToUpdatePricelistsFor.Any())
+            {
+                SalePriceListManager salePriceListManager = new SalePriceListManager();
+                salePriceListManager.SetCustomerPricelistsAsSent(customersToUpdatePricelistsFor);
+            }
 
             if (failedCustomerIdsToSendEmailFor.Count() > 0)
             {
@@ -41,12 +48,5 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 context.WriteTrackingMessage(LogEntryType.Warning, "Failed Sending Sale Pricelists to Customers: {0}.", customers);
             }
         }
-
-        private bool UpdatePriceListNotification(IEnumerable<int> customerIds,long processInstanceId)
-        {
-            SalePriceListManager salePriceListManager = new SalePriceListManager();
-            return salePriceListManager.UpdatePriceListNotification(customerIds, (int)SalePriceListOwnerType.Customer, processInstanceId);
-        }
-
     }
 }

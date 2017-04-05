@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
@@ -98,12 +97,12 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(pricelistId, null);
             var salePriceListCodeChanges = dataManager.GetFilteredSalePricelistCodeChanges(pricelistId, null);
-            return new CustomerPriceListChange
-            {
-                CodeChanges = salePriceListCodeChanges,
-                RateChanges = salePriceListRateChanges,
-                PriceListId = pricelistId
-            };
+            CustomerPriceListChange changes =  new CustomerPriceListChange();
+            changes.CodeChanges.AddRange(salePriceListCodeChanges);
+            changes.RateChanges.AddRange(salePriceListRateChanges);
+            changes.PriceListId = pricelistId;
+
+            return changes;            
         }
         public Dictionary<int, List<CustomerPriceListChange>> GetNotSentChanges(IEnumerable<int> customerIds)
         {
@@ -154,9 +153,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new CustomerPriceListChange
                 {
                     CustomerId = priceList.OwnerId,
-                    PriceListId = priceList.PriceListId,
-                    CodeChanges = new List<SalePricelistCodeChange>(),
-                    RateChanges = new List<SalePricelistRateChange>()
+                    PriceListId = priceList.PriceListId
                 };
             return null;
         }

@@ -12,23 +12,14 @@ namespace TOne.WhS.Sales.Business.Reader
 {
     public class SaleRateReadRPChanges : ISaleRateReader
     {
-        private IEnumerable<SaleRate> _customerSaleRates;
-        private int _sellingProductId;
-        private int _customerId;
-        private List<long> _zoneIds;
-        private DateTime _minimumDate;
-        private Dictionary<long, DateTime> _soldZonesEffectiveDateTimes;
-        SaleRatesByOwner _allSaleRatesByOwner;
+        private SaleRatesByOwner _allSaleRatesByOwner;
 
-        public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds, DateTime minimumDateTime, Dictionary<long, DateTime> zonesEffectiveDateTimes)
+        public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds, 
+            DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
-            _customerSaleRates = customerSaleRates;
-            _sellingProductId = routingCustomerInfo.SellingProductId;
-            _zoneIds = zoneIds;
-            _minimumDate = minimumDateTime;
-            _customerId = routingCustomerInfo.CustomerId;
-            _soldZonesEffectiveDateTimes = zonesEffectiveDateTimes;
-            _allSaleRatesByOwner = GetAllSaleRates();
+            //TODO: consider for this type of readers that selling product may be different in past
+            _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId, 
+                routingCustomerInfo.CustomerId, zoneIds, minimumDate, zonesEffectiveDateTimes);
         }
 
         public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int ownerId)
@@ -42,7 +33,7 @@ namespace TOne.WhS.Sales.Business.Reader
 
             return saleRateByOwnerType == null ? null : saleRateByOwnerType.GetRecord(ownerId);
         }
-        private SaleRatesByOwner GetAllSaleRates()
+        private SaleRatesByOwner GetAllSaleRates(IEnumerable<SaleRate> customerSaleRates, int sellingProductId, int customerId, IEnumerable<long> zoneIds, DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
             SaleRatesByOwner saleRatesByOwner = new SaleRatesByOwner
             {
@@ -51,33 +42,32 @@ namespace TOne.WhS.Sales.Business.Reader
             };
             SaleRatesByZone saleRateByZone;
             SaleRatePriceList saleRatePriceList;
-            foreach (var saleRate in _customerSaleRates)
+            foreach (var saleRate in customerSaleRates)
             {
                 VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByCustomer;
-                saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(_customerId);
+                saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(customerId);
                 saleRatePriceList = saleRateByZone.GetOrCreateItem(saleRate.ZoneId);
                 saleRatePriceList.Rate = saleRate;
             }
-            IEnumerable<SaleRate> sellingProductSaleRates = GetSellingProductRates();
+
+            SaleRateManager saleRateManager = new SaleRateManager();
+            IEnumerable<SaleRate> sellingProductSaleRates = saleRateManager.GetExistingRatesByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, 
+                zoneIds, minimumDate);
+
             foreach (var sellingProductSaleRate in sellingProductSaleRates)
             {
                 DateTime zoneEffectiveDateTime;
-                if (!_soldZonesEffectiveDateTimes.TryGetValue(sellingProductSaleRate.ZoneId, out zoneEffectiveDateTime))
+                if (!zonesEffectiveDateTimes.TryGetValue(sellingProductSaleRate.ZoneId, out zoneEffectiveDateTime))
                     continue;
-                if (zoneEffectiveDateTime >= sellingProductSaleRate.BED && (!sellingProductSaleRate.EED.HasValue || sellingProductSaleRate.EED > zoneEffectiveDateTime))
+                if (sellingProductSaleRate.IsInTimeRange(zoneEffectiveDateTime))
                 {
                     VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByProduct;
-                    saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(_sellingProductId);
+                    saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(sellingProductId);
                     saleRatePriceList = saleRateByZone.GetOrCreateItem(sellingProductSaleRate.ZoneId);
                     saleRatePriceList.Rate = sellingProductSaleRate;
                 }
             }
             return saleRatesByOwner;
-        }
-        private IEnumerable<SaleRate> GetSellingProductRates()
-        {
-            SaleRateManager saleRateManager = new SaleRateManager();
-            return saleRateManager.GetExistingRatesByZoneIds(SalePriceListOwnerType.SellingProduct, _sellingProductId, _zoneIds, _minimumDate);
         }
     }
 }

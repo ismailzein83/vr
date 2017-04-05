@@ -531,11 +531,13 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return this.GetType();
         }
-        public bool UpdatePriceListNotification(IEnumerable<int> customerIds, int ownerId, long processInstanceId)
+
+        public bool SetCustomerPricelistsAsSent(IEnumerable<int> customerIds)
         {
             ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
-            return dataManager.UpdatePriceListNotification(customerIds, ownerId, processInstanceId);
+            return dataManager.SetCustomerPricelistsAsSent(customerIds);
         }
+
         public IEnumerable<SalePriceList> GetCustomerSalePriceListsByProcessInstanceId(long processInstanceId)
         {
             Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceLists();
