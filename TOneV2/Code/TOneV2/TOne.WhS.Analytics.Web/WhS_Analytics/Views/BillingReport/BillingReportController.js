@@ -53,12 +53,25 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         singleCustomerAccountReadyPromiseDeferred.resolve();
     };
     $scope.validateBusinessCaseStatus = function () {
-        if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < 28) {
-            return 'At least you have to choose 28 days.';
+        var numberOfDays;
+        if ($scope.fromDate.getMonth() == $scope.toDate.getMonth()) {
+            numberOfDays = daysInMonth($scope.fromDate.getMonth() + 1, $scope.fromDate.getFullYear());
+        } else {
+            var diffDate = new Date($scope.fromDate);
+            diffDate.setMonth($scope.fromDate.getMonth() + 1);
+            numberOfDays = UtilsService.diffDays($scope.fromDate, diffDate) -1;
+        }
+        if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < numberOfDays) {
+            return 'At least you have to choose ' +  numberOfDays +' days.';
         }
         return null;
 
     };
+
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+
     $scope.onSupplierAccountDirectiveReady = function (api) {
         supplierAccountDirectiveAPI = api;
         supplierAccountReadyPromiseDeferred.resolve();
