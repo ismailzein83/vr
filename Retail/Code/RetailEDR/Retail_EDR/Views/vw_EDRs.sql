@@ -3,28 +3,28 @@ AS
 WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, 
                                                                   TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, 
                                                                   OriginatingZoneID, TerminatingZoneID, AirtimeRate, AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, 
-                                                                  MTAmount, Profit, TypeCalled, Duration, 0 AS PackagePrice
+                                                                  MTAmount, Profit, TypeCalled, Duration, OriginalAmount
                                         FROM            Retail_EDR.Voice WITH (NOLOCK)
                                         UNION ALL
                                         SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, 
                                                                  TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, AgentID AS Agent, AgentCommission, AccountID, 
                                                                  OriginatingZoneID, TerminatingZoneID, AirtimeRate, AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, 
-                                                                 MTAmount, Profit, TypeMessage AS TypeCalled, 0 AS Duration, 0 AS PackagePrice
+                                                                 MTAmount, Profit, TypeMessage AS TypeCalled, 0 AS Duration, Credit AS OriginalAmount
                                         FROM            Retail_EDR.Message WITH (NOLOCK)
                                         UNION ALL
-                                        SELECT        NULL AS IdCDR, CreatedDate AS StartDate, NULL AS TrafficType, NULL AS DirectionTraffic, NULL AS Calling, NULL AS Called, NULL 
+                                        SELECT        NULL AS IdCDR, CreatedDate AS StartDate, 'Event' AS TrafficType, NULL AS DirectionTraffic, NULL AS Calling, NULL AS Called, NULL 
                                                                  AS TypeNet, NULL AS SourceOperator, NULL AS DestinationOperator, NULL AS SourceArea, NULL AS DestinationArea, NULL 
                                                                  AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, PromotionCode AS Promotion, FileName, NULL AS FileDate, 
                                                                  CreatedDate AS CreationDate, NULL AS Balance, NULL AS Zone, NULL AS Agent, NULL AS AgentCommission, AccountId, NULL 
-                                                                 AS OriginatingZoneID, NULL AS TerminatingZoneID, NULL AS AirtimeRate, NULL AS AirtimeAmount, NULL AS TerminationRate, NULL 
-                                                                 AS TerminationAmount, NULL AS SaleRate, NULL AS SaleAmount, NULL AS Credit, NULL AS MTRate, NULL AS MTAmount, NULL AS Profit, NULL 
-                                                                 AS TypeCalled, 0 AS Duration, PackagePrice
+                                                                 AS OriginatingZoneID, NULL AS TerminatingZoneID, 0 AS AirtimeRate, 0 AS AirtimeAmount, 0 AS TerminationRate, NULL AS TerminationAmount, 
+                                                                 0 AS SaleRate, 0 AS SaleAmount, 0 AS Credit, 0 AS MTRate, 0 AS MTAmount, 0 AS Profit, NULL AS TypeCalled, 0 AS Duration, 
+                                                                 PackagePrice AS OriginalAmount
                                         FROM            Retail_EDR.RingoEvent WITH (NOLOCK))
     SELECT        StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, TypeConsumed, Bag, 
                               PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, OriginatingZoneID, TerminatingZoneID, AirtimeRate, 
                               AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, MTAmount, Profit, TypeCalled, CONVERT(datetime, 
                               CONVERT(varchar(10), StartDate, 121)) AS Day, 'Week ' + RIGHT('00' + CONVERT(VARCHAR, DATEPART(wk, StartDate)), 2) + ' ' + CONVERT(VARCHAR, 
-                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month, Duration, PackagePrice
+                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month, Duration, OriginalAmount, 1 AS NumberOfCalls
      FROM            AllEDRs AS AllEDRs_1
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
@@ -196,4 +196,12 @@ GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
+
+
+
+
+
+
 
