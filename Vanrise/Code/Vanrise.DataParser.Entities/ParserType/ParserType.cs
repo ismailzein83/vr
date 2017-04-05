@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Entities
 {
-    public abstract class ParserType
+    public class ParserType
     {
         public Guid ParserTypeId { get; set; }
         public string Name { get; set; }

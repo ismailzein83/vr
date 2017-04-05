@@ -354,9 +354,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataParser", "DataParser", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Entities", "Vanrise.DataParser.Entities\Vanrise.DataParser.Entities.csproj", "{91D049E3-D276-4AC0-8AC1-3BF0BBE84751}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Business", "Vanrise.DataParser.Business\Vanrise.DataParser.Business.csproj", "{24238652-C36C-473A-B366-C82EF712AD7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Data.SQL", "Vanrise.DataParser.SQL\Vanrise.DataParser.Data.SQL.csproj", "{92A59410-D13F-472A-A43B-3058FD3CCF1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Data", "Vanrise.DataParser.Data\Vanrise.DataParser.Data.csproj", "{E459F08A-5BFD-472C-A48B-04DE24C39643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Web", "Vanrise.DataParser.Web\Vanrise.DataParser.Web.csproj", "{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 150
+		SccNumberOfProjects = 154
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -956,6 +964,22 @@ Global
 		SccProjectTopLevelParentUniqueName149 = Vanrise.sln
 		SccProjectName149 = Vanrise.DataParser.Entities
 		SccLocalPath149 = Vanrise.DataParser.Entities
+		SccProjectUniqueName150 = Vanrise.DataParser.Business\\Vanrise.DataParser.Business.csproj
+		SccProjectTopLevelParentUniqueName150 = Vanrise.sln
+		SccProjectName150 = Vanrise.DataParser.Business
+		SccLocalPath150 = Vanrise.DataParser.Business
+		SccProjectUniqueName151 = Vanrise.DataParser.SQL\\Vanrise.DataParser.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName151 = Vanrise.sln
+		SccProjectName151 = Vanrise.DataParser.SQL
+		SccLocalPath151 = Vanrise.DataParser.SQL
+		SccProjectUniqueName152 = Vanrise.DataParser.Data\\Vanrise.DataParser.Data.csproj
+		SccProjectTopLevelParentUniqueName152 = Vanrise.sln
+		SccProjectName152 = Vanrise.DataParser.Data
+		SccLocalPath152 = Vanrise.DataParser.Data
+		SccProjectUniqueName153 = Vanrise.DataParser.Web\\Vanrise.DataParser.Web.csproj
+		SccProjectTopLevelParentUniqueName153 = Vanrise.sln
+		SccProjectName153 = Vanrise.DataParser.Web
+		SccLocalPath153 = Vanrise.DataParser.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2176,6 +2200,38 @@ Global
 		{91D049E3-D276-4AC0-8AC1-3BF0BBE84751}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91D049E3-D276-4AC0-8AC1-3BF0BBE84751}.Release|x64.ActiveCfg = Release|Any CPU
 		{91D049E3-D276-4AC0-8AC1-3BF0BBE84751}.Release|x86.ActiveCfg = Release|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Release|x64.ActiveCfg = Release|Any CPU
+		{24238652-C36C-473A-B366-C82EF712AD7C}.Release|x86.ActiveCfg = Release|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Release|x64.ActiveCfg = Release|Any CPU
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F}.Release|x86.ActiveCfg = Release|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Release|x64.ActiveCfg = Release|Any CPU
+		{E459F08A-5BFD-472C-A48B-04DE24C39643}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2335,5 +2391,9 @@ Global
 		{FD744119-7B12-4E47-916D-B503995458B8} = {BCE7C337-3A79-4B87-A3E1-17AF9AC2C755}
 		{B8D094FD-2AC9-46DE-9273-CEE8CACBA8C8} = {BCE7C337-3A79-4B87-A3E1-17AF9AC2C755}
 		{91D049E3-D276-4AC0-8AC1-3BF0BBE84751} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
+		{24238652-C36C-473A-B366-C82EF712AD7C} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
+		{92A59410-D13F-472A-A43B-3058FD3CCF1F} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
+		{E459F08A-5BFD-472C-A48B-04DE24C39643} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
+		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
 	EndGlobalSection
 EndGlobal

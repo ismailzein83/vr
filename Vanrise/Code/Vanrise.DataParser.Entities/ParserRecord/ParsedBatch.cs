@@ -9,7 +9,7 @@ namespace Vanrise.DataParser.Entities
     public class ParsedBatch
     {
         public string RecordType { get; set; }
-        public IEnumerable<ParsedRecord> ParsedRecords { get; set; }
+        public List<ParsedRecord> ParsedRecords { get; set; }
 
     }
 }

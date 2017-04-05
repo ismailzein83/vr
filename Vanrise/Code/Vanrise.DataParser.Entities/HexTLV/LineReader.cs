@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.DataParser.Entities
+namespace Vanrise.DataParser.Entities.HexTLV
 {
-    public class ParsedRecord
+    public abstract class LineReader
     {
-        public Dictionary<string, object> Fields { get; set; }
-
     }
 }

@@ -13,7 +13,11 @@ namespace Vanrise.DataParser.Entities
 
     public abstract class ParserTypeExtendedSettings
     {
-        public abstract IEnumerable<ParsedBatch> Execute(IDataParserInput input);
+        public abstract List<ParsedBatch> Execute(IDataParserInput input);
     }
 
+    public interface IParserTypeExtendedSettingsContext
+    {
+        IDataParserInput Input { get; }
+    }
 }
