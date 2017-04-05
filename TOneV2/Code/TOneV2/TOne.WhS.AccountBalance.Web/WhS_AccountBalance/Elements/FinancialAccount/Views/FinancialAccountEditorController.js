@@ -59,8 +59,16 @@
                 var setLoader = function (value) {
                     $scope.scopeModel.isLoadingDirective = value;
                 };
-                var directivePayload = { carrierProfileId: carrierProfileId, carrierAccountId: carrierAccountId };
-
+                var directivePayload;
+                if (financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined) {
+                    directivePayload = {
+                        carrierProfileId: financialAccountEntity.FinancialAccount.CarrierProfileId,
+                        carrierAccountId: financialAccountEntity.FinancialAccount.CarrierAccountId
+                    };
+                } else {
+                    directivePayload = { carrierProfileId: carrierProfileId, carrierAccountId: carrierAccountId };
+                }
+               
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
 
