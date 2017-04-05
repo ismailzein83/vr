@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordAlertRuleService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordAlertRuleService) {
+app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordAlertRuleService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordAlertRuleService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -31,7 +31,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
             var dataRecordAlertRuleSettingReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                $scope.scopeModel = {};
+                $scope.scopeModel = {}; 
                 $scope.scopeModel.tabObject = { showTab: false };
 
                 $scope.scopeModel.onDataRecordFieldsSelectorReady = function (api) {
@@ -54,9 +54,17 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                     }
                 };
 
+                $scope.scopeModel.onBeforeDataRecordFieldsSelectionChanged = function () {
+                    var isSettingsDirectiveHasData = dataRecordAlertRuleSettingsAPI.hasData();
+                    if (isSettingsDirectiveHasData == true) {
+                        return VRNotificationService.showConfirmation("Settings Data will be deleted. Are you sure you want to continue?").then(function (response) {
+                            return response;
+                        });
+                    }
 
-                $scope.scopeModel.onPreSelectDataRecordField = function (selectedItem) {
-                    return VR_GenericData_DataRecordAlertRuleService.onEditIdentificationFields();
+                    var dummyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    dummyPromiseDeferred.resolve(true);
+                    return dummyPromiseDeferred.promise;
                 };
                 $scope.scopeModel.onSelectDataRecordField = function (selectedItem) {
                     $scope.scopeModel.tabObject.showTab = true;
@@ -64,10 +72,6 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                     if (selectedItem != undefined) {
                         loadDataRecordAlertRuleSettingsDirective();
                     }
-                };
-
-                $scope.scopeModel.onPreDeselectDataRecordField = function (deselectedItem) {
-                    return VR_GenericData_DataRecordAlertRuleService.onEditIdentificationFields();
                 };
                 $scope.scopeModel.onDeselectDataRecordField = function (deselectedItem) {
                     if ($scope.scopeModel.selectedDataRecordFields.length == 1)

@@ -57,6 +57,8 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
                 var api = {};
 
                 api.load = function (payload) {
+                    directiveAPI = undefined;
+
                     var promises = [];
 
                     if (payload != undefined) {
@@ -115,6 +117,15 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
 
                 api.getData = function () {
                     return directiveAPI.getData();
+                };
+
+                api.hasData = function () {
+                    var hasData = false;
+
+                    if (directiveAPI != undefined) {
+                        hasData = directiveAPI.hasData();
+                    }
+                    return hasData;
                 };
 
                 if (ctrl.onReady != null)

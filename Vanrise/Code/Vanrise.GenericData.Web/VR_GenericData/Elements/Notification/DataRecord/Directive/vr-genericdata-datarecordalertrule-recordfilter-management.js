@@ -96,6 +96,10 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
                 };
             };
 
+            api.hasData = function () {
+                return ctrl.datasource.length > 0;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         };

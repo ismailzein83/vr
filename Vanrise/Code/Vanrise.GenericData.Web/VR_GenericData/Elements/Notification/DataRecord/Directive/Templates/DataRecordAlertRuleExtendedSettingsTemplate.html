@@ -3,6 +3,7 @@
         <vr-columns width="1/2row">
             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
                                                           selectedvalues="scopeModel.selectedDataRecordFields"
+                                                          onbeforeselectionchanged="scopeModel.onBeforeDataRecordFieldsSelectionChanged"
                                                           onselectionchanged="scopeModel.onDataRecordFieldsSelectionChanged"
                                                           onselectitem="scopeModel.onSelectDataRecordField"
                                                           ondeselectitem="scopeModel.onDeselectDataRecordField"
