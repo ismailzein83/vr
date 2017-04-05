@@ -16,7 +16,7 @@ namespace Vanrise.DataParser.Business.HexTLV
         }
         public RecordReader RecordReader { get; set; }
 
-        public override List<ParsedBatch> Execute(IParserTypeExecuteContext context)
+        public override void Execute(IParserTypeExecuteContext context)
         {
             throw new NotImplementedException();
         }

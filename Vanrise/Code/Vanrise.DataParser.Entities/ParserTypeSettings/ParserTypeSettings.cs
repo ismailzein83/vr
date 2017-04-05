@@ -14,11 +14,15 @@ namespace Vanrise.DataParser.Entities
     public abstract class ParserTypeExtendedSettings
     {
         public abstract Guid ConfigId { get; }
-        public abstract List<ParsedBatch> Execute(IParserTypeExecuteContext context);
+        public abstract void Execute(IParserTypeExecuteContext context);
     }
 
     public interface IParserTypeExecuteContext
     {
         IDataParserInput Input { get; }
+
+        ParsedRecord CreateRecord(string recordType);
+
+        void OnRecordParsed(ParsedRecord parsedRecord);
     }
 }

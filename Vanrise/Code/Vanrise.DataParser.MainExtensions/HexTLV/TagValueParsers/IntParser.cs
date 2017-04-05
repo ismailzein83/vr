@@ -14,5 +14,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
             get { throw new NotImplementedException(); }
         }
         public string FieldName { get; set; }
+
+        public override void Execute(ITagValueParserExecuteContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

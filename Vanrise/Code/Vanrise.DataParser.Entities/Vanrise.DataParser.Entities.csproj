@@ -46,8 +46,8 @@
     <Compile Include="HexTLV\HexTLVTagType.cs" />
     <Compile Include="HexTLV\RecordReader.cs" />
     <Compile Include="HexTLV\TagValueParser.cs" />
+    <Compile Include="ParserRecord\FldDictParsedRecord.cs" />
     <Compile Include="ParserTypeSettings\IDataParserInput.cs" />
-    <Compile Include="ParserRecord\ParsedBatch.cs" />
     <Compile Include="ParserRecord\ParsedRecord.cs" />
     <Compile Include="ParserTypeSettings\ParserTypeSettings.cs" />
     <Compile Include="ParserType\ParserType.cs" />

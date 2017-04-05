@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Entities
 {
-    public class ParsedRecord
+    public abstract class ParsedRecord
     {
-        public Dictionary<string, object> Fields { get; set; }
-
+        public abstract void SetFieldValue(string fieldName, Object value);
     }
 }

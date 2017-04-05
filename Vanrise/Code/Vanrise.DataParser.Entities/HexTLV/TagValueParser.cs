@@ -10,5 +10,13 @@ namespace Vanrise.DataParser.Entities.HexTLV
     {
         public abstract Guid ConfigId { get; }
 
+        public abstract void Execute(ITagValueParserExecuteContext context);
+    }
+
+    public interface ITagValueParserExecuteContext
+    {
+        List<byte> TagValue { get; }
+
+        ParsedRecord Record { get; }
     }
 }
