@@ -109,11 +109,6 @@ when not matched by target then
 	insert([ID],[Name],[ExecutionFlowDefinitionID])
 	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID]);
 
-
---[runtime].[SchedulerTaskTriggerType]--------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[TriggerTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('295B4FAC-DBF9-456F-855E-60D0B176F86B','Timer','{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[TriggerTypeInfo]))merge	[runtime].[SchedulerTaskTriggerType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[TriggerTypeInfo] = s.[TriggerTypeInfo]when not matched by target then	insert([ID],[Name],[TriggerTypeInfo])	values(s.[ID],s.[Name],s.[TriggerTypeInfo]);
-----------------------------------------------------------------------------------------------------
-
-
 --[runtime].[ScheduleTask]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
