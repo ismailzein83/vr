@@ -61,10 +61,10 @@ namespace Vanrise.Queueing
                 bool hasItem = false;
                 do
                 {
-                    Action<PersistentQueueItem> processItem =
-                        (itemToProcess) =>
+                    Action<PersistentQueueItem, QueueItem> processItem =
+                        (itemToProcess, queueItem) =>
                         {
-                            QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
+                            QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance, queueItem);
                             queueInstance.Settings.Activator.ProcessItem(context);
 
                             if (context.OutputItems != null && context.OutputItems.Count > 0)

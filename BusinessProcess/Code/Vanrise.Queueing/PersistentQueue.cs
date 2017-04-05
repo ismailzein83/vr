@@ -12,7 +12,7 @@ using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Queueing
-{    
+{
     public class PersistentQueue<T> : BaseQueue<T>, IPersistentQueue where T : PersistentQueueItem
     {
         #region ctor/Fields
@@ -63,7 +63,7 @@ namespace Vanrise.Queueing
         #endregion
 
         #region Public Methods
-       
+
         public override void Enqueue(T item)
         {
             EnqueuePrivate(item);
@@ -71,7 +71,7 @@ namespace Vanrise.Queueing
 
         long EnqueuePrivate(T item)
         {
-            DateTime? batchStart = item.BatchStart != DateTime.MinValue ? item.BatchStart : default(DateTime?);            
+            DateTime? batchStart = item.BatchStart != DateTime.MinValue ? item.BatchStart : default(DateTime?);
             string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
@@ -103,14 +103,14 @@ namespace Vanrise.Queueing
             if (processItem == null)
                 throw new ArgumentNullException("processItem");
 
-            return TryDequeuePrivate(processItem, null);
+            return TryDequeuePrivate((persistentQueueItem, queueItem) => { processItem(persistentQueueItem); }, null);
         }
 
         #endregion
 
         #region Private Methods
 
-        private bool TryDequeuePrivate(Action<T> processItem, IPersistentQueueDequeueContext context)
+        private bool TryDequeuePrivate(Action<T, QueueItem> processItem, IPersistentQueueDequeueContext context)
         {
             QueueItem queueItem = null;
             if (context != null && context.ActivatorInstanceId.HasValue)
@@ -129,7 +129,7 @@ namespace Vanrise.Queueing
                 T deserialized = DeserializeQueueItem(queueItem);
                 try
                 {
-                    processItem(deserialized);
+                    processItem(deserialized, queueItem);
                     _dataManagerQueueItem.DeleteItem(_queueId, queueItem.ItemId);
                     _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processed);
                 }
@@ -172,7 +172,7 @@ namespace Vanrise.Queueing
         }
 
 
-        public bool TryDequeueObject(Action<PersistentQueueItem> processItem, IPersistentQueueDequeueContext context)
+        public bool TryDequeueObject(Action<PersistentQueueItem, QueueItem> processItem, IPersistentQueueDequeueContext context)
         {
             if (processItem == null)
                 throw new ArgumentNullException("processItem");
@@ -189,12 +189,12 @@ namespace Vanrise.Queueing
                 var itemsIds = summaryBatches.Select(itm => itm.ItemId);
                 _dataManagerQueueItem.UpdateHeaderStatuses(itemsIds, QueueItemStatus.Processing);
                 List<PersistentQueueItem> deserializedBatches = new List<PersistentQueueItem>();
-                foreach(var summaryBatch in summaryBatches)
+                foreach (var summaryBatch in summaryBatches)
                 {
                     T deserialized = DeserializeQueueItem(summaryBatch);
                     deserializedBatches.Add(deserialized);
                 }
-                
+
                 try
                 {
                     processBatches(deserializedBatches);
@@ -209,7 +209,7 @@ namespace Vanrise.Queueing
                     if (retryCount >= _maxRetryDequeueTime)
                         failedStatus = QueueItemStatus.Suspended;
                     _dataManagerQueueItem.UpdateHeaders(itemsIds, failedStatus, retryCount, ex.ToString());
-                    if(failedStatus == QueueItemStatus.Suspended)
+                    if (failedStatus == QueueItemStatus.Suspended)
                         _dataManagerQueueItem.SetItemsSuspended(_queueId, itemsIds);
                     throw;
                 }

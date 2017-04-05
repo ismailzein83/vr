@@ -21,7 +21,7 @@ namespace Vanrise.Queueing.Entities
                 {
                     if (!int.TryParse(ConfigurationManager.AppSettings[String.Format("Queue_NbOfMaxConcurrentActivators_{0}", activatorName)], out nbOfConcurrentActivators))
                         if (!int.TryParse(ConfigurationManager.AppSettings["Queue_NbOfMaxConcurrentActivators_Default"], out nbOfConcurrentActivators))
-                        nbOfConcurrentActivators = 10;
+                            nbOfConcurrentActivators = 10;
                     s_nbOfMaxConcurrentActivators.TryAdd(activatorName, nbOfConcurrentActivators);
                 }
                 return nbOfConcurrentActivators;
@@ -35,7 +35,7 @@ namespace Vanrise.Queueing.Entities
         /// </summary>
         /// <param name="item"></param>
         /// <param name="outputItems"></param>
-        public virtual void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems){}
+        public virtual void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems) { }
 
         public virtual void ProcessItem(IQueueActivatorExecutionContext context)
         {
@@ -61,5 +61,7 @@ namespace Vanrise.Queueing.Entities
         QueueExecutionFlowStage GetStage(string stageName);
 
         QueueInstance Queue { get; }
+
+        QueueItem QueueItem { get; }
     }
 }

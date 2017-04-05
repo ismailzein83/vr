@@ -12,7 +12,7 @@ namespace Vanrise.Queueing.Entities
 
         long EnqueueObject(PersistentQueueItem item);
 
-        bool TryDequeueObject(Action<PersistentQueueItem> processItem, IPersistentQueueDequeueContext context);
+        bool TryDequeueObject(Action<PersistentQueueItem, QueueItem> processItem, IPersistentQueueDequeueContext context);
 
         bool TryDequeueSummaryBatches(DateTime batchStart, Action<IEnumerable<PersistentQueueItem>> processBatches);
     }

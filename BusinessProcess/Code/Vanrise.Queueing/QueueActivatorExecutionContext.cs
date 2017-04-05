@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing
@@ -11,10 +7,21 @@ namespace Vanrise.Queueing
     {
         PersistentQueueItem _itemToProcess;
         QueueInstance _queueInstance;
-        public QueueActivatorExecutionContext(PersistentQueueItem itemToProcess, QueueInstance queueInstance)
+        QueueItem _queueItem;
+
+        public QueueActivatorExecutionContext(PersistentQueueItem itemToProcess, QueueInstance queueInstance, QueueItem queueItem)
         {
             this._itemToProcess = itemToProcess;
             this._queueInstance = queueInstance;
+            this._queueItem = queueItem;
+        }
+
+        public QueueItem QueueItem
+        {
+            get
+            {
+                return this._queueItem;
+            }
         }
 
         public PersistentQueueItem ItemToProcess
@@ -36,7 +43,7 @@ namespace Vanrise.Queueing
             get
             {
                 return GetStage(this._queueInstance.StageName);
-            }        
+            }
         }
 
 
@@ -44,11 +51,11 @@ namespace Vanrise.Queueing
 
         public QueueExecutionFlowStage GetStage(string stageName)
         {
-            if(_queueExecutionFlowStagesByStageName == null)
+            if (_queueExecutionFlowStagesByStageName == null)
             {
                 QueueExecutionFlowManager execFlowManager = new QueueExecutionFlowManager();
                 var execFlow = execFlowManager.GetExecutionFlow(this._queueInstance.ExecutionFlowId.Value);
-                if(execFlow == null)
+                if (execFlow == null)
                     throw new NullReferenceException(String.Format("Execution Flow '{0}'", this._queueInstance.ExecutionFlowId.Value));
                 QueueExecutionFlowDefinitionManager execFlowDefinitionManager = new QueueExecutionFlowDefinitionManager();
                 _queueExecutionFlowStagesByStageName = execFlowDefinitionManager.GetFlowStages(execFlow.DefinitionId);
