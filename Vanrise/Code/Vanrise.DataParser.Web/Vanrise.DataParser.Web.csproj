@@ -112,6 +112,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="VR_DataParser\Elements\HexTLV\Directives\" />
+    <Folder Include="VR_DataParser\Elements\HexTLV\Services\" />
+    <Folder Include="VR_DataParser\Elements\HexTLV\Views\" />
     <Folder Include="VR_DataParser\Elements\ParserType\Directives\" />
     <Folder Include="VR_DataParser\Elements\ParserType\Services\" />
     <Folder Include="VR_DataParser\Elements\ParserType\Views\" />
@@ -174,6 +177,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

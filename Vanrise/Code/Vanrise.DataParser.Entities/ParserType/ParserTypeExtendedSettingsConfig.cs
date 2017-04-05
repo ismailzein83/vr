@@ -7,15 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.DataParser.Entities
 {
-    public class ParserType
+    public class ParserTypeExtendedSettingsConfig : ExtensionConfiguration
     {
-        public Guid ParserTypeId { get; set; }
-        public string Name { get; set; }
-        public ParserTypeSettings Settings { get; set; }
-
+        public const string EXTENSION_TYPE = "VR_DataParser_ParserTypeExtendedSettings";
+        public string Editor { get; set; }
     }
-
-  
-   
-   
 }

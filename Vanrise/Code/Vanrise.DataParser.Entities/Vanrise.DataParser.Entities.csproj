@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HexTLV\HexTLVRecordReadersConfig.cs" />
     <Compile Include="HexTLV\HexTLVTagType.cs" />
+    <Compile Include="HexTLV\HexTLVTagValueParserConfig.cs" />
     <Compile Include="HexTLV\RecordReader.cs" />
     <Compile Include="HexTLV\TagValueParser.cs" />
     <Compile Include="ParserRecord\FldDictParsedRecord.cs" />
@@ -51,6 +53,7 @@
     <Compile Include="ParserRecord\ParsedRecord.cs" />
     <Compile Include="ParserTypeSettings\ParserTypeSettings.cs" />
     <Compile Include="ParserType\ParserType.cs" />
+    <Compile Include="ParserType\ParserTypeExtendedSettingsConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
