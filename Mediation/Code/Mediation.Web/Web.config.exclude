@@ -32,6 +32,8 @@
     <add name="MainDBConnString" connectionString=""/>    
   </connectionStrings>
   <appSettings>
+    <add key="Web_ExtendedModulesNames" value="VR_DataParser"/>
+
     <add key="webpages:Version" value="2.0.0.0" />
     <add key="webpages:Enabled" value="false" />
     <add key="PreserveLoginUrl" value="true" />
