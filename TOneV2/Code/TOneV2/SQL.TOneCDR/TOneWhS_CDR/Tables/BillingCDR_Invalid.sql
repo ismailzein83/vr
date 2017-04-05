@@ -31,8 +31,11 @@
     [SwitchId]                    INT             NULL,
     [CostRateId]                  BIGINT          NULL,
     [SaleRateId]                  BIGINT          NULL,
-    [CountryId]                   INT             NULL
+    [CountryId]                   INT             NULL,
+    [QueueItemId]                 BIGINT          NULL
 );
+
+
 
 
 

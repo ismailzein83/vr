@@ -51,7 +51,10 @@
     [SaleExtraChargeValue]        DECIMAL (22, 6) NULL,
     [CountryId]                   INT             NULL,
     [SaleExtraChargeRateValue]    DECIMAL (20, 8) NULL,
-    [CostExtraChargeRateValue]    DECIMAL (20, 8) NULL);
+    [CostExtraChargeRateValue]    DECIMAL (20, 8) NULL,
+    [QueueItemId]                 BIGINT          NULL);
+
+
 
 
 

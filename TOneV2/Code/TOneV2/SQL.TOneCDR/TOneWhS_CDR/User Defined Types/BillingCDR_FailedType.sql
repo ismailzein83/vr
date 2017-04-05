@@ -29,7 +29,10 @@
     [ReleaseSource]               VARCHAR (10)    NULL,
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
-    [CountryId]                   INT             NULL);
+    [CountryId]                   INT             NULL,
+    [QueueItemId]                 BIGINT          NULL);
+
+
 
 
 

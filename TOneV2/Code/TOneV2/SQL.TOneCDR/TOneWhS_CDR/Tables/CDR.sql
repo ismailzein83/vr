@@ -1,4 +1,4 @@
-CREATE TABLE [TOneWhS_CDR].[CDR] (
+﻿CREATE TABLE [TOneWhS_CDR].[CDR] (
     [Id]                      BIGINT          NOT NULL,
     [IDonSwitch]              BIGINT          NULL,
     [Tag]                     VARCHAR (100)   NULL,
@@ -25,8 +25,11 @@ CREATE TABLE [TOneWhS_CDR].[CDR] (
     [CDPNOut]                 VARCHAR (50)    NULL,
     [SIP]                     VARCHAR (100)   NULL,
     [SwitchID]                INT             NULL,
-    [CDPNIn]                  VARCHAR (50)    NULL
+    [CDPNIn]                  VARCHAR (50)    NULL,
+    [QueueItemId]             BIGINT          NULL
 );
+
+
 
 
 
