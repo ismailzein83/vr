@@ -62,7 +62,8 @@
     <loggers>
       <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
         <parameters>
-          <parameter name="ConnectionStringKey" value="LogDBConnString" />
+          <parameter name="LoggingConnectionStringKey" value="LogDBConnString" />
+          <parameter name="ConfigurationConnectionStringKey" value="ConfigurationDBConnString" />
         </parameters>
       </logger>
       <logger name="ConsoleLogger"  type="Vanrise.Common.ConsoleLogger, Vanrise.Common"></logger>
@@ -86,6 +87,7 @@
   <appSettings>
     <add key="Mediation_GenericRecord_DBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="Mediation_GenericConfig_DBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
     <add key="QueueDBConnStringKey" value="TransactionDBConnString"/>
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString"/>
