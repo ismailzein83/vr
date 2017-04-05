@@ -13,6 +13,7 @@ namespace Vanrise.DataParser.Entities
 
     public abstract class ParserTypeExtendedSettings
     {
+        public abstract Guid ConfigId { get; }
         public abstract List<ParsedBatch> Execute(IParserTypeExecuteContext context);
     }
 

@@ -9,6 +9,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 {
     public class BoolParser : TagValueParser
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
         public string FieldName { get; set; }
     }
 }

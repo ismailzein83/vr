@@ -9,6 +9,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 {
     public class SequenceParser : TagValueParser
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
         public Dictionary<string, HexTLVTagType> TagTypes { get; set; }
     }
 }

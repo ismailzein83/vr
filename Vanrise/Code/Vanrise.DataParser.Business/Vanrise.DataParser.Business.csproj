@@ -44,9 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HexTLV\HexTLVParserType.cs" />
+    <Compile Include="ParserTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.DataParser.Data\Vanrise.DataParser.Data.csproj">
+      <Project>{e459f08a-5bfd-472c-a48b-04de24c39643}</Project>
+      <Name>Vanrise.DataParser.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.DataParser.Entities\Vanrise.DataParser.Entities.csproj">
       <Project>{91d049e3-d276-4ac0-8ac1-3bf0bbe84751}</Project>
       <Name>Vanrise.DataParser.Entities</Name>

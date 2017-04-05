@@ -43,7 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParserTypeDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Data.SQL\Vanrise.Data.SQL.csproj">
+      <Project>{4ab70e59-2c65-4167-8d5f-897702cf161b}</Project>
+      <Name>Vanrise.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DataParser.Data\Vanrise.DataParser.Data.csproj">
+      <Project>{e459f08a-5bfd-472c-a48b-04de24c39643}</Project>
+      <Name>Vanrise.DataParser.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DataParser.Entities\Vanrise.DataParser.Entities.csproj">
+      <Project>{91d049e3-d276-4ac0-8ac1-3bf0bbe84751}</Project>
+      <Name>Vanrise.DataParser.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

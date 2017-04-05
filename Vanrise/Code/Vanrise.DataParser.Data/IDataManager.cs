@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Data
 {
-    public class Class1
+    public interface IDataManager
     {
     }
 }

@@ -9,7 +9,13 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders
 {
     public class TagRecordReader : RecordReader
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
         public List<TagRecordType> TagRecordTypes { get; set; }
+
+       
     }
 
     public class TagRecordType

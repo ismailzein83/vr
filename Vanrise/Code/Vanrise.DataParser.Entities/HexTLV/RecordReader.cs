@@ -8,5 +8,7 @@ namespace Vanrise.DataParser.Entities.HexTLV
 {
     public abstract class RecordReader
     {
+        public abstract Guid ConfigId { get; }
+
     }    
 }

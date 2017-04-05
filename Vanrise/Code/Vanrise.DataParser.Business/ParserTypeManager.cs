@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.DataParser.Entities.HexTLV
+namespace Vanrise.DataParser.Business
 {
-    public abstract class TagValueParser
+    public class ParserTypeManager
     {
-        public abstract Guid ConfigId { get; }
-
     }
 }

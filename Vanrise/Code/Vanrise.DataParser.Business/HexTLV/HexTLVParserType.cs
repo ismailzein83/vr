@@ -10,11 +10,17 @@ namespace Vanrise.DataParser.Business.HexTLV
 {
     public class HexTLVParserType : ParserTypeExtendedSettings
     {
+        public override Guid ConfigId
+        {
+            get { throw new NotImplementedException(); }
+        }
         public RecordReader RecordReader { get; set; }
 
         public override List<ParsedBatch> Execute(IParserTypeExecuteContext context)
         {
             throw new NotImplementedException();
         }
+
+      
     }
 }
