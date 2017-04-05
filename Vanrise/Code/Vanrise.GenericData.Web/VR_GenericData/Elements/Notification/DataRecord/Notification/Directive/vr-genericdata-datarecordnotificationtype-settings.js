@@ -14,7 +14,7 @@ app.directive('vrGenericdataDatarecordnotificationtypeSettings', ['UtilsService'
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Notification/Directive/Templates/NotificationTypeSettingsTemplate.html'
         };
 
         function DataRecordNotificationTypeSettings($scope, ctrl, $attrs) {

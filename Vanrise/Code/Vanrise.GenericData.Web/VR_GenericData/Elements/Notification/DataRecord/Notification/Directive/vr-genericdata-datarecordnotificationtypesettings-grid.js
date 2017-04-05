@@ -14,7 +14,7 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Notification/Directive/Templates/NotificationTypeSettingsGridTemplate.html'
         };
 
         function DataRecordNotificationGridDirective($scope, ctrl, $attrs) {

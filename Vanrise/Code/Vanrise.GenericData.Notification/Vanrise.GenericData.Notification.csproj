@@ -57,22 +57,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleExtendedSettings.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleTypeSettings.cs" />
-    <Compile Include="DataRecord\DataRecordActionTargetType.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleConfig.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleNotificationManager.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleManager.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleNotification.cs" />
-    <Compile Include="DataRecord\DataRecordNotificationExtendedQuery.cs" />
-    <Compile Include="DataRecord\DataRecordNotificationTypeSettings.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleController.cs" />
-    <Compile Include="DataRecord\DataRecordNotificationTypeSettingsController.cs" />
-    <Compile Include="DataRecord\DataRecordNotificationTypeSettingsManager.cs" />
-    <Compile Include="DataRecord\DataRecordSendEmailDefinitionSettings.cs" />
-    <Compile Include="DataRecord\DataRecordAlertRuleActionEventPayload.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleExtendedSettings.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleTypeSettings.cs" />
+    <Compile Include="DataRecord\Actions\DataRecordActionTargetType.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleConfig.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleNotificationManager.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleManager.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleNotification.cs" />
+    <Compile Include="DataRecord\Notification\DataRecordNotificationExtendedQuery.cs" />
+    <Compile Include="DataRecord\Notification\DataRecordNotificationTypeSettings.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleController.cs" />
+    <Compile Include="DataRecord\Notification\DataRecordNotificationTypeSettingsController.cs" />
+    <Compile Include="DataRecord\Notification\DataRecordNotificationTypeSettingsManager.cs" />
+    <Compile Include="DataRecord\Actions\DataRecordSendEmailDefinitionSettings.cs" />
+    <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleActionEventPayload.cs" />
     <Compile Include="DataRecord\Filters\IVRAlertRuleTypeFilter\DataRecordAlertRuleTypeFilter.cs" />
-    <Compile Include="DataRecord\RecordFilterAlertRuleConfig.cs" />
+    <Compile Include="DataRecord\AlertRule\RecordFilterAlertRuleConfig.cs" />
     <Compile Include="DataRecord\Filters\IVRNotificationTypeFilter\DataRecordNotificationTypeFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRecord\QueueActivators\DataRecordCheckAlertRulesQueueActivator.cs" />

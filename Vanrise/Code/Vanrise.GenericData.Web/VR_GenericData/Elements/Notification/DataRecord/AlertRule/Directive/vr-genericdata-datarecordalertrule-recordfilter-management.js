@@ -17,7 +17,7 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/AlertRuleRecordFilterManagementTemplate.html'
+        templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/AlertRule/Directive/Templates/DataRecordAlertRuleRecordFilterManagementTemplate.html'
     };
 
     function DataRecordAlertRule(ctrl, $scope, $attrs) {

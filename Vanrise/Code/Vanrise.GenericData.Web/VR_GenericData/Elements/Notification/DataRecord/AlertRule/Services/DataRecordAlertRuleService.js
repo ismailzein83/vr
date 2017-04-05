@@ -8,28 +8,34 @@
     function DataRecordAlertRuleService(VRModalService) {
 
         function addDataRecordAlertRule(context, onDataRecordAlertRuleAdded) {
-            var settings = {};
+
             var parameters = {
                 context: context
             };
+
+            var settings = {};
+
             settings.onScopeReady = function (modalScope) {
                 modalScope.onDataRecordAlertRuleAdded = onDataRecordAlertRuleAdded
             };
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Views/AlertRuleRecordEditor.html', parameters, settings);
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/AlertRule/Views/AlertRuleRecordEditor.html', parameters, settings);
         }
 
         function editDataRecordAlertRule(dataRecordAlertRuleEntity, context, onDataRecordAlertRuleUpdated) {
-            var settings = {};
 
             var parameters = {
                 dataRecordAlertRuleEntity: dataRecordAlertRuleEntity,
                 context: context
             };
 
+            var settings = {};
+
             settings.onScopeReady = function (modalScope) {
                 modalScope.onDataRecordAlertRuleUpdated = onDataRecordAlertRuleUpdated;
             };
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Views/AlertRuleRecordEditor.html', parameters, settings);
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/AlertRule/Views/AlertRuleRecordEditor.html', parameters, settings);
         }
 
 

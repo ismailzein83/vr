@@ -18,7 +18,7 @@ app.directive("vrGenericdataDatarecordnotificationtypesettingsBodyeditor", ["Uti
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/NotificationTypeSettingsBodyEditorTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Notification/Directive/Templates/NotificationTypeSettingsBodyEditorTemplate.html"
         };
 
         function NotificationTypeSettingsBodyEditorCtor($scope, ctrl, $attrs) {

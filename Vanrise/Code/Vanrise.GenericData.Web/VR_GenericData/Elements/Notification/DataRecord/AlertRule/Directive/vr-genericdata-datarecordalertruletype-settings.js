@@ -14,7 +14,7 @@ app.directive('vrGenericdataDatarecordalertruletypeSettings', ['UtilsService', '
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/Directive/Templates/DataRecordAlertRuleTypeSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/AlertRule/Directive/Templates/DataRecordAlertRuleTypeSettingsTemplate.html'
         };
 
         function DataRecordAlertRuleTypeSettings($scope, ctrl, $attrs) {

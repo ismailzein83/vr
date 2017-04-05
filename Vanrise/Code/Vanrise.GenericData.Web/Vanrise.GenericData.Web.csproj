@@ -457,31 +457,31 @@
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\DataRecordAlertRuleExtendedSettingsTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\DataRecordAlertRuleTypeSettingsTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordalertrule-extendedsettings.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordalertruletype-settings.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\Templates\DataRecordAlertRuleExtendedSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\Templates\DataRecordAlertRuleTypeSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertrule-extendedsettings.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertruletype-settings.js" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\Templates\QueueActivatorDataRecordCheckAlertRulesTemplate.html" />
     <Content Include="VR_GenericData\Elements\Notification\DataRecord\QueueActivators\Directive\vr-genericdata-queueactivator-datarecordcheckalertrules.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Services\DataRecordNotificationTypeSettingsService.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Views\AlertRuleRecordEditor.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\AlertRuleRecordFilterManagementTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\AlertRuleSettingsTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordalertrule-recordfilter-management.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordalertrule-settings.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordalertruleconfig-selector.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Services\APIServices\DataRecordAlertRuleAPIService.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Services\APIServices\DataRecordNotificationTypeSettingsAPIService.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\NotificationTypeSettingsGridTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\NotificationTypeSettingsBodyEditorTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\NotificationTypeSettingsSearchEditorTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\NotificationTypeSettingsTemplate.html" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordnotificationtypesettings-grid.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordnotificationtypesettings-bodyeditor.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordnotificationtypesettings-searcheditor.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Directive\vr-genericdata-datarecordnotificationtype-settings.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Services\DataRecordAlertRuleService.js" />
-    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Views\AlertRuleRecordEditorController.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Services\DataRecordNotificationTypeSettingsService.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Views\AlertRuleRecordEditor.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\Templates\DataRecordAlertRuleRecordFilterManagementTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\Templates\DataRecordAlertRuleSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertrule-recordfilter-management.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertrule-settings.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Directive\vr-genericdata-datarecordalertruleconfig-selector.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Services\APIServices\DataRecordAlertRuleAPIService.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Services\APIServices\DataRecordNotificationTypeSettingsAPIService.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\Templates\NotificationTypeSettingsGridTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\Templates\NotificationTypeSettingsBodyEditorTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\Templates\NotificationTypeSettingsSearchEditorTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\Templates\NotificationTypeSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\vr-genericdata-datarecordnotificationtypesettings-grid.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\vr-genericdata-datarecordnotificationtypesettings-bodyeditor.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\vr-genericdata-datarecordnotificationtypesettings-searcheditor.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\Notification\Directive\vr-genericdata-datarecordnotificationtype-settings.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Services\DataRecordAlertRuleService.js" />
+    <Content Include="VR_GenericData\Elements\Notification\DataRecord\AlertRule\Views\AlertRuleRecordEditorController.js" />
     <Content Include="VR_GenericData\ModuleInitialization.js" />
     <Content Include="VR_GenericData\Services\APIServices\BELookupRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationAPIService.js" />
@@ -596,7 +596,11 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\" />
+    <Folder Include="VR_GenericData\Elements\Notification\DataRecord\Services\APIServices\" />
+    <Folder Include="VR_GenericData\Elements\Notification\DataRecord\Views\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />
