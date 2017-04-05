@@ -16,7 +16,10 @@
     [OtherPartyNumber]       VARCHAR (100)    NULL,
     [InterconnectOperatorId] BIGINT           NULL,
     [Zone]                   BIGINT           NULL,
-    [PackageId]              INT              NULL);
+    [PackageId]              INT              NULL,
+    [QueueItemId]            BIGINT           NULL);
+
+
 
 
 

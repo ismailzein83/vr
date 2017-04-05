@@ -15,8 +15,11 @@
     [Called]                 VARCHAR (100)    NULL,
     [OtherPartyNumber]       VARCHAR (100)    NULL,
     [InterconnectOperatorId] BIGINT           NULL,
-    [Zone]                   BIGINT           NULL
+    [Zone]                   BIGINT           NULL,
+    [QueueItemId]            BIGINT           NULL
 );
+
+
 
 
 

@@ -19,7 +19,10 @@
     [OriginatorIP]         VARCHAR (50)    NULL,
     [TerminatorIP]         VARCHAR (50)    NULL,
     [AttemptDateTime]      DATETIME        NULL,
-    [FileName]             VARCHAR (200)   NULL);
+    [FileName]             VARCHAR (200)   NULL,
+    [QueueItemId]          BIGINT          NULL);
+
+
 
 
 

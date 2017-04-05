@@ -21,8 +21,11 @@
     [Rate]                   DECIMAL (20, 8)  NULL,
     [Amount]                 DECIMAL (22, 6)  NULL,
     [RateTypeId]             INT              NULL,
-    [CurrencyId]             INT              NULL
+    [CurrencyId]             INT              NULL,
+    [QueueItemId]            BIGINT           NULL
 );
+
+
 
 
 

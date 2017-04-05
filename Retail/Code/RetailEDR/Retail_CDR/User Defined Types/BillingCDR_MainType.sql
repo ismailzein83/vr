@@ -21,7 +21,10 @@
     [RateTypeId]             INT              NULL,
     [CurrencyId]             INT              NULL,
     [FinancialAccountId]     BIGINT           NULL,
-    [AttemptDateTime]        DATETIME         NULL);
+    [AttemptDateTime]        DATETIME         NULL,
+    [QueueItemId]            BIGINT           NULL);
+
+
 
 
 
