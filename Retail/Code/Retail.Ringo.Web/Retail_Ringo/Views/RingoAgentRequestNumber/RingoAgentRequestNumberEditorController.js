@@ -33,7 +33,7 @@
                 }
                 Retail_Ringo_RingoAgentNumberRequestService.rejectAgentNumberRequest($scope, numberRequest, onNumberRequestRejected);
 
-            }
+            };
             $scope.scopeModel.addRule = function () {
 
                 var preDefinedData = {
