@@ -1,11 +1,14 @@
 ﻿<vr-tabs vertical>
     <vr-tab header="'Table Definition'">
         <vr-row removeline>
-            <vr-columns width="1/2row">
+            <vr-columns width="1/3row">
                 <vr-textbox value="ctrl.tableName" label="Table Name" isrequired="true"></vr-textbox>
             </vr-columns>
-            <vr-columns width="1/2row">
+            <vr-columns width="1/3row">
                 <vr-textbox value="ctrl.tableSchema" label="Table Schema"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-switch value="ctrl.includeQueueItemId" label="Include Queue Item"></vr-switch>
             </vr-columns>
         </vr-row>
         <vr-row>

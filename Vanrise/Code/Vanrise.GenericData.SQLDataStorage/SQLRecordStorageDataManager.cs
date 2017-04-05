@@ -157,6 +157,10 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 columnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
             }
+            if (_dataRecordStorageSettings.IncludeQueueItemId)
+            {
+                columnDefinitions.Add("QueueItemId bigint");
+            }
 
             return String.Format(" ({0});", string.Join(",", columnDefinitions));
         }
@@ -208,6 +212,13 @@ namespace Vanrise.GenericData.SQLDataStorage
             foreach (var columnDefinition in alterColumnDefinitions)
             {
                 builder.Append(String.Format("ALTER TABLE {0}.{1} ALTER COLUMN {2};", newSchema, newName, columnDefinition));
+            }
+
+            if (_dataRecordStorageSettings.IncludeQueueItemId)
+            {
+                builder.Append(String.Format(@"if not exists (select column_name from INFORMATION_SCHEMA.columns
+                                                              Where table_schema='{0}' AND table_name = '{1}' AND column_name = 'QueueItemId')
+                                               ALTER TABLE {0}.{1} ADD QueueItemId bigint;", newSchema, newName));
             }
 
             builder.AppendLine(BuildDropAndCreateTableTypeScript());

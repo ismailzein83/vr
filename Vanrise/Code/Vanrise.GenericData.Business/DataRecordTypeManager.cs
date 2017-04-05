@@ -337,6 +337,8 @@ namespace Vanrise.GenericData.Business
 
                         #GLOBALMEMBERS#
                             
+                        public long QueueItemId { get; set; }
+
                         public void SetFieldValue(string fieldName, dynamic fieldValue)
                         {
                             switch(fieldName)

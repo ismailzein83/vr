@@ -16,6 +16,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         public List<SQLDataRecordStorageColumn> Columns { get; set; }
 
         public List<NullableField> NullableFields { get; set; }
+
+        public bool IncludeQueueItemId { get; set; }
         
         /// <summary>
         /// this property is needed only in case the current storage (SQL table) is used to store Summary data (Statistic/Billing)

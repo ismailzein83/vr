@@ -29,19 +29,23 @@ namespace Vanrise.GenericData.QueueActivators
 
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
         {
+            if (context.QueueItem == null)
+                throw new NullReferenceException("context.QueueItem");
+
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
             var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
             if (queueItemType == null)
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
-            
+
             var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
             var dbApplyStream = recordStorageDataManager.InitialiazeStreamForDBApply();
-            foreach(var record in batchRecords)
+            foreach (var record in batchRecords)
             {
+                record.QueueItemId = context.QueueItem.ItemId;
                 recordStorageDataManager.WriteRecordToStream(record as Object, dbApplyStream);
             }
             var streamReadyToApply = recordStorageDataManager.FinishDBApplyStream(dbApplyStream);
@@ -54,7 +58,7 @@ namespace Vanrise.GenericData.QueueActivators
             var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
-            
+
             Queueing.MemoryQueue<Object> queuePreparedBatchesForDBApply = new Queueing.MemoryQueue<object>();
             AsyncActivityStatus prepareBatchForDBApplyStatus = new AsyncActivityStatus();
 
@@ -118,7 +122,7 @@ namespace Vanrise.GenericData.QueueActivators
 
         void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
-            
+
         }
 
         List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)

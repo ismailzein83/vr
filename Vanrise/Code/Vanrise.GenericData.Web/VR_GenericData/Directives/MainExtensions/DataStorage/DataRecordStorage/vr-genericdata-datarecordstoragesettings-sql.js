@@ -122,6 +122,7 @@
                     if (payload.Columns != undefined) {
                         ctrl.tableName = payload.TableName;
                         ctrl.tableSchema = payload.TableSchema;
+                        ctrl.includeQueueItemId = payload.IncludeQueueItemId;
                     }
 
                     if (payload.DataRecordTypeId != undefined) {
@@ -185,7 +186,8 @@
                         TableName: ctrl.tableName,
                         TableSchema: ctrl.tableSchema,
                         Columns: ctrl.columns.length > 0 ? getColumns() : null,
-                        NullableFields: getNullableFields()
+                        NullableFields: getNullableFields(),
+                        IncludeQueueItemId: ctrl.includeQueueItemId
                     };
 
                     function getColumns() {
