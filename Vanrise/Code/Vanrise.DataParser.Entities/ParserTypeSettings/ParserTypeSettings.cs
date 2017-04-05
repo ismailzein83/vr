@@ -8,15 +8,15 @@ namespace Vanrise.DataParser.Entities
 {
     public class ParserTypeSettings
     {
-        public ParserTypeExtendedSettings Settings { get; set; }
+        public ParserTypeExtendedSettings ExtendedSettings { get; set; }
     }
 
     public abstract class ParserTypeExtendedSettings
     {
-        public abstract List<ParsedBatch> Execute(IDataParserInput input);
+        public abstract List<ParsedBatch> Execute(IParserTypeExecuteContext context);
     }
 
-    public interface IParserTypeExtendedSettingsContext
+    public interface IParserTypeExecuteContext
     {
         IDataParserInput Input { get; }
     }

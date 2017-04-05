@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HexTLV\LineReader.cs" />
+    <Compile Include="HexTLV\HexTLVTagType.cs" />
+    <Compile Include="HexTLV\RecordReader.cs" />
     <Compile Include="HexTLV\TagValueParser.cs" />
     <Compile Include="ParserTypeSettings\IDataParserInput.cs" />
     <Compile Include="ParserRecord\ParsedBatch.cs" />

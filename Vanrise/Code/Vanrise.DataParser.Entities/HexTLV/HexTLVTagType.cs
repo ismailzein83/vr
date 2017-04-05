@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Entities.HexTLV
 {
-    public abstract class LineReader
+    public class HexTLVTagType
     {
+        public TagValueParser ValueParser { get; set; }
     }
 }

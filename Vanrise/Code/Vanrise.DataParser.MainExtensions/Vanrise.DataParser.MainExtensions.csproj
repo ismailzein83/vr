@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24238652-C36C-473A-B366-C82EF712AD7C}</ProjectGuid>
+    <ProjectGuid>{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.DataParser.Business</RootNamespace>
-    <AssemblyName>Vanrise.DataParser.Business</AssemblyName>
+    <RootNamespace>Vanrise.DataParser.MainExtensions</RootNamespace>
+    <AssemblyName>Vanrise.DataParser.MainExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HexTLV\HexTLVParserType.cs" />
+    <Compile Include="HexTLV\RecordReaders\TagRecordReader.cs" />
+    <Compile Include="HexTLV\TagValueParsers\BoolParser.cs" />
+    <Compile Include="HexTLV\TagValueParsers\IntParser.cs" />
+    <Compile Include="HexTLV\TagValueParsers\SequenceParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

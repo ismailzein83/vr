@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common", "Vanrise.Common\Vanrise.Common.csproj", "{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9}"
 EndProject
@@ -362,9 +362,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Data", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.Web", "Vanrise.DataParser.Web\Vanrise.DataParser.Web.csproj", "{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DataParser.MainExtensions", "Vanrise.DataParser.MainExtensions\Vanrise.DataParser.MainExtensions.csproj", "{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 154
+		SccNumberOfProjects = 155
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -980,6 +982,10 @@ Global
 		SccProjectTopLevelParentUniqueName153 = Vanrise.sln
 		SccProjectName153 = Vanrise.DataParser.Web
 		SccLocalPath153 = Vanrise.DataParser.Web
+		SccProjectUniqueName154 = Vanrise.DataParser.MainExtensions\\Vanrise.DataParser.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName154 = Vanrise.sln
+		SccProjectName154 = Vanrise.DataParser.MainExtensions
+		SccLocalPath154 = Vanrise.DataParser.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2232,6 +2238,14 @@ Global
 		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|x64.ActiveCfg = Release|Any CPU
 		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Release|x64.ActiveCfg = Release|Any CPU
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2395,5 +2409,6 @@ Global
 		{92A59410-D13F-472A-A43B-3058FD3CCF1F} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
 		{E459F08A-5BFD-472C-A48B-04DE24C39643} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
 		{BF7B7AF1-AD36-42C3-B49D-D05124C8D5C7} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
+		{84AF05D8-C62F-4DDE-807A-CA4A3F62BB3F} = {5F873716-8DFA-44FF-BA70-60700D9BF3EF}
 	EndGlobalSection
 EndGlobal
