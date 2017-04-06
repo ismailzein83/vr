@@ -14,5 +14,4 @@ SELECT [Id]
       ,[Settings]
       ,[Status]
   FROM [Ringo].[AgentNumberRequest] WITH(NOLOCK) 
-  order by id desc
 END
