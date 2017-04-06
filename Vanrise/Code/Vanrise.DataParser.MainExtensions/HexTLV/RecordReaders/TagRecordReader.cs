@@ -13,21 +13,19 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders
         {
             get { throw new NotImplementedException(); }
         }
-        public List<TagRecordType> TagRecordTypes { get; set; }
+        public Dictionary<string, TagRecordType> RecordTypesByTag { get; set; }
 
         public override void Execute(IRecordReaderExecuteContext context)
         {
-            foreach (TagRecordType item in TagRecordTypes)
-            {
-                context.OnRecordRead(item.RecordType, context.Data, item.TagTypes);
-            }
+            //foreach (TagRecordType item in TagRecordTypes)
+            //{
+            //    context.OnRecordRead(item.RecordType, context.Data, item.TagTypes);
+            //}
         }
     }
 
     public class TagRecordType
     {
-        public string Tag { get; set; }
-
         public string RecordType { get; set; }
 
         public Dictionary<string, HexTLVTagType> TagTypes { get; set; }
