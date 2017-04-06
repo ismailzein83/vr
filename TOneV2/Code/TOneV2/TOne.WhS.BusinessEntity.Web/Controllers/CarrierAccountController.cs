@@ -20,7 +20,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input));
         }
-
+        [HttpGet]
+        [Route("GetCarrierAccountHistoryDetailbyHistoryId")]
+        public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetCarrierAccountHistoryDetailbyHistoryId(carrierAccountHistoryId);
+        }
         [HttpGet]
         [Route("GetCarrierAccount")]
         public CarrierAccount GetCarrierAccount(int carrierAccountId)

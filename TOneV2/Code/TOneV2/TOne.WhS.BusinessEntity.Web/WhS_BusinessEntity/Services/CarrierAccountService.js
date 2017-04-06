@@ -12,7 +12,8 @@
             viewCarrierAccount: viewCarrierAccount,
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToCarrierAccount: registerObjectTrackingDrillDownToCarrierAccount
+            getEntityUniqueName: getEntityUniqueName,
+            registerHistoryViewAction: registerHistoryViewAction
         });
 
         function addCarrierAccount(onCarrierAccountAdded, dataItem) {
@@ -44,6 +45,34 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
         }
 
+        function viewHistoryCarrierAccount(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', modalParameters, modalSettings);
+        };
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_BusinessEntity_CarrierAccount_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryCarrierAccount(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
         function viewCarrierAccount(CarrierAccountId) {
             var modalSettings = {
             };
@@ -59,26 +88,7 @@
             return "WhS_BusinessEntity_CarrierAccount";
         }
 
-        function registerObjectTrackingDrillDownToCarrierAccount() {
-            var drillDownDefinition = {};
-
-            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-            drillDownDefinition.directive = "vr-common-objecttracking-grid";
-
-
-            drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
-                carrierAccountItem.objectTrackingGridAPI = directiveAPI;
-                var query = {
-                    ObjectId: carrierAccountItem.Entity.CarrierAccountId,
-                    EntityUniqueName: getEntityUniqueName(),
-
-                };
-                return carrierAccountItem.objectTrackingGridAPI.load(query);
-            };
-
-            addDrillDownDefinition(drillDownDefinition);
-
-        }
+       
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }

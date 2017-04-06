@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CarrierProfileService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
+    CarrierProfileService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
 
-    function CarrierProfileService(VRModalService, VRCommon_ObjectTrackingService) {
+    function CarrierProfileService(VRModalService, VRCommon_ObjectTrackingService, UtilsService) {
         var drillDownDefinitions = [];
 
         return ({
@@ -12,8 +12,22 @@
             editCarrierProfile: editCarrierProfile,
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
-            getEntityUniqueName: getEntityUniqueName
+            getEntityUniqueName: getEntityUniqueName,
+            registerHistoryViewAction: registerHistoryViewAction
         });
+
+        function viewHistoryCarrierProfile(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', modalParameters, modalSettings);
+        };
+
 
         function addCarrierProfile(onCarrierProfileAdded) {
             var settings = {};
@@ -41,6 +55,21 @@
         }
         function getEntityUniqueName() {
             return "WhS_BusinessEntity_CarrierProfile";
+        }
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_BusinessEntity_CarrierProfile_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryCarrierProfile(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
         }
 
       

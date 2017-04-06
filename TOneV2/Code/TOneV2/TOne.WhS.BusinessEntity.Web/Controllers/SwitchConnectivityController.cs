@@ -22,6 +22,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, _manager.GetFilteredSwitchConnectivities(input));
         }
 
+
+        [HttpGet]
+        [Route("GetSwitchConnectivityHistoryDetailbyHistoryId")]
+        public SwitchConnectivity GetSwitchConnectivityHistoryDetailbyHistoryId(int switchConnectivityHistoryId)
+        {
+            var v = _manager.GetSwitchConnectivityHistoryDetailbyHistoryId(switchConnectivityHistoryId);
+            return v;
+        }
+
         [HttpGet]
         [Route("GetSwitchConnectivity")]
         public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId)

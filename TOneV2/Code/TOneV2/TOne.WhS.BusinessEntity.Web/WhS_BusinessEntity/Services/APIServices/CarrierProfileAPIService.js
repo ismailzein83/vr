@@ -41,7 +41,12 @@
         function HasAddCarrierProfilePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCarrierProfile']));
         }
+        function GetCarrierProfileHistoryDetailbyHistoryId(carrierProfileHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetCarrierProfileHistoryDetailbyHistoryId'), {
+                carrierProfileHistoryId: carrierProfileHistoryId
+            });
+        }
         return ({
             GetCarrierProfilesInfo: GetCarrierProfilesInfo,
             GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
@@ -50,7 +55,8 @@
             UpdateCarrierProfile: UpdateCarrierProfile,
             HasUpdateCarrierProfilePermission: HasUpdateCarrierProfilePermission,
             HasAddCarrierProfilePermission: HasAddCarrierProfilePermission,
-            GetTaxesDefinition: GetTaxesDefinition
+            GetTaxesDefinition: GetTaxesDefinition,
+            GetCarrierProfileHistoryDetailbyHistoryId: GetCarrierProfileHistoryDetailbyHistoryId
         });
     }
 

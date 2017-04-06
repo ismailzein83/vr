@@ -24,6 +24,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
+        public SwitchConnectivity GetSwitchConnectivityHistoryDetailbyHistoryId(int switchConnectivityHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var switchConnectivity = s_vrObjectTrackingManager.GetObjectDetailById(switchConnectivityHistoryId);
+            return switchConnectivity.CastWithValidate<SwitchConnectivity>("Switch Connectivity : historyId ", switchConnectivityHistoryId);
+        }
         public Vanrise.Entities.IDataRetrievalResult<SwitchConnectivityDetail> GetFilteredSwitchConnectivities(Vanrise.Entities.DataRetrievalInput<SwitchConnectivityQuery> input)
         {
             Dictionary<int, SwitchConnectivity> cachedEntities = this.GetCachedSwitchConnectivities();

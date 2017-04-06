@@ -34,6 +34,12 @@
         function HasEditSwitchConnectivityPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSwitchConnectivity']));
         }
+        function GetSwitchConnectivityHistoryDetailbyHistoryId(switchConnectivityHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSwitchConnectivityHistoryDetailbyHistoryId'), {
+                switchConnectivityHistoryId: switchConnectivityHistoryId
+            });
+        }
 
         return ({
             GetFilteredSwitchConnectivities: GetFilteredSwitchConnectivities,
@@ -42,7 +48,8 @@
             UpdateSwitchConnectivity: UpdateSwitchConnectivity,
             HasAddSwitchConnectivityPermission: HasAddSwitchConnectivityPermission,
             HasEditSwitchConnectivityPermission: HasEditSwitchConnectivityPermission,
-            GetSwitcheConnectivitiesInfo: GetSwitcheConnectivitiesInfo
+            GetSwitcheConnectivitiesInfo: GetSwitcheConnectivitiesInfo,
+            GetSwitchConnectivityHistoryDetailbyHistoryId: GetSwitchConnectivityHistoryDetailbyHistoryId
         });
     }
 

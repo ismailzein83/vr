@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwitchConnectivityService.$inject = ['WhS_BE_SwitchConnectivityAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
+    SwitchConnectivityService.$inject = ['WhS_BE_SwitchConnectivityAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
 
-    function SwitchConnectivityService(WhS_BE_SwitchConnectivityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService) {
+    function SwitchConnectivityService(WhS_BE_SwitchConnectivityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService, UtilsService) {
         var editorUrl = '/Client/Modules/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityEditor.html';
         var drillDownDefinitions = [];
         function addSwitchConnectivity(onSwitchConnectivityAdded) {
@@ -62,11 +62,40 @@
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_BusinessEntity_SwitchConnectivity_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistorySwitchConnectivity(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
+        function viewHistorySwitchConnectivity(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal(editorUrl, modalParameters, modalSettings);
+        };
         return {
             addSwitchConnectivity: addSwitchConnectivity,
             editSwitchConnectivity: editSwitchConnectivity,
             registerObjectTrackingDrillDownToSwitchConnectivity: registerObjectTrackingDrillDownToSwitchConnectivity,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
         };
     }
 

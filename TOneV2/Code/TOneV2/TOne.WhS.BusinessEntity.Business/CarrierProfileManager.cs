@@ -20,6 +20,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
     
+        public CarrierProfile GetCarrierProfileHistoryDetailbyHistoryId(int carrierProfileHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var carrierProfile = s_vrObjectTrackingManager.GetObjectDetailById(carrierProfileHistoryId);
+            return carrierProfile.CastWithValidate<CarrierProfile>("Carrier Profile : historyId ", carrierProfileHistoryId);
+        }
+
         #region CarrierProfile
         public Vanrise.Entities.IDataRetrievalResult<CarrierProfileDetail> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {

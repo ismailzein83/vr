@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_CarrierAccountTypeEnum",
-    "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService", "WhS_BE_CarrierAccountActivationStatusEnum",
+    "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService", "WhS_BE_CarrierAccountActivationStatusEnum", "VRCommon_ObjectTrackingService",
 function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService,
-    WhS_BE_CarrierAccountService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountActivationStatusEnum) {
+    WhS_BE_CarrierAccountService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountActivationStatusEnum, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
 
@@ -57,6 +57,27 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 gridAPI = api;
 
                 var drillDownDefinitions = WhS_BE_CarrierAccountService.getDrillDownDefinition();
+                var drillDownobjtrack = defineObjectTrackingDrillDownToCarrierAccount();
+                drillDownDefinitions.push(drillDownobjtrack);
+
+                function defineObjectTrackingDrillDownToCarrierAccount() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
+                        carrierAccountItem.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: carrierAccountItem.Entity.CarrierAccountId,
+                            EntityUniqueName: WhS_BE_CarrierAccountService.getEntityUniqueName(),
+
+                        };
+                        return carrierAccountItem.objectTrackingGridAPI.load(query);
+                    };
+                    return drillDownDefinition;
+                }
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions,true);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")

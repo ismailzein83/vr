@@ -30,6 +30,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
+        public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var carrierAccount = s_vrObjectTrackingManager.GetObjectDetailById(carrierAccountHistoryId);
+            return carrierAccount.CastWithValidate<CarrierAccount>("Carrier Account : historyId ", carrierAccountHistoryId);
+        }
         #region CarrierAccount
         public Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {

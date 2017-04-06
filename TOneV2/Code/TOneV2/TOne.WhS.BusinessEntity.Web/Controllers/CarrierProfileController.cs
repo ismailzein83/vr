@@ -29,7 +29,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.GetCarrierProfile(carrierProfileId);
         }
-
+        [HttpGet]
+        [Route("GetCarrierProfileHistoryDetailbyHistoryId")]
+        public CarrierProfile GetCarrierProfileHistoryDetailbyHistoryId(int carrierProfileHistoryId)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.GetCarrierProfileHistoryDetailbyHistoryId(carrierProfileHistoryId);
+        }
 
         [HttpGet]
         [Route("GetTaxesDefinition")]

@@ -69,6 +69,13 @@
         function HasViewCarrierAccountPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['GetFilteredCarrierAccounts']));
         }
+
+        function GetCarrierAccountHistoryDetailbyHistoryId(carrierAccountHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetCarrierAccountHistoryDetailbyHistoryId'), {
+                carrierAccountHistoryId: carrierAccountHistoryId
+            });
+        }
         return ({
             GetCarrierAccountInfo: GetCarrierAccountInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
@@ -83,7 +90,8 @@
             GetSuppliersWithZonesGroupsTemplates: GetSuppliersWithZonesGroupsTemplates,
             HasUpdateCarrierAccountPermission: HasUpdateCarrierAccountPermission,
             HasAddCarrierAccountPermission: HasAddCarrierAccountPermission,
-            HasViewCarrierAccountPermission: HasViewCarrierAccountPermission
+            HasViewCarrierAccountPermission: HasViewCarrierAccountPermission,
+            GetCarrierAccountHistoryDetailbyHistoryId: GetCarrierAccountHistoryDetailbyHistoryId
         });
     }
 
