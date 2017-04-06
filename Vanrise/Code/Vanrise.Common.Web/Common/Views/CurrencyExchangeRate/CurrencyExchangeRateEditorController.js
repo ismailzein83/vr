@@ -85,9 +85,10 @@
         }
 
         function loadStaticData() {
-
-            if (currencyExchangeRateEntity == undefined)
+            if (currencyExchangeRateEntity == undefined) {
+                $scope.exchangeDate = new Date()
                 return;
+            }
             $scope.rate = currencyExchangeRateEntity.Rate;
             $scope.exchangeDate = currencyExchangeRateEntity.ExchangeDate;
         }
