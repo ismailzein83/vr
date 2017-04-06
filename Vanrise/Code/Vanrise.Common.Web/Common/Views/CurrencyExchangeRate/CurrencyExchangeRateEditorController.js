@@ -86,7 +86,7 @@
 
         function loadStaticData() {
             if (currencyExchangeRateEntity == undefined) {
-                $scope.exchangeDate = new Date()
+                $scope.exchangeDate = new Date();
                 return;
             }
             $scope.rate = currencyExchangeRateEntity.Rate;
