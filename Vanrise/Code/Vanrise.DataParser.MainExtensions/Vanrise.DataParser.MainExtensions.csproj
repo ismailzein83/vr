@@ -46,7 +46,9 @@
     <Compile Include="HexTLV\RecordReaders\TagRecordReader.cs" />
     <Compile Include="HexTLV\TagValueParsers\BoolParser.cs" />
     <Compile Include="HexTLV\TagValueParsers\IntParser.cs" />
+    <Compile Include="HexTLV\TagValueParsers\IPParser.cs" />
     <Compile Include="HexTLV\TagValueParsers\SequenceParser.cs" />
+    <Compile Include="HexTLV\TagValueParsers\StringParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

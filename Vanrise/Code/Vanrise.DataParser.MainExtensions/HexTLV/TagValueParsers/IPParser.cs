@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.DataParser.Entities;
 using Vanrise.DataParser.Entities.HexTLV;
 
-namespace Vanrise.DataParser.Business.HexTLV
+namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 {
-    public class HexTLVParserType : ParserTypeExtendedSettings
+    public class IPParser : TagValueParser
     {
         public override Guid ConfigId
         {
             get { throw new NotImplementedException(); }
         }
-        public RecordReader RecordReader { get; set; }
-
-        public override void Execute(IParserTypeExecuteContext context)
+        public string FieldName { get; set; }
+        public override void Execute(ITagValueParserExecuteContext context)
         {
-      
-
+           
         }
     }
 }

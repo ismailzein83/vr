@@ -17,7 +17,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders
 
         public override void Execute(IRecordReaderExecuteContext context)
         {
-            throw new NotImplementedException();
+            foreach (TagRecordType item in TagRecordTypes)
+            {
+                context.OnRecordRead(item.RecordType, context.Data, item.TagTypes);
+            }
         }
     }
 

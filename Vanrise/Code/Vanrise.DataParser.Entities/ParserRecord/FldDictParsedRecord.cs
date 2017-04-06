@@ -17,7 +17,8 @@ namespace Vanrise.DataParser.Entities
 
         public override void SetFieldValue(string fieldName, object value)
         {
-            this.FieldValues.Add(fieldName, value);
+            if (!this.FieldValues.ContainsKey(fieldName))
+                this.FieldValues.Add(fieldName, value);
         }
     }
 }
