@@ -16,6 +16,7 @@ BEGIN
 			,[ErrorMessage]
 			,[Data]
 			,[CreationTime]
+			,[EventPayload]
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK)
 	where ID = @NotificationID
 END

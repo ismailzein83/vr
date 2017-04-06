@@ -24,6 +24,7 @@ BEGIN
 	  ,[Data]	
 	  ,[CreationTime]
 	  ,[timestamp]
+	  ,[EventPayload]
 	INTO #temptable2_VRNotifications_GetUpdated
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK) 
 	WHERE  TypeID = @NotificationTypeID 
@@ -32,7 +33,7 @@ BEGIN
 		   AND ([timestamp] > @TimestampAfter) 
 	ORDER BY [timestamp]
 	
-	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] 
+	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload]
 	FROM #temptable2_VRNotifications_GetUpdated
 	  
 	IF((SELECT COUNT(*) FROM #temptable2_VRNotifications_GetUpdated) = 0)

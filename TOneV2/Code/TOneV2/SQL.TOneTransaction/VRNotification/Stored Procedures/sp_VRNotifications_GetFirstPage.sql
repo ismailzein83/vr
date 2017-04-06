@@ -27,6 +27,7 @@ BEGIN
 	  ,[ErrorMessage]
 	  ,[Data]	
 	  ,[CreationTime]
+	  ,[EventPayload]
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK) 
 	WHERE  TypeID = @NotificationTypeID 
 		   AND (@Description is null or [Description] like '%' + @Description + '%')

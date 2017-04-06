@@ -23,6 +23,7 @@ BEGIN
 			,[ErrorMessage]
 			,[Data]
 			,[CreationTime]
+			,[EventPayload]
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK)
 	where TypeID = @NotificationTypeID
 	      and (@EventKeys is null or EventKey in (select EventKey from @EventKeysTable))
