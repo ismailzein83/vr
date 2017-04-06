@@ -21,28 +21,30 @@ namespace Mediation.Runtime.DataParser
             buffer = new byte[fileStream.Length];
             fileStream.Read(buffer, 0, (int)fileStream.Length);
 
-            ReadData(buffer.ToList());
+            ReadData(buffer);
 
         }
 
-        public void ReadData(List<byte> data)
+        public void ReadData(byte[] data)
         {
 
             TagRecordReader tagRecordReader = new TagRecordReader();
-            Action<string, List<byte>, Dictionary<string, HexTLVTagType>> onRecordRead = (recordType, recordData, tagTypes) =>
+            Action<string, byte[], Dictionary<string, HexTLVTagType>> onRecordRead = (recordType, recordData, tagTypes) =>
             {
-
+                foreach (var item in tagTypes)
+                {
+                    TagValueParserExecuteContext tagValueParserExecuteContext = new TagValueParserExecuteContext
+                    {
+                        Record = new FldDictParsedRecord()
+                    };
+                    item.Value.ValueParser.Execute(tagValueParserExecuteContext);
+                }
             };
-            RecordReaderExecuteContext context = new RecordReaderExecuteContext(onRecordRead)
-            {
-                Data = data
-            };
 
-            tagRecordReader.TagRecordTypes = new List<TagRecordType>();
-            tagRecordReader.TagRecordTypes.Add(new TagRecordType
+            tagRecordReader.RecordTypesByTag = new Dictionary<string, TagRecordType>();
+            tagRecordReader.RecordTypesByTag.Add("B4-81", new TagRecordType
             {
                 RecordType = "GPRS",
-                Tag = "B4",
                 TagTypes = GetTagTypes()
             });
 
@@ -54,7 +56,10 @@ namespace Mediation.Runtime.DataParser
             };
             ParserTypeExecuteContext parserTypeExecuteContext = new ParserTypeExecuteContext(onRecordParsed)
             {
-                Input = new DataParserInput()
+                Input = new DataParserInput
+                {
+                    Data = data
+                }
             };
 
             hexParser.Execute(parserTypeExecuteContext);
@@ -84,7 +89,7 @@ namespace Mediation.Runtime.DataParser
             Dictionary<string, HexTLVTagType> result = new Dictionary<string, HexTLVTagType>();
             result.Add("80", new HexTLVTagType
             {
-                ValueParser = new IPParser { FieldName = "ggsnAddress" }
+                ValueParser = new IPv4Parser { FieldName = "ggsnAddress" }
             });
             return result;
         }
@@ -93,25 +98,6 @@ namespace Mediation.Runtime.DataParser
 
     #region Classes
 
-    public class RecordReaderExecuteContext : IRecordReaderExecuteContext
-    {
-        Action<string, List<byte>, Dictionary<string, HexTLVTagType>> _OnRecordRead;
-        public RecordReaderExecuteContext(Action<string, List<byte>, Dictionary<string, HexTLVTagType>> onRecordRead)
-        {
-            _OnRecordRead = onRecordRead;
-        }
-
-        public List<byte> Data
-        {
-            get;
-            set;
-        }
-
-        public void OnRecordRead(string recordType, List<byte> recordData, Dictionary<string, HexTLVTagType> tagTypes)
-        {
-            _OnRecordRead(recordType, recordData, tagTypes);
-        }
-    }
 
     public class ParserTypeExecuteContext : IParserTypeExecuteContext
     {
@@ -138,8 +124,29 @@ namespace Mediation.Runtime.DataParser
         }
     }
 
+    public class TagValueParserExecuteContext : ITagValueParserExecuteContext
+    {
+
+        public ParsedRecord Record
+        {
+            get;
+            set;
+        }
+
+        public byte[] TagValue
+        {
+            get;
+            set;
+        }
+    }
+
     public class DataParserInput : IDataParserInput
     {
+        public byte[] Data
+        {
+            get;
+            set;
+        }
     }
 
     #endregion
