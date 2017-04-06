@@ -24,6 +24,7 @@
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
+                gridAPI.load(buildGridQuery());
             };
 
             $scope.scopeModel.search = function () {
@@ -65,6 +66,7 @@
 
         function loadStatusSelector() {
             $scope.scopeModel.statuses = UtilsService.getArrayEnum(Retail_Ringo_AgentNumberRequestStatusEnum);
+            $scope.scopeModel.selectedStatuses = [{ value: 0, description: 'Pending' }];
         }
 
         function buildGridQuery() {
