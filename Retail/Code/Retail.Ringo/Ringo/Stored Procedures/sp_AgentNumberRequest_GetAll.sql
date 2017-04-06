@@ -13,5 +13,6 @@ SELECT [Id]
       ,[AgentId]
       ,[Settings]
       ,[Status]
+	  ,CreatedTime
   FROM [Ringo].[AgentNumberRequest] WITH(NOLOCK) 
 END
