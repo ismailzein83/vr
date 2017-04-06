@@ -1,5 +1,6 @@
 ﻿app.constant('BPInstanceStatusEnum', {
     New: { value: 0, description: "New", isOpened: true },
+    Postponed: { value: 5, description: "Postponed", isOpened: true },
     Running: { value: 10, description: "Running", isOpened: true },
     ProcessFailed: { value: 20, description: "ProcessFailed", isOpened: true },
     Completed: { value: 50, description: "Completed", isOpened: false },

@@ -92,6 +92,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, workflowInstanceId);
         }
 
+        public void UpdateInstanceLastMessage(long processInstanceId, string message)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateLastMessage]", processInstanceId, message);
+        }
+
         public BPInstance GetBPInstance(long bpInstanceId)
         {
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);

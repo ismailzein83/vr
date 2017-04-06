@@ -8,11 +8,10 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public interface IBPDefinitionCanRunBPInstanceContext
     {
-        BaseProcessInputArgument InputArgument { get; }
+        BPInstance IntanceToRun { get; }
 
         List<BPInstance> GetStartedBPInstances();
+
+        string Reason { set; }
     }
-
-    
-
 }

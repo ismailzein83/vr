@@ -45,14 +45,14 @@ namespace Vanrise.BusinessProcess
             return _serviceInstanceManager.GetServices(BusinessProcessService.SERVICE_TYPE_UNIQUE_NAME);
         }
 
-        static List<BPInstanceStatus> s_pendingStatuses = new List<BPInstanceStatus> { BPInstanceStatus.New, BPInstanceStatus.Running };
+        static List<BPInstanceStatus> s_pendingStatuses = new List<BPInstanceStatus> { BPInstanceStatus.New, BPInstanceStatus.Postponed, BPInstanceStatus.Running };
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPInstance> runningInstances)
         {
             int nbOfInstancesToRetrieve = s_minimumPendingInstancesToRetrieve + (bpServiceInstances.Count * s_maxWorkflowsPerServiceInstance);
             var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses, nbOfInstancesToRetrieve);
             if (pendingInstancesInfo != null && pendingInstancesInfo.Count > 0)
-            {
+            {                
                 var bpDefinitionsList = _bpDefinitionManager.GetBPDefinitions().ToList();
                 Dictionary<Guid, BPDefinition> bpDefinitions = bpDefinitionsList.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID, bpDefinition => bpDefinition);
                 Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo
@@ -73,7 +73,7 @@ namespace Vanrise.BusinessProcess
                             serviceInstanceInfo.TotalItemsCount++;
                             var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
                             bpDefinitionInfo.ItemsCount++;
-                            if (pendingInstanceInfo.Status == BPInstanceStatus.New)
+                            if (pendingInstanceInfo.Status == BPInstanceStatus.New || pendingInstanceInfo.Status == BPInstanceStatus.Postponed)
                             {
                                 bpDefinitionInfo.HasAnyNewInstance = true;
                                 serviceInstanceInfo.HasAnyNewInstance = true;
@@ -98,35 +98,63 @@ namespace Vanrise.BusinessProcess
                 List<ServiceInstanceBPDefinitionInfo> servicesToAssign = serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount < s_maxWorkflowsPerServiceInstance).ToList();
                 List<BPInstance> pendingInstancesToUpdate = new List<BPInstance>();
 
+                Func<List<BPInstance>> getStartedBPInstances = () =>
+                    {
+                        return pendingInstancesInfo.Where(itm => itm.ServiceInstanceId.HasValue).ToList();
+                    };
+
                 foreach (var pendingInstanceInfo in pendingInstancesInfo.Where(itm => !itm.ServiceInstanceId.HasValue && !terminatedPendingInstances.Contains(itm)).OrderBy(itm => itm.ProcessInstanceID))
                 {
                     if (servicesToAssign.Count == 0)
                         break;
 
-                    var bpDefinition = FindBPDefinition(bpDefinitions, pendingInstanceInfo.DefinitionID);
-                    int maxInstancesPerBPDefinition = bpDefinition.Configuration != null && bpDefinition.Configuration.MaxConcurrentWorkflows.HasValue ?
-                        bpDefinition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
-                    maxInstancesPerBPDefinition += s_moreAssignableItemsToMaxConcurrentPerBPDefinition;
+                    BPDefinitionExtendedSettings definitionExtendedSettings;
+                    var bpDefinition = FindBPDefinition(bpDefinitions, pendingInstanceInfo.DefinitionID, out definitionExtendedSettings);
 
-                    foreach (var serviceInstanceInfo in servicesToAssign.OrderBy(itm => itm.TotalItemsCount))
+                    var canRunBPInstanceContext = new BPDefinitionCanRunBPInstanceContext(pendingInstanceInfo, getStartedBPInstances);
+                    if (definitionExtendedSettings.CanRunBPInstance(canRunBPInstanceContext))
                     {
-                        var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
-                        if (bpDefinitionInfo.ItemsCount < maxInstancesPerBPDefinition)
+                        int maxInstancesPerBPDefinition = bpDefinition.Configuration != null && bpDefinition.Configuration.MaxConcurrentWorkflows.HasValue ?
+                            bpDefinition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
+                        maxInstancesPerBPDefinition += s_moreAssignableItemsToMaxConcurrentPerBPDefinition;
+
+                        foreach (var serviceInstanceInfo in servicesToAssign.OrderBy(itm => itm.TotalItemsCount))
                         {
-                            pendingInstanceInfo.ServiceInstanceId = serviceInstanceInfo.ServiceInstance.ServiceInstanceId;
-                            pendingInstancesToUpdate.Add(pendingInstanceInfo);
-                            bpDefinitionInfo.ItemsCount++;
-                            serviceInstanceInfo.TotalItemsCount++;
-                            if (pendingInstanceInfo.Status == BPInstanceStatus.New)
+                            var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
+                            if (bpDefinitionInfo.ItemsCount < maxInstancesPerBPDefinition)
                             {
+                                pendingInstanceInfo.ServiceInstanceId = serviceInstanceInfo.ServiceInstance.ServiceInstanceId;
+                                pendingInstancesToUpdate.Add(pendingInstanceInfo);
+                                bpDefinitionInfo.ItemsCount++;
+                                serviceInstanceInfo.TotalItemsCount++;
                                 bpDefinitionInfo.HasAnyNewInstance = true;
                                 serviceInstanceInfo.HasAnyNewInstance = true;
+                                if (serviceInstanceInfo.TotalItemsCount >= s_maxWorkflowsPerServiceInstance)
+                                    servicesToAssign.Remove(serviceInstanceInfo);
+                                break;
                             }
-                            if (serviceInstanceInfo.TotalItemsCount >= s_maxWorkflowsPerServiceInstance)
-                                servicesToAssign.Remove(serviceInstanceInfo);
-                            break;
+                        };
+                    }
+                    else
+                    {
+                        if (canRunBPInstanceContext.Reason != null && canRunBPInstanceContext.Reason != pendingInstanceInfo.LastMessage)
+                        {                           
+                            BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
+                            {
+                                ProcessInstanceId = pendingInstanceInfo.ProcessInstanceID,
+                                ParentProcessId = pendingInstanceInfo.ParentProcessID,
+                                Severity = Vanrise.Entities.LogEntryType.Warning,
+                                TrackingMessage = canRunBPInstanceContext.Reason,
+                                EventTime = DateTime.Now
+                            });
+                            _bpInstanceDataManager.UpdateInstanceLastMessage(pendingInstanceInfo.ProcessInstanceID, canRunBPInstanceContext.Reason);
                         }
-                    };
+                        if (pendingInstanceInfo.Status != BPInstanceStatus.Postponed)
+                        {
+                            pendingInstanceInfo.Status = BPInstanceStatus.Postponed;
+                            BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID, pendingInstanceInfo.Status, null, null);
+                        }
+                    }
                 }
 
                 if (pendingInstancesToUpdate.Count > 0)
@@ -235,11 +263,13 @@ namespace Vanrise.BusinessProcess
             }
         }
 
-        private BPDefinition FindBPDefinition(Dictionary<Guid, BPDefinition> bpDefinitions, Guid bpDefinitionId)
+        private BPDefinition FindBPDefinition(Dictionary<Guid, BPDefinition> bpDefinitions, Guid bpDefinitionId, out BPDefinitionExtendedSettings definitionExtendedSettings)
         {
             BPDefinition definition;
             if (!bpDefinitions.TryGetValue(bpDefinitionId, out definition))
                 throw new NullReferenceException(String.Format("definition '{0}'", bpDefinitionId));
+            definitionExtendedSettings = _bpDefinitionManager.GetBPDefinitionExtendedSettings(definition);
+            definitionExtendedSettings.ThrowIfNull("definitionExtendedSettings", bpDefinitionId);
             return definition;
         }
 
@@ -280,6 +310,32 @@ namespace Vanrise.BusinessProcess
             public bool HasAnyNewInstance { get; set; }
 
             public int ItemsCount { get; set; }
+        }
+
+        public class BPDefinitionCanRunBPInstanceContext : IBPDefinitionCanRunBPInstanceContext
+        {
+            Func<List<BPInstance>> _getStartedBPInstances;
+
+            public BPDefinitionCanRunBPInstanceContext(BPInstance instanceToRun, Func<List<BPInstance>> getStartedBPInstances)
+            {
+                this.IntanceToRun = instanceToRun;
+                this._getStartedBPInstances = getStartedBPInstances;
+            }
+
+            public BPInstance IntanceToRun
+            {
+                get;
+                private set;
+            }
+
+
+
+            public string Reason { set; get; }
+
+            public List<BPInstance> GetStartedBPInstances()
+            {
+                return _getStartedBPInstances();
+            }
         }
 
         #endregion

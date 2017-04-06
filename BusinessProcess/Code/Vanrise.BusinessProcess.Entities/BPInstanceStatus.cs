@@ -11,6 +11,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         New = 0,
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Warning, IsClosed = false)]
+        Postponed = 5,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         Running = 10,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = true)]

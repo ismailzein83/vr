@@ -12,7 +12,8 @@ namespace Vanrise.Reprocess.Business
     {
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
-            ReProcessingProcessInput reprocessInputArg = context.InputArgument.CastWithValidate<ReProcessingProcessInput>("reprocessInputArg");
+            context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
+            ReProcessingProcessInput reprocessInputArg = context.IntanceToRun.InputArgument.CastWithValidate<ReProcessingProcessInput>("context.IntanceToRun.InputArgument");
             Dictionary<Guid, Guid> execFlowDefIdsByReprocessDefId = new Dictionary<Guid, Guid>();
             Guid executionFlowDefinitionId = GetExecFlowDefByReprocessDefId(reprocessInputArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
             foreach(var startedBPInstance in context.GetStartedBPInstances())
@@ -21,9 +22,12 @@ namespace Vanrise.Reprocess.Business
                 if(startedBPInstanceReprocessArg != null)
                 {
                     Guid startedBPInstanceExecFlowDefId = GetExecFlowDefByReprocessDefId(startedBPInstanceReprocessArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
-                    if (startedBPInstanceExecFlowDefId == executionFlowDefinitionId 
+                    if (startedBPInstanceExecFlowDefId == executionFlowDefinitionId
                         && Utilities.AreTimePeriodsOverlapped(reprocessInputArg.FromTime, reprocessInputArg.ToTime, startedBPInstanceReprocessArg.FromTime, startedBPInstanceReprocessArg.ToTime))
+                    {
+                        context.Reason = String.Format("Another reprocess instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedBPInstanceReprocessArg.FromTime, startedBPInstanceReprocessArg.ToTime);
                         return false;
+                    }
                 }
             }
             return true;

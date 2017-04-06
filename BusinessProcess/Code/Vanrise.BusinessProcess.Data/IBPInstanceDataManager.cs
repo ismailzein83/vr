@@ -17,6 +17,8 @@ namespace Vanrise.BusinessProcess.Data
 
         void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId);
 
+        void UpdateInstanceLastMessage(long processInstanceId, string message);
+
         BPInstance GetBPInstance(long bpInstanceId);
 
         long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId);
