@@ -37,9 +37,9 @@ namespace Vanrise.Notification.Business
                 {
                     Actions = input.Actions,
                     ClearanceActions = input.ClearanceActions,
-                    EventPayload = input.EventPayload,
                     IsAutoClearable = input.IsAutoClearable
-                }
+                },
+                EventPayload = input.EventPayload
             };
             var notificationDataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             notificationDataManager.Insert(notification, out notificationId);

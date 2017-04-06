@@ -29,18 +29,12 @@ namespace Vanrise.Notification.Data.SQL
         public bool Insert(VRNotification notification, out long notificationId)
         {
             object insertedId;
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRNotification_Insert", out insertedId,
-                                                                                                notification.UserId,
-                                                                                                notification.TypeId,
-                                                                                                notification.ParentTypes.ParentType1,
-                                                                                                notification.ParentTypes.ParentType2,
-                                                                                                notification.EventKey,
-                                                                                                notification.BPProcessInstanceId,
-                                                                                                notification.Status,
-                                                                                                notification.AlertLevelId,
-                                                                                                notification.Description,
-                                                                                                notification.ErrorMessage,
-                                                                                                notification.Data != null ? Serializer.Serialize(notification.Data) : null);
+            
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRNotification_Insert", out insertedId, notification.UserId, notification.TypeId,
+                notification.ParentTypes.ParentType1, notification.ParentTypes.ParentType2, notification.EventKey, notification.BPProcessInstanceId, notification.Status,
+                notification.AlertLevelId, notification.Description, notification.ErrorMessage, notification.Data != null ? Serializer.Serialize(notification.Data) : null,
+                notification.EventPayload != null ? Serializer.Serialize(notification.EventPayload) : null);
+            
             notificationId = (long)insertedId;
             return (affectedRecords > 0);
         }
@@ -153,7 +147,6 @@ namespace Vanrise.Notification.Data.SQL
 
         VRNotification VRNotificationMapper(IDataReader reader)
         {
-
             return new VRNotification
             {
                 VRNotificationId = (long)reader["ID"],
@@ -171,7 +164,8 @@ namespace Vanrise.Notification.Data.SQL
                 BPProcessInstanceId = GetReaderValue<long?>(reader, "BPProcessInstanceID"),
                 ErrorMessage = reader["ErrorMessage"] as string,
                 CreationTime = (DateTime)reader["CreationTime"],
-                Data = Serializer.Deserialize<VRNotificationData>(reader["Data"] as string)
+                Data = reader["Data"] != DBNull.Value ? Serializer.Deserialize<VRNotificationData>(reader["Data"] as string) : null,
+                EventPayload = reader["EventPayload"] != DBNull.Value ? Serializer.Deserialize<IVRActionEventPayload>(reader["EventPayload"] as string) : null
             };
         }
 

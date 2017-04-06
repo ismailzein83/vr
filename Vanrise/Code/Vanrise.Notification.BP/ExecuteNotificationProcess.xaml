@@ -102,7 +102,7 @@
             <local:ExecuteActionProcess sap2010:WorkflowViewState.IdRef="ExecuteActionProcess_1">
               <local:ExecuteActionProcess.EventPayLoad>
                 <InArgument x:TypeArguments="vne:IVRActionEventPayload">
-                  <mca:CSharpValue x:TypeArguments="vne:IVRActionEventPayload">vrNotification.Data.EventPayload</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vne:IVRActionEventPayload">vrNotification.EventPayload</mca:CSharpValue>
                 </InArgument>
               </local:ExecuteActionProcess.EventPayLoad>
               <local:ExecuteActionProcess.VrAction>
@@ -127,7 +127,7 @@
         </InArgument>
       </vnba1:UpdateNotificationStatus.VRNotificationId>
     </vnba1:UpdateNotificationStatus>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEV4ZWN1dGVOb3RpZmljYXRpb25Qcm9jZXNzLnhhbWwTOAODAQ4CAQE8BTxcAgEoPQVIHwIBIUkFVCYCARpVBXUKAgEJdgWBASYCAQI8QzxZAgEpQAtAaQIBJUULRVwCASJRC1FnAgEeTAtMdwIBG1gLWJIBAgEKXAlzGwIBDX4LfmcCAQZ5C3l2AgEDXw9ffQIBF2YNcSoCAQ5pE2mCAQIBE24TblsCAQ8=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEV4ZWN1dGVOb3RpZmljYXRpb25Qcm9jZXNzLnhhbWwTOAODAQ4CAQE8BTxcAgEoPQVIHwIBIUkFVCYCARpVBXUKAgEJdgWBASYCAQI8QzxZAgEpQAtAaQIBJUULRVwCASJRC1FnAgEeTAtMdwIBG1gLWJIBAgEKXAlzGwIBDX4LfmcCAQZ5C3l2AgEDXw9ffQIBF2YNcSoCAQ5pE2l9AgETbhNuWwIBDw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

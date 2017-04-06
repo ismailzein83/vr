@@ -45,12 +45,12 @@ namespace Vanrise.Notification.Entities
         public DateTime CreationTime { get; set; }
 
         public VRNotificationData Data { get; set; }
+
+        public IVRActionEventPayload EventPayload { get; set; }
     }
 
     public class VRNotificationData
     {
-        public IVRActionEventPayload EventPayload { get; set; }
-
         public List<VRAction> Actions { get; set; }
 
         public List<VRAction> ClearanceActions { get; set; }

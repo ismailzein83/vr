@@ -35,10 +35,10 @@ namespace Vanrise.GenericData.Notification
             if (extendedQuery.FilterGroup == null)
                 return true;
 
-            if (context.VRNotification == null || context.VRNotification.Data == null || context.VRNotification.Data.EventPayload == null)
+            if (context.VRNotification == null || context.VRNotification.EventPayload == null)
                 return false;
 
-            DataRecordAlertRuleActionEventPayload dataRecordAlertRuleActionEventPayload = context.VRNotification.Data.EventPayload as DataRecordAlertRuleActionEventPayload;
+            DataRecordAlertRuleActionEventPayload dataRecordAlertRuleActionEventPayload = context.VRNotification.EventPayload as DataRecordAlertRuleActionEventPayload;
             if (dataRecordAlertRuleActionEventPayload == null)
                 return false;
 
@@ -81,14 +81,8 @@ namespace Vanrise.GenericData.Notification
         private DataRecordAlertRuleActionEventPayload GetDataRecordAlertRuleActionEventPayload(VRNotification vrNotification)
         {
             vrNotification.ThrowIfNull<VRNotification>("vrNotification");
-
-            VRNotificationData vrNotificationData = vrNotification.Data.CastWithValidate<VRNotificationData>("vrNotification.Data", vrNotification.VRNotificationId);
-
-            DataRecordAlertRuleActionEventPayload eventPayload = vrNotificationData.EventPayload.CastWithValidate<DataRecordAlertRuleActionEventPayload>("vrNotificationData.EventPayload", vrNotification.VRNotificationId);
-
-            return eventPayload;
+            return vrNotification.EventPayload.CastWithValidate<DataRecordAlertRuleActionEventPayload>("vrNotification.EventPayload", vrNotification.VRNotificationId);
         }
-
     }
 
     public class NotificationGridColumnDefinition
