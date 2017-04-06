@@ -15,7 +15,37 @@
             addDataSource: addDataSource,
             deleteDataSource: deleteDataSource,
             registerObjectTrackingDrillDownToDataSource:registerObjectTrackingDrillDownToDataSource,
-            getDrillDownDefinition:getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
+        };
+
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "VR_Integration_DataSource_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryDataSource(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
+        function viewHistoryDataSource(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('Client/Modules/Integration/Views/DataSource/DataSourceEditor.html', modalParameters, modalSettings);
         };
 
         function getExecutionStatusDescription(executionStatusValue) {
@@ -103,7 +133,7 @@
 
             drillDownDefinition.loadDirective = function (directiveAPI, dataSourceItem) {
                 dataSourceItem.objectTrackingGridAPI = directiveAPI;
-                console.log(dataSourceItem);
+              
                 var query = {
                     ObjectId: dataSourceItem.Entity.DataSourceId,
                     EntityUniqueName: getEntityUniqueName(),

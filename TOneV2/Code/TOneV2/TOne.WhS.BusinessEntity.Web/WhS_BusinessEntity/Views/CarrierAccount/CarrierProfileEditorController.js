@@ -12,7 +12,8 @@
         var cityId;
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var context;
+        var isViewHistoryMode;
         var cityDirectiveAPI;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -42,10 +43,10 @@
 
             if (parameters != undefined && parameters != null) {
                 carrierProfileId = parameters.CarrierProfileId;
-
+                context = parameters.context;
             }
             isEditMode = (carrierProfileId != undefined);
-
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -175,11 +176,27 @@
                     $scope.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getCarrierProfileHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        carrierProfileEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
         }
+        function getCarrierProfileHistory() {
+            return WhS_BE_CarrierProfileAPIService.GetCarrierProfileHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                carrierProfileEntity = response;
 
+            });
+        }
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
@@ -198,7 +215,17 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierProfileEntity ? carrierProfileEntity.Name : null, 'Carrier Profile') : UtilsService.buildTitleForAddEditor('Carrier Profile');
+
+
+            if (isEditMode && carrierProfileEntity != undefined)
+                
+                $scope.title = UtilsService.buildTitleForUpdateEditor(carrierProfileEntity.Name, 'Carrier Profile', $scope);
+              
+            else if (isViewHistoryMode && carrierProfileEntity != undefined)
+            $scope.title = "View Carrier Profile: " + carrierProfileEntity.Name;
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor('Carrier Profile');
+
         }
 
         function loadCurrencySelector() {

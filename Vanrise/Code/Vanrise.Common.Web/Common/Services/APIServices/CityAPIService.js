@@ -42,6 +42,12 @@
         function GetDistinctCountryIdsByCityIds(cityIds) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDistinctCountryIdsByCityIds"), cityIds);
         }
+        function GetCityHistoryDetailbyHistoryId(cityHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetCityHistoryDetailbyHistoryId'), {
+                cityHistoryId: cityHistoryId
+            });
+        }
 
         return ({
             HasAddCityPermission: HasAddCityPermission,
@@ -51,7 +57,8 @@
             UpdateCity: UpdateCity,
             HasEditCityPermission:HasEditCityPermission,
             AddCity: AddCity,
-            GetDistinctCountryIdsByCityIds: GetDistinctCountryIdsByCityIds
+            GetDistinctCountryIdsByCityIds: GetDistinctCountryIdsByCityIds,
+            GetCityHistoryDetailbyHistoryId: GetCityHistoryDetailbyHistoryId
         });
     }
 

@@ -32,6 +32,11 @@ namespace Vanrise.Common.Data.SQL
                 );
         }
 
+        public object GetObjectDetailById(int VRObjectTrackingId)
+        {
+            return GetItemSP("[logging].[sp_ObjectTracking_GetObjectDetailsById]", ObjectDetailMapper, VRObjectTrackingId);
+        }
+
         private VRObjectTrackingMetaData ObjectTrackingMapper(IDataReader reader)
         {
             VRObjectTrackingMetaData ObjectTracking = new VRObjectTrackingMetaData
@@ -40,15 +45,17 @@ namespace Vanrise.Common.Data.SQL
                 Time = GetReaderValue<DateTime>(reader, "LogTime"),
                 UserId = GetReaderValue<int>(reader, "UserID"),
                 ActionId = GetReaderValue<int>(reader, "ActionID"),
-               
-             
+                HasDetail = GetReaderValue<bool>(reader, "HasDetail"),
             };
 
             return ObjectTracking;
         }
 
+        private object ObjectDetailMapper(IDataReader reader)
+        {
+            return Vanrise.Common.Serializer.Deserialize<object>(reader["ObjectDetails"] as string);
+        }
 
 
-        
     }
 }

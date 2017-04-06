@@ -28,6 +28,14 @@ namespace Vanrise.Integration.Business
             else
                 return null;
         }
+
+        public DataSource GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var dataSource = s_vrObjectTrackingManager.GetObjectDetailById(dataSourceHistoryId);
+            return dataSource.CastWithValidate<DataSource>("DataSource : historyId ", dataSourceHistoryId);
+        }
+
         public IEnumerable<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources(DataSourceFilter filter)
         {
             var dataSources = GetCachedDataSources();

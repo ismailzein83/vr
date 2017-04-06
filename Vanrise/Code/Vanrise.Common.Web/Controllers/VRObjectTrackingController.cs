@@ -20,5 +20,13 @@ namespace Vanrise.Common.Web.Controllers
             VRObjectTrackingManager manager = new VRObjectTrackingManager();
             return GetWebResponse(input, manager.GetFilteredObjectTracking(input));
         }
+
+        [HttpGet]
+        [Route("GetViewHistoryItemClientActionName")]
+        public string GetViewHistoryItemClientActionName(string uniqueName)
+        {
+            VRObjectTrackingManager manager = new VRObjectTrackingManager();
+            return manager.GetViewHistoryItemClientActionName(uniqueName);
+        }
     }
 }

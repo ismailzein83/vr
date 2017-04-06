@@ -8,6 +8,8 @@
         var isEditMode;
         var userId;
         var userEntity;
+        var context;
+        var isViewHistoryMode;
         var tenantSelectorAPI;
         var tenantReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -18,10 +20,12 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null)
+            if (parameters != undefined && parameters != null) {
                 userId = parameters.userId;
-
+                context = parameters.context;
+            }
             isEditMode = (userId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -33,6 +37,7 @@
                 else
                     return insertUser();
             };
+
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
@@ -69,6 +74,17 @@
                     $scope.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getUserHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        userEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
@@ -80,7 +96,12 @@
                 $scope.isInEditMode = true;
             });
         }
+        function getUserHistory() {
+            return VR_Sec_UserAPIService.GetUserHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                userEntity = response;
 
+            });
+        }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector])
                .catch(function (error) {
@@ -114,6 +135,8 @@
         function setTitle() {
             if (isEditMode && userEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(userEntity.Name, 'User');
+            else if (isViewHistoryMode && userEntity != undefined)
+                $scope.title = "View User: " + userEntity.Name;
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('User');
         }

@@ -11,8 +11,14 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredObjectTracking"), input);
         }
 
+        function GetViewHistoryItemClientActionName(uniqueName) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetViewHistoryItemClientActionName"), {
+                uniqueName: uniqueName
+            });
+        }
         return ({
-            GetFilteredObjectTracking: GetFilteredObjectTracking
+            GetFilteredObjectTracking: GetFilteredObjectTracking,
+            GetViewHistoryItemClientActionName: GetViewHistoryItemClientActionName
         });
     }
 

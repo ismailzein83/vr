@@ -12,6 +12,7 @@ namespace Vanrise.Entities
       public DateTime Time { get; set; }
       public int UserId { get; set; }
       public int ActionId { get; set; }
+      public bool HasDetail { get; set; }
  
     }
 }

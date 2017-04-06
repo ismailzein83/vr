@@ -15,7 +15,7 @@ namespace Vanrise.Common.Business
         static IVRObjectTrackingDataManager s_dataManager = CommonDataManagerFactory.GetDataManager<IVRObjectTrackingDataManager>();
         static VRLoggableEntityManager s_loggableEntityManager = new VRLoggableEntityManager();
         static VRActionAuditLKUPManager s_actionAuditLKUPManager = new VRActionAuditLKUPManager();
-        
+
         internal long TrackObjectAction(VRLoggableEntityBase loggableEntity, string objectId, Object obj, string action, string actionDescription)
         {
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
@@ -26,10 +26,22 @@ namespace Vanrise.Common.Business
 
         public IDataRetrievalResult<VRObjectTrackingMetaDataDetail> GetFilteredObjectTracking(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQuery> input)
         {
-           return BigDataManager.Instance.RetrieveData(input, new VRObjectTrackingHandler());
-            
+            return BigDataManager.Instance.RetrieveData(input, new VRObjectTrackingHandler());
+
         }
 
+        public string GetViewHistoryItemClientActionName(string uniqueName)
+        {
+            var logEntity = s_loggableEntityManager.GetLoggableEntity(uniqueName);
+            return (logEntity != null) ? logEntity.Settings.ViewHistoryItemClientActionName : null;
+        }
+
+        public object GetObjectDetailById(int VRObjectTrackingId)
+        {
+            IVRObjectTrackingDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRObjectTrackingDataManager>();
+            return dataManager.GetObjectDetailById(VRObjectTrackingId);
+
+        }
 
         private class VRObjectTrackingHandler : BigDataRequestHandler<VRLoggableEntityQuery, VRObjectTrackingMetaData, VRObjectTrackingMetaDataDetail>
         {
@@ -76,7 +88,7 @@ namespace Vanrise.Common.Business
                 {
                     foreach (var record in context.BigResult.Data)
                     {
-                        if (record.Entity != null )
+                        if (record.Entity != null)
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
@@ -104,6 +116,6 @@ namespace Vanrise.Common.Business
 
             return objectTrackingMetaDataDetail;
         }
-      
+
     }
 }

@@ -7,6 +7,8 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     var isEditMode;
 
     var dataSourceEntity;
+    var context;
+    var isViewHistoryMode;
     var dataSourceId;
     var taskId = 0;
 
@@ -27,9 +29,11 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
 
         if (parameters != undefined && parameters != null) {
             dataSourceId = parameters.dataSourceId;
+            context = parameters.context;
         }
 
         isEditMode = (dataSourceId != undefined);
+        isViewHistoryMode = (context != undefined && context.historyId != undefined);
     }
 
     function defineScope() {
@@ -120,11 +124,28 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
+        else if (isViewHistoryMode) {
+            getDataSourceHistory().then(function () {
+                loadAllControls().finally(function () {
+                    dataSourceEntity = undefined;
+                });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
+            });
+
+        }
         else {
             loadAllControls();
         }
     }
+    function getDataSourceHistory() {
+        return VR_Integration_DataSourceAPIService.GetDataSourceHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+    
+            dataSourceEntity = response;
 
+        });
+    }
     function getDataSource() {
         return VR_Integration_DataSourceAPIService.GetDataSource(dataSourceId).then(function (dataSourceResponse) {
             dataSourceEntity = dataSourceResponse;
@@ -222,6 +243,8 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     function setTitle() {
         if (isEditMode && dataSourceTask != undefined && dataSourceTask.TaskData != undefined)
             $scope.title = UtilsService.buildTitleForUpdateEditor(dataSourceTask.TaskData.Name, "Data Source");
+        else if (isViewHistoryMode && dataSourceEntity != undefined)
+            $scope.title = "View Data Source: " + dataSourceEntity.Name;
         else
             $scope.title = UtilsService.buildTitleForAddEditor("Data Source");
     }
@@ -270,7 +293,7 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     }
   
     function insertDataSource() {
-
+       
         var dataSourceObject = buildDataSourceObjFromScope();
         return VR_Integration_DataSourceAPIService.AddDataSource(dataSourceObject)
         .then(function (response) {
@@ -288,7 +311,7 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     }
 
     function updateDataSource() {
-
+      
         var dataSourceObject = buildDataSourceObjFromScope();
         VR_Integration_DataSourceAPIService.UpdateDataSource(dataSourceObject)
         .then(function (response) {

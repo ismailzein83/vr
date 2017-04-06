@@ -2,9 +2,9 @@
 
     'use strict';
 
-    UserService.$inject = ['VRModalService', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
+    UserService.$inject = ['VRModalService', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
 
-    function UserService(VRModalService, VR_Sec_UserAPIService, VRNotificationService, VRCommon_ObjectTrackingService) {
+    function UserService(VRModalService, VR_Sec_UserAPIService, VRNotificationService, VRCommon_ObjectTrackingService, UtilsService) {
         var drillDownDefinitions = [];
         return ({
             addUser: addUser,
@@ -14,8 +14,11 @@
             forgotPassword: forgotPassword,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToUser: registerObjectTrackingDrillDownToUser,
-            getEntityUniqueName:getEntityUniqueName
+            getEntityUniqueName: getEntityUniqueName,
+            registerHistoryViewAction: registerHistoryViewAction
         });
+
+
 
         function addUser(onUserAdded) {
             var modalSettings = {};
@@ -40,6 +43,18 @@
 
             VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', modalParameters, modalSettings);
         }
+
+        function viewHistoryUser(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', modalParameters, modalSettings);
+        };
 
         function resetPassword(userId) {
             var modalParameters = {
@@ -67,7 +82,7 @@
                     }
                 });
         }
-        
+
         function forgotPassword(email) {
             var modalParameters = {
                 email: email
@@ -76,8 +91,24 @@
             VRModalService.showModal('/Client/Modules/Security/Views/User/ForgotPasswordEditor.html', modalParameters, undefined);
         }
 
-        function getEntityUniqueName()
-        {
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "VR_Security_User_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryUser(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
+        function getEntityUniqueName() {
             return "VR_Security_User";
         }
 
@@ -86,23 +117,23 @@
 
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
-            
+
 
             drillDownDefinition.loadDirective = function (directiveAPI, userItem) {
                 userItem.objectTrackingGridAPI = directiveAPI;
                 var query = {
                     ObjectId: userItem.Entity.UserId,
                     EntityUniqueName: getEntityUniqueName(),
-                    
+
                 };
                 return userItem.objectTrackingGridAPI.load(query);
             };
-            
+
             addDrillDownDefinition(drillDownDefinition);
-           
+
         }
         function addDrillDownDefinition(drillDownDefinition) {
-          
+
             drillDownDefinitions.push(drillDownDefinition);
         }
 

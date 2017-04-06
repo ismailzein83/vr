@@ -2,4 +2,5 @@
     VRCommon_DataSourceLogService.registerLogToMaster();
     VRCommon_DataSourceImportedBatchService.registerLogToMaster();
     VR_Integration_DataSourceService.registerObjectTrackingDrillDownToDataSource();
+    VR_Integration_DataSourceService.registerHistoryViewAction();
 }]);

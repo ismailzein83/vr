@@ -52,6 +52,13 @@ namespace Vanrise.Security.Business
                 VRActionLogger.Current.LogObjectViewed(GroupLoggableEntity.Instance, group);
             return group;
         }
+
+        public Group GetGroupHistoryDetailbyHistoryId(int groupHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var group = s_vrObjectTrackingManager.GetObjectDetailById(groupHistoryId);
+            return group.CastWithValidate<Group>("Group : historyId ", groupHistoryId);
+        }
         public Group GetGroup(int groupId)
         {
           

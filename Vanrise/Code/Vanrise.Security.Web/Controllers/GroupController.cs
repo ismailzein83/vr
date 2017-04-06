@@ -41,6 +41,13 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.GetGroup(groupId,true);
         }
 
+        [HttpGet]
+        [Route("GetGroupHistoryDetailbyHistoryId")]
+        public Group GetGroupHistoryDetailbyHistoryId(int groupHistoryId)
+        {
+            return _manager.GetGroupHistoryDetailbyHistoryId(groupHistoryId);
+        }
+
         [HttpPost]
         [Route("AddGroup")]
         public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(Group groupObj)

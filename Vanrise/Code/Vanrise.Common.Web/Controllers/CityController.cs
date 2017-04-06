@@ -22,6 +22,14 @@ namespace Vanrise.Common.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetCityHistoryDetailbyHistoryId")]
+        public City GetCityHistoryDetailbyHistoryId(int cityHistoryId)
+        {
+            CityManager manager = new CityManager();
+            return manager.GetCityHistoryDetailbyHistoryId(cityHistoryId);
+        }
+
+        [HttpGet]
         [Route("GetCitiesInfo")]
         public IEnumerable<CityInfo> GetCitiesInfo(int countryId)
         {

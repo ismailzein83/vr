@@ -7,8 +7,21 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             addCity: addCity,
             registerDrillDownToCountry: registerDrillDownToCountry,
             registerObjectTrackingDrillDownToCity: registerObjectTrackingDrillDownToCity,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
         });
+
+        function viewHistoryCity(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', modalParameters, modalSettings);
+        };
         function editCity(cityId, onCityUpdated) {
             var settings = {
             };
@@ -36,6 +49,24 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "VR_Common_City_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryCity(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
+
         function getEntityUniqueName() {
             return "VR_Common_City";
         }

@@ -10,6 +10,7 @@ namespace Vanrise.Common.Data
     {
         long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription);
         List<VRObjectTrackingMetaData> GetAll(Guid loggableEntityId, string objectId);
-       
+        object GetObjectDetailById(int VRObjectTrackingId);
+
     }
 }

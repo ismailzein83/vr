@@ -8,10 +8,24 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
             uploadCountrires: uploadCountrires,
-            getEntityUniqueName: getEntityUniqueName
+            getEntityUniqueName: getEntityUniqueName,
+            registerHistoryViewAction: registerHistoryViewAction
           
 
         });
+
+        function viewHistoryCountry(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryEditor.html', modalParameters, modalSettings);
+        };
+
         function editCountry(countryId, onCountryUpdated) {
             var settings = {
             };
@@ -45,6 +59,23 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
             var parameters = {};
 
             VRModalService.showModal('/Client/Modules/Common/Views/Country/CountryUploader.html', parameters, settings);
+        }
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "VR_Common_Country_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryCountry(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+           
         }
 
         function getEntityUniqueName() {

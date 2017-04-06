@@ -3,4 +3,6 @@
     VR_Sec_GroupService.registerObjectTrackingDrillDownToGroup();
     VR_Sec_ViewService.registerObjectTrackingDrillDownToView();
     VR_Sec_OrgChartService.registerObjectTrackingDrillDownToOrgChart();
+    VR_Sec_UserService.registerHistoryViewAction();
+    VR_Sec_GroupService.registerHistoryViewAction();
 }]);

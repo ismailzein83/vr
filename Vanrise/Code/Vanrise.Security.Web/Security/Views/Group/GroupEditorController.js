@@ -8,7 +8,8 @@
         var isEditMode;
         var groupEntity;
         var members;
-
+        var context;
+        var isViewHistoryMode;
         var groupeTypeAPI;
         var groupeTypeReadyPromiseDeferred; 
 
@@ -19,11 +20,13 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters) {
+            if (parameters != undefined && parameters != null) {
                 $scope.groupId = parameters.groupId;
+                context = parameters.context;
             }
 
             isEditMode = ($scope.groupId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -72,8 +75,18 @@
                     $scope.isLoading = false;
                 });
             }
-            else
-            {
+            else if (isViewHistoryMode) {
+                getGroupHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        groupEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+            else {
                 loadAllControls();
             }
         }
@@ -83,6 +96,14 @@
                 .then(function (response) {
                     groupEntity = response;
                 });
+        }
+
+
+        function getGroupHistory() {
+            return VR_Sec_GroupAPIService.GetGroupHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                groupEntity = response;
+
+            });
         }
 
         function loadAllControls()
@@ -100,6 +121,8 @@
         {
             if (isEditMode && groupEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(groupEntity.Name, 'Group');
+            else if (isViewHistoryMode && groupEntity != undefined)
+                $scope.title = "View Group: " + groupEntity.Name;
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Group');
         }

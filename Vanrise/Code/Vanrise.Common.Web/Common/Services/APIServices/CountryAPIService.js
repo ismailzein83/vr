@@ -1,11 +1,17 @@
 ﻿(function (appControllers) {
 
+
     "use strict";
     countryAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
     function countryAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
         var controllerName = 'Country';
+        function GetCountryHistoryDetailbyHistoryId(countryHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetCountryHistoryDetailbyHistoryId'), {
+                countryHistoryId: countryHistoryId
+            });
+        }
         function GetFilteredCountries(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredCountries"), input);
         }
@@ -67,6 +73,8 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateCountry']));
         }
 
+        
+
         return ({
             GetFilteredCountries: GetFilteredCountries,
             GetCountriesInfo: GetCountriesInfo,
@@ -80,7 +88,8 @@
             HasAddCountryPermission: HasAddCountryPermission,
             HasUploadCountryPermission: HasUploadCountryPermission,
             HasDownloadCountryPermission: HasDownloadCountryPermission,
-            HasEditCountryPermission: HasEditCountryPermission
+            HasEditCountryPermission: HasEditCountryPermission,
+            GetCountryHistoryDetailbyHistoryId: GetCountryHistoryDetailbyHistoryId
         });
     }
 

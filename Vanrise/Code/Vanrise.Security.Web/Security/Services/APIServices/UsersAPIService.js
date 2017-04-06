@@ -25,12 +25,15 @@
             ActivatePassword: ActivatePassword,
             ForgotPassword: ForgotPassword,
             DisableUser: DisableUser,
-            EnableUser: EnableUser
+            EnableUser: EnableUser,
+            GetUserHistoryDetailbyHistoryId: GetUserHistoryDetailbyHistoryId
         });
 
         function GetFilteredUsers(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredUsers'), input);
         }
+
+
 
         function GetUsersInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUsersInfo'), {
@@ -45,6 +48,13 @@
         function GetUserbyId(userId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUserbyId'), {
                 UserId: userId
+            });
+        }
+
+        function GetUserHistoryDetailbyHistoryId(userHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUserHistoryDetailbyHistoryId'), {
+                userHistoryId: userHistoryId
             });
         }
 
@@ -83,7 +93,7 @@
         function ForgotPassword(forgotPasswordInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ForgotPassword'), forgotPasswordInput);
         }
-        
+
         function ActivatePassword(activatePasswordInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ActivatePassword'), activatePasswordInput);
         }

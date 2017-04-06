@@ -39,6 +39,8 @@
 
         var sellingNumberPlanDirectiveAPI;
         var isEditMode;
+        var context;
+        var isViewHistoryMode;
         var carrierAccountId;
         var carrierProfileId;
         var carrierProfileId;
@@ -54,8 +56,10 @@
             if (parameters != undefined && parameters != null) {
                 carrierAccountId = parameters.CarrierAccountId;
                 carrierProfileId = parameters.CarrierProfileId;
+                context = parameters.context;
             }
             isEditMode = (carrierAccountId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -280,10 +284,28 @@
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         $scope.scopeModel.isLoading = false;
                     });
-            } else
+            }
+            else if (isViewHistoryMode) {
+                getCarrierAccountHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        carrierAccountEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
+            else
                 loadAllControls();
         }
+        function getCarrierAccountHistory() {
+            return WhS_BE_CarrierAccountAPIService.GetCarrierAccountHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                carrierAccountEntity = response;
 
+            });
+        }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadStaticSection, loadCarrierProfileDirective, loadCurrencySelector, loadBPBusinessRuleSetSelector, loadCompanySettingSelector])
                 .catch(function (error) {
@@ -300,6 +322,8 @@
                 .then(function (response) {
                     $scope.title = UtilsService.buildTitleForUpdateEditor(response, 'Carrier Account', $scope);
                 });
+            else if (isViewHistoryMode && carrierAccountEntity != undefined)
+                $scope.title = "View Carrier Account: " + carrierAccountEntity.Name;
             else 
               $scope.title =  UtilsService.buildTitleForAddEditor('Carrier Account');
         }

@@ -32,6 +32,15 @@ namespace Vanrise.Integration.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetDataSourceHistoryDetailbyHistoryId")]
+        public DataSource GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
+        {
+            DataSourceManager manager = new DataSourceManager();
+            
+            return manager.GetDataSourceHistoryDetailbyHistoryId(dataSourceHistoryId); ;
+        }
+
+        [HttpGet]
         [Route("GetDataSource")]
         public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(Guid dataSourceId)
         {

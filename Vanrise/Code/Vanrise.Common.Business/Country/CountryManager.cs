@@ -30,7 +30,12 @@ namespace Vanrise.Common.Business
             VRActionLogger.Current.LogGetFilteredAction(CountryLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCountries.ToBigResult(input, filterExpression, CountryDetailMapper), handler);
         }
-
+        public Country GetCountryHistoryDetailbyHistoryId(int countryHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var country = s_vrObjectTrackingManager.GetObjectDetailById(countryHistoryId);
+            return country.CastWithValidate<Country>("Country : historyId ", countryHistoryId);
+        }
         public IEnumerable<CountryInfo> GeCountriesInfo(CountryFilter filter)
         {
             IEnumerable<Country> allCountries = GetCachedCountries().Values;
@@ -402,6 +407,7 @@ namespace Vanrise.Common.Business
             public static CountryLoggableEntity Instance = new CountryLoggableEntity();
 
             private CountryLoggableEntity()
+
             {
 
             }

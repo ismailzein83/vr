@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonObjecttrackingGrid", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRCommon_ObjectTrackingAPIService",
-function (UtilsService, VRNotificationService, VRUIUtilsService,VRCommon_ObjectTrackingAPIService) {
+app.directive("vrCommonObjecttrackingGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingAPIService", "VRCommon_ObjectTrackingService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_ObjectTrackingAPIService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
 
@@ -26,6 +26,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VRCommon_ObjectT
     function objectTrackingGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var actionHistoryName;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -41,9 +42,20 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VRCommon_ObjectT
 
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
+                        if (actionHistoryName == null) {
+                            var uniqueName = query.EntityUniqueName;
+                            VRCommon_ObjectTrackingAPIService.GetViewHistoryItemClientActionName(uniqueName).then(function (response) {
+                                actionHistoryName = response;
+                            })
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
                         return gridAPI.retrieveData(query);
+                    });
+                        }
+
                     };
-                    
+
                     return directiveAPI;
                 }
             };
@@ -56,14 +68,38 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VRCommon_ObjectT
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-            
+
+
+            $scope.gridMenuActions = function (dataItem) {
+
+                if (dataItem.Entity.HasDetail) {
+
+                    var defaultMenuActions = [
+                        {
+                            name: "View",
+                            clicked: viewHistory,
+                        }];
+                    return defaultMenuActions;
+                }
+
+                return null;
+            };
+
         }
 
-       
+        function viewHistory(dataItem) {
 
-        
+            var payload = {
+                historyId: dataItem.Entity.VRObjectTrackingId
+            };
+            var action = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
+            if (action!=undefined)
+            action.actionMethod(payload);
+        }
 
-       
+
+
+
 
     }
 

@@ -25,7 +25,13 @@ namespace Vanrise.Common.Web.Controllers
 			CountryManager manager = new CountryManager();
 			return GetWebResponse(input, manager.GetFilteredCountries(input));
 		}
-
+        [HttpGet]
+        [Route("GetCountryHistoryDetailbyHistoryId")]
+        public Country GetCountryHistoryDetailbyHistoryId(int countryHistoryId)
+        {
+            CountryManager manager = new CountryManager();
+            return manager.GetCountryHistoryDetailbyHistoryId(countryHistoryId);
+        }
 		[HttpGet]
 		[Route("GetCountriesInfo")]
 		public IEnumerable<CountryInfo> GetCountriesInfo(string filter = null)

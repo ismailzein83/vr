@@ -13,7 +13,8 @@
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var disableCountry;
-
+        var context;
+        var isViewHistoryMode;
         loadParameters();
         defineScope();
         load();
@@ -24,8 +25,10 @@
                 cityId = parameters.CityId;
                 countryId = parameters.CountryId;
                 disableCountry = parameters.disableCountry
+                context = parameters.context;
             }
             editMode = (cityId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             $scope.disableCountry = editMode || disableCountry;
            
         }
@@ -66,11 +69,28 @@
                     $scope.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getCityHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        cityEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
             }
         }
+        function getCityHistory() {
+            return VRCommon_CityAPIService.GetCityHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                cityEntity = response;
 
+            });
+        }
         function getCity() {
             return VRCommon_CityAPIService.GetCity(cityId).then(function (city) {
                 cityEntity = city;
@@ -91,6 +111,8 @@
         {
             if (editMode && cityEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(cityEntity.Name, "City");
+            else if (isViewHistoryMode && cityEntity != undefined)
+                $scope.title = "View City: " + cityEntity.Name;
             else
                 $scope.title = UtilsService.buildTitleForAddEditor("City");
         }

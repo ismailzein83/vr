@@ -24,8 +24,16 @@
             DisableDataSource: DisableDataSource,
             EnableDataSource: EnableDataSource,
             DisableAllDataSource: DisableAllDataSource,
-            EnableAllDataSource: EnableAllDataSource
+            EnableAllDataSource: EnableAllDataSource,
+            GetDataSourceHistoryDetailbyHistoryId: GetDataSourceHistoryDetailbyHistoryId
         });
+
+        function GetDataSourceHistoryDetailbyHistoryId(dataSourceHistoryId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, 'DataSource', 'GetDataSourceHistoryDetailbyHistoryId'), {
+                dataSourceHistoryId: dataSourceHistoryId
+            });
+        }
+
         function GetDataSources(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, 'DataSource', 'GetDataSources'), { filter: filter });
         }

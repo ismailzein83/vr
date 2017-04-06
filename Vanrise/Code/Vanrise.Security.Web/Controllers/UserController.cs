@@ -45,6 +45,14 @@ namespace Vanrise.Security.Web.Controllers
             return userGroupManager.GetMembers(groupId);
         }
 
+
+        [HttpGet]
+        [Route("GetUserHistoryDetailbyHistoryId")]
+        public User GetUserHistoryDetailbyHistoryId(int userHistoryId)
+        {
+            return _manager.GetUserHistoryDetailbyHistoryId(userHistoryId);
+        }
+
         [HttpGet]
         [Route("GetUserbyId")]
         public User GetUserbyId(int userId)

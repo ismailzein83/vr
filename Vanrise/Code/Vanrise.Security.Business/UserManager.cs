@@ -50,6 +50,12 @@ namespace Vanrise.Security.Business
             return null;
         }
 
+        public User GetUserHistoryDetailbyHistoryId(int userHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var user = s_vrObjectTrackingManager.GetObjectDetailById(userHistoryId);
+            return user.CastWithValidate<User>("User : historyId ", userHistoryId);
+        }
         public IEnumerable<User> GetUsers()
         {
             var users = GetUsersByTenant();
@@ -192,7 +198,7 @@ namespace Vanrise.Security.Business
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
                     //emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-                   
+
                     ConfigManager cManager = new ConfigManager();
                     Guid newUserId = cManager.GetNewUserId();
                     if (cManager.ShouldSendEmailOnNewUser())
@@ -203,7 +209,7 @@ namespace Vanrise.Security.Business
                         });
                         sendMailTask.Start();
                     }
-                   
+
                 }
             }
 
@@ -224,7 +230,7 @@ namespace Vanrise.Security.Business
         }
 
 
-        
+
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
@@ -353,7 +359,7 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             User user = GetUserbyId(userId);
-                                
+
             bool updateActionSucc;
             var cloudServiceProxy = GetCloudServiceProxy();
             if (cloudServiceProxy != null)
@@ -400,7 +406,7 @@ namespace Vanrise.Security.Business
                                 VRMailManager vrMailManager = new VRMailManager();
                                 vrMailManager.SendMail(resetPasswordId, objects);
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
                                 LoggerFactory.GetExceptionLogger().WriteException(ex);
                             }
@@ -714,17 +720,17 @@ namespace Vanrise.Security.Business
             else
                 return null;
         }
-        private static void StartSendMailTask(Guid newUserID,object user , string pwd)
+        private static void StartSendMailTask(Guid newUserID, object user, string pwd)
         {
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
             objects.Add("User", user);
             objects.Add("Password", pwd);
             VRMailManager vrMailManager = new VRMailManager();
             try
-            {               
+            {
                 vrMailManager.SendMail(newUserID, objects);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LoggerFactory.GetExceptionLogger().WriteException(ex);
             }

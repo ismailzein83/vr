@@ -12,7 +12,8 @@
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var context;
+        var isViewHistoryMode;
         var switchSelectorAPI;
         var switchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,9 +24,11 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null)
+            if (parameters != undefined && parameters != null) {
                 switchConnectivityId = parameters.switchConnectivityId;
-
+                context = parameters.context;
+            }
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (switchConnectivityId != undefined);
         }
 
@@ -92,11 +95,27 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getSwitchConnectivityHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        switchConnectivityEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
         }
+        function getSwitchConnectivityHistory() {
+            return WhS_BE_SwitchConnectivityAPIService.GetSwitchConnectivityHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                switchConnectivityEntity = response;
 
+            });
+        }
         function getSwitchConnectivity() {
             return WhS_BE_SwitchConnectivityAPIService.GetSwitchConnectivity(switchConnectivityId).then(function (response) {
                 switchConnectivityEntity = response;
@@ -116,6 +135,8 @@
                 if (switchConnectivityEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(switchConnectivityEntity.Name, 'Switch Connectivity');
             }
+            else if (isViewHistoryMode && switchConnectivityEntity != undefined)
+                $scope.title = "View Switch Connectivity: " + switchConnectivityEntity.Name;
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Switch Connectivity');
         }

@@ -29,6 +29,13 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCities.ToBigResult(input, filterExpression, CityDetailMapper), handler);
         }
 
+        public City GetCityHistoryDetailbyHistoryId(int cityHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var city = s_vrObjectTrackingManager.GetObjectDetailById(cityHistoryId);
+            return city.CastWithValidate<City>("City : historyId ", cityHistoryId);
+        }
+
         public IEnumerable<CityInfo> GetCitiesInfo(int countryId)
         {
             return this.GetCachedCities().MapRecords(CityInfoMapper, city => city.CountryId == countryId).OrderBy(city => city.Name);
