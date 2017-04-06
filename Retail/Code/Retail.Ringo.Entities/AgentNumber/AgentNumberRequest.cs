@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Retail.Ringo.Entities
 {
@@ -17,5 +18,6 @@ namespace Retail.Ringo.Entities
         public long AgentId { get; set; }
         public Status Status { get; set; }
         public AgentNumberSetting Settings { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

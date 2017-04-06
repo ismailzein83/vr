@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Retail.Ringo.Entities;
 using Vanrise.Data.SQL;
@@ -51,7 +52,8 @@ namespace Retail.Ringo.Data.SQL
                 Id = (int)reader["ID"],
                 AgentId = (long)reader["AgentID"],
                 Status = (Status)GetReaderValue<byte>(reader, "Status"),
-                Settings = string.IsNullOrEmpty(settings) ? null : Vanrise.Common.Serializer.Deserialize<AgentNumberSetting>(settings)
+                Settings = string.IsNullOrEmpty(settings) ? null : Vanrise.Common.Serializer.Deserialize<AgentNumberSetting>(settings),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
         }
 

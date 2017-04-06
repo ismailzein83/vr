@@ -4,9 +4,11 @@
                  pagingtype="'PagingOnScroll'"
                  on-ready="scopeModel.onGridReady"
                  menuactions="scopeModel.gridMenuActions"
-                 idfield="Entity.Id" enableautoexport="true">
+                 idfield="Entity.Id" enableautoexport="true"
+                 defaultsortbyfieldname="'Entity.CreatedTime'" defaultsortdirection="'DESC'">
         <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Agent'" field="'AgentName'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Created Date'" field="'Entity.CreatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
     </vr-datagrid>
 </span>
