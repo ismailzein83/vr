@@ -704,16 +704,22 @@
                                 return;
                             var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
                             if (onBeforeSelectionChanged != undefined && typeof (onBeforeSelectionChanged) == 'function') {
-                                onBeforeSelectionChanged().then(function (response) {
-                                    if (response)
-                                        selectItem(e, item);
-                                    else
+                                var onBeforeSelectionChangedPromise = onBeforeSelectionChanged();
+                                if (onBeforeSelectionChangedPromise != undefined && onBeforeSelectionChangedPromise.then != undefined) {
+                                    onBeforeSelectionChangedPromise.then(function (response) {
+                                        if (response)
+                                            selectItem(e, item);
+                                        else
+                                            return;
+                                    }).catch(function () {
                                         return;
-                                }).catch(function () {
-                                    return;
-                                });
+                                    });
+                                }
+                                else {
+                                    selectItem(e, item);
+                                }
                             }
-                            else 
+                            else
                                 selectItem(e, item);
                         };
 
