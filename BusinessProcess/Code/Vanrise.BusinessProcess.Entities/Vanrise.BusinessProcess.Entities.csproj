@@ -59,6 +59,9 @@
   <ItemGroup>
     <Compile Include="BaseProcessInputArgument.cs" />
     <Compile Include="BPDefinition.cs" />
+    <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
+    <Compile Include="BPDefinitionContexts\IBPDefinitionCanRunBPInstanceContext.cs" />
+    <Compile Include="BPDefinitionContexts\SecurityContexts.cs" />
     <Compile Include="BPDefinitionDetail.cs" />
     <Compile Include="BPDefinitionInfo.cs" />
     <Compile Include="BPDefinitionInfoFilter.cs" />
