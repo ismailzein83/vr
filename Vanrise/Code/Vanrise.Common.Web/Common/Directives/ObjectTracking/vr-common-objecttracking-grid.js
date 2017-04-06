@@ -27,6 +27,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
         var gridAPI;
         var actionHistoryName;
+        var viewHistoryAction;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -46,16 +47,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                             var uniqueName = query.EntityUniqueName;
                             VRCommon_ObjectTrackingAPIService.GetViewHistoryItemClientActionName(uniqueName).then(function (response) {
                                 actionHistoryName = response;
-                            })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-                        return gridAPI.retrieveData(query);
-                    });
+                                viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            }).finally(function () {
+                                return gridAPI.retrieveData(query);
+                            });
                         }
-
                     };
-
                     return directiveAPI;
                 }
             };
@@ -69,38 +68,24 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                     });
             };
 
-
+            var defaultMenuActions = [{
+                name: "View",
+                clicked: viewHistory,
+            }];
             $scope.gridMenuActions = function (dataItem) {
-
-                if (dataItem.Entity.HasDetail) {
-
-                    var defaultMenuActions = [
-                        {
-                            name: "View",
-                            clicked: viewHistory,
-                        }];
+                if (dataItem.Entity.HasDetail && viewHistoryAction != undefined) {
                     return defaultMenuActions;
                 }
-
-                return null;
             };
 
         }
-
         function viewHistory(dataItem) {
-
             var payload = {
                 historyId: dataItem.Entity.VRObjectTrackingId
             };
-            var action = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
-            if (action!=undefined)
-            action.actionMethod(payload);
+            if (viewHistoryAction != undefined)
+                viewHistoryAction.actionMethod(payload);
         }
-
-
-
-
-
     }
 
     return directiveDefinitionObject;
