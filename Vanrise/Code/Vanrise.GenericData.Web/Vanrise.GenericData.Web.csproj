@@ -596,11 +596,7 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_GenericData\Elements\Notification\DataRecord\Directive\Templates\" />
-    <Folder Include="VR_GenericData\Elements\Notification\DataRecord\Services\APIServices\" />
-    <Folder Include="VR_GenericData\Elements\Notification\DataRecord\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />
