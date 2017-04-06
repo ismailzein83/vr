@@ -20,6 +20,10 @@ namespace Retail.Ringo.Business
             {
                 if (input.Query.AgentIds != null && !input.Query.AgentIds.Contains(numberRequest.AgentId))
                     return false;
+                if (input.Query.Status != null && !input.Query.Status.Contains((int)numberRequest.Status))
+                    return false;
+                if (!string.IsNullOrEmpty(input.Query.Number) && !numberRequest.Settings.AgentNumbers.Any(itm => itm.Number.StartsWith(input.Query.Number)))
+                    return false;
                 return true;
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAgentNumberRequests.ToBigResult(input, filterExpression, AgentNumberRequestDetailMapper));

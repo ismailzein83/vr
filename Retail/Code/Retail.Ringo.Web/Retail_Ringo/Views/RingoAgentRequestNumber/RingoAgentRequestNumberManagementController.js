@@ -1,26 +1,27 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    AgentRequestNumberManagementController.$inject = ['$scope',  'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    AgentRequestNumberManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Retail_Ringo_AgentNumberRequestStatusEnum'];
 
-    function AgentRequestNumberManagementController($scope, UtilsService, vrUIUtilsService, vrNotificationService) {
+    function AgentRequestNumberManagementController($scope, UtilsService, vrUIUtilsService, vrNotificationService, Retail_Ringo_AgentNumberRequestStatusEnum) {
 
         var gridAPI;
 
         var agentDirectiveApi;
         var agentReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+
         defineScope();
         load();
         function defineScope() {
 
             $scope.scopeModel = {};
-
+            $scope.scopeModel.statuses = [];
+            $scope.scopeModel.selectedStatuses = [];
             $scope.scopeModel.onAgentSelectorDirectiveReady = function (api) {
                 agentDirectiveApi = api;
                 agentReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
@@ -46,7 +47,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAgentSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadAgentSelector, loadStatusSelector]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
@@ -62,9 +63,16 @@
             return selectorLoadDeferred.promise;
         }
 
+        function loadStatusSelector() {
+            $scope.scopeModel.statuses = UtilsService.getArrayEnum(Retail_Ringo_AgentNumberRequestStatusEnum);
+        }
+
         function buildGridQuery() {
             return {
-                AgentIds: agentDirectiveApi.getSelectedIds()
+                AgentIds: agentDirectiveApi.getSelectedIds(),
+                Status: $scope.scopeModel.selectedStatuses != undefined && $scope.scopeModel.selectedStatuses.length > 0 ? UtilsService.getPropValuesFromArray($scope.scopeModel.selectedStatuses, "value") : undefined,
+                Number: $scope.scopeModel.number
+
             };
         }
     }

@@ -9,8 +9,8 @@ namespace Retail.Ringo.Entities
     public class AgentNumberRequestQuery
     {
         public IEnumerable<long> AgentIds { get; set; }
-        public Status? Status { get; set; }
+        public List<int> Status { get; set; }
+        public string Number { get; set; }
 
-        public List<NumberStatus> NumberStatuses { get; set; }
     }
 }

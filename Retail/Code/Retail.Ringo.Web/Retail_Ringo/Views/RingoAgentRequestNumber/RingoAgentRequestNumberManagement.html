@@ -10,6 +10,20 @@
                                             ismultipleselection>
 
                 </retail-be-account-selector>
+                <vr-columns width="normal">
+                    <vr-textbox label="Number" value="scopeModel.number">
+                    </vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Status"
+                               datasource="scopeModel.statuses"
+                               selectedvalues="scopeModel.selectedStatuses"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Status"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
             </vr-row>
         </div>
 
