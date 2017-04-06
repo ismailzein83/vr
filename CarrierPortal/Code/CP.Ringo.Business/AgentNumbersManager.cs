@@ -34,37 +34,27 @@ namespace CP.Ringo.Business
 
             return result;
         }
-        public IDataRetrievalResult<AgentNumberDetail> GetFilteredAgentNumbers(DataRetrievalInput<AgentNumberRequestQuery> query)
+        public IDataRetrievalResult<AgentNumberDetail> GetFilteredAgentNumbers(DataRetrievalInput<PortalAgentNumberRequestQuery> query)
         {
             BigResult<AgentNumberDetail> result = new BigResult<AgentNumberDetail>();
             VRInterAppRestConnection connectionSettings = GetInterAppConnection();
             var retailAccountSettings = GetRetailAccountSettings();
+            DataRetrievalInput<AgentNumberRequestQuery> apiQuery = BuildApiQuery(query);
 
-            query.Query = new AgentNumberRequestQuery
-            {
-                AgentIds = new List<long> { retailAccountSettings.AccountId }
-            };
-            query.SortByColumnName = "Entity.Id";
-            var bigResult = connectionSettings.Post<DataRetrievalInput<AgentNumberRequestQuery>, BigResult<AgentNumberRequestDetail>>("api/Retail_Ringo/RingoAgentNumberRequest/GetFilteredAgentNumberRequests", query);
+            var bigResult = connectionSettings.Post<DataRetrievalInput<AgentNumberRequestQuery>, BigResult<AgentNumberRequestDetail>>("api/Retail_Ringo/RingoAgentNumberRequest/GetFilteredAgentNumberRequests", apiQuery);
             List<AgentNumberDetail> agentNumbers = new List<AgentNumberDetail>();
-            foreach (var agentNumberDetail in bigResult.Data)
+            List<AgentNumber> tempList = new List<AgentNumber>();
+            foreach (var agentNumberDetail in bigResult.Data.OrderByDescending(itm => itm.Entity.Id))
             {
                 if (agentNumberDetail.Entity.Settings.AgentNumbers == null || agentNumberDetail.Entity.Status == Status.Rejected)
                     continue;
-                agentNumbers.AddRange(agentNumberDetail.Entity.Settings.AgentNumbers.Where(itm => itm.Status != NumberStatus.Rejected).MapRecords(AgentNumberDetailMapper));
+                tempList.AddRange(agentNumberDetail.Entity.Settings.AgentNumbers);
             }
+            Func<AgentNumber, bool> filterExpression = BuildFilterExpression(query);
+            agentNumbers.AddRange(tempList.MapRecords(AgentNumberDetailMapper, filterExpression));
             result.Data = agentNumbers;
 
             return result;
-        }
-
-        private AgentNumberDetail AgentNumberDetailMapper(AgentNumber agentNumber)
-        {
-            return new AgentNumberDetail
-            {
-                Entity = agentNumber,
-                StatusDescription = Utilities.GetEnumDescription<NumberStatus>(agentNumber.Status)
-            };
         }
 
         #region Private Methods
@@ -83,10 +73,58 @@ namespace CP.Ringo.Business
         {
             SettingManager settingManager = new SettingManager();
             RingoRetailSettings settings = settingManager.GetSetting<RingoRetailSettings>(RingoRetailSettings.SETTING_TYPE);
+            settings.ThrowIfNull("settings", RingoRetailSettings.SETTING_TYPE);
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection(settings.RetailVRConnectionId);
+            vrConnection.ThrowIfNull("vrConnection", settings.RetailVRConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
             return connectionSettings;
+        }
+
+        Func<AgentNumber, bool> BuildFilterExpression(DataRetrievalInput<PortalAgentNumberRequestQuery> query)
+        {
+            Func<AgentNumber, bool> filterExpression = (agentNumber) =>
+            {
+                if (agentNumber.Status == NumberStatus.Rejected)
+                    return false;
+                if (!string.IsNullOrEmpty(query.Query.Number) && !agentNumber.Number.StartsWith(query.Query.Number))
+                    return false;
+                if (query.Query.Status != null && !query.Query.Status.Contains((int)agentNumber.Status))
+                    return false;
+                return true;
+            };
+            return filterExpression;
+        }
+
+        DataRetrievalInput<AgentNumberRequestQuery> BuildApiQuery(DataRetrievalInput<PortalAgentNumberRequestQuery> query)
+        {
+            DataRetrievalInput<AgentNumberRequestQuery> apiQuery = new DataRetrievalInput<AgentNumberRequestQuery>
+            {
+                Query = new AgentNumberRequestQuery
+                {
+                    AgentIds = query.Query.AgentIds,
+                    Number = query.Query.Number,
+                    Status = query.Query.Status
+                },
+                DataRetrievalResultType = query.DataRetrievalResultType,
+                FromRow = query.FromRow,
+                GetSummary = query.GetSummary,
+                IsAPICall = query.IsAPICall,
+                IsSortDescending = query.IsSortDescending,
+                ResultKey = query.ResultKey,
+                SortByColumnName = "Entity.Id",
+                ToRow = query.ToRow
+            };
+            return apiQuery;
+        }
+
+        AgentNumberDetail AgentNumberDetailMapper(AgentNumber agentNumber)
+        {
+            return new AgentNumberDetail
+            {
+                Entity = agentNumber,
+                StatusDescription = Utilities.GetEnumDescription<NumberStatus>(agentNumber.Status)
+            };
         }
 
         #endregion

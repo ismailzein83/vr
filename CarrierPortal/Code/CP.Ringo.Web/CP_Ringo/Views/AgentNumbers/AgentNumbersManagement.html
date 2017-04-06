@@ -2,7 +2,20 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
-
+                <vr-columns width="normal">
+                    <vr-textbox label="Number" value="number">
+                    </vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Status"
+                               datasource="statuses"
+                               selectedvalues="selectedStatuses"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               entityname="Status"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
