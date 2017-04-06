@@ -7,7 +7,7 @@ using Vanrise.DataParser.Entities.HexTLV;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 {
-    public class IPParser : TagValueParser
+    public class IPv4Parser : TagValueParser
     {
         public override Guid ConfigId
         {

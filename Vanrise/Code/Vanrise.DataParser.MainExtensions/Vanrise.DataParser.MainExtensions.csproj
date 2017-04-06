@@ -46,12 +46,16 @@
     <Compile Include="HexTLV\RecordReaders\TagRecordReader.cs" />
     <Compile Include="HexTLV\TagValueParsers\BoolParser.cs" />
     <Compile Include="HexTLV\TagValueParsers\IntParser.cs" />
-    <Compile Include="HexTLV\TagValueParsers\IPParser.cs" />
+    <Compile Include="HexTLV\TagValueParsers\IPv4Parser.cs" />
     <Compile Include="HexTLV\TagValueParsers\SequenceParser.cs" />
     <Compile Include="HexTLV\TagValueParsers\StringParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.DataParser.Entities\Vanrise.DataParser.Entities.csproj">
       <Project>{91d049e3-d276-4ac0-8ac1-3bf0bbe84751}</Project>
       <Name>Vanrise.DataParser.Entities</Name>

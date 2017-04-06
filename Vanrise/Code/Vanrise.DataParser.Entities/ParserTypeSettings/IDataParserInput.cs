@@ -8,6 +8,6 @@ namespace Vanrise.DataParser.Entities
 {
     public interface IDataParserInput
     {
-
+        byte[] Data { get; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -434,6 +435,11 @@ namespace Vanrise.Common
             if (castedObject == null)
                 throw new Exception(String.Format("{0} '{1}' is not of type {2}. it is of type {3}", objectName, id, typeof(T), obj.GetType()));
             return castedObject;
+        }
+
+        public static void SkipBytes(this Stream stream, int numberOfBytes)
+        {
+            stream.Seek(numberOfBytes, SeekOrigin.Current);
         }
 
         #endregion

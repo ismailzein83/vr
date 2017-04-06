@@ -15,7 +15,7 @@ namespace Vanrise.DataParser.Entities.HexTLV
 
     public interface ITagValueParserExecuteContext
     {
-        List<byte> TagValue { get; }
+        byte[] TagValue { get; }
 
         ParsedRecord Record { get; }
     }

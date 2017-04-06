@@ -16,7 +16,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
         public string FieldName { get; set; }
         public override void Execute(ITagValueParserExecuteContext context)
         {
-            string value = System.Text.Encoding.UTF8.GetString(context.TagValue.ToArray());
+            string value = System.Text.Encoding.UTF8.GetString(context.TagValue);
             context.Record.SetFieldValue(this.FieldName, value);
         }
     }

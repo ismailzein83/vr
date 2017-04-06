@@ -11,12 +11,12 @@ namespace Vanrise.DataParser.Entities.HexTLV
         public abstract Guid ConfigId { get; }
 
         public abstract void Execute(IRecordReaderExecuteContext context);
-    } 
-   
+    }
+
     public interface IRecordReaderExecuteContext
     {
-        List<byte> Data { get; }
+        byte[] Data { get; }
 
-        void OnRecordRead(string recordType, List<byte> recordData, Dictionary<string, HexTLVTagType> tagTypes);
+        void OnRecordRead(string recordType, byte[] recordData, Dictionary<string, HexTLVTagType> tagTypes);
     }
 }
