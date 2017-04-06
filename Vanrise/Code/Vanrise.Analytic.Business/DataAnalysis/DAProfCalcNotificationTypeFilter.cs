@@ -8,6 +8,7 @@ namespace Vanrise.Analytic.Business
     public class DAProfCalcNotificationTypeFilter : IVRNotificationTypeFilter
     {
         public Guid DataAnalysisItemDefinitionId { get; set; }
+
         public bool IsMatched(IVRNotificationTypeFilterContext context)
         {
             if (context.VRNotificationType.Settings == null)
