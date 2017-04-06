@@ -9,8 +9,7 @@ namespace Mediation.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
-
-            bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+            var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
@@ -19,7 +18,8 @@ namespace Mediation.Web
                 "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Mediation_Generic", "*.js", true));
+                "~/Client/Modules/Mediation_Generic", "*.js", true);
+            bundles.Add(modulesJSBundle);
         }
     }
 }
