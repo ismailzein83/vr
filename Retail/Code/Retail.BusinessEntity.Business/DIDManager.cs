@@ -72,6 +72,16 @@ namespace Retail.BusinessEntity.Business
             return dids.GetRecord(number);
         }
 
+        public DID GetDIDBySourceId(string sourceId)
+        {
+            var dids = GetCachedDIDsGroupBySourceId();
+
+            if (dids == null)
+                return null;
+
+            return dids.GetRecord(sourceId);
+        }
+
         public InsertOperationOutput<DIDDetail> AddDID(DID did)
         {
             InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
@@ -164,7 +174,15 @@ namespace Retail.BusinessEntity.Business
                    return dids.ToDictionary(itm => itm.Value.Number, itm => itm.Value);
                });
         }
-
+        private Dictionary<string, DID> GetCachedDIDsGroupBySourceId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupBySourceId",
+               () =>
+               {
+                   var dids = GetCachedDIDs();
+                   return dids.ToDictionary(itm => itm.Value.SourceId, itm => itm.Value);
+               });
+        }
         private Dictionary<int, DID> GetCachedDIDs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllDIDs",

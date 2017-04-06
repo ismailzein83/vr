@@ -245,18 +245,14 @@ namespace Retail.Runtime.Mappers
 
         public Vanrise.Integration.Entities.MappingOutput ImportingMmsEDR_File()
         {
-            LogVerbose("Started");
+            HashSet<string> lstPackages = new HashSet<string> { "PROMO_GEN_RNW_OK", "SIM_PROMO_GEN_SUB", "PROMO_GEN_UNSUB", "SIM_PROMO_EXPIRED" };
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
-            var mmsEDRs = new List<dynamic>();
+            var ringoSmsEDRs = new List<dynamic>();
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type messageEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("MessageEDR");
+            Type ringoMessageEDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("RingoEventEDR");
 
-
-            var currentItemCount = 27;
-            var headerText = "H";
-
-            DateTime creationDate = default(DateTime);
+            var currentItemCount = 5;
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
             {
@@ -266,68 +262,59 @@ namespace Retail.Runtime.Mappers
 
                 string[] rowData = currentLine.Split(';');
 
-                if (rowData.Length == 2 && rowData[0] == headerText)
-                {
-                    creationDate = DateTime.ParseExact(rowData[1], "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+
+                if (rowData.Length < currentItemCount)
                     continue;
+
+                dynamic edr = Activator.CreateInstance(ringoMessageEDRRuntimeType) as dynamic;
+                edr.MSISDN = rowData[0];
+                edr.EventIdMvno = int.Parse(rowData[1]);
+                edr.EventId = int.Parse(rowData[2]);
+                edr.CreatedDate = DateTime.Now;
+                string edrEvent = rowData[3];
+                edr.Event = edrEvent;
+                edr.Parameters = rowData[4];
+                edr.FileName = ImportedData.Name;
+                if (lstPackages.Contains(edrEvent))
+                {
+                    string[] edrDetails = string.IsNullOrEmpty(edr.Parameters) ? null : edr.Parameters.Split(',');
+                    if (edrDetails != null)
+                    {
+                        string[] dateFormats = new string[] { "dd/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss" };
+                        DateTime date;
+                        int promotionId = 0;
+                        if (edrEvent != "SIM_PROMO_EXPIRED")
+                        {
+                            edr.PromotionCode = edrDetails[0];
+
+                            int.TryParse(edrDetails[1], out promotionId);
+                            edr.PromotionId = promotionId;
+                            DateTime.TryParseExact(edrDetails[2], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                            edr.ActivationDate = date;
+                            if (edrDetails.Length > 3)
+                            {
+                                DateTime.TryParseExact(edrDetails[3], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                                edr.CustomerActivationDate = date;
+                            }
+                        }
+                        else
+                        {
+                            int.TryParse(edrDetails[0], out promotionId);
+                            edr.PromotionId = promotionId;
+                            DateTime.TryParseExact(edrDetails[1], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                            edr.ActivationDate = date;
+                        }
+                    }
                 }
 
-                else if (rowData.Length != currentItemCount)
-                    continue;
-
-                dynamic edr = Activator.CreateInstance(messageEDRRuntimeType) as dynamic;
-                edr.IdCDR = long.Parse(rowData[0]);
-                edr.StartDate = DateTime.ParseExact(rowData[2], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-
-
-
-                edr.TrafficType = rowData[3];
-                edr.TypeMessage = rowData[4];
-                edr.DirectionTraffic = rowData[5];
-                edr.Calling = rowData[6];
-                edr.Called = rowData[7];
-                edr.TypeNet = rowData[8];
-                edr.SourceOperator = rowData[9];
-                edr.DestinationOperator = rowData[10];
-                edr.SourceArea = rowData[11];
-                edr.DestinationArea = rowData[12];
-
-                string bill = rowData[13];
-                edr.Bill = !string.IsNullOrEmpty(bill) ? int.Parse(bill) : default(int?);
-
-                edr.Unit = rowData[14];
-
-                string credit = rowData[15];
-                edr.Credit = !string.IsNullOrEmpty(credit) ? decimal.Parse(credit) : default(decimal?);
-
-                string balance = rowData[16];
-                edr.Balance = !string.IsNullOrEmpty(balance) ? decimal.Parse(balance) : default(decimal?);
-
-                edr.Bag = rowData[17];
-
-                string amount = rowData[18];
-                edr.Amount = !string.IsNullOrEmpty(amount) ? decimal.Parse(amount) : default(decimal?);
-
-                edr.TypeConsumed = rowData[19];
-                edr.PricePlan = rowData[20];
-                edr.Promotion = rowData[21];
-
-                string parentIdCDR = rowData[24];
-                edr.ParentIdCDR = !string.IsNullOrEmpty(parentIdCDR) ? long.Parse(parentIdCDR) : default(long?);
-
-                edr.FileName = rowData[25];
-                edr.FileDate = DateTime.ParseExact(rowData[26], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                edr.CreationDate = creationDate;
-
-                mmsEDRs.Add(edr);
+                ringoSmsEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(mmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
-            mappedBatches.Add("Message EDR Storage Stage", batch);
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            mappedBatches.Add("Ringo Event EDR Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
-            LogVerbose("Finished");
             return result;
         }
         public Vanrise.Integration.Entities.MappingOutput ImportingZajilCDRs(object importedData)

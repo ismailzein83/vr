@@ -8,6 +8,7 @@ namespace Retail.Zajil.MainExtensions
 {
     public class OrderDetailItem
     {
+        public int OrderId { get; set; }
         public string Charges { get; set; }
 
         public string Payment { get; set; }

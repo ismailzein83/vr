@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="AccountConvertor.cs" />
     <Compile Include="Account\InvoiceEnabledAccountFilter.cs" />
+    <Compile Include="Convertors\DIDConvertor.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceGenerator.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceSettings.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberPartnerSettings.cs" />

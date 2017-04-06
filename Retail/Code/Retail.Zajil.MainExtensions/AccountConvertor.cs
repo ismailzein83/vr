@@ -178,6 +178,7 @@ namespace Retail.Zajil.MainExtensions
         {
             return new OrderDetailItem
             {
+                OrderId = (int)row["OrderId"],
                 Achievement = row["Achievement"] as string,
                 Charges = row["Charges"] as string,
                 ChargesYear1 = GetDoubleValue(row, "Charges_Year1"),
@@ -195,14 +196,14 @@ namespace Retail.Zajil.MainExtensions
         }
         decimal GetDecimalValue(DataRow row, string columnName)
         {
-           return row[columnName] == DBNull.Value ? 0 : decimal.Parse(row[columnName].ToString());
+            return row[columnName] == DBNull.Value ? 0 : decimal.Parse(row[columnName].ToString());
         }
 
         double GetDoubleValue(DataRow row, string columnName)
         {
             return row[columnName] == DBNull.Value ? 0 : double.Parse(row[columnName].ToString());
         }
-        Dictionary<string,AccountCompanyContact> GetContactsList(DataRow row)
+        Dictionary<string, AccountCompanyContact> GetContactsList(DataRow row)
         {
             Dictionary<string, AccountCompanyContact> contacts = new Dictionary<string, AccountCompanyContact>();
 

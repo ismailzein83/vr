@@ -132,6 +132,7 @@
   <ItemGroup>
     <Compile Include="AccountActionManager.cs" />
     <Compile Include="AccountBalanceManager.cs" />
+    <Compile Include="Extensions\DIDSynchronizer.cs" />
     <Compile Include="ProductFamilyAddOrEditFilter.cs" />
     <Compile Include="ProductDefinitionAddOrEditFilter.cs" />
     <Compile Include="PackageDefinitionAddOrEditFilter.cs" />

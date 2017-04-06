@@ -73,6 +73,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
             var tab = [];
             for (var i = 0; i < ctrl.orderdetails.length; i++) {
                 tab.push({
+                    OrderId: ctl.orderDetails[i].OrderId,
                     Charges: ctrl.orderdetails[i].Charges,
                     Payment: ctrl.orderdetails[i].payment,
                     ContractPeriod: ctrl.orderdetails[i].ContractPeriod,
