@@ -53,7 +53,9 @@
     <Compile Include="ParserRecord\ParsedRecord.cs" />
     <Compile Include="ParserTypeSettings\ParserTypeSettings.cs" />
     <Compile Include="ParserType\ParserType.cs" />
+    <Compile Include="ParserType\ParserTypeDetail.cs" />
     <Compile Include="ParserType\ParserTypeExtendedSettingsConfig.cs" />
+    <Compile Include="ParserType\ParserTypeQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
