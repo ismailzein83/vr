@@ -429,6 +429,11 @@ namespace Vanrise.GenericData.Business
             IDataRecordTypeDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
             object _updateHandle;
 
+            protected override bool ShouldSetCacheExpired()
+            {
+                return _dataManager.AreDataRecordTypeUpdated(ref _updateHandle);
+            }
+
             public static void TriggerCacheExpiration()
             {
                 IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
