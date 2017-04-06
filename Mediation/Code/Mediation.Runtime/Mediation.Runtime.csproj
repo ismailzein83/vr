@@ -191,6 +191,21 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.DataParser.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DataParser.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DataParser.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DataParser.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DataParser.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -332,6 +347,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataParser\DataParserTester.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

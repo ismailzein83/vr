@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Mediation.Generic.BP.Arguments;
 using Mediation.Generic.Entities;
 using Mediation.Generic.MainExtensions.MediationOutputHandlers;
+using Mediation.Runtime.DataParser;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -20,7 +21,11 @@ namespace Mediation.Runtime.Tasks
     {
         public void Execute()
         {
-            RunImportProcess();
+
+            DataParserTester tester = new DataParserTester();
+            tester.ReadFile();
+
+            //RunImportProcess();
         }
 
         void RunImportProcess()
