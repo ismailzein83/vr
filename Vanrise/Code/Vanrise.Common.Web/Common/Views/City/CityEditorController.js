@@ -24,7 +24,7 @@
             if (parameters != undefined && parameters != null) {
                 cityId = parameters.CityId;
                 countryId = parameters.CountryId;
-                disableCountry = parameters.disableCountry
+                disableCountry = parameters.disableCountry;
                 context = parameters.context;
             }
             editMode = (cityId != undefined);
