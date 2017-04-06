@@ -44,6 +44,14 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -55,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalanceUpdateProcessBPSettings.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountBalanceUpdateHandler.cs" />
     <Compile Include="AccountStatementManager.cs" />
@@ -86,6 +95,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.AccountBalance.BP.Arguments\Vanrise.AccountBalance.BP.Arguments.csproj">
+      <Project>{ed541c78-4f5a-414d-83b4-7f8be4fb9211}</Project>
+      <Name>Vanrise.AccountBalance.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.AccountBalance.Data\Vanrise.AccountBalance.Data.csproj">
       <Project>{b965ecbb-a97f-4b6e-822b-09312422376b}</Project>
       <Name>Vanrise.AccountBalance.Data</Name>
