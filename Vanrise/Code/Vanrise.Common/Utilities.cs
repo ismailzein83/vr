@@ -95,6 +95,14 @@ namespace Vanrise.Common
             return date1 < date2 ? date1 : date2;
         }
 
+        public static bool AreTimePeriodsOverlapped(DateTime? p1From, DateTime? p1To, DateTime? p2From, DateTime? p2To)
+        {
+            if (p1From == p1To || p2From == p2To)
+                return false;
+
+            return p1To.VRGreaterThan(p2From) && p2To.VRGreaterThan(p1From);
+        }
+
         public static void ActivateAspose()
         {
 
