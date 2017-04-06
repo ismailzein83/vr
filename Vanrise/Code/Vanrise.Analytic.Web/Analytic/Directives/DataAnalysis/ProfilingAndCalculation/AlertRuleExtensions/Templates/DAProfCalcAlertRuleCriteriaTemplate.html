@@ -13,12 +13,14 @@
     <vr-columns width="1/3row">
         <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"
                                                          onselectionchanged="scopeModel.onDataAnalysisItemDefinitionSelectionChanged"
+                                                         onbeforeselectionchanged="scopeModel.onBeforeDataAnalysisItemDefinitionSelectionChanged"
                                                          customlabel="Analysis Type" isrequired="true">
         </vr-analytic-dataanalysisitemdefinition-selector>
     </vr-columns>
     <vr-columns width="1/3row" ng-show="scopeModel.isDataAnalysisItemDefinitionSelected">
         <span vr-loader="scopeModel.isOutputFieldsSelectorLoading">
-            <vr-analytic-daprofcalc-outputfields-selector on-ready="scopeModel.onDataAnalysisItemOutputFieldsSelectorReady" customlabel="Grouping Fields" ismultipleselection
+            <vr-analytic-daprofcalc-outputfields-selector on-ready="scopeModel.onDataAnalysisItemOutputFieldsSelectorReady" customlabel="Grouping Fields"
+                                                          onbeforeselectionchanged="scopeModel.onBeforeDataAnalysisItemOutputFieldsSelectionChanged" ismultipleselection
                                                           onselectitem="scopeModel.onSelectDataAnalysisItemOutputFields" ondeselectitem="scopeModel.onDeselectDataAnalysisItemOutputFields">
             </vr-analytic-daprofcalc-outputfields-selector>
         </span>

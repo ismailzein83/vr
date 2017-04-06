@@ -62,9 +62,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                         });
                     }
 
-                    var dummyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    dummyPromiseDeferred.resolve(true);
-                    return dummyPromiseDeferred.promise;
+                    return;
                 };
                 $scope.scopeModel.onSelectDataRecordField = function (selectedItem) {
                     $scope.scopeModel.tabObject.showTab = true;

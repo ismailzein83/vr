@@ -9,7 +9,8 @@
             restrict: "E",
             scope: {
                 onReady: "=",
-                onCriteriaSelectionChanged: "="
+                onCriteriaSelectionChanged: "=",
+                hasRelatedData: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -97,6 +98,29 @@
                         selectedOutputFields.splice(selectedOutputFields.indexOf(deselectedItem.Name), 1);
                         ctrl.onCriteriaSelectionChanged(dataAnalysisItemObj, selectedOutputFields);
                     }
+                };
+
+                $scope.scopeModel.onBeforeDataAnalysisItemDefinitionSelectionChanged = function () {
+                    return hasRelatedData();
+                };
+
+                $scope.scopeModel.onBeforeDataAnalysisItemOutputFieldsSelectionChanged = function () {
+                    return hasRelatedData();
+                };
+
+                function hasRelatedData() {
+                    var hasRelatedData;
+                    if (ctrl.hasRelatedData != undefined && typeof (ctrl.hasRelatedData) == 'function') {
+                        hasRelatedData = ctrl.hasRelatedData();
+                    }
+
+                    if (hasRelatedData == true) {
+                        return VRNotificationService.showConfirmation("Settings Data will be deleted. Are you sure you want to continue?").then(function (response) {
+                            return response;
+                        });
+                    }
+
+                    return;
                 };
 
                 UtilsService.waitMultiplePromises(promises).then(function () {

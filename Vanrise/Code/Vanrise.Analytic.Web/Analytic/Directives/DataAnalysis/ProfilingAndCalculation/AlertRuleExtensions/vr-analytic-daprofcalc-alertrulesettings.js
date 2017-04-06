@@ -71,6 +71,10 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                     });
                 };
 
+                $scope.scopeModel.hasSettingsData = function () {
+                    return dataRecordAlertRuleSettingsAPI != undefined ? dataRecordAlertRuleSettingsAPI.hasData() : false;
+                }
+
                 defineAPI();
             };
 

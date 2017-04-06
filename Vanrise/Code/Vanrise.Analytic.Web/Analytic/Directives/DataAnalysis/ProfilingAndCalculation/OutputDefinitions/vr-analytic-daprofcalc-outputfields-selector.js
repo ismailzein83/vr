@@ -15,7 +15,8 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
                 isrequired: '=',
                 hideremoveicon: '@',
                 normalColNum: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                onbeforeselectionchanged: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -103,7 +104,7 @@ app.directive('vrAnalyticDaprofcalcOutputfieldsSelector', ['VR_Analytic_DAProfCa
 
             var template =
                 '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label +
-                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
+                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" entityName="' + label +
                     '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                 '</vr-select>';
 
