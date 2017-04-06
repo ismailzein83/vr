@@ -155,6 +155,7 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
 
                 return VR_Notification_VRNotificationsAPIService.GetFirstPageVRNotifications(buildVRNotificationFirstPageInput()).then(function (response) {
                     manipulateDataUpdated(response);
+                    isGettingDataFirstTime = false;
                     VRTimerService.registerJob(onTimerElapsed, $scope);
                 });
             }
@@ -208,7 +209,6 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                             }
                             var minIdIndex = $scope.scopeModel.vrNotifications.length - 1;
                             minId = $scope.scopeModel.vrNotifications[minIdIndex].Entity.VRNotificationId;
-                            isGettingDataFirstTime = false;
                         }
                     }
                 }

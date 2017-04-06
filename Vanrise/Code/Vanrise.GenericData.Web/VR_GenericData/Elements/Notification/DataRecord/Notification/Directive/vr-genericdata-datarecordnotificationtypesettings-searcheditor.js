@@ -80,6 +80,10 @@ app.directive("vrGenericdataDatarecordnotificationtypesettingsSearcheditor", ["U
                 };
 
                 api.getData = function () {
+                    var filterGroup = recordFilterDirectiveAPI.getData().filterObj;
+                    if (filterGroup == undefined)
+                        return;
+
                     return {
                         $type: "Vanrise.GenericData.Notification.DataRecordNotificationExtendedQuery, Vanrise.GenericData.Notification",
                         FilterGroup: recordFilterDirectiveAPI.getData().filterObj

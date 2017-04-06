@@ -13,6 +13,7 @@
             if (status === VR_Notification_NotificationStatusEnum.Executed.value) return LabelColorsEnum.Success.color;
             if (status === VR_Notification_NotificationStatusEnum.Cleared.value) return LabelColorsEnum.Warning.color; 
             if (status === VR_Notification_NotificationStatusEnum.ErrorOnExecution.value) return LabelColorsEnum.Error.color;
+            if (status === VR_Notification_NotificationStatusEnum.ClearanceError.value) return LabelColorsEnum.Error.color;
 
             return LabelColorsEnum.Info.color;
         };

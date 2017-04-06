@@ -207,14 +207,20 @@ namespace Vanrise.GenericData.Business
     {
         Dictionary<string, dynamic> _dataRecord;
         Dictionary<string, DataRecordField> _recordTypeFieldsByName;
-        public DataRecordDictFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, Guid recordTypeId)
+
+        public DataRecordDictFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, Dictionary<string, DataRecordField> recordTypeFieldsByName)
         {
             if (dataRecord == null)
                 throw new ArgumentNullException("dataRecord");
             _dataRecord = dataRecord;
-            _recordTypeFieldsByName = (new DataRecordTypeManager()).GetDataRecordTypeFields(recordTypeId);
+            _recordTypeFieldsByName = recordTypeFieldsByName;
             if (_recordTypeFieldsByName == null)
                 throw new NullReferenceException("_recordTypeFieldsByName");
+        }
+        public DataRecordDictFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, Guid recordTypeId)
+            : this(dataRecord, (new DataRecordTypeManager()).GetDataRecordTypeFields(recordTypeId))
+        {
+            
         }
 
         public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
