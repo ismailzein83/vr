@@ -14,274 +14,263 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	public class StructureDataByZones : CodeActivity
-	{
-		#region Input Arguments
+    public class StructureDataByZones : CodeActivity
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<int> CurrencyId { get; set; }
+        [RequiredArgument]
+        public InArgument<int> CurrencyId { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<RateToChange>> RatesToChange { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<RateToChange>> RatesToChange { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<RateToClose>> RatesToClose { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<RateToClose>> RatesToClose { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<SaleZoneRoutingProductToAdd>> SaleZoneRoutingProductsToAdd { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneRoutingProductToAdd>> SaleZoneRoutingProductsToAdd { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<SaleZoneRoutingProductToClose>> SaleZoneRoutingProductsToClose { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneRoutingProductToClose>> SaleZoneRoutingProductsToClose { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<SaleZoneServiceToAdd>> SaleZoneServicesToAdd { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneServiceToAdd>> SaleZoneServicesToAdd { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
 
-		#endregion
+        #endregion
 
-		#region Output Arguments
+        #region Output Arguments
 
-		[RequiredArgument]
-		public OutArgument<IEnumerable<DataByZone>> DataByZone { get; set; }
+        [RequiredArgument]
+        public OutArgument<IEnumerable<DataByZone>> DataByZone { get; set; }
 
-		#endregion
+        #endregion
 
-		protected override void Execute(CodeActivityContext context)
-		{
-			IRatePlanContext ratePlanContext = context.GetRatePlanContext();
-			SalePriceListOwnerType ownerType = ratePlanContext.OwnerType;
-			int ownerId = ratePlanContext.OwnerId;
-			int currencyId = CurrencyId.Get(context);
+        protected override void Execute(CodeActivityContext context)
+        {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            SalePriceListOwnerType ownerType = ratePlanContext.OwnerType;
+            int ownerId = ratePlanContext.OwnerId;
+            int currencyId = CurrencyId.Get(context);
 
-			IEnumerable<CustomerCountryToAdd> countriesToAdd = CustomerCountriesToAdd.Get(context);
-			IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
-			
-			var endedCountryIds = new List<int>();
-			if (countriesToChange != null)
-				endedCountryIds.AddRange(countriesToChange.MapRecords(x => x.CountryId));
+            IEnumerable<CustomerCountryToAdd> countriesToAdd = CustomerCountriesToAdd.Get(context);
+            IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
 
-			IEnumerable<RateToChange> ratesToChange = this.RatesToChange.Get(context);
-			IEnumerable<RateToClose> ratesToClose = this.RatesToClose.Get(context);
+            var endedCountryIds = new List<int>();
+            if (countriesToChange != null)
+                endedCountryIds.AddRange(countriesToChange.MapRecords(x => x.CountryId));
 
-			IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context);
-			IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context);
+            IEnumerable<RateToChange> ratesToChange = this.RatesToChange.Get(context);
+            IEnumerable<RateToClose> ratesToClose = this.RatesToClose.Get(context);
 
-			IEnumerable<SaleZoneServiceToAdd> saleZoneServicesToAdd = this.SaleZoneServicesToAdd.Get(context);
-			IEnumerable<SaleZoneServiceToClose> saleZoneServicesToClose = this.SaleZoneServicesToClose.Get(context);
+            IEnumerable<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd = this.SaleZoneRoutingProductsToAdd.Get(context);
+            IEnumerable<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose = this.SaleZoneRoutingProductsToClose.Get(context);
 
-			IEnumerable<RatePlanCountry> soldCountries = null;
-			if (ownerType == SalePriceListOwnerType.Customer)
-				soldCountries = GetSoldCountries(ownerId, DateTime.Now.Date, false, countriesToAdd);
+            IEnumerable<SaleZoneServiceToAdd> saleZoneServicesToAdd = this.SaleZoneServicesToAdd.Get(context);
+            IEnumerable<SaleZoneServiceToClose> saleZoneServicesToClose = this.SaleZoneServicesToClose.Get(context);
 
-			var saleZoneManager = new SaleZoneManager();
+            Dictionary<int, RatePlanCustomerCountry> customerCountriesByCountryId =
+                (ownerType == SalePriceListOwnerType.Customer) ? GetCustomerCountriesByCountryId(ownerId, DateTime.Now.Date, countriesToAdd) : null;
 
-			Dictionary<string, DataByZone> dataByZoneName = new Dictionary<string, DataByZone>();
-			DataByZone dataByZone;
+            var saleZoneManager = new SaleZoneManager();
 
-			var ratePlanManager = new RatePlanManager();
-			var currencyExchangeManager = new CurrencyExchangeRateManager();
-			var saleRateManager = new SaleRateManager();
+            Dictionary<string, DataByZone> dataByZoneName = new Dictionary<string, DataByZone>();
+            DataByZone dataByZone;
 
-			foreach (RateToChange rateToChange in ratesToChange)
-			{
-				if (!dataByZoneName.TryGetValue(rateToChange.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, rateToChange.ZoneName, rateToChange.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+            var ratePlanManager = new RatePlanManager();
+            var currencyExchangeManager = new CurrencyExchangeRateManager();
+            var saleRateManager = new SaleRateManager();
 
-				if (rateToChange.RateTypeId.HasValue)
-					dataByZone.OtherRatesToChange.Add(rateToChange);
-				else
-					dataByZone.NormalRateToChange = rateToChange;
+            foreach (RateToChange rateToChange in ratesToChange)
+            {
+                if (!dataByZoneName.TryGetValue(rateToChange.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, rateToChange.ZoneName, rateToChange.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
 
-				if (dataByZone.ZoneRateGroup == null)
-					dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToChange.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
+                if (rateToChange.RateTypeId.HasValue)
+                    dataByZone.OtherRatesToChange.Add(rateToChange);
+                else
+                    dataByZone.NormalRateToChange = rateToChange;
 
-				if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
-					dataByZone.SoldOn = GetStartEffectiveTime(soldCountries, saleZoneManager, rateToChange.ZoneId);
-			}
+                if (dataByZone.ZoneRateGroup == null)
+                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToChange.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
 
-			foreach (RateToClose rateToClose in ratesToClose)
-			{
-				if (!dataByZoneName.TryGetValue(rateToClose.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, rateToClose.ZoneName, rateToClose.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+                if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
+                {
+                    RatePlanCustomerCountry ratePlanCustomerCountry = GetRatePlanCustomerCountry(customerCountriesByCountryId, saleZoneManager, rateToChange.ZoneId);
+                    if (ratePlanCustomerCountry != null)
+                    {
+                        dataByZone.SoldOn = ratePlanCustomerCountry.BED;
+                        dataByZone.IsCustomerCountryNew = ratePlanCustomerCountry.IsNew;
+                    }
+                }
+            }
 
-				if (rateToClose.RateTypeId.HasValue)
-					dataByZone.OtherRatesToClose.Add(rateToClose);
-				else
-					dataByZone.NormalRateToClose = rateToClose;
+            foreach (RateToClose rateToClose in ratesToClose)
+            {
+                if (!dataByZoneName.TryGetValue(rateToClose.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, rateToClose.ZoneName, rateToClose.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
 
-				if (dataByZone.ZoneRateGroup == null)
-					dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToClose.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
+                if (rateToClose.RateTypeId.HasValue)
+                    dataByZone.OtherRatesToClose.Add(rateToClose);
+                else
+                    dataByZone.NormalRateToClose = rateToClose;
 
-				if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
-					dataByZone.SoldOn = GetStartEffectiveTime(soldCountries, saleZoneManager, rateToClose.ZoneId);
-			}
+                if (dataByZone.ZoneRateGroup == null)
+                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToClose.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
 
-			foreach (SaleZoneRoutingProductToAdd routingProductToAdd in saleZoneRoutingProductsToAdd)
-			{
-				if (!dataByZoneName.TryGetValue(routingProductToAdd.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, routingProductToAdd.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+                if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
+                {
+                    RatePlanCustomerCountry ratePlanCustomerCountry = GetRatePlanCustomerCountry(customerCountriesByCountryId, saleZoneManager, rateToClose.ZoneId);
+                    if (ratePlanCustomerCountry != null)
+                    {
+                        dataByZone.SoldOn = ratePlanCustomerCountry.BED;
+                        dataByZone.IsCustomerCountryNew = ratePlanCustomerCountry.IsNew;
+                    }
+                }
+            }
+
+            foreach (SaleZoneRoutingProductToAdd routingProductToAdd in saleZoneRoutingProductsToAdd)
+            {
+                if (!dataByZoneName.TryGetValue(routingProductToAdd.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, routingProductToAdd.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
 
                 if (dataByZone.ZoneRateGroup == null)
                     dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, routingProductToAdd.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
 
-				dataByZone.SaleZoneRoutingProductToAdd = routingProductToAdd;
-			}
+                dataByZone.SaleZoneRoutingProductToAdd = routingProductToAdd;
+            }
 
-			foreach (SaleZoneRoutingProductToClose routingProductToClose in saleZoneRoutingProductsToClose)
-			{
-				if (!dataByZoneName.TryGetValue(routingProductToClose.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, routingProductToClose.ZoneName, routingProductToClose.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
-				dataByZone.SaleZoneRoutingProductToClose = routingProductToClose;
-			}
+            foreach (SaleZoneRoutingProductToClose routingProductToClose in saleZoneRoutingProductsToClose)
+            {
+                if (!dataByZoneName.TryGetValue(routingProductToClose.ZoneName, out dataByZone))
+                    AddEmptyDataByZone(dataByZoneName, routingProductToClose.ZoneName, routingProductToClose.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+                dataByZone.SaleZoneRoutingProductToClose = routingProductToClose;
+            }
 
-			foreach (SaleZoneServiceToAdd saleZoneServiceToAdd in saleZoneServicesToAdd)
-			{
-				if (!dataByZoneName.TryGetValue(saleZoneServiceToAdd.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, saleZoneServiceToAdd.ZoneName, saleZoneServiceToAdd.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+            this.DataByZone.Set(context, dataByZoneName.Values);
+        }
 
-				dataByZone.SaleZoneServiceToAdd = saleZoneServiceToAdd;
+        #region Private Members
 
-				if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
-					dataByZone.SoldOn = GetStartEffectiveTime(soldCountries, saleZoneManager, saleZoneServiceToAdd.ZoneId);
-			}
+        private class RatePlanCustomerCountry
+        {
+            public int CountryId { get; set; }
 
-			foreach (SaleZoneServiceToClose saleZoneServiceToClose in saleZoneServicesToClose)
-			{
-				if (!dataByZoneName.TryGetValue(saleZoneServiceToClose.ZoneName, out dataByZone))
-					AddEmptyDataByZone(dataByZoneName, saleZoneServiceToClose.ZoneName, saleZoneServiceToClose.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
+            public DateTime BED { get; set; }
 
-				dataByZone.SaleZoneServiceToClose = saleZoneServiceToClose;
+            public bool IsNew { get; set; }
+        }
 
-				if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
-					dataByZone.SoldOn = GetStartEffectiveTime(soldCountries, saleZoneManager, saleZoneServiceToClose.ZoneId);
-			}
+        private void AddEmptyDataByZone(Dictionary<string, DataByZone> dataByZoneName, string zoneName, long zoneId, IEnumerable<int> endedCountryIds, out DataByZone dataByZone, SaleZoneManager saleZoneManager)
+        {
+            int? countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
+            if (!countryId.HasValue)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Could not find the Country of Sale Zone '{0}'", zoneId));
+            dataByZone = new DataByZone()
+            {
+                ZoneId = zoneId,
+                ZoneName = zoneName,
+                CountryId = countryId.Value,
+                IsCountryEnded = endedCountryIds.Contains(countryId.Value),
+                OtherRatesToChange = new List<RateToChange>(),
+                OtherRatesToClose = new List<RateToClose>()
+            };
+            dataByZoneName.Add(zoneName, dataByZone);
+        }
 
-			this.DataByZone.Set(context, dataByZoneName.Values);
-		}
+        private Dictionary<int, RatePlanCustomerCountry> GetCustomerCountriesByCountryId(int customerId, DateTime effectiveOn, IEnumerable<CustomerCountryToAdd> countriesToAdd)
+        {
+            var customerCountryManager = new CustomerCountryManager();
+            IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn);
 
-		#region Private Members
+            IEnumerable<RatePlanCustomerCountry> newCountries = null;
+            if (countriesToAdd != null)
+            {
+                IEnumerable<int> newCountryIds = countriesToAdd.MapRecords(x => x.CountryId);
+                newCountries = countriesToAdd.MapRecords(x => new RatePlanCustomerCountry() { CountryId = x.CountryId, BED = x.BED, IsNew = true });
+            }
 
-		private class RatePlanCountry
-		{
-			public int CountryId { get; set; }
-			public DateTime BED { get; set; }
-		}
+            var allCountries = new List<RatePlanCustomerCountry>();
 
-		private RatePlanCountry CustomerCountryMapper(CustomerCountry2 customerCountry)
-		{
-			return new RatePlanCountry()
-			{
-				CountryId = customerCountry.CountryId,
-				BED = customerCountry.BED
-			};
-		}
+            if (soldCountries != null)
+                allCountries.AddRange(soldCountries.MapRecords(x => new RatePlanCustomerCountry() { CountryId = x.CountryId, BED = x.BED, IsNew = false }));
 
-		private void AddEmptyDataByZone(Dictionary<string, DataByZone> dataByZoneName, string zoneName, long zoneId, IEnumerable<int> endedCountryIds, out DataByZone dataByZone, SaleZoneManager saleZoneManager)
-		{
-			int? countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
-			if (!countryId.HasValue)
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Could not find the Country of Sale Zone '{0}'", zoneId));
-			dataByZone = new DataByZone()
-			{
-				ZoneId = zoneId,
-				ZoneName = zoneName,
-				CountryId = countryId.Value,
-				IsCountryEnded = endedCountryIds.Contains(countryId.Value),
-				OtherRatesToChange = new List<RateToChange>(),
-				OtherRatesToClose = new List<RateToClose>()
-			};
-			dataByZoneName.Add(zoneName, dataByZone);
-		}
+            if (newCountries != null)
+                allCountries.AddRange(newCountries);
 
-		private IEnumerable<RatePlanCountry> GetSoldCountries(int customerId, DateTime effectiveOn, bool isEffectiveInFuture, IEnumerable<CustomerCountryToAdd> countriesToAdd)
-		{
-			var customerCountryManager = new CustomerCountryManager();
-			IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn);
+            if (allCountries.Count == 0)
+                throw new DataIntegrityValidationException(string.Format("No countries are sold to Customer '{0}'", customerId));
 
-			IEnumerable<RatePlanCountry> draftCountries = null;
-			if (countriesToAdd != null)
-			{
-				IEnumerable<int> newCountryIds = countriesToAdd.MapRecords(x => x.CountryId);
-				draftCountries = countriesToAdd.MapRecords(x => new RatePlanCountry() { CountryId = x.CountryId, BED = x.BED });
-			}
+            return allCountries.ToDictionary(x => x.CountryId);
+        }
 
-			var allCountries = new List<RatePlanCountry>();
-			if (soldCountries != null) { allCountries.AddRange(soldCountries.MapRecords(CustomerCountryMapper)); }
-			if (draftCountries != null) { allCountries.AddRange(draftCountries); }
+        private RatePlanCustomerCountry GetRatePlanCustomerCountry(Dictionary<int, RatePlanCustomerCountry> customerCountriesByCountryId, SaleZoneManager saleZoneManager, long saleZoneId)
+        {
+            SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneId);
+            if (saleZone == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZone '{0}' was not found", saleZoneId));
+            RatePlanCustomerCountry ratePlanCustomerCountry = customerCountriesByCountryId.GetRecord(saleZone.CountryId);
+            if (ratePlanCustomerCountry == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Country of SaleZone '{0}' is not sold to the Customer", saleZone.Name));
+            return ratePlanCustomerCountry;
+        }
 
-			if (allCountries.Count == 0)
-				throw new DataIntegrityValidationException(string.Format("No countries are sold to Customer '{0}'", customerId));
+        private ZoneRateGroup GetZoneRateGroup(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn, int targetCurrencyId, RatePlanManager ratePlanManager, CurrencyExchangeRateManager currencyExchangeRateManager, SaleRateManager saleRateManager)
+        {
+            ZoneRateGroup zoneRateGroup = null;
+            SaleEntityZoneRate currentRate = ratePlanManager.GetRate(ownerType, ownerId, zoneId, effectiveOn);
+            if (currentRate != null)
+            {
+                zoneRateGroup = new ZoneRateGroup();
+                if (currentRate.Rate != null)
+                {
+                    zoneRateGroup.NormalRate = new ZoneRate();
 
-			return allCountries;
-		}
+                    decimal convertedNormalRate =
+                        currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate.Rate, saleRateManager.GetCurrencyId(currentRate.Rate), targetCurrencyId, effectiveOn);
 
-		private DateTime GetStartEffectiveTime(IEnumerable<RatePlanCountry> soldCountries, SaleZoneManager saleZoneManager, long saleZoneId)
-		{
-			SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneId);
-			if (saleZone == null)
-				throw new NullReferenceException("saleZone");
-			RatePlanCountry soldCountry = soldCountries.FindRecord(x => x.CountryId == saleZone.CountryId);
-			if (soldCountry == null)
-				throw new NullReferenceException("soldCountry");
-			return soldCountry.BED;
-		}
+                    zoneRateGroup.NormalRate.Source = currentRate.Source;
+                    zoneRateGroup.NormalRate.Rate = convertedNormalRate;
+                    zoneRateGroup.NormalRate.BED = currentRate.Rate.BED;
+                    zoneRateGroup.NormalRate.EED = currentRate.Rate.EED;
+                }
+                if (currentRate.RatesByRateType != null)
+                {
+                    zoneRateGroup.OtherRatesByType = new Dictionary<int, ZoneRate>();
+                    foreach (KeyValuePair<int, SaleRate> kvp in currentRate.RatesByRateType)
+                    {
+                        if (kvp.Value != null)
+                        {
+                            var otherRate = new ZoneRate();
 
-		private ZoneRateGroup GetZoneRateGroup(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn, int targetCurrencyId, RatePlanManager ratePlanManager, CurrencyExchangeRateManager currencyExchangeRateManager, SaleRateManager saleRateManager)
-		{
-			ZoneRateGroup zoneRateGroup = null;
-			SaleEntityZoneRate currentRate = ratePlanManager.GetRate(ownerType, ownerId, zoneId, effectiveOn);
-			if (currentRate != null)
-			{
-				zoneRateGroup = new ZoneRateGroup();
-				if (currentRate.Rate != null)
-				{
-					zoneRateGroup.NormalRate = new ZoneRate();
+                            SalePriceListOwnerType otherRateSource;
+                            currentRate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
 
-					decimal convertedNormalRate =
-						currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate.Rate, saleRateManager.GetCurrencyId(currentRate.Rate), targetCurrencyId, effectiveOn);
+                            decimal convertedOtherRate =
+                                currencyExchangeRateManager.ConvertValueToCurrency(kvp.Value.Rate, saleRateManager.GetCurrencyId(kvp.Value), targetCurrencyId, effectiveOn);
 
-					zoneRateGroup.NormalRate.Source = currentRate.Source;
-					zoneRateGroup.NormalRate.Rate = convertedNormalRate;
-					zoneRateGroup.NormalRate.BED = currentRate.Rate.BED;
-					zoneRateGroup.NormalRate.EED = currentRate.Rate.EED;
-				}
-				if (currentRate.RatesByRateType != null)
-				{
-					zoneRateGroup.OtherRatesByType = new Dictionary<int, ZoneRate>();
-					foreach (KeyValuePair<int, SaleRate> kvp in currentRate.RatesByRateType)
-					{
-						if (kvp.Value != null)
-						{
-							var otherRate = new ZoneRate();
+                            otherRate.Source = otherRateSource;
+                            otherRate.RateTypeId = kvp.Key;
+                            otherRate.Rate = convertedOtherRate;
+                            otherRate.BED = kvp.Value.BED;
+                            otherRate.EED = kvp.Value.EED;
 
-							SalePriceListOwnerType otherRateSource;
-							currentRate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
+                            zoneRateGroup.OtherRatesByType.Add(kvp.Key, otherRate);
+                        }
+                    }
+                }
+            }
+            return zoneRateGroup;
+        }
 
-							decimal convertedOtherRate =
-								currencyExchangeRateManager.ConvertValueToCurrency(kvp.Value.Rate, saleRateManager.GetCurrencyId(kvp.Value), targetCurrencyId, effectiveOn);
-
-							otherRate.Source = otherRateSource;
-							otherRate.RateTypeId = kvp.Key;
-							otherRate.Rate = convertedOtherRate;
-							otherRate.BED = kvp.Value.BED;
-							otherRate.EED = kvp.Value.EED;
-
-							zoneRateGroup.OtherRatesByType.Add(kvp.Key, otherRate);
-						}
-					}
-				}
-			}
-			return zoneRateGroup;
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }
