@@ -1,20 +1,17 @@
 ﻿'use strict';
+
 app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
+            scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new AccountBalanceRuleDefinitionCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -28,16 +25,16 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_AccountBalance/Directives/MainExtensions/BalanceAlertRule/Templates/BalanceAlertRuleSettingsTemplate.html';
             }
-
         };
 
         function AccountBalanceRuleDefinitionCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
             var genericRuleDefinitionEntity;
-
             var ruleObjects;
             var criteriaFields;
             var accountTypeId;
+
             var criteriaDirectiveAPI;
             var criteriaDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -80,7 +77,7 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                         $scope.scopeModel.actionExtensionType = payload.settings.VRActionExtensionType;
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadCriteriaDirective, loadObjectDirective, loadAccountTypeSelector]).catch(function (error) {
+                    return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadCriteriaDirective, loadObjectDirective]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.isLoading = false;
@@ -101,6 +98,20 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            function loadAccountTypeSelector() {
+                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                accountTypeSelectorAPIReadyDeferred.promise.then(function () {
+                    var payload = {
+                        selectedIds: accountTypeId
+                    };
+
+                    VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payload, accountTypeSelectorLoadDeferred);
+                });
+
+                return accountTypeSelectorLoadDeferred.promise;
+            }
+
 
             function loadObjectDirective() {
                 var objectDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -143,19 +154,6 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                 return criteriaDirectiveLoadDeferred.promise;
             }
 
-            function loadAccountTypeSelector() {
-                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                accountTypeSelectorAPIReadyDeferred.promise.then(function () {
-                    var payload = {
-                        selectedIds: accountTypeId
-                    };
-
-                    VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payload, accountTypeSelectorLoadDeferred);
-                });
-
-                return accountTypeSelectorLoadDeferred.promise;
-            }
-
             function buildContext() {
 
                 var context = {
@@ -163,9 +161,8 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                 };
                 return context;
             }
-
-            this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }
 ]);
