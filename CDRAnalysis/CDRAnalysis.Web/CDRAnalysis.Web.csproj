@@ -467,6 +467,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appSettings.config" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\CDRAnalysis.Web.pubxml" />
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
