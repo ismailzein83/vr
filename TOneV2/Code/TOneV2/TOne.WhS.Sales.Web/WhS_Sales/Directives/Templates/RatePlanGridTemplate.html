@@ -10,7 +10,7 @@
     </div>
     <vr-row removeline="true">
         <vr-columns width="fullrow">
-            <div style="min-height: 500px; max-height: 700px;">
+            <div >
                 <vr-datagrid on-ready="onGridReady"
                              datasource="zoneItems"
                              loadmoredata="loadMoreData"
@@ -18,6 +18,7 @@
                              norowhighlightonclick="'true'"
                              hidegridmenu
                              getrowstyle="getRowStyle"
+                             maxheight="{{ratePlanGridCtrl.maxHeight}}"
                              isdynamicrowstyle="true">
 
                     <vr-datagridcolumn headertext="'Zone'" type="'Text'" widthfactor="19" disablesorting="true">
