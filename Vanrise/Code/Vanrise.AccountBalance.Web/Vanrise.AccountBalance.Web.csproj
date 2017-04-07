@@ -153,6 +153,7 @@
     <Folder Include="VR_AccountBalance\Directives\BalanceAccountType\Templates\" />
     <Folder Include="VR_AccountBalance\Directives\BalanceAlertRule\" />
     <Folder Include="VR_AccountBalance\Directives\BillingTransactionType\Templates\" />
+    <Folder Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\Templates\" />
     <Folder Include="VR_AccountBalance\Views\BalanceAlertRule\" />
   </ItemGroup>
   <ItemGroup>
@@ -181,10 +182,10 @@
     <Content Include="VR_AccountBalance\Directives\BillingTransaction\vr-accountbalance-billingtransaction-search.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationBodyEditor.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationSearchEditor.html" />
-    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSettingsTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSettingsTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notification-bodyeditor.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notification-searcheditor.js" />
-    <Content Include="VR_AccountBalance\Directives\MainExtensions\AccountBalanceNotification\vr-accountbalance-notificationtype-settings.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notificationtype-settings.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\MainExtensions\BillingTransactionFieldEditorContoller.js" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\MainExtensions\Templates\BillingTransactionFieldEditor.html" />
     <Content Include="VR_AccountBalance\Directives\MainExtensions\Account\MainExtensions\Templates\BillingTransactionSourceSetting.html" />

@@ -15,7 +15,7 @@ app.directive('vrAccountbalanceNotificationtypeSettings', ['UtilsService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_AccountBalance/Directives/MainExtensions/AccountBalanceNotification/Templates/AccountBalanceNotificationTypeSettingsTemplate.html'
+            templateUrl: '/Client/Modules/VR_AccountBalance/Directives/AccountBalanceNotification/Templates/AccountBalanceNotificationTypeSettingsTemplate.html'
         };
 
         function AccountBalanceNotificationTypeSettings($scope, ctrl, $attrs) {
@@ -23,6 +23,7 @@ app.directive('vrAccountbalanceNotificationtypeSettings', ['UtilsService',
 
             function initializeController() {
                 $scope.scopeModel = {};
+
                 defineAPI();
             }
 
@@ -35,7 +36,7 @@ app.directive('vrAccountbalanceNotificationtypeSettings', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: 'Vanrise.AccountBalance.MainExtensions.AccountBalanceNotification.AccountBalanceNotificationTypeSettings, Vanrise.AccountBalance.MainExtensions'
+                        $type: 'Vanrise.AccountBalance.Business.AccountBalanceNotificationTypeSettings, Vanrise.AccountBalance.Business'
                     };
                 };
 
@@ -43,5 +44,4 @@ app.directive('vrAccountbalanceNotificationtypeSettings', ['UtilsService',
                     ctrl.onReady(api);
             }
         }
-
     }]);
