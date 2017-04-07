@@ -3,13 +3,15 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              idfield="Code">
+    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Zone Name'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn fixedwidth="'35'">
         <vr-icon icontype="dataItem.CodeChangeTypeIconType" iconurl="dataItem.CodeChangeTypeIcon"
                  tooltip="dataItem.CodeChangeTypeIconTooltip" inline>
         </vr-icon>
     </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Recent Zone'" field="'RecentZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
+
 </vr-datagrid>

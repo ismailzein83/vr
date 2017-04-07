@@ -1,15 +1,18 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    salePriceListPreviewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    salePriceListPreviewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListChangeAPIService'];
 
-    function salePriceListPreviewController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService) {
+    function salePriceListPreviewController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, whSBeSalePriceListChangeApiService) {
         var priceListId;
         var filter = {};
+        var ownerName;
         var codeChangeGridApi;
         var rateChangeGridApi;
-        var countryDirectiveApi;
-        var countryReadyPromiseDeferred = utilsService.createPromiseDeferred();
+        var countryCodeDirectiveApi;
+        var countryRateDirectiveApi;
+        var countryRateReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         loadAllControls();
@@ -23,25 +26,40 @@
                 rateChangeGridApi = api;
                 rateChangeGridApi.loadGrid(filter);
             };
-            $scope.onCountryReady = function (api) {
-                countryDirectiveApi = api;
-                countryReadyPromiseDeferred.resolve();
+            $scope.onCountryCodeReady = function (api) {
+                countryCodeDirectiveApi = api;
+                var setLoader = function (value) { $scope.isLoadingCountryCode = value };
+                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, countryCodeDirectiveApi, undefined, setLoader);
+
+            };
+            $scope.onCountryRateReady = function (api) {
+                countryRateDirectiveApi = api;
+                countryRateReadyPromiseDeferred.resolve();
             };
             $scope.searchCodeClicked = function () {
-                SetFilteredObject();
+                SetFilteredCodeObject();
                 return codeChangeGridApi.loadGrid(filter);
             };
             $scope.searchRateClicked = function () {
-                SetFilteredObject();
+                SetFilteredRateObject();
                 return rateChangeGridApi.loadGrid(filter);
             };
         }
-        function SetFilteredObject() {
+        function SetFilteredCodeObject() {
             if (priceListId != undefined) {
                 filter =
                 {
                     PriceListId: priceListId,
-                    Countries: countryDirectiveApi.getSelectedIds()
+                    Countries: countryCodeDirectiveApi.getSelectedIds()
+                }
+            }
+        }
+        function SetFilteredRateObject() {
+            if (priceListId != undefined) {
+                filter =
+                {
+                    PriceListId: priceListId,
+                    Countries: countryRateDirectiveApi.getSelectedIds()
                 }
             }
         }
@@ -52,23 +70,32 @@
                 filter.PriceListId = priceListId;
             }
         }
-        function loadCountrySelector() {
+        function loadCountryRateSelector() {
             var countryLoadPromiseDeferred = utilsService.createPromiseDeferred();
-
-            countryReadyPromiseDeferred.promise
+            countryRateReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {};
-                    vruiUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                    vruiUtilsService.callDirectiveLoad(countryRateDirectiveApi, directivePayload, countryLoadPromiseDeferred);
                 });
             return countryLoadPromiseDeferred.promise;
         }
         function setTitle() {
-            if (priceListId != undefined)
-                $scope.title = 'Sale Pricelist: ' + priceListId;
+            $scope.title = 'Sale Pricelist for ' + ownerName;
         }
+        function GetOwner() {
+            return whSBeSalePriceListChangeApiService.GetOwnerName(priceListId)
+                .then(function (name) {
+                    ownerName = name;
+                });
+        }
+
         function loadAllControls() {
             $scope.isLoadingFilter = true;
-            return utilsService.waitMultipleAsyncOperations([loadCountrySelector, setTitle])
+            return utilsService.waitMultipleAsyncOperations([loadCountryRateSelector, GetOwner])
+                .then(function () {
+                    console.log(ownerName);
+                    setTitle();
+                })
               .catch(function (error) {
                   vrNotificationService.notifyExceptionWithClose(error, $scope);
               })

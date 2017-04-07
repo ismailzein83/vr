@@ -24,6 +24,22 @@ namespace TOne.WhS.BusinessEntity.Business
             return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistCodeChangeDetailMapper));
         }
 
+        public string GetOwnerName(int priceListId)
+        {
+            string ownerName = string.Empty;
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SellingProductManager sellingProductManager = new SellingProductManager();
+            var priceList = salePriceListManager.GetPriceList(priceListId);
+            if (priceList != null)
+            {
+                var ownerId = priceList.OwnerId;
+                ownerName = priceList.OwnerType == SalePriceListOwnerType.Customer
+                    ? carrierAccountManager.GetCarrierAccountName(ownerId)
+                    : sellingProductManager.GetSellingProductName(ownerId);
+            }
+            return ownerName;
+        }
         public void SaveSalePriceListCustomerChanges(List<CustomerPriceListChange> customerPriceListChanges, long processInstanceId)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
@@ -97,12 +113,12 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(pricelistId, null);
             var salePriceListCodeChanges = dataManager.GetFilteredSalePricelistCodeChanges(pricelistId, null);
-            CustomerPriceListChange changes =  new CustomerPriceListChange();
+            CustomerPriceListChange changes = new CustomerPriceListChange();
             changes.CodeChanges.AddRange(salePriceListCodeChanges);
             changes.RateChanges.AddRange(salePriceListRateChanges);
             changes.PriceListId = pricelistId;
 
-            return changes;            
+            return changes;
         }
         public Dictionary<int, List<CustomerPriceListChange>> GetNotSentChanges(IEnumerable<int> customerIds)
         {

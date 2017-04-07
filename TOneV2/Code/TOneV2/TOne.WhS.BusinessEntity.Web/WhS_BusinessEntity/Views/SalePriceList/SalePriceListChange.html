@@ -1,14 +1,14 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_SalePriceListPreviewController" vr-loader="isLoading" vr-modalcontent size="medium">
+﻿<div vr-modalcontent ng-controller="WhS_BE_SalePriceListPreviewController" vr-loader="isLoadingFilter" vr-modalcontent size="medium">
     <vr-modalbody>
         <vr-form name="formSalePriceListPreview">
-            <vr-row removeline>
-                <vr-columns width="normal" haschildcolumns>
-                    <vr-common-country-selector on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>
-                </vr-columns>
-            </vr-row>
             <vr-tabs>
                 <vr-tab header="'Rates'">
                     <vr-form name="formRateFilter">
+                        <vr-row removeline>
+                            <vr-columns width="normal" haschildcolumns>
+                                <vr-common-country-selector on-ready="onCountryRateReady" ismultipleselection></vr-common-country-selector>
+                            </vr-columns>
+                        </vr-row>
                         <vr-row removeline>
                             <vr-actionbar showcollapsebutton="false" issectioncollapsed="filterSectionCollapsed">
                                 <div transclude-to="buttons">
@@ -26,6 +26,11 @@
                 </vr-tab>
                 <vr-tab header="'Codes'" dontload="true">
                     <vr-form name="formCodeFilter">
+                        <vr-row removeline>
+                            <vr-columns width="normal" haschildcolumns vr-loader="isLoadingCountryCode">
+                                <vr-common-country-selector on-ready="onCountryCodeReady" ismultipleselection></vr-common-country-selector>
+                            </vr-columns>
+                        </vr-row>
                         <vr-row removeline>
                             <vr-actionbar showcollapsebutton="false" issectioncollapsed="filterSectionCollapsed">
                                 <div transclude-to="buttons">
