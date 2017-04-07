@@ -10,7 +10,7 @@ namespace CDRAnalysis.Web
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
 
-            bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
+            var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/FraudAnalysis", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
@@ -20,7 +20,8 @@ namespace CDRAnalysis.Web
                 "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/PSTN_BusinessEntity", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_GenericData", "*.js", true));
+                "~/Client/Modules/VR_GenericData", "*.js", true);
+            bundles.Add(modulesJSBundle);
         }
     }
 }
