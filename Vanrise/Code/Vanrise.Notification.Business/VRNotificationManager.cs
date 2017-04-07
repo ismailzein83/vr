@@ -110,11 +110,10 @@ namespace Vanrise.Notification.Business
 
             return notifications;
         }
-
-        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus)
+        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, long? executeBPInstanceId = null, long? clearBPInstanceId = null)
         {
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            dataManager.UpdateNotificationStatus(notificationId, vrNotificationStatus);
+            dataManager.UpdateNotificationStatus(notificationId, vrNotificationStatus, executeBPInstanceId, clearBPInstanceId);
         }
 
         public VRNotificationUpdateOutput GetFirstPageVRNotifications(VRNotificationFirstPageInput input)

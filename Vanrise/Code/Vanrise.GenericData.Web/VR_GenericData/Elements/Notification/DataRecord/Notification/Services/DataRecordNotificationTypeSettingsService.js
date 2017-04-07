@@ -11,9 +11,10 @@
             if (status === VR_Notification_NotificationStatusEnum.New.value) return LabelColorsEnum.Primary.color;
             if (status === VR_Notification_NotificationStatusEnum.Executing.value) return LabelColorsEnum.Info.color;
             if (status === VR_Notification_NotificationStatusEnum.Executed.value) return LabelColorsEnum.Success.color;
-            if (status === VR_Notification_NotificationStatusEnum.Cleared.value) return LabelColorsEnum.Warning.color; 
+            if (status === VR_Notification_NotificationStatusEnum.Cleared.value) return LabelColorsEnum.Warning.color;
             if (status === VR_Notification_NotificationStatusEnum.ErrorOnExecution.value) return LabelColorsEnum.Error.color;
             if (status === VR_Notification_NotificationStatusEnum.ClearanceError.value) return LabelColorsEnum.Error.color;
+            if (status === VR_Notification_NotificationStatusEnum.Clearing.value) return LabelColorsEnum.Info.color;
 
             return LabelColorsEnum.Info.color;
         };

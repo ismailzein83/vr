@@ -29,12 +29,12 @@ namespace Vanrise.Notification.Data.SQL
         public bool Insert(VRNotification notification, out long notificationId)
         {
             object insertedId;
-            
+
             int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRNotification_Insert", out insertedId, notification.UserId, notification.TypeId,
-                notification.ParentTypes.ParentType1, notification.ParentTypes.ParentType2, notification.EventKey, notification.BPProcessInstanceId, notification.Status,
+                notification.ParentTypes.ParentType1, notification.ParentTypes.ParentType2, notification.EventKey, notification.Status,
                 notification.AlertLevelId, notification.Description, notification.ErrorMessage, notification.Data != null ? Serializer.Serialize(notification.Data) : null,
                 notification.EventPayload != null ? Serializer.Serialize(notification.EventPayload) : null);
-            
+
             notificationId = (long)insertedId;
             return (affectedRecords > 0);
         }
@@ -44,9 +44,9 @@ namespace Vanrise.Notification.Data.SQL
             return GetItemsSP("VRNotification.sp_VRNotification_GetByNotificationType", VRNotificationMapper, notificationTypeId, parentTypes.ParentType1, parentTypes.ParentType2, eventKey);
         }
 
-        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus)
+        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, long? executeBPInstanceId, long? clearBPInstanceId)
         {
-            ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus);
+            ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus, executeBPInstanceId, clearBPInstanceId);
         }
 
         public List<VRNotification> GetNotClearedNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, List<string> eventKeys, DateTime? notificationCreatedAfter)
@@ -161,7 +161,8 @@ namespace Vanrise.Notification.Data.SQL
                 TypeId = GetReaderValue<Guid>(reader, "TypeID"),
                 AlertLevelId = GetReaderValue<Guid>(reader, "AlertLevelID"),
                 Description = reader["Description"] as string,
-                BPProcessInstanceId = GetReaderValue<long?>(reader, "BPProcessInstanceID"),
+                ExecuteBPInstanceID = GetReaderValue<long?>(reader, "ExecuteBPInstanceID"),
+                ClearBPInstanceID = GetReaderValue<long?>(reader, "ClearBPInstanceID"),
                 ErrorMessage = reader["ErrorMessage"] as string,
                 CreationTime = (DateTime)reader["CreationTime"],
                 Data = reader["Data"] != DBNull.Value ? Serializer.Deserialize<VRNotificationData>(reader["Data"] as string) : null,

@@ -91,6 +91,23 @@
           <DelegateInArgument x:TypeArguments="vne:VRNotification" Name="vrNotification" />
         </ActivityAction.Argument>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <vnba1:UpdateNotificationStatus sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_2">
+            <vnba1:UpdateNotificationStatus.Status>
+              <InArgument x:TypeArguments="vne:VRNotificationStatus">
+                <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Clearing</mca:CSharpValue>
+              </InArgument>
+            </vnba1:UpdateNotificationStatus.Status>
+            <vnba1:UpdateNotificationStatus.VRNotificationBPInstanceType>
+              <InArgument x:TypeArguments="s:Nullable(vne:VRNotificationBPInstanceType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(vne:VRNotificationBPInstanceType)">VRNotificationBPInstanceType.Clear</mca:CSharpValue>
+              </InArgument>
+            </vnba1:UpdateNotificationStatus.VRNotificationBPInstanceType>
+            <vnba1:UpdateNotificationStatus.VRNotificationId>
+              <InArgument x:TypeArguments="x:Int64">
+                <mca:CSharpValue x:TypeArguments="x:Int64">vrNotification.VRNotificationId</mca:CSharpValue>
+              </InArgument>
+            </vnba1:UpdateNotificationStatus.VRNotificationId>
+          </vnba1:UpdateNotificationStatus>
           <If sap2010:WorkflowViewState.IdRef="If_1">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
@@ -124,7 +141,7 @@
               </ParallelForEach>
             </If.Then>
           </If>
-          <vnba1:UpdateNotificationStatus sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_1">
+          <vnba1:UpdateNotificationStatus VRNotificationBPInstanceType="{x:Null}" sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_1">
             <vnba1:UpdateNotificationStatus.Status>
               <InArgument x:TypeArguments="vne:VRNotificationStatus">
                 <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Cleared</mca:CSharpValue>
@@ -139,11 +156,12 @@
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sEzkDjwEOAgEBPQVSHwIBJVMFjQEXAgECQAtAVwIBL08LT28CASxKC0p0AgEpRQtFXwIBJlYLVnMCASJdCYsBFAIBA14LfhACAQ1/C4oBLAIBBGERYaMBAgEOZQ98IQIBEocBEYcBbQIBCYIBEYIBewIBBWgVaIwBAgEebxN6MAIBE3IZcoMBAgEZdxl3YwIBFA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sFzkDoAEOAgEBPQVSHwIBMlMFngEXAgECQAtAVwIBPE8LT28CATlKC0p0AgE2RQtFXwIBM1YLVnMCAS9dCZwBFAIBA14LbiwCASJvC48BEAIBDZABC5sBLAIBBGsRa20CAStmEWaVAQIBJ2ERYXwCASNyEXKjAQIBDnYPjQEhAgESmAERmAFtAgEJkwERkwF7AgEFeRV5jAECAR6AAROLATACARODARmDAYMBAgEZiAEZiAFjAgEU</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LoadNotifications_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="UpdateNotificationStatus_2" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="ExecuteActionProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210">
         <sap:WorkflowViewStateService.ViewState>
@@ -162,7 +180,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="UpdateNotificationStatus_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,546">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,608">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -170,15 +188,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="516,696" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="538,882">
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="516,758" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="538,944">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Notification.BP.ClearNotificationProcess_1" sap:VirtualizedContainerService.HintSize="578,962" />
+      <sap2010:ViewStateData Id="Vanrise.Notification.BP.ClearNotificationProcess_1" sap:VirtualizedContainerService.HintSize="578,1024" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

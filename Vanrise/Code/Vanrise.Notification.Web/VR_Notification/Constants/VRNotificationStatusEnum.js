@@ -4,5 +4,6 @@
     Executed: { value: 20, description: 'Executed' },
     Cleared: { value: 30, description: 'Cleared' },
     ErrorOnExecution: { value: 40, description: 'Execution Error' },
-    ClearanceError: { value: 50, description: 'Clearance Error' }
+    ClearanceError: { value: 50, description: 'Clearance Error' },
+    Clearing: { value: 60, description: 'Clearing' }
 });

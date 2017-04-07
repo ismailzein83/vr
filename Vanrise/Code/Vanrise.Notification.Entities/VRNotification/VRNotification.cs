@@ -17,7 +17,9 @@ namespace Vanrise.Notification.Entities
         [Description("Error")]
         ExecutionError = 40,
         [Description("Error")]
-        ClearanceError = 50
+        ClearanceError = 50,
+        [Description("Clearing")]
+        Clearing = 60
     }
 
     public class VRNotification
@@ -32,7 +34,9 @@ namespace Vanrise.Notification.Entities
 
         public string EventKey { get; set; }
 
-        public long? BPProcessInstanceId { get; set; }
+        public long? ExecuteBPInstanceID { get; set; }
+
+        public long? ClearBPInstanceID { get; set; }
 
         public VRNotificationStatus Status { get; set; }
 
@@ -48,6 +52,8 @@ namespace Vanrise.Notification.Entities
 
         public IVRActionEventPayload EventPayload { get; set; }
     }
+
+    public enum VRNotificationBPInstanceType { Execute, Clear }
 
     public class VRNotificationData
     {

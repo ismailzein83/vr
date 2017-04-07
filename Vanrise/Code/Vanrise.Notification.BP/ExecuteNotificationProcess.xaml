@@ -3,6 +3,7 @@
  xmlns:local="clr-namespace:Vanrise.Notification.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -76,6 +77,11 @@
           <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Executing</mca:CSharpValue>
         </InArgument>
       </vnba1:UpdateNotificationStatus.Status>
+      <vnba1:UpdateNotificationStatus.VRNotificationBPInstanceType>
+        <InArgument x:TypeArguments="s:Nullable(vne:VRNotificationBPInstanceType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(vne:VRNotificationBPInstanceType)">VRNotificationBPInstanceType.Execute</mca:CSharpValue>
+        </InArgument>
+      </vnba1:UpdateNotificationStatus.VRNotificationBPInstanceType>
       <vnba1:UpdateNotificationStatus.VRNotificationId>
         <InArgument x:TypeArguments="x:Int64">
           <mca:CSharpValue x:TypeArguments="x:Int64">vrNotification.VRNotificationId</mca:CSharpValue>
@@ -115,7 +121,7 @@
         </ParallelForEach>
       </If.Then>
     </If>
-    <vnba1:UpdateNotificationStatus DisplayName="UpdateStatusCompleted" sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_2">
+    <vnba1:UpdateNotificationStatus VRNotificationBPInstanceType="{x:Null}" DisplayName="UpdateStatusCompleted" sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_2">
       <vnba1:UpdateNotificationStatus.Status>
         <InArgument x:TypeArguments="vne:VRNotificationStatus">
           <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Executed</mca:CSharpValue>
@@ -127,7 +133,7 @@
         </InArgument>
       </vnba1:UpdateNotificationStatus.VRNotificationId>
     </vnba1:UpdateNotificationStatus>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEV4ZWN1dGVOb3RpZmljYXRpb25Qcm9jZXNzLnhhbWwTOAODAQ4CAQE8BTxcAgEoPQVIHwIBIUkFVCYCARpVBXUKAgEJdgWBASYCAQI8QzxZAgEpQAtAaQIBJUULRVwCASJRC1FnAgEeTAtMdwIBG1gLWJIBAgEKXAlzGwIBDX4LfmcCAQZ5C3l2AgEDXw9ffQIBF2YNcSoCAQ5pE2l9AgETbhNuWwIBDw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXEV4ZWN1dGVOb3RpZmljYXRpb25Qcm9jZXNzLnhhbWwUOQOJAQ4CAQE9BT1cAgErPgVJHwIBJEoFWiYCARpbBXsKAgEJfAWHASYCAQI9Qz1ZAgEsQQtBaQIBKEYLRlwCASVXC1dnAgEhUgtSkQECAR5NC013AgEbXgtekgECAQpiCXkbAgENhAELhAFnAgEGfwt/dgIBA2UPZX0CARdsDXcqAgEObxNvfQIBE3QTdFsCAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
