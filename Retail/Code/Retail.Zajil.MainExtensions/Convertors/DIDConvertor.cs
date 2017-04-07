@@ -84,7 +84,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                 BED = newBe.BED,
                 AccountId = newBe.AccountId
             };
-
+            finalBe.DID.DIDId = existingBe.DID.DIDId;
             context.FinalBE = finalBe;
         }
     }

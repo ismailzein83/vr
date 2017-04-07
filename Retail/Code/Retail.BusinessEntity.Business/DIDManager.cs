@@ -82,6 +82,11 @@ namespace Retail.BusinessEntity.Business
             return dids.GetRecord(sourceId);
         }
 
+        public bool TryAddDID(DID did, out int didId)
+        {
+            IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
+            return dataManager.Insert(did, out didId);
+        }
         public InsertOperationOutput<DIDDetail> AddDID(DID did)
         {
             InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
@@ -90,8 +95,8 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             int didId = -1;
 
-            IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
-            bool insertActionSucc = dataManager.Insert(did, out didId);
+
+            bool insertActionSucc = TryAddDID(did, out didId);
 
             if (insertActionSucc)
             {
@@ -109,20 +114,24 @@ namespace Retail.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public UpdateOperationOutput<DIDDetail> UpdateDID(DID did)
+        public bool TryUpdateDID(DID did)
         {
             IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
-
-            bool updateActionSucc = dataManager.Update(did);
+            bool success = dataManager.Update(did);
+            if (success)
+                VRActionLogger.Current.TrackAndLogObjectUpdated(DIDLoggableEntity.Instance, did);
+            return success;
+        }
+        public UpdateOperationOutput<DIDDetail> UpdateDID(DID did)
+        {
             UpdateOperationOutput<DIDDetail> updateOperationOutput = new UpdateOperationOutput<DIDDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            if (updateActionSucc)
+            if (TryUpdateDID(did))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectUpdated(DIDLoggableEntity.Instance, did);
+
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DIDDetailMapper(did);
             }
@@ -183,7 +192,7 @@ namespace Retail.BusinessEntity.Business
                    return dids.Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value); ;
                });
         }
-        private Dictionary<int, DID> GetCachedDIDs()
+        public Dictionary<int, DID> GetCachedDIDs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllDIDs",
                () =>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -32,12 +33,24 @@ namespace Retail.BusinessEntity.Business
             foreach (var targetDID in context.TargetBE)
             {
                 SourceDIDData sourceDID = targetDID as SourceDIDData;
-                var insertedDIDData = didManager.AddDID(sourceDID.DID);
-                ProcessRelatedAccounts(sourceDID, insertedDIDData.InsertedObject.Entity.DIDId ,true);
+                int DIDId;
+                didManager.TryAddDID(sourceDID.DID, out DIDId);
+                if (DIDId > 0)
+                {
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "New DID Number '{0}' is Added.", sourceDID.DID.Number);
+                    sourceDID.DID.DIDId = DIDId;
+                    var cachedDIDs = didManager.GetCachedDIDs();
+                    if (!cachedDIDs.ContainsKey((DIDId)))
+                        cachedDIDs.Add(DIDId, sourceDID.DID);
+                    ProcessRelatedAccounts(sourceDID, DIDId, true, context);
+                }
+                else
+                {
+                    context.WriteBusinessTrackingMsg(LogEntryType.Warning, "DID Number '{0}' was not Added.", sourceDID.DID.Number);
+                }
             }
         }
-
-        void ProcessRelatedAccounts(SourceDIDData accountData, int dIDId, bool isNewDID)
+        void ProcessRelatedAccounts(SourceDIDData accountData, int dIDId, bool isNewDID, ITargetBESynchronizerBEsContext context)
         {
             DIDManager didManager = new DIDManager();
 
@@ -50,26 +63,20 @@ namespace Retail.BusinessEntity.Business
             {
                 if (accountData.AccountId.HasValue && accountData.BED.HasValue)
                 {
-                    parentChildRelationManager.AddBEParentChildRelation(new BEParentChildRelation
-                    {
-                        BED = accountData.BED.Value,
-                        ChildBEId = didIdAsString,
-                        ParentBEId = accountIdAsString,
-                        RelationDefinitionId = accountDIDRelationDefinitionId
-
-                    });
+                    InsertParentChildRelation(accountData, accountDIDRelationDefinitionId, parentChildRelationManager, didIdAsString, accountIdAsString);
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account Id {1}.", accountData.DID.Number, accountIdAsString);
                 }
             }
             else
             {
                 bool isSameRelatedAccountExists = false;
                 IEnumerable<BEParentChildRelation> existingRelatedAccounts = parentChildRelationManager.GetParents(accountDIDRelationDefinitionId, didIdAsString);
-                if(existingRelatedAccounts != null)
+                if (existingRelatedAccounts != null)
                 {
                     DateTime dateToCloseExistingAccounts = (accountData.AccountId.HasValue && accountData.BED.HasValue) ? accountData.BED.Value : DateTime.Now;
-                    foreach(var existingRelatedAccount in existingRelatedAccounts)
+                    foreach (var existingRelatedAccount in existingRelatedAccounts)
                     {
-                        if(accountData.AccountId.HasValue && accountData.BED.HasValue)
+                        if (accountData.AccountId.HasValue && accountData.BED.HasValue)
                         {
                             if (existingRelatedAccount.ParentBEId == accountIdAsString && existingRelatedAccount.BED == accountData.BED.Value)
                             {
@@ -77,36 +84,51 @@ namespace Retail.BusinessEntity.Business
                                 continue;
                             }
                         }
-                         if(existingRelatedAccount.EED.VRGreaterThan(dateToCloseExistingAccounts))
-                         {
-                             existingRelatedAccount.EED = Utilities.Min(existingRelatedAccount.BED, dateToCloseExistingAccounts);
-                             parentChildRelationManager.UpdateBEParentChildRelation(existingRelatedAccount);
-                         }
+                        if (existingRelatedAccount.EED.VRGreaterThan(dateToCloseExistingAccounts))
+                        {
+                            existingRelatedAccount.EED = Utilities.Min(existingRelatedAccount.BED, dateToCloseExistingAccounts);
+                            parentChildRelationManager.UpdateBEParentChildRelation(existingRelatedAccount);
+                            context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} link to Account Id {1} is updated with EED {2}.", accountData.DID.Number, accountIdAsString, existingRelatedAccount.EED.Value.ToShortDateString());
+                        }
                     }
                 }
                 if (accountData.AccountId.HasValue && accountData.BED.HasValue && !isSameRelatedAccountExists)
                 {
-                    parentChildRelationManager.AddBEParentChildRelation(new BEParentChildRelation
-                    {
-                        BED = accountData.BED.Value,
-                        ChildBEId = didIdAsString,
-                        ParentBEId = accountIdAsString,
-                        RelationDefinitionId = accountDIDRelationDefinitionId
-                    });
+                    InsertParentChildRelation(accountData, accountDIDRelationDefinitionId, parentChildRelationManager, didIdAsString, accountIdAsString);
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account Id {1}.", accountData.DID.Number, accountIdAsString);
                 }
             }
         }
-
+        void InsertParentChildRelation(SourceDIDData accountData, Guid accountDIDRelationDefinitionId, BEParentChildRelationManager parentChildRelationManager, string didIdAsString, string accountIdAsString)
+        {
+            long beParentChildRelationId = 0;
+            var beParentChildRelation = new BEParentChildRelation
+            {
+                BED = accountData.BED.Value,
+                ChildBEId = didIdAsString,
+                ParentBEId = accountIdAsString,
+                RelationDefinitionId = accountDIDRelationDefinitionId
+            };
+            parentChildRelationManager.TryAddBEParentChildRelation(beParentChildRelation, out beParentChildRelationId);
+            if (beParentChildRelationId > 0)
+            {
+                beParentChildRelation.BEParentChildRelationId = beParentChildRelationId;
+                var cachedBEParentChildRelations = parentChildRelationManager.GetCachedBEParentChildRelations(accountDIDRelationDefinitionId);
+                if (!cachedBEParentChildRelations.ContainsKey((beParentChildRelationId)))
+                    cachedBEParentChildRelations.Add(beParentChildRelationId, beParentChildRelation);
+            }
+        }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             DIDSynchronizerInitializationData initializationData = context.InitializationData as DIDSynchronizerInitializationData;
             DID did;
             if (initializationData.DIDs.TryGetValue(context.SourceBEId as string, out did))
             {
+                //context.
+                //BEParentChildRelation parentRelation = new BEParentChildRelationManager().GetParent("", did.DIDId.ToString(), did.)
                 context.TargetBE = new SourceDIDData
                 {
                     DID = Serializer.Deserialize<DID>(Serializer.Serialize(did))
-
                 };
                 return true;
             }
@@ -118,8 +140,11 @@ namespace Retail.BusinessEntity.Business
             {
                 SourceDIDData sourceDIDData = targetBe as SourceDIDData;
                 DIDManager didManager = new DIDManager();
-                didManager.UpdateDID(sourceDIDData.DID);
-                ProcessRelatedAccounts(sourceDIDData, sourceDIDData.DID.DIDId, false);
+                if (didManager.TryUpdateDID(sourceDIDData.DID))
+                {
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number '{0}' is Updated.", sourceDIDData.DID.Number);
+                    ProcessRelatedAccounts(sourceDIDData, sourceDIDData.DID.DIDId, false, context);
+                }
             }
         }
     }
