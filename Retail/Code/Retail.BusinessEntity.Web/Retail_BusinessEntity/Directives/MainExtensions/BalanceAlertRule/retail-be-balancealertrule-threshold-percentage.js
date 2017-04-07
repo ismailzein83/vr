@@ -4,19 +4,16 @@ app.directive('retailBeBalancealertruleThresholdPercentage', ['UtilsService',
 
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
-                onReady: '='
+            scope: {
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new PercentageThresholdCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'PercentageThresholdCtrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
@@ -28,11 +25,9 @@ app.directive('retailBeBalancealertruleThresholdPercentage', ['UtilsService',
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/Retail_BusinessEntity/Directives/MainExtensions/BalanceAlertRule/Templates/PercentageBalanceAlertThresholdTemplate.html';
             }
-
         };
 
         function PercentageThresholdCtor(ctrl, $scope) {
-
             function initializeController() {
                 $scope.scopeModel = {};
                 defineAPI();

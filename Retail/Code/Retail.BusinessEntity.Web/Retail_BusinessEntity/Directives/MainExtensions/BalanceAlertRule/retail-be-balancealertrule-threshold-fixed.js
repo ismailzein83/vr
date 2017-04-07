@@ -6,7 +6,8 @@ app.directive('retailBeBalancealertruleThresholdFixed', ['UtilsService',
             restrict: 'E',
             scope:
             {
-                onReady: '='
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -16,7 +17,7 @@ app.directive('retailBeBalancealertruleThresholdFixed', ['UtilsService',
                 ctor.initializeController();
 
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'fixedThresholdCtrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
