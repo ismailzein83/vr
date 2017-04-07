@@ -38,7 +38,7 @@ namespace Vanrise.DataParser.Web.Controllers
         }
 
         [HttpPost]
-        [Route("UpdateCity")]
+        [Route("UpdateParserType")]
         public Vanrise.Entities.UpdateOperationOutput<ParserTypeDetail> UpdateParserType(ParserType parserType)
         {
             ParserTypeManager manager = new ParserTypeManager();
