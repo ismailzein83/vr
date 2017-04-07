@@ -7,9 +7,7 @@ AS
 BEGIN
 	
 UPDATE [VRNotification].[VRNotification]
-set [Status] = @Status
+set [Status] = @Status, ExecuteBPInstanceID = ISNULL(@ExecuteBPInstanceID, ExecuteBPInstanceID), ClearBPInstanceID = ISNULL(@ClearBPInstanceID, ClearBPInstanceID)
 where 	ID = @VRNotificationId
-		AND ExecuteBPInstanceID = ISNULL(@ExecuteBPInstanceID, ExecuteBPInstanceID)
-		AND ClearBPInstanceID = ISNULL(@ClearBPInstanceID, ClearBPInstanceID)
 
 END
