@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retail.BusinessEntity.Business;
+using Retail.BusinessEntity.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
 
@@ -14,6 +16,9 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public string SourceIdColumn { get; set; }
         public string SourceAccountIdColumn { get; set; }
         public string BEDColumn { get; set; }
+        public string DIDColumn { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
+
         public override string Name
         {
             get
@@ -25,12 +30,27 @@ namespace Retail.Zajil.MainExtensions.Convertors
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
+            AccountBEManager accountManager = new AccountBEManager();
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 string sourceId = row[this.SourceIdColumn] as string;
                 try
                 {
 
+                    string accountId = row[this.SourceAccountIdColumn] as string;
+                    SourceDIDData didData = new SourceDIDData
+                    {
+                        DID = new DID
+                        {
+                            Number = row[this.DIDColumn] as string,
+                            SourceId = sourceId,
+                            Settings = new DIDSettings
+                            {
+                                IsInternational = (double)row["Intl_Access"] == 1
+                            }
+                        },
+                        AccountId = accountManager.GetAccountBySourceId(AccountBEDefinitionId, accountId).AccountId
+                    };
                 }
                 catch (Exception ex)
                 {

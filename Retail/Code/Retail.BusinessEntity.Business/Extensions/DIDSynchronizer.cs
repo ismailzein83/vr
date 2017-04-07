@@ -20,7 +20,14 @@ namespace Retail.BusinessEntity.Business.Extensions
         }
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-            throw new NotImplementedException();
+            if (context.TargetBE == null)
+                throw new NullReferenceException("context.TargetBE");
+            DIDManager didManager = new DIDManager();
+            foreach (var targetDID in context.TargetBE)
+            {
+                SourceDIDData accountData = targetDID as SourceDIDData;
+                var insertedData = didManager.AddDID(accountData.DID);
+            }
         }
 
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
@@ -32,6 +39,7 @@ namespace Retail.BusinessEntity.Business.Extensions
                 context.TargetBE = new SourceDIDData
                 {
                     DID = Serializer.Deserialize<DID>(Serializer.Serialize(did))
+
                 };
                 return true;
             }

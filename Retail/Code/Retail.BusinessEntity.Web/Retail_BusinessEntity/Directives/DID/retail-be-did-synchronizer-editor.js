@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBeDidSynchronizerEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -10,7 +10,7 @@ app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsServic
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new retailZajilDidConvertorEditorCtor(ctrl, $scope, $attrs);
+                var ctor = new retailBeDidSynchronizerEditorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -18,45 +18,31 @@ app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_Zajil/Directives/MainExtensions/Payment/Templates/DIDConvertorEditor.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/DIDSynchronizerEditor.html"
         };
 
-        function retailZajilDidConvertorEditorCtor(ctrl, $scope, $attrs) {
+        function retailBeDidSynchronizerEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
-            var accountDefinitionSelectorApi;
-            var accountDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
             $scope.scopeModel = {};
+
 
             function initializeController() {
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
-                    if (payload != undefined) {
-                        $scope.scopeModel.bedColumn = payload.BEDColumn;
-                        $scope.scopeModel.accountColumn = payload.SourceAccountIdColumn;
-                        $scope.scopeModel.sourceIdColumn = payload.SourceIdColumn;
-                    }
-
                     var promises = [];
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.Zajil.MainExtensions.Convertors.DIDConvertor, Retail.Zajil.MainExtensions",
-                        Name: "Zajil DID Convertor",
-                        SourceAccountIdColumn: $scope.scopeModel.accountColumn,
-                        SourceIdColumn: $scope.scopeModel.sourceIdColumn,
-                        BEDColumn: $scope.scopeModel.bedColumn
+                        $type: "Retail.BusinessEntity.Business.DIDSynchronizer, Retail.BusinessEntity.Business",
+                        Name: "DID Synchronizer"
                     };
                     return data;
                 };
