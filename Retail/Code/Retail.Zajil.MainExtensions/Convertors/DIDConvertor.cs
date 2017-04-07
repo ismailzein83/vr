@@ -17,6 +17,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public string SourceAccountIdColumn { get; set; }
         public string BEDColumn { get; set; }
         public string DIDColumn { get; set; }
+        public string InternationalColumn { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
 
         public override string Name
@@ -30,27 +31,38 @@ namespace Retail.Zajil.MainExtensions.Convertors
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
-            AccountBEManager accountManager = new AccountBEManager();
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
-                string sourceId = row[this.SourceIdColumn] as string;
+                long? accountId = null;
+
+                string sourceId = ((double)row[this.SourceIdColumn]).ToString();
                 try
                 {
-
-                    string accountId = row[this.SourceAccountIdColumn] as string;
+                    AccountBEManager accountManager = new AccountBEManager();
+                    string sourceAccountId = row[this.SourceAccountIdColumn] as string;
+                    if (!string.IsNullOrEmpty(sourceAccountId))
+                    {
+                        Account account = accountManager.GetAccountBySourceId(AccountBEDefinitionId, sourceAccountId);
+                        account.ThrowIfNull("account: sourceId", sourceAccountId);
+                        Account childAccount = accountManager.GetChildAccounts(AccountBEDefinitionId, account.AccountId, false).FirstOrDefault();
+                        childAccount.ThrowIfNull("childAccount: ParentId", account.AccountId);
+                        accountId = childAccount.AccountId;
+                    }
                     SourceDIDData didData = new SourceDIDData
                     {
                         DID = new DID
                         {
-                            Number = row[this.DIDColumn] as string,
+                            Number = ((double)row[this.DIDColumn]).ToString(),
                             SourceId = sourceId,
                             Settings = new DIDSettings
                             {
-                                IsInternational = (double)row["Intl_Access"] == 1
+                                IsInternational = (row[InternationalColumn] == DBNull.Value ? 0 : double.Parse(row[InternationalColumn].ToString())) == 1
                             }
                         },
-                        AccountId = accountManager.GetAccountBySourceId(AccountBEDefinitionId, accountId).AccountId
+                        AccountId = accountId,
+                        BED = row[BEDColumn] == DBNull.Value ? default(DateTime?) : (DateTime?)row[BEDColumn]
                     };
+                    transactionTargetBEs.Add(didData);
                 }
                 catch (Exception ex)
                 {
@@ -58,11 +70,22 @@ namespace Retail.Zajil.MainExtensions.Convertors
                     context.WriteBusinessHandledException(finalException);
                 }
             }
+            context.TargetBEs = transactionTargetBEs;
         }
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)
         {
-            throw new NotImplementedException();
+            SourceDIDData existingBe = context.ExistingBE as SourceDIDData;
+            SourceDIDData newBe = context.NewBE as SourceDIDData;
+
+            SourceDIDData finalBe = new SourceDIDData
+            {
+                DID = newBe.DID,
+                BED = newBe.BED,
+                AccountId = newBe.AccountId
+            };
+
+            context.FinalBE = finalBe;
         }
     }
 }

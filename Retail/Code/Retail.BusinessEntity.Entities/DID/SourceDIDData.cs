@@ -11,6 +11,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public DID DID { get; set; }
         public long? AccountId { get; set; }
+        public DateTime? BED { get; set; }
         public object SourceBEId
         {
             get { return this.DID.SourceId; }

@@ -18,7 +18,7 @@ app.directive('retailBeDidSynchronizerEditor', ['UtilsService', 'VRUIUtilsServic
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Account/Templates/DIDSynchronizerEditor.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/DID/Templates/DIDSynchronizerEditor.html"
         };
 
         function retailBeDidSynchronizerEditorCtor(ctrl, $scope, $attrs) {

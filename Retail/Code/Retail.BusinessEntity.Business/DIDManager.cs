@@ -43,15 +43,15 @@ namespace Retail.BusinessEntity.Business
         {
             var dids = GetCachedDIDs();
             var did = dids.GetRecord(didId);
-           if (did != null && isViewedFromUI)
-               VRActionLogger.Current.LogObjectViewed(DIDLoggableEntity.Instance, did);
-           return did;
+            if (did != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(DIDLoggableEntity.Instance, did);
+            return did;
         }
         public DID GetDID(int didId)
         {
-            return  GetDID(didId,false);
+            return GetDID(didId, false);
         }
-       
+
         public string GetDIDNumber(int didId)
         {
             var DIDs = GetCachedDIDs();
@@ -174,13 +174,13 @@ namespace Retail.BusinessEntity.Business
                    return dids.ToDictionary(itm => itm.Value.Number, itm => itm.Value);
                });
         }
-        private Dictionary<string, DID> GetCachedDIDsGroupBySourceId()
+        public Dictionary<string, DID> GetCachedDIDsGroupBySourceId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupBySourceId",
                () =>
                {
                    var dids = GetCachedDIDs();
-                   return dids.ToDictionary(itm => itm.Value.SourceId, itm => itm.Value);
+                   return dids.Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value); ;
                });
         }
         private Dictionary<int, DID> GetCachedDIDs()

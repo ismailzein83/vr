@@ -9,7 +9,7 @@ using Vanrise.Data.SQL;
 using Retail.BusinessEntity.Entities;
 using Vanrise.Common;
 
-namespace  Retail.BusinessEntity.Data.SQL
+namespace Retail.BusinessEntity.Data.SQL
 {
     public class DIDDataManager : BaseSQLDataManager, IDIDDataManager
     {
@@ -28,7 +28,7 @@ namespace  Retail.BusinessEntity.Data.SQL
             object dIDId;
             string serializedSettings = dID.Settings != null ? Serializer.Serialize(dID.Settings) : null;
 
-            int recordsEffected = ExecuteNonQuerySP("Retail_BE.sp_DID_Insert", out dIDId, dID.Number, serializedSettings);
+            int recordsEffected = ExecuteNonQuerySP("Retail_BE.sp_DID_Insert", out dIDId, dID.Number, serializedSettings, dID.SourceId);
             insertedId = (recordsEffected > 0) ? (int)dIDId : -1;
             return (recordsEffected > 0);
         }
@@ -58,7 +58,7 @@ namespace  Retail.BusinessEntity.Data.SQL
                 DIDId = (int)reader["ID"],
                 Number = reader["Number"] as string,
                 Settings = Serializer.Deserialize<DIDSettings>(reader["Settings"] as string),
-
+                SourceId = reader["SourceID"] as string
             };
             return pop;
         }
