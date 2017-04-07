@@ -416,6 +416,31 @@ namespace Retail.BusinessEntity.Business
             return GetCachedAccounts(accountBEDefinitionId);
         }
 
+        public List<Account> GetChildAccounts(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        {
+            var accountTreeNode = GetCacheAccountTreeNodes(accountBEDefinitionId).GetRecord(accountId);
+            accountTreeNode.ThrowIfNull("accountTreeNode", accountId);
+            if(accountTreeNode.ChildNodes != null)
+            {
+                List<Account> childAccounts = new List<Account>();
+                foreach (var childNode in accountTreeNode.ChildNodes)
+                {
+                    childAccounts.Add(childNode.Account);
+                    if (withSubChildren)
+                    {
+                        var subChildren = GetChildAccounts(accountBEDefinitionId, childNode.Account.AccountId, withSubChildren);
+                        if (subChildren != null)
+                            childAccounts.AddRange(subChildren);
+                    }
+                }
+                return childAccounts;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         #endregion
 
         #region ExtendedSettings
