@@ -4,21 +4,11 @@
             <vr-button type="Add" data-onclick="ctrl.addOrderDetails" standalone></vr-button>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-datagrid datasource="ctrl.orderdetails" menuactions="ctrl.gridMenuActions" ondeleterow="ctrl.removeOrderDetail" norowhighlightonclick="true" hidegridmenu>
-                <vr-datagridcolumn headertext="'OrderId'" field="'Order Id'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Charges'" field="'Charges'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Payment'" field="'Payment'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Contract Period'" field="'ContractPeriod'" type="'Number'"></vr-datagridcolumn>
+            <vr-datagrid datasource="ctrl.orderdetails"  ondeleterow="ctrl.removeOrderDetail" norowhighlightonclick="true" hidegridmenu>
+                <vr-datagridcolumn headertext="'Service Order Id'" field="'OrderId'" isclickable="true" onclicked="ctrl.editOrderDetailItem"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Contract Remain'" field="'ContractRemain'" type="'Number'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Contract Days'" field="'ContractDays'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Total Contract'" field="'TotalContract'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Charges Year 1'" field="'ChargesYear1'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Charges Year 2'" field="'ChargesYear2'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Charges Year 3'" field="'ChargesYear3'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Installation'" field="'Installation'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Third Party'" field="'ThirdParty'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Discount'" field="'Discount'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Achievement'" field="'Achievement'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Contract Period'" field="'ContractPeriod'" type="'Number'"></vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>
     </vr-row>

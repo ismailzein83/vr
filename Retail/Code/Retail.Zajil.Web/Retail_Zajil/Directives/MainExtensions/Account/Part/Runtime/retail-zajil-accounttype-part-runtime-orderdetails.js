@@ -29,10 +29,17 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
             ctrl.orderdetails.splice(index, 1);
         };
 
+        ctrl.editOrderDetailItem = function (dataItem) {
+            var onOrderDetailUpdated = function (updatedOrderDetail) {
+                var index = ctrl.orderdetails.indexOf(dataItem);
+                ctrl.orderdetails[index] = updatedOrderDetail;
+            };
+            Retail_Zajil_OrderDetailService.editOrderDetail(onOrderDetailUpdated, dataItem);
+        };
+
         this.initializeController = initializeController;
 
         function initializeController() {
-            defineMenuActions();
             defineAPI();
         }
         function defineAPI() {
@@ -54,20 +61,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
-        function defineMenuActions() {
-            ctrl.gridMenuActions = [{
-                name: "Edit",
-                clicked: editOrderDetailItem,
-            }];
-        }
-        function editOrderDetailItem(orderDetailItem) {
-            var onOrderDetailUpdated = function (updatedOrderDetail) {
-                var index = ctrl.orderdetails.indexOf(orderDetailItem);
-                ctrl.orderdetails[index] = updatedOrderDetail;
-            };
-            Retail_Zajil_OrderDetailService.editOrderDetail(onOrderDetailUpdated, orderDetailItem);
-        }
+        }     
 
         function buildOrderDetailItemsList() {
             var tab = [];
