@@ -100,9 +100,15 @@ namespace Retail.Zajil.MainExtensions
             };
 
             finalBe.Account.TypeId = newBe.Account.TypeId;
+            UpdateOrderPart(finalBe, newBe);
             context.FinalBE = finalBe;
         }
 
+        void UpdateOrderPart(SourceAccountData finalBe, SourceAccountData newBe)
+        {
+            AccountPartOrderDetail newAccountPartOrderDetail = newBe.Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail;
+            finalBe.Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings = newAccountPartOrderDetail;
+        }
         #endregion
 
         #region Private Methods
