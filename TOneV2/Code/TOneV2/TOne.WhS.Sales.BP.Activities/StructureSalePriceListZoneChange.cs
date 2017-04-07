@@ -102,7 +102,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 #region Get Existing Sale Codes for Sold and Close Countries
 
                 Dictionary<long, List<SaleCode>> saleCodesByZoneId = null;
-                if(customerCountriesToAdd.Any() || customerCountriesToClose.Any())
+                if (customerCountriesToAdd.Any() || customerCountriesToClose.Any())
                 {
                     IEnumerable<SaleCode> existingSaleCodes = this.GetExistingSaleCodes(existingDataInfo, minimumDate);
                     saleCodesByZoneId = this.StructureExistingSaleCodesByZoneId(existingSaleCodes);
@@ -117,7 +117,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     CustomerNewCountriesChangesContext customerNewCountriesContext = new CustomerNewCountriesChangesContext()
                     {
                         CountriesToAdd = customerCountriesToAdd,
-                        CountriesToAddExistingZoneIds = existingDataInfo.CountriesToAddExistingZoneIds,
+                        CountriesToAddExistingZoneIdsByCountryId = existingDataInfo.CountriesToAddExistingZoneIdsByCountryId,
                         CustomerInfo = customerInfo,
                         MinimumDate = minimumDate,
                         RatesToAddForNewCountriesbyCountryId = structuredRateActions.RatesToAddForNewCountriesbyCountryId,
@@ -125,7 +125,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     };
 
                     this.GetChangesForNewCountries(customerNewCountriesContext);
-                    
+
                     changesForThisCustomer.RateChanges.AddRange(customerNewCountriesContext.RateChangesOutArgument);
                     changesForThisCustomer.CodeChanges.AddRange(customerNewCountriesContext.CodeChangesOutArgument);
                 }
@@ -158,7 +158,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 #region Processing Rates Actions
 
-                if(structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any() || structuredRateActions.RatesToChange.Any())
+                if (structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any() || structuredRateActions.RatesToChange.Any())
                 {
                     CustomerRateActionChangesContext customerRateActionContext = new CustomerRateActionChangesContext()
                     {
@@ -285,11 +285,14 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 #region Get Selling Product Rate and Code Changes
 
-                foreach (var zoneId in context.CountriesToAddExistingZoneIds)
+                List<long> zoneIdsForThisCountry =
+                    context.CountriesToAddExistingZoneIdsByCountryId.GetRecord(countryToAdd.CountryId);
+
+                foreach (var zoneId in zoneIdsForThisCountry)
                 {
                     string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
 
-                    if(!zoneIdsWithExplicitRates.Contains(zoneId))
+                    if (!zoneIdsWithExplicitRates.Contains(zoneId))
                     {
                         //Ignore zones that have explicit rates
                         var zoneRate = futureRateLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, zoneId);
@@ -306,9 +309,9 @@ namespace TOne.WhS.Sales.BP.Activities
                         });
 
                     }
-                    
+
                     IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
-                    if(zoneCodes == null)
+                    if (zoneCodes == null)
                         throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zoneName));
 
                     foreach (var existingCode in zoneCodes)
@@ -331,7 +334,8 @@ namespace TOne.WhS.Sales.BP.Activities
         private IEnumerable<SaleCode> GetExistingSaleCodes(ExistingDataInfo existingDataInfo, DateTime minimumDate)
         {
             var zoneIds = new List<long>();
-            zoneIds.AddRange(existingDataInfo.CountriesToAddExistingZoneIds);
+
+            zoneIds.AddRange(existingDataInfo.CountriesToAddExistingZoneIdsByCountryId.Values.SelectMany(z => z));
             zoneIds.AddRange(existingDataInfo.CountriesToCloseExistingZoneIds);
 
             SaleCodeManager saleCodeManager = new SaleCodeManager();
@@ -388,7 +392,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             Code = existingCode.Code,
                             ChangeType = CodeChange.Closed,
                             BED = existingCode.BED > soldCountry.BED ? existingCode.BED : soldCountry.BED,
-                            EED =  countryToClose.CloseEffectiveDate
+                            EED = countryToClose.CloseEffectiveDate
                         });
                     }
 
@@ -433,7 +437,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     throw new DataIntegrityValidationException(string.Format("Zone with Id {0} is not assigned to any country", rateToAdd.ZoneId));
 
                 var recentRate = context.RateChangeLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, rateToAdd.ZoneId);
-                if(recentRate == null)
+                if (recentRate == null)
                     throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToAdd.ZoneName));
 
                 context.RateChangesOutArgument.Add(new SalePricelistRateChange
@@ -533,7 +537,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (var zone in importedZones)
             {
-                if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null && 
+                if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null &&
                     (zone.NormalRateToChange.ChangeType == RateChangeType.Increase || zone.NormalRateToChange.ChangeType == RateChangeType.Decrease))
                 {
                     ratesToChange.Add(zone.NormalRateToChange);
@@ -559,16 +563,15 @@ namespace TOne.WhS.Sales.BP.Activities
         private ExistingDataInfo BuildExistingDataInfo(StructuredRateActions structuredRateActions, IEnumerable<CustomerCountryToAdd> countriesToAdd,
             IEnumerable<CustomerCountryToChange> countriesToClose, Dictionary<int, List<SaleZone>> existingZonesByCountryId, IEnumerable<SaleRate> saleRates)
         {
-            ExistingDataInfo Info = new ExistingDataInfo();
+            ExistingDataInfo info = new ExistingDataInfo();
             Dictionary<long, List<SaleRate>> existingRatesByZoneId = this.StructureExistingRatesByZoneId(saleRates);
-
 
             #region Fill Info from Rates to Add
 
             foreach (var rateToAdd in structuredRateActions.RatesToAdd)
             {
-                Info.RateActionsExistingZoneIds.Add(rateToAdd.ZoneId);
-                Info.ActionDatesByZoneId.Add(rateToAdd.ZoneId, rateToAdd.BED);
+                info.RateActionsExistingZoneIds.Add(rateToAdd.ZoneId);
+                info.ActionDatesByZoneId.Add(rateToAdd.ZoneId, rateToAdd.BED);
             }
 
             #endregion
@@ -577,74 +580,71 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (var rateToClose in structuredRateActions.RatesToClose)
             {
-                Info.RateActionsExistingZoneIds.Add(rateToClose.ZoneId);
-                Info.ActionDatesByZoneId.Add(rateToClose.ZoneId, rateToClose.CloseEffectiveDate);
+                info.RateActionsExistingZoneIds.Add(rateToClose.ZoneId);
+                info.ActionDatesByZoneId.Add(rateToClose.ZoneId, rateToClose.CloseEffectiveDate);
 
                 IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(rateToClose.ZoneId);
-                
+
                 SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(rateToClose.CloseEffectiveDate));
                 if (customerRateatClosingDate == null)
                     throw new DataIntegrityValidationException(string.Format("Trying to close a rate for zone {0} that has no existing rate", rateToClose.ZoneName));
-                
-                Info.CustomerRates.Add(customerRateatClosingDate);
+
+                info.CustomerRates.Add(customerRateatClosingDate);
             }
 
             #endregion
 
             #region Fill Info from New Countries
 
-            if (countriesToAdd.Any())
+
+            foreach (var countryToAdd in countriesToAdd)
             {
-                foreach (var countryToAdd in countriesToAdd)
+                List<SaleZone> countryExistingZones = existingZonesByCountryId.GetRecord(countryToAdd.CountryId);
+
+                if (countryExistingZones == null)
+                    throw new DataIntegrityValidationException(string.Format("Trying to sell a new country with no zones. Country Id {0}", countryToAdd.CountryId));
+
+                foreach (var zone in countryExistingZones)
                 {
-                    List<SaleZone> countryExistingZones = existingZonesByCountryId.GetRecord(countryToAdd.CountryId);
-
-                    if (countryExistingZones == null)
-                        throw new DataIntegrityValidationException(string.Format("Trying to sell a new country with no zones. Country Id {0}", countryToAdd.CountryId));
-
-                    foreach (var zone in countryExistingZones)
+                    if (zone.IsInTimeRange(countryToAdd.BED))
                     {
-                        if (zone.IsInTimeRange(countryToAdd.BED))
-                        {
-                            Info.CountriesToAddExistingZoneIds.Add(zone.SaleZoneId);
-                        }
+                        List<long> zoneIds = info.CountriesToAddExistingZoneIdsByCountryId.GetOrCreateItem(countryToAdd.CountryId);
+                        zoneIds.Add(zone.SaleZoneId);
                     }
                 }
             }
+
 
             #endregion
 
             #region Fill Info from Close Countries
 
-            if (countriesToClose.Any())
+            foreach (var countryToClose in countriesToClose)
             {
-                foreach (var countryToClose in countriesToClose)
+                List<SaleZone> countryExistingZones = existingZonesByCountryId.GetRecord(countryToClose.CountryId);
+
+                if (countryExistingZones == null)
+                    throw new DataIntegrityValidationException(string.Format("Trying to stop selling a country with no zones. Country Id {0}", countryToClose.CountryId));
+
+                foreach (var zone in countryExistingZones)
                 {
-                    List<SaleZone> countryExistingZones = existingZonesByCountryId.GetRecord(countryToClose.CountryId);
-
-                    if (countryExistingZones == null)
-                        throw new DataIntegrityValidationException(string.Format("Trying to stop selling a country with no zones. Country Id {0}", countryToClose.CountryId));
-
-                    foreach (var zone in countryExistingZones)
+                    if (zone.IsInTimeRange(countryToClose.CloseEffectiveDate))
                     {
-                        if (zone.IsInTimeRange(countryToClose.CloseEffectiveDate))
-                        {
-                            Info.CountriesToCloseExistingZoneIds.Add(zone.SaleZoneId);
-                            Info.ActionDatesByZoneId.Add(zone.SaleZoneId, countryToClose.CloseEffectiveDate);
+                        info.CountriesToCloseExistingZoneIds.Add(zone.SaleZoneId);
+                        info.ActionDatesByZoneId.Add(zone.SaleZoneId, countryToClose.CloseEffectiveDate);
 
-                            //Get the customer rate at the time of closure. These rates will be used by rate plan locator when getting rates for each zone related to a closed country
-                            IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(zone.SaleZoneId);
-                            SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(countryToClose.CloseEffectiveDate));
-                            if (customerRateatClosingDate != null)
-                                Info.CustomerRates.Add(customerRateatClosingDate);
-                        }
+                        //Get the customer rate at the time of closure. These rates will be used by rate plan locator when getting rates for each zone related to a closed country
+                        IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(zone.SaleZoneId);
+                        SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(countryToClose.CloseEffectiveDate));
+                        if (customerRateatClosingDate != null)
+                            info.CustomerRates.Add(customerRateatClosingDate);
                     }
                 }
             }
 
             #endregion
 
-            return Info;
+            return info;
         }
 
         private IEnumerable<RoutingCustomerInfoDetails> GetDataByCustomer(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveDate)
@@ -677,7 +677,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 SellingProductId = sellingProductId
             });
         }
-        
+
 
         #endregion
 
@@ -736,8 +736,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
         public class ExistingDataInfo
         {
-            private List<long> _countriesToAddExistingZoneIds = new List<long>();
-            public List<long> CountriesToAddExistingZoneIds { get { return this._countriesToAddExistingZoneIds; } }
+            private Dictionary<int, List<long>> _countriesToAddExistingZoneIdsByCountryId = new Dictionary<int, List<long>>();
+            public Dictionary<int, List<long>> CountriesToAddExistingZoneIdsByCountryId { get { return this._countriesToAddExistingZoneIdsByCountryId; } }
 
             private List<long> _countriesToCloseExistingZoneIds = new List<long>();
             public List<long> CountriesToCloseExistingZoneIds { get { return this._countriesToCloseExistingZoneIds; } }
@@ -771,7 +771,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             public Dictionary<int, List<DataByZone>> ImportedZonesByCountryId { get; set; }
 
-            public IEnumerable<RoutingCustomerInfoDetails> Customers {get; set;}
+            public IEnumerable<RoutingCustomerInfoDetails> Customers { get; set; }
 
             public SaleEntityZoneRateLocator FutureLocator { get; set; }
 
@@ -788,7 +788,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             public RoutingCustomerInfoDetails CustomerInfo { get; set; }
 
-            public List<long> CountriesToAddExistingZoneIds { get; set; }
+            public Dictionary<int, List<long>> CountriesToAddExistingZoneIdsByCountryId { get; set; }
 
             public Dictionary<int, List<RateToChange>> RatesToAddForNewCountriesbyCountryId { get; set; }
 
@@ -839,10 +839,10 @@ namespace TOne.WhS.Sales.BP.Activities
             public StructuredRateActions StructuredRateActions { get; set; }
 
             public SaleEntityZoneRateLocator RateChangeLocator { get; set; }
-            
+
             public RoutingCustomerInfoDetails CustomerInfo { get; set; }
 
-            #endregion 
+            #endregion
 
             #region Output Arguments
 

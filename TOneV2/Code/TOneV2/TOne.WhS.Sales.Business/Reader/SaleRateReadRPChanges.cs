@@ -14,11 +14,11 @@ namespace TOne.WhS.Sales.Business.Reader
     {
         private SaleRatesByOwner _allSaleRatesByOwner;
 
-        public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds, 
+        public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds,
             DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
             //TODO: consider for this type of readers that selling product may be different in past
-            _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId, 
+            _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId,
                 routingCustomerInfo.CustomerId, zoneIds, minimumDate, zonesEffectiveDateTimes);
         }
 
@@ -51,7 +51,7 @@ namespace TOne.WhS.Sales.Business.Reader
             }
 
             SaleRateManager saleRateManager = new SaleRateManager();
-            IEnumerable<SaleRate> sellingProductSaleRates = saleRateManager.GetExistingRatesByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, 
+            IEnumerable<SaleRate> sellingProductSaleRates = saleRateManager.GetExistingRatesByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId,
                 zoneIds, minimumDate);
 
             foreach (var sellingProductSaleRate in sellingProductSaleRates)
@@ -59,7 +59,7 @@ namespace TOne.WhS.Sales.Business.Reader
                 DateTime zoneEffectiveDateTime;
                 if (!zonesEffectiveDateTimes.TryGetValue(sellingProductSaleRate.ZoneId, out zoneEffectiveDateTime))
                     continue;
-                if (sellingProductSaleRate.IsInTimeRange(zoneEffectiveDateTime))
+                if (sellingProductSaleRate.IsInTimeRange(zoneEffectiveDateTime) && sellingProductSaleRate.RateTypeId == null)
                 {
                     VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByProduct;
                     saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(sellingProductId);
