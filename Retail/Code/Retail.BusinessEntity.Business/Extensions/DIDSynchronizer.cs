@@ -33,52 +33,70 @@ namespace Retail.BusinessEntity.Business
             {
                 SourceDIDData sourceDID = targetDID as SourceDIDData;
                 var insertedDIDData = didManager.AddDID(sourceDID.DID);
-                ProcessParentChildRelation(sourceDID, insertedDIDData.InsertedObject.Entity.DIDId);
+                ProcessRelatedAccounts(sourceDID, insertedDIDData.InsertedObject.Entity.DIDId ,true);
             }
         }
 
-        void ProcessParentChildRelation(SourceDIDData accountData, int dIDId)
+        void ProcessRelatedAccounts(SourceDIDData accountData, int dIDId, bool isNewDID)
         {
             DIDManager didManager = new DIDManager();
 
             Guid accountDIDRelationDefinitionId = didManager.GetAccountDIDRelationDefinitionId();
             BEParentChildRelationManager parentChildRelationManager = new BEParentChildRelationManager();
-            BEParentChildRelation beParentChildRelation = parentChildRelationManager.GetParent(accountDIDRelationDefinitionId, accountData.DID.DIDId.ToString(), DateTime.Now);
+            string didIdAsString = dIDId.ToString();
+            string accountIdAsString = accountData.AccountId.HasValue ? accountData.AccountId.Value.ToString() : null;
 
-            if (beParentChildRelation == null)
+            if (isNewDID)
             {
                 if (accountData.AccountId.HasValue && accountData.BED.HasValue)
+                {
                     parentChildRelationManager.AddBEParentChildRelation(new BEParentChildRelation
                     {
                         BED = accountData.BED.Value,
-                        ChildBEId = dIDId.ToString(),
-                        ParentBEId = accountData.AccountId.Value.ToString(),
+                        ChildBEId = didIdAsString,
+                        ParentBEId = accountIdAsString,
                         RelationDefinitionId = accountDIDRelationDefinitionId
 
                     });
+                }
             }
             else
             {
-                if (!accountData.AccountId.HasValue)
+                bool isSameRelatedAccountExists = false;
+                IEnumerable<BEParentChildRelation> existingRelatedAccounts = parentChildRelationManager.GetParents(accountDIDRelationDefinitionId, didIdAsString);
+                if(existingRelatedAccounts != null)
                 {
-                    beParentChildRelation.EED = DateTime.Now;
-                    parentChildRelationManager.UpdateBEParentChildRelation(beParentChildRelation);
+                    DateTime dateToCloseExistingAccounts = (accountData.AccountId.HasValue && accountData.BED.HasValue) ? accountData.BED.Value : DateTime.Now;
+                    foreach(var existingRelatedAccount in existingRelatedAccounts)
+                    {
+                        if(accountData.AccountId.HasValue && accountData.BED.HasValue)
+                        {
+                            if (existingRelatedAccount.ParentBEId == accountIdAsString && existingRelatedAccount.BED == accountData.BED.Value)
+                            {
+                                isSameRelatedAccountExists = true;
+                                continue;
+                            }
+                        }
+                         if(existingRelatedAccount.EED.VRGreaterThan(dateToCloseExistingAccounts))
+                         {
+                             existingRelatedAccount.EED = Utilities.Min(existingRelatedAccount.BED, dateToCloseExistingAccounts);
+                             parentChildRelationManager.UpdateBEParentChildRelation(existingRelatedAccount);
+                         }
+                    }
                 }
-                if (accountData.AccountId.HasValue && accountData.AccountId.Value.ToString() != beParentChildRelation.ParentBEId)
+                if (accountData.AccountId.HasValue && accountData.BED.HasValue && !isSameRelatedAccountExists)
                 {
-                    beParentChildRelation.EED = DateTime.Now;
-                    parentChildRelationManager.UpdateBEParentChildRelation(beParentChildRelation);
                     parentChildRelationManager.AddBEParentChildRelation(new BEParentChildRelation
                     {
-                        BED = accountData.BED.HasValue ? accountData.BED.Value : default(DateTime),
-                        ChildBEId = dIDId.ToString(),
-                        ParentBEId = accountData.AccountId.HasValue ? accountData.AccountId.Value.ToString() : null,
+                        BED = accountData.BED.Value,
+                        ChildBEId = didIdAsString,
+                        ParentBEId = accountIdAsString,
                         RelationDefinitionId = accountDIDRelationDefinitionId
                     });
                 }
             }
-
         }
+
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             DIDSynchronizerInitializationData initializationData = context.InitializationData as DIDSynchronizerInitializationData;
@@ -101,7 +119,7 @@ namespace Retail.BusinessEntity.Business
                 SourceDIDData sourceDIDData = targetBe as SourceDIDData;
                 DIDManager didManager = new DIDManager();
                 didManager.UpdateDID(sourceDIDData.DID);
-                ProcessParentChildRelation(sourceDIDData, sourceDIDData.DID.DIDId);
+                ProcessRelatedAccounts(sourceDIDData, sourceDIDData.DID.DIDId, false);
             }
         }
     }
