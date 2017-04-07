@@ -56,21 +56,26 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-               + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" '
+               + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId"  on-ready="ctrl.onSelectorReady"' 
                + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</vr-columns>';
         }
 
         function sellingNumberPlanCtor(ctrl, $scope, attrs) {
+            var selectorAPI;
 
             function initializeController() {
-                defineAPI();
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                };
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    selectorAPI.clearDataSource();
 
                     var selectedIds;
                     if (payload != undefined) {
@@ -78,7 +83,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                     }
 
                     return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
-                        ctrl.datasource.length = 0;
+                        ctrl.datasource.length = 0;                      
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
