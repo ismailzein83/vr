@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Business.Extensions;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
 {
@@ -29,20 +30,16 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
             AccountPart accountPart;
 
             if (!accountBEManager.TryGetAccountPart(accountBEDefinitionId, Convert.ToInt64(context.EntityBalanceInfo.EntityId), AccountPartFinancial._ConfigId, false, out accountPart))
-                throw new NullReferenceException("accountPart");
-            var accountPartFinancial = accountPart.Settings as AccountPartFinancial;
-            if (accountPartFinancial == null)
-                throw new NullReferenceException("accountPartFinancial");
+                throw new NullReferenceException(String.Format("accountPart. Account '{0}'", context.EntityBalanceInfo.EntityId));
+            var accountPartFinancial = accountPart.Settings.CastWithValidate<AccountPartFinancial>("accountPart.Settings", context.EntityBalanceInfo.EntityId);
 
             ProductManager productManager = new ProductManager();
             var product = productManager.GetProduct(accountPartFinancial.ProductId);
-            if (product == null)
-                throw new NullReferenceException("product");
+            product.ThrowIfNull("product", accountPartFinancial.ProductId);
+            product.Settings.ThrowIfNull("product.Settings", accountPartFinancial.ProductId);
 
-            var postPaidSettings = product.Settings.ExtendedSettings as PostPaidSettings;
-            if (postPaidSettings == null)
-                throw new NullReferenceException("postPaidSettings");
-
+            var postPaidSettings = product.Settings.ExtendedSettings.CastWithValidate<PostPaidSettings>("product.Settings.ExtendedSettings", accountPartFinancial.ProductId);
+            
             return -(postPaidSettings.CreditLimit * (100 - this.Percentage) / 100);
         }
     }
