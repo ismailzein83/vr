@@ -81,6 +81,7 @@
     <Compile Include="Context\BalancePeriodContext.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleBehavior.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
+    <Compile Include="Extensions\AccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
     <Compile Include="Filters\IAccountFilter\AccountTypeExtendedSettingsFilter.cs" />
     <Compile Include="LiveBalanceManager.cs" />
