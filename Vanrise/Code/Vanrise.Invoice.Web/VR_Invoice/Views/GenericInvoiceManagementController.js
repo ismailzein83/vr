@@ -110,7 +110,7 @@
         function loadPartnerSelectorDirective() {
             var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
             partnerSelectorReadyDeferred.promise.then(function () {
-                var partnerSelectorPayload = { extendedSettings: $scope.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings };
+                var partnerSelectorPayload = { extendedSettings: $scope.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings, invoiceTypeId: invoiceTypeId };
                 VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
             });
             return partnerSelectorPayloadLoadDeferred.promise;

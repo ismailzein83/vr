@@ -182,7 +182,7 @@
             function loadPartnerSelectorDirective() {
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
-                    var partnerSelectorPayload = { context: getContext(), extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings };
+                    var partnerSelectorPayload = { context: getContext(), extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings, invoiceTypeId: invoiceTypeId };
                     if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
                         partnerSelectorPayload.selectedIds = invoiceEntity.Invoice.PartnerId;
                     }
@@ -381,9 +381,9 @@
                         var partnerObject = partnerSelectorAPI.getData();
                         if (partnerObject != undefined && partnerObject.selectedIds != undefined) {
                             $scope.scopeModel.isLoading = true;
-                            VR_Invoice_InvoiceAPIService.GetBillingInterval(invoiceTypeId, partnerObject.selectedIds, $scope.scopeModel.issueDate).then(function (response) {
+                            VR_Invoice_InvoiceAPIService.GetBillingInterval(invoiceTypeId, partnerObject.selectedIds, $scope.scopeModel.issueDate).then(function (responseDate) {
                                 $scope.scopeModel.isLoading = false;
-                                if (response) {
+                                if (responseDate) {
                                     $scope.scopeModel.isLoading = true;
                                     VR_Invoice_InvoiceAPIService.CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerObject.selectedIds).then(function (response) {
                                         if (response) {
@@ -392,27 +392,35 @@
                                         {
                                             $scope.scopeModel.isDateDisabled = false;
                                         }
+
+                                        if (responseDate.ToDate != undefined) {
+                                            var toDate = UtilsService.createDateFromString(responseDate.ToDate);
+                                            $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
+                                        }
+                                        if (responseDate.FromDate != undefined) {
+                                            var fromDate = UtilsService.createDateFromString(responseDate.FromDate);
+                                            $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
+
+                                        }
+
                                         $scope.scopeModel.isLoading = false;
                                     }).catch(function (error) {
                                         $scope.scopeModel.isLoading = false;
                                     });
-
-                                    if (response.ToDate != undefined) {
-                                        var toDate = UtilsService.createDateFromString(response.ToDate);
-                                        $scope.scopeModel.toDate = new Date(toDate.setHours(23, 59, 59, 998));
-
-                                    }
-                                    if (response.FromDate != undefined) {
-                                        var fromDate = UtilsService.createDateFromString(response.FromDate);
-                                        $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
-                                    }
+                                 
                                 } else {
                                     $scope.scopeModel.fromDate = undefined;
                                     $scope.scopeModel.toDate = undefined;
                                 }
                             }).catch(function (error) {
                                 $scope.scopeModel.isLoading = false;
+
                             });;
+                        }else
+                        {
+                            $scope.scopeModel.fromDate = undefined;
+                            $scope.scopeModel.toDate = undefined;
+                            $scope.scopeModel.isDateDisabled = false;
                         }
                           
                     }

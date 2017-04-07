@@ -44,7 +44,8 @@
                     };
                     var directivePayload = {
                         filter: filter,
-                        extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings
+                        extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings,
+                        invoiceTypeId: invoiceTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -107,7 +108,8 @@
                             var directivePayload = {
                                 selectedIds: selectedIds,
                                 extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings,
-                                filter: filter
+                                filter: filter,
+                                invoiceTypeId: invoiceTypeId
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

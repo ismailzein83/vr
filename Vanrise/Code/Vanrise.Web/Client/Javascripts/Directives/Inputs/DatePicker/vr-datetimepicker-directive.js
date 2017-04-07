@@ -260,7 +260,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 if (ctrl.value == null)
                     $element.find('#divDatePicker').find('.vr-date-input').val('');
                 if (ctrl.value == undefined)
+                {
+                    selectedDate = undefined;
                     return;
+                }
                 var date;
                 if ($attrs.type == "time") {
                     var initialDate = new Date();
@@ -280,6 +283,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 }
                 else {
                     date = ctrl.value instanceof Date ? ctrl.value : (UtilsService.createDateFromString(ctrl.value));
+                   
                 }
                 if ((selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) && divDatePicker.data("DateTimePicker")) {
                     divDatePicker.data("DateTimePicker").date(date);
