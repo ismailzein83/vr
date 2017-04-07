@@ -428,7 +428,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.updateItems = [];
                 ctrl.columnDefs = [];
                 ctrl.gridStyle = {};
-                if (ctrl.maxheight != undefined) {
+                if (ctrl.maxheight != undefined && ctrl.maxheight!='') {
                     setMaxHeight(ctrl.maxheight);
                 }
 
@@ -972,7 +972,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.isLoadingMoreData = false;
                 if (loadMoreDataFunction != undefined) {
                     pagingOnScrollEnabled = true;
-                    if (ctrl.maxheight != undefined) {
+                    if (ctrl.maxheight != undefined && ctrl.maxheight != '') {
                         setMaxHeight(ctrl.maxheight);
                     }
 
