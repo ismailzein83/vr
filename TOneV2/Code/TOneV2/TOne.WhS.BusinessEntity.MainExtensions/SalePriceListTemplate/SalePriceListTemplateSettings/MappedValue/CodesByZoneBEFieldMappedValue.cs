@@ -62,7 +62,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             foreach (SalePLCodeNotification codeNotification in context.ZoneNotification.Codes)
             {
-                codes.Add(codeNotification.Code);
+                if(!codeNotification.EED.HasValue)
+                    codes.Add(codeNotification.Code);
             }
 
             return string.Join(context.Delimiter.ToString(), codes);

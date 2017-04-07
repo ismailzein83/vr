@@ -43,144 +43,147 @@ namespace TOne.WhS.Sales.BP.Activities
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate);
 
-            #region Getting Pricelist Changes
-
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+            if(dataByCustomer != null)
             {
-                #region Selling Product
+                #region Getting Pricelist Changes
 
-                var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
-                SellingProductChangesContext sellingProductContext = new SellingProductChangesContext()
+                if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
-                    ImportedZonesByCountryId = importedZonesByCountryId,
-                    Customers = dataByCustomer,
-                    FutureLocator = futureRateLocator,
-                    MinimumDate = minimumDate
-                };
+                    #region Selling Product
 
-                customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext);
-
-                #endregion
-            }
-            else
-            {
-                #region Customer
-
-                #region Preparing Data for Processing
-
-                RoutingCustomerInfoDetails customerInfo = dataByCustomer.FirstOrDefault();
-
-                Dictionary<int, CustomerCountryToAdd> countriesToAddByCountryId = customerCountriesToAdd.ToDictionary(x => x.CountryId);
-                Dictionary<int, CustomerCountryToChange> countriesToCloseByCountryId = customerCountriesToClose.ToDictionary(x => x.CountryId);
-                StructuredRateActions structuredRateActions = this.GetRateActions(importedZonesByCountryId, countriesToAddByCountryId, countriesToCloseByCountryId);
-
-                Dictionary<int, List<SaleZone>> existingZonesByCountryId = this.StructureExistingZonesByCountryId(saleZones);
-                ExistingDataInfo existingDataInfo = this.BuildExistingDataInfo(structuredRateActions, customerCountriesToAdd, customerCountriesToClose, existingZonesByCountryId, saleRates);
-
-                CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange();
-                changesForThisCustomer.CustomerId = customerInfo.CustomerId;
-
-                #endregion
-
-                #region Preparing Rate Change Locator
-
-                SaleEntityZoneRateLocator rateChangeLocator = null;
-                if (customerCountriesToClose.Any() || structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any())
-                {
-                    List<long> zoneIds = new List<long>();
-                    zoneIds.AddRange(existingDataInfo.CountriesToCloseExistingZoneIds);
-                    zoneIds.AddRange(existingDataInfo.RateActionsExistingZoneIds);
-
-                    rateChangeLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(existingDataInfo.CustomerRates, customerInfo,
-                        zoneIds, minimumDate, existingDataInfo.ActionDatesByZoneId));
-                }
-
-                #endregion
-
-                #region Processing Countries Actions
-
-                #region Get Existing Sale Codes for Sold and Close Countries
-
-                Dictionary<long, List<SaleCode>> saleCodesByZoneId = null;
-                if (customerCountriesToAdd.Any() || customerCountriesToClose.Any())
-                {
-                    IEnumerable<SaleCode> existingSaleCodes = this.GetExistingSaleCodes(existingDataInfo, minimumDate);
-                    saleCodesByZoneId = this.StructureExistingSaleCodesByZoneId(existingSaleCodes);
-                }
-
-                #endregion
-
-                #region Get Changes from New Countries
-
-                if (customerCountriesToAdd.Any())
-                {
-                    CustomerNewCountriesChangesContext customerNewCountriesContext = new CustomerNewCountriesChangesContext()
+                    var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
+                    SellingProductChangesContext sellingProductContext = new SellingProductChangesContext()
                     {
-                        CountriesToAdd = customerCountriesToAdd,
-                        CountriesToAddExistingZoneIdsByCountryId = existingDataInfo.CountriesToAddExistingZoneIdsByCountryId,
-                        CustomerInfo = customerInfo,
-                        MinimumDate = minimumDate,
-                        RatesToAddForNewCountriesbyCountryId = structuredRateActions.RatesToAddForNewCountriesbyCountryId,
-                        SaleCodesByZoneId = saleCodesByZoneId
+                        ImportedZonesByCountryId = importedZonesByCountryId,
+                        Customers = dataByCustomer,
+                        FutureLocator = futureRateLocator,
+                        MinimumDate = minimumDate
                     };
 
-                    this.GetChangesForNewCountries(customerNewCountriesContext);
+                    customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext);
 
-                    changesForThisCustomer.RateChanges.AddRange(customerNewCountriesContext.RateChangesOutArgument);
-                    changesForThisCustomer.CodeChanges.AddRange(customerNewCountriesContext.CodeChangesOutArgument);
+                    #endregion
                 }
-
-                #endregion
-
-                #region Get Changes from Closed Countries
-
-                if (customerCountriesToClose.Any())
+                else
                 {
-                    CustomerCountriesToCloseChangesContext customerCountriesToCloseContext = new CustomerCountriesToCloseChangesContext()
+                    #region Customer
+
+                    #region Preparing Data for Processing
+
+                    RoutingCustomerInfoDetails customerInfo = dataByCustomer.FirstOrDefault();
+
+                    Dictionary<int, CustomerCountryToAdd> countriesToAddByCountryId = customerCountriesToAdd.ToDictionary(x => x.CountryId);
+                    Dictionary<int, CustomerCountryToChange> countriesToCloseByCountryId = customerCountriesToClose.ToDictionary(x => x.CountryId);
+                    StructuredRateActions structuredRateActions = this.GetRateActions(importedZonesByCountryId, countriesToAddByCountryId, countriesToCloseByCountryId);
+
+                    Dictionary<int, List<SaleZone>> existingZonesByCountryId = this.StructureExistingZonesByCountryId(saleZones);
+                    ExistingDataInfo existingDataInfo = this.BuildExistingDataInfo(structuredRateActions, customerCountriesToAdd, customerCountriesToClose, existingZonesByCountryId, saleRates);
+
+                    CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange();
+                    changesForThisCustomer.CustomerId = customerInfo.CustomerId;
+
+                    #endregion
+
+                    #region Preparing Rate Change Locator
+
+                    SaleEntityZoneRateLocator rateChangeLocator = null;
+                    if (customerCountriesToClose.Any() || structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any())
                     {
-                        CountriesToClose = customerCountriesToClose,
-                        CountriesToCloseExistingZoneIds = existingDataInfo.CountriesToCloseExistingZoneIds,
-                        CustomerInfo = customerInfo,
-                        ProcessEffectiveDate = ratePlanContext.EffectiveDate,
-                        RateChangeLocator = rateChangeLocator,
-                        SaleCodesByZoneId = saleCodesByZoneId
-                    };
+                        List<long> zoneIds = new List<long>();
+                        zoneIds.AddRange(existingDataInfo.CountriesToCloseExistingZoneIds);
+                        zoneIds.AddRange(existingDataInfo.RateActionsExistingZoneIds);
 
-                    this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
+                        rateChangeLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(existingDataInfo.CustomerRates, customerInfo,
+                            zoneIds, minimumDate, existingDataInfo.ActionDatesByZoneId));
+                    }
 
-                    changesForThisCustomer.RateChanges.AddRange(customerCountriesToCloseContext.RateChangesOutArgument);
-                    changesForThisCustomer.CodeChanges.AddRange(customerCountriesToCloseContext.CodeChangesOutArgument);
-                }
+                    #endregion
 
-                #endregion
+                    #region Processing Countries Actions
 
-                #endregion
+                    #region Get Existing Sale Codes for Sold and Close Countries
 
-                #region Processing Rates Actions
-
-                if (structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any() || structuredRateActions.RatesToChange.Any())
-                {
-                    CustomerRateActionChangesContext customerRateActionContext = new CustomerRateActionChangesContext()
+                    Dictionary<long, List<SaleCode>> saleCodesByZoneId = null;
+                    if (customerCountriesToAdd.Any() || customerCountriesToClose.Any())
                     {
-                        CustomerInfo = customerInfo,
-                        RateChangeLocator = rateChangeLocator,
-                        StructuredRateActions = structuredRateActions
-                    };
+                        IEnumerable<SaleCode> existingSaleCodes = this.GetExistingSaleCodes(existingDataInfo, minimumDate);
+                        saleCodesByZoneId = this.StructureExistingSaleCodesByZoneId(existingSaleCodes);
+                    }
 
-                    this.GetChangesForRateActions(customerRateActionContext);
-                    changesForThisCustomer.RateChanges.AddRange(customerRateActionContext.RateChangesOutArgument);
+                    #endregion
+
+                    #region Get Changes from New Countries
+
+                    if (customerCountriesToAdd.Any())
+                    {
+                        CustomerNewCountriesChangesContext customerNewCountriesContext = new CustomerNewCountriesChangesContext()
+                        {
+                            CountriesToAdd = customerCountriesToAdd,
+                            CountriesToAddExistingZoneIdsByCountryId = existingDataInfo.CountriesToAddExistingZoneIdsByCountryId,
+                            CustomerInfo = customerInfo,
+                            MinimumDate = minimumDate,
+                            RatesToAddForNewCountriesbyCountryId = structuredRateActions.RatesToAddForNewCountriesbyCountryId,
+                            SaleCodesByZoneId = saleCodesByZoneId
+                        };
+
+                        this.GetChangesForNewCountries(customerNewCountriesContext);
+
+                        changesForThisCustomer.RateChanges.AddRange(customerNewCountriesContext.RateChangesOutArgument);
+                        changesForThisCustomer.CodeChanges.AddRange(customerNewCountriesContext.CodeChangesOutArgument);
+                    }
+
+                    #endregion
+
+                    #region Get Changes from Closed Countries
+
+                    if (customerCountriesToClose.Any())
+                    {
+                        CustomerCountriesToCloseChangesContext customerCountriesToCloseContext = new CustomerCountriesToCloseChangesContext()
+                        {
+                            CountriesToClose = customerCountriesToClose,
+                            CountriesToCloseExistingZoneIds = existingDataInfo.CountriesToCloseExistingZoneIds,
+                            CustomerInfo = customerInfo,
+                            ProcessEffectiveDate = ratePlanContext.EffectiveDate,
+                            RateChangeLocator = rateChangeLocator,
+                            SaleCodesByZoneId = saleCodesByZoneId
+                        };
+
+                        this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
+
+                        changesForThisCustomer.RateChanges.AddRange(customerCountriesToCloseContext.RateChangesOutArgument);
+                        changesForThisCustomer.CodeChanges.AddRange(customerCountriesToCloseContext.CodeChangesOutArgument);
+                    }
+
+                    #endregion
+
+                    #endregion
+
+                    #region Processing Rates Actions
+
+                    if (structuredRateActions.RatesToAdd.Any() || structuredRateActions.RatesToClose.Any() || structuredRateActions.RatesToChange.Any())
+                    {
+                        CustomerRateActionChangesContext customerRateActionContext = new CustomerRateActionChangesContext()
+                        {
+                            CustomerInfo = customerInfo,
+                            RateChangeLocator = rateChangeLocator,
+                            StructuredRateActions = structuredRateActions
+                        };
+
+                        this.GetChangesForRateActions(customerRateActionContext);
+                        changesForThisCustomer.RateChanges.AddRange(customerRateActionContext.RateChangesOutArgument);
+                    }
+
+                    #endregion
+
+                    customerPriceListChanges.Add(changesForThisCustomer);
+
+                    #endregion
                 }
-
-                #endregion
-
-                customerPriceListChanges.Add(changesForThisCustomer);
 
                 #endregion
             }
 
             CustomerChange.Set(context, customerPriceListChanges);
-
-            #endregion
         }
 
         #region Get Pricelist Changes from Selling Product Methods

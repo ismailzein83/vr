@@ -19,14 +19,20 @@ namespace TOne.WhS.CodePreparation.Business
 
         }
 
-        public override IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, ExistingRatesByZoneName existingRatesByZoneName)
+        public override IEnumerable<NewZoneRateEntity> GetRates(IEnumerable<CodeToAdd> codes, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType,
+            ExistingRatesByZoneName existingRatesByZoneName)
         {
             if (zonesByType[SaleZoneTypeEnum.Mobile].Count() == 0)
             {
                 if (zonesByType[SaleZoneTypeEnum.Fixed].Count() == 0)
+                {
                     return null;
+                }
                 else
-                    return this.CreateRatesWithDefaultValueForAllSellingProducts(zonesByType[SaleZoneTypeEnum.Fixed]);
+                {
+                    IEnumerable<string> fixedZoneNames = zonesByType[SaleZoneTypeEnum.Fixed].Select(x => x.Name);
+                    return this.CreateRatesWithDefaultValueForAllSellingProducts(fixedZoneNames, existingRatesByZoneName);
+                }
             }
             else
             {
@@ -39,37 +45,38 @@ namespace TOne.WhS.CodePreparation.Business
             }
         }
 
-        private List<NewZoneRateEntity> CreateRatesWithDefaultValueForAllSellingProducts(IEnumerable<ExistingZone> fixedExistingZones)
+        private List<NewZoneRateEntity> CreateRatesWithDefaultValueForAllSellingProducts(IEnumerable<string> fixedZoneNames, ExistingRatesByZoneName existingRatesByZoneName)
         {
-            List<NewZoneRateEntity> ratesEntities = new List<NewZoneRateEntity>();
-
-            SellingProductManager sellingProductManager = new SellingProductManager();
-            IEnumerable<SellingProduct> allSellingProducts = sellingProductManager.GetSellingProductsBySellingNumberPlan(base.SellingNumberPlanId);
+            Dictionary<int, NewZoneRateEntity> defaultRatesBySellingProductId = new Dictionary<int, NewZoneRateEntity>();
 
             SalePriceListManager priceListManager = new SalePriceListManager();
-            foreach (ExistingZone existingZone in fixedExistingZones)
+            foreach (string zoneName in fixedZoneNames)
             {
-                foreach (ExistingRate existingRate in existingZone.ExistingRates)
+                List<ExistingRate> effectiveExistingRates = null;
+                if(existingRatesByZoneName.TryGetValue(zoneName, out effectiveExistingRates))
                 {
-                    SalePriceList pricelist = priceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
-                    if(pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)
+                    foreach (ExistingRate effectiveRate in effectiveExistingRates)
                     {
-                        int sellingProductCurrencyId = base.GetCurrencyForNewRate(pricelist.OwnerId, SalePriceListOwnerType.SellingProduct);
-                        NewZoneRateEntity rate = new NewZoneRateEntity()
+                        SalePriceList pricelist = priceListManager.GetPriceList(effectiveRate.RateEntity.PriceListId);
+                        if (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct && !defaultRatesBySellingProductId.ContainsKey(pricelist.OwnerId))
                         {
-                            OwnerId = pricelist.OwnerId,
-                            OwnerType = SalePriceListOwnerType.SellingProduct,
-                            CurrencyId = sellingProductCurrencyId,
-                            //TODO: make sure to convert from default rate currency to selling product currency later
-                            Rate = base.SaleAreaSettings.DefaultRate
-                        };
+                            int sellingProductCurrencyId = base.GetCurrencyForNewRate(pricelist.OwnerId, SalePriceListOwnerType.SellingProduct);
+                            NewZoneRateEntity rate = new NewZoneRateEntity()
+                            {
+                                OwnerId = pricelist.OwnerId,
+                                OwnerType = SalePriceListOwnerType.SellingProduct,
+                                CurrencyId = sellingProductCurrencyId,
+                                //TODO: make sure to convert from default rate currency to selling product currency later
+                                Rate = base.SaleAreaSettings.DefaultRate
+                            };
 
-                        ratesEntities.Add(rate);
+                            defaultRatesBySellingProductId.Add(pricelist.OwnerId, rate);
+                        }
                     }
                 }
             }
 
-            return ratesEntities;
+            return defaultRatesBySellingProductId.Values.ToList();
         }
     }
 }

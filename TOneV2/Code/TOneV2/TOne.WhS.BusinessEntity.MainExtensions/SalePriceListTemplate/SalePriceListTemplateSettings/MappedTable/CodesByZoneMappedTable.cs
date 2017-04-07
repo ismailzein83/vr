@@ -33,6 +33,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         private void SetRecordData(List<SalePriceListTemplateTableCell> sheets, IEnumerable<CodesByZoneMappedColumn> mappedCols, SalePLZoneNotification zone, ref int rowIndex, string dateTimeFormat)
         {
+            if (zone.Codes.All(x => x.EED.HasValue))
+                return;//No need to mention the zone if all codes are closed for it (this happens when renaming a zone also)
+
             int? codesLength = GetLength(zone.Codes.Select(itm => itm.Code));
             
             int splitedCodesCount = 0;
