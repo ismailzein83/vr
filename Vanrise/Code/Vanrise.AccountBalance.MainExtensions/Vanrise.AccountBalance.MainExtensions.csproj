@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="AccountBalanceFieldSource\BillingTransactionFieldSourceSetting.cs" />
     <Compile Include="AccountBalanceFieldSource\LiveBalanceFieldSourceSetting.cs" />
-    <Compile Include="AccountBalanceNotification\AccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountUsagePeriods\DailyAccountUsagePeriod.cs" />
     <Compile Include="BalancePeriod\MonthlyBalancePeriodSettings.cs" />
     <Compile Include="BalancePeriod\WeeklyBalancePeriodSettings.cs" />

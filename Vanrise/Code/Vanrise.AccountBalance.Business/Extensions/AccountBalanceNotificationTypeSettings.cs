@@ -19,14 +19,12 @@ namespace Vanrise.AccountBalance.Business
 
             Guid BEDefinitionId = Guid.NewGuid();
 
-            AlertRuleActionEventPayload alertRuleActionEventPayload = new AlertRuleActionEventPayload()
+            return new AccountBalanceNotificationDetailEventPayload()
             {
-                BusinessEntityDescription = new BusinessEntityManager().GetEntityDescription(BEDefinitionId, eventPayload.EntityId),
+                BusinessEntityDescription = eventPayload.EntityId, //new BusinessEntityManager().GetEntityDescription(BEDefinitionId, eventPayload.EntityId),
                 CurrentBalance = eventPayload.CurrentBalance,
                 Threshold = eventPayload.Threshold
             };
-
-            return alertRuleActionEventPayload;
         }
 
         public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
@@ -35,7 +33,7 @@ namespace Vanrise.AccountBalance.Business
         }
     }
 
-    public class AlertRuleActionEventPayload : VRNotificationDetailEventPayload
+    public class AccountBalanceNotificationDetailEventPayload : VRNotificationDetailEventPayload
     {
         public string BusinessEntityDescription { get; set; }
 

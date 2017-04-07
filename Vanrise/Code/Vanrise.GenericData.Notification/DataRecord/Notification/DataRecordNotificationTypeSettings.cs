@@ -76,7 +76,7 @@ namespace Vanrise.GenericData.Notification
                 fieldValues.Add(fieldName, dataRecordFieldValue);
             }
 
-            return new AlertRuleActionEventPayload() { FieldValues = fieldValues };
+            return new DataRecordNotificationDetailEventPayload() { FieldValues = fieldValues };
         }
     }
 
@@ -87,7 +87,7 @@ namespace Vanrise.GenericData.Notification
         public string Header { get; set; }
     }
 
-    public class AlertRuleActionEventPayload : VRNotificationDetailEventPayload
+    public class DataRecordNotificationDetailEventPayload : VRNotificationDetailEventPayload
     {
         public Dictionary<string, DataRecordFieldValue> FieldValues { get; set; }
     }

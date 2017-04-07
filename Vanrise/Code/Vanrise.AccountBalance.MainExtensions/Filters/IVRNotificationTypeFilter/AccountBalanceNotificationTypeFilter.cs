@@ -1,4 +1,4 @@
-﻿using Vanrise.AccountBalance.MainExtensions.AccountBalanceNotification;
+﻿using Vanrise.AccountBalance.Business;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.MainExtensions.Filters
