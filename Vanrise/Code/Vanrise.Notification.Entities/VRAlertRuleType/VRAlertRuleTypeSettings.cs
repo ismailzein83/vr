@@ -13,13 +13,9 @@ namespace Vanrise.Notification.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public virtual Guid NotificationTypeId { get; set; }
-
         public virtual string CriteriaEditor { get; set; }
 
         public virtual string SettingEditor { get; set; }
-
-        public virtual string VRActionExtensionType { get; set; }
 
         public virtual string CheckerBPActivityFQTN { get; set; }
 

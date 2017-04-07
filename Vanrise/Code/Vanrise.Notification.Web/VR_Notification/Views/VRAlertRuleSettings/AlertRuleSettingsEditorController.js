@@ -5,16 +5,24 @@
     AlertRuleSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
     function AlertRuleSettingsEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
-        var thresholdEntity;
+
         var isEditMode;
-        var balanceAlertThresholdAPI;
-        var balanceAlertThresholdReadyDeferred = UtilsService.createPromiseDeferred();
+        var thresholdEntity;
         var balanceAlertActionExtensionType;
         var thresholdActionExtensionType;
+        var vrActionTargetType;
+        var notificationTypeId;
+        var context;
+
+        var notificationAlertlevelSelectorAPI;
+        var notificationAlertlevelSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var balanceAlertThresholdAPI;
+        var balanceAlertThresholdReadyDeferred = UtilsService.createPromiseDeferred();
+
         var vRActionManagementAPI;
         var vRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
-        var vrActionTargetType;
-        var context;
+
         var rollBackVRActionManagementAPI;
         var rollBackVRActionManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -24,19 +32,29 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            if (parameters != undefined) {
 
+            if (parameters != undefined) {
                 thresholdEntity = parameters.thresholdActionEntity;
                 balanceAlertActionExtensionType = parameters.actionExtensionType;
                 thresholdActionExtensionType = parameters.thresholdExtensionType;
-                context = parameters.context;
                 vrActionTargetType = parameters.vrActionTargetType;
-                isEditMode = (thresholdEntity != undefined);
-            }
-        }
+                context = parameters.context;
 
+                if (context != undefined) {
+                    var alertRuleTypeSettings = context.getAlertRuleTypeSettings();
+                    notificationTypeId = alertRuleTypeSettings != undefined ? alertRuleTypeSettings.NotificationTypeId : undefined;
+                }
+            }
+
+            isEditMode = thresholdEntity != undefined;
+        }
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onVRNotificationAlertlevelSelectorReady = function (api) {
+                notificationAlertlevelSelectorAPI = api;
+                notificationAlertlevelSelectorReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.onVRBalanceAlertRuleThresholdDirectiveReady = function (api) {
                 balanceAlertThresholdAPI = api;
@@ -66,28 +84,43 @@
                 $scope.modalContext.closeModal()
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRActionManagement, loadBalanceAlertThresholdDirective, loadRollBackVRActionManagement]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadNotificationAlertlevelSelector, loadVRActionManagement, loadBalanceAlertThresholdDirective, loadRollBackVRActionManagement])
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
         }
-
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor('Threshold') : UtilsService.buildTitleForAddEditor('Threshold');
         }
-
         function loadStaticData() {
 
         }
+        function loadNotificationAlertlevelSelector() {
+            var notificationAlertLevelSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
+            notificationAlertlevelSelectorReadyDeferred.promise.then(function () {
+
+                var notificationAlertlevelSelectorPayload = {
+                    filter: {
+                        VRNotificationTypeId: notificationTypeId
+                    }
+                };
+                if (thresholdEntity != undefined) {
+                    notificationAlertlevelSelectorPayload.selectedIds = thresholdEntity.AlertLevelId;
+                }
+                VRUIUtilsService.callDirectiveLoad(notificationAlertlevelSelectorAPI, notificationAlertlevelSelectorPayload, notificationAlertLevelSelectorLoadDeferred);
+            });
+
+            return notificationAlertLevelSelectorLoadDeferred.promise;
+        }
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
@@ -96,7 +129,14 @@
             });
             return vRActionManagementLoadDeferred.promises;
         }
-
+        function loadBalanceAlertThresholdDirective() {
+            var balanceAlertThresholdLoadDeferred = UtilsService.createPromiseDeferred();
+            balanceAlertThresholdReadyDeferred.promise.then(function () {
+                var balanceAlertThresholdPayload = { context: getContext(), thresholdEntity: thresholdEntity != undefined ? thresholdEntity.Threshold : undefined, extensionType: thresholdActionExtensionType };
+                VRUIUtilsService.callDirectiveLoad(balanceAlertThresholdAPI, balanceAlertThresholdPayload, balanceAlertThresholdLoadDeferred);
+            });
+            return balanceAlertThresholdLoadDeferred.promises;
+        }
         function loadRollBackVRActionManagement() {
             var rollBackVRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             rollBackVRActionManagementReadyDeferred.promise.then(function () {
@@ -106,22 +146,12 @@
             return rollBackVRActionManagementLoadDeferred.promises;
         }
 
-        function loadBalanceAlertThresholdDirective() {
-            var balanceAlertThresholdLoadDeferred = UtilsService.createPromiseDeferred();
-            balanceAlertThresholdReadyDeferred.promise.then(function () {
-                var balanceAlertThresholdPayload = { context: getContext(), thresholdEntity: thresholdEntity != undefined ? thresholdEntity.Threshold : undefined, extensionType: thresholdActionExtensionType };
-                VRUIUtilsService.callDirectiveLoad(balanceAlertThresholdAPI, balanceAlertThresholdPayload, balanceAlertThresholdLoadDeferred);
-            });
-            return balanceAlertThresholdLoadDeferred.promises;
-        }
-
         function insert() {
             var balanceAlertThresholdObj = buildBalanceAlertThresholdObjFromScope();
             if ($scope.onAlertRuleSettingsAdded != undefined)
                 $scope.onAlertRuleSettingsAdded(balanceAlertThresholdObj);
             $scope.modalContext.closeModal();
         }
-
         function update() {
             if ($scope.onAlertRuleSettingsUpdated != undefined) {
                 $scope.onAlertRuleSettingsUpdated(buildBalanceAlertThresholdObjFromScope());
@@ -133,12 +163,14 @@
             var threshold = balanceAlertThresholdAPI.getData();
             var obj = {
                 Threshold: threshold,
+                AlertLevelId: notificationAlertlevelSelectorAPI.getSelectedIds(),
                 Actions: vRActionManagementAPI.getData(),
                 RollbackActions: rollBackVRActionManagementAPI.getData(),
                 ThresholdDescription: threshold.ThresholdDescription
             };
             return obj;
         }
+
         function getContext() {
             var currentContext = context;
             if (currentContext == undefined)

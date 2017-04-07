@@ -8,20 +8,14 @@ namespace Vanrise.Notification.Entities
 {
     public abstract class VRBalanceAlertRuleTypeSettings : VRGenericAlertRuleTypeSettings
     {
-        public abstract string VRActionExtensionType { get; set; }
-
         public abstract VRActionTargetType GetActionTargetType();
 
         public abstract string ThresholdExtensionType { get; set; }
 
         public abstract VRBalanceAlertRuleBehavior Behavior { get; set; }
 
-        public override string SettingEditor
-        {
-            get
-            {
-                return "vr-notification-vrbalancealertrule-settings";
-            }
-        }
+        public abstract Guid NotificationTypeId { get; set; }
+
+        public override string SettingEditor { get { return "vr-notification-vrbalancealertrule-settings"; } }
     }
 }

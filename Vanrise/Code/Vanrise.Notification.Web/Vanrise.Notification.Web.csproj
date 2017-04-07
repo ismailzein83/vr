@@ -209,6 +209,7 @@
     <Content Include="VR_Notification\Services\VRAlertRuleService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleSettingsService.js" />
     <Content Include="VR_Notification\Services\VRAlertRuleTypeService.js" />
+    <Content Include="VR_Notification\Services\VRNotificationsService.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditorController.js" />
     <Content Include="VR_Notification\Views\VRActions\VRActionEditor.html" />
     <Content Include="VR_Notification\Views\VRAlertLevel\VRAlertLevelEditor.html" />

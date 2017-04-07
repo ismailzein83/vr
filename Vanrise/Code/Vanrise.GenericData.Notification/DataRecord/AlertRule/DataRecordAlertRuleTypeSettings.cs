@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Notification
 
         public List<AlertRuleTypeRecordField> IdentificationFields { get; set; }
 
-        public override Guid NotificationTypeId { get; set; }
+        public Guid NotificationTypeId { get; set; }
     }
 
     public class AlertRuleTypeRecordField

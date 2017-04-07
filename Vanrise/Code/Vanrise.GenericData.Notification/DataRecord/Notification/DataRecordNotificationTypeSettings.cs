@@ -5,6 +5,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Notification.Business;
 
 namespace Vanrise.GenericData.Notification
 {
@@ -54,7 +55,7 @@ namespace Vanrise.GenericData.Notification
             if (definedGridColumnFieldNames == null || definedGridColumnFieldNames.Count == 0)
                 throw new Exception("At least a Grid Column should be Defined!!");
 
-            DataRecordAlertRuleActionEventPayload eventPayload = GetDataRecordAlertRuleActionEventPayload(context.VRNotification);
+            DataRecordAlertRuleActionEventPayload eventPayload = new VRNotificationManager().GetVRNotificationEventPayload<DataRecordAlertRuleActionEventPayload>(context.VRNotification);
 
             foreach (var outputRecord in eventPayload.OutputRecords)
             {
@@ -76,12 +77,6 @@ namespace Vanrise.GenericData.Notification
             }
 
             return new AlertRuleActionEventPayload() { FieldValues = fieldValues };
-        }
-
-        private DataRecordAlertRuleActionEventPayload GetDataRecordAlertRuleActionEventPayload(VRNotification vrNotification)
-        {
-            vrNotification.ThrowIfNull<VRNotification>("vrNotification");
-            return vrNotification.EventPayload.CastWithValidate<DataRecordAlertRuleActionEventPayload>("vrNotification.EventPayload", vrNotification.VRNotificationId);
         }
     }
 

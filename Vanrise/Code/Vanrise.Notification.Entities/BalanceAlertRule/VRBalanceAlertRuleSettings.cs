@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
@@ -14,7 +11,9 @@ namespace Vanrise.Notification.Entities
     public class VRBalanceAlertThresholdAction
     {
         public Guid AlertLevelId { get; set; }
+
         public string  ThresholdDescription { get; set; }
+
         public VRBalanceAlertThreshold Threshold { get; set; }
 
         public List<VRAction> Actions { get; set; }

@@ -65,7 +65,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         AlertRuleId = activeThreshold.AlertRuleId,
                                         RuleTypeId = alertRule.RuleTypeId,
                                         Description = string.Format("Rolling back balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, activeThreshold.Threshold),
-                                        NotificationTypeId = alertRuleTypeManager.GetVRAlertRuleTypeSettings<VRAlertRuleTypeSettings>(alertRule.RuleTypeId).NotificationTypeId
+                                        NotificationTypeId = alertRuleTypeManager.GetVRAlertRuleTypeSettings<VRBalanceAlertRuleTypeSettings>(alertRule.RuleTypeId).NotificationTypeId
                                     };
                                     alertRuleNotificationManager.ClearNotifications(notificationInput);
                                     activeAlertThresholds.ActiveAlertsThersholds.Remove(activeThreshold);

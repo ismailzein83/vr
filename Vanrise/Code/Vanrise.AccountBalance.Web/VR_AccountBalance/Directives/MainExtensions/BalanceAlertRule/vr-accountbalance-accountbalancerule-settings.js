@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -31,21 +31,33 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
             this.initializeController = initializeController;
 
             var genericRuleDefinitionEntity;
-            var ruleObjects;
-            var criteriaFields;
-            var accountTypeId;
-
-            var criteriaDirectiveAPI;
-            var criteriaDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var objectDirectiveAPI;
-            var objectDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var accountTypeId, notificationTypeId;
+            var ruleObjects, criteriaFields;
 
             var accountTypeSelectorAPI;
             var accountTypeSelectorAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var notificationTypeSettingsSelectorAPI;
+            var notificationTypeSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var objectDirectiveAPI;
+            var objectDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var criteriaDirectiveAPI;
+            var criteriaDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+                    accountTypeSelectorAPI = api;
+                    accountTypeSelectorAPIReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onVRNotificationTypeSettingsSelectorReady = function (api) {
+                    notificationTypeSettingsSelectorAPI = api;
+                    notificationTypeSettingsSelectorReadyDeferred.resolve();
+                };
 
                 $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
                     criteriaDirectiveAPI = api;
@@ -57,27 +69,22 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                     objectDirectiveReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.accountTypeSelectorReady = function (api) {
-                    accountTypeSelectorAPI = api;
-                    accountTypeSelectorAPIReadyDeferred.resolve();
-                };
-
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.settings != undefined) {
+                        accountTypeId = payload.settings.AccountTypeId;
+                        notificationTypeId = payload.settings.NotificationTypeId;
                         criteriaFields = payload.settings.CriteriaDefinition.Fields;
                         ruleObjects = payload.settings.Objects;
-                        accountTypeId = payload.settings.AccountTypeId;
+
                         $scope.scopeModel.thresholdExtensionType = payload.settings.ThresholdExtensionType;
-                        $scope.scopeModel.actionExtensionType = payload.settings.VRActionExtensionType;
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadCriteriaDirective, loadObjectDirective]).catch(function (error) {
+                    return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadNotificationTypeSelector, loadCriteriaDirective, loadObjectDirective]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
                         $scope.isLoading = false;
@@ -88,10 +95,10 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
                     return {
                         $type: "Vanrise.AccountBalance.Business.Extensions.AccountBalanceAlertRuleTypeSettings, Vanrise.AccountBalance.Business",
                         AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
+                        NotificationTypeId: notificationTypeSettingsSelectorAPI.getSelectedIds(),
                         CriteriaDefinition: criteriaDirectiveAPI.getData(),
                         Objects: objectDirectiveAPI.getData(),
                         ThresholdExtensionType: $scope.scopeModel.thresholdExtensionType,
-                        VRActionExtensionType: $scope.scopeModel.actionExtensionType
                     };
                 };
 
@@ -111,8 +118,26 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
 
                 return accountTypeSelectorLoadDeferred.promise;
             }
+            function loadNotificationTypeSelector() {
+                var notificationSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
+                notificationTypeSettingsSelectorReadyDeferred.promise.then(function () {
 
+                    var notificationSelectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Vanrise.AccountBalance.MainExtensions.Filters.AccountBalanceNotificationTypeFilter, Vanrise.AccountBalance.MainExtensions"
+                            }]
+                        }
+                    };
+                    if (notificationTypeId != undefined) {
+                        notificationSelectorPayload.selectedIds = notificationTypeId;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(notificationTypeSettingsSelectorAPI, notificationSelectorPayload, notificationSelectorLoadDeferred);
+                });
+
+                return notificationSelectorLoadDeferred.promise;
+            }
             function loadObjectDirective() {
                 var objectDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -137,7 +162,6 @@ app.directive('vrAccountbalanceAccountbalanceruleSettings', ['UtilsService', 'VR
 
                 return objectDirectiveLoadDeferred.promise;
             }
-
             function loadCriteriaDirective() {
                 var criteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 

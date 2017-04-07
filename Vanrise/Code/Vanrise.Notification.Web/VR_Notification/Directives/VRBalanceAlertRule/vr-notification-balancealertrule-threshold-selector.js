@@ -18,7 +18,7 @@
                 var ctor = new VRBalanceAlertRuleThreshold($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "thresholdCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
@@ -128,8 +128,9 @@
         function getTamplate(attrs) {
 
             var template =
-                '<vr-row>'
-                    + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                //'<vr-row>'
+                    //+
+                    '<vr-columns colnum="{{thresholdCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -140,9 +141,9 @@
                             + 'hideremoveicon>'
                         + '</vr-select>'
                     + ' </vr-columns>'
-                + '</vr-row>'
+                //+ '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{thresholdCtrl.normalColNum}}" isrequired="thresholdCtrl.isrequired" customvalidate="thresholdCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }

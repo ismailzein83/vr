@@ -2,6 +2,7 @@
 (function (appControllers) {
 
     "use strict";
+
     VRNotificationsAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Notification_ModuleConfig'];
 
     function VRNotificationsAPIService(BaseAPIService, UtilsService, VR_Notification_ModuleConfig) {

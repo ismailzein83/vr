@@ -66,6 +66,7 @@
     <Compile Include="BalancePeriod\WeeklyBalancePeriodSettings.cs" />
     <Compile Include="BalanceRuleDefinitionSettings.cs" />
     <Compile Include="BillingTransaction\BillingTransactionSynchronizer.cs" />
+    <Compile Include="Filters\IVRNotificationTypeFilter\AccountBalanceNotificationTypeFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueActivators\UpdateAccountBalancesQueueActivator.cs" />
   </ItemGroup>
@@ -97,6 +98,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
       <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>
