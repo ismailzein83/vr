@@ -2000,6 +2000,12 @@ vr-switch[class*="divDisabled"] .switch {
     opacity: 0.5;
     background: #8a8a8a;
 }
+
+.divDisabled .switch {
+    pointer-events: none;
+    opacity: 0.5;
+    background: #8a8a8a;
+}
 /**************START Pagination*********/
 
 .pagination {
