@@ -5,7 +5,8 @@
     [ParentType1]         VARCHAR (255)    NULL,
     [ParentType2]         VARCHAR (255)    NULL,
     [EventKey]            NVARCHAR (900)   NOT NULL,
-    [BPProcessInstanceID] BIGINT           NULL,
+    [ExecuteBPInstanceID] BIGINT           NULL,
+    [ClearBPInstanceID]   BIGINT           NULL,
     [Status]              INT              NOT NULL,
     [AlertLevelID]        UNIQUEIDENTIFIER NULL,
     [Description]         NVARCHAR (900)   NULL,
@@ -16,6 +17,8 @@
     [timestamp]           ROWVERSION       NULL,
     CONSTRAINT [PK_VRActiveNotification_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

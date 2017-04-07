@@ -16,7 +16,8 @@ BEGIN
 	  ,[ParentType1]
 	  ,[ParentType2]
 	  ,[EventKey]
-	  ,[BPProcessInstanceID]
+	  ,[ExecuteBPInstanceID]
+	  ,[ClearBPInstanceID]
 	  ,[Status]
 	  ,[AlertLevelID]
 	  ,[Description]
@@ -33,7 +34,8 @@ BEGIN
 		   AND ([timestamp] > @TimestampAfter) 
 	ORDER BY [timestamp]
 	
-	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload]
+	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[ExecuteBPInstanceID]
+			,[ClearBPInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload]
 	FROM #temptable2_VRNotifications_GetUpdated
 	  
 	IF((SELECT COUNT(*) FROM #temptable2_VRNotifications_GetUpdated) = 0)

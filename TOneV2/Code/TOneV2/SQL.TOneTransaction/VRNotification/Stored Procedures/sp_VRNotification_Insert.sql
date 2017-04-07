@@ -4,7 +4,6 @@
 	@ParentType1 nvarchar(255),
 	@ParentType2 nvarchar(255),
 	@EventKey nvarchar(255),
-	@BPProcessInstanceID bigint,
 	@Status tinyint,
 	@AlertLevelID uniqueidentifier,
 	@Description nvarchar(900),
@@ -15,7 +14,7 @@
 AS
 BEGIN
 	
-		insert into [VRNotification].[VRNotification] ([UserID] ,[TypeID],[ParentType1],[ParentType2],[EventKey],[BPProcessInstanceID],[Status], [AlertLevelID],[Description],[ErrorMessage],[Data], [EventPayload])
-		values(@UserId, @TypeId,@ParentType1,@ParentType2,@EventKey,@BPProcessInstanceID,@Status, @AlertLevelID, @Description, @ErrorMessage, @Data, @EventPayload)
+		insert into [VRNotification].[VRNotification] ([UserID] ,[TypeID],[ParentType1],[ParentType2],[EventKey],[Status], [AlertLevelID],[Description],[ErrorMessage],[Data], [EventPayload])
+		values(@UserId, @TypeId,@ParentType1,@ParentType2,@EventKey,@Status, @AlertLevelID, @Description, @ErrorMessage, @Data, @EventPayload)
 	    SET @ID = SCOPE_IDENTITY()
 END
