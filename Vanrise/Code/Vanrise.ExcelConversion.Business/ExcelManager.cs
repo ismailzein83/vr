@@ -14,6 +14,7 @@ namespace Vanrise.ExcelConversion.Business
 {
     public class ExcelManager
     {
+        GeneralSettingsManager _generalSettingsManager = new GeneralSettingsManager();
         public ExcelWorkbook ReadExcelFile(long fileId)
         {
             var fileManager = new VRFileManager();
@@ -75,7 +76,18 @@ namespace Vanrise.ExcelConversion.Business
                         {
                             if (cell.Type == CellValueType.IsDateTime)
                             {
-                                eCell.Value = cell.StringValue;
+                                if (cell.Value != null)
+                                {
+                                    var valueDate = Convert.ToDateTime(cell.Value);
+                                    if (valueDate != valueDate.Date)
+                                    {
+                                        eCell.Value = valueDate.ToString(_generalSettingsManager.GetLongDateTimeFormat());
+                                    }
+                                    else
+                                    {
+                                        eCell.Value = valueDate.ToString(_generalSettingsManager.GetDateFormat());
+                                    }
+                                }
                             }
                             else
                                 eCell.Value = cell.Value;
@@ -163,7 +175,17 @@ namespace Vanrise.ExcelConversion.Business
                     {
                         if (cell.Type == CellValueType.IsDateTime)
                         {
-                            eCell.Value = cell.StringValue;
+                            if(cell.Value != null)
+                            {
+                                var valueDate = Convert.ToDateTime(cell.Value);
+                                if(valueDate != valueDate.Date)
+                                {
+                                    eCell.Value = valueDate.ToString(_generalSettingsManager.GetLongDateTimeFormat());
+                                }else
+                                {
+                                    eCell.Value = valueDate.ToString(_generalSettingsManager.GetDateFormat());
+                                }
+                            }
                         }
                         else
                             eCell.Value = cell.Value;

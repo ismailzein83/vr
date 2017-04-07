@@ -100,6 +100,18 @@ namespace Vanrise.Common.Business
                 return null;
             return parameter.Value;
         }
+        public string GetLongDateTimeFormat()
+        {
+            return "yyyy-MM-dd HH:mm:ss";
+        }
+        public string GetDateTimeFormat()
+        {
+            return "yyyy-MM-dd HH:mm";
+        }
+        public string GetDateFormat()
+        {
+            return "yyyy-MM-dd";
+        }
     }
     
 }
