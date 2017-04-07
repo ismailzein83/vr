@@ -10,5 +10,10 @@ namespace QM.CLITester.Entities.VRObjectTypes
     public class ScheduleTestResultObjectType : VRObjectType
     {
         public override Guid ConfigId { get { return new Guid("de87ff03-4013-4ef4-9b7d-06376ec59fbe"); } }
+
+        public override object CreateObject(IVRObjectTypeCreateObjectContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
