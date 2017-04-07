@@ -52,6 +52,11 @@ namespace Vanrise.GenericData.Business
             return cachedBEParentChildRelations.FindAllRecords(itm => itm.RelationDefinitionId == beParentChildRelationDefinitionId);
         }
 
+        public bool TryAddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem, out long insertedId)
+        {
+            IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+            return _dataManager.Insert(beParentChildRelationItem, out insertedId);
+        }
         public InsertOperationOutput<BEParentChildRelationDetail> AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
             var insertOperationOutput = new InsertOperationOutput<BEParentChildRelationDetail>();
@@ -66,7 +71,7 @@ namespace Vanrise.GenericData.Business
             {
                 IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
 
-                if (_dataManager.Insert(beParentChildRelationItem, out beParentChildRelationId))
+                if (TryAddBEParentChildRelation(beParentChildRelationItem, out beParentChildRelationId))
                 {
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildRelationItem.RelationDefinitionId);
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
@@ -195,7 +200,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        private Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations(Guid beParentChildRelationDefinitionId)
+        public Dictionary<long, BEParentChildRelation> GetCachedBEParentChildRelations(Guid beParentChildRelationDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedBEParentChildRelations", beParentChildRelationDefinitionId,
                () =>

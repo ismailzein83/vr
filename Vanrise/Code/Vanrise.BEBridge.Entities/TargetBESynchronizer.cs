@@ -46,24 +46,22 @@ namespace Vanrise.BEBridge.Entities
         void WriteBusinessHandledException(Exception ex);
     }
 
-    public interface ITargetBESynchronizerInsertBEsContext
+    public interface ITargetBESynchronizerInsertBEsContext : ITargetBESynchronizerBEsContext
     {
         List<ITargetBE> TargetBE { get; }
         Object InitializationData { get; }
-        
-        void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
 
-        void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
 
-        void WriteHandledException(Exception ex);
-
-        void WriteBusinessHandledException(Exception ex);
     }
 
-    public interface ITargetBESynchronizerUpdateBEsContext
+    public interface ITargetBESynchronizerUpdateBEsContext : ITargetBESynchronizerBEsContext
     {
         List<ITargetBE> TargetBE { get; }
 
+    }
+
+    public interface ITargetBESynchronizerBEsContext
+    {
         void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);
 
         void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
