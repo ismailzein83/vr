@@ -12,7 +12,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             if ($attrs.ispreview != undefined) {
                 UtilsService.setContextReadOnly($scope);
-                ctrl.maxHeight = (window.innerHeight - 350) +'px'
+                ctrl.maxHeight = (window.innerHeight - 337) +'px'
             }
 
             var ratePlanGrid = new RatePlanGrid($scope, ctrl, $attrs);
