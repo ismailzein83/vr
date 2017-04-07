@@ -11,6 +11,9 @@ using Vanrise.InvToAccBalanceRelation.Business;
 using Vanrise.InvToAccBalanceRelation.Entities;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.AccountBalance.Entities;
+using TOne.WhS.Invoice.Entities;
+using TOne.WhS.Invoice.Business;
 namespace TOne.WhS.InvToAccBalanceRelation.Business
 {
     public class CarrierInvToAccBalanceRelationDefinitionExtendedSettings : InvToAccBalanceRelationDefinitionExtendedSettings
@@ -20,76 +23,57 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
             get { return new Guid("F5CD8367-A6DC-421E-B93C-0567ED769150"); }
         }
 
-        public override List<InvoiceAccountInfo> GetBalanceInvoiceAccounts(IInvToAccBalanceRelGetBalanceInvoiceAccountsContext context)
+        public override List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> GetBalanceInvoiceAccounts(IInvToAccBalanceRelGetBalanceInvoiceAccountsContext context)
         {
 
-            List<InvoiceAccountInfo> invoiceAccountInfo = new List<InvoiceAccountInfo>();
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
             var financialAccount = new FinancialAccountManager().GetFinancialAccount(Convert.ToInt32(context.AccountId));
-            if(financialAccount == null)
-                throw new NullReferenceException(string.Format("financialAccount: financialAccountId {0}",context.AccountId));
-            var customerInvoiceTypeId = new Guid("EADC10C8-FFD7-4EE3-9501-0B2CE09029AD");
+            if (financialAccount == null)
+                throw new NullReferenceException(string.Format("financialAccount: financialAccountId {0}", context.AccountId));
+            List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo = new List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo>();
 
-            if(financialAccount.CarrierAccountId.HasValue)
+            FinancialAccountDefinitionManager financialAccountDefinitionManager = new AccountBalance.Business.FinancialAccountDefinitionManager();
+            var accountBalanceSettings = financialAccountDefinitionManager.GetFinancialAccountDefinitionExtendedSettings<AccountBalanceSettings>(context.AccountTypeId);
+           
+            InvoiceAccountManager invoiceAccountManager = new InvoiceAccountManager();
+            if(accountBalanceSettings.IsApplicableToCustomer)
             {
-                string partnerId = null;
-                var carrierAccount = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
-                carrierAccount.ThrowIfNull("carrierAccount", financialAccount.CarrierAccountId.Value);
-                if (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange)
+                if(financialAccount.CarrierProfileId.HasValue)
                 {
-                    var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
-                    if (carrierProfile.Settings.CustomerInvoiceByProfile)
+                    List<CarrierInvoiceAccountData> carrierInvoiceAccountsData;
+                    if (invoiceAccountManager.TryGetCustProfInvoiceAccountData(financialAccount.CarrierProfileId.Value, context.EffectiveOn, out carrierInvoiceAccountsData))
                     {
-                        partnerId = string.Format("Profile_{0}", carrierAccount.CarrierProfileId);
-
+                        AddInvoiceAccountInfo(invoiceAccountInfo, carrierInvoiceAccountsData);
                     }
-                    else
+                }else
+                {
+                    CarrierInvoiceAccountData carrierInvoiceAccountData;
+                    if (invoiceAccountManager.TryGetCustAccInvoiceAccountData(financialAccount.CarrierAccountId.Value, context.EffectiveOn, out carrierInvoiceAccountData))
                     {
-                        partnerId = string.Format("Account_{0}", carrierAccount.CarrierAccountId);
+                        AddInvoiceAccountInfo(invoiceAccountInfo, carrierInvoiceAccountData);
                     }
-                    invoiceAccountInfo.Add(new InvoiceAccountInfo
-                    {
-                        InvoiceTypeId = customerInvoiceTypeId,
-                        PartnerId = partnerId
-                    });
                 }
-               
-            }else {
-               var carrierProfile = carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
-               if (carrierProfile.Settings.CustomerInvoiceByProfile)
-               {
-                   string partnerId = string.Format("Profile_{0}", financialAccount.CarrierProfileId.Value);
-                   invoiceAccountInfo.Add(new InvoiceAccountInfo
-                   {
-                       InvoiceTypeId = customerInvoiceTypeId,
-                       PartnerId = partnerId
-                   });
-               }else
-               {
-                   var accounts = carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value,true,false);
-                   if (accounts != null && accounts.Count() > 0)
-                   {
-                       foreach (var account in accounts)
-                       {
-                           string partnerId = string.Format("Account_{0}", account.CarrierAccountId);
-                           invoiceAccountInfo.Add(new InvoiceAccountInfo
-                           {
-                               InvoiceTypeId = customerInvoiceTypeId,
-                               PartnerId = partnerId
-                           });
-                       }
-                   }
-               }
             }
-            //AccountTypeManager accountTypeManager = new AccountTypeManager();
-            ////AccountTypeSettings accountTypeSettings = accountTypeManager.GetAccountTypeSettings( context.AccountTypeId);
-            ////if(accountTypeSettings.InvToAccBalanceRelationId.HasValue)
-            ////{
-            ////    var invToAccBalanceRelationSettings = new InvToAccBalanceRelationDefinitionManager().GetRelationExtendedSettings(accountTypeSettings.InvToAccBalanceRelationId.Value);
-            ////    invToAccBalanceRelationSettings.
-            ////}
-
+            if(accountBalanceSettings.IsApplicableToSupplier)
+            {
+                if (financialAccount.CarrierProfileId.HasValue)
+                {
+                    List<CarrierInvoiceAccountData> carrierInvoiceAccountsData;
+                    if (invoiceAccountManager.TryGetSuppProfInvoiceAccountData(financialAccount.CarrierProfileId.Value, context.EffectiveOn, out carrierInvoiceAccountsData))
+                    {
+                      AddInvoiceAccountInfo(invoiceAccountInfo,carrierInvoiceAccountsData);
+                    }
+                }
+                else
+                {
+                    CarrierInvoiceAccountData carrierInvoiceAccountData;
+                    if (invoiceAccountManager.TryGetSuppAccInvoiceAccountData(financialAccount.CarrierAccountId.Value, context.EffectiveOn, out carrierInvoiceAccountData))
+                    {
+                        AddInvoiceAccountInfo(invoiceAccountInfo,carrierInvoiceAccountData);
+                    }
+                }
+            }
+          //  var customerInvoiceTypeId = new Guid("EADC10C8-FFD7-4EE3-9501-0B2CE09029AD");
             return invoiceAccountInfo;
         }
 
@@ -97,6 +81,30 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
         {
             throw new NotImplementedException();
 
+        }
+
+        private void AddInvoiceAccountInfo(List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo , CarrierInvoiceAccountData carrierInvoiceAccountData)
+        {
+            var partnerId = carrierInvoiceAccountData.InvoiceAccountId.ToString();
+            if(!invoiceAccountInfo.Any(x=>x.InvoiceTypeId == carrierInvoiceAccountData.InvoiceTypeId && x.PartnerId == partnerId))
+            {
+               invoiceAccountInfo.Add(CreateInvoiceAccountInfo(carrierInvoiceAccountData.InvoiceTypeId,partnerId));
+            }
+        }
+        private void AddInvoiceAccountInfo(List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo, List<CarrierInvoiceAccountData> carrierInvoiceAccountsData)
+        {
+            foreach (var carrierInvoiceAccountData in carrierInvoiceAccountsData)
+            {
+                AddInvoiceAccountInfo(invoiceAccountInfo, carrierInvoiceAccountData);
+            }
+        }
+        private Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo CreateInvoiceAccountInfo(Guid invoiceTypeId, string partnerId)
+        {
+            return new Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo
+            {
+                InvoiceTypeId = invoiceTypeId,
+                PartnerId = partnerId
+            };
         }
     }
 }

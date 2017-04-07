@@ -33,21 +33,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             get
             {
-                return "whs-invoice-carrier-customer-filter-selector";
+                return "whs-invoice-account-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                return "whs-invoice-carrier-customer-selector";
+                return "whs-invoice-account-selector";
             }
         }
         public bool UseMaskInfo { get; set; }
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
-            string[] partner = context.PartnerId.Split('_');
-            int partnerId = Convert.ToInt32(partner[1]);
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
             switch (context.InfoType)
             {
                 case "InvoiceRDLCReport":
@@ -60,18 +60,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         string carrierName = null;
                         string currencySymbol = null;
                         CompanySetting companySetting = null;
-                        if (partner[0].Equals("Profile"))
+
+                        if (invoiceAccount.CarrierProfileId.HasValue)
                         {
-                            companySetting = carrierProfileManager.GetCompanySetting(partnerId);
-                            carrierProfile = carrierProfileManager.GetCarrierProfile(partnerId);
+                            companySetting = carrierProfileManager.GetCompanySetting(invoiceAccount.CarrierProfileId.Value);
+                            carrierProfile = carrierProfileManager.GetCarrierProfile(invoiceAccount.CarrierProfileId.Value);
                             carrierName = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
                         }
-                        else if (partner[0].Equals("Account"))
+                        else
                         {
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            companySetting = carrierAccountManager.GetCompanySetting(partnerId);
-                            var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId));
+                            companySetting = carrierAccountManager.GetCompanySetting(invoiceAccount.CarrierAccountId.Value);
+                            var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(invoiceAccount.CarrierAccountId.Value));
                             carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
                             carrierName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
@@ -126,31 +127,31 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
-            string[] partnerId = context.PartnerId.Split('_');
-            if (partnerId[0].Equals("Profile"))
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            if (invoiceAccount.CarrierProfileId.HasValue)
             {
                 CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                return carrierProfileManager.GetCarrierProfileName(Convert.ToInt32(partnerId[1]));
+                return carrierProfileManager.GetCarrierProfileName(invoiceAccount.CarrierProfileId.Value);
             }
-            else if (partnerId[0].Equals("Account"))
+            else
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetCarrierAccountName(Convert.ToInt32(partnerId[1]));
+                return carrierAccountManager.GetCarrierAccountName(invoiceAccount.CarrierAccountId.Value);
             }
-            return null;
         }
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
-            string[] partnerId = context.PartnerId.Split('_');
-            if (partnerId[0].Equals("Profile"))
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            if (invoiceAccount.CarrierProfileId.HasValue)
             {
-                return Convert.ToInt32(partnerId[1]);
+                return invoiceAccount.CarrierProfileId.Value;
             }
-            else if (partnerId[0].Equals("Account"))
+            else
             {
-                return Convert.ToInt32(partnerId[1]);
+                return invoiceAccount.CarrierAccountId.Value;
             }
-            return null;
         }
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
         {
@@ -161,18 +162,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         public override int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context)
         {
-            string[] partnerId = context.PartnerId.Split('_');
-            if (partnerId[0].Equals("Profile"))
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            if (invoiceAccount.CarrierProfileId.HasValue)
             {
                 CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                return carrierProfileManager.GetCustomerTimeZoneId(Convert.ToInt32(partnerId[1]));
+                return carrierProfileManager.GetCustomerTimeZoneId(invoiceAccount.CarrierProfileId.Value);
             }
-            else if (partnerId[0].Equals("Account"))
+            else
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetCustomerTimeZoneId(Convert.ToInt32(partnerId[1]));
+                return carrierAccountManager.GetCustomerTimeZoneId(invoiceAccount.CarrierAccountId.Value);
             }
-            return null;
         }
     }
       

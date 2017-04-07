@@ -578,10 +578,11 @@ namespace TOne.WhS.AccountBalance.Business
                         var customerAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
                         if (customerAccounts != null)
                         {
+                            var carrierFinancialAccountData = CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId); 
                             foreach (var customerAccount in customerAccounts)
                             {
                                 customerFinancialAccountsData = customerFinancialAccountsDataDict.GetOrCreateItem(customerAccount.CarrierAccountId);
-                                customerFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                                customerFinancialAccountsData.Add(carrierFinancialAccountData);
                             }
                         }
                     }
@@ -628,10 +629,12 @@ namespace TOne.WhS.AccountBalance.Business
                     else // so financialAccount.CarrierProfileId.HasValue = true
                     {
                         var supplierAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, false, true);
+                        var carrierFinancialAccountData = CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId); 
+
                         foreach (var supplierAccount in supplierAccounts)
                         {
                             supplierFinancialAccountsData = supplierFinancialAccountsDataDict.GetOrCreateItem(supplierAccount.CarrierAccountId);
-                            supplierFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                            supplierFinancialAccountsData.Add(carrierFinancialAccountData);
                         }
                     }
                 }

@@ -10,14 +10,9 @@ namespace TOne.WhS.Invoice.Entities
     public class InvoiceAccountInfo
     {
         public int InvoiceAccountId { get; set; }
-
-        public InvoiceAccountCarrierType CarrierType { get; set; }
-
         public string Name { get; set; }
-
         public string Description { get; set; }
-
-        public InvoiceAccountEffectiveStatus EffectiveStatus { get; set; }
+        public int TimeZoneId { get; set; }
     }
 
     public enum InvoiceAccountEffectiveStatus { Recent = 0, Current = 1, Future = 2 }

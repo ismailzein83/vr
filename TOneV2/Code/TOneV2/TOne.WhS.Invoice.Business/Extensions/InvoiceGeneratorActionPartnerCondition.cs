@@ -17,14 +17,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public CarrierType CarrierType { get; set; }
         public override bool IsFilterMatch(IPartnerInvoiceFilterConditionContext context)
         {
-            string partner = context.generateInvoiceInput.PartnerId;
-            string[] partnerArr = partner.Split('_');
-            switch (partnerArr[0])
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.generateInvoiceInput.PartnerId));
+            if(invoiceAccount.CarrierProfileId.HasValue)
             {
-                case "Profile": return this.CarrierType == CarrierType.Profile;
-                case "Account": return this.CarrierType == CarrierType.Account;
+                return this.CarrierType == CarrierType.Profile;
+            }else
+            {
+                return this.CarrierType == CarrierType.Account;
             }
-            return false;
         }
     }
 }

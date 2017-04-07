@@ -30,27 +30,30 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
-            string[] partner = context.Invoice.PartnerId.Split('_');
-            int partnerId = Convert.ToInt32(partner[1]);
+
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.Invoice.PartnerId));
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            
             switch(context.InfoType)
             {
                 case "MailTemplate":
                     {
                         Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                         objects.Add("CustomerInvoice", context.Invoice);
-                        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
                         CarrierProfile carrierProfile = null;
-                        switch (partner[0])
+                        int carrierProfileId;
+                        if (invoiceAccount.CarrierProfileId.HasValue)
                         {
-                            case "Account":
-                                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                                var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
-                                carrierProfile = carrierProfileManager.GetCarrierProfile(account.CarrierProfileId);
-                                break;
-                            case "Profile":
-                                carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
-                                break;
+                            carrierProfileId = invoiceAccount.CarrierProfileId.Value;
                         }
+                        else
+                        {
+                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                            var account = carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
+                            carrierProfileId = account.CarrierProfileId;
+                        }
+                        carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId);
                         if (carrierProfile != null)
                         {
                             objects.Add("Profile", carrierProfile);
@@ -60,16 +63,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 case "Taxes":
                     {
                         #region Taxes
-                        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
                         IEnumerable<VRTaxItemDetail> taxItemDetails = null;
-                        if (partner[0].Equals("Profile"))
+
+                        if (invoiceAccount.CarrierProfileId.HasValue)
                         {
-                            taxItemDetails = carrierProfileManager.GetTaxItemDetails(partnerId);
+                            taxItemDetails = carrierProfileManager.GetTaxItemDetails(invoiceAccount.CarrierProfileId.Value);
                         }
-                        else if (partner[0].Equals("Account"))
+                        else
                         {
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partnerId));
+                            var carrierAccount = carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
                             taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierAccount.CarrierProfileId);
                         }
                         return taxItemDetails;
@@ -79,15 +82,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         #region BankDetails
                         IEnumerable<Guid> bankDetails = null;
-                        if (partner[0].Equals("Profile"))
+                        if (invoiceAccount.CarrierProfileId.HasValue)
                         {
-                            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                            bankDetails = carrierProfileManager.GetBankDetails(partnerId);
+                            bankDetails = carrierProfileManager.GetBankDetails(invoiceAccount.CarrierProfileId.Value);
                         }
-                        else if (partner[0].Equals("Account"))
+                        else
                         {
-                            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            bankDetails = carrierAccountManager.GetBankDetails(partnerId);
+                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                             bankDetails = carrierAccountManager.GetBankDetails(invoiceAccount.CarrierAccountId.Value);
                         }
                         return bankDetails;
                         #endregion
@@ -97,20 +99,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            string[] partner = context.PartnerId.Split('_');
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
             CarrierProfile carrierProfile = null;
-            switch(partner[0])
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            if (invoiceAccount.CarrierProfileId.HasValue)
             {
-                case "Account":
-                    CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                    var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(partner[1]));
-                    context.PartnerCreationDate = account.CreatedTime;
-                    break;
-                case "Profile":
-                    carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(partner[1]));
-                    context.PartnerCreationDate = carrierProfile.CreatedTime;
-                    break;
+                carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(invoiceAccount.CarrierProfileId.Value));
+                context.PartnerCreationDate = carrierProfile.CreatedTime;
+            }
+            else
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(invoiceAccount.CarrierAccountId.Value));
+                context.PartnerCreationDate = account.CreatedTime;
             }
         }
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)

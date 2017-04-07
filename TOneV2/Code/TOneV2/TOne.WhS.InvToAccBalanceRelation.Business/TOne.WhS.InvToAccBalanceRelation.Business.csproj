@@ -84,6 +84,14 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Business\TOne.WhS.Invoice.Business.csproj">
+      <Project>{3751a44f-a40a-4e0e-a86e-5665664ce616}</Project>
+      <Name>TOne.WhS.Invoice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Entities\TOne.WhS.Invoice.Entities.csproj">
+      <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
+      <Name>TOne.WhS.Invoice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

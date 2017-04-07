@@ -20,43 +20,43 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             List<string> listMeasures = new List<string> { "SaleNet", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
             List<string> listDimensions = new List<string> {"Customer","SaleZone", "SaleCurrency", "SaleRate", "SaleRateType" };
-            string[] partner = context.PartnerId.Split('_');
             string dimentionName = null;
-
-            string partnerType = partner[0];
-            int parterId = Convert.ToInt32(partner[1]);
             int currencyId = -1;
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
             IEnumerable<VRTaxItemDetail> taxItemDetails = null;
-            CarrierProfile carrierProfile = null;
-            
-            if (partnerType.Equals("Profile"))
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            string partnerType = null;
+            int dimensionValue;
+            int carrierProfileId;
+            if(invoiceAccount.CarrierProfileId.HasValue)
             {
+                partnerType = "Profile";
+                dimensionValue = invoiceAccount.CarrierProfileId.Value;
+                carrierProfileId = invoiceAccount.CarrierProfileId.Value;
                 dimentionName = "CustomerProfile";
-                carrierProfile = carrierProfileManager.GetCarrierProfile(parterId);
-                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(parterId);
-                taxItemDetails = carrierProfileManager.GetTaxItemDetails(parterId);
+                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(dimensionValue);
             }
-            else if (partnerType.Equals("Account"))
+            else
             {
+                partnerType = "Account";
                 dimentionName = "Customer";
+                dimensionValue = invoiceAccount.CarrierAccountId.Value;
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(parterId);
-                var carrierAccount  = carrierAccountManager.GetCarrierAccount(parterId);
-                carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
-                taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierAccount.CarrierProfileId);
+                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(dimensionValue);
+                var carrierAccount = carrierAccountManager.GetCarrierAccount(dimensionValue);
+                carrierProfileId = carrierAccount.CarrierProfileId;
             }
-
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, partner[1], context.FromDate, context.GeneratedToDate,currencyId);
+            taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierProfileId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, context.FromDate, context.GeneratedToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId);
-
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildCustomerInvoiceDetails
-            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partner[0],context.FromDate,context.ToDate);
+            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate);
             if (customerInvoiceDetails != null)
             {
                 customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;

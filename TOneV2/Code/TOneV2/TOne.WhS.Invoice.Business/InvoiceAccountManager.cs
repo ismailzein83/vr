@@ -113,13 +113,13 @@ namespace TOne.WhS.Invoice.Business
         }
         public CarrierInvoiceAccountData GetCustCarrierInvoiceByFinAccId(int invoiceAccountId)
         {
-            CarrierInvoiceAccountData carrierInvoiceAccountData = GetCachedCustCarrierInvoicesByFinAccId().GetRecord(invoiceAccountId);
+            CarrierInvoiceAccountData carrierInvoiceAccountData = GetCachedCustCarrierInvoicesByInvAccId().GetRecord(invoiceAccountId);
             carrierInvoiceAccountData.ThrowIfNull("carrierInvoiceAccountData", invoiceAccountId);
             return carrierInvoiceAccountData;
         }
         public CarrierInvoiceAccountData GetSuppCarrierInvoiceByFinAccId(int invoiceAccountId)
         {
-            CarrierInvoiceAccountData carrierInvoiceAccountData = GetCachedSuppCarrierInvoicesByFinAccId().GetRecord(invoiceAccountId);
+            CarrierInvoiceAccountData carrierInvoiceAccountData = GetCachedSuppCarrierInvoicesByInvAccId().GetRecord(invoiceAccountId);
             carrierInvoiceAccountData.ThrowIfNull("carrierInvoiceAccountData", invoiceAccountId);
             return carrierInvoiceAccountData;
         }
@@ -142,7 +142,24 @@ namespace TOne.WhS.Invoice.Business
         }
         public bool TryGetCustProfInvoiceAccountData(int customerProfileId, DateTime effectiveOn, out List<CarrierInvoiceAccountData> invoiceAccountsData)
         {
-            throw new NotImplementedException();
+            IOrderedEnumerable<CarrierInvoiceAccountData> carrierInvoiceAccounts = GetCachedCustCarrierInvoicesByCarrProfId().GetRecord(customerProfileId);
+            if (carrierInvoiceAccounts != null)
+            {
+                invoiceAccountsData = new List<CarrierInvoiceAccountData>();
+                foreach (var acc in carrierInvoiceAccounts)
+                {
+                    if (acc.BED <= effectiveOn && acc.EED.VRGreaterThan(effectiveOn))
+                    {
+                        invoiceAccountsData.Add(acc);
+                    }
+                }
+                if(invoiceAccountsData.Count > 0)
+                {
+                    return true;
+                }
+            }
+            invoiceAccountsData = null;
+            return false;
         }
         public bool TryGetSuppAccInvoiceAccountData(int supplierAccountId, DateTime effectiveOn, out CarrierInvoiceAccountData invoiceAccountData)
         {
@@ -163,7 +180,24 @@ namespace TOne.WhS.Invoice.Business
         }
         public bool TryGetSuppProfInvoiceAccountData(int supplierProfileId, DateTime effectiveOn, out List<CarrierInvoiceAccountData> invoiceAccountsData)
         {
-            throw new NotImplementedException();
+            IOrderedEnumerable<CarrierInvoiceAccountData> carrierInvoiceAccounts = GetCachedSuppCarrierInvoicesByCarrProfId().GetRecord(supplierProfileId);
+            if (carrierInvoiceAccounts != null)
+            {
+                invoiceAccountsData = new List<CarrierInvoiceAccountData>();
+                foreach (var acc in carrierInvoiceAccounts)
+                {
+                    if (acc.BED <= effectiveOn && acc.EED.VRGreaterThan(effectiveOn))
+                    {
+                        invoiceAccountsData.Add(acc);
+                    }
+                }
+                if (invoiceAccountsData.Count > 0)
+                {
+                    return true;
+                }
+            }
+            invoiceAccountsData = null;
+            return false;
         }
         public InvoiceAccountEditorRuntime GetInvoiceAccountEditorRuntime(int invoiceAccountId)
         {
@@ -196,11 +230,10 @@ namespace TOne.WhS.Invoice.Business
             invoiceValidationData.InvoiceTypes = new InvoiceTypeManager().GetInvoiceTypes();
 
 
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int carrierProfileID = -1;
             if (carrierAccountId.HasValue)
             {
-                var carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(carrierAccountId.Value);
                 carrierProfileID = carrierAccount.CarrierProfileId;
 
                 invoiceValidationData.InvoiceCarrierAccount = new InvoiceCarrierAccount
@@ -214,7 +247,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 carrierProfileID = carrierProfileId.Value;
 
-                var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId.Value, true, true);
+                var profileCarrierAccounts = _carrierAccountManager.GetCarriersByProfileId(carrierProfileId.Value, true, true);
                 invoiceValidationData.InvoiceCarrierProfile = new InvoiceCarrierProfile
                 {
                     ProfileCarrierAccounts = profileCarrierAccounts,
@@ -377,7 +410,22 @@ namespace TOne.WhS.Invoice.Business
                 {
                     if (invoiceAccount.Settings.InvoiceTypeId != filter.InvoiceTypeId)
                         return false;
-
+                    if(filter.GetCurrentOnly)
+                    {
+                        if (GetInvoiceAccountEffectiveStatus(invoiceAccount.BED, invoiceAccount.EED) != InvoiceAccountEffectiveStatus.Current)
+                            return false;
+                    }
+                    if(filter.CarrierType.HasValue)
+                    {
+                        if(filter.CarrierType.Value != CarrierType.Profile && invoiceAccount.CarrierProfileId.HasValue)
+                        {
+                            return false;
+                        }
+                        else if (filter.CarrierType.Value != CarrierType.Account && invoiceAccount.CarrierAccountId.HasValue)
+                        {
+                            return false;
+                        }
+                    }
                     return true;
                 };
             }
@@ -434,7 +482,7 @@ namespace TOne.WhS.Invoice.Business
                  return invoiceAccountsByType;
              });
         }
-        Dictionary<int, CarrierInvoiceAccountData> GetCachedCustCarrierInvoicesByFinAccId()
+        Dictionary<int, CarrierInvoiceAccountData> GetCachedCustCarrierInvoicesByInvAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierInvoicesByFinAccId",
              () =>
@@ -472,7 +520,7 @@ namespace TOne.WhS.Invoice.Business
                  return carrierDataByInvoiceAccountId;
              });
         }
-        Dictionary<int, CarrierInvoiceAccountData> GetCachedSuppCarrierInvoicesByFinAccId()
+        Dictionary<int, CarrierInvoiceAccountData> GetCachedSuppCarrierInvoicesByInvAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierInvoicesByFinAccId",
             () =>
@@ -526,20 +574,10 @@ namespace TOne.WhS.Invoice.Business
 
                 foreach (var invoiceAccount in invoiceAccounts.Values)
                 {
-                    if (invoiceAccount.Settings == null)
-                        throw new NullReferenceException(string.Format("invoiceAccount.Settings for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
-
-                    if (invoiceAccount.Settings.ExtendedSettings == null)
-                        throw new NullReferenceException(string.Format("invoiceAccount.Settings.ExtendedSettings for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
-
+                    CheckInvoiceAccountValid(invoiceAccount);
                     InvoiceAccountIsCustomerAccountContext context = new InvoiceAccountIsCustomerAccountContext() { InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId };
-
                     if (!invoiceAccount.Settings.ExtendedSettings.IsCustomerAccount(context))// IsCustomerAccount will set UsageTransactionTypeId on context
                         continue;
-
-                    if (!invoiceAccount.CarrierAccountId.HasValue && !invoiceAccount.CarrierProfileId.HasValue)
-                        throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
-
                     if (invoiceAccount.CarrierAccountId.HasValue)
                     {
                         customerInvoiceAccountsData = customerInvoiceAccountsDataDict.GetOrCreateItem(invoiceAccount.CarrierAccountId.Value);
@@ -547,7 +585,7 @@ namespace TOne.WhS.Invoice.Business
                     }
                     else // so invoiceAccount.CarrierProfileId.HasValue = true
                     {
-                        var customerAccounts = new CarrierAccountManager().GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value, true, false);
+                        var customerAccounts = _carrierAccountManager.GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value, true, false);
                         if (customerAccounts != null)
                         {
                             foreach (var customerAccount in customerAccounts)
@@ -578,20 +616,13 @@ namespace TOne.WhS.Invoice.Business
 
               foreach (var invoiceAccount in invoiceAccounts.Values)
               {
-                  if (invoiceAccount.Settings == null)
-                      throw new NullReferenceException(string.Format("invoiceAccount.Settings for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
 
-                  if (invoiceAccount.Settings.ExtendedSettings == null)
-                      throw new NullReferenceException(string.Format("invoiceAccount.Settings.ExtendedSettings for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
-
+                  CheckInvoiceAccountValid(invoiceAccount);
+              
                   InvoiceAccountIsSupplierAccountContext context = new InvoiceAccountIsSupplierAccountContext() { InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId };
 
                   if (!invoiceAccount.Settings.ExtendedSettings.IsSupplierAccount(context))
                       continue;
-
-                  if (!invoiceAccount.CarrierAccountId.HasValue && !invoiceAccount.CarrierProfileId.HasValue)
-                      throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
-
                   if (invoiceAccount.CarrierAccountId.HasValue)
                   {
                       supplierInvoiceAccountsData = supplierInvoiceAccountsDataDict.GetOrCreateItem(invoiceAccount.CarrierAccountId.Value);
@@ -599,7 +630,7 @@ namespace TOne.WhS.Invoice.Business
                   }
                   else
                   {
-                      var supplierAccounts = new CarrierAccountManager().GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value, false, true);
+                      var supplierAccounts = _carrierAccountManager.GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value, false, true);
                       foreach (var supplierAccount in supplierAccounts)
                       {
                           supplierInvoiceAccountsData = supplierInvoiceAccountsDataDict.GetOrCreateItem(supplierAccount.CarrierAccountId);
@@ -609,6 +640,44 @@ namespace TOne.WhS.Invoice.Business
               }
 
               return supplierInvoiceAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(invoiceAccount => invoiceAccount.BED));
+          });
+        }
+        Dictionary<int, IOrderedEnumerable<CarrierInvoiceAccountData>> GetCachedSuppCarrierInvoicesByCarrProfId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierInvoicesByCarrAccId",
+          () =>
+          {
+
+              Dictionary<int, List<CarrierInvoiceAccountData>> supplierInvoiceAccountsDataDict = new Dictionary<int, List<CarrierInvoiceAccountData>>();
+              Dictionary<int, InvoiceAccount> invoiceAccounts = GetCachedInvoiceAccounts();
+              foreach (var invoiceAccount in invoiceAccounts.Values)
+              {
+                  CheckInvoiceAccountValid(invoiceAccount);
+                  InvoiceAccountIsSupplierAccountContext context = new InvoiceAccountIsSupplierAccountContext() { InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId };
+                  if (!invoiceAccount.Settings.ExtendedSettings.IsSupplierAccount(context))
+                      continue;
+                  CreateCarrierInvoiceAccountDataAndAddToByProfDic(supplierInvoiceAccountsDataDict, invoiceAccount);
+              }
+              return supplierInvoiceAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(invoiceAccount => invoiceAccount.BED));
+          });
+        }
+        Dictionary<int, IOrderedEnumerable<CarrierInvoiceAccountData>> GetCachedCustCarrierInvoicesByCarrProfId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierInvoicesByCarrProfId",
+          () =>
+          {
+              
+              Dictionary<int, List<CarrierInvoiceAccountData>> customerInvoiceAccountsDataDict = new Dictionary<int, List<CarrierInvoiceAccountData>>();
+              Dictionary<int, InvoiceAccount> invoiceAccounts = GetCachedInvoiceAccounts();
+              foreach (var invoiceAccount in invoiceAccounts.Values)
+              {
+                  CheckInvoiceAccountValid(invoiceAccount);
+                  InvoiceAccountIsCustomerAccountContext context = new InvoiceAccountIsCustomerAccountContext() { InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId };
+                  if (!invoiceAccount.Settings.ExtendedSettings.IsCustomerAccount(context))
+                      continue;
+                  CreateCarrierInvoiceAccountDataAndAddToByProfDic(customerInvoiceAccountsDataDict, invoiceAccount);
+              }
+              return customerInvoiceAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(invoiceAccount => invoiceAccount.BED));
           });
         }
         private CarrierInvoiceAccountData CreateCarrierInvoiceAccountData(InvoiceAccount invoiceAccount)
@@ -621,32 +690,76 @@ namespace TOne.WhS.Invoice.Business
                 EED = invoiceAccount.EED,
             };
         }
+        private void CheckInvoiceAccountValid(InvoiceAccount invoiceAccount)
+        {
+            if (invoiceAccount.Settings == null)
+                throw new NullReferenceException(string.Format("invoiceAccount.Settings for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
 
+            if (invoiceAccount.Settings.ExtendedSettings == null)
+                throw new NullReferenceException(string.Format("invoiceAccount.Settings.ExtendedSettings for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
+         
+            if (!invoiceAccount.CarrierAccountId.HasValue && !invoiceAccount.CarrierProfileId.HasValue)
+                throw new NullReferenceException(string.Format("invoiceAccount.CarrierAccountId & invoiceAccount.CarrierProfileId for invoice Account Id: {0}", invoiceAccount.InvoiceAccountId));
+
+        }
+
+        private void CreateCarrierInvoiceAccountDataAndAddToByProfDic(Dictionary<int, List<CarrierInvoiceAccountData>> invoiceAccountsDataDict, InvoiceAccount invoiceAccount)
+        {
+            List<CarrierInvoiceAccountData> invoiceAccountsData;
+            var carrierInvoiceAccountData = CreateCarrierInvoiceAccountData(invoiceAccount);
+            if (invoiceAccount.CarrierProfileId.HasValue)
+            {
+                invoiceAccountsData = invoiceAccountsDataDict.GetOrCreateItem(invoiceAccount.CarrierProfileId.Value);
+                invoiceAccountsData.Add(carrierInvoiceAccountData);
+            }
+            else
+            {
+                var customerAccount = _carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
+                invoiceAccountsData = invoiceAccountsDataDict.GetOrCreateItem(customerAccount.CarrierProfileId);
+                invoiceAccountsData.Add(carrierInvoiceAccountData);
+            }
+        }
         #endregion
 
 
         #region Mappers
 
-        private InvoiceAccountInfo InvoiceAccountInfoMapper(InvoiceAccount InvoiceAccount)
+        private InvoiceAccountInfo InvoiceAccountInfoMapper(InvoiceAccount invoiceAccount)
         {
             var InvoiceAccountInfo = new InvoiceAccountInfo()
             {
-                InvoiceAccountId = InvoiceAccount.InvoiceAccountId,
-                EffectiveStatus = GetInvoiceAccountEffectiveStatus(InvoiceAccount.BED, InvoiceAccount.EED)
+                InvoiceAccountId = invoiceAccount.InvoiceAccountId,
             };
-            if (InvoiceAccount.CarrierProfileId.HasValue)
+            if (invoiceAccount.CarrierProfileId.HasValue)
             {
-                InvoiceAccountInfo.CarrierType = InvoiceAccountCarrierType.Profile;
-                InvoiceAccountInfo.Name = _carrierProfileManager.GetCarrierProfileName(InvoiceAccount.CarrierProfileId.Value);
+                InvoiceAccountInfo.Name = _carrierProfileManager.GetCarrierProfileName(invoiceAccount.CarrierProfileId.Value);
                 string profilePrefix = Utilities.GetEnumDescription<InvoiceAccountCarrierType>(InvoiceAccountCarrierType.Profile);
                 InvoiceAccountInfo.Description = string.Format("({0}) {1}", profilePrefix, InvoiceAccountInfo.Name);
+              
+                InvoiceAccountIsCustomerAccountContext invoiceAccountIsCustomerAccountContext = new InvoiceAccountIsCustomerAccountContext{InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId};
+                if(invoiceAccount.Settings.ExtendedSettings.IsCustomerAccount(invoiceAccountIsCustomerAccountContext))
+                {
+                    InvoiceAccountInfo.TimeZoneId = _carrierProfileManager.GetCustomerTimeZoneId(invoiceAccount.CarrierProfileId.Value);
+                }else
+                {
+                    InvoiceAccountInfo.TimeZoneId = _carrierProfileManager.GetSupplierTimeZoneId(invoiceAccount.CarrierProfileId.Value);
+                }
             }
             else
             {
-                InvoiceAccountInfo.CarrierType = InvoiceAccountCarrierType.Account;
-                InvoiceAccountInfo.Name = _carrierAccountManager.GetCarrierAccountName(InvoiceAccount.CarrierAccountId.Value);
+                InvoiceAccountInfo.Name = _carrierAccountManager.GetCarrierAccountName(invoiceAccount.CarrierAccountId.Value);
                 string accountPrefix = Utilities.GetEnumDescription<InvoiceAccountCarrierType>(InvoiceAccountCarrierType.Account);
                 InvoiceAccountInfo.Description = string.Format("({0}) {1}", accountPrefix, InvoiceAccountInfo.Name);
+                 
+                InvoiceAccountIsCustomerAccountContext invoiceAccountIsCustomerAccountContext = new InvoiceAccountIsCustomerAccountContext{InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId};
+               
+                if(invoiceAccount.Settings.ExtendedSettings.IsCustomerAccount(invoiceAccountIsCustomerAccountContext))
+                {
+                    InvoiceAccountInfo.TimeZoneId = _carrierAccountManager.GetCustomerTimeZoneId(invoiceAccount.CarrierAccountId.Value);
+                }else
+                {
+                    InvoiceAccountInfo.TimeZoneId = _carrierAccountManager.GetSupplierTimeZoneId(invoiceAccount.CarrierAccountId.Value);
+                }
             }
             return InvoiceAccountInfo;
         }

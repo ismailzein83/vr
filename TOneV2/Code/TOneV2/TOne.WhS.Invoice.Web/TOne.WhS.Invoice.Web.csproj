@@ -171,6 +171,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Invoice\Constants\CarrierTypeEnum.js" />
+    <Content Include="WhS_Invoice\Constants\InvoiceAccountCarrierTypeEnum.js" />
+    <Content Include="WhS_Invoice\Constants\InvoiceAccountEffectiveStatusEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
@@ -181,6 +183,7 @@
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\CustomerInvoice\whs-invoicetype-runtime-customerinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccount\Templates\InvoiceAccountGridTemplate.html" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccount\Templates\InvoiceAccountSearch.html" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccount\whs-invoice-account-selector.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccount\whs-invoice-invoiceaccount-grid.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccount\whs-invoice-invoiceaccount-search.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceCarrier\whs-invoice-carrier-customer-filter-selector.js" />

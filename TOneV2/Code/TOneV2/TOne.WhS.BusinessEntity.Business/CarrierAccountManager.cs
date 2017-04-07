@@ -86,6 +86,16 @@ namespace TOne.WhS.BusinessEntity.Business
                 return carrierAccount.CustomerSettings.TimeZoneId.Value;
            return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
         }
+        public int GetSupplierTimeZoneId(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new NullReferenceException("carrierAccount");
+            if (carrierAccount.CustomerSettings == null)
+                throw new NullReferenceException("carrierProfile.CustomerSettings");
+            return carrierAccount.SupplierSettings.TimeZoneId;
+           // return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
+        }
         public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId, bool getCustomers, bool getSuppliers)
         {
             if (getCustomers && getSuppliers)
