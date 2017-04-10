@@ -584,7 +584,6 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetForFilteredForBillingTransaction.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccount.sql" />
     <Build Include="genericdata\Stored Procedures\sp_DataRecordType_SetCacheExpired.sql" />
-    <Build Include="VR_AccountBalance\Tables\BalanceUsageQueue1.sql" />
     <Build Include="dataparser\Tables\ParserType.sql" />
     <Build Include="Security\dataparser.sql" />
   </ItemGroup>
