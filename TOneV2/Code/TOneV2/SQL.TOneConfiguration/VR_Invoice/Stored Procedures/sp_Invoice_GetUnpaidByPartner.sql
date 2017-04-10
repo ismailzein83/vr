@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [VR_Invoice].sp_Invoice_GetUnpaidByPartner
+CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetUnpaidByPartner]
 		@PartnerInvoiceTypeTable [VR_Invoice].PartnerInvoiceTypeTable READONLY
 AS
 BEGIN
@@ -24,5 +24,5 @@ BEGIN
 			inv.TimeZoneOffset
 	FROM	VR_Invoice.Invoice inv with(nolock)
 	join @PartnerInvoiceTypeTable pit on  inv.InvoiceTypeID = pit.InvoiceTypeID AND inv.PartnerID = pit.PartnerId 
-	where PaidDate IS NULL AND DueDate <= GETDATE()
+	where PaidDate IS NULL AND DueDate <= GETDATE() AND (IsDeleted IS NULL OR IsDeleted = 0 )
 END
