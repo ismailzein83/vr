@@ -1,118 +1,71 @@
 ﻿(function (appControllers) {
 
-	"use strict";
+    "use strict";
 
-	salePricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'VRUIUtilsService'];
+    salePricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-	function salePricelistController($scope, UtilsService, VRNotificationService, WhS_BE_SalePriceListOwnerTypeEnum, VRUIUtilsService) {
+    function salePricelistController($scope, utilsService, vrNotificationService, vruiUtilsService) {
 
-		var gridApi;
-		var filter = {};
+        var gridApi;
+        var filter = {};
 
-		var sellingProductSelectorAPI;
-		var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountSelectorApi;
+        var carrierAccountSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
-		var carrierAccountSelectorAPI;
-		var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        defineScope();
+        load();
 
-		defineScope();
-		load();
+        function defineScope() {
+            $scope.selectedCustomer = [];
 
-		function defineScope() {
+            $scope.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountSelectorApi = api;
+                carrierAccountSelectorReadyDeferred.resolve();
+            };
 
-			$scope.ownerTypes = UtilsService.getArrayEnum(WhS_BE_SalePriceListOwnerTypeEnum);
+            $scope.onGridReady = function (api) {
+                gridApi = api;
+                gridApi.loadGrid(filter);
+            };
 
-			$scope.selectedSellingProduct = [];
-			$scope.selectedCustomer = [];
+            $scope.searchClicked = function () {
+                setFilterObject();
+                return gridApi.loadGrid(filter);
+            };
+        }
+        function load() {
+            loadAllControls();
+        }
 
-			$scope.isRequiredSellingProductSelector = false;
-			$scope.isRequiredCarrierAccountSelector = false;
-
-			$scope.onSellingProductSelectorReady = function (api) {
-				sellingProductSelectorAPI = api;
-				sellingProductSelectorReadyDeferred.resolve();
-
-			};
-
-			$scope.onCarrierAccountSelectorReady = function (api) {
-				carrierAccountSelectorAPI = api;
-				carrierAccountSelectorReadyDeferred.resolve();
-			};
-
-			$scope.onGridReady = function (api) {
-				gridApi = api;
-				gridApi.loadGrid(filter);
-			};
-
-			$scope.onOwnerTypeChanged = function () {
-				if ($scope.selectedOwnerType != undefined) {
-					if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
-						$scope.showSellingProductSelector = true;
-						$scope.showCarrierAccountSelector = false;
-						$scope.selectedCustomer.length = 0;
-					}
-					else if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-						$scope.showSellingProductSelector = false;
-						$scope.showCarrierAccountSelector = true;
-						$scope.selectedSellingProduct.length = 0;
-					}
-				}
-			};
-
-			$scope.searchClicked = function () {
-				setFilterObject();
-				return gridApi.loadGrid(filter);
-			};
-		}
-		function load() {
-			loadAllControls();
-		}
-
-		function loadAllControls() {
-			$scope.isLoadingFilter = true;
-			return UtilsService.waitMultipleAsyncOperations([loadSellingProduct, loadCarrierAccount])
+        function loadAllControls() {
+            $scope.isLoadingFilter = true;
+            return utilsService.waitMultipleAsyncOperations([loadCarrierAccount])
               .catch(function (error) {
-              	VRNotificationService.notifyExceptionWithClose(error, $scope);
+                  vrNotificationService.notifyExceptionWithClose(error, $scope);
               })
              .finally(function () {
-             	$scope.isLoadingFilter = false;
+                 $scope.isLoadingFilter = false;
              });
-		}
-		function loadSellingProduct() {
-			var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        }
+        function loadCarrierAccount() {
+            var carrierAccountSelectorLoadDeferred = utilsService.createPromiseDeferred();
+            carrierAccountSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    filter: null,
+                    selectedIds: null
+                };
 
-			sellingProductSelectorReadyDeferred.promise.then(function () {
-				var payload = {
-					filter: null,
-					selectedIds: null
-				};
+                vruiUtilsService.callDirectiveLoad(carrierAccountSelectorApi, payload, carrierAccountSelectorLoadDeferred);
+            });
+            return carrierAccountSelectorLoadDeferred.promise;
+        }
 
-				VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, payload, sellingProductSelectorLoadDeferred);
-			});
-			return sellingProductSelectorLoadDeferred.promise;
-		}
-		function loadCarrierAccount() {
-			var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-			carrierAccountSelectorReadyDeferred.promise.then(function () {
-				var payload = {
-					filter: null,
-					selectedIds: null
-				};
+        function setFilterObject() {
+            filter = {};
+            filter.OwnerId = carrierAccountSelectorApi.getSelectedIds();
+            filter.CreationDate = $scope.CreationDate;
+        }
+    }
 
-				VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
-			});
-			return carrierAccountSelectorLoadDeferred.promise;
-		}
-
-		function setFilterObject() {
-			filter = {};
-			if ($scope.selectedOwnerType != undefined) {
-				filter.OwnerType = $scope.selectedOwnerType.value;
-				filter.OwnerIds = ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ?
-					sellingProductSelectorAPI.getSelectedIds() : carrierAccountSelectorAPI.getSelectedIds();
-			}
-		}
-	}
-
-	appControllers.controller('WhS_BE_SalePricelistController', salePricelistController);
+    appControllers.controller('WhS_BE_SalePricelistController', salePricelistController);
 })(appControllers);

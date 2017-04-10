@@ -494,14 +494,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
+        public IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
-            Dictionary<int, SalePriceList> cachedSalePriceLists = GetCachedSalePriceLists();
-            Func<SalePriceList, bool> filterExpression = (salePriceList) =>
+            Dictionary<int, SalePriceList> cachedSalePriceLists = GetCustomerCachedSalePriceLists();
+            Func<SalePriceList, bool> filterExpression = salePriceList =>
             {
-                if (input.Query.OwnerType.HasValue && salePriceList.OwnerType != input.Query.OwnerType.Value)
+                if (input.Query.OwnerId != null && !input.Query.OwnerId.Contains(salePriceList.OwnerId))
                     return false;
-                if (input.Query.OwnerIds != null && !input.Query.OwnerIds.Contains(salePriceList.OwnerId))
+                if (input.Query.CreationDate != null && salePriceList.CreatedTime <= input.Query.CreationDate)
                     return false;
                 return true;
             };
@@ -691,6 +691,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region  Private Members
 
+        private Dictionary<int, SalePriceList> GetCustomerCachedSalePriceLists()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerCachedSalePriceLists", () =>
+            {
+                Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceListsWithDeleted();
+
+                var notDeletedSalePriceLists = new Dictionary<int, SalePriceList>();
+                foreach (SalePriceList salePriceList in allSalePriceLists.Values)
+                {
+                    if (!salePriceList.IsDeleted && salePriceList.OwnerType == SalePriceListOwnerType.Customer)
+                        notDeletedSalePriceLists.Add(salePriceList.PriceListId, salePriceList);
+                }
+                return notDeletedSalePriceLists;
+            });
+        }
         public Dictionary<int, SalePriceList> GetCachedSalePriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCashedSalePriceLists"), () =>
