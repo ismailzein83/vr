@@ -30,7 +30,7 @@ namespace TOne.WhS.AccountBalance.Business
 
         public override string SelectorUIControl
         {
-            get { return ""; }
+            get { return "whs-accountbalance-account-selector"; }
         }
 
         #endregion

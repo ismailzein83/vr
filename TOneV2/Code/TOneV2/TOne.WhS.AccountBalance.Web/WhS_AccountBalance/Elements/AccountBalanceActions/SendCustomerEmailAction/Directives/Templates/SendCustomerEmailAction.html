@@ -1,0 +1,14 @@
+﻿<vr-row>
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <vr-common-mailmessagetemplate-selector on-ready="scopeModel.onAccountMailMessageTemplateSelectorReady"
+                                                customlabel="Account Mail Message Template"
+                                                isrequired="ctrl.isrequired">
+        </vr-common-mailmessagetemplate-selector>
+    </vr-columns>
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <vr-common-mailmessagetemplate-selector on-ready="scopeModel.onProfileMailMessageTemplateSelectorReady"
+                                                customlabel="Profile Mail Message Template"
+                                                isrequired="ctrl.isrequired">
+        </vr-common-mailmessagetemplate-selector>
+    </vr-columns>
+</vr-row>

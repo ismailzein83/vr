@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
+namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class SendCustomerEmailAction : VRAction
     {

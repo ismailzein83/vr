@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_FinancialAccountAPIService', 'WhS_AccountBalance_FinancialAccountCarrierTypeEnum', 'WhS_AccountBalance_FinancialAccountEffectiveStatusEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_AccountBalance_FinancialAccountAPIService, WhS_AccountBalance_FinancialAccountCarrierTypeEnum, WhS_AccountBalance_FinancialAccountEffectiveStatusEnum, UtilsService, VRUIUtilsService) {
+app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_FinancialAccountAPIService', 'VR_GenericData_BusinessEntityDefinitionAPIService', 'WhS_AccountBalance_FinancialAccountCarrierTypeEnum', 'WhS_AccountBalance_FinancialAccountEffectiveStatusEnum', 'UtilsService', 'VRUIUtilsService', function (WhS_AccountBalance_FinancialAccountAPIService, VR_GenericData_BusinessEntityDefinitionAPIService, WhS_AccountBalance_FinancialAccountCarrierTypeEnum, WhS_AccountBalance_FinancialAccountEffectiveStatusEnum, UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -79,13 +79,47 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 
                 var accountTypeId;
                 var extendedSettings;
+                var businessEntityDefinitionId;
 
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
                     extendedSettings = payload.extendedSettings;
                     context = payload.context;
+                    businessEntityDefinitionId = payload.businessEntityDefinitionId;
                 }
 
+                var promises = [];
+
+                if (businessEntityDefinitionId != undefined) {
+                    var getBusinessEntityDefinitionPromise = getBusinessEntityDefinition();
+                    promises.push(getBusinessEntityDefinitionPromise);
+
+                    var loadCarrierTypesAndFinancialAccountsDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadCarrierTypesAndFinancialAccountsDeferred.promise);
+
+                    getBusinessEntityDefinitionPromise.then(function () {
+                        loadCarrierTypesAndFinancialAccounts().then(function () {
+                            loadCarrierTypesAndFinancialAccountsDeferred.resolve();
+                        }).catch(function (error) {
+                            loadCarrierTypesAndFinancialAccountsDeferred.reject(error);
+                        });
+                    });
+                }
+                else {
+                    var loadCarrierTypesAndFinancialAccountsPromise = loadCarrierTypesAndFinancialAccounts();
+                    promises.push(loadCarrierTypesAndFinancialAccountsPromise);
+                }
+
+                function getBusinessEntityDefinition() {
+                    return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function (response) {
+                        if (response != undefined && response.Settings != null) {
+                            accountTypeId = response.Settings.AccountTypeId;
+                        }
+                    });
+                }
+                function loadCarrierTypesAndFinancialAccounts() {
+                    return UtilsService.waitMultipleAsyncOperations([loadCarrierTypes, loadFinancialAccounts]);
+                }
                 function loadCarrierTypes() {
                     $scope.scopeModel.carrierTypes = UtilsService.getArrayEnum(WhS_AccountBalance_FinancialAccountCarrierTypeEnum);
                 }
@@ -105,7 +139,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                     });
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadCarrierTypes, loadFinancialAccounts]);
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
@@ -144,10 +178,10 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
     }
     function getTemplate(attributes) {
         var isMultipleSelection = (attributes.ismultipleselection != undefined) ? 'ismultipleselection="accountSelectorCtrl.ismultipleselection"' : undefined;
-        return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum / 2}}">\
+        return '<vr-columns colnum="{{(accountSelectorCtrl.normalColNum / 2) | number: 0}}">\
                     <vr-switch label="Current Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
                 </vr-columns>\
-                <vr-columns colnum="{{accountSelectorCtrl.normalColNum / 2}}">\
+                <vr-columns colnum="{{(accountSelectorCtrl.normalColNum / 2) | number: 0}}">\
                     <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
 				        label="Carrier Type"\
 				        datasource="scopeModel.carrierTypes"\

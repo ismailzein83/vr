@@ -17,6 +17,18 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             get { return new Guid("DA72C2E9-4321-4C0C-8FCA-B8A363F6B480"); }
         }
 
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "whs-accountbalance-action-customer-sendemail";
+            }
+            set
+            {
+                base.RuntimeEditor = value;
+            }
+        }
+
         public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)
         {
             return (context.Target as CustomerAccountBalanceRuleTargetType != null);
