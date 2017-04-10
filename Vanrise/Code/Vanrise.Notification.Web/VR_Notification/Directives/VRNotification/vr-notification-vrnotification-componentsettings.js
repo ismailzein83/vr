@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 'VRUIUtilsService','VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
