@@ -153,6 +153,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllBySellingProductsAndCustomer", SaleRateMapper, saleZoneIdsAsString, sellingProductIdsAsString, customerId, getNormalRates, getOtherRates);
         }
 
+        public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, DateTime minimumDate)
+        {
+            string ownerIdsAsString = (ownerIds != null) ? string.Join(",", ownerIds) : null;
+            string zoneIdsAsString = (zoneIds != null) ? string.Join(",", zoneIds) : null;
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetEffectiveAfterByOwnersAndZones", SaleRateMapper, ownerType, ownerIdsAsString, zoneIdsAsString, minimumDate);
+        }
+
         #endregion
 
         #region Mappers

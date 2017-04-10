@@ -257,7 +257,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         CustomerName = obj.CustomerName,
                         SellingProductName = obj.SellingProductName
                     });
-                    carrierAccount= _carrierAccountManager.GetCarrierAccount(customerSellingProduct.CustomerId);
+                    carrierAccount = _carrierAccountManager.GetCarrierAccount(customerSellingProduct.CustomerId);
                     VRActionLogger.Current.LogObjectCustomAction(TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CarrierAccountLoggableEntity.Instance, "Assign Customer", true, carrierAccount, null);
                 }
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -328,6 +328,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return entitiesByCustomerId.GetRecord(customerId);
         }
 
+        /// <summary>
+        /// I'm not sure if the method will return duplicate customer ids in some cases, but it's not a big deal
+        /// </summary>
+        /// <param name="sellingProductId"></param>
+        /// <param name="minimumDate"></param>
+        /// <returns></returns>
+        public IEnumerable<int> GetEffectiveOrFutureAssignedCustomerIds(int sellingProductId, DateTime minimumDate)
+        {
+            Dictionary<int, List<ProcessedCustomerSellingProduct>> customerSellingProductsBySellingProductId = GetCachedProcessedCustomerSellingProductsBySellingProductId();
+            List<ProcessedCustomerSellingProduct> customerSellingProducts = customerSellingProductsBySellingProductId.GetRecord(sellingProductId);
+            return (customerSellingProducts != null) ? customerSellingProducts.MapRecords(x => x.CustomerId, x => x.IsEffectiveOrFuture(minimumDate)) : null;
+        }
+
         #endregion
 
         #region Validation Methods
@@ -390,6 +403,44 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
 
                 return customerSellingProductsById;
+            });
+        }
+
+        private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetCachedProcessedCustomerSellingProductsBySellingProductId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedProcessedCustomerSellingProductsBySellingProductId", () =>
+            {
+                var entitiesBySellingProductId = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
+
+                Dictionary<int, CustomerSellingProduct> cachedCustomerSellingProducts = GetCachedCustomerSellingProducts();
+
+                if (cachedCustomerSellingProducts != null)
+                {
+                    foreach (CustomerSellingProduct customerSellingProduct in cachedCustomerSellingProducts.Values.OrderBy(x => x.BED))
+                    {
+                        List<ProcessedCustomerSellingProduct> sellingProductEntities;
+
+                        if (!entitiesBySellingProductId.TryGetValue(customerSellingProduct.SellingProductId, out sellingProductEntities))
+                        {
+                            sellingProductEntities = new List<ProcessedCustomerSellingProduct>();
+                            entitiesBySellingProductId.Add(customerSellingProduct.SellingProductId, sellingProductEntities);
+                        }
+
+                        var sellingProductEntity = new ProcessedCustomerSellingProduct()
+                        {
+                            CustomerId = customerSellingProduct.CustomerId,
+                            SellingProductId = customerSellingProduct.SellingProductId,
+                            BED = customerSellingProduct.BED
+                        };
+
+                        if (sellingProductEntities.Count > 0)
+                            sellingProductEntities.Last().EED = sellingProductEntity.BED;
+
+                        sellingProductEntities.Add(sellingProductEntity);
+                    }
+                }
+
+                return entitiesBySellingProductId;
             });
         }
 

@@ -113,6 +113,7 @@
     <Compile Include="RateManagement\Preview\SaleZoneRoutingProductPreview.cs" />
     <Compile Include="RateManagement\Preview\SaleZoneServicePreview.cs" />
     <Compile Include="RateManagement\Rate\ChangedRate.cs" />
+    <Compile Include="RateManagement\Rate\EffectiveAfterCustomerZoneRatesByZone.cs" />
     <Compile Include="RateManagement\Rate\ExistingRate.cs" />
     <Compile Include="RateManagement\Rate\IProcessRatesContext.cs" />
     <Compile Include="RateManagement\Rate\NewRate.cs" />

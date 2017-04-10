@@ -290,6 +290,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetAllSaleRatesBySellingProductsAndCustomer(saleZoneIds, sellingProductIds, customerId, getNormalRates, getOtherRates);
         }
 
+        public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, DateTime minimumDate)
+        {
+            var dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetSaleRatesEffectiveAfterByOwnersAndZones(ownerType, ownerIds, zoneIds, minimumDate);
+        }
+
         #endregion
 
         #region Private Classes
