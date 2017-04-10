@@ -29,9 +29,11 @@
                     Body: $scope.body
                 };
                 $scope.isLoading = true;
-                VRCommon_VRMailAPIService.SendTestEmail(emailSettingDetail).finally(function () {
-                    $scope.isLoading = false;
+
+                return VRCommon_VRMailAPIService.SendTestEmail(emailSettingDetail).then(function () {
                     VRNotificationService.showSuccess("Email sent successfully");
+                }).finally(function () {
+                    $scope.isLoading = false;
                     $scope.modalContext.closeModal();
                 });
             };
