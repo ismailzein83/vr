@@ -40,10 +40,10 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-             loadAllControls(); 
+            loadAllControls();
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([ setTitle, loadStaticData]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -62,6 +62,7 @@
                 function loadStaticData() {
                     if (!isEditMode)
                         return;
+                    $scope.scopeModel.orderId = orderDetailObj.OrderId;
                     $scope.scopeModel.charges = orderDetailObj.Charges;
                     $scope.scopeModel.payment = orderDetailObj.Payment;
                     $scope.scopeModel.contractPeriod = orderDetailObj.ContractPeriod;
@@ -80,19 +81,20 @@
         }
 
         function buildOrderDetailObjFromScope() {
-            var obj = {               
-                Charges:$scope.scopeModel.charges,
-                Payment:$scope.scopeModel.payment,
-                ContractPeriod:$scope.scopeModel.contractPeriod,                
-                ContractRemain:$scope.scopeModel.contractRemain,
-                ContractDays:$scope.scopeModel.contractDays,
-                TotalContract:$scope.scopeModel.totalContract,
-                ChargesYear1:$scope.scopeModel.chargesYear1,
-                ChargesYear2:$scope.scopeModel.chargesYear2,
-                ChargesYear3:$scope.scopeModel.chargesYear3,
-                Installation:$scope.scopeModel.installation,
-                ThirdParty:$scope.scopeModel.thirdParty,
-                Discount:$scope.scopeModel.discount,
+            var obj = {
+                OrderId: $scope.scopeModel.orderId,
+                Charges: $scope.scopeModel.charges,
+                Payment: $scope.scopeModel.payment,
+                ContractPeriod: $scope.scopeModel.contractPeriod,
+                ContractRemain: $scope.scopeModel.contractRemain,
+                ContractDays: $scope.scopeModel.contractDays,
+                TotalContract: $scope.scopeModel.totalContract,
+                ChargesYear1: $scope.scopeModel.chargesYear1,
+                ChargesYear2: $scope.scopeModel.chargesYear2,
+                ChargesYear3: $scope.scopeModel.chargesYear3,
+                Installation: $scope.scopeModel.installation,
+                ThirdParty: $scope.scopeModel.thirdParty,
+                Discount: $scope.scopeModel.discount,
                 Achievement: $scope.scopeModel.achievement
             };
             return obj;
@@ -100,9 +102,9 @@
 
         function insertOrderDetail() {
             var obj = buildOrderDetailObjFromScope();
-             if ($scope.onOrderDetailAdded != undefined)
-                 $scope.onOrderDetailAdded(obj);
-             $scope.modalContext.closeModal();   
+            if ($scope.onOrderDetailAdded != undefined)
+                $scope.onOrderDetailAdded(obj);
+            $scope.modalContext.closeModal();
         }
 
         function updateOrderDetail() {
