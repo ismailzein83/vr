@@ -661,7 +661,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     new CustomerSellingProductManager().GetCustomerIdsAssignedToSellingProduct(ownerId, effectiveDate);
 
                 if (customerIdsAssignedToSellingProduct == null || !customerIdsAssignedToSellingProduct.Any())
-                    return null;
+                    return new List<RoutingCustomerInfoDetails>();
 
                 customerIds.AddRange(customerIdsAssignedToSellingProduct);
                 sellingProductId = ownerId;
