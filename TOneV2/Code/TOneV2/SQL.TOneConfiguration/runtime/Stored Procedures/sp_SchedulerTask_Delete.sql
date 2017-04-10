@@ -10,6 +10,4 @@ BEGIN
 	DELETE FROM [runtime].[ScheduleTask]
 	WHERE ID = @Id
 	
-	DELETE FROM [runtime].[ScheduleTaskState]
-	WHERE TaskId = @Id
 END
