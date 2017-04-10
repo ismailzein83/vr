@@ -37,10 +37,10 @@ app.directive('vrBebridgeBerecievedefinitionSelector', ['VR_BEBridge_BERecieveDe
 
 
         function getBERecieveDefinitionTemplate(attrs) {
-            var label = "BE Recieve Definition";
+            var label = "BE Receive Definition";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "BE Recieve Definitions";
+                label = "BE Receive Definitions";
                 multipleselection = "ismultipleselection";
             }
 
