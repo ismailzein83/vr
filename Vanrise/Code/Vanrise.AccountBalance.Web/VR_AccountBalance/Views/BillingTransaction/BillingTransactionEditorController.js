@@ -95,9 +95,7 @@
         function loadCurrencySelector() {
             var currencyLoadDeferred = UtilsService.createPromiseDeferred();
             currencySelectorReadyDeferred.promise.then(function () {
-                var currencySelectorPayload = {
-                    selectSystemCurrency: true
-                };
+                var currencySelectorPayload;
                 VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencyLoadDeferred);
             });
             return currencyLoadDeferred.promises;
@@ -155,7 +153,6 @@
             accountSelectorContext.onAccountSelected = function (selectedAccountId) {
                 $scope.scopeModel.isLoading = true;
                 VR_AccountBalance_AccountAPIService.GetAccountInfo(accountTypeId, selectedAccountId).then(function (response) {
-                    console.log(response);
                     if (response != undefined) {
                         currencySelectorAPI.selectedCurrency(response.CurrencyId);
                     }

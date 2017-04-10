@@ -64,7 +64,7 @@ namespace Vanrise.AccountBalance.Business
                 };
             }
 
-            return cachedBillingTransactionTypes.MapRecords(BillingTransactionTypeInfoMapper, filterExpression);
+            return cachedBillingTransactionTypes.MapRecords(BillingTransactionTypeInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         #endregion
