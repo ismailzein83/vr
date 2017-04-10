@@ -50,6 +50,7 @@
     <Compile Include="RateType\SpecificDayRateTypeSettings.cs" />
     <Compile Include="RateValue\FixedRateValueSettings.cs" />
     <Compile Include="Tariff\RegularTariffSettings.cs" />
+    <Compile Include="Tax\PercentageTaxSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
@@ -73,6 +74,7 @@
       <Name>Vanrise.Rules</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

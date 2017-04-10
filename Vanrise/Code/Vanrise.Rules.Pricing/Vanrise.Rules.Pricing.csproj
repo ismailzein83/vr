@@ -63,6 +63,9 @@
     <Compile Include="Tariff\IPricingRuleTariffContext.cs" />
     <Compile Include="Tariff\PricingRuleTariffSettings.cs" />
     <Compile Include="Tariff\PricingRuleTariffSettingsConfig.cs" />
+    <Compile Include="Tax\IPricingRuleTaxContext.cs" />
+    <Compile Include="Tax\PricingRuleTaxSettings.cs" />
+    <Compile Include="Tax\PricingRuleTaxSettingsConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
