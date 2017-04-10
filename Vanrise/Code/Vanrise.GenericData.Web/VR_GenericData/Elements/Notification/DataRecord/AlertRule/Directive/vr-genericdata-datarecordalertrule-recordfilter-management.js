@@ -69,15 +69,18 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
                 if (settings != undefined && settings.RecordAlertRuleConfigs != undefined) {
                     for (var x = 0; x < settings.RecordAlertRuleConfigs.length; x++) {
                         var currentRecordAlertRuleConfig = settings.RecordAlertRuleConfigs[x];
-
-                        var promise = VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: context.recordfields, FilterGroup: currentRecordAlertRuleConfig.FilterGroup }).then(function (response) {
-                            ctrl.datasource.push({ FilterExpression: response, Entity: currentRecordAlertRuleConfig, ActionNames: buildActionNames(currentRecordAlertRuleConfig.Actions) });
-                        });
-                        promises.push(promise);
+                        promises.push(fillDataSource(currentRecordAlertRuleConfig));
                     }
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
+            };
+
+            function fillDataSource(currentRecordAlertRuleConfig) {
+                var promise = VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: context.recordfields, FilterGroup: currentRecordAlertRuleConfig.FilterGroup }).then(function (response) {
+                    ctrl.datasource.push({ FilterExpression: response, Entity: currentRecordAlertRuleConfig, ActionNames: buildActionNames(currentRecordAlertRuleConfig.Actions) });
+                });
+                return promise
             };
 
             api.getData = function () {

@@ -97,7 +97,7 @@
             }
             function editDAProfCalcCalculationField(daProfCalcCalculationField) {
                 var onDAProfCalcCalculationFieldUpdated = function (updatedDAProfCalcCalculationField) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcCalculationFields, daProfCalcCalculationField.RecordFilter, 'RecordFilter');
+                    var index = UtilsService.getItemIndexByVal(ctrl.daProfCalcCalculationFields, daProfCalcCalculationField.FieldName, 'FieldName');
                     ctrl.daProfCalcCalculationFields[index] = updatedDAProfCalcCalculationField;
                 };
 
