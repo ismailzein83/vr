@@ -50,7 +50,7 @@ namespace Vanrise.Runtime.Business
         {
             SchedulerTaskManager schedulerTaskManager = new SchedulerTaskManager();
             List<SchedulerTaskStateDetail> schedulerTaskStateDetails = new List<SchedulerTaskStateDetail>();
-            
+
             IEnumerable<SchedulerTaskState> taskStates = GetSchedulerTaskStateByTaskIds(taskIds);
 
             if (taskStates != null)
@@ -95,16 +95,13 @@ namespace Vanrise.Runtime.Business
         public Vanrise.Entities.DeleteOperationOutput<SchedulerTaskState> DeleteTaskState(Guid taskId)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
+            dataManager.DeleteTaskState(taskId);
 
-            bool deleteActionSucc = dataManager.DeleteTaskState(taskId);
-            DeleteOperationOutput<SchedulerTaskState> deleteOperationOutput = new DeleteOperationOutput<SchedulerTaskState>();
-
-            deleteOperationOutput.Result = DeleteOperationResult.Failed;
-
-            if (deleteActionSucc)
+            DeleteOperationOutput<SchedulerTaskState> deleteOperationOutput = new DeleteOperationOutput<SchedulerTaskState>()
             {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-            }
+                Result = DeleteOperationResult.Succeeded
+            };
+
             return deleteOperationOutput;
         }
 

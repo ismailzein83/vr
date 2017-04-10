@@ -22,7 +22,7 @@ namespace Vanrise.Runtime.Data
 
         void InsertSchedulerTaskState(Guid taskId);
 
-        bool DeleteTaskState(Guid taskId);
+        void DeleteTaskState(Guid taskId);
 
         void RunSchedulerTask(Guid taskId);
     }

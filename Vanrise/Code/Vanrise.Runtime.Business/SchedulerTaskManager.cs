@@ -42,7 +42,7 @@ namespace Vanrise.Runtime.Business
                 };
             //(itm.ActionTypeId != 1) && (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
             //&& (input.Query.Filters == null || input.Query.Filters.FirstOrDefault(item => !item.IsMatched(itm)) == null)));
-        _vrActionLogger.LogGetFilteredAction(SchedulerTaskLoggableEntity.Instance, input);
+            _vrActionLogger.LogGetFilteredAction(SchedulerTaskLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allScheduledTasks.ToBigResult(input, filterExpression, SchedulerTaskDetailMapper));
         }
 
@@ -131,7 +131,7 @@ namespace Vanrise.Runtime.Business
         }
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(Guid taskId)
         {
-           return GetTask(taskId,false);
+            return GetTask(taskId, false);
         }
         public List<SchedulerTask> GetTasksbyActionType(Guid actionType)
         {
@@ -165,7 +165,7 @@ namespace Vanrise.Runtime.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-               _vrActionLogger.TrackAndLogObjectAdded(SchedulerTaskLoggableEntity.Instance, taskObject);
+                _vrActionLogger.TrackAndLogObjectAdded(SchedulerTaskLoggableEntity.Instance, taskObject);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SchedulerTaskDetailMapper(taskObject);
             }
@@ -187,7 +187,7 @@ namespace Vanrise.Runtime.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-          _vrActionLogger.TrackAndLogObjectUpdated(SchedulerTaskLoggableEntity.Instance, taskObject);
+                _vrActionLogger.TrackAndLogObjectUpdated(SchedulerTaskLoggableEntity.Instance, taskObject);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SchedulerTaskDetailMapper(taskObject);
             }
@@ -204,6 +204,9 @@ namespace Vanrise.Runtime.Business
 
             if (deleted)
             {
+                SchedulerTaskStateManager schedulerTaskStateManager = new SchedulerTaskStateManager();
+                schedulerTaskStateManager.DeleteTaskState(taskId);
+
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
@@ -323,13 +326,14 @@ namespace Vanrise.Runtime.Business
         {
             if (task == null)
                 return null;
-            return new SchedulerTaskDetail() { 
-                Entity = task ,
-                AllowEdit =  _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(task),
+            return new SchedulerTaskDetail()
+            {
+                Entity = task,
+                AllowEdit = _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(task),
                 AllowRun = _schedulerTaskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(task)
             };
         }
-       
+
         #endregion
 
     }

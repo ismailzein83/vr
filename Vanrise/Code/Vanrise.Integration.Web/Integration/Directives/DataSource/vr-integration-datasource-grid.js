@@ -50,7 +50,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                         return gridAPI.retrieveData(payload.query);
                     };
                     directiveAPI.onDataSourceAdded = function (dataSource) {
-                      gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
                         gridAPI.itemAdded(dataSource);
 
                     };
@@ -64,7 +64,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                         enableDisableAll(response.Data);
                         if (response.Data != undefined) {
                             for (var i = 0; i < response.Data.length; i++) {
-                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
                         onResponseReady(response);
@@ -83,11 +83,12 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                         name: "Edit",
                         clicked: editDataSource,
                         haspermission: hasEditDataSourcePermission
-                    }, {
-                        name: "Delete",
-                        clicked: deleteDataSource,
-                        haspermission: hasDeleteDataSourcePermission
                     }
+                    //,{
+                    //    name: "Delete",
+                    //    clicked: deleteDataSource,
+                    //    haspermission: hasDeleteDataSourcePermission
+                    //}
                 ];
 
                 if (dataItem.Entity.IsEnabled) {
@@ -112,7 +113,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
         function editDataSource(dataSourceObj) {
 
             var onDataSourceUpdated = function (dataSource) {
-           gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
+                gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
                 gridAPI.itemUpdated(dataSource);
             };
 
@@ -125,8 +126,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
-             
-                gridAPI.itemDeleted(dataSource);
+                gridAPI.itemDeleted({ Entity: dataSource });
             };
 
             VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj.Entity, onDataSourceDeleted);
@@ -158,7 +158,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
                     return VR_Integration_DataSourceAPIService.DisableDataSource(dataItem.Entity.DataSourceId).then(function () {
-                        
+
                         if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
                             onPermissionDisabled(dataItem.Entity);
                             enableDisableAll($scope.dataSources);
@@ -185,7 +185,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
                     return VR_Integration_DataSourceAPIService.EnableDataSource(dataItem.Entity.DataSourceId).then(function () {
-                        
+
                         if (onPermissionEnabled && typeof onPermissionEnabled == 'function') {
                             onPermissionEnabled(dataItem.Entity);
                             enableDisableAll($scope.dataSources);
@@ -214,7 +214,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                     context.showEnableAll();
             }
         }
-               
+
     }
 
     return directiveDefinitionObject;
