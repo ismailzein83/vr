@@ -10,8 +10,11 @@
     [timestamp]       ROWVERSION       NULL,
     [ExecutionFlowID] UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_QueueInstance] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_QueueInstance_QueueItemType] FOREIGN KEY ([ItemTypeID]) REFERENCES [queue].[QueueItemType] ([ID])
+    CONSTRAINT [FK_QueueInstance_QueueItemType] FOREIGN KEY ([ItemTypeID]) REFERENCES [queue].[QueueItemType] ([ID]),
+    CONSTRAINT [IX_QueueInstance_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
