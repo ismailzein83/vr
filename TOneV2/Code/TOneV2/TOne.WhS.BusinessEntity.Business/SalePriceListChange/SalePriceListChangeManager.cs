@@ -29,14 +29,11 @@ namespace TOne.WhS.BusinessEntity.Business
             string ownerName = string.Empty;
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            SellingProductManager sellingProductManager = new SellingProductManager();
             var priceList = salePriceListManager.GetPriceList(priceListId);
             if (priceList != null)
             {
                 var ownerId = priceList.OwnerId;
-                ownerName = priceList.OwnerType == SalePriceListOwnerType.Customer
-                    ? carrierAccountManager.GetCarrierAccountName(ownerId)
-                    : sellingProductManager.GetSellingProductName(ownerId);
+                ownerName = carrierAccountManager.GetCarrierAccountName(ownerId);
             }
             return ownerName;
         }
