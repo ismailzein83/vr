@@ -16,18 +16,19 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders
             get { throw new NotImplementedException(); }
         }
         public Dictionary<string, TagRecordType> RecordTypesByTag { get; set; }
-
+        public int NumberOfBytesToSkip { get; set; }
         public override void Execute(IRecordReaderExecuteContext context)
         {
             MemoryStream stream = new MemoryStream(context.Data);
             int position = 0;
             while (position < stream.Length)
             {
-                string tag = ParserHelper.GetStringValue(stream, 2);
-                position = position + 2;
-                //stream.SkipBytes(1);
+                string tag = ParserHelper.GetStringValue(stream, 1);
+                position++;
+                stream.SkipBytes(NumberOfBytesToSkip);
+                position += NumberOfBytesToSkip;
                 int recordLength = ParserHelper.GetIntValue(stream, 1);
-                position = position + recordLength + 1;
+                position += recordLength;
                 TagRecordType tagRecordType;
                 byte[] recordData = new byte[recordLength];
                 stream.Read(recordData, 0, recordLength);
