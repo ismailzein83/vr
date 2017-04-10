@@ -154,11 +154,10 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
 
                         UtilsService.waitMultiplePromises([dataRecordAlertRuleSettingReadyDeferred.promise, dataRecordTypeFieldsSelectionChangedDeferred.promise]).then(function () {
                             dataRecordAlertRuleSettingsLoadPromise = undefined;
-
                             getDataRecordFieldsInfo().then(function (response) {
                                 var dataRecordAlertRuleSettingsPayload = {
                                     settings: settings,
-                                    context: buildDataRecordAlertRuleSettingsContext()
+                                    context: buildDataRecordAlertRuleSettingsContext(UtilsService.getPropValuesFromArray(identificationFields, 'Name'))
                                 };
                                 VRUIUtilsService.callDirectiveLoad(dataRecordAlertRuleSettingsAPI, dataRecordAlertRuleSettingsPayload, dataRecordAlertRuleSettingsLoadDeferred);
                             });
@@ -220,7 +219,7 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                     getDataRecordFieldsInfo().then(function () {
 
                         var dataRecordAlertRuleSettingsPayload = {
-                            context: buildDataRecordAlertRuleSettingsContext()
+                            context: buildDataRecordAlertRuleSettingsContext(dataRecordTypeFieldsSelectorAPI.getSelectedIds())
                         };
 
                         var setLoader = function (value) {
@@ -231,10 +230,10 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                 });
             };
 
-            function buildDataRecordAlertRuleSettingsContext() {
+            function buildDataRecordAlertRuleSettingsContext(identificationFields) {
                 return {
                     recordfields: buildRecordFields(),
-                    vrActionTargetType: buildDAProfCalcTargetType(),
+                    vrActionTargetType: buildDataRecordActionTargetType(identificationFields),
                     notificationTypeId: notificationTypeId
                 };
             }
@@ -252,10 +251,11 @@ app.directive('vrGenericdataDatarecordalertruleExtendedsettings', ['UtilsService
                 return recordFields;
             }
 
-            function buildDAProfCalcTargetType() {
+            function buildDataRecordActionTargetType(identificationFields) {
                 return {
                     $type: "Vanrise.GenericData.Notification.DataRecordActionTargetType, Vanrise.GenericData.Notification",
-                    DataRecordTypeId: dataRecordTypeId
+                    DataRecordTypeId: dataRecordTypeId,
+                    AvailableDataRecordFieldNames: identificationFields
                 };
             }
         }
