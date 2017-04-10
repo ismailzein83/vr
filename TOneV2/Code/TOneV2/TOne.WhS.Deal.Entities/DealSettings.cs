@@ -13,5 +13,16 @@ namespace TOne.WhS.Deal.Entities
         public DateTime BeginDate { get; set; }
 
         public DateTime? EndDate { get; set; }
+
+        public virtual void GetZoneGroups(IDealGetZoneGroupsContext context)
+        {
+        }
+    }
+
+    public interface IDealGetZoneGroupsContext
+    {
+        List<DealSaleZoneGroup> SaleZoneGroups { set; }
+
+        List<DealSupplierZoneGroup> SupplierZoneGroups { set; }
     }
 }
