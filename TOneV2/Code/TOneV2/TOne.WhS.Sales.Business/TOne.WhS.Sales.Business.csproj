@@ -100,6 +100,7 @@
     <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneHavingPendingClosedRateIsModified.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateBEDIsGreaterThanNewCountryBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\CustomerZoneRateBEDIsGreaterThanSellingProductZoneRateBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateHasInvalidEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\DraftNewRateIsClosed.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductNormalRateDoesNotExistCondition.cs" />
