@@ -12,7 +12,16 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                                                                  MTAmount, Profit, TypeMessage AS TypeCalled, 0 AS Duration, Credit AS OriginalAmount
                                         FROM            Retail_EDR.Message WITH (NOLOCK)
                                         UNION ALL
-                                        SELECT        NULL AS IdCDR, CreatedDate AS StartDate, 'Event' AS TrafficType, NULL AS DirectionTraffic, NULL AS Calling, NULL AS Called, NULL 
+                                        SELECT        IdCDR, StartDate, 'Data' AS TrafficType, NULL AS DirectionTraffic, Calling, NULL AS Called, NULL AS TypeNet, NULL AS SourceOperator, NULL 
+                                                                 AS DestinationOperator, Zone AS SourceArea, NULL AS DestinationArea, TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, 
+                                                                 CreationDate, Balance, NULL AS Zone, Agent, AgentCommission, Account AS AccountID, NULL AS OriginatingZoneID, NULL AS TerminatingZoneID, 
+                                                                 AirtimeRate, AirtimeAmount, NULL AS TerminationRate, NULL AS TerminationAmount, NULL AS SaleRate, NULL AS SaleAmount, Credit, NULL 
+                                                                 AS MTRate, NULL AS MTAmount, NULL AS Profit, TypeGprs AS TypeCalled, 0 AS Duration, Credit AS OriginalAmount
+                                        FROM            Retail_EDR.GPRS WITH (NOLOCK)
+                                        UNION ALL
+                                        SELECT        NULL AS IdCDR, CreatedDate AS StartDate, 
+                                                                 CASE WHEN PromotionCode LIKE '%_VOiCE_%' THEN 'Voce' ELSE CASE WHEN PromotionCode LIKE '%_SMS_%' THEN 'Sms' ELSE CASE WHEN PromotionCode
+                                                                  LIKE '%_DATA_%' THEN 'Data' ELSE '' END END END AS TrafficType, NULL AS DirectionTraffic, NULL AS Calling, NULL AS Called, NULL 
                                                                  AS TypeNet, NULL AS SourceOperator, NULL AS DestinationOperator, NULL AS SourceArea, NULL AS DestinationArea, NULL 
                                                                  AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, PromotionCode AS Promotion, FileName, NULL AS FileDate, 
                                                                  CreatedDate AS CreationDate, NULL AS Balance, NULL AS Zone, NULL AS Agent, NULL AS AgentCommission, AccountId, NULL 
@@ -122,7 +131,7 @@ Begin DesignProperties =
    Begin DataPane = 
       Begin ParameterDefaults = ""
       End
-      Begin ColumnWidths = 41
+      Begin ColumnWidths = 42
          Width = 284
          Width = 1500
          Width = 1500
@@ -164,6 +173,7 @@ Begin DesignProperties =
          Width = 1500
          Width = 1500
          Width = 1500
+         Width = 1500
       End
    End
    Begin CriteriaPane = 
@@ -181,9 +191,9 @@ Begin DesignProperties =
          Filter = 1350
          Or = 1350
          Or = 1350
-         Or = 1350
-      End
-   End', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+         Or = 1', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 
@@ -193,9 +203,13 @@ Begin DesignProperties =
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'350
+      End
+   End
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 
