@@ -33,6 +33,14 @@ namespace Vanrise.Common.Web.Controllers
                 
         }
 
+        [HttpPost]
+        [Route("SendTestEmail")]
+        public void SendTestEmail(EmailSettingDetail setting)
+        {
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendTestMail(setting.EmailSettingData, setting.ToEmail, setting.Subject, setting.Body);
+        }
+
         [HttpGet]
         [Route("GetSetting")]
         public object GetSetting(Guid settingId)

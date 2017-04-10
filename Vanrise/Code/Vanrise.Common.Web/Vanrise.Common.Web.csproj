@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\VRMailController.cs" />
     <Compile Include="Controllers\VRObjectTrackingController.cs" />
     <Compile Include="Controllers\UISettingsController.cs" />
     <Compile Include="Controllers\CompanySettingsController.cs" />
@@ -351,6 +352,7 @@
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\UISettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRMailAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTimeZoneAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\EmailTemplateAPIService.js" />
@@ -374,6 +376,7 @@
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRConnectionService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
+    <Content Include="Common\Services\VRMailService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRConcatenatedPartService.js" />
@@ -460,6 +463,8 @@
     <Content Include="Common\Views\Support.html" />
     <Content Include="Common\Views\Settings\SettingsManagement.html" />
     <Content Include="Common\Views\Settings\SettingsManagementController.js" />
+    <Content Include="Common\Views\TestEmail\TestEmailEditor.html" />
+    <Content Include="Common\Views\TestEmail\TestEmailEditorController.js" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditor.html" />
     <Content Include="Common\Views\TextManipulation\TextManipulationEditorController.js" />
     <Content Include="Common\Views\VRApplicationVisibility\VRApplicationVisibilityEditor.html" />

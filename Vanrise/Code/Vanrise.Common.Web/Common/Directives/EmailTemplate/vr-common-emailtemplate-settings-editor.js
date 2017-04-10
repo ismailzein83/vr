@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRMailAPIService', 'VRCommon_VRMailService',
+    function (UtilsService, VRUIUtilsService, VRCommon_VRMailAPIService, VRCommon_VRMailService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -57,6 +57,23 @@ app.directive('vrCommonEmailtemplateSettingsEditor', ['UtilsService', 'VRUIUtils
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            $scope.sendEmail = function () {
+                var onSendTestEmail = function () {
+
+                };
+
+                var emailSettingData = {
+                    senderEmail: $scope.senderEmail,
+                    senderPassword: $scope.senderPassword,
+                    host: $scope.host,
+                    port: $scope.port,
+                    timeoutInSeconds: $scope.timeout,
+                    enabelSsl: $scope.ssl
+                };
+
+                VRCommon_VRMailService.sendTestEmail(onSendTestEmail, emailSettingData);
+            };
 
             this.initializeController = initializeController;
 

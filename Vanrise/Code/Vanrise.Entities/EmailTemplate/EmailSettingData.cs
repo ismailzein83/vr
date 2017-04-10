@@ -9,4 +9,12 @@
         public int TimeoutInSeconds { get; set; }
         public bool EnabelSsl { get; set; }
     }
+
+    public class EmailSettingDetail
+    {
+        public EmailSettingData EmailSettingData { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public string ToEmail { get; set; }
+    }
 }

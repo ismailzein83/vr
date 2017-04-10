@@ -77,6 +77,34 @@ namespace Vanrise.Common.Business
             SendMail(to, cc, subject, body, null);
         }
 
+        public void SendTestMail(EmailSettingData emailSettingData, string to, string subject, string body)
+        {
+            if (String.IsNullOrWhiteSpace(to))
+                throw new NullReferenceException("to");
+
+            if (String.IsNullOrWhiteSpace(subject))
+                throw new NullReferenceException("subject");
+
+            if (String.IsNullOrWhiteSpace(body))
+                throw new NullReferenceException("body");
+
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            string[] toAddresses = to.Split(';', ',', ':');
+            foreach (var toAddress in toAddresses)
+            {
+                mailMessage.To.Add(new MailAddress(toAddress));
+            }
+
+            mailMessage.Subject = subject;
+            mailMessage.Body = body;
+            mailMessage.IsBodyHtml = true;
+
+            SmtpClient client = GetSMTPClient(emailSettingData);
+
+            client.Send(mailMessage);
+        }
+
         public void SendMail(string to, string cc, string subject, string body, List<VRMailAttachement> attachements)
         {
             if (String.IsNullOrWhiteSpace(to))
