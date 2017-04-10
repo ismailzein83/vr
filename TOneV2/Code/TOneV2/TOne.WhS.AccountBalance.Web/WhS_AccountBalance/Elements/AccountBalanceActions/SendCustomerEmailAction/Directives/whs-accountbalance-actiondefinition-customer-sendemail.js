@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('whsAccountbalanceActiondefinitionCustomerSendemail', [function () {
+app.directive('whsAccountbalanceActiondefinitionCustomerSendemail', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -22,15 +22,27 @@ app.directive('whsAccountbalanceActiondefinitionCustomerSendemail', [function ()
 
         this.initializeController = initializeController;
 
-        var mailMessageTypeSelectorAPI;
+        var accountMailMessageTypeSelectorAPI;
+        var accountMailMessageTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var profileMailMessageTypeSelectorAPI;
+        var profileMailMessageTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
-                mailMessageTypeSelectorAPI = api;
-                defineAPI();
+            $scope.scopeModel.onAccountMailMessageTypeSelectorReady = function (api) {
+                accountMailMessageTypeSelectorAPI = api;
+                accountMailMessageTypeSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.onProfileMailMessageTypeSelectorReady = function (api) {
+                profileMailMessageTypeSelectorAPI = api;
+                profileMailMessageTypeSelectorReadyDeferred.resolve();
+            };
+
+            UtilsService.waitMultiplePromises([accountMailMessageTypeSelectorReadyDeferred.promise, profileMailMessageTypeSelectorReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
         }
         function defineAPI() {
 
@@ -39,22 +51,41 @@ app.directive('whsAccountbalanceActiondefinitionCustomerSendemail', [function ()
             api.load = function (payload) {
 
                 var extendedSettings;
-
+                var promises = [];
                 if (payload != undefined && payload.Settings != null) {
                     extendedSettings = payload.Settings.ExtendedSettings;
                 }
 
-                var mailMessageTypeSelectorPayload = {
-                    selectedIds: (extendedSettings != undefined) ? extendedSettings.MailMessageTypeId : undefined
-                };
+                promises.push(loadAccountMailMessageTypeSelector());
+                promises.push(loadProfileMailMessageTypeSelector());
 
-                return mailMessageTypeSelectorAPI.load(mailMessageTypeSelectorPayload);
+                function loadAccountMailMessageTypeSelector() {
+                    var accountMailMessageTypePayload;
+                    if (extendedSettings != undefined) {
+                        accountMailMessageTypePayload = {
+                            selectedIds: extendedSettings.AccountMessageTypeId
+                        };
+                    }
+                    return accountMailMessageTypeSelectorAPI.load(accountMailMessageTypePayload);
+                }
+                function loadProfileMailMessageTypeSelector() {
+                    var profileMailMessageTypePayload;
+                    if (extendedSettings != undefined) {
+                        profileMailMessageTypePayload = {
+                            selectedIds: extendedSettings.ProfileMessageTypeId
+                        };
+                    }
+                    return profileMailMessageTypeSelectorAPI.load(profileMailMessageTypePayload);
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
                 return {
                     $type: 'TOne.WhS.AccountBalance.MainExtensions.SendCustomerEmailActionDefinition, TOne.WhS.AccountBalance.MainExtensions',
-                    MailMessageTypeId: mailMessageTypeSelectorAPI.getSelectedIds()
+                    ProfileMessageTypeId: profileMailMessageTypeSelectorAPI.getSelectedIds(),
+                    AccountMessageTypeId: accountMailMessageTypeSelectorAPI.getSelectedIds(),
                 };
             };
 

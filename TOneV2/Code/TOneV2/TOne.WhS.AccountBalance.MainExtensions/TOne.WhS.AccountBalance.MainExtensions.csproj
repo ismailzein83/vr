@@ -56,6 +56,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -76,6 +80,14 @@
     <Reference Include="Vanrise.Reprocess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidSettings.cs" />
@@ -95,9 +107,11 @@
     <Compile Include="VRBalanceAlertActions\BlockCustomerActionDefinition.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailAction.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailActionDefinition.cs" />
-    <Compile Include="VRBalanceAlertThresholds\CustFixedThreshold.cs" />
-    <Compile Include="VRBalanceAlertThresholds\CustTolerancePercThreshold.cs" />
+    <Compile Include="VRBalanceAlertThresholds\PrePaid\CustFixedThreshold.cs" />
+    <Compile Include="VRBalanceAlertThresholds\PostPaid\CustTolerancePercThreshold.cs" />
     <Compile Include="VRBalanceAlertThresholds\SuppTolerancePercBalAlertThreshold.cs" />
+    <Compile Include="VRObjectTypes\FinancialAccountObjectType.cs" />
+    <Compile Include="VRObjectTypes\FinancialAccountPropertyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.AccountBalance.Business\TOne.WhS.AccountBalance.Business.csproj">
@@ -117,6 +131,7 @@
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,7 +7,7 @@ using TOne.WhS.AccountBalance.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.AccountBalance.MainExtensions
+namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds.PostPaid
 {
     /// <summary>
     /// only applicable for PostPaid Customer AccountType
@@ -16,7 +16,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
     {
         public override Guid ConfigId
         {
-            get { return new Guid("F16B3576-0622-48F1-9180-E7582C6B39EA"); }
+            get { return new Guid("9D1732F1-E595-41B8-8FA6-FBD0AE039EED"); }
         }
 
         public Decimal Percentage { get; set; }

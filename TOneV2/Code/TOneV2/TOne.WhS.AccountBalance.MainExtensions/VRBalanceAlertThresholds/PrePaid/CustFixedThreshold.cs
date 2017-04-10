@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds
+namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds.PrePaid
 {
     /// <summary>
     /// only applicable for PrePaid Customer AccountType
@@ -14,7 +14,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("D188C0DF-A278-4F03-9D89-F5DF808AFD61"); }
         }
 
         public Decimal Threshold { get; set; }

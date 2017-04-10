@@ -10,10 +10,10 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
             isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
-            var accountSelectorCtrl = this;
-            accountSelectorCtrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
+            var ctrl = this;
+            ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
-            var accountSelector = new AccountSelector($scope, accountSelectorCtrl, $attrs);
+            var accountSelector = new AccountSelector($scope, ctrl, $attrs);
             accountSelector.initializeController();
         },
         controllerAs: "accountSelectorCtrl",
@@ -23,7 +23,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
         }
     };
 
-    function AccountSelector($scope, accountSelectorCtrl, $attrs) {
+    function AccountSelector($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -42,7 +42,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
             $scope.scopeModel.accountDataTextField = 'Description';
 
             $scope.scopeModel.carrierTypes = [];
-            $scope.scopeModel.filteredAccounts = [];
+            ctrl.datasource = [];
 
             $scope.scopeModel.onSwitchValueChanged = function () {
                 filterAccounts();
@@ -80,12 +80,13 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                 var accountTypeId;
                 var extendedSettings;
                 var businessEntityDefinitionId;
-
+                var selectedIds;
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
                     extendedSettings = payload.extendedSettings;
                     context = payload.context;
                     businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                    selectedIds = payload.selectedIds;
                 }
 
                 var promises = [];
@@ -132,10 +133,13 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                             for (var i = 0; i < response.length; i++) {
                                 var account = response[i];
                                 allAccounts.push(account);
-                                $scope.scopeModel.filteredAccounts.push(account);
+                                ctrl.datasource.push(account);
                             }
                         }
                         filterAccounts();
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', $attrs, ctrl);
+                        }
                     });
                 }
 
@@ -144,12 +148,14 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 
             api.getData = function () {
                 return {
-                    selectedIds: VRUIUtilsService.getIdSelectedIds('FinancialAccountId', $attrs, accountSelectorCtrl)
+                    selectedIds: VRUIUtilsService.getIdSelectedIds('FinancialAccountId', $attrs, ctrl)
                 };
             };
-
-            if (accountSelectorCtrl.onReady != null) {
-                accountSelectorCtrl.onReady(api);
+            api.getSelectedIds = function () {
+                return VRUIUtilsService.getIdSelectedIds('FinancialAccountId', $attrs, ctrl);
+            };
+            if (ctrl.onReady != null) {
+                ctrl.onReady(api);
             }
         }
 
@@ -157,15 +163,15 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
             var getCurrentOnly = $scope.scopeModel.getCurrentOnly;
             var carrierType = $scope.scopeModel.selectedCarrierType;
 
-            $scope.scopeModel.filteredAccounts.length = 0;
+            ctrl.datasource.length = 0;
 
-            if ($attrs.ismultipleselection != undefined) accountSelectorCtrl.selectedvalues.length = 0;
-            else accountSelectorCtrl.selectedvalues = undefined;
+            if ($attrs.ismultipleselection != undefined) ctrl.selectedvalues.length = 0;
+            else ctrl.selectedvalues = undefined;
 
             for (var i = 0; i < allAccounts.length; i++) {
                 if (!effectiveStatusFilter(allAccounts[i]) || !carrierTypeFilter(allAccounts[i]))
                     continue;
-                $scope.scopeModel.filteredAccounts.push(allAccounts[i]);
+                ctrl.datasource.push(allAccounts[i]);
             }
 
             function effectiveStatusFilter(targetAccount) {
@@ -174,6 +180,8 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
             function carrierTypeFilter(targetAccount) {
                 return (carrierType == undefined || targetAccount.CarrierType == carrierType.value);
             }
+
+
         }
     }
     function getTemplate(attributes) {
@@ -194,7 +202,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                 <vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
                     <vr-select on-ready="scopeModel.onAccountSelectorReady"\
 				        label="Financial Account"\
-				        datasource="scopeModel.filteredAccounts"\
+				        datasource="accountSelectorCtrl.datasource"\
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
 				        datavaluefield="FinancialAccountId"\
 				        datatextfield="{{scopeModel.accountDataTextField}}"\

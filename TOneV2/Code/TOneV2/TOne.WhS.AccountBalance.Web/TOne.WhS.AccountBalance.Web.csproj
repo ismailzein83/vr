@@ -134,6 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\Directive\" />
     <Folder Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\MainExtensions\" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_AccountBalance\Constant\FinancialAccountPropertyEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\FinancialAccountCarrierTypeEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\FinancialAccountEffectiveStatusEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\ModuleConfig.js" />
@@ -150,8 +152,10 @@
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\BlockCustomerAction\Directives\whs-accountbalance-action-customer-block.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\SendCustomerEmailAction\Directives\Templates\SendCustomerEmailAction.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\SendCustomerEmailAction\Directives\whs-accountbalance-action-customer-sendemail.js" />
-    <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\Directive\Template\CustomerTolerancePercentageThreshold.html" />
-    <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\Directive\whs-accountbalance-threshold-customer-tolerancepercentage.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PrePaid\Template\CustomerFixedPercentageThreshold.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PrePaid\whs-accountbalance-threshold-customer-fixedthreshold.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PostPaid\Template\CustomerTolerancePercentageThreshold.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PostPaid\whs-accountbalance-threshold-customer-tolerancepercentage.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountType\Directives\AccountTypeFieldSources\Templates\TOneCustomFieldSourceSetting.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountType\Directives\AccountTypeFieldSources\whs-accountbalance-accounttype-source-tonecustomfield.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
@@ -183,6 +187,10 @@
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\BE_Definition\whs-accountbalance-bedefinition-editor.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountGridTemplate.html" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\Templates\FinancialAccountSearch.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\Templates\FinancialAccountObjectTypeTemplate.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\Templates\FinancialAccountPropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\whs-accountbalance-financialaccountobjecttype.js" />
+    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\whs-accountbalance-financialaccountpropertyevaluator.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\whs-accountbalance-financialaccount-grid.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\whs-accountbalance-financialaccount-search.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Services\APIServices\FinancialAccountAPIService.js" />

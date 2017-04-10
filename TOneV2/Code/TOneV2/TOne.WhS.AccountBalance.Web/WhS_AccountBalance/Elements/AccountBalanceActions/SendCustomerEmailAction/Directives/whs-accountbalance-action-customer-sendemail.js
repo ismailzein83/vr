@@ -22,26 +22,26 @@ app.directive('whsAccountbalanceActionCustomerSendemail', ['UtilsService', funct
 
         this.initializeController = initializeController;
 
-        var accountSelectorAPI;
-        var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountMailMessageTemplateSelectorAPI;
+        var accountMailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var profileSelectorAPI;
-        var profileSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var profileMailMessageTemplateSelectorAPI;
+        var profileMailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.onAccountMailMessageTemplateSelectorReady = function (api) {
-                accountSelectorAPI = api;
-                accountSelectorReadyDeferred.resolve();
+                accountMailMessageTemplateSelectorAPI = api;
+                accountMailMessageTemplateSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onProfileMailMessageTemplateSelectorReady = function (api) {
-                profileSelectorAPI = api;
-                profileSelectorReadyDeferred.resolve();
+                profileMailMessageTemplateSelectorAPI = api;
+                profileMailMessageTemplateSelectorReadyDeferred.resolve();
             };
 
-            UtilsService.waitMultiplePromises([accountSelectorReadyDeferred.promise, profileSelectorReadyDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([accountMailMessageTemplateSelectorReadyDeferred.promise, profileMailMessageTemplateSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
         }
@@ -51,28 +51,34 @@ app.directive('whsAccountbalanceActionCustomerSendemail', ['UtilsService', funct
 
             api.load = function (payload) {
                 var extendedSettings;
-                var mailMessageTypeId;
 
                 if (payload != undefined && payload.selectedVRActionDefinition != undefined && payload.selectedVRActionDefinition.Settings != null) {
                     extendedSettings = payload.selectedVRActionDefinition.Settings.ExtendedSettings;
                 }
-
-                if (extendedSettings != undefined)
-                    mailMessageTypeId = extendedSettings.MailMessageTypeId;
-
                 var promises = [];
+                
+                promises.push(loadAccountMailMessageTemplateSelector());
+                promises.push(loadProfileMailMessageTemplateSelector());
 
-                var selectorPayload = {
-                    filter: {
-                        VRMailMessageTypeId: mailMessageTypeId
-                    }
-                };
+                function loadAccountMailMessageTemplateSelector() {
+                    var accountMailMessageTemplatePayload = {
+                        filter: {
+                            VRMailMessageTypeId: extendedSettings.AccountMessageTypeId
+                        },
+                        selectedIds: payload.vrActionEntity != undefined ? payload.vrActionEntity.AccountMailTemplateId : undefined
 
-                var loadAccountSelectorPromise = accountSelectorAPI.load(selectorPayload);
-                promises.push(loadAccountSelectorPromise);
-
-                var loadProfileSelectorPromise = profileSelectorAPI.load(selectorPayload);
-                promises.push(loadProfileSelectorPromise);
+                    };
+                    return accountMailMessageTemplateSelectorAPI.load(accountMailMessageTemplatePayload);
+                }
+                function loadProfileMailMessageTemplateSelector() {
+                    var profileMailMessageTemplatePayload = {
+                        filter: {
+                            VRMailMessageTypeId: extendedSettings.ProfileMessageTypeId
+                        },
+                        selectedIds: payload.vrActionEntity != undefined ? payload.vrActionEntity.ProfileMailTemplateId : undefined
+                    };
+                    return profileMailMessageTemplateSelectorAPI.load(profileMailMessageTemplatePayload);
+                }
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -80,9 +86,9 @@ app.directive('whsAccountbalanceActionCustomerSendemail', ['UtilsService', funct
             api.getData = function () {
                 return {
                     $type: 'TOne.WhS.AccountBalance.MainExtensions.SendCustomerEmailAction, TOne.WhS.AccountBalance.MainExtensions',
-                    ActionName: 'Email Customer',
-                    AccountMailTemplateId: accountSelectorAPI.getSelectedIds(),
-                    ProfileMailTemplateId: profileSelectorAPI.getSelectedIds()
+                    ActionName: 'Customer Send Email',
+                    AccountMailTemplateId: accountMailMessageTemplateSelectorAPI.getSelectedIds(),
+                    ProfileMailTemplateId: profileMailMessageTemplateSelectorAPI.getSelectedIds()
                 };
             };
 

@@ -10,8 +10,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class SendCustomerEmailActionDefinition : VRActionDefinitionExtendedSettings
     {
-        public Guid MailMessageTypeId { get; set; }
-
+        public Guid AccountMessageTypeId { get; set; }
+        public Guid ProfileMessageTypeId { get; set; }
         public override Guid ConfigId
         {
             get { return new Guid("DA72C2E9-4321-4C0C-8FCA-B8A363F6B480"); }
@@ -22,10 +22,6 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             get
             {
                 return "whs-accountbalance-action-customer-sendemail";
-            }
-            set
-            {
-                base.RuntimeEditor = value;
             }
         }
 

@@ -15,7 +15,7 @@ app.directive('whsAccountbalanceThresholdCustomerTolerancepercentage', [function
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: '/Client/Modules/WhS_AccountBalance/Elements/AccountBalanceAlertThreshold/Customer/Directive/Template/CustomerTolerancePercentageThreshold.html'
+        templateUrl: '/Client/Modules/WhS_AccountBalance/Elements/AccountBalanceAlertThreshold/Customer/PostPaid/Template/CustomerTolerancePercentageThreshold.html'
     };
 
     function CustomerTolerancePercentageThreshold($scope, ctrl, $attrs) {
@@ -25,15 +25,6 @@ app.directive('whsAccountbalanceThresholdCustomerTolerancepercentage', [function
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.validatePercentage = function () {
-                if ($scope.scopeModel.percentage == undefined)
-                    return null;
-                var percentageAsNumber = Number($scope.scopeModel.percentage);
-                if (percentageAsNumber <= 0 || percentageAsNumber > 100)
-                    return 'Percentage must be a positive number greater than 0 and less than 100';
-                return null;
-            };
-
             defineAPI();
         }
         function defineAPI() {
@@ -41,11 +32,16 @@ app.directive('whsAccountbalanceThresholdCustomerTolerancepercentage', [function
             var api = {};
 
             api.load = function (payload) {
+                if (payload != undefined) {
+                    $scope.scopeModel.percentage = payload.Percentage;
+                }
             };
 
             api.getData = function () {
                 return {
-                    $type: 'TOne.WhS.AccountBalance.MainExtensions.BlockCustomerActionDefinition, TOne.WhS.AccountBalance.MainExtensions'
+                    $type: 'TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds.PostPaid.CustTolerancePercThreshold, TOne.WhS.AccountBalance.MainExtensions',
+                    Percentage: $scope.scopeModel.percentage,
+                    ThresholdDescription: $scope.scopeModel.percentage + " %"
                 };
             };
 
