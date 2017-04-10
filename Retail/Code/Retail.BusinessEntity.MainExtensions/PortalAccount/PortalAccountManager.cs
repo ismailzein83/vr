@@ -55,10 +55,12 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
                         Email = userDetails.InsertedObject.Entity.Email,
                         TenantId = userDetails.InsertedObject.Entity.TenantId
                     };
+                    AccountBEManager accountBEManager = new AccountBEManager();
 
-                    bool IsAccountExtendedSettingsUpdated = new AccountBEManager().UpdateAccountExtendedSetting(accountBEDefinitionId, accountId, portalAccountSettings);
+                    bool IsAccountExtendedSettingsUpdated = accountBEManager.UpdateAccountExtendedSetting(accountBEDefinitionId, accountId, portalAccountSettings);
                     if (IsAccountExtendedSettingsUpdated)
                     {
+                        accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Configure Portal Account", string.Format("Email: {0}", portalAccountSettings.Email), portalAccountSettings);
                         insertOperationOutput.InsertedObject = portalAccountSettings;
                     }
                     else

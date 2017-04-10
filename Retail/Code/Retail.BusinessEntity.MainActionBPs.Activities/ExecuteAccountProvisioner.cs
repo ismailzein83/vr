@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.BusinessProcess;
 using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.Business;
 namespace Retail.BusinessEntity.MainActionBPs.Activities
 {
     public sealed class ExecuteAccountProvisioner : NativeActivity
@@ -19,6 +20,8 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
         public InArgument<AccountProvisionerDefinitionSettings> AccountProvisionerDefinition { get; set; }
         [RequiredArgument]
         public InArgument<AccountProvisioner> AccountProvisioner { get; set; }
+        [RequiredArgument]
+        public InArgument<AccountActionDefinition> AccountActionDefinition { get; set; }
         protected override void Execute(NativeActivityContext context)
         {
             var actionProvisioner = this.AccountProvisioner.Get(context);
@@ -26,8 +29,9 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
                 throw new ArgumentNullException("accountProvisioner");
             var definitionSettings = this.AccountProvisionerDefinition.Get(context);
             var accountId = this.AccountId.Get(context);
+            var accountActionDefinition = this.AccountActionDefinition.Get(context);
             var accountBEDefinitionId = this.AccountBEDefinitionId.Get(context);
-            var provisioninigContext = new AccountProvisioningContext(this, context, definitionSettings, accountId, accountBEDefinitionId);
+            var provisioninigContext = new AccountProvisioningContext(this, context, definitionSettings, accountId, accountBEDefinitionId, accountActionDefinition);
             actionProvisioner.Execute(provisioninigContext);
         }
 
@@ -38,13 +42,15 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             AccountProvisionerDefinitionSettings _definitionSettings;
             public long _accountId { get; set; }
             public Guid _accountBEDefinitionId { get; set; }
-            public AccountProvisioningContext(ExecuteAccountProvisioner parentActivity, NativeActivityContext context, AccountProvisionerDefinitionSettings definitionSettings, long accountId, Guid accountBEDefinitionId)
+            public AccountActionDefinition _accountActionDefinition { get; set; }
+            public AccountProvisioningContext(ExecuteAccountProvisioner parentActivity, NativeActivityContext context, AccountProvisionerDefinitionSettings definitionSettings, long accountId, Guid accountBEDefinitionId, AccountActionDefinition accountActionDefinition)
             {
                 _parentActivity = parentActivity;
                 _context = context;
                 _definitionSettings = definitionSettings;
                 _accountBEDefinitionId = accountBEDefinitionId;
                 _accountId = accountId;
+                _accountActionDefinition = accountActionDefinition;
             }
 
             public AccountProvisionerDefinitionSettings DefinitionSettings
@@ -78,6 +84,22 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             {
                 _context.WriteBusinessTrackingMsg(severity, messageFormat, args);
             }
+            public void TrackActionExecuted(string actionDescription, Object technicalInformation)
+            {
+                var actionProvisionerTechnicalInformation = new ActionProvisionerTechnicalInformation
+                {
+                    ActionDefinitionId = _accountActionDefinition.AccountActionDefinitionId,
+                    ProvisionerInfo = technicalInformation
+                };
+                new AccountBEManager().TrackAndLogObjectCustomAction(_accountBEDefinitionId, _accountId, _accountActionDefinition.Name, actionDescription, actionProvisionerTechnicalInformation);
+            }
+            
+  
+        }
+        public class ActionProvisionerTechnicalInformation
+        {
+            public Guid ActionDefinitionId { get; set; }
+            public Object ProvisionerInfo { get; set; }
         }
     }
 }

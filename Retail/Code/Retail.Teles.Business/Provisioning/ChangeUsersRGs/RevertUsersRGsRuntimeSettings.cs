@@ -25,22 +25,31 @@ namespace Retail.Teles.Business
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
 
             var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
-            var changedUsers = GetChangedUsers( context,definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState);
+            ChURGsActionCh oldChURGsActionCh;
+            var changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState, out oldChURGsActionCh);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
 
             RevertBlockedUsers(context,definitionSettings.VRConnectionId, changedUsers);
-            RevertBlockedUsersState(context, changeUsersRGsAccountState);
+            RevertBlockedUsersState(context, changeUsersRGsAccountState, oldChURGsActionCh);
            
         }
 
-        void RevertBlockedUsersState(IAccountProvisioningContext context, ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        void RevertBlockedUsersState(IAccountProvisioningContext context, ChangeUsersRGsAccountState changeUsersRGsAccountState, ChURGsActionCh oldChURGsActionCh)
         {
+            var currentUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null && changeUsersRGsAccountState.ChangesByActionType.Count == 0)
             {
-                accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+                if (accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId))
+                {
+                    context.TrackActionExecuted(null, oldChURGsActionCh);
+                };
             }else
             {
-                accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
+                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState))
+                {
+                    context.TrackActionExecuted(null, oldChURGsActionCh);
+                };
             }
         }
         void RevertBlockedUsers(IAccountProvisioningContext context, Guid vrConnectionId, List<dynamic> changedUsers)
@@ -54,12 +63,14 @@ namespace Retail.Teles.Business
                 }
             }
         }
-        List<dynamic> GetChangedUsers(IAccountProvisioningContext context,string actionType,Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        List<dynamic> GetChangedUsers(IAccountProvisioningContext context, string actionType, Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState, out ChURGsActionCh oldChURGsActionCh)
         {
             List<dynamic> changedUsers = null;
+            oldChURGsActionCh = null;
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null)
             {
                 ChURGsActionCh chURGsActionCh;
+              
                 if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
                 {
                     if (chURGsActionCh.ChangesByUser != null)
@@ -76,6 +87,7 @@ namespace Retail.Teles.Business
                             }
                         }
                     }
+                    oldChURGsActionCh = chURGsActionCh;
                     changeUsersRGsAccountState.ChangesByActionType.Remove(actionType);
                 }
             }

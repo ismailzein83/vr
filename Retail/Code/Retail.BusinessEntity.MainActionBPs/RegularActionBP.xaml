@@ -50,8 +50,6 @@
       <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Integration.BP.Activities</AssemblyReference>
-      <AssemblyReference>Vanrise.Integration.Entities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.Business</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.MainActionBPs.Activities</AssemblyReference>
@@ -119,6 +117,11 @@
       </Assign.Value>
     </Assign>
     <rbma1:ExecuteAccountProvisioner sap2010:WorkflowViewState.IdRef="ExecuteAccountProvisioner_1">
+      <rbma1:ExecuteAccountProvisioner.AccountActionDefinition>
+        <InArgument x:TypeArguments="rbe:AccountActionDefinition">
+          <mca:CSharpValue x:TypeArguments="rbe:AccountActionDefinition">accountActionDefinition</mca:CSharpValue>
+        </InArgument>
+      </rbma1:ExecuteAccountProvisioner.AccountActionDefinition>
       <rbma1:ExecuteAccountProvisioner.AccountBEDefinitionId>
         <InArgument x:TypeArguments="s:Guid">
           <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountBEDefinitionId</mca:CSharpValue>
@@ -185,7 +188,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwdQAO9AQ4CAQFJBVQOAwGSAVUFYA4DAYEBYQVsDgIBcG0FeA4CAV95BY4BJwIBPo8BBbsBCgIBAlELUbsBAwGbAUwLTHUDAZMBXQtdkgIDAYoBWAtYgAEDAYIBaQtp5wECAXlkC2SJAQIBcXULde4BAgFocAtwewIBYIsBC4sBoQECAVeBAQuBAVcCAU+GAQuGAXoCAUd8C3xiAgE/kgELkgGDAQIBA5YBCbkBFAIBC5cBC6IBFAIBLaMBC7gBJgIBDJ8BEZ8B3QECATaaARGaAXUCAS6rARGrAV0CASW1ARG1AYMBAgEdsAERsAFlAgEVpgERpgFoAgEN</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwePgPAAQ4CAQFHBVIOAwGaAVMFXg4DAYkBXwVqDgIBeGsFdg4CAWd3BZEBJwIBPpIBBb4BCgIBAk8LT7sBAwGjAUoLSnUDAZsBWwtbkgIDAZIBVgtWgAEDAYoBZwtn5wEDAYEBYgtiiQECAXlzC3PuAQIBcG4LbnsCAWiOAQuOAaEBAgFfhAELhAFXAgFXegt6cwIBT4kBC4kBegIBR38Lf2ICAT+VAQuVAYMBAgEDmQEJvAEUAgELmgELpQEUAgEtpgELuwEmAgEMogERogHdAQIBNp0BEZ0BdQIBLq4BEa4BXQIBJbgBEbgBgwECAR2zARGzAWUCARWpARGpAWgCAQ0=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

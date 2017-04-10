@@ -420,7 +420,7 @@ namespace Retail.BusinessEntity.Business
         {
             var accountTreeNode = GetCacheAccountTreeNodes(accountBEDefinitionId).GetRecord(accountId);
             accountTreeNode.ThrowIfNull("accountTreeNode", accountId);
-            if(accountTreeNode.ChildNodes != null)
+            if (accountTreeNode.ChildNodes != null)
             {
                 List<Account> childAccounts = new List<Account>();
                 foreach (var childNode in accountTreeNode.ChildNodes)
@@ -497,7 +497,10 @@ namespace Retail.BusinessEntity.Business
             else
                 return default(T);
         }
-
+        public void TrackAndLogObjectCustomAction(Guid accountBEDefinitionId, long accountId, string action,string actionDescription, Object technicalInfo)
+        {
+            VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), action, true, GetAccount(accountBEDefinitionId, accountId), actionDescription, technicalInfo);
+        }
         #endregion
 
         #region Private Methods

@@ -110,10 +110,12 @@ namespace Retail.Teles.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             AccountBEManager accountBEManager = new AccountBEManager();
+            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new EnterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId };
             bool result = accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
-                new EnterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId });
+                enterpriseAccountMappingInfo);
             if (result)
             {
+                accountBEManager.TrackAndLogObjectCustomAction(input.AccountBEDefinitionId, input.AccountId, "Map To Teles Enterprise",null, enterpriseAccountMappingInfo);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(input.AccountBEDefinitionId);

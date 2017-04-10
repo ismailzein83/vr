@@ -29,8 +29,9 @@ namespace Retail.Teles.Business
                     changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
                 if (changeUsersRGsAccountState.ChangesByActionType == null)
                     changeUsersRGsAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
-               
+
                 ChURGsActionCh chURGsActionCh;
+                ChURGsActionCh newChURGsActionCh = new ChURGsActionCh();
                 if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
                 {
                     chURGsActionCh = new ChURGsActionCh();
@@ -42,15 +43,15 @@ namespace Retail.Teles.Business
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("All sites for enterpriseId {0} loaded.", enterpriseAccountMappingInfo.TelesEnterpriseId));
                 if (sites != null)
                 {
-                    var usersToBlock = GetUsersToBlockForeachSite(context,definitionSettings, sites, chURGsActionCh);
+                    var usersToBlock = GetUsersToBlockForeachSite(context, definitionSettings, sites, chURGsActionCh, newChURGsActionCh);
                     UpdateBlockedUsers(definitionSettings, usersToBlock);
                     
                     if (chURGsActionCh != null && chURGsActionCh.ChangesByUser != null && chURGsActionCh.ChangesByUser.Count != 0)
-                        UpdateBlockedUsersState(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState);
+                        UpdateBlockedUsersState(context, changeUsersRGsAccountState, newChURGsActionCh);
                 }
             }
         }
-        List<dynamic> GetUsersToBlockForeachSite(IAccountProvisioningContext context,ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, ChURGsActionCh chURGsActionCh)
+        List<dynamic> GetUsersToBlockForeachSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, ChURGsActionCh chURGsActionCh, ChURGsActionCh newChURGsActionCh)
         {
             List<dynamic> usersToBlock = new List<dynamic>();
             foreach (var site in sites)
@@ -61,13 +62,13 @@ namespace Retail.Teles.Business
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Routing groups for site {0} loaded.", site.name));
                 if (siteRoutingGroups != null)
                 {
-                    GetUsersToBlock(context,definitionSettings, usersToBlock, siteRoutingGroups, site.id, chURGsActionCh);
+                    GetUsersToBlock(context, definitionSettings, usersToBlock, siteRoutingGroups, site.id, chURGsActionCh, newChURGsActionCh);
                 }
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing site {0}.", site.name));
             }
             return usersToBlock;
         }
-        void GetUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, Dictionary<dynamic, dynamic> siteRoutingGroups, dynamic siteId, ChURGsActionCh chURGsActionCh)
+        void GetUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, Dictionary<dynamic, dynamic> siteRoutingGroups, dynamic siteId, ChURGsActionCh chURGsActionCh,ChURGsActionCh newChURGsActionCh)
         {
 
             List<dynamic> existingRoutingGroups = null;
@@ -114,14 +115,14 @@ namespace Retail.Teles.Business
             }
             if (definitionSettings.ExistingRoutingGroupCondition == null)
             {
-                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
+                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh,newChURGsActionCh, true);
             }else if (existingRoutingGroups == null)
             {
                 switch (definitionSettings.ExistingRGNoMatchHandling)
                 {
                     case ExistingRGNoMatchHandling.Skip: return;
                     case ExistingRGNoMatchHandling.UpdateAll:
-                        ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, true);
+                        ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh,newChURGsActionCh, true);
                         break;
                     case ExistingRGNoMatchHandling.Stop:
                         if (existingRoutingGroups == null)
@@ -131,10 +132,10 @@ namespace Retail.Teles.Business
             }
             else
             {
-                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh, false);
+                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock, chURGsActionCh,newChURGsActionCh, false);
             }
         }
-        void ProcessUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, dynamic siteId, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup, List<dynamic> usersToBlock, ChURGsActionCh chURGsActionCh, bool updateAll)
+        void ProcessUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, dynamic siteId, List<dynamic> existingRoutingGroups, dynamic newRoutingGroup, List<dynamic> usersToBlock, ChURGsActionCh chURGsActionCh,ChURGsActionCh newChURGsActionCh, bool updateAll)
         {
             var users = GetUsers(definitionSettings.VRConnectionId, siteId);
             if(users != null)
@@ -154,10 +155,16 @@ namespace Retail.Teles.Business
                         {
                             if (chURGsActionCh.ChangesByUser == null)
                                 chURGsActionCh.ChangesByUser = new Dictionary<dynamic, ChURGsUserCh>();
+                            if(newChURGsActionCh.ChangesByUser == null)
+                            {
+                                newChURGsActionCh.ChangesByUser = new Dictionary<dynamic, ChURGsUserCh>();
+                            }
                             ChURGsUserCh chURGsUserCh;
                             if (!chURGsActionCh.ChangesByUser.TryGetValue(user.id, out chURGsUserCh))
                             {
-                                chURGsActionCh.ChangesByUser.Add(user.id, new ChURGsUserCh { OriginalRGId = user.routingGroupId });
+                                chURGsUserCh = new ChURGsUserCh { OriginalRGId = user.routingGroupId };
+                                chURGsActionCh.ChangesByUser.Add(user.id, chURGsUserCh);
+                                newChURGsActionCh.ChangesByUser.Add(user.id, chURGsUserCh);
                             }
                         }
                         user.routingGroupId = newRoutingGroup;
@@ -182,11 +189,14 @@ namespace Retail.Teles.Business
                 }
             }
         }
-        void UpdateBlockedUsersState(Guid accountBEDefinition, long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState)
+        void UpdateBlockedUsersState(IAccountProvisioningContext context, ChangeUsersRGsAccountState changeUsersRGsAccountState,ChURGsActionCh newChURGsActionCh)
         {
             if (changeUsersRGsAccountState != null)
             {
-                accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(accountBEDefinition, accountId, changeUsersRGsAccountState);
+                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState))
+                {
+                    context.TrackActionExecuted(null, newChURGsActionCh);
+                };
             }
 
         }

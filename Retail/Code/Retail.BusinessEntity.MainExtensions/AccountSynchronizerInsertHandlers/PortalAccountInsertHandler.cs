@@ -73,8 +73,11 @@ namespace Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers
                         Email = userDetails.InsertedObject.Entity.Email,
                         TenantId = userDetails.InsertedObject.Entity.TenantId
                     };
-
-                    new AccountBEManager().UpdateAccountExtendedSetting(accountBEDefinitionId, account.AccountId, portalAccountSettings);
+                    AccountBEManager accountBEManager = new AccountBEManager();
+                    if (accountBEManager.UpdateAccountExtendedSetting(accountBEDefinitionId, account.AccountId, portalAccountSettings))
+                    {
+                        accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, account.AccountId, "Configure Portal Account", string.Format("Email: {0}", portalAccountSettings.Email), portalAccountSettings);
+                    };
                     context.SynchronizerInsertBEContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Portal User Account (Email: {0}) has been created for Account '{1}'", email, account.Name);
                 }
             }
