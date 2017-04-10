@@ -16,10 +16,10 @@ namespace Vanrise.Common.Data.SQL
 
         }
 
-        public long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription)
+        public long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription,Object technicalInformation)
         {
             object objectTrackingId;
-            ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, obj != null ? Vanrise.Common.Serializer.Serialize(obj) : null, actionId, actionDescription);
+            ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, obj != null ? Vanrise.Common.Serializer.Serialize(obj) : null, actionId, actionDescription, technicalInformation != null ? Vanrise.Common.Serializer.Serialize(technicalInformation) : null);
             return (long)objectTrackingId;
         }
 

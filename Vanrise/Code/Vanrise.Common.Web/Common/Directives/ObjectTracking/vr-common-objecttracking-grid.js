@@ -43,17 +43,26 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
+                        var promiseDeferred = UtilsService.createPromiseDeferred();
                         if (actionHistoryName == null) {
                             var uniqueName = query.EntityUniqueName;
                             VRCommon_ObjectTrackingAPIService.GetViewHistoryItemClientActionName(uniqueName).then(function (response) {
                                 actionHistoryName = response;
                                 viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
+                                return gridAPI.retrieveData(query).finally(function () {
+                                    promiseDeferred.resolve();
+                                });
                             }).catch(function (error) {
+                                promiseDeferred.reject(error);
                                 VRNotificationService.notifyException(error, $scope);
-                            }).finally(function () {
-                                return gridAPI.retrieveData(query);
+                            });
+                        } else {
+                            gridAPI.retrieveData(query).finally(function () {
+                                promiseDeferred.resolve();
                             });
                         }
+                        
+                        return promiseDeferred.promise;
                     };
                     return directiveAPI;
                 }

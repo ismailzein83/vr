@@ -8,7 +8,7 @@ namespace Vanrise.Common.Data
 {
     public interface IVRObjectTrackingDataManager : IDataManager
     {
-        long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription);
+        long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription, Object technicalInformation);
         List<VRObjectTrackingMetaData> GetAll(Guid loggableEntityId, string objectId);
         object GetObjectDetailById(int VRObjectTrackingId);
 

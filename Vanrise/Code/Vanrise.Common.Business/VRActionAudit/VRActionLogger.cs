@@ -34,18 +34,17 @@ namespace Vanrise.Common.Business
             LogAction(loggableEntity, action, null, null, null, null);
         }
 
-        public void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription = null)
+        public void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription = null, Object technicalInformation = null)
         {
-            if(isObjectUpdated)
+            if (isObjectUpdated)
             {
-                TrackAndLogObjectAction(loggableEntity, action, obj, actionDescription, false);
+                TrackAndLogObjectAction(loggableEntity, action, obj, technicalInformation, actionDescription, false);
             }
             else
             {
                 LogAction(loggableEntity, action, GetObjectId(loggableEntity, obj), GetObjectName(loggableEntity, obj), actionDescription, null);
             }
         }
-
         public void LogObjectViewed(VRLoggableEntityBase loggableEntity, Object obj)
         {
             LogAction(loggableEntity, "View Item Detail", GetObjectId(loggableEntity, obj), GetObjectName(loggableEntity, obj), null, null);
@@ -53,30 +52,30 @@ namespace Vanrise.Common.Business
 
         public void TrackAndLogObjectAdded(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Add", obj, null, true);
+            TrackAndLogObjectAction(loggableEntity, "Add", obj,null, null, true);
         }
 
         public void TrackAndLogObjectUpdated(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Update", obj, null, true);
+            TrackAndLogObjectAction(loggableEntity, "Update", obj,null, null, true);
         }
 
         public void TrackAndLogObjectDeleted(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Delete", obj, null, true);
+            TrackAndLogObjectAction(loggableEntity, "Delete", obj,null, null, true);
         }
 
         #endregion
 
         #region Private Methods
 
-        private void TrackAndLogObjectAction(VRLoggableEntityBase loggableEntity, string action, Object obj, string actionDescription, bool saveObject)
+        private void TrackAndLogObjectAction(VRLoggableEntityBase loggableEntity, string action, Object obj, Object technicalInformation, string actionDescription, bool saveObject)
         {
             action.ThrowIfNull("action"); 
             string objectId = GetObjectId(loggableEntity, obj);
             string objectName = GetObjectName(loggableEntity, obj);
 
-            long objectTrackingId = s_objectTrackingManager.TrackObjectAction(loggableEntity, objectId, saveObject ? obj : null, action, actionDescription);
+            long objectTrackingId = s_objectTrackingManager.TrackObjectAction(loggableEntity, objectId, saveObject ? obj : null, action, actionDescription,technicalInformation);
 
             LogAction(loggableEntity, action, objectId, objectName, actionDescription, saveObject ? objectTrackingId : default(long?));
         }

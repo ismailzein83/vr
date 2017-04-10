@@ -11,7 +11,7 @@ namespace Vanrise.Common
     {
         void LogGetFilteredAction(VRLoggableEntityBase loggableEntity, DataRetrievalInput dataRetrievalInput);
 
-        void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription);
+        void LogObjectCustomAction(VRLoggableEntityBase loggableEntity, string action, bool isObjectUpdated, Object obj, string actionDescription, Object technicalInformation = null);
 
         void LogObjectViewed(VRLoggableEntityBase loggableEntity, Object obj);
 
