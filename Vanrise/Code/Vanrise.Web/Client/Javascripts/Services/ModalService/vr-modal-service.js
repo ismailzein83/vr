@@ -22,6 +22,7 @@
             modalScope.modalContext.closeModal = function () {
                 if (modalInstance) modalInstance.hide();
                 deferred.resolve();
+                modalScope.$destroy();
             };
 
            
@@ -85,7 +86,9 @@
                 }
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
-
+            modalScope.$on("$destroy", function () {
+                $(window).off("resize.Viewport");
+            });
             modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: "am-fade-and-scale" ,onHide:onhideModal });
             return deferred.promise;
         }
