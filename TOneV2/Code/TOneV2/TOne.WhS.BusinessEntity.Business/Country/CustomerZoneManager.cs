@@ -62,7 +62,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
+        public InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
         {
             CustomerZones currentCustomerZones = this.GetCustomerZones(customerZones.CustomerId, DateTime.Now, false);
 
@@ -78,7 +78,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
 
-            TOne.Entities.InsertOperationOutput<CustomerZones> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CustomerZones>();
+            InsertOperationOutput<CustomerZones> insertOperationOutput = new InsertOperationOutput<CustomerZones>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
 
             int customerZonesId = -1;

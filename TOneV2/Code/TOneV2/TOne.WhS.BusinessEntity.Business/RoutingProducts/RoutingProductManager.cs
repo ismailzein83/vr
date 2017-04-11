@@ -102,11 +102,11 @@ namespace TOne.WhS.BusinessEntity.Business
 			return routingProducts.MapRecords(RoutingProductInfoMapper, filterPredicate).OrderBy(x => x.Name);
 		}
 
-		public TOne.Entities.InsertOperationOutput<RoutingProductDetail> AddRoutingProduct(RoutingProduct routingProduct)
+		public InsertOperationOutput<RoutingProductDetail> AddRoutingProduct(RoutingProduct routingProduct)
 		{
 			ValidateRoutingProductToAdd(routingProduct);
 
-			TOne.Entities.InsertOperationOutput<RoutingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RoutingProductDetail>();
+			InsertOperationOutput<RoutingProductDetail> insertOperationOutput = new InsertOperationOutput<RoutingProductDetail>();
 
 			insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
 			insertOperationOutput.InsertedObject = null;
@@ -132,14 +132,14 @@ namespace TOne.WhS.BusinessEntity.Business
 			return insertOperationOutput;
 		}
 
-		public TOne.Entities.UpdateOperationOutput<RoutingProductDetail> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
+		public UpdateOperationOutput<RoutingProductDetail> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
 		{
 			ValidateRoutingProductToEdit(routingProduct);
 
 			IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
 
 			bool updateActionSucc = dataManager.Update(routingProduct);
-			var updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProductDetail>();
+			var updateOperationOutput = new UpdateOperationOutput<RoutingProductDetail>();
 
 			updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
 			updateOperationOutput.UpdatedObject = null;
@@ -159,11 +159,11 @@ namespace TOne.WhS.BusinessEntity.Business
 			return updateOperationOutput;
 		}
 
-		public TOne.Entities.DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
+		public DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
 		{
 			IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
 
-			TOne.Entities.DeleteOperationOutput<object> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<object>();
+			DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
 			deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
 
 			bool deleteActionSucc = dataManager.Delete(routingProductId);

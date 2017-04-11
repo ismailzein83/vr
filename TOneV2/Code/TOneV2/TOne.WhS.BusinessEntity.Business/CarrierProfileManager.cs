@@ -69,11 +69,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedCarrierProfiles().MapRecords(CarrierProfileInfoMapper).OrderBy(x => x.Name);
         }
-        public TOne.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
+        public InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             ValidateCarrierProfileToAdd(carrierProfile);
 
-            TOne.Entities.InsertOperationOutput<CarrierProfileDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierProfileDetail>();
+            InsertOperationOutput<CarrierProfileDetail> insertOperationOutput = new InsertOperationOutput<CarrierProfileDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -95,14 +95,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfileToEdit)
+        public UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfileToEdit)
         {
             ValidateCarrierProfileToEdit(carrierProfileToEdit);
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierProfileToEdit);
-            TOne.Entities.UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierProfileDetail>();
+            UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new UpdateOperationOutput<CarrierProfileDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;

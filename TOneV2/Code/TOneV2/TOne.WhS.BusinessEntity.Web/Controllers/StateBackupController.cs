@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("RestoreData")]
-        public TOne.Entities.UpdateOperationOutput<StateBackup> RestoreData(long stateBackupId)
+        public UpdateOperationOutput<StateBackup> RestoreData(long stateBackupId)
         {
             StateBackupManager manager = new StateBackupManager();
             return  manager.RestoreData(stateBackupId);

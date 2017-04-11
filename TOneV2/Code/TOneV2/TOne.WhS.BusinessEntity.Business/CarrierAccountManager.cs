@@ -226,11 +226,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
-        public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
+        public InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
         {
             ValidateCarrierAccountToAdd(carrierAccount);
 
-            TOne.Entities.InsertOperationOutput<CarrierAccountDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CarrierAccountDetail>();
+            InsertOperationOutput<CarrierAccountDetail> insertOperationOutput = new InsertOperationOutput<CarrierAccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -266,7 +266,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit)
+        public UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit)
         {
             int carrierProfileId;
             ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId);
@@ -274,7 +274,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
-            TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierAccountDetail>();
+            UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new UpdateOperationOutput<CarrierAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;

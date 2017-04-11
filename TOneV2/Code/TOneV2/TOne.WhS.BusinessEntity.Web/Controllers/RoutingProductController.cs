@@ -56,21 +56,21 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddRoutingProduct")]
-        public TOne.Entities.InsertOperationOutput<RoutingProductDetail> AddRoutingProduct(RoutingProduct routingProduct)
+        public InsertOperationOutput<RoutingProductDetail> AddRoutingProduct(RoutingProduct routingProduct)
         {
             return _manager.AddRoutingProduct(routingProduct);
         }
 
         [HttpPost]
         [Route("UpdateRoutingProduct")]
-        public TOne.Entities.UpdateOperationOutput<RoutingProductDetail> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
+        public UpdateOperationOutput<RoutingProductDetail> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
         {
             return _manager.UpdateRoutingProduct(routingProduct);
         }
 
         [HttpGet]
         [Route("DeleteRoutingProduct")]
-        public TOne.Entities.DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
+        public DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
         {
             return _manager.DeleteRoutingProduct(routingProductId);
         } 

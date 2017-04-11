@@ -79,7 +79,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddCarrierAccount")]
-        public TOne.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
+        public InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.AddCarrierAccount(carrierAccount);
@@ -87,7 +87,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateCarrierAccount")]
-        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccount)
+        public UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccount)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.UpdateCarrierAccount(carrierAccount);

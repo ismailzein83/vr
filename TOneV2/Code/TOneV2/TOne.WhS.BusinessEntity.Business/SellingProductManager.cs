@@ -99,11 +99,11 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return sellingProduct.SellingNumberPlanId;
         }
-        public TOne.Entities.InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
+        public InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
         {
             ValidateSellingProductToAdd(sellingProduct);
 
-            TOne.Entities.InsertOperationOutput<SellingProductDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<SellingProductDetail>();
+            InsertOperationOutput<SellingProductDetail> insertOperationOutput = new InsertOperationOutput<SellingProductDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -129,14 +129,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProductToEdit)
+        public UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProductToEdit)
         {
             ValidateSellingProductToEdit(sellingProductToEdit);
 
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
 
             bool updateActionSucc = dataManager.Update(sellingProductToEdit);
-            TOne.Entities.UpdateOperationOutput<SellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<SellingProductDetail>();
+            UpdateOperationOutput<SellingProductDetail> updateOperationOutput = new UpdateOperationOutput<SellingProductDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;

@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddCustomerZones")]
-        public TOne.Entities.InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
+        public InsertOperationOutput<CustomerZones> AddCustomerZones(CustomerZones customerZones)
         {
             CustomerZoneManager manager = new CustomerZoneManager();
             return manager.AddCustomerZones(customerZones);

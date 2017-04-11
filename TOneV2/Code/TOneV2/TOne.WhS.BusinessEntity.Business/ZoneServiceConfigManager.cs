@@ -203,9 +203,9 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        public TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
+        public InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
-            TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail>();
+            InsertOperationOutput<ZoneServiceConfigDetail> insertOperationOutput = new InsertOperationOutput<ZoneServiceConfigDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             if (GetCachedZoneServiceConfigs().FindRecord(x => x.Value.Settings.Color.ToLower() == zoneServiceConfig.Settings.Color.ToLower()).Value != null)
@@ -234,11 +234,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail> UpdateZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
+        public UpdateOperationOutput<ZoneServiceConfigDetail> UpdateZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             IZoneServiceConfigDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneServiceConfigDataManager>();
 
-            TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail>();
+            UpdateOperationOutput<ZoneServiceConfigDetail> updateOperationOutput = new UpdateOperationOutput<ZoneServiceConfigDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             if (GetCachedZoneServiceConfigs().FindRecord(x => x.Value.Settings.Color.ToLower() == zoneServiceConfig.Settings.Color.ToLower() && x.Key != zoneServiceConfig.ZoneServiceConfigId).Value != null)

@@ -183,10 +183,6 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">
-      <Project>{60da66bd-017d-43a2-82dc-ed7db8751d23}</Project>
-      <Name>TOne.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>

@@ -44,7 +44,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddCodeGroup")]
-        public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
+        public InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
             CodeGroupManager manager = new CodeGroupManager();
             return manager.AddCodeGroup(codeGroup);
@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
       
         [HttpPost]
         [Route("UpdateCodeGroup")]
-        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroup)
+        public UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroup)
         {
             CodeGroupManager manager = new CodeGroupManager();
             return manager.UpdateCodeGroup(codeGroup);

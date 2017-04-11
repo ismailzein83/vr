@@ -140,11 +140,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return codeGroup.Code;
 
         }
-        public TOne.Entities.InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
+        public InsertOperationOutput<CodeGroupDetail> AddCodeGroup(CodeGroup codeGroup)
         {
             ValidateCodeGroupToAdd(codeGroup);
 
-            TOne.Entities.InsertOperationOutput<CodeGroupDetail> insertOperationOutput = new TOne.Entities.InsertOperationOutput<CodeGroupDetail>();
+            InsertOperationOutput<CodeGroupDetail> insertOperationOutput = new InsertOperationOutput<CodeGroupDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -168,14 +168,14 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroupToEdit)
+        public UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroupToEdit)
         {
             ValidateCodeGroupToEdit(codeGroupToEdit);
 
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
 
             bool updateActionSucc = dataManager.Update(codeGroupToEdit);
-            TOne.Entities.UpdateOperationOutput<CodeGroupDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CodeGroupDetail>();
+            UpdateOperationOutput<CodeGroupDetail> updateOperationOutput = new UpdateOperationOutput<CodeGroupDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;

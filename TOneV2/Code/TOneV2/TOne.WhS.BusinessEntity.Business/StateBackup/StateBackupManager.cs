@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -43,9 +44,9 @@ namespace TOne.WhS.BusinessEntity.Business
             manager.BackupData(backupType);
         }
 
-        public TOne.Entities.UpdateOperationOutput<StateBackup> RestoreData(long stateBackupId)
+        public UpdateOperationOutput<StateBackup> RestoreData(long stateBackupId)
         {
-            TOne.Entities.UpdateOperationOutput<StateBackup> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<StateBackup>();
+            UpdateOperationOutput<StateBackup> updateOperationOutput = new UpdateOperationOutput<StateBackup>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;

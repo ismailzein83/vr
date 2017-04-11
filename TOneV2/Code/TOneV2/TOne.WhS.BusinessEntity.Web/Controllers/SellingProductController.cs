@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -40,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddSellingProduct")]
-        public TOne.Entities.InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
+        public InsertOperationOutput<SellingProductDetail> AddSellingProduct(SellingProduct sellingProduct)
         {
             SellingProductManager manager = new SellingProductManager();
             return manager.AddSellingProduct(sellingProduct);
@@ -48,7 +49,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateSellingProduct")]
-        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProduct)
+        public UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProduct)
         {
             SellingProductManager manager = new SellingProductManager();
             return manager.UpdateSellingProduct(sellingProduct);

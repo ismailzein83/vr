@@ -49,14 +49,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddZoneServiceConfig")]
-        public TOne.Entities.InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
+        public InsertOperationOutput<ZoneServiceConfigDetail> AddZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
             return manager.AddZoneServiceConfig(zoneServiceConfig);
         }
         [HttpPost]
         [Route("UpdateZoneServiceConfig")]
-        public TOne.Entities.UpdateOperationOutput<ZoneServiceConfigDetail> UpdateZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
+        public UpdateOperationOutput<ZoneServiceConfigDetail> UpdateZoneServiceConfig(ZoneServiceConfig zoneServiceConfig)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
             return manager.UpdateZoneServiceConfig(zoneServiceConfig);

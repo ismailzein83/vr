@@ -209,12 +209,12 @@ namespace TOne.WhS.BusinessEntity.Business
               });
         }
 
-        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
+        public InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
         {
             foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts)
                 ValidateCustomerSellingProductToAdd(customerSellingProduct);
 
-            TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> insertOperationOutput = new TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>>();
+            InsertOperationOutput<List<CustomerSellingProductDetail>> insertOperationOutput = new InsertOperationOutput<List<CustomerSellingProductDetail>>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
@@ -267,13 +267,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProductToEdit customerSellingProduct)
+        public UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProductToEdit customerSellingProduct)
         {
             int customerId;
             ValidateCustomerSellingProductToEdit(customerSellingProduct, out customerId);
 
             ICustomerSellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
-            TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail>();
+            UpdateOperationOutput<CustomerSellingProductDetail> updateOperationOutput = new UpdateOperationOutput<CustomerSellingProductDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 

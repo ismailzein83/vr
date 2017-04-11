@@ -2,6 +2,7 @@
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -41,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddSellingNumberPlan")]
-        public TOne.Entities.InsertOperationOutput<SellingNumberPlanDetail> AddSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
+        public InsertOperationOutput<SellingNumberPlanDetail> AddSellingNumberPlan(SellingNumberPlan sellingNumberPlan)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.AddSellingNumberPlan(sellingNumberPlan);
@@ -49,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateSellingNumberPlan")]
-        public TOne.Entities.UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
+        public UpdateOperationOutput<SellingNumberPlanDetail> UpdateSellingNumberPlan(SellingNumberPlanToEdit sellingNumberPlan)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.UpdateSellingNumberPlan(sellingNumberPlan);
