@@ -9,57 +9,57 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	public class PrepareCustomersWithPriceList : CodeActivity
-	{
-		#region Input Arguments
+    public class PrepareCustomersWithPriceList : CodeActivity
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<int>> CustomerIdsWithPriceList { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<int>> CustomerIdsWithPriceList { get; set; }
 
-		#endregion
+        #endregion
 
-		#region Output Arguments
+        #region Output Arguments
 
-		[RequiredArgument]
-		public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersWithPriceList { get; set; }
+        [RequiredArgument]
+        public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersWithPriceList { get; set; }
 
-		#endregion
+        #endregion
 
-		protected override void Execute(System.Activities.CodeActivityContext context)
-		{
-			IEnumerable<int> customerIdsWithPriceList = CustomerIdsWithPriceList.Get(context);
+        protected override void Execute(System.Activities.CodeActivityContext context)
+        {
+            IEnumerable<int> customerIdsWithPriceList = CustomerIdsWithPriceList.Get(context);
 
-			var customersWithPriceList = new List<CarrierAccountInfo>();
-			var carrierAccountManager = new CarrierAccountManager();
+            var customersWithPriceList = new List<CarrierAccountInfo>();
+            var carrierAccountManager = new CarrierAccountManager();
 
-			foreach (int customerId in customerIdsWithPriceList)
-			{
-				CarrierAccountInfo customerInfo = CustomerInfoMapper(customerId, carrierAccountManager);
-				customersWithPriceList.Add(customerInfo);
-			}
+            foreach (int customerId in customerIdsWithPriceList)
+            {
+                CarrierAccountInfo customerInfo = CustomerInfoMapper(customerId, carrierAccountManager);
+                customersWithPriceList.Add(customerInfo);
+            }
+            customersWithPriceList = customersWithPriceList.OrderBy(c => c.Name).ToList();
+            CustomersWithPriceList.Set(context, customersWithPriceList);
+        }
 
-			CustomersWithPriceList.Set(context, customersWithPriceList);
-		}
+        #region Private Methods
 
-		#region Private Methods
+        private CarrierAccountInfo CustomerInfoMapper(int customerId, CarrierAccountManager carrierAccountManager)
+        {
+            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerId);
+            if (customer == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' was not found", customerId));
+            else
+            {
+                return new CarrierAccountInfo()
+                {
+                    CarrierAccountId = customerId,
+                    Name = carrierAccountManager.GetCarrierAccountName(customerId),
+                    AccountType = customer.AccountType,
+                    SellingNumberPlanId = customer.SellingNumberPlanId
+                };
+            }
+        }
 
-		private CarrierAccountInfo CustomerInfoMapper(int customerId, CarrierAccountManager carrierAccountManager)
-		{
-			CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerId);
-			if (customer == null)
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' was not found", customerId));
-			else
-			{
-				return new CarrierAccountInfo()
-				{
-					CarrierAccountId = customerId,
-					Name = carrierAccountManager.GetCarrierAccountName(customerId),
-					AccountType = customer.AccountType,
-					SellingNumberPlanId = customer.SellingNumberPlanId
-				};
-			}
-		}
-		
-		#endregion
-	}
+        #endregion
+    }
 }
