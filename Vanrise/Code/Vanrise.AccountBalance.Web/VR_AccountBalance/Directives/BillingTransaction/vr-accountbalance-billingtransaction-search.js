@@ -66,7 +66,11 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     query: getFilterObject(),
                     showAccount: false,
                 };
-                return gridAPI.loadGrid(payload);
+                var promise = [];
+                promise.push(getCurrentAccountBalance());
+                promise.push(gridAPI.loadGrid(payload));
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             $scope.scopeModel.addTransaction = function () {
