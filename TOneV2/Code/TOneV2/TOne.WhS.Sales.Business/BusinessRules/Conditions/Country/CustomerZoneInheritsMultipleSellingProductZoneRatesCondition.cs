@@ -19,42 +19,41 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            //IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
-            //if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
-            //    return true;
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+                return true;
 
-            //if (ratePlanContext.IntersectedSellingProductZoneRatesByZone == null)
-            //    return true;
+            if (ratePlanContext.IntersectedSellingProductZoneRatesByZone == null)
+                return true;
 
-            //var countryToAdd = context.Target as CustomerCountryToAdd;
+            var countryToAdd = context.Target as CustomerCountryToAdd;
 
-            //IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
+            IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
 
-            //if (countryZones == null || countryZones.Count() == 0)
-            //    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZones of Country '{0}' were not found", countryToAdd.CountryId));
+            if (countryZones == null || countryZones.Count() == 0)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZones of Country '{0}' were not found", countryToAdd.CountryId));
 
-            //var invalidZoneNames = new List<string>();
-            //var saleZoneManager = new SaleZoneManager();
+            var invalidZoneNames = new List<string>();
 
-            //foreach (ExistingZone countryZone in countryZones)
-            //{
-            //    IEnumerable<SaleRate> zoneRates = ratePlanContext.IntersectedSellingProductZoneRatesByZone.GetRecord(countryZone.ZoneId);
+            foreach (ExistingZone countryZone in countryZones)
+            {
+                IEnumerable<SaleRate> zoneRates = ratePlanContext.IntersectedSellingProductZoneRatesByZone.GetRecord(countryZone.ZoneId);
 
-            //    if (zoneRates == null || zoneRates.Count() == 0)
-            //        continue;
+                if (zoneRates == null || zoneRates.Count() == 0)
+                    continue;
 
-            //    if (zoneRates.FindAllRecords(x => x.IsEffective(countryToAdd.BED)).Count() > 1)
-            //    {
-            //        invalidZoneNames.Add(countryZone.Name);
-            //    }
-            //}
+                if (zoneRates.FindAllRecords(x => !x.EED.HasValue || x.EED.Value > countryToAdd.BED).Count() > 1)
+                {
+                    invalidZoneNames.Add(countryZone.Name);
+                }
+            }
 
-            //if (invalidZoneNames.Count > 0)
-            //{
-            //    context.Message = string.Format("The following Zones inherit multiple Rates from the Customer's SellingProducts", string.Join(",", invalidZoneNames));
-            //    return false;
-            //}
+            if (invalidZoneNames.Count > 0)
+            {
+                context.Message = string.Format("The following Zones inherit multiple Rates from the Customer's SellingProducts: {0}", string.Join(",", invalidZoneNames));
+                return false;
+            }
 
             return true;
         }

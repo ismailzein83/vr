@@ -99,6 +99,7 @@
     <Compile Include="ProcessCustomerCountries.cs" />
     <Compile Include="SavePricelistFiles.cs" />
     <Compile Include="SetContextEffectiveAfterCustomerZoneRatesByZone.cs" />
+    <Compile Include="SetContextIntersectedSellingProductZoneRatesByZone.cs" />
     <Compile Include="SetRatePlanContext.cs" />
     <Compile Include="StructureDefaultData.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />

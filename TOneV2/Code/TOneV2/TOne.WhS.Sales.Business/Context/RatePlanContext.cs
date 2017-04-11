@@ -33,6 +33,8 @@ namespace TOne.WhS.Sales.Business
             }
         }
         public EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; set; }
+        public IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; set; }
+        public Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; set; }
     }
 
     public interface IRatePlanContext
@@ -45,5 +47,7 @@ namespace TOne.WhS.Sales.Business
         SaleEntityZoneRateLocator FutureRateLocator { get; }
         DateTime RetroactiveDate { get; }
         EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; }
+        IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; }
+        Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; }
     }
 }

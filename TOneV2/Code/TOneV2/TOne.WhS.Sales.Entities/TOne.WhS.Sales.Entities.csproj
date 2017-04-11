@@ -115,6 +115,7 @@
     <Compile Include="RateManagement\Rate\ChangedRate.cs" />
     <Compile Include="RateManagement\Rate\EffectiveAfterCustomerZoneRatesByZone.cs" />
     <Compile Include="RateManagement\Rate\ExistingRate.cs" />
+    <Compile Include="RateManagement\Rate\IntersectedSellingProductZoneRatesByZone.cs" />
     <Compile Include="RateManagement\Rate\IProcessRatesContext.cs" />
     <Compile Include="RateManagement\Rate\NewRate.cs" />
     <Compile Include="RateManagement\RoutingProduct\Default\ChangedDefaultRoutingProduct.cs" />
