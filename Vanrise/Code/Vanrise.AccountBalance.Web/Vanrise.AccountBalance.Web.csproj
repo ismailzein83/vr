@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountBalanceNotificationTypeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountStatementController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
@@ -225,6 +226,7 @@
     <Content Include="VR_AccountBalance\ModuleInitialization.js" />
     <Content Include="VR_AccountBalance\Services\AccountTypeService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountAPIService.js" />
+    <Content Include="VR_AccountBalance\Services\APIServices\AccountBalanceNotificationTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountStatementAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountTypeAPIService.js" />
     <Content Include="VR_AccountBalance\Services\APIServices\AccountUsageAPIService.js" />

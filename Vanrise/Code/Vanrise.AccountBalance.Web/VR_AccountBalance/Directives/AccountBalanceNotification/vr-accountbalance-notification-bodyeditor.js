@@ -5,13 +5,12 @@ app.directive("vrAccountbalanceNotificationBodyeditor", ["UtilsService", "VRNoti
 
         var directiveDefinitionObject = {
             restrict: "E",
-            scope:
-            {
+            scope: {
                 onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new ViewEditorCtor($scope, ctrl, $attrs);
+                var ctor = new NotificationTypeSettingsBodyEditorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -22,29 +21,44 @@ app.directive("vrAccountbalanceNotificationBodyeditor", ["UtilsService", "VRNoti
             templateUrl: "/Client/Modules/VR_AccountBalance/Directives/AccountBalanceNotification/Templates/AccountBalanceNotificationBodyEditor.html"
         };
 
-        function ViewEditorCtor($scope, ctrl, $attrs) {
+        function NotificationTypeSettingsBodyEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var gridAPI;
+            var gridAPIDirectiveAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    gridAPIDirectiveAPIReadyDeferred.resolve();
                 };
 
                 defineAPI();
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var promises = [];
 
-                    gridAPI.loadGrid(payload);
+                    //Loading Grid
+                    var gridLoadPromise = getGridLoadPromise();
+                    promises.push(gridLoadPromise);
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function getGridLoadPromise() {
+                        var gridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        gridAPIDirectiveAPIReadyDeferred.promise.then(function () {
+                            var gridDirectivePayload = payload;
+                            VRUIUtilsService.callDirectiveLoad(gridAPI, gridDirectivePayload, gridLoadPromiseDeferred);
+                        });
+
+                        return gridLoadPromiseDeferred.promise;
+                    }
+
+                    UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

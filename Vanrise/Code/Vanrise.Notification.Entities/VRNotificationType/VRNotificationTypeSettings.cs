@@ -9,12 +9,11 @@ namespace Vanrise.Notification.Entities
 {
     public class VRNotificationTypeSettings : VRComponentTypeSettings
     {
-        public override Guid VRComponentTypeConfigId
-        {
-            get { return new Guid("FDD73530-067F-4160-AB71-7852303C785C"); }
-        }
+        public override Guid VRComponentTypeConfigId { get { return new Guid("FDD73530-067F-4160-AB71-7852303C785C"); } }
+
         public Guid VRAlertLevelDefinitionId { get; set; }
-        public VRNotificationTypeExtendedSettings ExtendedSettings { get; set; }   
+
+        public VRNotificationTypeExtendedSettings ExtendedSettings { get; set; }
 
         //public abstract bool CanExecuteNotification(IVRNotificationTypeCanExecuteNotificationContext context);
     }

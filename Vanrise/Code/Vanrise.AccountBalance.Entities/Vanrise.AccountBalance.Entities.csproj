@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalanceNotification\AccountBalanceNotificationTypeExtendedSettingsConfig.cs" />
     <Compile Include="AccountBalances\AccountBalanceDetail.cs" />
     <Compile Include="AccountBalances\AccountBalance.cs" />
     <Compile Include="AccountBalances\AccountBalanceEntity.cs" />

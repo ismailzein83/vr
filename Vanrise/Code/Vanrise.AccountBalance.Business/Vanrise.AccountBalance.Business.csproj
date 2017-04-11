@@ -72,6 +72,7 @@
     <Compile Include="AccountUsageManager.cs" />
     <Compile Include="BillingTransactionTypeManager.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Context\AccountBalanceAlertRuleGetEntityNameContext.cs" />
     <Compile Include="Context\AccountBalanceFieldSourceGetFieldDefinitionsContext.cs" />
     <Compile Include="Context\AccountBalanceFieldSourceGetFieldValueContext.cs" />
     <Compile Include="Context\AccountBalanceFieldSourcePrepareSourceDataContext.cs" />
@@ -81,8 +82,11 @@
     <Compile Include="Context\BalancePeriodContext.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleBehavior.cs" />
     <Compile Include="Extensions\AccountBalanceAlertRuleTypeSettings.cs" />
+    <Compile Include="Extensions\AccountBalanceNotificationQuery.cs" />
+    <Compile Include="Extensions\AccountBalanceNotificationTypeManager.cs" />
     <Compile Include="Extensions\AccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
+    <Compile Include="Extensions\AccountBalanceNotificationTypeExtendedSettings.cs" />
     <Compile Include="Filters\IAccountFilter\AccountTypeExtendedSettingsFilter.cs" />
     <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="QueueActivators\BalanceUpdatePayload.cs" />

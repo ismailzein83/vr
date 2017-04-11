@@ -25,7 +25,6 @@ namespace Vanrise.AccountBalance.Business
         }
 
         string _accountName;
-
         public string EntityName
         {
             get
@@ -39,6 +38,11 @@ namespace Vanrise.AccountBalance.Business
         public decimal CurrentBalance
         {
             get { return this.LiveBalance.CurrentBalance; }
+        }
+
+        public int CurrencyId
+        {
+            get { return this.LiveBalance.CurrencyId; }
         }
 
         public int? AlertRuleId

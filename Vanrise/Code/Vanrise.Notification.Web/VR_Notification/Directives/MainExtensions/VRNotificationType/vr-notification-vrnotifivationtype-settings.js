@@ -12,7 +12,8 @@
                 normalColNum: '@',
                 isrequired: '=',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -115,10 +116,14 @@
         }
 
         function getTemplate(attrs) {
-            var label = "label='Notification Type Setting'";
+            var label = "label='Notification Type'";
 
             if (attrs.hidelabel != undefined) {
-                label = "label='Notification Type Settings'";
+                label = "";
+            }
+
+            if(attrs.customlabel != undefined) {
+                label = "label='" + attrs.customlabel + "'";
             }
 
             return '<vr-columns colnum="{{typeSettingsCtrl.normalColNum}}">' +

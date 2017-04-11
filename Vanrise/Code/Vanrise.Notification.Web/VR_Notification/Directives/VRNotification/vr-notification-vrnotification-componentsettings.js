@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 'VRUIUtilsService','VRNotificationService',
+app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
     function (UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: 'E',
@@ -46,11 +46,11 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     if (payload != undefined && payload.componentType != undefined) {
                         $scope.scopeModel.name = payload.componentType.Name;
                         settings = payload.componentType.Settings;
-                      
+
                     }
 
                     function loadNotificationTypeSelector() {
-                      
+
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         vrNotificationTypeSettingsSelectorReadyDeferred.promise.then(function () {
@@ -68,12 +68,12 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     }
 
                     function loadBusinessEntityDefinitionSelector() {
-                        
+
                         var selectorLoadBEDeferred = UtilsService.createPromiseDeferred();
 
                         businessEntityDefinitionSelectorReadyDeffered.promise.then(function () {
-                           
-                            var payloadSelector = { 
+
+                            var payloadSelector = {
                                 selectedIds: settings != undefined ? settings.VRAlertLevelDefinitionId : undefined,
                                 filter: {
                                     Filters: [{
@@ -86,17 +86,17 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
 
                         return selectorLoadBEDeferred.promise;
                     }
-                   
-                    return UtilsService.waitMultipleAsyncOperations([loadNotificationTypeSelector,loadBusinessEntityDefinitionSelector]).catch(function (error) {
+
+                    return UtilsService.waitMultipleAsyncOperations([loadNotificationTypeSelector, loadBusinessEntityDefinitionSelector]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
-                       
+
                     });
-                
+
                 };
 
                 api.getData = function () {
-                  
+
                     return {
                         Name: $scope.scopeModel.name,
                         Settings: {

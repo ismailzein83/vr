@@ -1,13 +1,22 @@
-﻿
-<vr-row vr-loader="scopeModel.isLoading">
+﻿<vr-row vr-loader="scopeModel.isLoading">
     <vr-columns width="fullrow">
-        <vr-datagrid datasource="scopeModel.vrNotifications" 
-                     pagingtype="'PagingOnScroll'" 
-                     on-ready="scopeModel.onGridReady" 
-                     hidepaginginfo 
-                     loadmoredata="scopeModel.loadMoreData">
-            <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'" disablesorting="true" fixedwidth="'200'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" fixedwidth="'200'"></vr-datagridcolumn>
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.vrNotifications"
+                     pagingtype="'PagingOnScroll'"
+                     loadmoredata="scopeModel.loadMoreData"
+                     idfield="Entity.VRNotificationId"
+                     hidepaginginfo normalcell>
+
+            <vr-datagridcolumn headertext="'Alert Level'" tooltipfield="'AlertLevelDescription'" getcolor="scopeModel.getAlertLevelStyleColor" disablesorting="true" fixedwidth="'20'" invisibleheader></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.VRNotificationId'" disablesorting="true" fixedwidth="'80'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Created'" field="'Entity.CreationTime'" type="'LongDatetime'" disablesorting="true" fixedwidth="'120'"></vr-datagridcolumn>
+            <!--<vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" disablesorting="true" widthfactor="'20'"></vr-datagridcolumn>-->
+            <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" getcolor="scopeModel.getStatusColor" disablesorting="true" fixedwidth="'100'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="scopeModel.AccountColumnHeader" field="'VRNotificationEventPayload.BusinessEntityDescription'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Balance'" field="'VRNotificationEventPayload.CurrentBalance'" disablesorting="true" type="'Number'" fixedwidth="'80'" numberprecision="'NormalPrecision'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Threshold'" field="'VRNotificationEventPayload.Threshold'" disablesorting="true" type="'Number'" fixedwidth="'80'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Currency'" field="'VRNotificationEventPayload.Currency'" disablesorting="true" fixedwidth="'60'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Actions'" field="'ActionNames'" disablesorting="true"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

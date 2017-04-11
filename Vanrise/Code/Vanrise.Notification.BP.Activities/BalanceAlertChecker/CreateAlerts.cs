@@ -79,6 +79,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         break;
                                     CreateAlertRuleNotificationInput createAlertRuleNotification = new CreateAlertRuleNotificationInput
                                     {
+                                        AlertLevelId = thresholdInfo.ThresholdAction.AlertLevelId,
                                         Actions = thresholdInfo.ThresholdAction.Actions,
                                         ClearanceActions = thresholdInfo.ThresholdAction.RollbackActions,
                                         AlertRuleId = alertRule.VRAlertRuleId,
@@ -87,6 +88,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         {
                                             AlertRuleTypeId = inputArgument.AlertTypeId,
                                             CurrentBalance = entityBalanceInfo.CurrentBalance,
+                                            CurrencyId = entityBalanceInfo.CurrencyId,
                                             EntityId = entityBalanceInfo.EntityId,
                                             Threshold = currentThreshold
                                         },

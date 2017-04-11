@@ -14,6 +14,8 @@ namespace Vanrise.Notification.Entities
 
         Decimal CurrentBalance { get; }
 
+        int CurrencyId { get; }
+
         int? AlertRuleId { get; }
 
         Decimal? NextAlertThreshold { get; }

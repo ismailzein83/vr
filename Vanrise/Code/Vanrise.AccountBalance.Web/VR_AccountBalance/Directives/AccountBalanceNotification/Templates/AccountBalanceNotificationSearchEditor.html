@@ -1,1 +1,11 @@
-﻿Search Editor Test
+﻿<!--<span ng-show="scopeModel.showBasicTab()">
+    <vr-columns colnum="2">
+        <vr-textbox value="scopeModel.Text" label="Testing"></vr-textbox>
+    </vr-columns>
+</span>-->
+
+<span ng-show="scopeModel.showAdvancedTab()" vr-loader="scopeModel.isSearchDirectiveLoading">
+    <vr-directivewrapper ng-if="scopeModel.notificationQueryEditor != undefined" directive="scopeModel.notificationQueryEditor" vr-loader="scopeModel.isLoadingDirective"
+                         on-ready="scopeModel.onDirectiveReady" customvalidate="ctrl.customvalidate" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired">
+    </vr-directivewrapper>
+</span>

@@ -4,7 +4,6 @@ using System.Linq;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Entities;
-using Vanrise.Common;
 using Vanrise.Notification.Business;
 
 namespace Vanrise.GenericData.Notification

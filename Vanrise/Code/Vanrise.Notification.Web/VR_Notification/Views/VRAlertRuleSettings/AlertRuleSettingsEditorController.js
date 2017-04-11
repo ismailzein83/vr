@@ -124,7 +124,7 @@
         function loadVRActionManagement() {
             var vRActionManagementLoadDeferred = UtilsService.createPromiseDeferred();
             vRActionManagementReadyDeferred.promise.then(function () {
-                var vrActionPayload = { vrActionTargetType: vrActionTargetType, context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: true };
+                var vrActionPayload = { vrActionTargetType: vrActionTargetType, context: getContext(), extensionType: balanceAlertActionExtensionType, actions: thresholdEntity != undefined ? thresholdEntity.Actions : undefined, isRequired: false };
                 VRUIUtilsService.callDirectiveLoad(vRActionManagementAPI, vrActionPayload, vRActionManagementLoadDeferred);
             });
             return vRActionManagementLoadDeferred.promises;

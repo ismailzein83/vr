@@ -1,5 +1,6 @@
 ﻿using Vanrise.Common;
 using Vanrise.Entities;
+using System.Linq;
 
 namespace Vanrise.Notification.Entities
 {
@@ -14,6 +15,17 @@ namespace Vanrise.Notification.Entities
         public string AlertLevelDescription { get; set; }
 
         public StyleFormatingSettings AlertLevelStyle { get; set; }
+
+        public string ActionNames
+        {
+            get
+            {
+                if (this.Entity == null || this.Entity.Data == null || this.Entity.Data.Actions == null || this.Entity.Data.Actions.Count == 0)
+                    return string.Empty;
+
+                return string.Join<string>(", ", this.Entity.Data.Actions.Select(x => x.ActionName));
+            }
+        }
     }
 
     public abstract class VRNotificationDetailEventPayload

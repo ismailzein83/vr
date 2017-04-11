@@ -7,11 +7,14 @@ using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Notification.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.AccountBalance.Business.Extensions
 {
     public class AccountBalanceAlertRuleBehavior : VRBalanceAlertRuleBehavior
     {
+        #region Public Methods
+
         public override void LoadBalanceInfos(IVRBalanceAlertRuleLoadBalanceInfosContext context)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
@@ -83,6 +86,15 @@ namespace Vanrise.AccountBalance.Business.Extensions
             dataManager.GetLiveBalancesToClearAlert((liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
         }
 
+        public override string GetEntityName(IVRBalanceAlertRuleGetEntityNameContext context)
+        {
+            context.RuleTypeSettings.ThrowIfNull("context.RuleTypeSettings");
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = context.RuleTypeSettings.CastWithValidate<AccountBalanceAlertRuleTypeSettings>("context.RuleTypeSettings");
+            return new AccountManager().GetAccountName(ruleTypeSettings.AccountTypeId, context.EntityId);
+        }
+
+        #endregion
+
         #region Private Methods
 
         private AccountBalanceAlertRuleTypeSettings GetRuleTypeSettings(IVRBalanceAlertRuleBehaviorContext context)
@@ -96,5 +108,6 @@ namespace Vanrise.AccountBalance.Business.Extensions
         }
 
         #endregion
+
     }
 }

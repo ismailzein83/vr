@@ -1,7 +1,8 @@
 ﻿using System;
-using Vanrise.GenericData.Business;
+using Vanrise.AccountBalance.Business.Extensions;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -13,23 +14,50 @@ namespace Vanrise.AccountBalance.Business
 
         public override string BodyRuntimeEditor { get { return "vr-accountbalance-notification-bodyeditor"; } }
 
+        public string AccountColumnHeader { get; set; }
+
+        public AccountBalanceNotificationTypeExtendedSettings AccountBalanceNotificationTypeExtendedSettings { get; set; }
+
+
+        public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
+        {
+            AccountBalanceNotificationTypeExtendedSettings.ThrowIfNull("AccountBalanceNotificationTypeExtendedSettings");
+
+            if (context.ExtendedQuery == null)
+                return true;
+
+            var accountBalanceNotificationQuery = context.ExtendedQuery as AccountBalanceNotificationQuery;
+            if (accountBalanceNotificationQuery == null)
+                return false;
+
+            if (context.VRNotification == null || context.VRNotification.EventPayload == null)
+                return false;
+
+            var accountBalanceNotificationTypeIsMatchedContext = new AccountBalanceNotificationTypeIsMatchedContext()
+            {
+                VRNotification = context.VRNotification,
+                AccountBalanceNotificationExtendedQuery = accountBalanceNotificationQuery.AccountBalanceNotificationExtendedQuery
+            };
+            return AccountBalanceNotificationTypeExtendedSettings.IsVRNotificationMatched(accountBalanceNotificationTypeIsMatchedContext);
+        }
+
         public override VRNotificationDetailEventPayload GetNotificationDetailEventPayload(IVRNotificationTypeGetNotificationEventPayloadContext context)
         {
             VRBalanceAlertEventPayload eventPayload = new VRNotificationManager().GetVRNotificationEventPayload<VRBalanceAlertEventPayload>(context.VRNotification);
 
-            Guid BEDefinitionId = Guid.NewGuid();
+            AccountBalanceAlertRuleGetEntityNameContext accountBalanceAlertRuleGetEntityNameContext = new AccountBalanceAlertRuleGetEntityNameContext()
+            {
+                RuleTypeSettings = new VRAlertRuleTypeManager().GetVRAlertRuleTypeSettings<VRBalanceAlertRuleTypeSettings>(eventPayload.AlertRuleTypeId),
+                EntityId = eventPayload.EntityId
+            };
 
             return new AccountBalanceNotificationDetailEventPayload()
             {
-                BusinessEntityDescription = eventPayload.EntityId, //new BusinessEntityManager().GetEntityDescription(BEDefinitionId, eventPayload.EntityId),
+                BusinessEntityDescription = new AccountBalanceAlertRuleBehavior().GetEntityName(accountBalanceAlertRuleGetEntityNameContext),
                 CurrentBalance = eventPayload.CurrentBalance,
-                Threshold = eventPayload.Threshold
+                Threshold = eventPayload.Threshold,
+                Currency = new Vanrise.Common.Business.CurrencyManager().GetCurrencySymbol(eventPayload.CurrencyId)
             };
-        }
-
-        public override bool IsVRNotificationMatched(IVRNotificationTypeIsMatchedContext context)
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -40,5 +68,7 @@ namespace Vanrise.AccountBalance.Business
         public Decimal CurrentBalance { get; set; }
 
         public Decimal Threshold { get; set; }
+
+        public String Currency { get; set; }
     }
 }

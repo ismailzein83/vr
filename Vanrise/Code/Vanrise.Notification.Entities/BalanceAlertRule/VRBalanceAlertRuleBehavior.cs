@@ -20,6 +20,8 @@ namespace Vanrise.Notification.Entities
         public abstract void LoadEntitiesToAlert(IVRBalanceAlertRuleLoadEntitiesToAlertContext context);
 
         public abstract void LoadEntitiesToClearAlerts(IVRBalanceAlertRuleLoadEntitiesToClearAlertsContext context);
+
+        public abstract string GetEntityName(IVRBalanceAlertRuleGetEntityNameContext context);
     }
 
     public interface IVRBalanceAlertRuleBehaviorContext
@@ -55,5 +57,10 @@ namespace Vanrise.Notification.Entities
     public interface IVRBalanceAlertRuleLoadEntitiesToClearAlertsContext : IVRBalanceAlertRuleBehaviorContext
     {
         void OnBalanceInfoLoaded(IVREntityBalanceInfo balanceInfo);
+    }
+
+    public interface IVRBalanceAlertRuleGetEntityNameContext : IVRBalanceAlertRuleBehaviorContext
+    {
+        string EntityId { get; }
     }
 }

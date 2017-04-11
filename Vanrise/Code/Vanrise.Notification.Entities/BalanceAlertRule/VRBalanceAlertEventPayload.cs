@@ -10,6 +10,8 @@ namespace Vanrise.Notification.Entities
 
         public Decimal CurrentBalance { get; set; }
 
+        public int CurrencyId { get; set; }
+
         public Decimal Threshold { get; set; }
     }
 }
