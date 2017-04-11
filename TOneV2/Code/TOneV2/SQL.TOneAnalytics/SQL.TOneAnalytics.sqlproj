@@ -72,6 +72,8 @@
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="TOneWhS_Analytics\Stored Procedures\" />
+    <Folder Include="TOneWhS_Deal\" />
+    <Folder Include="TOneWhS_Deal\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15Min.sql" />
@@ -91,5 +93,7 @@
     <Build Include="TOneWhS_Analytics\Stored Procedures\sp_TrafficStatsMeasure_GroupBySaleZone_Supplier.sql" />
     <Build Include="TOneWhS_Analytics\Tables\BillingStats30Min.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\BillingStats30MinType.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealProgress.sql" />
+    <Build Include="Security\TOneWhS_Deal.sql" />
   </ItemGroup>
 </Project>
