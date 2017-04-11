@@ -92,7 +92,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('48FC148C-299A-4717-BD03-401BB79C082E','Default Notification','Default Notification','{"$type":"Vanrise.Notification.Business.VRAlertLevelBEDefinitionSettings, Vanrise.Notification.Business","ConfigId":"0b44d3f3-aa62-4289-8eb3-d93269515036","DefinitionEditor":"vr-notification-alertleveldefinitionbe-editor","IdType":"System.Guid","ManagerFQTN":"Vanrise.Notification.Business.VRAlertLevelManager,Vanrise.Notification.Business","SelectorUIControl":"vr-notification-alertlevel-selector"}')
+('48FC148C-299A-4717-BD03-401BB79C082E','Default Alert Level Group','Default Alert Level Group','{"$type":"Vanrise.Notification.Business.VRAlertLevelBEDefinitionSettings, Vanrise.Notification.Business","ConfigId":"0b44d3f3-aa62-4289-8eb3-d93269515036","DefinitionEditor":"vr-notification-alertleveldefinitionbe-editor","IdType":"System.Guid","ManagerFQTN":"Vanrise.Notification.Business.VRAlertLevelManager,Vanrise.Notification.Business","SelectorUIControl":"vr-notification-alertlevel-selector"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Settings]))
 merge	[genericdata].[BusinessEntityDefinition] as t
