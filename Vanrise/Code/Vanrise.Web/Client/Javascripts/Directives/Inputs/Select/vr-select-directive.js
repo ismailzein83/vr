@@ -518,37 +518,38 @@
                         }
                     }
                 };
-                $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
-
-                    hideAllOtherDropDown($attrs.id);
-                    if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
-                        return;
-                    $('div[name=' + $attrs.id + ']').addClass("changing-state");
-                    var menuPosition = getDropDownDirection($attrs.id);
-                    if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {                       
-                        $('div[name=' + $attrs.id + ']').addClass("open-select");
-                        vrSelectSharedObject.onOpenDropDown($attrs.id);
+                setTimeout(function () {
+                    $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
                         hideAllOtherDropDown($attrs.id);
-                        afterShowDropdown($attrs.id);
-                    }
-                    else {
-                        $('div[name=' + $attrs.id + ']').removeClass("open-select");
-                        if (menuPosition.toTop == true) {
-                            $('div[name=' + $attrs.id + ']').find('.dropdown-menu').hide(function () {
-                                $('div[name=' + $attrs.id + ']').removeClass("changing-state");
-                            });
+                        if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
+                            return;
+                        $('div[name=' + $attrs.id + ']').addClass("changing-state");
+                        var menuPosition = getDropDownDirection($attrs.id);
+                        if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {
+                            $('div[name=' + $attrs.id + ']').addClass("open-select");
+                            vrSelectSharedObject.onOpenDropDown($attrs.id);
+                            afterShowDropdown($attrs.id);
                         }
                         else {
-                            $('div[name=' + $attrs.id + ']').find('.dropdown-menu').slideUp("slow", function () {
-                                $('div[name=' + $attrs.id + ']').removeClass("changing-state");
-                            });
+                            $('div[name=' + $attrs.id + ']').removeClass("open-select");
+                            if (menuPosition.toTop == true) {
+                                $('div[name=' + $attrs.id + ']').find('.dropdown-menu').hide(function () {
+                                    $('div[name=' + $attrs.id + ']').removeClass("changing-state");
+                                });
+                            }
+                            else {
+                                $('div[name=' + $attrs.id + ']').find('.dropdown-menu').slideUp("slow", function () {
+                                    $('div[name=' + $attrs.id + ']').removeClass("changing-state");
+                                });
+                            }
+                            afterHideDropdown($attrs.id);
+                            event.stopPropagation();
+                            return;
                         }
-                        afterHideDropdown($attrs.id);
                         event.stopPropagation();
-                        return;
-                    }
-                    event.stopPropagation();
-                });
+                    });
+                },100)
+               
 
                 $(document).on('click', function (e) {
                     var button = $('div[name=' + $attrs.id + ']');
