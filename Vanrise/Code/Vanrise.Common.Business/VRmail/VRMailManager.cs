@@ -85,9 +85,6 @@ namespace Vanrise.Common.Business
             if (String.IsNullOrWhiteSpace(subject))
                 throw new NullReferenceException("subject");
 
-            if (String.IsNullOrWhiteSpace(body))
-                throw new NullReferenceException("body");
-
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
             string[] toAddresses = to.Split(';', ',', ':');

@@ -44,8 +44,8 @@
         }
 
         function load() {
-            $scope.subject = "Test Subject";
-            $scope.body = "Test Body";
+            $scope.subject = "Validate System Mail";
+            $scope.body = "This email is received while generating test email.";
             $scope.isLoading = true;
             loadAllControls();
         }
