@@ -104,10 +104,12 @@ as (select * from (values
 
 ('70CF19AC-B860-4010-A544-B6D41F94F505','Retail_BE_AccountBEDefinition','Account BE','VR_Security_ViewTypeConfig'				,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"retail-be-accountbedefinition-vieweditor"}'),
 
-('EB85EE78-78CE-437D-B13E-18DD15EABE54','Retail_BE_Visibility','Retail Business Entity','VRCommon_ModuleVisibility'							,'{"Editor":"retail-be-visibilityaccountdefinitions-management"}'),
-('1bdacfe6-f050-4187-9e96-9647049605d3','RetailBE_VRNotification_VRAction_BalanceRetailAccountEMail','Balance Retail Account Email ','VR_Notification_VRActionDefinition'							,'{"Editor":"retail-be-actiondefinition-sendemailsettings"}'),
-('820856b8-c29d-43d9-9950-18ae7af22bb9','RetailBE_VRNotification_VRAction_BalanceRetailAccountAction','Balance Retail Account Action','VR_Notification_VRActionDefinition'							,'{"Editor":"retail-be-actiondefinition-balancealertsettings"}'),
-('fb232763-6ac1-49b5-a410-fa792980055c','RetailBE_AccountView_AccountHistory','Account History','Retail_BE_AccountViewDefinitionConfig'							,'{"Editor":"retail-be-accountviewdefinitionsettings-acounthistory"}')
+('EB85EE78-78CE-437D-B13E-18DD15EABE54','Retail_BE_Visibility','Retail Business Entity','VRCommon_ModuleVisibility'																,'{"Editor":"retail-be-visibilityaccountdefinitions-management"}'),
+('1bdacfe6-f050-4187-9e96-9647049605d3','RetailBE_VRNotification_VRAction_BalanceRetailAccountEMail','Balance Retail Account Email ','VR_Notification_VRActionDefinition'		,'{"Editor":"retail-be-actiondefinition-sendemailsettings"}'),
+('820856b8-c29d-43d9-9950-18ae7af22bb9','RetailBE_VRNotification_VRAction_BalanceRetailAccountAction','Balance Retail Account Action','VR_Notification_VRActionDefinition'		,'{"Editor":"retail-be-actiondefinition-balancealertsettings"}'),
+('fb232763-6ac1-49b5-a410-fa792980055c','RetailBE_AccountView_AccountHistory','Account History','Retail_BE_AccountViewDefinitionConfig'											,'{"Editor":"retail-be-accountviewdefinitionsettings-acounthistory"}'),
+
+('52525041-7A8B-4AE1-9599-A3F34A87CB38','Retail Account Balance','Retail Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'							,'{"Editor":"retail-be-accountbalancenotificationtype-settings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
