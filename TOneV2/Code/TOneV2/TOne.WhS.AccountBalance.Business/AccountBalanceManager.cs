@@ -92,13 +92,8 @@ namespace TOne.WhS.AccountBalance.Business
 
         dynamic Vanrise.AccountBalance.Entities.IAccountManager.GetAccount(Vanrise.AccountBalance.Entities.IAccountContext context)
         {
-            CarrierAccount carrierAccount;
-            CarrierProfile carrierProfile;
-            GetAccountOrProfile(context.AccountId, out carrierAccount, out carrierProfile);
-            if (carrierProfile != null)
-                return carrierProfile;
-            else
-                return carrierAccount;
+             int financialAccountId = ParseFinancialAccountId(context.AccountId);
+             return new FinancialAccountManager().GetFinancialAccount(financialAccountId);
         }
 
         Vanrise.AccountBalance.Entities.AccountInfo Vanrise.AccountBalance.Entities.IAccountManager.GetAccountInfo(Vanrise.AccountBalance.Entities.IAccountInfoContext context)
