@@ -260,7 +260,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _SettingsCacheLastCheck);
             }
         }
-        private class SwitchLoggableEntity : VRLoggableEntityBase
+        public class SwitchLoggableEntity : VRLoggableEntityBase
         {
             public static SwitchLoggableEntity Instance = new SwitchLoggableEntity();
 

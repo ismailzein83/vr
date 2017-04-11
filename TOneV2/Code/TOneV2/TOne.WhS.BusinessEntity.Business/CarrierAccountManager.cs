@@ -268,33 +268,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit)
         {
-            int carrierProfileId;
-            ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId);
-
-            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-
-            bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
             UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new UpdateOperationOutput<CarrierAccountDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
-            CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
-
-            if (CarrierAccountManager.IsSupplier(cachedAccount.AccountType))
+            if (TryUpdateCarrierAccount(carrierAccountToEdit, true))
             {
-                SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
-                zoneServiceManager.UpdateSupplierDefaultService(carrierAccountToEdit.CarrierAccountId, carrierAccountToEdit.SupplierSettings.DefaultServices);
-            }
-
-            if (updateActionSucc)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
-                VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, carrierAccount);
-              
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
-                
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
             }
@@ -302,6 +281,32 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+        public bool TryUpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit,bool withTracking)
+        {
+            int carrierProfileId;
+
+            ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId);
+            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
+            CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
+            if (CarrierAccountManager.IsSupplier(cachedAccount.AccountType))
+            {
+                SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
+                zoneServiceManager.UpdateSupplierDefaultService(carrierAccountToEdit.CarrierAccountId, carrierAccountToEdit.SupplierSettings.DefaultServices);
+            }
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                if(withTracking)
+                {
+                    var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
+                }
+                return true;
+            }
+            return false;
+        }
+         
         public void UpdateCarrierAccountExtendedSetting<T>(int carrierAccountId, T extendedSettings) where T : class
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
@@ -322,7 +327,12 @@ namespace TOne.WhS.BusinessEntity.Business
             if (dataManager.UpdateExtendedSettings(carrierAccountId, carrierAccount.ExtendedSettings))
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
-
+        }
+        public bool UpdateCustomerRoutingStatus(int carrierAccountId, RoutingStatus routingStatus,bool withTracking)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            carrierAccount.CustomerSettings.RoutingStatus = routingStatus;
+            return TryUpdateCarrierAccount(ConvertCarrierAccountToEdit(carrierAccount), withTracking);
         }
         #endregion
 
@@ -789,6 +799,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+        private CarrierAccountToEdit ConvertCarrierAccountToEdit(CarrierAccount carrierAccount)
+        {
+            return new CarrierAccountToEdit
+            {
+                CarrierAccountId = carrierAccount.CarrierAccountId,
+                SourceId = carrierAccount.SourceId,
+                SupplierSettings = carrierAccount.SupplierSettings,
+                CarrierAccountSettings = carrierAccount.CarrierAccountSettings,
+                CustomerSettings = carrierAccount.CustomerSettings,
+                NameSuffix = carrierAccount.NameSuffix,
+                CreatedTime = carrierAccount.CreatedTime,
+
+            };
+        }
+        
         #endregion
         public class CarrierAccountLoggableEntity : VRLoggableEntityBase
         {
