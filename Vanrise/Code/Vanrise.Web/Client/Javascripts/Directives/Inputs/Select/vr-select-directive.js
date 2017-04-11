@@ -548,7 +548,7 @@
                         }
                         event.stopPropagation();
                     });
-                },100)
+                }, 100);
                
 
                 $(document).on('click', function (e) {
