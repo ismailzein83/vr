@@ -97,6 +97,7 @@
     <Compile Include="BulkAction\Input\ContextZoneItemInput.cs" />
     <Compile Include="BusinessRules\BusinessRuleUtilities.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
+    <Compile Include="BusinessRules\Conditions\Country\CustomerZoneInheritsMultipleSellingProductZoneRatesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneHavingPendingClosedRateIsModified.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateBEDIsGreaterThanNewCountryBEDCondition.cs" />
