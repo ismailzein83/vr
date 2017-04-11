@@ -4,8 +4,11 @@
     [Settings]    NVARCHAR (MAX)   NULL,
     [CreatedTime] DATETIME         CONSTRAINT [DF_VRObjectTypeDefinition_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]   ROWVERSION       NULL,
-    CONSTRAINT [PK_VRObjectTypeDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_VRObjectTypeDefinition] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [IX_VRObjectTypeDefinition] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
