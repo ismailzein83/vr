@@ -527,7 +527,7 @@
                     var menuPosition = getDropDownDirection($attrs.id);
                     if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {                       
                         $('div[name=' + $attrs.id + ']').addClass("open-select");
-                        vrSelectSharedObject.onOpenDropDown($attrs.id)
+                        vrSelectSharedObject.onOpenDropDown($attrs.id);
                         hideAllOtherDropDown($attrs.id);
                         afterShowDropdown($attrs.id);
                     }
