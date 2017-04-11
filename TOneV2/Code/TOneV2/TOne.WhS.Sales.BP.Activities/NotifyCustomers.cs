@@ -13,22 +13,22 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	public class NotifyCustomers : CodeActivity
-	{
-		#region Input Arguments
+    public class NotifyCustomers : CodeActivity
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<int>> CustomerIds { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<int>> CustomerIds { get; set; }
 
-		#endregion
+        #endregion
 
-		protected override void Execute(CodeActivityContext context)
-		{
-			IEnumerable<int> customerIds = CustomerIds.Get(context);
-			int initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
-			long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+        protected override void Execute(CodeActivityContext context)
+        {
+            IEnumerable<int> customerIds = CustomerIds.Get(context);
+            int initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
-			NotificationManager notificationManager = new NotificationManager();
+            NotificationManager notificationManager = new NotificationManager();
             IEnumerable<int> failedCustomerIdsToSendEmailFor = notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);
             IEnumerable<int> customersToUpdatePricelistsFor = customerIds.FindAllRecords(x => !failedCustomerIdsToSendEmailFor.Contains(x));
 
@@ -45,9 +45,10 @@ namespace TOne.WhS.Sales.BP.Activities
                 foreach (int customerId in failedCustomerIdsToSendEmailFor)
                     customerNames.Add(carrierAccountManager.GetCarrierAccountName(customerId));
 
-                string customers = string.Join(", ", customerNames.ToArray());
+                var orderCustomersByName = customerNames.OrderBy(name => name);
+                string customers = string.Join(", ", orderCustomersByName.ToArray());
                 context.WriteTrackingMessage(LogEntryType.Warning, "Failed Sending Sale Pricelists to Customers: {0}.", customers);
             }
-		}
-	}
+        }
+    }
 }

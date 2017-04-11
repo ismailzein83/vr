@@ -37,8 +37,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 CarrierAccountInfo customerInfo = CustomerInfoMapper(customerId, carrierAccountManager);
                 customersWithPriceList.Add(customerInfo);
             }
-            customersWithPriceList = customersWithPriceList.OrderBy(c => c.Name).ToList();
-            CustomersWithPriceList.Set(context, customersWithPriceList);
+            var orderedCustomersByNAme = customersWithPriceList.OrderBy(c => c.Name).ToList();
+            CustomersWithPriceList.Set(context, orderedCustomersByNAme);
         }
 
         #region Private Methods
