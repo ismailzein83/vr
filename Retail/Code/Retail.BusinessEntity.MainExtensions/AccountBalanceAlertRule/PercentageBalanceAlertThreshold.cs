@@ -1,14 +1,8 @@
-﻿using Retail.BusinessEntity.Business;
+﻿using System;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.AccountBalance.Business.Extensions;
-using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
 
@@ -16,11 +10,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
 {
     public class PercentageBalanceAlertThreshold : VRBalanceAlertThreshold
     {
+        public override Guid ConfigId { get { return new Guid("30B37A0A-63D8-4323-899B-3A2782FC5A05"); } }
+
         public Decimal Percentage { get; set; }
-        public override Guid ConfigId
-        {
-            get { return new Guid("30B37A0A-63D8-4323-899B-3A2782FC5A05"); }
-        }
 
         public override decimal GetThreshold(IVRBalanceAlertThresholdContext context)
         {
@@ -39,7 +31,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
             product.Settings.ThrowIfNull("product.Settings", accountPartFinancial.ProductId);
 
             var postPaidSettings = product.Settings.ExtendedSettings.CastWithValidate<PostPaidSettings>("product.Settings.ExtendedSettings", accountPartFinancial.ProductId);
-            
+
             return -(postPaidSettings.CreditLimit * (100 - this.Percentage) / 100);
         }
     }
