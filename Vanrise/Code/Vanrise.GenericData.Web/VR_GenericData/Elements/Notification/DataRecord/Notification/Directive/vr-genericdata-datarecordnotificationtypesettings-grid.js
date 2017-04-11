@@ -103,12 +103,12 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                     if (notificationGridColumnAttributes != undefined) {
                         for (var index = 0; index < notificationGridColumnAttributes.length; index++) {
                             var notificationGridColumnAttribute = notificationGridColumnAttributes[index];
-                            var column = {
-                                HeaderText: notificationGridColumnAttribute.Attribute.HeaderText,
-                                Field: notificationGridColumnAttribute.Attribute.Field,
-                                Type: notificationGridColumnAttribute.Attribute.Type
-                            };
-                            $scope.scopeModel.columns.push(column);
+                            //var column = {
+                            //    HeaderText: notificationGridColumnAttribute.Attribute.HeaderText,
+                            //    Field: notificationGridColumnAttribute.Attribute.Field,
+                            //    Type: notificationGridColumnAttribute.Attribute.Type
+                            //};
+                            $scope.scopeModel.columns.push(notificationGridColumnAttribute.Attribute);
                         }
                     }
                 });
