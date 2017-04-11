@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (countryZones == null || countryZones.Count() == 0)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZones of Country '{0}' were not found", countryToAdd.CountryId));
 
-            var invalidZoneNames = new List<string>();
+            DateTime? validCountryBED = null;
 
             foreach (ExistingZone countryZone in countryZones)
             {
@@ -45,13 +45,17 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 if (zoneRates.FindAllRecords(x => !x.EED.HasValue || x.EED.Value > countryToAdd.BED).Count() > 1)
                 {
-                    invalidZoneNames.Add(countryZone.Name);
+                    DateTime lastRateBED = zoneRates.Last().BED;
+                    if (!validCountryBED.HasValue || validCountryBED.Value < lastRateBED)
+                        validCountryBED = lastRateBED;
                 }
             }
 
-            if (invalidZoneNames.Count > 0)
+            if (validCountryBED.HasValue)
             {
-                context.Message = string.Format("The following Zones inherit multiple Rates from the Customer's SellingProducts: {0}", string.Join(",", invalidZoneNames));
+                var countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryToAdd.CountryId);
+                string validCountryBEDAsString = UtilitiesManager.GetDateTimeAsString(validCountryBED.Value);
+                context.Message = string.Format("BED of Country '{0}' must be greater than or equal to '{1}'", countryName, validCountryBEDAsString);
                 return false;
             }
 
