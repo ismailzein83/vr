@@ -120,13 +120,13 @@ app.directive('retailBeAccountGrid', ['VRNotificationService', 'UtilsService', '
                             if (accountGridColumnAttributes != undefined) {
                                 for (var index = 0; index < accountGridColumnAttributes.length; index++) {
                                     var accountGridColumnAttribute = accountGridColumnAttributes[index];
-                                    var column = {
-                                        HeaderText: accountGridColumnAttribute.Attribute.HeaderText,
-                                        Field: accountGridColumnAttribute.Attribute.Field,
-                                        Type: accountGridColumnAttribute.Attribute.Type
-                                    };
+                                    //var column = {
+                                    //    HeaderText: accountGridColumnAttribute.Attribute.HeaderText,
+                                    //    Field: accountGridColumnAttribute.Attribute.Field,
+                                    //    Type: accountGridColumnAttribute.Attribute.Type
+                                    //};
                                     gridColumnFieldNames.push(accountGridColumnAttribute.Name);
-                                    $scope.scopeModel.columns.push(column);
+                                    $scope.scopeModel.columns.push(accountGridColumnAttribute.Attribute);
                                 }
                             }
                             accountGridColumnAttributesLoadPromiseDeferred.resolve();
