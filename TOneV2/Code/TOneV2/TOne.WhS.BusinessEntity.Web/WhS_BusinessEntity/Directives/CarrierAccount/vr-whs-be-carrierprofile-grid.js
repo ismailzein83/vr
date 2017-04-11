@@ -37,26 +37,37 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var finalDrillDownDefinitions = [];
+                AddCarrierAccountDrillDown();
+                function AddCarrierAccountDrillDown() {
+                    var drillDownDefinition = {};
 
-                var drillDownDefinitions = UtilsService.cloneObject(WhS_BE_CarrierProfileService.getDrillDownDefinition(),true);
+                    drillDownDefinition.title = "Carrier Account";
+                    drillDownDefinition.directive = "vr-whs-be-carrieraccount-grid";
 
-                var drillDownDefinition = {};
-
-                drillDownDefinition.title = "Carrier Account";
-                drillDownDefinition.directive = "vr-whs-be-carrieraccount-grid";
-
-                drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
-                    carrierProfileItem.carrierAccountGridAPI = directiveAPI;
-                    var payload = {
-                        query: {
-                            CarrierProfilesIds: [carrierProfileItem.Entity.CarrierProfileId]
-                        },
-                        hideProfileColumn: true
+                    drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                        carrierProfileItem.carrierAccountGridAPI = directiveAPI;
+                        var payload = {
+                            query: {
+                                CarrierProfilesIds: [carrierProfileItem.Entity.CarrierProfileId]
+                            },
+                            hideProfileColumn: true
+                        };
+                        return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
                     };
-                    return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
-                };
-                drillDownDefinitions.push(drillDownDefinition);
+                    finalDrillDownDefinitions.push(drillDownDefinition);
+                }
+
+                var drillDownDefinitions = WhS_BE_CarrierProfileService.getDrillDownDefinition();
+                if (drillDownDefinitions != undefined && drillDownDefinitions.length > 0) {
+                    for (var i = 0, drillDownDefinitionslength = drillDownDefinitions.length; i < drillDownDefinitionslength; i++) {
+                        finalDrillDownDefinitions.push(drillDownDefinitions[i]);
+                    }
+                }
+
+
                 AddObjectTrackingDrillDown();
+
                 function AddObjectTrackingDrillDown() {
                     var drillDownDefinition = {};
 
@@ -74,10 +85,11 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         return carrierProfileItem.objectTrackingGridAPI.load(query);
                     };
 
-                    drillDownDefinitions.push(drillDownDefinition);
+                    finalDrillDownDefinitions.push(drillDownDefinition);
 
                 }
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());

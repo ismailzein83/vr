@@ -55,10 +55,17 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
+                var finalDrillDownDefinitions = [];
                 var drillDownDefinitions = WhS_BE_CarrierAccountService.getDrillDownDefinition();
-                var drillDownobjtrack = defineObjectTrackingDrillDownToCarrierAccount();
-                drillDownDefinitions.push(drillDownobjtrack);
+                if (drillDownDefinitions != undefined && drillDownDefinitions.length > 0)
+                {
+                    for (var i = 0, drillDownDefinitionslength = drillDownDefinitions.length; i < drillDownDefinitionslength; i++)
+                    {
+                        finalDrillDownDefinitions.push(drillDownDefinitions[i]);
+                    }
+                }
+
+                finalDrillDownDefinitions.push(defineObjectTrackingDrillDownToCarrierAccount());
 
                 function defineObjectTrackingDrillDownToCarrierAccount() {
                     var drillDownDefinition = {};
@@ -78,7 +85,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     };
                     return drillDownDefinition;
                 }
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.menuActions,true);
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.menuActions, true);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());

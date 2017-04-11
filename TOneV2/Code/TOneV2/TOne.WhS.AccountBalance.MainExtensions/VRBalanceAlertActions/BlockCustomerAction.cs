@@ -28,40 +28,34 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 
             SwitchManager switchManager = new SwitchManager();
             var switches = switchManager.GetAllSwitches();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             if (financialAccount.CarrierAccountId.HasValue)
             {
-                var carrierAccount = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
-                if(carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
-                {
-                    BlockCustomer(carrierAccount.CarrierAccountId, carrierAccount.CustomerSettings.RoutingStatus);
-                    BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
-
-                }
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
+                BlockCustomer(carrierAccount, switches);
             }
             else
             {
-                var carrierAccounts = carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value,true,false);
+                var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
                 foreach (var carrierAccount in carrierAccounts)
                 {
-                    if (carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
-                    {
-                        BlockCustomer(carrierAccount.CarrierAccountId, carrierAccount.CustomerSettings.RoutingStatus);
-                        BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
-                    }
+                    BlockCustomer(carrierAccount, switches);
                 }
                
             }
         }
 
-        private void BlockCustomer(int carrierAccountId, RoutingStatus routingStatus)
+        private void BlockCustomer(CarrierAccount carrierAccount, List<Switch> switches)
         {
-            CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
+            if (carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
             {
-                OriginalRoutingStatus = routingStatus
-            };
-            _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccountId, RoutingStatus.Blocked, false);
-            _carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccountId, customerRoutingStatusState);
+                CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
+                {
+                    OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus
+                };
+                _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccount.CarrierAccountId, RoutingStatus.Blocked, false);
+                _carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccount.CarrierAccountId, customerRoutingStatusState);
+                BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
+            }
         }
         private void BlockCustomerOnSwitches(List<Switch> switches, int carrierAccountId)
         {
