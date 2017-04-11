@@ -2,14 +2,14 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
             onOpenDropDown: function (idAttribute) {
                 rootScope.$apply(function () {
                     openedDropDownIds.push(idAttribute);
-                });
+                });              
             },
             onCloseDropDown: function (idAttribute) {
                 var index = openedDropDownIds.indexOf(idAttribute);
@@ -48,14 +48,18 @@
                 hint: '@',
                 haspermission: '=',
                 hasviewpermission: '=',
-                limitcharactercount:'='
+                limitcharactercount: '='
             },
             controller: function ($scope, $element, $attrs) {
+                //$scope.$on("$destroy", function () {
+                //    $(window).off("resize.Viewport");
+                //});   
                 if (rootScope == undefined)
                     rootScope = $scope.$root;
 
                 var controller = this;
                 controller.filtername = '';
+                controller.includeAdvancedSearch = $attrs.includeadvancedsearch != undefined;
                 controller.readOnly = utilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
                 controller.validate = function () {
@@ -66,7 +70,7 @@
 
                 controller.boundDataSource = [];
                 $scope.effectiveDataSource = [];
-                
+
                 $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
                     fillEffectiveDataSourceFromItems(getdatasource());
                 });
@@ -93,17 +97,56 @@
 
                 controller.searchLocal = function () {
                     var filteredItems = [];
-                    var allDataItems = getdatasource(); 
+                    var allDataItems = getdatasource();
                     for (var i = 0; i < allDataItems.length; i++) {
-                        var propValue = allDataItems[i][controller.datatextfield]; 
+                        var propValue = allDataItems[i][controller.datatextfield];
                         if (propValue != undefined && propValue.toLowerCase().indexOf(controller.filtername.toLowerCase()) >= 0)
                             filteredItems.push(allDataItems[i]);
                     }
                     fillEffectiveDataSourceFromItems(filteredItems);
                 };
+                controller.showSearchSection = false;
+                controller.toggleAdvancedSearch = function (e) {
+                    controller.showSearchSection = !controller.showSearchSection;
+                };
 
+                controller.cancelClickTrigger = function (e) {
+                    controller.showSearchSection = false;
+                    var onCancelHandler = $scope.$parent.$eval($attrs.oncancelhandler);
+                    if (onCancelHandler != undefined && typeof (onCancelHandler) == 'function') {
+                        var onCancelHandlerCallBackFunction = onCancelHandler;
+                        if (onCancelHandlerCallBackFunction.then != undefined) {
+                            controller.isloading = true;
+                            return onCancelHandlerCallBackFunction.then(function (response) {
+                                controller.isloading = false;
+                            }).catch(function () {
+                                controller.isloading = false;
+                            });
+                        }
+                        else {
+                            onCancelHandler();
+                        }
+                    }
+                };
+                controller.okClickTrigger = function (e) {
+                    var onOkHandler = $scope.$parent.$eval($attrs.onokhandler);
+                    if (onOkHandler != undefined && typeof (onOkHandler) == 'function') {
+                        var onOkHandlerCallBackFunction = onOkHandler;
+                        if (onOkHandlerCallBackFunction.then != undefined) {
+                            controller.isloading = true;
+                            return onOkHandlerCallBackFunction.then(function (response) {
+                                controller.isloading = false;
+                            }).catch(function () {
+                                controller.isloading = false;
+                            });
+                        }
+                        else {
+                            onOkHandler();
+                        }
+                    }
+                };
                 var isAddingPage = false;
-                var found=false;
+                var found = false;
                 function addPageToBoundDataSource() {
                     if (isAddingPage)
                         return;
@@ -114,9 +157,9 @@
                             for (var i = controller.boundDataSource.length; i < $scope.effectiveDataSource.length && addedItems < 20; i++) {
                                 controller.boundDataSource.push($scope.effectiveDataSource[i]);
                                 addedItems++;
-                            }                           
+                            }
                             isAddingPage = false;
-                            if(controller.isDropDownOpened())
+                            if (controller.isDropDownOpened())
                                 markSelectedDataItem();
                         });
                     });
@@ -133,7 +176,7 @@
                             if ($('#' + index).offset() != undefined) {
                                 found = true;
                                 $('#' + index).find('a').first().addClass('mark-select-selected');
-                                $('#divDataSourceContainer').first().stop().animate({
+                                $('#divDataSourceContainer' + controller.id).first().stop().animate({
                                     scrollTop: parseInt($('#' + index).attr("dataindex")) * 25
                                 }, 1);
                                 $('.mark-select').mouseover(function () {
@@ -145,16 +188,16 @@
                         }
                     }
                     else {
-                        if (controller.selectedvalues.length > 0) {                        
+                        if (controller.selectedvalues.length > 0) {
                             var index = controller.getObjectValue(controller.selectedvalues[controller.selectedvalues.length - 1]);
                             var item = utilsService.getItemByVal(allDataItems, index, controller.datavaluefield);
                             if ($('#' + index).offset() != undefined) {
                                 found = true;
-                                $('#divDataSourceContainer').first().stop().animate({
-                                    scrollTop: (parseInt($('#' + index).attr("dataindex")) * 24) 
+                                $('#divDataSourceContainer' + controller.id).first().stop().animate({
+                                    scrollTop: (parseInt($('#' + index).attr("dataindex")) * 24)
                                 }, 1);
                             }
-                            else if (allDataItems.length < 300 &&  item != null && $('#' + index).offset() == undefined)
+                            else if (allDataItems.length < 300 && item != null && $('#' + index).offset() == undefined)
                                 addPageToBoundDataSource();
                         }
                     }
@@ -233,11 +276,10 @@
 
                 function setdatasource(datasource) {
                     if (isRemoteLoad()) controller.data = datasource;
-                    else controller.datasource = datasource;                    
+                    else controller.datasource = datasource;
                 }
 
-                function fillEffectiveDataSourceFromItems(items)
-                {
+                function fillEffectiveDataSourceFromItems(items) {
                     $scope.effectiveDataSource.length = 0;
                     controller.boundDataSource.length = 0;
                     if (items != undefined) {
@@ -246,14 +288,6 @@
                         }
                     }
                     addPageToBoundDataSource();
-                }
-
-                function muteAction(e) {
-                    baseDirService.muteAction(e);
-                }
-
-                function onClickLi(e) {
-                    if (isMultiple()) muteAction(e);
                 }
 
                 function selectedSectionVisible() {
@@ -305,7 +339,6 @@
                     return (onAddHandler != undefined && typeof (onAddHandler) == 'function');
                 }
                 function clearFilter(e) {
-                    muteAction(e);
                     controller.filtername = '';
                     fillEffectiveDataSourceFromItems(getdatasource());
                 }
@@ -367,8 +400,6 @@
                     //getInputeStyle: getInputeStyle,
                     adjustTooltipPosition: adjustTooltipPosition,
                     setdatasource: setdatasource,
-                    onClickLi: onClickLi,
-                    muteAction: muteAction,
                     selectedSectionVisible: selectedSectionVisible,
                     getObjectText: getObjectText,
                     getObjectValue: getObjectValue,
@@ -383,13 +414,176 @@
                     onViewHandler: onViewHandler,
                     includeOnViewHandler: includeOnViewHandler
                 });
+
+                var afterShowDropdown = function (id) {
+                    var dropdown = $('div[name=' + id + ']');
+                    var menuPosition = getDropDownDirection(id);
+                    $('div[name=' + id + ']').find('.dropdown-menu').css({ position: 'fixed', top: menuPosition.top, left: menuPosition.left });
+                    setTimeout(function () {
+                        $('#filterInput').focus();
+                        var lastScrollTop;
+                        dropdown.find("#divDataSourceContainer" + id).scroll(function (e) {
+                            var scrollTop = dropdown.find("#divDataSourceContainer" + id).scrollTop();
+                            var scrollPercentage = 100 * scrollTop / (dropdown.find('#divDataSourceBody' + id).height() - dropdown.find("#divDataSourceContainer" + id).height());
+
+                            if (scrollTop > lastScrollTop) {
+                                if (scrollPercentage > 80)
+                                    addPageToBoundDataSource();
+                            }
+                            lastScrollTop = scrollTop;
+
+                        });
+                        markSelectedDataItem();
+                    }, 1);
+                    var selfHeight = dropdown.height();
+                    var selfOffset = dropdown.offset();
+                    var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                    var heigth = dropdown.parents('.vr-pager-container').length > 0 ? 235 : 200;
+                    if ((innerHeight - 100) - basetop < heigth) {
+                        var dropdownMenu = dropdown.find('.dropdown-menu');
+                        var height = dropdownMenu.css({ display: "block" }).height();
+                        dropdownMenu.css({ overflow: "hidden", marginTop: height, height: 0 }).animate({
+                            marginTop: 0,
+                            height: height
+                        }, 1000, function () {
+                            $(this).css({ display: "block", overflow: "", height: "", marginTop: "" });
+                            $('div[name=' + id + ']').removeClass("changing-state");
+                        });
+                    }
+                    else {
+                        dropdown.find('.dropdown-menu').first().slideDown("slow", function () {
+                            $('div[name=' + id + ']').removeClass("changing-state");
+                        });
+                    }
+                    $('div[name=' + id + ']').find('.dropdown-menu').css({ position: 'fixed', top: menuPosition.top, left: menuPosition.left });
+
+                };
+                var afterHideDropdown = function (id) {
+                    $('div[name=' + id + ']').find('#filterInput').blur();
+                    if (controller.onblurdropdown != null) {
+                        controller.onblurdropdown()
+                    }
+                    vrSelectSharedObject.onCloseDropDown(id);
+                    found = false;
+                    controller.showSearchSection = false;
+                };
+                function getDropDownDirection(id) {
+                    var self = $('div[name=' +id + ']').find('.dropdown-toggle').first();
+                    var selfHeight = $(self).parent().height();
+                    var selfOffset = $(self).offset();
+                    var initialtop = 0;
+                    var basetop = selfOffset.top -$(window).scrollTop() + selfHeight;
+                    var baseleft = selfOffset.left - $(window).scrollLeft();                  
+                    var heigth = $('div[name=' +id + ']').parents('.vr-pager-container').length > 0 ? 235: 200;
+                    if ((innerHeight - 100) - basetop < heigth) {
+                        initialtop = basetop - (heigth + (selfHeight * 2.7));
+                        if (isRemoteLoad()) {
+                            initialtop = initialtop - 35;
+                        }
+                        if (controller.hidefilterbox != undefined)
+                            initialtop = initialtop + 30;
+                        if (controller.readOnly && controller.isRemoteLoad())
+                            initialtop = initialtop + 30;
+                    }
+                    else
+                        initialtop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                    return {
+                        toTop: ((innerHeight - 100) - basetop < heigth),
+                        top: initialtop,
+                        left: baseleft
+                    };
+                };
+                function hideAllOtherDropDown(currentId) {
+                    var dropdowns = $('.dropdown-menu');
+                    var len = dropdowns.length;
+                    var i;
+                    var self;
+                    for (i = 0; i < len; i++) {
+                        self = $(dropdowns[i]);
+                        var id = self.parent().attr('name');
+                        if (self.parent().hasClass('open-select') && currentId != id && self.parent().find('div[name=' + currentId + ']').length == 0) {
+                            self.parent().removeClass('open-select');
+                            afterHideDropdown(id);
+                            if (currentId == undefined) {
+                                $('div[name=' + id + ']').find('.dropdown-menu').hide();
+                            }
+                            else {
+                                if (getDropDownDirection(id).toTop == true) {
+                                    $('div[name=' + id + ']').find('.dropdown-menu').hide();
+                                }
+                                else {
+                                    $('div[name=' + id + ']').find('.dropdown-menu').slideUp(300);
+                                }
+                            }
+                        }
+                    }
+                };
+                $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
+
+                    hideAllOtherDropDown($attrs.id);
+                    if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
+                        return;
+                    $('div[name=' + $attrs.id + ']').addClass("changing-state");
+                    var menuPosition = getDropDownDirection($attrs.id);
+                    if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {                       
+                        $('div[name=' + $attrs.id + ']').addClass("open-select");
+                        vrSelectSharedObject.onOpenDropDown($attrs.id)
+                        hideAllOtherDropDown($attrs.id);
+                        afterShowDropdown($attrs.id);
+                    }
+                    else {
+                        $('div[name=' + $attrs.id + ']').removeClass("open-select");
+                        if (menuPosition.toTop == true) {
+                            $('div[name=' + $attrs.id + ']').find('.dropdown-menu').hide(function () {
+                                $('div[name=' + $attrs.id + ']').removeClass("changing-state");
+                            });
+                        }
+                        else {
+                            $('div[name=' + $attrs.id + ']').find('.dropdown-menu').slideUp("slow", function () {
+                                $('div[name=' + $attrs.id + ']').removeClass("changing-state");
+                            });
+                        }
+                        afterHideDropdown($attrs.id);
+                        event.stopPropagation();
+                        return;
+                    }
+                    event.stopPropagation();
+                });
+
+                $(document).on('click', function (e) {
+                    var button = $('div[name=' + $attrs.id + ']');
+                    if ($(e.target).attr('open-trriger') != undefined && $(e.target).attr('open-trriger') == $attrs.id)
+                        return;
+                    if ((!$(e.target).hasClass('inner-remove') && !$(e.target).hasClass('remove-selection') && !$(button).is(e.target) && $(button).has(e.target).length === 0) || ($(e.target).hasClass('single-select' + $attrs.id))) {
+                        $(button).removeClass('open-select');
+                        $('div[name=' + $attrs.id + ']').find('.dropdown-menu').first().slideUp("slow", function () {
+                            afterHideDropdown($attrs.id);
+                        });
+                    }
+                });
+
+                $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
+                    fixDropdownPosition();
+                });
+                $(window).scroll(function () {
+                    fixDropdownPosition();
+                });
+                $(window).resize(function () {
+                    fixDropdownPosition();
+                });
+                var fixDropdownPosition = function () {
+                    hideAllOtherDropDown()
+                };
+                $scope.$on('start-drag', function (event, args) {
+                    fixDropdownPosition();
+                });
+
                 var api = {};
                 api.clearDataSource = function () {
                     if (controller.isRemoteLoad()) {
                         controller.filtername = "";
                         controller.data.length = 0;
                     }
-
                     else
                         controller.datasource.length = 0;
 
@@ -409,140 +603,39 @@
                         return items;
                     });
                 };
+                api.removeReadOnly = function (nameFilter) {
+                    controller.readOnly = false;
+                };
+                api.openDropDown = function () {
+                    var event = $(window.event);
+                    if (event) {
+                        var target = event[0].srcElement;
+                        $(target).attr('open-trriger', $attrs.id);
+                    }
+                    if ($('div[name=' + $attrs.id + ']').hasClass('open-select') == false) {
+                        $timeout(function () {
+                            $('div[name=' + $attrs.id + ']').find('.dropdown-toggle').first().trigger("click");
+                        }, 1);
+                    }
+                };
+
+                api.closeDropDown = function () {
+                    if (!$('div[name=' + $attrs.id + ']').hasClass('open-select'))
+                        return;
+                    $timeout(function () {
+                        if ($('div[name=' + $attrs.id + ']').hasClass('open-select')) {
+                            $('div[name=' + $attrs.id + ']').find('.dropdown-toggle').first().trigger("click");
+                        }
+                    }, 1);
+                };
                 if (controller.onReady != null) {
                     controller.onReady(api);
                 }
-                //Exports
-                setTimeout(function () {
-                    $('div[name=' + $attrs.id + ']').on('show.bs.dropdown', function (event) {
 
-                        vrSelectSharedObject.onOpenDropDown($attrs.id);
-
-                        setTimeout(function () {
-                            $('#filterInput').focus();
-                            var lastScrollTop;
-                            $element.find("#divDataSourceContainer").scroll(function () {
-                                
-                                var scrollTop = $(this).scrollTop();
-                                var scrollPercentage = 100 * scrollTop / ($element.find('#divDataSourceBody').height() - $(this).height());
-
-                                if (scrollTop > lastScrollTop) {
-                                    if (scrollPercentage > 80)
-                                        addPageToBoundDataSource();
-                                }
-                                lastScrollTop = scrollTop;
-                               
-                            });
-                            markSelectedDataItem();
-                        }, 1);
-                        var selfHeight = $(this).height();
-                        var selfOffset = $(this).offset();
-                        var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
-
-                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 235 : 200;
-
-                        if ((innerHeight - 100) - basetop < heigth) {
-                            var div = $(this).find('.dropdown-menu');
-                            var height = div.css({
-                                display: "block"
-                            }).height();
-
-                            div.css({
-                                overflow: "hidden",
-                                marginTop: height,
-                                height: 0
-                            }).animate({
-                                marginTop: 0,
-                                height: height
-                            }, 1000, function () {
-                                $(this).css({
-                                    display: "",
-                                    overflow: "",
-                                    height: "",
-                                    marginTop: ""
-                                });
-                            });
-
-                        }
-                        else
-                            $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-                   
-                    });
-
-                    $('div[name=' + $attrs.id + ']').attr('name', $attrs.id).on('hide.bs.dropdown', function () {
-
-                        $('#filterInput').blur();
-                        if (controller.onblurdropdown != null) {
-                            controller.onblurdropdown()
-                        }
-                        vrSelectSharedObject.onCloseDropDown($attrs.id);
-                        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-                        found =  false;
-                    });
-
-                    
-                }, 100);
-                setTimeout(function () {
-                    // if ($('div[name=' + $attrs.id + ']').parents('.modal-body').length > 0) {
-
-                    $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
-
-                        var self = $(this);
-                        var selfHeight = $(this).parent().height();
-                        var selfOffset = $(self).offset();
-                        var dropDown = self.parent().find('ul');
-                        var top = 0;
-                        var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
-                        var baseleft = selfOffset.left - $(window).scrollLeft();
-
-                        var heigth = $(this).parents('.vr-pager-container').length > 0 ? 245 : 200;
-                        if ((innerHeight - 100) - basetop < heigth) {
-                            top = basetop - (heigth + (selfHeight * 2.7));
-                            if (isRemoteLoad()) {
-                                top = top - 35;
-                            }
-                            if (controller.hidefilterbox != undefined)
-                                top = top + 30;
-                            if (controller.readOnly && controller.isRemoteLoad())
-                                top = top + 30;
-
-                        }
-                        else
-                            top = selfOffset.top - $(window).scrollTop() + selfHeight;
-
-
-
-
-                        $(dropDown).css({ position: 'fixed', top: top, left: baseleft });
-                       
-                    });
-
-                    $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
-                        fixDropdownPosition();
-                    });
-                    $(window).scroll(function () {
-                        fixDropdownPosition();
-                    });
-                    $(window).resize(function () {
-                        fixDropdownPosition();
-                    });
-
-                    //  }
-
-                }, 1);
-                var fixDropdownPosition = function () {
-                    $('.drop-down-inside-modal').find('.dropdown-menu').hide();
-                    $('.drop-down-inside-modal').removeClass("open");
-
-                };
-                $scope.$on('start-drag', function (event, args) {
-                    fixDropdownPosition();
-                });
-
-               
             },
             controllerAs: 'ctrl',
             bindToController: true,
+            transclude: true,
             compile: function (element, attrs) {
 
 
@@ -608,8 +701,8 @@
                     else {
                         var noCaret = attrs.nocaret != undefined;
                         var noborder = attrs.noborder != undefined;
-                        var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button" data-toggle="dropdown" '
-                                            + ' aria-expanded="true"  ' + validateButtonClass + '>'
+                        var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button"  '
+                                            + '   ' + validateButtonClass + '>'
                                             + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
                                             + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
@@ -635,11 +728,14 @@
                     pre: function ($scope, iElem, iAttrs) {
 
                         var ctrl = $scope.ctrl;
+                        ctrl.id = iAttrs.id;
 
                         var getInputeStyle = function () {
                             var div = iElem.find('div[validator-section]')[0];
                             if (iAttrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "-3px" });
+                                $(div).css({
+                                    "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "-3px"
+                                });
                             }
                         };
                         getInputeStyle();
@@ -647,18 +743,16 @@
                         //baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);
 
                         ctrl.clearAllSelected = function (e, isSingle) {
-                            ctrl.muteAction(e);
                             ctrl.selectedvalues = [];
                             ctrl.selectedvalues.length = 0;
-                            if (isSingle != undefined) {                               
+                            if (isSingle != undefined) {
                                 //$('.dropdown-menu').hide();
                                 ctrl.selectedvalues = undefined;
                             }
-                               
+
                         };
 
                         function selectItem(e, item) {
-                           
                             if (!ctrl.isMultiple()) {
 
                                 if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
@@ -672,7 +766,6 @@
 
                             }
                             else {
-                                ctrl.muteAction(e);
                                 var index = null;
                                 try {
                                     index = baseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
@@ -696,6 +789,11 @@
                                     ctrl.selectedvalues.push(item);
                                 }
 
+                            }
+                            if (iElem.parents('.dropdown-menu').length > 0) {
+                                $timeout(function () {
+                                    $(iElem.find('.vr-select-remove')).addClass('inner-remove');
+                                }, 10);
                             }
                         }
 
@@ -725,6 +823,7 @@
 
 
 
+
                         $scope.$watch(function () {
 
                             if (ctrl.isMultiple()) {
@@ -750,7 +849,7 @@
                                 if (promise != null && promise.then != undefined) {
                                     ctrl.showloading = true;
                                     promise.then(function (items) {
-                                        ctrl.setdatasource(items);                                      
+                                        ctrl.setdatasource(items);
                                     }).finally(function () {
                                         ctrl.showloading = false;
                                     });
@@ -771,7 +870,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout'];
 
     app.directive('vrSelect', vrSelectDirective);
 

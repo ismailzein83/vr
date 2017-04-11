@@ -48,6 +48,9 @@ appControllers.directive('draggable',['$document', function ($document) {
             $document.unbind('mousemove', mousemove);
             $document.unbind('mouseup', mouseup);
         }
+        scope.$on("$destroy", function() {
+             $(window).off("resize.Viewport");
+        });
     };
 }]);
 appControllers.factory('vrInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
@@ -103,6 +106,9 @@ appControllers.directive('draggablemodal',['$document',function ($document) {
             $document.unbind('mousemove', mousemove);
             $document.unbind('mouseup', mouseup);
         }
+        scope.$on("$destroy", function() {
+             $(window).off("resize.Viewport");
+        });
     };
 }]);
 
@@ -138,6 +144,10 @@ appControllers.directive('clickOutside',['$document', function ($document) {
 
                 $scope.$eval($scope.clickOutside);
             });
+            $scope.$on("$destroy", function() {
+               $(window).off("resize.Viewport");
+            });
+
         }
     };
 }])

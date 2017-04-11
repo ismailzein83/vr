@@ -531,7 +531,19 @@ a.vr-select-disabled-item:hover, a.vr-select-disabled-item:active, a.vr-select-d
     background-color: transparent !important;
    
 }
-
+.vr-select-advance-search {
+    background-color:#fff;
+    position: absolute;
+    top: -6px;
+    left: 220px;
+    z-index: 11100;
+    width: 230px;
+    display: block;
+    border: 1px solid #ddd;
+    border-left:0px;
+    border-radius: 4px;
+    height: calc(100% + 12px );
+}
 .single-col-checklist {
     width: 226px;
 }
@@ -613,7 +625,12 @@ add padding .left-addon input {
     top: 7px;
     right: 5px;
 }
-
+.vr-menu-item{
+    display:none;
+}
+.vr-menu-item-selected{
+    display:block;
+}
 .item-menu {
     padding: 2px 5px;
     margin: 0px;
