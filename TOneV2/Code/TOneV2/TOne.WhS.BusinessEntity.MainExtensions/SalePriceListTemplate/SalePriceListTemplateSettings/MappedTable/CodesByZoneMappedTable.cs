@@ -18,12 +18,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public char Delimiter { get; set; }
 
-        public override IEnumerable<SalePriceListTemplateTableCell> FillSheet(ISalePriceListTemplateSettingsContext context, string dateTimeFormat)
+        public override IEnumerable<SalePriceListTemplateTableCell> FillSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
         {
             List<SalePriceListTemplateTableCell> sheets = new List<SalePriceListTemplateTableCell>();
             int currentRowIndex = this.FirstRowIndex;
 
-            foreach (SalePLZoneNotification zone in context.Zones)
+            foreach (SalePLZoneNotification zone in zoneNotificationList)
             {
                 IEnumerable<CodesByZoneMappedColumn> mappedCols = this.MappedColumns.Select(item => item as CodesByZoneMappedColumn);
                 SetRecordData(sheets, mappedCols, zone, ref currentRowIndex, dateTimeFormat);

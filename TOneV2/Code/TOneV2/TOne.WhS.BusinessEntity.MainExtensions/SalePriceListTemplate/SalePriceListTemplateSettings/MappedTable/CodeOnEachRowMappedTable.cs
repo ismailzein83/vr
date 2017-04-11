@@ -15,12 +15,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             get { return new Guid("4EBE3013-2A48-41BD-97D6-57286759B907"); }
         }
 
-        public override IEnumerable<SalePriceListTemplateTableCell> FillSheet(ISalePriceListTemplateSettingsContext context, string dateTimeFormat)
+        public override IEnumerable<SalePriceListTemplateTableCell> FillSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
         {
             List<SalePriceListTemplateTableCell> sheets = new List<SalePriceListTemplateTableCell>();
             int currentRowIndex = this.FirstRowIndex;
 
-            foreach (SalePLZoneNotification zone in context.Zones)
+            foreach (SalePLZoneNotification zone in zoneNotificationList)
             {
                 foreach (var code in zone.Codes)
                     {

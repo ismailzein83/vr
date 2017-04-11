@@ -32,12 +32,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             if (file.Content == null)
                 throw new NullReferenceException(String.Format("File '{0}' is empty", TemplateFileId));
 
+            IEnumerable<SalePLZoneNotification> orderedListofZones = context.Zones.OrderBy(x => x.ZoneName);
+
             MemoryStream stream = new MemoryStream(file.Content);
             Workbook workbook = new Workbook(stream);
 
             Vanrise.Common.Utilities.ActivateAspose();
 
-            SetWorkbookData(context, workbook);
+            SetWorkbookData(orderedListofZones, workbook);
 
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = workbook.SaveToStream();
@@ -46,13 +48,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         #region Private Methods
 
-        private void SetWorkbookData(ISalePriceListTemplateSettingsContext context, Workbook workbook)
+        private void SetWorkbookData(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook)
         {
             if (MappedTables != null)
             {
                 foreach (MappedTable mappedSheet in MappedTables)
                 {
-                    IEnumerable<SalePriceListTemplateTableCell> sheets = mappedSheet.FillSheet(context, DateTimeFormat);
+                    IEnumerable<SalePriceListTemplateTableCell> sheets = mappedSheet.FillSheet(zoneNotificationList, DateTimeFormat);
                     Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
                     SetCellData(worksheet, sheets);
                 }
