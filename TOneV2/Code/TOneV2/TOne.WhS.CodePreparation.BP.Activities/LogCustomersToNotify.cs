@@ -37,8 +37,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
 
             string message = (customerNames.Count > 1) ? "Sending Sale Pricelists to Customers: {0}" : "Sending Sale Pricelist to Customer: {0}";
-            customerNames = customerNames.OrderBy(name => name).ToList();
-            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, string.Join(",", customerNames));
+            var orderedCustomersByName = customerNames.OrderBy(name => name).ToList();
+            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, string.Join(",", orderedCustomersByName));
         }
     }
 }
