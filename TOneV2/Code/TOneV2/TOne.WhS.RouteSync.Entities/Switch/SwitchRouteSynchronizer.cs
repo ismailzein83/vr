@@ -20,6 +20,14 @@ namespace TOne.WhS.RouteSync.Entities
         public abstract void Finalize(ISwitchRouteSynchronizerFinalizeContext context);
 
         public abstract void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
+        public virtual bool TryBlockCustomer(ITryBlockCustomerContext context)
+        {
+            return false;
+        }
+        public virtual bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
+        {
+            return false;
+        }
     }
 
     public enum RouteSyncDeliveryMethod { Batches = 0, AllRoutes = 1 }
@@ -78,5 +86,21 @@ namespace TOne.WhS.RouteSync.Entities
     public interface ISwitchRouteSynchronizerApplyRoutesContext
     {
         Object PreparedItemsForApply { get; }
+    }
+    public interface ITryBlockCustomerContext
+    {
+        string CustomerId { get; set; }
+    }
+    public interface ITryUnBlockCustomerContext
+    {
+        string CustomerId { get; set; }
+    }
+    public class TryBlockCustomerContext : ITryBlockCustomerContext
+    {
+        public string CustomerId { get; set; }
+    }
+    public class TryUnBlockCustomerContext : ITryUnBlockCustomerContext
+    {
+        public string CustomerId { get; set; }
     }
 }

@@ -8,18 +8,17 @@ using Vanrise.Notification.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
-    public class BlockCustomerActionDefinition : VRActionDefinitionExtendedSettings
+    public class UnBlockCustomerActionDefinition : VRActionDefinitionExtendedSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("55E97A73-994A-4D60-9A9E-BBD04D08929D"); }
+            get { return new Guid("86912E3E-7305-4D5D-8796-7CCF88B9A7FA"); }
         }
-
         public override string RuntimeEditor
         {
             get
             {
-                return "whs-accountbalance-action-customer-block";
+                return "whs-accountbalance-action-customer-unblock";
             }
         }
 

@@ -107,6 +107,8 @@
     <Compile Include="VRBalanceAlertActions\BlockCustomerActionDefinition.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailAction.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailActionDefinition.cs" />
+    <Compile Include="VRBalanceAlertActions\UnBlockCustomerAction.cs" />
+    <Compile Include="VRBalanceAlertActions\UnBlockCustomerActionDefinition.cs" />
     <Compile Include="VRBalanceAlertThresholds\PrePaid\CustFixedThreshold.cs" />
     <Compile Include="VRBalanceAlertThresholds\PostPaid\CustTolerancePercThreshold.cs" />
     <Compile Include="VRBalanceAlertThresholds\SuppTolerancePercBalAlertThreshold.cs" />
@@ -129,6 +131,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

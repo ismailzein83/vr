@@ -13,7 +13,7 @@ using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
-    public class BlockCustomerAction : VRAction
+    public class UnBlockCustomerAction : VRAction
     {
         public override void Execute(IVRActionExecutionContext context)
         {
@@ -27,54 +27,35 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
             SwitchManager switchManager = new SwitchManager();
             var switches = switchManager.GetAllSwitches();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
             if (financialAccount.CarrierAccountId.HasValue)
             {
                 var carrierAccount = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
-                if(carrierAccount.CustomerSettings.RoutingStatus != BusinessEntity.Entities.RoutingStatus.Blocked)
+                CustomerRoutingStatusState customerRoutingStatusState = carrierAccountManager.GetExtendedSettings<CustomerRoutingStatusState>(carrierAccount);
+
+                if (customerRoutingStatusState != null && carrierAccount.CustomerSettings.RoutingStatus == BusinessEntity.Entities.RoutingStatus.Blocked)
                 {
-                    CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
-                    {
-                        OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus
-                    };
-                    carrierAccount.CustomerSettings.RoutingStatus = BusinessEntity.Entities.RoutingStatus.Blocked;
+                    carrierAccount.CustomerSettings.RoutingStatus = customerRoutingStatusState.OriginalRoutingStatus;
+                    customerRoutingStatusState = null;
                     carrierAccountManager.UpdateCarrierAccount(ConvertCarrierAccountToEdit(carrierAccount));
                     carrierAccountManager.UpdateCarrierAccountExtendedSetting(financialAccount.CarrierAccountId.Value, customerRoutingStatusState);
-                    BlockCustomerOnSwitches(switches, financialAccount.CarrierAccountId.ToString());
+                    UnBlockCustomerOnSwitches(switches, financialAccount.CarrierAccountId.ToString());
                 }
             }
             else
             {
-                var carrierAccounts = carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value,true,false);
+                var carrierAccounts = carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
                 foreach (var carrierAccount in carrierAccounts)
                 {
-                    if (carrierAccount.CustomerSettings.RoutingStatus != BusinessEntity.Entities.RoutingStatus.Blocked)
+                    CustomerRoutingStatusState customerRoutingStatusState = carrierAccountManager.GetExtendedSettings<CustomerRoutingStatusState>(carrierAccount);
+
+                    if (customerRoutingStatusState != null && carrierAccount.CustomerSettings.RoutingStatus == BusinessEntity.Entities.RoutingStatus.Blocked)
                     {
-                        CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
-                        {
-                            OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus
-                        };
-                        carrierAccount.CustomerSettings.RoutingStatus = BusinessEntity.Entities.RoutingStatus.Blocked;
+                        carrierAccount.CustomerSettings.RoutingStatus = customerRoutingStatusState.OriginalRoutingStatus;
+                        customerRoutingStatusState = null;
                         carrierAccountManager.UpdateCarrierAccount(ConvertCarrierAccountToEdit(carrierAccount));
                         carrierAccountManager.UpdateCarrierAccountExtendedSetting(financialAccount.CarrierAccountId.Value, customerRoutingStatusState);
-                        BlockCustomerOnSwitches(switches, financialAccount.CarrierAccountId.ToString());
-                    }
-                }
-               
-            }
-        }
-        private void BlockCustomerOnSwitches(List<Switch> switches, string customerId)
-        {
-            if (switches != null)
-            {
-                foreach (var switchItem in switches)
-                {
-                    TryBlockCustomerContext context = new TryBlockCustomerContext
-                    {
-                        CustomerId = customerId
-                    };
-                    if (switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context))
-                    {
-
+                        UnBlockCustomerOnSwitches(switches, financialAccount.CarrierAccountId.ToString());
                     }
                 }
             }
@@ -93,5 +74,23 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 
             };
         }
+        private void UnBlockCustomerOnSwitches(List<Switch> switches, string customerId)
+        {
+            if (switches != null)
+            {
+                foreach (var switchItem in switches)
+                {
+                    TryUnBlockCustomerContext context = new TryUnBlockCustomerContext
+                    {
+                        CustomerId = customerId
+                    };
+                    if (switchItem.Settings.RouteSynchronizer.TryUnBlockCustomer(context))
+                    {
+
+                    }
+                }
+            }
+        }
+
     }
 }

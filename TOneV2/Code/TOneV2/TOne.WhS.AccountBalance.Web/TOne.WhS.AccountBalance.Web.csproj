@@ -148,6 +148,10 @@
     <Content Include="WhS_AccountBalance\Constant\FinancialAccountCarrierTypeEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\FinancialAccountEffectiveStatusEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\ModuleConfig.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\UnBlockCustomerAction\Directives\Templates\UnBlockCustomerAction.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\UnBlockCustomerAction\Directives\Templates\UnBlockCustomerActionDefinition.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\UnBlockCustomerAction\Directives\whs-accountbalance-action-customer-unblock.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\UnBlockCustomerAction\Directives\whs-accountbalance-actiondefinition-customer-unblock.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\BlockCustomerAction\Directives\Templates\BlockCustomerAction.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\BlockCustomerAction\Directives\whs-accountbalance-action-customer-block.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\SendCustomerEmailAction\Directives\Templates\SendCustomerEmailAction.html" />

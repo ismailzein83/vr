@@ -35,7 +35,7 @@ app.directive('whsAccountbalanceActiondefinitionCustomerBlock', [function () {
 
             api.getData = function () {
                 return {
-                    $type: 'TOne.WhS.AccountBalance.MainExtensions.BlockCustomerActionDefinition, TOne.WhS.AccountBalance.MainExtensions'
+                    $type: 'TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions.BlockCustomerActionDefinition, TOne.WhS.AccountBalance.MainExtensions'
                 };
             };
 

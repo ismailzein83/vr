@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('whsAccountbalanceActionCustomerBlock', [function () {
+app.directive('whsAccountbalanceActiondefinitionCustomerUnblock', [function () {
     return {
         restrict: "E",
         scope: {
@@ -10,15 +10,15 @@ app.directive('whsAccountbalanceActionCustomerBlock', [function () {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new BlockCustomerAction($scope, ctrl, $attrs);
+            var ctor = new UnBlockCustomerActionDefinition($scope, ctrl, $attrs);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: '/Client/Modules/WhS_AccountBalance/Elements/AccountBalanceActions/BlockCustomerAction/Directives/Templates/BlockCustomerAction.html'
+        templateUrl: '/Client/Modules/WhS_AccountBalance/Elements/AccountBalanceActions/UnBlockCustomerAction/Directives/Templates/UnBlockCustomerActionDefinition.html'
     };
 
-    function BlockCustomerAction($scope, ctrl, $attrs) {
+    function UnBlockCustomerActionDefinition($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -35,7 +35,7 @@ app.directive('whsAccountbalanceActionCustomerBlock', [function () {
 
             api.getData = function () {
                 return {
-                    $type: 'TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions.BlockCustomerAction, TOne.WhS.AccountBalance.MainExtensions'
+                    $type: 'TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions.UnBlockCustomerActionDefinition, TOne.WhS.AccountBalance.MainExtensions'
                 };
             };
 
