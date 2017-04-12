@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountDetail
     {
-        public Account Entity { get; set; }
+        public long AccountId { get; set; } 
         public string AccountTypeTitle { get; set; }
         public int DirectSubAccountCount { get; set; }
         public int TotalSubAccountCount { get; set; }

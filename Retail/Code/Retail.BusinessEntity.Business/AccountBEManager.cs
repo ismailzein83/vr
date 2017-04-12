@@ -72,7 +72,7 @@ namespace Retail.BusinessEntity.Business
             {
                 foreach (var accountDetail in bigResult.Data)
                 {
-                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.Entity, filtredActionIds, filterdViewIds);
+                    AccountDetailMapperStep2(input.Query.AccountBEDefinitionId, accountDetail, accountDetail.AccountId, filtredActionIds, filterdViewIds);
                 }
             }
 
@@ -912,7 +912,7 @@ namespace Retail.BusinessEntity.Business
 
             return new AccountDetail()
             {
-                Entity = account,
+                AccountId = account.AccountId,
                 AccountTypeTitle = accountTypeManager.GetAccountTypeName(account.TypeId),
                 DirectSubAccountCount = accountTreeNode.ChildNodes.Count,
                 TotalSubAccountCount = accountTreeNode.TotalSubAccountsCount,
@@ -937,6 +937,12 @@ namespace Retail.BusinessEntity.Business
             accountDetail.AvailableAccountActions = accountActionDefinitions != null ? accountActionDefinitions.Where(x => ActionDefinitionIds.Contains(x.AccountActionDefinitionId)).Select(itm => itm.AccountActionDefinitionId).ToList() : null;
             accountDetail.Style = GetStatuStyle(account.StatusId);
         }
+        private void AccountDetailMapperStep2(Guid accountBEDefinitionId, AccountDetail accountDetail, long accountId, HashSet<Guid> ActionDefinitionIds, HashSet<Guid> ViewDefinitionIds)
+        {
+            Account account = this.GetAccount(accountBEDefinitionId, accountId);
+            AccountDetailMapperStep2(accountBEDefinitionId, accountDetail, account, ActionDefinitionIds, ViewDefinitionIds);
+        }
+
         private StyleFormatingSettings GetStatuStyle(Guid statusID)
         {
             Vanrise.Common.Business.StatusDefinitionManager statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();

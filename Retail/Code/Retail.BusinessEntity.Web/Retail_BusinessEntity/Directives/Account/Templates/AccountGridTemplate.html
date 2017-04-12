@@ -5,9 +5,9 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.menuActions"
-             idfield="Entity.AccountId"
-             defaultsortbyfieldname="'Entity.AccountId'" enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountId'"></vr-datagridcolumn>
+             idfield="AccountId"
+             defaultsortbyfieldname="'AccountId'" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'AccountId'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
 
     <vr-datagridexpandablerow>
