@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E80C060E-B246-40CB-B9E7-EF33E82F4562}"
 EndProject
@@ -47,9 +47,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.BP.Argume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Generic.MainExtensions", "Mediation.Generic.MainExtensions\Mediation.Generic.MainExtensions.csproj", "{53C6CF7D-FD79-413C-ABA1-01F34777A005}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Teles", "Teles", "{2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Teles.Business", "Mediation.Teles.Business\Mediation.Teles.Business.csproj", "{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -117,6 +121,10 @@ Global
 		SccProjectTopLevelParentUniqueName16 = Mediation.sln
 		SccProjectName16 = Mediation.Generic.MainExtensions
 		SccLocalPath16 = Mediation.Generic.MainExtensions
+		SccProjectUniqueName17 = Mediation.Teles.Business\\Mediation.Teles.Business.csproj
+		SccProjectTopLevelParentUniqueName17 = Mediation.sln
+		SccProjectName17 = Mediation.Teles.Business
+		SccLocalPath17 = Mediation.Teles.Business
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +197,10 @@ Global
 		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53C6CF7D-FD79-413C-ABA1-01F34777A005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,5 +223,7 @@ Global
 		{4AFAFB2B-67CD-465E-85C5-7EE41316FAD3} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{C08816B3-1E52-4D76-8CFA-2672A00FAC64} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{53C6CF7D-FD79-413C-ABA1-01F34777A005} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
+		{2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2} = {E82A6672-DA4F-41B1-8696-C5CC1D4B1812}
+		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D} = {2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2}
 	EndGlobalSection
 EndGlobal

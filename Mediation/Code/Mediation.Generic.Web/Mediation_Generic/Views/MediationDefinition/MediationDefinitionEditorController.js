@@ -167,7 +167,7 @@
                         var onOutPutHandlerUpdated = function (obj) {
                             $scope.scopeModel.handlers[$scope.scopeModel.handlers.indexOf(dataItem)] = buildHandlerRecord(obj);
                         };
-                        Mediation_Generic_OutPutHandlerService.editOutPutHandler(dataItem,dataTransformationDefinitionId, onOutPutHandlerUpdated);
+                        Mediation_Generic_OutPutHandlerService.editOutPutHandler(dataItem, dataTransformationDefinitionId, onOutPutHandlerUpdated);
                     }
                 }];
             };
@@ -537,7 +537,7 @@
         function loadFields() {
             var obj = { DataRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds() };
             var serializedFilter = UtilsService.serializetoJson(obj);
-            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter);
+            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataParsedRecordTypeSelectorAPI.getSelectedIds(), undefined);
         }
 
         function getParsedRecordIdentificationSetting() {

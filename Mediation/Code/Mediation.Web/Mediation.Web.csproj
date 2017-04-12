@@ -475,6 +475,10 @@
       <Project>{ab400620-7c45-46fe-9006-76a7a543c956}</Project>
       <Name>Mediation.Generic.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Teles.Business\Mediation.Teles.Business.csproj">
+      <Project>{8dde7260-624a-4e06-ab69-de5fa7742a5d}</Project>
+      <Name>Mediation.Teles.Business</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -97,7 +97,7 @@
             function loadFields() {
                 var obj = { DataRecordTypeId: dataRecoredId };
                 var serializedFilter = UtilsService.serializetoJson(obj);
-                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter);
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecoredId, undefined);
             }
         }
     }
