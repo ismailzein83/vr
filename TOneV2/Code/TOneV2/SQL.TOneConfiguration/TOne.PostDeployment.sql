@@ -1674,6 +1674,7 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
+set identity_insert [queue].[QueueActivatorConfig] off;
 
 --[logging].[LoggableEntity]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
