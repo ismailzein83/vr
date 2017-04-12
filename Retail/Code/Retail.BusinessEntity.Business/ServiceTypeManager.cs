@@ -207,7 +207,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        private Dictionary<Guid, ServiceType> GetCachedServiceTypesWithHidden()
+        internal Dictionary<Guid, ServiceType> GetCachedServiceTypesWithHidden()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetServiceTypesWithHidden", () =>
             {

@@ -181,7 +181,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        private Dictionary<Guid, ProductDefinition> GetCachedProductDefinitionsWithHidden()
+        internal Dictionary<Guid, ProductDefinition> GetCachedProductDefinitionsWithHidden()
         {
             VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
             return vrComponentTypeManager.GetCachedComponentTypes<ProductDefinitionSettings, ProductDefinition>();

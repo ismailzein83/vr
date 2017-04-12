@@ -292,7 +292,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<Guid, AccountType> GetCachedAccountTypesWithHidden()
+        internal Dictionary<Guid, AccountType> GetCachedAccountTypesWithHidden()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountTypesWithHidden", () =>
             {

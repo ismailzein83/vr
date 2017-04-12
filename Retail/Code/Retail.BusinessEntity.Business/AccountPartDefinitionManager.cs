@@ -158,7 +158,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<Guid, AccountPartDefinition> GetCachedAccountPartDefinitions()
+        internal Dictionary<Guid, AccountPartDefinition> GetCachedAccountPartDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountPartDefinitions", () =>
             {
