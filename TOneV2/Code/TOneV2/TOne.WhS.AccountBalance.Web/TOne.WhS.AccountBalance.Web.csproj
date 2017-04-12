@@ -160,6 +160,10 @@
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PrePaid\whs-accountbalance-threshold-customer-fixedthreshold.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PostPaid\Template\CustomerTolerancePercentageThreshold.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceAlertThreshold\Customer\PostPaid\whs-accountbalance-threshold-customer-tolerancepercentage.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceNotification\Directives\Template\AccountBalanceNotificationTypeSearchEditorTemplate.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceNotification\Directives\Template\AccountBalanceNotificationTypeSettingsTemplate.html" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceNotification\Directives\whs-accountbalance-notificationtype-searcheditor.js" />
+    <Content Include="WhS_AccountBalance\Elements\AccountBalanceNotification\Directives\whs-accountbalance-notificationtype-settings.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountType\Directives\AccountTypeFieldSources\Templates\TOneCustomFieldSourceSetting.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountType\Directives\AccountTypeFieldSources\whs-accountbalance-accounttype-source-tonecustomfield.js" />
     <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\FinancialAccountTypes\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
