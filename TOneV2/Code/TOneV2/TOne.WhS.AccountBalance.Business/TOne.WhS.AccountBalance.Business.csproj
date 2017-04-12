@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceManager.cs" />
+    <Compile Include="AccountBalanceNotification\TOneAccountBalanceNotificationExtendedQuery.cs" />
+    <Compile Include="AccountBalanceNotification\TOneAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountBalanceSettings.cs" />
     <Compile Include="FinancialAccountBESettings.cs" />
     <Compile Include="FinancialAccountDefinitionManager.cs" />
