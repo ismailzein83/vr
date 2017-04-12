@@ -110,6 +110,53 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
+        public string GenerateApplicationScript(Guid applicationVisibilityId)
+        {
+            VRApplicationVisibility appVisibility = GetVRApplicationVisibility(applicationVisibilityId);
+            appVisibility.ThrowIfNull("appVisibility", applicationVisibilityId);
+            StringBuilder builder = new StringBuilder();
+            if(appVisibility.Settings != null && appVisibility.Settings.ModulesVisibility  != null)
+            {
+                foreach(var modVisibilityEntry in appVisibility.Settings.ModulesVisibility)
+                {
+                    StringBuilder modScriptBuilder = new StringBuilder();
+                    Action<string, string> addEntityScriptAction = (entityName, entityScript) =>
+                        {
+                            modScriptBuilder.AppendLine();
+                            modScriptBuilder.AppendFormat("-------------- START Entity '{0}' -------------------", entityName);
+                            modScriptBuilder.AppendLine();
+                            modScriptBuilder.AppendLine("-----------------------------------------------------------------------------------------");
+                            modScriptBuilder.AppendLine("BEGIN");
+                            modScriptBuilder.AppendLine();
+                            modScriptBuilder.AppendLine(entityScript);
+                            modScriptBuilder.AppendLine();
+                            modScriptBuilder.AppendLine("END");
+                            modScriptBuilder.AppendLine("-----------------------------------------------------------------------------------------");
+                            modScriptBuilder.AppendFormat("-------------- END Entity '{0}' -------------------", entityName);
+                            modScriptBuilder.AppendLine();
+                        };
+                    var context = new VRModuleVisibilityGenerateScriptContext (addEntityScriptAction);
+                    
+                    modVisibilityEntry.Value.GenerateScript(context);
+                    if (modScriptBuilder.Length > 0)
+                    {
+                        builder.AppendLine();
+                        builder.AppendFormat("-------------- START Module Id '{0}' -------------------", modVisibilityEntry.Key);
+                        builder.AppendLine();
+                        builder.AppendLine("-----------------------------------------------------------------------------------------");
+                        builder.AppendLine();
+                        builder.AppendLine(modScriptBuilder.ToString());
+                        builder.AppendLine();
+                        builder.AppendLine("-----------------------------------------------------------------------------------------");
+                        builder.AppendFormat("-------------- END Module Id '{0}' -------------------", modVisibilityEntry.Key);
+                        modScriptBuilder.AppendLine();
+                    }
+                }
+            }
+
+            return builder.ToString();
+        }
+
         public IEnumerable<VRApplicationVisibilityInfo> GetVRApplicationVisibiltiesInfo(VRApplicationVisibilityFilter filter)
         {
             Func<VRApplicationVisibility, bool> filterExpression = null;
@@ -142,6 +189,20 @@ namespace Vanrise.Common.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreVRApplicationVisibilityUpdated(ref _updateHandle);
+            }
+        }
+
+        private class VRModuleVisibilityGenerateScriptContext : IVRModuleVisibilityGenerateScriptContext
+        {
+            Action<string,string> _addEntityScriptAction;
+            public VRModuleVisibilityGenerateScriptContext(Action<string,string> addEntityScriptAction)
+            {
+                addEntityScriptAction.ThrowIfNull("addEntityScriptAction");
+                _addEntityScriptAction = addEntityScriptAction;
+            }
+            public void AddEntityScript(string entityName, string entityScript)
+            {
+                _addEntityScriptAction(entityName, entityScript);
             }
         }
 
