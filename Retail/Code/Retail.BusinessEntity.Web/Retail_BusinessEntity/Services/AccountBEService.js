@@ -38,6 +38,7 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
         };
+
         function getEntityUniqueName(definitionId) {
             return "Retail_BusinessEntity_AccountBE_" + definitionId;
         }
@@ -79,7 +80,7 @@
                     var payload = {
                         accountViewDefinition: accountViewDefinition,
                         accountBEDefinitionId: accountBEDefinitionId,
-                        parentAccountId: account.Entity.AccountId
+                        parentAccountId: account.AccountId
                     };
                     return payload;
                 }
@@ -109,9 +110,9 @@
         return {
             addAccount: addAccount,
             editAccount: editAccount,
+            getEntityUniqueName: getEntityUniqueName,
             defineAccountViewTabs: defineAccountViewTabs,
-            openAccount360DegreeEditor: openAccount360DegreeEditor,
-            getEntityUniqueName: getEntityUniqueName
+            openAccount360DegreeEditor: openAccount360DegreeEditor
         };
 
     }

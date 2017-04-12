@@ -10,17 +10,18 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
                 ExecuteAction: function (payload) {
                     if (payload == undefined)
                         return;
+
                     var accountBEDefinitionId = payload.accountBEDefinitionId;
                     var accountActionId = payload.accountActionDefinition.AccountActionDefinitionId;
                     var onItemUpdated = payload.onItemUpdated;
                     var account = payload.account;
-                    var enterpriseInfoEntity = account.Entity.ExtendedSettings != undefined ? account.Entity.ExtendedSettings["Retail.Teles.Entities.EnterpriseAccountMappingInfo"] : undefined;
+                    var enterpriseInfoEntity = account.ExtendedSettings != undefined ? account.ExtendedSettings["Retail.Teles.Entities.EnterpriseAccountMappingInfo"] : undefined;
 
                     var onAccountUpdated = function (updatedAccount) {
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedAccount);
                     };
-                    mapTelesAccountEditor(accountBEDefinitionId, accountActionId, account.Entity.AccountId, enterpriseInfoEntity, onAccountUpdated);
+                    mapTelesAccountEditor(accountBEDefinitionId, accountActionId, account.AccountId, enterpriseInfoEntity, onAccountUpdated);
                 }
             };
             Retail_BE_AccountActionService.registerActionType(actionType);
