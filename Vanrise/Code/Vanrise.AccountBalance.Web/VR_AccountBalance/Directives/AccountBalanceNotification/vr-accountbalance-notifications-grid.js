@@ -32,7 +32,7 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
                 $scope.scopeModel = {};
                 $scope.scopeModel.columns = [];
                 $scope.scopeModel.vrNotifications = [];
-                $scope.scopeModel.AccountColumnTitle = "";
+                $scope.scopeModel.AccountColumnHeader = "";
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
