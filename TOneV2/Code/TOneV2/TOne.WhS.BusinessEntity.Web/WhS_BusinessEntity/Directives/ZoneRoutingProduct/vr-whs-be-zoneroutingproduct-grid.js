@@ -93,11 +93,14 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
                 directive: "vr-whs-be-saleentityzoneroutingproduct-history-grid",
                 loadDirective: function (directiveAPI, dataItem) {
                     var directivePayload = {
-                        OwnerType: gridQuery.OwnerType,
-                        OwnerId: gridQuery.OwnerId,
-                        SellingNumberPlanId: gridQuery.SellingNumberPlanId,
-                        ZoneName: dataItem.ZoneName,
-                        CountryId: dataItem.Entity.CountryId
+                        query: {
+                            OwnerType: gridQuery.OwnerType,
+                            OwnerId: gridQuery.OwnerId,
+                            SellingNumberPlanId: gridQuery.SellingNumberPlanId,
+                            ZoneName: dataItem.ZoneName,
+                            CountryId: dataItem.Entity.CountryId
+                        },
+                        primarySaleEntity: gridQuery.PrimarySaleEntity
                     };
                     return directiveAPI.load(directivePayload);
                 }

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEntityZoneRoutingProductHistoryAPIService', 'WhS_BE_SaleEntityZoneRoutingProductSourceTypeEnum', 'WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_BE_SaleEntityZoneRoutingProductHistoryAPIService, WhS_BE_SaleEntityZoneRoutingProductSourceTypeEnum, WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEntityZoneRoutingProductHistoryAPIService', 'WhS_BE_SaleEntityZoneRoutingProductSourceTypeEnum', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_BE_SaleEntityZoneRoutingProductHistoryAPIService, WhS_BE_SaleEntityZoneRoutingProductSourceTypeEnum, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -19,6 +19,7 @@ app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEnt
         this.initializeController = initializeController;
 
         var gridAPI;
+        var primarySaleEntity;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -67,16 +68,19 @@ app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEnt
         function defineAPI() {
             var api = {};
 
-            api.load = function (query) {
+            api.load = function (payload) {
+
+                var query;
+
+                if (payload != undefined) {
+                    query = payload.query;
+                    primarySaleEntity = payload.primarySaleEntity;
+                }
 
                 var ownerType;
 
-                if (query != undefined) {
-                    ownerType = query.OwnerType;
-                }
-
-                if (ownerType != undefined) {
-                    $scope.scopeModel.isOwnerCustomer = (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value);
+                if (query != undefined && query.OwnerType != null) {
+                    $scope.scopeModel.isOwnerCustomer = (query.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value);
                 }
 
                 return gridAPI.retrieveData(query);
@@ -100,10 +104,12 @@ app.directive('vrWhsBeSaleentityzoneroutingproductHistoryGrid', ['WhS_BE_SaleEnt
                 };
             }
             function setSourceIconProperties() {
-                if (record.SaleEntityName != undefined) {
+                if (primarySaleEntity == undefined)
+                    return;
+                if (primarySaleEntity == WhS_BE_PrimarySaleEntityEnum.Customer.value && record.SaleEntityName != null) {
                     record.sourceIconType = 'inherited';
                 }
-                else {
+                else if (primarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value && record.SaleEntityName == null) {
                     record.sourceIconType = 'explicit';
                 }
             }
