@@ -15,7 +15,8 @@
             viewLinkedRouteRules: viewLinkedRouteRules,
             editLinkedRouteRule: editLinkedRouteRule,
             registerObjectTrackingDrillDownToRouteRules: registerObjectTrackingDrillDownToRouteRules,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
         });
 
         function addRouteRule(onRouteRuleAdded, routingProductId, sellingNumberPlanId) {
@@ -122,7 +123,33 @@
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
         };
+        function viewRouteRules(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', modalParameters, modalSettings);
+        }
 
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_Routing_RouteRules_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewRouteRules(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
         function getEntityUniqueName() {
             return "WhS_Routing_RouteRules";
         }

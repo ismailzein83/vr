@@ -11,7 +11,7 @@
         var linkedCode;
         var linkedRouteRuleInput;
         var isEditMode;
-
+        var isViewHistoryMode;
         var routeRuleId;
         var routingProductId;
         var sellingNumberPlanId;
@@ -33,7 +33,7 @@
 
         var routeRuleSettingsAPI;
         var routeRuleSettingsReadyPromiseDeferred;
-
+        var context;
         loadParameters();
         defineScope();
         load();
@@ -42,7 +42,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-
+                context = parameters.context;
                 routeRuleId = parameters.routeRuleId;
                 routingProductId = parameters.routingProductId;
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
@@ -51,6 +51,7 @@
                 linkedCode = parameters.linkedCode;
             }
             isEditMode = routeRuleId != undefined && (linkedRouteRuleInput == undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
         function defineScope() {
 
@@ -257,12 +258,28 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+           else if (isViewHistoryMode) {
+               getRouteRuleHistory().then(function () {
+                        loadAllControls().finally(function () {
+                            routeRuleEntity = undefined;
+                        });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.isLoading = false;
+                    });
+
+                }
             else {
                 $scope.title = "New Route Rule";
                 loadAllControls();
             }
         }
+        function getRouteRuleHistory() {
+            return WhS_Routing_RouteRuleAPIService.GetRouteRuleHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                routeRuleEntity = response;
 
+            });
+        }
         function getRouteRule() {
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 $scope.scopeModel.routeRuleName = routeRule != null ? routeRule.Name : '';

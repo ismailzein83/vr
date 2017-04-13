@@ -52,7 +52,12 @@
         function BuildLinkedRouteRule(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "BuildLinkedRouteRule"), input);
         };
+        function GetRouteRuleHistoryDetailbyHistoryId(routeRuleHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, 'GetRouteRuleHistoryDetailbyHistoryId'), {
+                routeRuleHistoryId: routeRuleHistoryId
+            });
+        }
         return ({
             GetFilteredRouteRules: GetFilteredRouteRules,
             GetRule: GetRule,
@@ -64,7 +69,8 @@
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
             HasDeleteRulePermission: HasDeleteRulePermission,
-            BuildLinkedRouteRule: BuildLinkedRouteRule
+            BuildLinkedRouteRule: BuildLinkedRouteRule,
+            GetRouteRuleHistoryDetailbyHistoryId: GetRouteRuleHistoryDetailbyHistoryId
         });
     };
 

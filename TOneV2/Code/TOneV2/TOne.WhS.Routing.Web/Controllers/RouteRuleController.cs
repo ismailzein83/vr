@@ -42,6 +42,12 @@ namespace TOne.WhS.Routing.Web.Controllers
             return manager.GetCodeCriteriaGroupTemplates();
         }
 
+        [Route("GetRouteRuleHistoryDetailbyHistoryId")]
+        public RouteRule GetRouteRuleHistoryDetailbyHistoryId(int routeRuleHistoryId)
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.GetRouteRuleHistoryDetailbyHistoryId(routeRuleHistoryId);
+        }
         [HttpGet]
         [Route("GetRule")]
         public new RouteRule GetRule(int ruleId)
