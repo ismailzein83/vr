@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType','UISettingsService',
+app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType', 'UISettingsService',
     function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType, UISettingsService) {
 
 
@@ -20,9 +20,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 showexpand: '=',
                 norowhighlightonclick: '=',
                 gridmenuactions: '=',
-                margin:'='
+                margin: '='
             },
             controller: function ($scope, $element, $attrs) {
+                $scope.$on("$destroy", function () {
+                    $element.off();
+                    $(window).off("resize.Viewport");
+                });
                 var ctrl = this;
                 ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
 
@@ -48,7 +52,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.showgmenu = false;
                 ctrl.toggelGridMenu = function (e, bool) {
-                    if (bool != undefined){
+                    if (bool != undefined) {
                         $scope.$apply(function () {
                             ctrl.showgmenu = bool;
                         })
@@ -353,10 +357,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 //    width -= 1;
                 ctrl.dataColumnsSectionWidth = "calc(100% - " + otherSectionsWidth + "px)";
             }
-            $(window).resize(function() {
-                setTimeout(function() {
+            $(window).resize(function () {
+                setTimeout(function () {
                     calculateColumnsWidth();
-               }, 100)
+                }, 100)
             });
 
             function calculateColumnsWidth() {
@@ -428,7 +432,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.updateItems = [];
                 ctrl.columnDefs = [];
                 ctrl.gridStyle = {};
-                if (ctrl.maxheight != undefined && ctrl.maxheight!='') {
+                if (ctrl.maxheight != undefined && ctrl.maxheight != '') {
                     setMaxHeight(ctrl.maxheight);
                 }
 
@@ -465,10 +469,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                         if (colDef.expendableColumnDescription != undefined)
                             modalScope.value = eval('dataItem.' + colDef.expendableColumnDescription);
-                        else                            
+                        else
                             modalScope.value = ctrl.getCellValue(dataItem, colDef);
 
-                        if (modalScope.messageTitle != "" && (modalScope.value == "" || modalScope.value ==null)) {
+                        if (modalScope.messageTitle != "" && (modalScope.value == "" || modalScope.value == null)) {
                             modalScope.messageTitle = undefined;
                             modalScope.value = eval('dataItem.' + colDef.expendableColumnTitle);
                         }
@@ -603,7 +607,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         return dataItem.CssClass;
                 };
                 ctrl.getCellContainerClass = function (dataItem, colDef) {
-                    return colDef && colDef.cssClass ;
+                    return colDef && colDef.cssClass;
                 };
                 function getRowCSSClass(dataItem) {
                     if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
@@ -1167,7 +1171,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 
                 ctrl.menuActionClicked = function (action, dataItem) {
-                    action.clicked(dataItem , gridApi);
+                    action.clicked(dataItem, gridApi);
                 };
             }
 
@@ -1267,7 +1271,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         ctrl.pagerSettings.currentPage = 1;
                 }
                 ctrl.exportIsClickable = retrieveDataInput != undefined;
-                if (retrieveDataInput == undefined)                
+                if (retrieveDataInput == undefined)
                     return;
                 retrieveDataInput.SortByColumnName = sortColumn != undefined ? sortColumn.field : defaultSortByFieldName;
 

@@ -6,12 +6,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify,  $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService) {
     Waves.displayEffect();
 
-    //$rootScope.$on("$destroy", function () {
-    //    $(window).off("resize.Viewport");
-    //});
-    //$scope.$on("$destroy", function () {
-    //    $(window).off("resize.Viewport");
-    //});
+    $rootScope.$on("$destroy", function () {
+        $(window).off("resize.Viewport");
+    });
+    $scope.$on("$destroy", function () {
+        $(window).off("resize.Viewport");
+    });
     $rootScope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
@@ -237,8 +237,8 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     var selectedMenuItem;
     var currentURL;
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        $('.vr-menu-item').removeClass('vr-menu-item-selected');
-        //$(window).off("resize.Viewport");
+        $('.vr-menu-item').removeClass('vr-menu-item-selected');        
+        $(window).off("resize.Viewport");
     });
     $rootScope.$on('$locationChangeSuccess', function (evnt, newURL) {
         var decodedURL = decodeURIComponent(newURL);

@@ -12,7 +12,12 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             modulename: '@',
             validationfunction: '='
         },
-        controller: function ($scope, $element, $attrs,$timeout) {
+        controller: function ($scope, $element, $attrs, $timeout) {
+            $scope.$on("$destroy", function () {
+                $element.off();
+                $(document).off();
+                $(window).off("resize.Viewport");
+            });
             var ctrl = this;
             ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
             ctrl.validate = function () {

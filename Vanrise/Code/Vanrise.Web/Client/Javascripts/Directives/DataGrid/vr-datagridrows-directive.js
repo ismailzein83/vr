@@ -7,7 +7,7 @@ app.directive('vrDatagridrows', [function () {
         restrict: 'E',
         require: '^vrDatagrid',
         scope: {},
-        controller: function ($scope, $element) {            
+        controller: function ($scope, $element) {
 
         },
         compile: function (element, attrs) {
@@ -19,6 +19,9 @@ app.directive('vrDatagridrows', [function () {
 
             return {
                 pre: function (scope, elem, attrs, dataGridCtrl) {
+                    scope.$on('$destroy', function () {
+                        elem.off();
+                    });
                     scope.isGridScope = true;
                     scope.ctrl = dataGridCtrl;
                     scope.gridParentScope = scope.$parent;

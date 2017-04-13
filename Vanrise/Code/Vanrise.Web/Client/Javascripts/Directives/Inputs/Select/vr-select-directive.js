@@ -9,7 +9,7 @@
             onOpenDropDown: function (idAttribute) {
                 rootScope.$apply(function () {
                     openedDropDownIds.push(idAttribute);
-                });              
+                });
             },
             onCloseDropDown: function (idAttribute) {
                 var index = openedDropDownIds.indexOf(idAttribute);
@@ -51,9 +51,11 @@
                 limitcharactercount: '='
             },
             controller: function ($scope, $element, $attrs) {
-                //$scope.$on("$destroy", function () {
-                //    $(window).off("resize.Viewport");
-                //});   
+                $scope.$on("$destroy", function () {
+                    $element.off();
+                    $(document).off();
+                    $(window).off("resize.Viewport");
+                });
                 if (rootScope == undefined)
                     rootScope = $scope.$root;
 
@@ -468,13 +470,13 @@
                     controller.showSearchSection = false;
                 };
                 function getDropDownDirection(id) {
-                    var self = $('div[name=' +id + ']').find('.dropdown-toggle').first();
+                    var self = $('div[name=' + id + ']').find('.dropdown-toggle').first();
                     var selfHeight = $(self).parent().height();
                     var selfOffset = $(self).offset();
                     var initialtop = 0;
-                    var basetop = selfOffset.top -$(window).scrollTop() + selfHeight;
-                    var baseleft = selfOffset.left - $(window).scrollLeft();                  
-                    var heigth = $('div[name=' +id + ']').parents('.vr-pager-container').length > 0 ? 235: 200;
+                    var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                    var baseleft = selfOffset.left - $(window).scrollLeft();
+                    var heigth = $('div[name=' + id + ']').parents('.vr-pager-container').length > 0 ? 235 : 200;
                     if ((innerHeight - 100) - basetop < heigth) {
                         initialtop = basetop - (heigth + (selfHeight * 2.7));
                         if (isRemoteLoad()) {
@@ -549,7 +551,7 @@
                         event.stopPropagation();
                     });
                 }, 100);
-               
+
 
                 $(document).on('click', function (e) {
                     var button = $('div[name=' + $attrs.id + ']');
