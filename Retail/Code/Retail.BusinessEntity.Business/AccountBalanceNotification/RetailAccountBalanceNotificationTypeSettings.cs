@@ -1,7 +1,5 @@
 ﻿using System;
 using Vanrise.AccountBalance.Business;
-using Vanrise.Notification.Entities;
-using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -18,12 +16,11 @@ namespace Retail.BusinessEntity.Business
             if (context.AccountBalanceNotificationExtendedQuery == null)
                 return true;
 
-            var retailAccountBalanceNotificationExtendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
-            if (retailAccountBalanceNotificationExtendedQuery == null)
+            var extendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
+            if (extendedQuery == null)
                 return false;
 
-            var vrBalanceAlertEventPayload = context.VRNotification.EventPayload as VRBalanceAlertEventPayload;
-            if (retailAccountBalanceNotificationExtendedQuery.AccountIds != null && !retailAccountBalanceNotificationExtendedQuery.AccountIds.Contains(vrBalanceAlertEventPayload.EntityId))
+            if (extendedQuery.AccountIds != null && !extendedQuery.AccountIds.Contains(context.EventPayload.EntityId))
                 return false;
 
             return true;
