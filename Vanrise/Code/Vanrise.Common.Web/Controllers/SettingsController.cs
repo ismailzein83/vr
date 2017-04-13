@@ -30,7 +30,7 @@ namespace Vanrise.Common.Web.Controllers
         }
         [HttpPost]
         [Route("UpdateSetting")]
-        public object UpdateSetting(Setting setting)
+        public object UpdateSetting(SettingToEdit setting)
         {
            
             SettingManager manager = new SettingManager();

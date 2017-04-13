@@ -21,7 +21,7 @@ namespace Vanrise.Common.Data.SQL
             return GetItemsSP("common.sp_Setting_GetAll", SettingMapper);
         }
 
-        public bool UpdateSetting(Setting setting)
+        public bool UpdateSetting(SettingToEdit setting)
         {
             return ExecuteNonQuerySP("common.sp_Setting_Update", setting.SettingId, setting.Name, Vanrise.Common.Serializer.Serialize(setting.Data)) > 0;
         }

@@ -57,17 +57,17 @@ namespace Vanrise.Common.Business
                 return null;
         }
 
-
         public Setting GetSettingHistoryDetailbyHistoryId(int settingHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var setting = s_vrObjectTrackingManager.GetObjectDetailById(settingHistoryId);
             return setting.CastWithValidate<Setting>("Setting : historyId ", settingHistoryId);
         }
-        public UpdateOperationOutput<SettingDetail> UpdateSetting(Setting setting)
+
+        public UpdateOperationOutput<SettingDetail> UpdateSetting(SettingToEdit settingToEdit)
         {
             ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
-            bool updateActionSucc = dataManager.UpdateSetting(setting);
+            bool updateActionSucc = dataManager.UpdateSetting(settingToEdit);
             UpdateOperationOutput<SettingDetail> updateOperationOutput = new UpdateOperationOutput<SettingDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
@@ -75,14 +75,14 @@ namespace Vanrise.Common.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectUpdated(SettingLoggableEntity.Instance, setting);
+                Setting updatedSetting = GetSetting(settingToEdit.SettingId);
+
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SettingLoggableEntity.Instance, updatedSetting);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SettingDetailMapper(setting);
+                updateOperationOutput.UpdatedObject = SettingDetailMapper(updatedSetting);
             }
             return updateOperationOutput;
         }
-
-
 
         public List<string> GetDistinctSettingCategories()
         {

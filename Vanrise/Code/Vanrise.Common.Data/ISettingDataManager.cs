@@ -7,7 +7,7 @@ namespace Vanrise.Common.Data
     {
         IEnumerable<Setting> GetSettings();
 
-        bool UpdateSetting(Setting setting);
+        bool UpdateSetting(SettingToEdit setting);
 
         bool AreSettingsUpdated(ref object updateHandle);
     }

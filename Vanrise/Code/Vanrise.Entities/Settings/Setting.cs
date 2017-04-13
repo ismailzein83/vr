@@ -23,8 +23,17 @@ namespace Vanrise.Entities
         public string Editor { get; set; }
     }
 
-    public abstract class SettingData 
-    { 
+    public abstract class SettingData
+    {
 
+    }
+
+    public class SettingToEdit
+    {
+        public Guid SettingId { get; set; }
+
+        public string Name { get; set; }
+ 
+        public object Data { get; set; }
     }
 }
