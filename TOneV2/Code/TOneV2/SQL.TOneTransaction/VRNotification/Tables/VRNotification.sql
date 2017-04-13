@@ -26,3 +26,10 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IDX_Notification_NotCleared]
+    ON [VRNotification].[VRNotification]([TypeID] ASC, [ParentType1] ASC, [ParentType2] ASC, [CreationTime] ASC);
+
