@@ -30,6 +30,34 @@ app.service('VRCommon_SettingsService', ['VRModalService', 'UtilsService', 'VRCo
 
             VRModalService.showModal('/Client/Modules/Common/Views/Settings/SettingsEditor.html', parameters, settings);
         }
+
+
+        function viewHistorySettings(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/Settings/SettingsEditor.html', modalParameters, modalSettings);
+        };
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "VR_Common_Setting_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistorySettings(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
         function getEntityUniqueName() {
             return "VR_Common_Setting";
         }
@@ -66,6 +94,7 @@ app.service('VRCommon_SettingsService', ['VRModalService', 'UtilsService', 'VRCo
             editSettings: editSettings,
             viewSettings: viewSettings,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToSetting: registerObjectTrackingDrillDownToSetting
+            registerObjectTrackingDrillDownToSetting: registerObjectTrackingDrillDownToSetting,
+            registerHistoryViewAction: registerHistoryViewAction
         });
     }]);

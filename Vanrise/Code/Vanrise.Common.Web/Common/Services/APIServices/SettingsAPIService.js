@@ -30,14 +30,21 @@
         function HasUpdateTechnicalSettingsPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['UpdateTechnicalSetting']));
         }
+        
+        function GetSettingHistoryDetailbyHistoryId(settingHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, 'GetSettingHistoryDetailbyHistoryId'), {
+                settingHistoryId: settingHistoryId
+            });
+        }
         return ({
             GetFilteredSettings: GetFilteredSettings,
             UpdateSetting: UpdateSetting,
             GetSetting: GetSetting,
             GetDistinctSettingCategories: GetDistinctSettingCategories,
             HasUpdateSettingsPermission: HasUpdateSettingsPermission,
-            HasUpdateTechnicalSettingsPermission: HasUpdateTechnicalSettingsPermission
+            HasUpdateTechnicalSettingsPermission: HasUpdateTechnicalSettingsPermission,
+            GetSettingHistoryDetailbyHistoryId: GetSettingHistoryDetailbyHistoryId
         });
     }
 

@@ -16,4 +16,5 @@
     VRCommon_StyleDefinitionService.registerObjectTrackingDrillDownToStyleDefinition();
     VRCommon_CountryService.registerHistoryViewAction();
     VRCommon_CityService.registerHistoryViewAction();
+    VRCommon_SettingsService.registerHistoryViewAction();
 }]);

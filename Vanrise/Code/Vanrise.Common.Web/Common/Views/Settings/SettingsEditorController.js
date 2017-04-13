@@ -11,7 +11,8 @@
 
         var settingsEditorAPI;
         var settingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var context;
+        var isViewHistoryMode;
         defineScope();
         loadParameters();
         load();
@@ -20,7 +21,9 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 settingsId = parameters.settingsId;
+                context = parameters.context;
             }
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -46,20 +49,40 @@
         function load() {
             $scope.isLoading = true;
 
-
-            getSetting().then(function () {
-                loadAllControls().finally(function () {
-                    settingEntity = undefined;
+            if (isViewHistoryMode) {
+                getSettingHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        settingEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
                 });
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isLoading = false;
-            });
+
+            }
+            else {
+                getSetting().then(function () {
+                    loadAllControls().finally(function () {
+                        settingEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+            }
+            
 
         }
-
+        function getSettingHistory() {
+            return VRCommon_SettingsAPIService.GetSettingHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                $scope.settingEditor = response.Settings.Editor;
+                settingEntity = response;
+             
+            });
+        }
         function getSetting() {
             return VRCommon_SettingsAPIService.GetSetting(settingsId).then(function (setting) {
+               
                 $scope.settingEditor = setting.Settings.Editor;
                 settingEntity = setting;
             });
