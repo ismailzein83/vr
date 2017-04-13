@@ -86,10 +86,10 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                     labelSendValue = "Send";
                 }
                 var salePriceListSend =
-                    {
-                        name: labelSendValue,
-                        clicked: SendPriceList
-                    }
+                {
+                    name: labelSendValue,
+                    clicked: SendPriceList
+                };
                 menuActions.push(salePriceListSend);
                 return menuActions;
             };
