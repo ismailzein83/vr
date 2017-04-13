@@ -76,7 +76,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             var manager = new SalePriceListTemplateManager();
             return manager.UpdateSalePriceListTemplate(salePriceListTemplate);
         }
-
+             [HttpGet]
+        [Route("GetSalePriceListTemplateHistoryDetailbyHistoryId")]
+        public SalePriceListTemplate GetSalePriceListTemplateHistoryDetailbyHistoryId(int salePriceListTemplateHistoryId)
+        {
+            var manager = new SalePriceListTemplateManager();
+            return manager.GetSalePriceListTemplateHistoryDetailbyHistoryId(salePriceListTemplateHistoryId);
+        }
         [HttpGet]
         [Route("DownloadSalePriceListTemplate")]
         public object DownloadSalePriceListTemplate()

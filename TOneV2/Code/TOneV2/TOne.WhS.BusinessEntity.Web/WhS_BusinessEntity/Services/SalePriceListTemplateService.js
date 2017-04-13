@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	SalePriceListTemplateService.$inject = ['VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
+	SalePriceListTemplateService.$inject = ['VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
 
-	function SalePriceListTemplateService(VRModalService, VRNotificationService,VRCommon_ObjectTrackingService) {
+	function SalePriceListTemplateService(VRModalService, VRNotificationService, VRCommon_ObjectTrackingService,UtilsService) {
 	    var drillDownDefinitions = [];
 		var editorUrl = '/Client/Modules/WhS_BusinessEntity/Views/SalePriceListTemplate/SalePriceListTemplateEditor.html';
 
@@ -32,6 +32,33 @@
 			};
 
 			VRModalService.showModal(editorUrl, parameters, settings);
+		}
+		function viewSalePriceListTemplateCity(context) {
+		    var modalParameters = {
+		        context: context
+		    };
+		    var modalSettings = {
+		    };
+		    modalSettings.onScopeReady = function (modalScope) {
+		        UtilsService.setContextReadOnly(modalScope);
+		    };
+		    VRModalService.showModal(editorUrl, modalParameters, modalSettings);
+		}
+
+		function registerHistoryViewAction() {
+
+		    var actionHistory = {
+		        actionHistoryName: "WhS_BusinessEntity_SalePriceListTemplate_ViewHistoryItem",
+		        actionMethod: function (payload) {
+
+		            var context = {
+		                historyId: payload.historyId
+		            };
+
+		            viewSalePriceListTemplateCity(context);
+		        }
+		    };
+		    VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
 		}
 
 		function getEntityUniqueName() {
@@ -71,7 +98,8 @@
 			addSalePriceListTemplate: addSalePriceListTemplate,
 			editSalePriceListTemplate: editSalePriceListTemplate,
 			registerObjectTrackingDrillDownToSalePriceListTemplate: registerObjectTrackingDrillDownToSalePriceListTemplate,
-			getDrillDownDefinition: getDrillDownDefinition
+			getDrillDownDefinition: getDrillDownDefinition,
+			registerHistoryViewAction: registerHistoryViewAction
 		};
 	}
 

@@ -7,10 +7,10 @@
 	function SalePriceListTemplateEditorController($scope, WhS_BE_SalePriceListTemplateAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
 		var isEditMode;
-
+		var isViewHistoryMode;
 		var salePriceListTemplateId;
 		var salePriceListTemplateEntity;
-
+		var context;
 		var settingsSelectiveAPI;
 		var settingsSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,9 +23,10 @@
 			var parameters = VRNavigationService.getParameters($scope);
 
 			if (parameters != undefined && parameters != null) {
-				salePriceListTemplateId = parameters.salePriceListTemplateId;
+			    salePriceListTemplateId = parameters.salePriceListTemplateId;
+			    context = parameters.context;
 			}
-
+			isViewHistoryMode = (context != undefined && context.historyId != undefined);
 			isEditMode = (salePriceListTemplateId != undefined);
 		}
 		function defineScope() {
@@ -64,11 +65,28 @@
 					$scope.scopeModel.isLoading = false;
 				});
 			}
+
+			else if (isViewHistoryMode) {
+			    getSalePriceListTemplateHistory().then(function () {
+			        loadAllControls().finally(function () {
+			            salePriceListTemplateEntity = undefined;
+			        });
+			    }).catch(function (error) {
+			        VRNotificationService.notifyExceptionWithClose(error, $scope);
+			        $scope.isLoading = false;
+			    });
+
+			}
 			else {
 				loadAllControls();
 			}
 		}
+		function getSalePriceListTemplateHistory() {
+		    return WhS_BE_SalePriceListTemplateAPIService.GetSalePriceListTemplateHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+		        salePriceListTemplateEntity = response;
 
+		    });
+		}
 		function getSalePriceListTemplate() {
 			return WhS_BE_SalePriceListTemplateAPIService.GetSalePriceListTemplate(salePriceListTemplateId).then(function (response) {
 				salePriceListTemplateEntity = response;

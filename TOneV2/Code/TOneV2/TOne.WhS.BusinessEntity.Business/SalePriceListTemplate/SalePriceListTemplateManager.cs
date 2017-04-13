@@ -30,7 +30,12 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SalePriceListTemplateLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper), handler);
 		}
-
+        public SalePriceListTemplate GetSalePriceListTemplateHistoryDetailbyHistoryId(int salePriceListTemplateHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var salePriceListTemplate = s_vrObjectTrackingManager.GetObjectDetailById(salePriceListTemplateHistoryId);
+            return salePriceListTemplate.CastWithValidate<SalePriceListTemplate>("SalePriceListTemplate : historyId ", salePriceListTemplateHistoryId);
+        }
         public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId, bool isViewedFromUI)
 		{
 			var salePriceListTemplateItem= GetCachedSalePriceListTemplates().GetRecord(salePriceListTemplateId);

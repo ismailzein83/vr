@@ -14,5 +14,6 @@ function (WhS_BE_CarrierProfileService,WhS_BE_ZoneServiceConfigService,WhS_BE_Sa
     WhS_BE_ZoneServiceConfigService.registerObjectTrackingDrillDownToZoneServiceConfig();
     WhS_BE_CarrierAccountService.registerHistoryViewAction();
     WhS_BE_CarrierProfileService.registerHistoryViewAction();
+    WhS_BE_SalePriceListTemplateService.registerHistoryViewAction();
     WhS_BE_SwitchConnectivityService.registerHistoryViewAction();
 }]);

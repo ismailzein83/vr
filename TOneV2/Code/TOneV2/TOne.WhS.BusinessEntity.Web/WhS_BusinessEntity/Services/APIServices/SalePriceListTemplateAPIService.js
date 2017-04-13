@@ -60,7 +60,12 @@
         function HasEditSalePriceListTemplatePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSalePriceListTemplate']));
         }
+        function GetSalePriceListTemplateHistoryDetailbyHistoryId(salePriceListTemplateHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplateHistoryDetailbyHistoryId'), {
+                salePriceListTemplateHistoryId: salePriceListTemplateHistoryId
+            });
+        }
         return ({
             GetFilteredSalePriceListTemplates: GetFilteredSalePriceListTemplates,
             GetSalePriceListTemplate: GetSalePriceListTemplate,
@@ -72,7 +77,8 @@
             UpdateSalePriceListTemplate: UpdateSalePriceListTemplate,
             DownloadSalePriceListTemplate: DownloadSalePriceListTemplate,
             HasAddSalePriceListTemplatePermission: HasAddSalePriceListTemplatePermission,
-            HasEditSalePriceListTemplatePermission: HasEditSalePriceListTemplatePermission
+            HasEditSalePriceListTemplatePermission: HasEditSalePriceListTemplatePermission,
+            GetSalePriceListTemplateHistoryDetailbyHistoryId: GetSalePriceListTemplateHistoryDetailbyHistoryId
         });
     }
 
