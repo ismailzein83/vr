@@ -4,9 +4,10 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetBalancesToClearAlert]
+@AccountTypeId uniqueidentifier
+
 AS
-BEGIN
-	
+BEGIN	
 	SELECT	 lb.CurrentBalance
 			,lb.AccountId
 			,lb.AccountTypeID
@@ -17,6 +18,5 @@ BEGIN
 			,lb.LastExecutedActionThreshold
 			,lb.ActiveAlertsInfo
 	FROM VR_AccountBalance.LiveBalance lb WITH(NOLOCK) 
-	WHERE lb.[CurrentBalance] > lb.LastExecutedActionThreshold 
-
+	WHERE lb.AccountTypeID = @AccountTypeId and lb.[CurrentBalance] > lb.LastExecutedActionThreshold 
 END

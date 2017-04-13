@@ -4,6 +4,8 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetAll]
+@AccountTypeId uniqueidentifier
+
 AS
 BEGIN
 	SELECT	 AccountID
@@ -16,4 +18,5 @@ BEGIN
 			,LastExecutedActionThreshold
 			,ActiveAlertsInfo
 	FROM	VR_AccountBalance.LiveBalance  with(nolock)
+	where	[AccountTypeID] = @AccountTypeId
 END
