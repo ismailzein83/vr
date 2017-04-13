@@ -13,16 +13,22 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "SalePricelist")]
-    public class WhS_BE_SalePricelistController : Vanrise.Web.Base.BaseAPIController 
+    public class WhS_BE_SalePricelistController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredSalePriceLists")]
         public object GetFilteredSalePriceLists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             SalePriceListManager manager = new SalePriceListManager();
-            return GetWebResponse(input,manager.GetFilteredPricelists(input));
+            return GetWebResponse(input, manager.GetFilteredPricelists(input));
         }
-        
-       
+
+        [HttpPost]
+        [Route("SendPriceList")]
+        public object SendPriceList(object priceListId)
+        {
+            SalePriceListManager manager = new SalePriceListManager();
+            return manager.SendPriceList((long)priceListId);
+        }
     }
 }

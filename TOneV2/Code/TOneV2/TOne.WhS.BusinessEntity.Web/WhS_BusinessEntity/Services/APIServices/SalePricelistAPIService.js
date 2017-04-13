@@ -9,9 +9,13 @@
         function GetFilteredSalePriceLists(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredSalePriceLists"), input);
         }
+        function SendPriceList(priceListId) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "SendPriceList"), priceListId);
+        }
 
         return ({
-            GetFilteredSalePriceLists: GetFilteredSalePriceLists
+            GetFilteredSalePriceLists: GetFilteredSalePriceLists,
+            SendPriceList: SendPriceList
         });
     }
 

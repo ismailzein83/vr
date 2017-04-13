@@ -43,8 +43,68 @@ namespace TOne.WhS.BusinessEntity.Business
                 Guid salePLMailTemplateId = _carrierAccountManager.GetSalePLMailTemplateId(customerId);
                 this.SendMail(salePLMailTemplateId, customerId, initiatorId, processInstanceId, failedCustomerIdsToSendEmailFor);
             }
-
             return failedCustomerIdsToSendEmailFor;
+        }
+        public bool SendSalePriceList(int initiatorId, SalePriceList customerPricelist, VRFile file)
+        {
+            CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerPricelist.OwnerId);
+            Guid salePlmailTemplateId = _carrierAccountManager.GetSalePLMailTemplateId(customer.CarrierAccountId);
+
+            MemoryStream memoryStream = new MemoryStream(file.Content) { Position = 0 };
+
+            var attachment = new Attachment(memoryStream, "SalePriceList.xlsx")
+            {
+                ContentType = new ContentType("application/vnd.ms-excel"),
+                TransferEncoding = TransferEncoding.Base64,
+                NameEncoding = Encoding.UTF8,
+                Name = "SalePriceList.xls"
+            };
+
+            User initiator = _userManager.GetUserbyId(initiatorId);
+
+            var objects = new Dictionary<string, dynamic>
+            {
+                {"Customer", customer},
+                {"User", initiator},
+                {"Sale Pricelist", customerPricelist}
+            };
+
+            VRMailEvaluatedTemplate evaluatedTemplate = _vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
+
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            EmailSettingData emailSettingData = configManager.GetSystemEmail();
+
+            MailMessage objMail = new MailMessage
+            {
+                From = new MailAddress(emailSettingData.SenderEmail),
+                Subject = evaluatedTemplate.Subject,
+                Body = evaluatedTemplate.Body,
+                IsBodyHtml = true
+            };
+            objMail.Attachments.Add(attachment);
+            if (evaluatedTemplate.To != null)
+            {
+                foreach (string toEmail in evaluatedTemplate.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                    objMail.To.Add(toEmail);
+            }
+            if (evaluatedTemplate.CC != null)
+            {
+                foreach (string ccEmail in evaluatedTemplate.CC.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                    objMail.CC.Add(ccEmail);
+            }
+            SmtpClient client = _vrMailManager.GetSMTPClient(emailSettingData);
+            try
+            {
+                client.Send(objMail);
+                SalePriceListManager salePriceListManager = new SalePriceListManager();
+                salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { customerPricelist.OwnerId }, customerPricelist.PriceListId);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
         #endregion
@@ -113,10 +173,10 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 failedCustomersToSendEmail.Add(customer.CarrierAccountId);
             }
-            
+
         }
 
         #endregion
-      
+
     }
 }

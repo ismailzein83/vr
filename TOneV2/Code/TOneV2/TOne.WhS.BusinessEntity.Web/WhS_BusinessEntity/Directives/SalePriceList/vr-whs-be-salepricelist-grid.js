@@ -2,7 +2,7 @@
 
 app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService"
                                             , "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_SalePriceListChangeService",
-function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, FileAPIService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSalePriceListPreviewService) {
+function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fileApiService, whSBeSalePriceListOwnerTypeEnum, whSBeSalePriceListPreviewService) {
 
     var directiveDefinitionObject = {
 
@@ -52,12 +52,12 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, F
 
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_SalePricelistAPIService.GetFilteredSalePriceLists(dataRetrievalInput)
+                return whSBeSalePricelistApiService.GetFilteredSalePriceLists(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
                     .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        vrNotificationService.notifyExceptionWithClose(error, $scope);
                     });
             };
 
@@ -68,30 +68,46 @@ function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService, F
         function defineMenuActions() {
             $scope.gridMenuActions = function (dataItem) {
                 var menuActions = [];
+                var labelSendValue = "Resend";
                 var salePriceListPreview =
                 {
                     name: "Preview PriceList",
                     clicked: PreviewPriceList
                 };
                 menuActions.push(salePriceListPreview);
-                if (dataItem.Entity.OwnerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                if (dataItem.Entity.OwnerType === whSBeSalePriceListOwnerTypeEnum.Customer.value) {
                     var downloadPricelist = {
                         name: "Download",
                         clicked: downloadPriceList
                     };
                     menuActions.push(downloadPricelist);
                 }
+                if (dataItem.Entity.IsSent === false) {
+                    labelSendValue = "Send";
+                }
+                var salePriceListSend =
+                    {
+                        name: labelSendValue,
+                        clicked: SendPriceList
+                    }
+                menuActions.push(salePriceListSend);
                 return menuActions;
             };
 
+        }
+        function SendPriceList(priceListObj) {
+            whSBeSalePricelistApiService.SendPriceList(priceListObj.Entity.PriceListId)
+                .then(function (response) {
+                    vrNotificationService.showSuccess('Email Sended Successfully');
+                });
         }
         function PreviewPriceList(priceListObj) {
             whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId);
         }
         function downloadPriceList(priceListObj) {
-            FileAPIService.DownloadFile(priceListObj.Entity.FileId)
+            fileApiService.DownloadFile(priceListObj.Entity.FileId)
                     .then(function (response) {
-                        UtilsService.downloadFile(response.data, response.headers);
+                        utilsService.downloadFile(response.data, response.headers);
                     });
         }
     }

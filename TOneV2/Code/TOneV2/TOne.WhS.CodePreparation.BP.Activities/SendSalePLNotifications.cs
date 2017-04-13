@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             if (customersToUpdatePricelistsFor != null && customersToUpdatePricelistsFor.Any())
             {
                 SalePriceListManager salePriceListManager = new SalePriceListManager();
-                salePriceListManager.SetCustomerPricelistsAsSent(customersToUpdatePricelistsFor);
+                salePriceListManager.SetCustomerPricelistsAsSent(customersToUpdatePricelistsFor, null);
             }
 
             if (failedCustomerIdsToSendEmailFor.Count() > 0)

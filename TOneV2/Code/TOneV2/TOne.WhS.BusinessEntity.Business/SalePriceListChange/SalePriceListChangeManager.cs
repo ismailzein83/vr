@@ -90,7 +90,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         CountryId = rate.CountryId,
                         ZoneName = rate.ZoneName,
-                        Rate = decimal.Round(rate.Rate, 8),
+                        Rate = rate.Rate,
                         PricelistId = priceListChange.PriceListId,
                         ChangeType = rate.ChangeType,
                         BED = rate.BED,
@@ -117,60 +117,52 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return changes;
         }
-        public Dictionary<int, List<CustomerPriceListChange>> GetNotSentChanges(IEnumerable<int> customerIds)
+        public Dictionary<int, List<CustomerPriceListChange>> GetNotSentChangesByCustomer(IEnumerable<int> customerIds)
         {
-            var manager = new SalePriceListManager();
-            var customerPriceListChanges = new Dictionary<int, List<CustomerPriceListChange>>();
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             List<SalePricelistCodeChange> codeChanges = dataManager.GetNotSentCodechanges(customerIds);
             List<SalePricelistRateChange> rateChanges = dataManager.GetNotSentRatechanges(customerIds);
-            var codeChangesByPriceListId =
-                codeChanges.GroupBy(r => r.PricelistId)
-                    .Select(group => new { PriceListId = @group.Key, Items = @group.ToList() });
-
-            var rateChangesByPriceListId =
-              rateChanges.GroupBy(r => r.PricelistId)
-                  .Select(group => new { PriceListId = @group.Key, Items = @group.ToList() });
-            foreach (var grouppedCodes in codeChangesByPriceListId)
+            var customerPriceListChanges = new Dictionary<int, CustomerPriceListChange>();
+            foreach (var codeChange in codeChanges)
             {
-                CustomerPriceListChange customerPriceList = GetCustomerPriceListChange(manager, grouppedCodes.PriceListId);
-                List<CustomerPriceListChange> customerPriceListChangesTemp;
-                if (!customerPriceListChanges.TryGetValue(customerPriceList.CustomerId, out customerPriceListChangesTemp))
+                CustomerPriceListChange customerPriceList;
+                if (!customerPriceListChanges.TryGetValue(codeChange.PricelistId, out customerPriceList))
                 {
-                    customerPriceListChangesTemp = new List<CustomerPriceListChange>();
-                    customerPriceListChanges.Add(customerPriceList.CustomerId, customerPriceListChangesTemp);
+                    customerPriceList = new CustomerPriceListChange();
+                    customerPriceListChanges.Add(codeChange.PricelistId, customerPriceList);
                 }
-                customerPriceList.CodeChanges.AddRange(grouppedCodes.Items);
-                customerPriceListChangesTemp.Add(customerPriceList);
+                customerPriceList.CodeChanges.Add(codeChange);
             }
-            foreach (var grouppedRateChange in rateChangesByPriceListId)
+            foreach (var rateChange in rateChanges)
             {
-                var customerPriceList = GetCustomerPriceListChange(manager, grouppedRateChange.PriceListId);
-                if (customerPriceList == null) continue;
-                List<CustomerPriceListChange> customerPriceListChangesTemp;
-                if (!customerPriceListChanges.TryGetValue(customerPriceList.CustomerId, out customerPriceListChangesTemp))
+                CustomerPriceListChange customerPriceList;
+                if (!customerPriceListChanges.TryGetValue(rateChange.PricelistId, out customerPriceList))
                 {
-                    customerPriceListChangesTemp = new List<CustomerPriceListChange>();
-                    customerPriceListChanges.Add(customerPriceList.CustomerId, customerPriceListChangesTemp);
+                    customerPriceList = new CustomerPriceListChange();
+                    customerPriceListChanges.Add(rateChange.PricelistId, customerPriceList);
                 }
-                customerPriceList.RateChanges.AddRange(grouppedRateChange.Items);
-                customerPriceListChangesTemp.Add(customerPriceList);
+                customerPriceList.RateChanges.Add(rateChange);
             }
-            return customerPriceListChanges;
-        }
 
-        private CustomerPriceListChange GetCustomerPriceListChange(SalePriceListManager manager, int pricelistId)
-        {
-            var priceList = manager.GetPriceList(pricelistId);
-            if (priceList != null)
-                return new CustomerPriceListChange
+            var priceListByCustomerId = new Dictionary<int, List<CustomerPriceListChange>>();
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+
+            foreach (var customerPriceList in customerPriceListChanges)
+            {
+                var priceList = salePriceListManager.GetPriceList(customerPriceList.Key);
+                List<CustomerPriceListChange> changes;
+                if (!priceListByCustomerId.TryGetValue(priceList.OwnerId, out changes))
                 {
-                    CustomerId = priceList.OwnerId,
-                    PriceListId = priceList.PriceListId
-                };
-            return null;
+                    changes = new List<CustomerPriceListChange>();
+                    priceListByCustomerId.Add(priceList.OwnerId, changes);
+                }
+                var customerPriceListValue = customerPriceList.Value;
+                customerPriceListValue.CustomerId = priceList.OwnerId;
+                customerPriceListValue.PriceListId = priceList.PriceListId;
+                changes.Add(customerPriceListValue);
+            }
+            return priceListByCustomerId;
         }
-
         #region Mapper
         private SalePricelistRateChange SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)
         {
