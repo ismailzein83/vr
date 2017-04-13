@@ -12,12 +12,6 @@ namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcGenerateVRAlertEventsOutputProcessor : IDAProfCalcOutputRecordProcessor
     {
-        public int UserId { get; set; }
-
-        public DAProfCalcGenerateVRAlertEventsOutputProcessor(int userId)
-        {
-            UserId = userId;
-        }
         public void Initialize(IDAProfCalcOutputRecordProcessorIntializeContext context)
         {
 
@@ -36,47 +30,81 @@ namespace Vanrise.Analytic.Business
 
                 DAProfCalcAlertRuleExecPayload daProfCalcAlertRuleExecPayload = daProfCalcExecInput.DAProfCalcPayload.CastWithValidate<DAProfCalcAlertRuleExecPayload>("context.DAProfCalcExecInput.DAProfCalcPayload");
 
+                Guid notificationTypeId = new DAProfCalcNotificationManager().GetDAProfCalcNotificationTypeId(daProfCalcAlertRuleExecPayload.AlertRuleTypeId, dataAnalysisItemDefinitionId);
+
                 DAProfCalcOutputSettings daProfCalcOutputSettings = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinitionSettings<DAProfCalcOutputSettings>(dataAnalysisItemDefinitionId);
                 DataAnalysisItemDefinition dataAnalysisItemDefinition = dataAnalysisItemDefinitionManager.GetDataAnalysisItemDefinition(dataAnalysisItemDefinitionId);
 
-                VRAlertRule alertRule = new VRAlertRuleManager().GetVRAlertRule(daProfCalcAlertRuleExecPayload.AlertRuleId);
-                Guid notificationTypeId = new DAProfCalcNotificationManager().GetDAProfCalcNotificationTypeId(alertRule.RuleTypeId, dataAnalysisItemDefinitionId);
-
-                alertRule.Settings.ThrowIfNull("alertRule.Settings", daProfCalcAlertRuleExecPayload.AlertRuleId);
-                DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings.CastWithValidate<DAProfCalcAlertRuleSettings>(string.Format("alertRule.Settings.ExtendedSettings AlertRuleId:{0}", daProfCalcAlertRuleExecPayload.AlertRuleId));
-
-                List<DataRecordAlertRuleNotification> dataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
-                List<string> eventKeys = new List<string>();
+                Dictionary<long, DAProfCalcNotificationData> daProfCalcNotificationDataDict = new Dictionary<long, DAProfCalcNotificationData>();
 
                 foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
                 {
-                    DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext() 
+                    DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext()
                     {
                         RecordFilterContext = new DataRecordDictFilterGenericFieldMatchContext(outputRecord.FieldValues, daProfCalcOutputSettings.RecordTypeId)
                     };
 
-                    if (daProfCalcAlertRuleSettings.Settings.IsRuleMatched(dataRecordAlertRuleSettingsIsMatchedContext))
+                    foreach (long alertRuleId in daProfCalcAlertRuleExecPayload.AlertRuleIds)
                     {
-                        DataRecordAlertRuleNotification dataRecordAlertRuleNotification = new DataRecordAlertRuleNotification()
+                        DAProfCalcNotificationData daProfCalcNotificationData;
+                        if (!daProfCalcNotificationDataDict.TryGetValue(alertRuleId, out daProfCalcNotificationData))
                         {
-                            Actions = dataRecordAlertRuleSettingsIsMatchedContext.Actions,
-                            AlertLevelId = dataRecordAlertRuleSettingsIsMatchedContext.AlertLevelId,
-                            FieldValues = outputRecord.FieldValues,
-                            GroupingKey = outputRecord.GroupingKey
-                        };
-                        dataRecordAlertRuleNotifications.Add(dataRecordAlertRuleNotification);
-                        eventKeys.Add(outputRecord.GroupingKey);
+                            VRAlertRule alertRule = new VRAlertRuleManager().GetVRAlertRule(alertRuleId);
+
+                            alertRule.Settings.ThrowIfNull("alertRule.Settings", alertRuleId);
+                            DAProfCalcAlertRuleSettings daProfCalcAlertRuleSettings = alertRule.Settings.ExtendedSettings.CastWithValidate<DAProfCalcAlertRuleSettings>(string.Format("alertRule.Settings.ExtendedSettings AlertRuleId:{0}", alertRuleId));
+
+                            daProfCalcNotificationData = new DAProfCalcNotificationData()
+                            {
+                                DAProfCalcAlertRuleSettings = daProfCalcAlertRuleSettings,
+                                AlertRule = alertRule
+                            };
+                            daProfCalcNotificationDataDict.Add(alertRuleId, daProfCalcNotificationData);
+                        }
+
+                        if (daProfCalcNotificationData.DAProfCalcAlertRuleSettings.Settings.IsRuleMatched(dataRecordAlertRuleSettingsIsMatchedContext))
+                        {
+                            DataRecordAlertRuleNotification dataRecordAlertRuleNotification = new DataRecordAlertRuleNotification()
+                            {
+                                Actions = dataRecordAlertRuleSettingsIsMatchedContext.Actions,
+                                AlertLevelId = dataRecordAlertRuleSettingsIsMatchedContext.AlertLevelId,
+                                FieldValues = outputRecord.FieldValues,
+                                GroupingKey = outputRecord.GroupingKey
+                            };
+                            daProfCalcNotificationData.DataRecordAlertRuleNotifications.Add(dataRecordAlertRuleNotification);
+                            daProfCalcNotificationData.EventKeys.Add(outputRecord.GroupingKey);
+                        }
                     }
                 }
-                DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
-                dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(dataRecordAlertRuleNotifications, eventKeys, alertRule.RuleTypeId, notificationTypeId, alertRule.VRAlertRuleId,
-                     daProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, string.Format("Alert Rule {0}, Data Analysis Item {1}", alertRule.Name, dataAnalysisItemDefinition.Name), UserId);
+
+                foreach (var daProfCalcNotificationDataItem in daProfCalcNotificationDataDict)
+                {
+                    DAProfCalcNotificationData daProfCalcNotificationData = daProfCalcNotificationDataItem.Value;
+
+                    DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
+                    dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(daProfCalcNotificationData.DataRecordAlertRuleNotifications, daProfCalcNotificationData.EventKeys, daProfCalcNotificationData.AlertRule.RuleTypeId, notificationTypeId, daProfCalcNotificationDataItem.Key,
+                         daProfCalcNotificationData.DAProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, string.Format("Alert Rule {0}, Data Analysis Item {1}", daProfCalcNotificationData.AlertRule.Name, dataAnalysisItemDefinition.Name), daProfCalcNotificationData.AlertRule.UserId);
+                }
             }
         }
 
         public void Finalize(IDAProfCalcOutputRecordProcessorFinalizeContext context)
         {
 
+        }
+
+        private class DAProfCalcNotificationData
+        {
+            public DAProfCalcNotificationData()
+            {
+                DataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
+                EventKeys = new List<string>();
+            }
+            public List<DataRecordAlertRuleNotification> DataRecordAlertRuleNotifications { get; set; }
+            public List<string> EventKeys { get; set; }
+            public VRAlertRule AlertRule { get; set; }
+
+            public DAProfCalcAlertRuleSettings DAProfCalcAlertRuleSettings { get; set; }
         }
     }
 }

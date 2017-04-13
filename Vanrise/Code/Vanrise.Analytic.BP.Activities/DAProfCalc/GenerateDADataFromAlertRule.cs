@@ -61,17 +61,31 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     if (daProfCalcAlertRuleSettings == null)
                         throw new Exception(String.Format("alertRule.Settings.ExtendedSettings is not of type DAProfCalcAlertRuleSettings. it is of type '0'", alertRule.Settings.ExtendedSettings.GetType()));
 
-                    DAProfCalcExecInput input = new DAProfCalcExecInput()
+
+                    DAProfCalcExecInput daProfCalcExecInput = new DAProfCalcExecInput()
+                        {
+                            OutputItemDefinitionId = daProfCalcAlertRuleSettings.OutputItemDefinitionId,
+                            DAProfCalcPayload = new DAProfCalcAlertRuleExecPayload()
+                            {
+                                AlertRuleIds = new List<long>() { alertRule.VRAlertRuleId },
+                                AlertRuleTypeId = alertRuleTypeId
+                            },
+                            DataAnalysisRecordFilter = daProfCalcAlertRuleSettings.DataAnalysisFilterGroup,
+                            GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames
+                        };
+
+                    bool hasMatching = false;
+                    foreach (DAProfCalcExecInput existingDAProfCalcExecInput in daProfCalcExecInputs)
                     {
-                        OutputItemDefinitionId = daProfCalcAlertRuleSettings.OutputItemDefinitionId,
-                        DAProfCalcPayload = new DAProfCalcAlertRuleExecPayload() 
-                        { 
-                            AlertRuleId = alertRule.VRAlertRuleId
-                        },
-                        DataAnalysisRecordFilter = daProfCalcAlertRuleSettings.DataAnalysisFilterGroup,
-                        GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames
-                    };
-                    daProfCalcExecInputs.Add(input);
+                        if (AreDAProfCalcExecInputMatching(daProfCalcExecInput, existingDAProfCalcExecInput))
+                        {
+                            (existingDAProfCalcExecInput.DAProfCalcPayload as DAProfCalcAlertRuleExecPayload).AlertRuleIds.Add(alertRule.VRAlertRuleId);
+                            hasMatching = true;
+                            break;
+                        }
+                    }
+                    if (!hasMatching)
+                        daProfCalcExecInputs.Add(daProfCalcExecInput);
                 }
             }
 
@@ -79,6 +93,31 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             DAProfCalcExecInputs.Set(context, daProfCalcExecInputs);
             SourceRecordStorageIds.Set(context, sourceRecordStorageIds);
             context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Data Analysis Profiling and Calculation Execution Inputs loaded.", null);
+        }
+
+        private bool AreDAProfCalcExecInputMatching(DAProfCalcExecInput firstDAProfCalcExexInput, DAProfCalcExecInput secondDAProfCalcExexInput)
+        {
+            if (firstDAProfCalcExexInput.OutputItemDefinitionId != secondDAProfCalcExexInput.OutputItemDefinitionId)
+                return false;
+
+            if (firstDAProfCalcExexInput.DataAnalysisRecordFilter != null || secondDAProfCalcExexInput.DataAnalysisRecordFilter != null)
+                return false;
+
+            if (firstDAProfCalcExexInput.GroupingFieldNames != null && secondDAProfCalcExexInput.GroupingFieldNames == null)
+                return false;
+
+            if (firstDAProfCalcExexInput.GroupingFieldNames == null && secondDAProfCalcExexInput.GroupingFieldNames != null)
+                return false;
+
+            var inFirstOnly = firstDAProfCalcExexInput.GroupingFieldNames.Except(secondDAProfCalcExexInput.GroupingFieldNames);
+            if (inFirstOnly.Any())
+                return false;
+
+            var inSecondOnly = secondDAProfCalcExexInput.GroupingFieldNames.Except(firstDAProfCalcExexInput.GroupingFieldNames);
+            if (inSecondOnly.Any())
+                return false;
+
+            return true;
         }
     }
 }

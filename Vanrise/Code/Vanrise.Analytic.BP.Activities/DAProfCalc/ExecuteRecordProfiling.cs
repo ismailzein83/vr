@@ -136,7 +136,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                     }
                                 }
                             }
-                            if (profilingDGItems.Count >= 10000)
+                            if (profilingDGItems.Count >= 500000)
                             {
                                 DistributedDataGrouper dataGrouper = dataAnalysisInfo.Value.DistributedDataGrouper;
                                 dataGrouper.DistributeGroupingItems(profilingDGItems.Values.Select(itm => itm as IDataGroupingItem).ToList());

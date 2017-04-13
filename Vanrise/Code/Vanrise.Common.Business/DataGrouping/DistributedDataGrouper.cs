@@ -22,7 +22,7 @@ namespace Vanrise.Common.Business
         static DistributedDataGrouper()
         {
             if (!int.TryParse(ConfigurationManager.AppSettings["DistributedDataGrouper_DistributeBatchSize"], out s_distributeBatchSize))
-                s_distributeBatchSize = 500;
+                s_distributeBatchSize = 10000;
         }
 
         public DistributedDataGrouper(string dataAnalysisUniqueName, DataGroupingHandler groupingHandler)
@@ -59,19 +59,38 @@ namespace Vanrise.Common.Business
             }
         }
 
+        Dictionary<string, Guid> _executerServiceIdByGroupingKey = new Dictionary<string, Guid>();
+
         private void DistributeGroupingItems_Private(List<IDataGroupingItem> items)
         {
-            List<DataGroupingDistributionInfo> distributionInfos = null;
             Dictionary<string, IDataGroupingItem> itemsByKeys = items.ToDictionary(itm => _groupingHandler.GetItemGroupingKey(new DataGroupingHandlerGetItemGroupingKeyContext { Item = itm }), itm => itm);
-            GetDistributorClient((distributorClient) =>
+            IEnumerable<string> keysToRequest = itemsByKeys.Keys.Where(itm => !_executerServiceIdByGroupingKey.ContainsKey(itm));
+            if (keysToRequest != null && keysToRequest.Count() > 0)
             {
-                distributionInfos = distributorClient.GetItemKeysDistributionInfos(_dataAnalysisUniqueName, itemsByKeys.Keys.ToList());
-            });
-            Parallel.ForEach(distributionInfos, (distributionInfo) =>
-            {
-                GetExecutorClient(distributionInfo.ExecutorServiceInstanceId, (executorClient) =>
+                GetDistributorClient((distributorClient) =>
                 {
-                    executorClient.AddItemsToGrouping(_dataAnalysisUniqueName, _groupingHandler.SerializeItems(itemsByKeys.Where(itmEntry => distributionInfo.ItemKeys.Contains(itmEntry.Key)).Select(itmEntry => itmEntry.Value).ToList()));
+                    var receivedDistributionInfos = distributorClient.GetItemKeysDistributionInfos(_dataAnalysisUniqueName, keysToRequest.ToList());
+                    foreach (var distributionInfo in receivedDistributionInfos)
+                    {
+                        foreach (var groupingKey in distributionInfo.ItemKeys)
+                        {
+                             _executerServiceIdByGroupingKey.Add(groupingKey, distributionInfo.ExecutorServiceInstanceId);
+                        }
+                    }
+                });
+            }
+
+            Dictionary<Guid, List<IDataGroupingItem>> itemsByExecutorServiceId = new Dictionary<Guid, List<IDataGroupingItem>>();
+            foreach(var groupingItemEntry in itemsByKeys)
+            {
+                itemsByExecutorServiceId.GetOrCreateItem(_executerServiceIdByGroupingKey[groupingItemEntry.Key]).Add(groupingItemEntry.Value);
+            }
+
+            Parallel.ForEach(itemsByExecutorServiceId, (gourpingItemsEntry) =>
+            {
+                GetExecutorClient(gourpingItemsEntry.Key, (executorClient) =>
+                {
+                    executorClient.AddItemsToGrouping(_dataAnalysisUniqueName, _groupingHandler.SerializeItems(gourpingItemsEntry.Value));
                 });
             });
         }

@@ -8,16 +8,20 @@ namespace Vanrise.Analytic.Entities
 {
     public enum DAProfCalcChunkTimeEnum
     {
+        [DAProfCalcChunkTimeAttribute(15)]
+        FifteenMinutes = 0,
+        [DAProfCalcChunkTimeAttribute(30)]
+        ThirtyMinutes = 1,
         [DAProfCalcChunkTimeAttribute(60)]
-        OneHour = 0,
+        OneHour = 2,
         [DAProfCalcChunkTimeAttribute(120)]
-        TwoHours = 1,
+        TwoHours = 3,
         [DAProfCalcChunkTimeAttribute(180)]
-        ThreeHours = 2,
+        ThreeHours = 4,
         [DAProfCalcChunkTimeAttribute(360)]
-        SixHours = 3,
+        SixHours = 5,
         [DAProfCalcChunkTimeAttribute(720)]
-        TwelveHours = 4,
+        TwelveHours = 6,
     }
 
     public class DAProfCalcChunkTimeAttribute : Attribute

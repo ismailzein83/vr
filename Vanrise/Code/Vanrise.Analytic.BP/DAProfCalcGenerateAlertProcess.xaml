@@ -50,7 +50,6 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
@@ -58,6 +57,7 @@
       <AssemblyReference>Vanrise.Analytic.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
@@ -125,7 +125,7 @@
       </local:DAProfCalcSubProcess.FromTime>
       <local:DAProfCalcSubProcess.OutputRecordProcessor>
         <InArgument x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">
-          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">new Vanrise.Analytic.Business.DAProfCalcGenerateVRAlertEventsOutputProcessor(Input.UserId)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">new Vanrise.Analytic.Business.DAProfCalcGenerateVRAlertEventsOutputProcessor()</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.OutputRecordProcessor>
       <local:DAProfCalcSubProcess.RecordStorageIds>
@@ -172,7 +172,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwURgOwAQ4CAQFMBVIgAgFCUwVoKQIBLWkFpwEiAgEJqAEFrgEgAgECTwtPhQECAURMYEyNAQIBQ2ALYGcCAT1lC2VpAgE4WwtbfgIBM1YLVlwCAS5sC2xrAgEocQtxXwIBI4ABC4ABvwECAR6FAQuFAWECARl2C3Z2AgEUewt7WQIBD4oBC4oBVwIBCqsBC6sBhQECAQSoAWCoAY0BAgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwURgOwAQ4CAQFMBVIgAgFCUwVoKQIBLWkFpwEiAgEJqAEFrgEgAgECTwtPhQECAURMYEyNAQIBQ2ALYGcCAT1lC2VpAgE4WwtbfgIBM1YLVlwCAS5sC2xrAgEocQtxXwIBI4ABC4ABswECAR6FAQuFAWECARl2C3Z2AgEUewt7WQIBD4oBC4oBVwIBCqsBC6sBhQECAQSoAWCoAY0BAgED</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
