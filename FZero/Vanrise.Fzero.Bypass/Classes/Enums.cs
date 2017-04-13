@@ -54,7 +54,7 @@ namespace Vanrise.Fzero.Bypass
             ITPC = 1,
             Zain = 2,
             ST = 3,
-            //Madar = 7
+            Madar = 7
         }
 
         public enum RecommendedAction : int

@@ -235,11 +235,11 @@ namespace Vanrise.Fzero.Services.Report
                     ErrorLog("reportPath: " + reportPath);
                     ErrorLog("reportPath2: " + reportPath2);
                 }
-                //else if (ClientID == (int)Enums.Clients.Madar)//-- Madar
-                //{
-                //    reportPath = Path.Combine(exeFolder, @"Reports\rptToMadarOperator.rdlc");
-                //    ErrorLog("reportPath: " + reportPath);
-                //}
+                else if (ClientID == (int)Enums.Clients.Madar)//-- Madar
+                {
+                    reportPath = Path.Combine(exeFolder, @"Reports\rptToMadarOperator.rdlc");
+                    ErrorLog("reportPath: " + reportPath);
+                }
                 else
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptDefaultToOperator.rdlc");
@@ -325,12 +325,14 @@ namespace Vanrise.Fzero.Services.Report
                                 EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                                 report.ReportID, profile_name);
                 }
-                //else if (ClientID == (int)Enums.Clients.Madar)
-                //{
-                //    EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF,
-                //                EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
-                //                report.ReportID, profile_name);
-                //}
+                else if (ClientID == (int)Enums.Clients.Madar)
+                {
+                    ErrorLog("Madar: filenamePDF " + filenamePDF + " report.ReportID " + report.ReportID);
+
+                    EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF,
+                                EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
+                                report.ReportID, profile_name);
+                }
                 else
                 {
                     string zainExcel = ConfigurationManager.AppSettings["ZainExcel"];

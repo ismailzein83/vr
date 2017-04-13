@@ -131,6 +131,7 @@
       <DependentUpon>ReportService.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptDefaultToOperator.rdlc" />
+    <EmbeddedResource Include="Reports\rptToMadarOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToOperator.rdlc" />
     <EmbeddedResource Include="Reports\rptToOperatorIraqNationalSec.rdlc" />
     <EmbeddedResource Include="Reports\rptToSyrianOperator.rdlc" />
