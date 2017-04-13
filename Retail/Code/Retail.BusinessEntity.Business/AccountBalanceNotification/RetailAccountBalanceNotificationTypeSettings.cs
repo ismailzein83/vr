@@ -13,19 +13,6 @@ namespace Retail.BusinessEntity.Business
 
         public override bool IsVRNotificationMatched(IAccountBalanceNotificationTypeIsMatchedContext context)
         {
-            if (context.AccountBalanceNotificationExtendedQuery == null)
-                return true;
-
-            var retailAccountBalanceNotificationExtendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
-            if (retailAccountBalanceNotificationExtendedQuery == null)
-                return false;
-
-            var vrBalanceAlertEventPayload = context.VRNotification.EventPayload as VRBalanceAlertEventPayload;
-            if (retailAccountBalanceNotificationExtendedQuery.AccountIds != null && !retailAccountBalanceNotificationExtendedQuery.AccountIds.Contains(vrBalanceAlertEventPayload.EntityId))
-                return false;
-
-            return true;
-
             //if (context.AccountBalanceNotificationExtendedQuery == null)
             //    return true;
 
@@ -37,6 +24,8 @@ namespace Retail.BusinessEntity.Business
             //    return false;
 
             //return true;
+
+            return true;
         }
     }
 }
