@@ -23,38 +23,44 @@ namespace Vanrise.Fzero.Bypass
 
         public static void SendAutoBlockReport(string toEmail, HashSet<string> CLIs, string ReportID, string profile_name)
         {
-            string CLIConcatenated = string.Empty;
-            int ID = (int)Enums.EmailTemplates.AutoBlockReport;
-            EmailTemplate template = EmailTemplate.Load(ID);
-            if (template.IsActive)
+            if (CLIs.Count > 0)
             {
-                Email email = new Email() { EmailTemplateID = ID };
-                email.DestinationEmail = toEmail;
-                email.Subject = template.Subject.Replace("%ReportID%", ReportID);
-                email.CC = string.Empty;
+                string CLIConcatenated = string.Empty;
+                int ID = (int)Enums.EmailTemplates.AutoBlockReport;
+                EmailTemplate template = EmailTemplate.Load(ID);
+                if (template.IsActive)
+                {
+                    Email email = new Email() { EmailTemplateID = ID };
+                    email.DestinationEmail = toEmail;
+                    email.Subject = template.Subject.Replace("%ReportID%", ReportID);
+                    email.CC = string.Empty;
 
 
-                foreach (var i in CLIs)
-                    CLIConcatenated += "<br />" + i + "<br />";
+                    foreach (var i in CLIs)
+                        CLIConcatenated += "<br />" + i + "<br />";
 
-                email.Body = template.MessageBody.Replace("%CLIs%", CLIConcatenated).Replace("%Total%", CLIs.Count.ToString());
-                Email.SendMailWithAttachement(email, string.Empty, profile_name);
+                    email.Body = template.MessageBody.Replace("%CLIs%", CLIConcatenated).Replace("%Total%", CLIs.Count.ToString());
+                    Email.SendMailWithAttachement(email, string.Empty, profile_name);
+                }
             }
         }
 
 
         public static void SendReporttoMobileOperator(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
         {
-            int ID = (int)Enums.EmailTemplates.ReporttoMobileOperator;
-            EmailTemplate template = EmailTemplate.Load(ID);
-            if (template.IsActive)
+            if (Total > 0)
             {
-                Email email = new Email() { EmailTemplateID = ID };
-                email.DestinationEmail = toEmail;
-                email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
-                email.CC = CC;
-                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
-                Email.SendMailWithAttachement(email, AttachedPath, profile_name);
+                int ID = (int)Enums.EmailTemplates.ReporttoMobileOperator;
+                EmailTemplate template = EmailTemplate.Load(ID);
+                if (template.IsActive)
+                {
+                    Email email = new Email() { EmailTemplateID = ID };
+                    email.DestinationEmail = toEmail;
+                    email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
+                    email.CC = CC;
+                    email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
+                    Email.SendMailWithAttachement(email, AttachedPath, profile_name);
+                }
             }
         }
 
@@ -75,16 +81,19 @@ namespace Vanrise.Fzero.Bypass
 
         public static void SendReporttoMobileSyrianOperator(int Total, string AttachedPath, string toEmail, string OperatorLink, string CC, string ReportID, string profile_name)
         {
-            int ID = (int)Enums.EmailTemplates.ReporttoMobileSyrianOperator;
-            EmailTemplate template = EmailTemplate.Load(ID);
-            if (template.IsActive)
+            if (Total > 0)
             {
-                Email email = new Email() { EmailTemplateID = ID };
-                email.DestinationEmail = toEmail;
-                email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
-                email.CC = CC;
-                email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
-                Email.SendMailWithAttachement(email, AttachedPath, profile_name);
+                int ID = (int)Enums.EmailTemplates.ReporttoMobileSyrianOperator;
+                EmailTemplate template = EmailTemplate.Load(ID);
+                if (template.IsActive)
+                {
+                    Email email = new Email() { EmailTemplateID = ID };
+                    email.DestinationEmail = toEmail;
+                    email.Subject = template.Subject.Replace("%ReportID%", ReportID).Replace("%Total%", Total.ToString());
+                    email.CC = CC;
+                    email.Body = template.MessageBody.Replace("%OperatorLink%", OperatorLink).Replace("%Total%", Total.ToString());
+                    Email.SendMailWithAttachement(email, AttachedPath, profile_name);
+                }   
             }
         }
 

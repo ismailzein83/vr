@@ -197,8 +197,8 @@ namespace Vanrise.Fzero.Services.Report
 
                 }
 
-
-                GeneratedCall.SendReport(ListIds, Vanrise.Fzero.Bypass.Report.Save(report).ID);
+                Vanrise.Fzero.Bypass.Report reportSaved = Vanrise.Fzero.Bypass.Report.Save(report);
+                GeneratedCall.SendReport(ListIds, reportSaved.ID);
                 ReportParameter[] parameters = new ReportParameter[3];
                 parameters[0] = new ReportParameter("ReportID", report.ReportID);
 
@@ -235,6 +235,11 @@ namespace Vanrise.Fzero.Services.Report
                     ErrorLog("reportPath: " + reportPath);
                     ErrorLog("reportPath2: " + reportPath2);
                 }
+                //else if (ClientID == (int)Enums.Clients.Madar)//-- Madar
+                //{
+                //    reportPath = Path.Combine(exeFolder, @"Reports\rptToMadarOperator.rdlc");
+                //    ErrorLog("reportPath: " + reportPath);
+                //}
                 else
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptDefaultToOperator.rdlc");
@@ -256,7 +261,17 @@ namespace Vanrise.Fzero.Services.Report
                 ReportDataSource rptDataSourceDataSet1 = new ReportDataSource("DataSet1", AppType.GetAppTypes());
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourceDataSet1);
 
-                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT));
+                //
+                //Get reported calls compared from generated calls
+                //
+                List<ViewGeneratedCall> reportedCalls = GeneratedCall.GetReportedCalls(report.ReportID, DifferenceInGMT);
+                int reportedCallsCount = reportedCalls.Count;
+                if (reportedCallsCount == 0)
+                {
+                    Vanrise.Fzero.Bypass.Report.Delete(reportSaved);
+                }
+
+                ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", reportedCalls);
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
                 if (ClientID == (int)Enums.Clients.ITPC)
                     rvToOperator2.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
@@ -306,10 +321,16 @@ namespace Vanrise.Fzero.Services.Report
 
                 if (ClientID == 3)
                 {
-                    EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF,
+                    EmailManager.SendReporttoMobileSyrianOperator(reportedCallsCount, filenameExcel + ";" + filenamePDF,
                                 EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                                 report.ReportID, profile_name);
                 }
+                //else if (ClientID == (int)Enums.Clients.Madar)
+                //{
+                //    EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF,
+                //                EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
+                //                report.ReportID, profile_name);
+                //}
                 else
                 {
                     string zainExcel = ConfigurationManager.AppSettings["ZainExcel"];
@@ -317,7 +338,7 @@ namespace Vanrise.Fzero.Services.Report
                     ErrorLog("zainExcel: " + zainExcel);
 
                     if (string.IsNullOrEmpty(zainExcel))
-                        EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
+                        EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
                     else
                     {
                         string reportCode = ReportID.Substring(0, 3);
@@ -328,16 +349,16 @@ namespace Vanrise.Fzero.Services.Report
 
                             if (zainExcel == "true")
                             {
-                                ErrorLog("ListIds.Count: " + ListIds.Count + " filenameExcel2: " + filenameExcel2 + " filenamePDF: " + filenamePDF
+                                ErrorLog("reportedCallsCount: " + reportedCallsCount + " filenameExcel2: " + filenameExcel2 + " filenamePDF: " + filenamePDF
                                         + " EmailAddress: " + EmailAddress + " report.ReportID: " + report.ReportID);
 
-                                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel2 + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                                EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenameExcel2 + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                             }
                             else
-                                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                                EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                         }
                         else
-                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
                     }
 
                 }

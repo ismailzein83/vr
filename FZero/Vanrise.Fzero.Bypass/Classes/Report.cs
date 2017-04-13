@@ -24,6 +24,25 @@ namespace Vanrise.Fzero.Bypass
             return Report;
         }
 
+        public static bool Delete(Report report)
+        {
+            bool success = false;
+            try
+            {
+                using (Entities context = new Entities())
+                {
+                    context.Entry(report).State = System.Data.EntityState.Deleted;
+                    context.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.Report.Delete(" + report.ID.ToString() + ")", err);
+            }
+            return success;
+        }
+
         public static Report Load(string PartofReportCode)
         {
             Report Report = new Report();
