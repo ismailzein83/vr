@@ -16,14 +16,27 @@ namespace Retail.BusinessEntity.Business
             if (context.AccountBalanceNotificationExtendedQuery == null)
                 return true;
 
-            var extendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
-            if (extendedQuery == null)
+            var retailAccountBalanceNotificationExtendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
+            if (retailAccountBalanceNotificationExtendedQuery == null)
                 return false;
 
-            if (extendedQuery.AccountIds != null && !extendedQuery.AccountIds.Contains(context.EventPayload.EntityId))
+            var vrBalanceAlertEventPayload = context.VRNotification.EventPayload as VRBalanceAlertEventPayload;
+            if (retailAccountBalanceNotificationExtendedQuery.AccountIds != null && !retailAccountBalanceNotificationExtendedQuery.AccountIds.Contains(vrBalanceAlertEventPayload.EntityId))
                 return false;
 
             return true;
+
+            //if (context.AccountBalanceNotificationExtendedQuery == null)
+            //    return true;
+
+            //var extendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
+            //if (extendedQuery == null)
+            //    return false;
+
+            //if (extendedQuery.AccountIds != null && !extendedQuery.AccountIds.Contains(context.EventPayload.EntityId))
+            //    return false;
+
+            //return true;
         }
     }
 }
