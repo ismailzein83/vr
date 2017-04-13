@@ -10,7 +10,7 @@ using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
 namespace Retail.BusinessEntity.MainActionBPs.Activities
 {
-    public sealed class ExecuteAccountProvisioner : NativeActivity
+    public sealed class ExecuteAccountProvisioner : Vanrise.BusinessProcess.BaseCodeActivity
     {
         [RequiredArgument]
         public InArgument<long> AccountId { get; set; }
@@ -22,28 +22,28 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
         public InArgument<AccountProvisioner> AccountProvisioner { get; set; }
         [RequiredArgument]
         public InArgument<AccountActionDefinition> AccountActionDefinition { get; set; }
-        protected override void Execute(NativeActivityContext context)
+
+        protected override void VRExecute(IBaseCodeActivityContext context)
         {
-            var actionProvisioner = this.AccountProvisioner.Get(context);
+            var actionProvisioner = this.AccountProvisioner.Get(context.ActivityContext);
             if (actionProvisioner == null)
                 throw new ArgumentNullException("accountProvisioner");
-            var definitionSettings = this.AccountProvisionerDefinition.Get(context);
-            var accountId = this.AccountId.Get(context);
-            var accountActionDefinition = this.AccountActionDefinition.Get(context);
-            var accountBEDefinitionId = this.AccountBEDefinitionId.Get(context);
-            var provisioninigContext = new AccountProvisioningContext(this, context, definitionSettings, accountId, accountBEDefinitionId, accountActionDefinition);
+            var definitionSettings = this.AccountProvisionerDefinition.Get(context.ActivityContext);
+            var accountId = this.AccountId.Get(context.ActivityContext);
+            var accountActionDefinition = this.AccountActionDefinition.Get(context.ActivityContext);
+            var accountBEDefinitionId = this.AccountBEDefinitionId.Get(context.ActivityContext);
+            var provisioninigContext = new AccountProvisioningContext(this, context.ActivityContext, definitionSettings, accountId, accountBEDefinitionId, accountActionDefinition);
             actionProvisioner.Execute(provisioninigContext);
         }
-
         private class AccountProvisioningContext : IAccountProvisioningContext
         {
             ExecuteAccountProvisioner _parentActivity;
-            NativeActivityContext _context;
+            ActivityContext _context;
             AccountProvisionerDefinitionSettings _definitionSettings;
             public long _accountId { get; set; }
             public Guid _accountBEDefinitionId { get; set; }
             public AccountActionDefinition _accountActionDefinition { get; set; }
-            public AccountProvisioningContext(ExecuteAccountProvisioner parentActivity, NativeActivityContext context, AccountProvisionerDefinitionSettings definitionSettings, long accountId, Guid accountBEDefinitionId, AccountActionDefinition accountActionDefinition)
+            public AccountProvisioningContext(ExecuteAccountProvisioner parentActivity, ActivityContext context, AccountProvisionerDefinitionSettings definitionSettings, long accountId, Guid accountBEDefinitionId, AccountActionDefinition accountActionDefinition)
             {
                 _parentActivity = parentActivity;
                 _context = context;
