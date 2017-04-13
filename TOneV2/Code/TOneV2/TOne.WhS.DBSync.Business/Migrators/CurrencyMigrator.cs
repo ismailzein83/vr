@@ -70,12 +70,15 @@ namespace TOne.WhS.DBSync.Business
                     currencySettingData.CurrencyId = currency.CurrencyId;
                     
                     systemCurrencySetting.Data = currencySettingData;
-                    settingManager.UpdateSetting(systemCurrencySetting);
+                    SettingToEdit settingToEdit = new SettingToEdit()
+                    {
+                        SettingId = systemCurrencySetting.SettingId,
+                        Name = systemCurrencySetting.Name,
+                        Data = systemCurrencySetting.Data,
+                    };
+                    settingManager.UpdateSetting(settingToEdit);
                 }
             }
-            
-            
-            
         }
     }
 }

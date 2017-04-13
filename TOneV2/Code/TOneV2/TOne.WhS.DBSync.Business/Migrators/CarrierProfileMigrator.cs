@@ -280,8 +280,13 @@ namespace TOne.WhS.DBSync.Business
                     }
 
                     bETechnicalSettingsData.DocumentCategoryDefinition = documentDefinition;
-
-                    settingManager.UpdateSetting(bETechnicalSettings);
+                    SettingToEdit settingToEdit = new SettingToEdit()
+                    {
+                        SettingId = bETechnicalSettings.SettingId,
+                        Name = bETechnicalSettings.Name,
+                        Data = bETechnicalSettings.Data,
+                    };
+                    settingManager.UpdateSetting(settingToEdit);
                 }
             }
 
