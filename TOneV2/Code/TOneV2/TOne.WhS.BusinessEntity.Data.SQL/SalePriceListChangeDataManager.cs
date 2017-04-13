@@ -119,8 +119,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             if (streamForBulkInsert != null)
                 streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                     record.PricelistId,
-                    record.Rate,
-                    record.RecentRate,
+                    decimal.Round(record.Rate, 8),
+                    record.RecentRate.HasValue ? decimal.Round(record.RecentRate.Value, 8) : record.RecentRate,
                     record.CountryId,
                     record.ZoneName,
                     (int)record.ChangeType,
