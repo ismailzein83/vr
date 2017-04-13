@@ -21,6 +21,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedSellingNumberPlans().Values.MapRecords(SellingNumberPlanInfoMapper).OrderBy(x => x.Name);
         }
 
+        public SellingNumberPlan GetSellingNumberPlanHistoryDetailbyHistoryId(int sellingNumberPlanHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var sellingNumberPlan = s_vrObjectTrackingManager.GetObjectDetailById(sellingNumberPlanHistoryId);
+            return sellingNumberPlan.CastWithValidate<SellingNumberPlan>("SellingNumberPlan : historyId ", sellingNumberPlanHistoryId);
+        }
+
         public SellingNumberPlan GetSellingNumberPlan(int numberPlanId, bool isViewedFromUI)
         {
             var sellingNumberPlan= GetCachedSellingNumberPlans().GetRecord(numberPlanId);

@@ -8,7 +8,8 @@
 
         var sellingNumberPlanId;
         var editMode;
-
+        var context;
+        var isViewHistoryMode;
         defineScope();
         loadParameters();
         load();
@@ -17,8 +18,10 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
+                context = parameters.context;
             }
             editMode = (sellingNumberPlanId != undefined);
+             isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
         function defineScope() {
 
@@ -50,12 +53,27 @@
             if (editMode) {
                 getSellingNumberPlan();
             }
+            else if (isViewHistoryMode) {
+                getSellingNumberPlanHistory();
+            }
             else {
                 $scope.title = UtilsService.buildTitleForAddEditor("SellingNumberPlan");
                 $scope.isGettingData = false;
             }
 
         }
+
+        function getSellingNumberPlanHistory() {
+            return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlanHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                fillScopeFromSellingNumberPlanObj(response);
+
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
+            });
+        }
+
         function getSellingNumberPlan() {
             return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlan(sellingNumberPlanId).then(function (sellingNumberPlan) {
                 fillScopeFromSellingNumberPlanObj(sellingNumberPlan);

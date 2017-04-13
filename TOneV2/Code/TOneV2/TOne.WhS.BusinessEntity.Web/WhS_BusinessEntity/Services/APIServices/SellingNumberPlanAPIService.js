@@ -37,7 +37,12 @@
         function HasAddSellingNumberPlanPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddSellingNumberPlan']));
         }
+        function GetSellingNumberPlanHistoryDetailbyHistoryId(sellingNumberPlanHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSellingNumberPlanHistoryDetailbyHistoryId'), {
+                sellingNumberPlanHistoryId: sellingNumberPlanHistoryId
+            });
+        }
         return ({
             GetSellingNumberPlans: GetSellingNumberPlans,
             GetFilteredSellingNumberPlans: GetFilteredSellingNumberPlans,
@@ -46,7 +51,8 @@
             GetSellingNumberPlan: GetSellingNumberPlan,
             HasUpdateSellingNumberPlanPermission: HasUpdateSellingNumberPlanPermission,
             HasAddSellingNumberPlanPermission: HasAddSellingNumberPlanPermission,
-            GetMasterSellingNumberPlan: GetMasterSellingNumberPlan
+            GetMasterSellingNumberPlan: GetMasterSellingNumberPlan,
+            GetSellingNumberPlanHistoryDetailbyHistoryId: GetSellingNumberPlanHistoryDetailbyHistoryId
         });
     }
 

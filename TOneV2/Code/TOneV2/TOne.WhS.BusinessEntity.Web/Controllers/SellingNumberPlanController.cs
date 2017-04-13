@@ -25,6 +25,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
             return manager.GetSellingNumberPlan(sellingNumberPlanId,true);
         }
+
+        
+             [HttpGet]
+             [Route("GetSellingNumberPlanHistoryDetailbyHistoryId")]
+        public SellingNumberPlan GetSellingNumberPlanHistoryDetailbyHistoryId(int sellingNumberPlanHistoryId)
+        {
+            SellingNumberPlanManager manager = new SellingNumberPlanManager();
+            return manager.GetSellingNumberPlanHistoryDetailbyHistoryId(sellingNumberPlanHistoryId);
+        }
         [HttpGet]
         [Route("GetMasterSellingNumberPlan")]
         public SellingNumberPlan GetMasterSellingNumberPlan()
