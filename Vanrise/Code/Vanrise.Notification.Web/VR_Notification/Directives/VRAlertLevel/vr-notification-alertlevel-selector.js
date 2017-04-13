@@ -55,6 +55,7 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
                 var api = {};
 
                 api.load = function (payload) {
+                  
                     var selectedIds;
                     var filter;
                     if (payload != undefined) {
@@ -64,6 +65,7 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
                     }
 
                     return VR_Notification_AlertLevelAPIService.GetAlertLevelsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {

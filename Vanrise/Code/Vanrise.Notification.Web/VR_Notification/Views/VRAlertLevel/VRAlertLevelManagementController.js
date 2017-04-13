@@ -9,7 +9,7 @@
         var gridAPI;
         var beDefinitionSelectorApi;
         var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-       
+        
         defineScope();
         load();
 

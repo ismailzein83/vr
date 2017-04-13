@@ -86,7 +86,7 @@ namespace Vanrise.Notification.Business
             if (dataManager.Update(alertLevelItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectUpdated(VRAlertLevelLoggableEntity.Instance, alertLevelItem);
+               VRActionLogger.Current.TrackAndLogObjectUpdated(VRAlertLevelLoggableEntity.Instance, alertLevelItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRAlertLevelDetailMapper(this.GetAlertLevel(alertLevelItem.VRAlertLevelId));
             }
@@ -103,26 +103,31 @@ namespace Vanrise.Notification.Business
         }
         public IEnumerable<VRAlertLevelInfo> GetAlertLevelsInfo(VRAlertLevelInfoFilter filter)
         {
+            Func<VRAlertLevel, bool> filterExpression = null;
             Guid businessEntityDefinitionId;
-            if (!filter.BusinessEntityDefinitionId.HasValue && !filter.VRNotificationTypeId.HasValue)
+            if (filter!=null)
             {
-                throw new Exception("BusinessEntityDefinitionId or VRNotificationTypeId should be specified.");
-            }
-            if (filter.BusinessEntityDefinitionId.HasValue)
-                businessEntityDefinitionId = filter.BusinessEntityDefinitionId.Value;
-            else
-            {
-                var notficationTypeSettings = _vrnotificationTypeManager.GetNotificationTypeSettings(filter.VRNotificationTypeId.Value);
-                businessEntityDefinitionId = notficationTypeSettings.VRAlertLevelDefinitionId;
-            }
-            Func<VRAlertLevel, bool> filterExpression = (x) =>
-            {
-                if (x.BusinessEntityDefinitionId != businessEntityDefinitionId)
-                    return false;
-                return true;
+                if (!filter.BusinessEntityDefinitionId.HasValue && !filter.VRNotificationTypeId.HasValue)
+                {
+                    throw new Exception("BusinessEntityDefinitionId or VRNotificationTypeId should be specified.");
+                }
+                if (filter.BusinessEntityDefinitionId.HasValue)
+                    businessEntityDefinitionId = filter.BusinessEntityDefinitionId.Value;
+                else
+                {
+                    var notficationTypeSettings = _vrnotificationTypeManager.GetNotificationTypeSettings(filter.VRNotificationTypeId.Value);
+                    businessEntityDefinitionId = notficationTypeSettings.VRAlertLevelDefinitionId;
+                }
+               filterExpression = (x) =>
+                {
+                    if (x.BusinessEntityDefinitionId != businessEntityDefinitionId)
+                        return false;
+                    return true;
 
-            };
-            return this.GetCachedAlertLevels().MapRecords(VRAlertLevelInfoMapper, filterExpression).OrderBy(x => x.Name);
+                };
+            }
+            
+            return this.GetCachedAlertLevels().MapRecords(VRAlertLevelInfoMapper, filterExpression).OrderBy(x => x.Settings.Weight);
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -158,7 +163,8 @@ namespace Vanrise.Notification.Business
             VRAlertLevelInfo alertLevelInfo = new VRAlertLevelInfo()
             {
                 VRAlertLevelId = alertLevel.VRAlertLevelId,
-                Name = alertLevel.Name
+                Name = alertLevel.Name,
+                Settings=alertLevel.Settings
             };
             return alertLevelInfo;
         }
