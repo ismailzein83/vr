@@ -32,6 +32,12 @@
         function GetSwapDealSettingData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealSettingData'));
         }
+        function GetSwapDealHistoryDetailbyHistoryId(swapDealHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealHistoryDetailbyHistoryId'), {
+                swapDealHistoryId: swapDealHistoryId
+            });
+        }
         return ({
             GetFilteredSwapDeals: GetFilteredSwapDeals,
             GetDeal: GetDeal,
@@ -39,7 +45,8 @@
             UpdateDeal: UpdateDeal,
             HasAddDealPermission: HasAddDealPermission,
             HasEditDealPermission: HasEditDealPermission,
-            GetSwapDealSettingData: GetSwapDealSettingData
+            GetSwapDealSettingData: GetSwapDealSettingData,
+            GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId
         });
     }
 

@@ -41,7 +41,14 @@ namespace TOne.WhS.Deal.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDeinitionDetailMapper), handler);
         }
-        
+       
+            public DealDefinition GetSwapDealHistoryDetailbyHistoryId(int swapDealHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var dealDefinition = s_vrObjectTrackingManager.GetObjectDetailById(swapDealHistoryId);
+            return dealDefinition.CastWithValidate<DealDefinition>("DealDefinition : historyId ", swapDealHistoryId);
+        }
+
         public SwapDealSettingData GetSwapDealSettingData()
         {
             var settingManager = new SettingManager();

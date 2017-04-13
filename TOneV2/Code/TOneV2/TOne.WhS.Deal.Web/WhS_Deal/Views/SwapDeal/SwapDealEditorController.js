@@ -20,7 +20,8 @@
         var dealOutboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountSelectedPromise;
-
+        var context;
+        var isViewHistoryMode;
         loadParameters();
         defineScope();
         load();
@@ -31,7 +32,9 @@
 
             if (parameters != undefined && parameters != null) {
                 dealId = parameters.dealId;
+                context = parameters.context;
             }
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (dealId != undefined);
         }
 
@@ -142,11 +145,27 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getSwapDealHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        dealEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
         }
+        function getSwapDealHistory() {
+            return WhS_Deal_SwapDealAPIService.GetSwapDealHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                dealEntity = response;
 
+            });
+        }
         function getSwapDeal() {
             return WhS_Deal_SwapDealAPIService.GetDeal(dealId).then(function (response) {
                 dealEntity = response;

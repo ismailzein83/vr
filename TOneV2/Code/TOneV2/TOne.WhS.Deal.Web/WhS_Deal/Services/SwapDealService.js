@@ -9,6 +9,34 @@
 	    var drillDownDefinitions = [];
 	    var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
 
+	    function viewHistorySwapDeal(context) {
+	        var modalParameters = {
+	            context: context
+	        };
+	        var modalSettings = {
+	        };
+	        modalSettings.onScopeReady = function (modalScope) {
+	            UtilsService.setContextReadOnly(modalScope);
+	        };
+	        VRModalService.showModal(editorUrl, modalParameters, modalSettings);
+	    }
+
+	    function registerHistoryViewAction() {
+
+	        var actionHistory = {
+	            actionHistoryName: "WhS_Deal_SwapDealManager_ViewHistoryItem",
+	            actionMethod: function (payload) {
+
+	                var context = {
+	                    historyId: payload.historyId
+	                };
+
+	                viewHistorySwapDeal(context);
+	            }
+	        };
+	        VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+	    }
+
 		function analyzeSwapDeal(onSwapDealAnalyzed)
 		{
 			var parameters = null;
@@ -82,7 +110,8 @@
 		    addSwapDeal: addSwapDeal,
 		    editSwapDeal: editSwapDeal,
 		    registerObjectTrackingDrillDownToSwapDeal: registerObjectTrackingDrillDownToSwapDeal,
-		    getDrillDownDefinition: getDrillDownDefinition
+		    getDrillDownDefinition: getDrillDownDefinition,
+		    registerHistoryViewAction: registerHistoryViewAction
 		};
 	}
 

@@ -23,7 +23,13 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredSwapDeals(input));
         }
-        
+
+        [HttpGet]
+        [Route("GetSwapDealHistoryDetailbyHistoryId")]
+        public DealDefinition GetSwapDealHistoryDetailbyHistoryId(int swapDealHistoryId)
+        {
+            return _manager.GetSwapDealHistoryDetailbyHistoryId(swapDealHistoryId);
+        }
         [HttpGet]
         [Route("GetDeal")]
         public DealDefinition GetDeal(int dealId)
@@ -48,7 +54,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetSwapDealSettingData")]
         public SwapDealSettingData GetSwapDealSettingData()
         {
-            return  _manager.GetSwapDealSettingData();
+            return _manager.GetSwapDealSettingData();
         }
     }
 }
