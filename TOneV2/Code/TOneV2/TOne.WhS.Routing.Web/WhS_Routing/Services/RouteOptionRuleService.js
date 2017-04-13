@@ -15,9 +15,36 @@
             viewLinkedRouteOptionRules: viewLinkedRouteOptionRules,
             editLinkedRouteOptionRule: editLinkedRouteOptionRule,
             registerObjectTrackingDrillDownToRouteOptionRules: registerObjectTrackingDrillDownToRouteOptionRules,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
         });
+        function viewRouteOptionRules(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleEditor.html', modalParameters, modalSettings);
+        }
 
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_Routing_RouteOptionRules_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewRouteOptionRules(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
         function addRouteOptionRule(onRouteOptionRuleAdded, routingProductId, sellingNumberPlanId) {
             var settings = {
             };

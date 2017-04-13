@@ -11,7 +11,9 @@
         var linkedRouteOptionRuleInput;
         var linkedCode;
 
+        var isViewHistoryMode;
         var isEditMode;
+        var context;
 
         var routeRuleId;
         var routingProductId;
@@ -46,7 +48,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-
+                context = parameters.context;
                 routeRuleId = parameters.routeRuleId;
                 routingProductId = parameters.routingProductId;
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
@@ -55,6 +57,7 @@
                 linkedCode = parameters.linkedCode;
             }
             isEditMode = routeRuleId != undefined && (linkedRouteOptionRuleInput == undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
         function defineScope() {
 
@@ -272,12 +275,28 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                geRouteOptionRuleHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        routeOptionRuleEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 $scope.title = "New Route Option Rule";
                 loadAllControls();
             }
         }
+        function geRouteOptionRuleHistory() {
+            return WhS_Routing_RouteOptionRuleAPIService.GetRouteOptionRuleHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                routeOptionRuleEntity = response;
 
+            });
+        }
         function getRouteOptionRule() {
             return WhS_Routing_RouteOptionRuleAPIService.GetRuleEditorRuntime(routeRuleId).then(function (routeOptionRule) {
                 routeOptionRuleEntity = routeOptionRule.Entity;

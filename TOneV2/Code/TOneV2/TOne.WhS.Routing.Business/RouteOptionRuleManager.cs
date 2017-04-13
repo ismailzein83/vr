@@ -39,6 +39,13 @@ namespace TOne.WhS.Routing.Business
             return linkedRouteOptionRules.FindAllRecords(itm => itm.IsEffectiveOrFuture(effectiveDate));
         }
 
+
+        public RouteOptionRule GetRouteOptionRuleHistoryDetailbyHistoryId(int routeOptionRuleHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var routeOptionRule = s_vrObjectTrackingManager.GetObjectDetailById(routeOptionRuleHistoryId);
+            return routeOptionRule.CastWithValidate<RouteOptionRule>("RouteOptionRule : historyId ", routeOptionRuleHistoryId);
+        }
         public RouteOptionRule BuildLinkedRouteOptionRule(int? ruleId, int? customerId, string code, int? supplierId, long? supplierZoneId)
         {
             RouteOptionRule relatedRouteOptionRule;
