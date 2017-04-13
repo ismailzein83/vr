@@ -1,5 +1,5 @@
-﻿app.run(['WhS_BE_SellingNumberPlanService', 'WhS_BE_CarrierProfileService', 'WhS_BE_ZoneServiceConfigService', 'WhS_BE_SalePriceListTemplateService', 'WhS_BE_SwitchConnectivityService', 'WhS_BE_SwitchService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CodeGroupService', 'WhS_BE_SaleZoneService', 'WhS_BE_SupplierRateService', 'WhS_BE_SupplierCodeService', 'WhS_BE_SupplierZoneService_Service', 'WhS_BE_CustomerSellingProductService',
-function (WhS_BE_SellingNumberPlanService,WhS_BE_CarrierProfileService, WhS_BE_ZoneServiceConfigService, WhS_BE_SalePriceListTemplateService, WhS_BE_SwitchConnectivityService, WhS_BE_SwitchService, WhS_BE_CarrierAccountService, WhS_BE_CodeGroupService, WhS_BE_SaleZoneService, WhS_BE_SupplierRateService, WhS_BE_SupplierCodeService, WhS_BE_SupplierZoneService_Service, WhS_BE_CustomerSellingProductService) {
+﻿app.run(['WhS_BE_SellingProductService', 'WhS_BE_SellingNumberPlanService', 'WhS_BE_CarrierProfileService', 'WhS_BE_ZoneServiceConfigService', 'WhS_BE_SalePriceListTemplateService', 'WhS_BE_SwitchConnectivityService', 'WhS_BE_SwitchService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CodeGroupService', 'WhS_BE_SaleZoneService', 'WhS_BE_SupplierRateService', 'WhS_BE_SupplierCodeService', 'WhS_BE_SupplierZoneService_Service', 'WhS_BE_CustomerSellingProductService',
+function (WhS_BE_SellingProductService, WhS_BE_SellingNumberPlanService, WhS_BE_CarrierProfileService, WhS_BE_ZoneServiceConfigService, WhS_BE_SalePriceListTemplateService, WhS_BE_SwitchConnectivityService, WhS_BE_SwitchService, WhS_BE_CarrierAccountService, WhS_BE_CodeGroupService, WhS_BE_SaleZoneService, WhS_BE_SupplierRateService, WhS_BE_SupplierCodeService, WhS_BE_SupplierZoneService_Service, WhS_BE_CustomerSellingProductService) {
     WhS_BE_CodeGroupService.registerDrillDownToCountry();
     WhS_BE_SaleZoneService.registerDrillDownToSellingNumberPlan();
     WhS_BE_SupplierRateService.registerDrillDownToSupplierZone();
@@ -17,4 +17,5 @@ function (WhS_BE_SellingNumberPlanService,WhS_BE_CarrierProfileService, WhS_BE_Z
     WhS_BE_SalePriceListTemplateService.registerHistoryViewAction();
     WhS_BE_SwitchConnectivityService.registerHistoryViewAction();
     WhS_BE_SellingNumberPlanService.registerHistoryViewAction();
+    WhS_BE_SellingProductService.registerHistoryViewAction();
 }]);

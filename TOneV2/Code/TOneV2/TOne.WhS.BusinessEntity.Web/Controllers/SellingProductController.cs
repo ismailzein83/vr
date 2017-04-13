@@ -23,6 +23,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
         
         [HttpGet]
+        [Route("GetSellingProductHistoryDetailbyHistoryId")]
+        public SellingProduct GetSellingProductHistoryDetailbyHistoryId(int sellingProductHistoryId)
+        {
+            SellingProductManager manager = new SellingProductManager();
+            return manager.GetSellingProductHistoryDetailbyHistoryId(sellingProductHistoryId);
+        }
+        [HttpGet]
         [Route("GetSellingProductsInfo")]
         public IEnumerable<SellingProductInfo> GetSellingProductsInfo(string serializedFilter)
         {

@@ -2,13 +2,14 @@
 
     'use strict';
 
-    SellingProductService.$inject = ['WhS_BE_SellingProductAPIService', 'VRModalService', 'VRNotificationService'];
+    SellingProductService.$inject = ['WhS_BE_SellingProductAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
 
-    function SellingProductService(WhS_BE_SellingProductAPIService, VRModalService, VRNotificationService) {
+    function SellingProductService(WhS_BE_SellingProductAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService, UtilsService) {
         return ({
             addSellingProduct: addSellingProduct,
             editSellingProduct: editSellingProduct,
-            getEntityUniqueName: getEntityUniqueName
+            getEntityUniqueName: getEntityUniqueName,
+            registerHistoryViewAction: registerHistoryViewAction
         });
 
         function addSellingProduct(onSellingProductAdded) {
@@ -33,6 +34,34 @@
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, modalSettings);
         }
+
+        function viewHistorySellingProduct(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', modalParameters, modalSettings);
+        };
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_BusinessEntity_SellingProduct_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistorySellingProduct(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
         function getEntityUniqueName() {
             return "WhS_BusinessEntity_SellingProduct";
         }

@@ -34,7 +34,12 @@
         function HasAddSellingProductPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddSellingProduct']));
         }
+        function GetSellingProductHistoryDetailbyHistoryId(sellingProductHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSellingProductHistoryDetailbyHistoryId'), {
+                sellingProductHistoryId: sellingProductHistoryId
+            });
+        }
         return ({
             GetFilteredSellingProducts: GetFilteredSellingProducts,
             AddSellingProduct: AddSellingProduct,
@@ -42,7 +47,8 @@
             GetSellingProduct: GetSellingProduct,
             GetSellingProductsInfo: GetSellingProductsInfo,
             HasUpdateSellingProductPermission: HasUpdateSellingProductPermission,
-            HasAddSellingProductPermission: HasAddSellingProductPermission
+            HasAddSellingProductPermission: HasAddSellingProductPermission,
+            GetSellingProductHistoryDetailbyHistoryId: GetSellingProductHistoryDetailbyHistoryId
         });
     }
 

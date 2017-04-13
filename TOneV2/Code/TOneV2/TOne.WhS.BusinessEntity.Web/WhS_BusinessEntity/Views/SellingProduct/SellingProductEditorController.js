@@ -10,7 +10,8 @@
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var sellingProductEntity;
-
+        var context;
+        var isViewHistoryMode;
         loadParameters();
         defineScope();
         load();
@@ -19,8 +20,10 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 sellingProductId = parameters.SellingProductId;
+                context = parameters.context;
             }
             isEditMode = (sellingProductId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -69,11 +72,28 @@
                     $scope.scopeModal.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getSellingProductHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        sellingProductEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
             }
         }
+        function getSellingProductHistory() {
+            return WhS_BE_SellingProductAPIService.GetSellingProductHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                sellingProductEntity=response;
 
+            });
+        }
         function getSellingProduct() {
             return WhS_BE_SellingProductAPIService.GetSellingProduct(sellingProductId).then(function (sellingProduct) {
                 sellingProductEntity = sellingProduct;

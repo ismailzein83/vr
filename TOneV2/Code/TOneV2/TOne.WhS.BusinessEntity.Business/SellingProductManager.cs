@@ -36,6 +36,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression, SellingProductDetailMapper), handler);
         }
 
+        public SellingProduct GetSellingProductHistoryDetailbyHistoryId(int sellingProductHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var sellingProduct = s_vrObjectTrackingManager.GetObjectDetailById(sellingProductHistoryId);
+            return sellingProduct.CastWithValidate<SellingProduct>("SellingProduct : historyId ", sellingProductHistoryId);
+        }
         public IEnumerable<SellingProductInfo> GetSellingProductsInfo(SellingProductInfoFilter filter)
         {
             Func<SellingProduct, bool> filterPredicate = null;
