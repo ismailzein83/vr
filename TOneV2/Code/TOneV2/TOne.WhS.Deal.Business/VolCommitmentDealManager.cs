@@ -59,6 +59,12 @@ namespace TOne.WhS.Deal.Business
             return detail;
         }
 
+        public DealDefinition GetVolumeCommitmentHistoryDetailbyHistoryId(int volumeCommitmentHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var dealDefinition = s_vrObjectTrackingManager.GetObjectDetailById(volumeCommitmentHistoryId);
+            return dealDefinition.CastWithValidate<DealDefinition>("DealDefinition : historyId ", volumeCommitmentHistoryId);
+        }
         public override BaseDealLoggableEntity GetLoggableEntity()
         {
             return VolCommitmentDealLoggableEntity.Instance;

@@ -17,7 +17,8 @@
         var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountSelectedPromise;
-
+        var context;
+        var isViewHistoryMode;
         loadParameters();
         defineScope();
         load();
@@ -26,8 +27,11 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
+            {
                 dealId = parameters.dealId;
-
+                context = parameters.context;
+            }
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (dealId != undefined);
             
         };
@@ -98,11 +102,27 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getVolumeCommitmentHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        volumeCommitmentEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
         };
+        function getVolumeCommitmentHistory() {
+            return WhS_Deal_VolCommitmentDealAPIService.GetVolumeCommitmentHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                volumeCommitmentEntity = response;
 
+            });
+        }
         function getVolumeCommitment() {
             return WhS_Deal_VolCommitmentDealAPIService.GetDeal(dealId).then(function (response) {
                 volumeCommitmentEntity = response;

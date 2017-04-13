@@ -23,7 +23,12 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredVolCommitmentDeals(input));
         }
-
+        [HttpGet]
+        [Route("GetVolumeCommitmentHistoryDetailbyHistoryId")]
+        public DealDefinition GetVolumeCommitmentHistoryDetailbyHistoryId(int volumeCommitmentHistoryId)
+        {
+            return _manager.GetVolumeCommitmentHistoryDetailbyHistoryId(volumeCommitmentHistoryId);
+        }
         [HttpGet]
         [Route("GetDeal")]
         public DealDefinition GetDeal(int dealId)

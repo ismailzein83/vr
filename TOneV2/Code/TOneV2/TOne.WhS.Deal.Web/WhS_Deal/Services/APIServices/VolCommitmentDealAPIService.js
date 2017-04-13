@@ -27,14 +27,22 @@
         }
         function HasEditDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['UpdateDeal']));
-        }       
+        }
+        function GetVolumeCommitmentHistoryDetailbyHistoryId(volumeCommitmentHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetVolumeCommitmentHistoryDetailbyHistoryId'), {
+                volumeCommitmentHistoryId: volumeCommitmentHistoryId
+            });
+        }
+
         return ({
             GetFilteredVolCommitmentDeals:GetFilteredVolCommitmentDeals,
             GetDeal: GetDeal,
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,
             HasAddDealPermission: HasAddDealPermission,
-            HasEditDealPermission: HasEditDealPermission
+            HasEditDealPermission: HasEditDealPermission,
+            GetVolumeCommitmentHistoryDetailbyHistoryId: GetVolumeCommitmentHistoryDetailbyHistoryId
         });
     }
 

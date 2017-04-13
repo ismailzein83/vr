@@ -16,9 +16,35 @@
             addVolumeCommitmentItemTierExRate: addVolumeCommitmentItemTierExRate,
             editVolumeCommitmentItemTierExRate: editVolumeCommitmentItemTierExRate,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToVolCommitmentDeal: registerObjectTrackingDrillDownToVolCommitmentDeal
+            registerObjectTrackingDrillDownToVolCommitmentDeal: registerObjectTrackingDrillDownToVolCommitmentDeal,
+            registerHistoryViewAction: registerHistoryViewAction
         });
+        function viewHistoryVolumeCommitment(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', modalParameters, modalSettings);
+        }
+        function registerHistoryViewAction() {
 
+            var actionHistory = {
+                actionHistoryName: "WhS_Deal_VolCommitmentDeal_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryVolumeCommitment(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
         function addVolumeCommitment(onVolumeCommitmentAdded) {
             var settings = {
             };
