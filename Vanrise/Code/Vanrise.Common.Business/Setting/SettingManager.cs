@@ -29,7 +29,7 @@ namespace Vanrise.Common.Business
 
             Func<Setting, bool> filterExpression = (itemObject) =>
             {
-                 if (!hasTechnicalSettingsView && itemObject.IsTechnical == true) 
+                if (!hasTechnicalSettingsView && itemObject.IsTechnical == true)
                     return false;
 
                 if (input.Query == null)
@@ -41,7 +41,7 @@ namespace Vanrise.Common.Business
                 if (!string.IsNullOrEmpty(input.Query.Category) && string.Compare(itemObject.Category, input.Query.Category, true) != 0)
                     return false;
 
-               
+
 
                 return true;
             };
@@ -55,6 +55,14 @@ namespace Vanrise.Common.Business
                 return setting.Name;
             else
                 return null;
+        }
+
+
+        public Setting GetSettingHistoryDetailbyHistoryId(int settingHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var setting = s_vrObjectTrackingManager.GetObjectDetailById(settingHistoryId);
+            return setting.CastWithValidate<Setting>("Setting : historyId ", settingHistoryId);
         }
         public UpdateOperationOutput<SettingDetail> UpdateSetting(Setting setting)
         {
@@ -75,7 +83,7 @@ namespace Vanrise.Common.Business
         }
 
 
-        
+
         public List<string> GetDistinctSettingCategories()
         {
             var allSettings = GetCachedSettings();
@@ -88,7 +96,7 @@ namespace Vanrise.Common.Business
         public Setting GetSetting(Guid settingId, bool isViewedFromUI)
         {
             var allSettings = GetCachedSettings();
-            var setting  =  allSettings.GetRecord(settingId);          
+            var setting = allSettings.GetRecord(settingId);
             if (setting != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SettingLoggableEntity.Instance, setting);
             return setting;
@@ -96,8 +104,8 @@ namespace Vanrise.Common.Business
 
         public Setting GetSetting(Guid settingId)
         {
-           
-            return GetSetting(settingId,false);
+
+            return GetSetting(settingId, false);
         }
         public Setting GetSettingByType(string type)
         {
@@ -153,7 +161,7 @@ namespace Vanrise.Common.Business
                 Entity = setting
             };
         }
-    
+
 
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -209,7 +217,7 @@ namespace Vanrise.Common.Business
                 Setting setting = context.Object.CastWithValidate<Setting>("context.Object");
                 return s_settingManager.GetSettingName(setting);
             }
-            
+
         }
 
         #region Security

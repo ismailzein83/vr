@@ -20,7 +20,14 @@ namespace Vanrise.Common.Web.Controllers
             SettingManager manager = new SettingManager();
             return GetWebResponse(input, manager.GetFilteredSettings(input));
         }
-
+         
+        [HttpGet]
+        [Route("GetSettingHistoryDetailbyHistoryId")]
+        public Setting GetSettingHistoryDetailbyHistoryId(int settingHistoryId)
+        {
+            SettingManager manager = new SettingManager();
+            return manager.GetSettingHistoryDetailbyHistoryId(settingHistoryId);
+        }
         [HttpPost]
         [Route("UpdateSetting")]
         public object UpdateSetting(Setting setting)
