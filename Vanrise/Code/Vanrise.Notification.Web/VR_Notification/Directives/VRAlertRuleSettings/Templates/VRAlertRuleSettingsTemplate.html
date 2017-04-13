@@ -6,8 +6,13 @@
 <vr-row>
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeThresholdAction" hidegridmenu>
+            <vr-datagrid on-ready="onGridReady"
+                         datasource="ctrl.datasource"
+                         ondeleterow="ctrl.removeThresholdAction"
+                         menuactions="gridMenuActions"
+                         norowhighlightonclick="true"
+                         enabledraggablerow="true" hidegridmenu>
+
                 <vr-datagridcolumn headertext="'Threshold Descritpion'" field="'Entity.ThresholdDescription'" widthfactor="10"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Actions'" field="'Entity.ActionNames'" widthfactor="10"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Rollback Action'" field="'Entity.RollbackActionNames'" widthfactor="10"></vr-datagridcolumn>
