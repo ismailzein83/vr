@@ -91,24 +91,24 @@ namespace TOne.WhS.RouteSync.Entities
     {
         string CustomerId { get; set; }
 
-        SwitchCustomerBlockingInfo SwitchBlockingInfo { get; set; }
+        object SwitchBlockingInfo { get; set; }
     }
     public interface ITryUnBlockCustomerContext
     {
         string CustomerId { get; set; }
 
-        SwitchCustomerBlockingInfo SwitchBlockingInfo { get; set; }
+        object SwitchBlockingInfo { get; set; }
     }
     public class TryBlockCustomerContext : ITryBlockCustomerContext
     {
         public string CustomerId { get; set; }
 
-        public SwitchCustomerBlockingInfo SwitchBlockingInfo { get; set; }
+        public object SwitchBlockingInfo { get; set; }
     }
     public class TryUnBlockCustomerContext : ITryUnBlockCustomerContext
     {
         public string CustomerId { get; set; }
 
-        public SwitchCustomerBlockingInfo SwitchBlockingInfo { get; set; }
+        public object SwitchBlockingInfo { get; set; }
     }
 }

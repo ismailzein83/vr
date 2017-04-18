@@ -48,13 +48,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
         {
             if (carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
             {
+                _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccount.CarrierAccountId, RoutingStatus.Blocked, false);
                 Dictionary<int, SwitchCustomerBlockingInfo> blockingInfoBySwitchId = BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
                 CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
                 {
                     OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus,
                     BlockingInfoBySwitchId = blockingInfoBySwitchId
                 };
-                _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccount.CarrierAccountId, RoutingStatus.Blocked, false);
                 _carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccount.CarrierAccountId, customerRoutingStatusState);
             }
         }
@@ -71,7 +71,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
                     };
                     if (switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context))
                     {
-                        blockingInfo.Add(switchItem.SwitchId, context.SwitchBlockingInfo);
+                        blockingInfo.Add(switchItem.SwitchId, new SwitchCustomerBlockingInfo() { SwitchBlockingInfo = context.SwitchBlockingInfo });
 
                         VRActionLogger.Current.LogObjectCustomAction(SwitchManager.SwitchLoggableEntity.Instance, "Block Customer ", false, switchItem, string.Format("Block Customer: {0}", _carrierAccountManager.GetCarrierAccountName(carrierAccountId)));
                     }

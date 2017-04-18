@@ -13,4 +13,9 @@ namespace TOne.WhS.AccountBalance.Entities
 
         public Dictionary<int, SwitchCustomerBlockingInfo> BlockingInfoBySwitchId { get; set; }
     }
+
+    public class SwitchCustomerBlockingInfo
+    {
+        public object SwitchBlockingInfo { get; set; }
+    }
 }
