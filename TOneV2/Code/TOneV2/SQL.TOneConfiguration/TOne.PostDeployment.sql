@@ -183,9 +183,7 @@ as (select * from (values
 ('DA72C2E9-4321-4C0C-8FCA-B8A363F6B480','WhS_AccountBalance_ActionDefinition_EmailCustomer','Email Customer','VR_Notification_VRActionDefinition'		,'{"Editor":"whs-accountbalance-actiondefinition-customer-sendemail"}'),
 ('55E97A73-994A-4D60-9A9E-BBD04D08929D','WhS_AccountBalance_ActionDefinition_BlockCustomer','Block Customer','VR_Notification_VRActionDefinition'		,'{"Editor":"whs-accountbalance-actiondefinition-customer-block"}'),
 
-('F5CD8367-A6DC-421E-B93C-0567ED769150','Carrier Invoice To Account Relation','Carrier Invoice To Account Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"whs-invtoaccbalancerelation-definition-carrierextendedsettings"}'),
-
-('EE2C731E-A5F7-481E-B350-7771C8A0F3BC','TOne Account Balance','TOne Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'		,'{"Editor":"whs-accountbalance-notificationtype-settings"}')
+('F5CD8367-A6DC-421E-B93C-0567ED769150','Carrier Invoice To Account Relation','Carrier Invoice To Account Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"whs-invtoaccbalancerelation-definition-carrierextendedsettings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -272,8 +270,8 @@ when not matched by target then
 end
 
 
-GO--delete useless views from TOne product such 'My Scheduler Service', 'Style Definitions'
-delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','66DE2441-8A96-41E7-94EA-9F8AF38A3515')
+GO--delete useless views from TOne product such 'My Scheduler Service'
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308')
 --delete Sale Services and supplier invoice
 delete from [sec].[View] where [Id] in ('3FB29A16-7107-42B7-851F-97ABA49C2EDF', '3CFAEDD5-AB60-49A4-ACF2-C5B6739CC5E4')
 --delete Normalization Rules and Mapping Rules
