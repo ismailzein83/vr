@@ -67,7 +67,7 @@ app.directive("vrNotificationBalancealertruleAlertcheckerprocessManual", ['Utils
             alertRuleTypeSelectorAPIReadyDeferred.promise.then(function () {
 
                 var payload = { filter: { Filters: [] } };
-                payload.filter.Filters.push({ $type: "Vanrise.Notification.Entities.VRBalanceAlertRuleTypeFilter, Vanrise.Notification.Entities" });
+                payload.filter.Filters.push({ $type: "Vanrise.Notification.Business.VRBalanceAlertRuleTypeFilter, Vanrise.Notification.Business" });
 
                 VRUIUtilsService.callDirectiveLoad(alertRuleTypeSelectorAPI, payload, alertRuleTypeSelectorLoadDeferred);
             });

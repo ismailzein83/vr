@@ -50,7 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPDefinitionExtendedSettings\ExecuteNotificationBPDefinitionExtendedSettings.cs" />
-    <Compile Include="Filters\VRAlertLevelBEDefinitionFilter.cs" />
+    <Compile Include="Filters\IBusinessEntityDefinitionFilter\VRAlertLevelBEDefinitionFilter.cs" />
+    <Compile Include="Filters\IVRAlertRuleTypeFilter\VRBalanceAlertRuleTypeFilter.cs" />
     <Compile Include="VRAlertLevelBEDefinitionSettings.cs" />
     <Compile Include="VRAlertLevelManager.cs" />
     <Compile Include="VRAlertRuleTypeAddOrEditFilter.cs" />

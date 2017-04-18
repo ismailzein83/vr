@@ -56,7 +56,6 @@
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleBehavior.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleSettings.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleThresholdConfig.cs" />
-    <Compile Include="BalanceAlertRule\VRBalanceAlertRuleTypeFilter.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleTypeSettings.cs" />
     <Compile Include="BalanceAlertRule\IVREntityBalanceInfo.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceUpdateLastAlertInfoPayload.cs" />

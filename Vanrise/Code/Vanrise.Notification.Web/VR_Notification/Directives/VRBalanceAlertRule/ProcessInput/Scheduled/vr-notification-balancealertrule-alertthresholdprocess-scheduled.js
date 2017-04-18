@@ -65,7 +65,7 @@ app.directive("vrNotificationBalancealertruleAlertthresholdprocessScheduled", ['
             alertRuleTypeSelectorAPIReadyDeferred.promise.then(function () {
 
                 var selectorPayload = { filter: { Filters: [] } };
-                selectorPayload.filter.Filters.push({ $type: "Vanrise.Notification.Entities.VRBalanceAlertRuleTypeFilter, Vanrise.Notification.Entities" });
+                selectorPayload.filter.Filters.push({ $type: "Vanrise.Notification.Business.VRBalanceAlertRuleTypeFilter, Vanrise.Notification.Business" });
 
                 if (payload != undefined && payload.data != undefined)
                     selectorPayload.selectedIds = payload.data.AlertRuleTypeId;
