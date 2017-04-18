@@ -89,15 +89,15 @@ namespace TOne.WhS.RouteSync.Entities
     }
     public interface ITryBlockCustomerContext
     {
-        string CustomerId { get; set; }
+        string CustomerId { get; }
 
-        object SwitchBlockingInfo { get; set; }
+        object SwitchBlockingInfo { set; }
     }
     public interface ITryUnBlockCustomerContext
     {
-        string CustomerId { get; set; }
+        string CustomerId { get; }
 
-        object SwitchBlockingInfo { get; set; }
+        object SwitchBlockingInfo { set; }
     }
     public class TryBlockCustomerContext : ITryBlockCustomerContext
     {
