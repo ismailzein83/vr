@@ -20,7 +20,7 @@ set nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (
 ('143BBD63-6E9D-46F4-8B3C-D899E9966120','VRAccountBalance_AccountTypeSource_BillingTransactionSummary','Billing Transaction Summary','VR_AccountBalance_AccountTypeSources'		,'{"Editor":"vr-accountbalance-accounttype-source-billingtransaction"}'),
 
 ('6336D88E-3460-4388-B56C-322FBC336129','Billing Transaction Synchronizer','Billing Transaction Synchronizer','VR_BEBridge_BESynchronizer'										,'{"Editor":"vr-accountbalance-billingtransaction-synchronizer"}'),
-('BA79CB79-D058-4382-88FC-DB1C154B5374','VR_Notification_VRAlertRuleTypeSettings_AccountBalanceRule','Account Balance Rule Type','VR_Notification_VRAlertRuleTypeSettings'		,'{"Editor":"vr-accountbalance-accountbalancerule-settings"}'),
+('BA79CB79-D058-4382-88FC-DB1C154B5374','VR_Notification_VRAlertRuleTypeSettings_AccountBalanceRule','Account Balance','VR_Notification_VRAlertRuleTypeSettings'				,'{"Editor":"vr-accountbalance-accountbalancerule-settings"}'),
 ('0FC411D1-90FD-417C-BFDF-EC0C35B1A666','VR_Notification_AccountBalanceNotification_Setting','Account Balance Notification','VR_Notification_VRNotificationTypeSettings'		,'{"Editor":"vr-accountbalance-notificationtype-settings"}'),
 
 ('4DE3ADCE-B8D4-4266-868D-6C78CB3738DF','VR_AccountBalance_FinancialTransactionsView','Financial Transactions','VR_Security_ViewTypeConfig'										,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-accountbalance-billingtransaction-vieweditor"}'),
