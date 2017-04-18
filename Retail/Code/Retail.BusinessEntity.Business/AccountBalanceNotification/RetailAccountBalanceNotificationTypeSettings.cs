@@ -13,17 +13,15 @@ namespace Retail.BusinessEntity.Business
 
         public override bool IsVRNotificationMatched(IAccountBalanceNotificationTypeIsMatchedContext context)
         {
-            //if (context.AccountBalanceNotificationExtendedQuery == null)
-            //    return true;
+            if (context.AccountBalanceNotificationExtendedQuery == null)
+                return true;
 
-            //var extendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
-            //if (extendedQuery == null)
-            //    return false;
+            var extendedQuery = context.AccountBalanceNotificationExtendedQuery as RetailAccountBalanceNotificationExtendedQuery;
+            if (extendedQuery == null)
+                return false;
 
-            //if (extendedQuery.AccountIds != null && !extendedQuery.AccountIds.Contains(context.EventPayload.EntityId))
-            //    return false;
-
-            //return true;
+            if (extendedQuery.AccountIds != null && !extendedQuery.AccountIds.Contains(context.EventPayload.EntityId))
+                return false;
 
             return true;
         }
