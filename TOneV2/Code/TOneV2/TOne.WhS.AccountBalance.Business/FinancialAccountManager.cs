@@ -425,6 +425,7 @@ namespace TOne.WhS.AccountBalance.Business
                    return financialAccounts.ToDictionary(fa => fa.FinancialAccountId, fa => fa);
                });
         }
+
         Dictionary<Guid, List<FinancialAccount>> GetCachedFinancialAccountsByAccBalTypeId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsByAccBalTypeId",
@@ -453,6 +454,7 @@ namespace TOne.WhS.AccountBalance.Business
                      return financialAccountsByType;
                  });
         }
+
         Dictionary<int, CarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByFinAccId",
@@ -496,6 +498,7 @@ namespace TOne.WhS.AccountBalance.Business
 
            
         }
+
         Dictionary<int, CarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
 
@@ -642,6 +645,7 @@ namespace TOne.WhS.AccountBalance.Business
                 return supplierFinancialAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(financialAccount => financialAccount.BED));
             });
         }
+
         private CarrierFinancialAccountData CreateCarrierFinancialAccountData(FinancialAccount financialAccount, Guid usageTransactionTypeId)
         {
             return new CarrierFinancialAccountData()
@@ -654,11 +658,13 @@ namespace TOne.WhS.AccountBalance.Business
             };
         }
 
+        #endregion
+
         #region Private Validation Methods
         private bool CheckIsAllowToAddFinancialAccount(FinancialAccount financialAccount, bool isEditMode, out string message)
         {
             message = null;
-            if(!CheckFinancialAccountActivation(financialAccount))
+            if (!CheckFinancialAccountActivation(financialAccount))
             {
                 message = "Financial account is inactive.";
                 return false;
@@ -819,6 +825,8 @@ namespace TOne.WhS.AccountBalance.Business
             return filterExpression;
         }
 
+        #endregion
+
         #region LoadFinancialValidationData
         private List<FinancialAccountData> LoadProfileFinancialAccounts(int carrierProfileId, IEnumerable<AccountType> financialAccountTypes, int financialAccountId)
         {
@@ -863,10 +871,6 @@ namespace TOne.WhS.AccountBalance.Business
             }
             return financialAccountsData;
         }
-
-        #endregion
-        
-        #endregion
 
         #endregion
 
