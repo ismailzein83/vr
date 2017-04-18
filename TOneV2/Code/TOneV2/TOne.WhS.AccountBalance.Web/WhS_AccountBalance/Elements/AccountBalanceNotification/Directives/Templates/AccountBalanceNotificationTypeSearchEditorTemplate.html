@@ -1,0 +1,13 @@
+﻿<!--<vr-columns colnum="12" haschildcolumns>-->
+<vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                        onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChanged"
+                                        selectedvalues="scopeModel.accountType"
+                                        customlabel="Account Type" normal-col-num="2">
+</vr-accountbalance-accounttype-selector>
+<span vr-loader="scopeModel.isFinancialAccountDirectiveLoading">
+    <vr-accountbalance-account-selector ng-if="scopeModel.accountType != undefined"
+                                        on-ready="scopeModel.onFinancialAccountDirectiveReady"
+                                        normal-col-num="2" ismultipleselection>
+    </vr-accountbalance-account-selector>
+</span>
+<!--</vr-columns>-->

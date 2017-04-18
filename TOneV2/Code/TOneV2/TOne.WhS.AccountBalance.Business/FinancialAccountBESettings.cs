@@ -20,7 +20,7 @@ namespace TOne.WhS.AccountBalance.Business
 
         public override string IdType
         {
-            get { return "System.Guid"; }
+            get { return "System.Int64"; }
         }
 
         public override string ManagerFQTN
