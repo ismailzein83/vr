@@ -69,6 +69,10 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

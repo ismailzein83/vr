@@ -48,20 +48,25 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
             CustomerRoutingStatusState customerRoutingStatusState = _carrierAccountManager.GetExtendedSettings<CustomerRoutingStatusState>(carrierAccount);
             if (customerRoutingStatusState != null && carrierAccount.CustomerSettings.RoutingStatus == BusinessEntity.Entities.RoutingStatus.Blocked)
             {
+                UnBlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
                 _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccount.CarrierAccountId, customerRoutingStatusState.OriginalRoutingStatus, false);
                 _carrierAccountManager.UpdateCarrierAccountExtendedSetting<CustomerRoutingStatusState>(carrierAccount.CarrierAccountId, null);
-                UnBlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
             }
         }
         private void UnBlockCustomerOnSwitches(List<Switch> switches, int carrierAccountId)
         {
             if (switches != null)
             {
+                CustomerRoutingStatusState routingStatusState = _carrierAccountManager.GetExtendedSettings<CustomerRoutingStatusState>(carrierAccountId);
                 foreach (var switchItem in switches)
                 {
+                    SwitchCustomerBlockingInfo blockingInfo = null;
+                    routingStatusState.BlockingInfoBySwitchId.TryGetValue(switchItem.SwitchId, out blockingInfo);
+
                     TryUnBlockCustomerContext context = new TryUnBlockCustomerContext
                     {
-                        CustomerId = carrierAccountId.ToString()
+                        CustomerId = carrierAccountId.ToString(),
+                        SwitchBlockingInfo = blockingInfo
                     };
                     if (switchItem.Settings.RouteSynchronizer.TryUnBlockCustomer(context))
                     {

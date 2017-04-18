@@ -48,17 +48,19 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
         {
             if (carrierAccount.CustomerSettings.RoutingStatus != RoutingStatus.Blocked)
             {
+                Dictionary<int, SwitchCustomerBlockingInfo> blockingInfoBySwitchId = BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
                 CustomerRoutingStatusState customerRoutingStatusState = new Entities.CustomerRoutingStatusState
                 {
-                    OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus
+                    OriginalRoutingStatus = carrierAccount.CustomerSettings.RoutingStatus,
+                    BlockingInfoBySwitchId = blockingInfoBySwitchId
                 };
                 _carrierAccountManager.UpdateCustomerRoutingStatus(carrierAccount.CarrierAccountId, RoutingStatus.Blocked, false);
                 _carrierAccountManager.UpdateCarrierAccountExtendedSetting(carrierAccount.CarrierAccountId, customerRoutingStatusState);
-                BlockCustomerOnSwitches(switches, carrierAccount.CarrierAccountId);
             }
         }
-        private void BlockCustomerOnSwitches(List<Switch> switches, int carrierAccountId)
+        private Dictionary<int, SwitchCustomerBlockingInfo> BlockCustomerOnSwitches(List<Switch> switches, int carrierAccountId)
         {
+            Dictionary<int, SwitchCustomerBlockingInfo> blockingInfo = new Dictionary<int,SwitchCustomerBlockingInfo>();
             if (switches != null)
             {
                 foreach (var switchItem in switches)
@@ -69,10 +71,14 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
                     };
                     if (switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context))
                     {
+                        blockingInfo.Add(switchItem.SwitchId, context.SwitchBlockingInfo);
+
                         VRActionLogger.Current.LogObjectCustomAction(SwitchManager.SwitchLoggableEntity.Instance, "Block Customer ", false, switchItem, string.Format("Block Customer: {0}", _carrierAccountManager.GetCarrierAccountName(carrierAccountId)));
                     }
                 }
             }
+
+            return blockingInfo;
         }
     }
 }
