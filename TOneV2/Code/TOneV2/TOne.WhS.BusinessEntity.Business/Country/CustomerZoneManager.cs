@@ -205,6 +205,11 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return null;
         }
+        public IEnumerable<CustomerCountry2> GetCustomerCountriesEffectiveAfter(int customerId, DateTime date, long? processInstanceId)
+        {
+            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountriesEffectiveAfter(customerId, date);
+            return customerCountries != null ? customerCountries.FindAllRecords(x => (x.ProcessInstanceId == null || x.ProcessInstanceId <= processInstanceId)) : null;
+        }
 
         public long ReserveIdRange(int numberOfIds)
         {
@@ -223,7 +228,6 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, List<CustomerCountry2>> allCustomerCountries = GetAllCachedCustomerCountries();
             return allCustomerCountries.GetRecord(customerId);
         }
-
         #endregion
 
         #region Private Classes

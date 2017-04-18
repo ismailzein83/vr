@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         List<SaleCode> GetSaleCodes(DateTime effectiveOn);
 
-        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn);
+        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn, long? processInstanceId);
 
         List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate);
 

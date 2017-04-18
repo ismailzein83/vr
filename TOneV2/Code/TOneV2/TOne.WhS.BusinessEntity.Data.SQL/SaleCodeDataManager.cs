@@ -26,8 +26,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             string zoneIdsAsString = null;
             if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
-				zoneIdsAsString = string.Join<long>(",", query.ZonesIds);
-			return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.SellingNumberPlanId, zoneIdsAsString, query.Code, query.EffectiveOn, query.GetEffectiveAfter);
+                zoneIdsAsString = string.Join<long>(",", query.ZonesIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.SellingNumberPlanId, zoneIdsAsString, query.Code, query.EffectiveOn, query.GetEffectiveAfter);
         }
 
         public IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query)
@@ -63,10 +63,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[TOneWhS_BE].[sp_SaleCode_GetByEffective]", SaleCodeMapper, effectiveOn);
         }
-
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn, long? processInstanceId)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn); 
+            /*
+             * If processInstanceId is null then we get all sale codes effective After
+             * Else we get the sale Codes effectives at the time => processInstanceId<= param.processInstanceId and effective in param.effectiveOn
+             * */
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetSaleCodesEffectiveAfter", SaleCodeMapper, sellingNumberPlanId, effectiveOn, processInstanceId);
         }
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
@@ -171,7 +174,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return String.Format(@"DELETE sc FROM [TOneWhS_BE].[SaleCode] sc  Inner Join [TOneWhS_BE].SaleZone sz on sc.ZoneID = sz.ID
                                             Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
         }
-       
+
         #endregion
 
     }

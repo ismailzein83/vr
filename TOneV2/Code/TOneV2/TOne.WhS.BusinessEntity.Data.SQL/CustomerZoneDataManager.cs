@@ -157,13 +157,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         private CustomerCountry2 CustomerCountryMapper(IDataReader reader)
         {
-            return new CustomerCountry2()
+            return new CustomerCountry2
             {
                 CustomerCountryId = (int)reader["ID"],
                 CustomerId = (int)reader["CustomerID"],
                 CountryId = (int)reader["CountryID"],
                 BED = (DateTime)reader["BED"],
-                EED = base.GetReaderValue<DateTime?>(reader, "EED")
+                EED = base.GetReaderValue<DateTime?>(reader, "EED"),
+                ProcessInstanceId = GetReaderValue<long?>(reader, "processInstanceId")
             };
         }
 

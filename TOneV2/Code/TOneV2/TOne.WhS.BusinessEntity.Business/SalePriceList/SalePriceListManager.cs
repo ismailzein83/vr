@@ -25,19 +25,20 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Save Price List Files
         private SalePriceListOutputContext PrepareSalePriceListContext(SalePriceListInputContext context)
         {
-            IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, context.EffectiveDate);
+            IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, context.EffectiveDate, context.ProcessInstanceId);
             if (saleCodes == null || !saleCodes.Any())
                 return null;
 
             var customerChanges = StructureCustomerPriceListChanges(context.CustomerChanges);
+
             IEnumerable<ExistingSaleCodeEntity> existingSaleCodeEntities = saleCodes.MapRecords(ExistingSaleCodeEntityMapper);
             Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(existingSaleCodeEntities);
             Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry = StructureZoneWrappersByCountry(existingSaleCodesByZoneName);
-            IEnumerable<RoutingCustomerInfoDetails> dataByCustomerList;
-            Dictionary<int, int> dataByCustomerDictionary;
 
             var customerIdsWithChanges = customerChanges.Select(c => c.CustomerId);
-            SetDataByCustomer(customerIdsWithChanges, context.EffectiveDate, out dataByCustomerList, out dataByCustomerDictionary);
+
+            IEnumerable<RoutingCustomerInfoDetails> dataByCustomerList = GetDataByCustomer(customerIdsWithChanges, context.EffectiveDate);
+
             var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomerList, context.EffectiveDate, true));
             var salePriceListChanges = new SalePriceListChangeManager();
             var notSentChanges = salePriceListChanges.GetNotSentChangesByCustomer(customerIdsWithChanges);
@@ -50,20 +51,20 @@ namespace TOne.WhS.BusinessEntity.Business
             };
 
         }
-        private VRFile GetPriceListContent(CarrierAccount customer, List<SalePLZoneNotification> customerZonesNotifications)
+        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications)
         {
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
-            int priceListTemplateId = _carrierAccountManager.GetSalePriceListTemplateId(customer.CarrierAccountId);
+            int priceListTemplateId = _carrierAccountManager.GetSalePriceListTemplateId(carrierAccountId);
 
             SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(priceListTemplateId);
             if (template == null)
-                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", customer.CarrierAccountId));
+                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", carrierAccountId));
             ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext
             {
                 Zones = customerZonesNotifications
             };
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
-            string customerName = _carrierAccountManager.GetCarrierAccountName(customer.CarrierAccountId);
+            string customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
             string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xls");
             return new VRFile
             {
@@ -74,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 CreatedTime = DateTime.Today,
             };
         }
-        private SalePriceList GetPriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, Dictionary<int, SalePriceList> currentSalePriceLists, long processInstanceId, VRFile file)
+        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists, List<SalePriceList> priceListToSave)
         {
             SalePriceList salePriceList;
             var salePriceListManager = new SalePriceListManager();
@@ -90,32 +91,31 @@ namespace TOne.WhS.BusinessEntity.Business
                     PriceListId = salePriceListId,
                     EffectiveOn = DateTime.Today
                 };
+                priceListToSave.Add(salePriceList);
             }
             salePriceList.PriceListType = customerSalePriceListType;
             salePriceList.FileId = fileManager.AddFile(file);
             salePriceList.ProcessInstanceId = processInstanceId;
             salePriceList.EffectiveOn = DateTime.Today;
-            salePriceList.CurrencyId = customer.CarrierAccountSettings.CurrencyId;
+            salePriceList.CurrencyId = currencyId ?? customer.CarrierAccountSettings.CurrencyId;
             return salePriceList;
         }
-        private void StructureSalePriceLists(IEnumerable<SalePriceList> salePriceLists, out Dictionary<int, SalePriceList> priceListsByPriceListId, out Dictionary<int, SalePriceList> customerPriceListsByCustomerId)
+        private Dictionary<int, SalePriceList> GetSalePriceListByCustomerId(IEnumerable<SalePriceList> salePriceLists)
         {
-            priceListsByPriceListId = new Dictionary<int, SalePriceList>();
-            customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
+            Dictionary<int, SalePriceList> customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
 
-            if (salePriceLists == null || salePriceLists.Count() == 0)
-                return;
+            if (salePriceLists == null || !salePriceLists.Any())
+                return customerPriceListsByCustomerId;
 
             foreach (SalePriceList salePriceList in salePriceLists)
             {
-                priceListsByPriceListId.Add(salePriceList.PriceListId, salePriceList);
-
                 if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
                 {
                     if (!customerPriceListsByCustomerId.ContainsKey(salePriceList.OwnerId))
                         customerPriceListsByCustomerId.Add(salePriceList.OwnerId, salePriceList);
                 }
             }
+            return customerPriceListsByCustomerId;
         }
         private List<CustomerSalePriceListInfo> StructureCustomerPriceListChanges(IEnumerable<CustomerPriceListChange> customerPriceListChanges)
         {
@@ -256,7 +256,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return customerInfo;
         }
-        private List<SalePLZoneNotification> MergeExistingWithChanges(CustomerSalePriceListInfo customerInfo, SalePriceListOutputContext salePriceListContext, DateTime effectiveDate, SalePriceListType changeType)
+        private List<SalePLZoneNotification> MergeExistingWithChanges(CustomerSalePriceListInfo customerInfo, SalePriceListOutputContext salePriceListContext, DateTime effectiveDate, SalePriceListType changeType, long processInstanceId)
         {
             List<CustomerPriceListChange> notSentPriceListChange;
             salePriceListContext.NotSentChangesByCustomerId.TryGetValue(customerInfo.CustomerId, out notSentPriceListChange);
@@ -265,7 +265,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePlZoneNotifications = MapToSalePlZoneNotification(updateCountryByZone.CountryByZone, salePriceListContext.ZoneWrappersByCountry, salePriceListContext.FutureLocator, customerInfo);
 
             var customerCountryManager = new CustomerCountryManager();
-            var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerInfo.CustomerId, effectiveDate);
+            var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerInfo.CustomerId, effectiveDate, processInstanceId);
 
             if (soldCountries == null) return salePlZoneNotifications;
 
@@ -409,11 +409,9 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return salePlZoneNotifications;
         }
-        private void SetDataByCustomer(IEnumerable<int> customerIds, DateTime effectiveOn, out IEnumerable<RoutingCustomerInfoDetails> dataByCustomerList, out Dictionary<int, int> dataByCustomerDictionary)
+        private IEnumerable<RoutingCustomerInfoDetails> GetDataByCustomer(IEnumerable<int> customerIds, DateTime effectiveOn)
         {
             var list = new List<RoutingCustomerInfoDetails>();
-            var dictionary = new Dictionary<int, int>();
-
             var customerSellingProductManager = new CustomerSellingProductManager();
 
             foreach (int customerId in customerIds)
@@ -428,11 +426,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     CustomerId = customerId,
                     SellingProductId = sellingProductId.Value
                 });
-
-                dictionary.Add(customerId, sellingProductId.Value);
             }
-            dataByCustomerList = list;
-            dataByCustomerDictionary = dictionary;
+            return list;
         }
 
         #endregion
@@ -451,13 +446,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     EffectiveDate = context.EffectiveDate,
                     SellingNumberPlanId = context.SellingNumberPlanId,
-                    CustomerChanges = context.CustomerPriceListChanges
+                    CustomerChanges = context.CustomerPriceListChanges,
+                    ProcessInstanceId = context.ProcessInstanceId
                 };
                 SalePriceListOutputContext outputContext = PrepareSalePriceListContext(inputcontext);
-                Dictionary<int, SalePriceList> contextPriceListsByPriceListId;
-                Dictionary<int, SalePriceList> customerPriceListsByCustomerId;
-                StructureSalePriceLists(context.SalePriceLists, out contextPriceListsByPriceListId, out customerPriceListsByCustomerId);
+
+                Dictionary<int, SalePriceList> customerPriceListsByCustomerId = GetSalePriceListByCustomerId(context.SalePriceLists);
+
                 var customerSellingProductManager = new CustomerSellingProductManager();
+
                 foreach (var customerChange in outputContext.CustomerChanges)
                 {
                     CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerChange.CustomerId);
@@ -466,26 +463,15 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (sellingProductId.HasValue) customerChange.SellingProductId = sellingProductId.Value;
 
                     SalePriceListType customerPlType = GetSalePriceListType(customer.CustomerSettings.IsAToZ, context.ChangeType);
-                    List<SalePLZoneNotification> customerZoneNotifications = MergeExistingWithChanges(customerChange, outputContext, context.EffectiveDate, customerPlType);
+                    List<SalePLZoneNotification> customerZoneNotifications = MergeExistingWithChanges(customerChange, outputContext, inputcontext.EffectiveDate, customerPlType, context.ProcessInstanceId);
 
                     if (customerZoneNotifications.Count > 0)
                     {
-                        VRFile file = GetPriceListContent(customer, customerZoneNotifications);
-                        SalePriceList priceList = GetPriceList(customer, customerPlType, customerPriceListsByCustomerId, context.ProcessInstanceId, file);
+                        VRFile file = GetPriceListFile(customerChange.CustomerId, customerZoneNotifications);
+                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, customerPlType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, priceListsToSave);
 
-                        if (priceList == null)
-                            continue;
-
-                        if (!contextPriceListsByPriceListId.ContainsKey(priceList.PriceListId))
-                            priceListsToSave.Add(priceList);
-
-                        if (context.CurrencyId.HasValue)
-                            priceList.CurrencyId = context.CurrencyId.Value;
-
-                        var tempPriceList = context.CustomerPriceListChanges.FirstOrDefault(r => r.CustomerId == customerChange.CustomerId);
-
-                        if (tempPriceList != null)
-                            tempPriceList.PriceListId = priceList.PriceListId;
+                        var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerChange.CustomerId);
+                        customerPriceListChange.PriceListId = priceList.PriceListId;
                     }
                 }
                 BulkInsertCustomerChanges(context.CustomerPriceListChanges.ToList(), context.ProcessInstanceId);
@@ -507,8 +493,9 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
             {
                 CustomerChanges = new List<CustomerPriceListChange> { customerPriceListChange },
-                EffectiveDate = customerPriceList.EffectiveOn,
-                SellingNumberPlanId = sellingNumberPlanId
+                EffectiveDate = customerPriceList.CreatedTime,
+                SellingNumberPlanId = sellingNumberPlanId,
+                ProcessInstanceId = customerPriceList.ProcessInstanceId
             };
 
             SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
@@ -522,13 +509,13 @@ namespace TOne.WhS.BusinessEntity.Business
             var sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerInfo.CustomerId, DateTime.Now, false);
             if (sellingProductId.HasValue) customerInfo.SellingProductId = sellingProductId.Value;
 
-            List<SalePLZoneNotification> customerZoneNotifications = MergeExistingWithChanges(customerInfo, salePriceListOutput, DateTime.Now, customerPriceList.PriceListType.Value);
+            List<SalePLZoneNotification> customerZoneNotifications = MergeExistingWithChanges(customerInfo, salePriceListOutput, salePriceListContext.EffectiveDate, customerPriceList.PriceListType.Value, customerPriceList.ProcessInstanceId);
 
             var notificationManager = new NotificationManager();
             if (customerZoneNotifications.Count > 0)
             {
                 int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
-                VRFile file = GetPriceListContent(customer, customerZoneNotifications);
+                VRFile file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications);
                 if (file != null)
                     return notificationManager.SendSalePriceList(userId, customerPriceList, file);
             }
@@ -539,9 +526,9 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, SalePriceList> cachedSalePriceLists = GetCustomerCachedSalePriceLists();
             Func<SalePriceList, bool> filterExpression = salePriceList =>
             {
-                if (input.Query.OwnerId != null && !input.Query.OwnerId.Contains(salePriceList.OwnerId))
+                if (input.Query.OwnerId != null && input.Query.OwnerId != salePriceList.OwnerId)
                     return false;
-                if (input.Query.CreationDate != null && salePriceList.CreatedTime <= input.Query.CreationDate)
+                if (input.Query.CreationDate != null && salePriceList.CreatedTime == input.Query.CreationDate)
                     return false;
                 return true;
             };
@@ -832,6 +819,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public IEnumerable<CustomerPriceListChange> CustomerChanges { get; set; }
             public DateTime EffectiveDate { get; set; }
             public int SellingNumberPlanId { get; set; }
+            public long ProcessInstanceId { get; set; }
         }
         private class SalePriceListOutputContext
         {

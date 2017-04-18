@@ -39,7 +39,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             return saleCode.Code;
         }
-       
+
         public List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
@@ -57,14 +57,12 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodes(effectiveOn);
         }
-
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        
+        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn, long? processInstanceId)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, effectiveOn);
+            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, effectiveOn, processInstanceId);
         }
-
-        
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
@@ -170,7 +168,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
@@ -196,7 +194,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        private class  SaleCodeLoggableEntity : VRLoggableEntityBase
+        private class SaleCodeLoggableEntity : VRLoggableEntityBase
         {
             public static SaleCodeLoggableEntity Instance = new SaleCodeLoggableEntity();
 

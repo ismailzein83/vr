@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanID { get; set; }
-        
+
         [RequiredArgument]
         public InOutArgument<IEnumerable<SaleCode>> ExistingCodeEntities { get; set; }
 
@@ -37,7 +37,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 MinimumDate = this.MinimumDate.Get(context),
                 SellingNumberPlanId = this.SellingNumberPlanID.Get(context)
-               
+
             };
         }
 
@@ -50,10 +50,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override GetExistingCodesOutput DoWorkWithResult(GetExistingCodesInput inputArgument, AsyncActivityHandle handle)
         {
-
             SaleCodeManager codeManager = new SaleCodeManager();
-            List<SaleCode> saleCodes = codeManager.GetSaleCodesEffectiveAfter(inputArgument.SellingNumberPlanId, Vanrise.Common.Utilities.Min(inputArgument.MinimumDate, DateTime.Today));
-            return new GetExistingCodesOutput()
+            List<SaleCode> saleCodes = codeManager.GetSaleCodesEffectiveAfter(inputArgument.SellingNumberPlanId, Vanrise.Common.Utilities.Min(inputArgument.MinimumDate, DateTime.Today), null);
+            return new GetExistingCodesOutput
             {
                 ExistingCodeEntities = saleCodes
             };
