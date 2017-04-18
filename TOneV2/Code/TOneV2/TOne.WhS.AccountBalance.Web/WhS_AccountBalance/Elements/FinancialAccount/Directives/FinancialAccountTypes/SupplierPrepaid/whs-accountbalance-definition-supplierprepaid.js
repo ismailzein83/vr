@@ -13,7 +13,7 @@ app.directive("whsAccountbalanceDefinitionSupplierprepaid", ["UtilsService", "VR
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SupplierPostPaid($scope, ctrl, $attrs);
+                var ctor = new SupplierPrepaid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@ app.directive("whsAccountbalanceDefinitionSupplierprepaid", ["UtilsService", "VR
 
         };
 
-        function SupplierPostPaid($scope, ctrl, $attrs) {
+        function SupplierPrepaid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var usageTransactionTypeApi;
             var usageTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();

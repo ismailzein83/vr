@@ -108,7 +108,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     }
                     else if (supplierCreditLimit.HasValue)
                     {
-                        if (customerCreditLimit.Value > 0)
+                        if (supplierCreditLimit.Value > 0)
                             consumed = item.CurrentBalance * 100 / supplierCreditLimit.Value;
 
                     }

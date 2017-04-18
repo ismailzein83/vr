@@ -13,7 +13,7 @@ app.directive("whsAccountbalanceRuntimeSupplierprepaid", ["UtilsService", "VRNot
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SupplierPostPaid($scope, ctrl, $attrs);
+                var ctor = new SupplierPrepaidSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@ app.directive("whsAccountbalanceRuntimeSupplierprepaid", ["UtilsService", "VRNot
 
         };
 
-        function SupplierPostPaid($scope, ctrl, $attrs) {
+        function SupplierPrepaidSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
         
             function initializeController() {

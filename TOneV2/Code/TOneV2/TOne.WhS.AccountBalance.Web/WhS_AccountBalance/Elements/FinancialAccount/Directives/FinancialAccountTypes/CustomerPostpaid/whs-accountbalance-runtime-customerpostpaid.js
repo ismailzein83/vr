@@ -13,7 +13,7 @@ app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNo
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new CustomerPostPaid($scope, ctrl, $attrs);
+                var ctor = new CustomerPostpaidSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@ app.directive("whsAccountbalanceRuntimeCustomerpostpaid", ["UtilsService", "VRNo
 
         };
 
-        function CustomerPostPaid($scope, ctrl, $attrs) {
+        function CustomerPostpaidSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var carrierAccountId;
             var carrierProfileId;

@@ -13,7 +13,7 @@ app.directive("whsAccountbalanceDefinitionNetting", ["UtilsService", "VRNotifica
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new CustomerPostPaid($scope, ctrl, $attrs);
+                var ctor = new NettingDefinitionSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@ app.directive("whsAccountbalanceDefinitionNetting", ["UtilsService", "VRNotifica
 
         };
 
-        function CustomerPostPaid($scope, ctrl, $attrs) {
+        function NettingDefinitionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var supplierUsageTransactionTypeApi;
             var supplierUsageTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();

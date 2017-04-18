@@ -13,7 +13,7 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new CustomerPostPaid($scope, ctrl, $attrs);
+                var ctor = new NettingSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@ app.directive("whsAccountbalanceRuntimeNetting", ["UtilsService", "VRNotificatio
 
         };
 
-        function CustomerPostPaid($scope, ctrl, $attrs) {
+        function NettingSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var carrierAccountId;
             var carrierProfileId;
