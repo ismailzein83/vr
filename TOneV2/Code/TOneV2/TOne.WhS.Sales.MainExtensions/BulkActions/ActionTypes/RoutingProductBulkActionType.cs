@@ -22,14 +22,16 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #endregion
 
+        public int RoutingProductId { get; set; }
+
+        public bool ApplyNewNormalRateBED { get; set; }
+
+        #region Bulk Action Members
+
         public override Guid ConfigId
         {
             get { return new Guid("67D0BD5E-8B7A-407E-B03B-5FAE05F10A01"); }
         }
-
-        public int RoutingProductId { get; set; }
-
-        public bool ApplyNewNormalRateBED { get; set; }
 
         public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
         {
@@ -114,6 +116,13 @@ namespace TOne.WhS.Sales.MainExtensions
                     context.ZoneDraft.NewRoutingProduct.BED = newNormalRateBED.Value;
             }
         }
+
+        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+        {
+
+        }
+
+        #endregion
 
         #region Private Methods
 

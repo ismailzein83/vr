@@ -19,12 +19,14 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #endregion
 
+        public DateTime EED { get; set; }
+
+        #region Bulk Action Members
+
         public override Guid ConfigId
         {
             get { return new Guid("736034AB-115F-464B-919D-052EBFDEDD5C"); }
         }
-
-        public DateTime EED { get; set; }
 
         public override void ValidateZone(IZoneValidationContext context)
         {
@@ -137,5 +139,12 @@ namespace TOne.WhS.Sales.MainExtensions
             closedRates.Add(closedNormalRate);
             context.ZoneDraft.ClosedRates = closedRates;
         }
+
+        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+        {
+
+        }
+
+        #endregion
     }
 }

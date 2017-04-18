@@ -56,8 +56,9 @@
                 ownerTypeSelectorAPI = api;
                 ownerTypeSelectorReadyDeferred.resolve();
             };
-            $scope.onOwnerTypeChanged = function (item) {
+            $scope.onOwnerTypeChanged = function (selectedOwnerType) {
                 resetRatePlan();
+                clearOwnerInfo();
                 draftCurrencyId = undefined;
 
                 var selectedId = ownerTypeSelectorAPI.getSelectedIds();
@@ -82,12 +83,24 @@
             };
             $scope.onSellingProductChanged = function (selectedSellingProduct) {
                 resetRatePlan();
-                if (selectedSellingProduct != undefined) {
-                    $scope.isLoadingFilterSection = true;
-                    doesOwnerDraftExist().finally(function () {
-                        $scope.isLoadingFilterSection = false;
-                    });
-                }
+
+                if (selectedSellingProduct == undefined)
+                    return;
+
+                var promises = [];
+                $scope.isLoadingFilterSection = true;
+
+                var doesOwnerDraftExistPromise = doesOwnerDraftExist();
+                promises.push(doesOwnerDraftExistPromise);
+
+                var loadOwnerInfoPromise = loadOwnerInfo();
+                promises.push(loadOwnerInfoPromise);
+
+                UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilterSection = false;
+                });
             };
 
             $scope.onCarrierAccountSelectorReady = function (api) {
@@ -98,14 +111,18 @@
                 resetRatePlan();
                 draftCurrencyId = undefined;
 
-                var selectedId = carrierAccountSelectorAPI.getSelectedIds();
+                var selectedCustomerId = carrierAccountSelectorAPI.getSelectedIds();
 
-                if (selectedId != undefined) {
-                    $scope.isLoadingFilterSection = true;
-                    onCustomerChanged(selectedId).finally(function () {
-                        $scope.isLoadingFilterSection = false;
-                    });
-                }
+                if (selectedCustomerId == undefined)
+                    return;
+
+                $scope.isLoadingFilterSection = true;
+
+                onCustomerChanged(selectedCustomerId).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilterSection = false;
+                });
             };
 
             $scope.numberOfOptions = 3;
@@ -406,59 +423,98 @@
             $scope.deleteDraft = function () {
                 var promises = [];
 
-                var confirmPromise = VRNotificationService.showConfirmation("Are you sure you want to cancel all of your changes?");
-                promises.push(confirmPromise);
+                var confirmationPromise = VRNotificationService.showConfirmation("Are you sure that you want to delete the entire draft?");
+                promises.push(confirmationPromise);
 
-                var deleteDeferred = UtilsService.createPromiseDeferred();
-                promises.push(deleteDeferred.promise);
+                var deletionDeferred = UtilsService.createPromiseDeferred();
+                promises.push(deletionDeferred.promise);
 
-                confirmPromise.then(function (confirmed) {
-                    if (confirmed) {
-                        return WhS_Sales_RatePlanAPIService.DeleteDraft(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId()).then(function (response) {
-                            if (response) {
-                                deleteDeferred.resolve();
-                                VRNotificationService.showSuccess("Draft deleted");
-
-                                countryChanges = undefined;
-                                $scope.showCancelButton = false;
-
-                                if (isRoutingInfoDefined())
-                                    loadRatePlan();
-                            }
-                            else {
-                                deleteDeferred.reject();
-                            }
-                        }).catch(function (error) {
-                            deleteDeferred.reject();
-                            VRNotificationService.notifyException(error, $scope);
-                        });
-                    }
+                confirmationPromise.then(function (isConfirmed) {
+                    if (!isConfirmed)
+                        deletionDeferred.resolve();
                     else {
-                        deleteDeferred.resolve();
+                        var deletionPromises = [];
+
+                        $scope.isLoading = true;
+                        $scope.isLoadingFilterSection = true;
+
+                        var deleteDraftPromise = WhS_Sales_RatePlanAPIService.DeleteDraft(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId());
+                        deletionPromises.push(deleteDraftPromise);
+
+                        var loadOwnerInfoDeferred = UtilsService.createPromiseDeferred();
+                        deletionPromises.push(loadOwnerInfoDeferred.promise);
+
+                        deleteDraftPromise.then(function () {
+                            VRNotificationService.showSuccess("Draft deleted");
+
+                            countryChanges = undefined;
+                            $scope.showCancelButton = false;
+
+                            if (isRoutingInfoDefined())
+                                loadRatePlan();
+
+                            loadOwnerInfo().then(function () {
+                                loadOwnerInfoDeferred.resolve();
+                            }).catch(function (error) {
+                                loadOwnerInfoDeferred.reject(error);
+                            });
+                        });
+
+                        UtilsService.waitMultiplePromises(deletionPromises).then(function () {
+                            deletionDeferred.resolve();
+                        }).catch(function (error) {
+                            deletionDeferred.reject(error);
+                        }).finally(function () {
+                            $scope.isLoading = false;
+                            $scope.isLoadingFilterSection = false;
+                        });
                     }
                 });
 
                 return UtilsService.waitMultiplePromises(promises);
             };
             $scope.openBulkActionWizard = function () {
-                var ownerType = ownerTypeSelectorAPI.getSelectedIds();
-                var ownerId = getOwnerId();
-                var ownerSellingNumberPlanId = getOwnerSellingNumberPlanId();
-                var gridQuery = getGridQuery(false);
-                var routingDatabaseId = databaseSelectorAPI.getSelectedIds();
-                var policyConfigId = policySelectorAPI.getSelectedIds();
-                var costCalculationMethods = getCostCalculationMethods();
-                var currencyId = getCurrencyId();
                 var onBulkActionAppliedToDraft = function () {
                     $scope.showCancelButton = true;
-                    if (isRoutingInfoDefined())
-                        loadRatePlan();
+
+                    var promises = [];
+
+                    $scope.isLoading = true;
+                    $scope.isLoadingFilterSection = true;
+
+                    var loadOwnerInfoPromise = loadOwnerInfo();
+                    promises.push(loadOwnerInfoPromise);
+
+                    if (isRoutingInfoDefined()) {
+                        var loadRatePlanPromise = loadRatePlan();
+                        promises.push(loadRatePlanPromise);
+                    }
+
+                    UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                        $scope.isLoadingFilterSection = false;
+                    });
+                };
+
+                var openBulkActionWizardInput = {
+                    ownerType: ownerTypeSelectorAPI.getSelectedIds(),
+                    ownerId: getOwnerId(),
+                    ownerSellingNumberPlanId: getOwnerSellingNumberPlanId(),
+                    gridQuery: getGridQuery(false),
+                    routingDatabaseId: databaseSelectorAPI.getSelectedIds(),
+                    policyConfigId: policySelectorAPI.getSelectedIds(),
+                    numberOfOptions: $scope.numberOfOptions,
+                    costCalculationMethods: getCostCalculationMethods(),
+                    currencyId: getCurrencyId(),
+                    onBulkActionAppliedToDraft: onBulkActionAppliedToDraft
                 };
 
                 saveDraft().catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
-                    WhS_Sales_RatePlanService.openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, $scope.numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft);
+                    WhS_Sales_RatePlanService.openBulkActionWizard(openBulkActionWizardInput);
                 });
             };
             $scope.importRatePlan = function () {
@@ -784,6 +840,9 @@
             var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
             promises.push(doesOwnerDraftExistDeferred.promise);
 
+            var loadOwnerInfoPromise = loadOwnerInfo();
+            promises.push(loadOwnerInfoPromise);
+
             validateCustomerPromise.then(function () {
                 if (isCustomerValid) {
                     getCustomerCurrencyId().then(function () {
@@ -901,6 +960,9 @@
                                 $scope.isLoading = true;
                                 var promises = [];
 
+                                var loadOwnerInfoPromise = loadOwnerInfo();
+                                promises.push(loadOwnerInfoPromise);
+
                                 if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
 
                                     var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
@@ -990,6 +1052,31 @@
         }
         function isRoutingInfoDefined() {
             return (databaseSelectorAPI.getSelectedIds() != undefined && policySelectorAPI.getSelectedIds() != undefined && $scope.numberOfOptions != undefined);
+        }
+
+        function loadOwnerInfo() {
+            var ownerType = ownerTypeSelectorAPI.getSelectedIds();
+            var ownerId = getOwnerId();
+            var effectiveOn = UtilsService.getDateFromDateTime(new Date());
+
+            return WhS_Sales_RatePlanAPIService.GetOwnerInfo(ownerType, ownerId, effectiveOn).then(function (response) {
+                if (response != undefined) {
+                    $scope.assignedToSellingProductName = response.AssignedToSellingProductName;
+
+                    $scope.currentDefaultRoutingProductName = response.CurrentDefaultRoutingProductName;
+                    if (response.IsCurrentDefaultRoutingProductInherited)
+                        $scope.currentDefaultRoutingProductName += ' (Inherited)';
+
+                    $scope.newDefaultRoutingProductName = response.NewDefaultRoutingProductName;
+                    $scope.resetToDefaultRoutingProductName = response.ResetToDefaultRoutingProductName;
+                }
+            });
+        }
+        function clearOwnerInfo() {
+            $scope.assignedToSellingProductName = undefined;
+            $scope.currentDefaultRoutingProductName = undefined;
+            $scope.newDefaultRoutingProductName = undefined;
+            $scope.resetToDefaultRoutingProductName = undefined;
         }
     }
 

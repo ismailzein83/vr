@@ -173,6 +173,7 @@
     <Compile Include="RatePlanning\CalculatedRate.cs" />
     <Compile Include="RatePlanning\Draft\ZoneChanges.cs" />
     <Compile Include="RatePlanning\Country\SoldCountry.cs" />
+    <Compile Include="RatePlanning\OwnerInfo.cs" />
     <Compile Include="RatePlanning\ZoneItem.cs" />
     <Compile Include="RatePlanning\ZoneRateChangesDetail.cs" />
     <Compile Include="RatePlanning\ZoneRoutingProductChangesDetail.cs" />

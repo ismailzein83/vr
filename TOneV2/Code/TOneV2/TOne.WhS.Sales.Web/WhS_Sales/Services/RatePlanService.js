@@ -121,23 +121,23 @@
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ZoneInfo.html", parameters, settings);
         }
 
-        function openBulkActionWizard(ownerType, ownerId, ownerSellingNumberPlanId, gridQuery, routingDatabaseId, policyConfigId, numberOfOptions, costCalculationMethods, currencyId, onBulkActionAppliedToDraft) {
+        function openBulkActionWizard(input) {
 
             var parameters = {
-                ownerType: ownerType,
-                ownerId: ownerId,
-                ownerSellingNumberPlanId: ownerSellingNumberPlanId,
-                gridQuery: gridQuery,
-                routingDatabaseId: routingDatabaseId,
-                policyConfigId: policyConfigId,
-                numberOfOptions: numberOfOptions,
-                currencyId: currencyId
+                ownerType: input.ownerType,
+                ownerId: input.ownerId,
+                ownerSellingNumberPlanId: input.ownerSellingNumberPlanId,
+                gridQuery: input.gridQuery,
+                routingDatabaseId: input.routingDatabaseId,
+                policyConfigId: input.policyConfigId,
+                numberOfOptions: input.numberOfOptions,
+                currencyId: input.currencyId
             };
 
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onBulkActionAppliedToDraft = onBulkActionAppliedToDraft;
+                modalScope.onBulkActionAppliedToDraft = input.onBulkActionAppliedToDraft;
             };
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/BulkAction/BulkActionWizard.html", parameters, modalSettings);

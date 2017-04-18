@@ -22,6 +22,8 @@ namespace TOne.WhS.Sales.Entities
         public abstract void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context);
 
         public abstract void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context);
+
+        public abstract void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context);
     }
 
     public interface IBulkActionApplicableToCountryContext
@@ -88,6 +90,8 @@ namespace TOne.WhS.Sales.Entities
         ZoneItem GetContextZoneItem(long zoneId);
 
         int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+
+        SaleEntityZoneRoutingProduct GetSellingProductZoneRoutingProduct(long zoneId);
     }
 
     public interface IApplyBulkActionToZoneDraftContext
@@ -97,5 +101,11 @@ namespace TOne.WhS.Sales.Entities
         ZoneItem GetZoneItem(long zoneId);
 
         int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+    }
+
+    public interface IApplyBulkActionToDefaultDraftContext
+    {
+        SaleEntityZoneRoutingProduct GetCustomerDefaultRoutingProduct();
+        DefaultChanges DefaultDraft { get; }
     }
 }

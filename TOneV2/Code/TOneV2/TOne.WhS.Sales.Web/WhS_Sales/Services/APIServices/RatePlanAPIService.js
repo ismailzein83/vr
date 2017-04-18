@@ -164,6 +164,14 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ValidateImportedData"), input);
         }
 
+        function GetOwnerInfo(ownerType, ownerId, effectiveOn) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetOwnerInfo"), {
+                ownerType: ownerType,
+                ownerId: ownerId,
+                effectiveOn: effectiveOn
+            });
+        }
+
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -195,7 +203,8 @@
             DownloadImportRatePlanResult: DownloadImportRatePlanResult,
             DownloadImportRatePlanTemplate: DownloadImportRatePlanTemplate,
             ValidateBulkActionZones: ValidateBulkActionZones,
-            ValidateImportedData: ValidateImportedData
+            ValidateImportedData: ValidateImportedData,
+            GetOwnerInfo: GetOwnerInfo
         };
 
     }

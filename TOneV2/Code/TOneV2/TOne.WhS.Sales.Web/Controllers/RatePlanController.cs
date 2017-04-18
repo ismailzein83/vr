@@ -268,5 +268,12 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             return new RatePlanManager().ValidateImportedData(input);
         }
+
+        [HttpGet]
+        [Route("GetOwnerInfo")]
+        public OwnerInfo GetOwnerInfo(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+        {
+            return new RatePlanManager().GetOwnerInfo(ownerType, ownerId, effectiveOn);
+        }
     }
 }

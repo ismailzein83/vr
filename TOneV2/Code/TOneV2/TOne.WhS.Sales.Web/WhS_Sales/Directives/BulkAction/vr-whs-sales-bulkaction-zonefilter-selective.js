@@ -57,7 +57,6 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
             };
         }
         function defineAPI() {
-
             var api = {};
 
             api.load = function (payload) {
@@ -71,6 +70,8 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
                     zoneFilterType = payload.zoneFilterType;
                     bulkActionContext = payload.bulkActionContext;
                 }
+
+                extendBulkActionContext();
 
                 var loadDirectivePromise = loadDirective();
                 promises.push(loadDirectivePromise);
@@ -136,6 +137,22 @@ app.directive('vrWhsSalesBulkactionZonefilterSelective', ['WhS_Sales_RatePlanAPI
             if (selectiveCtrl.onReady != null) {
                 selectiveCtrl.onReady(api);
             }
+        }
+        function extendBulkActionContext() {
+            if (bulkActionContext == undefined)
+                return;
+            bulkActionContext.selectDefaultBulkActionZoneFilter = function (defaultBulkActionZoneFilterConfigId, canApplyZoneFilter) {
+                $scope.scopeModel.isDisabled = (canApplyZoneFilter === false);
+
+                if (defaultBulkActionZoneFilterConfigId == undefined)
+                    return;
+
+                // If the default zone filter is different than the selected one, delete the onBulkActionChanged of the selected zone filter
+                if ($scope.scopeModel.selectedExtensionConfig != undefined && $scope.scopeModel.selectedExtensionConfig.ExtensionConfigurationId != defaultBulkActionZoneFilterConfigId)
+                    delete bulkActionContext.onBulkActionChanged;
+
+                $scope.scopeModel.selectedExtensionConfig = UtilsService.getItemByVal($scope.scopeModel.extensionConfigs, defaultBulkActionZoneFilterConfigId, 'ExtensionConfigurationId');
+            };
         }
     }
 }]);

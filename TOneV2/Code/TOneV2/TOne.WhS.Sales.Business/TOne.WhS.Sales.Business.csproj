@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="BulkAction\ActionApplicableToZoneContext.cs" />
     <Compile Include="BulkAction\ApplicableZoneIdsContext.cs" />
+    <Compile Include="BulkAction\ApplyBulkActionToDefaultDraftContext.cs" />
     <Compile Include="BulkAction\ApplyBulkActionToZoneDraftContext.cs" />
     <Compile Include="BulkAction\ApplyBulkActionToZoneItemContext.cs" />
     <Compile Include="BulkAction\Input\ContextZoneItemInput.cs" />

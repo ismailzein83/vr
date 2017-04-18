@@ -174,6 +174,7 @@
     <Content Include="WhS_Sales\Directives\Country\vr-whs-sales-soldcountry-grid.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\Templates\RateBulkActionTypeTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-bed.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-defaultroutingproduct.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-eed.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-import.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-rate.js" />

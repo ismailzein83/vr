@@ -98,7 +98,7 @@ namespace TOne.WhS.Sales.Business
 
 			var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
 			var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, draft, input.CurrencyId, rateLocator);
-			var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft);
+			var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft, null);
 
 			foreach (SaleZone zone in saleZones)
 			{

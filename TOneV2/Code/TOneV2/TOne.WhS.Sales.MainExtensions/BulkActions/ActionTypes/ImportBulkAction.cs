@@ -13,12 +13,16 @@ namespace TOne.WhS.Sales.MainExtensions
 {
     public class ImportBulkAction : BulkActionType
     {
+        #region Fields / Constructors
+
         private ImportBulkActionValidationCacheManager _cacheManager;
 
-        public override Guid ConfigId
+        public ImportBulkAction()
         {
-            get { return new Guid("1136DAC5-A1EE-4C72-B12C-05FF513CE3D3"); }
+            _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
         }
+
+        #endregion
 
         public long FileId { get; set; }
 
@@ -30,9 +34,11 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public Guid CacheObjectName { get; set; }
 
-        public ImportBulkAction()
+        #region Bulk Action Members
+
+        public override Guid ConfigId
         {
-            _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
+            get { return new Guid("1136DAC5-A1EE-4C72-B12C-05FF513CE3D3"); }
         }
 
         public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
@@ -96,6 +102,15 @@ namespace TOne.WhS.Sales.MainExtensions
             context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates);
         }
 
+        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+        {
+
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates)
         {
             ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
@@ -137,5 +152,7 @@ namespace TOne.WhS.Sales.MainExtensions
                 });
             });
         }
+
+        #endregion
     }
 }

@@ -21,12 +21,14 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #endregion
 
+        public DateTime BED { get; set; }
+
+        #region Bulk Action Members
+
         public override Guid ConfigId
         {
             get { return new Guid("310EAF9D-68B5-466A-9CC4-96121B03A5FD"); }
         }
-
-        public DateTime BED { get; set; }
 
         public override void ValidateZone(IZoneValidationContext context)
         {
@@ -94,6 +96,13 @@ namespace TOne.WhS.Sales.MainExtensions
             DraftRateToChange newNormalRate = GetZoneNewNormalRate(context.ZoneDraft);
             newNormalRate.BED = BED;
         }
+
+        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+        {
+
+        }
+
+        #endregion
 
         #region Private Methods
 

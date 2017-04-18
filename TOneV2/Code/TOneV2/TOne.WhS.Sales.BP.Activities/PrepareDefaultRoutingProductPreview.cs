@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -28,7 +30,7 @@ namespace TOne.WhS.Sales.BP.Activities
     }
 
     #endregion
-    
+
     public class PrepareDefaultRoutingProductPreview : BaseAsyncActivity<PrepareDefaultRoutingProductPreviewInput, PrepareDefaultRoutingProductPreviewOutput>
     {
         #region Input Arguments
@@ -61,8 +63,12 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
+
             if (this.DefaultRoutingProductPreview.Get(context) == null)
                 this.DefaultRoutingProductPreview.Set(context, new DefaultRoutingProductPreview());
+
             base.OnBeforeExecute(context, handle);
         }
 
@@ -74,9 +80,11 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListOwnerType ownerType = inputArgument.OwnerType;
             int ownerId = inputArgument.OwnerId;
             DateTime minimumDate = inputArgument.MinimumDate;
-            
+
+            IRatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as IRatePlanContext;
+
             var routingProductManager = new RoutingProductManager();
-            SaleEntityZoneRoutingProduct currentRoutingProduct = GetCurrentDefaultRoutingProduct(ownerType, ownerId, minimumDate);
+            SaleEntityZoneRoutingProduct currentRoutingProduct = GetCurrentDefaultRoutingProduct(ownerType, ownerId, ratePlanContext.EffectiveDate);
             var preview = new DefaultRoutingProductPreview() { };
 
             if (defaultRoutingProductToAdd != null)
@@ -113,7 +121,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             this.DefaultRoutingProductPreview.Set(context, result.DefaultRoutingProductPreview);
         }
-        
+
         #region Private Methods
 
         private SaleEntityZoneRoutingProduct GetCurrentDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
@@ -137,7 +145,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             return routingProduct;
         }
-        
+
         #endregion
     }
 }

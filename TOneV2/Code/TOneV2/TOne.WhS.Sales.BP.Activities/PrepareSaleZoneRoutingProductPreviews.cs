@@ -9,6 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -72,8 +73,12 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
+
             if (this.SaleZoneRoutingProductPreviews.Get(context) == null)
                 this.SaleZoneRoutingProductPreviews.Set(context, new List<SaleZoneRoutingProductPreview>());
+
             base.OnBeforeExecute(context, handle);
         }
 
@@ -86,8 +91,10 @@ namespace TOne.WhS.Sales.BP.Activities
             int ownerId = inputArgument.OwnerId;
             DateTime minimumDate = inputArgument.MinimumDate;
 
+            IRatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as IRatePlanContext;
+
             var saleZoneRoutingProductPreviews = new List<SaleZoneRoutingProductPreview>();
-            var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(minimumDate));
+            var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(ratePlanContext.EffectiveDate));
             var routingProductManager = new RoutingProductManager();
 
             foreach (SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd in saleZoneRoutingProductsToAdd)

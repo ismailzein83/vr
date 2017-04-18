@@ -22,16 +22,18 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #endregion
 
-        public override Guid ConfigId
-        {
-            get { return new Guid("A893F3C6-D4BF-4C60-BA7D-2A773791D7BD"); }
-        }
-
         public CostCalculationMethod CostCalculationMethod { get; set; }
 
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
         public DateTime BED { get; set; }
+
+        #region Bulk Action Members
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("A893F3C6-D4BF-4C60-BA7D-2A773791D7BD"); }
+        }
 
         public override void ValidateZone(IZoneValidationContext context)
         {
@@ -237,6 +239,13 @@ namespace TOne.WhS.Sales.MainExtensions
                 context.ZoneDraft.NewRates = newRates;
             }
         }
+
+        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+        {
+
+        }
+
+        #endregion
 
         #region Private Methods
 

@@ -2,16 +2,15 @@
     <vr-form validationcontext="FilterGroup">
 
         <div vr-loader="isLoadingFilterSection" ng-hide="filterSectionCollapsed">
-
             <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-choices-filter selectedindex="selectedChoiceindex">
                         <vr-choice-filter isselected="isSettingsSelected">Settings</vr-choice-filter>
                         <vr-choice-filter isselected="isZoneFilterSelected">Zone Filter</vr-choice-filter>
+                        <vr-choice-filter isselected="isInfoSelected">Info</vr-choice-filter>
                     </vr-choices-filter>
                 </vr-columns>
             </vr-row>
-
             <vr-row>
                 <vr-validation-group validationcontext="LoadGroup">
                     <vr-validation-group validationcontext="OwnerGroup">
@@ -79,9 +78,35 @@
                         <vr-common-filter-text on-ready="onTextFilterReady" label="Zone Name" normal-col-num="2"></vr-common-filter-text>
                     </span>
 
+                    <span ng-show="isInfoSelected">
+                        <vr-columns colnum="4" ng-show="assignedToSellingProductName != undefined">
+                            <vr-label>Assigned to Selling Product:</vr-label>
+                            <vr-label isvalue>{{assignedToSellingProductName}}</vr-label>
+                        </vr-columns>
+                    </span>
+
+                    <span ng-show="isInfoSelected">
+                        <vr-columns colnum="4" ng-show="currentDefaultRoutingProductName != undefined">
+                            <vr-label>Current Default Routing Product:</vr-label>
+                            <vr-label isvalue>{{currentDefaultRoutingProductName}}</vr-label>
+                        </vr-columns>
+                    </span>
+
+                    <span ng-show="isInfoSelected">
+                        <vr-columns colnum="4" ng-show="newDefaultRoutingProductName != undefined">
+                            <vr-label>New Default Routing Product:</vr-label>
+                            <vr-label isvalue>{{newDefaultRoutingProductName}}</vr-label>
+                        </vr-columns>
+                    </span>
+
+                    <span ng-show="isInfoSelected">
+                        <vr-columns colnum="4" ng-show="resetToDefaultRoutingProductName != undefined">
+                            <vr-label>Reset to Default Routing Product:</vr-label>
+                            <vr-label isvalue>{{resetToDefaultRoutingProductName}}</vr-label>
+                        </vr-columns>
+                    </span>
                 </vr-validation-group>
             </vr-row>
-
         </div>
 
         <vr-row removeline>
@@ -98,11 +123,6 @@
         </vr-row>
 
         <div vr-loader="isLoading">
-            <vr-row ng-if="showDefaultItem">
-                <vr-columns width="fullrow">
-                    <vr-directivetabs tabitems="defaultItemTabs"></vr-directivetabs>
-                </vr-columns>
-            </vr-row>
             <div ng-show="showGrid">
                 <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
             </div>
