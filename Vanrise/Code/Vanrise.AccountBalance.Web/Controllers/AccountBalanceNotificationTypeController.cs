@@ -23,10 +23,10 @@ namespace Vanrise.AccountBalance.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetAccountColumnHeader")]
-        public string GetAccountColumnHeader(Guid notificationTypeId)
+        [Route("GetAccountBalanceNotificationTypeSettings")]
+        public AccountBalanceNotificationTypeSettings GetAccountBalanceNotificationTypeSettings(Guid notificationTypeId)
         {
-            return manager.GetAccountColumnHeader(notificationTypeId);
+            return manager.GetAccountBalanceNotificationTypeSettings(notificationTypeId);
         }
     }
 }

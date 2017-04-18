@@ -44,6 +44,9 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
             var api = {};
 
             api.load = function (payload) {
+
+                console.log(payload);
+
                 $scope.scopeModel.editor = undefined;
                 directiveReadyDeferred = UtilsService.createPromiseDeferred();
 

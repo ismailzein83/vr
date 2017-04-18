@@ -6,8 +6,15 @@
 <vr-row>
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" normalcell
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeDataRecordAlertRule" hidegridmenu>
+            <vr-datagrid on-ready="onGridReady"
+                         datasource="ctrl.datasource"
+                         ondeleterow="ctrl.removeDataRecordAlertRule"
+                         menuactions="gridMenuActions"
+                         norowhighlightonclick="true"
+                         enabledraggablerow="true"
+                         hidegridmenu normalcell>
+
+                <vr-datagridcolumn headertext="'Alert Level'" field="'AlertLevelName'" widthfactor="5" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Filter'" field="'FilterExpression'" widthfactor="10" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Actions'" field="'ActionNames'" widthfactor="5" disablesorting></vr-datagridcolumn>
             </vr-datagrid>

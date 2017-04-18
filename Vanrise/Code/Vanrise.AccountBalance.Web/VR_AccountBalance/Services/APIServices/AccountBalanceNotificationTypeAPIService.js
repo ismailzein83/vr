@@ -12,8 +12,8 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountBalanceNotificationTypeExtendedSettingsConfigs"));
         }
 
-        function GetAccountColumnHeader(notificationTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountColumnHeader"), {
+        function GetAccountBalanceNotificationTypeSettings(notificationTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetAccountBalanceNotificationTypeSettings"), {
                 notificationTypeId: notificationTypeId
             });
         }
@@ -21,7 +21,7 @@
 
         return {
             GetAccountBalanceNotificationTypeExtendedSettingsConfigs: GetAccountBalanceNotificationTypeExtendedSettingsConfigs,
-            GetAccountColumnHeader: GetAccountColumnHeader
+            GetAccountBalanceNotificationTypeSettings: GetAccountBalanceNotificationTypeSettings
         };
     }
 

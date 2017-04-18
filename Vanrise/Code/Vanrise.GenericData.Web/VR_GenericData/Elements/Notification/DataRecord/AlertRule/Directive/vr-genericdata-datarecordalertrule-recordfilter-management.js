@@ -1,6 +1,7 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordalertruleRecordfilterManagement', ['UtilsService', 'VR_GenericData_DataRecordAlertRuleService', 'VR_GenericData_RecordFilterAPIService',
-function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericData_RecordFilterAPIService) {
+
+app.directive('vrGenericdataDatarecordalertruleRecordfilterManagement', ['UtilsService', 'VR_GenericData_DataRecordAlertRuleService', 'VR_GenericData_RecordFilterAPIService', 'VR_Notification_AlertLevelAPIService',
+function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericData_RecordFilterAPIService, VR_Notification_AlertLevelAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -23,7 +24,10 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
     function DataRecordAlertRule(ctrl, $scope, $attrs) {
         this.initializeController = initializeController;
 
+        var alertLevelsInfo;
         var context;
+
+        var getAlertLevelsInfoPromise;
 
         function initializeController() {
             ctrl.datasource = [];
@@ -35,12 +39,11 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
             };
 
             ctrl.addDataRecordAlertRule = function () {
-
                 var onDataRecordAlertRuleAdded = function (dataRecordAlertRuleObj) {
                     ctrl.datasource.push(dataRecordAlertRuleObj);
                 };
-                VR_GenericData_DataRecordAlertRuleService.addDataRecordAlertRule(context, onDataRecordAlertRuleAdded);
 
+                VR_GenericData_DataRecordAlertRuleService.addDataRecordAlertRule(context, onDataRecordAlertRuleAdded);
             };
 
             ctrl.removeDataRecordAlertRule = function (dataItem) {
@@ -57,7 +60,6 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
             var api = {};
 
             api.load = function (payload) {
-                var promises = [];
 
                 var settings;
 
@@ -66,21 +68,26 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
                     context = payload.context;
                 }
 
-                if (settings != undefined && settings.RecordAlertRuleConfigs != undefined) {
-                    for (var x = 0; x < settings.RecordAlertRuleConfigs.length; x++) {
-                        var currentRecordAlertRuleConfig = settings.RecordAlertRuleConfigs[x];
-                        promises.push(fillDataSource(currentRecordAlertRuleConfig));
+                var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                VR_Notification_AlertLevelAPIService.GetAlertLevelsInfo({ VRNotificationTypeId: context.notificationTypeId }).then(function (response) {
+                    alertLevelsInfo = response;
+
+                    var fillDataSourcePromisesDeferred = [];
+
+                    if (settings != undefined && settings.RecordAlertRuleConfigs != undefined) {
+                        for (var x = 0; x < settings.RecordAlertRuleConfigs.length; x++) {
+                            var currentRecordAlertRuleConfig = settings.RecordAlertRuleConfigs[x];
+                            fillDataSourcePromisesDeferred.push(fillDataSource(currentRecordAlertRuleConfig));
+                        }
                     }
-                }
 
-                return UtilsService.waitMultiplePromises(promises);
-            };
-
-            function fillDataSource(currentRecordAlertRuleConfig) {
-                var promise = VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: context.recordfields, FilterGroup: currentRecordAlertRuleConfig.FilterGroup }).then(function (response) {
-                    ctrl.datasource.push({ FilterExpression: response, Entity: currentRecordAlertRuleConfig, ActionNames: buildActionNames(currentRecordAlertRuleConfig.Actions) });
+                    UtilsService.waitMultiplePromises(fillDataSourcePromisesDeferred).then(function () {
+                        loadPromiseDeferred.resolve();
+                    });
                 });
-                return promise
+
+                return loadPromiseDeferred.promise;
             };
 
             api.getData = function () {
@@ -107,6 +114,17 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
                 ctrl.onReady(api);
         };
 
+        function fillDataSource(currentRecordAlertRuleConfig) {
+            return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: context.recordfields, FilterGroup: currentRecordAlertRuleConfig.FilterGroup }).then(function (response) {
+                ctrl.datasource.push({
+                    AlertLevelName: getAlertLevelName(currentRecordAlertRuleConfig.AlertLevelId),
+                    FilterExpression: response,
+                    Entity: currentRecordAlertRuleConfig,
+                    ActionNames: buildActionNames(currentRecordAlertRuleConfig.Actions)
+                });
+            });
+        };
+
         function defineMenuActions() {
 
             $scope.gridMenuActions = [{
@@ -119,6 +137,7 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
             var onDataRecordAlertRuleUpdated = function (dataRecordAlertRuleObj) {
                 ctrl.datasource[ctrl.datasource.indexOf(dataItem)] = dataRecordAlertRuleObj;
             };
+
             VR_GenericData_DataRecordAlertRuleService.editDataRecordAlertRule(dataItem.Entity, context, onDataRecordAlertRuleUpdated);
         };
 
@@ -134,6 +153,14 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
 
             return actionNames.join();
         };
+
+        function getAlertLevelName(alertLevelId) {
+            for (var index = 0; index < alertLevelsInfo.length; index++) {
+                var alertLevelInfo = alertLevelsInfo[index];
+                if (alertLevelInfo.VRAlertLevelId == alertLevelId)
+                    return alertLevelInfo.Name;
+            }
+        }
     };
 
     return directiveDefinitionObject;

@@ -32,7 +32,8 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
                 $scope.scopeModel = {};
                 $scope.scopeModel.columns = [];
                 $scope.scopeModel.vrNotifications = [];
-                $scope.scopeModel.AccountColumnHeader = "";
+                $scope.scopeModel.showAccountTypeColumn = false;
+                $scope.scopeModel.accountColumnHeader = "";
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -97,8 +98,13 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
             }
 
             function getNotificationGridColumnsLoadPromise(notificationTypeId) {
-                return VR_AccountBalance_AccountBalanceNotificationTypeAPIService.GetAccountColumnHeader(notificationTypeId).then(function (response) {
-                    $scope.scopeModel.AccountColumnHeader = response;
+                return VR_AccountBalance_AccountBalanceNotificationTypeAPIService.GetAccountBalanceNotificationTypeSettings(notificationTypeId).then(function (response) {
+                    var accountBalanceNotificationTypeSettings = response;
+
+                    if (accountBalanceNotificationTypeSettings != undefined) {
+                        $scope.scopeModel.accountColumnHeader = accountBalanceNotificationTypeSettings.AccountColumnHeader;
+                        $scope.scopeModel.showAccountTypeColumn = accountBalanceNotificationTypeSettings.ShowAccountTypeColumn;
+                    }
                 });
             }
         }

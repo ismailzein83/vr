@@ -16,16 +16,19 @@ namespace Vanrise.AccountBalance.Data.SQL
 {
     public class LiveBalanceDataManager : BaseSQLDataManager, ILiveBalanceDataManager
     {
-
         #region ctor/Local Variables
+
         const string LiveBalance_TABLENAME = "LiveBalance";
+        
         public LiveBalanceDataManager()
             : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
         }
+
         #endregion
 
         #region Public Methods
+
         public LiveBalance GetLiveBalance(Guid accountTypeId, String accountId)
         {
             return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_GetById]", LiveBalanceMapper, accountTypeId, accountId);
@@ -34,7 +37,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemsSP("[VR_AccountBalance].[sp_LiveBalance_GetAccountsInfo]", LiveBalanceAccountInfoMapper, accountTypeId);
         }
-        public void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady)
+        public void GetLiveBalanceAccounts(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_LiveBalance_GetAll]",
                (reader) =>
@@ -43,7 +46,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                    {
                        onLiveBalanceReady(LiveBalanceMapper(reader));
                    }
-               });
+               }, accountTypeId);
         }
 
         public IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> GetFilteredAccountBalances(AccountBalanceQuery query)
@@ -77,7 +80,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                            cmd.Parameters.Add(dtPrm);
                        });
         }
-        public void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady)
+        public void GetLiveBalancesToAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_LiveBalance_GetBalancesForAlert]",
                (reader) =>
@@ -86,9 +89,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                    {
                        onLiveBalanceReady(LiveBalanceMapper(reader));
                    }
-               });
+               }, accountTypeId);
         }
-        public void GetLiveBalancesToClearAlert(Action<LiveBalance> onLiveBalanceReady)
+        public void GetLiveBalancesToClearAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_LiveBalance_GetBalancesToClearAlert]",
                  (reader) =>
@@ -97,7 +100,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                      {
                          onLiveBalanceReady(LiveBalanceMapper(reader));
                      }
-                 });
+                 }, accountTypeId);
         }
         public void UpdateBalanceLastAlertInfos(List<LiveBalanceLastThresholdUpdateEntity> updateEntities)
         {
@@ -132,7 +135,6 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-
                 UpdateLiveBalancetoUpdate(liveBalnacesToUpdate);
                 AccountUsageDataManager accountUsageDataManager = new SQL.AccountUsageDataManager();
                 accountUsageDataManager.UpdateAccountUsageFromBalanceUsageQueue(accountsUsageToUpdate, correctionProcessId);
@@ -141,7 +143,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 scope.Complete();
             }
             return true;
-
         }
         public bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds)
         {
@@ -166,9 +167,11 @@ namespace Vanrise.AccountBalance.Data.SQL
             ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_CheckIfHasTransactions]", out hasTransactions, accountTypeId, accountId);
             return (bool)hasTransactions;
         }
+
         #endregion
 
         #region Mappers
+
         private LiveBalance LiveBalanceMapper(IDataReader reader)
         {
             return new LiveBalance
@@ -184,7 +187,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader["ActiveAlertsInfo"] as string, typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo
             };
         }
-
         private Vanrise.AccountBalance.Entities.AccountBalance AccountBalanceMapper(IDataReader reader)
         {
             return new Vanrise.AccountBalance.Entities.AccountBalance
@@ -260,7 +262,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AlertRuleId", typeof(decimal));
             return dt;
         }
-        void FillNextThresholdUpdateRow(DataRow dr, LiveBalanceNextThresholdUpdateEntity updateEntity)
+        private void FillNextThresholdUpdateRow(DataRow dr, LiveBalanceNextThresholdUpdateEntity updateEntity)
         {
             dr["AccountTypeID"] = updateEntity.AccountTypeId;
             dr["AccountID"] = updateEntity.AccountId;
@@ -270,7 +272,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (updateEntity.AlertRuleId.HasValue)
                 dr["AlertRuleId"] = updateEntity.AlertRuleId;
         }
-        DataTable GetNextThresholdUpdateTable()
+        private DataTable GetNextThresholdUpdateTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("AccountTypeID", typeof(Guid));
@@ -279,7 +281,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("AlertRuleId", typeof(int));
             return dt;
         }
-        void FillLastThresholdUpdateRow(DataRow dr, LiveBalanceLastThresholdUpdateEntity updateEntity)
+        private void FillLastThresholdUpdateRow(DataRow dr, LiveBalanceLastThresholdUpdateEntity updateEntity)
         {
             dr["AccountTypeID"] = updateEntity.AccountTypeId;
             dr["AccountID"] = updateEntity.AccountId;
@@ -288,7 +290,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             if (updateEntity.ActiveAlertsInfo != null)
                 dr["ActiveAlertsInfo"] = Serializer.Serialize(updateEntity.ActiveAlertsInfo, true);
         }
-        DataTable GetLastThresholdUpdateTable()
+        private DataTable GetLastThresholdUpdateTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("AccountTypeID", typeof(Guid));
@@ -297,7 +299,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             dt.Columns.Add("ActiveAlertsInfo", typeof(string));
             return dt;
         }
-
         private string GetAccountBalanceQuery(AccountBalanceQuery query)
         {
             StringBuilder whereBuilder = new StringBuilder(@"lb.AccountTypeID = @AccountTypeID");
@@ -322,11 +323,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             return queryBuilder.ToString();
         }
 
-
         #endregion
-
-
-
-     
     }
 }

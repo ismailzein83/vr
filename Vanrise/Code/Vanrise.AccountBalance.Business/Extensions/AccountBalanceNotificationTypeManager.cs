@@ -14,10 +14,9 @@ namespace Vanrise.AccountBalance.Business
             return extensionConfiguration.GetExtensionConfigurations<AccountBalanceNotificationTypeExtendedSettingsConfig>(AccountBalanceNotificationTypeExtendedSettingsConfig.EXTENSION_TYPE);
         }
 
-        public string GetAccountColumnHeader(Guid notificationTypeId)
+        public AccountBalanceNotificationTypeSettings GetAccountBalanceNotificationTypeSettings(Guid notificationTypeId)
         {
-            AccountBalanceNotificationTypeSettings accountBalanceNotificationTypeSettings = new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings<AccountBalanceNotificationTypeSettings>(notificationTypeId);
-            return accountBalanceNotificationTypeSettings.AccountColumnHeader;
+            return new VRNotificationTypeManager().GetVRNotificationTypeExtendedSettings<AccountBalanceNotificationTypeSettings>(notificationTypeId);
         }
     }
 }

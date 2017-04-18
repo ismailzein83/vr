@@ -4,7 +4,10 @@
             <vr-tabs>
                 <vr-tab header="'Criteria'">
                     <vr-row>
-                        <vr-notification-alertlevel-selector isrequired="true" normal-col-num="3" on-ready="scopeModel.onVRNotificationAlertlevelSelectorReady"></vr-notification-alertlevel-selector>
+                        <vr-notification-alertlevel-selector on-ready="scopeModel.onVRNotificationAlertlevelSelectorReady"
+                                                             selectedvalues="scopeModel.selectedAlertLevel"
+                                                             isrequired="true" normal-col-num="3">
+                        </vr-notification-alertlevel-selector>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">

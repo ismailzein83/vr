@@ -17,8 +17,10 @@ namespace Vanrise.AccountBalance.Business.Extensions
 
         public override void LoadBalanceInfos(IVRBalanceAlertRuleLoadBalanceInfosContext context)
         {
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);
+
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            dataManager.GetLiveBalanceAccounts((liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
+            dataManager.GetLiveBalanceAccounts(ruleTypeSettings.AccountTypeId, (liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
         }
 
         public override GenericData.Entities.GenericRuleTarget CreateRuleTarget(IVRBalanceAlertRuleCreateRuleTargetContext context)
@@ -76,20 +78,23 @@ namespace Vanrise.AccountBalance.Business.Extensions
 
         public override void LoadEntitiesToAlert(IVRBalanceAlertRuleLoadEntitiesToAlertContext context)
         {
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);
+
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            dataManager.GetLiveBalancesToAlert((liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
+            dataManager.GetLiveBalancesToAlert(ruleTypeSettings.AccountTypeId, (liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
         }
 
         public override void LoadEntitiesToClearAlerts(IVRBalanceAlertRuleLoadEntitiesToClearAlertsContext context)
         {
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);
+
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            dataManager.GetLiveBalancesToClearAlert((liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
+            dataManager.GetLiveBalancesToClearAlert(ruleTypeSettings.AccountTypeId, (liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
         }
 
         public override string GetEntityName(IVRBalanceAlertRuleGetEntityNameContext context)
         {
-            context.RuleTypeSettings.ThrowIfNull("context.RuleTypeSettings");
-            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = context.RuleTypeSettings.CastWithValidate<AccountBalanceAlertRuleTypeSettings>("context.RuleTypeSettings");
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);
             return new AccountManager().GetAccountName(ruleTypeSettings.AccountTypeId, context.EntityId);
         }
 
@@ -99,12 +104,8 @@ namespace Vanrise.AccountBalance.Business.Extensions
 
         private AccountBalanceAlertRuleTypeSettings GetRuleTypeSettings(IVRBalanceAlertRuleBehaviorContext context)
         {
-            if (context.RuleTypeSettings == null)
-                throw new ArgumentNullException("context.RuleTypeSettings");
-            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = context.RuleTypeSettings as AccountBalanceAlertRuleTypeSettings;
-            if (ruleTypeSettings == null)
-                throw new Exception(String.Format("context.RuleTypeSettings is not of type AccountBalanceAlertRuleTypeSettings. it is of type '{0}'", context.RuleTypeSettings.GetType()));
-            return ruleTypeSettings;
+            context.RuleTypeSettings.ThrowIfNull("context.RuleTypeSettings");
+            return context.RuleTypeSettings.CastWithValidate<AccountBalanceAlertRuleTypeSettings>("context.RuleTypeSettings");
         }
 
         #endregion

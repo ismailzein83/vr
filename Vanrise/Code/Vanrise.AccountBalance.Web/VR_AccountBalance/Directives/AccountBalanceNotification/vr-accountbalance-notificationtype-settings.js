@@ -57,14 +57,17 @@ app.directive('vrAccountbalanceNotificationtypeSettings', ['UtilsService', 'VRUI
                     var promises = [];
 
                     var accountColumnHeader;
+                    var showAccountTypeColumn;
                     var accountBalanceNotificationTypeExtendedSettings;
 
                     if (payload != undefined) {
                         accountColumnHeader = payload.AccountColumnHeader;
+                        showAccountTypeColumn = payload.ShowAccountTypeColumn;
                         accountBalanceNotificationTypeExtendedSettings = payload.AccountBalanceNotificationTypeExtendedSettings;
                     }
 
                     $scope.scopeModel.accountColumnHeader = accountColumnHeader;
+                    $scope.scopeModel.showAccountTypeColumn = showAccountTypeColumn;
 
                     var loadAccountBalanceNotificationTypeExtendedSettingsConfigs = getAccountBalanceNotificationTypeExtendedSettingsConfigs();
                     promises.push(loadAccountBalanceNotificationTypeExtendedSettingsConfigs);
@@ -120,8 +123,9 @@ app.directive('vrAccountbalanceNotificationtypeSettings', ['UtilsService', 'VRUI
 
                     var obj = {
                         $type: 'Vanrise.AccountBalance.Business.AccountBalanceNotificationTypeSettings, Vanrise.AccountBalance.Business',
-                        AccountBalanceNotificationTypeExtendedSettings: extendedSettings,
-                        AccountColumnHeader: $scope.scopeModel.accountColumnHeader
+                        AccountColumnHeader: $scope.scopeModel.accountColumnHeader,
+                        ShowAccountTypeColumn: $scope.scopeModel.showAccountTypeColumn,
+                        AccountBalanceNotificationTypeExtendedSettings: extendedSettings
                     };
 
                     return obj;

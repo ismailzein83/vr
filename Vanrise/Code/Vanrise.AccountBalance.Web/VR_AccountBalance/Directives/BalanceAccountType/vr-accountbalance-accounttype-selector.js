@@ -45,9 +45,11 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
-            var hideremoveicon;
+
+            var hideremoveicon = "";
             if (attrs.hideremoveicon!=undefined)
                 hideremoveicon = "hideremoveicon";
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                        + ' <vr-select on-ready="ctrl.onSelectorReady"'
                        + '  selectedvalues="ctrl.selectedvalues"'

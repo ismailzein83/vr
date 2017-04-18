@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Data
     public interface ILiveBalanceDataManager : IDataManager
     {
         LiveBalance GetLiveBalance(Guid accountTypeId, String accountId);
-        void GetLiveBalanceAccounts(Action<LiveBalance> onLiveBalanceReady);
+        void GetLiveBalanceAccounts(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
         IEnumerable<Vanrise.AccountBalance.Entities.AccountBalance> GetFilteredAccountBalances(AccountBalanceQuery query);
         bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds);
         IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId);
@@ -19,8 +19,8 @@ namespace Vanrise.AccountBalance.Data
        
         void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities);
         void UpdateBalanceLastAlertInfos(List<LiveBalanceLastThresholdUpdateEntity> updateEntities);
-        void GetLiveBalancesToAlert(Action<LiveBalance> onLiveBalanceReady);
-        void GetLiveBalancesToClearAlert(Action<LiveBalance> onLiveBalanceReady);
+        void GetLiveBalancesToAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
+        void GetLiveBalancesToClearAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
         bool CheckIfAccountHasTransactions(Guid accountTypeId, String accountId);
     }
 }

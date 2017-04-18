@@ -66,9 +66,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     query: getFilterObject(),
                     showAccount: false,
                 };
-                var promise = [];
-                promise.push(getCurrentAccountBalance());
-                promise.push(gridAPI.loadGrid(payload));
+                var promises = [];
+                promises.push(getCurrentAccountBalance());
+                promises.push(gridAPI.loadGrid(payload));
 
                 return UtilsService.waitMultiplePromises(promises);
             };

@@ -37,6 +37,7 @@
                     notificationTypeId = parameters.context.notificationTypeId;
                 }
             }
+
             isEditMode = dataRecordAlertRuleEntity != undefined;
         };
         function defineScope() {
@@ -120,7 +121,21 @@
 
             return vRActionManagementLoadDeferred.promise;
         };
+        function loadRecordFilterDirective() {
+            var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
+            recordFilterDirectiveReadyDeferred.promise.then(function () {
+                var recordFilterDirectivePayload = {};
+                recordFilterDirectivePayload.context = buildRecordFilterContext(recordfields);
+                if (dataRecordAlertRuleEntity != undefined) {
+                    recordFilterDirectivePayload.FilterGroup = dataRecordAlertRuleEntity.FilterGroup;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+            });
+
+            return recordFilterDirectiveLoadDeferred.promise;
+        };
         function loadVRNotificationAlertlevelSelector() {
             var vrNotificationAlertlevelSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -141,71 +156,6 @@
             return vrNotificationAlertlevelSelectorLoadDeferred.promise;
         };
 
-        function loadRecordFilterDirective() {
-            var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            recordFilterDirectiveReadyDeferred.promise.then(function () {
-                var recordFilterDirectivePayload = {};
-                recordFilterDirectivePayload.context = buildRecordFilterContext(recordfields);
-                if (dataRecordAlertRuleEntity != undefined) {
-                    recordFilterDirectivePayload.FilterGroup = dataRecordAlertRuleEntity.FilterGroup;
-                }
-
-                VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
-            });
-
-            return recordFilterDirectiveLoadDeferred.promise;
-        };
-
-        function insert() {
-            if ($scope.onDataRecordAlertRuleAdded != undefined)
-                $scope.onDataRecordAlertRuleAdded(buildDataRecordAlertRuleObjFromScope());
-            $scope.modalContext.closeModal();
-        };
-        function update() {
-            if ($scope.onDataRecordAlertRuleUpdated != undefined) {
-                $scope.onDataRecordAlertRuleUpdated(buildDataRecordAlertRuleObjFromScope());
-            }
-            $scope.modalContext.closeModal();
-        };
-
-        function buildDataRecordAlertRuleObjFromScope() {
-            var recordFilterData = recordFilterDirectiveAPI.getData();
-            var actions = vRActionManagementAPI.getData();
-
-            return {
-                Entity: {
-                    FilterGroup: recordFilterData.filterObj,
-                    Actions: actions,
-                    AlertLevelId: vrNotificationAlertlevelSelectorAPI.getSelectedIds()
-                },
-                FilterExpression: recordFilterData.expression,
-                ActionNames: buildActionNames(actions)
-            }
-        };
-
-        function getContext() {
-            var currentContext = context;
-
-            if (currentContext == undefined)
-                currentContext = {};
-
-            return currentContext;
-        };
-
-        function buildActionNames(actions) {
-            if (actions == undefined || actions == null || actions.length == 0)
-                return null;
-
-            var actionNames = [];
-            for (var x = 0; x < actions.length; x++) {
-                var currentAction = actions[x];
-                actionNames.push(currentAction.ActionName);
-            }
-
-            return actionNames.join();
-        };
-
         function buildRecordFilterContext(outputFields) {
             var context = {
                 getFields: function () {
@@ -224,6 +174,48 @@
                 }
             };
             return context;
+        };
+
+        function insert() {
+            if ($scope.onDataRecordAlertRuleAdded != undefined) {
+                $scope.onDataRecordAlertRuleAdded(buildDataRecordAlertRuleObjFromScope());
+            }
+            $scope.modalContext.closeModal();
+        };
+        function update() {
+            if ($scope.onDataRecordAlertRuleUpdated != undefined) {
+                $scope.onDataRecordAlertRuleUpdated(buildDataRecordAlertRuleObjFromScope());
+            }
+            $scope.modalContext.closeModal();
+        };
+
+        function buildDataRecordAlertRuleObjFromScope() {
+            var alertLevel = $scope.scopeModel.selectedAlertLevel;
+            var recordFilterData = recordFilterDirectiveAPI.getData();
+            var actions = vRActionManagementAPI.getData();
+
+            return {
+                Entity: {
+                    FilterGroup: recordFilterData.filterObj,
+                    Actions: actions,
+                    AlertLevelId: alertLevel.VRAlertLevelId
+                },
+                AlertLevelName: alertLevel.Name,
+                FilterExpression: recordFilterData.expression,
+                ActionNames: buildActionNames(actions)
+            }
+        };
+        function buildActionNames(actions) {
+            if (actions == undefined || actions == null || actions.length == 0)
+                return null;
+
+            var actionNames = [];
+            for (var x = 0; x < actions.length; x++) {
+                var currentAction = actions[x];
+                actionNames.push(currentAction.ActionName);
+            }
+
+            return actionNames.join();
         };
     }
 

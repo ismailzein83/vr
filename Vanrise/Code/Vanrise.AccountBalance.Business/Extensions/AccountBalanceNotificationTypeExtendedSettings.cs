@@ -14,14 +14,18 @@ namespace Vanrise.AccountBalance.Business
 
     public interface IAccountBalanceNotificationTypeIsMatchedContext
     {
-        VRNotification VRNotification { get; }
+        Guid AccountTypeId { get; }
+
+        VRBalanceAlertEventPayload EventPayload { get; }
 
         AccountBalanceNotificationExtendedQuery AccountBalanceNotificationExtendedQuery { get; }
     }
 
     public class AccountBalanceNotificationTypeIsMatchedContext : IAccountBalanceNotificationTypeIsMatchedContext
     {
-        public VRNotification VRNotification { get; set;  }
+        public Guid AccountTypeId { get; set; }
+
+        public VRBalanceAlertEventPayload EventPayload { get; set; }
 
         public AccountBalanceNotificationExtendedQuery AccountBalanceNotificationExtendedQuery { get; set; }
     }
