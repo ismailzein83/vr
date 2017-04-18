@@ -49,7 +49,6 @@ appControllers.directive('draggable', ['$document', function ($document) {
             $document.unbind('mouseup', mouseup);
         }
         scope.$on("$destroy", function () {
-            $document.off();
             $(window).off("resize.Viewport");
         });
     };
@@ -107,9 +106,6 @@ appControllers.directive('draggablemodal', ['$document', function ($document) {
             $document.unbind('mousemove', mousemove);
             $document.unbind('mouseup', mouseup);
         }
-        scope.$on("$destroy", function () {
-            $document.off();
-        });
     };
 }]);
 
@@ -124,7 +120,7 @@ appControllers.directive('clickOutside', ['$document', function ($document) {
             var classList = (attr.outsideIfNot !== undefined) ? attr.outsideIfNot.replace(', ', ',').split(',') : [];
             if (attr.id !== undefined) classList.push(attr.id);
 
-            $document.on('click', function (e) {
+            function documentclickOutside(e) {
                 var i = 0,
                     element;
 
@@ -142,13 +138,15 @@ appControllers.directive('clickOutside', ['$document', function ($document) {
                         }
                     }
                 }
-
                 $scope.$eval($scope.clickOutside);
-            });
-            $scope.$on("$destroy", function () {
-                $document.off();
-            });
+            }
+            
+            $document.bind('click', documentclickOutside);
 
+            $scope.$on("$destroy", function () {
+                $(window).off("resize.Viewport");
+                $document.unbind('click', documentclickOutside);
+            });
         }
     };
 }])
