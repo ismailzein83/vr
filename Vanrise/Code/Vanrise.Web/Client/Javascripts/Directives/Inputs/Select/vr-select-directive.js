@@ -53,7 +53,6 @@
             controller: function ($scope, $element, $attrs) {
                 $scope.$on("$destroy", function () {
                     $element.off();
-                    $(document).off();
                     $(window).off("resize.Viewport");
                 });
                 if (rootScope == undefined)
