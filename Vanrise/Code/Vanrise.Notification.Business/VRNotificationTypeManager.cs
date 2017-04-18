@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Security.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Notification.Business
 {
-    public class VRNotificationTypeManager
+    public class VRNotificationTypeManager : IVRNotificationTypeManager
     {
         #region Ctor/Properties
 
@@ -108,7 +110,53 @@ namespace Vanrise.Notification.Business
                 SearchDirective = vrNotificationType.Settings.ExtendedSettings.SearchRuntimeEditor
             };
         }
+        private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+        {
+            int userId =  ContextFactory.GetContext().GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, requiredPermission);
+
+        }
+        private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
+        {
+            SecurityManager secManager = new SecurityManager();
+            if (!secManager.IsAllowed(requiredPermission, userId))
+                return false;
+            return true;
+
+        }
 
         #endregion
+
+        #region security
+
+        public bool DoesUserHaveViewAccess(Guid vrNotificationTypeId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var genericRuleDefinition = GetNotificationTypeSettings(vrNotificationTypeId);
+            return DoesUserHaveViewAccess(userId, genericRuleDefinition);
+        }
+        public bool DoesUserHaveViewAccess(VRNotificationTypeSettings vrNotificationTypeSettings)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveViewAccess(userId, vrNotificationTypeSettings);
+        }
+        public bool DoesUserHaveViewAccess(int userId, List<Guid> vrNotificationTypeIds)
+        {
+            foreach (var guid in vrNotificationTypeIds)
+            {
+                var genericRuleDefinition = GetNotificationTypeSettings(guid);
+                if (DoesUserHaveViewAccess(userId, genericRuleDefinition))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveViewAccess(int userId, VRNotificationTypeSettings vrNotificationTypeSettings)
+        {
+            if (vrNotificationTypeSettings.Security != null && vrNotificationTypeSettings.Security.ViewRequiredPermission != null)
+                return DoesUserHaveAccess(userId, vrNotificationTypeSettings.Security.ViewRequiredPermission);
+            else
+                return true;
+        }
+        #endregion 
     }
 }

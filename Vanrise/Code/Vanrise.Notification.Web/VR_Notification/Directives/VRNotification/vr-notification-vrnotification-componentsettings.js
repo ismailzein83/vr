@@ -24,6 +24,14 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
             var vrNotificationTypeSettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var businessEntityDefinitionSelectorAPI;
             var businessEntityDefinitionSelectorReadyDeffered = UtilsService.createPromiseDeferred();
+
+
+            var viewPermissionAPI;
+            var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var hidePermissionAPI;
+            var hidePermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -35,6 +43,17 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                     businessEntityDefinitionSelectorAPI = api;
                     businessEntityDefinitionSelectorReadyDeffered.resolve();
                 };
+
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onHideRequiredPermissionReady = function (api) {
+                    hidePermissionAPI = api;
+                    hidePermissionReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
             function defineAPI() {
@@ -87,7 +106,33 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                         return selectorLoadBEDeferred.promise;
                     }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadNotificationTypeSelector, loadBusinessEntityDefinitionSelector]).catch(function (error) {
+                    function loadViewRequiredPermission() {
+                        var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: settings && settings.Security && settings.Security.ViewRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
+                        });
+                        return viewSettingPermissionLoadDeferred.promise;
+                    }
+
+
+                    function loadHideRequiredPermission() {
+                        var hidePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        hidePermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: settings && settings.Security && settings.Security.HideRequiredPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(hidePermissionAPI, dataPayload, hidePermissionLoadDeferred);
+                        });
+                        return hidePermissionLoadDeferred.promise;
+                    }
+
+
+                    return UtilsService.waitMultipleAsyncOperations([loadNotificationTypeSelector, loadBusinessEntityDefinitionSelector, loadViewRequiredPermission, loadHideRequiredPermission]).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
 
@@ -102,7 +147,11 @@ app.directive('vrNotificationVrnotificationComponentsettings', ['UtilsService', 
                         Settings: {
                             $type: "Vanrise.Notification.Entities.VRNotificationTypeSettings, Vanrise.Notification.Entities",
                             ExtendedSettings: vrNotificationTypeSettingsSelectorAPI.getData(),
-                            VRAlertLevelDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
+                            VRAlertLevelDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
+                            Security: {
+                                ViewRequiredPermission:viewPermissionAPI.getData(),
+                                HideRequiredPermission: hidePermissionAPI.getData()
+                            }
                         }
                     };
                 };

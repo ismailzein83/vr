@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Notification.Entities
 {
@@ -15,11 +16,22 @@ namespace Vanrise.Notification.Entities
 
         public VRNotificationTypeExtendedSettings ExtendedSettings { get; set; }
 
+        public VRNotificationTypeSecurity Security { get; set; }
+
         //public abstract bool CanExecuteNotification(IVRNotificationTypeCanExecuteNotificationContext context);
     }
 
     public interface IVRNotificationTypeCanExecuteNotificationContext
     {
         string EventKey { get; }
+    }
+
+    public class VRNotificationTypeSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { set; get; }
+
+        public RequiredPermissionSettings HideRequiredPermission { set; get; }
+
+
     }
 }

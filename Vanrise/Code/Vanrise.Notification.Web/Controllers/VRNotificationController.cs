@@ -12,24 +12,32 @@ namespace Vanrise.Notification.Web.Controllers
     {
         VRNotificationManager _manager = new VRNotificationManager();
 
+        VRNotificationTypeManager _typeManager = new VRNotificationTypeManager();
+
         [HttpPost]
         [Route("GetFirstPageVRNotifications")]
-        public VRNotificationUpdateOutput GetFirstPageVRNotifications(VRNotificationFirstPageInput input)
+        public object GetFirstPageVRNotifications(VRNotificationFirstPageInput input)
         {
+            if (!_typeManager.DoesUserHaveViewAccess(input.NotificationTypeId))
+                return GetUnauthorizedResponse();
             return _manager.GetFirstPageVRNotifications(input);
         }
 
         [HttpPost]
         [Route("GetUpdatedVRNotifications")]
-        public VRNotificationUpdateOutput GetUpdatedVRNotifications(VRNotificationUpdateInput input)
+        public object GetUpdatedVRNotifications(VRNotificationUpdateInput input)
         {
+            if (!_typeManager.DoesUserHaveViewAccess(input.NotificationTypeId))
+                return GetUnauthorizedResponse();
             return _manager.GetUpdatedVRNotifications(input);
         }
 
         [HttpPost]
         [Route("GetBeforeIdVRNotifications")]
-        public List<VRNotificationDetail> GetBeforeIdVRNotifications(VRNotificationBeforeIdInput input)
+        public object GetBeforeIdVRNotifications(VRNotificationBeforeIdInput input)
         {
+            if (!_typeManager.DoesUserHaveViewAccess(input.NotificationTypeId))
+                return GetUnauthorizedResponse();
             return _manager.GetBeforeIdVRNotifications(input);
         }
     }

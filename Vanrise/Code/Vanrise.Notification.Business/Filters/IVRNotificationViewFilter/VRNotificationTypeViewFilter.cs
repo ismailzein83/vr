@@ -17,7 +17,9 @@ namespace Vanrise.Notification.Business
 
                 View vrNotificationView = viewManager.GetView(this.ViewId);
                 var settings = vrNotificationView.Settings as VRNotificationViewSettings;
-
+                var vrNotificationTypeManager = new VRNotificationTypeManager();
+                if (!vrNotificationTypeManager.DoesUserHaveViewAccess(ContextFactory.GetContext().GetLoggedInUserId(), context.VRNotificationType.Settings))
+                    return false;
                 if (!settings.Settings.Any(s => s.VRNotificationTypeId == context.VRNotificationType.VRComponentTypeId))
                     return false;
             }
