@@ -6,19 +6,20 @@ using Vanrise.Notification.Entities;
 
 namespace Vanrise.Notification.BP.Activities
 {
-    public sealed class ExecuteAction : CodeActivity
+    public sealed class ExecuteAction : Vanrise.BusinessProcess.BaseCodeActivity
     {
         public InArgument<IVRActionEventPayload> EventPayload { get; set; }
         public InArgument<VRAction> Action { get; set; }
         public InArgument<int> UserID { get; set; }
-        protected override void Execute(CodeActivityContext context)
+
+        protected override void VRExecute(IBaseCodeActivityContext context)
         {
             VRActionExecutionContext vrActionExecutionContext = new VRActionExecutionContext
             {
-                EventPayload = EventPayload.Get(context),
-                UserID = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId
+                EventPayload = EventPayload.Get(context.ActivityContext),
+                UserID = context.ActivityContext.GetSharedInstanceData().InstanceInfo.InitiatorUserId
             };
-            Action.Get(context).Execute(vrActionExecutionContext);
+            Action.Get(context.ActivityContext).Execute(vrActionExecutionContext);
         }
     }
 }
