@@ -6,6 +6,7 @@ using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Queueing;
 using System.Linq;
+using Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate;
 
 namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
 {
@@ -66,8 +67,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                 {
                                     VRBalanceAlertThresholdAction balanceAlertThresholdAction = balanceAlertRuleSettings.ThresholdActions[i];
                                     VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo, AlertRuleTypeId = inputArgument.AlertTypeId };
-                                    decimal ruleThresholdValue = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
-                                    thresholdsInfos.Add(new AlertThresholdInfo { Threshold = ruleThresholdValue, ThresholdAction = balanceAlertThresholdAction });
+                                    decimal roundedRuleThresholdValue = CalculateNextAlertThresholds.ThresholdRounding(balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext));
+                                    thresholdsInfos.Add(new AlertThresholdInfo { Threshold = roundedRuleThresholdValue, ThresholdAction = balanceAlertThresholdAction });
                                 }
 
                                 foreach (var thresholdInfo in thresholdsInfos.OrderByDescending(itm => itm.Threshold))
@@ -75,8 +76,10 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                     var currentThreshold = thresholdInfo.Threshold;
                                     if (entityBalanceInfo.LastExecutedAlertThreshold.HasValue && entityBalanceInfo.LastExecutedAlertThreshold.Value <= currentThreshold)
                                         continue;
+
                                     if (entityBalanceInfo.CurrentBalance > currentThreshold)
                                         break;
+
                                     CreateAlertRuleNotificationInput createAlertRuleNotification = new CreateAlertRuleNotificationInput
                                     {
                                         AlertLevelId = thresholdInfo.ThresholdAction.AlertLevelId,

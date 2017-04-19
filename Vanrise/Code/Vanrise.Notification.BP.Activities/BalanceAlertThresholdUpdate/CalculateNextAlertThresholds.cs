@@ -74,8 +74,8 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                     {
                                         VRBalanceAlertThresholdAction balanceAlertThresholdAction = balanceAlertRuleSettings.ThresholdActions[i];
                                         VRBalanceAlertThresholdContext vrBalanceAlertThresholdContext = new VRBalanceAlertThresholdContext { EntityBalanceInfo = entityBalanceInfo, AlertRuleTypeId = inputArgument.AlertTypeId };
-                                        decimal ruleThresholdValue = balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext);
-                                        thresholds.Add(ruleThresholdValue);
+                                        decimal roundedRuleThresholdValue = CalculateNextAlertThresholds.ThresholdRounding(balanceAlertThresholdAction.Threshold.GetThreshold(vrBalanceAlertThresholdContext));
+                                        thresholds.Add(roundedRuleThresholdValue);
                                     }
                                     foreach (var threshold in thresholds.OrderByDescending(itm => itm))
                                     {
@@ -137,6 +137,11 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
             base.OnBeforeExecute(context, handle);
         }
 
+
+        internal static Decimal ThresholdRounding(Decimal threshold)
+        {
+            return Decimal.Round(threshold, 2);
+        }
     }
 
 }
