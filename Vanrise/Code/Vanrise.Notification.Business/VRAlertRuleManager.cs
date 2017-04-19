@@ -64,6 +64,8 @@ namespace Vanrise.Notification.Business
                     return false;
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
+                if (input.Query.RuleTypeIds != null && !input.Query.RuleTypeIds.Contains(x.RuleTypeId))
+                    return false;
                 return true;
             };
 
@@ -261,7 +263,8 @@ namespace Vanrise.Notification.Business
         {
             VRAlertRuleDetail vrAlertRuleDetail = new VRAlertRuleDetail()
             {
-                Entity = vrAlertRule
+                Entity = vrAlertRule,
+                RuleTypeName = new VRAlertRuleTypeManager().GetVRAlertRuleTypeName(vrAlertRule.RuleTypeId)
             };
             vrAlertRuleDetail.AllowEdit = _alertTypeManager.DoesUserHaveEditAccess(vrAlertRule.RuleTypeId);
             return vrAlertRuleDetail;

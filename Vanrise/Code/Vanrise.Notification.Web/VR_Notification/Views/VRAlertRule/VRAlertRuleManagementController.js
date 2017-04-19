@@ -7,18 +7,24 @@
     function VRAlertRuleManagementController($scope, VR_Notification_VRAlertRuleService, VR_Notification_VRAlertRuleAPIService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
-
+        var vrAlertRuleTypeSelectorAPI;
+        var vrAlertRuleTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
 
         function defineScope() {
-
-            $scope.search = function () {
+            $scope.scopeModel = {};
+            $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
                 return gridAPI.load(query);
             };
-            $scope.add = function () {
+            
+            $scope.scopeModel.onAlertRuleTypeSelectorReady = function (api) {
+                vrAlertRuleTypeSelectorAPI = api;
+                vrAlertRuleTypeSelectoReadyDeferred.resolve();
+            };
+            $scope.scopeModel.add = function () {
                 var onVRAlertRuleAdded = function (addedVRAlertRule) {
                     gridAPI.onVRAlertRuleAdded(addedVRAlertRule);
                 };
@@ -26,23 +32,42 @@
                 VR_Notification_VRAlertRuleService.addVRAlertRule(onVRAlertRuleAdded);
             };
 
-            $scope.hasAddVRAlertRulePermission = function () {
+            $scope.scopeModel.hasAddVRAlertRulePermission = function () {
                 return VR_Notification_VRAlertRuleAPIService.HasAddVRAlertRulePermission()
             };
 
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
             };
         }
-
+       
+        
+    
         function load() {
-
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadVRAlertRuleTypeSelector]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+
+        }
+        function loadVRAlertRuleTypeSelector() {
+            var vrAlertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            vrAlertRuleTypeSelectoReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, undefined, vrAlertRuleTypeSelectorLoadDeferred);
+            });
+            return vrAlertRuleTypeSelectorLoadDeferred.promise;
+        }
         function buildGridQuery() {
             return {
-                Name: $scope.name,
+                Name: $scope.scopeModel.name,
+                RuleTypeIds: vrAlertRuleTypeSelectorAPI.getSelectedIds()
             };
         }
     }

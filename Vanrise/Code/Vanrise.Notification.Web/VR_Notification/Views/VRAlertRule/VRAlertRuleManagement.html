@@ -1,12 +1,15 @@
 ﻿
 
-<vr-panel ng-controller="VR_Notification_VRAlertRuleManagementController">
+<vr-panel ng-controller="VR_Notification_VRAlertRuleManagementController" vr-loader="scopeModel.isLoading ">
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-textbox label="Name" value="name"></vr-textbox>
+                    <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-notification-alertruletype-selector on-ready="scopeModel.onAlertRuleTypeSelectorReady" selectedvalues="scopeModel.selectedRuleType" ismultipleselection></vr-notification-alertruletype-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -14,15 +17,15 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="add" haspermission="hasAddVRAlertRulePermission"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add" haspermission="scopeModel.hasAddVRAlertRulePermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
 
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-notification-vralertrule-grid on-ready="onGridReady"></vr-notification-vralertrule-grid>
+                <vr-notification-vralertrule-grid on-ready="scopeModel.onGridReady"></vr-notification-vralertrule-grid>
             </vr-columns>
         </vr-row>
 
