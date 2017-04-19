@@ -115,7 +115,7 @@ namespace TOne.WhS.AccountBalance.Business
         public FinancialAccountEditorRuntime GetFinancialAccountEditorRuntime(int financialAccountId)
         {
             var allFinancialAccounts = GetCachedFinancialAccounts();
-            var financialAccount =  allFinancialAccounts.GetRecord(financialAccountId);
+            var financialAccount = allFinancialAccounts.GetRecord(financialAccountId);
             bool hasFinancialTransactions = new AccountBalanceManager().CheckFinancialAccountTranasactions(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId);
             return new FinancialAccountEditorRuntime
             {
@@ -204,7 +204,7 @@ namespace TOne.WhS.AccountBalance.Business
                 return false;
 
             Func<FinancialAccountData, bool> filterExpression = GetFinancialAccountFilterExpression(accountTypeId, carrierAccount.AccountType, accountBalanceSetting, isEditMode);
-        
+
             switch (carrierAccount.AccountType)
             {
                 case BusinessEntity.Entities.CarrierAccountType.Customer:
@@ -237,7 +237,7 @@ namespace TOne.WhS.AccountBalance.Business
 
             foreach (var account in carrierAccounts)
             {
-              
+
                 if (account.AccountType == CarrierAccountType.Customer)
                 {
                     hasCustomers = true;
@@ -317,7 +317,7 @@ namespace TOne.WhS.AccountBalance.Business
                 }
                 else
                 {
-                    
+
                     if (!CheckFinancialCarrierAccountValidation(financialAccountType.VRComponentTypeId, accountBalanceSettings, financialValidationData.FinancialCarrierAccount.CarrierAccount, financialValidationData.ProfileFinancialAccounts, financialValidationData.FinancialCarrierAccount.FinancialAccounts, false))
                         return false;
                 }
@@ -326,7 +326,7 @@ namespace TOne.WhS.AccountBalance.Business
             var applicableFinancialAccountTypes = financialValidationData.FinancialAccountTypes.FindAllRecords(filterExpression);
             return applicableFinancialAccountTypes.Count() > 0;
         }
-    
+
         #region LoadFinancialValidationData
         public FinancialValidationData LoadFinancialValidationData(int? carrierProfileId, int? carrierAccountId, int financialAccountId)
         {
@@ -461,10 +461,10 @@ namespace TOne.WhS.AccountBalance.Business
              () =>
              {
                  var carrierDataByFinancialAccountId = new Dictionary<int, CarrierFinancialAccountData>();
+
                  Dictionary<int, FinancialAccount> cachedFinancialAccounts = GetCachedFinancialAccounts();
                  if (cachedFinancialAccounts != null)
                  {
-
                      foreach (var financialAccount in cachedFinancialAccounts.Values)
                      {
                          if (financialAccount.Settings == null)
@@ -477,31 +477,25 @@ namespace TOne.WhS.AccountBalance.Business
 
                          if (financialAccount.Settings.ExtendedSettings.IsCustomerAccount(context))// IsCustomerAccount will set CreditLimit on context
                          {
+                             int currencyId;
+                             if (financialAccount.CarrierAccountId.HasValue)
+                                 currencyId = _carrierAccountManager.GetCarrierAccountCurrencyId(financialAccount.CarrierAccountId.Value);
+                             else  // so financialAccount.CarrierProfileId.HasValue = true
+                                 currencyId = _carrierProfileManager.GetCarrierProfileCurrencyId(financialAccount.CarrierProfileId.Value);
+
                              carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
                              {
-                                 return new CarrierFinancialAccountData
-                                 {
-                                     AccountTypeId = financialAccount.Settings.AccountTypeId,
-                                     BED = financialAccount.BED,
-                                     CreditLimit = context.CreditLimit,
-                                     EED = financialAccount.EED,
-                                     FinancialAccountId = financialAccount.FinancialAccountId,
-                                     UsageTransactionTypeId = context.UsageTransactionTypeId
-                                 };
+                                 return CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId, context.CreditLimit, currencyId);
                              });
                          }
                      }
                  }
                  return carrierDataByFinancialAccountId;
              });
-
-
-           
         }
 
         Dictionary<int, CarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
-
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierFinancialsByFinAccId",
               () =>
               {
@@ -521,25 +515,21 @@ namespace TOne.WhS.AccountBalance.Business
 
                           if (financialAccount.Settings.ExtendedSettings.IsSupplierAccount(context))// IsSupplierAccount will set CreditLimit on context
                           {
+                              int currencyId;
+                              if (financialAccount.CarrierAccountId.HasValue)
+                                  currencyId = _carrierAccountManager.GetCarrierAccountCurrencyId(financialAccount.CarrierAccountId.Value);
+                              else  // so financialAccount.CarrierProfileId.HasValue = true
+                                  currencyId = _carrierProfileManager.GetCarrierProfileCurrencyId(financialAccount.CarrierProfileId.Value);
+
                               carrierDataByFinancialAccountId.GetOrCreateItem(financialAccount.FinancialAccountId, () =>
                               {
-                                  return new CarrierFinancialAccountData
-                                  {
-                                      AccountTypeId = financialAccount.Settings.AccountTypeId,
-                                      BED = financialAccount.BED,
-                                      CreditLimit = context.CreditLimit,
-                                      EED = financialAccount.EED,
-                                      FinancialAccountId = financialAccount.FinancialAccountId,
-                                      UsageTransactionTypeId = context.UsageTransactionTypeId
-                                  };
+                                  return CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId, context.CreditLimit, currencyId);
                               });
                           }
                       }
                   }
                   return carrierDataByFinancialAccountId;
               });
-
-            
         }
 
         /// <summary>
@@ -551,6 +541,7 @@ namespace TOne.WhS.AccountBalance.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByCarrAccId",
             () =>
             {
+                int currencyId;
                 List<CarrierFinancialAccountData> customerFinancialAccountsData;
                 Dictionary<int, List<CarrierFinancialAccountData>> customerFinancialAccountsDataDict = new Dictionary<int, List<CarrierFinancialAccountData>>();
                 Dictionary<int, FinancialAccount> financialAccounts = GetCachedFinancialAccounts();
@@ -573,15 +564,17 @@ namespace TOne.WhS.AccountBalance.Business
 
                     if (financialAccount.CarrierAccountId.HasValue)
                     {
+                        currencyId = _carrierAccountManager.GetCarrierAccountCurrencyId(financialAccount.CarrierAccountId.Value);
                         customerFinancialAccountsData = customerFinancialAccountsDataDict.GetOrCreateItem(financialAccount.CarrierAccountId.Value);
-                        customerFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                        customerFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId, context.CreditLimit, currencyId));
                     }
                     else // so financialAccount.CarrierProfileId.HasValue = true
                     {
                         var customerAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
                         if (customerAccounts != null)
                         {
-                            var carrierFinancialAccountData = CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId); 
+                            currencyId = _carrierProfileManager.GetCarrierProfileCurrencyId(financialAccount.CarrierProfileId.Value);
+                            var carrierFinancialAccountData = CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId, context.CreditLimit, currencyId);
                             foreach (var customerAccount in customerAccounts)
                             {
                                 customerFinancialAccountsData = customerFinancialAccountsDataDict.GetOrCreateItem(customerAccount.CarrierAccountId);
@@ -604,6 +597,7 @@ namespace TOne.WhS.AccountBalance.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierFinancialsByCarrAccId",
             () =>
             {
+                int currencyId;
                 List<CarrierFinancialAccountData> supplierFinancialAccountsData;
                 Dictionary<int, List<CarrierFinancialAccountData>> supplierFinancialAccountsDataDict = new Dictionary<int, List<CarrierFinancialAccountData>>();
                 Dictionary<int, FinancialAccount> financialAccounts = GetCachedFinancialAccounts();
@@ -626,13 +620,15 @@ namespace TOne.WhS.AccountBalance.Business
 
                     if (financialAccount.CarrierAccountId.HasValue)
                     {
+                        currencyId = _carrierAccountManager.GetCarrierAccountCurrencyId(financialAccount.CarrierAccountId.Value);
                         supplierFinancialAccountsData = supplierFinancialAccountsDataDict.GetOrCreateItem(financialAccount.CarrierAccountId.Value);
-                        supplierFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId));
+                        supplierFinancialAccountsData.Add(CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId, context.CreditLimit, currencyId));
                     }
                     else // so financialAccount.CarrierProfileId.HasValue = true
                     {
+                        currencyId = _carrierProfileManager.GetCarrierProfileCurrencyId(financialAccount.CarrierProfileId.Value);
                         var supplierAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, false, true);
-                        var carrierFinancialAccountData = CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId); 
+                        var carrierFinancialAccountData = CreateCarrierFinancialAccountData(financialAccount, context.UsageTransactionTypeId, context.CreditLimit, currencyId);
 
                         foreach (var supplierAccount in supplierAccounts)
                         {
@@ -646,12 +642,14 @@ namespace TOne.WhS.AccountBalance.Business
             });
         }
 
-        private CarrierFinancialAccountData CreateCarrierFinancialAccountData(FinancialAccount financialAccount, Guid usageTransactionTypeId)
+        private CarrierFinancialAccountData CreateCarrierFinancialAccountData(FinancialAccount financialAccount, Guid usageTransactionTypeId, Decimal? creditLimit, int currencyId)
         {
             return new CarrierFinancialAccountData()
             {
                 AccountTypeId = financialAccount.Settings.AccountTypeId,
                 FinancialAccountId = financialAccount.FinancialAccountId,
+                CreditLimit = creditLimit,
+                CarrierCurrencyId = currencyId,
                 UsageTransactionTypeId = usageTransactionTypeId,
                 BED = financialAccount.BED,
                 EED = financialAccount.EED
@@ -921,7 +919,7 @@ namespace TOne.WhS.AccountBalance.Business
         }
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
-          
+
             return new FinancialAccountDetail
             {
                 Entity = financialAccount,

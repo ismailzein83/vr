@@ -51,12 +51,15 @@ namespace TOne.WhS.AccountBalance.Business
             }
         }
 
-        public Decimal GetCustomerCreditLimit(string balanceEntityId)
+        public Decimal GetCustomerCreditLimit(string balanceEntityId, out int carrierCurrencyId)
         {
             int financeAccountId = ParseFinancialAccountId(balanceEntityId);
             CarrierFinancialAccountData financialAccountData = s_financialAccountManager.GetCustCarrierFinancialByFinAccId(financeAccountId);
+            
             if (!financialAccountData.CreditLimit.HasValue)
-                throw new NullReferenceException(String.Format("financialAccountData.CreditLimit '{0}'", balanceEntityId));
+                throw new Vanrise.Entities.VRBusinessException(String.Format("Credit Limit must have a value for the Financial Account: '{0}'", balanceEntityId));
+
+            carrierCurrencyId = financialAccountData.CarrierCurrencyId;
             return financialAccountData.CreditLimit.Value;
         }
 

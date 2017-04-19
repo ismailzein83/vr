@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.AccountBalance.Business;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds.PostPaid
 {
@@ -14,10 +11,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds.PostPa
     /// </summary>
     public class CustTolerancePercThreshold : VRBalanceAlertThreshold
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("9D1732F1-E595-41B8-8FA6-FBD0AE039EED"); }
-        }
+        public override Guid ConfigId { get { return new Guid("9D1732F1-E595-41B8-8FA6-FBD0AE039EED"); } }
 
         public Decimal Percentage { get; set; }
 
@@ -25,8 +19,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertThresholds.PostPa
         {
             context.ThrowIfNull("context");
             context.EntityBalanceInfo.ThrowIfNull("context.EntityBalanceInfo");
-            Decimal creditLimit = new AccountBalanceManager().GetCustomerCreditLimit(context.EntityBalanceInfo.EntityId);
-            return -(creditLimit * (100 - this.Percentage) / 100);
+            int liveBalanceCurrencyId = context.EntityBalanceInfo.CurrencyId;
+
+            int carrierCurrencyId;
+            Decimal creditLimit = new AccountBalanceManager().GetCustomerCreditLimit(context.EntityBalanceInfo.EntityId, out carrierCurrencyId);
+            Decimal convertedCreditLimit = new CurrencyExchangeRateManager().ConvertValueToCurrency(creditLimit, carrierCurrencyId, liveBalanceCurrencyId, DateTime.Now);
+
+            return -(convertedCreditLimit * (100 - this.Percentage) / 100);
         }
     }
 }

@@ -16,6 +16,8 @@ namespace TOne.WhS.AccountBalance.Entities
 
         public Decimal? CreditLimit { get; set; }
 
+        public int CarrierCurrencyId { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
