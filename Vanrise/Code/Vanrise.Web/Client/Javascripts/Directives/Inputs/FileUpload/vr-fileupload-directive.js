@@ -15,7 +15,6 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
         controller: function ($scope, $element, $attrs, $timeout) {
             $scope.$on("$destroy", function () {
                 $element.off();
-                $(document).off();
                 $(window).off("resize.Viewport");
             });
             var ctrl = this;
