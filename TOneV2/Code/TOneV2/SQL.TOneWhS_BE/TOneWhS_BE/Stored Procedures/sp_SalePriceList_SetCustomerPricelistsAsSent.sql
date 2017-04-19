@@ -4,7 +4,8 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SetCustomerPricelistsAsSent]
-	@CustomerID nvarchar(max)
+	@CustomerID nvarchar(max),
+	@PriceListId int = null
 AS
 BEGIN
 	DECLARE @CustomerIDsTable TABLE (CustomerID int)
@@ -13,4 +14,5 @@ BEGIN
 	
 	Update TOneWhS_BE.SalePriceList Set IsSent = 1
 	Where Ownertype = 1 AND OwnerID in (select CustomerID from @CustomerIDsTable)
+	and (@PriceListId is null or ID<=@PriceListId)
 END

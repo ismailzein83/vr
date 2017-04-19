@@ -96,8 +96,8 @@ BEGIN
 			
 			-- Sync customer countries
 
-			insert into TOneWhS_BE.CustomerCountry (ID, CustomerID, CountryID, BED, EED)
-			select ID, CustomerID, CountryID, BED, EED
+			insert into TOneWhS_BE.CustomerCountry (ID, CustomerID, CountryID, BED, EED,ProcessInstanceID)
+			select ID, CustomerID, CountryID, BED, EED,@ProcessInstanceID
 			from TOneWhS_Sales.RP_CustomerCountry_New newCountry with(nolock)
 			where newCountry.ProcessInstanceID = @ProcessInstanceId
 

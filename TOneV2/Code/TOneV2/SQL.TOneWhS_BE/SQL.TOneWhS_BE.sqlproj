@@ -300,7 +300,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchConnectivity_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchConnectivity_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfter.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCodeGroupIds.sql" />
@@ -469,5 +468,6 @@
     <Build Include="TOneWhS_Invoice\Stored Procedures\sp_CarrierInvoiceAccount_Insert.sql" />
     <Build Include="TOneWhS_Invoice\Stored Procedures\sp_CarrierInvoiceAccount_Update.sql" />
     <Build Include="Security\TOneWhS_Invoice.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetSaleCodesEffectiveAfter.sql" />
   </ItemGroup>
 </Project>

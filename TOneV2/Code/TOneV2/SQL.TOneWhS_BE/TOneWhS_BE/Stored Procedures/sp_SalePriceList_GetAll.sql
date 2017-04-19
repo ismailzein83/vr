@@ -9,6 +9,6 @@ AS
 BEGIN
 	set nocount on;
 
-	select [ID], [OwnerID], [OwnerType], [CurrencyID], [EffectiveOn], [PriceListType], [ProcessInstanceID], [FileID], [CreatedTime],issent
+	select [ID], [OwnerID], [OwnerType], [CurrencyID], [EffectiveOn], [PriceListType], [ProcessInstanceID], [FileID], [CreatedTime],issent,SourceID
 	from [TOneWhS_BE].SalePriceList with(nolock)
 END

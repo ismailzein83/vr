@@ -7,9 +7,12 @@
     [EED]                 DATETIME       NULL,
     [timestamp]           ROWVERSION     NULL,
     [SourceID]            VARCHAR (50)   NULL,
+    [ProcessInstanceID]   BIGINT         NULL,
     CONSTRAINT [PK_SaleZone] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleZone_SellingNumberPlan] FOREIGN KEY ([SellingNumberPlanID]) REFERENCES [TOneWhS_BE].[SellingNumberPlan] ([ID])
 );
+
+
 
 
 

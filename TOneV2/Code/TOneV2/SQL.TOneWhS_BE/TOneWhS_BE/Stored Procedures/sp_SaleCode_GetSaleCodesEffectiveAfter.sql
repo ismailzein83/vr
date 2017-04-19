@@ -1,10 +1,11 @@
 ﻿-- =============================================
 -- Description:	Get all sale codes effective and pending effective by sellingNumberPlanId
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetEffectiveAndPendingBySellingNumberPlan]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetSaleCodesEffectiveAfter]
 	-- Add the parameters for the stored procedure here
 	@SellingNumberPlanId bigint,
-	@When DateTime
+	@When DateTime,
+	@ProcessInstanceId bigint
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -16,5 +17,6 @@ FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK)
 		JOIN	[TOneWhS_BE].[SaleZone] sz WITH(NOLOCK) ON sc.ZoneID=sz.ID
 WHERE	sz.[SellingNumberPlanID]=@SellingNumberPlanId
 		and (sc.EED is null or sc.EED > @when)
+		and (@ProcessInstanceId is null or (sc.processInstanceID is null or sc.processInstanceID<@ProcessInstanceId))
         
 END

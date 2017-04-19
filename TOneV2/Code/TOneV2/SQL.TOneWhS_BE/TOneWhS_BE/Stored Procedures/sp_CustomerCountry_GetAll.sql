@@ -3,10 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE TOneWhS_BE.sp_CustomerCountry_GetAll
+CREATE PROCEDURE [TOneWhS_BE].[sp_CustomerCountry_GetAll]
 	
 AS
 BEGIN
-	select [ID], [CustomerID], [CountryID], [BED], [EED]
+	select [ID], [CustomerID], [CountryID], [BED], [EED],ProcessInstanceID
 	from TOneWhS_BE.CustomerCountry
 END
