@@ -6,12 +6,14 @@
     [EffectiveOn]       DATETIME     NULL,
     [PriceListType]     TINYINT      NULL,
     [SourceID]          VARCHAR (50) NULL,
-    [ProcessInstanceID] BIGINT       NULL,
     [FileID]            BIGINT       NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF_SalePriceList_CreatedTime_1] DEFAULT (getdate()) NULL,
     [StateBackupID]     BIGINT       NOT NULL,
-    [IsSent]            BIT          NULL
+    [IsSent]            BIT          NULL,
+    [ProcessInstanceID] BIGINT       NULL
 );
+
+
 
 
 
