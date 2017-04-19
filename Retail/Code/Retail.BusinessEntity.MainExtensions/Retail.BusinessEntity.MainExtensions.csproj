@@ -103,6 +103,10 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
@@ -143,6 +147,9 @@
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
     <Compile Include="AccountViews\AccountHistoryView.cs" />
+    <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
+    <Compile Include="PackageTypes\InvoiceRecurChargePackageDefinitionSettings.cs" />
+    <Compile Include="PackageTypes\InvoiceRecurChargePackageSettings.cs" />
     <Compile Include="PortalAccount\PortalAccount.cs" />
     <Compile Include="AccountViews\AccountServices.cs" />
     <Compile Include="AccountViews\Actions.cs" />
@@ -179,7 +186,6 @@
     <Compile Include="DurationVolumes\VolumePerUnit.cs" />
     <Compile Include="FileAccountConvertors\CompanyConvertor.cs" />
     <Compile Include="FileAccountConvertors\UserConvertor.cs" />
-    <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\PricingPackageSettings.cs" />
     <Compile Include="PackageTypes\VolumePackageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

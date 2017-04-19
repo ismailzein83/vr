@@ -91,6 +91,8 @@
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandlerConfig.cs" />
     <Compile Include="Account\ExtendedSettings\PortalAccountSettings.cs" />
     <Compile Include="BusinessManagers\IAccountBEManager.cs" />
+    <Compile Include="ChargeableEntity\ChargeableEntityDefinitionSettings.cs" />
+    <Compile Include="ChargeableEntity\ChargeableEntitySettings.cs" />
     <Compile Include="DID\DID.cs" />
     <Compile Include="DID\DIDDetail.cs" />
     <Compile Include="DID\DIDFilter.cs" />
