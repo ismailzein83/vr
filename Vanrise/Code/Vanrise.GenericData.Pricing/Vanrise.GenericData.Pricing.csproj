@@ -66,6 +66,10 @@
     <Compile Include="Tariff\TariffRuleContext.cs" />
     <Compile Include="Tariff\TariffRule.cs" />
     <Compile Include="Tariff\TariffRuleManager.cs" />
+    <Compile Include="Tax\TaxRule.cs" />
+    <Compile Include="Tax\TaxRuleContext.cs" />
+    <Compile Include="Tax\TaxRuleDefinitionSettings.cs" />
+    <Compile Include="Tax\TaxRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">

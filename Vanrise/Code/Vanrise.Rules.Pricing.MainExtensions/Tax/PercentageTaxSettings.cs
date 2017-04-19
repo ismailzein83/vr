@@ -6,21 +6,25 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Pricing.MainExtensions.Tax
 {
-    public class PercentageTaxSettings : PricingRuleTaxSettings
+    public class PercentageTaxSettings : PricingRuleTaxActionSettings
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("8C340085-E102-4504-A49B-329480CC7605"); }
         }
 
-        public Decimal TaxPercentage { get; set; }
+        public Decimal? FromAmount { get; set; }
 
-        protected override void Execute(IPricingRuleTaxContext context)
+        public Decimal? ToAmount { get; set; }
+
+        public Decimal ExtraPercentage { get; set; }
+
+        protected override void Execute(IPricingRuleTaxActionContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override string GetDescription(GenericData.Entities.IGenericRuleSettingsDescriptionContext context)
+        public override string GetDescription()
         {
             throw new NotImplementedException();
         }

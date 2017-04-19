@@ -65,6 +65,9 @@
     <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
     <Compile Include="Country\CountryFilter.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
+    <Compile Include="GenericLKUP\GenericLKUPDefinitionConfig.cs" />
+    <Compile Include="GenericLKUP\GenericLKUPDefinitionExtendedSettings.cs" />
+    <Compile Include="GenericLKUP\GenericLKUPItem.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
     <Compile Include="VRActionAudit\VRActionAuditDetail.cs" />

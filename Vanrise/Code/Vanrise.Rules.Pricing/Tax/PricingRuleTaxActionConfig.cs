@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.Rules.Pricing
 {
-    public class PricingRuleTaxSettingsConfig : ExtensionConfiguration
+    public class PricingRuleTaxActionConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_Rules_PricingRuleTaxSettings";
+        public const string EXTENSION_TYPE = "VR_Rules_PricingRuleTaxAction";
         public string Editor { get; set; }
     }
 }

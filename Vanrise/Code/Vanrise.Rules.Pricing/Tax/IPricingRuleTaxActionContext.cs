@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Pricing
 {
-    public interface IPricingRuleTaxContext : IRuleExecutionContext
+    public interface IPricingRuleTaxActionContext
     {
         DateTime? TargetTime { get; }
 
         Decimal Amount { get; set; }
 
-        Decimal TaxAmount { set; }
-
         int? DestinationCurrencyId { get; }
 
-        int SourceCurrencyId { get; set; }
+        int SourceCurrencyId { get; }
+
+        bool IsTaxApplied { get; set; }
     }
 }

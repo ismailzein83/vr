@@ -7,17 +7,31 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Rules.Pricing
 {
-    public abstract class PricingRuleTaxSettings
+    public class PricingRuleTaxSettings
     {
-        public abstract Guid ConfigId { get; }
+        public List<PricingRuleTaxActionSettings> Actions { get; set; }
 
-        protected abstract void Execute(IPricingRuleTaxContext context);
+        public int CurrencyId { get; set; }
 
         public void ApplyTaxRule(IPricingRuleTaxContext context)
         {
-            this.Execute(context);
-        }
+            PricingRuleTaxActionContext actionContext = new PricingRuleTaxActionContext
+            {
+                Amount = context.Amount,
+                TargetTime = context.TargetTime,
+                DestinationCurrencyId = context.DestinationCurrencyId,
+                SourceCurrencyId = context.SourceCurrencyId
+            };
 
-        public abstract string GetDescription(IGenericRuleSettingsDescriptionContext context);
+            var originalAmount = context.Amount;
+            foreach (var action in this.Actions)
+            {
+                action.Execute(actionContext);
+                if (actionContext.IsTaxApplied)
+                    break;
+            }
+            context.TaxAmount = actionContext.Amount - context.Amount;
+            context.Amount = actionContext.Amount;
+        }
     }
 }
