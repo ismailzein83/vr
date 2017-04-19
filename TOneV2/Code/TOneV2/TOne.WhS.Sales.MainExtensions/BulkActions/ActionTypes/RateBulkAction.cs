@@ -14,11 +14,23 @@ namespace TOne.WhS.Sales.MainExtensions
 {
     public class RateBulkAction : BulkActionType
     {
-        #region Fields
+        #region Fields / Constructors
 
         private Dictionary<int, DateTime> _datesByCountry;
 
         private int? _sellingProductId;
+
+        private int _newRateDayOffset;
+        private int _increasedRateDayOffset;
+        private int _decreasedRateDayOffset;
+
+        public RateBulkAction()
+        {
+            var configManager = new TOne.WhS.Sales.Business.ConfigManager();
+            _newRateDayOffset = configManager.GetNewRateDayOffset();
+            _increasedRateDayOffset = configManager.GetIncreasedRateDayOffset();
+            _decreasedRateDayOffset = configManager.GetDecreasedRateDayOffset();
+        }
 
         #endregion
 
@@ -26,7 +38,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
-        public DateTime BED { get; set; }
+        public DateTime? BED { get; set; }
 
         #region Bulk Action Members
 
@@ -43,10 +55,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
             if (context.ValidationResult == null)
             {
-                context.ValidationResult = new RateBulkActionValidationResult()
-                {
-                    BED = BED
-                };
+                context.ValidationResult = new RateBulkActionValidationResult();
             }
 
             var validationResult = context.ValidationResult as RateBulkActionValidationResult;
@@ -121,10 +130,10 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
-            if (context.SaleZone.BED > BED)
+            if (context.SaleZone.EED.HasValue)
                 return false;
 
-            if (context.SaleZone.EED.HasValue)
+            if (BED.HasValue && context.SaleZone.BED > BED)
                 return false;
 
             if (context.OwnerType == SalePriceListOwnerType.Customer)
@@ -142,7 +151,7 @@ namespace TOne.WhS.Sales.MainExtensions
                     _datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, false);
                 }
 
-                if (!UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED, _datesByCountry))
+                if (BED.HasValue && !UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED.Value, _datesByCountry))
                     return false;
             }
 
@@ -162,8 +171,7 @@ namespace TOne.WhS.Sales.MainExtensions
             var newNormalRate = new DraftRateToChange()
             {
                 ZoneId = context.ZoneItem.ZoneId,
-                RateTypeId = null,
-                BED = BED
+                RateTypeId = null
             };
 
             decimal? cost = null;
@@ -172,38 +180,47 @@ namespace TOne.WhS.Sales.MainExtensions
             if (CostCalculationMethod != null)
                 costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
 
+            ZoneItem zoneItem = context.GetContextZoneItem(context.ZoneItem.ZoneId);
+
             if (costCalculationMethodIndex.HasValue)
             {
-                ZoneItem zoneItem = context.GetContextZoneItem(context.ZoneItem.ZoneId);
-                if (zoneItem == null)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("ZoneItem of Zone '{0}' was not found", context.ZoneItem.ZoneId));
                 if (zoneItem.Costs != null)
                     cost = zoneItem.Costs.ElementAt(costCalculationMethodIndex.Value);
             }
 
-            var rateCalculationContext = new RateCalculationMethodContext()
-            {
-                Cost = cost
-            };
+            var rateCalculationContext = new RateCalculationMethodContext() { Cost = cost };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
-            if (rateCalculationContext.Rate.HasValue)
-            {
-                newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
-                newRates.Add(newNormalRate);
-                context.ZoneItem.NewRates = newRates;
-            }
+            newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
+            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId);
+
+            newRates.Add(newNormalRate);
+            context.ZoneItem.NewRates = newRates;
         }
 
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
-            ZoneItem zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
+            var newRates = new List<DraftRateToChange>();
+
+            if (context.ZoneDraft != null && context.ZoneDraft.NewRates != null)
+            {
+                IEnumerable<DraftRateToChange> newOtherRates = context.ZoneDraft.NewRates.FindAllRecords(x => x.RateTypeId.HasValue);
+                newRates.AddRange(newOtherRates);
+            }
+
+            var newNormalRate = new DraftRateToChange()
+            {
+                ZoneId = context.ZoneDraft.ZoneId,
+                RateTypeId = null,
+            };
 
             decimal? cost = null;
             int? costCalculationMethodIndex = null;
 
             if (CostCalculationMethod != null)
                 costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
+
+            ZoneItem zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
 
             if (costCalculationMethodIndex.HasValue)
             {
@@ -217,27 +234,11 @@ namespace TOne.WhS.Sales.MainExtensions
             };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
-            if (rateCalculationContext.Rate.HasValue)
-            {
-                var newRates = new List<DraftRateToChange>();
+            newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
+            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId);
 
-                if (context.ZoneDraft != null && context.ZoneDraft.NewRates != null)
-                {
-                    IEnumerable<DraftRateToChange> newOtherRates = context.ZoneDraft.NewRates.FindAllRecords(x => x.RateTypeId.HasValue);
-                    newRates.AddRange(newOtherRates);
-                }
-
-                var newNormalRate = new DraftRateToChange()
-                {
-                    ZoneId = zoneItem.ZoneId,
-                    RateTypeId = null,
-                    Rate = GetRoundedRate(rateCalculationContext.Rate.Value),
-                    BED = BED
-                };
-
-                newRates.Add(newNormalRate);
-                context.ZoneDraft.NewRates = newRates;
-            }
+            newRates.Add(newNormalRate);
+            context.ZoneDraft.NewRates = newRates;
         }
 
         public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
@@ -252,6 +253,42 @@ namespace TOne.WhS.Sales.MainExtensions
         private decimal GetRoundedRate(decimal rate)
         {
             return decimal.Round(rate, 4);
+        }
+
+        private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId)
+        {
+            if (BED.HasValue)
+                return BED.Value;
+
+            DateTime newNormalRateBED;
+
+            DateTime todayPlusOffset = GetTodayPlusOffset(currentRate, newRate);
+            newNormalRateBED = Utilities.Max(todayPlusOffset, zoneBED);
+
+            if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                DateTime countryBED = _datesByCountry.GetRecord(countryId);
+                newNormalRateBED = Utilities.Max(newNormalRateBED, countryBED);
+            }
+
+            return newNormalRateBED;
+        }
+
+        private DateTime GetTodayPlusOffset(decimal? currentRate, decimal newRate)
+        {
+            DateTime today = DateTime.Today;
+
+            if (!currentRate.HasValue)
+                return today.AddDays(_newRateDayOffset);
+            else
+            {
+                if (newRate > currentRate.Value)
+                    return today.AddDays(_increasedRateDayOffset);
+                else if (newRate < currentRate.Value)
+                    return today.AddDays(_decreasedRateDayOffset);
+            }
+
+            return today;
         }
 
         #endregion

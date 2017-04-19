@@ -686,7 +686,10 @@ namespace TOne.WhS.Sales.Business
 
                 return BuildZoneItems(filteredSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, null, draft, input.EffectiveOn, zoneRPLocator);
             };
-            var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods);
+            var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods)
+            {
+                OwnerType = input.OwnerType
+            };
 
             var newDraft = new Changes()
             {
@@ -887,6 +890,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, costCalculationMethods, getSellingProductZoneRoutingProduct)
                     {
+                        OwnerType = ownerType,
                         ZoneItem = zoneItem,
                         ZoneDraft = zoneDraft
                     };

@@ -17,8 +17,6 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public List<InvalidZoneRate> DuplicateRates { get; set; }
 
-        public DateTime BED { get; set; }
-
         public RateBulkActionValidationResult()
         {
             base.ExcludedZoneIds = new List<long>();
