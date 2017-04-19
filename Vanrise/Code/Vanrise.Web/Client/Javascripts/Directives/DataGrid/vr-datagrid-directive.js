@@ -986,7 +986,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         if (isInModal() == true)
                             h += sh * 0.5;
                         else
-                            h += sh - 367;
+                            h += sh - 332;
 
                         h = h < 30 ? 30 : h;
                         setMaxHeight(h + "px");
