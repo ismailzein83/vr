@@ -118,7 +118,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ProcessInstanceId = GetReaderValue<long>(reader, "ProcessInstanceID"),
                 FileId = GetReaderValue<long>(reader, "FileID"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                IsSent = GetReaderValue<bool>(reader, "IsSent")
+                IsSent = GetReaderValue<bool>(reader, "IsSent"),
+                SourceId = GetReaderValue<string>(reader, "SourceID")
             };
 
             return salePriceList;

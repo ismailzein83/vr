@@ -67,30 +67,34 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
 
         function defineMenuActions() {
             $scope.gridMenuActions = function (dataItem) {
+
                 var menuActions = [];
-                var labelSendValue = "Resend";
-                var salePriceListPreview =
-                {
-                    name: "Preview PriceList",
-                    clicked: PreviewPriceList
-                };
-                menuActions.push(salePriceListPreview);
-                if (dataItem.Entity.OwnerType === whSBeSalePriceListOwnerTypeEnum.Customer.value) {
+                var sourceId = dataItem.Entity.SourceId;
+                if (typeof sourceId == 'undefined' || sourceId == null) {
+                    var labelSendValue = "Resend";
+                    var salePriceListPreview =
+                    {
+                        name: "Preview PriceList",
+                        clicked: PreviewPriceList
+                    };
+                    menuActions.push(salePriceListPreview);
+                    if (dataItem.Entity.IsSent === false) {
+                        labelSendValue = "Send";
+                    }
+                    var salePriceListSend =
+                    {
+                        name: labelSendValue,
+                        clicked: SendPriceList
+                    };
+                    menuActions.push(salePriceListSend);
+                }
+                if (dataItem.Entity.FileId !== 0) {
                     var downloadPricelist = {
                         name: "Download",
                         clicked: downloadPriceList
                     };
                     menuActions.push(downloadPricelist);
                 }
-                if (dataItem.Entity.IsSent === false) {
-                    labelSendValue = "Send";
-                }
-                var salePriceListSend =
-                {
-                    name: labelSendValue,
-                    clicked: SendPriceList
-                };
-                menuActions.push(salePriceListSend);
                 return menuActions;
             };
 
