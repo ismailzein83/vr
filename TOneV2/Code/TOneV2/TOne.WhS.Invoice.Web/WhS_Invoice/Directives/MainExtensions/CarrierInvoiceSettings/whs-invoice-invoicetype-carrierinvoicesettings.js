@@ -45,7 +45,7 @@ app.directive("whsInvoiceInvoicetypeCarrierinvoicesettings", ["UtilsService", "V
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Invoice.Business.Extensions.CarrierInvoiceSettings ,TOne.WhS.Invoice.Business",
+                        $type: "TOne.WhS.Invoice.Business.Extensions.CustomerInvoiceSettings ,TOne.WhS.Invoice.Business",
                     };
                 };
 
