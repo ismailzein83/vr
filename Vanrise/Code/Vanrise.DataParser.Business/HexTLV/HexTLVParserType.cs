@@ -12,7 +12,7 @@ namespace Vanrise.DataParser.Business.HexTLV
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("DF8E951E-9D65-4F49-BC92-18F6E159D7DF"); }
         }
         public RecordReader RecordReader { get; set; }
 

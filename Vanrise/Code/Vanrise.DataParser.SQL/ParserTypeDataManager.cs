@@ -47,10 +47,12 @@ namespace Vanrise.DataParser.Data.SQL
 
         ParserType ParserTypeMapper(IDataReader reader)
         {
-            ParserType parserType = new ParserType();
-            parserType.ParserTypeId = (Guid)reader["ID"];
-            parserType.Name = reader["Name"] as string;
-            return parserType;
+            return new ParserType
+            {
+               ParserTypeId = (Guid)reader["ID"],
+               Name = reader["Name"] as string,
+               Settings = Vanrise.Common.Serializer.Deserialize<ParserTypeSettings>(reader["Settings"] as string)
+            };
         }
 
         # endregion

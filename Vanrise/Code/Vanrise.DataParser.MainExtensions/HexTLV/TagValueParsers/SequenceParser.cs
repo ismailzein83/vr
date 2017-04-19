@@ -11,7 +11,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("300353A5-1105-4BAC-9207-1602BB0A3B1A"); }
         }
         public Dictionary<string, HexTLVTagType> TagTypes { get; set; }
 

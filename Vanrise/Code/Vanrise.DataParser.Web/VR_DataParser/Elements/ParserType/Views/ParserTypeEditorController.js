@@ -2,47 +2,47 @@
 
     "use strict";
 
-    paserTypeEditorController.$inject = ['$scope', 'VR_DataParser_ParserTypeAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+    paserTypeEditorController.$inject = ['$scope', 'VR_DataParser_ParserTypeAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function paserTypeEditorController($scope, VR_DataParser_ParserTypeAPIService, VRNotificationService, VRNavigationService, UtilsService) {
-
+    function paserTypeEditorController($scope, VR_DataParser_ParserTypeAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         var parserTypeId;
-        var editMode;
+        var isEditMode;
         var parserTypeEntity;
+        var parserTypeExtendedSettingsSelectorAPI;
+        var parserTypeExtendedSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
+
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 parserTypeId = parameters.parserTypeId;
             }
-            editMode = (parserTypeId != undefined);
-
-        }
+                isEditMode = (parserTypeId != undefined);
+            }
 
         function defineScope() {
-
-            $scope.saveParserType= function () {
-                if (editMode)
+            $scope.scopeModel = {};
+            $scope.saveParserType = function () {
+                if (isEditMode)
                     return updateParserType();
                 else
                     return insertParserType();
             };
-
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-
+            $scope.scopeModel.onParserTypeExtendedSettingsSelectorReady = function (api) {
+                parserTypeExtendedSettingsSelectorAPI = api;
+                parserTypeExtendedSettingsSelectorReadyPromiseDeferred.resolve();
+            };
         }
 
         function load() {
-
             $scope.isLoading = true;
-
-            if (editMode) {
+            if (isEditMode) {
                 getParserType().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -53,10 +53,7 @@
                     $scope.isLoading = false;
                 });
             }
-
-            else {
-                loadAllControls();
-            }
+            else loadAllControls();
         }
 
         function getParserType() {
@@ -66,7 +63,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParserTypeExtendedSettingsSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -76,41 +73,53 @@
         }
 
         function setTitle() {
-            if (editMode && parserTypeEntity != undefined)
+            if (isEditMode && parserTypeEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(parserTypeEntity.Name, "ParserType");
             else
                 $scope.title = UtilsService.buildTitleForAddEditor("ParserType");
         }
 
         function loadStaticData() {
-
             if (parserTypeEntity == undefined)
                 return;
+            $scope.scopeModel.name = parserTypeEntity.Name;
+        }
 
-            $scope.name = parserTypeEntity.Name;
+        function loadParserTypeExtendedSettingsSelector() {
+            var parserTypeExtendedSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            parserTypeExtendedSettingsSelectorReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {context:getContext()};
+                    if (parserTypeEntity != undefined && parserTypeEntity.Settings != undefined) {
+                        directivePayload.parserTypeEntity = parserTypeEntity.Settings;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(parserTypeExtendedSettingsSelectorAPI, directivePayload, parserTypeExtendedSettingsLoadPromiseDeferred);
+                });
+            return parserTypeExtendedSettingsLoadPromiseDeferred.promise;
         }
 
         function buildParserTypeObjFromScope() {
             var obj = {
-                ParserTypeId: (parserTypeId != null) ? parserTypeId : 0,
-                Name: $scope.name,
-                Settings:null
+                ParserTypeId: parserTypeId,
+                Name: $scope.scopeModel.name,
+                Settings: {
+                    ExtendedSettings: parserTypeExtendedSettingsSelectorAPI.getData()
+                                    }
             };
             return obj;
         }
 
-
         function insertParserType() {
             $scope.isLoading = true;
-
             var parserTypeObject = buildParserTypeObjFromScope();
-            return VR_DataParser_ParserTypeAPIService.AddParserType(parserTypeObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("ParserType", response, "Name")) {
-                    if ($scope.onParserTypeAdded != undefined)
-                        $scope.onParserTypeAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
+                 return VR_DataParser_ParserTypeAPIService.AddParserType(parserTypeObject)
+                    .then(function (response) {
+                        if (VRNotificationService.notifyOnItemAdded("ParserType", response, "Name"))
+                        {
+                            if ($scope.onParserTypeAdded != undefined)
+                                    $scope.onParserTypeAdded(response.InsertedObject);
+                          $scope.modalContext.closeModal();
+                            }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
@@ -118,9 +127,9 @@
             });
 
         }
+
         function updateParserType() {
             $scope.isLoading = true;
-
             var parserTypeObject = buildParserTypeObjFromScope();
             VR_DataParser_ParserTypeAPIService.UpdateParserType(parserTypeObject)
             .then(function (response) {
@@ -134,6 +143,13 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
+        }
+
+        function getContext() {
+            var  context;
+            if (context == undefined)
+                context = {};
+            return context;
         }
     }
 

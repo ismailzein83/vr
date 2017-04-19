@@ -1,0 +1,7 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addHexTLVTagType" standalone></vr-button>
+<vr-validator validate="ctrl.validate()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" hidegridmenu>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Key'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

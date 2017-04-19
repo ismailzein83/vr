@@ -20,8 +20,6 @@ function (UtilsService, VRNotificationService, VR_DataParser_ParserTypeAPIServic
 
         },
         templateUrl: "/Client/Modules/VR_DataParser/Elements/ParserType/Directives/Templates/ParserTypeGrid.html"
-
-
     };
 
     function ParserTypeGrid($scope, ctrl, $attrs) {
@@ -33,23 +31,22 @@ function (UtilsService, VRNotificationService, VR_DataParser_ParserTypeAPIServic
 
             $scope.parserTypes = [];
             $scope.onGridReady = function (api) {
+                     gridAPI = api;
+                        if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                                ctrl.onReady(getDirectiveAPI());
+                    function getDirectiveAPI() {
+                                 var directiveAPI = {};
+                                 directiveAPI.loadGrid = function (query) {
+                                 return gridAPI.retrieveData(query);
+                                 };
 
-                gridAPI = api;
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
-
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
-                    };
-                    directiveAPI.onParserTypeAdded = function (parserTypeObject) {
+                        directiveAPI.onParserTypeAdded = function (parserTypeObject) {
                         gridAPI.itemAdded(parserTypeObject);
                     };
                     return directiveAPI;
                 }
             };
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+          $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_DataParser_ParserTypeAPIService.GetFilteredParserTypes(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
@@ -69,13 +66,11 @@ function (UtilsService, VRNotificationService, VR_DataParser_ParserTypeAPIServic
             }];
         }
 
-        
-
         function editParsertype(ParserTypeObj) {
             var onParserTypeUpdated = function (ParserTypeObj) {
                 gridAPI.itemUpdated(ParserTypeObj);
             };
-
+           
             VR_DataParser_ParserTypeService.editParserType(ParserTypeObj.Entity.ParserTypeId, onParserTypeUpdated);
         }
 

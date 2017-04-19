@@ -13,7 +13,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("1F558330-45F4-4C00-8E5C-4B51ED8F6349"); }
         }
         public Dictionary<string, TagRecordType> RecordTypesByTag { get; set; }
         public int NumberOfBytesToSkip { get; set; }

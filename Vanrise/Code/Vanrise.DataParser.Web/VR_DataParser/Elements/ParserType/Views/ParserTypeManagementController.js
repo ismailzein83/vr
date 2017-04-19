@@ -7,46 +7,42 @@
     function parserTypeManagementController($scope, VR_DataParser_ParserTypeService) {
 
         var gridAPI;
-                var filter = {};
+        var filter = {};
 
-                defineScope();
-                load();
+        defineScope();
+        load();
 
-                function defineScope() {
-                    $scope.searchClicked = function () {
+              function defineScope() {
+                 $scope.searchClicked = function () {
                         getFilterObject();
                         return gridAPI.loadGrid(filter);
                     };
 
-
-                    function getFilterObject() {
+                 function getFilterObject() {
                         filter = {
                             Name: $scope.name
                         };
-
                     }
 
-                    $scope.onGridReady = function (api) {
+                  $scope.onGridReady = function (api) {
                         gridAPI = api;
                         api.loadGrid(filter);
-                    };
-                    $scope.addNewParserType = addNewParserType;
+                  };
+
+                  $scope.addNewParserType = addNewParserType;
                 }
 
-                function load() {
+              function load() {
                     loadAllControls();
-
                 }
 
-                function loadAllControls()
+              function loadAllControls()
                 {}
 
-
-                function addNewParserType() {
+              function addNewParserType() {
                     var onParserTypeAdded = function (parserTypeObj) {
                         gridAPI.onParserTypeAdded(parserTypeObj);
                     };
-
                     VR_DataParser_ParserTypeService.addParserType(onParserTypeAdded);
                 }
 
