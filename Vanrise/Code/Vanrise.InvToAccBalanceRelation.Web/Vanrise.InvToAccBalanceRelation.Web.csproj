@@ -122,11 +122,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountBalanceInvoicesController.cs" />
     <Compile Include="Controllers\RelationDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_InvToAccBalanceRelation\Constant\ModuleConfig.js" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\AccountBalanceInvoices\Directives\Templates\AccountBalanceInvoicesGrid.html" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\AccountBalanceInvoices\Directives\vr-accountbalanceinvoices-grid.js" />
+    <Content Include="VR_InvToAccBalanceRelation\Elements\AccountBalanceInvoices\Services\APIServies\AccountBalanceInvoicesAPIService.js" />
     <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\MainExtensions\Templates\InvoiceSummarySourceSetting.html" />
     <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\MainExtensions\vr-accountbalance-accounttype-source-invoicesummary.js" />
     <Content Include="VR_InvToAccBalanceRelation\Elements\InvToAccBalanceRelationDefinition\Directives\Templates\VRInvToAccBalanceRelationDefinitionSettings.html" />
@@ -143,6 +147,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
+      <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
+      <Name>Vanrise.Invoice.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.InvToAccBalanceRelation.Business\Vanrise.InvToAccBalanceRelation.Business.csproj">
       <Project>{fd744119-7b12-4e47-916d-b503995458b8}</Project>

@@ -12,6 +12,7 @@
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var selectedDataRecordTypeSelectorReadyPromiseDeferred;
 
         var mainGridColumnsAPI;
         var mainGridColumnsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -70,6 +71,12 @@
         var invoiceAttachmentsAPI;
         var invoiceAttachmentsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var amountFieldAPI;
+        var amountFieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var currencyFieldAPI;
+        var currencyFieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeEntity;
 
         defineScope();
@@ -89,6 +96,14 @@
             $scope.scopeModel.onInvoiceAttachmentsReady = function (api) {
                 invoiceAttachmentsAPI = api;
                 invoiceAttachmentsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onAmountFieldSelectorReady = function (api) {
+                amountFieldAPI = api;
+                amountFieldReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onCurrencyFieldSelectorReady = function (api) {
+                currencyFieldAPI = api;
+                currencyFieldReadyPromiseDeferred.resolve();
             };
 
 
@@ -110,6 +125,18 @@
                         $scope.scopeModel.isLoading = false;
                         dataRecordTypeEntity = response;
                     });
+
+                    if (selectedDataRecordTypeSelectorReadyPromiseDeferred != undefined)
+                        selectedDataRecordTypeSelectorReadyPromiseDeferred.resolve();
+                    else
+                    {
+                        var setLoader = function (value) { $scope.scopeModel.isLoadAmountField = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, amountFieldAPI, { dataRecordTypeId: dataRecordTypeId }, setLoader);
+
+                        var setLoader = function (value) { $scope.scopeModel.isLoadCurrencyField = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencyFieldAPI, { dataRecordTypeId: dataRecordTypeId }, setLoader);
+                    }
+                   
                 }
             };
 
@@ -200,6 +227,7 @@
                 automaticInvoiceActionsAPI = api;
                 automaticInvoiceActionsReadyPromiseDeferred.resolve();
             };
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -234,7 +262,9 @@
                         InvoiceSettingPartUISections: invoiceSettingDefinitionDirectiveAPI.getData(),
                         AutomaticInvoiceActions: automaticInvoiceActionsAPI.getData(),
                         UseTimeZone: $scope.scopeModel.useTimeZone,
-                        InvoiceAttachments: invoiceAttachmentsAPI.getData()
+                        InvoiceAttachments: invoiceAttachmentsAPI.getData(),
+                        AmountFieldName: amountFieldAPI.getSelectedIds(),
+                        CurrencyFieldName:currencyFieldAPI.getSelectedIds()
                     }
                 };
                 return obj;
@@ -315,6 +345,8 @@
                 }
 
                 function loadDataRecordTypeSelector() {
+                    if (invoiceTypeEntity != undefined)
+                      selectedDataRecordTypeSelectorReadyPromiseDeferred  = UtilsService.createPromiseDeferred();
                     var dataRecordTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     dataRecordTypeSelectorReadyPromiseDeferred.promise.then(function () {
@@ -553,7 +585,29 @@
                     });
                     return invoiceAttachmentsDeferredLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadInvoiceAttachmentsGrid, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission,loadViewSettingsRequiredPermission,loadAddSettingsRequiredPermission,loadEditSettingsRequiredPermission,loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
+
+
+                function loadCurrencyFieldSelector() {
+                    var currencyFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    currencyFieldReadyPromiseDeferred.promise.then(function () {
+                        var currencyFieldPayload = invoiceTypeEntity != undefined ? { dataRecordTypeId: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId,selectedIds: invoiceTypeEntity.Settings.CurrencyFieldName  } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(currencyFieldAPI, currencyFieldPayload, currencyFieldLoadPromiseDeferred);
+                    });
+                    return currencyFieldLoadPromiseDeferred.promise;
+                }
+
+                function loadAmountFieldSelector() {
+                    var amountFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    amountFieldReadyPromiseDeferred.promise.then(function () {
+                        var amountFieldPayload = invoiceTypeEntity != undefined ? { dataRecordTypeId: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId, selectedIds: invoiceTypeEntity.Settings.AmountFieldName } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(amountFieldAPI, amountFieldPayload, amountFieldLoadPromiseDeferred);
+                    });
+                    return amountFieldLoadPromiseDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadInvoiceAttachmentsGrid,loadAmountFieldSelector,loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission,loadViewSettingsRequiredPermission,loadAddSettingsRequiredPermission,loadEditSettingsRequiredPermission,loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

@@ -19,6 +19,10 @@
         var billingTransactionTypeSelectorAPI;
         var billingTransactionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var accountBalanceInvoicesGridAPI;
+        var accountBalanceInvoicesGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -48,6 +52,11 @@
                 billingTransactionTypeSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onAccountBalanceInvoicesGridReady = function(api)
+            {
+                accountBalanceInvoicesGridAPI = api;
+                accountBalanceInvoicesGridReadyDeferred.resolve();
+            }
             $scope.scopeModel.save = function () {
                 return insertBillingTransaction();
             };
@@ -59,15 +68,27 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (accountId == undefined) {
-                loadAccountSelector().then(function (response) {
-                    loadAllControls();
-                });
-            }
-            else
-                loadAllControls();
-        }
 
+            getAccountTypeSettings()
+            .then(function () {
+                if (accountId == undefined) {
+                    loadAccountSelector().then(function (response) {
+                        loadAllControls();
+                    });
+                }
+                else
+                    loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
+           
+        }
+        function getAccountTypeSettings()
+        {
+            return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSettings(accountTypeId).then(function (response) {
+                $scope.scopeModel.useAccountInvoicesGrid = response.InvToAccBalanceRelationId != undefined;
+            });
+        }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadBillingTransactionTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -170,12 +191,25 @@
             };
             return obj;
         }
-
+        function loadAccountBalanceInvoices(selectedAccountId) {
+            var accountBalanceInvoicesPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountBalanceInvoicesGridReadyDeferred.promise.then(function () {
+                var payload = {
+                    AccountTypeId: accountTypeId,
+                    AccountId: selectedAccountId
+                };
+                VRUIUtilsService.callDirectiveLoad(accountBalanceInvoicesGridAPI, payload, accountBalanceInvoicesPromiseDeferred);
+            });
+            return accountBalanceInvoicesPromiseDeferred.promise;
+        }
         function setAccountSelectorContext() {
             accountSelectorContext = {};
 
             accountSelectorContext.onAccountSelected = function (selectedAccountId) {
                 $scope.scopeModel.isLoading = true;
+                if ($scope.scopeModel.useAccountInvoicesGrid)
+                  loadAccountBalanceInvoices(selectedAccountId);
+
                 VR_AccountBalance_AccountAPIService.GetAccountInfo(accountTypeId, selectedAccountId).then(function (response) {
                     if (response != undefined) {
                         currencySelectorAPI.selectedCurrency(response.CurrencyId);

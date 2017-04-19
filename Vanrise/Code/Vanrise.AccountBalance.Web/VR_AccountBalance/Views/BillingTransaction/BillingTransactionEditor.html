@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_AccountBalance_BillingTransactionEditorController" width="small" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_AccountBalance_BillingTransactionEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formBillingTransactionEditor">
             <vr-tabs>
@@ -25,6 +25,13 @@
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <vr-textarea label="Notes" value="scopeModel.notes"> </vr-textarea>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-if="scopeModel.useAccountInvoicesGrid">
+                            <vr-section header="Account Invoices">
+                                <vr-accountbalanceinvoices-grid on-ready="scopeModel.onAccountBalanceInvoicesGridReady"> </vr-accountbalanceinvoices-grid>
+                            </vr-section>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

@@ -364,7 +364,7 @@ namespace Vanrise.Invoice.Business
             return null;
         }
 
-        public Dictionary<InvoiceByPartnerInvoiceType,List<Entities.Invoice>> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
+        public Dictionary<InvoiceByPartnerInvoiceType, List<Entities.Invoice>> GetUnPaidPartnerInvoicesDic(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             var invoices =  dataManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
@@ -380,7 +380,11 @@ namespace Vanrise.Invoice.Business
             }
             return invoicesByPartnerInvoiceType;
         }
-
+        public IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
+        }
         #endregion
 
         #region Mappers

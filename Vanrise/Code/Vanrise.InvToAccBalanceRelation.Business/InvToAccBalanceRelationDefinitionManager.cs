@@ -62,23 +62,8 @@ namespace Vanrise.InvToAccBalanceRelation.Business
 
         #region Private Classes
 
-        private class InvToAccBalanceRelGetBalanceInvoiceAccountsContext: IInvToAccBalanceRelGetBalanceInvoiceAccountsContext
-        {
-            public Guid AccountTypeId { get; set; }
+      
 
-            public string AccountId { get; set; }
-
-            public DateTime EffectiveOn { get; set; }
-        }
-
-        private class InvToAccBalanceRelGetInvoiceBalanceAccountsContext : IInvToAccBalanceRelGetInvoiceBalanceAccountsContext
-        {
-            public Guid InvoiceTypeId { get; set; }
-
-            public string PartnerId { get; set; }
-
-            public DateTime EffectiveOn { get; set; }
-        }
 
         #endregion
 

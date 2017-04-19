@@ -13,6 +13,12 @@
                         <vr-columns width="1/3row">
                             <vr-switch label="Use Time Zone" value="scopeModel.useTimeZone"></vr-switch>
                         </vr-columns>
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadAmountField">
+                            <vr-genericdata-datarecordtypefields-selector label="Amount Field Name" on-ready="scopeModel.onAmountFieldSelectorReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadCurrencyField">
+                            <vr-genericdata-datarecordtypefields-selector label="Currency Field Name" on-ready="scopeModel.onCurrencyFieldSelectorReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
                     </vr-row>
                     <vr-invoice-startdatecalculationmethod on-ready="scopeModel.onStartCalculationMethodDirectiveReady" normal-col-num="4"></vr-invoice-startdatecalculationmethod>
                 </vr-tab>

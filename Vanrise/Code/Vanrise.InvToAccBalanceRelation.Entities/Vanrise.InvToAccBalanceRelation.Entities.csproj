@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountInvoice.cs" />
+    <Compile Include="AccountInvoiceDetail.cs" />
+    <Compile Include="AccountInvoicesQuery.cs" />
     <Compile Include="BalanceAccountInfo.cs" />
     <Compile Include="InvoiceAccountInfo.cs" />
     <Compile Include="InvToAccBalanceRelationDefinition.cs" />

@@ -26,6 +26,8 @@ namespace Vanrise.Invoice.Entities
         public List<InvoiceAttachment> InvoiceAttachments { get; set; }
 
         public Guid? InvToAccBalanceRelationId { get; set; }
+        public string AmountFieldName { get; set; }
+        public string CurrencyFieldName { get; set; }
     }
 
 

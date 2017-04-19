@@ -189,7 +189,7 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                     }
                 }
             }
-            return invoiceManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
+            return invoiceManager.GetUnPaidPartnerInvoicesDic(partnerInvoiceTypes);
 
         }
         private IEnumerable<BillingTransactionMetaData> GetBillingTransactionPaidData(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime)

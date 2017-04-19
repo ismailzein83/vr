@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBalanceInvoicesManager.cs" />
     <Compile Include="InvoiceSummaryFieldSourceSetting.cs" />
     <Compile Include="InvToAccBalanceRelationDefinitionManager.cs" />
+    <Compile Include="InvToAccBalanceRelGetBalanceInvoiceAccountsContext.cs" />
+    <Compile Include="InvToAccBalanceRelGetInvoiceBalanceAccountsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

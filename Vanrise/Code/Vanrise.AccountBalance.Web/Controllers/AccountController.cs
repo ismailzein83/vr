@@ -13,11 +13,13 @@ namespace Vanrise.AccountBalance.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "Account")]
     public class AccountController : Vanrise.Web.Base.BaseAPIController
     {
+        AccountManager accountManager = new AccountManager();
         [HttpGet]
         [Route("GetAccountInfo")]
         public AccountInfo GetAccountInfo(Guid accountTypeId, string accountId)
         {
-            return new AccountManager().GetAccountInfo(accountTypeId, accountId);
+            return accountManager.GetAccountInfo(accountTypeId, accountId);
         }
+      
     }
 }
