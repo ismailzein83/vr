@@ -91,15 +91,49 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySellingNumberingPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleZone] WITH (TABLOCK)
-                                            SELECT [ID], [SellingNumberPlanID], [CountryID], [Name], [BED], [EED], [SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleZone]
-                                            Where SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
+                                                       ( [ID]
+                                                       , [SellingNumberPlanID]
+                                                       , [CountryID]
+                                                       , [Name]
+                                                       , [BED]
+                                                       , [EED]
+                                                       , [SourceID]
+                                                       , [StateBackupID]
+                                                       , [ProcessInstanceID])
+                                                 SELECT [ID]
+                                                        , [SellingNumberPlanID]
+                                                        , [CountryID]
+                                                        , [Name]
+                                                        , [BED]
+                                                        , [EED]
+                                                        , [SourceID]
+                                                        , {1} AS StateBackupID
+                                                        ,[ProcessInstanceID]
+                                                FROM [TOneWhS_BE].[SaleZone]
+                                                Where SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleZone] ([ID], [SellingNumberPlanID], [CountryID], [Name], [BED], [EED], [SourceID])
-                                            SELECT [ID], [SellingNumberPlanID], [CountryID], [Name], [BED], [EED], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SaleZone]
-                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleZone] 
+                                                ( [ID]
+                                                , [SellingNumberPlanID]
+                                                , [CountryID]
+                                                , [Name]
+                                                , [BED]
+                                                , [EED]
+                                                , [SourceID]
+                                                , [ProcessInstanceID])
+                                         SELECT   [ID]
+                                                , [SellingNumberPlanID]
+                                                , [CountryID]
+                                                , [Name]
+                                                , [BED]
+                                                , [EED]
+                                                , [SourceID] 
+                                                , [ProcessInstanceID]
+                                        FROM [{0}].[TOneWhS_BE_Bkup].[SaleZone]
+                                        WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 
 

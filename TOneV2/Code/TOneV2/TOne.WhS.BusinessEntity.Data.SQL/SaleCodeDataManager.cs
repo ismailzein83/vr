@@ -157,16 +157,53 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySellingNumberingPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleCode] WITH (TABLOCK)
-                                            SELECT sc.[ID], sc.[Code], sc.[ZoneID], sc.[CodeGroupID], sc.[BED], sc.[EED], sc.[SourceID], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleCode]
+                                                      ( [ID]
+                                                       ,[Code]
+                                                       ,[ZoneID]
+                                                       ,[CodeGroupID]
+                                                       ,[BED]
+                                                       ,[EED]
+                                                       ,[SourceID]
+                                                       ,[StateBackupID]
+                                                       ,[ProcessInstanceID])
+                                                SELECT
+                                                          sc.[ID]
+                                                        , sc.[Code]
+                                                        , sc.[ZoneID]
+                                                        , sc.[CodeGroupID]
+                                                        , sc.[BED]
+                                                        , sc.[EED]
+                                                        , sc.[SourceID]
+                                                        , {1} AS StateBackupID 
+                                                        , sc.[ProcessInstanceID] 
+                                            FROM [TOneWhS_BE].[SaleCode]
                                             sc WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on sc.ZoneID = sz.ID
                                             Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleCode] ([ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID])
-                                            SELECT [ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID]  FROM [{0}].[TOneWhS_BE_Bkup].[SaleCode]
-                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleCode] 
+                                            ( [ID]
+                                            , [Code]
+                                            , [ZoneID]
+                                            , [CodeGroupID]
+                                            , [BED]
+                                            , [EED]
+                                            , [SourceID]
+                                            , [ProcessInstanceID] )
+                                                                                           
+                                        SELECT 
+                                              [ID]
+                                            , [Code]
+                                            , [ZoneID]
+                                            , [CodeGroupID]
+                                            , [BED]
+                                            , [EED]
+                                            , [SourceID]  
+                                            , [ProcessInstanceID]
+                                        FROM [{0}].[TOneWhS_BE_Bkup].[SaleCode]
+                                        WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 
         public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)

@@ -131,6 +131,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySellingNumberingPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
+                                                   ([ID]
+                                                   ,[OwnerType]
+                                                   ,[OwnerID]
+                                                   ,[CurrencyID]
+                                                   ,[EffectiveOn]
+                                                   ,[PriceListType]
+                                                   ,[SourceID]
+                                                   ,[ProcessInstanceID]
+                                                   ,[FileID]
+                                                   ,[IsSent]
+                                                   ,[CreatedTime]
+                                                   ,[StateBackupID])
                                             SELECT 
                                                      sp.[ID]
 		                                            ,sp.[OwnerType]
@@ -141,9 +153,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 		                                            ,sp.[SourceID]
 		                                            ,sp.[ProcessInstanceID]
 		                                            ,sp.[FileID]
+                                                    ,sp.IsSent
 		                                            ,sp.[CreatedTime]
                                                     ,{1} AS StateBackupID  
-                                                    ,sp.IsSent
                                             FROM [TOneWhS_BE].[SalePriceList] sp WITH (NOLOCK) 
                                             Inner Join [TOneWhS_BE].CarrierAccount ca WITH (NOLOCK) on sp.OwnerID = ca.ID
 											Inner Join [TOneWhS_BE].SellingNumberPlan np on ca.SellingNumberPlanID=np.ID
@@ -159,9 +171,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 		                                            ,sp.[SourceID]
 		                                            ,sp.[ProcessInstanceID]
 		                                            ,sp.[FileID]
+                                                    ,sp.IsSent
 		                                            ,sp.[CreatedTime]
                                                     ,{1} AS StateBackupID 
-                                                    ,sp.IsSent
                                            FROM [TOneWhS_BE].[SalePriceList] sp WITH (NOLOCK) 
                                            Inner Join [TOneWhS_BE].SellingProduct sellp WITH (NOLOCK) on sp.OwnerID = sellp.ID
 										   Inner Join [TOneWhS_BE].SellingNumberPlan np on sellp.SellingNumberPlanID=np.ID
@@ -173,24 +185,49 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
-                                            SELECT   [ID]
-                                                    ,[OwnerType] 
-                                                    ,[OwnerID] 
-                                                    ,[CurrencyID] 
-                                                    ,[EffectiveOn]
-                                                    ,[PriceListType]
-                                                    ,[SourceID]
-                                                    ,[ProcessInstanceID]
-                                                    ,[FileID]
-                                                    ,[CreatedTime]
-                                                    ,{1} AS StateBackupID 
-                                                    ,[IsSent] FROM [TOneWhS_BE].[SalePriceList]
+                                                   ([ID]
+                                                   ,[OwnerType]
+                                                   ,[OwnerID]
+                                                   ,[CurrencyID]
+                                                   ,[EffectiveOn]
+                                                   ,[PriceListType]
+                                                   ,[SourceID]
+                                                   ,[ProcessInstanceID]
+                                                   ,[FileID]
+                                                   ,[IsSent]
+                                                   ,[CreatedTime]
+                                                   ,[StateBackupID])
+                                            SELECT  [ID]
+                                                   ,[OwnerType]
+                                                   ,[OwnerID]
+                                                   ,[CurrencyID]
+                                                   ,[EffectiveOn]
+                                                   ,[PriceListType]
+                                                   ,[SourceID]
+                                                   ,[ProcessInstanceID]
+                                                   ,[FileID]
+                                                   ,[IsSent]
+                                                   ,[CreatedTime]
+                                                   ,{1} AS StateBackupID 
+                                            FROM [TOneWhS_BE].[SalePriceList]
                                             WITH (NOLOCK) Where OwnerId = {2} and OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SalePriceList] ( [ID] ,[OwnerType] ,[OwnerID] ,[CurrencyID] ,[EffectiveOn] ,[PriceListType], [SourceID] ,[ProcessInstanceID],[FileID],[CreatedTime],[IsSent])
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SalePriceList] 
+                                                    ([ID] 
+                                                    ,[OwnerType] 
+                                                    ,[OwnerID] 
+                                                    ,[CurrencyID] 
+                                                    ,[EffectiveOn] 
+                                                    ,[PriceListType]
+                                                    ,[SourceID] 
+                                                    ,[ProcessInstanceID]
+                                                    ,[FileID]
+                                                    ,[CreatedTime]
+                                                    ,[IsSent])
+                                                                                                
                                             SELECT   [ID] 
                                                     ,[OwnerType] 
                                                     ,[OwnerID] 
