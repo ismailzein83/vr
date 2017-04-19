@@ -22,33 +22,33 @@ namespace Mediation.Runtime.Tasks
         public void Execute()
         {
 
-            DataParserTester tester = new DataParserTester();
-            tester.ReadFile();
+            //DataParserTester tester = new DataParserTester();
+            //tester.ReadFile();
 
-            //RunImportProcess();
+            RunImportProcess();
         }
 
         void RunImportProcess()
         {
-            MediationDefinition definition = new MediationDefinition
-            {
-                OutputHandlers = new List<MediationOutputHandlerDefinition>(),
-                ParsedRecordTypeId = new Guid(),
-                ParsedRecordIdentificationSetting = new ParsedRecordIdentificationSetting()
-                {
-                    StatusMappings = new List<StatusMapping>()
-                }
-            };
-            definition.OutputHandlers.Add(new MediationOutputHandlerDefinition()
-            {
-                Handler = new StoreRecordsOutputHandler()
-                {
-                    DataRecordStorageId = new Guid("0B1837DF-C8CE-4B2A-B07E-1A9F75408741")
-                },
-                OutputRecordName = "cookedCDR"
-            });
+            //MediationDefinition definition = new MediationDefinition
+            //{
+            //    OutputHandlers = new List<MediationOutputHandlerDefinition>(),
+            //    ParsedRecordTypeId = new Guid(),
+            //    ParsedRecordIdentificationSetting = new ParsedRecordIdentificationSetting()
+            //    {
+            //        StatusMappings = new List<StatusMapping>()
+            //    }
+            //};
+            //definition.OutputHandlers.Add(new MediationOutputHandlerDefinition()
+            //{
+            //    Handler = new StoreRecordsOutputHandler()
+            //    {
+            //        DataRecordStorageId = new Guid("0B1837DF-C8CE-4B2A-B07E-1A9F75408741")
+            //    },
+            //    OutputRecordName = "cookedCDR"
+            //});
+            //string serielized = Vanrise.Common.Serializer.Serialize(definition);
 
-            string serielized = Vanrise.Common.Serializer.Serialize(definition);
             var runtimeServices = new List<RuntimeService>();
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };

@@ -20,7 +20,7 @@ namespace Mediation.Generic.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<MediationRecord> mediationRecords = MediationRecords.Get(context);
-            EventIds.Set(context, mediationRecords.Select(s => s.SessionId));
+            EventIds.Set(context, mediationRecords.Select(s => s.SessionId).Distinct());
         }
     }
 }

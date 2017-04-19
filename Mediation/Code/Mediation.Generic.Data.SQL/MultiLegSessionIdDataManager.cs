@@ -10,6 +10,11 @@ namespace Mediation.Generic.Data.SQL
 {
     public class MultiLegSessionIdDataManager : BaseSQLDataManager, IMultiLegSessionIdDataManager
     {
+        public MultiLegSessionIdDataManager()
+            : base(GetConnectionStringName("Mediation_GenericRecord_DBConnStringKey", "Mediation_GenericRecord_DBConnString"))
+        {
+
+        }
         public void DeleteSessionIdFromDB(int mediationDefinionId, string sessionId)
         {
             ExecuteNonQuerySP("[Mediation_Generic].[sp_MultiLegSessionID_DeleteSessionId]", mediationDefinionId, sessionId);
