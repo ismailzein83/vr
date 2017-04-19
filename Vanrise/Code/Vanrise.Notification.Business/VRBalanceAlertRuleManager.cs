@@ -43,6 +43,10 @@ namespace Vanrise.Notification.Business
                                StringBuilder ruleActionsDescription = new StringBuilder();
                                foreach (var thresholdAction in alertRuleSettings.ThresholdActions)
                                {
+                                   if (thresholdAction.Actions == null)
+                                   {
+                                       continue;
+                                   }
                                    if (ruleActionsDescription.Length > 0)
                                    {
                                        ruleActionsDescription.Append(",");
