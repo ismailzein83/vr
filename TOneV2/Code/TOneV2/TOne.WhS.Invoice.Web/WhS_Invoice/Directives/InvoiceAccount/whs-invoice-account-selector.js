@@ -174,8 +174,9 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
     }
     function getTemplate(attributes) {
         var isMultipleSelection = (attributes.ismultipleselection != undefined) ? 'ismultipleselection="accountSelectorCtrl.ismultipleselection"' : undefined;
+        var label = (attributes.ismultipleselection != undefined) ? "Carriers" : "Carrier";
         return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum / 2}}">\
-                    <vr-switch label="Current Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
+                    <vr-switch label="Effective Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
                 </vr-columns>\
                 <vr-columns colnum="{{accountSelectorCtrl.normalColNum / 2}}">\
                     <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
@@ -189,7 +190,7 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
                 </vr-columns>\
                 <vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
                     <vr-select on-ready="scopeModel.onAccountSelectorReady"\
-				        label="Invoice Account"\
+				        label="' + label + '"\
 				        datasource="accountSelectorCtrl.datasource"\
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
 				        datavaluefield="InvoiceAccountId"\
