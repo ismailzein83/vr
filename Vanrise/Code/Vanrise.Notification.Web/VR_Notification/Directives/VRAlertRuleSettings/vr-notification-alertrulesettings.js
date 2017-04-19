@@ -85,10 +85,10 @@ app.directive('vrNotificationAlertrulesettings', ['UtilsService', 'VR_Notificati
                         }
                     }
 
-                    if (settings != undefined && settings.ThresholdActions != undefined) {
+                    var getAlertLevelsInfoPromise = getAlertLevelsInfo(alertTypeSettings.NotificationTypeId);
+                    promises.push(getAlertLevelsInfoPromise);
 
-                        var getAlertLevelsInfoPromise = getAlertLevelsInfo(alertTypeSettings.NotificationTypeId);
-                        promises.push(getAlertLevelsInfoPromise);
+                    if (settings != undefined && settings.ThresholdActions != undefined) {
 
                         getAlertLevelsInfoPromise.then(function () {
                             for (var i = 0; i < settings.ThresholdActions.length; i++) {
@@ -181,9 +181,10 @@ app.directive('vrNotificationAlertrulesettings', ['UtilsService', 'VR_Notificati
             }
 
             function getAlertLevelName(alertLevelId) {
-                for (var index = 0; index < alertLevelsInfo.length; index++) {
-                    var alertLevelInfo = alertLevelsInfo[index];
-                    if (alertLevelInfo.VRAlertLevelId == alertLevelId)
+                if (alertLevelsInfo != undefined)
+                {
+                    var alertLevelInfo = UtilsService.getItemByVal(alertLevelsInfo, alertLevelId, "VRAlertLevelId");
+                    if (alertLevelInfo != undefined)
                         return alertLevelInfo.Name;
                 }
             }
