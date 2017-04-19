@@ -586,6 +586,7 @@
     <Build Include="genericdata\Stored Procedures\sp_DataRecordType_SetCacheExpired.sql" />
     <Build Include="dataparser\Tables\ParserType.sql" />
     <Build Include="Security\dataparser.sql" />
+    <Build Include="common\Tables\GenericLKUP.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
