@@ -11,6 +11,8 @@
         var vrAlertRuleEntity;
         var vrAlertRuleTypeId;
         var vrAlertRuleTypeEntity;
+        var context;
+        var isViewMode;
 
         var directiveAPI;
         var directiveReadyDeferred;
@@ -19,7 +21,6 @@
         var vrAlertRuleTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
         var vrAlertRuleTypeSelectionChangedDeferred;
 
-        var context;
 
         loadParameters();
         defineScope();
@@ -31,6 +32,7 @@
             if (parameters != undefined && parameters != null) {
                 vrAlertRuleId = parameters.vrAlertRuleId;
                 context = parameters.context;
+                isViewMode = parameters.isViewMode;
             }
             isEditMode = (vrAlertRuleId != undefined);
         }

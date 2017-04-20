@@ -1,39 +1,60 @@
-﻿
-(function (appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
 
-    VRAlertRuleService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
+    VRAlertRuleService.$inject = ['VRModalService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function VRAlertRuleService(VRModalService, VRCommon_ObjectTrackingService) {
+    function VRAlertRuleService(VRModalService, UtilsService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
+
         function addVRAlertRule(onVRAlertRuleAdded, context) {
+
+            var parameters = {
+                context: context,
+                isViewMode: false
+            };
+
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRAlertRuleAdded = onVRAlertRuleAdded
             };
-            var parameters = {
-                context: context
-            };
+
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', parameters, settings);
         };
 
         function editVRAlertRule(vrAlertRuleId, onVRAlertRuleUpdated, context) {
-            var settings = {};
 
             var parameters = {
                 vrAlertRuleId: vrAlertRuleId,
-                context: context
+                context: context,
+                isViewMode: false
             };
+
+            var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRAlertRuleUpdated = onVRAlertRuleUpdated;
             };
+
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', parameters, settings);
         }
-        function getEntityUniqueName(ruleTypeId) {
-            return "VR_Notification_AlertRule_" + ruleTypeId;
+
+        function viewVRAlertRule(vrAlertRuleId, context) {
+
+            var parameters = {
+                vrAlertRuleId: vrAlertRuleId,
+                context: context,
+                isViewMode: true
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', parameters, settings);
         }
 
         function registerObjectTrackingDrillDownToAlertRule() {
@@ -42,10 +63,9 @@
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
-
             drillDownDefinition.loadDirective = function (directiveAPI, alertRuleItem) {
                 alertRuleItem.objectTrackingGridAPI = directiveAPI;
-                
+
                 var query = {
                     ObjectId: alertRuleItem.Entity.VRAlertRuleId,
                     EntityUniqueName: getEntityUniqueName(alertRuleItem.Entity.RuleTypeId),
@@ -55,8 +75,11 @@
             };
 
             addDrillDownDefinition(drillDownDefinition);
-
         }
+        function getEntityUniqueName(ruleTypeId) {
+            return "VR_Notification_AlertRule_" + ruleTypeId;
+        }
+
         function addDrillDownDefinition(drillDownDefinition) {
 
             drillDownDefinitions.push(drillDownDefinition);
@@ -69,6 +92,7 @@
         return {
             addVRAlertRule: addVRAlertRule,
             editVRAlertRule: editVRAlertRule,
+            viewVRAlertRule: viewVRAlertRule,
             registerObjectTrackingDrillDownToAlertRule: registerObjectTrackingDrillDownToAlertRule,
             getDrillDownDefinition: getDrillDownDefinition
         };

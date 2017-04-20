@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountBalance_AccountBalanceNotificationTypeAPIService', 'VR_GenericData_DataRecordNotificationTypeSettingsService', 'VR_Notification_VRNotificationService',
-    function (UtilsService, VR_AccountBalance_AccountBalanceNotificationTypeAPIService, VR_GenericData_DataRecordNotificationTypeSettingsService, VR_Notification_VRNotificationService) {
+app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountBalance_AccountBalanceNotificationTypeAPIService', 'VR_GenericData_DataRecordNotificationTypeSettingsService', 'VR_Notification_VRNotificationService', 'VR_Notification_VRAlertRuleService', 'BusinessProcess_BPInstanceService',
+    function (UtilsService, VR_AccountBalance_AccountBalanceNotificationTypeAPIService, VR_GenericData_DataRecordNotificationTypeSettingsService, VR_Notification_VRNotificationService, VR_Notification_VRAlertRuleService, BusinessProcess_BPInstanceService) {
         return {
             restrict: 'E',
             scope: {
@@ -27,11 +27,11 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
             //API
             var gridAPI;
 
-
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.columns = [];
                 $scope.scopeModel.vrNotifications = [];
+                //$scope.scopeModel.menuActions = [];
                 $scope.scopeModel.showAccountTypeColumn = false;
                 $scope.scopeModel.accountColumnHeader = "";
 
@@ -51,8 +51,46 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
                 $scope.scopeModel.getAlertLevelStyleColor = function (dataItem) {
                     return dataItem.AlertLevelStyle;
                 };
-            }
 
+                $scope.scopeModel.menuActions = function (dataItem) {
+                    var menuActions = [];
+
+                    if (dataItem.Entity.ParentTypes.ParentType2 != undefined) {
+                        menuActions.push({
+                            name: 'Matching Rule',
+                            clicked: viewVRAlertRule
+                        });
+                    }
+
+                    if (dataItem.Entity.ExecuteBPInstanceID != undefined) {
+                        menuActions.push({
+                            name: 'Executed Process',
+                            clicked: executeBPInstance
+                        });
+                    }
+
+                    if (dataItem.Entity.ClearBPInstanceID != undefined) {
+                        menuActions.push({
+                            name: 'Cleared Process',
+                            clicked: clearBPInstance
+                        });
+                    }
+
+                    function viewVRAlertRule(vrNotificationItem) {
+                        VR_Notification_VRAlertRuleService.viewVRAlertRule(vrNotificationItem.Entity.ParentTypes.ParentType2);
+                    }
+                    function executeBPInstance(vrNotificationItem) {
+                        BusinessProcess_BPInstanceService.openProcessTracking(vrNotificationItem.Entity.ExecuteBPInstanceID);
+                    }
+                    function clearBPInstance(vrNotificationItem) {
+                        BusinessProcess_BPInstanceService.openProcessTracking(vrNotificationItem.Entity.ClearBPInstanceID);
+                    }
+
+                    return menuActions;
+                };
+
+                //defineMenuActions();
+            }
             function defineAPI() {
                 var api = {};
 
