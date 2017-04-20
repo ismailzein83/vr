@@ -173,7 +173,7 @@
         function buildBodyDirectiveQuery() {
             return {
                 AlertLevelIds: notificationAlertlevelSelectorAPI.getSelectedIds(),
-                Description: $scope.scopeModel.description,
+                //Description: $scope.scopeModel.description,
                 StatusIds: notificationStatusSelectorAPI.getSelectedIds()
             };
         }
