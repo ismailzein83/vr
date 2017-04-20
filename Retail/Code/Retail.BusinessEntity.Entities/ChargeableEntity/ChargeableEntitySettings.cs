@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class ChargeableEntitySettings : Vanrise.Entities.GenericLKUPItemSettings
+    public class ChargeableEntitySettings : Vanrise.Entities.GenericLKUPItemExtendedSettings
     {
     }
 }
