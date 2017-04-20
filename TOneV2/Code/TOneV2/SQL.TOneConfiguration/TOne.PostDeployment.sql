@@ -185,7 +185,10 @@ as (select * from (values
 ('DA72C2E9-4321-4C0C-8FCA-B8A363F6B480','WhS_AccountBalance_ActionDefinition_EmailCustomer','Email Customer','VR_Notification_VRActionDefinition'		,'{"Editor":"whs-accountbalance-actiondefinition-customer-sendemail"}'),
 ('55E97A73-994A-4D60-9A9E-BBD04D08929D','WhS_AccountBalance_ActionDefinition_BlockCustomer','Block Customer','VR_Notification_VRActionDefinition'		,'{"Editor":"whs-accountbalance-actiondefinition-customer-block"}'),
 
-('F5CD8367-A6DC-421E-B93C-0567ED769150','Carrier Invoice To Account Relation','Carrier Invoice To Account Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"whs-invtoaccbalancerelation-definition-carrierextendedsettings"}')
+('F5CD8367-A6DC-421E-B93C-0567ED769150','Carrier Invoice To Account Relation','Carrier Invoice To Account Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"whs-invtoaccbalancerelation-definition-carrierextendedsettings"}'),
+
+('2647EDE8-0BA5-4131-8F2F-EB047FF0B359','Customer Property','Customer Property','WhS_BE_Customer_PropertyEvaluator'										,'{"Editor":"vr-whs-be-customerpropertyevaluator"}'),
+('48E39E5B-58A2-4799-89B3-F54ED3C48807','Customer','Customer','VR_Common_ObjectType'																	,'{"Editor":"vr-whs-be-customerobjecttype", "PropertyEvaluatorExtensionType": "WhS_BE_Customer_PropertyEvaluator"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
