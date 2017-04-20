@@ -48,32 +48,32 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
             ctrl.datasource = [];
 
             $scope.scopeModel.onSwitchValueChanged = function () {
-                if (switchValueSelectedPromiseDeferred != undefined)
-                    switchValueSelectedPromiseDeferred.resolve();
-                else {
-                    loadInvoiceAccounts().finally(function () {
-                        reloadContextFunctions();
-                    });
-                }
+                //if (switchValueSelectedPromiseDeferred != undefined)
+                //    switchValueSelectedPromiseDeferred.resolve();
+                //else {
+                    //loadInvoiceAccounts().finally(function () {
+                       // reloadContextFunctions();
+                   // });
+                //}
             };
             $scope.scopeModel.onCarrierTypeSelectorReady = function (api) {
                 carrierTypeSelectorAPI = api;
                 carrierTypeSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onCarrierTypeChanged = function (selectedCarrierType) {
-                if (carrierTypeSelectedPromiseDeferred != undefined)
-                    carrierTypeSelectedPromiseDeferred.resolve();
-                else
-                {
+               // if (carrierTypeSelectedPromiseDeferred != undefined)
+                //    carrierTypeSelectedPromiseDeferred.resolve();
+                //else
+                //{
                     $scope.scopeModel.accountDataTextField = (selectedCarrierType != undefined) ? 'Name' : 'Description';
-                    loadInvoiceAccounts().finally(function () {
-                        reloadContextFunctions();
+                    //loadInvoiceAccounts().finally(function () {
+                        //reloadContextFunctions();
 
                         if (context != undefined && context.reloadPregeneratorActions != undefined) {
                             context.reloadPregeneratorActions();
                         }
-                    });
-                }
+                    //});
+                //}
             };
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;
@@ -84,6 +84,21 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
                 {
                     reloadContextFunctions(selectedAccount);
                 }
+            };
+
+            $scope.scopeModel.onOKSearch = function (api) {               
+                return loadInvoiceAccounts().then(function () {
+                    reloadContextFunctions();
+                });
+            };
+          
+
+            $scope.scopeModel.onCancelSearch = function (api) {
+                $scope.scopeModel.getCurrentOnly = true;
+                $scope.scopeModel.selectedCarrierType = undefined;
+                return loadInvoiceAccounts().then(function () {
+                    reloadContextFunctions();
+                });
             };
 
             UtilsService.waitMultiplePromises([accountSelectorReadyDeferred.promise, carrierTypeSelectorReadyDeferred.promise]).then(function () {
@@ -175,21 +190,8 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
     function getTemplate(attributes) {
         var isMultipleSelection = (attributes.ismultipleselection != undefined) ? 'ismultipleselection="accountSelectorCtrl.ismultipleselection"' : undefined;
         var label = (attributes.ismultipleselection != undefined) ? "Carriers" : "Carrier";
-        return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum / 2}}">\
-                    <vr-switch label="Effective Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
-                </vr-columns>\
-                <vr-columns colnum="{{accountSelectorCtrl.normalColNum / 2}}">\
-                    <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
-				        label="Carrier Type"\
-				        datasource="scopeModel.carrierTypes"\
-                        selectedvalues="scopeModel.selectedCarrierType"\
-                        onselectionchanged="scopeModel.onCarrierTypeChanged"\
-				        datavaluefield="value"\
-				        datatextfield="description">\
-			        </vr-select>\
-                </vr-columns>\
-                <vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
-                    <vr-select on-ready="scopeModel.onAccountSelectorReady"\
+        return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
+                    <vr-select on-ready="scopeModel.onAccountSelectorReady"  includeadvancedsearch onokhandler="scopeModel.onOKSearch" oncancelhandler="scopeModel.onCancelSearch" \
 				        label="' + label + '"\
 				        datasource="accountSelectorCtrl.datasource"\
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
@@ -199,6 +201,19 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
 				        isrequired="accountSelectorCtrl.isrequired"\
 				        hideremoveicon="accountSelectorCtrl.isrequired"\
                         ' + isMultipleSelection + '>\
+                            <vr-columns colnum="12">\
+                                <vr-switch label="Effective Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
+                            </vr-columns>\
+                            <vr-columns colnum="12">\
+                                <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
+				                    label="Carrier Type"\
+				                    datasource="scopeModel.carrierTypes"\
+                                    selectedvalues="scopeModel.selectedCarrierType"\
+                                    onselectionchanged="scopeModel.onCarrierTypeChanged"\
+				                    datavaluefield="value"\
+				                    datatextfield="description">\
+			                    </vr-select>\
+                            </vr-columns>\
                     </vr-select>\
                 </vr-columns>';
     }

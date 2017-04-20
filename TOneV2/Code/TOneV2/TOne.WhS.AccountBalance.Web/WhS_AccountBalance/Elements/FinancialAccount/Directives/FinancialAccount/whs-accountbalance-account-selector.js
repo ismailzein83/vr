@@ -39,21 +39,17 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.getCurrentOnly = true;
-            $scope.scopeModel.accountDataTextField = 'Description';
 
             $scope.scopeModel.carrierTypes = [];
             ctrl.datasource = [];
 
             $scope.scopeModel.onSwitchValueChanged = function () {
-                filterAccounts();
             };
             $scope.scopeModel.onCarrierTypeSelectorReady = function (api) {
                 carrierTypeSelectorAPI = api;
                 carrierTypeSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onCarrierTypeChanged = function (selectedCarrierType) {
-                $scope.scopeModel.accountDataTextField = (selectedCarrierType != undefined) ? 'Name' : 'Description';
-                filterAccounts();
             };
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;
@@ -63,7 +59,14 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                 if (context != undefined && context.onAccountSelected != undefined)
                     context.onAccountSelected(selectedAccount.FinancialAccountId);
             };
-
+            $scope.scopeModel.onOKSearch = function (api) {
+                filterAccounts();
+            };
+            $scope.scopeModel.onCancelSearch = function (api) {
+                $scope.scopeModel.getCurrentOnly = true;
+                $scope.scopeModel.selectedCarrierType = undefined;
+                filterAccounts();
+            };
             UtilsService.waitMultiplePromises([accountSelectorReadyDeferred.promise, carrierTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
@@ -133,7 +136,10 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                             for (var i = 0; i < response.length; i++) {
                                 var account = response[i];
                                 allAccounts.push(account);
-                                ctrl.datasource.push(account);
+                                ctrl.datasource.push({
+                                    FinancialAccountId: account.FinancialAccountId,
+                                    Label: account.Description
+                                });
                             }
                         }
                         filterAccounts();
@@ -171,9 +177,12 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
             for (var i = 0; i < allAccounts.length; i++) {
                 if (!effectiveStatusFilter(allAccounts[i]) || !carrierTypeFilter(allAccounts[i]))
                     continue;
-                ctrl.datasource.push(allAccounts[i]);
+                ctrl.datasource.push({
+                    FinancialAccountId: allAccounts[i].FinancialAccountId,
+                    Label: (carrierType != undefined) ? allAccounts[i].Name : allAccounts[i].Description
+                });
             }
-
+            console.log(ctrl.datasource)
             function effectiveStatusFilter(targetAccount) {
                 return (!getCurrentOnly || targetAccount.EffectiveStatus == WhS_AccountBalance_FinancialAccountEffectiveStatusEnum.Current.value);
             }
@@ -186,30 +195,30 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
     }
     function getTemplate(attributes) {
         var isMultipleSelection = (attributes.ismultipleselection != undefined) ? 'ismultipleselection="accountSelectorCtrl.ismultipleselection"' : undefined;
-        return '<vr-columns colnum="{{(accountSelectorCtrl.normalColNum / 2) | number: 0}}">\
-                    <vr-switch label="Current Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
-                </vr-columns>\
-                <vr-columns colnum="{{(accountSelectorCtrl.normalColNum / 2) | number: 0}}">\
-                    <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
-				        label="Carrier Type"\
-				        datasource="scopeModel.carrierTypes"\
-                        selectedvalues="scopeModel.selectedCarrierType"\
-                        onselectionchanged="scopeModel.onCarrierTypeChanged"\
-				        datavaluefield="value"\
-				        datatextfield="description">\
-			        </vr-select>\
-                </vr-columns>\
-                <vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
-                    <vr-select on-ready="scopeModel.onAccountSelectorReady"\
+        return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
+                    <vr-select on-ready="scopeModel.onAccountSelectorReady" includeadvancedsearch onokhandler="scopeModel.onOKSearch" oncancelhandler="scopeModel.onCancelSearch" \
 				        label="Financial Account"\
 				        datasource="accountSelectorCtrl.datasource"\
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
 				        datavaluefield="FinancialAccountId"\
-				        datatextfield="{{scopeModel.accountDataTextField}}"\
+				        datatextfield="Label"\
                         onselectitem="scopeModel.onAccountSelected"\
 				        isrequired="accountSelectorCtrl.isrequired"\
 				        hideremoveicon="accountSelectorCtrl.isrequired"\
                         ' + isMultipleSelection + '>\
+                            <vr-columns colnum="12">\
+                                <vr-switch label="Current Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
+                            </vr-columns>\
+                            <vr-columns colnum="12">\
+                                <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
+				                    label="Carrier Type"\
+				                    datasource="scopeModel.carrierTypes"\
+                                    selectedvalues="scopeModel.selectedCarrierType"\
+                                    onselectionchanged="scopeModel.onCarrierTypeChanged"\
+				                    datavaluefield="value"\
+				                    datatextfield="description">\
+			                    </vr-select>\
+                            </vr-columns>\
                     </vr-select>\
                 </vr-columns>';
     }
