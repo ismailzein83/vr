@@ -13,20 +13,21 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tax
             get { return new Guid("8C340085-E102-4504-A49B-329480CC7605"); }
         }
 
-        public Decimal? FromAmount { get; set; }
-
-        public Decimal? ToAmount { get; set; }
-
         public Decimal ExtraPercentage { get; set; }
 
         protected override void Execute(IPricingRuleTaxActionContext context)
         {
             throw new NotImplementedException();
         }
-
         public override string GetDescription()
         {
-            throw new NotImplementedException();
+            StringBuilder description = new StringBuilder();
+            if(this.FromAmount.HasValue)
+            description.Append(String.Format("From Amount: {0}; ", FromAmount));
+            if(this.ToAmount.HasValue)
+             description.Append(String.Format("To Amount: {0}; ", ToAmount));
+            description.Append(String.Format("Extra Percentage: {0}", ExtraPercentage));
+            return description.ToString();
         }
     }
 }

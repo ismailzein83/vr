@@ -150,6 +150,8 @@
   <ItemGroup>
     <Content Include="VR_Rules\Constants\ModuleConfig.js" />
     <Content Include="VR_Rules\Constants\FirstPeriodRateTypeEnum.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\Templates\PricingRulePercentageTaxTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\vr-rules-pricingrulesettings-tax-percentage.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRuleFixedExtraChargeTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRulePercentageExtraChargeTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\vr-rules-pricingrulesettings-extracharge-fixed.js" />
@@ -170,10 +172,12 @@
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-replacestring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-substring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizenumbersettings.js" />
+    <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleTaxSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleRateTypeSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleRateValueSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleTariffSettings.html" />
+    <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-tax.js" />
     <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-extracharge.js" />
     <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-ratetype.js" />
     <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-ratevalue.js" />

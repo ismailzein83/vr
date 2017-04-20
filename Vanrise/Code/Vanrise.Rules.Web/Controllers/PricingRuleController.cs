@@ -42,5 +42,12 @@ namespace Vanrise.Rules.Web.Controllers
             PricingRuleManager manager = new PricingRuleManager();
             return manager.GetPricingRuleRateValueTemplates();
         }
+        [HttpGet]
+        [Route("GetPricingRuleTaxTemplates")]
+        public IEnumerable<PricingRuleTaxActionConfig> GetPricingRuleTaxTemplates()
+        {
+            PricingRuleManager manager = new PricingRuleManager();
+            return manager.GetPricingRuleTaxTemplates();
+        }
     }
 }

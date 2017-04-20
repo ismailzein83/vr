@@ -32,5 +32,10 @@ namespace Vanrise.Rules.Pricing
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<PricingRuleRateValueSettingsConfig>(PricingRuleRateValueSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<PricingRuleTaxActionConfig> GetPricingRuleTaxTemplates()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<PricingRuleTaxActionConfig>(PricingRuleTaxActionConfig.EXTENSION_TYPE);
+        }
     }
 }

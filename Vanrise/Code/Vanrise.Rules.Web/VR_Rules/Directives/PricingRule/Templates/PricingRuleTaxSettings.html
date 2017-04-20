@@ -1,0 +1,30 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId"
+                   label="Filter Type" datasource="ctrl.taxTemplates" selectedvalues="ctrl.selectedTemplate" onselectionchanged="ctrl.onActionTemplateChanged">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="normal" withemptyline>
+        <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
+    </vr-columns>
+    <vr-common-currency-selector on-ready="ctrl.onCurrencySelectReady" isrequired="true" normal-col-num="3"></vr-common-currency-selector>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
+        <vr-validator validate="ctrl.isValid()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                <vr-datagridcolumn headertext="'Filter Type'" field="'Entity.name'" widthfactor="10"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'From Amount'" widthfactor="10">
+                    <vr-textbox value="dataItem.Entity.fromAmount" customvalidate="dataItem.Entity.validate(dataItem)" type="number" label="From Amount" minvalue="0"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'To Amount'" widthfactor="10">
+                    <vr-textbox value="dataItem.Entity.toAmount" customvalidate="dataItem.Entity.validate(dataItem)" type="number" label="To Amount" minvalue="0"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="10">
+                    <vr-directivewrapper directive="dataItem.Entity.editor" on-ready="dataItem.Entity.onDirectiveReady" />
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>
