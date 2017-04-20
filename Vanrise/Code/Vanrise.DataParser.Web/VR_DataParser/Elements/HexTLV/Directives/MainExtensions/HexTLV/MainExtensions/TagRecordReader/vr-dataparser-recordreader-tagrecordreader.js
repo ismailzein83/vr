@@ -78,7 +78,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders.TagRecordReader ,Vanrise.DataParser.MainExtensions",
+                    $type:"Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders.TagRecordReader ,Vanrise.DataParser.MainExtensions",
                     RecordTypesByTag: tagRecordReaderGridAPI.getData(),
                     NumberOfBytesToSkip: $scope.scopeModel.numberOfBytesToSkip,
                 };

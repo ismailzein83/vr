@@ -11,7 +11,7 @@ namespace Vanrise.Common.Business
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("F0DEC732-929C-4F75-AA35-9E19298D3092"); }
         }
 
         public GenericLKUPDefinitionExtendedSettings ExtendedSettings { get; set; }

@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\VRMailController.cs" />
     <Compile Include="Controllers\VRObjectTrackingController.cs" />
     <Compile Include="Controllers\UISettingsController.cs" />
@@ -214,6 +215,9 @@
     <Content Include="Common\Directives\GeneralSettings\vr-common-ui-settings-editor.js" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-general-settings-editor.js" />
     <Content Include="Common\Directives\GeneralSettings\vr-common-pagesize-selector.js" />
+    <Content Include="Common\Directives\GenericLKUP\MainExtensions\Templates\GenericLKUPBEDefinition.html" />
+    <Content Include="Common\Directives\GenericLKUP\MainExtensions\vr-common-genericlkup-be-definition.js" />
+    <Content Include="Common\Directives\GenericLKUP\MainExtensions\vr-common-genericlkup-be-definition-selector.js" />
     <Content Include="Common\Directives\GridColCSSClass\vr-common-gridcolcssclass-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\SQLConnectionEditorTemplate.html" />
@@ -344,6 +348,7 @@
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
+    <Content Include="Common\Services\APIServices\GenericLKUPDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />
