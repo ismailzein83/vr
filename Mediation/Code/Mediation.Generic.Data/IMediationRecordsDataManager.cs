@@ -11,11 +11,11 @@ namespace Mediation.Generic.Data
 
         IEnumerable<MediationRecord> GetMediationRecords();
 
-        IEnumerable<MediationRecord> GetMediationRecordsByStatus(int mediationDefinitionId, EventStatus status);
+        IEnumerable<MediationRecord> GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status);
 
-        IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds);
+        IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds);
 
-        bool DeleteMediationRecordsBySessionIds(int mediationDefinitionId, IEnumerable<string> sessionIds);
+        bool DeleteMediationRecordsBySessionIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds);
 
         Guid DataRecordTypeId { set; }
     }

@@ -8,7 +8,7 @@ namespace Mediation.Generic.Entities
 {
     public class MultiLegSessionIdEntity
     {
-        public int MediationDefinitionId { get; set; }
+        public Guid MediationDefinitionId { get; set; }
         public string SessionId { get; set; }
         public string LegId { get; set; }
     }

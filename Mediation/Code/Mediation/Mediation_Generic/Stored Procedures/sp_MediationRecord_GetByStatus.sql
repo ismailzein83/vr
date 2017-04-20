@@ -1,5 +1,5 @@
 ﻿CREATE procedure [Mediation_Generic].[sp_MediationRecord_GetByStatus]
-@MediationDefinitionId int,
+@MediationDefinitionId uniqueidentifier,
 @Status tinyint
 as
 begin

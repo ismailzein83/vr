@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Mediation.Generic.Entities
 {
-    public class MediationDefinitionInfo
+    public enum CentrixCallType
     {
-        public Guid MediationDefinitionId { get; set; }
-        public string Name { get; set; }
+        Normal = 1,
+        Conference,
+        Forward,
+        Transfer,
+        Pickup,
+        Routing,
+        Redirect
     }
 }

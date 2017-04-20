@@ -97,8 +97,8 @@
         </InOutArgument>
       </mgba1:GetMediationDefinition.MediationDefinition>
       <mgba1:GetMediationDefinition.MediationDefinitionId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.MediationDefinitionId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.MediationDefinitionId</mca:CSharpValue>
         </InArgument>
       </mgba1:GetMediationDefinition.MediationDefinitionId>
     </mgba1:GetMediationDefinition>
@@ -128,8 +128,8 @@
         </InArgument>
       </mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
       <mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
         </InArgument>
       </mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
       <mgba1:LoadMediationRecordsByStatus.MediationRecords>
@@ -308,8 +308,8 @@
         </InOutArgument>
       </mgba1:DeleteProcessedMediationRecords.IsDataDeleted>
       <mgba1:DeleteProcessedMediationRecords.MediationDefinitionId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
         </InArgument>
       </mgba1:DeleteProcessedMediationRecords.MediationDefinitionId>
     </mgba1:DeleteProcessedMediationRecords>

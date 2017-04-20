@@ -14,7 +14,7 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<IEnumerable<string>> EventIds { get; set; }
 
         [RequiredArgument]
-        public InArgument<int> MediationDefinitionId { get; set; }
+        public InArgument<Guid> MediationDefinitionId { get; set; }
 
         [RequiredArgument]
         public InOutArgument<bool> IsDataDeleted { get; set; }

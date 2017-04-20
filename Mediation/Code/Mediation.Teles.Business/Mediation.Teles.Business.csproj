@@ -52,6 +52,12 @@
     <Compile Include="TelesMediatorManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.Entities\Mediation.Generic.Entities.csproj">
+      <Project>{edbd3a6e-4535-4b84-8c2a-2ae6aedf5005}</Project>
+      <Name>Mediation.Generic.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

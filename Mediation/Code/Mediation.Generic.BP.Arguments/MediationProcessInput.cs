@@ -9,7 +9,7 @@ namespace Mediation.Generic.BP.Arguments
 {
     public class MediationProcessInput : BaseProcessInputArgument
     {
-        public int MediationDefinitionId { get; set; }
+        public Guid MediationDefinitionId { get; set; }
 
         public override string GetTitle()
         {

@@ -60,11 +60,11 @@ namespace Mediation.Generic.Data.SQL
         {
             return GetItemsSP("[Mediation_Generic].[sp_MediationRecord_GetAll]", MediationRecordMapper);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByStatus(int mediationDefinitionId, EventStatus status)
+        public IEnumerable<MediationRecord> GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status)
         {
             return GetItemsSP("[Mediation_Generic].[sp_MediationRecord_GetByStatus]", MediationRecordMapper, mediationDefinitionId, (short)status);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByIds(int mediationDefinitionId, IEnumerable<string> sessionIds)
+        public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds)
         {
             return GetItemsSPCmd("[Mediation_Generic].[sp_MediationRecord_GetByIds]", MediationRecordMapper, (cmd) =>
             {
@@ -73,12 +73,12 @@ namespace Mediation.Generic.Data.SQL
                 dtPrm.Value = BuildEventIdsTable(sessionIds);
                 cmd.Parameters.Add(dtPrm);
 
-                dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.BigInt);
+                dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.UniqueIdentifier);
                 dtPrm.Value = mediationDefinitionId;
                 cmd.Parameters.Add(dtPrm);
             });
         }
-        public bool DeleteMediationRecordsBySessionIds(int mediationDefinitionId, IEnumerable<string> sessionIds)
+        public bool DeleteMediationRecordsBySessionIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds)
         {
             return ExecuteNonQuerySPCmd("[Mediation_Generic].[sp_MediationRecord_DeleteBySessionIds]", (cmd) =>
             {
@@ -87,7 +87,7 @@ namespace Mediation.Generic.Data.SQL
                 dtPrm.Value = BuildEventIdsTable(sessionIds);
                 cmd.Parameters.Add(dtPrm);
 
-                dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.BigInt);
+                dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.UniqueIdentifier);
                 dtPrm.Value = mediationDefinitionId;
                 cmd.Parameters.Add(dtPrm);
             }) > 0;
@@ -132,7 +132,7 @@ namespace Mediation.Generic.Data.SQL
                 SessionId = reader["SessionId"] as string,
                 EventTime = GetReaderValue<DateTime>(reader, "EventTime"),
                 EventStatus = (EventStatus)GetReaderValue<byte>(reader, "EventStatus"),
-                MediationDefinitionId = (int)reader["MediationDefinitionId"],
+                MediationDefinitionId = GetReaderValue<Guid>(reader, "MediationDefinitionId"),
                 EventDetails = _dataRecordTypeManager.DeserializeRecord(reader["EventDetails"] as string, _dataRecordTypeId)
             };
         }

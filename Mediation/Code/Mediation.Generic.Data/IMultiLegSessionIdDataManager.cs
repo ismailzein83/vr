@@ -9,8 +9,8 @@ namespace Mediation.Generic.Data
 {
     public interface IMultiLegSessionIdDataManager : IDataManager
     {
-        IEnumerable<MultiLegSessionIdEntity> GetMultiLegSessionIds(int mediationDefinitionId);
-        void DeleteSessionIdFromDB(int mediationDefinionId, string sessionId);
-        void AddSessionLegsToDB(int mediationDefinitionId, string sessionId, List<string> nonAssociatedLegIds);
+        IEnumerable<MultiLegSessionIdEntity> GetMultiLegSessionIds(Guid mediationDefinitionId);
+        void DeleteSessionIdFromDB(Guid mediationDefinionId, string sessionId);
+        void AddSessionLegsToDB(Guid mediationDefinitionId, string sessionId, List<string> nonAssociatedLegIds);
     }
 }

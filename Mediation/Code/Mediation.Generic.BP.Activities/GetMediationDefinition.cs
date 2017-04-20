@@ -13,14 +13,14 @@ namespace Mediation.Generic.BP.Activities
     public sealed class GetMediationDefinition : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int> MediationDefinitionId { get; set; }
+        public InArgument<Guid> MediationDefinitionId { get; set; }
 
         [RequiredArgument]
         public InOutArgument<MediationDefinition> MediationDefinition { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            int mediationDefinitionId = MediationDefinitionId.Get(context);
+            Guid mediationDefinitionId = MediationDefinitionId.Get(context);
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
             var mediationDefinition = mediationDefinitionManager.GetMediationDefinition(mediationDefinitionId);
             mediationDefinition.ThrowIfNull("mediationDefinition", mediationDefinitionId);

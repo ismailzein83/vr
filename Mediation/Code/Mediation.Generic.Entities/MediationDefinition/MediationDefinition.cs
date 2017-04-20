@@ -12,7 +12,7 @@ namespace Mediation.Generic.Entities
 {
     public class MediationDefinition
     {
-        public int MediationDefinitionId { get; set; }
+        public Guid MediationDefinitionId { get; set; }
         public string Name { get; set; }
         public Guid ParsedRecordTypeId { get; set; }
         public Guid CookedRecordTypeId { get; set; }

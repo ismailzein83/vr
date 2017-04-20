@@ -16,7 +16,7 @@ namespace Mediation.Generic.QueueActivators
         DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
         DataStoreManager _dataStoreManager = new DataStoreManager();
 
-        public int MediationDefinitionId { get; set; }
+        public Guid MediationDefinitionId { get; set; }
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {

@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         [HttpGet]
         [Route("GetMediationDefinition")]
-        public MediationDefinition GetMediationDefinition(int mediationDefinitionId)
+        public MediationDefinition GetMediationDefinition(Guid mediationDefinitionId)
         {
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
             return mediationDefinitionManager.GetMediationDefinition(mediationDefinitionId);
@@ -33,10 +33,10 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpPost]
         [Route("GetMediationDefinitionsInfoByIds")]
-        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionsInfoByIds(HashSet<int> accountIds)
+        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionsInfoByIds(HashSet<Guid> mediationDefinitionIds)
         {
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
-            return mediationDefinitionManager.GetMediationDefinitionInfoByIds(accountIds);
+            return mediationDefinitionManager.GetMediationDefinitionInfoByIds(mediationDefinitionIds);
         }
 
         [HttpPost]

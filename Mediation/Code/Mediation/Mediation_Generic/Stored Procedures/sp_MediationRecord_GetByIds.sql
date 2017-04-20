@@ -1,7 +1,8 @@
 ﻿
+
 CREATE procedure [Mediation_Generic].[sp_MediationRecord_GetByIds]
 @Ids dbo.StringIDType READONLY,
-@MediationDefinitionId int
+@MediationDefinitionId uniqueidentifier
 as
 begin
 SELECT [EventId]

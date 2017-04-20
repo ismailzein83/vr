@@ -68,6 +68,8 @@
     <Folder Include="dbo\User Defined Types\" />
     <Folder Include="Mediation_Generic\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="Mediation_Generic\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mediation_Generic\Tables\MediationRecord.sql" />
@@ -86,6 +88,12 @@
     <Build Include="Security\VANRISE_development.sql" />
     <Build Include="Mediation_Generic\Tables\CookedCDR.sql" />
     <Build Include="Mediation_Generic\User Defined Types\CookedCDRType.sql" />
+    <Build Include="Mediation_Generic\Tables\MultiLegSessionID.sql" />
+    <Build Include="Mediation_Generic\Functions\GetLegIdsSessionTable.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_InsertSessionLegs.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_GetByMediationDefinitionID.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_DeleteSessionId.sql" />
+    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Mediation.PostDeployment.sql" />

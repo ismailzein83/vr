@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations.cs" />
     <Compile Include="IMediationProcessContext.cs" />
     <Compile Include="MediationDefinition\MediationDefinition.cs" />
     <Compile Include="MediationDefinition\MediationDefinitionDetail.cs" />

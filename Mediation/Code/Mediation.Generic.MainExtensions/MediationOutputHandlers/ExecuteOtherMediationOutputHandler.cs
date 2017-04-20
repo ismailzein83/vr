@@ -17,7 +17,7 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
             get { return new Guid("F1D57186-49CE-4BF9-B4B6-46DDCE93E9EC"); }
         }
 
-        public int MediationDefinitionId { get; set; }
+        public Guid MediationDefinitionId { get; set; }
 
         public override void Execute(IMediationOutputHandlerContext context)
         {

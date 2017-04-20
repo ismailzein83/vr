@@ -11,9 +11,9 @@ namespace Mediation.Generic.Business
 {
     public class MediationProcessContext : IMediationProcessContext
     {
-        int _mediationDefinitionId;
+        Guid _mediationDefinitionId;
 
-        public MediationProcessContext(int mediationDefinitionId)
+        public MediationProcessContext(Guid mediationDefinitionId)
         {
             _mediationDefinitionId = mediationDefinitionId;
         }

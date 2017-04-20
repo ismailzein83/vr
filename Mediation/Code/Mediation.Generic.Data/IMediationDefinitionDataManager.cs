@@ -16,6 +16,6 @@ namespace Mediation.Generic.Data
 
         bool UpdateMediationDefinition(MediationDefinition mediationDefinition);
 
-        bool AddMediationDefinition(MediationDefinition mediationDefinition, out int mediationDefinitionId);
+        bool InsertMediationDefinition(MediationDefinition mediationDefinition);
     }
 }

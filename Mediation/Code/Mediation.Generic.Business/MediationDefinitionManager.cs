@@ -14,7 +14,7 @@ namespace Mediation.Generic.Business
 {
     public class MediationDefinitionManager
     {
-        public MediationDefinition GetMediationDefinition(int mediationDefinitionId)
+        public MediationDefinition GetMediationDefinition(Guid mediationDefinitionId)
         {
             var mediationDefinitions = GetCachedMediationDefinitions();
             return mediationDefinitions.GetRecord(mediationDefinitionId);
@@ -59,17 +59,16 @@ namespace Mediation.Generic.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int mediationId = -1;
-
 
             IMediationDefinitionDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationDefinitionDataManager>();
-            bool insertActionSucc = dataManager.AddMediationDefinition(mediationDefinition, out mediationId);
+            mediationDefinition.MediationDefinitionId = Guid.NewGuid();
+            bool insertActionSucc = dataManager.InsertMediationDefinition(mediationDefinition);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                mediationDefinition.MediationDefinitionId = mediationId;
+                mediationDefinition.MediationDefinitionId = mediationDefinition.MediationDefinitionId;
                 insertOperationOutput.InsertedObject = MediationDefinitionDetailMapper(mediationDefinition);
             }
             else
@@ -83,10 +82,10 @@ namespace Mediation.Generic.Business
         public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionInfo()
         {
             var mediationDefinitions = GetCachedMediationDefinitions();
-            return mediationDefinitions.MapRecords(MediationDefinitionInfoMapper).OrderBy(x => x.Name); 
+            return mediationDefinitions.MapRecords(MediationDefinitionInfoMapper).OrderBy(x => x.Name);
         }
 
-        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionInfoByIds(HashSet<int> mediationDefinitionIds)
+        public IEnumerable<MediationDefinitionInfo> GetMediationDefinitionInfoByIds(HashSet<Guid> mediationDefinitionIds)
         {
             var mediationDefinitions = GetCachedMediationDefinitions();
             Func<MediationDefinition, bool> mediationDefinitionFilter = (mediationDefinition) =>
@@ -103,7 +102,7 @@ namespace Mediation.Generic.Business
             return new ExtensionConfigurationManager().GetExtensionConfigurations<MediationOutputHandlerConfig>(MediationOutputHandlerConfig.EXTENSION_TYPE);
         }
         #region Private Methods
-        private Dictionary<int, MediationDefinition> GetCachedMediationDefinitions()
+        private Dictionary<Guid, MediationDefinition> GetCachedMediationDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetMediationDefinitions",
                () =>

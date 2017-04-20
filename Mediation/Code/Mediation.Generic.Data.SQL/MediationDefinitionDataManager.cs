@@ -35,14 +35,10 @@ namespace Mediation.Generic.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool AddMediationDefinition(MediationDefinition mediationDefinition, out int mediationDefinitionId)
+        public bool InsertMediationDefinition(MediationDefinition mediationDefinition)
         {
-            object mediationDefinitionID;
-            string serializedObj = null;
-            serializedObj = Vanrise.Common.Serializer.Serialize(mediationDefinition);
-            int recordesEffected = ExecuteNonQuerySP("Mediation_Generic.sp_MediationDefinition_Insert", out mediationDefinitionID, mediationDefinition.Name, serializedObj);
-            mediationDefinitionId = (recordesEffected > 0) ? (int)mediationDefinitionID : -1;
-
+            string serializedObj = Vanrise.Common.Serializer.Serialize(mediationDefinition);
+            int recordesEffected = ExecuteNonQuerySP("Mediation_Generic.sp_MediationDefinition_Insert", mediationDefinition.MediationDefinitionId, mediationDefinition.Name, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -55,7 +51,7 @@ namespace Mediation.Generic.Data.SQL
             if (details != null && details != string.Empty)
                 mediationDefinition = Vanrise.Common.Serializer.Deserialize<MediationDefinition>(details);
 
-            mediationDefinition.MediationDefinitionId = (int)reader["ID"];
+            mediationDefinition.MediationDefinitionId = GetReaderValue<Guid>(reader, "ID");
 
             return mediationDefinition;
         }

@@ -1,7 +1,9 @@
 ﻿
-create procedure [Mediation_Generic].[sp_MediationRecord_DeleteBySessionIds]
+
+
+CREATE procedure [Mediation_Generic].[sp_MediationRecord_DeleteBySessionIds]
 @Ids dbo.StringIDType READONLY,
-@MediationDefinitionId int
+@MediationDefinitionId uniqueidentifier
 as
 begin
 delete sr

@@ -15,15 +15,15 @@ namespace Mediation.Generic.Data.SQL
         {
 
         }
-        public void DeleteSessionIdFromDB(int mediationDefinionId, string sessionId)
+        public void DeleteSessionIdFromDB(Guid mediationDefinionId, string sessionId)
         {
             ExecuteNonQuerySP("[Mediation_Generic].[sp_MultiLegSessionID_DeleteSessionId]", mediationDefinionId, sessionId);
         }
-        public void AddSessionLegsToDB(int mediationDefinitionId, string sessionId, List<string> nonAssociatedLegIds)
+        public void AddSessionLegsToDB(Guid mediationDefinitionId, string sessionId, List<string> nonAssociatedLegIds)
         {
             ExecuteNonQuerySP("[Mediation_Generic].[sp_MultiLegSessionID_InsertSessionLegs]", mediationDefinitionId, sessionId, string.Join(",", nonAssociatedLegIds));
         }
-        public IEnumerable<MultiLegSessionIdEntity> GetMultiLegSessionIds(int mediationDefinitionId)
+        public IEnumerable<MultiLegSessionIdEntity> GetMultiLegSessionIds(Guid mediationDefinitionId)
         {
             return GetItemsSP("[Mediation_Generic].[sp_MultiLegSessionID_GetByMediationDefinitionID]", MultiLegSessionIdEntityMapper, mediationDefinitionId);
         }
@@ -31,7 +31,7 @@ namespace Mediation.Generic.Data.SQL
         {
             return new MultiLegSessionIdEntity
             {
-                MediationDefinitionId = (int)reader["MediationDefinitionID"],
+                MediationDefinitionId = GetReaderValue<Guid>(reader, "MediationDefinitionID"),
                 SessionId = reader["SessionID"] as string,
                 LegId = reader["LegId"] as string
             };

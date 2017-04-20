@@ -15,11 +15,15 @@
     [IncomingGwId]         NVARCHAR (100)  NULL,
     [OutgoingGwId]         NVARCHAR (100)  NULL,
     [TransferredCallId]    NVARCHAR (100)  NULL,
-    [OriginatorIP]         NVARCHAR (50)   NULL,
-    [TerminatorIP]         NVARCHAR (50)   NULL,
     [DurationInSeconds]    DECIMAL (10, 4) NULL,
+    [OriginatorIp]         NVARCHAR (100)  NULL,
+    [TerminatorIp]         NVARCHAR (100)  NULL,
+    [AttemptDateTime]      DATETIME        NULL,
+    [CallType]             TINYINT         NULL,
     CONSTRAINT [PK_CookedCDR] PRIMARY KEY CLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

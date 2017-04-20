@@ -19,7 +19,7 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<Guid> DataRecordTypeId { get; set; }
 
         [RequiredArgument]
-        public InArgument<int> MediationDefinitionId { get; set; }
+        public InArgument<Guid> MediationDefinitionId { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<MediationRecord>> MediationRecords { get; set; }

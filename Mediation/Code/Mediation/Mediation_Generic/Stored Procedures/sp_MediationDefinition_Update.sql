@@ -5,8 +5,8 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [Mediation_Generic].[sp_MediationDefinition_Update]
-	@ID INT,
+CREATE PROCEDURE [Mediation_Generic].[sp_MediationDefinition_Update]
+	@ID uniqueidentifier,
 	@Name nvarchar(255),
 	@Details VARCHAR(MAX)
 AS
