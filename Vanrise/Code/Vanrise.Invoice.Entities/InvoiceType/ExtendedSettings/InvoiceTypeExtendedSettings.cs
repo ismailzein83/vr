@@ -46,6 +46,7 @@ namespace Vanrise.Invoice.Entities
     }
     public interface IExtendedSettingsPartnerIdsContext
     {
+        Guid InvoiceTypeId { get; }
         PartnerRetrievalType PartnerRetrievalType { get; }
     }
      public enum PartnerRetrievalType { GetAll = 1 , GetInactive = 2 ,GetActive = 3 }

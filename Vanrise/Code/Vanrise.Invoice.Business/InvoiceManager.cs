@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.Business
             var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
 
             var bigResult = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
-            var inActivePartners = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { PartnerRetrievalType = PartnerRetrievalType.GetInactive });
+            var inActivePartners = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { PartnerRetrievalType = PartnerRetrievalType.GetInactive, InvoiceTypeId = input.Query.InvoiceTypeId });
             Vanrise.Entities.BigResult<InvoiceDetail> finalResult = new BigResult<InvoiceDetail>
             {
                 ResultKey  = bigResult.ResultKey,
