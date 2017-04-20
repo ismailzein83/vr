@@ -67,21 +67,20 @@ app.directive("vrDataparserHextlvTagTypeGrid", ["UtilsService", "VR_DataParser_P
                 };
 
                 api.load = function (payload) {
+                    ctrl.datasource.length = 0;
                     if (payload != undefined) {
                         tagTypes = payload.tagTypes;
                         context = payload.context;
                         if (tagTypes != undefined) {
-                           
+
                             for (var name in tagTypes) {
-                                if (name != "$type")
-                                {
+                                if (name != "$type") {
                                     var gridTagType = {
                                         Key: name,
                                         Value: tagTypes[name]
                                     }
                                     ctrl.datasource.push({ Entity: gridTagType });
                                 }
-                                
                             }
                         }
                     }
@@ -108,7 +107,7 @@ app.directive("vrDataparserHextlvTagTypeGrid", ["UtilsService", "VR_DataParser_P
             function editHexTLVTagType(tagTypeObj) {
                 var onEditHexTLVTagType = function (tag) {
                     var index = ctrl.datasource.indexOf(tagTypeObj);
-                    ctrl.datasource[index] = { Entity: tag};
+                    ctrl.datasource[index] = { Entity: tag };
                 };
                 VR_DataParser_ParserTypeConfigService.editHexTLVTagType(tagTypeObj, onEditHexTLVTagType, getContext());
             }

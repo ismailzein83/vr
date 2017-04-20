@@ -52,7 +52,8 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivePayload = { context: getContext() };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
 
             }
@@ -67,8 +68,8 @@
                     var tagValueParserEntity;
 
                     if (payload != undefined) {
-                        tagValueParserEntity = payload.tagValueParserEntity;
                         context = payload.context;
+                        tagValueParserEntity = payload.tagValueParserEntity;
                     }
 
                     if (tagValueParserEntity != undefined) {
@@ -80,7 +81,7 @@
                     promises.push(getTagValueParserPromise);
 
                     function getTagValueParserConfigs() {
-                      
+
                         return VR_DataParser_ParserTypeConfigsAPIService.GetTagValueParserTemplateConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
@@ -96,20 +97,16 @@
 
                     function loadDirective() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
-
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { context: getContext};
+                            var directivePayload = { context: getContext() };
                             if (tagValueParserEntity != undefined)
-                                directivePayload = { ValueParser: tagValueParserEntity };
+                                directivePayload.ValueParser = tagValueParserEntity;
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
-
                         return directiveLoadDeferred.promise;
                     }
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 

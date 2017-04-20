@@ -47,8 +47,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             var api = {};
 
             api.load = function (payload) {
-                if (payload != undefined)
-                {
+                if (payload != undefined) {
                     valueParserEntity = payload.ValueParser;
                     context = payload.context;
                 }
@@ -59,7 +58,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 function loadHexTLVTagTypeGridDirective() {
                     var hexTLVTagTypePayload = { context: getContext() };
                     if (valueParserEntity != undefined)
-                        hexTLVTagTypePayload = { tagTypes: valueParserEntity.TagTypes };
+                        hexTLVTagTypePayload.tagTypes = valueParserEntity.TagTypes;
                     return hexTLVTagTypeGridAPI.load(hexTLVTagTypePayload);
                 }
 

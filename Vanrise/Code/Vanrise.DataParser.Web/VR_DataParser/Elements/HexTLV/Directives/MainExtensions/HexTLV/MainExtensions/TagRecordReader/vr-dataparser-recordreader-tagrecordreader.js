@@ -34,7 +34,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         function initializeController() {
 
             $scope.scopeModel = {};
-            
+
             $scope.scopeModel.onTagRecordReaderGridReady = function (api) {
 
                 tagRecordReaderGridAPI = api;
@@ -51,11 +51,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             api.load = function (payload) {
                 var promises = [];
                 var gridPayload;
+                var recordTypesByTag;
                 if (payload != undefined) {
-                    $scope.scopeModel.numberOfBytesToSkip = payload.recordReaderEntity.NumberOfBytesToSkip;
+                    if (payload.recordReaderEntity != undefined) {
+                        $scope.scopeModel.numberOfBytesToSkip = payload.recordReaderEntity.NumberOfBytesToSkip;
+                        recordTypesByTag = payload.recordReaderEntity.RecordTypesByTag;
+                    }
                     context = payload.context;
                     gridPayload = {
-                        recordTypesByTag: payload.recordReaderEntity.RecordTypesByTag,
+                        recordTypesByTag: recordTypesByTag,
                         context: getContext()
                     };
                 }
@@ -94,7 +98,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
     }
 
 
-       
+
 
     return directiveDefinitionObject;
 

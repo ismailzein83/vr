@@ -20,8 +20,8 @@
             if (parameters != undefined && parameters != null) {
                 parserTypeId = parameters.parserTypeId;
             }
-                isEditMode = (parserTypeId != undefined);
-            }
+            isEditMode = (parserTypeId != undefined);
+        }
 
         function defineScope() {
             $scope.scopeModel = {};
@@ -83,13 +83,14 @@
             if (parserTypeEntity == undefined)
                 return;
             $scope.scopeModel.name = parserTypeEntity.Name;
+            $scope.scopeModel.useRecordType = parserTypeEntity.Settings.UseRecordType;
         }
 
         function loadParserTypeExtendedSettingsSelector() {
             var parserTypeExtendedSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             parserTypeExtendedSettingsSelectorReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {context:getContext()};
+                    var directivePayload = { context: getContext() };
                     if (parserTypeEntity != undefined && parserTypeEntity.Settings != undefined) {
                         directivePayload.parserTypeEntity = parserTypeEntity.Settings;
                     }
@@ -103,8 +104,9 @@
                 ParserTypeId: parserTypeId,
                 Name: $scope.scopeModel.name,
                 Settings: {
+                    UseRecordType: $scope.scopeModel.useRecordType,
                     ExtendedSettings: parserTypeExtendedSettingsSelectorAPI.getData()
-                                    }
+                }
             };
             return obj;
         }
@@ -112,19 +114,18 @@
         function insertParserType() {
             $scope.isLoading = true;
             var parserTypeObject = buildParserTypeObjFromScope();
-                 return VR_DataParser_ParserTypeAPIService.AddParserType(parserTypeObject)
-                    .then(function (response) {
-                        if (VRNotificationService.notifyOnItemAdded("ParserType", response, "Name"))
-                        {
-                            if ($scope.onParserTypeAdded != undefined)
-                                    $scope.onParserTypeAdded(response.InsertedObject);
-                          $scope.modalContext.closeModal();
-                            }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
+            return VR_DataParser_ParserTypeAPIService.AddParserType(parserTypeObject)
+               .then(function (response) {
+                   if (VRNotificationService.notifyOnItemAdded("ParserType", response, "Name")) {
+                       if ($scope.onParserTypeAdded != undefined)
+                           $scope.onParserTypeAdded(response.InsertedObject);
+                       $scope.modalContext.closeModal();
+                   }
+               }).catch(function (error) {
+                   VRNotificationService.notifyException(error, $scope);
+               }).finally(function () {
+                   $scope.isLoading = false;
+               });
 
         }
 
@@ -146,9 +147,12 @@
         }
 
         function getContext() {
-            var  context;
-            if (context == undefined)
-                context = {};
+            var context = {
+                useRecordType: function () {
+                    return $scope.scopeModel.useRecordType;
+
+                }
+            }
             return context;
         }
     }

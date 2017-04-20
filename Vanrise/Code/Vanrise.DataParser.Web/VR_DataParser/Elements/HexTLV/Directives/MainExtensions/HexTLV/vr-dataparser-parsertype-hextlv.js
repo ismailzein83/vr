@@ -44,11 +44,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             var api = {};
 
             api.load = function (payload) {
-               
                 var promises = [];
                 var recordReaderEntity;
                 if (payload != undefined) {
-                    recordReaderEntity = payload.extendedSettings.RecordReader;
+                    if (payload.extendedSettings != undefined)
+                    { recordReaderEntity = payload.extendedSettings.RecordReader; }
                     context = payload.context;
                 }
 
@@ -56,13 +56,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 promises.push(loadSelectorRecordReaderPromise);
 
                 function loadSelectorrecordReader() {
-                    
-                        var selectorPayload = {context : getContext()};
-                        if (recordReaderEntity != undefined) {
-                            selectorPayload.recordReaderEntity = recordReaderEntity;
-                        }
-                       
-                        return recordReaderSelectorAPI.load(selectorPayload);;
+
+                    var selectorPayload = { context: getContext() };
+                    if (recordReaderEntity != undefined) {
+                        selectorPayload.recordReaderEntity = recordReaderEntity;
+                    }
+
+                    return recordReaderSelectorAPI.load(selectorPayload);;
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
@@ -85,9 +85,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             return currentContext;
         }
     }
-    
 
-   
+
+
 
     return directiveDefinitionObject;
 

@@ -14,7 +14,8 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             isdisabled: "=",
             selectedvalues: "=",
             showaddbutton: '@',
-            hidelabel: '@'
+            hidelabel: '@',
+            onselectitem: "=",
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -67,7 +68,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"'
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem"'
                + 'entityname="Type" ' + label + '></vr-select>';
 
     }

@@ -8,6 +8,7 @@ namespace Vanrise.DataParser.Entities
 {
     public class ParserTypeSettings
     {
+        public Boolean UseRecordType { get; set; }
         public ParserTypeExtendedSettings ExtendedSettings { get; set; }
     }
 

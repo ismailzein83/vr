@@ -68,11 +68,8 @@
                         recordReaderEntity = payload.recordReaderEntity;
                         context = payload.context;
                     }
-
-                    if (recordReaderEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
-                    }
 
                     var getRecordReaderTemplateConfigsPromise = getRecordeReaderTemplateConfigs();
                     promises.push(getRecordReaderTemplateConfigsPromise);

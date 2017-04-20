@@ -1,5 +1,8 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/2row" ng-if="!scopeModel.useRecordType">
         <vr-textbox value="scopeModel.fieldName" label="Field Name " isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row" ng-if="scopeModel.useRecordType">
+        <vr-genericdata-datarecordtypefields-selector label="Field Name " on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
     </vr-columns>
 </vr-row>

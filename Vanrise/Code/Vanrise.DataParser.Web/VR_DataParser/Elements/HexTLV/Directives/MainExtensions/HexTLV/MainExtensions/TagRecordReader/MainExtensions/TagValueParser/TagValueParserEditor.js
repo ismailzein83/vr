@@ -23,6 +23,7 @@
             if (parameters != undefined) {
                 context = parameters.context;
                 tagTypeEntity = parameters.tagTypeEntity;
+
             }
             isEditMode = (tagTypeEntity != undefined);
         }
@@ -37,7 +38,7 @@
             };
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateTagValueParser() : addTagValueParser(); 
+                return (isEditMode) ? updateTagValueParser() : addTagValueParser();
             }
 
             $scope.scopeModel.close = function () {
@@ -98,9 +99,7 @@
                 tagValueParserSelectorReadyPromiseDeferred.promise.then(function () {
                     var tagValueParserSelectorPayload = { context: getContext() };
                     if (tagTypeEntity != undefined)
-                        tagValueParserSelectorPayload = {
-                            tagValueParserEntity: tagTypeEntity.Value.ValueParser,
-                        };
+                        tagValueParserSelectorPayload.tagValueParserEntity = tagTypeEntity.Value.ValueParser;
                     VRUIUtilsService.callDirectiveLoad(tagValueParserSelectorAPI, tagValueParserSelectorPayload, tagValueParserSelectorLoadPromiseDeferred);
                 });
                 return tagValueParserSelectorLoadPromiseDeferred.promise;

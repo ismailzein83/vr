@@ -49,7 +49,8 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivePayload = { context: getContext() };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -71,7 +72,7 @@
                     promises.push(getParserTypeTemplateConfigsPromise);
 
                     function getParserTypeTemplateConfigs() {
-                        
+
                         return VR_DataParser_ParserTypeConfigsAPIService.GetParserTypeTemplateConfigs().then(function (response) {
                             if (response != null) {
                                 var i;
@@ -80,7 +81,7 @@
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
                                 if (parserTypeEntity != undefined) {
-                                  
+
                                     $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, parserTypeEntity.ExtendedSettings.ConfigId, 'ExtensionConfigurationId');
                                 }
@@ -95,7 +96,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = {context : getContext()};
+                            var directivePayload = { context: getContext() };
                             if (parserTypeEntity != undefined) {
                                 directivePayload.extendedSettings = parserTypeEntity.ExtendedSettings;
                             }

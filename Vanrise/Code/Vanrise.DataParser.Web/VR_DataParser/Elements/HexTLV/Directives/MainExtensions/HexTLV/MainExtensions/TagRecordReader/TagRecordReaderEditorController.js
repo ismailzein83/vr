@@ -5,7 +5,7 @@
     TagRecordReaderEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
     function TagRecordReaderEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
-
+        var testContextChange;
         var context;
         var tagRecordTypeEntity;
 
@@ -13,7 +13,8 @@
 
         var hexTLVTagTypeGridAPI;
         var hexTLVTagTypeGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var dataRecordTypeSelectorAPI;
+        var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -23,20 +24,30 @@
             if (parameters != undefined) {
                 context = parameters.context;
                 tagRecordTypeEntity = parameters.tagRecordTypeEntity;
-               
             }
             isEditMode = (tagRecordTypeEntity != undefined);
         }
 
         function defineScope() {
             $scope.scopeModel = {};
+            if (context != undefined) {
+                $scope.scopeModel.useRecordType = context.useRecordType();
+            }
+            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
+                dataRecordTypeSelectorAPI = api;
+                dataRecordTypeSelectorReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onHexTLVTagTypeGridReady = function (api) {
                 hexTLVTagTypeGridAPI = api;
                 hexTLVTagTypeGridReadyPromiseDeferred.resolve();
             };
-            
+
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateRecordReaderTag() : addRecordReaderTag();
+            };
+            $scope.scopeModel.onDataRecordTypeSelectionChange = function () {
+                var hexTLVTagTypePayload = { context: getContext() };
+                hexTLVTagTypeGridAPI.load(hexTLVTagTypePayload);
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -46,7 +57,7 @@
                 return {
                     Key: $scope.scopeModel.tag,
                     Value: {
-                        RecordType: $scope.scopeModel.recordType,
+                        RecordType: $scope.scopeModel.useRecordType ? dataRecordTypeSelectorAPI.getSelectedIds() : $scope.scopeModel.recordType,
                         TagTypes: hexTLVTagTypeGridAPI.getData()
                     }
                 };
@@ -69,6 +80,7 @@
         }
 
         function load() {
+            testContextChange = getContext();
             $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
@@ -90,29 +102,45 @@
                 var hexTLVTagTypeGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 hexTLVTagTypeGridReadyPromiseDeferred.promise.then(function () {
                     var hexTLVTagTypePayload = { context: getContext() };
-                    if (tagRecordTypeEntity != undefined)
-                        hexTLVTagTypePayload = {
-                            tagTypes: tagRecordTypeEntity.Value.TagTypes,
-                        };
+                    if (tagRecordTypeEntity != undefined && testContextChange.recordTypeId != getContext().recordTypeId)
+                        hexTLVTagTypePayload.tagTypes = tagRecordTypeEntity.Value.TagTypes;
+
                     VRUIUtilsService.callDirectiveLoad(hexTLVTagTypeGridAPI, hexTLVTagTypePayload, hexTLVTagTypeGridLoadPromiseDeferred);
                 });
                 return hexTLVTagTypeGridLoadPromiseDeferred.promise;
             }
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadHexTLVTagTypeGridDirective]).then(function () {
-
+            function loadDataRecordTypeSelector() {
+                if ($scope.scopeModel.useRecordType) {
+                    var dataRecordTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    dataRecordTypeSelectorReadyPromiseDeferred.promise.then(function () {
+                        var dataRecordTypePayload = {};
+                        if (tagRecordTypeEntity != undefined)
+                            dataRecordTypePayload = {
+                                selectedIds: tagRecordTypeEntity.Value.RecordType,
+                            };
+                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypePayload, dataRecordTypeSelectorLoadPromiseDeferred);
+                    });
+                    return dataRecordTypeSelectorLoadPromiseDeferred.promise;
+                }
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadHexTLVTagTypeGridDirective]).then(function () {
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
-               VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
 
         function getContext() {
-            var currentContext = context;
-            if (currentContext == undefined)
-                currentContext = {};
-            return currentContext;
+            var currenctContext = context;
+            if (currenctContext == undefined)
+                currenctContext = {};
+            if (dataRecordTypeSelectorAPI != undefined) {
+                currenctContext.recordTypeId = function () {
+                    return dataRecordTypeSelectorAPI.getSelectedIds();
+                };
+            }
+            return currenctContext;
         }
 
     }

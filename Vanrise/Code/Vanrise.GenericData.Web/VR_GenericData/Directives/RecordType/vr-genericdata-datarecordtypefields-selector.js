@@ -88,7 +88,8 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                 };
 
                 api.load = function (payload) {
-
+                    
+                    var promises = [];
                     var selectedIds;
                     var dataRecordTypeId;
                     var filter;
@@ -115,6 +116,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
                     });
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getSelectedIds = function () {
