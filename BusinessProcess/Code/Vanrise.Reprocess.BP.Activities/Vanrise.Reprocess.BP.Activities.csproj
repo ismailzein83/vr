@@ -82,6 +82,7 @@
     <Compile Include="FinalizeStage.cs" />
     <Compile Include="ExecuteStage.cs" />
     <Compile Include="GetReprocessDefinition.cs" />
+    <Compile Include="InitializeStage.cs" />
     <Compile Include="LoadDataToReprocess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StageManager.cs" />
