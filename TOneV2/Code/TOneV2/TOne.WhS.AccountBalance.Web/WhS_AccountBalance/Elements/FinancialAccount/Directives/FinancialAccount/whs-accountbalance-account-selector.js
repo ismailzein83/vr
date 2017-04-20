@@ -70,6 +70,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
             UtilsService.waitMultiplePromises([accountSelectorReadyDeferred.promise, carrierTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
+            ctrl.fieldTitle = "Financial Account";
         }
         function defineAPI() {
 
@@ -88,6 +89,8 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                     accountTypeId = payload.accountTypeId;
                     extendedSettings = payload.extendedSettings;
                     context = payload.context;
+                    if( payload.fieldTitle != undefined)
+                      ctrl.fieldTitle = payload.fieldTitle;
                     businessEntityDefinitionId = payload.businessEntityDefinitionId;
                     selectedIds = payload.selectedIds;
                 }
@@ -195,9 +198,9 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
     }
     function getTemplate(attributes) {
         var isMultipleSelection = (attributes.ismultipleselection != undefined) ? 'ismultipleselection="accountSelectorCtrl.ismultipleselection"' : undefined;
-        return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
+        return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum}}"> \
+                    <vr-label>{{accountSelectorCtrl.fieldTitle}}</vr-label>\
                     <vr-select on-ready="scopeModel.onAccountSelectorReady" includeadvancedsearch onokhandler="scopeModel.onOKSearch" oncancelhandler="scopeModel.onCancelSearch" \
-				        label="Financial Account"\
 				        datasource="accountSelectorCtrl.datasource"\
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
 				        datavaluefield="FinancialAccountId"\
