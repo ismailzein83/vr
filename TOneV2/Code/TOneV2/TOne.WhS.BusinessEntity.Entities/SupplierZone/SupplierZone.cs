@@ -2,7 +2,7 @@
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierZone
+    public class SupplierZone : Vanrise.Entities.IDateEffectiveSettings
     {
         public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("AD86042C-0B49-4379-966A-DC0D39ADBA6D");
 

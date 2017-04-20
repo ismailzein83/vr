@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_BE_SupplierZoneAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'VRCommon_EntityFilterEffectiveModeEnum', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_BE_SupplierZoneAPIService, VRCommon_EntityFilterEffectiveModeEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -8,7 +8,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 onReady: '=',
                 ismultipleselection: "@",
                 onselectionchanged: '=',
-                onblurdropdown:'=',
+                onblurdropdown: '=',
                 isrequired: "=",
                 supplierid: "=",
                 selectedvalues: '=',
@@ -101,16 +101,11 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                         return deferredPromise.promise;
                     }
 
-                    var getEffectiveOnly = true;
+                    if (filter == undefined)
+                        filter = {};
 
-                    if (filter != undefined) {
-                        if (filter.GetEffectiveOnly == undefined) {
-                            filter.GetEffectiveOnly = getEffectiveOnly;
-                        }
-                    }
-                    else {
-                        filter = { GetEffectiveOnly: getEffectiveOnly };
-                    }
+                    if (filter.EffectiveMode == undefined)
+                        filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
 
                     var serializedFilter = UtilsService.serializetoJson(filter);
 
@@ -150,7 +145,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
                         if (filter != undefined && filter.CountryIds != undefined && filter.CountryIds.length == 1) {
                             ctrl.limitcharactercount = 0;
-                            promises.push(selectorApi.loadDataSource("").then(function (res) {}));
+                            promises.push(selectorApi.loadDataSource("").then(function (res) { }));
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }

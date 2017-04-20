@@ -177,7 +177,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
             }
 
-            var now = DateTime.Now;
+            var today = DateTime.Today;
             HashSet<long> filteredZoneIds = null;
 
             if (filter.SaleZoneFilterSettings != null)
@@ -194,7 +194,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             Func<SaleZone, bool> filterPredicate = (zone) =>
             {
-                if (filter.GetEffectiveOnly && (zone.BED > now || (zone.EED.HasValue && zone.EED.Value < now)))
+                if (!zone.IsEffective(filter.EffectiveMode, today))
                     return false;
 
                 if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
@@ -353,11 +353,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (saleZoneName == null)
                 throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneName");
-            
+
             IEnumerable<SaleZone> cachedSaleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
             if (cachedSaleZones == null || cachedSaleZones.Count() == 0)
                 return null;
-            
+
             string targetZoneName = saleZoneName.Trim().ToLower();
             return cachedSaleZones.MapRecords(x => x.SaleZoneId, x => x.CountryId == countryId && (x.Name != null && x.Name.ToLower() == targetZoneName));
         }
@@ -422,10 +422,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Sales Zones",
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name", Width = 35});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name", Width = 35 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });

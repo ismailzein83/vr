@@ -45,11 +45,11 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SupplierZoneLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper), handler);
         }
-        
+
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
             string nameFilterLower = searchValue != null ? searchValue.ToLower() : null;
-            DateTime now = DateTime.Now;
+            DateTime today = DateTime.Today;
 
             IEnumerable<SupplierZone> supplierZones = GetSupplierZonesBySupplier(supplierId);
 
@@ -58,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (filter.CountryIds != null && !filter.CountryIds.Contains(supplierZone.CountryId))
                     return false;
 
-                if (filter.GetEffectiveOnly && (supplierZone.BED > now || (supplierZone.EED.HasValue && supplierZone.EED.Value < now)))
+                if (!supplierZone.IsEffective(filter.EffectiveMode, today))
                     return false;
 
                 if (nameFilterLower != null && !supplierZone.Name.ToLower().Contains(nameFilterLower))
@@ -94,7 +94,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetSupplierZonesEffectiveAfter(supplierId, minimumDate);
         }
-        
+
         public List<SupplierZone> GetSupplierZones(int supplierId, DateTime effectiveDate)
         {
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
@@ -106,25 +106,25 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
             return dataManager.GetEffectiveSupplierZones(supplierId, effectiveOn, isEffectiveInFuture);
         }
-        
+
         public SupplierZone GetSupplierZone(long zoneId)
         {
             var supplierZones = GetCachedSupplierZones();
             return supplierZones.GetRecord(zoneId);
         }
-        
+
         public string GetSupplierZoneName(long zoneId)
         {
             SupplierZone supplierZone = GetSupplierZone(zoneId);
             return supplierZone != null ? supplierZone.Name : null;
         }
-        
+
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
             var allSupplierZones = GetCachedSupplierZones();
             return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId)).OrderBy(x => x.Name);
         }
-        
+
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
@@ -172,7 +172,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Zones",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
@@ -184,7 +184,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var record in context.BigResult.Data)
                     {
-                        if (record.Entity != null )
+                        if (record.Entity != null)
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
@@ -269,7 +269,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             }
 
-          
+
 
             public override string EntityUniqueName
             {

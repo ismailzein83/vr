@@ -8,9 +8,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierZoneInfoFilter
     {
-        public bool GetEffectiveOnly { get; set; }
+        public Vanrise.Entities.EntityFilterEffectiveMode EffectiveMode { get; set; }
 
-		public IEnumerable<int> CountryIds { get; set; }
+        public IEnumerable<int> CountryIds { get; set; }
 
         public IEnumerable<long> AvailableZoneIds { get; set; }
 

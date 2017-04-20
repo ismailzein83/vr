@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_BE_SaleZoneAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon_EntityFilterEffectiveModeEnum', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_BE_SaleZoneAPIService, VRCommon_EntityFilterEffectiveModeEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -40,17 +40,16 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
         };
 
 
-        function getBeSaleZoneTemplate(attrs)
-        {
-        	var label;
-        	if (attrs.hidelabel == undefined)
-        		label = 'label="Sale Zone"';
+        function getBeSaleZoneTemplate(attrs) {
+            var label;
+            if (attrs.hidelabel == undefined)
+                label = 'label="Sale Zone"';
 
             var multipleselection = "";
 
             if (attrs.ismultipleselection != undefined) {
-            	if (attrs.hidelabel == undefined)
-            		label = 'label="Sale Zones"';
+                if (attrs.hidelabel == undefined)
+                    label = 'label="Sale Zones"';
 
                 multipleselection = "ismultipleselection";
             }
@@ -80,7 +79,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
         function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {
 
-        	var filter;
+            var filter;
             var availableZoneIds;
             var excludedZoneIds;
 
@@ -130,28 +129,23 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                     if (sellingNumberPlanId == undefined)
                         return function () { };
 
-                    var getEffectiveOnly = true;
+                    if (filter == undefined)
+                        filter = {};
 
-                    if (filter != undefined) {
-                        if (filter.GetEffectiveOnly == undefined) {
-                            filter.GetEffectiveOnly = getEffectiveOnly;
-                        }
-                    }
-                    else {
-                        filter = { GetEffectiveOnly: getEffectiveOnly };
-                    }
+                    if (filter.EffectiveMode == undefined)
+                        filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
 
                     filter.availableZoneIds = availableZoneIds;
                     filter.excludedZoneIds = excludedZoneIds;
 
                     var serializedFilter = UtilsService.serializetoJson(filter);
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter).then(function (response) {
-                    	availableSaleZones.length = 0;
-                    	if (response != undefined) {
-                    		for (var i = 0; i < response.length; i++)
-                    			availableSaleZones.push(response[i]);
-                    	}
-                    	return response;
+                        availableSaleZones.length = 0;
+                        if (response != undefined) {
+                            for (var i = 0; i < response.length; i++)
+                                availableSaleZones.push(response[i]);
+                        }
+                        return response;
                     });
                 };
 
@@ -172,9 +166,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 api.load = function (payload) {
 
-                	selectorApi.clearDataSource();
+                    selectorApi.clearDataSource();
 
-                	var selectedIds;
+                    var selectedIds;
                     var payloadSellingNumberPlanId;
 
                     if (payload != undefined) {
@@ -295,12 +289,12 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 };
 
                 api.getAvailableSaleZones = function () {
-                	if (availableSaleZones.length > 0) {
-                		var availableZones = [];
-                		for (var i = 0; i < availableSaleZones.length; i++)
-                			availableZones.push(availableSaleZones[i]);
-                		return availableZones;
-                	}
+                    if (availableSaleZones.length > 0) {
+                        var availableZones = [];
+                        for (var i = 0; i < availableSaleZones.length; i++)
+                            availableZones.push(availableSaleZones[i]);
+                        return availableZones;
+                    }
                 };
 
                 if (saleZoneSelectorCtrl.onReady != null)

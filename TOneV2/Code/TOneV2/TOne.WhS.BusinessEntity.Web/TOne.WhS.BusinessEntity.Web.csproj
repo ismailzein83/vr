@@ -206,7 +206,6 @@
     <Content Include="WhS_BusinessEntity\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\EntityFilterEffectiveModeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SaleEntityZoneRoutingProductSourceTypeEnum.js" />

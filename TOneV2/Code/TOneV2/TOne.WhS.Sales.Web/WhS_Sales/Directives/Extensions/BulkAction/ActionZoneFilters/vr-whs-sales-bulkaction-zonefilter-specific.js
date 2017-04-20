@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_Sales_SpecificApplicableZoneEntityTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_SpecificApplicableZoneEntityTypeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_Sales_SpecificApplicableZoneEntityTypeEnum', 'VRCommon_EntityFilterEffectiveModeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_SpecificApplicableZoneEntityTypeEnum, VRCommon_EntityFilterEffectiveModeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
     return {
         restrict: "E",
         scope: {
@@ -290,7 +290,9 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
         }
         function getSaleZoneSelectorPayload() {
             var saleZoneSelectorPayload = {
-                filter: {}
+                filter: {
+                    EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.CurrentAndFuture.value
+                }
             };
 
             if (bulkActionContext != undefined) {
@@ -415,6 +417,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
             function getCommonSaleZoneSelectorPayload() {
                 var selectorPayload = {
                     filter: {
+                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.CurrentAndFuture.value,
                         Filters: getSaleZoneSelectorFilters(),
                         ExcludedZoneIds: getExcludedSaleZoneIds()
                     }
