@@ -30,18 +30,14 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
 
 
         function getAccountTemplate(attrs) {
-            var label = "Account";
             var multipleselection = "";
-
             if (attrs.ismultipleselection != undefined) {
-                label = "Accounts";
                 multipleselection = "ismultipleselection";
             }
 
-            if (attrs.customlabel != undefined) {
-                label = attrs.customlabel;
-            }
+          
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                   + '<vr-label>{{ctrl.fieldTitle}}</vr-label>'
                    + '<vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
@@ -50,8 +46,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isrequired"'
-                   + '  label="' + label + '"'
-                   + ' entityName="' + label + '"'
+            //       + ' entityName="ctrl.fieldTitle"'
                    + '  >'
                    + '</vr-select>'
                    + '</vr-columns>';
@@ -65,7 +60,13 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
             var selectorAPI;
             var accountBeDefinitionId;
             function initializeController() {
-
+                 ctrl.fieldTitle = "Account";
+                if (attrs.ismultipleselection != undefined) {
+                    ctrl.fieldTitle = "Accounts";
+                }
+                if (attrs.customlabel != undefined) {
+                    ctrl.fieldTitle = attrs.customlabel;
+                }
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
 
@@ -96,6 +97,8 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                             accountBeDefinitionId = payload.businessEntityDefinitionId;
                         else
                             accountBeDefinitionId = payload.AccountBEDefinitionId;
+                        if (payload.fieldTitle != undefined)
+                            ctrl.fieldTitle = payload.fieldTitle;
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                         if (payload.beFilter != undefined) {
