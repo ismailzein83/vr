@@ -9,6 +9,9 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordFieldChoice
     {
         public int DataRecordFieldChoiceId { get; set; }
+
+        public Guid DataRecordFieldChoiceId2 { get; set; }
+
         public string Name { get; set; }
         public DataRecordFieldChoiceSettings Settings { get; set; }
     }

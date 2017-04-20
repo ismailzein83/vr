@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
@@ -12,8 +13,31 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldChoicesType : DataRecordFieldType
     {
+        
         public override Guid ConfigId { get { return new Guid("eabc41a9-e332-4120-ac85-f0b7e53c0d0d"); } }
-        public List<Choice> Choices { get; set; }
+
+        List<Choice> _choices;
+        public List<Choice> Choices
+        {
+            get
+            {
+                if (this.ChoiceDefinitionId.HasValue)
+                {
+                    return GetChoices(this.ChoiceDefinitionId.Value);
+                }
+                else
+                {
+                    return _choices;
+                }
+            }
+            set
+            {
+                _choices = value;
+            }
+        }
+
+        public Guid? ChoiceDefinitionId { get; set; }
+
         public bool IsNullable { get; set; }
 
         public override DataRecordFieldOrderType OrderType
@@ -121,6 +145,36 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             NumberListRecordFilter numberListRecordFilter = filter as NumberListRecordFilter;
             return string.Format(" {0} {1} ( {2} ) ", numberListRecordFilter.FieldName, Utilities.GetEnumDescription(numberListRecordFilter.CompareOperator), GetDescription(numberListRecordFilter.Values));
+        }
+
+        List<Choice> GetChoices(Guid choiceDefinitionId)
+        {
+            List<Choice> choices = GetCachedChoicesByDefinitionId().GetRecord(choiceDefinitionId);
+            choices.ThrowIfNull("choices", choiceDefinitionId);
+            return choices;
+        }
+
+        Dictionary<Guid, List<Choice>> GetCachedChoicesByDefinitionId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordFieldChoiceManager.CacheManager>().GetOrCreateObject("GetCachedChoicesByDefinitionId",
+                () =>
+                {
+                    DataRecordFieldChoiceManager choiceDefinitionManager = new DataRecordFieldChoiceManager();
+                    var allChoiceDefinitions = choiceDefinitionManager.GetCachedDataRecordFieldChoices();
+                    allChoiceDefinitions.ThrowIfNull("allChoiceDefinitions");
+                    Dictionary<Guid, List<Choice>> choices = new Dictionary<Guid, List<Choice>>();
+                    foreach(var choiceDefinition in allChoiceDefinitions.Values)
+                    {
+                        choiceDefinition.Settings.ThrowIfNull("choiceDefinition.Settings", choiceDefinition.DataRecordFieldChoiceId2);
+                        choiceDefinition.Settings.Choices.ThrowIfNull("choiceDefinition.Settings.Choices", choiceDefinition.DataRecordFieldChoiceId2);
+                        choices.Add(choiceDefinition.DataRecordFieldChoiceId2, choiceDefinition.Settings.Choices.Select(itm => new Choice
+                            {
+                                Text = itm.Text,
+                                Value = itm.Value
+                            }).ToList());
+                    }
+                    return choices;
+                });
         }
     }
 

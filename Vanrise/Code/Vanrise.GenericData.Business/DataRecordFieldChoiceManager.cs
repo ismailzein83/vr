@@ -30,6 +30,11 @@ namespace Vanrise.GenericData.Business
 
         }
 
+        public DataRecordFieldChoice GetDataRecordFieldChoice(Guid dataRecordFieldChoiceId)
+        {
+            throw new NotImplementedException();
+        }
+
         public DataRecordFieldChoice GeDataRecordFieldChoice(int dataRecordFieldChoiceId)
         {
             var cachedDataRecordFieldChoice = GetCachedDataRecordFieldChoices();
@@ -101,7 +106,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        Dictionary<int, DataRecordFieldChoice> GetCachedDataRecordFieldChoices()
+        public Dictionary<int, DataRecordFieldChoice> GetCachedDataRecordFieldChoices()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordFieldChoices",
                 () =>
@@ -116,7 +121,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Classes
 
-        class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDataRecordFieldChoiceDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordFieldChoiceDataManager>();
             object _updateHandle;
