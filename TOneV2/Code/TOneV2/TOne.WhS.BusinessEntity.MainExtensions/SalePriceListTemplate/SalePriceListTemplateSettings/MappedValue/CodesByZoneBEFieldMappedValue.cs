@@ -56,16 +56,20 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         private string GetCodesValue(ICodesByZoneMappedValueContext context)
         {
-            string codesValue = string.Empty;
-
             List<string> codes = new List<string>();
 
-            foreach (SalePLCodeNotification codeNotification in context.ZoneNotification.Codes)
-            {
-                if(!codeNotification.EED.HasValue)
-                    codes.Add(codeNotification.Code);
-            }
+            var codeNotifactions = context.ZoneNotification.Codes;
 
+            var allCodesHasEED = codeNotifactions.All(c => c.EED.HasValue);
+            if (allCodesHasEED) codes.AddRange(codeNotifactions.Select(c => c.Code));
+            else
+            {
+                foreach (SalePLCodeNotification codeNotification in codeNotifactions)
+                {
+                    if (!codeNotification.EED.HasValue)
+                        codes.Add(codeNotification.Code);
+                }
+            }
             return string.Join(context.Delimiter.ToString(), codes);
         }
 

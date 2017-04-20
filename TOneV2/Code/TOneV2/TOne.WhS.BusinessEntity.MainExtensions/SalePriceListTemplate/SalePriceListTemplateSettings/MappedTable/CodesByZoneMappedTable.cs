@@ -33,16 +33,16 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         private void SetRecordData(List<SalePriceListTemplateTableCell> sheets, IEnumerable<CodesByZoneMappedColumn> mappedCols, SalePLZoneNotification zone, ref int rowIndex, string dateTimeFormat)
         {
-            if (zone.Codes.All(x => x.EED.HasValue))
-                return;//No need to mention the zone if all codes are closed for it (this happens when renaming a zone also)
+            //if (zone.Codes.All(x => x.EED.HasValue))
+            //    return;//No need to mention the zone if all codes are closed for it (this happens when renaming a zone also)
 
             int? codesLength = GetLength(zone.Codes.Select(itm => itm.Code));
-            
+
             int splitedCodesCount = 0;
-            
+
             if (codesLength.HasValue && codesLength > _excelCellMaxValue)
                 splitedCodesCount = (int)Math.Ceiling((double)codesLength.Value / _excelCellMaxValue);
-           
+
             if (splitedCodesCount > 0)
             {
                 int saleCodesStartIndex = 0;
@@ -69,7 +69,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     SetCellData(sheets, mappedCol, zone, rowIndex, dateTimeFormat);
                 rowIndex++;
             }
-               
+
         }
 
         private void SetCellData(List<SalePriceListTemplateTableCell> sheets, CodesByZoneMappedColumn mappedCol, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat)
@@ -120,7 +120,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             }
             return saleCodes;
         }
-    
+
         private int? GetLength(IEnumerable<string> codes)
         {
             if (codes == null)
