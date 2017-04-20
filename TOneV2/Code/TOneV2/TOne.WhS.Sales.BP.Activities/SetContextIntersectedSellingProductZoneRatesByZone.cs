@@ -20,9 +20,6 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<ExistingZone>> ExistingZones { get; set; }
-
-        [RequiredArgument]
         public InArgument<DateTime> MinimumDate { get; set; }
 
         #endregion
@@ -40,14 +37,11 @@ namespace TOne.WhS.Sales.BP.Activities
                 return;
 
             DateTime minimumDate = MinimumDate.Get(context);
-            IEnumerable<ExistingZone> existingZones = ExistingZones.Get(context);
 
             Dictionary<int, List<ProcessedCustomerSellingProduct>> structuredSPAssignments = GetStructuredSPAssignments(ratePlanContext.OwnerId, minimumDate);
             IEnumerable<int> sellingProductIds = structuredSPAssignments.Keys;
 
-            ratePlanContext.ExistingZonesByCountry = new Dictionary<int, List<ExistingZone>>();
-            IEnumerable<long> countryZoneIds;
-            SetExistingZonesByCountry(ratePlanContext.ExistingZonesByCountry, existingZones, countriesToAdd, out countryZoneIds);
+            IEnumerable<long> countryZoneIds = GetCountryZoneIds(ratePlanContext.ExistingZonesByCountry, countriesToAdd);
 
             IEnumerable<SaleRate> rates =
                 new SaleRateManager().GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType.SellingProduct, sellingProductIds, countryZoneIds, minimumDate);
@@ -63,27 +57,22 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private void SetExistingZonesByCountry(Dictionary<int, List<ExistingZone>> existingZonesByCountry, IEnumerable<ExistingZone> existingZones, IEnumerable<CustomerCountryToAdd> countriesToAdd, out IEnumerable<long> countryZoneIds)
+        private IEnumerable<long> GetCountryZoneIds(Dictionary<int, List<ExistingZone>> existingZonesByCountry, IEnumerable<CustomerCountryToAdd> countriesToAdd)
         {
-            var zoneIds = new List<long>();
+            var allCountryZoneIds = new List<long>();
 
-            foreach (ExistingZone existingZone in existingZones)
+            foreach (CustomerCountryToAdd countryToAdd in countriesToAdd)
             {
-                List<ExistingZone> countryZones;
+                List<ExistingZone> countryZones = existingZonesByCountry.GetRecord(countryToAdd.CountryId);
 
-                if (!existingZonesByCountry.TryGetValue(existingZone.CountryId, out countryZones))
-                {
-                    countryZones = new List<ExistingZone>();
-                    existingZonesByCountry.Add(existingZone.CountryId, countryZones);
-                }
+                if (countryZones == null || countryZones.Count == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zones of Country '{0}' were not found", countryToAdd.CountryId));
 
-                countryZones.Add(existingZone);
-
-                if (countriesToAdd.Any(countryToAdd => existingZone.CountryId == countryToAdd.CountryId))
-                    zoneIds.Add(existingZone.ZoneId);
+                IEnumerable<long> countryZoneIds = countryZones.MapRecords(x => x.ZoneId);
+                allCountryZoneIds.AddRange(countryZoneIds);
             }
 
-            countryZoneIds = zoneIds;
+            return allCountryZoneIds;
         }
 
         private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetStructuredSPAssignments(int customerId, DateTime minimumDate)
