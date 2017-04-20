@@ -2,6 +2,14 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
                 <vr-accountbalance-accounttype-selector ng-hide="scopeModel.hideAccountType" normal-col-num="2" on-ready="scopeModel.onAccountTypeSelectorReady" selectedvalues="scopeModel.accountType"
                                                         onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChange" customlabel="Account Type"
                                                         isrequired="true" hideremoveicon></vr-accountbalance-accounttype-selector>
@@ -11,10 +19,10 @@
                 <vr-columns width="normal" ng-show="scopeModel.accountType">
                     <vr-datetimepicker type="dateTime" label="To" value="scopeModel.toTime" customvalidate="scopeModel.validateDateTime()"></vr-datetimepicker>
                 </vr-columns>
-                <span ng-show="scopeModel.accountType">
+                <span ng-show="scopeModel.accountType && advancedSelected">
                     <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" ismultipleselection="true" normal-col-num="2"></vr-accountbalance-billingtransactiontype-selector>
                 </span>
-                <vr-accountbalance-account-selector on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
+                <vr-accountbalance-account-selector ng-show="advancedSelected" on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
             </vr-row>
         </div>
         <vr-row removeline>
