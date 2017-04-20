@@ -19,6 +19,11 @@ namespace Vanrise.GenericData.QueueActivators
 
         public List<TransformBatchNextStageRecord> NextStagesRecords { get; set; }
 
+        public override void OnDisposed()
+        {
+
+        }
+
         public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)
         {
 
@@ -58,10 +63,11 @@ namespace Vanrise.GenericData.QueueActivators
             }
         }
 
-        public override void OnDisposed()
-        {
 
-        }
+        //public void InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
@@ -125,7 +131,6 @@ namespace Vanrise.GenericData.QueueActivators
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
-
 
         public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
         {

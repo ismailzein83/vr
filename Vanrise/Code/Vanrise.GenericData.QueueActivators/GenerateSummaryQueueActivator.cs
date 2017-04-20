@@ -20,6 +20,14 @@ namespace Vanrise.GenericData.QueueActivators
 
         public string NextStageName { get; set; }
 
+        public override void OnDisposed()
+        {
+        }
+
+        public override void ProcessItem(Queueing.Entities.PersistentQueueItem item, Queueing.Entities.ItemsToEnqueue outputItems)
+        {
+        }
+
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
         {
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
@@ -49,6 +57,12 @@ namespace Vanrise.GenericData.QueueActivators
                 }
             }
         }
+
+
+        //public void InitializeStage(IReprocessStageActivatorInitializingContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
@@ -164,6 +178,63 @@ namespace Vanrise.GenericData.QueueActivators
             }
         }
 
+        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
+        {
+            return null;
+        }
+
+        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
+        {
+            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
+        }
+
+        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
+        {
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+            List<StagingSummaryInfo> stagingSummaryInfoList = dataManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
+
+            List<BatchRecord> stageBatchRecords = new List<BatchRecord>();
+
+            if (stagingSummaryInfoList == null || stagingSummaryInfoList.Count == 0)
+            {
+                StageBatchRecord batchRecord = new StageBatchRecord()
+                {
+                    BatchStart = context.StartDate,
+                    BatchEnd = context.EndDate,
+                    IsEmptyBatch = true
+                };
+                stageBatchRecords.Add(batchRecord);
+            }
+            else
+            {
+                DateTime current = context.StartDate;
+                foreach (var stagingSummaryInfo in stagingSummaryInfoList.OrderBy(itm => itm.BatchStart))
+                {
+                    if (current < stagingSummaryInfo.BatchStart)
+                    {
+                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = stagingSummaryInfo.BatchStart, IsEmptyBatch = true });
+                    }
+                    current = stagingSummaryInfo.BatchEnd;
+                    if (stagingSummaryInfo.AlreadyFinalised)
+                    {
+                        dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stagingSummaryInfo.BatchStart);
+                    }
+                    else
+                    {
+                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = stagingSummaryInfo.BatchStart, BatchEnd = stagingSummaryInfo.BatchEnd, IsEmptyBatch = false });
+                    }
+                }
+                if (current < context.EndDate)
+                {
+                    stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = context.EndDate, IsEmptyBatch = true });
+                }
+            }
+            return stageBatchRecords;
+        }
+
+
+        #region Private Methods
+
         private static void StartEnqueuingBatches(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, Dictionary<DateTime, GenericSummaryRecordBatch> genericSummaryRecordBatchesDict, GenericSummaryTransformationManager transformationManager)
         {
             DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
@@ -255,60 +326,7 @@ namespace Vanrise.GenericData.QueueActivators
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
         }
 
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
-        {
-            return null;
-        }
-
-        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
-        {
-            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
-        }
-
-
-        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
-        {
-            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
-            List<StagingSummaryInfo> stagingSummaryInfoList = dataManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
-
-            List<BatchRecord> stageBatchRecords = new List<BatchRecord>();
-
-            if (stagingSummaryInfoList == null || stagingSummaryInfoList.Count == 0)
-            {
-                StageBatchRecord batchRecord = new StageBatchRecord()
-                {
-                    BatchStart = context.StartDate,
-                    BatchEnd = context.EndDate,
-                    IsEmptyBatch = true
-                };
-                stageBatchRecords.Add(batchRecord);
-            }
-            else
-            {
-                DateTime current = context.StartDate;
-                foreach (var stagingSummaryInfo in stagingSummaryInfoList.OrderBy(itm => itm.BatchStart))
-                {
-                    if (current < stagingSummaryInfo.BatchStart)
-                    {
-                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = stagingSummaryInfo.BatchStart, IsEmptyBatch = true });
-                    }
-                    current = stagingSummaryInfo.BatchEnd;
-                    if (stagingSummaryInfo.AlreadyFinalised)
-                    {
-                        dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stagingSummaryInfo.BatchStart);
-                    }
-                    else
-                    {
-                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = stagingSummaryInfo.BatchStart, BatchEnd = stagingSummaryInfo.BatchEnd, IsEmptyBatch = false });
-                    }
-                }
-                if (current < context.EndDate)
-                {
-                    stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = context.EndDate, IsEmptyBatch = true });
-                }
-            }
-            return stageBatchRecords;
-        }
+        #endregion
     }
 
     public class StageBatchRecord : BatchRecord

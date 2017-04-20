@@ -12,10 +12,10 @@ namespace Vanrise.GenericData.QueueActivators
 {
     public class StoreBatchQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
-        public Guid DataRecordStorageId { get; set; }
-
         DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
         DataStoreManager _dataStoreManager = new DataStoreManager();
+
+        public Guid DataRecordStorageId { get; set; }
 
         public override void OnDisposed()
         {
@@ -53,6 +53,11 @@ namespace Vanrise.GenericData.QueueActivators
         }
 
 
+        //public void InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
@@ -66,6 +71,30 @@ namespace Vanrise.GenericData.QueueActivators
             DeleteFromDB(context, recordStorageDataManager);
             ApplyBatchesToDB(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
         }
+
+        void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
+        {
+
+        }
+
+        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
+        {
+            return null;
+        }
+
+        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
+        {
+            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
+        }
+
+        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
+        {
+            return null;
+        }
+
+
+        #region Private Methods
+
         private static void StartPrepareBatchForDBApplyTask(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<Object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             Task prepareDataTask = new Task(() =>
@@ -104,40 +133,22 @@ namespace Vanrise.GenericData.QueueActivators
         private void ApplyBatchesToDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             context.DoWhilePreviousRunning(prepareBatchForDBApplyStatus, () =>
-                   {
-                       bool hasItem = false;
-                       do
-                       {
-                           hasItem = queuePreparedBatchesForDBApply.TryDequeue((preparedBatchForDBApply) =>
-                           {
-                               recordStorageDataManager.ApplyStreamToDB(preparedBatchForDBApply);
-                           });
-                       } while (!context.ShouldStop() && hasItem);
-                   });
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = queuePreparedBatchesForDBApply.TryDequeue((preparedBatchForDBApply) =>
+                    {
+                        recordStorageDataManager.ApplyStreamToDB(preparedBatchForDBApply);
+                    });
+                } while (!context.ShouldStop() && hasItem);
+            });
         }
         private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
         {
             recordStorageDataManager.DeleteRecords(context.From, context.To);
         }
 
-        void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
-        {
-
-        }
-
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
-        {
-            return null;
-        }
-
-        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
-        {
-            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
-        }
-
-        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
-        {
-            return null;
-        }
+        #endregion
     }
 }

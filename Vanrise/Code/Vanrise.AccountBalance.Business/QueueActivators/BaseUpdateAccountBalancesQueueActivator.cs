@@ -86,6 +86,12 @@ namespace Vanrise.AccountBalance.Business
 
         protected abstract void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context);
 
+
+        //public void InitializeStage(IReprocessStageActivatorInitializingContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
@@ -225,6 +231,64 @@ namespace Vanrise.AccountBalance.Business
 
         protected abstract void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context);
 
+        public List<string> GetOutputStages(List<string> stageNames)
+        {
+            return null;
+        }
+
+        public Vanrise.Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
+        {
+            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
+        }
+
+        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
+        {
+            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
+            List<StagingSummaryInfo> stagingSummaryInfoList = dataManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
+
+            List<BatchRecord> stageBatchRecords = new List<BatchRecord>();
+
+            if (stagingSummaryInfoList == null || stagingSummaryInfoList.Count == 0)
+            {
+                StageBatchRecord batchRecord = new StageBatchRecord()
+                {
+                    BatchStart = context.StartDate,
+                    BatchEnd = context.EndDate,
+                    IsEmptyBatch = true
+                };
+                stageBatchRecords.Add(batchRecord);
+            }
+            else
+            {
+                DateTime current = context.StartDate;
+                foreach (var stagingSummaryInfo in stagingSummaryInfoList.OrderBy(itm => itm.BatchStart))
+                {
+                    if (current < stagingSummaryInfo.BatchStart)
+                    {
+                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = stagingSummaryInfo.BatchStart, IsEmptyBatch = true });
+                    }
+
+                    current = stagingSummaryInfo.BatchEnd;
+                    if (stagingSummaryInfo.AlreadyFinalised)
+                    {
+                        dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stagingSummaryInfo.BatchStart);
+                    }
+                    else
+                    {
+                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = stagingSummaryInfo.BatchStart, BatchEnd = stagingSummaryInfo.BatchEnd, IsEmptyBatch = false });
+                    }
+                }
+                if (current < context.EndDate)
+                {
+                    stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = context.EndDate, IsEmptyBatch = true });
+                }
+            }
+            return stageBatchRecords;
+        }
+
+
+        #region Private Methods
+
         private void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches,
             AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
         {
@@ -245,7 +309,7 @@ namespace Vanrise.AccountBalance.Business
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
             }
         }
-
+        
         private void PrepareUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName, CorrectUsageBalanceItemByType preparedCorrectUsageBalanceItems)
         {
@@ -374,64 +438,6 @@ namespace Vanrise.AccountBalance.Business
 
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
         }
-
-        public List<string> GetOutputStages(List<string> stageNames)
-        {
-            return null;
-        }
-
-        public Vanrise.Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
-        {
-            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
-        }
-
-        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
-        {
-            IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
-            List<StagingSummaryInfo> stagingSummaryInfoList = dataManager.GetStagingSummaryInfo(context.ProcessInstanceId, context.CurrentStageName);
-
-            List<BatchRecord> stageBatchRecords = new List<BatchRecord>();
-
-            if (stagingSummaryInfoList == null || stagingSummaryInfoList.Count == 0)
-            {
-                StageBatchRecord batchRecord = new StageBatchRecord()
-                {
-                    BatchStart = context.StartDate,
-                    BatchEnd = context.EndDate,
-                    IsEmptyBatch = true
-                };
-                stageBatchRecords.Add(batchRecord);
-            }
-            else
-            {
-                DateTime current = context.StartDate;
-                foreach (var stagingSummaryInfo in stagingSummaryInfoList.OrderBy(itm => itm.BatchStart))
-                {
-                    if (current < stagingSummaryInfo.BatchStart)
-                    {
-                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = stagingSummaryInfo.BatchStart, IsEmptyBatch = true });
-                    }
-
-                    current = stagingSummaryInfo.BatchEnd;
-                    if (stagingSummaryInfo.AlreadyFinalised)
-                    {
-                        dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stagingSummaryInfo.BatchStart);
-                    }
-                    else
-                    {
-                        stageBatchRecords.Add(new StageBatchRecord { BatchStart = stagingSummaryInfo.BatchStart, BatchEnd = stagingSummaryInfo.BatchEnd, IsEmptyBatch = false });
-                    }
-                }
-                if (current < context.EndDate)
-                {
-                    stageBatchRecords.Add(new StageBatchRecord { BatchStart = current, BatchEnd = context.EndDate, IsEmptyBatch = true });
-                }
-            }
-            return stageBatchRecords;
-        }
-
-
-        #region Private Method
 
         private void GenerateEmptyBatch(AccountBalanceType accountBalanceType, DateTime batchStart, DateTime batchEnd)
         {

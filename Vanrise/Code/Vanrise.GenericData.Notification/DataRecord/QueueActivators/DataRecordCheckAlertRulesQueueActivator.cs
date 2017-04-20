@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.QueueActivators;
 using Vanrise.Notification.Business;
@@ -12,12 +11,9 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Notification
 {
-    public class DataRecordCheckAlertRulesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
+    public class DataRecordCheckAlertRulesQueueActivator : Vanrise.Queueing.Entities.QueueActivator
     {
         public Guid AlertRuleTypeId { get; set; }
-
-
-        #region QueueActivator
 
         public override void OnDisposed()
         {
@@ -168,19 +164,8 @@ namespace Vanrise.GenericData.Notification
             }
         }
 
-        private class AlertNotificationData
-        {
-            public AlertNotificationData()
-            {
-                DataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
-                EventKeys = new HashSet<string>();
-            }
-            public List<DataRecordAlertRuleNotification> DataRecordAlertRuleNotifications { get; set; }
-            public HashSet<string> EventKeys { get; set; }
-            public IEnumerable<string> AvailableIdentificationFieldNames { get; set; }
-            public VRAlertRule AlertRule { get; set; }
-            public DataRecordAlertRuleExtendedSettings DataRecordAlertRuleExtendedSettings { get; set; }
-        }
+
+        #region Private Methods
 
         private bool AreFieldValuesValid(IEnumerable<string> availableIdentificationFieldNames, Dictionary<string, dynamic> fieldValues, out string groupingKey)
         {
@@ -205,32 +190,20 @@ namespace Vanrise.GenericData.Notification
 
         #endregion
 
-        #region IReprocessStageActivator
+        #region Private Classes
 
-        public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        private class AlertNotificationData
         {
-
-        }
-
-        public void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
-        {
-
-        }
-
-        public List<string> GetOutputStages(List<string> stageNames)
-        {
-            return null;
-        }
-
-        public Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
-        {
-            return null;
-
-        }
-
-        public List<Reprocess.Entities.BatchRecord> GetStageBatchRecords(Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
-        {
-            return null;
+            public AlertNotificationData()
+            {
+                DataRecordAlertRuleNotifications = new List<DataRecordAlertRuleNotification>();
+                EventKeys = new HashSet<string>();
+            }
+            public List<DataRecordAlertRuleNotification> DataRecordAlertRuleNotifications { get; set; }
+            public HashSet<string> EventKeys { get; set; }
+            public IEnumerable<string> AvailableIdentificationFieldNames { get; set; }
+            public VRAlertRule AlertRule { get; set; }
+            public DataRecordAlertRuleExtendedSettings DataRecordAlertRuleExtendedSettings { get; set; }
         }
 
         #endregion
