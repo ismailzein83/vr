@@ -351,10 +351,12 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjecttype.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />
+    <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorDistributeBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorUpdateSummaryTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorTransformBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-storebatch.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-generatesummary.js" />
+    <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-distributebatch.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-updatesummary.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-transformbatch.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-runtimeeditor.js" />
