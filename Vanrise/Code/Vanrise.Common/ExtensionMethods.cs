@@ -394,6 +394,21 @@ namespace Vanrise.Common
             return entity.BED <= date && entity.EED.VRGreaterThan(date);
         }
 
+        public static bool IsEffective(this IDateEffectiveSettings entity, EntityFilterEffectiveMode effectiveMode, DateTime date)
+        {
+            switch (effectiveMode)
+            {
+                case EntityFilterEffectiveMode.Current:
+                    return IsEffective(entity, date);
+                case EntityFilterEffectiveMode.CurrentAndFuture:
+                    return IsEffectiveOrFuture(entity, date);
+                case EntityFilterEffectiveMode.All:
+                    return true;
+                default:
+                    throw new ArgumentException(string.Format("EntityFilterEffectiveMode '{0}' is not valid", effectiveMode));
+            }
+        }
+
         #endregion
 
         #region Assembly

@@ -187,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
+    <Content Include="Common\Constant\EntityFilterEffectiveModeEnum.js" />
     <Content Include="Common\Constant\GridWidthFactorEnum.js" />
     <Content Include="Common\Constant\LogEntryTypeEnum.js" />
     <Content Include="Common\Constant\LogAttributeEnum.js" />
