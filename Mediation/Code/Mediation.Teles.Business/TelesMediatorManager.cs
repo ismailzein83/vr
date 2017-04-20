@@ -48,13 +48,11 @@ namespace Mediation.Teles.Business
             var groupedLegs = cdrLegs.GroupBy(itm => itm.TC_CALLID);
             var prevTerminationNumber = "";
             DateTime disconnectDateTime = cdrLegs.OrderBy(itm => itm.TC_SEQUENCENUMBER).Where(itm => itm.TC_LOGTYPE == "STOP").Last().TC_TIMESTAMP;
-            for (int i = 0; i < groupedLegs.Count(); i++)
+            foreach (var group in groupedLegs.OrderBy(group => group.Min(record => record.TC_SEQUENCENUMBER)))
             {
-                var group = groupedLegs.ElementAt(i).OrderBy(itm => itm.TC_SEQUENCENUMBER);
                 ProcessCDREntity ProcessCDREntity = ProcessSingleLegCDRs(group.ToList(), cookedCDRRecordTypeName, prevTerminationNumber, disconnectDateTime);
                 prevTerminationNumber = ProcessCDREntity.PreviousTerminator;
                 cdrs.AddRange(ProcessCDREntity.CookedCDRs);
-
             }
             return cdrs;
         }
