@@ -98,11 +98,13 @@ namespace CP.Ringo.Business
 
         DataRetrievalInput<AgentNumberRequestQuery> BuildApiQuery(DataRetrievalInput<PortalAgentNumberRequestQuery> query)
         {
+            VRInterAppRestConnection connectionSettings = GetInterAppConnection();
+            var retailAccountSettings = GetRetailAccountSettings();
             DataRetrievalInput<AgentNumberRequestQuery> apiQuery = new DataRetrievalInput<AgentNumberRequestQuery>
             {
                 Query = new AgentNumberRequestQuery
                 {
-                    AgentIds = query.Query.AgentIds,
+                    AgentIds = new List<long>() { retailAccountSettings.AccountId },
                     Number = query.Query.Number,
                     Status = query.Query.Status
                 },
