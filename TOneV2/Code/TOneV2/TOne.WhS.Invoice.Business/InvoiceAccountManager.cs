@@ -397,7 +397,7 @@ namespace TOne.WhS.Invoice.Business
             var applicableInvoiceAccountTypes = invoiceValidationData.InvoiceTypes.FindAllRecords(filterExpression);
             return applicableInvoiceAccountTypes.Count() > 0;
         }
-
+      
         public IEnumerable<InvoiceAccountInfo> GetInvoiceAccountsInfo(InvoiceAccountInfoFilter filter)
         {
             Dictionary<int, InvoiceAccount> allInvoiceAccounts = GetCachedInvoiceAccounts();
@@ -409,6 +409,8 @@ namespace TOne.WhS.Invoice.Business
                 filterFunc = (invoiceAccount) =>
                 {
                     if (invoiceAccount.Settings.InvoiceTypeId != filter.InvoiceTypeId)
+                        return false;
+                    if (filter.ActivationStatus.HasValue && !CheckActivationStatus(filter.ActivationStatus.Value, invoiceAccount))
                         return false;
                     if(filter.GetCurrentOnly)
                     {
@@ -431,7 +433,21 @@ namespace TOne.WhS.Invoice.Business
             }
             return allInvoiceAccounts.MapRecords(InvoiceAccountInfoMapper, filterFunc);
         }
-
+        private bool CheckActivationStatus(ActivationStatus activationStatus, InvoiceAccount invoiceAccount)
+        {
+            if(invoiceAccount.CarrierAccountId.HasValue)
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
+                if (carrierAccount.CarrierAccountSettings.ActivationStatus != activationStatus)
+                    return false;
+            }else
+            {
+                var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value,true,true);
+                if (carrierAccounts == null || carrierAccounts.All(x => x.CarrierAccountSettings.ActivationStatus != activationStatus))
+                    return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Private Classes
