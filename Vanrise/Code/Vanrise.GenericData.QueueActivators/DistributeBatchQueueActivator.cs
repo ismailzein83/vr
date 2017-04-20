@@ -30,12 +30,19 @@ namespace Vanrise.GenericData.QueueActivators
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
         {
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
+            var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
+            if (queueItemType == null)
+                throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
+            var recordTypeId = queueItemType.DataRecordTypeId;
+            var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
+
+            DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription);
             if (this.OutputStages != null)
             {
                 foreach (var stageName in this.OutputStages)
                 {
-                    context.OutputItems.Add(stageName, dataRecordBatch);
+                    context.OutputItems.Add(stageName, transformedBatch);
                 }
             }
         }
