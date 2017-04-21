@@ -152,7 +152,7 @@
                     return $scope.scopeModel.useRecordType;
 
                 }
-            }
+            };
             return context;
         }
     }

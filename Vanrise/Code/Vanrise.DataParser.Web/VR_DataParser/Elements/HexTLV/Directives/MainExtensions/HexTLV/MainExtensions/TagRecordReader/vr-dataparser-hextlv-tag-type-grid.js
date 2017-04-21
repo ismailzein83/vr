@@ -38,7 +38,7 @@ app.directive("vrDataparserHextlvTagTypeGrid", ["UtilsService", "VR_DataParser_P
                     if (ctrl.datasource.length != 0)
                         return null;
                     return "it is empty grid";
-                }
+                };
                 ctrl.addHexTLVTagType = function () {
                     var onHexTLVTagTypeAdded = function (tagTypeObj) {
                         ctrl.datasource.push({ Entity: tagTypeObj });
@@ -78,7 +78,7 @@ app.directive("vrDataparserHextlvTagTypeGrid", ["UtilsService", "VR_DataParser_P
                                     var gridTagType = {
                                         Key: name,
                                         Value: tagTypes[name]
-                                    }
+                                    };
                                     ctrl.datasource.push({ Entity: gridTagType });
                                 }
                             }

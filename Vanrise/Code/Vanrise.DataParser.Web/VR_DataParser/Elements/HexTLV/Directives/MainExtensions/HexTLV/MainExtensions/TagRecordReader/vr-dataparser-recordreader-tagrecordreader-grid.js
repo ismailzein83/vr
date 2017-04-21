@@ -38,7 +38,7 @@ app.directive("vrDataparserRecordreaderTagrecordreaderGrid", ["UtilsService", "V
                     if (ctrl.datasource.length != 0)
                         return null;
                     return "it is empty grid";
-                }
+                };
                 ctrl.addTagRecordReader = function () {
                     var onTagRecordReaderAdded = function (gridRecord) {
                         ctrl.datasource.push({ Entity: gridRecord });
@@ -76,7 +76,7 @@ app.directive("vrDataparserRecordreaderTagrecordreaderGrid", ["UtilsService", "V
                                     var gridRecord = {
                                         Key: tag,
                                         Value: recordTypesByTag[tag]
-                                    }
+                                    };
                                     ctrl.datasource.push({ Entity: gridRecord });
                                 }
 

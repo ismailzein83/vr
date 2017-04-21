@@ -39,7 +39,7 @@
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateTagValueParser() : addTagValueParser();
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
