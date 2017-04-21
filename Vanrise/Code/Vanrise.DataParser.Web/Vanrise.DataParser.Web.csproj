@@ -108,16 +108,45 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ParserTypeConfigsController.cs" />
     <Compile Include="Controllers\ParserTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VR_DataParser\Elements\HexTLV\Directives\" />
-    <Folder Include="VR_DataParser\Elements\HexTLV\Services\" />
+    <Folder Include="DataParser\Directives\" />
+    <Folder Include="DataParser\Services\" />
+    <Folder Include="DataParser\Views\" />
     <Folder Include="VR_DataParser\Elements\HexTLV\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_DataParser\Constants\ModuleConfig.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParseIPV4.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserBool.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserSequence.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserString.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-ipv4.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-sequence.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-string.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\RecordReaderTagRecordReader.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\RecordReaderTagRecordReaderGrid.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\HexTLVTagTypeGrid.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\Templates\ParserTypeHexTLV.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserInt.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-bool.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-recordreader-tagrecordreader.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-recordreader-tagrecordreader-grid.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-hextlv-tag-type-grid.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\vr-dataparser-parsertype-hextlv.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-int.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\vr-dataparser-parsertype-extendedsettings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-hextlvtagtype-tagvalueparser.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\vr-dataparser-hextlv-recordreader.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Services\APIServices\ParserTypeConfigsAPIService.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Services\ParserTypeConfigService.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\TageRecordReaderEditor.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\TagRecordReaderEditorController.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserEditor.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\TagValueParserEditor.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\templates\ParserTypeGrid.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\vr-dataparser-parsertype-grid.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Services\APIServices\ParserTypeAPIService.js" />
@@ -126,7 +155,6 @@
     <Content Include="VR_DataParser\Elements\ParserType\Views\ParserTypeEditorController.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Views\ParserTypeManagement.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Views\ParserTypeManagementController.js" />
-    <Content Include="VR_DataParser\Elements\ParserType\Views\PTypeManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
