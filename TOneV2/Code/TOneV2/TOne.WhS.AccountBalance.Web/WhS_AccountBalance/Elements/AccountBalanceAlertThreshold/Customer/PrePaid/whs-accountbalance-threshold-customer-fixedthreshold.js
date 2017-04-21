@@ -46,7 +46,7 @@ app.directive('whsAccountbalanceThresholdCustomerFixedthreshold', ['UtilsService
                     var currencyId;
 
                     if (payload != undefined) {
-                        threshold = payload.Threshold
+                        threshold = payload.Threshold;
                         currencyId = payload.CurrencyId;
                     }
 
