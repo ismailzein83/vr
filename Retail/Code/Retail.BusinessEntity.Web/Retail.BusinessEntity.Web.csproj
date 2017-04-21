@@ -339,6 +339,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinitions\Templates\ActionDefinitionSendEmailSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\retail-be-balancealertrule-threshold-percentage.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\Templates\PercentageBalanceAlertThresholdTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\retail-be-packagedefinition-extendedsettings-invoicerecurcharge.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\InvoiceRecurchargePackageDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-packagesettings-extendedsettings-invoicerecurcharge.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\InvoiceRecurChargePackageSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\ProductFamilyPackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ProductFamily\retail-be-productfamily-selector.js" />

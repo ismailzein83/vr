@@ -11,14 +11,14 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("E326482A-9AB5-4715-848F-11CAF4940040"); }
         }
 
         public override string RuntimeEditor
         {
             get
             {
-                throw new NotImplementedException();
+                return "retail-be-packagesettings-extendedsettings-invoicerecurcharge";
             }
         }
 
