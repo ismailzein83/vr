@@ -18,10 +18,7 @@ app.directive('vrDatagridrows', [function () {
             element.find('#rowSection2').html(rowTemplate);
 
             return {
-                pre: function (scope, elem, attrs, dataGridCtrl) {
-                    scope.$on('$destroy', function () {
-                        elem.off();
-                    });
+                pre: function (scope, elem, attrs, dataGridCtrl) {                    
                     scope.isGridScope = true;
                     scope.ctrl = dataGridCtrl;
                     scope.gridParentScope = scope.$parent;

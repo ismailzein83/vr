@@ -25,7 +25,9 @@ app.directive('vrValidator', ['$compile', 'UtilsService', function ($compile, Ut
                             return $scope.$eval(iAttrs.validate);
                         };
                         var validator = parentValidationGroupCtrl.addValidator(validate);
+                       
                         $scope.$on('$destroy', function () {
+                            iElem.off();
                             parentValidationGroupCtrl.removeValidator(validator);
                         });
                     }

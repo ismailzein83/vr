@@ -65,12 +65,15 @@
             compile: function (element, attrs) {              
                 return {
                     pre: function ($scope, iElem, iAttrs) {
+                        $scope.$on("$destroy", function () {
+                            valueWatch();
+                        });
                         var ctrl = $scope.ctrl;
 
                         if (ctrl.value == undefined)
                             ctrl.value = [];
                         var isUserChange;
-                        $scope.$watch('ctrl.value', function (newValue, oldValue) {
+                        var valueWatch = $scope.$watch('ctrl.value', function (newValue, oldValue) {
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
                           

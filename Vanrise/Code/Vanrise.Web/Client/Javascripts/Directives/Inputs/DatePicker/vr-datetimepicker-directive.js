@@ -35,7 +35,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
         controller: function ($scope, $element, $attrs) {
             $scope.$on("$destroy", function () {
                 $element.off();
-                $(window).off("resize.Viewport");
+                updatewatch();
             });
             var divDatePicker = $element.find('#divDatePicker');
             //var inputElement = $element.find('#mainInput');
@@ -260,7 +260,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
 
                 }, 1);
             };
-            $scope.$watch('ctrl.value', function () {
+            var updatewatch =  $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == null)
                     $element.find('#divDatePicker').find('.vr-date-input').val('');
                 if (ctrl.value == undefined)
@@ -305,8 +305,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     }
                 }
 
-            });
-
+            });            
             $scope.ctrl.onBlurDirective = function (e) {
                 var dateTab = new Date(ctrl.value).toDateString().split(" ");
                 var year = parseInt(dateTab[3]);

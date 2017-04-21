@@ -12,6 +12,9 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
 
         },
         controller: function ($scope, $element, $attrs) {
+            $scope.$on("$destroy", function () {
+                selectedindexWatch();
+            });
             var ctrl = this;
 
             var choiceCtrls = [];
@@ -82,7 +85,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 }
             }
 
-            $scope.$watch("ctrl.selectedindex", function (value) {
+            var selectedindexWatch =  $scope.$watch("ctrl.selectedindex", function (value) {
                 if (choiceCtrls[ctrl.selectedindex] != undefined && !choiceCtrls[ctrl.selectedindex].isSelected)
                     ctrl.selectChoice(choiceCtrls[ctrl.selectedindex]);
                 else {

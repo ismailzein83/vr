@@ -30,11 +30,13 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
                 ctrl.value = false;
         },
         link: function (scope, element, attrs, ctrl) {
-
+            scope.$on("$destroy", function () {
+                valueWatch();
+            });
             ctrl.readOnly = UtilsService.isContextReadOnly(scope) || attrs.readonly != undefined;
 
             var isUserChange;
-            scope.$watch('ctrl.value', function (newValue, oldValue) {
+            var valueWatch = scope.$watch('ctrl.value', function (newValue, oldValue) {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                     return;
                 isUserChange = false;//reset the flag

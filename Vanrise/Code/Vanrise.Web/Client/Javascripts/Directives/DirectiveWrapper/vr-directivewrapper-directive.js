@@ -15,7 +15,11 @@ app.directive('vrDirectivewrapper', ['$compile', '$injector', function ($compile
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                     var cloneScope = null;
-                    $scope.$watch(iAttrs.directive, function () {
+                    $scope.$on("$destroy", function () {
+                        iElem.off();
+                        directiveWatch();
+                    });
+                    var directiveWatch =  $scope.$watch(iAttrs.directive, function () {
                         var directive = $scope.$eval(iAttrs.directive);
                         if (directive != undefined) {
                             if (!$injector.has(attrs.$normalize(directive) + 'Directive'))

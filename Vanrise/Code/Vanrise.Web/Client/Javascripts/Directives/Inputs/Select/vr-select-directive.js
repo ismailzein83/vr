@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout, $rootScope) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
@@ -54,6 +54,8 @@
                 $scope.$on("$destroy", function () {
                     $element.off();
                     $(window).off("resize.Viewport");
+                    datasourceWatch();
+                    dataWatch();
                 });
                 if (rootScope == undefined)
                     rootScope = $scope.$root;
@@ -72,11 +74,11 @@
                 controller.boundDataSource = [];
                 $scope.effectiveDataSource = [];
 
-                $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
+                var datasourceWatch =  $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
                     fillEffectiveDataSourceFromItems(getdatasource());
                 });
 
-                $scope.$watchCollection('ctrl.data', function (newValue, oldValue) {
+                var dataWatch = $scope.$watchCollection('ctrl.data', function (newValue, oldValue) {
                     fillEffectiveDataSourceFromItems(getdatasource());
                 });
 
@@ -131,6 +133,7 @@
                 };
                 controller.okClickTrigger = function (e) {
                     var onOkHandler = $scope.$parent.$eval($attrs.onokhandler);
+                    controller.showSearchSection = false;
                     if (onOkHandler != undefined && typeof (onOkHandler) == 'function') {
                         var onOkHandlerCallBackFunction = onOkHandler;
                         if (onOkHandlerCallBackFunction.then != undefined) {
@@ -495,7 +498,8 @@
                     };
                 };
                 function hideAllOtherDropDown(currentId) {
-                    var dropdowns = $('.dropdown-menu');
+                   $rootScope.$broadcast("hidegridmenu");                  
+                    var dropdowns = $('.dropdown-menu');                   
                     var len = dropdowns.length;
                     var i;
                     var self;
@@ -521,6 +525,7 @@
                 };
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
+                        
                         hideAllOtherDropDown($attrs.id);
                         if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
                             return;
@@ -530,6 +535,7 @@
                             $('div[name=' + $attrs.id + ']').addClass("open-select");
                             vrSelectSharedObject.onOpenDropDown($attrs.id);
                             afterShowDropdown($attrs.id);
+                            $(document).bind('click', boundDocumentSeclectOutside);
                         }
                         else {
                             $('div[name=' + $attrs.id + ']').removeClass("open-select");
@@ -544,6 +550,7 @@
                                 });
                             }
                             afterHideDropdown($attrs.id);
+                            $(document).unbind('click', boundDocumentSeclectOutside);
                             event.stopPropagation();
                             return;
                         }
@@ -551,8 +558,7 @@
                     });
                 }, 100);
 
-
-                $(document).on('click', function (e) {
+                function boundDocumentSeclectOutside(e) {
                     var button = $('div[name=' + $attrs.id + ']');
                     if ($(e.target).attr('open-trriger') != undefined && $(e.target).attr('open-trriger') == $attrs.id)
                         return;
@@ -560,10 +566,10 @@
                         $(button).removeClass('open-select');
                         $('div[name=' + $attrs.id + ']').find('.dropdown-menu').first().slideUp("slow", function () {
                             afterHideDropdown($attrs.id);
+                            $(document).unbind('click', boundDocumentSeclectOutside);
                         });
                     }
-                });
-
+                }
                 $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
                     fixDropdownPosition();
                 });
@@ -728,7 +734,9 @@
                 onLoad();
                 return {
                     pre: function ($scope, iElem, iAttrs) {
-
+                        $scope.$on("$destroy", function () {
+                            valueWatch();
+                        });
                         var ctrl = $scope.ctrl;
                         ctrl.id = iAttrs.id;
 
@@ -826,7 +834,7 @@
 
 
 
-                        $scope.$watch(function () {
+                        var valueWatch = $scope.$watch(function () {
 
                             if (ctrl.isMultiple()) {
                                 return ctrl.selectedvalues.length;
@@ -872,7 +880,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout','$rootScope'];
 
     app.directive('vrSelect', vrSelectDirective);
 

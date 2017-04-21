@@ -51,32 +51,42 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
 
                 ctrl.showgmenu = false;
-                ctrl.toggelGridMenu = function (e, bool) {
-                    if (bool != undefined) {
-                        $scope.$apply(function () {
-                            ctrl.showgmenu = bool;
-                        })
-                    }
 
+                $scope.$on('hidegridmenu', function (event, args) {
+                    ctrl.showgmenu = false;
+                    $('.vr-grid-menu').removeClass("open-grid-menu");
+                    $(document).unbind('click', bindClickOutSideGridMenu);
+                });
+
+                ctrl.toggelGridMenu = function (e) {
+                    var self = angular.element(e.currentTarget);
+                   
+                    var menu = self.parent().find('.vr-grid-menu')[0];
+                    if (ctrl.showgmenu == false) {
+                        setTimeout(function () {
+                            var selfHeight = $(self).height();
+                            var selfOffset = $(self).offset();
+                            $(menu).addClass("open-grid-menu");
+                            $(menu).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: 'auto' });
+                            ctrl.showgmenu = true;
+                            $scope.$root.$digest();
+                        }, 1);
+                        $(document).bind("click", bindClickOutSideGridMenu);
+            
+                    }
                     else {
-                        if (ctrl.showgmenu == false) {
-                            setTimeout(function () {
-
-                                var self = angular.element(e.currentTarget);
-                                var selfHeight = $(self).height();
-                                var selfOffset = $(self).offset();
-                                var menu = self.parent().find('.vr-grid-menu')[0];
-                                $(menu).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: 'auto' });
-                                $scope.$apply(function () {
-                                    ctrl.showgmenu = true;
-                                })
-                            }, 1);
-                        }
-                        else
-                            ctrl.showgmenu = false;
-                    }
+                        ctrl.showgmenu = false;
+                        $(menu).removeClass("open-grid-menu");
+                        $(document).unbind('click', bindClickOutSideGridMenu);
+                    }                        
                 };
-
+                function bindClickOutSideGridMenu(e) {
+                    if (!$('out-div').is(e.target) && $('out-div').has(e.target).length === 0 && $('.open-grid-menu').has(e.target).length === 0) {
+                        $('out-div').removeClass("open-grid-menu");
+                          ctrl.showgmenu = false;
+                          $scope.$root.$digest();                                         
+                    }
+                }
                 setTimeout(function () {
                     $('.vr-grid-menu').parents('div').scroll(function () {
                         var menu = $(window).find('.vr-grid-menu')[0];

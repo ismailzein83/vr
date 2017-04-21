@@ -14,15 +14,21 @@ app.directive('vrChoiceFilter', [function () {
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             $element.bind("$destroy", function () {
-                ctrl.removeTab(ctrl);
-            });
-
+                setTimeout(function () {
+                    ctrl.removeTab(ctrl);
+                }, 1)
+                
+            });           
         },
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
             return {
-                pre: function ($scope, iElem, iAttrs, choicesCtrl) {
+                    pre: function ($scope, iElem, iAttrs, choicesCtrl) {
+                    $scope.$on("$destroy", function () {
+                        iElem.off();
+                        selectedWatch();
+                    });
                     var ctrl = $scope.ctrl;
 
                     ctrl.selectionChanged = function () {
@@ -54,7 +60,7 @@ app.directive('vrChoiceFilter', [function () {
 
                         }, 1);
                     };
-                    $scope.$watch("ctrl.isselected", function (value) {
+                    var selectedWatch = $scope.$watch("ctrl.isselected", function (value) {
                         if (ctrl.isSelected != value) {
                             if (value)
                                 choicesCtrl.selectChoice(ctrl);

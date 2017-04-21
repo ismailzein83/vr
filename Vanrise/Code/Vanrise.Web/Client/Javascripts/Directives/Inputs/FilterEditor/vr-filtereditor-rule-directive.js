@@ -14,6 +14,9 @@
             },
             controller: function ($scope) {
                 var ctrl = this;
+                $scope.$on("$destroy", function () {
+                    watch();
+                });
                 
                 function getField(filter) {
                     if (filter) {
@@ -55,7 +58,7 @@
                     }
                 }
 
-                function watch() {
+                var watch = function () {
 
                     $scope.$watch('ctrl.fromDate', function (newValue) {
                         ctrl.fromDate = newValue;
@@ -82,7 +85,7 @@
                         ctrl.inputValueTo = newValue;
                         setOutput();
                     });
-                }
+                };
 
                 function onLoad() {
                     ctrl.inputEnum = inputEnum;

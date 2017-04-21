@@ -26,9 +26,11 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            
+           
             var treeElement = $element.find('#divTree');
-
+            $scope.$on("$destroy", function () {
+                $(treeElement).off();
+            });
             var incrementalId = 0;
             function fillTreeFromDataSource(treeArray, dataSource) {                
                 for (var i = 0; i < dataSource.length; i++) {
@@ -267,7 +269,10 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
-                    $scope.$watch('ctrl.selecteditem', function () {
+                    $scope.$on("$destroy", function () {
+                        selecteditemWatch();
+                    });
+                    var selecteditemWatch =  $scope.$watch('ctrl.selecteditem', function () {
                         if (iAttrs.onvaluechanged != undefined) {
 
                             var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);

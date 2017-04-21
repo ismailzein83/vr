@@ -12,6 +12,10 @@ app.directive('vrChoicesFilter', ['UtilsService', '$rootScope', function (UtilsS
 
         },
         controller: function ($scope, $element, $attrs) {
+            $scope.$on("$destroy", function () {
+                 $element.off();
+                 selectedIndexWatch();
+            });
             var ctrl = this;
 
             var choiceCtrls = [];
@@ -22,7 +26,10 @@ app.directive('vrChoicesFilter', ['UtilsService', '$rootScope', function (UtilsS
             };
             ctrl.removeTab = function (tabCtrl) {
                 choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
-                UtilsService.safeApply($scope, function () { });
+                setTimeout(function () {
+                    UtilsService.safeApply($scope, function () { });
+                }, 1);
+               
             };
 
             ctrl.getTabStyle = function (ctrl) {
@@ -67,7 +74,7 @@ app.directive('vrChoicesFilter', ['UtilsService', '$rootScope', function (UtilsS
                 }
             }
 
-            $scope.$watch("ctrl.selectedindex", function (value) {
+            var selectedIndexWatch = $scope.$watch("ctrl.selectedindex", function (value) {
                 if (choiceCtrls[ctrl.selectedindex] != undefined && !choiceCtrls[ctrl.selectedindex].isSelected)
                     ctrl.selectChoice(choiceCtrls[ctrl.selectedindex]);
                 else {

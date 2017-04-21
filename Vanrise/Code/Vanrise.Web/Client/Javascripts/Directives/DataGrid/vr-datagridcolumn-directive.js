@@ -8,7 +8,11 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-
+                    $scope.$on("$destroy", function () {
+                        iElem.off();
+                        headertextWatch!= undefined && headertextWatch();
+                        ngshowWatch != undefined && ngshowWatch();
+                    });
                     var gridColumnAttribute = iAttrs.columnattributes != undefined ? $scope.$eval(iAttrs.columnattributes) : undefined;
 
                     var col = {};
@@ -98,10 +102,10 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                    
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
 
-
-
+                    var headertextWatch;
+                    var ngshowWatch;
                     if (iAttrs.headertext != undefined) {
-                        $scope.$watch(iAttrs.headertext, function (val) {
+                        headertextWatch = $scope.$watch(iAttrs.headertext, function (val) {
                             if (colDef != undefined && val != undefined)
                                 dataGridCtrl.updateColumnHeader(colDef, val);
                         });
@@ -123,7 +127,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     });
 
                     iAttrs.$observe('ngShow', function (expr) {
-                        $scope.$watch(function () {
+                        ngshowWatch = $scope.$watch(function () {
                             return $parse(expr)($scope);
                         }, function (value) {
                             if (colDef != undefined) {

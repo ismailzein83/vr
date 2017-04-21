@@ -123,8 +123,12 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
     };
     $scope.logout = function () {
+        $('#mainNgView').off();
+        $('#mainNgView').empty();
+        $(window).off("resize.Viewport");
         SecurityService.deleteAccessCookie();
         SecurityService.redirectToLoginPage(true);
+
     };
     $scope.openSupportModal = function () {
         var modalSettings = {
@@ -164,7 +168,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
                 $('#collapse-' + item.Id).removeClass('vr-menu-item-selected');
                 $('#collapse-' + item.Id).removeAttr('style');
         }
-        else {
+        else {            
             $scope.menuItemsCurrent = item;        
                 $('#collapse-' + item.Id).addClass('vr-menu-item-selected');
                 $('#collapse-' + item.Id).removeAttr('style');
@@ -237,7 +241,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     var selectedMenuItem;
     var currentURL;
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        $('.vr-menu-item').removeClass('vr-menu-item-selected');        
+        $('.vr-menu-item').removeClass('vr-menu-item-selected');
         $(window).off("resize.Viewport");
     });
     $rootScope.$on('$locationChangeSuccess', function (evnt, newURL) {

@@ -5,9 +5,12 @@ app.directive('vrHtmlcompiler', ['$compile', function ($compile) {
         restrict: 'A',
         replace: true,
         link: function ($scope, $element, $attrs) {
-            
+            $scope.$on("$destroy", function () {
+                $element.off();
+                vrHtmlcompilerWatch();
+            });
             var htmlData = $attrs.vrHtmlcompiler;
-            $scope.$watch($attrs.vrHtmlcompiler, function (html) {
+            var vrHtmlcompilerWatch =  $scope.$watch($attrs.vrHtmlcompiler, function (html) {
                 if (html != undefined) {
                     $element.html(html);
                     $compile($element.contents())($scope);

@@ -26,12 +26,16 @@ app.directive('vrPreviewImage', ['FileAPIService', function (FileAPIService) {
                 });
             };
 
-            $scope.$watch('ctrl.value', function () {                
+            var updatewatch = $scope.$watch('ctrl.value', function () {                
                 if (ctrl.value != null && ctrl.value != undefined && ctrl.value != 0) {
                     ctrl.previewImage();
                 }
                 else 
                     ctrl.image = "/Client/Images/no_image.jpg";
+            });
+
+            $scope.$on('$destroy', function () {
+                updatewatch();
             });
           
         },

@@ -20,8 +20,11 @@ app.directive('vrTimeformat', ['UtilsService', '$compile', 'VRModalService', fun
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
+                    $scope.$on("$destroy", function () {
+                        valueWatch();
+                    });
                     var ctrl = $scope.ctrl;
-                    $scope.$watch('ctrl.value', function (newValue, oldValue) {
+                    var valueWatch = $scope.$watch('ctrl.value', function (newValue, oldValue) {
 
                         var retrunedValue;
                         if (newValue == "") {

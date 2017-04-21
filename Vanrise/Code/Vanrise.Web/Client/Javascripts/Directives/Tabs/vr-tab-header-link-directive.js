@@ -26,6 +26,9 @@ app.directive('vrTabHeaderLink', [function () {
             //element.html(' <label class="hand-cursor" ng-class="ctrl.isselected?\'clicked-btn\':\'\'">{{ctrl.isselected}}' + element.html() + '</label><label>|</label>');
             return {
                 pre: function ($scope, iElem, iAttrs, choicesCtrl) {
+                    $scope.$on("$destroy", function () {
+                        selectedWatch();
+                    });
                     var ctrl = $scope.ctrl;
 
                     ctrl.selectionChanged = function () {
@@ -65,7 +68,7 @@ app.directive('vrTabHeaderLink', [function () {
                         }, 1);
                     };
 
-                    $scope.$watch("ctrl.isselected", function (value) {
+                    var selectedWatch = $scope.$watch("ctrl.isselected", function (value) {
                         if (ctrl.isSelected != value) {
                             if (value)
                                 choicesCtrl.selectChoice(ctrl);

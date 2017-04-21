@@ -40,15 +40,16 @@
                     }
                 }, 10);
                
-                var $quan = $('.next-input');
-                $quan.on('keyup', function (e) {
+                var $quan = $('.next-input').filter(function () {
+                    return !$(this).parents('.divDisabled').length;
+                });
+                $quan.bind('keyup', function (e) {
+                    var ind = $quan.index(this);
                     if (e.which === 40 || e.which === 13 ) {
-                        var ind = $quan.index(this);
                          $quan.eq(ind + 1).focus();
                       
                     }
                     if (e.which === 38) {
-                        var ind = $quan.index(this);
                         var  el = $quan.eq(ind - 1);
                         if(el)
                           $quan.eq(ind - 1).focus();
@@ -83,10 +84,12 @@
                 return {
                     pre: function ($scope, iElem, iAttrs) {
                         var ctrl = $scope.ctrl;
-
-
+                        $scope.$on("$destroy", function () {
+                            valueWatch();
+                        });
                         var isUserChange;
-                        $scope.$watch('ctrl.value', function (newValue, oldValue) {
+
+                        var valueWatch = $scope.$watch('ctrl.value', function (newValue, oldValue) {
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
 
@@ -222,7 +225,7 @@
                 //    format = 'format="number"'; '+format+'
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<vr-validator validate="ctrl.validate()" vr-input>'
-                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput"  placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="ctrl.onKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)">'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput"  placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="ctrl.onKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)">'
                             + '</vr-validator>'
                             + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';

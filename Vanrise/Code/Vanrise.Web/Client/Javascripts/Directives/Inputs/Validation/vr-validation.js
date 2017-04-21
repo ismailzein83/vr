@@ -11,7 +11,9 @@ app.directive('vrValidation', ['ValidationService', 'BaseDirService', function (
                 post: function (scope, iElem, iAttrs, ctrl) {
                     var options = scope.$eval(iAttrs.options);
                     var validationElement = angular.element(iElem[0].querySelector('.validate-element'));
-
+                    scope.$on('$destroy', function () {
+                        iElem.off();
+                    });
 
                     validationElement.bind('blur', function () {
                         options = scope.$eval(iAttrs.options);
