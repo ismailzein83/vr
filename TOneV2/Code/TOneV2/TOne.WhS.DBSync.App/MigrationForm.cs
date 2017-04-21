@@ -19,6 +19,7 @@ namespace TOne.WhS.DBSync.App
         public MigrationForm()
         {
             InitializeComponent();
+            Vanrise.Security.Business.SecurityContext.Current.SetContextUserId(1);
             SwitchMappingRulesMigrator = new SwitchMappingRulesMigrator(Program.ConnectionString);
             PopulateSwitchCombo();
             PopulateParserCb();

@@ -144,6 +144,14 @@
     <Reference Include="Vanrise.Rules.Normalization">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MigrationForm.cs">
@@ -180,6 +188,30 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Business\TOne.WhS.AccountBalance.Business.csproj">
+      <Project>{5a8fe576-bf07-498c-a27f-2100fc828bce}</Project>
+      <Name>TOne.WhS.AccountBalance.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Data.SQL\TOne.WhS.AccountBalance.Data.SQL.csproj">
+      <Project>{a6a5fe20-e968-483c-a6e3-171b3648a67e}</Project>
+      <Name>TOne.WhS.AccountBalance.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Data\TOne.WhS.AccountBalance.Data.csproj">
+      <Project>{dda303d7-61bb-4a64-9e56-94821bb4bc45}</Project>
+      <Name>TOne.WhS.AccountBalance.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
+      <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
+      <Name>TOne.WhS.AccountBalance.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.MainExtensions\TOne.WhS.AccountBalance.MainExtensions.csproj">
+      <Project>{7947d71a-4077-4559-9614-3628201ac795}</Project>
+      <Name>TOne.WhS.AccountBalance.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.AccountBalance.Web\TOne.WhS.AccountBalance.Web.csproj">
+      <Project>{4d623062-fd08-47bd-a86f-5036b4b653eb}</Project>
+      <Name>TOne.WhS.AccountBalance.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.DBSync.Business\TOne.WhS.DBSync.Business.csproj">
       <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
       <Name>TOne.WhS.DBSync.Business</Name>
