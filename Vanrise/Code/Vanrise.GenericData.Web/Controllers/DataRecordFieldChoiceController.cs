@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataRecordFieldChoice")]
-        public DataRecordFieldChoice GetDataRecordFieldChoice(int dataRecordFieldChoiceId)
+        public DataRecordFieldChoice GetDataRecordFieldChoice(Guid dataRecordFieldChoiceId)
         {
             return _manager.GeDataRecordFieldChoice(dataRecordFieldChoiceId);
         }

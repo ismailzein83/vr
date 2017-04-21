@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        public DataRecordFieldChoice GeDataRecordFieldChoice(int dataRecordFieldChoiceId)
+        public DataRecordFieldChoice GeDataRecordFieldChoice(Guid dataRecordFieldChoiceId)
         {
             var cachedDataRecordFieldChoice = GetCachedDataRecordFieldChoices();
             return cachedDataRecordFieldChoice.FindRecord((dataRecordFieldChoice) => dataRecordFieldChoice.DataRecordFieldChoiceId == dataRecordFieldChoiceId);
@@ -55,14 +55,12 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int dataRecordFieldChoiceId = -1;
-
+            dataRecordFieldChoice.DataRecordFieldChoiceId = Guid.NewGuid();
             IDataRecordFieldChoiceDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordFieldChoiceDataManager>();
-            bool insertActionSucc = dataManager.AddDataRecordFieldChoice(dataRecordFieldChoice, out dataRecordFieldChoiceId);
+            bool insertActionSucc = dataManager.AddDataRecordFieldChoice(dataRecordFieldChoice);
 
             if (insertActionSucc)
             {
-                dataRecordFieldChoice.DataRecordFieldChoiceId = dataRecordFieldChoiceId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(DataRecordFieldChoiceLoggableEntity.Instance, dataRecordFieldChoice);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = DataRecordFieldChoiceDetailMapper(dataRecordFieldChoice);
@@ -106,7 +104,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        public Dictionary<int, DataRecordFieldChoice> GetCachedDataRecordFieldChoices()
+        public Dictionary<Guid, DataRecordFieldChoice> GetCachedDataRecordFieldChoices()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordFieldChoices",
                 () =>

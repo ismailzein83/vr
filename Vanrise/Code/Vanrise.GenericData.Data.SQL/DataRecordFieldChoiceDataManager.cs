@@ -23,19 +23,15 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("genericdata.sp_DataRecordFieldChoice_GetAll", DataRecordFieldChoiceMapper);
         }
 
-        public bool AddDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice, out int insertedId)
+        public bool AddDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice)
         {
-            object dataRecordFieldChoiceId;
-
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Insert", out dataRecordFieldChoiceId, dataRecordFieldChoice.Name, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
-            insertedId = (affectedRows == 1) ? (int)dataRecordFieldChoiceId : -1;
-
-            return (affectedRows == 1);
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Insert", dataRecordFieldChoice.DataRecordFieldChoiceId, dataRecordFieldChoice.Name, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
+            return (affectedRows > 0 );
         }
         public bool UpdateDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice)
         {
             int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataRecordFieldChoice_Update", dataRecordFieldChoice.DataRecordFieldChoiceId, dataRecordFieldChoice.Name, Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
-            return (affectedRows == 1);
+            return (affectedRows > 0);
         }
         public bool AreDataRecordFieldChoicesUpdated(ref object updateHandle)
         {
@@ -50,7 +46,7 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return new DataRecordFieldChoice()
             {
-                DataRecordFieldChoiceId = (int)reader["ID"],
+                DataRecordFieldChoiceId = (Guid)reader["ID"],
                 Name = (string)reader["Name"],
                 Settings = Vanrise.Common.Serializer.Deserialize<DataRecordFieldChoiceSettings>((string)reader["Settings"])
             };

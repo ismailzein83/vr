@@ -219,7 +219,9 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinitionsetting-selective.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-recordtype-selector.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\Templates\ChoicesGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\Templates\DataRecordFieldChoiceGrid.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-choices.js" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-grid.js" />
     <Content Include="VR_GenericData\Directives\DataRecordFieldChoice\vr-genericdata-datarecordfieldchoice-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />

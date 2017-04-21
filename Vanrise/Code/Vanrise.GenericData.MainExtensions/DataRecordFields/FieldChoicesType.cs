@@ -165,9 +165,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     Dictionary<Guid, List<Choice>> choices = new Dictionary<Guid, List<Choice>>();
                     foreach(var choiceDefinition in allChoiceDefinitions.Values)
                     {
-                        choiceDefinition.Settings.ThrowIfNull("choiceDefinition.Settings", choiceDefinition.DataRecordFieldChoiceId2);
-                        choiceDefinition.Settings.Choices.ThrowIfNull("choiceDefinition.Settings.Choices", choiceDefinition.DataRecordFieldChoiceId2);
-                        choices.Add(choiceDefinition.DataRecordFieldChoiceId2, choiceDefinition.Settings.Choices.Select(itm => new Choice
+                        choiceDefinition.Settings.ThrowIfNull("choiceDefinition.Settings", choiceDefinition.DataRecordFieldChoiceId);
+                        choiceDefinition.Settings.Choices.ThrowIfNull("choiceDefinition.Settings.Choices", choiceDefinition.DataRecordFieldChoiceId);
+                        choices.Add(choiceDefinition.DataRecordFieldChoiceId, choiceDefinition.Settings.Choices.Select(itm => new Choice
                             {
                                 Text = itm.Text,
                                 Value = itm.Value

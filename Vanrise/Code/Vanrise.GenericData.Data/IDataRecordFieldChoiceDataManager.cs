@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Data
     {
         bool AreDataRecordFieldChoicesUpdated(ref object updateHandle);
         bool UpdateDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice);
-        bool AddDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice, out int insertedId);
+        bool AddDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice);
         IEnumerable<DataRecordFieldChoice> GetDataRecordFieldChoices();
     }
 }
