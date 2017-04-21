@@ -3,19 +3,9 @@
         <vr-switch label="Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
     </vr-columns>
     <vr-columns colnum="3">
-        <vr-textbox label="ID" value="ctrl.Id" onvaluechanged="ctrl.onValueChange" type="number"></vr-textbox>
-    </vr-columns>
-    <vr-columns colnum="3">
-        <vr-textbox label="Value" value="ctrl.value" onvaluechanged="ctrl.onValueChange"></vr-textbox>
-    </vr-columns>
-    <vr-columns colnum="3" withemptyline>
-        <vr-button type="Add" data-onclick="ctrl.addValue" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datalist maxitemsperrow="6" datasource="ctrl.values" autoremoveitem="true">
-                {{dataItem.Text}}
-            </vr-datalist>
-        </vr-validator>
+        <vr-genericdata-datarecordfieldchoice-selector on-ready="scopeModel.onDataRecordFieldChoiceSelectorReady" selectedvalues="scopeModel.selectedDataRecordFieldChoice"></vr-genericdata-datarecordfieldchoice-choices>
+</vr-columns>
+    <vr-columns colnum="6" ng-if="scopeModel.selectedDataRecordFieldChoice == undefined" vr-loader="scopeModal.isLoadingDirective ">
+        <vr-genericdata-datarecordfieldchoice-choices on-ready="scopeModel.onChoicesGridReady"></vr-genericdata-datarecordfieldchoice-choices>
     </vr-columns>
 </vr-columns>

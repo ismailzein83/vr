@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataFieldtypeChoices', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,51 +34,79 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
 
         function choicesTypeCtor(ctrl, $scope) {
 
-            function initializeController() {
-                
-                ctrl.Id = ctrl.values.length+1;
-                ctrl.isValid = function () {
-                    if (ctrl.values != undefined && ctrl.values.length > 0)
-                        return null;
-                    return "You Should Add At Least One Choice.";
-                };
-                ctrl.disableAddButton = true;
-                ctrl.addValue = function () {
-                    ctrl.values.push(AddChoice(ctrl.value));
-                    ctrl.Id = ctrl.values.length + 1;
-                    ctrl.value = undefined;
-                    ctrl.disableAddButton = true;
-                };
-                ctrl.onValueChange = function (value) {
-                    ctrl.disableAddButton = value == undefined || (UtilsService.getItemIndexByVal(ctrl.values, ctrl.value, "Text") != -1 || UtilsService.getItemIndexByVal(ctrl.values, ctrl.Id, "Value") != -1);
-                };
+            var choicesGridAPI;
+            var choicesGridReadyDeferred;
 
+            var dataRecordFieldChoiceSelectorGridAPI;
+            var dataRecordFieldChoiceSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.onChoicesGridReady = function (api) {
+                    choicesGridAPI = api;
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, choicesGridAPI, undefined, setLoader, choicesGridReadyDeferred);
+                }
+                $scope.scopeModel.onDataRecordFieldChoiceSelectorReady = function (api) {
+                    dataRecordFieldChoiceSelectorGridAPI = api;
+                    dataRecordFieldChoiceSelectorReadyDeferred.resolve();
+                }
                 defineAPI();
             }
-
-            function AddChoice(choice) {
-                var obj = {
-                    Value: ctrl.Id,
-                    Text: choice
-                };
-                return obj;
-            }
-
+        
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined && payload.Choices != undefined && payload.Choices.length > 0) {
-                        ctrl.values = payload.Choices;
                         ctrl.isNullable = payload.IsNullable;
+                        
                     }
+                    if (payload != undefined  && payload.ChoiceDefinitionId == undefined) {
+                        choicesGridReadyDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadChoicesGrid());
+
+                    }
+                    function loadChoicesGrid() {
+                        var loadChoicesGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                        choicesGridReadyDeferred.promise.then(function () {
+                            choicesGridReadyDeferred = undefined;
+                            var choicesGridPayLoad;
+                            if (payload != undefined && payload.Choices != undefined) {
+                                choicesGridPayLoad = {
+                                    choices: payload.Choices
+                                }
+                            }
+                            VRUIUtilsService.callDirectiveLoad(choicesGridAPI, choicesGridPayLoad, loadChoicesGridPromiseDeferred);
+                        });
+                        return loadChoicesGridPromiseDeferred.promise;
+                    }
+                    promises.push(loadDataRecordFieldChoiceSelector());
+                    function loadDataRecordFieldChoiceSelector() {
+                        var loadDataRecordFieldChoiceSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        dataRecordFieldChoiceSelectorReadyDeferred.promise.then(function () {
+                            var dataRecordFieldChoicePayLoad;
+                            if (payload != undefined && payload.ChoiceDefinitionId != undefined) {
+                                dataRecordFieldChoicePayLoad = {
+                                    selectedIds: payload.ChoiceDefinitionId
+                                }
+                            }
+                            VRUIUtilsService.callDirectiveLoad(dataRecordFieldChoiceSelectorGridAPI, dataRecordFieldChoicePayLoad, loadDataRecordFieldChoiceSelectorPromiseDeferred);
+                        });
+                        return loadDataRecordFieldChoiceSelectorPromiseDeferred.promise;
+                    }
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions",
-                        Choices: ctrl.values,
-                        IsNullable: ctrl.isNullable
+                        Choices: choicesGridAPI.getData(),
+                        IsNullable: ctrl.isNullable,
+                        ChoiceDefinitionId: dataRecordFieldChoiceSelectorGridAPI.getSelectedIds()
                     };
                 };
 
