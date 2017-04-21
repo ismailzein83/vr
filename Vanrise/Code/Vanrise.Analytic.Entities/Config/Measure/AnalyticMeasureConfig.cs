@@ -19,6 +19,8 @@ namespace Vanrise.Analytic.Entities
 
         public List<string> DependentDimensions { get; set; }
 
+        public List<string> ExternalSources { get; set; }
+
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
 
         public RequiredPermissionSettings RequiredPermission { get; set; }

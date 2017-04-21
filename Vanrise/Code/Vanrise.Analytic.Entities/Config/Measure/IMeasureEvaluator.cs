@@ -32,6 +32,8 @@ namespace Vanrise.Analytic.Entities
 
         List<dynamic> GetDistinctDimensionValues(string dimensionName);
 
+        Object GetExternalSourceValue(string sourceName, string measureName);
+
         DateTime GetQueryFromTime();
 
         DateTime GetQueryToTime();

@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
-    public class GetMeasureValueContext : IGetMeasureValueContext
+    internal class GetMeasureValueContext : IGetMeasureValueContext
     {
         AnalyticQuery _query;
+        string _recordGroupingKey;
         DBAnalyticRecord _sqlRecord;
         HashSet<string> _allDimensions;
         IAnalyticTableQueryContext _analyticTableQueryContext;
-        public GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions)
+        Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> _measureExternalSourcesResults;
+        internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions, Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults)
         {
             if (analyticTableQueryContext == null)
                 throw new ArgumentNullException("analyticTableQueryContext");
@@ -26,8 +29,10 @@ namespace Vanrise.Analytic.Business
                 throw new ArgumentNullException("allDimensions");
             _analyticTableQueryContext = analyticTableQueryContext;
             _query = _analyticTableQueryContext.Query;
+            _recordGroupingKey = recordGroupingKey;
             _sqlRecord = sqlRecord;
             _allDimensions = allDimensions;
+            _measureExternalSourcesResults = measureExternalSourcesResults;
         }
         public dynamic GetAggregateValue(string aggregateName)
         {
@@ -71,6 +76,34 @@ namespace Vanrise.Analytic.Business
         public bool IsFilterIncluded(string filterName)
         {
             return _analyticTableQueryContext.GetDimensionNames(_query.FilterGroup).Contains(filterName);
+        }
+
+
+        public object GetExternalSourceValue(string sourceName, string measureName)
+        {
+            _measureExternalSourcesResults.ThrowIfNull("_measureExternalSourcesResults");
+            AnalyticMeasureExternalSourceProcessedResult sourceResult;
+            if (!_measureExternalSourcesResults.TryGetValue(sourceName, out sourceResult))
+                throw new NullReferenceException(String.Format("sourceResult. Name '{0}'", sourceName));
+            Dictionary<string, Object> measureValues;
+            if(_recordGroupingKey != null)
+            {
+                AnalyticMeasureExternalSourceRecord matchRecord;
+                if (sourceResult.RecordsByDimensionKey != null && sourceResult.RecordsByDimensionKey.TryGetValue(_recordGroupingKey, out matchRecord))
+                    measureValues = matchRecord.MeasureValues;
+                else
+                    return null;
+            }
+            else//in case of summary record
+            {
+                measureValues = sourceResult.OriginalResult.SummaryMeasureValues;
+            }
+            if (measureValues == null)
+                throw new NullReferenceException(string.Format("measureValues. sourceName '{0}', grouping Key '{1}'", sourceName, _recordGroupingKey));
+            Object measureValue;
+            if (!measureValues.TryGetValue(measureName, out measureValue))
+                throw new NullReferenceException(String.Format("measureValue. Name '{0}' sourceName '{1}'", measureName, sourceName));
+            return measureValue;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Vanrise.Analytic.Business
         Dictionary<string, AnalyticAggregate> _aggregates;
         Dictionary<string, AnalyticMeasure> _measures;
         Dictionary<string, AnalyticJoin> _joins;
+        Dictionary<string, AnalyticMeasureExternalSource> _measureExternalSources;
 
         public AnalyticTableQueryContext(AnalyticQuery query)
         {
@@ -35,6 +36,7 @@ namespace Vanrise.Analytic.Business
             _aggregates = analyticItemConfigManager.GetAggregates(analyticTableId);
             _measures = analyticItemConfigManager.GetMeasures(analyticTableId);
             _joins = analyticItemConfigManager.GetJoins(analyticTableId);
+            _measureExternalSources = analyticItemConfigManager.GetMeasureExternalSources(analyticTableId);
         }
         public AnalyticTable GetTable()
         {
@@ -79,6 +81,16 @@ namespace Vanrise.Analytic.Business
             if (!_joins.TryGetValue(joinName, out join))
                 throw new NullReferenceException(String.Format("join '{0}'", joinName));
             return join;
+        }
+
+        public AnalyticMeasureExternalSource GetMeasureExternalSourceConfig(string measureExternalSourceName)
+        {
+            if (_measureExternalSources == null)
+                throw new NullReferenceException("_measureExternalSources");
+            AnalyticMeasureExternalSource measureExternalSource;
+            if (!_measureExternalSources.TryGetValue(measureExternalSourceName, out measureExternalSource))
+                throw new NullReferenceException(String.Format("measureExternalSource '{0}'", measureExternalSourceName));
+            return measureExternalSource;
         }
 
         public IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup)

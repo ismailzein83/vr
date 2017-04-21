@@ -88,6 +88,8 @@
     <Compile Include="Config\Dimension\AnalyticDimensionEditorInput.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionEditorRuntime.cs" />
     <Compile Include="Config\Dimension\IDimensionEvaluator.cs" />
+    <Compile Include="Config\ExternalSource\AnalyticMeasureExternalSourceConfig.cs" />
+    <Compile Include="Config\ExternalSource\AnalyticMeasureExternalSource.cs" />
     <Compile Include="Config\Join\AnalyticJoin.cs" />
     <Compile Include="Config\Join\AnalyticJoinConfigInfo.cs" />
     <Compile Include="Config\Join\AnalyticJoinConfigInfoFilter.cs" />

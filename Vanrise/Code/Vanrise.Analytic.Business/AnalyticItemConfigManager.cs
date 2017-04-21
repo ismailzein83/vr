@@ -129,6 +129,32 @@ namespace Vanrise.Analytic.Business
             return analyticJoins;
         }
 
+        public Dictionary<string, AnalyticMeasureExternalSource> GetMeasureExternalSources(int tableId)
+        {
+            string cacheName = String.Format("GetMeasureExternalSources_{0}", tableId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    var measureSourceConfigs = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, AnalyticItemType.MeasureSource);
+                    Dictionary<string, AnalyticMeasureExternalSource> measureSources = new Dictionary<string, AnalyticMeasureExternalSource>();
+                    foreach (var itemConfig in measureSourceConfigs)
+                    {
+                        AnalyticMeasureExternalSourceConfig measureSourceConfig = itemConfig.Config;
+                        if (measureSourceConfig == null)
+                            throw new NullReferenceException("measureSourceConfig");
+                        AnalyticMeasureExternalSource measureSource = new AnalyticMeasureExternalSource
+                        {
+                            AnalyticMeasureExternalSourceConfigId = itemConfig.AnalyticItemConfigId,
+                            Name = itemConfig.Name,
+                            Config = measureSourceConfig
+                        };
+                        measureSources.Add(itemConfig.Name, measureSource);
+                    }
+                    return measureSources;
+                });
+
+        }
+
         public string GetAnalyticItemConfigName(AnalyticItemConfig analyticItemConfig)
         {
             if (analyticItemConfig != null)
