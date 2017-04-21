@@ -7,7 +7,7 @@
                         <vr-accountbalance-account-selector on-ready="scopeModel.onAccountSelectorReady" normal-col-num="6" ng-if="scopeModel.showAccountSelector" isrequired="true"></vr-accountbalance-account-selector>
 
                         <vr-columns width="1/2row">
-                            <vr-textbox label="Amount" value="scopeModel.amount" isrequired="true" type="number"></vr-textbox>
+                            <vr-textbox label="Amount" value="scopeModel.amount" isrequired="true" type="number" customvalidate="scopeModel.validateAmount()"></vr-textbox>
                         </vr-columns>
 
                         <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6"></vr-common-currency-selector>

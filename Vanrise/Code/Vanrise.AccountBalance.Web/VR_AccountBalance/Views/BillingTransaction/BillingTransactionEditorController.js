@@ -64,6 +64,17 @@
                 $scope.modalContext.closeModal()
             };
 
+            $scope.scopeModel.validateAmount = function () {
+                if ($scope.scopeModel.amount == undefined)
+                    return 'Amount is a required field';
+                if (isNaN($scope.scopeModel.amount))
+                    return 'Amount is an invalid number';
+                var amount = Number($scope.scopeModel.amount);
+                if (amount <= 0)
+                    return 'Amount must be > 0';
+                return null;
+            };
+
             setAccountSelectorContext();
         }
         function load() {
