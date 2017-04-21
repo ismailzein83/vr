@@ -52,11 +52,10 @@
                 billingTransactionTypeSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onAccountBalanceInvoicesGridReady = function(api)
-            {
+            $scope.scopeModel.onAccountBalanceInvoicesGridReady = function (api) {
                 accountBalanceInvoicesGridAPI = api;
                 accountBalanceInvoicesGridReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.save = function () {
                 return insertBillingTransaction();
             };
