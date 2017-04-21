@@ -95,7 +95,4 @@
     <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_DeleteSessionId.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="Mediation.PostDeployment.sql" />
-  </ItemGroup>
 </Project>
