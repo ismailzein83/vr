@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Notification.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -33,6 +34,8 @@ namespace Vanrise.Analytic.Entities
 
         public List<DAProfCalcItemNotification> DAProfCalcItemNotifications { get; set; }
 
+        public DAProfCalcAlertRuleTypeSecurity DAProfCalcSecurity { get; set; }
+
         public string RawRecordFilterLabel { get; set; }
     }
 
@@ -46,5 +49,12 @@ namespace Vanrise.Analytic.Entities
         public Guid DataAnalysisItemDefinitionId { get; set; }
 
         public Guid NotificationTypeId { get; set; }
+    }
+
+    public class DAProfCalcAlertRuleTypeSecurity
+    {
+        public RequiredPermissionSettings ViewPermission { get; set; }
+
+        public RequiredPermissionSettings StartInstancePermission { get; set; }
     }
 }

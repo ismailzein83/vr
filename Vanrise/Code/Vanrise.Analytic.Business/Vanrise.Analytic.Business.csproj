@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticConfigurationManager.cs" />
@@ -49,6 +53,7 @@
     <Compile Include="AnalyticReportManager.cs" />
     <Compile Include="AnalyticTableManager.cs" />
     <Compile Include="AnalyticTableQueryContext.cs" />
+    <Compile Include="DataAnalysis\DAProfCalcAlertRuleTypeBPExtentedSettings.cs" />
     <Compile Include="DataAnalysis\DADynamicTypeGenerator.cs" />
     <Compile Include="DataAnalysis\DAGetMeasureValueContext.cs" />
     <Compile Include="DataAnalysis\DAProfCalcDataRecordStorageFilter.cs" />
@@ -58,6 +63,7 @@
     <Compile Include="DataAnalysis\DAProfCalcGenerateVRAlertEventsOutputProcessor.cs" />
     <Compile Include="DataAnalysis\DAProfCalcOutputSettingsManager.cs" />
     <Compile Include="DataAnalysis\DAProfCalcActionTargetType.cs" />
+    <Compile Include="DataAnalysis\DAProfCalcVRAlertRuleTypeFilter.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisDefinitionManager.cs" />
     <Compile Include="DataAnalysis\DataAnalysisItemExtraFields.cs" />
@@ -69,6 +75,10 @@
     <Compile Include="StyleRuleConditionContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
+      <Project>{74bcfdd5-6f60-4976-a31c-712beccc2787}</Project>
+      <Name>Vanrise.Analytic.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Analytic.Data\Vanrise.Analytic.Data.csproj">
       <Project>{78984a30-50a0-435a-9eb9-31d0273ef0bf}</Project>
       <Name>Vanrise.Analytic.Data</Name>

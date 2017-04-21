@@ -130,9 +130,15 @@ namespace Vanrise.Notification.Business
 
         #endregion
 
-        #region Private Classes
+        #region Caching
 
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+
+        public T GetCachedOrCreate<T>(Object cacheName, Func<T> createObject)
+        {
+            return s_cacheManager.GetOrCreateObject(cacheName, createObject);
+        }
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRAlertRuleTypeDataManager _dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleTypeDataManager>();
             object _updateHandle;
@@ -142,6 +148,11 @@ namespace Vanrise.Notification.Business
                 return _dataManager.AreVRAlertRuleTypeUpdated(ref _updateHandle);
             }
         }
+        #endregion
+
+        #region Private Classes
+
+        
 
         private class VRAlertRuleTypeLoggableEntity : VRLoggableEntityBase
         {
@@ -191,9 +202,9 @@ namespace Vanrise.Notification.Business
 
         #region Private Methods
 
-        private Dictionary<Guid, VRAlertRuleType> GetCachedVRAlertRuleTypes()
+        public Dictionary<Guid, VRAlertRuleType> GetCachedVRAlertRuleTypes()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRAlertRuleTypes",
+            return s_cacheManager.GetOrCreateObject("GetVRAlertRuleTypes",
                () =>
                {
                    IVRAlertRuleTypeDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleTypeDataManager>();
@@ -301,5 +312,7 @@ namespace Vanrise.Notification.Business
         }
 
         #endregion
+
+       
     }
 }

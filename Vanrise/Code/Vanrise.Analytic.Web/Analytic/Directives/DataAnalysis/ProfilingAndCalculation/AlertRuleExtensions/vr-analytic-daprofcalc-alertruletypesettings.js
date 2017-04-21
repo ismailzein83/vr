@@ -32,6 +32,12 @@
 
             var daProfCalcGridAPI;
 
+            var viewPermissionAPI;
+            var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var startInstancePermissionAPI;
+            var startInstancePermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.daProfCalcItemNotifications = [];
@@ -39,6 +45,14 @@
                 $scope.scopeModel.onDataAnalysisDefinitionSelectorReady = function (api) {
                     dataAnalysisDefinitionSelectorAPI = api;
                     dataAnalysisDefinitionSelectoReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onStartInstanceRequiredPermissionReady = function (api) {
+                    startInstancePermissionAPI = api;
+                    startInstancePermissionReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onSourceDataRecordStorageSelectorReady = function (api) {
                     sourceDataRecordStorageSelectorAPI = api;
@@ -59,6 +73,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceDataRecordStorageSelectorAPI, payload, setSourceLoader, sourceDataRecordStorageSelectorReadyDeferred);
                 };
+
                 $scope.scopeModel.onDAProfCalcGridReady = function (api) {
                     daProfCalcGridAPI = api;
                 };
@@ -219,7 +234,40 @@
                             VRUIUtilsService.callDirectiveLoad(sourceDataRecordStorageSelectorAPI, recordStoragePayload, sourceDataRecordStorageSelectorLoadDeferred);
                         });
                         promises.push(sourceDataRecordStorageSelectorLoadDeferred.promise);
+
+                        var loadViewRequiredPermissionPromise = loadViewRequiredPermission();
+                        promises.push(loadViewRequiredPermissionPromise);
+
+                        var loadStartInstanceRequiredPermissionPromise = loadStartInstanceRequiredPermission();
+                        promises.push(loadStartInstanceRequiredPermissionPromise);
+
                     }
+
+                    function loadViewRequiredPermission() {
+                        var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewPermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: vrAlertRuleTypeSettings  && vrAlertRuleTypeSettings.DAProfCalcSecurity && vrAlertRuleTypeSettings.DAProfCalcSecurity.ViewPermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
+                        });
+                        return viewSettingPermissionLoadDeferred.promise;
+                    }
+
+
+                    function loadStartInstanceRequiredPermission() {
+                        var startInstancePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+                        startInstancePermissionReadyDeferred.promise.then(function () {
+                            var dataPayload = {
+                                data: vrAlertRuleTypeSettings  && vrAlertRuleTypeSettings.DAProfCalcSecurity && vrAlertRuleTypeSettings.DAProfCalcSecurity.StartInstancePermission || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(startInstancePermissionAPI, dataPayload, startInstancePermissionLoadDeferred);
+                        });
+                        return startInstancePermissionLoadDeferred.promise;
+                    }
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -230,7 +278,11 @@
                         DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
                         SourceRecordStorages: buildSourceRecordStorages(),
                         DAProfCalcItemNotifications: buildDAProfCalcItemNotifications(),
-                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel
+                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel,
+                        DAProfCalcSecurity: {
+                            ViewPermission:viewPermissionAPI.getData(),
+                            StartInstancePermission: startInstancePermissionAPI.getData()
+                        }
                     };
                     return data;
                 };
