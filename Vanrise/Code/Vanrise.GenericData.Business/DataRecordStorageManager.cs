@@ -416,6 +416,7 @@ namespace Vanrise.GenericData.Business
                 return s_dataRecordStororageManager.GetDataRecordStorageName(dataRecordStorage);
             }
         }
+
         private class DataRecordRequestHandler : BigDataRequestHandler<DataRecordQuery, DataRecord, DataRecordDetail>
         {
             public Guid DataRecordTypeId { get; set; }
@@ -550,33 +551,6 @@ namespace Vanrise.GenericData.Business
             }
 
         }
-     
-        #endregion
-
-        #region Mappers
-
-        DataRecordStorageDetail DataRecordStorageMapper(DataRecordStorage dataRecordStorage)
-        {
-            return new DataRecordStorageDetail()
-            {
-                Entity = dataRecordStorage
-            };
-        }
-
-        DataRecordStorageInfo DataRecordStorageInfoMapper(DataRecordStorage dataRecordStorage)
-        {
-            DataStore dataStore = _dataStoreManager.GetDataStore(dataRecordStorage.DataStoreId);
-
-            return new DataRecordStorageInfo()
-            {
-                DataRecordStorageId = dataRecordStorage.DataRecordStorageId,
-                Name = dataRecordStorage.Name,
-                DataRecordTypeId = dataRecordStorage.DataRecordTypeId,
-                IsRemoteRecordStorage = dataStore != null && dataStore.Settings != null ? dataStore.Settings.IsRemoteDataStore : false
-            };
-        }
-
-        #endregion
 
         private class DataRecordStorageExcelExportHandler : ExcelExportHandler<DataRecordDetail>
         {
@@ -630,5 +604,32 @@ namespace Vanrise.GenericData.Business
                 context.MainSheet = sheet;
             }
         }
+     
+        #endregion
+
+        #region Mappers
+
+        DataRecordStorageDetail DataRecordStorageMapper(DataRecordStorage dataRecordStorage)
+        {
+            return new DataRecordStorageDetail()
+            {
+                Entity = dataRecordStorage
+            };
+        }
+
+        DataRecordStorageInfo DataRecordStorageInfoMapper(DataRecordStorage dataRecordStorage)
+        {
+            DataStore dataStore = _dataStoreManager.GetDataStore(dataRecordStorage.DataStoreId);
+
+            return new DataRecordStorageInfo()
+            {
+                DataRecordStorageId = dataRecordStorage.DataRecordStorageId,
+                Name = dataRecordStorage.Name,
+                DataRecordTypeId = dataRecordStorage.DataRecordTypeId,
+                IsRemoteRecordStorage = dataStore != null && dataStore.Settings != null ? dataStore.Settings.IsRemoteDataStore : false
+            };
+        }
+
+        #endregion
     }
 }
