@@ -185,7 +185,6 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                     Label: (carrierType != undefined) ? allAccounts[i].Name : allAccounts[i].Description
                 });
             }
-            console.log(ctrl.datasource)
             function effectiveStatusFilter(targetAccount) {
                 return (!getCurrentOnly || targetAccount.EffectiveStatus == WhS_AccountBalance_FinancialAccountEffectiveStatusEnum.Current.value);
             }
