@@ -38,7 +38,7 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
         var accountSelectorAPI;
         var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var context;
-
+        var filter;
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.getCurrentOnly = true;
@@ -129,10 +129,11 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
             api.load = function (payload) {
                 carrierTypeSelectorAPI.clearDataSource();
                 accountSelectorAPI.clearDataSource();
-
+                
                 var extendedSettings;
                 if (payload != undefined) {
                     invoiceTypeId = payload.invoiceTypeId;
+                    filter = payload.filter;
                     extendedSettings = payload.extendedSettings;
                     context = payload.context;
                     selectedIds = payload.selectedIds;
@@ -160,11 +161,11 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
         }
 
         function getFilter() {
-            var filter = {
-                InvoiceTypeId: invoiceTypeId,
-                GetCurrentOnly: $scope.scopeModel.getCurrentOnly,
-                CarrierType: $scope.scopeModel.selectedCarrierType != undefined ? $scope.scopeModel.selectedCarrierType.value : undefined
-            };
+            if (filter == undefined)
+                filter = {};
+            filter.InvoiceTypeId = invoiceTypeId;
+            filter.GetCurrentOnly = $scope.scopeModel.getCurrentOnly;
+            filter.CarrierType = $scope.scopeModel.selectedCarrierType != undefined ? $scope.scopeModel.selectedCarrierType.value : undefined;
             return filter;
         }
         function loadInvoiceAccounts() {

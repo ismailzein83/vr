@@ -10,6 +10,7 @@ using TOne.WhS.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Invoice.Business;
+using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business
@@ -428,6 +429,13 @@ namespace TOne.WhS.Invoice.Business
                             return false;
                         }
                     }
+                    if(filter.Filters != null)
+                    {
+                        if (!CheckIfPartnerMatched(filter.Filters, invoiceAccount.InvoiceAccountId))
+                        {
+                            return false;
+                        }
+                    }
                     return true;
                 };
             }
@@ -445,6 +453,22 @@ namespace TOne.WhS.Invoice.Business
                 var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value,true,true);
                 if (carrierAccounts == null || carrierAccounts.All(x => x.CarrierAccountSettings.ActivationStatus != activationStatus))
                     return false;
+            }
+            return true;
+        }
+        bool CheckIfPartnerMatched(List<IInvoicePartnerFilter> filters, int invoiceAccountId)
+        {
+            if (filters != null)
+            {
+                InvoicePartnerFilterContext context = new InvoicePartnerFilterContext
+                {
+                    PartnerId = invoiceAccountId.ToString()
+                };
+                foreach (var filter in filters)
+                {
+                    if (!filter.IsMatched(context))
+                        return false;
+                }
             }
             return true;
         }

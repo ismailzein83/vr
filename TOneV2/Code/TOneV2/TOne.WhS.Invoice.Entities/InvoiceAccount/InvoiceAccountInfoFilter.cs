@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Entities
 {
@@ -14,5 +15,6 @@ namespace TOne.WhS.Invoice.Entities
         public bool GetCurrentOnly { get; set; }
         public CarrierType? CarrierType { get; set; }
         public ActivationStatus? ActivationStatus { get; set; }
+        public List<IInvoicePartnerFilter> Filters { get; set; }
     }
 }
