@@ -1,5 +1,5 @@
-﻿create PROCEDURE genericdata.[sp_DataRecordFieldChoice_Update]
-	@ID int,
+﻿CREATE PROCEDURE [genericdata].[sp_DataRecordFieldChoice_Update]
+	@ID uniqueidentifier,
 	@Name nvarchar(255), 
 	@Settings nvarchar(MAX)
 AS
