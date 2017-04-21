@@ -42,10 +42,10 @@ app.directive("mediationGenericMediationdefinitionGrid", ["UtilsService", "VRNot
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
-                        }
+                        };
                         directiveAPI.onMediationDefinitionAdded = function (onMediationDefinitionObj) {
                             gridAPI.itemAdded(onMediationDefinitionObj);
-                        }
+                        };
 
                         return directiveAPI;
                     }
@@ -76,7 +76,7 @@ app.directive("mediationGenericMediationdefinitionGrid", ["UtilsService", "VRNot
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
-                }
+                };
             }
 
             function hasEditMediationDefinitionPermission() {
@@ -85,7 +85,7 @@ app.directive("mediationGenericMediationdefinitionGrid", ["UtilsService", "VRNot
             function editMediationDefinition(dataItem) {
                 var onMediationDefinitionUpdated = function (mediationDefinitionObj) {
                     gridAPI.itemUpdated(mediationDefinitionObj);
-                }
+                };
 
                 Mediation_Generic_MediationDefinitionService.editMediationDefinition(dataItem.Entity.MediationDefinitionId, onMediationDefinitionUpdated);
             }

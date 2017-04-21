@@ -91,7 +91,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataParsedRecordTypeFieldsTimeSelectorAPI, timePayload, setTimeLoader, dataParsedRecordTypeSelectedPromiseDeferred);
                 }
-            }
+            };
 
             //#endregion
 
@@ -122,7 +122,7 @@
                         $scope.scopeModel.handlers.length = 0;
                     }
                 }
-            }
+            };
 
             $scope.scopeModel.selectedDataTransformationDefinitionParsedRecord;
             $scope.scopeModel.onDataTransformationDefinitionParsedRecordReady = function (api) {
@@ -153,7 +153,7 @@
             //#region handlers Grid
             $scope.scopeModel.handlers = [];
             $scope.scopeModel.addHandler = function () {
-                var dataTransformationDefinitionId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds()
+                var dataTransformationDefinitionId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds();
                 var onOutPutHandlerAdded = function (obj) {
                     $scope.scopeModel.handlers.push(buildHandlerRecord(obj));
                 };
@@ -183,7 +183,7 @@
                 else {
                     return Mediation_Generic_MediationDefinitionAPIService.HasAddMediationDefinition();
                 }
-            }
+            };
 
             $scope.scopeModel.SaveMediationDefinition = function () {
                 $scope.scopeModel.isLoading = true;
@@ -198,7 +198,7 @@
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.scopeModel.ValidateStatusConditions = function () {
 
@@ -215,7 +215,7 @@
                     return 'At least one event should be selected.';
                 return null;
 
-            }
+            };
 
             $scope.scopeModel.validateHandlers = function () {
                 if (dataTransformationDefinitionInsertSelectorAPI.getSelectedIds() == undefined)
@@ -467,7 +467,7 @@
                 ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
                 ParsedTransformationSettings: getParsedTransformationSettings(),
                 OutputHandlers: buildHandlersGridData($scope.scopeModel.handlers)
-            }
+            };
             return item;
         }
         function buildHandlersGridData(handlers) {
@@ -511,7 +511,7 @@
                             Id: dataItem.Id
                         };
                         gridAPI.itemUpdated(obj);
-                    }
+                    };
                     VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(fields, dataItem.FilterObj, onDataRecordFieldTypeFilterAdded);
                 }
             });
@@ -610,7 +610,7 @@
         }
 
         function loadDefaultEventStatusMappings() {
-            var stagingStatusEnums = UtilsService.getArrayEnum(Mediation_Generic_StorageStagingStatusEnum)
+            var stagingStatusEnums = UtilsService.getArrayEnum(Mediation_Generic_StorageStagingStatusEnum);
             $scope.scopeModel.selectedStatusMappings.push(getStatusFromEnumObj(stagingStatusEnums, 'Start'));
             $scope.scopeModel.selectedStatusMappings.push(getStatusFromEnumObj(stagingStatusEnums, 'Stop'));
         }

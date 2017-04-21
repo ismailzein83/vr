@@ -81,14 +81,14 @@
                     promises.push(mediationDefinitionSelectorLoadDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
 
                 api.getData = function () {
                     return {
                         $type: 'Mediation.Generic.QueueActivators.StoreStagingRecordsQueueActivator, Mediation.Generic.QueueActivators',
                         MediationDefinitionId: mediationDefinitionSelectorAPI.getSelectedIds()
                     };
-                }
+                };
 
                 return api;
             }

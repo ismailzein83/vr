@@ -78,12 +78,12 @@ app.directive('mediationGenericMediationdefinitionSelector', ['Mediation_Generic
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(defineAPI());
                     }
-                }
+                };
 
 
                 ctrl.search = function (nameFilter) {
                     return Mediation_Generic_MediationDefinitionAPIService.GetMediationDefinitionsInfo(nameFilter);
-                }
+                };
 
             }
 
@@ -115,7 +115,7 @@ app.directive('mediationGenericMediationdefinitionSelector', ['Mediation_Generic
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('MediationDefinitionId', attrs, ctrl);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

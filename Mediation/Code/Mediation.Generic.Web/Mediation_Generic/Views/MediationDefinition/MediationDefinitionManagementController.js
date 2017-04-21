@@ -23,7 +23,7 @@
             };
             $scope.hasAddMediationDefinition = function () {
                 return Mediation_Generic_MediationDefinitionAPIService.HasAddMediationDefinition();
-            }
+            };
             $scope.addMediationDefinition = function () {
                 var onMediationDefinitionAdded = function (onMediationDefinitionObj) {
                     gridAPI.onMediationDefinitionAdded(onMediationDefinitionObj);

@@ -57,7 +57,7 @@ app.directive("mediationGenericMediationprocessManual", ["VRUIUtilsService", "Ut
                     var promises = [];
                     promises.push(loadMediationDefinitionSelector());
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

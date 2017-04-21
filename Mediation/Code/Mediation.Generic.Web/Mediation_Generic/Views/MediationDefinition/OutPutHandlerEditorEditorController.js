@@ -146,11 +146,11 @@
 
         function buildHandlerObjFromScope() {
             var settings = handlerTypeEditorAPI.getData();
-            settings.ConfigId = handlerTypeSelectorAPI.getSelectedIds()
+            settings.ConfigId = handlerTypeSelectorAPI.getSelectedIds();
             var item = {
                 OutputRecordName: dataTransformationSelectorAPI.getSelectedIds(),
                 Handler: settings
-            }
+            };
             return item;
         }
     }
