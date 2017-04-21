@@ -4,6 +4,7 @@ using System.Data;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Notification.Entities;
+using System.Linq;
 
 namespace Vanrise.Notification.Data.SQL
 {
@@ -39,9 +40,10 @@ namespace Vanrise.Notification.Data.SQL
             return (affectedRecords > 0);
         }
 
-        public List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey)
+        public List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey, List<VRNotificationStatus> statusesToLoad)
         {
-            return GetItemsSP("VRNotification.sp_VRNotification_GetByNotificationType", VRNotificationMapper, notificationTypeId, parentTypes.ParentType1, parentTypes.ParentType2, eventKey);
+            string statusesString = statusesToLoad != null && statusesToLoad.Count > 0 ? String.Join(",", statusesToLoad.Select(itm => (int)itm)) : null;
+            return GetItemsSP("VRNotification.sp_VRNotification_GetByNotificationType", VRNotificationMapper, notificationTypeId, parentTypes.ParentType1, parentTypes.ParentType2, eventKey, statusesString);
         }
 
         public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, long? executeBPInstanceId, long? clearBPInstanceId)

@@ -24,9 +24,10 @@ namespace Vanrise.Notification.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
+            List<VRNotificationStatus> statusesToLoad = new List<VRNotificationStatus> { VRNotificationStatus.Executed };
             Notifications.Set(context, dataManager.GetVRNotifications(NotificationTypeId.Get(context),
                                                                       ParentTypes.Get(context),
-                                                                      EventKey.Get(context)));
+                                                                      EventKey.Get(context), statusesToLoad));
         }
     }
 }

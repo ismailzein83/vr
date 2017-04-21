@@ -8,7 +8,7 @@ namespace Vanrise.Notification.Data
     {
         bool Insert(VRNotification notification, out long notificationId);
         VRNotification GetVRNotificationById(long notificationId);
-        List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey);
+        List<VRNotification> GetVRNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, string eventKey, List<VRNotificationStatus> statusesToLoad);
         void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, long? executeBPInstanceId, long? clearBPInstanceId);
         void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context);
         List<VRNotification> GetUpdateVRNotifications(IVRNotificationUpdateContext context);
