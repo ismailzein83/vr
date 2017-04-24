@@ -59,9 +59,9 @@
                                     addBackDrop();
                                     expandSectionDeferred.resolve();
                                     checkOnExpandMethode();
-                                }, 0);
+                                    }, ft ? 0: 1200);
                                    
-                            }, ft ? 0 :1000);
+                            },0);
                             return expandSectionDeferred.promise;
                         };
 
@@ -91,6 +91,7 @@
                         });
                         var fixDropdownSectionPosition = function () {
                             ctrl.showmenu = false;
+                            scope.$root.$digest();
                             $('.vr-backdrop').remove();
                             $('.vr-backdrop-modal').remove();
                         };
