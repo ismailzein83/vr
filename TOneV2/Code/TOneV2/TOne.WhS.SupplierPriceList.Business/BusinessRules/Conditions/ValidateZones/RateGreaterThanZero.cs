@@ -17,16 +17,20 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is ImportedRate;
+            return target is ImportedDataByZone;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedRate importedRate = context.Target as ImportedRate;
-            if (importedRate != null && importedRate.Rate <= 0)
+            ImportedDataByZone importedZone = context.Target as ImportedDataByZone;
+            if (importedZone != null && importedZone.ImportedNormalRates != null && importedZone.ImportedNormalRates.Count > 0)
             {
-                context.Message = string.Format("Zone {0} Has Rate {1} < 0 ", importedRate.ZoneName, importedRate.Rate);
-                return false;
+                ImportedRate importedRate = importedZone.ImportedNormalRates.First();
+                if (importedRate.Rate <= 0)
+                {
+                    context.Message = string.Format("Zone {0} Has Rate <= 0 ", importedRate.ZoneName);
+                    return false;
+                }
             }
             return true;
         }
