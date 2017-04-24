@@ -323,7 +323,7 @@ namespace TOne.WhS.BusinessEntity.Business
             List<SalePricelistRateChange> saleproPricelistRateChanges = new List<SalePricelistRateChange>();
             if (notSentChanges.Count == 0) return saleproPricelistRateChanges;
             var orderedNotSentChanges = notSentChanges.OrderByDescending(r => r.PricelistId);
-            
+
             if (currentChanges != null)
             {
                 foreach (var currentChange in currentChanges)
@@ -335,7 +335,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return new List<SalePricelistRateChange> { currentChange };
                 }
             }
-            
+
             return saleproPricelistRateChanges;
         }
         private List<SalePricelistCodeChange> MatchCode(List<SalePricelistCodeChange> lastChanges, List<SalePricelistCodeChange> currentChanges)
@@ -394,7 +394,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     continue;
 
                 List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(soldCountry.CountryId);
-                salePlZoneNotifications.AddRange(this.GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, changedZoneNames, futureLocator));
+                if (existingZones != null)
+                    salePlZoneNotifications.AddRange(this.GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, changedZoneNames, futureLocator));
             }
 
             //In this case the pricelist type is Full then we need to return all changed zones with their missing zones in their countries and the other sold countries
