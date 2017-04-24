@@ -304,7 +304,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -974,7 +973,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
+                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,3)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1008,7 +1007,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
+                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,3)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1168,7 +1167,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
+                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,3)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1497,7 +1496,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,2)</Value>
+                              <Value>= Parameters!Currency.Value + " " + FormatNumber(Parameters!TotalAmount.Value,3)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1734,7 +1733,7 @@ not receive anything in writing with in a week starting from invoice delivery</V
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Customer ID: " + Parameters!AccountName.Value + System.Environment.NewLine + "Customer Name: " + Parameters!VoiceCustomerNo.Value</Value>
+                <Value>="Customer ID: " + Parameters!VoiceCustomerNo.Value + System.Environment.NewLine + "Customer Name: " + Parameters!AccountName.Value</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
