@@ -105,7 +105,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             List<EndPointStatus> endPointStatuses = PrepareEndPointStatus(context.CustomerId, endPointStatus);
             if (endPointStatuses == null || !endPointStatuses.Any()) return false;
             context.SwitchBlockingInfo = endPointStatuses;
-            return masterDataManager.BlockEndPoints(endPointStatuses.Select(it => it.EndPointId), "access_list", 3);
+            return masterDataManager.BlockEndPoints(endPointStatuses.Select(it => it.EndPointId), "access_list", (int)State.Suspended);
         }
 
         public override bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
