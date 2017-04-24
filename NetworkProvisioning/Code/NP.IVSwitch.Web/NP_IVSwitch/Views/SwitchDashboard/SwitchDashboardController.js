@@ -37,19 +37,18 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.customerChartReady = function(api)
-            {
+            $scope.scopeModel.customerChartReady = function (api) {
                 customerChartAPI = api;
                 customerChartReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.supplierChartReady = function (api) {
                 supplierChartAPI = api;
                 supplierChartReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.destinationChartReady = function (api) {
                 destinationChartAPI = api;
                 destinationChartReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.getACDColor = function (dataItem) {
                 if (dataItem.ACD <= 5) {
                     return LabelColorsEnum.Error.color;
@@ -58,7 +57,7 @@
                 } else {
                     return LabelColorsEnum.Processed.color;
                 }
-            }
+            };
             $scope.scopeModel.getPDDColor = function (dataItem) {
                 if (dataItem.PDDInSec >= 5) {
                     return LabelColorsEnum.Error.color;
@@ -66,7 +65,7 @@
                 else if (dataItem.PDDInSec >= 3) {
                     return LabelColorsEnum.Warning.color;
                 }
-            }
+            };
             $scope.scopeModel.getPercConnectedColor = function (dataItem) {
                 if (dataItem.PercConnected <= 50) {
                     return LabelColorsEnum.Error.color;
@@ -75,34 +74,33 @@
                 } else {
                     return LabelColorsEnum.Processed.color;
                 }
-            }
+            };
           
             $scope.scopeModel.lastDistributionChartReady = function (api) {
                 lastDistributionChartAPI = api;
                 lastDistributionChartReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.topCustomers = [];
             $scope.scopeModel.topSuppliers = [];
             $scope.scopeModel.overAllResult = [];
             $scope.scopeModel.overAllDuration = [];
-            $scope.scopeModel.guageChartReady = function(api)
-            {
+            $scope.scopeModel.guageChartReady = function (api) {
                 guageChartAPI = api;
                 guageChartReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.liveChartReady = function (api) {
                 liveChartAPI = api;
                 liveChartReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.acdGuageChartReady = function (api) {
                 acdGuageChartAPI = api;
                 acdGuageChartReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.acdLiveChartReady = function (api) {
                 acdLiveChartAPI = api;
                 acdLiveChartReadyDeferred.resolve();
-            }
+            };
 
         }
         function load()
@@ -166,9 +164,9 @@
                     else
                     {
                         updateLastDistributionChart(response.LastDistributionResult);
-                        updateDestinationChart(response.TopZonesResult)
-                        updateSupplierChart(response.TopSuppliersResult)
-                        updateCustomerChart(response.TopCustomersResult)
+                        updateDestinationChart(response.TopZonesResult);
+                        updateSupplierChart(response.TopSuppliersResult);
+                        updateCustomerChart(response.TopCustomersResult);
                         chartDataFunction(response.LiveSummaryResult);
                         chartACDLiveFunction(response.LiveSummaryResult);
                         guageLiveFunction(response.LiveSummaryResult);

@@ -34,7 +34,7 @@ app.directive("npIvswitchRouteoptionGrid", ["UtilsService", "VRNotificationServi
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
-                }
+                };
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return npIvSwitchCustomerRouteApiService.GetFilteredCustomerRouteOptions(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
