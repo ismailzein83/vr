@@ -74,15 +74,30 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         }
 
         #region private functions
-        private Dictionary<string, Switch> GetSwitches()
+
+        private Dictionary<string, Switch> StructureSwitchesBySourceId()
         {
             SwitchManager manager = new SwitchManager();
-            return manager.GetAllSwitches().Where(it => it.SourceId != null).ToDictionary(it => it.SourceId, it => it);
+            Dictionary<string, Switch> switchesBySourceId = new Dictionary<string, Switch>();
+            var switches = manager.GetAllSwitches();
+            foreach (var switchItem in switches)
+            {
+                if (!string.IsNullOrEmpty(switchItem.SourceId) && !switchesBySourceId.ContainsKey(switchItem.SourceId))
+                    switchesBySourceId.Add(switchItem.SourceId, switchItem);
+            }
+            return switchesBySourceId;
         }
-        private Dictionary<string, CarrierAccount> GetAllCarriers()
+        private Dictionary<string, CarrierAccount> StructureCarriersBySourceId()
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            return carrierAccountManager.GetAllCarriers().Where(it => it.SourceId != null).ToDictionary(it => it.SourceId, it => it);
+            Dictionary<string, CarrierAccount> carriersBySourceId = new Dictionary<string, CarrierAccount>();
+            var carriers = carrierAccountManager.GetAllCarriers();
+            foreach (var carrier in carriers)
+            {
+                if (!string.IsNullOrEmpty(carrier.SourceId) && !carriersBySourceId.ContainsKey(carrier.SourceId))
+                    carriersBySourceId.Add(carrier.SourceId, carrier);
+            }
+            return carriersBySourceId;
         }
         private InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
         {
@@ -101,17 +116,17 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         {
             try
             {
-
-                CarrierAccounts = GetAllCarriers();
-                Dictionary<string, Switch> switches = GetSwitches();
-                int currentSwitchId;
-                if (switches.ContainsKey(switchId)) currentSwitchId = switches[switchId].SwitchId;
-                else
+                CarrierAccounts = StructureCarriersBySourceId();
+                Dictionary<string, Switch> switchesBySourceId = StructureSwitchesBySourceId();
+                Switch switchItem;
+                if (!switchesBySourceId.TryGetValue(switchId, out switchItem))
                 {
                     Logger.Success = false;
                     Logger.InfoMessage.AppendLine("No matching Switch exists");
                     return;
                 }
+
+                int currentSwitchId = switchItem.SwitchId;
                 #region customer
                 foreach (var elt in inParsedMappings)
                 {
