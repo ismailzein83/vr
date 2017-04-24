@@ -7,32 +7,33 @@ using System.Threading.Tasks;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	#region Classes
+    #region Classes
 
-	public class ProcessRatesInput
-	{
-		public IEnumerable<RateToChange> RatesToChange { get; set; }
+    public class ProcessRatesInput
+    {
+        public IEnumerable<RateToChange> RatesToChange { get; set; }
 
-		public IEnumerable<RateToClose> RatesToClose { get; set; }
+        public IEnumerable<RateToClose> RatesToClose { get; set; }
 
-		public IEnumerable<ExistingZone> ExistingZones { get; set; }
+        public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
-		public IEnumerable<ExistingRate> ExistingRates { get; set; }
+        public IEnumerable<ExistingRate> ExistingRates { get; set; }
 
-		public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
-	}
+        public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+    }
 
-	public class ProcessRatesOutput
-	{
-		public IEnumerable<NewRate> NewRates { get; set; }
+    public class ProcessRatesOutput
+    {
+        public IEnumerable<NewRate> NewRates { get; set; }
 
-		public IEnumerable<ChangedRate> ChangedRates { get; set; }
-	}
-	
-	#endregion
+        public IEnumerable<ChangedRate> ChangedRates { get; set; }
+    }
+
+    #endregion
 
     public class ProcessRates : BaseAsyncActivity<ProcessRatesInput, ProcessRatesOutput>
     {
@@ -50,8 +51,8 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<ExistingRate>> ExistingRates { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<ExistingCustomerCountry>> ExplicitlyChangedExistingCustomerCountries { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<ExistingCustomerCountry>> ExplicitlyChangedExistingCustomerCountries { get; set; }
 
         #endregion
 
@@ -73,12 +74,15 @@ namespace TOne.WhS.Sales.BP.Activities
                 RatesToClose = this.RatesToClose.Get(context),
                 ExistingZones = this.ExistingZones.Get(context),
                 ExistingRates = this.ExistingRates.Get(context),
-				ExplicitlyChangedExistingCustomerCountries = ExplicitlyChangedExistingCustomerCountries.Get(context)
+                ExplicitlyChangedExistingCustomerCountries = ExplicitlyChangedExistingCustomerCountries.Get(context)
             };
         }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
+
             if (this.NewRates.Get(context) == null)
                 this.NewRates.Set(context, new List<NewRate>());
 
@@ -94,7 +98,7 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<RateToClose> ratesToClose = inputArgument.RatesToClose;
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
             IEnumerable<ExistingRate> existingRates = inputArgument.ExistingRates;
-			IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries = inputArgument.ExplicitlyChangedExistingCustomerCountries;
+            IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries = inputArgument.ExplicitlyChangedExistingCustomerCountries;
 
             var priceListRateManager = new PriceListRateManager();
 
@@ -104,10 +108,16 @@ namespace TOne.WhS.Sales.BP.Activities
                 RatesToClose = ratesToClose,
                 ExistingZones = existingZones,
                 ExistingRates = existingRates,
-				ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries
+                ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries
             };
 
             priceListRateManager.ProcessCountryRates(processRatesContext);
+
+            if (DoRateChangesExist(processRatesContext))
+            {
+                RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
+                ratePlanContext.SetProcessHasChangesToTrueWithLock();
+            }
 
             return new ProcessRatesOutput()
             {
@@ -121,5 +131,20 @@ namespace TOne.WhS.Sales.BP.Activities
             this.NewRates.Set(context, result.NewRates);
             this.ChangedRates.Set(context, result.ChangedRates);
         }
+
+        #region Private Methods
+
+        private bool DoRateChangesExist(ProcessRatesContext context)
+        {
+            if (context.NewRates != null && context.NewRates.Count() > 0)
+                return true;
+
+            if (context.ChangedRates != null && context.ChangedRates.Count() > 0)
+                return true;
+
+            return false;
+        }
+
+        #endregion
     }
 }

@@ -7,113 +7,141 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	#region Classes
+    #region Classes
 
-	public class ProcessCustomerCountriesInput
-	{
-		public SalePriceListOwnerType OwnerType { get; set; }
-		public IEnumerable<CustomerCountryToAdd> CustomerCountriesToAdd { get; set; }
-		public IEnumerable<CustomerCountryToChange> CustomerCountriesToChange { get; set; }
-		public IEnumerable<ExistingCustomerCountry> ExistingCustomerCountries { get; set; }
-	}
+    public class ProcessCustomerCountriesInput
+    {
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public IEnumerable<CustomerCountryToAdd> CustomerCountriesToAdd { get; set; }
+        public IEnumerable<CustomerCountryToChange> CustomerCountriesToChange { get; set; }
+        public IEnumerable<ExistingCustomerCountry> ExistingCustomerCountries { get; set; }
+    }
 
-	public class ProcessCustomerCountriesOutput
-	{
-		public IEnumerable<NewCustomerCountry> NewCustomerCountries { get; set; }
-		public IEnumerable<ChangedCustomerCountry> ChangedCustomerCountries { get; set; }
-		public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
-	}
+    public class ProcessCustomerCountriesOutput
+    {
+        public IEnumerable<NewCustomerCountry> NewCustomerCountries { get; set; }
+        public IEnumerable<ChangedCustomerCountry> ChangedCustomerCountries { get; set; }
+        public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+    }
 
-	#endregion
+    #endregion
 
-	public class ProcessCustomerCountries : Vanrise.BusinessProcess.BaseAsyncActivity<ProcessCustomerCountriesInput, ProcessCustomerCountriesOutput>
-	{
-		#region Input Arguments
+    public class ProcessCustomerCountries : Vanrise.BusinessProcess.BaseAsyncActivity<ProcessCustomerCountriesInput, ProcessCustomerCountriesOutput>
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
-		[RequiredArgument]
-		public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
-		[RequiredArgument]
-		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
-		[RequiredArgument]
-		public InArgument<IEnumerable<ExistingCustomerCountry>> ExistingCustomerCountries { get; set; }
+        [RequiredArgument]
+        public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<ExistingCustomerCountry>> ExistingCustomerCountries { get; set; }
 
-		#endregion
+        #endregion
 
-		#region Output Arguments
+        #region Output Arguments
 
-		[RequiredArgument]
-		public OutArgument<IEnumerable<NewCustomerCountry>> NewCustomerCountries { get; set; }
-		
-		[RequiredArgument]
-		public OutArgument<IEnumerable<ChangedCustomerCountry>> ChangedCustomerCountries { get; set; }
+        [RequiredArgument]
+        public OutArgument<IEnumerable<NewCustomerCountry>> NewCustomerCountries { get; set; }
 
-		[RequiredArgument]
-		public OutArgument<IEnumerable<ExistingCustomerCountry>> ExplicitlyChangedExistingCustomerCountries { get; set; }
+        [RequiredArgument]
+        public OutArgument<IEnumerable<ChangedCustomerCountry>> ChangedCustomerCountries { get; set; }
 
-		#endregion
+        [RequiredArgument]
+        public OutArgument<IEnumerable<ExistingCustomerCountry>> ExplicitlyChangedExistingCustomerCountries { get; set; }
 
-		protected override ProcessCustomerCountriesInput GetInputArgument(AsyncCodeActivityContext context)
-		{
-			return new ProcessCustomerCountriesInput()
-			{
-				OwnerType = OwnerType.Get(context),
-				CustomerCountriesToAdd = CustomerCountriesToAdd.Get(context),
-				CustomerCountriesToChange = CustomerCountriesToChange.Get(context),
-				ExistingCustomerCountries = ExistingCustomerCountries.Get(context)
-			};
-		}
+        #endregion
 
-		protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-		{
-			if (NewCustomerCountries.Get(context) == null)
-				NewCustomerCountries.Set(context, new List<NewCustomerCountry>());
+        protected override ProcessCustomerCountriesInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ProcessCustomerCountriesInput()
+            {
+                OwnerType = OwnerType.Get(context),
+                CustomerCountriesToAdd = CustomerCountriesToAdd.Get(context),
+                CustomerCountriesToChange = CustomerCountriesToChange.Get(context),
+                ExistingCustomerCountries = ExistingCustomerCountries.Get(context)
+            };
+        }
 
-			if (ChangedCustomerCountries.Get(context) == null)
-				ChangedCustomerCountries.Set(context, new List<ChangedCustomerCountry>());
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
 
-			if (ExplicitlyChangedExistingCustomerCountries.Get(context) == null)
-				ExplicitlyChangedExistingCustomerCountries.Set(context, new List<ExistingCustomerCountry>());
+            if (NewCustomerCountries.Get(context) == null)
+                NewCustomerCountries.Set(context, new List<NewCustomerCountry>());
 
-			base.OnBeforeExecute(context, handle);
-		}
+            if (ChangedCustomerCountries.Get(context) == null)
+                ChangedCustomerCountries.Set(context, new List<ChangedCustomerCountry>());
 
-		protected override ProcessCustomerCountriesOutput DoWorkWithResult(ProcessCustomerCountriesInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-		{
-			var processCustomerCountriesContext = new ProcessCustomerCountriesContext();
+            if (ExplicitlyChangedExistingCustomerCountries.Get(context) == null)
+                ExplicitlyChangedExistingCustomerCountries.Set(context, new List<ExistingCustomerCountry>());
 
-			if (inputArgument.OwnerType == SalePriceListOwnerType.Customer)
-			{
-				var plCustomerCountryManager = new PriceListCustomerCountryManager();
+            base.OnBeforeExecute(context, handle);
+        }
 
-				processCustomerCountriesContext.CustomerCountriesToAdd = inputArgument.CustomerCountriesToAdd;
-				processCustomerCountriesContext.CustomerCountriesToChange = inputArgument.CustomerCountriesToChange;
-				processCustomerCountriesContext.ExistingCustomerCountries = inputArgument.ExistingCustomerCountries;
-				
-				plCustomerCountryManager.ProcessCustomerCountries(processCustomerCountriesContext);
-			}
-			else
-			{
-				processCustomerCountriesContext.ExplicitlyChangedExistingCustomerCountries = new List<ExistingCustomerCountry>();
-			}
+        protected override ProcessCustomerCountriesOutput DoWorkWithResult(ProcessCustomerCountriesInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            var processCustomerCountriesContext = new ProcessCustomerCountriesContext();
 
-			return new ProcessCustomerCountriesOutput()
-			{
-				NewCustomerCountries = processCustomerCountriesContext.NewCustomerCountries,
-				ChangedCustomerCountries = processCustomerCountriesContext.ChangedCustomerCountries,
-				ExplicitlyChangedExistingCustomerCountries = processCustomerCountriesContext.ExplicitlyChangedExistingCustomerCountries
-			};
-		}
+            if (inputArgument.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                var plCustomerCountryManager = new PriceListCustomerCountryManager();
 
-		protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCustomerCountriesOutput result)
-		{
-			NewCustomerCountries.Set(context, result.NewCustomerCountries);
-			ChangedCustomerCountries.Set(context, result.ChangedCustomerCountries);
-			ExplicitlyChangedExistingCustomerCountries.Set(context, result.ExplicitlyChangedExistingCustomerCountries);
-		}
-	}
+                processCustomerCountriesContext.CustomerCountriesToAdd = inputArgument.CustomerCountriesToAdd;
+                processCustomerCountriesContext.CustomerCountriesToChange = inputArgument.CustomerCountriesToChange;
+                processCustomerCountriesContext.ExistingCustomerCountries = inputArgument.ExistingCustomerCountries;
+
+                plCustomerCountryManager.ProcessCustomerCountries(processCustomerCountriesContext);
+            }
+            else
+            {
+                processCustomerCountriesContext.ExplicitlyChangedExistingCustomerCountries = new List<ExistingCustomerCountry>();
+            }
+
+            if (DoCountryChangesExist(processCustomerCountriesContext))
+            {
+                RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
+                ratePlanContext.SetProcessHasChangesToTrueWithLock();
+            }
+
+            return new ProcessCustomerCountriesOutput()
+            {
+                NewCustomerCountries = processCustomerCountriesContext.NewCustomerCountries,
+                ChangedCustomerCountries = processCustomerCountriesContext.ChangedCustomerCountries,
+                ExplicitlyChangedExistingCustomerCountries = processCustomerCountriesContext.ExplicitlyChangedExistingCustomerCountries
+            };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCustomerCountriesOutput result)
+        {
+            NewCustomerCountries.Set(context, result.NewCustomerCountries);
+            ChangedCustomerCountries.Set(context, result.ChangedCustomerCountries);
+            ExplicitlyChangedExistingCustomerCountries.Set(context, result.ExplicitlyChangedExistingCustomerCountries);
+        }
+
+        #region Private Methods
+
+        private bool DoCountryChangesExist(ProcessCustomerCountriesContext context)
+        {
+            if (context.NewCustomerCountries != null && context.NewCustomerCountries.Count() > 0)
+                return true;
+
+            if (context.ChangedCustomerCountries != null && context.ChangedCustomerCountries.Count() > 0)
+                return true;
+
+            if (context.ExplicitlyChangedExistingCustomerCountries != null && context.ExplicitlyChangedExistingCustomerCountries.Count() > 0)
+                return true;
+
+            return false;
+        }
+
+        #endregion
+    }
 }

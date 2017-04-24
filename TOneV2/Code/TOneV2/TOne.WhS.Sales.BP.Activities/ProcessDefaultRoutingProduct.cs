@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -27,7 +28,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         public IEnumerable<ChangedDefaultRoutingProduct> ChangedDefaultRoutingProducts { get; set; }
     }
-    
+
     #endregion
 
     public class ProcessDefaultRoutingProduct : BaseAsyncActivity<ProcessDefaultRoutingProductInput, ProcessDefaultRoutingProductOutput>
@@ -67,6 +68,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
+
             if (this.NewDefaultRoutingProduct.Get(context) == null)
                 this.NewDefaultRoutingProduct.Set(context, new NewDefaultRoutingProduct());
 
@@ -92,6 +96,12 @@ namespace TOne.WhS.Sales.BP.Activities
             var priceListDefaultRoutingProductManager = new PriceListDefaultRoutingProductManager();
             priceListDefaultRoutingProductManager.ProcessDefaultRoutingProduct(processDefaultRoutingProductContext);
 
+            if (DoDeafultRoutingProductChangesExist(processDefaultRoutingProductContext))
+            {
+                RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
+                ratePlanContext.SetProcessHasChangesToTrueWithLock();
+            }
+
             return new ProcessDefaultRoutingProductOutput()
             {
                 NewDefaultRoutingProduct = processDefaultRoutingProductContext.NewDefaultRoutingProduct,
@@ -104,5 +114,20 @@ namespace TOne.WhS.Sales.BP.Activities
             this.NewDefaultRoutingProduct.Set(context, result.NewDefaultRoutingProduct);
             this.ChangedDefaultRoutingProducts.Set(context, result.ChangedDefaultRoutingProducts);
         }
+
+        #region Private Methods
+
+        private bool DoDeafultRoutingProductChangesExist(ProcessDefaultRoutingProductContext context)
+        {
+            if (context.NewDefaultRoutingProduct != null)
+                return true;
+
+            if (context.ChangedDefaultRoutingProducts != null && context.ChangedDefaultRoutingProducts.Count() > 0)
+                return true;
+
+            return false;
+        }
+
+        #endregion
     }
 }
