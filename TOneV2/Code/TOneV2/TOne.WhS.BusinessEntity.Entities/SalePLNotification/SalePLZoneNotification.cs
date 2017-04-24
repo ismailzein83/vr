@@ -8,23 +8,12 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
 	public class SalePLZoneNotification : IBaseRates
 	{
-		private List<SalePLCodeNotification> _codes = new List<SalePLCodeNotification>();
+        public long ZoneId { get; set; }
 
 		public string ZoneName { get; set; }
 
-		public long ZoneId { get; set; }
-
-		public List<SalePLCodeNotification> Codes
-		{
-			get
-			{
-				return this._codes;
-			}
-			set
-			{
-				_codes = value;
-			}
-		}
+        private List<SalePLCodeNotification> _codes = new List<SalePLCodeNotification>();
+        public List<SalePLCodeNotification> Codes { get { return this._codes; } }
 
 		public SalePLRateNotification Rate { get; set; }
 

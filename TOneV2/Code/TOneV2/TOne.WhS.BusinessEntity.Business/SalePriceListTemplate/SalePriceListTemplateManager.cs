@@ -236,7 +236,6 @@ namespace TOne.WhS.BusinessEntity.Business
 					ZoneName = "Zone " + (i + 1)
 				};
 
-				zone.Codes = new List<SalePLCodeNotification>();
 				zone.Codes.Add(new SalePLCodeNotification()
 				{
 					Code = "Code " + (i + 1),

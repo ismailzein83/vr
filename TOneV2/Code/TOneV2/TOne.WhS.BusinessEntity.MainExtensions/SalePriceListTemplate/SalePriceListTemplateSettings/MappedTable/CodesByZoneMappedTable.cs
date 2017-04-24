@@ -55,9 +55,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                         {
                             ZoneName = zone.ZoneName,
                             ZoneId = zone.ZoneId,
-                            Rate = zone.Rate,
-                            Codes = codes
+                            Rate = zone.Rate
                         };
+                        currentZone.Codes.AddRange(codes);
                         SetCellData(sheets, mappedCol, currentZone, rowIndex, dateTimeFormat);
                     }
                     rowIndex++;
