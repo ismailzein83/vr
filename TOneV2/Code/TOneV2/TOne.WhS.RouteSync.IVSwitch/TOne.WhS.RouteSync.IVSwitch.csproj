@@ -72,6 +72,7 @@
     <Compile Include="BuiltInIVSwitchSWSync.cs" />
     <Compile Include="ConfigBuilder.cs" />
     <Compile Include="ConfigurationCacheManager.cs" />
+    <Compile Include="EndPointStatus.cs" />
     <Compile Include="IVSwitchConvertedRoute.cs" />
     <Compile Include="IVSwitchMasterDataManager.cs" />
     <Compile Include="IVSwitchOption.cs" />

@@ -11,6 +11,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
 {
@@ -31,7 +32,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
             var switches = switchManager.GetAllSwitches();
 
             if (financialAccount.CarrierAccountId.HasValue)
-            {   var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
                 UnBlockCustomer(carrierAccount, switches);
             }
             else
@@ -57,6 +59,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
         {
             if (switches != null)
             {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                StringBuilder errorStringBuilder = new StringBuilder();
                 CustomerRoutingStatusState routingStatusState = _carrierAccountManager.GetExtendedSettings<CustomerRoutingStatusState>(carrierAccountId);
                 foreach (var switchItem in switches)
                 {
@@ -71,12 +75,24 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
                         CustomerId = carrierAccountId.ToString(),
                         SwitchBlockingInfo = blockingInfo.SwitchBlockingInfo
                     };
-
-                    if (switchItem.Settings.RouteSynchronizer.TryUnBlockCustomer(context))
+                    try
                     {
-                        VRActionLogger.Current.LogObjectCustomAction(SwitchManager.SwitchLoggableEntity.Instance, "UnBlock Customer ", false, switchItem, string.Format("UnBlock Customer: {0}", _carrierAccountManager.GetCarrierAccountName(carrierAccountId)));
+
+                        if (switchItem.Settings.RouteSynchronizer.TryUnBlockCustomer(context))
+                        {
+                            VRActionLogger.Current.LogObjectCustomAction(SwitchManager.SwitchLoggableEntity.Instance, "UnBlock Customer ", false, switchItem, string.Format("UnBlock Customer: {0}", _carrierAccountManager.GetCarrierAccountName(carrierAccountId)));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+                        errorStringBuilder.AppendLine(string.Format("Couldn't Unblock Customer {0}.More Details: {1}",
+                            carrierAccountName, e.Message));
+
                     }
                 }
+                if (errorStringBuilder.Length > 0)
+                    throw new VRBusinessException(errorStringBuilder.ToString());
             }
         }
 

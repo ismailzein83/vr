@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NP.IVSwitch.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -51,7 +53,57 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return GetItemsText(query, RouteMapper, null);
         }
 
+        public bool BlockEndPoints(IEnumerable<int> endPointIds, string tableName, int stateId)
+        {
+            string endPointsString = null;
+            if (endPointIds != null && endPointIds.Any())
+                endPointsString = string.Join(",", endPointIds);
+            string blockQuery = string.Format("UPDATE {0} SET state_id = {1} WHERE user_id IN ( {2} )", tableName,
+                stateId, endPointsString);
+
+            return ExecuteNonQueryText(blockQuery, cmd => { }) > 0;
+        }
+
+        public bool UpdateEndPointState(List<EndPointStatus> endPointStatuses)
+        {
+            List<string> valueList = endPointStatuses.Select(
+                                     endPointStatus =>
+                                     string.Format("( {0}, {1})", endPointStatus.EndPointId, (int)endPointStatus.Status)).ToList();
+
+            string endPointsString = null;
+            if (valueList != null && valueList.Any())
+                endPointsString = string.Join(",", valueList);
+            string query = string.Format(@"update access_list as a set
+                            state_id = c.state_id
+                             from (values
+                                     {0} 
+                            ) as c(user_id, state_id) 
+                        where c.user_id = a.user_id;
+                        ", endPointsString);
+            int recordsEffected = ExecuteNonQueryText(query, cmd =>
+            {
+            });
+            return recordsEffected > 0;
+        }
+        public List<EndPointStatus> GetAccessListStatus(string whereCondition, List<int> endPointStatusIds)
+        {
+            string endPointStatusIdsString = null;
+            if (endPointStatusIds != null && endPointStatusIds.Any())
+                endPointStatusIdsString = string.Join(",", endPointStatusIds);
+
+            string query = string.Format(" SELECT  user_id, state_id FROM access_list where state_id in({1}) {0};", whereCondition, endPointStatusIdsString);
+            return GetItemsText(query, EndPointStatusMapper, cmd => { });
+        }
         #region Mapper
+        private EndPointStatus EndPointStatusMapper(IDataReader reader)
+        {
+            return new EndPointStatus
+            {
+                EndPointId = (int)reader["user_id"],
+                Status = (State)GetReaderValue<Int16>(reader, "state_id")
+            };
+        }
+
         RouteTable RouteMapper(IDataReader reader)
         {
             RouteTable supplierDefinition = new RouteTable

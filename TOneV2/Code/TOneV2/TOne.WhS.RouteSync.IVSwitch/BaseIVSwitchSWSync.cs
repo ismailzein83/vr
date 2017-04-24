@@ -1,10 +1,8 @@
-﻿using System;
+﻿using NP.IVSwitch.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.IVSwitch
@@ -99,8 +97,51 @@ namespace TOne.WhS.RouteSync.IVSwitch
             }
         }
         public abstract PreparedConfiguration GetPreparedConfiguration();
+        public abstract List<EndPointStatus> PrepareEndPointStatus(string carrierId, List<int> endPointstatuses);
+        public override bool TryBlockCustomer(ITryBlockCustomerContext context)
+        {
+            IVSwitchMasterDataManager masterDataManager = new IVSwitchMasterDataManager(MasterConnectionString);
+            List<int> endPointStatus = new List<int> { (int)State.Active, (int)State.Dormant };
+            List<EndPointStatus> endPointStatuses = PrepareEndPointStatus(context.CustomerId, endPointStatus);
+            if (endPointStatuses == null || !endPointStatuses.Any()) return false;
+            context.SwitchBlockingInfo = endPointStatuses;
+            return masterDataManager.BlockEndPoints(endPointStatuses.Select(it => it.EndPointId), "access_list", 3);
+        }
+
+        public override bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
+        {
+            var unblockContext = context as TryUnBlockCustomerContext;
+            if (unblockContext == null) return false;
+
+            var endPointBlockingInfos = unblockContext.SwitchBlockingInfo as List<EndPointStatus>;
+            if (endPointBlockingInfos == null) return false;
+
+            List<int> endPointStatus = new List<int> { (int)State.Suspended };
+            List<EndPointStatus> switchEndPointStatuses = PrepareEndPointStatus(context.CustomerId, endPointStatus);
+            if (switchEndPointStatuses == null || !switchEndPointStatuses.Any()) return false;
+
+            List<EndPointStatus> suspendedEndPoints = GetSuspendedEndPoints(endPointBlockingInfos, switchEndPointStatuses);
+            IVSwitchMasterDataManager masterDataManager = new IVSwitchMasterDataManager(MasterConnectionString);
+            return masterDataManager.UpdateEndPointState(suspendedEndPoints);
+        }
 
         #region private functions
+
+        private List<EndPointStatus> GetSuspendedEndPoints(List<EndPointStatus> endPointBlockingInfo, List<EndPointStatus> switchEndPointstatuses)
+        {
+            List<EndPointStatus> suspendedList = new List<EndPointStatus>();
+            Dictionary<int, EndPointStatus> endPointStatuseByEndPointId = switchEndPointstatuses.ToDictionary(item => item.EndPointId, item => item);
+            foreach (var currentEndPointStatus in endPointBlockingInfo)
+            {
+                EndPointStatus switchEndPointStatus;
+                if (endPointStatuseByEndPointId.TryGetValue(currentEndPointStatus.EndPointId, out switchEndPointStatus))
+                {
+                    if (switchEndPointStatus.Status == State.Suspended)
+                        suspendedList.Add(currentEndPointStatus);
+                }
+            }
+            return suspendedList;
+        }
         private void BuildTempTables(PreparedConfiguration preparedData)
         {
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
@@ -114,7 +155,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 }
             }
         }
-        private IVSwitchTariff BuildTariff(Route route)
+        private IVSwitchTariff BuildTariff(Entities.Route route)
         {
             IVSwitchTariff tariff = new IVSwitchTariff
             {
@@ -129,7 +170,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             }
             return tariff;
         }
-        private IVSwitchConvertedRoute BuildRouteAndRouteOptions(Route route, EndPoint endPoint, PreparedConfiguration preparedData)
+        private IVSwitchConvertedRoute BuildRouteAndRouteOptions(Entities.Route route, EndPoint endPoint, PreparedConfiguration preparedData)
         {
             if (route == null)
                 return null;
