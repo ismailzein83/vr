@@ -110,7 +110,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                                 dataGridCtrl.updateColumnHeader(colDef, val);
                         });
 
-                        if (col.headerText.toUpperCase() === 'ID') {
+                        if (col.headerText!=undefined &&  col.headerText.toUpperCase() === 'ID') {
                             dataGridCtrl.hideColumn(colDef);
                         }
 
