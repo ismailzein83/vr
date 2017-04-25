@@ -588,23 +588,29 @@
 
 
                 function loadCurrencyFieldSelector() {
-                    var currencyFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined &&  invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined) {
+                        var currencyFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    currencyFieldReadyPromiseDeferred.promise.then(function () {
-                        var currencyFieldPayload = invoiceTypeEntity != undefined ? { dataRecordTypeId: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId,selectedIds: invoiceTypeEntity.Settings.CurrencyFieldName  } : undefined;
-                        VRUIUtilsService.callDirectiveLoad(currencyFieldAPI, currencyFieldPayload, currencyFieldLoadPromiseDeferred);
-                    });
-                    return currencyFieldLoadPromiseDeferred.promise;
+                        currencyFieldReadyPromiseDeferred.promise.then(function () {
+                            var currencyFieldPayload = invoiceTypeEntity != undefined ? { dataRecordTypeId: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId, selectedIds: invoiceTypeEntity.Settings.CurrencyFieldName } : undefined;
+                            VRUIUtilsService.callDirectiveLoad(currencyFieldAPI, currencyFieldPayload, currencyFieldLoadPromiseDeferred);
+                        });
+                        return currencyFieldLoadPromiseDeferred.promise;
+                    }
                 }
 
                 function loadAmountFieldSelector() {
-                    var amountFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined)
+                    {
+                        var amountFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    amountFieldReadyPromiseDeferred.promise.then(function () {
-                        var amountFieldPayload = invoiceTypeEntity != undefined ? { dataRecordTypeId: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId, selectedIds: invoiceTypeEntity.Settings.AmountFieldName } : undefined;
-                        VRUIUtilsService.callDirectiveLoad(amountFieldAPI, amountFieldPayload, amountFieldLoadPromiseDeferred);
-                    });
-                    return amountFieldLoadPromiseDeferred.promise;
+                        amountFieldReadyPromiseDeferred.promise.then(function () {
+                            var amountFieldPayload = invoiceTypeEntity != undefined ? { dataRecordTypeId: invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId, selectedIds: invoiceTypeEntity.Settings.AmountFieldName } : undefined;
+                            VRUIUtilsService.callDirectiveLoad(amountFieldAPI, amountFieldPayload, amountFieldLoadPromiseDeferred);
+                        });
+                        return amountFieldLoadPromiseDeferred.promise;
+                    }
+                  
                 }
 
                 return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadInvoiceAttachmentsGrid,loadAmountFieldSelector,loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission,loadViewSettingsRequiredPermission,loadAddSettingsRequiredPermission,loadEditSettingsRequiredPermission,loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
