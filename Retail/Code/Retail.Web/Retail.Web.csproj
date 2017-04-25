@@ -715,6 +715,18 @@
       <Project>{30dce0ef-eea6-456a-9778-469c46f737ea}</Project>
       <Name>Retail.Invoice.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.MultiNet.Business\Retail.MultiNet.Business.csproj">
+      <Project>{b72910b9-b085-4a14-8bb7-816d0a28a6b9}</Project>
+      <Name>Retail.MultiNet.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.MultiNet.Entities\Retail.MultiNet.Entities.csproj">
+      <Project>{73608c81-84ad-480a-a988-74244ee9c8f8}</Project>
+      <Name>Retail.MultiNet.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.MultiNet.Web\Retail.MultiNet.Web.csproj">
+      <Project>{ce5f6fa1-bd80-4690-b728-496a0e7a0fc9}</Project>
+      <Name>Retail.MultiNet.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Ringo.Business\Retail.Ringo.Business.csproj">
       <Project>{c6098267-9bb4-4f28-8a80-70132fb0bc82}</Project>
       <Name>Retail.Ringo.Business</Name>
