@@ -17,7 +17,7 @@ namespace Retail.MultiNet.Business
 
         public override Guid ConfigId
         {
-            get { return new Guid("F0A5A4EC-B1D9-4F4E-957D-7A055469DAF8"); }
+            get { return new Guid("3C121314-56F2-445D-91C7-896D07D09BDD"); }
         }
 
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)

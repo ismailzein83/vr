@@ -25,8 +25,8 @@ namespace Retail.MultiNet.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDuration" };
-            List<string> listDimensions = new List<string> { "FinancialAccountId", "ServiceType", "Zone", "Operator" };
+            List<string> listMeasures = new List<string> { "CountIN", "CountOUT" };
+            List<string> listDimensions = new List<string> { "FinancialAccountId", "ServiceType"};
 
             string dimensionName = "FinancialAccountId";
 
@@ -48,19 +48,7 @@ namespace Retail.MultiNet.Business
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
             InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId);
-            retailSubscriberInvoiceDetails.DuePeriod = context.GetDuePeriod();
-            AccountPart accountPart;
-            if (accountBEManager.TryGetAccountPart(_acountBEDefinitionId, accountId, _companyExtendedInfoPartdefinitionId, false, out accountPart))
-            {
-              //  ZajilCompanyExtendedInfo zajilCompanyExtendedInfo = null;
-              //  zajilCompanyExtendedInfo = accountPart.Settings as ZajilCompanyExtendedInfo;
-                //if (zajilCompanyExtendedInfo != null)
-                //{
-                //    retailSubscriberInvoiceDetails.VoiceCustomerNo = zajilCompanyExtendedInfo.GPVoiceCustomerNo;
-                //    retailSubscriberInvoiceDetails.SalesAgent = zajilCompanyExtendedInfo.SalesAgent;
-                //    retailSubscriberInvoiceDetails.CustomerPO = zajilCompanyExtendedInfo.CustomerPO;
-                //}
-            }
+           
             context.Invoice = new GeneratedInvoice
             {
                 InvoiceDetails = retailSubscriberInvoiceDetails,
@@ -68,28 +56,35 @@ namespace Retail.MultiNet.Business
             };
 
         }
-
-        private InvoiceDetails BuildInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate, int currencyId)
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords)
         {
-            InvoiceDetails retailSubscriberInvoiceDetails = null;
-            if (itemSetNamesDic != null)
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
+            if (analyticRecords != null)
             {
-                List<InvoiceBillingRecord> invoiceBillingRecordList = null;
-                if (itemSetNamesDic.TryGetValue("GroupedByServiceType", out invoiceBillingRecordList))
+                foreach (var analyticRecord in analyticRecords)
                 {
-                    retailSubscriberInvoiceDetails = new InvoiceDetails();
-                    foreach (var invoiceBillingRecord in invoiceBillingRecordList)
-                    {
-                        retailSubscriberInvoiceDetails.TotalAmount += invoiceBillingRecord.Amount;
-                        retailSubscriberInvoiceDetails.CountCDRs += invoiceBillingRecord.CountCDRs;
-                        retailSubscriberInvoiceDetails.TotalDuration += invoiceBillingRecord.TotalDuration;
-                        retailSubscriberInvoiceDetails.CurrencyId = currencyId;
-                    }
-                };
-            }
-            return retailSubscriberInvoiceDetails;
-        }
+                    DimensionValue serviceTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                    DimensionValue financialAccountId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
 
+                    if (serviceTypeId.Value != null)
+                    {
+                        MeasureValue countIN = GetMeasureValue(analyticRecord, "CountIN");
+                        MeasureValue countOUT = GetMeasureValue(analyticRecord, "CountOUT");
+
+                        InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+                        {
+                            ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
+                            CountIN = Convert.ToDecimal(countIN.Value ?? 0.0),
+                            CountOUT = Convert.ToInt32(countOUT.Value),
+                        };
+                        if (financialAccountId.Value != null)
+                            invoiceBillingRecord.FinancialAccountId = Convert.ToInt64(financialAccountId.Value);
+                        AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
+                    }
+                }
+            }
+            return itemSetNamesDic;
+        }
         private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
@@ -104,17 +99,13 @@ namespace Retail.MultiNet.Business
 
                     foreach (var item in itemSetValues)
                     {
-                        if (item.Amount == 0)
-                            continue;
-
                         InvoiceItemDetails subscriberInvoiceItemDetails = new InvoiceItemDetails()
                         {
-                            Amount = item.Amount,
+                            CountIN = item.CountIN,
+                            CountOUT = item.CountOUT,
                             ServiceTypeId = item.ServiceTypeId,
-                            CountCDRs = item.CountCDRs,
-                            TotalDuration = item.TotalDuration,
-                            ZoneId = item.ZoneId,
-                            InterconnectOperatorId = item.InterconnectOperatorId
+                            FinancialAccountId = item.FinancialAccountId,
+
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -128,7 +119,24 @@ namespace Retail.MultiNet.Business
             }
             return generatedInvoiceItemSets;
         }
-
+        private InvoiceDetails BuildInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate, int currencyId)
+        {
+            InvoiceDetails retailSubscriberInvoiceDetails = null;
+            if (itemSetNamesDic != null)
+            {
+                List<InvoiceBillingRecord> invoiceBillingRecordList = null;
+                if (itemSetNamesDic.TryGetValue("GroupedByServiceType", out invoiceBillingRecordList))
+                {
+                    retailSubscriberInvoiceDetails = new InvoiceDetails();
+                    foreach (var invoiceBillingRecord in invoiceBillingRecordList)
+                    {
+                        retailSubscriberInvoiceDetails.CountIN += invoiceBillingRecord.CountIN;
+                        retailSubscriberInvoiceDetails.CountOUT += invoiceBillingRecord.CountOUT;
+                    }
+                };
+            }
+            return retailSubscriberInvoiceDetails;
+        }
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate, int currencyId)
         {
             AnalyticManager analyticManager = new AnalyticManager();
@@ -155,45 +163,6 @@ namespace Retail.MultiNet.Business
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
-
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords)
-        {
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
-            if (analyticRecords != null)
-            {
-                foreach (var analyticRecord in analyticRecords)
-                {
-                    DimensionValue serviceTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
-                    DimensionValue zoneId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
-                    DimensionValue operatorId = analyticRecord.DimensionValues.ElementAtOrDefault(3);
-
-                    if (serviceTypeId.Value != null)
-                    {
-                        MeasureValue totalAmount = GetMeasureValue(analyticRecord, "Amount");
-                        MeasureValue countCDRs = GetMeasureValue(analyticRecord, "CountCDRs");
-                        MeasureValue totalDuration = GetMeasureValue(analyticRecord, "TotalDuration");
-
-                        InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
-                        {
-                            ServiceTypeId = new Guid(serviceTypeId.Value.ToString()),
-                            Amount = Convert.ToDecimal(totalAmount.Value ?? 0.0),
-                            CountCDRs = Convert.ToInt32(countCDRs.Value),
-                            TotalDuration = Convert.ToDecimal(totalDuration.Value ?? 0.0)
-                        };
-
-                        if (zoneId.Value != null)
-                            invoiceBillingRecord.ZoneId = Convert.ToInt32(zoneId.Value);
-
-                        if (operatorId.Value != null)
-                            invoiceBillingRecord.InterconnectOperatorId = Convert.ToInt32(operatorId.Value);
-
-                        AddItemToDictionary(itemSetNamesDic, "GroupedByServiceType", invoiceBillingRecord);
-                    }
-                }
-            }
-            return itemSetNamesDic;
-        }
-
         private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
         {
             if (itemSetNamesDic == null)
@@ -212,27 +181,18 @@ namespace Retail.MultiNet.Business
                 itemSetNamesDic[key] = invoiceBillingRecordList;
             }
         }
-
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
         {
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-
         public class InvoiceBillingRecord
         {
-            public decimal Amount { get; set; }
-
             public Guid? ServiceTypeId { get; set; }
-
-            public long? ZoneId { get; set; }
-
-            public long? InterconnectOperatorId { get; set; }
-
-            public int CountCDRs { get; set; }
-
-            public Decimal TotalDuration { get; set; }
+            public long? FinancialAccountId { get; set; }
+            public Decimal CountOUT { get; set; }
+            public Decimal CountIN { get; set; }
         }
 
     }

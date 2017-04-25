@@ -8,17 +8,9 @@ namespace Retail.MultiNet.Entities
 {
     public class InvoiceItemDetails
     {
-        public decimal Amount { get; set; }
-
         public Guid? ServiceTypeId { get; set; }
-
-        public long? ZoneId { get; set; }
-
-        public long? InterconnectOperatorId { get; set; }
-
-        public int CountCDRs { get; set; }
-
-        public Decimal TotalDuration { get; set; }
-
+        public long? FinancialAccountId { get; set; }
+        public decimal CountIN { get; set; }
+        public decimal CountOUT { get; set; }
     }
 }

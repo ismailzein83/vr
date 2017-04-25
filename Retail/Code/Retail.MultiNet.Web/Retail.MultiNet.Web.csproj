@@ -118,13 +118,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_MultiNet\Constant\ModuleConfig.js" />
+    <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-invoice-invoicetype-multinetsubscriberinvoicesettings.js" />
+    <Content Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\MultiNetnvoiceSettingsTemplate.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
