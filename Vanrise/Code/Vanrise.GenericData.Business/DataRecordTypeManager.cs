@@ -42,15 +42,20 @@ namespace Vanrise.GenericData.Business
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
-           
+
             return dataRecordTypes.GetRecord(dataRecordTypeId); ;
         }
-       
+
         public DataRecordType GetDataRecordType(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
+            return dataRecordTypes.GetRecord(dataRecordTypeId);
+        }
 
-            return dataRecordTypes.GetRecord(dataRecordTypeId); ;
+        public DataRecordType GetDataRecordType(string dataRecordTypeName)
+        {
+            var dataRecordTypes = GetCachedDataRecordTypesByName();
+            return dataRecordTypes.GetRecord(dataRecordTypeName);
         }
 
         public string GetDataRecordTypeName(Guid dataRecordTypeId)
@@ -295,6 +300,16 @@ namespace Vanrise.GenericData.Business
                });
         }
 
+        private Dictionary<string, DataRecordType> GetCachedDataRecordTypesByName()
+        {
+            return GetCacheManager().GetOrCreateObject("GetDataRecordTypesByName",
+               () =>
+               {
+                   Dictionary<Guid, DataRecordType> dataRecordTypes = GetCachedDataRecordTypes();
+                   return dataRecordTypes.ToDictionary(itm => itm.Value.Name, itm => itm.Value);
+               });
+        }
+
         private Type GetOrCreateRuntimeType(DataRecordType dataRecordType)
         {
             string fullTypeName;
@@ -409,7 +424,7 @@ namespace Vanrise.GenericData.Business
             classDefinitionBuilder.Replace("#GETFIELDMEMBERS#", getFieldValueBuilder.ToString());
 
             classDefinitionBuilder.Replace("#FIELDNAMES#", fieldNamesAsString);
-            
+
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
             string className = "DataRecord";

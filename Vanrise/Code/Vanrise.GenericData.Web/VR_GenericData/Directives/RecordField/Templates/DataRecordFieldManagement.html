@@ -1,4 +1,11 @@
-﻿<vr-section title="Extra Fields">
+﻿<vr-section header="Settings">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-textbox label="Date Time Field" value="ctrl.dateTimeField"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-section header="Extra Fields">
     <vr-row>
         <vr-columns width="1/4row">
             <vr-switch label="Extra Fields" value="ctrl.hasExtraFields" isrequired></vr-switch>
@@ -9,7 +16,7 @@
     </vr-row>
 </vr-section>
 
-<vr-section title="Static Fields">
+<vr-section header="Static Fields">
     <vr-button type="Add" data-onclick="ctrl.addDataRecordField" standalone></vr-button>
 
     <vr-validator validate="ctrl.isValid()">

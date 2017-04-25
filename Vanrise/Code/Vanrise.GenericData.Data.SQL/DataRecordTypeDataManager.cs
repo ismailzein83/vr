@@ -30,8 +30,9 @@ namespace Vanrise.GenericData.Data.SQL
         {
             string serializedFields = dataRecordType.Fields != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.Fields) : null;
             string serializedExtraFieldsEvaluator = dataRecordType.ExtraFieldsEvaluator != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator) : null;
+            string serializedSettings = dataRecordType.Settings != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.Settings) : null;
 
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Update", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Update", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator, serializedSettings);
             return (recordesEffected > 0);
         }
 
@@ -39,8 +40,9 @@ namespace Vanrise.GenericData.Data.SQL
         {
             string serializedFields = dataRecordType.Fields != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.Fields) : null;
             string serializedExtraFieldsEvaluator = dataRecordType.ExtraFieldsEvaluator != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator) : null;
+            string serializedSettings = dataRecordType.Settings != null ? Vanrise.Common.Serializer.Serialize(dataRecordType.Settings) : null;
 
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator);
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_DataRecordType_Insert", dataRecordType.DataRecordTypeId, dataRecordType.Name, dataRecordType.ParentId, serializedFields, serializedExtraFieldsEvaluator, serializedSettings);
             return (recordesEffected > 0);
         }
 
@@ -60,7 +62,8 @@ namespace Vanrise.GenericData.Data.SQL
                 Name = reader["Name"] as string,
                 ParentId = GetReaderValue<Guid?>(reader, "ParentID"),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader["Fields"] as string),
-                ExtraFieldsEvaluator = reader["ExtraFieldsEvaluator"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(reader["ExtraFieldsEvaluator"] as string) : null
+                ExtraFieldsEvaluator = reader["ExtraFieldsEvaluator"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(reader["ExtraFieldsEvaluator"] as string) : null,
+                Settings = reader["Settings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(reader["Settings"] as string) : null
             };
         }
 

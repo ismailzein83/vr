@@ -84,6 +84,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     }
 
                     var obj = {
+                        Settings: { DateTimeField: ctrl.dateTimeField },
                         Fields: fields,
                         HasExtraFields: ctrl.hasExtraFields,
                         ExtraFieldsEvaluator: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
@@ -93,8 +94,10 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    var settings;
                     if (payload != undefined) {
+                        settings = payload.Settings;
+
                         ctrl.hasExtraFields = payload.ExtraFieldsEvaluator != undefined;
                         if (ctrl.hasExtraFields) {
                             dataRecordTypeExtraFieldsReadyDeferred = UtilsService.createPromiseDeferred();
@@ -110,6 +113,11 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                             promises.push(directiveLoadDeferred.promise);
                         }
                     }
+
+                    if (settings != undefined) {
+                        ctrl.dateTimeField = settings.DateTimeField;
+                    }
+
                     var dataRecorddFieldTypePromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.fieldTypeConfigs.push(item);

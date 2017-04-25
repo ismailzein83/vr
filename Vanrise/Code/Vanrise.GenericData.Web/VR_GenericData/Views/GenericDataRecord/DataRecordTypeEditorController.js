@@ -102,6 +102,7 @@
             if (obj != undefined) {
                 dataRecordType.Fields = obj.Fields;
                 dataRecordType.ExtraFieldsEvaluator = obj.ExtraFieldsEvaluator;
+                dataRecordType.Settings = obj.Settings;
             }
             return dataRecordType;
         };
@@ -111,7 +112,7 @@
 
             dataRecordFieldReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields, ExtraFieldsEvaluator: dataRecordTypeEntity.ExtraFieldsEvaluator } : undefined;
+                    var directivePayload = (dataRecordTypeEntity != undefined) ? { Fields: dataRecordTypeEntity.Fields, ExtraFieldsEvaluator: dataRecordTypeEntity.ExtraFieldsEvaluator, Settings: dataRecordTypeEntity.Settings } : undefined;
 
                     VRUIUtilsService.callDirectiveLoad(dataRecordFieldAPI, directivePayload, loadDataRecordFieldPromiseDeferred);
                 });

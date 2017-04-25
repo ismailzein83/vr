@@ -21,6 +21,11 @@ namespace Vanrise.GenericData.Entities
         public DataRecordTypeExtraField ExtraFieldsEvaluator { get; set; }
     }
 
+    public class DataRecordTypeSettings
+    {
+        public string DateTimeField { get; set; }
+    }
+
     public abstract class DataRecordTypeExtraField
     {
         public abstract Guid ConfigId { get; }
