@@ -8,11 +8,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-                    $scope.$on("$destroy", function () {
-                        iElem.off();
-                        headertextWatch!= undefined && headertextWatch();
-                        ngshowWatch != undefined && ngshowWatch();
-                    });
+                    
                     var gridColumnAttribute = iAttrs.columnattributes != undefined ? $scope.$eval(iAttrs.columnattributes) : undefined;
 
                     var col = {};
@@ -120,11 +116,21 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                         dataGridCtrl.hideColumn(colDef);
 
                     iElem.bind("$destroy", function () {
+                        removeColumnFromGridIfExists();
+                    });
+                    $scope.$on("$destroy", function () {
+                        removeColumnFromGridIfExists();
+                        iElem.off();
+                        headertextWatch != undefined && headertextWatch();
+                        ngshowWatch != undefined && ngshowWatch();
+                    });
+
+                    function removeColumnFromGridIfExists() {
                         if (colDef != undefined) {
                             dataGridCtrl.removeColumn(colDef);
                             colDef = undefined;
                         }
-                    });
+                    }
 
                     iAttrs.$observe('ngShow', function (expr) {
                         ngshowWatch = $scope.$watch(function () {
