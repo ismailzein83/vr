@@ -31,6 +31,7 @@
         function defineScope() {
             $scope.nodes = [];
             $scope.sellingNumberPlans = [];
+            $scope.treeHeight = (innerHeight - 210) + 'px';
             $scope.selectedSellingNumberPlan;
             $scope.currentNode;
 

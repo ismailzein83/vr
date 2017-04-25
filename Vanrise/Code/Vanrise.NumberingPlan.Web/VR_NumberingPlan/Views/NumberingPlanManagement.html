@@ -27,7 +27,7 @@
     </vr-row>
     <vr-row>
         <vr-columns width="1/4row" ng-show="selectedSellingNumberPlan!=undefined" vr-loader="isLoadingCountries">
-            <div style="max-height:700px;overflow-y:auto">
+            <div ng-style="{'height':treeHeight,'overflow-y':'auto'}">
                 <vr-treeview on-ready="countriesTreeReady"
                              datachildrenfield="effectiveZones"
                              datavaluefield="nodeId"
