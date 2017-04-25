@@ -44,28 +44,16 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
                 for (var x = 0; x < ctrl.datasource.length; x++) {
                     var currentItem = ctrl.datasource[x].Entity;
-
-                    if (currentItem.fromAmount != undefined && currentItem.toAmount == undefined) 
-                        return "To Amount should be filled.";
-
-                    if (currentItem.fromAmount == undefined && currentItem.toAmount != undefined)
-                        return "From Amount should be filled.";
-                   
-
                     var currentItemFromAmount = parseFloat(currentItem.fromAmount);
                     var currentItemToAmount = parseFloat(currentItem.toAmount);
-                    
                     for (var y = 0; y < ctrl.datasource.length; y++) {
                         if (x == y)
                             continue;
                         var otherItem = ctrl.datasource[y].Entity;
                         var otherItemFromAmount = parseFloat(otherItem.fromAmount);
                         var otherItemToAmount = parseFloat(otherItem.toAmount);
-
-                        if ((currentItemToAmount > otherItemFromAmount && currentItemFromAmount <= otherItemFromAmount)
-                            || (currentItemFromAmount < otherItemToAmount && currentItemToAmount >= otherItemToAmount))
+                        if (UtilsService.areTimePeriodsOverlapped(currentItemFromAmount, currentItemToAmount, otherItemFromAmount, otherItemToAmount))
                             return "Amounts Overlapped";
-                        
                     }
                 }
 

@@ -878,6 +878,11 @@
             var baseurl = protocol + '//' + host + '/';
             return baseurl;
         }
+        function areTimePeriodsOverlapped(p1From, p1To, p2From, p2To) {
+            if ((isNaN(p1To) || p1To >= p2From) && (isNaN(p2To) || p2To >= p1From))
+                return true;
+            return false;
+        }
 
         return ({
             replaceAll: replaceAll,
@@ -940,7 +945,8 @@
             isIntegerValue: isIntegerValue,
             addFloats: addFloats,
             getBaseUrlPrefix: getBaseUrlPrefix,
-            getCurrentDateWithoutMilliseconds: getCurrentDateWithoutMilliseconds
+            getCurrentDateWithoutMilliseconds: getCurrentDateWithoutMilliseconds,
+            areTimePeriodsOverlapped: areTimePeriodsOverlapped
         });
     }
 
