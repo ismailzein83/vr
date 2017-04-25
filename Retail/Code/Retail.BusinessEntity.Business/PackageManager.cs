@@ -16,11 +16,7 @@ namespace Retail.BusinessEntity.Business
     public class PackageManager : IBusinessEntityManager
     {
         #region ctor/Local Variables
-        static PackageDefinitionManager _packageDefinitionManager;
-        public PackageManager()
-        {
-            _packageDefinitionManager = new PackageDefinitionManager();
-        }
+        static PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
 
         #endregion
 
@@ -91,6 +87,23 @@ namespace Retail.BusinessEntity.Business
                 }
             }
             return packages;
+        }
+
+
+        public Guid GetPackageAccountDefinitionId(Package package)
+        {
+            package.Settings.ThrowIfNull("package.Settings", package.PackageId);
+            var packageDefinition = _packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
+            packageDefinition.ThrowIfNull("packageDefinition", package.Settings.PackageDefinitionId);
+            packageDefinition.Settings.ThrowIfNull("packageDefinition.Settings", package.Settings.PackageDefinitionId);
+            return packageDefinition.Settings.AccountBEDefinitionId;
+        }
+
+        public Guid GetPackageAccountDefinitionId(int packageId)
+        {
+            var package = GetPackage(packageId);
+            package.ThrowIfNull("package", packageId);
+            return GetPackageAccountDefinitionId(package);
         }
 
         public InsertOperationOutput<PackageDetail> AddPackage(Package package)
