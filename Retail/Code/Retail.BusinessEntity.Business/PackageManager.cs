@@ -197,7 +197,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        private Dictionary<int, Package> GetCachedPackages()
+        public Dictionary<int, Package> GetCachedPackages()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetPackages",
                () =>

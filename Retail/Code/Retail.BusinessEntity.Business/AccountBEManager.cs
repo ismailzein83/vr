@@ -523,7 +523,7 @@ namespace Retail.BusinessEntity.Business
                     return GetCachedAccounts(accountBEDefinitionId).Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
                 });
         }
-        Dictionary<long, AccountTreeNode> GetCacheAccountTreeNodes(Guid accountBEDefinitionId)
+        internal Dictionary<long, AccountTreeNode> GetCacheAccountTreeNodes(Guid accountBEDefinitionId)
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCacheAccountTreeNodes_{0}", accountBEDefinitionId), accountBEDefinitionId,
                 () =>
@@ -649,23 +649,6 @@ namespace Retail.BusinessEntity.Business
                 fieldType = accountGenericField.FieldType;
                 return accountGenericField.GetValue(new AccountGenericFieldContext(_account));
             }
-        }
-        private class AccountTreeNode
-        {
-            public Account Account { get; set; }
-
-            public AccountTreeNode ParentNode { get; set; }
-
-            List<AccountTreeNode> _childNodes = new List<AccountTreeNode>();
-            public List<AccountTreeNode> ChildNodes
-            {
-                get
-                {
-                    return _childNodes;
-                }
-            }
-
-            public int TotalSubAccountsCount { get; set; }
         }
         private class AccountExcelExportHandler : ExcelExportHandler<AccountDetail>
         {
@@ -1056,5 +1039,24 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+    }
+
+
+    internal class AccountTreeNode
+    {
+        public Account Account { get; set; }
+
+        public AccountTreeNode ParentNode { get; set; }
+
+        List<AccountTreeNode> _childNodes = new List<AccountTreeNode>();
+        public List<AccountTreeNode> ChildNodes
+        {
+            get
+            {
+                return _childNodes;
+            }
+        }
+
+        public int TotalSubAccountsCount { get; set; }
     }
 }

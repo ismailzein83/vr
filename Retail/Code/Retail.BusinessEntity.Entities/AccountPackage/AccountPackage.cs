@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountPackage
+    public class AccountPackage : Vanrise.Entities.IDateEffectiveSettings
     {
         public int AccountPackageId { get; set; }
 

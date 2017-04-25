@@ -46,6 +46,12 @@ namespace Retail.BusinessEntity.Business
             Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             return cachedAccountPackages.GetRecord(accountPackageId);
         }
+
+        public List<AccountPackage> GetAccountPackagesByAccountId(long accountId)
+        {
+            var accountInfo = GetAccountInfo(accountId);
+            return accountInfo != null ? accountInfo.AccountPackages : null;
+        }
         public int GetAccountPackagesCount(long accountId)
         {
             var accountInfo = GetAccountInfo(accountId);
@@ -174,6 +180,8 @@ namespace Retail.BusinessEntity.Business
 
         private class AccountInfo
         {
+            public long AccountId { get; set; }
+
             List<AccountPackage> _accountPackages = new List<AccountPackage>();
             public List<AccountPackage> AccountPackages
             {
@@ -182,6 +190,15 @@ namespace Retail.BusinessEntity.Business
                     return _accountPackages;
                 }
             }
+
+            public IOrderedEnumerable<ProcessedAccountPackage> AssignedPackages { get; set; }
+        }
+
+        private class ProcessedAccountPackage
+        {
+            public AccountPackage AccountPackage { get; set; }
+
+            public Package Package { get; set; }
         }
 
         #endregion
@@ -208,13 +225,42 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountInfoByAccountId",
               () =>
               {
+                  AccountBEManager accountBEManager = new AccountBEManager();
+
                   Dictionary<long, AccountInfo> accountInfos = new Dictionary<long, AccountInfo>();
+                  Dictionary<int, Package> allPackages = new PackageManager().GetCachedPackages();
+                  Dictionary<int, Guid> accountDefinitionIdsByPackageId = GetAccountDefinitionIdsByPackageId(allPackages);
+                  Dictionary<long, List<ProcessedAccountPackage>> accountPackages = new Dictionary<long, List<ProcessedAccountPackage>>();
                   foreach (var accountPackage in GetCachedAccountPackages().Values)
                   {
-                      accountInfos.GetOrCreateItem(accountPackage.AccountId).AccountPackages.Add(accountPackage);
+                      Package package = allPackages.GetRecord(accountPackage.PackageId);
+                      if (package != null)
+                      {
+                          accountInfos.GetOrCreateItem(accountPackage.AccountId, () => new AccountInfo { AccountId = accountPackage.AccountId}).AccountPackages.Add(accountPackage);
+                          accountPackages.GetOrCreateItem(accountPackage.AccountId).Add(new ProcessedAccountPackage { AccountPackage = accountPackage, Package = package});
+                      }
+                  }
+                  foreach(var accountInfo in accountInfos.Values)
+                  {
+                      accountInfo.AssignedPackages = accountPackages[accountInfo.AccountId].OrderByDescending(itm => itm.AccountPackage.EED.HasValue ? itm.AccountPackage.EED.Value : DateTime.MaxValue);
                   }
                   return accountInfos;
               });
+        }
+
+        private Dictionary<int, Guid> GetAccountDefinitionIdsByPackageId(Dictionary<int, Package> allPackages)
+        {
+            Dictionary<int, Guid> accountDefinitionIdsByPackageId = new Dictionary<int, Guid>();
+            PackageDefinitionManager packageDefinitionManager = new PackageDefinitionManager();
+            foreach(var package in allPackages.Values)
+            {
+                package.Settings.ThrowIfNull("package.Settings", package.PackageId);
+                var packageDefinition = packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
+                packageDefinition.ThrowIfNull("packageDefinition", package.Settings.PackageDefinitionId);
+                packageDefinition.Settings.ThrowIfNull("packageDefinition.Settings", package.Settings.PackageDefinitionId);
+                accountDefinitionIdsByPackageId.Add(package.PackageId, packageDefinition.Settings.AccountBEDefinitionId);
+            }
+            return accountDefinitionIdsByPackageId;
         }
 
 
