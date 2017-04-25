@@ -88,6 +88,36 @@ namespace Retail.BusinessEntity.Business
             return null;
         }
 
+        public void LoadAccountPackagesByPriority(Guid accountBEDefinitionId,long accountId,  DateTime effectiveTime, bool withInheritence, Action<Package, LoadPackageHandle> OnPackageLoaded)
+        {
+            var accountInfo = GetAccountInfo(accountId);
+            if(accountInfo != null)
+            {
+                LoadPackageHandle handle = new LoadPackageHandle();
+                foreach(var processedAccountPackage in accountInfo.AssignedPackages)
+                {
+                    if(processedAccountPackage.AccountPackage.IsEffective(effectiveTime))
+                    {
+                        OnPackageLoaded(processedAccountPackage.Package, handle);
+                        if (handle.Stop)
+                            return;
+                    }
+                }
+                if (withInheritence && accountInfo.Account.ParentAccountId.HasValue)
+                    LoadAccountPackagesByPriority(accountBEDefinitionId, accountInfo.Account.ParentAccountId.Value, effectiveTime, withInheritence, OnPackageLoaded);
+            }
+            else
+            {
+                if(withInheritence)
+                {
+                    var account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
+                    account.ThrowIfNull("account", accountBEDefinitionId);
+                    if (account.ParentAccountId.HasValue)
+                        LoadAccountPackagesByPriority(accountBEDefinitionId, account.ParentAccountId.Value, effectiveTime, withInheritence, OnPackageLoaded);
+                }
+            }
+        }
+
         public InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackageToAdd accountPackageToAdd)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountPackageDetail>();
@@ -130,8 +160,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Classes
-
-
+        
         private class AccountPackageExcelExportHandler : ExcelExportHandler<AccountPackageDetail>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountPackageDetail> context)
@@ -180,7 +209,7 @@ namespace Retail.BusinessEntity.Business
 
         private class AccountInfo
         {
-            public long AccountId { get; set; }
+            public Account Account { get; set; }
 
             List<AccountPackage> _accountPackages = new List<AccountPackage>();
             public List<AccountPackage> AccountPackages
@@ -233,16 +262,25 @@ namespace Retail.BusinessEntity.Business
                   Dictionary<long, List<ProcessedAccountPackage>> accountPackages = new Dictionary<long, List<ProcessedAccountPackage>>();
                   foreach (var accountPackage in GetCachedAccountPackages().Values)
                   {
-                      Package package = allPackages.GetRecord(accountPackage.PackageId);
+                      Package package = allPackages.GetRecord(accountPackage.PackageId);                      
                       if (package != null)
                       {
-                          accountInfos.GetOrCreateItem(accountPackage.AccountId, () => new AccountInfo { AccountId = accountPackage.AccountId}).AccountPackages.Add(accountPackage);
+                          AccountInfo accountInfo;
+                          if(!accountInfos.TryGetValue(accountPackage.AccountId, out accountInfo))
+                          {
+                              Account account = accountBEManager.GetAccount(accountDefinitionIdsByPackageId[accountPackage.PackageId], accountPackage.AccountId);
+                              if (account == null)
+                                  continue;
+                              accountInfo = new AccountInfo { Account = account };
+                              accountInfos.Add(accountPackage.AccountId, accountInfo);
+                          }
+                          accountInfo.AccountPackages.Add(accountPackage);
                           accountPackages.GetOrCreateItem(accountPackage.AccountId).Add(new ProcessedAccountPackage { AccountPackage = accountPackage, Package = package});
                       }
                   }
                   foreach(var accountInfo in accountInfos.Values)
                   {
-                      accountInfo.AssignedPackages = accountPackages[accountInfo.AccountId].OrderByDescending(itm => itm.AccountPackage.EED.HasValue ? itm.AccountPackage.EED.Value : DateTime.MaxValue);
+                      accountInfo.AssignedPackages = accountPackages[accountInfo.Account.AccountId].OrderByDescending(itm => itm.AccountPackage.EED.HasValue ? itm.AccountPackage.EED.Value : DateTime.MaxValue);
                   }
                   return accountInfos;
               });
@@ -281,5 +319,10 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+    }
+
+    public class LoadPackageHandle
+    {
+        public bool Stop { get; set; }
     }
 }
