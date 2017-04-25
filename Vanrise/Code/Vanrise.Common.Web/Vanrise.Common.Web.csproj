@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\GenericLKUPController.cs" />
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\VRMailController.cs" />
     <Compile Include="Controllers\VRObjectTrackingController.cs" />
@@ -219,6 +220,8 @@
     <Content Include="Common\Directives\GenericLKUP\MainExtensions\Templates\GenericLKUPBEDefinition.html" />
     <Content Include="Common\Directives\GenericLKUP\MainExtensions\vr-common-genericlkup-be-definition.js" />
     <Content Include="Common\Directives\GenericLKUP\MainExtensions\vr-common-genericlkup-be-definition-selector.js" />
+    <Content Include="Common\Directives\GenericLKUP\Templates\GenericLKUPItemGrid.html" />
+    <Content Include="Common\Directives\GenericLKUP\vr-common-genericlkupitem-grid.js" />
     <Content Include="Common\Directives\GridColCSSClass\vr-common-gridcolcssclass-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\SQLConnectionEditorTemplate.html" />
@@ -349,6 +352,7 @@
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
+    <Content Include="Common\Services\APIServices\GenericLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\GenericLKUPDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
@@ -377,6 +381,7 @@
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
+    <Content Include="Common\Services\GenericLKUPService.js" />
     <Content Include="Common\Services\ObjectTrackingService.js" />
     <Content Include="Common\Services\StatusDefinitionService.js" />
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
@@ -437,6 +442,10 @@
     <Content Include="Common\Views\ErrorController.js" />
     <Content Include="Common\Views\File\RecentFile.html" />
     <Content Include="Common\Views\File\RecentFileController.js" />
+    <Content Include="Common\Views\GenericLKUP\GenericLKUPEditor.html" />
+    <Content Include="Common\Views\GenericLKUP\GenericLKUPEditorController.js" />
+    <Content Include="Common\Views\GenericLKUP\GenericLKUPManagement.html" />
+    <Content Include="Common\Views\GenericLKUP\GenericLKUPManagementController.js" />
     <Content Include="Common\Views\Logger\LoggerManagement.html" />
     <Content Include="Common\Views\Logger\LoggerManagementController.js" />
     <Content Include="Common\Views\MasterLog\MasterLogManagement.html" />

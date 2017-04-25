@@ -17,4 +17,5 @@
     VRCommon_CountryService.registerHistoryViewAction();
     VRCommon_CityService.registerHistoryViewAction();
     VRCommon_SettingsService.registerHistoryViewAction();
+    VRCommon_RateTypeService.registerHistoryViewAction();
 }]);

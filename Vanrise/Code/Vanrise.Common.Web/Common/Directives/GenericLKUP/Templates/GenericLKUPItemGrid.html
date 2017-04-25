@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="scopeModel.genericLKUP"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.GenericLKUPItemId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.GenericLKUPItemId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Generic LKUP'" field="'BusinessEntityDefinitionName'"></vr-datagridcolumn>
+</vr-datagrid>

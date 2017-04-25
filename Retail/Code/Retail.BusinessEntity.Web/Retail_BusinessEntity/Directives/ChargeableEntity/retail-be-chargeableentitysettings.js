@@ -1,6 +1,6 @@
 ﻿"use strict";
-               
-app.directive("retailBeChargeableentitydefinitionsettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+
+app.directive("retailBeChargeableentitysettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -19,7 +19,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/ChargeableEntity/Definition/Templates/ChargeableEntityDefinitionSettingDirective.html"
+        templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/ChargeableEntity/Templates/ChargeableEntitySettings.html"
     };
 
     function Chargeableentitydefinitionsettings($scope, ctrl) {
@@ -41,7 +41,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Retail.BusinessEntity.Entities.ChargeableEntityDefinitionSettings ,Retail.BusinessEntity.Entities",
+                    $type: "Retail.BusinessEntity.Entities.ChargeableEntitySettings ,Retail.BusinessEntity.Entities",
                 };
             };
 

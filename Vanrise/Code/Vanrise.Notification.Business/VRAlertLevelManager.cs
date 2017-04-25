@@ -229,8 +229,8 @@ namespace Vanrise.Notification.Business
 
         public dynamic GetEntityId(IBusinessEntityIdContext context)
         {
-            var statusDefinition = context.Entity as StatusDefinition;
-            return statusDefinition.StatusDefinitionId;
+            var vrAlertLevel = context.Entity as VRAlertLevel;
+            return vrAlertLevel.VRAlertLevelId;
         }
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)

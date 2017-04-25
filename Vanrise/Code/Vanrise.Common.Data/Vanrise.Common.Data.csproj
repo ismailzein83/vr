@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IGenericLKUPItemDataManager.cs" />
     <Compile Include="IVRActionAuditDataManager.cs" />
     <Compile Include="IVRActionAuditLKUPDataManager.cs" />
     <Compile Include="IVRApplicationVisibilityDataManager.cs" />

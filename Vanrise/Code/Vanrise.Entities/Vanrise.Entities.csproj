@@ -69,6 +69,8 @@
     <Compile Include="GenericLKUP\GenericLKUPDefinitionConfig.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionExtendedSettings.cs" />
     <Compile Include="GenericLKUP\GenericLKUPItem.cs" />
+    <Compile Include="GenericLKUP\GenericLKUPItemDetail.cs" />
+    <Compile Include="GenericLKUP\GenericLKUPQuery.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
     <Compile Include="VRActionAudit\VRActionAuditDetail.cs" />

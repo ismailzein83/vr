@@ -44,13 +44,22 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.load = function (payload) {
                 var promises = [];
-
+                var businessEntityDefinitionSettings;
+                if (payload!=undefined && payload.businessEntityDefinitionSettings != undefined)
+                {
+                    businessEntityDefinitionSettings = payload.businessEntityDefinitionSettings;
+                }
                 var loadSelectorGenericLKUPBEDefinitionPromise = loadSelectorGenericLKUPBEDefinition();
                 promises.push(loadSelectorGenericLKUPBEDefinitionPromise);
 
                 function loadSelectorGenericLKUPBEDefinition() {
-
-                    return genericLKUPBEDefinitionSelectorAPI.load(undefined);
+                    var selectorPayload;
+                    if (businessEntityDefinitionSettings != undefined) {
+                        selectorPayload = {
+                            genericLKUPDefineitionSettings : businessEntityDefinitionSettings.ExtendedSettings
+                        }
+                    }
+                    return genericLKUPBEDefinitionSelectorAPI.load(selectorPayload);
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

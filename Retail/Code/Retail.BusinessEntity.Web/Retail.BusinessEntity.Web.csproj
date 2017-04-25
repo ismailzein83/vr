@@ -322,6 +322,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\Definition\retail-be-chargeableentitydefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\Definition\Templates\ChargeableEntityDefinitionSettingDirective.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\retail-be-chargeableentitysettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\Templates\ChargeableEntitySettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-synchronizer-editor.js" />

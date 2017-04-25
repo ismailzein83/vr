@@ -57,6 +57,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigData\BigDataManager.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="CityManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="Filters\GenericLKUPBEDefinitionFilter.cs" />
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionManager.cs" />
     <Compile Include="GenericLKUP\GenericLKUPManager.cs" />
