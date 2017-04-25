@@ -10,7 +10,8 @@
             addRateType: addRateType,
             editRateType: editRateType,
             registerObjectTrackingDrillDownToRateType: registerObjectTrackingDrillDownToRateType,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
         });
 
         function addRateType(onRateTypeAdded) {
@@ -39,7 +40,32 @@
 
             VRModalService.showModal('/Client/Modules/Common/Views/RateType/RateTypeEditor.html', parameters, settings);
         }
+        function viewHistoryRateType(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/RateType/RateTypeEditor.html', modalParameters, modalSettings);
+        };
+        function registerHistoryViewAction() {
 
+            var actionHistory = {
+                actionHistoryName: "VR_Common_RateType_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryRateType(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
         function getEntityUniqueName() {
             return "VR_Common_RateType";
         }
