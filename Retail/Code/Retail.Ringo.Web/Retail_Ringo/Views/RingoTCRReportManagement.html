@@ -1,0 +1,66 @@
+﻿<vr-panel ng-controller="Retail_Ringo_TCRReportManagementController">
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-select datasource="scopeModel.tCRReportType"
+                               selectedvalues="scopeModel.selectedTCRReportType"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               isrequired="true"
+                               label="Report Type"
+                               hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal" ng-if="scopeModel.selectedTCRReportType.value == 1">
+                    <vr-datetimepicker label="Date" isrequired value="scopeModel.fromDate" type="date"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal" ng-if="scopeModel.selectedTCRReportType.value == 0">
+                    <vr-select datasource="scopeModel.tCRReportMonth"
+                               selectedvalues="scopeModel.selectedTCRReportMonth"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               isrequired="true"
+                               label="Month"
+                               hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal" ng-if="scopeModel.selectedTCRReportType.value == 0">
+                    <vr-select datasource="scopeModel.tCRReportYear"
+                               selectedvalues="scopeModel.selectedTCRReportYear"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               isrequired="true"
+                               label="Year"
+                               hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+                <retail-ringo-operator-selector normal-col-num="3" ng-if="scopeModel.selectedTCRReportType.value == 0"
+                                                on-ready="scopeModel.onOperatorSelectorDirectiveReady"
+                                                customlabel="Operators"
+                                                isrequired
+                                                ismultipleselection>
+                </retail-ringo-operator-selector>
+
+                <retail-ringo-operator-selector normal-col-num="3" ng-if="scopeModel.selectedTCRReportType.value == 1"
+                                                on-ready="scopeModel.onSingleOperatorSelectorDirectiveReady"
+                                                customlabel="OperatorsSS"
+                                                isrequired>
+                </retail-ringo-operator-selector>
+</vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Generate" formname="formFilter" data-onclick="scopeModel.generateReport"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+
+    </vr-form>
+</vr-panel>

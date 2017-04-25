@@ -51,10 +51,14 @@
     <Compile Include="AgentNumber\AgentNumberRequestDetail.cs" />
     <Compile Include="AgentNumber\AgentNumberRequestQuery.cs" />
     <Compile Include="AgentNumber\AgentNumberSetting.cs" />
+    <Compile Include="DettaglioRingoMessageEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RingoMessageCountEntity.cs" />
     <Compile Include="RingoMessageFilter.cs" />
     <Compile Include="RingoReportFilter.cs" />
+    <Compile Include="SintesiRingoMessageEntity.cs" />
+    <Compile Include="TCRReportType.cs" />
+    <Compile Include="TCRRingoReportFilter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

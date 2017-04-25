@@ -114,6 +114,9 @@
     <Content Include="Retail_Ringo\Constant\AgentNumberStatusEnum.js" />
     <Content Include="Retail_Ringo\Constant\AgentNumberRequestStatusEnum.js" />
     <Content Include="Retail_Ringo\Constant\ModuleConfig.js" />
+    <Content Include="Retail_Ringo\Constant\TCRReportMonthsEnum.js" />
+    <Content Include="Retail_Ringo\Constant\TCRReportTypeEnum.js" />
+    <Content Include="Retail_Ringo\Constant\TCRReportYearEnum.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-entitiesinfo.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\retail-ringo-accountpart-definition-otherinfo.js" />
     <Content Include="Retail_Ringo\Directives\MainExtensions\AccountParts\Definition\Templates\AccountTypeEntitiesInfoPartDefinitionTemplate.html" />
@@ -132,6 +135,7 @@
     <Content Include="Retail_Ringo\Directives\MainExtensions\Pos\Templates\PosConvertorEditor.html" />
     <Content Include="Retail_Ringo\Directives\AgentRequestNumber\retail-ringo-agentrequestnumber-grid.js" />
     <Content Include="Retail_Ringo\Directives\AgentRequestNumber\Templates\AgentRequestNumberGridTemplate.html" />
+    <Content Include="Retail_Ringo\Directives\Operator\retail-ringo-operator-selector.js" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoAgentNumberRequestAPIService.js" />
     <Content Include="Retail_Ringo\Services\APIServices\RingoReportSheetAPIService.js" />
     <Content Include="Retail_Ringo\Services\RingoAgentNumberRequestService.js" />
@@ -141,6 +145,8 @@
     <Content Include="Retail_Ringo\Views\RingoAgentRequestNumber\RingoAgentRequestNumberManagementController.js" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagement.html" />
     <Content Include="Retail_Ringo\Views\RingoMNPReportManagementController.js" />
+    <Content Include="Retail_Ringo\Views\RingoTCRReportManagement.html" />
+    <Content Include="Retail_Ringo\Views\RingoTCRReportManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.Ringo.MainExtensions.csproj">
@@ -166,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Ringo\Reports\MNP Report.xls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Retail_Ringo\Directives\Operator\Templates\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

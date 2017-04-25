@@ -16,8 +16,17 @@
             });
         }
 
+        function DownloadTCRReport(filter) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Ringo_ModuleConfig.moduleName, controllerName, 'DownloadTCRReport'), filter,
+            {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+
+        }
         return ({
-            DownloadMNPReport: DownloadMNPReport
+            DownloadMNPReport: DownloadMNPReport,
+            DownloadTCRReport: DownloadTCRReport
         });
     }
 

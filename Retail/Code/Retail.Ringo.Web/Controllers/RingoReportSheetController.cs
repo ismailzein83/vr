@@ -24,5 +24,13 @@ namespace Retail.Ringo.Web.Controllers
             RingoReportSheetManager manager = new RingoReportSheetManager();
             return GetExcelResponse(manager.GenerateMNPReport(filter), string.Format("MNP Report{0}.xls", filter.FromDate.ToString("MMyy")));
         }
+
+        [HttpPost]
+        [Route("DownloadTCRReport")]
+        public object DownloadTCRReport(TCRRingoReportFilter filter)
+        {
+            RingoReportSheetManager manager = new RingoReportSheetManager();
+            return GetExcelResponse(manager.GenerateTCRReport(filter), string.Format("TCR Report{0}.zip", filter.From.Value.ToString("MMyy")));
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using Retail.Ringo.Entities;
 using Vanrise.Data.SQL;
@@ -41,7 +42,38 @@ namespace Retail.Ringo.Data.SQL
             return GetItemsText(string.Format(query_RingoMessage_LastDayWithData, BuildConditionClause(filter)), RingoMessageCountMapper, GetCommandAction(filter));
         }
 
+        public IEnumerable<SintesiRingoMessageEntity> GetSintesiRingoMessageEntityByRecipient(TCRRingoReportFilter filter)
+        {
+            return GetItemsText(string.Format(query_GetSintesi_ByICSIRecipient, BuildTCRRecipientConditionClause(filter)), SintesiRingoMessageMapper, GetCommandAction(filter));
+        }
+
+        public IEnumerable<SintesiRingoMessageEntity> GetSintesiRingoMessageEntityBySender(TCRRingoReportFilter filter)
+        {
+            return GetItemsText(string.Format(query_GetSintesi_ByICSISender, BuildTCRSenderConditionClause(filter)), SintesiRingoMessageMapper, GetCommandAction(filter));
+        }
+
+        public IEnumerable<DettaglioRingoMessageEntity> GetDettaglioRingoMessageEntityByRecipient(TCRRingoReportFilter filter)
+        {
+            return GetItemsText(string.Format(query_GetDettaglio_ByICSIRecipient, BuildTCRRecipientConditionClause(filter)), DettaglioRingoMessageMapper, GetCommandAction(filter));
+        }
+
+        public IEnumerable<DettaglioRingoMessageEntity> GetDettaglioRingoMessageEntityBySender(TCRRingoReportFilter filter)
+        {
+            return GetItemsText(string.Format(query_GetDettaglio_ByICSISender, BuildTCRSenderConditionClause(filter)), DettaglioRingoMessageMapper, GetCommandAction(filter));
+        }
+
         private static Action<System.Data.Common.DbCommand> GetCommandAction(RingoMessageFilter filter)
+        {
+            return (cmd) =>
+            {
+                if (filter.From.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@From", filter.From));
+                if (filter.To.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@To", filter.To));
+            };
+        }
+
+        private static Action<System.Data.Common.DbCommand> GetCommandAction(TCRRingoReportFilter filter)
         {
             return (cmd) =>
             {
@@ -79,6 +111,37 @@ namespace Retail.Ringo.Data.SQL
 
             return condition.ToString();
         }
+        string BuildTCRRecipientConditionClause(TCRRingoReportFilter filter)
+        {
+            StringBuilder condition = new StringBuilder();
+            if (filter.Operator != null && filter.Operator.Count > 0)
+            {
+                var listOperators = filter.Operator.Select(x => "'" + x + "'").ToList();
+                condition.AppendFormat(" and Recipient IN ({0}) ", String.Join(",", listOperators));
+            }
+            if (filter.From.HasValue)
+                condition.AppendFormat(" and MessageDate >= @From");
+            if (filter.To.HasValue)
+                condition.AppendFormat(" and MessageDate < @To");
+
+            return condition.ToString();
+        }
+
+        string BuildTCRSenderConditionClause(TCRRingoReportFilter filter)
+        {
+            StringBuilder condition = new StringBuilder();
+            if (filter.Operator != null && filter.Operator.Count > 0)
+            {
+                var listOperators = filter.Operator.Select(x => "'" + x + "'").ToList();
+                condition.AppendFormat(" and Sender IN ({0}) ", String.Join(",", listOperators));
+            }
+            if (filter.From.HasValue)
+                condition.AppendFormat(" and MessageDate >= @From");
+            if (filter.To.HasValue)
+                condition.AppendFormat(" and MessageDate < @To");
+
+            return condition.ToString();
+        }
         string BuildInStatement(List<int> lstIds)
         {
             return string.Join(",", lstIds);
@@ -96,9 +159,128 @@ namespace Retail.Ringo.Data.SQL
             };
         }
 
+        SintesiRingoMessageEntity SintesiRingoMessageMapper(IDataReader reader)
+        {
+            return new SintesiRingoMessageEntity
+            {
+                MessageDate = GetReaderValue<DateTime>(reader, "MessageDate"),
+                Network = reader["Network"] as string,
+                NumberOfRows = (int)reader["NumberOfRows"],
+                Operator = reader["Operator"] as string,
+                TotalTransferredCredit = (int)reader["TotalTransferredCredit"]
+            };
+        }
+
+        DettaglioRingoMessageEntity DettaglioRingoMessageMapper(IDataReader reader)
+        {
+            return new DettaglioRingoMessageEntity
+            {
+                Network = reader["Network"] as string,
+                RecipientRequestCode = reader["RecipientRequestCode"] as string,
+                Operator = reader["Operator"] as string,
+                TransferredCredit = (int)reader["TransferredCredit"]
+            };
+        }
+
         #endregion
 
         #region Queries
+
+        private const string query_GetDettaglio_ByICSIRecipient = @"
+            ;WITH ringo AS (
+            SELECT distinct [Sender]
+                  ,[Recipient]
+                  ,[SenderNetwork]
+                  ,[RecipientNetwork]
+                  ,[MSISDN]
+                  ,[RecipientRequestCode]
+                  ,[MessageType]
+                  ,[FileName]
+                 ,[MessageDate]
+                  ,[StateRequest]
+                  ,[FlagCredit]
+                  ,[TransferredCredit]
+                  ,[FlagRequestCreditTransfer]
+                  ,[AccountID]
+              FROM [Retail_EDR].[RingoMessage]
+               WHERE messagetype IN (10,12) {0} )
+
+                -- Ringo --> other
+               SELECT Recipient,RecipientNetwork,RecipientRequestCode, TransferredCredit
+               FROM ringo ";
+
+        private const string query_GetDettaglio_ByICSISender = @"
+            ;WITH ringo AS (
+            SELECT distinct [Sender]
+                  ,[Recipient]
+                  ,[SenderNetwork]
+                  ,[RecipientNetwork]
+                  ,[MSISDN]
+                  ,[RecipientRequestCode]
+                  ,[MessageType]
+                  ,[FileName]
+                 ,[MessageDate]
+                  ,[StateRequest]
+                  ,[FlagCredit]
+                  ,[TransferredCredit]
+                  ,[FlagRequestCreditTransfer]
+                  ,[AccountID]
+              FROM [Retail_EDR].[RingoMessage]
+               WHERE messagetype IN (10,12) {0} )
+
+            --Other --> Ringo
+                 SELECT Sender Operator,SenderNetwork Network,RecipientRequestCode NumberOfRows, TransferredCredit TotalTransferredCredit
+               FROM ringo ";
+
+        private const string query_GetSintesi_ByICSIRecipient = @"
+    	    ;WITH ringo AS (
+            SELECT distinct [Sender]
+                    ,[Recipient]
+                    ,[SenderNetwork]
+                    ,[RecipientNetwork]
+                    ,[MSISDN]
+                    ,[RecipientRequestCode]
+                    ,[MessageType]
+                    ,[FileName]
+                    ,[MessageDate]
+                    ,[StateRequest]
+                    ,[FlagCredit]
+                    ,[TransferredCredit]
+                    ,[FlagRequestCreditTransfer]
+                    ,[AccountID]
+                FROM [Retail_EDR].[RingoMessage]
+                WHERE messagetype IN (10,12) {0} )
+
+            -- Ringo --> other
+            SELECT Recipient Operator,RecipientNetwork Network,MessageDate,COUNT(*) NumberOfRows,SUM(TransferredCredit)  TotalTransferredCredit
+                FROM ringo
+                GROUP BY Recipient,RecipientNetwork,MessageDate
+                ORDER BY Recipient,RecipientNetwork,MessageDate";
+
+        private const string query_GetSintesi_ByICSISender = @"
+              ;WITH ringo AS (
+            SELECT distinct [Sender]
+                  ,[Recipient]
+                  ,[SenderNetwork]
+                  ,[RecipientNetwork]
+                  ,[MSISDN]
+                  ,[RecipientRequestCode]
+                  ,[MessageType]
+                  ,[FileName]
+                 ,[MessageDate]
+                  ,[StateRequest]
+                  ,[FlagCredit]
+                  ,[TransferredCredit]
+                  ,[FlagRequestCreditTransfer]
+                  ,[AccountID]
+              FROM [Retail_EDR].[RingoMessage]
+               WHERE messagetype IN (10,12) {0} )
+
+            --Other --> Ringo
+              SELECT  Sender Operator,SenderNetwork Network, MessageDate,COUNT(*) NumberOfRows,SUM(TransferredCredit) TotalTransferredCredit
+              FROM ringo
+              GROUP BY Sender,SenderNetwork,MessageDate
+              ORDER BY Sender,SenderNetwork,MessageDate";
 
         const string query_GetTotal_ByICSTSender = @"
     	                                            SELECT	count(*) 

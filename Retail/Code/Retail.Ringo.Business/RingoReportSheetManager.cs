@@ -8,6 +8,7 @@ using System.Web;
 using Aspose.Cells;
 using Retail.Ringo.Entities;
 using Vanrise.Entities;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace Retail.Ringo.Business
 {
@@ -99,7 +100,353 @@ namespace Retail.Ringo.Business
             return wbk.SaveToStream();
         }
 
+        public byte[] GenerateTCRReport(TCRRingoReportFilter filter)
+        {
+            Dictionary<string, byte[]> dicAllData = new Dictionary<string, byte[]>();
+
+            if (filter.ReportType == TCRReportType.Dettaglio)
+            {
+                filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 00, 00, 00);
+                filter.To = new DateTime(filter.From.Value.Year,filter.From.Value.Month, filter.From.Value.Day,23,59,59);
+            }
+            else
+            {
+                filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, 01, 00, 00, 00);
+                filter.To = new DateTime(filter.From.Value.Year, filter.From.Value.Month, DateTime.DaysInMonth(filter.From.Value.Year, filter.From.Value.Month), 23, 59, 59);
+            }
+            RingoMessageManager ringoMessageManager = new RingoMessageManager();
+
+            if (filter.ReportType == TCRReportType.Sintesi)
+            {
+                IEnumerable<SintesiRingoMessageEntity> listSintesiRecipient = ringoMessageManager.GetSintesiRingoMessageEntityByRecipient(new TCRRingoReportFilter
+                {
+                    Operator = filter.Operator,
+                    From = filter.From,
+                    To = filter.To
+                });
+
+                IEnumerable<SintesiRingoMessageEntity> listSintesiSender = ringoMessageManager.GetSintesiRingoMessageEntityBySender(new TCRRingoReportFilter
+                {
+                    Operator = filter.Operator,
+                    From = filter.From,
+                    To = filter.To
+                });
+
+                foreach (var item in GetData(listSintesiRecipient, filter, true))
+                {
+                    if (!dicAllData.ContainsKey(item.Key))
+                        dicAllData.Add(item.Key, item.Value);
+                }
+
+                foreach (var item in GetData(listSintesiSender, filter, false))
+                {
+                    if (!dicAllData.ContainsKey(item.Key))
+                        dicAllData.Add(item.Key, item.Value);
+                }
+            }
+            else
+            {
+                IEnumerable<DettaglioRingoMessageEntity> listDettaglioRecipient = ringoMessageManager.GetDettaglioRingoMessageEntityByRecipient(new TCRRingoReportFilter
+                {
+                    Operator = filter.Operator,
+                    From = filter.From,
+                    To = filter.To
+                });
+
+                IEnumerable<DettaglioRingoMessageEntity> listDettaglioSender = ringoMessageManager.GetDettaglioRingoMessageEntityBySender(new TCRRingoReportFilter
+                {
+                    Operator = filter.Operator,
+                    From = filter.From,
+                    To = filter.To
+                });
+
+                foreach (var item in GetData(listDettaglioRecipient, filter, true))
+                {
+                    if (!dicAllData.ContainsKey(item.Key))
+                        dicAllData.Add(item.Key, item.Value);
+                }
+
+                foreach (var item in GetData(listDettaglioSender, filter, false))
+                {
+                    if (!dicAllData.ContainsKey(item.Key))
+                        dicAllData.Add(item.Key, item.Value);
+                }
+            }
+
+            return Compress(dicAllData);
+        }
+
+
         #region Private Methods
+
+        private Dictionary<string, byte[]> GetData(IEnumerable<SintesiRingoMessageEntity> listSintesiRecipient, TCRRingoReportFilter filter, bool recipient)
+        {
+            List<SintesiRingoMessageEntity> listOperators = listSintesiRecipient.ToList();
+            Dictionary<string, byte[]> dicData = new Dictionary<string, byte[]>();
+
+            bool newOperator = true;
+            var sb = new StringBuilder();
+
+            int incremental = 1;
+            int transactionCount = 0;
+            int sumTransferredCredit = 0;
+
+            for (int i = 0; i < listOperators.Count(); i++)
+            {
+                if (newOperator)
+                {
+                    incremental = 1;
+                    transactionCount = 0;
+                    sumTransferredCredit = 0;
+
+                    newOperator = false;
+                    if(recipient)
+                        sb.AppendLine(SintesiRingoOperatorRecipientHeader(listOperators[i], filter));
+                    else
+                        sb.AppendLine(SintesiRingoOperatorSenderHeader(listOperators[i], filter));
+                }
+
+                sumTransferredCredit = sumTransferredCredit + listOperators[i].TotalTransferredCredit;
+                transactionCount = transactionCount + listOperators[i].NumberOfRows;
+
+                if (i + 1 < listOperators.Count())
+                {
+                    if (listOperators[i].Operator != listOperators[i + 1].Operator)
+                    {
+                        sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
+
+                        if (recipient)
+                            sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter,
+                                transactionCount, sumTransferredCredit, incremental + 2));
+                        else
+                            sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter,
+                                transactionCount, sumTransferredCredit, incremental + 2));
+
+                        var myString = sb.ToString();
+                        var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
+
+                        dicData.Add(listOperators[i].Operator, myByteArray);
+                        newOperator = true;
+                    }
+                    else
+                    {
+                        sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
+                    }
+                }
+                else
+                {
+                    sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
+
+                    if (recipient)
+                        sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
+                    else
+                        sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
+
+                    var myString = sb.ToString();
+                    var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
+                    
+                    string fileName;
+                    if (recipient)
+                        fileName = "TCR_Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMM");
+                    else
+                        fileName = "TCR_" + listOperators[i].Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMM");
+
+                    dicData.Add(fileName, myByteArray);
+                }
+
+                incremental++;
+            }
+            return dicData;
+        }
+
+        private Dictionary<string, byte[]> GetData(IEnumerable<DettaglioRingoMessageEntity> listDettaglioRecipient, TCRRingoReportFilter filter, bool recipient)
+        {
+            List<DettaglioRingoMessageEntity> listOperators = listDettaglioRecipient.ToList();
+            Dictionary<string, byte[]> dicData = new Dictionary<string, byte[]>();
+
+            bool newOperator = true;
+            var sb = new StringBuilder();
+
+            int incremental = 1;
+            int transactionCount = 0;
+            int sumTransferredCredit = 0;
+
+            for (int i = 0; i < listOperators.Count(); i++)
+            {
+                if (newOperator)
+                {
+                    incremental = 1;
+                    transactionCount = 0;
+                    sumTransferredCredit = 0;
+
+                    newOperator = false;
+                    if (recipient)
+                        sb.AppendLine(DettaglioRingoOperatorRecipientHeader(listOperators[i], filter));
+                    else
+                        sb.AppendLine(DettaglioRingoOperatorSenderHeader(listOperators[i], filter));
+                }
+
+                sumTransferredCredit = sumTransferredCredit + listOperators[i].TransferredCredit;
+                transactionCount = transactionCount + 1;
+
+                if (i + 1 < listOperators.Count())
+                {
+                    if (listOperators[i].Operator != listOperators[i + 1].Operator)
+                    {
+                        sb.AppendLine(DettaglioRingoOperatorBody(listOperators[i], incremental));
+
+                        if (recipient)
+                            sb.AppendLine(DettaglioRingoOperatorRecipientFooter(listOperators[i], filter,
+                                transactionCount, sumTransferredCredit, incremental + 2));
+                        else
+                            sb.AppendLine(DettaglioRingoOperatorSenderFooter(listOperators[i], filter,
+                                transactionCount, sumTransferredCredit, incremental + 2));
+
+                        var myString = sb.ToString();
+                        var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
+                        string fileName;
+                        if (recipient)
+                            fileName = "Ringo_"+ listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMMdd");
+                        else
+                            fileName = listOperators[i].Operator + "_Ringo_" + "_" + filter.From.Value.ToString("yyyyMMdd");
+
+                        dicData.Add(fileName, myByteArray);
+                        newOperator = true;
+                    }
+                    else
+                    {
+                        sb.AppendLine(DettaglioRingoOperatorBody(listOperators[i], incremental));
+                    }
+                }
+                else
+                {
+                    sb.AppendLine(DettaglioRingoOperatorBody(listOperators[i], incremental));
+
+                    if (recipient)
+                        sb.AppendLine(DettaglioRingoOperatorRecipientFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
+                    else
+                        sb.AppendLine(DettaglioRingoOperatorSenderFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
+
+                    var myString = sb.ToString();
+                    var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
+
+                    string fileName;
+                    if (recipient)
+                        fileName = "Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMMdd");
+                    else
+                        fileName = listOperators[i].Operator + "_Ringo_" + "_" + filter.From.Value.ToString("yyyyMMdd");
+
+                    dicData.Add(fileName, myByteArray);
+                }
+
+                incremental++;
+            }
+            return dicData;
+        }
+
+        private static byte[] Compress(Dictionary<string, byte[]> data)
+        {
+
+            System.IO.MemoryStream memoryStream = new System.IO.MemoryStream();
+            ZipOutputStream s = new ZipOutputStream(memoryStream);
+            s.SetLevel(9);
+            int i = 0;
+            foreach (var item in data)
+            {
+                ZipEntry entry = new ZipEntry(item.Key+ ".txt");
+                s.PutNextEntry(entry);
+                s.Write(item.Value, 0, item.Value.Length);
+            }
+            s.Finish();
+            s.Close();
+            return memoryStream.ToArray();
+        }
+
+        #region Sintesi Functions
+        string SintesiRingoOperatorRecipientHeader(SintesiRingoMessageEntity sintesiRingoMessageEntity, TCRRingoReportFilter filter)
+        {
+            return (string.Format(" RS{0}NOVA{1}ICSI{2}RINGOT{3}", sintesiRingoMessageEntity.Network,
+            sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
+            filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
+        }
+
+        string SintesiRingoOperatorBody(SintesiRingoMessageEntity sintesiRingoMessageEntity,
+            TCRRingoReportFilter filter, int incremental)
+        {
+            return (string.Format(" 20{0}{1}{2}{3}",
+                incremental.ToString("D10"), filter.From.Value.ToString("yyyyMMdd"), sintesiRingoMessageEntity.TotalTransferredCredit.ToString("D10"),
+                sintesiRingoMessageEntity.NumberOfRows.ToString("D10")));
+        }
+
+        string SintesiRingoOperatorRecipientFooter(SintesiRingoMessageEntity sintesiRingoMessageEntity,
+            TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
+        {
+            return (string.Format(" RF{0}NOVA{1}ICSI{2}RINGOT{3}{4}{5}{6}", sintesiRingoMessageEntity.Network,
+                sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
+                filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
+                incremental.ToString("D10")));
+        }
+
+        string SintesiRingoOperatorSenderHeader(SintesiRingoMessageEntity sintesiRingoMessageEntity,
+            TCRRingoReportFilter filter)
+        {
+            return (string.Format(" RSNOVA{0}ICSI{1}{2}RINGIN{3}", sintesiRingoMessageEntity.Network,
+            sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
+            filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
+        }
+
+        string SintesiRingoOperatorSenderFooter(SintesiRingoMessageEntity sintesiRingoMessageEntity,
+            TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
+        {
+            return (string.Format(" RFNOVA{0}ICSI{1}{2}RINGIN{3}{4}{5}{6}", sintesiRingoMessageEntity.Network,
+                sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
+                filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
+                incremental.ToString("D10")));
+        }
+
+        #endregion
+
+        #region Dettaglio Functions
+        string DettaglioRingoOperatorRecipientHeader(DettaglioRingoMessageEntity dettaglioRingoMessageEntity,
+            TCRRingoReportFilter filter)
+        {
+            return (string.Format(" PC{0}NOVA{1}ICSI{2}RINGOT{3}", dettaglioRingoMessageEntity.Network,
+            dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
+            filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
+        }
+
+        string DettaglioRingoOperatorBody(DettaglioRingoMessageEntity dettaglioRingoMessageEntity, int incremental)
+        {
+            return (string.Format(" 10{0}{1}{2}",
+                incremental.ToString("D10"), dettaglioRingoMessageEntity.RecipientRequestCode, dettaglioRingoMessageEntity.TransferredCredit.ToString("D10")));
+        }
+
+        string DettaglioRingoOperatorRecipientFooter(DettaglioRingoMessageEntity dettaglioRingoMessageEntity,
+            TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
+        {
+            return (string.Format(" EF{0}NOVA{1}ICSI{2}RINGOT{3}{4}{5}{6}", dettaglioRingoMessageEntity.Network,
+                dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
+                filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
+                incremental.ToString("D10")));
+        }
+
+        string DettaglioRingoOperatorSenderHeader(DettaglioRingoMessageEntity dettaglioRingoMessageEntity, TCRRingoReportFilter filter)
+        {
+            return (string.Format(" PCNOVA{0}ICSI{1}{2}RINGIN{3}", dettaglioRingoMessageEntity.Network,
+            dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
+            filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
+        }
+
+        string DettaglioRingoOperatorSenderFooter(DettaglioRingoMessageEntity dettaglioRingoMessageEntity,
+            TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
+        {
+            return (string.Format(" EFNOVA{0}ICSI{1}{2}RINGIN{3}{4}{5}{6}", dettaglioRingoMessageEntity.Network,
+                dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
+                filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
+                incremental.ToString("D10")));
+        }
+
+        #endregion
         void UpdateWorkSheetByRow(Dictionary<string, RingoMessageCountEntity> data, Workbook wbk, int sheetIndex, int rowIndex, int columnIndex, int valueRow, int count)
         {
 

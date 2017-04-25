@@ -38,5 +38,25 @@ namespace Retail.Ringo.Business
             IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
             return dataManager.GetRingoMessageCountEntityBySender_LastDay(filter).ToDictionary(k => k.Name, v => v);
         }
+        public IEnumerable<SintesiRingoMessageEntity> GetSintesiRingoMessageEntityByRecipient(TCRRingoReportFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetSintesiRingoMessageEntityByRecipient(filter);
+        }
+        public IEnumerable<SintesiRingoMessageEntity> GetSintesiRingoMessageEntityBySender(TCRRingoReportFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetSintesiRingoMessageEntityBySender(filter);
+        }
+        public IEnumerable<DettaglioRingoMessageEntity> GetDettaglioRingoMessageEntityByRecipient(TCRRingoReportFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetDettaglioRingoMessageEntityByRecipient(filter);
+        }
+        public IEnumerable<DettaglioRingoMessageEntity> GetDettaglioRingoMessageEntityBySender(TCRRingoReportFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetDettaglioRingoMessageEntityBySender(filter);
+        }
     }
 }

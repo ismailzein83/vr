@@ -1,0 +1,20 @@
+﻿app.constant('Retail_Ringo_TCRReportYear', {
+    2000: { value: 2000, description: '2000' },
+    2001: { value: 2001, description: '2001' },
+    2002: { value: 2002, description: '2002' },
+    2003: { value: 2003, description: '2003' },
+    2004: { value: 2004, description: '2004' },
+    2005: { value: 2005, description: '2005' },
+    2006: { value: 2006, description: '2006' },
+    2007: { value: 2007, description: '2007' },
+    2008: { value: 2008, description: '2008' },
+    2009: { value: 2009, description: '2009' },
+    2010: { value: 2010, description: '2010' },
+    2011: { value: 2011, description: '2011' },
+    2012: { value: 2012, description: '2012' },
+    2013: { value: 2013, description: '2013' },
+    2014: { value: 2014, description: '2014' },
+    2015: { value: 2015, description: '2015' },
+    2016: { value: 2016, description: '2016' },
+    2017: { value: 2017, description: '2017' }
+});
