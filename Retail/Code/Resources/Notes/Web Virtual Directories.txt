@@ -27,3 +27,4 @@ Retail_Zajil			C:\TFS\Retail\Code\Retail.Zajil.Web\Retail_Zajil
 Reprocess				C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
 Retail_Teles			C:\TFS\Retail\Code\Retail.Teles.Web\Retail_Teles
 VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
+Retail_MultiNet			C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet
