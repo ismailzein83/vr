@@ -101,8 +101,21 @@ when not matched by target then
                 {
                     var gridColumn = accountDefSettings.GridDefinition.ColumnDefinitions[i];
                     VRRetailBEVisibilityAccountDefinitionGridColumns columnVisibility = accountDefinitionVisibility.GridColumns.FindRecord(itm => itm.FieldName == gridColumn.FieldName);
-                    if (columnVisibility == null)
+                    if (columnVisibility != null)
+                    {
+                        if (!string.IsNullOrEmpty(columnVisibility.Header))
+                            gridColumn.Header = columnVisibility.Header;
+                        if(columnVisibility.SpecialAvailabilitySettings)
+                        {
+                            gridColumn.IsAvailableInRoot = columnVisibility.IsAvailableInRoot;
+                            gridColumn.IsAvailableInSubAccounts = columnVisibility.IsAvailableInSubAccounts;
+                            gridColumn.SubAccountsAvailabilityCondition = columnVisibility.SubAccountsAvailabilityCondition;
+                        }
+                    }
+                    else
+                    {
                         accountDefSettings.GridDefinition.ColumnDefinitions.RemoveAt(i);
+                    }
                 }
             }
 
@@ -113,8 +126,19 @@ when not matched by target then
                 {
                     var view = accountDefSettings.AccountViewDefinitions[i];
                     VRRetailBEVisibilityAccountDefinitionView viewVisibility = accountDefinitionVisibility.Views.FindRecord(itm => itm.ViewId == view.AccountViewDefinitionId);
-                    if (viewVisibility == null)
+                    if (viewVisibility != null)
+                    {
+                        if (viewVisibility.SpecialCondition)
+                            view.AvailabilityCondition = viewVisibility.AvailabilityCondition;
+                        if (viewVisibility.SpecialDrillDownSectionName)
+                            view.DrillDownSectionName = viewVisibility.DrillDownSectionName;
+                        if (viewVisibility.SpecialAccount360DegreeSectionName)
+                            view.Account360DegreeSectionName = viewVisibility.Account360DegreeSectionName;
+                    }
+                    else
+                    {
                         accountDefSettings.AccountViewDefinitions.RemoveAt(i);
+                    }
                 }
             }
 
@@ -125,8 +149,17 @@ when not matched by target then
                 {
                     var action = accountDefSettings.ActionDefinitions[i];
                     VRRetailBEVisibilityAccountDefinitionAction actionVisibility = accountDefinitionVisibility.Actions.FindRecord(itm => itm.ActionId == action.AccountActionDefinitionId);
-                    if (actionVisibility == null)
+                    if (actionVisibility != null)
+                    {
+                        if (!String.IsNullOrEmpty(actionVisibility.Title))
+                            action.Name = actionVisibility.Title;
+                        if (actionVisibility.SpecialCondition)
+                            action.AvailabilityCondition = actionVisibility.AvailabilityCondition;
+                    }
+                    else
+                    {
                         accountDefSettings.ActionDefinitions.RemoveAt(i);
+                    }
                 }
             }
 
@@ -232,8 +265,20 @@ when not matched by target then
                             VRRetailBEVisibilityAccountDefinitionAccountType accountTypeVisibility = accountDefinitionVisibility.AccountTypes.FindRecord(itm => itm.AccountTypeId == accountType.AccountTypeId);
                             if (accountTypeVisibility != null)
                             {
-                                AccountType visibileAccountType = Serializer.Deserialize<AccountType>(Serializer.Serialize(accountType));
-                                visibleAccountTypes.Add(visibileAccountType);
+                                AccountType visibleAccountType = Serializer.Deserialize<AccountType>(Serializer.Serialize(accountType));
+                                if (!String.IsNullOrEmpty(accountTypeVisibility.Title))
+                                    visibleAccountType.Title = accountTypeVisibility.Title;
+                                if(accountTypeVisibility.Parts != null)
+                                {
+                                    for (int i = visibleAccountType.Settings.PartDefinitionSettings.Count - 1; i >= 0; i--)
+                                    {
+                                        var partDefinition = visibleAccountType.Settings.PartDefinitionSettings[i];
+                                        var partDefinitionVisibility = accountTypeVisibility.Parts.FindRecord(itm => itm.PartDefinitionId == partDefinition.PartDefinitionId);
+                                        if (partDefinitionVisibility == null)
+                                            visibleAccountType.Settings.PartDefinitionSettings.RemoveAt(i);                                        
+                                    }
+                                }
+                                visibleAccountTypes.Add(visibleAccountType);
                             }
                         }
                     }
@@ -298,6 +343,8 @@ when not matched by target then
                             if (serviceTypeVisibility != null)
                             {
                                 ServiceType visibileServiceType = Serializer.Deserialize<ServiceType>(Serializer.Serialize(serviceType));
+                                if (!String.IsNullOrEmpty(serviceTypeVisibility.Title))
+                                    visibileServiceType.Title = serviceTypeVisibility.Title;
                                 visibleServiceTypes.Add(visibileServiceType);
                             }
                         }
@@ -366,6 +413,8 @@ when not matched by target then
                             if (productDefinitionVisibility != null)
                             {
                                 ProductDefinition visibileProductDefinition = Serializer.Deserialize<ProductDefinition>(Serializer.Serialize(productDefinition));
+                                if (!String.IsNullOrEmpty(productDefinitionVisibility.Title))
+                                    visibileProductDefinition.Name = productDefinitionVisibility.Title;
                                 visibleProductDefinitions.Add(visibileProductDefinition);
                             }
                         }
@@ -397,6 +446,8 @@ when not matched by target then
                             if (packageDefinitionVisibility != null)
                             {
                                 PackageDefinition visibilePackageDefinition = Serializer.Deserialize<PackageDefinition>(Serializer.Serialize(packageDefinition));
+                                if (!String.IsNullOrEmpty(packageDefinitionVisibility.Title))
+                                    visibilePackageDefinition.Name = packageDefinitionVisibility.Title;
                                 visiblePackageDefinitions.Add(visibilePackageDefinition);
                             }
                         }
@@ -415,6 +466,10 @@ when not matched by target then
 
         public List<VRRetailBEVisibilityAccountDefinitionGridColumns> GridColumns { get; set; }
 
+        public List<VRRetailBEVisibilityAccountDefinitionGridExportColumn> GridExportColumns { get; set; }
+
+        public List<VRRetailBEVisibilityAccountDefinitionExtraField> ExtraFields { get; set; }
+
         public List<VRRetailBEVisibilityAccountDefinitionView> Views { get; set; }
 
         public List<VRRetailBEVisibilityAccountDefinitionAction> Actions { get; set; }
@@ -432,35 +487,91 @@ when not matched by target then
     public class VRRetailBEVisibilityAccountDefinitionGridColumns
     {
         public string FieldName { get; set; }
+
+        public string Header { get; set; }
+
+        public bool SpecialAvailabilitySettings { get; set; }
+
+        public bool IsAvailableInRoot { get; set; }
+
+        public bool IsAvailableInSubAccounts { get; set; }
+
+        public AccountCondition SubAccountsAvailabilityCondition { get; set; }
+    }
+
+    public class VRRetailBEVisibilityAccountDefinitionGridExportColumn
+    {
+        public string FieldName { get; set; }
+
+        public string Header { get; set; }
+    }
+
+    public class VRRetailBEVisibilityAccountDefinitionExtraField
+    {
+        public string ExtraFieldId { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionView
     {
         public Guid ViewId { get; set; }
+
+        public bool SpecialCondition { get; set; }
+
+        public AccountCondition AvailabilityCondition { get; set; }
+
+        public bool SpecialDrillDownSectionName { get; set; }
+                
+        public string DrillDownSectionName { get; set; }
+
+        public bool SpecialAccount360DegreeSectionName { get; set; }
+
+        public string Account360DegreeSectionName { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionAction
     {
         public Guid ActionId { get; set; }
+
+        public string Title { get; set; }
+
+        public bool SpecialCondition { get; set; }
+
+        public AccountCondition AvailabilityCondition { get; set; }
+
     }
 
     public class VRRetailBEVisibilityAccountDefinitionAccountType
     {
         public Guid AccountTypeId { get; set; }
+
+        public string Title { get; set; }
+
+        public List<VRRetailBEVisibilityAccountDefinitionAccountTypePart> Parts { get; set; }
+    }
+
+    public class VRRetailBEVisibilityAccountDefinitionAccountTypePart
+    {
+        public Guid PartDefinitionId { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionServiceType
     {
         public Guid ServiceTypeId { get; set; }
+
+        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionProductDefinition
     {
         public Guid ProductDefinitionId { get; set; }
+
+        public string Title { get; set; }
     }
 
     public class VRRetailBEVisibilityAccountDefinitionPackageDefinition
     {
         public Guid PackageDefinitionId { get; set; }
+
+        public string Title { get; set; }
     }
 }
