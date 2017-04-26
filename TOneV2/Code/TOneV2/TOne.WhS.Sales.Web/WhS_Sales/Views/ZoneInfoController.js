@@ -40,7 +40,7 @@
             if (zoneBED != undefined)
                 $scope.scopeModel.zoneBED = UtilsService.getShortDate(new Date(zoneBED));
 
-            $scope.scopeModel.sectionHeader = (zoneName != undefined) ? ('Zone: ' + zoneName) : 'Zone';
+            $scope.scopeModel.zoneName = zoneName;
             $scope.scopeModel.zoneEED = (zoneEED != undefined) ? UtilsService.getShortDate(new Date(zoneEED)) : undefined;
 
             $scope.scopeModel.directiveTabs = [{

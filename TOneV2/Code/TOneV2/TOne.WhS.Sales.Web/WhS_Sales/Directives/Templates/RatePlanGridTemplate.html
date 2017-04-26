@@ -10,7 +10,7 @@
     </div>
     <vr-row removeline="true">
         <vr-columns width="fullrow">
-            <div >
+            <div>
                 <vr-datagrid on-ready="onGridReady"
                              datasource="zoneItems"
                              loadmoredata="loadMoreData"
@@ -39,6 +39,19 @@
                         </span>
                     </vr-datagridcolumn>
 
+                    <vr-datagridcolumn headertext="'Current Rate'"
+                                       type="'Number'"
+                                       numberprecision="'LongPrecision'"
+                                       widthfactor="7"
+                                       disablesorting="true">
+                        <div style="text-align: right">
+                            <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
+                            <span ng-if="dataItem.FutureNormalRate != null"
+                                  style="cursor: pointer; text-decoration: underline"
+                                  ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
+                        </div>
+                    </vr-datagridcolumn>
+
                     <vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
                         <div vr-loader="dataItem.isLoadingRouteOptions">
                             <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
@@ -55,22 +68,9 @@
                                        type="'Number'"
                                        numberprecision="'LongPrecision'"
                                        isfielddynamic="true"
-                                       columnindex="3 + $index"
+                                       columnindex="5 + $index"
                                        widthfactor="7"
                                        disablesorting="true">
-                    </vr-datagridcolumn>
-
-                    <vr-datagridcolumn headertext="'Current Rate'"
-                                       type="'Number'"
-                                       numberprecision="'LongPrecision'"
-                                       widthfactor="7"
-                                       disablesorting="true">
-                        <div style="text-align: right">
-                            <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
-                            <span ng-if="dataItem.FutureNormalRate != null"
-                                  style="cursor: pointer; text-decoration: underline"
-                                  ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
-                        </div>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn widthfactor="5">
@@ -78,7 +78,7 @@
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Margin'" field="'Margin'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Margin %'" field="'MarginPercentage'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Margin %'" field="'MarginPercentage'" type="'Number'" numberprecision="'DecimalPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Calculated Rate'"
                                        field="'CalculatedRate'"
@@ -94,7 +94,6 @@
                             <span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
                         </span>
                     </vr-datagridcolumn>
-
 
                     <vr-datagridcolumn headertext="'New Rate'" widthfactor="7" disablesorting="true">
                         <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
