@@ -25,10 +25,9 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public void SavePricelistFiles(ISalePricelistFileContext context)
         {
-            var priceListsToSave = new List<SalePriceList>();
-
+            Dictionary<int, SalePriceList> customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
             if (context.SalePriceLists != null && context.SalePriceLists.Any())
-                priceListsToSave.AddRange(context.SalePriceLists);
+                customerPriceListsByCustomerId = GetSalePriceListByCustomerId(context.SalePriceLists);
 
             if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Any())
             {
@@ -40,8 +39,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     ProcessInstanceId = context.ProcessInstanceId
                 };
                 SalePriceListOutputContext outputContext = PrepareSalePriceListContext(inputcontext);
-
-                Dictionary<int, SalePriceList> customerPriceListsByCustomerId = GetSalePriceListByCustomerId(context.SalePriceLists);
 
                 var customerSellingProductManager = new CustomerSellingProductManager();
 
@@ -67,7 +64,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (customerZoneNotifications.Count > 0)
                     {
                         VRFile file = GetPriceListFile(customerId, customerZoneNotifications);
-                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, priceListsToSave);
+                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
                         customerPriceListChange.PriceListId = priceList.PriceListId;
@@ -75,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 BulkInsertCustomerChanges(context.CustomerPriceListChanges.ToList(), context.ProcessInstanceId);
             }
-            BulkInsertPriceList(priceListsToSave);
+            BulkInsertPriceList(customerPriceListsByCustomerId.Values.ToList());
         }
         public bool SendPriceList(long salePriceListId)
         {
@@ -285,6 +282,8 @@ namespace TOne.WhS.BusinessEntity.Business
             var notSentCustomerChanges = StructureCustomerPriceListChanges(notSentChangesForThisCustomer.Where(p => p.PriceListId >= lastSentPriceListId)
                         .OrderByDescending((p => p.PriceListId)));
 
+            if (notSentCustomerChanges == null) return currentChangesByCountryId;
+
             var lastSentPriceListChanges = salePriceListChangeManager.GetCustomerChangesByPriceListId(lastSentPriceListId);
             foreach (var notSentpricelist in notSentCustomerChanges)
             {
@@ -403,7 +402,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         private List<SalePLZoneNotification> CreateNotificationsForAllZoneChanges(int customerId, int sellingProductId, ZoneChangesByCountryId allChangesByCountryId,
-            Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry, SaleEntityZoneRateLocator futureLocator)
+             Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry, SaleEntityZoneRateLocator futureLocator)
         {
             List<SalePLZoneNotification> salePlZoneNotifications = new List<SalePLZoneNotification>();
             foreach (var country in allChangesByCountryId)
@@ -459,7 +458,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return salePlZoneNotifications;
         }
-
         private SalePLRateNotification GetRateNotificationFromExistingData(int customerId, int sellingProductId, long zoneId, string zoneName, SaleEntityZoneRateLocator futureLocator)
         {
             SaleEntityZoneRate zoneRate = futureLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
@@ -525,7 +523,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 CreatedTime = DateTime.Today,
             };
         }
-        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists, List<SalePriceList> priceListToSave)
+        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists)
         {
             SalePriceList salePriceList;
             var salePriceListManager = new SalePriceListManager();
@@ -539,9 +537,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     OwnerId = customer.CarrierAccountId,
                     OwnerType = SalePriceListOwnerType.Customer,
                     PriceListId = salePriceListId,
-                    EffectiveOn = DateTime.Today
+                    EffectiveOn = DateTime.Today,
+                    CreatedTime = DateTime.Now
                 };
-                priceListToSave.Add(salePriceList);
+                currentSalePriceLists.Add(salePriceList.PriceListId, salePriceList);
             }
             salePriceList.PriceListType = customerSalePriceListType;
             salePriceList.FileId = fileManager.AddFile(file);
