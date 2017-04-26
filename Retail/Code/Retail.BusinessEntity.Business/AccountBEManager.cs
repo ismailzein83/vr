@@ -93,15 +93,16 @@ namespace Retail.BusinessEntity.Business
             Account account = this.GetAccount(accountBEDefinitionId, accountId);
             if (account != null)
             {
-                AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
-                return GetAccountName(account, accountType);
+                return GetAccountName(account);
             }
             return null;
         }
-        public string GetAccountName(Account account, AccountType accountType)
+        public string GetAccountName(Account account)
         {
             if (account != null)
             {
+                AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
+                accountType.ThrowIfNull("accountType", account.TypeId);
                 string name = account.Name;
                 if (accountType.Settings.ShowConcatenatedName && account.ParentAccountId.HasValue)
                 {
@@ -941,11 +942,10 @@ namespace Retail.BusinessEntity.Business
         }
         private AccountInfo AccountInfoMapper(Account account)
         {
-            AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
             return new AccountInfo
             {
                 AccountId = account.AccountId,
-                Name = GetAccountName(account, accountType)
+                Name = GetAccountName(account)
             };
         }
 
