@@ -8,14 +8,14 @@ CREATE PROCEDURE [genericdata].[sp_DataRecordType_Update]
 	@Name nvarchar(255),
 	@ParentId uniqueidentifier,
 	@Fields VARCHAR(MAX),
-	@ExtraFieldsEvaluator nvarchar(max)
-	
+	@ExtraFieldsEvaluator nvarchar(max),
+	@Settings nvarchar(max)
 AS
 BEGIN
 IF NOT EXISTS(SELECT 1 FROM genericdata.[DataRecordType] WHERE ID != @ID AND Name = @Name)
 	BEGIN
 		Update genericdata.[DataRecordType]
-		Set Name = @Name, ParentID = @ParentId , Fields = @Fields, ExtraFieldsEvaluator = @ExtraFieldsEvaluator
+		Set Name = @Name, ParentID = @ParentId , Fields = @Fields, ExtraFieldsEvaluator = @ExtraFieldsEvaluator, Settings = @Settings
 		Where ID = @ID
 	END
 END
