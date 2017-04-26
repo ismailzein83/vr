@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService', 'VRNotificationService',
-    function (Retail_BE_AccountPackageAPIService, VRNotificationService) {
+app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService', 'VRNotificationService', 'Retail_BE_AccountPackageService',
+    function (Retail_BE_AccountPackageAPIService, VRNotificationService, Retail_BE_AccountPackageService) {
         return {
             restrict: 'E',
             scope: {
@@ -27,7 +27,7 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.menuActions = [];
                 $scope.scopeModel.accountPackages = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
@@ -53,9 +53,9 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
-                        assignedToAccountId = payload.AssignedToAccountId
+                        assignedToAccountId = payload.AssignedToAccountId;
                     }
-
+                   
                     return gridAPI.retrieveData(buildGridQuery());
                 };
 
@@ -68,7 +68,22 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions = [];
+                $scope.scopeModel.menuActions.push({
+                    name: 'Edit',
+                    clicked: editAccountPackage,
+                    haspermession: hasEditAccountPackagePermission
+                });
+            }
+            function hasEditAccountPackagePermission() {
+                return Retail_BE_AccountPackageAPIService.DoesUserHaveAddAccess(accountBEDefinitionId);
+            }
+
+            function editAccountPackage(accountPackageItem) {
+                var onAccountPackageUpdated = function (accountPackageItem) {
+                    gridAPI.itemUpdated(accountPackageItem);
+                };
+
+                Retail_BE_AccountPackageService.editAccountPackage(accountPackageItem.Entity.AccountPackageId,accountBEDefinitionId,accountPackageItem.Entity.AccountId,onAccountPackageUpdated);
             }
 
             function buildGridQuery() {

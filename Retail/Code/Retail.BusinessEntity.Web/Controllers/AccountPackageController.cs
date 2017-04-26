@@ -45,5 +45,15 @@ namespace Retail.BusinessEntity.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.AddAccountPackage(accountPackageToAdd);
         }
+         [HttpPost]
+         [Route("UpdateAccountPackage")]
+        public object UpdateAccountPackage(AccountPackageToEdit accountPackageToEdit)
+        {
+
+            if (!_manager.DoesUserHaveEditAccountPackageAccess(accountPackageToEdit.AccountPackageId))
+                return GetUnauthorizedResponse();
+            return _manager.UpdateAccountPackage(accountPackageToEdit);
+        }
+        
     }
 }

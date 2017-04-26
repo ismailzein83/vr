@@ -27,12 +27,17 @@
                 accountBEDefinitionId: accountBEDefinitionId
             });
         }
+        
+        function UpdateAccountPackage(accountPackage) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccountPackage'), accountPackage);
+        }
 
         return {
             GetFilteredAccountPackages: GetFilteredAccountPackages,
             GetAccountPackage: GetAccountPackage,
             AddAccountPackage: AddAccountPackage,
-            DoesUserHaveAddAccess: DoesUserHaveAddAccess
+            DoesUserHaveAddAccess: DoesUserHaveAddAccess,
+            UpdateAccountPackage: UpdateAccountPackage
         };
     }
 

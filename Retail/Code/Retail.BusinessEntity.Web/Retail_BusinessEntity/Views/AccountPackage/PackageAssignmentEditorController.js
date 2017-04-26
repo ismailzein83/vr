@@ -28,7 +28,6 @@
                 accountId = parameters.accountId;
                 accountPackageId = parameters.accountPackageId;
             }
-
             isEditMode = (accountPackageId != undefined);
         }
         function defineScope()
@@ -53,11 +52,13 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+            $scope.scopeModel.packageSelectorDisabled = false;
         }
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
+                $scope.scopeModel.packageSelectorDisabled = true;
                 getAccountPackage().then(function () {
                     loadAllControls().finally(function () {
                         accountPackageEntity = undefined;
@@ -124,6 +125,7 @@
                 };
                 if (accountPackageEntity != undefined) {
                     packageSelectorPayload.selectedIds = accountPackageEntity.PackageId;
+                    
                 }
 
                 VRUIUtilsService.callDirectiveLoad(packageSelectorAPI, packageSelectorPayload, packageSelectorLoadDeferred);
@@ -135,8 +137,8 @@
             if (accountPackageEntity == undefined)
                 return;
 
-            $scope.scopeModel.bed = accountEntity.BED;
-            $scope.scopeModel.eed = accountEntity.EED;
+            $scope.scopeModel.bed = accountPackageEntity.BED;
+            $scope.scopeModel.eed = accountPackageEntity.EED;
         }
 
         function insertAccountPackage()
@@ -179,14 +181,25 @@
 
         function buildAccountPackageObjFromScope()
         {
-            var obj = {
-                AccountPackageId: accountPackageId,
-                AccountBEDefinitionId: accountBEDefinitionId,
-                AccountId: accountId,
-                PackageId: packageSelectorAPI.getSelectedIds(),
-                BED: $scope.scopeModel.bed,
-                EED: $scope.scopeModel.eed
-            };
+            var obj = {};
+            if (isEditMode) {
+                obj = {
+                    AccountPackageId: accountPackageId,
+                    BED: $scope.scopeModel.bed,
+                    EED: $scope.scopeModel.eed
+                };
+            }
+            else {
+                obj = {
+                    AccountPackageId: accountPackageId,
+                    AccountBEDefinitionId: accountBEDefinitionId,
+                    AccountId: accountId,
+                    PackageId: packageSelectorAPI.getSelectedIds(),
+                    BED: $scope.scopeModel.bed,
+                    EED: $scope.scopeModel.eed
+                };
+            }
+           
             return obj;
         }
     }

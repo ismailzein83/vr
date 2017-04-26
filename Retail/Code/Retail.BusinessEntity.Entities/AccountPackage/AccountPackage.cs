@@ -23,4 +23,15 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid AccountBEDefinitionId { get; set; }
     }
+
+    public class AccountPackageToEdit 
+    {
+     
+        public int AccountPackageId { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+    }
+    
 }

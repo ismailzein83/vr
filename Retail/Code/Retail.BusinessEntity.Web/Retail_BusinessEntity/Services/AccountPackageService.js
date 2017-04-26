@@ -20,10 +20,27 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountPackage/PackageAssignmentEditor.html', parameters, settings);
-        };
+        }
+
+        function editAccountPackage(accountPackageId, accountBEDefinitionId, accountId, onAccountPackageUpdated) {
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+                accountPackageId: accountPackageId
+            };
+  
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onAccountPackageUpdated = onAccountPackageUpdated
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountPackage/PackageAssignmentEditor.html', parameters, settings);
+        }
 
         return {
-            assignPackageToAccount: assignPackageToAccount
+            assignPackageToAccount: assignPackageToAccount,
+            editAccountPackage: editAccountPackage
         };
     }
 

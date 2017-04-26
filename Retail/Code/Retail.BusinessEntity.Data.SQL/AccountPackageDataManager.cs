@@ -42,7 +42,11 @@ namespace Retail.BusinessEntity.Data.SQL
             insertedId = -1;
             return false;
         }
-
+        public bool Update(AccountPackageToEdit accountPackage)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountPackage_Update", accountPackage.AccountPackageId, accountPackage.BED, accountPackage.EED);
+            return (affectedRecords > 0);
+        }
         public bool AreAccountPackagesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("Retail.AccountPackage", ref updateHandle);

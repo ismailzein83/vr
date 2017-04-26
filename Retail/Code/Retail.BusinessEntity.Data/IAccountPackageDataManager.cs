@@ -13,6 +13,8 @@ namespace Retail.BusinessEntity.Data
 
         bool Insert(AccountPackage accountPackage, out int insertedId);
 
+        bool Update(AccountPackageToEdit accountPackage);
+
         bool AreAccountPackagesUpdated(ref object updateHandle);
     }
 }
