@@ -26,8 +26,9 @@ namespace TOne.WhS.BusinessEntity.Business
         public void SavePricelistFiles(ISalePricelistFileContext context)
         {
             Dictionary<int, SalePriceList> customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
+            var sellingProductPriceList = new List<SalePriceList>();
             if (context.SalePriceLists != null && context.SalePriceLists.Any())
-                customerPriceListsByCustomerId = GetSalePriceListByCustomerId(context.SalePriceLists);
+                customerPriceListsByCustomerId = GetSalePriceListByCustomerId(context.SalePriceLists, out sellingProductPriceList);
 
             if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Any())
             {
@@ -72,7 +73,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 BulkInsertCustomerChanges(context.CustomerPriceListChanges.ToList(), context.ProcessInstanceId);
             }
-            BulkInsertPriceList(customerPriceListsByCustomerId.Values.ToList());
+            var priceListsToSave = customerPriceListsByCustomerId.Values.Concat(sellingProductPriceList);
+            BulkInsertPriceList(priceListsToSave.ToList());
         }
         public bool SendPriceList(long salePriceListId)
         {
@@ -409,26 +411,27 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 List<ExistingSaleZone> existingSaleZones = zoneWrappersByCountry.GetRecord(country.Key);
                 if (existingSaleZones == null) continue;
-                foreach (var zone in country.Value)
+                foreach (var zoneChange in country.Value)
                 {
-                    ExistingSaleZone zoneWrapper = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(zone.Value.ZoneName));
+                    ExistingSaleZone existingSaleZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(zoneChange.Value.ZoneName));
 
                     SalePLZoneNotification salePlZone = new SalePLZoneNotification
                     {
-                        ZoneId = zoneWrapper.ZoneId,
-                        ZoneName = zoneWrapper.ZoneName
+                        ZoneName = zoneChange.Value.ZoneName
                     };
 
-                    if (zone.Value.CodeChanges != null)
+                    if (existingSaleZone != null) salePlZone.ZoneId = existingSaleZone.ZoneId;
+
+                    if (zoneChange.Value.CodeChanges != null)
                     {
                         //Add all code changes as notifications
-                        salePlZone.Codes.AddRange(zone.Value.CodeChanges.MapRecords(SalePLCodeChangeToSalePLNotificationMapper));
+                        salePlZone.Codes.AddRange(zoneChange.Value.CodeChanges.MapRecords(SalePLCodeChangeToSalePLNotificationMapper));
                     }
 
-                    if (zoneWrapper != null)
+                    if (existingSaleZone != null)
                     {
                         //Add missing codes from existing data
-                        foreach (ExistingSaleCode existingCode in zoneWrapper.Codes)
+                        foreach (ExistingSaleCode existingCode in existingSaleZone.Codes)
                         {
                             if (salePlZone.Codes.Any(x => x.Code == existingCode.Code))
                                 continue;
@@ -437,10 +440,10 @@ namespace TOne.WhS.BusinessEntity.Business
                         }
                     }
 
-                    if (zone.Value.RateChanges != null && zone.Value.RateChanges.Count > 0)
+                    if (zoneChange.Value.RateChanges != null && zoneChange.Value.RateChanges.Count > 0)
                     {
                         //Add the rate change as notification
-                        SalePricelistRateChange rateChange = zone.Value.RateChanges.First();
+                        SalePricelistRateChange rateChange = zoneChange.Value.RateChanges.First();
                         salePlZone.Rate = new SalePLRateNotification
                         {
                             Rate = rateChange.Rate,
@@ -451,7 +454,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                     else
                     {
-                        salePlZone.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, zoneWrapper.ZoneId, zoneWrapper.ZoneName, futureLocator);
+                        if (existingSaleZone != null)
+                            salePlZone.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingSaleZone.ZoneId, existingSaleZone.ZoneName, futureLocator);
                     }
                     salePlZoneNotifications.Add(salePlZone);
                 }
@@ -549,8 +553,9 @@ namespace TOne.WhS.BusinessEntity.Business
             salePriceList.CurrencyId = currencyId ?? customer.CarrierAccountSettings.CurrencyId;
             return salePriceList;
         }
-        private Dictionary<int, SalePriceList> GetSalePriceListByCustomerId(IEnumerable<SalePriceList> salePriceLists)
+        private Dictionary<int, SalePriceList> GetSalePriceListByCustomerId(IEnumerable<SalePriceList> salePriceLists, out List<SalePriceList> sellingProductPriceList)
         {
+            sellingProductPriceList = new List<SalePriceList>();
             Dictionary<int, SalePriceList> customerPriceListsByCustomerId = new Dictionary<int, SalePriceList>();
 
             if (salePriceLists == null || !salePriceLists.Any())
@@ -558,10 +563,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (SalePriceList salePriceList in salePriceLists)
             {
-                if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
+                switch (salePriceList.OwnerType)
                 {
-                    if (!customerPriceListsByCustomerId.ContainsKey(salePriceList.OwnerId))
-                        customerPriceListsByCustomerId.Add(salePriceList.OwnerId, salePriceList);
+                    case SalePriceListOwnerType.Customer:
+                        if (!customerPriceListsByCustomerId.ContainsKey(salePriceList.OwnerId))
+                            customerPriceListsByCustomerId.Add(salePriceList.OwnerId, salePriceList);
+                        break;
+                    case SalePriceListOwnerType.SellingProduct:
+                        sellingProductPriceList.Add(salePriceList);
+                        break;
                 }
             }
             return customerPriceListsByCustomerId;
