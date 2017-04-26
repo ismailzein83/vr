@@ -105,6 +105,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                 foreach (ZoneToProcess zoneData in countryData.ZonesToProcess)
                 {
+                    if(zoneData.ChangeType == ZoneChangeType.New)
+                    {
+                        if(!zoneData.AddedZones.Any())
+                            throw new Exception(string.Format("New Zone with name {0} to be created without Added Zones", zoneData.ZoneName));
+
+                        actionsForThisCountry.ZonesToAddIds.Add(zoneData.AddedZones.Last().ZoneId);
+                    }
+                        
                     actionsForThisCountry.RatesToAdd.AddRange(zoneData.RatesToAdd);
 
                     if (zoneData.ChangeType == ZoneChangeType.Deleted || zoneData.ChangeType == ZoneChangeType.PendingClosed)
@@ -145,7 +153,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 foreach (var countryAction in actionsForSoldCountryOfThisCustomer)
                 {
                     changesForThisCustomer.RateChanges.AddRange(
-                    this.GetRateChangesFromRateToAdd(countryAction.RatesToAdd, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId));
+                    this.GetRateChangesFromZonesToAdd(countryAction.ZonesToAddIds, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId));
 
                     changesForThisCustomer.RateChanges.AddRange(
                         this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, futureRateLocator, countryAction.CountryId, customerId, sellingProductId));
@@ -161,25 +169,24 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return customerPriceListChanges;
         }
 
-        private IEnumerable<SalePricelistRateChange> GetRateChangesFromRateToAdd(IEnumerable<RateToAdd> ratesToAdd, SaleEntityZoneRateLocator ratesToAddLocator, int countryId, 
+        private IEnumerable<SalePricelistRateChange> GetRateChangesFromZonesToAdd(IEnumerable<long> zonesToAddIds, SaleEntityZoneRateLocator ratesToAddLocator, int countryId, 
             int customerId, int sellingProductId)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
 
-            foreach (var rateToAdd in ratesToAdd)
+            foreach (var zoneId in zonesToAddIds)
             {
-                var existingZoneIdAtRateCreationTime = rateToAdd.AddedRates.Any() ? rateToAdd.AddedRates.Last().AddedZone : null;
-                if (existingZoneIdAtRateCreationTime == null)
-                    throw new Exception(string.Format("Opening a rate without added zones for zone {0}", rateToAdd.ZoneName));
+                string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
 
-                var rateToSend = ratesToAddLocator.GetCustomerZoneRate(customerId, sellingProductId, existingZoneIdAtRateCreationTime.ZoneId);
+                var rateToSend = ratesToAddLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
                 if (rateToSend == null)
-                    throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", rateToAdd.ZoneName));
+                    throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneName));
 
                 rateChanges.Add(new SalePricelistRateChange
                 {
                     CountryId = countryId,
-                    ZoneName = rateToAdd.ZoneName,
+                    ZoneName = zoneName,
                     Rate = rateToSend.Rate.Rate,
                     ChangeType = RateChangeType.New,
                     BED = rateToSend.Rate.BED
@@ -329,6 +336,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             private List<CodeToClose> _codesToClose = new List<CodeToClose>();
             public List<CodeToClose> CodesToClose { get { return this._codesToClose; } }
+
+            private List<long> _zonesToAddIds = new List<long>();
+            public List<long> ZonesToAddIds { get { return this._zonesToAddIds; } }
 
             private List<ZoneToProcess> _zonesToClose = new List<ZoneToProcess>();
             public List<ZoneToProcess> ZonesToClose { get { return this._zonesToClose; } }
