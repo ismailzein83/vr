@@ -25,8 +25,8 @@
 
             if (parameters != undefined) {
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
-                accountId = parameters.accountId;
                 accountPackageId = parameters.accountPackageId;
+                accountId = parameters.accountId;
             }
             isEditMode = (accountPackageId != undefined);
         }
@@ -76,6 +76,7 @@
         function getAccountPackage() {
             return Retail_BE_AccountPackageAPIService.GetAccountPackage(accountPackageId).then(function (response) {
                 accountPackageEntity = response;
+                accountId = accountPackageEntity.AccountId;
             });
         }
 
@@ -104,7 +105,7 @@
                     $scope.title += ': ' + accountName + ' - ' + packageName;
             }
             else {
-                return Retail_BE_AccountBEAPIService.GetAccountName(accountBEDefinitionId, accountId).then(function (response) {
+                return Retail_BE_AccountBEAPIService.GetAccountName(accountBEDefinitionId,accountId).then(function (response) {
                     $scope.title = 'Assign Package for ' + response;
                 });
             }

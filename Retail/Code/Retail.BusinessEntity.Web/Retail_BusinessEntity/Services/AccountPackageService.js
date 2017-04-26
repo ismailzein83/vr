@@ -6,7 +6,7 @@
 
     function AccountPackageService(VRModalService, VRNotificationService)
     {
-        function assignPackageToAccount(accountBEDefinitionId, accountId, onAccountPackageAdded)
+        function assignPackageToAccount(accountBEDefinitionId,accountId,onAccountPackageAdded)
         {
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
@@ -22,10 +22,9 @@
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountPackage/PackageAssignmentEditor.html', parameters, settings);
         }
 
-        function editAccountPackage(accountPackageId, accountBEDefinitionId, accountId, onAccountPackageUpdated) {
+        function editAccountPackage(accountPackageId, accountBEDefinitionId, onAccountPackageUpdated) {
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
-                accountId: accountId,
                 accountPackageId: accountPackageId
             };
   

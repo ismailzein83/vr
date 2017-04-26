@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.Business
 
         AccountBEManager _accountBEManager = new AccountBEManager();
         PackageManager _packageManager = new PackageManager();
-        string fieldMessage="Package Assignment Failed. It overlaps with other assignement";
+        const string fieldMessage="Package Assignment Failed. It overlaps with other assignement";
         #endregion
 
 
@@ -120,44 +120,41 @@ namespace Retail.BusinessEntity.Business
 
         public InsertOperationOutput<AccountPackageDetail> AddAccountPackage(AccountPackageToAdd accountPackageToAdd)
         {
-
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountPackageDetail>();
-
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             if (IsOverLappedAccoutPackage(accountPackageToAdd.AccountPackageId, accountPackageToAdd.AccountId, accountPackageToAdd.PackageId, accountPackageToAdd.BED, accountPackageToAdd.EED))
-            {insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.Message = fieldMessage;
-            insertOperationOutput.ShowExactMessage = true;
-            }
-                
-            else {
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+                insertOperationOutput.Message = fieldMessage;
+                insertOperationOutput.ShowExactMessage = true;
+            }   
+            else 
+            {
                 IAccountPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
                 int accountPackageId = -1;
-
-                dataManager.Insert(accountPackageToAdd, out accountPackageId);
-                
+                if (dataManager.Insert(accountPackageToAdd, out accountPackageId))
+                {
                     var account = _accountBEManager.GetAccount(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd.AccountId);
-                    var accountName = _accountBEManager.GetAccountName(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd.AccountId);
+                    var packageName = _packageManager.GetPackageName(accountPackageToAdd.PackageId);
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     accountPackageToAdd.AccountPackageId = accountPackageId;
-                    VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountPackageToAdd.AccountBEDefinitionId), "Assign Package", true, account, String.Format("Account -> Package {0} {1} {2}", accountName, accountPackageToAdd.BED, accountPackageToAdd.EED));
+                    VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountPackageToAdd.AccountBEDefinitionId), "Assign Package", true, account, String.Format("Account -> Package {0} {1} {2}", packageName, accountPackageToAdd.BED, accountPackageToAdd.EED));
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd);
-                
-                
+                }
+                else 
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+                }  
             }
-           
-
             return insertOperationOutput;
         }
 
         public UpdateOperationOutput<AccountPackageDetail> UpdateAccountPackage(AccountPackageToEdit accountPackageToEdit)
         {
             var accountPackage = GetAccountPackage(accountPackageToEdit.AccountPackageId);
-
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountPackageDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             if (IsOverLappedAccoutPackage(accountPackageToEdit.AccountPackageId, accountPackage.AccountId, accountPackage.PackageId, accountPackageToEdit.BED, accountPackageToEdit.EED))
@@ -165,19 +162,17 @@ namespace Retail.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
                 updateOperationOutput.Message = fieldMessage;
                 updateOperationOutput.ShowExactMessage = true;
-            }
-                
-            else {
+            }   
+            else 
+            {
                 IAccountPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
-
-
                 if (dataManager.Update(accountPackageToEdit))
                 {
                     var accountBEDefinitionId = _packageManager.GetPackageAccountDefinitionId(accountPackage.PackageId);
                     var account = _accountBEManager.GetAccount(accountBEDefinitionId, accountPackage.AccountId);
-                    var accountName = _accountBEManager.GetAccountName(accountBEDefinitionId, accountPackage.AccountId);
+                    var packageName = _packageManager.GetPackageName(accountPackage.PackageId);
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountBEDefinitionId), "Update AccountPackage", true, account, String.Format("Account -> Package {0} {1} {2}", accountName, accountPackageToEdit.BED, accountPackageToEdit.EED));
+                    VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountBEDefinitionId), "Update AccountPackage", true, account, String.Format("Account -> Package {0} {1} {2}", packageName, accountPackageToEdit.BED, accountPackageToEdit.EED));
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = AccountPackageDetailMapper(_packageManager.GetPackageAccountDefinitionId(accountPackage.PackageId), this.GetAccountPackage(accountPackageToEdit.AccountPackageId));
                 }
@@ -186,28 +181,24 @@ namespace Retail.BusinessEntity.Business
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
                 }
             }
-
-
             return updateOperationOutput;
         }
 
 
 
 
-        public bool IsOverLappedAccoutPackage(int AccountPackageId, long AccountId, int PackageId, DateTime BED, DateTime? EED)
+        public bool IsOverLappedAccoutPackage(int accountPackageId, long accountId, int packageId, DateTime bed, DateTime? eed)
         {
-            var accountPackages = GetAccountPackagesByAccountId(AccountId);
-            foreach (var accountPackege in accountPackages)
+            var accountPackages = GetAccountPackagesByAccountId(accountId);
+            foreach (var accountPackage in accountPackages)
             {
-                if (accountPackege.PackageId == PackageId && accountPackege.AccountPackageId != AccountPackageId)
+                if (accountPackage.PackageId == packageId && accountPackage.AccountPackageId != accountPackageId)
                 {
-                    if (Utilities.AreTimePeriodsOverlapped(BED, EED, accountPackege.BED, accountPackege.EED))
+                    if (Utilities.AreTimePeriodsOverlapped(bed, eed, accountPackage.BED, accountPackage.EED))
                         return true;
                 }
-            
             }
             return false;
-
         }
         public bool DoesUserHaveViewAccountPackageAccess(Guid accountBEDefinitionId)
         {

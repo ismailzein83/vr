@@ -83,7 +83,7 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
                     gridAPI.itemUpdated(accountPackageItem);
                 };
 
-                Retail_BE_AccountPackageService.editAccountPackage(accountPackageItem.Entity.AccountPackageId,accountBEDefinitionId,accountPackageItem.Entity.AccountId,onAccountPackageUpdated);
+                Retail_BE_AccountPackageService.editAccountPackage(accountPackageItem.Entity.AccountPackageId,accountBEDefinitionId,onAccountPackageUpdated);
             }
 
             function buildGridQuery() {
