@@ -359,7 +359,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
 
             string targetZoneName = saleZoneName.Trim().ToLower();
-            return cachedSaleZones.MapRecords(x => x.SaleZoneId, x => x.CountryId == countryId && (x.Name != null && x.Name.ToLower() == targetZoneName));
+            return cachedSaleZones.MapRecords(x => x.SaleZoneId, x => x.CountryId == countryId && (x.Name != null && x.Name.Trim().ToLower() == targetZoneName));
         }
 
         #endregion
