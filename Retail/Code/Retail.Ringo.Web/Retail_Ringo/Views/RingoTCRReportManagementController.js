@@ -6,6 +6,7 @@
     function RingoTCRReportManagementController($scope, Retail_Ringo_RingoReportSheetAPIService, UtilsService, vrNotificationService, vrUIUtilsService, Retail_Ringo_TCRReportType, Retail_Ringo_TCRReportMonths, Retail_Ringo_TCRReportYear) {
 
         var operatorDirectiveApi;
+        var singleOperatorDirectiveApi;
         var operatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var singleOperatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -21,7 +22,7 @@
             };
 
             $scope.scopeModel.onSingleOperatorSelectorDirectiveReady = function (api) {
-                operatorDirectiveApi = api;
+                singleOperatorDirectiveApi = api;
                 singleOperatorReadyPromiseDeferred.resolve();
             };
 
@@ -31,10 +32,17 @@
                     date = new Date($scope.scopeModel.selectedTCRReportYear.value, $scope.scopeModel.selectedTCRReportMonth.value, 1);
                 } else
                     date = $scope.scopeModel.fromDate;
+                var selectedOperators;
+
+                if ($scope.scopeModel.selectedTCRReportType.value == 1)
+                    selectedOperators = singleOperatorDirectiveApi.getSelectedValues();
+                else
+                    selectedOperators = operatorDirectiveApi.getSelectedValues();
+
                 var filter = {
                     ReportType: $scope.scopeModel.selectedTCRReportType.value,
                     From: date,
-                    Operator: operatorDirectiveApi.getSelectedValues()
+                    Operator: selectedOperators
                 };
                 return Retail_Ringo_RingoReportSheetAPIService.DownloadTCRReport(filter).then(function (response) {
 
@@ -47,7 +55,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorSelector, loadSingleOperatorSelector]).catch(function (error) {
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
@@ -75,11 +83,20 @@
                 vrUIUtilsService.callDirectiveLoad(operatorDirectiveApi, operatorPayload, selectorLoadDeferred);
             });
 
+            return selectorLoadDeferred.promise;
+        }
+
+        function loadSingleOperatorSelector() {
+            var operatorPayload = {
+                AccountBEDefinitionId: "CBC68CD3-2F02-4452-B261-0D32AE4F8269"
+            };
+
+            var singleSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             singleOperatorReadyPromiseDeferred.promise.then(function () {
-                vrUIUtilsService.callDirectiveLoad(operatorDirectiveApi, operatorPayload, selectorLoadDeferred);
+                vrUIUtilsService.callDirectiveLoad(singleOperatorDirectiveApi, operatorPayload, singleSelectorLoadDeferred);
             });
 
-            return selectorLoadDeferred.promise;
+            return singleSelectorLoadDeferred.promise;
         }
 
     }

@@ -39,17 +39,17 @@
                                hideremoveicon>
                     </vr-select>
                 </vr-columns>
-                <retail-ringo-operator-selector normal-col-num="3" ng-if="scopeModel.selectedTCRReportType.value == 0"
+
+                <retail-ringo-operator-selector normal-col-num="3" ng-show="scopeModel.selectedTCRReportType.value == 0"
                                                 on-ready="scopeModel.onOperatorSelectorDirectiveReady"
                                                 customlabel="Operators"
-                                                isrequired
                                                 ismultipleselection>
                 </retail-ringo-operator-selector>
 
-                <retail-ringo-operator-selector normal-col-num="3" ng-if="scopeModel.selectedTCRReportType.value == 1"
+                <retail-ringo-operator-selector normal-col-num="3" ng-show="scopeModel.selectedTCRReportType.value == 1"
                                                 on-ready="scopeModel.onSingleOperatorSelectorDirectiveReady"
                                                 customlabel="Operators"
-                                                isrequired>
+                                                isrequired="true">
                 </retail-ringo-operator-selector>
 </vr-row>
         </div>
