@@ -3,7 +3,7 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
                 <vr-validation-group validationcontext="SearchGroup">
-                    <span  vr-loader="isLoadingSellingNumberPlan">
+                    <span vr-loader="isLoadingSellingNumberPlan">
                         <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
                     </span>
                 </vr-validation-group>
@@ -27,19 +27,17 @@
     </vr-row>
     <vr-row>
         <vr-columns width="1/4row" ng-show="selectedSellingNumberPlan!=undefined" vr-loader="isLoadingCountries">
-            <div ng-style="{'height':treeHeight,'overflow-y':'auto'}">
-                <vr-treeview on-ready="countriesTreeReady"
-                             datachildrenfield="effectiveZones"
-                             datavaluefield="nodeId"
-                             datatextfield="nodeName"
-                             selecteditem="currentNode"
-                             hasremotechildrenfield="hasRemoteChildren"
-                             loadremotechildren="loadEffectiveSaleZones"
-                             onvaluechanged="onNodeSelection"
-                             datavaluefieldmethod="buildTreeId"
-                             state="true">
-                </vr-treeview>
-            </div>
+            <vr-treeview on-ready="countriesTreeReady"
+                         datachildrenfield="effectiveZones"
+                         datavaluefield="nodeId"
+                         datatextfield="nodeName"
+                         selecteditem="currentNode"
+                         hasremotechildrenfield="hasRemoteChildren"
+                         loadremotechildren="loadEffectiveSaleZones"
+                         onvaluechanged="onNodeSelection"
+                         datavaluefieldmethod="buildTreeId"
+                         state="true">
+            </vr-treeview>
         </vr-columns>
         <vr-columns width="3/4row" ng-show="currentNode!=undefined">
             <vr-whs-codepreparation-codesgrid ng-show="showGrid" on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
