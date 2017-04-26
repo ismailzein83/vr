@@ -28,8 +28,15 @@ app.directive("retailInvoiceInvoicetypeMultinetsubscriberinvoicesettings", ["Uti
         function MultiNetnvoiceSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
           
+            var beDefinitionSelectorApi;
+            var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                    beDefinitionSelectorApi = api;
+                    beDefinitionSelectorPromiseDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -38,6 +45,26 @@ app.directive("retailInvoiceInvoicetypeMultinetsubscriberinvoicesettings", ["Uti
 
                 api.load = function (payload) {
                     var promises = [];
+                    var businessEntityDefinitionSelectorLoadPromise = getBusinessEntityDefinitionSelectorLoadPromise();
+                    promises.push(businessEntityDefinitionSelectorLoadPromise);
+                    function getBusinessEntityDefinitionSelectorLoadPromise() {
+                        var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        beDefinitionSelectorPromiseDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
+                                    }]
+                                }
+                            };
+                            if (payload != undefined && payload.extendedSettingsEntity != undefined) {
+                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AcountBEDefinitionId;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
+                        });
+                        return businessEntityDefinitionSelectorLoadDeferred.promise;
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -45,6 +72,8 @@ app.directive("retailInvoiceInvoicetypeMultinetsubscriberinvoicesettings", ["Uti
                 api.getData = function () {
                     return {
                         $type: "Retail.MultiNet.Business.MultiNetSubscriberInvoiceSettings, Retail.MultiNet.Business",
+                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+
                     };
                 };
 

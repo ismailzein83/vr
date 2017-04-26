@@ -135,6 +135,7 @@
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationExtendedQuery.cs" />
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="Extensions\DIDSynchronizer.cs" />
+    <Compile Include="Filters\IBusinessEntityDefinitionFilter\ChargeableEntityDefinitionFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountBalanceAccountFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccount\FinancialAccountInvoiceAccountFilter.cs" />
