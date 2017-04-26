@@ -32,12 +32,19 @@
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
         }
+        function GetGenericLKUPItemsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetGenericLKUPItemsInfo'), {
+                filter: filter
+            });
+        }
+        
         return ({
             GetFilteredGenericLKUPItems: GetFilteredGenericLKUPItems,
             AddGenericLKUPItem: AddGenericLKUPItem,
             UpdateGenericLKUPItem: UpdateGenericLKUPItem,
             GetGenericLKUPItem: GetGenericLKUPItem,
             GetGenericLKUPDefinitionExtendedSetings: GetGenericLKUPDefinitionExtendedSetings,
+            GetGenericLKUPItemsInfo: GetGenericLKUPItemsInfo
         });
     }
 

@@ -11,8 +11,9 @@
         var genericLKUPItemId;
         var genericLKUPItemEntity;
 
-        var beDefinitionSelectorApi;
-        var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+        var genericLKUPDefinitionSelectorApi;
+        var genericLKUPDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var selectedBeDefinitionSelectorPromiseDeferred;
 
         var genericLKUPDefinitionExtendedSetingsEntity;
@@ -34,9 +35,9 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
-                beDefinitionSelectorApi = api;
-                beDefinitionSelectorPromiseDeferred.resolve();
+            $scope.scopeModel.onGenericLKUPDefinitionSelectorReady = function (api) {
+                genericLKUPDefinitionSelectorApi = api;
+                genericLKUPDefinitionSelectorPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -53,23 +54,27 @@
                 extendedSettingDirectiveAPI = api;
                 extendedSettingReadyPromiseDeferred.resolve();
             };
-            $scope.scopeModel.loadExtendedSettingsRuntimeEditor = function (v) {
+            $scope.scopeModel.loadExtendedSettingsRuntimeEditor = function (value) {
                
                 if (selectedBeDefinitionSelectorPromiseDeferred != undefined)
                     selectedBeDefinitionSelectorPromiseDeferred.resolve();
                 else
                 {
-                    var businessEntityDefinitionId = beDefinitionSelectorApi.getSelectedIds();
-                    if (businessEntityDefinitionId != undefined) {
-                        getGenericLKUPDefinitionExtendedSetings(businessEntityDefinitionId).then(function () {
-                            extendedSettingReadyPromiseDeferred.promise.then(function () {
-                                var setLoader = function (value) {
-                                    $scope.scopeModel.isLoadingDirective = value;
-                                };
-                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, extendedSettingDirectiveAPI, undefined, setLoader, selectedBeDefinitionSelectorPromiseDeferred);
+                    if (value != undefined)
+                    {
+                        var businessEntityDefinitionId = genericLKUPDefinitionSelectorApi.getSelectedIds();
+                        if (businessEntityDefinitionId != undefined) {
+                            getGenericLKUPDefinitionExtendedSetings(businessEntityDefinitionId).then(function () {
+                                extendedSettingReadyPromiseDeferred.promise.then(function () {
+                                    var setLoader = function (value) {
+                                        $scope.scopeModel.isLoadingDirective = value;
+                                    };
+                                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, extendedSettingDirectiveAPI, undefined, setLoader, selectedBeDefinitionSelectorPromiseDeferred);
+                                });
                             });
-                        });
+                        }
                     }
+                   
                 }
                
             };
@@ -108,8 +113,7 @@
         function loadAllControls() {
             function setTitle() {
                 if (isEditMode) {
-                    var GenericLKUPItemName = (genericLKUPItemEntity != undefined) ? genericLKUPItemEntity.Name : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(GenericLKUPItemName, 'Generic LKUP');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(genericLKUPItemEntity.Name, 'Generic LKUP');
                 }
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor('Generic LKUP');
@@ -123,19 +127,14 @@
             function loadBusinessEntityDefinitionSelector() {
                 if(genericLKUPItemEntity != undefined)
                     selectedBeDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                beDefinitionSelectorPromiseDeferred.promise.then(function () {
+                var genericLKUPDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                genericLKUPDefinitionSelectorPromiseDeferred.promise.then(function () {
                     var payloadSelector = {
                         selectedIds: genericLKUPItemEntity != undefined ? genericLKUPItemEntity.BusinessEntityDefinitionId : undefined,
-                        filter: {
-                            Filters: [{
-                                $type: "Vanrise.Common.Business.GenericLKUPBEDefinitionFilter, Vanrise.Common.Business"
-                            }]
-                        }
                     };
-                    VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, payloadSelector, businessEntityDefinitionSelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(genericLKUPDefinitionSelectorApi, payloadSelector, genericLKUPDefinitionSelectorLoadDeferred);
                 });
-                return businessEntityDefinitionSelectorLoadDeferred.promise;
+                return genericLKUPDefinitionSelectorLoadDeferred.promise;
             }
 
             function loadBusinessEntityExtendedSettings()
@@ -207,7 +206,7 @@
             return {
                 GenericLKUPItemId: genericLKUPItemEntity != undefined ? genericLKUPItemEntity.GenericLKUPItemId : undefined,
                 Name: $scope.scopeModel.name,
-                BusinessEntityDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+                BusinessEntityDefinitionId: genericLKUPDefinitionSelectorApi.getSelectedIds(),
                 Settings: settings,
             };
         }

@@ -50,6 +50,14 @@ namespace Vanrise.Common.Web.Controllers
             GenericLKUPDefinitionManager manager = new GenericLKUPDefinitionManager();
             return manager.GetGenericLKUPDefinitionExtendedSetings(businessEntityDefinitionId);
         }
+
+        [HttpGet]
+        [Route("GetGenericLKUPItemsInfo")]
+        public IEnumerable<GenericLKUPItemInfo> GetGenericLKUPItemsInfo(string filter = null)
+        {
+            GenericLKUPItemInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<GenericLKUPItemInfoFilter>(filter) : null;
+            return _manager.GetGenericLKUPItemsInfo(deserializedFilter);
+        }
       
     }
 }

@@ -222,6 +222,8 @@
     <Content Include="Common\Directives\GenericLKUP\MainExtensions\vr-common-genericlkup-be-definition-selector.js" />
     <Content Include="Common\Directives\GenericLKUP\Templates\GenericLKUPItemGrid.html" />
     <Content Include="Common\Directives\GenericLKUP\vr-common-genericlkupitem-grid.js" />
+    <Content Include="Common\Directives\GenericLKUP\vr-common-genericlkupdefinition-selector.js" />
+    <Content Include="Common\Directives\GenericLKUP\vr-common-genericlkupitem-selector.js" />
     <Content Include="Common\Directives\GridColCSSClass\vr-common-gridcolcssclass-selector.js" />
     <Content Include="Common\Directives\GridColumnWidth\vr-common-gridcolumnwidth-editor.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\SQLConnectionEditorTemplate.html" />

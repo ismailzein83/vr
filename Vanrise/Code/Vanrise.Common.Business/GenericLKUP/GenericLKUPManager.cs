@@ -11,16 +11,9 @@ namespace Vanrise.Common.Business
 {
     public class GenericLKUPManager : IBusinessEntityManager
     {
-
-       
-
-
-
-        //VRNotificationTypeManager _vrnotificationTypeManager = new VRNotificationTypeManager();
         public GenericLKUPItem GetGenericLKUPItem(Guid genericLKUPItemId)
         {
             Dictionary<Guid, GenericLKUPItem> cachedGenericLKUPItems = this.GetCachedGenericLKUPItems();
-
             return cachedGenericLKUPItems.GetRecord(genericLKUPItemId);
         }
 
@@ -94,7 +87,24 @@ namespace Vanrise.Common.Business
         {
             return this.GetCachedGenericLKUPItems().MapRecords(x => x).OrderBy(x => x.Name);
         }
-       
+
+        public IEnumerable<GenericLKUPItemInfo> GetGenericLKUPItemsInfo(GenericLKUPItemInfoFilter filter)
+        {
+            Func<GenericLKUPItem, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                filterExpression = (x) =>
+                {
+                    if (filter.BusinessEntityDefinitionId.HasValue && filter.BusinessEntityDefinitionId.Value != x.BusinessEntityDefinitionId)
+                        return false;
+                    return true;
+                };
+            }
+            return this.GetCachedGenericLKUPItems().MapRecords(GenericLKUPItemInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IGenericLKUPItemDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IGenericLKUPItemDataManager>();
@@ -126,6 +136,14 @@ namespace Vanrise.Common.Business
                 BusinessEntityDefinitionName = manager.GetBusinessEntityDefinitionName(genericLKUPItem.BusinessEntityDefinitionId)
             };
             return genericLKUPItemDetail;
+        }
+        private GenericLKUPItemInfo GenericLKUPItemInfoMapper(GenericLKUPItem genericLKUPItem)
+        {
+            return new GenericLKUPItemInfo()
+            {
+                GenericLKUPItemId = genericLKUPItem.GenericLKUPItemId,
+                Name = genericLKUPItem.Name
+            };
         }
        
         #region IBusinessEntityManager

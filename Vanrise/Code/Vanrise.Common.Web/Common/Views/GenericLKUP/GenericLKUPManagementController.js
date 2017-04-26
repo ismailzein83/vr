@@ -7,8 +7,8 @@
     function GenericLKUPManagementController($scope, VR_Common_GenericLKUPService, VR_Common_GnericLKUPAPIService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
         var gridAPI;
-        var beDefinitionSelectorApi;
-        var beDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+        var genericLKUPDefinitionSelectorApi;
+        var genericLKUPDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -19,9 +19,9 @@
                 return gridAPI.load(query);
             };
 
-            $scope.onBusinessEntityDefinitionSelectorReady = function (api) {
-                beDefinitionSelectorApi = api;
-                beDefinitionSelectorPromiseDeferred.resolve();
+            $scope.onGenericLKUPDefinitionSelectorReady = function (api) {
+                genericLKUPDefinitionSelectorApi = api;
+                genericLKUPDefinitionSelectorPromiseDeferred.resolve();
             };
 
             $scope.add = function () {
@@ -49,23 +49,17 @@
         }
 
         function loadAllControls() {
-            function loadBusinessEntityDefinitionSelector() {
-                var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                beDefinitionSelectorPromiseDeferred.promise.then(function () {
+            function loadGenericLKUPDefinitionSelector() {
+                var genericLKUPDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                genericLKUPDefinitionSelectorPromiseDeferred.promise.then(function () {
                     var payloadSelector = {
-                        filter: {
-                            Filters: [{
-                                $type: "Vanrise.Common.Business.GenericLKUPBEDefinitionFilter, Vanrise.Common.Business"
-                            }]
-                        }
                     };
-                    VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, payloadSelector, businessEntityDefinitionSelectorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(genericLKUPDefinitionSelectorApi, payloadSelector, genericLKUPDefinitionSelectorLoadDeferred);
                 });
-                return businessEntityDefinitionSelectorLoadDeferred.promise;
+                return genericLKUPDefinitionSelectorLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([loadBusinessEntityDefinitionSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadGenericLKUPDefinitionSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
@@ -73,7 +67,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.name,
-                BusinessEntityDefinitionIds: beDefinitionSelectorApi.getSelectedIds()
+                BusinessEntityDefinitionIds: genericLKUPDefinitionSelectorApi.getSelectedIds()
             };
         }
     }
