@@ -26,7 +26,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-           
+            ctrl.treeHeight = $element.parents(".modal-dialog").length > 0 ? innerHeight * 0.50 : (innerHeight - 210) + 'px';
             var treeElement = $element.find('#divTree');
             $scope.$on("$destroy", function () {
                 $(treeElement).off();
@@ -288,7 +288,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
             };
         },
         template: function (element, attrs) {
-            return '<div id="divTree" />';
+            return '<div ng-style="::{\'height\':ctrl.treeHeight,\'overflow-y\':\'auto\'}"><div id="divTree" /></div>';
         }
 
     };   
