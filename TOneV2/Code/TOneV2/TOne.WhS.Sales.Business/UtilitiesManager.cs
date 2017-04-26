@@ -201,6 +201,14 @@ namespace TOne.WhS.Sales.Business
             return closedCountryIds;
         }
 
+        public static void CalculateAverageCost(ICostCalculationMethodContext context)
+        {
+            if (context.Route == null)
+                throw new ArgumentNullException("context.Route");
+            if (context.Route.RouteOptionsDetails != null && context.Route.RouteOptionsDetails.Count() > 0)
+                context.Cost = context.Route.RouteOptionsDetails.Average(x => x.ConvertedSupplierRate);
+        }
+
         #region Private Methods
         private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
@@ -32,7 +33,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             foreach (RPRouteOptionDetail option in context.Route.RouteOptionsDetails)
             {
                 DurationBySupplier durationBySupplier = null;
-                if(durationByZone.TryGetValue(option.Entity.SaleZoneId, out durationBySupplier))
+                if (durationByZone.TryGetValue(option.Entity.SaleZoneId, out durationBySupplier))
                 {
                     decimal durationInMinutes = 0;
                     if (durationBySupplier.TryGetValue(option.Entity.SupplierId, out durationInMinutes))
@@ -43,10 +44,21 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 }
             }
 
+            decimal? weightedAverageCost = null;
+
             if (sumOfDuration != 0)
-                context.Cost = sumOfRatesMultipliedByDuration / sumOfDuration;
+                weightedAverageCost = sumOfRatesMultipliedByDuration / sumOfDuration;
+
+            if (weightedAverageCost.HasValue)
+                context.Cost = weightedAverageCost.Value;
+            else
+            {
+                context.CustomObject = null;
+                UtilitiesManager.CalculateAverageCost(context);
+            }
         }
 
+        #region Private Methods
 
         private DurationByZone GetDurationByZone(IEnumerable<long> zoneIds)
         {
@@ -73,7 +85,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             DateTime toDate = DateTime.Today;
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, zoneIds, fromDate, toDate);
-            
+
             DurationByZone durationByZone = new DurationByZone();
 
             foreach (var analyticRecord in analyticResult.Data)
@@ -101,7 +113,6 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             return durationByZone;
         }
 
-
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, IEnumerable<long> saleZoneIds, DateTime fromDate, DateTime toDate)
         {
             AnalyticManager analyticManager = new AnalyticManager();
@@ -124,9 +135,9 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             {
                 Dimension = "SaleZone",
                 FilterValues = saleZoneIds.Cast<object>().ToList()
-           
+
             };
-            
+
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
@@ -137,6 +148,8 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
+
+        #endregion
     }
 
     class DurationBySupplier : Dictionary<int, decimal>
