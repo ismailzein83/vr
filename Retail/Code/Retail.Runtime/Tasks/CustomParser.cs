@@ -44,7 +44,7 @@ namespace Retail.Runtime
                 ringoSmsEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs", "RingoEventEDR");
             mappedBatches.Add("Ringo Event EDR Storage Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();

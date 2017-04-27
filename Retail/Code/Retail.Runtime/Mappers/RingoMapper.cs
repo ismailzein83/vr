@@ -100,7 +100,7 @@ namespace Retail.Runtime.Mappers
                 voiceEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(voiceEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(voiceEDRs, "#RECORDSCOUNT# of Raw EDRs", "VoiceEDR");
             mappedBatches.Add("Voice Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
@@ -152,7 +152,7 @@ namespace Retail.Runtime.Mappers
                 ringoSmsEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs", "RingoMessageEDR");
             mappedBatches.Add("Ringo SMS EDR Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
@@ -234,7 +234,7 @@ namespace Retail.Runtime.Mappers
                 dataEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataEDRs, "#RECORDSCOUNT# of Raw EDRs", "GprsEDR");
             mappedBatches.Add("Gprs EDR Storage Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
@@ -313,7 +313,7 @@ namespace Retail.Runtime.Mappers
                 ringoSmsEDRs.Add(edr);
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs");
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs", "RingoEventEDR");
             mappedBatches.Add("Ringo Event EDR Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
@@ -384,7 +384,7 @@ namespace Retail.Runtime.Mappers
                 currentCDRId++;
             }
 
-            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs");
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
             mappedBatches.Add("CDR Storage Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
