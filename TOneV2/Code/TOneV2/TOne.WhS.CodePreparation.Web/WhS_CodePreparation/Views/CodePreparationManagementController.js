@@ -142,8 +142,7 @@
             $scope.moveCodesClicked = function () {
                 var codes = codesGridAPI.getSelectedCodes();
                 var codesData = [];
-                for (var i = 0; i < codes.length ; i++)
-                {
+                for (var i = 0; i < codes.length ; i++) {
                     var codeData = {
                         Code: codes[i].Code,
                         BED: codes[i].BED
@@ -260,8 +259,7 @@
                     treeAPI.createNode(node);
                     countryNode.effectiveZones.push(node);
                 }
-                treeAPI.refreshTree($scope.nodes);
-
+                //  treeAPI.refreshTree($scope.nodes);
             }
         }
 
@@ -342,19 +340,17 @@
         }
 
         function onCodesClosed(closedCodes) {
-        	if (closedCodes != undefined)
-        	{
-            	hideShowStateAndClearSelection(true);
+            if (closedCodes != undefined) {
+                hideShowStateAndClearSelection(true);
 
-            	for (var i = 0; i < closedCodes.length; i++)
+                for (var i = 0; i < closedCodes.length; i++)
                     codesGridAPI.onCodeClosed(closedCodes[i]);
 
                 if ($scope.currentNode != undefined) {
                     if ($scope.currentNode.type == 'Zone') {
-                    	return codesGridAPI.loadGrid(getCodesFilterObject()).then(function ()
-                    	{
-                    	    setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
-                    	});
+                        return codesGridAPI.loadGrid(getCodesFilterObject()).then(function () {
+                            setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
+                        });
                     }
                 }
             }
@@ -457,14 +453,14 @@
         }
 
         function hideShowEnd(draftStatus, status) {
-            if(status != null)
+            if (status != null)
                 $scope.showEnd = false;
             else
                 $scope.showEnd = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && draftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value && draftStatus != WhS_CP_ZoneItemDraftStatusEnum.Renamed.value;
         }
 
         function hideShowAddCode(draftStatus, status) {
-            if(status != null)
+            if (status != null)
                 $scope.showAddNewCode = false;
             else
                 $scope.showAddNewCode = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
@@ -519,7 +515,7 @@
 
         function getCountries() {
             countries.length = 0;
-            return VRCommon_CountryAPIService.GetCountriesInfo().then(function(response) {
+            return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
                 angular.forEach(response, function (itm) {
                     countries.push(itm);
                 });
@@ -528,7 +524,7 @@
 
         function checkState() {
             countries.length = 0;
-            return WhS_CP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function(response) {
+            return WhS_CP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
                 $scope.hasState = response;
             });
         }
@@ -568,7 +564,7 @@
                     case WhS_CP_ZoneItemDraftStatusEnum.Renamed.value:
                         icon = WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon;
                         break;
-                    }
+                }
             }
 
             if (zoneInfo.Status != null) {
@@ -579,7 +575,7 @@
                     case WhS_CP_ZoneItemStatusEnum.PendingEffective.value:
                         icon = WhS_CP_ZoneItemStatusEnum.PendingEffective.icon;
                         break;
-                    }
+                }
             }
 
             return {
