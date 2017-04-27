@@ -60,6 +60,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 {
                     var summaryBatch = createSummaryBatchObj();
                     summaryBatch.BatchStart = itm.BatchStart;
+                    summaryBatch.BatchEnd = itm.BatchEnd;
                     summaryBatch.Items = itm.ItemsBySummaryKey.Values;
                     return summaryBatch;
                 });

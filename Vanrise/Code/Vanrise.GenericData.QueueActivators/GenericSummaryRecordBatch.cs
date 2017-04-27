@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.QueueActivators
     {
         static GenericSummaryRecordBatch()
         {
-            ProtoBufSerializer.AddSerializableType(typeof(GenericSummaryRecordBatch), "SummaryTransformationDefinitionId", "SerializedRecordsList", "BatchStart");
+            ProtoBufSerializer.AddSerializableType(typeof(GenericSummaryRecordBatch), "SummaryTransformationDefinitionId", "SerializedRecordsList", "BatchStart", "BatchEnd");
         }
 
         public Guid SummaryTransformationDefinitionId { get; set; }
@@ -58,5 +58,29 @@ namespace Vanrise.GenericData.QueueActivators
             else
                 return String.Format("{0} Summary Records", GetRecordCount());
         }
+
+        public override DateTime GetBatchEnd()
+        {
+            return BatchEnd;
+        }
+
+        public override DateTime GetBatchStart()
+        {
+            return BatchStart;
+        }
+
+        public override void SetBatchEnd(DateTime batchEnd)
+        {
+            BatchEnd = batchEnd;
+        }
+
+        public override void SetBatchStart(DateTime batchStart)
+        {
+            BatchStart = batchStart;
+        }
+
+        public DateTime BatchStart { get; set; }
+
+        public DateTime BatchEnd { get; set; }
     }
 }

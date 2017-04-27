@@ -9,6 +9,7 @@ namespace Vanrise.Entities.SummaryTransformation
     public interface ISummaryBatch
     {
         DateTime BatchStart { get; set; }
+        DateTime BatchEnd { get; set; }
     }
 
     public interface ISummaryBatch<T> : ISummaryBatch

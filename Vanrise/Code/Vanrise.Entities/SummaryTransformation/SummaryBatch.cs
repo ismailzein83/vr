@@ -12,5 +12,7 @@ namespace Vanrise.Entities.SummaryTransformation
         public IEnumerable<T> Items { get; set; }
 
         public DateTime BatchStart { get; set; }
+
+        public DateTime BatchEnd { get; set; }
     }
 }

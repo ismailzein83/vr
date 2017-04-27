@@ -125,7 +125,10 @@ namespace Vanrise.GenericData.QueueActivators
                     var currentBatchStart = summaryBatchEntry.Key;
                     var currentBatchEnd = summaryItems.First().SummaryItem.BatchEnd;
 
-                    var genericSummaryBatch = new GenericSummaryRecordBatch { BatchStart = currentBatchStart, Items = summaryItems.Select(summaryItemInProcess => summaryItemInProcess.SummaryItem).ToList(), SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
+                    var genericSummaryBatch = new GenericSummaryRecordBatch { Items = summaryItems.Select(summaryItemInProcess => summaryItemInProcess.SummaryItem).ToList(), SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
+                    genericSummaryBatch.SetBatchStart(currentBatchStart);
+                    genericSummaryBatch.SetBatchEnd(currentBatchEnd);
+
                     StagingSummaryRecord stagingSummaryRecord = new StagingSummaryRecord() { ProcessInstanceId = context.ProcessInstanceId, BatchStart = currentBatchStart, BatchEnd = currentBatchEnd, StageName = context.CurrentStageName };
 
                     if (context.To >= currentBatchEnd && context.From <= currentBatchStart)
