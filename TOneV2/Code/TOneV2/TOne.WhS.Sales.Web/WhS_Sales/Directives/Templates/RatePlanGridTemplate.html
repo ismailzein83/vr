@@ -52,6 +52,10 @@
                         </div>
                     </vr-datagridcolumn>
 
+                    <vr-datagridcolumn widthfactor="5">
+                        <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
+                    </vr-datagridcolumn>
+
                     <vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
                         <div vr-loader="dataItem.isLoadingRouteOptions">
                             <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
@@ -68,13 +72,9 @@
                                        type="'Number'"
                                        numberprecision="'LongPrecision'"
                                        isfielddynamic="true"
-                                       columnindex="5 + $index"
+                                       columnindex="6 + $index"
                                        widthfactor="7"
                                        disablesorting="true">
-                    </vr-datagridcolumn>
-
-                    <vr-datagridcolumn widthfactor="5">
-                        <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Margin'" field="'Margin'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
