@@ -22,7 +22,7 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 foreach (var sourceQueueId in sourceQueueIds)
                 {
-                    ExecuteNonQuerySP("queue.sp_QueueSubscription_Insert", sourceQueueId, susbscribedQueueId);
+                    ExecuteNonQuerySP("queue.sp_QueueSubscription_Insert", sourceQueueId, susbscribedQueueId, true);
                 }
             }
         }

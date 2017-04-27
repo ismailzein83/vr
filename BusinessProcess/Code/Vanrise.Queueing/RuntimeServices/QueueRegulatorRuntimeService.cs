@@ -16,6 +16,7 @@ namespace Vanrise.Queueing
 
         IQueueActivatorInstanceDataManager _queueActivatorInstanceDataManager = QDataManagerFactory.GetDataManager<IQueueActivatorInstanceDataManager>();
         IQueueItemDataManager _queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
+        QueueItemManager _queueItemManager = new QueueItemManager();
 
         QueueInstanceManager _queueManager = new QueueInstanceManager();
         ISummaryBatchActivatorDataManager _summaryBatchActivatorDataManager = QDataManagerFactory.GetDataManager<ISummaryBatchActivatorDataManager>();
@@ -27,7 +28,63 @@ namespace Vanrise.Queueing
                 List<QueueActivatorInstance> activeActivatorInstances = GetActiveActivatorInstances();
                 AssignQueueItemsToActivators(activeActivatorInstances.Where(itm => itm.ActivatorType == QueueActivatorType.Normal).ToList());
                 AssignSummaryBatchesToActivators(activeActivatorInstances.Where(itm => itm.ActivatorType == QueueActivatorType.Summary).ToList());
+                TryUpdateHoldRequests();
             });
+        }
+
+        private void TryUpdateHoldRequests()
+        {
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            Dictionary<Guid, IOrderedEnumerable<HoldRequest>> holdRequestsByExecutionFlowDefinition = holdRequestManager.GetCachedOrderedHoldRequestsByExecutionFlowDefinition();
+            if (holdRequestsByExecutionFlowDefinition == null || holdRequestsByExecutionFlowDefinition.Count == 0)
+                return;
+
+            foreach (var item in holdRequestsByExecutionFlowDefinition)
+            {
+                var holdRequests = item.Value;
+                foreach (HoldRequest holdRequest in holdRequests)
+                {
+                    if (holdRequest.Status == HoldRequestStatus.CanBeStarted)
+                        continue;
+
+                    bool holdRequestCanBeStarted = true;
+
+                    foreach (HoldRequest holdRequestToCompare in holdRequests)
+                    {
+                        if (holdRequest == holdRequestToCompare)
+                            break;
+
+                        if (holdRequest.IsOverlappedWith(holdRequestToCompare))
+                        {
+                            holdRequestCanBeStarted = false;
+                            break;
+                        }
+                    }
+
+                    if (!holdRequestCanBeStarted)
+                        continue;
+
+                    if (holdRequestCanBeStarted && holdRequest.QueuesToHold != null && holdRequest.QueuesToHold.Count > 0)
+                    {
+                        if (_queueItemManager.HasPendingQueueItems(holdRequest.QueuesToHold, holdRequest.From, holdRequest.To, true))
+                            continue;
+
+                        if (_queueItemManager.HasPendingSummaryQueueItems(holdRequest.QueuesToHold, holdRequest.From, holdRequest.To))
+                            continue;
+                    }
+
+                    if (holdRequest.QueuesToProcess != null && holdRequest.QueuesToProcess.Count > 0)
+                    {
+                        if (_queueItemManager.HasPendingQueueItems(holdRequest.QueuesToProcess, holdRequest.From, holdRequest.To, false))
+                            continue;
+
+                        if (_summaryBatchActivatorDataManager.HasPendingSummaryBatchActivators(holdRequest.QueuesToProcess, holdRequest.From, holdRequest.To))
+                            continue;
+                    }
+
+                    holdRequestManager.UpdateStatus(holdRequest.HoldRequestId, HoldRequestStatus.CanBeStarted);
+                }
+            }
         }
 
         private List<QueueActivatorInstance> GetActiveActivatorInstances()
@@ -49,14 +106,19 @@ namespace Vanrise.Queueing
             else
                 return null;
         }
-                
+
         private void AssignQueueItemsToActivators(List<QueueActivatorInstance> activeActivatorInstances)
         {
             if (activeActivatorInstances == null || activeActivatorInstances.Count == 0)
                 return;
+
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            IOrderedEnumerable<HoldRequest> holdRequests = holdRequestManager.GetCachedOrderedHoldRequests();
+
             int maxNbOfPendingItems = s_maxNumberOfItemsPerActivator * activeActivatorInstances.Count;
-            List<PendingQueueItemInfo> pendingQueueItems = _queueItemDataManager.GetPendingQueueItems(maxNbOfPendingItems);
-            if(pendingQueueItems != null && pendingQueueItems.Count > 0)
+            List<PendingQueueItemInfo> pendingQueueItems = _queueItemManager.GetPendingQueueItems(maxNbOfPendingItems, holdRequests);
+
+            if (pendingQueueItems != null && pendingQueueItems.Count > 0)
             {
                 Dictionary<int, AssignedQueueItemsCount> itemsCountByQueue = new Dictionary<int, AssignedQueueItemsCount>();
                 Dictionary<Guid, ActivatorInstanceItemsCount> itemsCountByActivator
@@ -65,14 +127,14 @@ namespace Vanrise.Queueing
                         ActivatorInstance = activatorInstance,
                         QueueIds = new List<int>()
                     });
-                foreach(var pendingQueueItem in pendingQueueItems)
+                foreach (var pendingQueueItem in pendingQueueItems)
                 {
                     AssignedQueueItemsCount assignedQueueItemsCount = itemsCountByQueue.GetOrCreateItem(pendingQueueItem.QueueId, () =>
                         {
                             var queueInstance = _queueManager.GetQueueInstanceById(pendingQueueItem.QueueId);
                             return new AssignedQueueItemsCount { QueueId = pendingQueueItem.QueueId, MaxItemsCount = queueInstance.Settings.Activator.NbOfMaxConcurrentActivators };
                         });
-                    if(pendingQueueItem.ActivatorInstanceId.HasValue)
+                    if (pendingQueueItem.ActivatorInstanceId.HasValue)
                     {
                         ActivatorInstanceItemsCount activatorItemsCount;
                         if (itemsCountByActivator.TryGetValue(pendingQueueItem.ActivatorInstanceId.Value, out activatorItemsCount))
@@ -89,7 +151,7 @@ namespace Vanrise.Queueing
                 List<PendingQueueItemInfo> pendingQueueItemsToUpdate = new List<PendingQueueItemInfo>();
                 List<ActivatorInstanceItemsCount> activatorsToAssign = itemsCountByActivator.Values.Where(itm => itm.ItemsCount < s_maxNumberOfItemsPerActivator).OrderBy(itm => itm.ItemsCount).ToList();
                 int activatorInstanceIndex = 0;
-                foreach(var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue).OrderBy(itm => itm.ExecutionFlowTriggerItemID).ThenBy(itm => itm.QueueItemId))
+                foreach (var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue).OrderBy(itm => itm.ExecutionFlowTriggerItemID).ThenBy(itm => itm.QueueItemId))
                 {
                     if (activatorsToAssign.Count == 0)
                         break;
@@ -115,9 +177,9 @@ namespace Vanrise.Queueing
                     activatorInstanceIndex++;
                 }
                 _queueItemDataManager.SetQueueItemsActivatorInstances(pendingQueueItemsToUpdate);
-                foreach(var activatorInstanceItemsCount in itemsCountByActivator.Values)
+                foreach (var activatorInstanceItemsCount in itemsCountByActivator.Values)
                 {
-                    if(activatorInstanceItemsCount.ItemsCount > 0)
+                    if (activatorInstanceItemsCount.ItemsCount > 0)
                     {
                         try
                         {
@@ -127,12 +189,12 @@ namespace Vanrise.Queueing
                                     client.SetPendingQueuesToProcess(activatorInstanceItemsCount.ActivatorInstance.ActivatorId, activatorInstanceItemsCount.QueueIds.Distinct().ToList());
                                 });
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             LoggerFactory.GetExceptionLogger().WriteException(ex);
                         }
                     }
-                }                
+                }
             }
         }
 
@@ -140,16 +202,20 @@ namespace Vanrise.Queueing
         {
             if (activeActivatorInstances == null || activeActivatorInstances.Count == 0)
                 return;
-            List<SummaryBatch> summaryBatches = _queueItemDataManager.GetSummaryBatches();
-            if(summaryBatches != null && summaryBatches.Count > 0)
+
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            IOrderedEnumerable<HoldRequest> holdRequests = holdRequestManager.GetCachedOrderedHoldRequests();
+
+            List<SummaryBatch> summaryBatches = _queueItemManager.GetSummaryBatches(holdRequests);
+            if (summaryBatches != null && summaryBatches.Count > 0)
             {
                 List<SummaryBatchActivator> assignedSummaryBatchActivators = _summaryBatchActivatorDataManager.GetAllSummaryBatchActivators();
-                
+
                 Dictionary<int, AssignedQueueItemsCount> assignedBatchesCountByQueue = new Dictionary<int, AssignedQueueItemsCount>();
                 Dictionary<Guid, ActivatorInstanceItemsCount> itemsCountByActivator
                     = activeActivatorInstances.ToDictionary(activatorInstance => activatorInstance.ActivatorId, activatorInstance => new ActivatorInstanceItemsCount { ActivatorInstance = activatorInstance });
 
-                for(int i = assignedSummaryBatchActivators.Count -1; i>=0;i--)
+                for (int i = assignedSummaryBatchActivators.Count - 1; i >= 0; i--)
                 {
                     var summaryBatchActivator = assignedSummaryBatchActivators[i];
                     AssignedQueueItemsCount assignedQueueItemsCount = assignedBatchesCountByQueue.GetOrCreateItem(summaryBatchActivator.QueueId, () =>
@@ -174,7 +240,7 @@ namespace Vanrise.Queueing
                 List<ActivatorInstanceItemsCount> activatorsToAssign = itemsCountByActivator.Values.Where(itm => itm.ItemsCount < s_maxNumberOfItemsPerActivator).OrderBy(itm => itm.ItemsCount).ToList();
                 int activatorInstanceIndex = 0;
 
-                foreach(var summarybatch in summaryBatches.OrderBy(itm => itm.BatchStart))
+                foreach (var summarybatch in summaryBatches.OrderBy(itm => itm.BatchStart))
                 {
                     if (activatorsToAssign.Count == 0)
                         break;
@@ -200,7 +266,8 @@ namespace Vanrise.Queueing
                     {
                         QueueId = summarybatch.QueueId,
                         BatchStart = summarybatch.BatchStart,
-                        ActivatorId = activatorToAssign.ActivatorInstance.ActivatorId
+                        ActivatorId = activatorToAssign.ActivatorInstance.ActivatorId,
+                        BatchEnd = summarybatch.BatchEnd
                     });
 
                     assignedQueueItemsCount.ItemsCount++;
@@ -208,7 +275,7 @@ namespace Vanrise.Queueing
                     if (activatorToAssign.ItemsCount >= s_maxNumberOfItemsPerActivator)
                         activatorsToAssign.Remove(activatorToAssign);
 
-                    activatorInstanceIndex++;                    
+                    activatorInstanceIndex++;
                 }
                 _summaryBatchActivatorDataManager.Insert(summaryBatchActivatorsToCreate);
             }
@@ -219,7 +286,7 @@ namespace Vanrise.Queueing
 
         private class AssignedQueueItemsCount
         {
-            public int QueueId{ get; set; }
+            public int QueueId { get; set; }
 
             public int ItemsCount { get; set; }
 

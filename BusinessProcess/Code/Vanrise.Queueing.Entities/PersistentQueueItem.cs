@@ -10,7 +10,13 @@ namespace Vanrise.Queueing.Entities
     {        
         public long ExecutionFlowTriggerItemId { get; set; }
 
-        public DateTime BatchStart { get; set; }
+        public abstract DateTime GetBatchStart();
+
+        public abstract DateTime GetBatchEnd();
+
+        public abstract void SetBatchStart(DateTime batchStart);
+
+        public abstract void SetBatchEnd(DateTime batchEnd);
         
         public virtual byte[] Serialize()
         {

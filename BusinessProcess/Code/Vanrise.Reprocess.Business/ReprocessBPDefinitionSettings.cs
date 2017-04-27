@@ -1,25 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Reprocess.BP.Arguments;
 using Vanrise.Common;
+using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
+using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.Reprocess.Business
 {
     public class ReprocessBPDefinitionSettings : Vanrise.BusinessProcess.Business.DefaultBPDefinitionExtendedSettings
     {
+        public override void OnBPExecutionCompleted(BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
+        {
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            HoldRequest holdRequest = holdRequestManager.GetHoldRequest(context.BPInstance.ProcessInstanceID);
+            if (holdRequest != null)
+                holdRequestManager.DeleteHoldRequest(holdRequest.HoldRequestId);
+        }
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             ReProcessingProcessInput reprocessInputArg = context.IntanceToRun.InputArgument.CastWithValidate<ReProcessingProcessInput>("context.IntanceToRun.InputArgument");
             Dictionary<Guid, Guid> execFlowDefIdsByReprocessDefId = new Dictionary<Guid, Guid>();
             Guid executionFlowDefinitionId = GetExecFlowDefByReprocessDefId(reprocessInputArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
-            foreach(var startedBPInstance in context.GetStartedBPInstances())
+            foreach (var startedBPInstance in context.GetStartedBPInstances())
             {
                 ReProcessingProcessInput startedBPInstanceReprocessArg = startedBPInstance.InputArgument as ReProcessingProcessInput;
-                if(startedBPInstanceReprocessArg != null)
+                if (startedBPInstanceReprocessArg != null)
                 {
                     Guid startedBPInstanceExecFlowDefId = GetExecFlowDefByReprocessDefId(startedBPInstanceReprocessArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
                     if (startedBPInstanceExecFlowDefId == executionFlowDefinitionId
@@ -30,6 +37,26 @@ namespace Vanrise.Reprocess.Business
                     }
                 }
             }
+
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
+            if (existingHoldRequest == null)
+            {
+                ReprocessDefinitionManager reprocessDefinitionManager = new ReprocessDefinitionManager();
+                ReprocessDefinition reprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reprocessInputArg.ReprocessDefinitionId);
+
+                holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, reprocessDefinition.Settings.ExecutionFlowDefinitionId, reprocessInputArg.FromTime, reprocessInputArg.ToTime,
+                    reprocessDefinition.Settings.StagesToHoldNames, reprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
+
+                context.Reason = "Waiting CDR Import";
+                return false;
+            }
+            else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
+            {
+                context.Reason = "Waiting CDR Import";
+                return false;
+            }
+
             return true;
         }
 

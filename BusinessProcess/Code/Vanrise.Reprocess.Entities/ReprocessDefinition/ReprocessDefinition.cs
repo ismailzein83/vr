@@ -24,5 +24,9 @@ namespace Vanrise.Reprocess.Entities
         public List<string> StageNames { get; set; }
 
         public List<string> InitiationStageNames { get; set; }
+
+        public List<string> StagesToHoldNames { get; set; }
+
+        public List<string> StagesToProcessNames { get; set; }
     }
 }

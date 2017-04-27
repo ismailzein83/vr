@@ -81,12 +81,9 @@ namespace Vanrise.Queueing
         {
             IEnumerable<QueueInstance> queueInstances = GetCachedQueueInstances().Values.ToList();
             return queueInstances.Where(x => x.ExecutionFlowId.HasValue && executionFlowIds.Contains(x.ExecutionFlowId.Value));
-
         }
 
-
         #endregion
-
 
         #region Private Classes
 

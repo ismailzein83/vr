@@ -35,8 +35,19 @@ namespace Vanrise.Queueing.Data.SQL
         {
             foreach(var summaryBatchActivator in summaryBatchActivators)
             {
-                ExecuteNonQuerySP("[queue].[sp_SummaryBatchActivator_Insert]", summaryBatchActivator.QueueId, summaryBatchActivator.BatchStart, summaryBatchActivator.ActivatorId);
+                ExecuteNonQuerySP("[queue].[sp_SummaryBatchActivator_Insert]", summaryBatchActivator.QueueId, summaryBatchActivator.BatchStart, summaryBatchActivator.BatchEnd, summaryBatchActivator.ActivatorId);
             }
+        }
+
+        public bool HasPendingSummaryBatchActivators(List<int> queueIdsToCheck, DateTime from, DateTime to)
+        {
+            string queueIdsToCheckAsString = null;
+            if (queueIdsToCheck != null)
+                queueIdsToCheckAsString = string.Join<int>(",", queueIdsToCheck);
+
+            object hasPendingItems;
+            ExecuteNonQuerySP("[queue].[sp_SummaryBatchActivator_HasPendingItems]", out hasPendingItems, queueIdsToCheckAsString, from, to);
+            return (bool)hasPendingItems;
         }
 
         #region Mappers
@@ -47,6 +58,7 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 QueueId = (int)reader["QueueID"],
                 BatchStart = (DateTime)reader["BatchStart"],
+                BatchEnd = (DateTime)reader["BatchEnd"],
                 ActivatorId = (Guid)reader["ActivatorID"]
             };
         }

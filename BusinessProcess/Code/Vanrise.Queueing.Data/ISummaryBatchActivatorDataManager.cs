@@ -11,11 +11,12 @@ namespace Vanrise.Queueing.Data
     {
         List<SummaryBatchActivator> GetAllSummaryBatchActivators();
 
-
         List<SummaryBatchActivator> GetSummaryBatchActivators(Guid activatorId);
 
         void Delete(int queueId, DateTime batchStart);
 
         void Insert(List<SummaryBatchActivator> summaryBatchActivators);
+
+        bool HasPendingSummaryBatchActivators(List<int> queueIdsToCheck, DateTime from, DateTime to);
     }
 }

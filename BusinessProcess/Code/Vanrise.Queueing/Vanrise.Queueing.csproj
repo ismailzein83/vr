@@ -73,6 +73,7 @@
     <Compile Include="MemoryQueue.cs" />
     <Compile Include="PersistentQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HoldRequestManager.cs" />
     <Compile Include="RuntimeServices\IQueueActivationRuntimeWCFService.cs" />
     <Compile Include="RuntimeServices\QueueActivationRuntimeService.cs" />
     <Compile Include="RuntimeServices\QueueActivationRuntimeWCFService.cs" />

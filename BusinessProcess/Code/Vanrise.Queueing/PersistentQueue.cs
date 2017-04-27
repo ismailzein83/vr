@@ -34,6 +34,8 @@ namespace Vanrise.Queueing
             }
         }
 
+        QueueActivatorType _queueActivatorType;
+
         T _emptyObject;
 
         int _maxRetryDequeueTime;
@@ -52,6 +54,12 @@ namespace Vanrise.Queueing
                 _maxRetryDequeueTime = 0;
             if (!int.TryParse(ConfigurationManager.AppSettings["Queue_NbOfSummaryBatchesToDequeue"], out _nbOfSummaryBatchesToDequeue))
                 _nbOfSummaryBatchesToDequeue = 20;
+
+            var summaryBatchQueueActivator = settings.Activator as ISummaryBatchQueueActivator;
+            if (summaryBatchQueueActivator == null)
+                _queueActivatorType = QueueActivatorType.Normal;
+            else
+                _queueActivatorType = QueueActivatorType.Summary;
         }
 
         #endregion
@@ -71,7 +79,7 @@ namespace Vanrise.Queueing
 
         long EnqueuePrivate(T item)
         {
-            DateTime? batchStart = item.BatchStart != DateTime.MinValue ? item.BatchStart : default(DateTime?);
+            //DateTime? batchStart = item.BatchStart != DateTime.MinValue ? item.BatchStart : default(DateTime?);
             string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
@@ -82,7 +90,7 @@ namespace Vanrise.Queueing
             var subscribedQueueIds = queueSubscriptionManager.GetSubscribedQueueIds(_queueId);
             if (subscribedQueueIds == null || subscribedQueueIds.Count == 0)
             {
-                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, batchStart, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueActivatorType, _queueId, itemId, item.GetBatchStart(), item.GetBatchEnd(), executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             else
             {
@@ -93,7 +101,7 @@ namespace Vanrise.Queueing
                     foreach (int queueId in subscribedQueueIds)
                         targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID());
                 }
-                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, batchStart, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueActivatorType, targetQueuesItemsIds, _queueId, itemId, item.GetBatchStart(), item.GetBatchEnd(), executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             return itemId;
         }
@@ -155,7 +163,8 @@ namespace Vanrise.Queueing
             byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
             T deserialized = _emptyObject.Deserialize<T>(decompressed);
             deserialized.ExecutionFlowTriggerItemId = queueItem.ExecutionFlowTriggerItemId;
-            deserialized.BatchStart = queueItem.BatchStart;
+            deserialized.SetBatchStart(queueItem.BatchStart);
+            deserialized.SetBatchEnd(queueItem.BatchEnd);
             return deserialized;
         }
 

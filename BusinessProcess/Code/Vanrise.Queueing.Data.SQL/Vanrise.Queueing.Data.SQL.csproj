@@ -68,6 +68,7 @@
     <Compile Include="QueueItemDataManager.cs" />
     <Compile Include="QueueItemTypeDataManager.cs" />
     <Compile Include="QueueSubscriptionDataManager.cs" />
+    <Compile Include="HoldRequestDataManager.cs" />
     <Compile Include="SummaryBatchActivatorDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

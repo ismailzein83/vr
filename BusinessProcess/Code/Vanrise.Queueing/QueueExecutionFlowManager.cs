@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Queueing.Data;
@@ -13,7 +12,6 @@ namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowManager
     {
-
         #region Public Methods
 
         public QueuesByStages GetQueuesByStages(Guid executionFlowId)
@@ -60,7 +58,7 @@ namespace Vanrise.Queueing
 
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-       
+
             executionFlowObj.ExecutionFlowId = Guid.NewGuid();
             IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
             bool insertActionSucc = dataManager.AddExecutionFlow(executionFlowObj);
@@ -84,9 +82,7 @@ namespace Vanrise.Queueing
         {
             var cachedFlows = GetCachedQueueExecutionFlows();
             return cachedFlows.MapRecords(QueueExecutionFlowInfoMapper, null);
-
         }
-
 
         public string GetExecutionFlowName(Guid executionFlowId)
         {
@@ -120,7 +116,7 @@ namespace Vanrise.Queueing
         public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId, bool isViewedFromUI)
         {
             var executionFlows = GetCachedQueueExecutionFlows();
-            var executionFlowItem= executionFlows.GetRecord(executionFlowId);
+            var executionFlowItem = executionFlows.GetRecord(executionFlowId);
             if (executionFlowItem != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(QueueExecutionFlowLoggableEntity.Instance, executionFlowItem);
             return executionFlowItem;
@@ -128,7 +124,13 @@ namespace Vanrise.Queueing
 
         public QueueExecutionFlow GetExecutionFlow(Guid executionFlowId)
         {
-           return GetExecutionFlow(executionFlowId,false);
+            return GetExecutionFlow(executionFlowId, false);
+        }
+
+        public List<QueueExecutionFlow> GetExecutionFlowsByDefinition(Guid executionFlowDefinitionId)
+        {
+            var executionFlows = GetCachedQueueExecutionFlowsByDefinition();
+            return executionFlows.GetRecord(executionFlowDefinitionId);
         }
 
         public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail> UpdateExecutionFlow(QueueExecutionFlow executionFlowObject)
@@ -152,7 +154,6 @@ namespace Vanrise.Queueing
         }
 
         #endregion
-
 
         #region Private Methods
 
@@ -237,8 +238,27 @@ namespace Vanrise.Queueing
                });
         }
 
-        #endregion
+        Dictionary<Guid, List<QueueExecutionFlow>> GetCachedQueueExecutionFlowsByDefinition()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlowsByDefinition",
+               () =>
+               {
+                   Dictionary<Guid, List<QueueExecutionFlow>> queueExecutionFlowsDict = new Dictionary<Guid, List<QueueExecutionFlow>>();
+                   Dictionary<Guid, QueueExecutionFlow> queueExecutionFlows = GetCachedQueueExecutionFlows();
 
+                   if (queueExecutionFlows != null)
+                   {
+                       foreach (var queueExecutionFlow in queueExecutionFlows)
+                       {
+                           List<QueueExecutionFlow> tempQueueExecutionFlows = queueExecutionFlowsDict.GetOrCreateItem(queueExecutionFlow.Value.DefinitionId);
+                           tempQueueExecutionFlows.Add(queueExecutionFlow.Value);
+                       }
+                   }
+                   return queueExecutionFlowsDict;
+               });
+        }
+
+        #endregion
 
         #region Private Classes
 
@@ -297,11 +317,9 @@ namespace Vanrise.Queueing
             }
         }
 
-
         #endregion
 
         #region Mappers
-
         private QueueExecutionFlowDetail QueueExecutionFlowMapper(QueueExecutionFlow executionFlow)
         {
             QueueExecutionFlowDetail executionFlowDetail = new QueueExecutionFlowDetail();
@@ -320,7 +338,5 @@ namespace Vanrise.Queueing
         }
 
         #endregion
-
-
     }
 }

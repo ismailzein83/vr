@@ -60,6 +60,7 @@
     <Compile Include="IQueueItemDataManager.cs" />
     <Compile Include="IQueueItemTypeDataManager.cs" />
     <Compile Include="IQueueSubscriptionDataManager.cs" />
+    <Compile Include="IHoldRequestDataManager.cs" />
     <Compile Include="ISummaryBatchActivatorDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QDataManagerFactory.cs" />

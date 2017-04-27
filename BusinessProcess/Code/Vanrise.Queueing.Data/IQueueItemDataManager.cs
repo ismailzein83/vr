@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data
@@ -13,9 +10,9 @@ namespace Vanrise.Queueing.Data
 
         long GenerateItemID();
 
-        void EnqueueItem(int queueId, long itemId, DateTime? batchStart, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(QueueActivatorType queueActivatorType, int queueId, long itemId, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
-        void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, DateTime? batchStart, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(QueueActivatorType queueActivatorType, Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
         QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders);
 
@@ -33,7 +30,7 @@ namespace Vanrise.Queueing.Data
 
         List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds);
 
-        Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input);       
+        Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input);
 
         IEnumerable<QueueItem> DequeueSummaryBatches(int queueId, DateTime batchStart, int nbOfBatches);
 
@@ -47,10 +44,14 @@ namespace Vanrise.Queueing.Data
 
         QueueItem DequeueItem(int _queueId, Guid activatorInstanceId);
 
-        List<PendingQueueItemInfo> GetPendingQueueItems(int maxNbOfPendingItems);
+        void GetPendingQueueItems(int maxNbOfPendingItems, Func<PendingQueueItemInfo, bool> onPendingQueueItemReady);
 
         void SetQueueItemsActivatorInstances(List<PendingQueueItemInfo> pendingQueueItemsToUpdate);
 
         List<SummaryBatch> GetSummaryBatches();
+
+        bool HasPendingQueueItems(List<int> queueIdsToCheck, DateTime from, DateTime to, bool onlyAssignedQueues);
+
+        bool HasPendingSummaryQueueItems(List<int> queueIdsToCheck, DateTime from, DateTime to);
     }
 }

@@ -23,12 +23,14 @@
         var executionFlowStageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var stageAPI;
-        var stageSelectorReadyDeferred;//= UtilsService.createPromiseDeferred();
+        var stageSelectorReadyDeferred;
+
+        var stagesToHoldAPI;
+        var stagesToProcessAPI;
 
         loadParameters();
         defineScope();
         load();
-
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -46,24 +48,36 @@
                 dataRecordStorageAPI = api;
                 dataRecordStorageSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onDataRecordStorageSelectionChanged = function () {          
-                 tryLoadFlowStagesOrResolvePromise(onDataRecordStorageSelectionChangedDeferred);
+            $scope.scopeModel.onDataRecordStorageSelectionChanged = function () {
+                tryLoadFlowStagesOrResolvePromise(onDataRecordStorageSelectionChangedDeferred);
             };
 
             $scope.scopeModel.onExecutionFlowDefinitionSelectorReady = function (api) {
                 executionFlowDefinitionAPI = api;
                 executionFlowDefinitionSelectorReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onStagesToHoldSelectorReady = function (api) {
+                stagesToHoldAPI = api;
+            };
+
+            $scope.scopeModel.onStagesToProcessSelectorReady = function (api) {
+                stagesToProcessAPI = api;
+            };
+
+            $scope.scopeModel.onStageSelectorReady = function (api) {
+                stageAPI = api;
+            };
+
             $scope.scopeModel.onExecutionFlowDefinitionSelectionChanged = function () {
-             
                 loadStagesSelector();
+                loadStagesToHoldSelector();
+                loadStagesToProcessSelector();
                 tryLoadFlowStagesOrResolvePromise(onExecutionFlowDefinitionSelectionChangedDeferred);
-         
             };
 
             $scope.scopeModel.onStageSelectorSelectionChanged = function () {
-                        
-                 tryLoadFlowStagesOrResolvePromise(stageSelectorReadyDeferred);
+                tryLoadFlowStagesOrResolvePromise(stageSelectorReadyDeferred);
             };
 
             $scope.scopeModel.onExecutionFlowStageSelectorReady = function (api) {
@@ -71,10 +85,6 @@
                 executionFlowStageSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onStageSelectorReady = function (api) {
-                stageAPI = api;
-            };
-            
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -83,6 +93,7 @@
                     return insert();
                 }
             };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -95,20 +106,39 @@
                     payload.selectedIds = reprocessDefinitionEntity.Settings.StageNames;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSatge = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stageAPI, payload, setLoader);
+            };
 
-            }
+            function loadStagesToHoldSelector() {
+                var stagesToHoldPayload = {
+                    executionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds()
+                };
+                if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined)
+                    stagesToHoldPayload.selectedIds = reprocessDefinitionEntity.Settings.StagesToHoldNames;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToHold = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToHoldAPI, stagesToHoldPayload, setLoader);
+            };
+
+            function loadStagesToProcessSelector() {
+                var stagesToProcessPayload = {
+                    executionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds()
+                };
+                if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined)
+                    stagesToProcessPayload.selectedIds = reprocessDefinitionEntity.Settings.StagesToProcessNames;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToProcessAPI, stagesToProcessPayload, setLoader);
+            };
+
             function tryLoadFlowStagesOrResolvePromise(promiseDeferred) {
                 if (promiseDeferred != undefined)
                     promiseDeferred.resolve();
-                else
-                {
+                else {
                     setTimeout(function () {
                         UtilsService.safeApply($scope, function () {
 
                             var selectedRecordStorage = $scope.scopeModel.selectedRecordStorage;
-                            var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds()!=undefined ?executionFlowDefinitionAPI.getSelectedIds():0;
+                            var selectedExecutionFlowDefinitionId = executionFlowDefinitionAPI.getSelectedIds() != undefined ? executionFlowDefinitionAPI.getSelectedIds() : 0;
                             var stageNames = stageAPI.getSelectedIds() != undefined ? stageAPI.getSelectedIds() : [];
-                       
+
                             var payload = {
                                 executionFlowDefinitionId: selectedExecutionFlowDefinitionId,
                                 filter: {
@@ -120,9 +150,9 @@
                                 $scope.scopeModel.isLoadingExecutionFlowStages = value;
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, executionFlowStageAPI, payload, setExecutionFlowStagesLoader, promiseDeferred);
-                        });                        
-                    });      
-                 } 
+                        });
+                    });
+                }
             }
         }
         function load() {
@@ -164,12 +194,14 @@
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor('ReprocessDefinition');
                 }
-            }
+            };
+
             function loadStaticData() {
                 if (reprocessDefinitionEntity == undefined)
                     return;
                 $scope.scopeModel.name = reprocessDefinitionEntity.Name;
-            }
+            };
+
             function loadDataRecordStorageSelector() {
                 var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 dataRecordStorageSelectorReadyDeferred.promise.then(function () {
@@ -182,7 +214,8 @@
                     VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
                 });
                 return dataRecordStorageSelectorLoadDeferred.promise;
-            }
+            };
+
             function loadExecutionFlowDefinitionSelector() {
                 var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
@@ -195,7 +228,8 @@
                     VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
                 });
                 return executionFlowDefinitionSelectorLoadDeferred.promise;
-            }
+            };
+
             function loadExecutionFlowStageSelector() {
                 if (reprocessDefinitionEntity == undefined || reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId == undefined)
                     return;
@@ -210,7 +244,7 @@
 
                 if (stageSelectorReadyDeferred == undefined)
                     stageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-                
+
                 UtilsService.waitMultiplePromises([executionFlowStageSelectorReadyDeferred.promise, onExecutionFlowDefinitionSelectionChangedDeferred.promise, onDataRecordStorageSelectionChangedDeferred.promise, stageSelectorReadyDeferred.promise])
                     .then(function () {
                         setTimeout(function () {
@@ -223,21 +257,18 @@
                                     executionFlowDefinitionId: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId,
                                     filter: {
                                         Filters: [buildStageRecordTypeFilter()],
-                                        InculdesStageNames:  reprocessDefinitionEntity.Settings.StageNames
+                                        InculdesStageNames: reprocessDefinitionEntity.Settings.StageNames
                                     },
                                     selectedIds: reprocessDefinitionEntity.Settings.InitiationStageNames
                                 };
                                 VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, executionFlowStageSelectorPayload, executionFlowStageSelectorLoadDeferred);
                             });
-                        },1000);
-
+                        }, 1000);
                     });
 
                 return executionFlowStageSelectorLoadDeferred.promise;
-            }
-        }
-
-
+            };
+        };
 
         function insert() {
             $scope.scopeModel.isLoading = true;
@@ -252,7 +283,8 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
+        };
+
         function update() {
             $scope.scopeModel.isLoading = true;
             return Reprocess_ReprocessDefinitionAPIService.UpdateReprocessDefinition(buildReprocessDefinitionObjFromScope()).then(function (response) {
@@ -267,22 +299,25 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
+        };
 
         function buildStageRecordTypeFilter() {
 
             return {
                 '$type': 'Vanrise.GenericData.QueueActivators.RecordTypeStageFilter, Vanrise.GenericData.QueueActivators',
-                RecordTypeId:$scope.scopeModel.selectedRecordStorage.DataRecordTypeId 
+                RecordTypeId: $scope.scopeModel.selectedRecordStorage.DataRecordTypeId
             };
-        }
+        };
+
         function buildReprocessDefinitionObjFromScope() {
 
             var settings = {
                 SourceRecordStorageId: dataRecordStorageAPI.getSelectedIds(),
                 ExecutionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds(),
                 InitiationStageNames: executionFlowStageAPI.getSelectedIds(),
-                StageNames: stageAPI.getSelectedIds()
+                StageNames: stageAPI.getSelectedIds(),
+                StagesToHoldNames: stagesToHoldAPI.getSelectedIds(),
+                StagesToProcessNames: stagesToProcessAPI.getSelectedIds()
             };
 
             return {
@@ -290,7 +325,7 @@
                 Name: $scope.scopeModel.name,
                 Settings: settings
             };
-        }
+        };
     }
 
     appControllers.controller('Reprocess_ReprocessDefinitionEditorController', ReprocessDefinitionEditorController);
