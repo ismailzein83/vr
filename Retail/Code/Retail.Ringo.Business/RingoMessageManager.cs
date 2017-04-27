@@ -28,6 +28,18 @@ namespace Retail.Ringo.Business
             return dataManager.GetRingoMessageCountEntityByRecipient_CTE(filter).ToDictionary(k => k.Name, v => v);
         }
 
+        public Dictionary<string, RingoMessageCountEntity> GetSenderRingoMessageRecords_CTE(RingoMessageFilter filter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetSenderRingoMessageRecords_CTE(filter).ToDictionary(k => k.Name, v => v);
+        }
+
+        public Dictionary<string, RingoMessageCountEntity> GetSenderRingoMessageRecords_EightSheet(RingoMessageFilter firstFilter, RingoMessageFilter secondFilter)
+        {
+            IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();
+            return dataManager.GetSenderRingoMessageRecords_EightSheet(firstFilter, secondFilter).ToDictionary(k => k.Name, v => v);
+        }
+
         public Dictionary<string, RingoMessageCountEntity> GetRecipientRingoMessageRecords(RingoMessageFilter filter)
         {
             IRingoMessageDataManager dataManager = RingoDataManagerFactory.GetDataManager<IRingoMessageDataManager>();

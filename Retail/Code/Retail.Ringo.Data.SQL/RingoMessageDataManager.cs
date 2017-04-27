@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,15 @@ namespace Retail.Ringo.Data.SQL
         {
             return GetItemsText(string.Format(query_RingoMessage_LastDayWithData, BuildConditionClause(filter)), RingoMessageCountMapper, GetCommandAction(filter));
         }
+        public IEnumerable<RingoMessageCountEntity> GetSenderRingoMessageRecords_CTE(RingoMessageFilter filter)
+        {
+            return GetItemsText(string.Format(query_RingoMessage_GetCountSender_CTE, BuildConditionClause(filter)), RingoMessageCountMapper, GetCommandAction(filter));
+        }
+
+        public IEnumerable<RingoMessageCountEntity> GetSenderRingoMessageRecords_EightSheet(RingoMessageFilter firstFilter, RingoMessageFilter secondFilter)
+        {
+            return GetItemsText(string.Format(query_RingoMessage_GetCountSender_CTE, BuildConditionClause(firstFilter), BuildConditionClause(secondFilter)), RingoMessageCountMapper, GetCommandAction(firstFilter));
+        }
 
         public IEnumerable<SintesiRingoMessageEntity> GetSintesiRingoMessageEntityByRecipient(TCRRingoReportFilter filter)
         {
@@ -62,27 +72,6 @@ namespace Retail.Ringo.Data.SQL
             return GetItemsText(string.Format(query_GetDettaglio_ByICSISender, BuildTCRSenderConditionClause(filter)), DettaglioRingoMessageMapper, GetCommandAction(filter));
         }
 
-        private static Action<System.Data.Common.DbCommand> GetCommandAction(RingoMessageFilter filter)
-        {
-            return (cmd) =>
-            {
-                if (filter.From.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@From", filter.From));
-                if (filter.To.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@To", filter.To));
-            };
-        }
-
-        private static Action<System.Data.Common.DbCommand> GetCommandAction(TCRRingoReportFilter filter)
-        {
-            return (cmd) =>
-            {
-                if (filter.From.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@From", filter.From));
-                if (filter.To.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@To", filter.To));
-            };
-        }
 
         #endregion
 
@@ -125,6 +114,27 @@ namespace Retail.Ringo.Data.SQL
                 condition.AppendFormat(" and MessageDate < @To");
 
             return condition.ToString();
+        }
+        Action<DbCommand> GetCommandAction(RingoMessageFilter filter)
+        {
+            return (cmd) =>
+            {
+                if (filter.From.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@From", filter.From));
+                if (filter.To.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@To", filter.To));
+            };
+        }
+
+        Action<DbCommand> GetCommandAction(TCRRingoReportFilter filter)
+        {
+            return (cmd) =>
+            {
+                if (filter.From.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@From", filter.From));
+                if (filter.To.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@To", filter.To));
+            };
         }
 
         string BuildTCRSenderConditionClause(TCRRingoReportFilter filter)
@@ -311,6 +321,17 @@ namespace Retail.Ringo.Data.SQL
                                                             )
                                                             select distinct(recipient) Name, count(*) Total from cte
                                                             group by recipient";
+        const string query_RingoMessage_GetCountSender_CTE = @"
+                                                            WITH cte (sender, msisdn, number)
+                                                            AS
+                                                            ( 
+                                                                SELECT  sender, msisdn, count(*)  
+                                                                from    [Retail_EDR].[RingoMessage]
+                                                                where   1 = 1 {0}
+                                                                group by sender,msisdn
+                                                            )
+                                                            select distinct(sender) Name, count(*) Total from cte
+                                                            group by sender";
         const string query_RingoMessage_LastDayWithData = @"
                                                             ;with maxDate as (
                                                             select  Max(CONVERT(date, MessageDate)) as MaxMessageDate
@@ -321,6 +342,38 @@ namespace Retail.Ringo.Data.SQL
                                                             where MessageDate>=MaxMessageDate and MessageDate<dateadd(day,1, MaxMessageDate)
                                                             {0}
                                                             group by (Sender)";
+
+        const string query_RingoMessage_EighthReportCTE = @"
+                                            with 
+                                            cte1 (sender, Msisdn, Messagedate) 
+                                            as (
+                                                select sender, msisdn,Messagedate from  [Retail_EDR].[RingoMessage]
+                                                where 1=1 {0}
+                                            )
+                                            ,
+                                            cte6 (sender, Msisdn, Messagedate) as (
+                                            select sender, msisdn,Messagedate from  [Retail_EDR].[RingoMessage]
+                                            where 1=1 {1}),
+                                            
+                                            ctejoin (sender, msisdn,diff) as (
+                                                select cte1.sender, cte1.msisdn, 
+                                                datediff (dd,cte1.Messagedate,cte6.Messagedate) - (DATEDIFF(wk,cte1.Messagedate,cte6.Messagedate) *2) -        case 
+                                                    when datepart(dw, cte1.Messagedate) = 1 
+                                                    then 1 
+                                                    else 0 
+                                                end + 
+                                                case 
+                                                    when datepart(dw, cte6.Messagedate) = 1 
+                                                    then 1 
+                                                    else 0 
+                                                end
+                                            from cte1 join cte6 on cte1.Msisdn=cte6.msisdn 
+                                            and cte1.sender=cte6.sender)
+
+                                            select sender, AVG(diff) from ctejoin
+                                            group by sender";
         #endregion
+
+
     }
 }

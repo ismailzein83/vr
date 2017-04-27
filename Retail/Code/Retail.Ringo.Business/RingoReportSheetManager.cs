@@ -58,23 +58,71 @@ namespace Retail.Ringo.Business
             //3r
             UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
             {
-                StateRequests = new List<int>() { 1, 8 },
+                StateRequests = new List<int>() { 9 },
                 Recipient = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
-            }), wbk, 4, 11, 3, 18, 168);
+            }), wbk, 4, 11, 3, 12, 168);
+
+            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            {
+                StateRequests = new List<int>() { 8 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 4, 11, 3, 14, 168);
+
+            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            {
+                StateRequests = new List<int>() { 7 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 4, 11, 3, 15, 168);
+
+            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            {
+                StateRequests = new List<int>() { 1 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 4, 11, 3, 16, 168);
 
             //3d
             UpdateWorkSheetByRow(ringoMessageManager.GetRecipientRingoMessageRecords(new RingoMessageFilter
             {
-                StateRequests = new List<int>() { 1, 8 },
+                StateRequests = new List<int>() { 9 },
+                Sender = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 5, 11, 3, 12, 168);
+
+            UpdateWorkSheetByRow(ringoMessageManager.GetRecipientRingoMessageRecords(new RingoMessageFilter
+            {
+                StateRequests = new List<int>() { 8 },
+                Sender = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 5, 11, 3, 14, 168);
+
+            UpdateWorkSheetByRow(ringoMessageManager.GetRecipientRingoMessageRecords(new RingoMessageFilter
+            {
+                StateRequests = new List<int>() { 7 },
+                Sender = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 5, 11, 3, 15, 168);
+
+            UpdateWorkSheetByRow(ringoMessageManager.GetRecipientRingoMessageRecords(new RingoMessageFilter
+            {
+                StateRequests = new List<int>() { 1 },
                 Sender = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 5, 11, 3, 16, 168);
 
             //5t
-            UpdateWorkSheetByColumn(ringoMessageManager.GetRecipientRingoMessageRecords_CTE(new RingoMessageFilter
+            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords_CTE(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 6 },
                 Sender = "ICSI",
@@ -83,19 +131,64 @@ namespace Retail.Ringo.Business
             }), wbk, 8, 13, 1, 170, 168);
 
             //5s
-            UpdateWorkSheetByColumn(ringoMessageManager.GetRecipientRingoMessageRecords_CTE(new RingoMessageFilter
+            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords_CTE(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 6 },
-                Sender = "ICSI",
+                Recipient = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 9, 13, 1, 170, 168);
 
+
+            //7N
             UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
             {
+                MessageTypes = new List<int> { 6 },
                 Recipient = "ICSI",
+                From = DateTime.Parse("2015-01-01"),
                 To = filter.ToDate
             }), wbk, 12, 13, 1, 170, 168);
+
+            //8r 13
+            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords_EightSheet(new RingoMessageFilter
+            {
+                MessageTypes = new List<int> { 1 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            },
+            new RingoMessageFilter
+            {
+                MessageTypes = new List<int> { 6 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 13, 11, 3, 12, 168);
+
+            //8r 14
+            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords_EightSheet(new RingoMessageFilter
+            {
+                MessageTypes = new List<int> { 2 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            },
+            new RingoMessageFilter
+            {
+                MessageTypes = new List<int> { 6 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 13, 11, 3, 13, 168);
+
+            //8r 16
+            UpdateWorkSheetByRow(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            {
+                MessageTypes = new List<int> { 6 },
+                Recipient = "ICSI",
+                From = filter.FromDate,
+                To = filter.ToDate
+            }), wbk, 13, 11, 3, 15, 168);
 
             return wbk.SaveToStream();
         }
@@ -107,7 +200,7 @@ namespace Retail.Ringo.Business
             if (filter.ReportType == TCRReportType.Dettaglio)
             {
                 filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 00, 00, 00);
-                filter.To = new DateTime(filter.From.Value.Year,filter.From.Value.Month, filter.From.Value.Day,23,59,59);
+                filter.To = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 23, 59, 59);
             }
             else
             {
@@ -200,7 +293,7 @@ namespace Retail.Ringo.Business
                     sumTransferredCredit = 0;
 
                     newOperator = false;
-                    if(recipient)
+                    if (recipient)
                         sb.AppendLine(SintesiRingoOperatorRecipientHeader(listOperators[i], filter));
                     else
                         sb.AppendLine(SintesiRingoOperatorSenderHeader(listOperators[i], filter));
@@ -244,7 +337,7 @@ namespace Retail.Ringo.Business
 
                     var myString = sb.ToString();
                     var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
-                    
+
                     string fileName;
                     if (recipient)
                         fileName = "TCR_Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMM");
@@ -306,7 +399,7 @@ namespace Retail.Ringo.Business
                         var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
                         string fileName;
                         if (recipient)
-                            fileName = "Ringo_"+ listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMMdd");
+                            fileName = "Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMMdd");
                         else
                             fileName = listOperators[i].Operator + "_Ringo_" + "_" + filter.From.Value.ToString("yyyyMMdd");
 
@@ -353,7 +446,7 @@ namespace Retail.Ringo.Business
             int i = 0;
             foreach (var item in data)
             {
-                ZipEntry entry = new ZipEntry(item.Key+ ".txt");
+                ZipEntry entry = new ZipEntry(item.Key + ".txt");
                 s.PutNextEntry(entry);
                 s.Write(item.Value, 0, item.Value.Length);
             }

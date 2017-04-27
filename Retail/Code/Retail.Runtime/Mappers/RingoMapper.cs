@@ -243,8 +243,10 @@ namespace Retail.Runtime.Mappers
             return result;
         }
 
-        public Vanrise.Integration.Entities.MappingOutput ImportingMmsEDR_File()
+        public Vanrise.Integration.Entities.MappingOutput ImportingMmsEDR_File(object localData)
         {
+            //Retail.Runtime.Mappers.RingoMapper mapper = new Retail.Runtime.Mappers.RingoMapper();
+            //return mapper.ImportingMmsEDR_File(data);
             HashSet<string> lstPackages = new HashSet<string> { "PROMO_GEN_RNW_OK", "SIM_PROMO_GEN_SUB", "PROMO_GEN_UNSUB", "SIM_PROMO_EXPIRED" };
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             var ringoSmsEDRs = new List<dynamic>();
@@ -289,13 +291,13 @@ namespace Retail.Runtime.Mappers
 
                             int.TryParse(edrDetails[1], out promotionId);
                             edr.PromotionId = promotionId;
-                            DateTime.TryParseExact(edrDetails[2], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
-                            edr.ActivationDate = date;
                             if (edrDetails.Length > 3)
                             {
                                 DateTime.TryParseExact(edrDetails[3], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
                                 edr.CustomerActivationDate = date;
                             }
+                            DateTime.TryParseExact(edrDetails[2], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                            edr.ActivationDate = date;
                         }
                         else
                         {
@@ -304,6 +306,7 @@ namespace Retail.Runtime.Mappers
                             DateTime.TryParseExact(edrDetails[1], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
                             edr.ActivationDate = date;
                         }
+                        edr.CreatedDate = date;
                     }
                 }
 
