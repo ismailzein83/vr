@@ -26,44 +26,34 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
         };
 
         function DirectiveConstructor($scope, ctrl) {
-
             this.initializeController = initializeController;
 
-            function initializeController() {
-                defineAPI();
-            }
             var reprocessDefinitionSelectorAPI;
             var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.onReprocessDefinitionSelectorReady = function (api) {
-                reprocessDefinitionSelectorAPI = api;
-                reprocessDefinitionSelectorReadyDeferred.resolve();
-            };
+            function initializeController() {
 
-            $scope.isValid = function () {
-                if ($scope.daysBack != undefined && $scope.numberOfDays != undefined) {
-                    if (parseFloat($scope.numberOfDays) > parseFloat($scope.daysBack)) {
-                        return 'Number Of Days should be less than or equal to Days Back.';
+                $scope.onReprocessDefinitionSelectorReady = function (api) {
+                    reprocessDefinitionSelectorAPI = api;
+                    reprocessDefinitionSelectorReadyDeferred.resolve();
+                };
+
+                $scope.isValid = function () {
+                    if ($scope.daysBack != undefined && $scope.numberOfDays != undefined) {
+                        if (parseFloat($scope.numberOfDays) > parseFloat($scope.daysBack)) {
+                            return 'Number Of Days should be less than or equal to Days Back.';
+                        }
+
                     }
+                    return null;
+                };
 
-                }
-                return null;
-            };
+                defineAPI();
+            }
 
             function defineAPI() {
 
                 var api = {};
-                api.getData = function () {
-                    return {
-                        $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
-                        ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
-                        ChunkTime: $scope.selectedChunkTime.value
-                    };
-                };
-
-                api.getExpressionsData = function () {
-                    return { "ScheduleTime": "ScheduleTime", "DaysBack": $scope.daysBack, "NumberOfDays": $scope.numberOfDays };
-                };
 
                 api.load = function (payload) {
                     $scope.chunkTimes = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
@@ -76,6 +66,7 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
                         if (payload.data != undefined) {
                             $scope.selectedChunkTime = UtilsService.getEnum(ReprocessChunkTimeEnum, "value", payload.data.ChunkTime);
+                            $scope.useTempStorage = payload.data.UseTempStorage;
                         }
                     }
 
@@ -94,6 +85,19 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                     promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getExpressionsData = function () {
+                    return { "ScheduleTime": "ScheduleTime", "DaysBack": $scope.daysBack, "NumberOfDays": $scope.numberOfDays };
+                };
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
+                        ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
+                        ChunkTime: $scope.selectedChunkTime.value,
+                        UseTempStorage: $scope.useTempStorage
+                    };
                 };
 
                 if (ctrl.onReady != null)

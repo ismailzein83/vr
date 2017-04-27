@@ -21,7 +21,7 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Stage: {0}. From: {1} - To: {2}", StageName, From.ToString(), To.ToString());
+            return String.Format("#BPDefinitionTitle# for stage: '{0}' From: {1} - To: {2}", StageName, From.ToString("yyyy-MM-dd HH:mm:ss"), To.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
 }

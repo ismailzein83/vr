@@ -45,6 +45,7 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
@@ -109,6 +110,11 @@
           <mca:CSharpValue x:TypeArguments="vre:BatchRecord">Input.BatchRecord</mca:CSharpValue>
         </InArgument>
       </vrba1:FinalizeStage.BatchRecord>
+      <vrba1:FinalizeStage.InitializationOutputByStage>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">Input.InitializationOutputByStage</mca:CSharpValue>
+        </InArgument>
+      </vrba1:FinalizeStage.InitializationOutputByStage>
       <vrba1:FinalizeStage.StageActivator>
         <InArgument x:TypeArguments="vre:IReprocessStageActivator">
           <mca:CSharpValue x:TypeArguments="vre:IReprocessStageActivator">StageActivator</mca:CSharpValue>
@@ -120,7 +126,7 @@
         </InArgument>
       </vrba1:FinalizeStage.StageName>
     </vrba1:FinalizeStage>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwPPAN8DgIBAUEFTA4CAS1NBVgkAgEiWQVpHwIBEmoFehsCAQJJC0mOAQIBM0QLRHUCAS5VC1ViAgEoUAtQcwIBI2YLZlgCAR1hC2FzAgEYXAtcawIBE3cLd1gCAQ1tC21hAgEIcgtyawIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwQPQOCAQ4CAQFCBU0OAgEyTgVZJAIBJ1oFah8CARdrBYABGwIBAkoLSo4BAgE4RQtFdQIBM1YLVmICAS1RC1FzAgEoZwtnWAIBImILYnMCAR1dC11rAgEYcwtzhAECARJ9C31YAgENbgtuYQIBCHgLeGsCAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

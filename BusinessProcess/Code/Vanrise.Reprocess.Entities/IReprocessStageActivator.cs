@@ -11,15 +11,28 @@ namespace Vanrise.Reprocess.Entities
 {
     public interface IReprocessStageActivator
     {
-        BaseQueue<IReprocessBatch> GetQueue();
-
-        List<string> GetOutputStages(List<string> stageNames);
+        object InitializeStage(IReprocessStageActivatorInitializingContext context);
 
         void ExecuteStage(IReprocessStageActivatorExecutionContext context);
 
         void FinalizeStage(IReprocessStageActivatorFinalizingContext context);
 
+        int? GetStorageRowCount(IReprocessStageActivatorGetStorageRowCountContext context);
+
+        void CommitChanges(IReprocessStageActivatorCommitChangesContext context);
+
+        void DropStorage(IReprocessStageActivatorDropStorageContext context);
+
+        List<string> GetOutputStages(List<string> stageNames);
+
+        BaseQueue<IReprocessBatch> GetQueue();
+
         List<BatchRecord> GetStageBatchRecords(IReprocessStageActivatorPreparingContext context);
+    }
+
+    public interface IReprocessStageActivatorInitializingContext
+    {
+        long ProcessId { get; }
     }
 
     public interface IReprocessStageActivatorExecutionContext
@@ -45,9 +58,11 @@ namespace Vanrise.Reprocess.Entities
         string CurrentStageName { get; }
 
         long ProcessInstanceId { get; }
+
+        object InitializationStageOutput { get; }
     }
 
-    public interface IReprocessStageActivatorFinalizingContext 
+    public interface IReprocessStageActivatorFinalizingContext
     {
         long ProcessInstanceId { get; }
 
@@ -58,6 +73,27 @@ namespace Vanrise.Reprocess.Entities
         void WriteTrackingMessage(LogEntryType severity, string messageFormat);
 
         void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo);
+
+        object InitializationStageOutput { get; }
+    }
+
+    public interface IReprocessStageActivatorGetStorageRowCountContext
+    {
+        object InitializationStageOutput { get; }
+    }
+
+    public interface IReprocessStageActivatorCommitChangesContext
+    {
+        object InitializationStageOutput { get; }
+
+        DateTime From { get; }
+
+        DateTime To { get; }
+    }
+
+    public interface IReprocessStageActivatorDropStorageContext
+    {
+        object InitializationStageOutput { get; }
     }
 
     public interface IReprocessStageActivatorPreparingContext

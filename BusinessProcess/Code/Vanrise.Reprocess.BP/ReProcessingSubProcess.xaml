@@ -48,6 +48,7 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
@@ -173,6 +174,11 @@
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
                 </InArgument>
               </vrba1:ExecuteStage.From>
+              <vrba1:ExecuteStage.InitializationOutputByStage>
+                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">Input.InitializationOutputByStage</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.InitializationOutputByStage>
               <vrba1:ExecuteStage.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">stage.PreviousStatus</mca:CSharpValue>
@@ -203,6 +209,11 @@
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
                 </InArgument>
               </vrba1:ExecuteStage.To>
+              <!--<vrba1:ExecuteStage.UseTempStorage>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.UseTempStorage</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.UseTempStorage>-->
             </vrba1:ExecuteStage>
             <vrba1:EvaluateStagesStatus sap2010:WorkflowViewState.IdRef="EvaluateStagesStatus_2">
               <vrba1:EvaluateStagesStatus.LoadDataToReprocessStatus>
@@ -220,7 +231,7 @@
         </ActivityAction>
       </ParallelForEach>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJT8D4AEOAgEBRAVPDgMBmwFQBVskAwGQAVwFZw4DAYUBaAXeARACAQJMC0yEAQMBoQFHC0dwAwGcAVgLWGIDAZYBUwtTcwMBkQFkC2R4AwGLAV8LX2cDAYYBbAeeARICAUyfAQfdARkCAQNtCZEBJQIBWpIBCZ0BJgIBTaIBDaIBjAECAUapAQvbARYCAQR/D399AgF/cA9wZQIBeXoPeogBAgFziQEPiQF8AgFtdQ91XQIBZ4QBD4QBYwIBYY4BD44BWwIBW5UBD5UBdAIBVJoBD5oBYwIBTqoBDc4BIgIBFM8BDdoBKgIBBcsBE8sBXwIBP7IBE7IBcwIBOLcBE7cBYgIBMa0BE60BYQIBKsEBE8EBggECASPGARPGAXMCARy8ARO8AWcCARXSARPSAXgCAQ3XARPXAWcCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJ0AD6wEOAgEBRQVQDgMBqQFRBVwkAwGeAV0FaA4DAZMBaQXpARACAQJNC02EAQMBrwFIC0hwAwGqAVkLWWIDAaQBVAtUcwMBnwFlC2V4AwGZAWALYGcDAZQBbQefARICAVqgAQfoARkCAQNuCZIBJQIBaJMBCZ4BJgIBW6MBDaMBjAECAVSqAQvmARYCAQSAAQ+AAX0DAY0BcQ9xZQMBhwF7D3uIAQMBgQGKAQ+KAXwCAXt2D3ZdAgF1hQEPhQFjAgFvjwEPjwFbAgFplgEPlgF0AgFimwEPmwFjAgFcqwEN2QEiAgEU2gEN5QEqAgEFswETswGMAQIBTdEBE9EBXwIBRrgBE7gBcwIBP70BE70BYgIBOK4BE64BYQIBMdYBE9YBZgIBKscBE8cBggECASPMARPMAXMCARzCARPCAWcCARXdARPdAXgCAQ3iARPiAWcCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

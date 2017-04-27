@@ -76,12 +76,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommitChanges.cs" />
+    <Compile Include="ComputeBatchesTimeSpan.cs" />
+    <Compile Include="DropStorage.cs" />
     <Compile Include="EvaluateStagesStatus.cs" />
     <Compile Include="GetStageActivator.cs" />
     <Compile Include="GetStageBatchRecords.cs" />
     <Compile Include="FinalizeStage.cs" />
     <Compile Include="ExecuteStage.cs" />
     <Compile Include="GetReprocessDefinition.cs" />
+    <Compile Include="GetStageStorageRowCount.cs" />
     <Compile Include="InitializeStage.cs" />
     <Compile Include="LoadDataToReprocess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,9 +15,11 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public BatchRecord BatchRecord { get; set; }
 
+        public Dictionary<string, object> InitializationOutputByStage { get; set; }
+
         public override string GetTitle()
         {
-            return String.Format("Stage: {0}. {1}", StageName, BatchRecord.GetBatchTitle());
+            return String.Format("#BPDefinitionTitle# for stage: '{0}'. {1}", StageName, BatchRecord.GetBatchTitle());
         }
     }
 }

@@ -1,18 +1,23 @@
 ﻿<vr-row removeline>
-    <vr-columns colnum="3">
+<vr-row>
+    <vr-columns colnum="4">
         <reprocess-reprocessdefinition-selector isrequired="true" on-ready="onReprocessDefinitionSelectorReady"></reprocess-reprocessdefinition-selector>
     </vr-columns>
 
-    <vr-columns colnum="3">
+    <vr-columns colnum="4">
         <vr-datetimepicker label="From" isrequired="true" value="fromDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
     </vr-columns>
 
-    <vr-columns colnum="3">
+    <vr-columns colnum="4">
         <vr-datetimepicker label="To" isrequired="true" value="toDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
     </vr-columns>
-
-    <vr-columns colnum="3">
+</vr-row>
+<vr-row>
+    <vr-columns colnum="4">
         <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
                    datasource="chunkTimes" selectedvalues="selectedChunkTime"></vr-select>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-switch value="useTempStorage" label="Use Temporary Storage"></vr-switch>
     </vr-columns>
 </vr-row>

@@ -1,8 +1,9 @@
 ﻿<vr-row>
-    <vr-columns colnum="3">
+    <vr-columns colnum="4">
         <reprocess-reprocessdefinition-selector isrequired="true" on-ready="onReprocessDefinitionSelectorReady"></reprocess-reprocessdefinition-selector>
     </vr-columns>
-    <vr-columns colnum="6" haschildcolumns>
+
+    <vr-columns colnum="8" haschildcolumns>
         <vr-validator validate="isValid()">
             <vr-columns colnum="6">
                 <vr-textbox value="daysBack" type="number" label="Days Back" isrequired="true" minvalue="1"></vr-textbox>
@@ -13,8 +14,14 @@
             </vr-columns>
         </vr-validator>
     </vr-columns>
-    <vr-columns colnum="3">
+</vr-row>
+<vr-row>
+    <vr-columns colnum="4">
         <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
                    datasource="chunkTimes" selectedvalues="selectedChunkTime"></vr-select>
+    </vr-columns>
+
+    <vr-columns colnum="4">
+        <vr-switch value="useTempStorage" label="Use Temporary Storage"></vr-switch>
     </vr-columns>
 </vr-row>
