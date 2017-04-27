@@ -43,7 +43,7 @@ namespace TOne.WhS.CodePreparation.Business
                     CountryManager manager = new CountryManager();
                     result = false;
                     string countryName = manager.GetCountryName(zoneToProcess.AddedZones.First().CountryId);
-                    context.Message = string.Format("Zone {0} has a code that belongs to the code group of country {1}", zoneToProcess.ZoneName, countryName);
+                    context.Message = string.Format("Zone {0} has a code that belongs to country {1}", zoneToProcess.ZoneName, countryName);
                 }
             }
             return result;
@@ -51,10 +51,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            ZoneToProcess zoneToProcess = target as ZoneToProcess;
-            CountryManager manager = new CountryManager();
-            string countryName = manager.GetCountryName(zoneToProcess.AddedZones.First().CountryId);
-            return string.Format("Zone {0} has a code that belongs to the code group of country {1}", zoneToProcess.ZoneName, countryName);
+            throw new NotImplementedException();
         }
 
     }

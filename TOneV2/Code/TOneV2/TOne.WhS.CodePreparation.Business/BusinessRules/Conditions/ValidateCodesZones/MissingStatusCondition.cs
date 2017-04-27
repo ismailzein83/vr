@@ -28,7 +28,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} has a missing status", (target as ImportedCode).Code);
+            throw new NotImplementedException();
         }
     }
 }

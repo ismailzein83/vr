@@ -36,9 +36,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            string zoneName = target as ZoneToProcess != null ? (target as ZoneToProcess).ZoneName : (target as NotImportedZone).ZoneName;
-
-            return string.Format("All codes in zone {0} are closed, zone {0} will be closed", zoneName);
+            throw new NotImplementedException();
         }
 
     }

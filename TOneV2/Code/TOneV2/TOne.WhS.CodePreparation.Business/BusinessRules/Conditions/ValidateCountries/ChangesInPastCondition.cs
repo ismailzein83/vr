@@ -29,14 +29,14 @@ namespace TOne.WhS.CodePreparation.Business
             bool result = saleZoneManager.IsCountryEmpty(cpContext.SellingNumberPlanId, country.CountryId , DateTime.Now );
 
             if(result == false)
-                context.Message = string.Format("Effective date can not be less than date of today");
+                context.Message = "Effective date cannot be less than date of today";
 
             return result;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Effective date can not be less than date of today");
+            throw new NotImplementedException();
         }
     }
 }

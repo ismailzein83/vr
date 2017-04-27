@@ -21,16 +21,16 @@ namespace TOne.WhS.CodePreparation.Business
 
             ImportedCode importedData = context.Target as ImportedCode;
             var result = !string.IsNullOrEmpty(importedData.Code);
-            
+
             if (result == false)
-                context.Message = string.Format("Can not add Zone {0} because it has a missing code", importedData.ZoneName);
+                context.Message = string.Format("Missing code in zone {0}", importedData.ZoneName);
 
             return result;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing code", (target as ImportedCode).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }

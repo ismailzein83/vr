@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 {
-                    context.Message = string.Format("Can not close code {0} at zone {1} because this code is pending effective", codeToClose.Code, codeToClose.ZoneName);
+                    context.Message = string.Format("Cannot close code {0} in zone {1} because this code is pending effective", codeToClose.Code, codeToClose.ZoneName);
                     return false;
                 }
             }
@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 {
-                    context.Message = string.Format("Can not move code {0} at zone {1} because this code is pending effective", codeToMove.Code, codeToMove.OldZoneName);
+                    context.Message = string.Format("Cannot move code {0} in zone {1} because this code is pending effective", codeToMove.Code, codeToMove.OldZoneName);
                     return false;
                 }
             }
@@ -44,7 +44,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a pending effective code that can not be closed or moved", (target as ZoneToProcess).RecentZoneName);
+            throw new NotImplementedException();
         }
 
     }

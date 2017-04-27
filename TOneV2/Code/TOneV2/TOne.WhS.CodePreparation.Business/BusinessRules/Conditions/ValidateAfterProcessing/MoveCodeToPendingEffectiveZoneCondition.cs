@@ -27,13 +27,13 @@ namespace TOne.WhS.CodePreparation.Business
 
             if (zoneTopProcess.CodesToAdd.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
             {
-                context.Message = string.Format("Can not add codes to the pending effective zone {0}", zoneTopProcess.ZoneName);
+                context.Message = string.Format("Cannot add codes to the pending zone {0}", zoneTopProcess.ZoneName);
                 return false;
             }
 
             if (zoneTopProcess.CodesToMove.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
             {
-                context.Message = string.Format("Can not move codes to the pending effective zone {0}", zoneTopProcess.ZoneName);
+                context.Message = string.Format("Cannot move codes to the pending zone {0}", zoneTopProcess.ZoneName);
                 return false;
             }
 
@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Can not move or add code to the pending effective zone {0}", (target as ZoneToProcess).ZoneName);
+            throw new NotImplementedException();
         }
 
     }

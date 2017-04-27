@@ -27,12 +27,12 @@ namespace TOne.WhS.CodePreparation.Business
             if (codeToAdd != null && codeToAdd.CodeGroup == null)
             {
                 result = false;
-                context.Message = string.Format("Can not add Code {0} because it is not assigned to a code group", codeToAdd.Code);
+                context.Message = string.Format("Cannot add Code {0} because it is not assigned to a code group", codeToAdd.Code);
             }
             else if (codeToClose != null && codeToClose.CodeGroup == null)
             {
                 result = false;
-                context.Message = string.Format("Can not close Code {0} because it is not assigned to a code group", codeToClose.Code);
+                context.Message = string.Format("Cannot close Code {0} because it is not assigned to a code group", codeToClose.Code);
             }
 
             return result;
@@ -40,7 +40,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} not assigned to a code group", (target as CodeToAdd).Code);
+            throw new NotImplementedException();
         }
     }
 }

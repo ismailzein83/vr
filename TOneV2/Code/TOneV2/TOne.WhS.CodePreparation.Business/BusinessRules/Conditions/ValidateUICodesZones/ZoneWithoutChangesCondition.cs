@@ -29,7 +29,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has no codes, creation of zone has been canceled", (target as NewZone).Name);
+            throw new NotImplementedException();
         }
     }
 }
