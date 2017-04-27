@@ -48,11 +48,11 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService','VRUIUtilsService
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, choicesGridAPI, undefined, setLoader, choicesGridReadyDeferred);
-                }
+                };
                 $scope.scopeModel.onDataRecordFieldChoiceSelectorReady = function (api) {
                     dataRecordFieldChoiceSelectorGridAPI = api;
                     dataRecordFieldChoiceSelectorReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
         

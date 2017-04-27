@@ -27,11 +27,10 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.values = [];
-            $scope.scopeModel.onChoicesGridReady = function(api)
-            {
+            $scope.scopeModel.onChoicesGridReady = function (api) {
                 choicesGridAPI = api;
                 choicesGridReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.saveDataRecordFieldChoice = function () {
                 $scope.isLoading = true;
                 if (isEditMode)
