@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             var carrierAccountManager = new CarrierAccountManager();
             IEnumerable<CarrierAccountInfo> customersForThisSellingNumberPlan = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
 
-            if(customersForThisSellingNumberPlan != null && customersForThisSellingNumberPlan.Any())
+            if (customersForThisSellingNumberPlan != null && customersForThisSellingNumberPlan.Any())
             {
                 IEnumerable<StructuredCountryActions> allCountryActions = this.GetCountryActions(countriesToProcess);
 
@@ -71,8 +71,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (var customer in customers)
             {
-                int customerId = customer.CarrierAccountId; 
-                
+                int customerId = customer.CarrierAccountId;
+
                 int? effectiveSellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, effectiveDate, false);
                 if (effectiveSellingProductId.HasValue)
                 {
@@ -105,14 +105,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                 foreach (ZoneToProcess zoneData in countryData.ZonesToProcess)
                 {
-                    if(zoneData.ChangeType == ZoneChangeType.New)
+                    if (zoneData.ChangeType == ZoneChangeType.New)
                     {
-                        if(!zoneData.AddedZones.Any())
+                        if (!zoneData.AddedZones.Any())
                             throw new Exception(string.Format("New Zone with name {0} to be created without Added Zones", zoneData.ZoneName));
 
-                        actionsForThisCountry.ZonesToAddIds.Add(zoneData.AddedZones.Last().ZoneId);
+                        actionsForThisCountry.NewZonesToAdd.Add(
+                            new NewZoneToAdd
+                            {
+                                ZoneName = zoneData.ZoneName,
+                                ZoneId = zoneData.AddedZones.Last().ZoneId
+                            });
                     }
-                        
+
                     actionsForThisCountry.RatesToAdd.AddRange(zoneData.RatesToAdd);
 
                     if (zoneData.ChangeType == ZoneChangeType.Deleted || zoneData.ChangeType == ZoneChangeType.PendingClosed)
@@ -131,13 +136,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             var customerPriceListChanges = new List<CustomerPriceListChange>();
             var customerCountryManager = new CustomerCountryManager();
-            
+
             foreach (CarrierAccountInfo customer in customers)
             {
                 int customerId = customer.CarrierAccountId;
-                
+
                 IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveDate);
-                if (soldCountries == null) 
+                if (soldCountries == null)
                     continue;
 
                 var actionsForSoldCountryOfThisCustomer = allCountryActions.FindAllRecords(
@@ -153,7 +158,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 foreach (var countryAction in actionsForSoldCountryOfThisCustomer)
                 {
                     changesForThisCustomer.RateChanges.AddRange(
-                    this.GetRateChangesFromZonesToAdd(countryAction.ZonesToAddIds, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId));
+                    this.GetRateChangesFromZonesToAdd(countryAction.NewZonesToAdd, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId));
 
                     changesForThisCustomer.RateChanges.AddRange(
                         this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, futureRateLocator, countryAction.CountryId, customerId, sellingProductId));
@@ -164,29 +169,27 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                 }
 
-                customerPriceListChanges.Add(changesForThisCustomer); 
+                customerPriceListChanges.Add(changesForThisCustomer);
             }
             return customerPriceListChanges;
         }
 
-        private IEnumerable<SalePricelistRateChange> GetRateChangesFromZonesToAdd(IEnumerable<long> zonesToAddIds, SaleEntityZoneRateLocator ratesToAddLocator, int countryId, 
+        private IEnumerable<SalePricelistRateChange> GetRateChangesFromZonesToAdd(IEnumerable<NewZoneToAdd> newZonesToAdd, SaleEntityZoneRateLocator ratesToAddLocator, int countryId,
             int customerId, int sellingProductId)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
 
-            foreach (var zoneId in zonesToAddIds)
+            foreach (var zoneToAdd in newZonesToAdd)
             {
-                string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
-
-                var rateToSend = ratesToAddLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+                var rateToSend = ratesToAddLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneToAdd.ZoneId);
                 if (rateToSend == null)
-                    throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneName));
+                    throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneToAdd.ZoneName));
 
                 rateChanges.Add(new SalePricelistRateChange
                 {
                     CountryId = countryId,
-                    ZoneName = zoneName,
+                    ZoneName = zoneToAdd.ZoneName,
                     Rate = rateToSend.Rate.Rate,
                     ChangeType = RateChangeType.New,
                     BED = rateToSend.Rate.BED
@@ -212,7 +215,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     //Comparing with Original EED instead of EED because existing zones EEDs will be updated to the changed EED.
                     //This way no existing zones will be considered as effective at closure time. Comparing with Original EED that should be null will get us results.
-                    if(existingZone.BED <= closureDate && existingZone.OriginalEED.VRGreaterThan(closureDate))
+                    if (existingZone.BED <= closureDate && existingZone.OriginalEED.VRGreaterThan(closureDate))
                     {
                         existingZoneAtCloureTime = existingZone;
                         break;
@@ -239,7 +242,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             return rateChanges;
         }
-      
+
         private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId)
         {
             List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
@@ -256,7 +259,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 });
             }
 
-            return codeChanges;            
+            return codeChanges;
         }
 
         private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToMove(IEnumerable<CodeToMove> codesToMove, int countryId)
@@ -300,8 +303,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             foreach (var codeToClose in codesToClose)
             {
                 ExistingCode firstExistingCode = codeToClose.ChangedExistingCodes.FirstOrDefault();
-                if(firstExistingCode == null)
-                    throw new Exception(string.Format("Trying to close code {0} on zone {1}, this code does not have existing data", codeToClose.Code, codeToClose.ZoneName)); 
+                if (firstExistingCode == null)
+                    throw new Exception(string.Format("Trying to close code {0} on zone {1}, this code does not have existing data", codeToClose.Code, codeToClose.ZoneName));
 
                 codeChanges.Add(new SalePricelistCodeChange
                 {
@@ -337,13 +340,18 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             private List<CodeToClose> _codesToClose = new List<CodeToClose>();
             public List<CodeToClose> CodesToClose { get { return this._codesToClose; } }
 
-            private List<long> _zonesToAddIds = new List<long>();
-            public List<long> ZonesToAddIds { get { return this._zonesToAddIds; } }
+            private List<NewZoneToAdd> _newZonesToAdd = new List<NewZoneToAdd>();
+            public List<NewZoneToAdd> NewZonesToAdd { get { return this._newZonesToAdd; } }
 
             private List<ZoneToProcess> _zonesToClose = new List<ZoneToProcess>();
             public List<ZoneToProcess> ZonesToClose { get { return this._zonesToClose; } }
         }
 
+        private class NewZoneToAdd
+        {
+            public long ZoneId { get; set; }
+            public string ZoneName { get; set; }
+        }
         #endregion
     }
 }
