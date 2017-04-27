@@ -39,7 +39,11 @@
                         </span>
                     </vr-datagridcolumn>
 
-                    <vr-datagridcolumn headertext="'Rate'"
+                    <vr-datagridcolumn headertext="'Services'" fixedwidth="50" disablesorting="true">
+                        <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                    </vr-datagridcolumn>
+
+                    <vr-datagridcolumn headertext="'C.Rate'"
                                        type="'Number'"
                                        numberprecision="'LongPrecision'"
                                        widthfactor="7"
@@ -62,8 +66,10 @@
                         </div>
                     </vr-datagridcolumn>
 
-                    <vr-datagridcolumn headertext="'Services'" fixedwidth="50" disablesorting="true">
-                        <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                    <vr-datagridcolumn headertext="'TQI'" type="'Text'" fixedwidth="21" disablesorting="true">
+                        <span vr-disabled="viewScope.scopeModel.isPreview">
+                            <span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
+                        </span>
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn ng-repeat="method in costCalculationMethods"
@@ -72,7 +78,7 @@
                                        type="'Number'"
                                        numberprecision="'LongPrecision'"
                                        isfielddynamic="true"
-                                       columnindex="6 + $index"
+                                       columnindex="7 + $index"
                                        widthfactor="7"
                                        disablesorting="true">
                     </vr-datagridcolumn>
@@ -89,11 +95,7 @@
                                        disablesorting="true">
                     </vr-datagridcolumn>
 
-                    <vr-datagridcolumn headertext="'TQI'" type="'Text'" fixedwidth="21" disablesorting="true">
-                        <span vr-disabled="viewScope.scopeModel.isPreview">
-                            <span ng-click="viewScope.onTQIClicked(dataItem)" style="cursor: pointer; text-decoration: underline">...</span>
-                        </span>
-                    </vr-datagridcolumn>
+                    
 
                     <vr-datagridcolumn headertext="'N.Rate'" widthfactor="7" disablesorting="true">
                         <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
