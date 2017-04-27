@@ -26,5 +26,25 @@ namespace TOne.CDR.Entities
         {
             return String.Format("Batch of {0} Billing CDRs", CDRs.Count);
         }
+
+        public override DateTime GetBatchEnd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DateTime GetBatchStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBatchEnd(DateTime batchEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBatchStart(DateTime batchStart)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

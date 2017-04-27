@@ -36,5 +36,25 @@ namespace TOne.CDR.Entities
         {
             return this.CDRs != null ? this.CDRs.Max(itm => itm.AttemptDateTime) : default(DateTime);
         }
+
+        public override DateTime GetBatchEnd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DateTime GetBatchStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBatchEnd(DateTime batchEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBatchStart(DateTime batchStart)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

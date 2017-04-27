@@ -28,5 +28,25 @@ namespace TOne.CDR.Entities
         {
             return String.Format("Batch of {0} Traffic Statistics", TrafficStatistics.Count);
         }
+
+        public override DateTime GetBatchEnd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DateTime GetBatchStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBatchEnd(DateTime batchEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetBatchStart(DateTime batchStart)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
