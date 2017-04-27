@@ -43,6 +43,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.recordCountPerTransaction = 10000;
 
             $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageAPI = api;
@@ -199,7 +200,13 @@
             function loadStaticData() {
                 if (reprocessDefinitionEntity == undefined)
                     return;
+
                 $scope.scopeModel.name = reprocessDefinitionEntity.Name;
+
+                var reprocessDefinitionSettings = reprocessDefinitionEntity.Settings;
+                if (reprocessDefinitionSettings != undefined && reprocessDefinitionSettings.RecordCountPerTransaction > 0) {
+                    $scope.scopeModel.recordCountPerTransaction = reprocessDefinitionSettings.RecordCountPerTransaction;
+                }
             };
 
             function loadDataRecordStorageSelector() {
@@ -317,7 +324,8 @@
                 InitiationStageNames: executionFlowStageAPI.getSelectedIds(),
                 StageNames: stageAPI.getSelectedIds(),
                 StagesToHoldNames: stagesToHoldAPI.getSelectedIds(),
-                StagesToProcessNames: stagesToProcessAPI.getSelectedIds()
+                StagesToProcessNames: stagesToProcessAPI.getSelectedIds(),
+                RecordCountPerTransaction: $scope.scopeModel.recordCountPerTransaction
             };
 
             return {

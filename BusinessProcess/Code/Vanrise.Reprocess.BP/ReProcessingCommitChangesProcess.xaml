@@ -145,6 +145,11 @@
                       <mca:CSharpValue x:TypeArguments="s:DateTime">Input.From</mca:CSharpValue>
                     </InArgument>
                   </vrba1:ComputeBatchesTimeSpan.From>
+                  <vrba1:ComputeBatchesTimeSpan.RecordCountPerTransaction>
+                    <InArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpValue x:TypeArguments="x:Int32">reprocessDefinition.Settings.RecordCountPerTransaction</mca:CSharpValue>
+                    </InArgument>
+                  </vrba1:ComputeBatchesTimeSpan.RecordCountPerTransaction>
                   <vrba1:ComputeBatchesTimeSpan.StorageRowCount>
                     <InArgument x:TypeArguments="x:Int32">
                       <mca:CSharpValue x:TypeArguments="x:Int32">storageRowCount.Value</mca:CSharpValue>
@@ -240,7 +245,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d1ZDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nQ29tbWl0Q2hhbmdlc1Byb2Nlc3MueGFtbCk+A/QBDgIBAUYFUSQDAcgBUgViHwMBsgFjBXglAwGVAXkF8gEKAgECTgtOYgMB0AFJC0lzAwHJAV8LX1gDAcEBWgtacwMBugFVC1VrAwGzAWYLZoQBAwGrAXULdWsDAaQBcAtwWAMBnQFrC2trAwGWAXwLfGICAQOAAQnwARQCAQqBAQveARACASHfAQvvAR8CAQuEARGEAWwCASKIAQ/cARoCASniARHiAYoBAgEa7AER7AFeAgET5wER5wFxAgEMiQERngEwAgF4nwERtAEuAgFbtQER2wEbAgEqmwEXmwFfAwGOAZYBF5YBaQMBhwGRAReRAWEDAYABjAEXjAFuAgF5sQEXsQFfAgFxpwEXpwFhAgFqogEXogGEAQIBY6wBF6wBZgIBXLgBF7gBhgECAVS/ARXZASsCASvHARvHAZQBAgFM1gEb1gFiAgFEwgEbwgFkAgE80QEb0QFoAgE0zAEbzAF7AgEs</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1ZDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nQ29tbWl0Q2hhbmdlc1Byb2Nlc3MueGFtbCo+A/kBDgIBAUYFUSQDAc8BUgViHwMBuQFjBXglAwGcAXkF9wEKAgECTgtOYgMB1wFJC0lzAwHQAV8LX1gDAcgBWgtacwMBwQFVC1VrAwG6AWYLZoQBAwGyAXULdWsDAasBcAtwWAMBpAFrC2trAwGdAXwLfGICAQOAAQn1ARQCAQqBAQvjARACASHkAQv0AR8CAQuEARGEAWwCASKIAQ/hARoCASnnARHnAYoBAgEa8QER8QFeAgET7AER7AFxAgEMiQERowEwAgF4pAERuQEuAgFbugER4AEbAgEqoAEXoAFfAwGVAZsBF5sBaQMBjgGWAReWAYoBAwGHAZEBF5EBYQMBgAGMAReMAW4CAXm2ARe2AV8CAXGsAResAWECAWqnARenAYQBAgFjsQEXsQFmAgFcvQEXvQGGAQIBVMQBFd4BKwIBK8wBG8wBlAECAUzbARvbAWICAUTHARvHAWQCATzWARvWAWgCATTRARvRAXsCASw=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

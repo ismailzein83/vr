@@ -28,5 +28,7 @@ namespace Vanrise.Reprocess.Entities
         public List<string> StagesToHoldNames { get; set; }
 
         public List<string> StagesToProcessNames { get; set; }
+
+        public int RecordCountPerTransaction { get; set; }
     }
 }

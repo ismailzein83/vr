@@ -15,6 +15,9 @@ namespace Vanrise.Reprocess.BP.Activities
         [RequiredArgument]
         public InArgument<int> StorageRowCount { get; set; }
 
+        //[RequiredArgument]
+        public InArgument<int> RecordCountPerTransaction { get; set; }
+
         [RequiredArgument]
         public OutArgument<TimeSpan> BatchesTimeSpan { get; set; }
 
@@ -23,10 +26,9 @@ namespace Vanrise.Reprocess.BP.Activities
             DateTime from = this.From.Get(context.ActivityContext);
             DateTime to = this.To.Get(context.ActivityContext);
             double storageRowCount = this.StorageRowCount.Get(context.ActivityContext);
+            double maxBatchSize = this.RecordCountPerTransaction.Get(context.ActivityContext);  //10000; TODO: load it from settings
 
-            double batchSize = 10000;//TODO: load it from settings
-            int batchCount = (int)Math.Ceiling(storageRowCount / batchSize);
-
+            int batchCount = (int)Math.Ceiling(storageRowCount / maxBatchSize);
             TimeSpan reprocessDuration = to.Subtract(from);
             TimeSpan batchDuration = TimeSpan.FromMinutes(reprocessDuration.TotalMinutes / batchCount);
 
