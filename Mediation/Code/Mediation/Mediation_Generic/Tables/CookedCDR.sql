@@ -19,9 +19,12 @@
     [OriginatorIp]         NVARCHAR (100)  NULL,
     [TerminatorIp]         NVARCHAR (100)  NULL,
     [AttemptDateTime]      DATETIME        NULL,
-    [CallType]             TINYINT         NULL,
+    [SendCallType]         TINYINT         NULL,
+    [ReveiveCallType]      TINYINT         NULL,
     CONSTRAINT [PK_CookedCDR] PRIMARY KEY CLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

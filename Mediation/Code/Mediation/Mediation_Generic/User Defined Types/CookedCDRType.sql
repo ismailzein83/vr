@@ -16,7 +16,10 @@
     [TransferredCallId]    NVARCHAR (100)  NULL,
     [DurationInSeconds]    DECIMAL (10, 4) NULL,
     [AttemptDateTime]      DATETIME        NULL,
-    [CallType]             TINYINT         NULL);
+    [SendCallType]         TINYINT         NULL,
+    [ReveiveCallType]      TINYINT         NULL);
+
+
 
 
 
