@@ -80,7 +80,7 @@ namespace TestRuntime
             if (cdrs.Count > 0)
             {
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
-                mappedBatches.Add("CDR Storage Stage", batch);
+                mappedBatches.Add("Distribute Raw CDRs Stage", batch);
             }
             else
                 importedData.IsEmpty = true;
@@ -163,7 +163,7 @@ namespace TestRuntime
             if (cdrs.Count > 0)
             {
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
-                mappedBatches.Add("CDR Storage Stage", batch);
+                mappedBatches.Add("Distribute Raw CDRs Stage", batch);
             }
             else
                 importedData.IsEmpty = true;
