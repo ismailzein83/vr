@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.BusinessProcess;
-using Vanrise.GenericData.Business;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 
 namespace Vanrise.GenericData.QueueActivators
@@ -14,6 +8,8 @@ namespace Vanrise.GenericData.QueueActivators
     public class DistributeBatchQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
         public List<string> OutputStages { get; set; }
+
+        #region QueueActivator
 
         public override void OnDisposed()
         {
@@ -24,8 +20,6 @@ namespace Vanrise.GenericData.QueueActivators
         {
             throw new NotImplementedException();
         }
-
-
 
         public override void ProcessItem(Queueing.Entities.IQueueActivatorExecutionContext context)
         {
@@ -47,7 +41,16 @@ namespace Vanrise.GenericData.QueueActivators
             }
         }
 
-        void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        #endregion
+
+        #region IReprocessStageActivator
+
+        public object InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
+        {
+            return null;
+        }
+
+        public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
             context.DoWhilePreviousRunning(() =>
             {
@@ -74,7 +77,25 @@ namespace Vanrise.GenericData.QueueActivators
             });
         }
 
-        private List<string> GetOutputStages(List<string> stageNames)
+        public void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
+        {
+
+        }
+
+        public int? GetStorageRowCount(Reprocess.Entities.IReprocessStageActivatorGetStorageRowCountContext context)
+        {
+            return null;
+        }
+
+        public void CommitChanges(Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
+        {
+        }
+
+        public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
+        {
+        }
+
+        public List<string> GetOutputStages(List<string> stageNames)
         {
             if (OutputStages == null)
                 return null;
@@ -88,17 +109,7 @@ namespace Vanrise.GenericData.QueueActivators
             return filteredStages != null ? filteredStages.ToList() : null;
         }
 
-        void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
-        {
-
-        }
-
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
-        {
-            return null;
-        }
-
-        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
+        public Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
@@ -107,5 +118,13 @@ namespace Vanrise.GenericData.QueueActivators
         {
             return null;
         }
+
+        #endregion
+
+        #region Private Methods
+
+
+
+        #endregion
     }
 }

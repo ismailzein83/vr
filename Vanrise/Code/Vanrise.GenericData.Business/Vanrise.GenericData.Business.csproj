@@ -62,12 +62,15 @@
     <Compile Include="BusinessEntity\VRRestAPIBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DataStorage\CreateTempStorageContext.cs" />
     <Compile Include="DataRecordFieldChoiceManager.cs" />
     <Compile Include="DataRecordFieldFormulaConvertFilterContext.cs" />
     <Compile Include="DataRecordFieldManager.cs" />
     <Compile Include="DataRecordFieldTypeConfigManager.cs" />
     <Compile Include="DataRecordStorageManager.cs" />
     <Compile Include="DataRecordTypeManager.cs" />
+    <Compile Include="DataStorage\DropStorageContext.cs" />
+    <Compile Include="DataStorage\FillDataRecordStorageFromTempStorageContext.cs" />
     <Compile Include="DataStorage\GetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\DataRecordStorage\VRRestAPIRecordQueryInterceptorContext.cs" />
     <Compile Include="DataStoreConfigManager.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\IGenericRuleStructureBehavior.cs" />
     <Compile Include="GetRecordStorageDataManagerContext.cs" />
+    <Compile Include="DataStorage\GetStorageRowCountContext.cs" />
     <Compile Include="RecordFilterManager.cs" />
     <Compile Include="SummaryTransformation\DynamicTypeGenerator.cs" />
     <Compile Include="SummaryTransformation\IGenericSummaryTransformer.cs" />

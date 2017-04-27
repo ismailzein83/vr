@@ -9,13 +9,15 @@ namespace Vanrise.GenericData.Business
 {
     public class GetSummaryRecordStorageDataManagerContext : IGetSummaryRecordStorageDataManagerContext
     {
-        SummaryTransformationDefinition _summaryTransformationDefinition;
-        public GetSummaryRecordStorageDataManagerContext(SummaryTransformationDefinition summaryTransformationDefinition)
+        public GetSummaryRecordStorageDataManagerContext(SummaryTransformationDefinition summaryTransformationDefinition, TempStorageInformation tempStorageInformation)
         {
             if (summaryTransformationDefinition == null)
                 throw new ArgumentNullException("summaryTransformationDefinition");
             _summaryTransformationDefinition = summaryTransformationDefinition;
+
+            _tempStorageInformation = tempStorageInformation;
         }
+
 
         DataStore _dataStore;
         public DataStore DataStore
@@ -32,7 +34,7 @@ namespace Vanrise.GenericData.Business
                 return _dataStore;
             }
         }
-
+        
         DataRecordStorage _dataRecordStorage;
         public DataRecordStorage DataRecordStorage
         {
@@ -49,9 +51,16 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        SummaryTransformationDefinition _summaryTransformationDefinition;
         public SummaryTransformationDefinition SummaryTransformationDefinition
         {
             get { return _summaryTransformationDefinition; }
+        }
+
+        TempStorageInformation _tempStorageInformation;
+        public TempStorageInformation TempStorageInformation
+        {
+            get { return _tempStorageInformation; }
         }
     }
 }

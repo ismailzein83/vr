@@ -91,7 +91,12 @@
     <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />
     <Compile Include="DataRecordTypes\DataRecordTypeExtraFieldTemplate.cs" />
     <Compile Include="DataStorage\DataRecordStorage\VRRestAPIRecordQueryInterceptor.cs" />
+    <Compile Include="DataStorage\ICreateTempStorageContext.cs" />
+    <Compile Include="DataStorage\IDropStorageContext.cs" />
+    <Compile Include="DataStorage\IFillDataRecordStorageFromTempStorageContext.cs" />
     <Compile Include="DataStorage\IGetRemoteRecordStorageDataManagerContext.cs" />
+    <Compile Include="DataStorage\TempStorageInformation.cs" />
+    <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />

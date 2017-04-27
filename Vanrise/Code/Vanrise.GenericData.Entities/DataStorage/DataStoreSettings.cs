@@ -8,7 +8,9 @@ namespace Vanrise.GenericData.Entities
 {
     public abstract class DataStoreSettings
     {
-        public abstract Guid ConfigId { get;}
+        public abstract Guid ConfigId { get; }
+
+        public virtual bool IsRemoteDataStore { get { return false; } }
 
         public abstract void UpdateRecordStorage(IUpdateRecordStorageContext context);
 
@@ -21,9 +23,12 @@ namespace Vanrise.GenericData.Entities
             return null;
         }
 
-        public virtual bool IsRemoteDataStore
-        {
-            get { return false; }
-        }
+        public abstract void CreateTempStorage(ICreateTempStorageContext context);
+
+        public abstract void FillDataRecordStorageFromTempStorage(IFillDataRecordStorageFromTempStorageContext context);
+
+        public abstract void DropStorage(IDropStorageContext context);
+
+        public abstract int GetStorageRowCount(IGetStorageRowCountContext context);
     }
 }

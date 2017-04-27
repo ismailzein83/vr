@@ -20,6 +20,9 @@ namespace Vanrise.GenericData.QueueActivators
 
         public string NextStageName { get; set; }
 
+
+        #region QueueActivator
+
         public override void OnDisposed()
         {
         }
@@ -58,15 +61,23 @@ namespace Vanrise.GenericData.QueueActivators
             }
         }
 
+        #endregion
 
-        //public void InitializeStage(IReprocessStageActivatorInitializingContext context)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        #region IReprocessStageActivator
 
-        void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        public object InitializeStage(IReprocessStageActivatorInitializingContext context)
         {
-            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
+            SummaryTransformationDefinition summaryTransformationDefinition = new SummaryTransformationDefinitionManager().GetSummaryTransformationDefinition(this.SummaryTransformationDefinitionId);
+            summaryTransformationDefinition.ThrowIfNull("summaryTransformationDefinition", this.SummaryTransformationDefinitionId);
+
+            return new DataRecordStorageManager().CreateTempStorage(summaryTransformationDefinition.DataRecordStorageId, context.ProcessId);
+        }
+
+        public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput != null ? context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("tempStorageInformation") : null;
+
+            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId, TempStorageInformation = tempStorageInformation };
             var allSummaryBatches = new VRDictionary<DateTime, VRDictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
             Dictionary<DateTime, GenericSummaryRecordBatch> genericSummaryRecordBatchesDict = new Dictionary<DateTime, GenericSummaryRecordBatch>();
 
@@ -141,26 +152,28 @@ namespace Vanrise.GenericData.QueueActivators
             }
 
             if (genericSummaryRecordBatchesDict.Count > 0)
-                StartEnqueuingBatches(context, genericSummaryRecordBatchesDict, transformationManager);
+                StartEnqueuingBatches(context, genericSummaryRecordBatchesDict, transformationManager, tempStorageInformation);
 
             if (runningTasks.Count > 0)
                 Task.WaitAll(runningTasks.ToArray());
         }
 
-        void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
+        public void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput != null ? context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("tempStorageInformation") : null;
+
             StageBatchRecord stageBatchRecord = context.BatchRecord as StageBatchRecord;
             if (stageBatchRecord == null)
                 throw new Exception(String.Format("context.BatchRecord should be of type 'StageRecordInfo' and not of type '{0}'", context.BatchRecord.GetType()));
 
             DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
-            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
+            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId, TempStorageInformation = tempStorageInformation };
 
-            var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId);
+            var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId, tempStorageInformation);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
 
-            if (stageBatchRecord.IsEmptyBatch)
+            if (tempStorageInformation == null && stageBatchRecord.IsEmptyBatch)
             {
                 recordStorageDataManager.DeleteRecords(stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd);
             }
@@ -174,16 +187,51 @@ namespace Vanrise.GenericData.QueueActivators
                 });
                 loadDataTask.Start();
 
-                PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName, stageBatchRecord.BatchStart);
+                PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName,
+                    stageBatchRecord.BatchStart, tempStorageInformation);
             }
         }
 
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
+        public int? GetStorageRowCount(IReprocessStageActivatorGetStorageRowCountContext context)
+        {
+            TempStorageInformation tempStorageInformation = null;
+
+            if (context.InitializationStageOutput != null)
+                tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
+
+            SummaryTransformationDefinition summaryTransformationDefinition = new SummaryTransformationDefinitionManager().GetSummaryTransformationDefinition(this.SummaryTransformationDefinitionId);
+            summaryTransformationDefinition.ThrowIfNull("summaryTransformationDefinition", this.SummaryTransformationDefinitionId);
+
+            DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+            return dataRecordStorageManager.GetStorageRowCount(summaryTransformationDefinition.DataRecordStorageId, tempStorageInformation);
+        }
+
+        public void CommitChanges(IReprocessStageActivatorCommitChangesContext context)
+        {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
+
+            SummaryTransformationDefinition summaryTransformationDefinition = new SummaryTransformationDefinitionManager().GetSummaryTransformationDefinition(this.SummaryTransformationDefinitionId);
+            summaryTransformationDefinition.ThrowIfNull("summaryTransformationDefinition", this.SummaryTransformationDefinitionId);
+
+            new DataRecordStorageManager().FillDataRecordStorageFromTempStorage(summaryTransformationDefinition.DataRecordStorageId, tempStorageInformation, context.From, context.To);
+        }
+
+        public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
+        {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
+
+            SummaryTransformationDefinition summaryTransformationDefinition = new SummaryTransformationDefinitionManager().GetSummaryTransformationDefinition(this.SummaryTransformationDefinitionId);
+            summaryTransformationDefinition.ThrowIfNull("summaryTransformationDefinition", this.SummaryTransformationDefinitionId);
+
+            new DataRecordStorageManager().DropStorage(summaryTransformationDefinition.DataRecordStorageId, tempStorageInformation);
+        }
+
+        public List<string> GetOutputStages(List<string> stageNames)
         {
             return null;
         }
 
-        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
+        public Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
@@ -232,31 +280,27 @@ namespace Vanrise.GenericData.QueueActivators
             return stageBatchRecords;
         }
 
+        #endregion
 
         #region Private Methods
 
-        private static void StartEnqueuingBatches(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, Dictionary<DateTime, GenericSummaryRecordBatch> genericSummaryRecordBatchesDict, GenericSummaryTransformationManager transformationManager)
+        private static void StartEnqueuingBatches(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, Dictionary<DateTime, GenericSummaryRecordBatch> genericSummaryRecordBatchesDict,
+            GenericSummaryTransformationManager transformationManager, TempStorageInformation tempStorageInformation)
         {
             DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-            var recordStorageDataManager = dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId);
+            var recordStorageDataManager = dataRecordStorageManager.GetStorageDataManager(transformationManager.SummaryTransformationDefinition.DataRecordStorageId, tempStorageInformation);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
 
             foreach (var genericSummaryRecordBatch in genericSummaryRecordBatchesDict)
             {
-                InsertBatches(context.WriteTrackingMessage, transformationManager, recordStorageDataManager, new List<GenericSummaryRecordBatch>() { genericSummaryRecordBatch.Value }, context.CurrentStageName, genericSummaryRecordBatch.Key);
+                InsertBatches(context.WriteTrackingMessage, transformationManager, recordStorageDataManager, new List<GenericSummaryRecordBatch>() { genericSummaryRecordBatch.Value },
+                    context.CurrentStageName, genericSummaryRecordBatch.Key, tempStorageInformation);
             }
         }
 
-        private static void PrepareAndInsertBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
-            GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches,
-            AsyncActivityStatus loadBatchStatus, string currentStageName, DateTime batchStart)
-        {
-            List<GenericSummaryRecordBatch> preparedBatches = PrepareBatches(writeTrackingMessage, doWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, currentStageName);
-            InsertBatches(writeTrackingMessage, transformationManager, recordStorageDataManager, preparedBatches, currentStageName, batchStart);
-        }
-
-        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
+        private static void StartLoadingBatches(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches,
+            AsyncActivityStatus loadBatchStatus, StageBatchRecord stageBatchRecord)
         {
             IStagingSummaryRecordDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IStagingSummaryRecordDataManager>();
             try
@@ -276,6 +320,16 @@ namespace Vanrise.GenericData.QueueActivators
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
             }
         }
+
+        private static void PrepareAndInsertBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
+            GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches,
+            AsyncActivityStatus loadBatchStatus, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation)
+        {
+            List<GenericSummaryRecordBatch> preparedBatches = PrepareBatches(writeTrackingMessage, doWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, currentStageName);
+            InsertBatches(writeTrackingMessage, transformationManager, recordStorageDataManager, preparedBatches, currentStageName, batchStart, tempStorageInformation);
+        }
+
+
 
         private static List<GenericSummaryRecordBatch> PrepareBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName)
@@ -307,13 +361,14 @@ namespace Vanrise.GenericData.QueueActivators
             return preparedBatches;
         }
 
-        private static void InsertBatches(Action<LogEntryType, string> writeTrackingMessage, GenericSummaryTransformationManager transformationManager,
-            IDataRecordDataManager recordStorageDataManager, List<GenericSummaryRecordBatch> queuePreparedBatches, string currentStageName, DateTime batchStart)
+        private static void InsertBatches(Action<LogEntryType, string> writeTrackingMessage, GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
+            List<GenericSummaryRecordBatch> queuePreparedBatches, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation)
         {
             writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
             VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
 
-            recordStorageDataManager.DeleteRecords(batchStart);
+            if (tempStorageInformation == null)
+                recordStorageDataManager.DeleteRecords(batchStart);
 
             foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in queuePreparedBatches)
                 transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);
@@ -400,7 +455,7 @@ namespace Vanrise.GenericData.QueueActivators
 //            }
 //        }
 
-//        void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+//        void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
 //        {
 //            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
 //            var allSummaryBatches = new Dictionary<DateTime, Dictionary<string, Vanrise.Common.Business.SummaryTransformation.SummaryItemInProcess<GenericSummaryItem>>>();
@@ -450,7 +505,7 @@ namespace Vanrise.GenericData.QueueActivators
 //        {
 //            return string.Format("Reprocess_GenerateSummary_{0}_{1}_", processInstanceId, currentStageName);
 //        }
-//        void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
+//        void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
 //        {
 //            DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
 //            var transformationManager = new GenericSummaryTransformationManager() { SummaryTransformationDefinitionId = this.SummaryTransformationDefinitionId };
@@ -513,12 +568,12 @@ namespace Vanrise.GenericData.QueueActivators
 //            context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finish Inserting Batches");
 //        }
 
-//        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
+//        List<string> GetOutputStages(List<string> stageNames)
 //        {
 //            return null;
 //        }
 
-//        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
+//        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
 //        {
 //            return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
 //        }

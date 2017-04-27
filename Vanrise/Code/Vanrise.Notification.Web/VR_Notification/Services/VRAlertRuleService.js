@@ -50,9 +50,9 @@
 
             var settings = {};
 
-            settings.onScopeReady = function (modalScope) {
-                UtilsService.setContextReadOnly(modalScope);
-            };
+            //settings.onScopeReady = function (modalScope) {
+            //    UtilsService.setContextReadOnly(modalScope);
+            //};
 
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRule/VRAlertRuleEditor.html', parameters, settings);
         }

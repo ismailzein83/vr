@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GetRecordStorageDataManagerContext : IGetRecordStorageDataManagerContext
+    public class GetStorageRowCountContext : IGetStorageRowCountContext
     {
         public DataStore DataStore { get; set; }
 

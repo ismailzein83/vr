@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public interface IGetRecordStorageDataManagerContext
+    public interface IDropStorageContext
     {
         DataStore DataStore { get; }
 

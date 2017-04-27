@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public interface IGetRecordStorageDataManagerContext
+    public interface IFillDataRecordStorageFromTempStorageContext
     {
         DataStore DataStore { get; }
 
         DataRecordStorage DataRecordStorage { get; }
 
         TempStorageInformation TempStorageInformation { get; }
+
+        DateTime From { get; }
+
+        DateTime To { get; }
     }
 }

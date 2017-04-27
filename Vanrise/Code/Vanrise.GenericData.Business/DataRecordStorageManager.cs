@@ -41,7 +41,7 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException(String.Format("dataStore.Settings. Id '{0}'", dataRecordStorage.DataStoreId));
 
             var remoteRecordDataManager = dataStore.Settings.GetRemoteRecordDataManager(new GetRemoteRecordStorageDataManagerContext() { DataStore = dataStore, DataRecordStorage = dataRecordStorage });
-            
+
             if (remoteRecordDataManager != null)
                 return remoteRecordDataManager.GetFilteredDataRecords(input);
             else
@@ -126,7 +126,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public IDataRecordDataManager GetStorageDataManager(Guid recordStorageId)
+        public IDataRecordDataManager GetStorageDataManager(Guid recordStorageId, TempStorageInformation tempStorageInformation = null)
         {
             var dataRecordStorage = GetDataRecordStorage(recordStorageId);
             if (dataRecordStorage == null)
@@ -134,7 +134,7 @@ namespace Vanrise.GenericData.Business
             if (dataRecordStorage.Settings == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage.Settings. Id '{0}'", recordStorageId));
 
-            return GetStorageDataManager(dataRecordStorage);
+            return GetStorageDataManager(dataRecordStorage, tempStorageInformation);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataRecordStorageDetail> GetFilteredDataRecordStorages(Vanrise.Entities.DataRetrievalInput<DataRecordStorageQuery> input)
@@ -152,7 +152,7 @@ namespace Vanrise.GenericData.Business
         public string GetDataRecordStorageName(DataRecordStorage dataRecordStorage)
         {
             if (dataRecordStorage != null)
-               return dataRecordStorage.Name;
+                return dataRecordStorage.Name;
             return null;
         }
         public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(DataRecordStorageFilter filter)
@@ -191,12 +191,11 @@ namespace Vanrise.GenericData.Business
         public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)
         {
             var cachedDataRecordStorages = GetCachedDataRecordStorages();
-            var dataRecordStorageItem= cachedDataRecordStorages.FindRecord(dataRecordStorage => dataRecordStorage.DataRecordStorageId == dataRecordStorageId);
-           
+            var dataRecordStorageItem = cachedDataRecordStorages.FindRecord(dataRecordStorage => dataRecordStorage.DataRecordStorageId == dataRecordStorageId);
+
             return dataRecordStorageItem;
         }
 
-      
         public Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail> AddDataRecordStorage(DataRecordStorage dataRecordStorage)
         {
             Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail>();
@@ -257,13 +256,13 @@ namespace Vanrise.GenericData.Business
             if (dataRecordStorage.Settings == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", dataRecordStorageId));
 
-
             var dataManager = manager.GetStorageDataManager(dataRecordStorage);
             if (dataManager == null)
                 throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
 
             dataManager.GetDataRecords(from, to, onItemReady);
         }
+
         public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
@@ -298,9 +297,81 @@ namespace Vanrise.GenericData.Business
             return extensionConfigurationManager.GetExtensionConfigurations<VRRestAPIRecordQueryInterceptorConfig>(VRRestAPIRecordQueryInterceptorConfig.EXTENSION_TYPE);
         }
 
+        public object CreateTempStorage(Guid dataRecordStorageId, long processId)
+        {
+            DataRecordStorage dataRecordStorage;
+            DataStore dataStore;
+            GetDataRecordData(dataRecordStorageId, out dataRecordStorage, out dataStore);
+
+            CreateTempStorageContext createTempStorageContext = new CreateTempStorageContext()
+            {
+                DataStore = dataStore,
+                DataRecordStorage = dataRecordStorage,
+                ProcessId = processId
+            };
+            dataStore.Settings.CreateTempStorage(createTempStorageContext);
+
+            return createTempStorageContext.TempStorageInformation;
+        }
+
+        public void FillDataRecordStorageFromTempStorage(Guid dataRecordStorageId, TempStorageInformation tempStorageInformation, DateTime from, DateTime to)
+        {
+            DataRecordStorage dataRecordStorage;
+            DataStore dataStore;
+            GetDataRecordData(dataRecordStorageId, out dataRecordStorage, out dataStore);
+
+            FillDataRecordStorageFromTempStorageContext fillDataRecordStorageFromTempStorage = new FillDataRecordStorageFromTempStorageContext()
+            {
+                DataStore = dataStore,
+                DataRecordStorage = dataRecordStorage,
+                TempStorageInformation = tempStorageInformation,
+                From = from,
+                To = to
+            };
+            dataStore.Settings.FillDataRecordStorageFromTempStorage(fillDataRecordStorageFromTempStorage);
+        }
+
+        public void DropStorage(Guid dataRecordStorageId, TempStorageInformation tempStorageInformation = null)
+        {
+            DataRecordStorage dataRecordStorage;
+            DataStore dataStore;
+            GetDataRecordData(dataRecordStorageId, out dataRecordStorage, out dataStore);
+
+            DropStorageContext dropTempStorageContext = new DropStorageContext()
+            {
+                DataStore = dataStore,
+                DataRecordStorage = dataRecordStorage,
+                TempStorageInformation = tempStorageInformation
+            };
+            dataStore.Settings.DropStorage(dropTempStorageContext);
+        }
+
+        public int GetStorageRowCount(Guid dataRecordStorageId, TempStorageInformation tempStorageInformation = null)
+        {
+            DataRecordStorage dataRecordStorage;
+            DataStore dataStore;
+            GetDataRecordData(dataRecordStorageId, out dataRecordStorage, out dataStore);
+
+            GetStorageRowCountContext getStorageRowCountContext = new GetStorageRowCountContext()
+            {
+                DataStore = dataStore,
+                DataRecordStorage = dataRecordStorage,
+                TempStorageInformation = tempStorageInformation
+            };
+            return dataStore.Settings.GetStorageRowCount(getStorageRowCountContext);
+        }
         #endregion
 
         #region Private Methods
+        private void GetDataRecordData(Guid dataRecordStorageId, out DataRecordStorage dataRecordStorage, out DataStore dataStore)
+        {
+            dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            dataStore = new DataStoreManager().GetDataStore(dataRecordStorage.DataStoreId);
+            dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);
+            dataStore.Settings.ThrowIfNull("dataStore.Settings", dataRecordStorage.DataStoreId);
+        }
 
         bool DoesUserHaveAccessOnRecordStorage(int userId, DataRecordStorage dataRecordStorage)
         {
@@ -339,18 +410,15 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentNullException("dataStore.Settings");
         }
 
-        IDataRecordDataManager GetStorageDataManager(DataRecordStorage dataRecordStorage)
+        IDataRecordDataManager GetStorageDataManager(DataRecordStorage dataRecordStorage, TempStorageInformation tempStorageInformation = null)
         {
             var dataStore = _dataStoreManager.GetDataStore(dataRecordStorage.DataStoreId);
             if (dataStore == null)
                 throw new NullReferenceException(String.Format("dataStore. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.DataStoreId, dataRecordStorage.DataRecordStorageId));
             if (dataStore.Settings == null)
                 throw new NullReferenceException(String.Format("dataStore.Settings. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.DataStoreId, dataRecordStorage.DataRecordStorageId));
-            var getRecordStorageDataManagerContext = new GetRecordStorageDataManagerContext
-            {
-                DataStore = dataStore,
-                DataRecordStorage = dataRecordStorage
-            };
+
+            var getRecordStorageDataManagerContext = new GetRecordStorageDataManagerContext { DataStore = dataStore, DataRecordStorage = dataRecordStorage, TempStorageInformation = tempStorageInformation };
             return dataStore.Settings.GetDataRecordDataManager(getRecordStorageDataManagerContext);
         }
 
@@ -604,7 +672,7 @@ namespace Vanrise.GenericData.Business
                 context.MainSheet = sheet;
             }
         }
-     
+
         #endregion
 
         #region Mappers

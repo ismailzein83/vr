@@ -14,7 +14,10 @@ namespace Vanrise.GenericData.Business
         where T : class, ISummaryBatch<GenericSummaryItem>
     {
         public Guid SummaryTransformationDefinitionId { get; set; }
-        
+
+        public TempStorageInformation TempStorageInformation { get; set; }
+
+
         #region Private Properties
 
         IDataTransformer _dataTransformer;
@@ -70,7 +73,7 @@ namespace Vanrise.GenericData.Business
             {
                 if(_summaryRecordDataManager == null)
                 {
-                    GetSummaryRecordStorageDataManagerContext context = new GetSummaryRecordStorageDataManagerContext(this.SummaryTransformationDefinition);
+                    GetSummaryRecordStorageDataManagerContext context = new GetSummaryRecordStorageDataManagerContext(this.SummaryTransformationDefinition, TempStorageInformation);
                     _summaryRecordDataManager = context.DataStore.Settings.GetSummaryDataRecordDataManager(context);
                     if (_summaryRecordDataManager == null)
                         throw new NullReferenceException("_summaryRecordDataManager");

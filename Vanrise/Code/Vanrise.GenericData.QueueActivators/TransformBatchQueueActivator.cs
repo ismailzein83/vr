@@ -19,6 +19,8 @@ namespace Vanrise.GenericData.QueueActivators
 
         public List<TransformBatchNextStageRecord> NextStagesRecords { get; set; }
 
+        #region QueueActivator
+
         public override void OnDisposed()
         {
 
@@ -63,11 +65,14 @@ namespace Vanrise.GenericData.QueueActivators
             }
         }
 
+        #endregion
 
-        //public void InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        #region IReprocessStageActivator
+
+        public object InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
+        {
+            return null;
+        }
 
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
@@ -112,6 +117,19 @@ namespace Vanrise.GenericData.QueueActivators
 
         }
 
+        public int? GetStorageRowCount(Reprocess.Entities.IReprocessStageActivatorGetStorageRowCountContext context)
+        {
+            return null;
+        }
+
+        public void CommitChanges(Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
+        {
+        }
+
+        public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
+        {
+        }
+
         public List<string> GetOutputStages(List<string> stageNames)
         {
             if (NextStagesRecords == null)
@@ -136,6 +154,8 @@ namespace Vanrise.GenericData.QueueActivators
         {
             return null;
         }
+
+        #endregion
     }
 
     public class TransformBatchNextStageRecord

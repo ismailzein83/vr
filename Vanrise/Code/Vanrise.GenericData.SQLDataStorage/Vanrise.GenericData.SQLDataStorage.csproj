@@ -50,6 +50,7 @@
     <Compile Include="SQLDataRecordStorageSettings.cs" />
     <Compile Include="SQLDataRecordStorageState.cs" />
     <Compile Include="SQLDataStoreSettings.cs" />
+    <Compile Include="SQLTempStorageInformation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">

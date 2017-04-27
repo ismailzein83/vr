@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.QueueActivators
 {
@@ -16,6 +17,9 @@ namespace Vanrise.GenericData.QueueActivators
         DataStoreManager _dataStoreManager = new DataStoreManager();
 
         public Guid DataRecordStorageId { get; set; }
+
+
+        #region QueueActivator
 
         public override void OnDisposed()
         {
@@ -42,6 +46,7 @@ namespace Vanrise.GenericData.QueueActivators
             var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
+
             var dbApplyStream = recordStorageDataManager.InitialiazeStreamForDBApply();
             foreach (var record in batchRecords)
             {
@@ -52,15 +57,20 @@ namespace Vanrise.GenericData.QueueActivators
             recordStorageDataManager.ApplyStreamToDB(streamReadyToApply);
         }
 
+        #endregion
 
-        //public void InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        #region IReprocessStageActivator
 
-        void Reprocess.Entities.IReprocessStageActivator.ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        public object InitializeStage(Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
         {
-            var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
+            return new DataRecordStorageManager().CreateTempStorage(this.DataRecordStorageId, context.ProcessId);
+        }
+
+        public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
+        {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput != null ? context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("tempStorageInformation") : null;
+
+            var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId, tempStorageInformation);
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
 
@@ -68,21 +78,45 @@ namespace Vanrise.GenericData.QueueActivators
             AsyncActivityStatus prepareBatchForDBApplyStatus = new AsyncActivityStatus();
 
             StartPrepareBatchForDBApplyTask(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
-            DeleteFromDB(context, recordStorageDataManager);
+            if (tempStorageInformation == null)
+            {
+                DeleteFromDB(context, recordStorageDataManager);
+            }
             ApplyBatchesToDB(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
         }
 
-        void Reprocess.Entities.IReprocessStageActivator.FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
+        public void FinalizeStage(Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
-
         }
 
-        List<string> Reprocess.Entities.IReprocessStageActivator.GetOutputStages(List<string> stageNames)
+        public int? GetStorageRowCount(Reprocess.Entities.IReprocessStageActivatorGetStorageRowCountContext context)
+        {
+            TempStorageInformation tempStorageInformation = null;
+
+            if (context.InitializationStageOutput != null)
+                tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
+
+            return new DataRecordStorageManager().GetStorageRowCount(this.DataRecordStorageId, tempStorageInformation);
+        }
+
+        public void CommitChanges(Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
+        {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
+            new DataRecordStorageManager().FillDataRecordStorageFromTempStorage(this.DataRecordStorageId, tempStorageInformation, context.From, context.To);
+        }
+
+        public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
+        {
+            TempStorageInformation tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
+            new DataRecordStorageManager().DropStorage(this.DataRecordStorageId, tempStorageInformation);
+        }
+
+        public List<string> GetOutputStages(List<string> stageNames)
         {
             return null;
         }
 
-        Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> Reprocess.Entities.IReprocessStageActivator.GetQueue()
+        public Queueing.BaseQueue<Reprocess.Entities.IReprocessBatch> GetQueue()
         {
             return new Queueing.MemoryQueue<Reprocess.Entities.IReprocessBatch>();
         }
@@ -92,6 +126,7 @@ namespace Vanrise.GenericData.QueueActivators
             return null;
         }
 
+        #endregion
 
         #region Private Methods
 
@@ -130,6 +165,10 @@ namespace Vanrise.GenericData.QueueActivators
             });
             prepareDataTask.Start();
         }
+        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
+        {
+            recordStorageDataManager.DeleteRecords(context.From, context.To);
+        }
         private void ApplyBatchesToDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             context.DoWhilePreviousRunning(prepareBatchForDBApplyStatus, () =>
@@ -143,10 +182,6 @@ namespace Vanrise.GenericData.QueueActivators
                     });
                 } while (!context.ShouldStop() && hasItem);
             });
-        }
-        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
-        {
-            recordStorageDataManager.DeleteRecords(context.From, context.To);
         }
 
         #endregion

@@ -16,6 +16,8 @@ namespace Vanrise.AccountBalance.Business
 {
     public abstract class BaseUpdateAccountBalancesQueueActivator : Vanrise.Queueing.Entities.QueueActivator, Vanrise.Reprocess.Entities.IReprocessStageActivator
     {
+        #region QueueActivator
+
         public override void OnDisposed()
         {
         }
@@ -84,13 +86,14 @@ namespace Vanrise.AccountBalance.Business
             }
         }
 
-        protected abstract void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context);
+        #endregion
 
+        #region IReprocessStageActivator
 
-        //public void InitializeStage(IReprocessStageActivatorInitializingContext context)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public object InitializeStage(IReprocessStageActivatorInitializingContext context)
+        {
+            return null;
+        }
 
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
@@ -114,30 +117,30 @@ namespace Vanrise.AccountBalance.Business
                             throw new Exception(String.Format("reprocessBatch should be of type 'Reprocess.Entities.GenericDataRecordBatch'. and not of type '{0}'", reprocessBatch.GetType()));
 
                         Action<BalanceUpdatePayload> submitBalanceUpdate = (balanceUpdatePayload) =>
+                        {
+                            AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = balanceUpdatePayload.AccountTypeId, TransactionTypeId = balanceUpdatePayload.TransactionTypeId };
+
+                            decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(balanceUpdatePayload.Amount, balanceUpdatePayload.CurrencyId, systemCurrencyId, balanceUpdatePayload.EffectiveOn); ;
+
+                            correctUsageBalanceItemsByType = correctUsageBalanceItemsByTypeByBatchStart.GetOrCreateItem(balanceUpdatePayload.EffectiveOn.Date);
+                            if (!correctUsageBalanceItemsByType.TryGetValue(accountBalanceType, out correctUsageBalanceItems))
                             {
-                                AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = balanceUpdatePayload.AccountTypeId, TransactionTypeId = balanceUpdatePayload.TransactionTypeId };
-
-                                decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(balanceUpdatePayload.Amount, balanceUpdatePayload.CurrencyId, systemCurrencyId, balanceUpdatePayload.EffectiveOn); ;
-
-                                correctUsageBalanceItemsByType = correctUsageBalanceItemsByTypeByBatchStart.GetOrCreateItem(balanceUpdatePayload.EffectiveOn.Date);
-                                if (!correctUsageBalanceItemsByType.TryGetValue(accountBalanceType, out correctUsageBalanceItems))
+                                correctUsageBalanceItem = new CorrectUsageBalanceItem() { Value = convertedAmount, AccountId = balanceUpdatePayload.AccountId, CurrencyId = systemCurrencyId };
+                                correctUsageBalanceItems = new CorrectUsageBalanceItemByAccount();
+                                correctUsageBalanceItems.Add(balanceUpdatePayload.AccountId, correctUsageBalanceItem);
+                                correctUsageBalanceItemsByType.Add(accountBalanceType, correctUsageBalanceItems);
+                            }
+                            else
+                            {
+                                if (!correctUsageBalanceItems.TryGetValue(balanceUpdatePayload.AccountId, out correctUsageBalanceItem))
                                 {
                                     correctUsageBalanceItem = new CorrectUsageBalanceItem() { Value = convertedAmount, AccountId = balanceUpdatePayload.AccountId, CurrencyId = systemCurrencyId };
-                                    correctUsageBalanceItems = new CorrectUsageBalanceItemByAccount();
                                     correctUsageBalanceItems.Add(balanceUpdatePayload.AccountId, correctUsageBalanceItem);
-                                    correctUsageBalanceItemsByType.Add(accountBalanceType, correctUsageBalanceItems);
                                 }
                                 else
-                                {
-                                    if (!correctUsageBalanceItems.TryGetValue(balanceUpdatePayload.AccountId, out correctUsageBalanceItem))
-                                    {
-                                        correctUsageBalanceItem = new CorrectUsageBalanceItem() { Value = convertedAmount, AccountId = balanceUpdatePayload.AccountId, CurrencyId = systemCurrencyId };
-                                        correctUsageBalanceItems.Add(balanceUpdatePayload.AccountId, correctUsageBalanceItem);
-                                    }
-                                    else
-                                        correctUsageBalanceItem.Value += convertedAmount;
-                                }
-                            };
+                                    correctUsageBalanceItem.Value += convertedAmount;
+                            }
+                        };
 
                         foreach (var record in genericDataRecordBatch.Records)
                         {
@@ -229,7 +232,18 @@ namespace Vanrise.AccountBalance.Business
             }
         }
 
-        protected abstract void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context);
+        public int? GetStorageRowCount(IReprocessStageActivatorGetStorageRowCountContext context)
+        {
+            return null;
+        }
+
+        public void CommitChanges(IReprocessStageActivatorCommitChangesContext context)
+        {
+        }
+
+        public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
+        {
+        }
 
         public List<string> GetOutputStages(List<string> stageNames)
         {
@@ -286,6 +300,15 @@ namespace Vanrise.AccountBalance.Business
             return stageBatchRecords;
         }
 
+        #endregion
+
+        #region Abstract Methods
+
+        protected abstract void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context);
+
+        protected abstract void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context);
+
+        #endregion
 
         #region Private Methods
 
@@ -309,7 +332,7 @@ namespace Vanrise.AccountBalance.Business
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
             }
         }
-        
+
         private void PrepareUsageBalanceItems(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             Queueing.MemoryQueue<CorrectUsageBalanceItemByType> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName, CorrectUsageBalanceItemByType preparedCorrectUsageBalanceItems)
         {

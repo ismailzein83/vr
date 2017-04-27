@@ -9,13 +9,11 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages.DataStore
 {
     public class VRRestAPIDataStoreSettings : DataStoreSettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("4829119D-F86F-4A6C-A6C0-CDB3FC8274C1"); }
-        }
+        public override Guid ConfigId { get { return new Guid("4829119D-F86F-4A6C-A6C0-CDB3FC8274C1"); } }
 
         public Guid ConnectionId { get; set; }
 
+        public override bool IsRemoteDataStore { get { return true; } }
 
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
@@ -36,12 +34,24 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages.DataStore
             return new VRRestAPIRecordDataManager(context.DataRecordStorage, this.ConnectionId);
         }
 
-        public override bool IsRemoteDataStore
+        public override void CreateTempStorage(ICreateTempStorageContext context)
         {
-            get
-            {
-                return true;
-            }
+            throw new NotSupportedException("CreateTempStorage is not supported in VRRestAPIDataStoreSettings.");
+        }
+
+        public override void FillDataRecordStorageFromTempStorage(IFillDataRecordStorageFromTempStorageContext context)
+        {
+            throw new NotSupportedException("FillDataRecordStorageFromTempStorage is not supported in VRRestAPIDataStoreSettings.");
+        }
+
+        public override void DropStorage(IDropStorageContext context)
+        {
+            throw new NotSupportedException("DropStorage is not supported in VRRestAPIDataStoreSettings.");
+        }
+
+        public override int GetStorageRowCount(IGetStorageRowCountContext context)
+        {
+            throw new NotSupportedException("GetStorageRowCount is not supported in VRRestAPIDataStoreSettings.");
         }
     }
 }

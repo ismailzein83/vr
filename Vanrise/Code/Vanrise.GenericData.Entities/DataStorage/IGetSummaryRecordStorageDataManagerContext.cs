@@ -13,5 +13,7 @@ namespace Vanrise.GenericData.Entities
         DataRecordStorage DataRecordStorage { get; }
 
         SummaryTransformationDefinition SummaryTransformationDefinition { get; }
+
+        TempStorageInformation TempStorageInformation { get; }
     }
 }
