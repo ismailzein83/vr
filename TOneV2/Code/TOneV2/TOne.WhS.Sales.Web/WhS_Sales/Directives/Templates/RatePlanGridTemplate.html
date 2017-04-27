@@ -39,7 +39,7 @@
                         </span>
                     </vr-datagridcolumn>
 
-                    <vr-datagridcolumn headertext="'Current Rate'"
+                    <vr-datagridcolumn headertext="'Rate'"
                                        type="'Number'"
                                        numberprecision="'LongPrecision'"
                                        widthfactor="7"
@@ -62,7 +62,7 @@
                         </div>
                     </vr-datagridcolumn>
 
-                    <vr-datagridcolumn headertext="'Services'" disablesorting="true">
+                    <vr-datagridcolumn headertext="'Services'" fixedwidth="50" disablesorting="true">
                         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
                     </vr-datagridcolumn>
 
@@ -78,7 +78,7 @@
                     </vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Margin'" field="'Margin'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Margin %'" field="'MarginPercentage'" type="'Number'" numberprecision="'DecimalPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'%Margin'" field="'MarginPercentage'" type="'Number'" numberprecision="'DecimalPrecision'" widthfactor="7" isfielddynamic="true" disablesorting></vr-datagridcolumn>
 
                     <vr-datagridcolumn headertext="'Calculated Rate'"
                                        field="'CalculatedRate'"
@@ -95,7 +95,7 @@
                         </span>
                     </vr-datagridcolumn>
 
-                    <vr-datagridcolumn headertext="'New Rate'" widthfactor="7" disablesorting="true">
+                    <vr-datagridcolumn headertext="'N.Rate'" widthfactor="7" disablesorting="true">
                         <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
                             <vr-textbox type="number"
                                         value="dataItem.NewRate"
