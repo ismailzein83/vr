@@ -64,7 +64,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has multiple codes that belong to different countries", (target as ZoneToProcess).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }

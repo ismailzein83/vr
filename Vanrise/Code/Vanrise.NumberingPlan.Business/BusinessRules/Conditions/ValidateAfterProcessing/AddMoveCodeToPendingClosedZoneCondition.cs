@@ -22,14 +22,14 @@ namespace Vanrise.NumberingPlan.Business
 
             if (zoneToProcess.CodesToAdd.Count() > 0 && zoneToProcess.EED.HasValue)
             {
-                context.Message = string.Format("Can not add code to pending closed zone '{0}'", zoneToProcess.ZoneName);
+                context.Message = string.Format("Cannot add code to pending closed zone '{0}'", zoneToProcess.ZoneName);
                 return false;
             }
 
 
             if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.EED.HasValue)
             {
-                context.Message = string.Format("Can not move code to pending closed zone '{0}'", zoneToProcess.ZoneName);
+                context.Message = string.Format("Cannot move code to pending closed zone '{0}'", zoneToProcess.ZoneName);
                 return false;
             }
 
@@ -38,7 +38,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Can not move or add code to the pending closed zone {0}", (target as ZoneToProcess).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }

@@ -48,10 +48,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            ZoneToProcess zoneToProcess = target as ZoneToProcess;
-            CountryManager manager = new CountryManager();
-            string countryName = manager.GetCountryName(zoneToProcess.AddedZones.First().CountryId);
-            return string.Format("Zone {0} has a code that belongs to the code group of country {1}", zoneToProcess.ZoneName, countryName);
+            throw new NotImplementedException();
         }
 
     }

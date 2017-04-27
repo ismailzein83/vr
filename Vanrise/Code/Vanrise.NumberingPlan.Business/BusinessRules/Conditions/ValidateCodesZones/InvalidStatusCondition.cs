@@ -27,7 +27,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} has an invalid status", (target as ImportedCode).Code);
+            throw new NotImplementedException();
         }
     }
 }

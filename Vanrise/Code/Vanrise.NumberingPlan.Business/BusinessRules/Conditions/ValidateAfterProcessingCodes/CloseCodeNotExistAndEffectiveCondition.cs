@@ -26,7 +26,7 @@ namespace Vanrise.NumberingPlan.Business
                 if (codeToClose.ChangedExistingCodes.Count() == 0 || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code
                     && item.ParentZone.ZoneEntity.Name.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    context.Message = string.Format("Can not close code {0} at zone {1} because this code either does not exist or is not effective", codeToClose.Code, zoneToProcess.ZoneName);
+                    context.Message = string.Format("Cannot close code {0} in zone {1} because this code either does not exist or it's not effective", codeToClose.Code, zoneToProcess.ZoneName);
                     return false;
                 }
             }
@@ -36,7 +36,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a code to close that does not exist or not effective", (target as ZoneToProcess).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }

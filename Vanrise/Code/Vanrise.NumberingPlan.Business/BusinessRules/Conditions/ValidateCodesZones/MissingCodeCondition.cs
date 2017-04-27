@@ -22,14 +22,14 @@ namespace Vanrise.NumberingPlan.Business
             var result = !string.IsNullOrEmpty(importedData.Code);
 
             if (result == false)
-                context.Message = string.Format("Can not add Zone {0} because it has a missing code", importedData.ZoneName);
+                context.Message = string.Format("Missing Code in zone {0}", importedData.ZoneName);
 
             return result;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing code", (target as ImportedCode).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }

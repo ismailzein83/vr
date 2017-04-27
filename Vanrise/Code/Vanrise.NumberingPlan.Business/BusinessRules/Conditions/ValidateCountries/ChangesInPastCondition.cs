@@ -34,7 +34,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Effective date can not be less than date of today");
+            throw new NotImplementedException();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Vanrise.NumberingPlan.Business
                 if (!(codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
                          && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))))
                 {
-                    context.Message = string.Format("Can not move Code {0} because this code does not exist in zone {1}", codeToMove.Code, codeToMove.OldZoneName);
+                    context.Message = string.Format("Cannot move Code {0} because this code does not exist in zone {1}", codeToMove.Code, codeToMove.OldZoneName);
                     return false;
                 }
 
@@ -36,8 +36,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            CodeToMove codeToMove = target as CodeToMove;
-            return string.Format("Code {0} does not exist in zone {1} and can not be moved", codeToMove.Code, codeToMove.OldZoneName);
+            throw new NotImplementedException();
         }
     }
 }

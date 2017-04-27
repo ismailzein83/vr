@@ -24,7 +24,7 @@ namespace Vanrise.NumberingPlan.Business
             {
                 if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
                 {
-                    context.Message = string.Format("Can not add code {0} at zone {1} with an effective date less than the effective date of its zone", codeToAdd.Code, zone.ZoneName);
+                    context.Message = string.Format("Cannot add code {0} in zone {1} with an effective date less than the effective date of its zone", codeToAdd.Code, zone.ZoneName);
                     return false;
                 }
             }
@@ -33,7 +33,7 @@ namespace Vanrise.NumberingPlan.Business
             {
                 if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
                 {
-                    context.Message = string.Format("Can not move code {0} at zone {1} with an effective date less than the effective date of its zone", codeToMove.Code, zone.ZoneName);
+                    context.Message = string.Format("Cannot move code {0} in zone {1} with an effective date less than the effective date of its zone", codeToMove.Code, zone.ZoneName);
                     return false;
                 }
             }
@@ -43,7 +43,7 @@ namespace Vanrise.NumberingPlan.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a code with effective date less than the effective date of the zone", (target as ZoneToProcess).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }
