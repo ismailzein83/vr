@@ -227,7 +227,8 @@ as (select * from (values
 (4,'Update Summary Queue Activator','{ "QueueActivatorConfigId": "4" , "Name": "Update Summary Queue Activator" ,"Title" : "Update Summary Queue Activator"							, "Editor" :"vr-genericdata-queueactivator-updatesummary"}'),
 (5,'Generate Summary Queue Activator','{ "QueueActivatorConfigId": "5" , "Name": "Generate Summary Queue Activator" ,"Title" : "Generate Summary Queue Activator"					, "Editor" :"vr-genericdata-queueactivator-generatesummary"}'),
 (6,'Update Account Balances Queue Activator','{"QueueActivatorConfigId": "6" ,"Name": "Update Account Balances Queue Activator","Title": "Update Account Balances Queue Activator"  ,"Editor" :"vr-accountbalance-queueactivator-updateaccountbalances"}'),
-(8, 'Check Action Rules Queue Activator','{"QueueActivatorConfigId": "8" ,"Name": "Check Alert Rules Queue Activator","Title": "Check Action Rules Queue Activator"					,"Editor":"vr-genericdata-queueactivator-datarecordcheckalertrules"}')	
+(8,'Check Action Rules Queue Activator','{"QueueActivatorConfigId": "8" ,"Name": "Check Alert Rules Queue Activator","Title": "Check Action Rules Queue Activator"					,"Editor":"vr-genericdata-queueactivator-datarecordcheckalertrules"}'),
+(9,'Distribute Batch Queue Activator','{"QueueActivatorConfigId": "9" ,"Name": "Distribute Batch Queue Activator","Title": "Distribute Batch Queue Activator", "Editor":"vr-genericdata-queueactivator-distributebatch"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Details]))
 merge	[queue].[QueueActivatorConfig] as t

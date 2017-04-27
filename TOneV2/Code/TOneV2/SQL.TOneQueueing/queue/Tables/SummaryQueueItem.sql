@@ -4,8 +4,11 @@
     [Content]                    VARBINARY (MAX) NOT NULL,
     [ExecutionFlowTriggerItemID] BIGINT          NULL,
     [BatchStart]                 DATETIME        NULL,
+    [BatchEnd]                   DATETIME        NULL,
     [IsSuspended]                BIT             NULL
 );
+
+
 
 
 GO

@@ -6,8 +6,11 @@
     [LockedByProcessID]          INT              NULL,
     [IsSuspended]                BIT              NULL,
     [ActivatorID]                UNIQUEIDENTIFIER NULL,
-    [BatchStart]                 DATETIME         NULL
+    [BatchStart]                 DATETIME         NULL,
+    [BatchEnd]                   DATETIME         NULL
 );
+
+
 
 
 GO

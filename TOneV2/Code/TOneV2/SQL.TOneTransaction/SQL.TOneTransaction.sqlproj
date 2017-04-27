@@ -99,6 +99,7 @@
     <Folder Include="VRNotification\Tables\" />
     <Folder Include="VRNotification\Stored Procedures\" />
     <Folder Include="VRNotification\Functions\" />
+    <Folder Include="queue\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -223,6 +224,13 @@
     <Build Include="VRNotification\Functions\ParseStringList.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotification_GetNotCleared.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateLastMessage.sql" />
+    <Build Include="queue\Tables\HoldRequest.sql" />
+    <Build Include="queue\Functions\ParseStringList.sql" />
+    <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_HasPendingItems.sql" />
+    <Build Include="queue\Stored Procedures\sp_HoldRequest_UpdateStatus.sql" />
+    <Build Include="queue\Stored Procedures\sp_HoldRequest_Insert.sql" />
+    <Build Include="queue\Stored Procedures\sp_HoldRequest_GetAll.sql" />
+    <Build Include="queue\Stored Procedures\sp_HoldRequest_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
