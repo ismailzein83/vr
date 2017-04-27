@@ -43,7 +43,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.recordCountPerTransaction = 10000;
+            $scope.scopeModel.recordCountPerTransaction = 50000;
 
             $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageAPI = api;
