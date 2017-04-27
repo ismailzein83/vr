@@ -49,12 +49,12 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             if (sumOfDuration != 0)
                 weightedAverageCost = sumOfRatesMultipliedByDuration / sumOfDuration;
 
-            if (weightedAverageCost.HasValue)
+            if (weightedAverageCost.HasValue && weightedAverageCost.Value > 0)
                 context.Cost = weightedAverageCost.Value;
             else
             {
                 context.CustomObject = null;
-                UtilitiesManager.CalculateAverageCost(context);
+                new AvgCostCalculation().CalculateCost(context);
             }
         }
 
