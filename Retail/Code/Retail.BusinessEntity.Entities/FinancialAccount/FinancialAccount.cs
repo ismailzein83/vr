@@ -8,6 +8,8 @@ namespace Retail.BusinessEntity.Entities
 {
     public class FinancialAccount : Vanrise.Entities.IDateEffectiveSettings
     {
+        public int SequenceNumber { get; set; }
+
         public Guid FinancialAccountDefinitionId { get; set; }
 
         public DateTime BED { get; set; }
