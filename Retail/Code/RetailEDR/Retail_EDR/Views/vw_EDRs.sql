@@ -20,10 +20,10 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                                         FROM            Retail_EDR.GPRS WITH (NOLOCK)
                                         UNION ALL
                                         SELECT        NULL AS IdCDR, CreatedDate AS StartDate, 
-                                                                 CASE WHEN PromotionCode LIKE '%_VOiCE_%' THEN 'Voce' ELSE CASE WHEN PromotionCode LIKE '%_SMS_%' THEN 'Sms' ELSE CASE WHEN PromotionCode
-                                                                  LIKE '%_DATA_%' THEN 'Data' ELSE '' END END END AS TrafficType, NULL AS DirectionTraffic, NULL AS Calling, NULL AS Called, NULL 
-                                                                 AS TypeNet, NULL AS SourceOperator, NULL AS DestinationOperator, NULL AS SourceArea, NULL AS DestinationArea, NULL 
-                                                                 AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, PromotionCode AS Promotion, FileName, NULL AS FileDate, 
+                                                                 CASE WHEN PromotionCode LIKE '%_VOiCE_%' THEN 'Event_Voce' ELSE CASE WHEN PromotionCode LIKE '%_SMS_%' THEN 'Event_Sms' ELSE CASE
+                                                                  WHEN PromotionCode LIKE '%_DATA_%' THEN 'Event_Data' ELSE '' END END END AS TrafficType, NULL AS DirectionTraffic, NULL 
+                                                                 AS Calling, NULL AS Called, NULL AS TypeNet, NULL AS SourceOperator, NULL AS DestinationOperator, NULL AS SourceArea, NULL 
+                                                                 AS DestinationArea, NULL AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, PromotionCode AS Promotion, FileName, NULL AS FileDate, 
                                                                  CreatedDate AS CreationDate, NULL AS Balance, NULL AS Zone, NULL AS Agent, NULL AS AgentCommission, AccountId, NULL 
                                                                  AS OriginatingZoneID, NULL AS TerminatingZoneID, 0 AS AirtimeRate, 0 AS AirtimeAmount, 0 AS TerminationRate, NULL AS TerminationAmount, 
                                                                  0 AS SaleRate, 0 AS SaleAmount, 0 AS Credit, 0 AS MTRate, 0 AS MTAmount, 0 AS Profit, NULL AS TypeCalled, 0 AS Duration, 
