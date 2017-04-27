@@ -25,10 +25,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             var defaultData = context.Target as DefaultData;
 
-            if (defaultData.DefaultRoutingProductToAdd == null && defaultData.CurrentDefaultRoutingProduct == null)
+            if (defaultData.CurrentDefaultRoutingProduct == null && defaultData.DefaultRoutingProductToAdd == null)
             {
-                string sellingProductName = new SellingProductManager().GetSellingProductName(ratePlanContext.OwnerId);
-                context.Message = string.Format("Selling Product '{0}' does not have a default Routing Product", sellingProductName);
+                context.Message = string.Format("Default routing product was not found");
                 return false;
             }
 
@@ -37,7 +36,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return "Selling Product does not have a default Routing Product";
+            return "Default routing product was not found";
         }
     }
 }

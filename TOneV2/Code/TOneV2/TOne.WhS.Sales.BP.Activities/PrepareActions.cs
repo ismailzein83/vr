@@ -311,7 +311,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     DateTime? newNormalRateBED = GetZoneNewNormalRateBED(zoneDraft);
                     if (!newNormalRateBED.HasValue)
-                        throw new Vanrise.Entities.ValidationException("newNormalRateBED");
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The routing product of zone '{0}' has been changed and has been set to follow the new normal rate's BED. However, the new normal rate was not found", zoneDraft.ZoneName));
                     zoneRPToClose.CloseEffectiveDate = newNormalRateBED.Value;
                 }
                 else

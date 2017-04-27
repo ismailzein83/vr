@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (zoneData.NormalRateToClose != null)
             {
-                context.Message = string.Format("Selling Product Zone '{0}' a Closed Existing Rate", zoneData.ZoneName);
+                context.Message = string.Format("Zone '{0}' has a closed existing rate", zoneData.ZoneName);
                 return false;
             }
             if (zoneData.OtherRatesToClose != null && zoneData.OtherRatesToClose.Count() > 0)
@@ -41,17 +41,17 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                         continue;
                     otherRateTypeNames.Add(otherRateTypeName);
                 }
-				if (otherRateTypeNames.Count > 0)
-				{
-					string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
-					context.Message = string.Format("Other Rate Types '{0}' of Selling Product Zone '{1}' are closed", rateTypeNames, zoneData.ZoneName);
-					return false;
-				}
+                if (otherRateTypeNames.Count > 0)
+                {
+                    string rateTypeNames = string.Join(", ", otherRateTypeNames);
+                    context.Message = string.Format("Zone '{0}' has closed existing other rates of types '{1}'", zoneData.ZoneName, rateTypeNames);
+                    return false;
+                }
             }
 
             if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue)
             {
-                context.Message = string.Format("Selling Product Zone '{0}' has a New Rate with an EED", zoneData.ZoneName);
+                context.Message = string.Format("Zone '{0}' has a new rate with an EED", zoneData.ZoneName);
                 return false;
             }
 
@@ -69,12 +69,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                         otherRateTypeNames.Add(otherRateTypeName);
                     }
                 }
-				if (otherRateTypeNames.Count > 0)
-				{
-					string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
-					context.Message = string.Format("New Other Rates '{0}' of Selling Product Zone '{1}' have EEDs", rateTypeNames, zoneData.ZoneName);
-					return false;
-				}
+                if (otherRateTypeNames.Count > 0)
+                {
+                    string rateTypeNames = string.Join(", ", otherRateTypeNames.ToArray());
+                    context.Message = string.Format("Zone '{0}' has new other rates of types '{1}' with an EED", zoneData.ZoneName, rateTypeNames);
+                    return false;
+                }
             }
 
             return true;
@@ -83,7 +83,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
             var zoneData = target as DataByZone;
-            return string.Format("Selling Product Zone '{0}' either has a New Rate with an EED or a Closed Existing Rate", zoneData.ZoneName);
+            return string.Format("Zone '{0}' either has new rates with an EED or closed existing rates", zoneData.ZoneName);
         }
     }
 }

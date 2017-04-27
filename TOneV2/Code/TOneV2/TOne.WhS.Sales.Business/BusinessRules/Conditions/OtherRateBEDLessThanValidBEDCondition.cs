@@ -13,38 +13,38 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as DataByZone != null);
+            return target as DataByZone != null;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var zone = context.Target as DataByZone;
+            var zoneData = context.Target as DataByZone;
 
-            if (zone.OtherRatesToChange != null)
+            if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
             {
-                List<DateTime?> beginEffectiveDates;
+                DateTime minimumBED = GetMinimumOtherRateBED(zoneData);
 
-                foreach (RateToChange otherRateToChange in zone.OtherRatesToChange)
+                var invalidRateTypeNames = new List<string>();
+                var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+
+                foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                 {
-                    if (otherRateToChange.BED == default(DateTime))
-                        return false;
+                    if (otherRateToChange.BED != default(DateTime) && otherRateToChange.BED >= minimumBED)
+                        continue;
 
-                    if (zone.ZoneRateGroup != null && zone.ZoneRateGroup.NormalRate != null)
-                    {
-                        beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.ZoneRateGroup.NormalRate.BED };
+                    string rateTypeName = rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value);
 
-                        if (otherRateToChange.BED >= UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)
-                            continue;
-                    }
+                    if (rateTypeName == null)
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Name of rate type '{0}' was not found", otherRateToChange.RateTypeId.Value));
 
-                    if (zone.NormalRateToChange != null)
-                    {
-                        beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn, zone.NormalRateToChange.BED };
+                    invalidRateTypeNames.Add(rateTypeName);
+                }
 
-                        if (otherRateToChange.BED >= UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)
-                            continue;
-                    }
-
+                if (invalidRateTypeNames.Count > 0)
+                {
+                    string minimumOtherRateBED = UtilitiesManager.GetDateTimeAsString(minimumBED);
+                    string invalidRateTypes = string.Join(",", invalidRateTypeNames);
+                    context.Message = string.Format("Other rates of type(s) '{0}' of zone '{1}' must have a BED that's greater than or equal to '{2}'", invalidRateTypes, zoneData.ZoneName, minimumOtherRateBED);
                     return false;
                 }
             }
@@ -71,5 +71,31 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return messageBuilder.ToString();
         }
+
+        #region Private Methods
+
+        private DateTime GetMinimumOtherRateBED(DataByZone zoneData)
+        {
+            var beginEffectiveDates = new List<DateTime>();
+
+            beginEffectiveDates.Add(zoneData.BED);
+
+            if (zoneData.SoldOn.HasValue)
+                beginEffectiveDates.Add(zoneData.SoldOn.Value);
+
+            ZoneRate currentRate = (zoneData.ZoneRateGroup != null) ? zoneData.ZoneRateGroup.NormalRate : null;
+            RateToChange newRate = zoneData.NormalRateToChange;
+
+            if (currentRate != null && newRate != null)
+                beginEffectiveDates.Add(Utilities.Min(currentRate.BED, newRate.BED));
+            else if (currentRate != null)
+                beginEffectiveDates.Add(currentRate.BED);
+            else if (newRate != null)
+                beginEffectiveDates.Add(newRate.BED);
+
+            return beginEffectiveDates.Max();
+        }
+
+        #endregion
     }
 }

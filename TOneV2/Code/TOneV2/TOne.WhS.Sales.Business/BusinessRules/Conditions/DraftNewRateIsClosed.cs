@@ -43,7 +43,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidRateTypeNames.Count > 0)
             {
-                context.Message = string.Format("New SaleRates '{0}' cannot be closed", string.Join(",", invalidRateTypeNames));
+                context.Message = string.Format("New rates of types'{0}' of zone '{1}' cannot be closed", string.Join(",", invalidRateTypeNames, zoneData.ZoneName));
                 return false;
             }
 
@@ -52,7 +52,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return "New SaleRates cannot be closed";
+            var zoneData = target as DataByZone;
+            return string.Format("New rates of zone '{0}' cannot be closed", zoneData.ZoneName);
         }
     }
 }

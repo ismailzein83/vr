@@ -13,28 +13,30 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as DataByZone != null);
+            return target as DataByZone != null;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var zone = context.Target as DataByZone;
-            
-            if (zone.NormalRateToChange != null)
+            var zoneData = context.Target as DataByZone;
+
+            if (zoneData.NormalRateToChange != null)
             {
-                if (zone.EED.HasValue && zone.NormalRateToChange.EED > zone.EED.Value)
+                if (zoneData.EED.HasValue && zoneData.NormalRateToChange.EED > zoneData.EED.Value)
                 {
-                    string normalRateEEDString = zone.NormalRateToChange.EED.Value.ToShortDateString();
-                    context.Message = string.Format("EED ({0}) of the normal rate of zone {1} must be less than or equal to EED ({2}) of the zone", normalRateEEDString, zone.ZoneName, zone.EED);
+                    string zoneEED = UtilitiesManager.GetDateTimeAsString(zoneData.EED.Value);
+                    string normalRateEED = UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToChange.EED.Value);
+                    context.Message = string.Format("EED '{0}' of the normal rate of zone '{1}' must be less than or equal to EED '{2}' of the zone", normalRateEED, zoneData.ZoneName, zoneEED);
                     return false;
                 }
             }
-            else if (zone.NormalRateToClose != null)
+            else if (zoneData.NormalRateToClose != null)
             {
-                if (zone.EED.HasValue && zone.NormalRateToClose.CloseEffectiveDate > zone.EED.Value)
+                if (zoneData.EED.HasValue && zoneData.NormalRateToClose.CloseEffectiveDate > zoneData.EED.Value)
                 {
-                    string normalRateEEDString = zone.NormalRateToClose.CloseEffectiveDate.ToShortDateString();
-                    context.Message = string.Format("EED ({0}) of the normal rate of zone {1} must be less than or equal to EED ({2}) of the zone", normalRateEEDString, zone.ZoneName, zone.EED);
+                    string zoneEED = UtilitiesManager.GetDateTimeAsString(zoneData.EED.Value);
+                    string normalRateEED = UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToClose.CloseEffectiveDate);
+                    context.Message = string.Format("EED '{0}' of the normal rate of zone '{1}' must be less than or equal to EED '{2}' of the zone", normalRateEED, zoneData.ZoneName, zoneEED);
                     return false;
                 }
             }
@@ -44,16 +46,20 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override string GetMessage(IRuleTarget target)
         {
-            DataByZone zone = (target as DataByZone);
+            var zoneData = target as DataByZone;
 
-            string normalRateEEDString = "NULL";
-            if (zone.NormalRateToChange != null)
-                if (zone.NormalRateToChange.EED.HasValue)
-                    normalRateEEDString = zone.NormalRateToChange.EED.Value.ToShortDateString();
-                else if (zone.NormalRateToClose != null)
-                    normalRateEEDString = zone.NormalRateToClose.CloseEffectiveDate.ToShortDateString();
+            string zoneEED = UtilitiesManager.GetDateTimeAsString(zoneData.EED.Value);
+            string normalRateEED = null;
 
-            return String.Format("EED ({0}) of the normal rate of zone {1} must be less than or equal to EED ({2}) of the zone", normalRateEEDString, zone.ZoneName, zone.EED);
+            if (zoneData.NormalRateToChange != null)
+            {
+                if (zoneData.NormalRateToChange.EED.HasValue)
+                    normalRateEED = UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToChange.EED.Value);
+                else if (zoneData.NormalRateToClose != null)
+                    normalRateEED = UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToClose.CloseEffectiveDate);
+            }
+
+            return String.Format("EED '{0}' of the normal rate of zone '{1}' must be less than or equal to EED '{2}' of the zone", normalRateEED, zoneData.ZoneName, zoneEED);
         }
     }
 }

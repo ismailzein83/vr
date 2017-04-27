@@ -57,7 +57,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (errorMessages.Count > 0)
             {
-                string test = "Rate of type X must have a BED >= Y";
                 context.Message = string.Format("The following rates of zone '{0}' have invalid BEDs: {1}", zoneData.ZoneName, string.Join(",", errorMessages));
                 return false;
             }

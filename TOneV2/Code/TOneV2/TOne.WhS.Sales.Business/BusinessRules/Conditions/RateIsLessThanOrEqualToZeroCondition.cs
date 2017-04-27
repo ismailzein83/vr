@@ -12,7 +12,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as DataByZone != null);
+            return target is DataByZone;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
@@ -21,13 +21,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (zone.NormalRateToChange != null && zone.NormalRateToChange.NormalRate <= 0)
             {
-                context.Message = String.Format("The rate of zone {0} must be greater than 0", zone.ZoneName);
+                context.Message = String.Format("The rate of zone '{0}' must be greater than 0", zone.ZoneName);
                 return false;
             }
 
             if (zone.OtherRatesToChange != null && zone.OtherRatesToChange.Any(x => x.NormalRate <= 0))
             {
-                context.Message = String.Format("The other rate of zone {0} must be greater than 0", zone.ZoneName);
+                context.Message = String.Format("The other rate of zone '{0}' must be greater than 0", zone.ZoneName);
                 return false;
             }
 
@@ -36,8 +36,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override string GetMessage(IRuleTarget target)
         {
-            DataByZone zone = (target as DataByZone);
-            return String.Format("The rate of zone {0} must be greater than 0", zone.ZoneName);
+            var zone = target as DataByZone;
+            return String.Format("The rate of zone '{0}' must be greater than 0", zone.ZoneName);
         }
     }
 }

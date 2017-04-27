@@ -53,9 +53,6 @@ namespace TOne.WhS.Sales.BP.Activities
 			}
 			else
 			{
-				if (dataByCustomer == null || dataByCustomer.Count() == 0)
-					throw new Vanrise.Entities.ValidationException(string.Format("dataByCustomer was not set for Customer '{0}'", ratePlanContext.OwnerId));
-
 				RoutingCustomerInfoDetails customerData = dataByCustomer.FirstOrDefault();
 				Dictionary<int, IEnumerable<SaleZone>> newCountryZonesByCountry = GetNewCountryZonesByCountry(newCountries, ratePlanContext.OwnerSellingNumberPlanId, ratePlanContext.EffectiveDate);
 
