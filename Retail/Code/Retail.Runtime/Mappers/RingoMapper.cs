@@ -385,7 +385,7 @@ namespace Retail.Runtime.Mappers
             }
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
-            mappedBatches.Add("CDR Storage Stage", batch);
+            mappedBatches.Add("Distribute Raw CDRs Stage", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
