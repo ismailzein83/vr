@@ -5,15 +5,17 @@
 -- =============================================
 CREATE PROCEDURE [queue].[sp_QueueSubscription_Insert] 
 	@QueueID int,
-	@SubscribedQueueID int
+	@SubscribedQueueID int,
+	@IsActive bit
 AS
 BEGIN
 	
 	INSERT INTO [queue].[QueueSubscription]
            ([QueueID]
-           ,[SubscribedQueueID])
+           ,[SubscribedQueueID]
+		   ,[IsActive])
 	VALUES
            (@QueueID
-           ,@SubscribedQueueID)
-           
+           ,@SubscribedQueueID
+		   ,@IsActive)
 END
