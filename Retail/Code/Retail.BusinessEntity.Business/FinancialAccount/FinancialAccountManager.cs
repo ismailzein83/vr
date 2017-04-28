@@ -5,14 +5,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
     public class FinancialAccountManager
     {
         static AccountBEManager s_accountManager = new AccountBEManager();
-
+        static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
         #region Public Methods
+
+
+        public IDataRetrievalResult<FinancialAccountDetail> GetFilteredFinancialAccounts(DataRetrievalInput<FinancialAccountQuery> input)
+        {
+            var cachedFinancialAccounts = GetFinancialAccounts(input.Query.AccountBEDefinitionId, input.Query.AccountId, false);
+            Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
+            {
+                return true;
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
+        }
+
 
         public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited)
         {
@@ -126,6 +139,15 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>();
         }
 
+        private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccountData financialAccountData)
+        {
+            return new FinancialAccountDetail
+            {
+                BED = financialAccountData.FinancialAccount.BED,
+                EED = financialAccountData.FinancialAccount.EED,
+                FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId)
+            };
+        }
         #endregion
     }
 }

@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="scopeModel.financialAccounts"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'Pager'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="FinancialAccountId">
+    <vr-datagridcolumn headertext="'ID'" field="'FinancialAccountId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'"></vr-datagridcolumn>
+</vr-datagrid>

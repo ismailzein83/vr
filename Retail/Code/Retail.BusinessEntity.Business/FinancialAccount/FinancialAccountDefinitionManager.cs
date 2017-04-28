@@ -27,7 +27,16 @@ namespace Retail.BusinessEntity.Business
             };
             return s_componentTypeManager.GetComponentTypes<FinancialAccountDefinitionSettings, FinancialAccountDefinition>().MapRecords(FinancialAccountDefinitionInfoMapper,filterExpression);
         }
-
+        public string GetFinancialAccountDefinitionName(Guid financialAccountDefinitionId)
+        {
+           var financialAccountDefinition = GetFinancialAccountDefinition(financialAccountDefinitionId);
+           return financialAccountDefinition != null ? financialAccountDefinition.Name : null;
+        }
+        public FinancialAccountDefinition GetFinancialAccountDefinition(Guid financialAccountDefinitionId)
+        {
+            return s_componentTypeManager.GetComponentType<FinancialAccountDefinitionSettings, FinancialAccountDefinition>(financialAccountDefinitionId);
+        }
+     
         #region Mappers
         private FinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(FinancialAccountDefinition financialAccountDefinition)
         {

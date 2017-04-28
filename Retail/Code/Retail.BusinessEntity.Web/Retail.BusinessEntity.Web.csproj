@@ -159,6 +159,8 @@
     <Compile Include="Controllers\AccountPartDefinitionController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\AccountSynchronizerHandlerController.cs" />
+    <Compile Include="Controllers\FinancialAccountController.cs" />
+    <Compile Include="Controllers\FinancialAccountDefinitionController.cs" />
     <Compile Include="Controllers\PackageDefinitionController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInfoController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
@@ -250,6 +252,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\GridColumnDefinitionExportExcelEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountSecurityDefinition\retail-be-accountsecuritydefinition-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountSecurityDefinition\Templates\AccountSecurityDefinitionManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-financialaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-acounthistory.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-actions.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-childberelation.js" />
@@ -261,6 +264,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-subaccounts.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-accountinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\AccountHistorySettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\FinancialAccountViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\ActionsViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\ChildBERelationViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\FinancialTransactionsViewSettingsTemplate.html" />
@@ -300,6 +304,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountservices-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-actions-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-childberelations-view.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-financialaccounts-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-financialtransactions-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-portalaccount-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-subaccounts-view.js" />
@@ -310,6 +315,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountInfoViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\ActionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\ChildBERelationsViewTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\FinancialAccountsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\FinancialTransactionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\PortalAccountViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\SubAccountsViewTemplate.html" />
@@ -331,8 +337,13 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDAccountRelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDSynchronizerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-search.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountDefinitionSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountSearchTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />
@@ -602,6 +613,8 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\DIDAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
@@ -614,6 +627,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountSynchronizerHandlerAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\VRAccountBalanceAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\FinancialAccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\PortalAccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\ProductFamilyService.js" />
     <Content Include="Retail_BusinessEntity\Services\RecurringChargeDefinitionService.js" />
@@ -672,6 +686,8 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagement.html" />

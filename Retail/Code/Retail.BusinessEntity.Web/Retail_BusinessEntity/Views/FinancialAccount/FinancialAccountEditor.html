@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_FinancialAccountEditorController" width="small" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formFinancialAccountEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                </vr-tab>
+                <vr-tab header="'Time Settings'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="date" label="BED" isrequired customvalidate="scopeModel.validateDates()" vr-disabled="scopeModel.disableAccountTypeAndBED"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker value="scopeModel.endEffectiveDate" type="date" label="EED" customvalidate="scopeModel.validateEEDDate()" vr-disabled="scopeModel.disableEED"></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formFinancialAccountEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

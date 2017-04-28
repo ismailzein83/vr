@@ -8,5 +8,9 @@ namespace Retail.BusinessEntity.Entities
 {
     public class FinancialAccountDetail
     {
+        public string FinancialAccountDefinitionName { get; set; }
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
     }
 }
