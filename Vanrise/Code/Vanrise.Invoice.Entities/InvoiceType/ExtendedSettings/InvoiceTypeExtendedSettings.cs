@@ -31,6 +31,7 @@ namespace Vanrise.Invoice.Entities
         dynamic CustomSectionPayload { get; }
         int GetDuePeriod();
         GeneratedInvoice Invoice { set; }
+        string ErrorMessage { set; }
     }
     public interface IInvoiceTypeExtendedSettingsInfoContext
     {
