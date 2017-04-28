@@ -147,9 +147,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.Web", "Retail.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.BP.Arguments", "Retail.Cost.BP.Arguments\Retail.Cost.BP.Arguments.csproj", "{AF85B6F6-461D-477D-8E5A-459FBA704D8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.BP", "Retail.Cost.BP\Retail.Cost.BP.csproj", "{0997FA79-93EF-4EF4-A700-E5915E09CBA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.BP.Activities", "Retail.Cost.BP.Activities\Retail.Cost.BP.Activities.csproj", "{004EFC23-3577-4D54-B935-901CA21C4A4F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 57
+		SccNumberOfProjects = 59
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -377,6 +381,14 @@ Global
 		SccProjectTopLevelParentUniqueName56 = Retail.sln
 		SccProjectName56 = Retail.Cost.BP.Arguments
 		SccLocalPath56 = Retail.Cost.BP.Arguments
+		SccProjectUniqueName57 = Retail.Cost.BP\\Retail.Cost.BP.csproj
+		SccProjectTopLevelParentUniqueName57 = Retail.sln
+		SccProjectName57 = Retail.Cost.BP
+		SccLocalPath57 = Retail.Cost.BP
+		SccProjectUniqueName58 = Retail.Cost.BP.Activities\\Retail.Cost.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName58 = Retail.sln
+		SccProjectName58 = Retail.Cost.BP.Activities
+		SccLocalPath58 = Retail.Cost.BP.Activities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -615,6 +627,14 @@ Global
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0997FA79-93EF-4EF4-A700-E5915E09CBA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0997FA79-93EF-4EF4-A700-E5915E09CBA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0997FA79-93EF-4EF4-A700-E5915E09CBA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0997FA79-93EF-4EF4-A700-E5915E09CBA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{004EFC23-3577-4D54-B935-901CA21C4A4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{004EFC23-3577-4D54-B935-901CA21C4A4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{004EFC23-3577-4D54-B935-901CA21C4A4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{004EFC23-3577-4D54-B935-901CA21C4A4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -687,5 +707,7 @@ Global
 		{84A54068-1858-4009-8687-5AAB7E7B8901} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{2F04A10E-321F-4CBF-9B0E-9F55C017DB59} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
+		{0997FA79-93EF-4EF4-A700-E5915E09CBA9} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
+		{004EFC23-3577-4D54-B935-901CA21C4A4F} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 	EndGlobalSection
 EndGlobal
