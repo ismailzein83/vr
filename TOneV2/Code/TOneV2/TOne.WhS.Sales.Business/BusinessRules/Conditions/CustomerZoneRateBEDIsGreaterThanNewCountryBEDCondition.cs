@@ -32,9 +32,23 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (!zoneData.SoldOn.HasValue)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("BED of country '{0}' of zone '{0}' was not found", countryName, zoneData.ZoneName));
 
+            DateTime validRateBED;
+            string partialErrorMessage;
+
+            if (zoneData.BED > zoneData.SoldOn.Value)
+            {
+                validRateBED = zoneData.BED;
+                partialErrorMessage = string.Format("zone '{0}'", zoneData.ZoneName);
+            }
+            else
+            {
+                validRateBED = zoneData.SoldOn.Value;
+                partialErrorMessage = string.Format("new country '{0}'", countryName);
+            }
+
             var errorMessages = new List<string>();
 
-            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED > zoneData.SoldOn.Value)
+            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED > validRateBED)
                 errorMessages.Add(string.Format("normal rate BED '{0}'", UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToChange.BED)));
 
             if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
@@ -43,7 +57,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                 {
-                    if (otherRateToChange.BED > zoneData.SoldOn.Value)
+                    if (otherRateToChange.BED > validRateBED)
                     {
                         string rateTypeName = rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value);
                         string formattedRateTypeName = (!string.IsNullOrWhiteSpace(rateTypeName)) ? rateTypeName.ToLower() : null;
@@ -54,11 +68,10 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (errorMessages.Count > 0)
             {
-                string soldOnAsString = UtilitiesManager.GetDateTimeAsString(zoneData.SoldOn.Value);
+                string validRateBEDAsString = UtilitiesManager.GetDateTimeAsString(validRateBED);
                 string errorMessagesAsString = string.Join(", ", errorMessages);
 
-                context.Message =
-                    string.Format("The following rates of zone '{0}' must have a BED that is equal to '{1}' that of the new country '{2}': {3}", zoneData.ZoneName, soldOnAsString, countryName, errorMessagesAsString);
+                context.Message = string.Format("The following rates of zone '{0}' must have a BED that is equal to the BED of the {1} '{2}': {3}", zoneData.ZoneName, partialErrorMessage, validRateBEDAsString, errorMessagesAsString);
 
                 return false;
             }
