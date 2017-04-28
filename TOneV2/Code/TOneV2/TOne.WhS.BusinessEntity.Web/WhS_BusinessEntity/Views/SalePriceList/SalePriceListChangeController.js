@@ -93,7 +93,6 @@
             $scope.isLoadingFilter = true;
             return utilsService.waitMultipleAsyncOperations([loadCountryRateSelector, GetOwner])
                 .then(function () {
-                    console.log(ownerName);
                     setTitle();
                 })
               .catch(function (error) {
