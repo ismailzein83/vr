@@ -74,6 +74,11 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return true;
         }
+
+        public virtual List<BPInstanceProgressView> GetBPInstanceProgressViews(IGetBPInstanceProgressViewsContext context)
+        {
+            return null;
+        }
     }
 
     //public interface IBPDefinitionShouldRestrictBPInstanceCreationContext

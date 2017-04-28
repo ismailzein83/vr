@@ -61,6 +61,7 @@
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionCanRunBPInstanceContext.cs" />
+    <Compile Include="BPDefinitionContexts\IGetBPInstanceProgressViewsContext.cs" />
     <Compile Include="BPDefinitionContexts\SecurityContexts.cs" />
     <Compile Include="BPDefinitionDetail.cs" />
     <Compile Include="BPDefinitionInfo.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="BPDefinitionQuery.cs" />
     <Compile Include="BPEvent.cs" />
     <Compile Include="BPInstance.cs" />
+    <Compile Include="BPInstanceProgressView.cs" />
     <Compile Include="BPPendingInstanceInfo.cs" />
     <Compile Include="BPTrackingBeforeIdInput.cs" />
     <Compile Include="BPInstanceDetail.cs" />
