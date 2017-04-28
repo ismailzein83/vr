@@ -33,14 +33,16 @@ function ($compile) {
             api.getData = function () {
                 var obj = {
                     $type: "Vanrise.Rules.Pricing.MainExtensions.Tax.PercentageTaxSettings,Vanrise.Rules.Pricing.MainExtensions",
-                    ExtraPercentage: ctrl.extraPercentage
+                    TaxPercentage: ctrl.taxPercentage,
+                    AmountToSkip: ctrl.amountToSkip
                 };
                 return obj;
             };
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    ctrl.extraPercentage = payload.ExtraPercentage;
+                    ctrl.taxPercentage = payload.TaxPercentage;
+                    ctrl.amountToSkip = payload.AmountToSkip;
                 }
             };
 

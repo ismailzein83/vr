@@ -10,12 +10,11 @@ namespace Vanrise.Rules.Pricing
     {
         DateTime? TargetTime { get; }
 
-        Decimal Amount { get; set; }
+        Decimal Amount { get; }
 
-        int? DestinationCurrencyId { get; }
+        int RuleCurrencyId { get; }
 
-        int SourceCurrencyId { get; }
-
-        bool IsTaxApplied { get; set; }
+        int AmountCurrencyId { get; }
+        decimal? TaxAmount { set; }
     }
 }

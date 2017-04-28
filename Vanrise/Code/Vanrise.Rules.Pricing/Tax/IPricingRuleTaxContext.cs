@@ -14,8 +14,6 @@ namespace Vanrise.Rules.Pricing
 
         Decimal TaxAmount { set; }
 
-        int? DestinationCurrencyId { get; }
-
-        int SourceCurrencyId { get; set; }
+        int CurrencyId { get; }
     }
 }

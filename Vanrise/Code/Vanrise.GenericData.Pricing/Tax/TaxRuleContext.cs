@@ -14,11 +14,7 @@ namespace Vanrise.GenericData.Pricing
         public decimal Amount { get; set; }
 
         public decimal TaxAmount { get; set; }
-
-        public int? DestinationCurrencyId { get; set; }
-
-        public int SourceCurrencyId { get; set; }
-
         public Rules.IVRRule Rule { get; set; }
+        public int CurrencyId { get; set; }
     }
 }

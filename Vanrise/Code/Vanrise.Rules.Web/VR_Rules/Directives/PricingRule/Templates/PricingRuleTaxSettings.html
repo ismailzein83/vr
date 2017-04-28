@@ -21,7 +21,7 @@
                 <vr-datagridcolumn headertext="'To Amount'" widthfactor="10">
                     <vr-textbox value="dataItem.Entity.toAmount" customvalidate="dataItem.Entity.validate(dataItem)" type="number" label="To Amount" minvalue="0"></vr-textbox>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="10">
+                <vr-datagridcolumn headertext="'Filter Settings'" widthfactor="20">
                     <vr-directivewrapper directive="dataItem.Entity.editor" on-ready="dataItem.Entity.onDirectiveReady" />
                 </vr-datagridcolumn>
             </vr-datagrid>

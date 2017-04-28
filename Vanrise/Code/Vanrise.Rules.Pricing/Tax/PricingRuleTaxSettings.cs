@@ -19,19 +19,19 @@ namespace Vanrise.Rules.Pricing
             {
                 Amount = context.Amount,
                 TargetTime = context.TargetTime,
-                DestinationCurrencyId = context.DestinationCurrencyId,
-                SourceCurrencyId = context.SourceCurrencyId
+                RuleCurrencyId = this.CurrencyId,
+                AmountCurrencyId = context.CurrencyId
             };
-
-            var originalAmount = context.Amount;
+            
             foreach (var action in this.Actions)
             {
                 action.Execute(actionContext);
-                if (actionContext.IsTaxApplied)
+                if (actionContext.TaxAmount.HasValue)
+                {
+                    context.TaxAmount = actionContext.TaxAmount.Value;
                     break;
+                }
             }
-            context.TaxAmount = actionContext.Amount - context.Amount;
-            context.Amount = actionContext.Amount;
         }
     }
 }

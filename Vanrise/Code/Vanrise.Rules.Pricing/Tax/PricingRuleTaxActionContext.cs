@@ -12,10 +12,10 @@ namespace Vanrise.Rules.Pricing
 
         public decimal Amount { get; set; }
 
-        public int? DestinationCurrencyId { get; set; }
+        public int RuleCurrencyId { get; set; }
 
-        public int SourceCurrencyId { get; set; }
+        public int AmountCurrencyId { get; set; }
 
-        public bool IsTaxApplied { get; set; }
+        public decimal? TaxAmount { get; set; }
     }
 }

@@ -15,7 +15,6 @@ namespace Vanrise.GenericData.Pricing
             var taxPricingRule = GetMatchRule(ruleDefinitionId, target);
             if (taxPricingRule != null)
             {
-                context.SourceCurrencyId = taxPricingRule.Settings.CurrencyId;
                 taxPricingRule.Settings.ApplyTaxRule(context);
                 context.Rule = taxPricingRule;
             }
