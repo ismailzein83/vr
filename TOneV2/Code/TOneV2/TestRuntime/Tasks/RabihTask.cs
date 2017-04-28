@@ -205,9 +205,9 @@ namespace TestRuntime
                     case DBTableName.ZoneServiceConfig:
                         migrationTables.Add(table);
                         break;
-                    //case DBTableName.Rule:
-                    //    migrationTables.Add(table);
-                    //    break;
+                    case DBTableName.Rule:
+                        migrationTables.Add(table);
+                        break;
                     default:
                         break;
                 }
@@ -215,7 +215,8 @@ namespace TestRuntime
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
             {
-                ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=no@cce$$dev;",
+                //ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=no@cce$$dev;",
+                ConnectionString = "Server=192.168.110.185;Database=MVTSPRO;User ID=development;Password=dev!123;",
                 DefaultSellingNumberPlanId = 1,
                 SellingProductId = 1,
                 HolidayRateTypeId = -1,
@@ -223,7 +224,7 @@ namespace TestRuntime
                 WeekendRateTypeId = -3,
                 UseTempTables = true,
                 MigrationRequestedTables = migrationTables,
-                OnlyEffective = false
+                OnlyEffective = true
             };
             DBSyncTaskAction dbSyncTaskAction = new DBSyncTaskAction();
             dbSyncTaskAction.Execute(new SchedulerTask(), taskActionArgument, null);
