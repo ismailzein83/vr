@@ -104,7 +104,13 @@
     <Compile Include="FinancialAccount\AccountBEFinancialAccountsSettings.cs" />
     <Compile Include="FinancialAccount\FinancialAccount.cs" />
     <Compile Include="FinancialAccount\FinancialAccountData.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountDefinition.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountDefinitionInfo.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionSettings.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountDetail.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountInfo.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountInfoFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountSettings.cs" />
     <Compile Include="Package\Definition\PackageDefinitionFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />

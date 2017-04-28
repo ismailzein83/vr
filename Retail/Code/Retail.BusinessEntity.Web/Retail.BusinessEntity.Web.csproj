@@ -331,6 +331,8 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDAccountRelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDSynchronizerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountDefinitionSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />

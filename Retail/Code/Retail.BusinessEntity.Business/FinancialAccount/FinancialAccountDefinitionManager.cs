@@ -17,5 +17,27 @@ namespace Retail.BusinessEntity.Business
             financialAccountDefinitionSettings.ThrowIfNull("financialAccountDefinitionSettings");
             return financialAccountDefinitionSettings;
         }
+        public IEnumerable<FinancialAccountDefinitionInfo> GetFinancialAccountDefinitionsInfo(FinancialAccountDefinitionInfoFilter financialAccountDefinitionFilter)
+        {
+            Func<FinancialAccountDefinition, bool> filterExpression = (financialAccountDefinition) =>
+            {
+                if (financialAccountDefinitionFilter == null)
+                    return true;
+                return true;
+            };
+            return s_componentTypeManager.GetComponentTypes<FinancialAccountDefinitionSettings, FinancialAccountDefinition>().MapRecords(FinancialAccountDefinitionInfoMapper,filterExpression);
+        }
+
+        #region Mappers
+        private FinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(FinancialAccountDefinition financialAccountDefinition)
+        {
+            return new FinancialAccountDefinitionInfo
+            {
+                FinancialAccountDefinitionId = financialAccountDefinition.VRComponentTypeId,
+                Name = financialAccountDefinition.Name
+            };
+        }
+
+        #endregion
     }
 }
