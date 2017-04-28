@@ -6,10 +6,11 @@
              pagingtype="'PagingOnScroll'"
              hidegridmenu>
     <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Services'">
+  
+    <vr-datagridcolumn headertext="'Services'" fixedwidth="70">
         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
-    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" widthfactor="3">
+    <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" fixedwidth="25">
         <vr-icon icontype="dataItem.sourceIconType" inline></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" headertext="'Selling Product'" field="'SaleEntityName'" type="'Text'"></vr-datagridcolumn>
