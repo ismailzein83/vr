@@ -535,12 +535,39 @@ namespace Vanrise.Common
         }
 
         private const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occured. Please consult technical support. Click to see technical details";
+
+        public static IEnumerable<DateTimeRange> GenerateDateTimeRanges(DateTime from, DateTime to, TimeSpan timeSpan)
+        {
+            double intervalInMinutes = timeSpan.TotalMinutes;
+            List<DateTimeRange> dateTimeRanges = new List<DateTimeRange>();
+
+            DateTime endDate = from;
+            DateTime startDate = endDate;
+
+            while (endDate != to)
+            {
+                startDate = endDate;
+
+                DateTime tempToDate = endDate.AddMinutes(intervalInMinutes);
+
+                if (tempToDate > to)
+                    endDate = to;
+                else
+                    endDate = tempToDate;
+
+
+                dateTimeRanges.Add(new DateTimeRange() { From = startDate, To = endDate });
+            }
+
+            return dateTimeRanges.OrderBy(itm => itm.From);
+        }
     }
 
     public interface IPropValueReader
     {
         Object GetPropertyValue(dynamic target);
     }
+
     public interface IPropValueReaderCompilationStep
     {
         HashSet<string> GetPropertiesToCompile(IPropValueReaderCompilationStepContext context);
@@ -558,5 +585,4 @@ namespace Vanrise.Common
             return new HashSet<string> { "ID", "Entity.ID", "Name", "Entity.Name", "Description", "Entity.Description", "CreatedTime", "Entity.CreatedTime" };
         }
     }
-
 }
