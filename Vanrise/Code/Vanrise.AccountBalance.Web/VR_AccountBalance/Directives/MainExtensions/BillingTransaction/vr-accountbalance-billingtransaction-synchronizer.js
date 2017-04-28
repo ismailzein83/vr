@@ -47,7 +47,6 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload != undefined) {
                         $scope.scopeModel.checkExisting = payload.CheckExisting;
                     }
@@ -94,7 +93,6 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                         CheckExisting: $scope.scopeModel.checkExisting,
                         BillingTransactionTypeIds: $scope.scopeModel.checkExisting ? transactionTypeDirectiveAPI.getSelectedIds() : undefined
                     };
-                    console.log(data);
                     return data;
                 };
 
