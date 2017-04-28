@@ -19,6 +19,8 @@ namespace Vanrise.Queueing.Entities
 
         public QueueActivator QueueActivator { get; set; }
 
+        public bool IsSequential { get; set; }
+
         public int? MaximumConcurrentReaders { get; set; }
 
         public List<string> SourceStages { get; set; }

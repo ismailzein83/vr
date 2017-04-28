@@ -167,7 +167,7 @@ namespace Vanrise.Queueing
        
         #region Private Methods
 
-        private Dictionary<Guid, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()
+        public Dictionary<Guid, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedExecutionFlowDefinitions",
                () =>

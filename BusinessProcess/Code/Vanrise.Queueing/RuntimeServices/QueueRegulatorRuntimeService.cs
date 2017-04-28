@@ -19,6 +19,7 @@ namespace Vanrise.Queueing
         QueueItemManager _queueItemManager = new QueueItemManager();
 
         QueueInstanceManager _queueManager = new QueueInstanceManager();
+        QueueExecutionFlowManager _execFlowManager = new QueueExecutionFlowManager();
         ISummaryBatchActivatorDataManager _summaryBatchActivatorDataManager = QDataManagerFactory.GetDataManager<ISummaryBatchActivatorDataManager>();
 
         protected override void Execute()
@@ -120,38 +121,30 @@ namespace Vanrise.Queueing
 
             if (pendingQueueItems != null && pendingQueueItems.Count > 0)
             {
-                Dictionary<int, AssignedQueueItemsCount> itemsCountByQueue = new Dictionary<int, AssignedQueueItemsCount>();
-                Dictionary<Guid, ActivatorInstanceItemsCount> itemsCountByActivator
-                    = activeActivatorInstances.ToDictionary(activatorInstance => activatorInstance.ActivatorId, activatorInstance => new ActivatorInstanceItemsCount
-                    {
-                        ActivatorInstance = activatorInstance,
-                        QueueIds = new List<int>()
-                    });
-                foreach (var pendingQueueItem in pendingQueueItems)
-                {
-                    AssignedQueueItemsCount assignedQueueItemsCount = itemsCountByQueue.GetOrCreateItem(pendingQueueItem.QueueId, () =>
-                        {
-                            var queueInstance = _queueManager.GetQueueInstanceById(pendingQueueItem.QueueId);
-                            return new AssignedQueueItemsCount { QueueId = pendingQueueItem.QueueId, MaxItemsCount = queueInstance.Settings.Activator.NbOfMaxConcurrentActivators };
-                        });
-                    if (pendingQueueItem.ActivatorInstanceId.HasValue)
-                    {
-                        ActivatorInstanceItemsCount activatorItemsCount;
-                        if (itemsCountByActivator.TryGetValue(pendingQueueItem.ActivatorInstanceId.Value, out activatorItemsCount))
-                        {
-                            activatorItemsCount.ItemsCount++;
-                            activatorItemsCount.QueueIds.Add(pendingQueueItem.QueueId);
-                            assignedQueueItemsCount.ItemsCount++;
-                        }
-                        else
-                            pendingQueueItem.ActivatorInstanceId = null;
-                    }
-                }
+                Dictionary<int, AssignedQueueItemsCount> itemsCountByQueue;
+                Dictionary<Guid, ActivatorInstanceItemsCount> itemsCountByActivator;
+                BuildItemsCountObjs(activeActivatorInstances, pendingQueueItems, out itemsCountByQueue, out itemsCountByActivator);
+
+                Dictionary<int, QueueRuntimeInfo> queueRuntimeInfos = _execFlowManager.GetQueueRuntimeInfoByQueueId();
+                HashSet<int> sequentialQueueIds = new HashSet<int>(queueRuntimeInfos.Where(itm => itm.Value.IsSequencial).Select(itm => itm.Key));
 
                 List<PendingQueueItemInfo> pendingQueueItemsToUpdate = new List<PendingQueueItemInfo>();
                 List<ActivatorInstanceItemsCount> activatorsToAssign = itemsCountByActivator.Values.Where(itm => itm.ItemsCount < s_maxNumberOfItemsPerActivator).OrderBy(itm => itm.ItemsCount).ToList();
                 int activatorInstanceIndex = 0;
-                foreach (var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue).OrderBy(itm => itm.ExecutionFlowTriggerItemID).ThenBy(itm => itm.QueueItemId))
+                //assigning items of non-sequential queues
+                foreach (var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue && !sequentialQueueIds.Contains(itm.QueueId)).OrderBy(itm => itm.ExecutionFlowTriggerItemID).ThenBy(itm => itm.QueueItemId))
+                {
+                    if (activatorsToAssign.Count == 0)
+                        break;
+
+                    AssignedQueueItemsCount assignedQueueItemsCount = itemsCountByQueue[pendingQueueItem.QueueId];
+                    if (assignedQueueItemsCount.ItemsCount >= assignedQueueItemsCount.MaxItemsCount)
+                        continue;
+                
+                    AssignActivatorToQueueItem(pendingQueueItem, pendingQueueItemsToUpdate, assignedQueueItemsCount, ref activatorInstanceIndex, activatorsToAssign);
+                }
+                //assigning items of sequential queues
+                foreach(var pendingQueueItem in pendingQueueItems.Where(itm => !itm.ActivatorInstanceId.HasValue && sequentialQueueIds.Contains(itm.QueueId)).OrderBy(itm => itm.QueueItemId))
                 {
                     if (activatorsToAssign.Count == 0)
                         break;
@@ -160,42 +153,98 @@ namespace Vanrise.Queueing
                     if (assignedQueueItemsCount.ItemsCount >= assignedQueueItemsCount.MaxItemsCount)
                         continue;
 
-                    if (activatorInstanceIndex >= activatorsToAssign.Count)
-                        activatorInstanceIndex = 0;
+                    QueueRuntimeInfo queueRuntimeInfo = queueRuntimeInfos.GetRecord(pendingQueueItem.QueueId);
+                    queueRuntimeInfo.ThrowIfNull("queueRuntimeInfo", pendingQueueItem.QueueId);
+                    ActivatorInstanceItemsCount activatorToAssign = null;
 
-                    ActivatorInstanceItemsCount activatorToAssign = activatorsToAssign[activatorInstanceIndex];
-                    pendingQueueItem.ActivatorInstanceId = activatorToAssign.ActivatorInstance.ActivatorId;
-                    pendingQueueItemsToUpdate.Add(pendingQueueItem);
-
-                    assignedQueueItemsCount.ItemsCount++;
-                    activatorToAssign.QueueIds.Add(pendingQueueItem.QueueId);
-                    activatorToAssign.ItemsCount++;
-
-                    if (activatorToAssign.ItemsCount >= s_maxNumberOfItemsPerActivator)
-                        activatorsToAssign.Remove(activatorToAssign);
-
-                    activatorInstanceIndex++;
-                }
-                _queueItemDataManager.SetQueueItemsActivatorInstances(pendingQueueItemsToUpdate);
-                foreach (var activatorInstanceItemsCount in itemsCountByActivator.Values)
-                {
-                    if (activatorInstanceItemsCount.ItemsCount > 0)
-                    {
-                        try
-                        {
-                            ServiceClientFactory.CreateTCPServiceClient<IQueueActivationRuntimeWCFService>(activatorInstanceItemsCount.ActivatorInstance.ServiceURL,
-                                (client) =>
-                                {
-                                    client.SetPendingQueuesToProcess(activatorInstanceItemsCount.ActivatorInstance.ActivatorId, activatorInstanceItemsCount.QueueIds.Distinct().ToList());
-                                });
-                        }
-                        catch (Exception ex)
-                        {
-                            LoggerFactory.GetExceptionLogger().WriteException(ex);
-                        }
+                    var assignedQueueItemInSameStage = pendingQueueItems.FindRecord(itm => itm.ActivatorInstanceId.HasValue && queueRuntimeInfo.QueueIdsInSameStage.Contains(itm.QueueId));
+                    if (assignedQueueItemInSameStage != null)
+                    {                        
+                        activatorToAssign = activatorsToAssign.FindRecord(itm => itm.ActivatorInstance.ActivatorId == assignedQueueItemInSameStage.ActivatorInstanceId.Value);
+                        if (activatorToAssign == null)
+                            continue;
                     }
+                    AssignActivatorToQueueItem(pendingQueueItem, pendingQueueItemsToUpdate, assignedQueueItemsCount, ref activatorInstanceIndex, activatorsToAssign, activatorToAssign);
+                }
+
+                NotifyActivators(itemsCountByActivator, pendingQueueItemsToUpdate);
+            }
+        }
+
+        private void BuildItemsCountObjs(List<QueueActivatorInstance> activeActivatorInstances, List<PendingQueueItemInfo> pendingQueueItems, out Dictionary<int, AssignedQueueItemsCount> itemsCountByQueue, out Dictionary<Guid, ActivatorInstanceItemsCount> itemsCountByActivator)
+        {
+            itemsCountByQueue = new Dictionary<int, AssignedQueueItemsCount>();
+            itemsCountByActivator = activeActivatorInstances.ToDictionary(activatorInstance => activatorInstance.ActivatorId,
+                activatorInstance => new ActivatorInstanceItemsCount
+                {
+                    ActivatorInstance = activatorInstance,
+                    QueueIds = new List<int>()
+                });
+            foreach (var pendingQueueItem in pendingQueueItems)
+            {
+                AssignedQueueItemsCount assignedQueueItemsCount = itemsCountByQueue.GetOrCreateItem(pendingQueueItem.QueueId, () =>
+                {
+                    var queueInstance = _queueManager.GetQueueInstanceById(pendingQueueItem.QueueId);
+                    return new AssignedQueueItemsCount { QueueId = pendingQueueItem.QueueId, MaxItemsCount = queueInstance.Settings.Activator.NbOfMaxConcurrentActivators };
+                });
+                if (pendingQueueItem.ActivatorInstanceId.HasValue)
+                {
+                    ActivatorInstanceItemsCount activatorItemsCount;
+                    if (itemsCountByActivator.TryGetValue(pendingQueueItem.ActivatorInstanceId.Value, out activatorItemsCount))
+                    {
+                        activatorItemsCount.ItemsCount++;
+                        activatorItemsCount.QueueIds.Add(pendingQueueItem.QueueId);
+                        assignedQueueItemsCount.ItemsCount++;
+                    }
+                    else
+                        pendingQueueItem.ActivatorInstanceId = null;
                 }
             }
+        }
+
+        private void AssignActivatorToQueueItem(PendingQueueItemInfo pendingQueueItem, List<PendingQueueItemInfo> pendingQueueItemsToUpdate, AssignedQueueItemsCount assignedQueueItemsCount, ref int activatorInstanceIndex, List<ActivatorInstanceItemsCount> activatorsToAssign, ActivatorInstanceItemsCount activatorToAssign = null)
+        {
+            if (activatorToAssign == null)
+            {
+                if (activatorInstanceIndex >= activatorsToAssign.Count)
+                    activatorInstanceIndex = 0;
+
+                activatorToAssign = activatorsToAssign[activatorInstanceIndex];
+            }
+
+            pendingQueueItem.ActivatorInstanceId = activatorToAssign.ActivatorInstance.ActivatorId;
+            pendingQueueItemsToUpdate.Add(pendingQueueItem);
+
+            assignedQueueItemsCount.ItemsCount++;
+            activatorToAssign.QueueIds.Add(pendingQueueItem.QueueId);
+            activatorToAssign.ItemsCount++;
+
+            if (activatorToAssign.ItemsCount >= s_maxNumberOfItemsPerActivator)
+                activatorsToAssign.Remove(activatorToAssign);
+
+            activatorInstanceIndex++;
+        }
+
+        private void NotifyActivators(Dictionary<Guid, ActivatorInstanceItemsCount> itemsCountByActivator, List<PendingQueueItemInfo> pendingQueueItemsToUpdate)
+        {
+            if (pendingQueueItemsToUpdate != null && pendingQueueItemsToUpdate.Count > 0)
+                _queueItemDataManager.SetQueueItemsActivatorInstances(pendingQueueItemsToUpdate);
+            Parallel.ForEach(itemsCountByActivator.Values.Where(itm => itm.ItemsCount > 0),
+                (activatorInstanceItemsCount) =>
+                {
+                    try
+                    {
+                        ServiceClientFactory.CreateTCPServiceClient<IQueueActivationRuntimeWCFService>(activatorInstanceItemsCount.ActivatorInstance.ServiceURL,
+                            (client) =>
+                            {
+                                client.SetPendingQueuesToProcess(activatorInstanceItemsCount.ActivatorInstance.ActivatorId, activatorInstanceItemsCount.QueueIds.Distinct().ToList());
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerFactory.GetExceptionLogger().WriteException(ex);
+                    }
+                });
         }
 
         private void AssignSummaryBatchesToActivators(List<QueueActivatorInstance> activeActivatorInstances)

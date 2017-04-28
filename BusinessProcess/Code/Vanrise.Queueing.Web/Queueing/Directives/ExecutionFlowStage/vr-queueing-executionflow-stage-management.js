@@ -61,6 +61,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
                             QueueNameTemplate: stage.QueueNameTemplate,
                             QueueTitleTemplate: stage.QueueTitleTemplate,
                             MaximumConcurrentReaders: stage.MaximumConcurrentReaders,
+                            IsSequential: stage.IsSequential,
                             QueueItemType: stage.QueueItemType,
                             QueueActivator: stage.QueueActivator,
                             SourceStages: stage.SourceStages

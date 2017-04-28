@@ -52,6 +52,62 @@ namespace Vanrise.Queueing
                });
         }
 
+        private struct GetQueueIdsInSameStageCacheName
+        {
+            public int QueueId { get; set; }
+        }
+        public QueueRuntimeInfo GetQueueRuntimeInfo(int queueId)
+        {
+            QueueRuntimeInfo queueRuntimeInfo = GetQueueRuntimeInfoByQueueId().GetRecord(queueId);
+            queueRuntimeInfo.ThrowIfNull("queueRuntimeInfo", queueId);
+            return queueRuntimeInfo;
+        }
+
+        public Dictionary<int, QueueRuntimeInfo> GetQueueRuntimeInfoByQueueId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<ExecutionFlowRuntimeCacheManager>().GetOrCreateObject("GetQueueRuntimeInfoByQueueId",
+               () =>
+               {
+                   Dictionary<int, QueueRuntimeInfo> rslt = new Dictionary<int, QueueRuntimeInfo>();
+                   var allQueues = new QueueInstanceManager().GetReadyQueueInstances();
+                   allQueues.ThrowIfNull("allQueues");
+                   Dictionary<Guid, QueueExecutionFlowDefinition> execFlowDefs = new QueueExecutionFlowDefinitionManager().GetCachedExecutionFlowDefinitions();
+                   execFlowDefs.ThrowIfNull("execFlowDefs");
+                   Dictionary<Guid, QueueExecutionFlow> execFlows = GetCachedQueueExecutionFlows();
+                   execFlows.ThrowIfNull("execFlows");
+                   Dictionary<Guid, List<Guid>> execFlowIdsInSameDefByExecFlowId = new Dictionary<Guid, List<Guid>>();
+                   foreach (var execFlow in execFlows.Values)
+                   {
+                       execFlowIdsInSameDefByExecFlowId.Add(execFlow.ExecutionFlowId, execFlows.Values.Where(itm => itm.DefinitionId == execFlow.DefinitionId).Select(itm => itm.ExecutionFlowId).ToList());
+                   }
+                   foreach (var queue in allQueues)
+                   {
+                       QueueRuntimeInfo runtimeInfo = new QueueRuntimeInfo();
+                       if(queue.ExecutionFlowId.HasValue)
+                       {
+                           List<Guid> execFlowIdsInSameDef;
+                           if (!execFlowIdsInSameDefByExecFlowId.TryGetValue(queue.ExecutionFlowId.Value, out execFlowIdsInSameDef))
+                               throw new NullReferenceException(string.Format("execFlowIdsInSameDef '{0}'", queue.ExecutionFlowId.Value));
+                           runtimeInfo.QueueIdsInSameStage = allQueues.Where(itm => itm.ExecutionFlowId.HasValue && execFlowIdsInSameDef.Contains(itm.ExecutionFlowId.Value) && itm.StageName == queue.StageName).Select(itm => itm.QueueInstanceId).ToList();
+                           var execFlow = execFlows.GetRecord(queue.ExecutionFlowId.Value);
+                           execFlow.ThrowIfNull("execFlow", queue.ExecutionFlowId.Value);
+                           var execFlowDefinition = execFlowDefs.GetRecord(execFlow.DefinitionId);
+                           execFlowDefinition.ThrowIfNull("execFlowDefinition", execFlow.DefinitionId);
+                           execFlowDefinition.Stages.ThrowIfNull("execFlowDefinition.Stages", execFlow.DefinitionId);
+                           var matchStage = execFlowDefinition.Stages.FindRecord(itm => itm.StageName == queue.StageName);
+                           if (matchStage != null)
+                               runtimeInfo.IsSequencial = matchStage.IsSequential;
+                       }
+                       else
+                       {
+                           runtimeInfo.QueueIdsInSameStage = new List<int> { queue.QueueInstanceId };
+                       }
+                       rslt.Add(queue.QueueInstanceId, runtimeInfo);
+                   }
+                   return rslt;
+               });
+        }
+
         public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
         {
             InsertOperationOutput<QueueExecutionFlowDetail> insertOperationOutput = new InsertOperationOutput<QueueExecutionFlowDetail>();
@@ -338,5 +394,12 @@ namespace Vanrise.Queueing
         }
 
         #endregion
+    }
+
+    public class QueueRuntimeInfo
+    {
+        public bool IsSequencial { get; set; }
+
+        public List<int> QueueIdsInSameStage { get; set; }
     }
 }
