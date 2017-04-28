@@ -102,6 +102,7 @@
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString"/>
 
+    <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
