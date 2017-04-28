@@ -134,7 +134,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (input.Query.OwnerId != null && input.Query.OwnerId != salePriceList.OwnerId)
                     return false;
-                if (input.Query.CreationDate != null && salePriceList.CreatedTime == input.Query.CreationDate)
+                if (input.Query.CreationDate.HasValue && salePriceList.CreatedTime.Date != input.Query.CreationDate)
                     return false;
                 return true;
             };
