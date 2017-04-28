@@ -16,15 +16,15 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                                                                  AS DestinationOperator, Zone AS SourceArea, NULL AS DestinationArea, TypeConsumed, Bag, PricePlan, Promotion, FileName, FileDate, 
                                                                  CreationDate, Balance, NULL AS Zone, Agent, AgentCommission, Account AS AccountID, NULL AS OriginatingZoneID, NULL AS TerminatingZoneID, 
                                                                  AirtimeRate, AirtimeAmount, NULL AS TerminationRate, NULL AS TerminationAmount, NULL AS SaleRate, NULL AS SaleAmount, Credit, NULL 
-                                                                 AS MTRate, NULL AS MTAmount, NULL AS Profit, TypeGprs AS TypeCalled, 0 AS Duration, Credit AS OriginalAmount
+                                                                 AS MTRate, NULL AS MTAmount, Profit, TypeGprs AS TypeCalled, 0 AS Duration, Credit AS OriginalAmount
                                         FROM            Retail_EDR.GPRS WITH (NOLOCK)
                                         UNION ALL
                                         SELECT        NULL AS IdCDR, CreatedDate AS StartDate, 
                                                                  CASE WHEN PromotionCode LIKE '%_VOiCE_%' THEN 'Event_Voce' ELSE CASE WHEN PromotionCode LIKE '%_SMS_%' THEN 'Event_Sms' ELSE CASE
                                                                   WHEN PromotionCode LIKE '%_DATA_%' THEN 'Event_Data' ELSE '' END END END AS TrafficType, NULL AS DirectionTraffic, NULL 
                                                                  AS Calling, NULL AS Called, NULL AS TypeNet, NULL AS SourceOperator, NULL AS DestinationOperator, NULL AS SourceArea, NULL 
-                                                                 AS DestinationArea, NULL AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, PromotionCode AS Promotion, FileName, NULL AS FileDate, 
-                                                                 CreatedDate AS CreationDate, NULL AS Balance, NULL AS Zone, NULL AS Agent, NULL AS AgentCommission, AccountId, NULL 
+                                                                 AS DestinationArea, NULL AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, REPLACE(PromotionCode, '_', ' ') AS Promotion, FileName, NULL 
+                                                                 AS FileDate, CreatedDate AS CreationDate, NULL AS Balance, NULL AS Zone, NULL AS Agent, NULL AS AgentCommission, AccountId, NULL 
                                                                  AS OriginatingZoneID, NULL AS TerminatingZoneID, 0 AS AirtimeRate, 0 AS AirtimeAmount, 0 AS TerminationRate, NULL AS TerminationAmount, 
                                                                  0 AS SaleRate, 0 AS SaleAmount, 0 AS Credit, 0 AS MTRate, 0 AS MTAmount, 0 AS Profit, NULL AS TypeCalled, 0 AS Duration, 
                                                                  PackagePrice AS OriginalAmount
@@ -33,7 +33,10 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                               PricePlan, Promotion, FileName, FileDate, CreationDate, Balance, Zone, Agent, AgentCommission, AccountID, OriginatingZoneID, TerminatingZoneID, AirtimeRate, 
                               AirtimeAmount, TerminationRate, TerminationAmount, SaleRate, SaleAmount, Credit, MTRate, MTAmount, Profit, TypeCalled, CONVERT(datetime, 
                               CONVERT(varchar(10), StartDate, 121)) AS Day, 'Week ' + RIGHT('00' + CONVERT(VARCHAR, DATEPART(wk, StartDate)), 2) + ' ' + CONVERT(VARCHAR, 
-                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month, Duration, OriginalAmount, 1 AS NumberOfCalls
+                              DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month, Duration, OriginalAmount, 1 AS NumberOfCalls, 
+                              CASE WHEN Promotion = '' OR
+                              Promotion IS NULL OR
+                              Promotion = 'Nessuna Promo' THEN 'No Promo' ELSE 'Promo' END AS InPromotion
      FROM            AllEDRs AS AllEDRs_1
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
@@ -131,7 +134,7 @@ Begin DesignProperties =
    Begin DataPane = 
       Begin ParameterDefaults = ""
       End
-      Begin ColumnWidths = 42
+      Begin ColumnWidths = 43
          Width = 284
          Width = 1500
          Width = 1500
@@ -146,7 +149,7 @@ Begin DesignProperties =
          Width = 1500
          Width = 1500
          Width = 1500
-         Width = 1500
+         Width = 2115
          Width = 1500
          Width = 1500
          Width = 1500
@@ -174,6 +177,7 @@ Begin DesignProperties =
          Width = 1500
          Width = 1500
          Width = 1500
+         Width = 1500
       End
    End
    Begin CriteriaPane = 
@@ -190,8 +194,9 @@ Begin DesignProperties =
          GroupBy = 1350
          Filter = 1350
          Or = 1350
-         Or = 1350
-         Or = 1', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+         Or ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 
@@ -203,11 +208,14 @@ Begin DesignProperties =
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'350
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'= 1350
+         Or = 1350
       End
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 

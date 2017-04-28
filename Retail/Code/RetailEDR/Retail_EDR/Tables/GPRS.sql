@@ -25,8 +25,11 @@
     [AirtimeAmount]   DECIMAL (20, 10) NULL,
     [AgentCommission] DECIMAL (20, 10) NULL,
     [Agent]           BIGINT           NULL,
-    [Account]         BIGINT           NULL
+    [Account]         BIGINT           NULL,
+    [Profit]          DECIMAL (20, 10) NULL
 );
+
+
 
 
 
