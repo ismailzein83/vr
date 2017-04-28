@@ -178,46 +178,6 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 
 
---[queue].[ExecutionFlowDefinition]---------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[Title],[ExecutionTree],[Stages])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('DCC30943-F1E3-44D2-81F0-4AB49EADFD31','MediationExecutionFlow', 'Mediation Execution Flow', NULL, '{"$type":"System.Collections.Generic.List`1[[Vanrise.Queueing.Entities.QueueExecutionFlowStage, Vanrise.Queueing.Entities]], mscorlib","$values":[{"$type":"Vanrise.Queueing.Entities.QueueExecutionFlowStage, Vanrise.Queueing.Entities","StageName":"Mediation Store Batch","QueueNameTemplate":"Queue_#FlowId#_#StageName#","QueueTitleTemplate":"#StageName# Queue (#FlowName#)","QueueItemType":{"$type":"Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators","DataRecordTypeId":"1d7b5d3c-4ac6-42a3-a6e8-5a014e2edf94","BatchDescription":"#RECORDSCOUNT# of CDRs"},"QueueActivator":{"$type":"Mediation.Generic.QueueActivators.StoreStagingRecordsQueueActivator, Mediation.Generic.QueueActivators","MediationDefinitionId":1,"ConfigId":501}}]}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[ExecutionTree],[Stages]))
-merge	[queue].[ExecutionFlowDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ExecutionTree] = s.[ExecutionTree],[Stages] = s.[Stages]
-when not matched by target then
-	insert([ID],[Name],[Title],[ExecutionTree],[Stages])
-	values(s.[ID],s.[Name],s.[Title],s.[ExecutionTree],s.[Stages]);
-
-
---[queue].[ExecutionFlow]-------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-
-;with cte_data([ID],[Name],[ExecutionFlowDefinitionID])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('8F27D74A-F254-4E98-AE43-05AE61566484','Mediation Flow','DCC30943-F1E3-44D2-81F0-4AB49EADFD31')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ExecutionFlowDefinitionID]))
-merge	[queue].[ExecutionFlow] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
-when not matched by target then
-	insert([ID],[Name],[ExecutionFlowDefinitionID])
-	values(s.[ID],s.[Name],s.[ExecutionFlowDefinitionID]);
-
 --[runtime].[ScheduleTask]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
