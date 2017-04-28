@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         {
             get
             {
-                return "retail-be-financialaccount-view";
+                return "retail-be-financialaccounts-view";
             }
         }
 

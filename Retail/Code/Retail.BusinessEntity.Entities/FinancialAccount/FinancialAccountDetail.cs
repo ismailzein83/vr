@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class FinancialAccountDetail
     {
+        public int SequenceNumber { get; set; }
         public string FinancialAccountDefinitionName { get; set; }
         public DateTime BED { get; set; }
 

@@ -11,8 +11,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredFinancialAccounts"), input);
         }
 
+        function AddFinancialAccount(financialAccountToInsert) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "AddFinancialAccount"), financialAccountToInsert);
+        }
+
+        function UpdateFinancialAccount(financialAccountToEdit) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "UpdateFinancialAccount"), financialAccountToEdit);
+        }
+
         return {
-            GetFilteredFinancialAccounts: GetFilteredFinancialAccounts
+            GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
+            AddFinancialAccount: AddFinancialAccount,
+            UpdateFinancialAccount: UpdateFinancialAccount
         };
     }
 

@@ -14,11 +14,24 @@ namespace Retail.BusinessEntity.Web.Controllers
     public class FinancialAccountController : BaseAPIController
     {
         FinancialAccountManager _manager = new FinancialAccountManager();
-        [HttpGet]
-        [Route("GetFinancialAccountDefinitionsInfo")]
+        [HttpPost]
+        [Route("GetFilteredFinancialAccounts")]
         public object GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<FinancialAccountQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input));
+        }
+        [HttpPost]
+        [Route("AddFinancialAccount")]
+        public object AddFinancialAccount(FinancialAccountToInsert financialAccountToInsert)
+        {
+            return _manager.AddFinancialAccount(financialAccountToInsert);
+        }
+
+        [HttpPost]
+        [Route("UpdateFinancialAccount")]
+        public object UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
+        {
+            return _manager.UpdateFinancialAccount(financialAccountToEdit);
         }
     }
 }

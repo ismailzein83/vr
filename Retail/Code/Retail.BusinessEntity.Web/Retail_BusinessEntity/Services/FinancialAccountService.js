@@ -10,9 +10,10 @@
             editFinancialAccount: editFinancialAccount,
         });
 
-        function addFinancialAccount(onFinancialAccountAdded) {
+        function addFinancialAccount(onFinancialAccountAdded, accountBEDefinitionId, accountId) {
             var modalParameters = {
-
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId
             };
             var modalSettings = {};
 
@@ -20,13 +21,14 @@
                 modalScope.onFinancialAccountAdded = onFinancialAccountAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/FinancialAccount/Templates/FinancialAccountEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/FinancialAccount/FinancialAccountEditor.html', modalParameters, modalSettings);
         }
 
-        function editFinancialAccount(onFinancialAccountUpdated,financialAccountId,accountBEDefinitionId) {
+        function editFinancialAccount(onFinancialAccountUpdated, accountBEDefinitionId,accountId, sequenceNumber) {
             var modalParameters = {
                 accountBEDefinitionId:accountBEDefinitionId,
-                financialAccountId: financialAccountId
+                sequenceNumber: sequenceNumber,
+                accountId: accountId
             };
             var modalSettings = {};
 
@@ -34,7 +36,7 @@
                 modalScope.onFinancialAccountUpdated = onFinancialAccountUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/FinancialAccount/Templates/FinancialAccountEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/FinancialAccount/FinancialAccountEditor.html', modalParameters, modalSettings);
         }
     }
 

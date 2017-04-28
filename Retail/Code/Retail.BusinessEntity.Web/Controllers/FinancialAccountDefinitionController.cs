@@ -16,9 +16,9 @@ namespace Retail.BusinessEntity.Web.Controllers
         FinancialAccountDefinitionManager _manager = new FinancialAccountDefinitionManager();
         [HttpGet]
         [Route("GetFinancialAccountDefinitionsInfo")]
-        public IEnumerable<FinancialAccountDefinitionInfo> GetFinancialAccountDefinitionsInfo(string filter)
+        public IEnumerable<FinancialAccountDefinitionInfo> GetFinancialAccountDefinitionsInfo(string filter = null)
         {
-            FinancialAccountDefinitionInfoFilter deserializedFlter = Vanrise.Common.Serializer.Deserialize<FinancialAccountDefinitionInfoFilter>(filter);
+            FinancialAccountDefinitionInfoFilter deserializedFlter =filter!= null? Vanrise.Common.Serializer.Deserialize<FinancialAccountDefinitionInfoFilter>(filter):null;
             return _manager.GetFinancialAccountDefinitionsInfo(deserializedFlter);
         }
     }

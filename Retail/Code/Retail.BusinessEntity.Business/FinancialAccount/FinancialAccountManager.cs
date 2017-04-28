@@ -13,9 +13,8 @@ namespace Retail.BusinessEntity.Business
     {
         static AccountBEManager s_accountManager = new AccountBEManager();
         static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
+      
         #region Public Methods
-
-
         public IDataRetrievalResult<FinancialAccountDetail> GetFilteredFinancialAccounts(DataRetrievalInput<FinancialAccountQuery> input)
         {
             var cachedFinancialAccounts = GetFinancialAccounts(input.Query.AccountBEDefinitionId, input.Query.AccountId, false);
@@ -25,7 +24,6 @@ namespace Retail.BusinessEntity.Business
             };
             return DataRetrievalManager.Instance.ProcessResult(input, cachedFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
         }
-
 
         public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited)
         {
@@ -48,10 +46,64 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        public Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> AddFinancialAccount(FinancialAccountToInsert financialAccountToInsert)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail>();
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId);
+            accountBEFinancialAccountsSettings.LastTakenSequenceNumber++;
+            financialAccountToInsert.FinancialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
+            accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToInsert.FinancialAccount);
+
+            if(s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId,financialAccountToInsert.AccountId,accountBEFinancialAccountsSettings))
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            
+            var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
+            var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
+            financialAccount = financialAccountToEdit.FinancialAccount;
+
+            if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         #endregion
 
         #region Private Methods
-
+        private AccountBEFinancialAccountsSettings GetAccountBEFinancialAccountsSettings(Guid accountBEDefinitionId, long accountId)
+        {
+            var accountBEFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountBEDefinitionId, accountId);
+            if (accountBEFinancialAccountsSettings == null)
+                accountBEFinancialAccountsSettings = new AccountBEFinancialAccountsSettings();
+            if (accountBEFinancialAccountsSettings.FinancialAccounts == null)
+                accountBEFinancialAccountsSettings.FinancialAccounts = new List<FinancialAccount>();
+            return accountBEFinancialAccountsSettings;
+        }
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccounts(Guid accountDefinitionId)
         {
             return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccounts", accountDefinitionId,
@@ -74,7 +126,6 @@ namespace Retail.BusinessEntity.Business
                     return allFinancialAccountsData;
                 });
         }
-
         private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account)
         {
             return new FinancialAccountData
@@ -83,7 +134,6 @@ namespace Retail.BusinessEntity.Business
                 Account = account
             };
         }
-
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithInherited(Guid accountDefinitionId)
         {
             return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccountsWithInherited", accountDefinitionId,
@@ -103,7 +153,6 @@ namespace Retail.BusinessEntity.Business
                     return allFinancialAccountsData.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(faItm => faItm.FinancialAccount.EED.HasValue ? faItm.FinancialAccount.EED.Value : DateTime.MaxValue));
                 });
         }
-
         private void AddAccountNodeFinancialAccounts(AccountTreeNode accountNode,  Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData)
         {
             List<FinancialAccountData> financialAccounts = allFinancialAccountsData.GetOrCreateItem(accountNode.Account.AccountId);
@@ -133,19 +182,22 @@ namespace Retail.BusinessEntity.Business
                 }
             }
         }
-
         private Vanrise.Caching.BaseCacheManager<Guid> GetCacheManager()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>();
         }
-
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccountData financialAccountData)
+        {
+            return FinancialAccountDetailMapper(financialAccountData.FinancialAccount);
+        }
+        private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
             return new FinancialAccountDetail
             {
-                BED = financialAccountData.FinancialAccount.BED,
-                EED = financialAccountData.FinancialAccount.EED,
-                FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId)
+                SequenceNumber = financialAccount.SequenceNumber,
+                BED = financialAccount.BED,
+                EED = financialAccount.EED,
+                FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId)
             };
         }
         #endregion

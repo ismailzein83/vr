@@ -37,10 +37,10 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
 
 
         function getTemplate(attrs) {
-            var label = "Financial Account Definition";
+            var label = "Financial Account Type";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "Financial Account Definitions";
+                label = "Financial Account Types";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)

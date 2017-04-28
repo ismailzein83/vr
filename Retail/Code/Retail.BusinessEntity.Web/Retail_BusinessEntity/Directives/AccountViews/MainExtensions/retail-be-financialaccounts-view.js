@@ -62,7 +62,7 @@
             function buildGridPayload() {
                 var FinancialAccountsGridPayload = {
                     accountBEDefinitionId: accountBEDefinitionId,
-                    AccountsIds: [parentAccountId],
+                    accountId: parentAccountId,
                 };
                 return FinancialAccountsGridPayload;
             }

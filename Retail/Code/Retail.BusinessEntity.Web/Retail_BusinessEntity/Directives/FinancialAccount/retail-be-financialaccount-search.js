@@ -19,7 +19,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_AccountBalance/Directives/BillingTransaction/Templates/BillingTransactionSearch.html"
+        templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FinancialAccount/Templates/FinancialAccountSearchTemplate.html"
 
     };
 
@@ -28,8 +28,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var gridAPI;
         var gridPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var accountsIds;
-     
+        var accountId;
+        var accountBEDefinitionId;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -39,7 +39,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 var onFinancialAccountAdded = function (obj) {
                     gridAPI.onFinancialAccountAdded(obj);
                 };
-                Retail_BE_FinancialAccountService.addFinancialAccount(onFinancialAccountAdded, accountsIds[0]);
+                Retail_BE_FinancialAccountService.addFinancialAccount(onFinancialAccountAdded,accountBEDefinitionId, accountId);
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -56,7 +56,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 $scope.scopeModel.isLoading = true;
 
                 if (payload != undefined) {
-                    accountsIds = payload.AccountsIds;
+                    accountId = payload.accountId;
+                    accountBEDefinitionId = payload.accountBEDefinitionId;
                 }
 
                 return loadFinancialAccountsGrid().finally(function () {
@@ -70,11 +71,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
         function getFilterObject() {
             var filter = {
-                TransactionTypeIds: transactionTypeSelectorAPI.getSelectedIds(),
-                AccountTypeId: accountTypeId,
-                AccountsIds: accountsIds,
-                FromTime: $scope.scopeModel.fromTime,
-                ToTime: $scope.scopeModel.toTime,
+                AccountBEDefinitionId: accountBEDefinitionId,
+                AccountId: accountId,
             };
             return filter;
         }
@@ -82,6 +80,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             return gridPromiseDeferred.promise.then(function () {
                 var payload = {
                     query: getFilterObject(),
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    accountId: accountId
                 };
                 gridAPI.loadGrid(payload);
             });
