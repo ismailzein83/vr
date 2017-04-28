@@ -65,24 +65,29 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
 
         function buildOrderDetailItemsList() {
             var tab = [];
-            for (var i = 0; i < ctrl.orderdetails.length; i++) {
-                tab.push({
-                    OrderId: ctl.orderDetails[i].OrderId,
-                    Charges: ctrl.orderdetails[i].Charges,
-                    Payment: ctrl.orderdetails[i].payment,
-                    ContractPeriod: ctrl.orderdetails[i].ContractPeriod,
-                    ContractRemain: ctrl.orderdetails[i].ContractRemain,
-                    ContractDays: ctrl.orderdetails[i].ContractDays,
-                    TotalContract: ctrl.orderdetails[i].TotalContract,
-                    ChargesYear1: ctrl.orderdetails[i].ChargesYear1,
-                    ChargesYear2: ctrl.orderdetails[i].ChargesYear2,
-                    ChargesYear3: ctrl.orderdetails[i].ChargesYear3,
-                    Installation: ctrl.orderdetails[i].Installation,
-                    ThirdParty: ctrl.orderdetails[i].ThirdParty,
-                    Discount: ctrl.orderdetails[i].Discount,
-                    Achievement: ctrl.orderdetails[i].Achievement
-                });
+            if (ctrl.orderdetails != undefined)
+            {
+                for (var i = 0; i < ctrl.orderdetails.length; i++) {
+                    var orderDetail = ctrl.orderdetails[i];
+                    tab.push({
+                        OrderId: orderDetail.OrderId,
+                        Charges: orderDetail.Charges,
+                        Payment: orderDetail.payment,
+                        ContractPeriod: orderDetail.ContractPeriod,
+                        ContractRemain: orderDetail.ContractRemain,
+                        ContractDays: orderDetail.ContractDays,
+                        TotalContract: orderDetail.TotalContract,
+                        ChargesYear1: orderDetail.ChargesYear1,
+                        ChargesYear2: orderDetail.ChargesYear2,
+                        ChargesYear3: orderDetail.ChargesYear3,
+                        Installation: orderDetail.Installation,
+                        ThirdParty: orderDetail.ThirdParty,
+                        Discount: orderDetail.Discount,
+                        Achievement: orderDetail.Achievement
+                    });
+                }
             }
+           
 
             return tab;
         }

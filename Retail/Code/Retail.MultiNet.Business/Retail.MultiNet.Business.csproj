@@ -53,14 +53,37 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Pricing">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Invoice.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +100,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
+      <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
+      <Name>Retail.BusinessEntity.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.MultiNet.Entities\Retail.MultiNet.Entities.csproj">
       <Project>{73608c81-84ad-480a-a988-74244ee9c8f8}</Project>

@@ -14,7 +14,13 @@ namespace Retail.MultiNet.Business
     {
         public Guid AcountBEDefinitionId { get; set; }
         public Guid CompanyExtendedInfoPartdefinitionId { get; set; }
-
+        public List<Guid> SalesTaxChargeableEntities { get; set; }
+        public List<Guid> WHTaxChargeableEntities { get; set; }
+        public Guid InComingChargeableEntity { get; set; }
+        public Guid OutGoingChargeableEntity { get; set; }
+        public Guid SalesTaxRuleDefinitionId { get; set; }
+        public Guid WHTaxRuleDefinitionId { get; set; }
+        public Guid latePaymentRuleDefinitionId { get; set; }
         public override Guid ConfigId
         {
             get { return new Guid("3C121314-56F2-445D-91C7-896D07D09BDD"); }
@@ -47,7 +53,7 @@ namespace Retail.MultiNet.Business
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new MultiNetSubscriberInvoiceGenerator(this.AcountBEDefinitionId, this.CompanyExtendedInfoPartdefinitionId);
+            return new MultiNetSubscriberInvoiceGenerator(this.AcountBEDefinitionId, this.SalesTaxChargeableEntities, this.WHTaxChargeableEntities, this.InComingChargeableEntity, this.OutGoingChargeableEntity, this.SalesTaxRuleDefinitionId, this.WHTaxRuleDefinitionId, this.latePaymentRuleDefinitionId);
         }
 
         public override InvoicePartnerManager GetPartnerManager()
