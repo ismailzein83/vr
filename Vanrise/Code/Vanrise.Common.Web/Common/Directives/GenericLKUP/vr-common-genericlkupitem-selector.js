@@ -53,7 +53,13 @@
             var selectorAPI;
 
             function initializeController() {
-
+                ctrl.fieldTitle = "GenericLKUP Item";
+                if (attrs.ismultipleselection != undefined) {
+                    ctrl.fieldTitle = "GenericLKUP Items";
+                }
+                if (attrs.customlabel != undefined) {
+                    ctrl.fieldTitle = attrs.customlabel;
+                }
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
 
@@ -73,6 +79,14 @@
                     if (payload) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        if (payload.businessEntityDefinitionId != undefined)
+                        {
+                            if (filter == undefined)
+                                filter = {};
+                            filter.BusinessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        }
+                        if (payload.fieldTitle != undefined)
+                            ctrl.fieldTitle = payload.fieldTitle;
                     }
                     ctrl.datasource.length = 0;
                     return VR_Common_GnericLKUPAPIService.GetGenericLKUPItemsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
@@ -109,6 +123,7 @@
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                   + '<vr-label>{{ctrl.fieldTitle}}</vr-label>'
                 + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
 
@@ -120,8 +135,7 @@
                     + ' datatextfield="Name"'
                     + ismultipleselection
                     + ' vr-disabled="ctrl.isdisabled"'
-                    + ' isrequired="ctrl.isrequired"'
-                    + ' entityName="' + label + '" label="' + label +'" >'
+                    + ' isrequired="ctrl.isrequired">'
 
                 + '</vr-select>'
             + '</vr-columns>';

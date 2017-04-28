@@ -29,7 +29,7 @@ namespace Vanrise.Common.Business
 
         public override string SelectorUIControl
         {
-            get { return ""; }
+            get { return "vr-common-genericlkupitem-selector"; }
         }
     }
 }
