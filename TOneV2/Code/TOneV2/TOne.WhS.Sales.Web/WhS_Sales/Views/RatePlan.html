@@ -113,10 +113,10 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Load" validationcontext="LoadGroup" data-onclick="load"></vr-button>
-                    <vr-button type="Settings" data-onclick="editSettings"></vr-button>
-                    <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard"></vr-button>
+                    <vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton"></vr-button>
+                    <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" ng-show="showBulkActionButton"></vr-button>
                     <vr-button type="ManageSellingCountries" validationcontext="OwnerGroup" ng-show="showCarrierAccountSelector" data-onclick="sellNewCountries"></vr-button>
-                    <vr-button type="Save" validationcontext="OwnerGroup" menuactions="saveButtonMenuActions"></vr-button>
+                    <vr-button type="Save" validationcontext="OwnerGroup" menuactions="saveButtonMenuActions" ng-show="showSaveButton"></vr-button>
                     <vr-button type="CancelChanges" ng-show="showCancelButton" data-onclick="deleteDraft"></vr-button>
                 </div>
             </vr-actionbar>

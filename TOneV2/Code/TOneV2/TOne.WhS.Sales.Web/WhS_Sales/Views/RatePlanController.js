@@ -57,8 +57,11 @@
                 ownerTypeSelectorReadyDeferred.resolve();
             };
             $scope.onOwnerTypeChanged = function (selectedOwnerType) {
-                resetRatePlan();
+
                 clearOwnerInfo();
+                resetRatePlan();
+                showActionButtons(false);
+
                 draftCurrencyId = undefined;
 
                 var selectedId = ownerTypeSelectorAPI.getSelectedIds();
@@ -82,16 +85,15 @@
                 sellingProductSelectorReadyDeferred.resolve();
             };
             $scope.onSellingProductChanged = function (selectedSellingProduct) {
+
                 resetRatePlan();
+                showActionButtons(false);
 
                 if (selectedSellingProduct == undefined)
                     return;
 
                 var promises = [];
                 $scope.isLoadingFilterSection = true;
-
-                var doesOwnerDraftExistPromise = doesOwnerDraftExist();
-                promises.push(doesOwnerDraftExistPromise);
 
                 var loadOwnerInfoPromise = loadOwnerInfo();
                 promises.push(loadOwnerInfoPromise);
@@ -108,7 +110,10 @@
                 carrierAccountSelectorReadyDeferred.resolve();
             };
             $scope.onCarrierAccountChanged = function (selectedCustomer) {
+
                 resetRatePlan();
+                showActionButtons(false);
+
                 draftCurrencyId = undefined;
 
                 var selectedCustomerId = carrierAccountSelectorAPI.getSelectedIds();
@@ -630,19 +635,33 @@
 
         function loadRatePlan() {
 
+            showActionButtons(true);
+
             var promises = [];
+
             var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
+            var ownerId = getOwnerId();
 
-            var getDraftCurrencyIdPromise = getDraftCurrencyId();
-            promises.push(getDraftCurrencyIdPromise);
+            var doesOwnerDraftExistPromise = doesOwnerDraftExist();
+            promises.push(doesOwnerDraftExistPromise);
 
-            var loadDefaultItemPromise = loadDefaultItem();
-            promises.push(loadDefaultItemPromise);
+            if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                var getDraftCurrencyIdPromise = WhS_Sales_RatePlanAPIService.GetDraftCurrencyId(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, ownerId);
+                promises.push(getDraftCurrencyIdPromise);
+                getDraftCurrencyIdPromise.then(function (response) {
+                    if (response != undefined) {
+                        draftCurrencyId = response;
+                        currencySelectorAPI.selectedCurrency(response)
+                    }
+                    if (draftCurrencyId == undefined)
+                        draftCurrencyId = defaultCustomerCurrencyId;
+                });
+            }
 
             var loadGridDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadGridDeferred.promise);
 
-            getDraftCurrencyIdPromise.then(function () {
+            UtilsService.convertToPromiseIfUndefined(getDraftCurrencyIdPromise).then(function () {
                 var gridQuery = getGridQuery(true);
                 gridAPI.load(gridQuery).then(function () {
                     loadGridDeferred.resolve();
@@ -650,39 +669,6 @@
                     loadGridDeferred.reject(error);
                 });
             });
-
-            function getDraftCurrencyId() {
-                if (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-                    return WhS_Sales_RatePlanAPIService.GetDraftCurrencyId(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, getOwnerId()).then(function (response) {
-                        if (response != null) {
-                            draftCurrencyId = response;
-                            currencySelectorAPI.selectedCurrency(response)
-                        }
-                        if (draftCurrencyId == undefined)
-                            draftCurrencyId = defaultCustomerCurrencyId;
-                    });
-                }
-                else {
-                    var deferred = UtilsService.createPromiseDeferred();
-                    deferred.resolve();
-                    return deferred.promise;
-                }
-            }
-            function loadDefaultItem() {
-                var effectiveOn = UtilsService.getDateFromDateTime(new Date());
-                return WhS_Sales_RatePlanAPIService.GetDefaultItem(ownerTypeValue, getOwnerId(), effectiveOn).then(function (response) {
-                    if (response != undefined) {
-                        defaultItem = response;
-                        defaultItem.OwnerType = ownerTypeValue;
-                        defaultItem.OwnerId = getOwnerId();
-                        for (var i = 0; i < $scope.defaultItemTabs.length; i++) {
-                            var tab = $scope.defaultItemTabs[i];
-                            if (tab.directiveAPI)
-                                tab.loadDirective(tab.directiveAPI);
-                        }
-                    }
-                });
-            }
 
             return UtilsService.waitMultiplePromises(promises);
         }
@@ -837,9 +823,6 @@
             var getCountryChangesDeferred = UtilsService.createPromiseDeferred();
             promises.push(getCountryChangesDeferred.promise);
 
-            var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
-            promises.push(doesOwnerDraftExistDeferred.promise);
-
             var loadOwnerInfoPromise = loadOwnerInfo();
             promises.push(loadOwnerInfoPromise);
 
@@ -855,16 +838,10 @@
                     }).catch(function (error) {
                         getCountryChangesDeferred.reject(error, $scope);
                     });
-                    doesOwnerDraftExist().then(function () {
-                        doesOwnerDraftExistDeferred.resolve();
-                    }).catch(function (error) {
-                        doesOwnerDraftExistDeferred.reject(error);
-                    });
                 }
                 else {
                     getCustomerCurrencyIdDeferred.resolve();
                     getCountryChangesDeferred.resolve();
-                    doesOwnerDraftExistDeferred.resolve();
                     VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not assigned to a selling product");
                     $scope.selectedCustomer = undefined;
                 }
@@ -1077,6 +1054,13 @@
             $scope.currentDefaultRoutingProductName = undefined;
             $scope.newDefaultRoutingProductName = undefined;
             $scope.resetToDefaultRoutingProductName = undefined;
+        }
+
+        function showActionButtons(showValue) {
+            $scope.showSettingsButton = showValue;
+            $scope.showBulkActionButton = showValue;
+            $scope.showSaveButton = showValue;
+            $scope.showCancelButton = showValue;
         }
     }
 
