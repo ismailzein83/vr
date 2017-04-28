@@ -64,8 +64,9 @@ namespace Vanrise.Runtime
                 ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(RuntimeManagerWCFService), typeof(IRuntimeManagerWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceURL);
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return false;
             }
         }
