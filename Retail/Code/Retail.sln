@@ -145,15 +145,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.Entities", "Ret
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.Web", "Retail.Cost.Web\Retail.Cost.Web.csproj", "{2F04A10E-321F-4CBF-9B0E-9F55C017DB59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.BP", "Retail.Cost.BP\Retail.Cost.BP.csproj", "{F90E5475-4BB2-43CE-9329-41F61C0388ED}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.BP.Activities", "Retail.Cost.BP.Activities\Retail.Cost.BP.Activities.csproj", "{365535CC-9687-4AEA-88AF-3BDED81EA6AF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.BP.Arguments", "Retail.Cost.BP.Arguments\Retail.Cost.BP.Arguments.csproj", "{AF85B6F6-461D-477D-8E5A-459FBA704D8A}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 59
+		SccNumberOfProjects = 57
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -377,18 +373,10 @@ Global
 		SccProjectTopLevelParentUniqueName55 = Retail.sln
 		SccProjectName55 = Retail.Cost.Web
 		SccLocalPath55 = Retail.Cost.Web
-		SccProjectUniqueName56 = Retail.Cost.BP\\Retail.Cost.BP.csproj
+		SccProjectUniqueName56 = Retail.Cost.BP.Arguments\\Retail.Cost.BP.Arguments.csproj
 		SccProjectTopLevelParentUniqueName56 = Retail.sln
-		SccProjectName56 = Retail.Cost.BP
-		SccLocalPath56 = Retail.Cost.BP
-		SccProjectUniqueName57 = Retail.Cost.BP.Activities\\Retail.Cost.BP.Activities.csproj
-		SccProjectTopLevelParentUniqueName57 = Retail.sln
-		SccProjectName57 = Retail.Cost.BP.Activities
-		SccLocalPath57 = Retail.Cost.BP.Activities
-		SccProjectUniqueName58 = Retail.Cost.BP.Arguments\\Retail.Cost.BP.Arguments.csproj
-		SccProjectTopLevelParentUniqueName58 = Retail.sln
-		SccProjectName58 = Retail.Cost.BP.Arguments
-		SccLocalPath58 = Retail.Cost.BP.Arguments
+		SccProjectName56 = Retail.Cost.BP.Arguments
+		SccLocalPath56 = Retail.Cost.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -623,14 +611,6 @@ Global
 		{2F04A10E-321F-4CBF-9B0E-9F55C017DB59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F04A10E-321F-4CBF-9B0E-9F55C017DB59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F04A10E-321F-4CBF-9B0E-9F55C017DB59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F90E5475-4BB2-43CE-9329-41F61C0388ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F90E5475-4BB2-43CE-9329-41F61C0388ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F90E5475-4BB2-43CE-9329-41F61C0388ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F90E5475-4BB2-43CE-9329-41F61C0388ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{365535CC-9687-4AEA-88AF-3BDED81EA6AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{365535CC-9687-4AEA-88AF-3BDED81EA6AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{365535CC-9687-4AEA-88AF-3BDED81EA6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{365535CC-9687-4AEA-88AF-3BDED81EA6AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -706,8 +686,6 @@ Global
 		{72D1F349-FC2A-4F5E-BF3C-6FE371790137} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{84A54068-1858-4009-8687-5AAB7E7B8901} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{2F04A10E-321F-4CBF-9B0E-9F55C017DB59} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
-		{F90E5475-4BB2-43CE-9329-41F61C0388ED} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
-		{365535CC-9687-4AEA-88AF-3BDED81EA6AF} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{AF85B6F6-461D-477D-8E5A-459FBA704D8A} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 	EndGlobalSection
 EndGlobal
