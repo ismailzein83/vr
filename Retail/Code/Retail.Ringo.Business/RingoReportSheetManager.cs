@@ -196,81 +196,84 @@ namespace Retail.Ringo.Business
         public byte[] GenerateTCRReport(TCRRingoReportFilter filter)
         {
             Dictionary<string, byte[]> dicAllData = new Dictionary<string, byte[]>();
-
-            if (filter.ReportType == TCRReportType.Dettaglio)
-            {
-                filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 00, 00, 00);
-                filter.To = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 23, 59, 59);
-            }
-            else
-            {
-                filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, 01, 00, 00, 00);
-                filter.To = new DateTime(filter.From.Value.Year, filter.From.Value.Month, DateTime.DaysInMonth(filter.From.Value.Year, filter.From.Value.Month), 23, 59, 59);
-            }
             RingoMessageManager ringoMessageManager = new RingoMessageManager();
 
-            if (filter.ReportType == TCRReportType.Sintesi)
+
+            switch (filter.ReportType)
             {
-                IEnumerable<SintesiRingoMessageEntity> listSintesiRecipient = ringoMessageManager.GetSintesiRingoMessageEntityByRecipient(new TCRRingoReportFilter
-                {
-                    Operator = filter.Operator,
-                    From = filter.From,
-                    To = filter.To
-                });
-
-                IEnumerable<SintesiRingoMessageEntity> listSintesiSender = ringoMessageManager.GetSintesiRingoMessageEntityBySender(new TCRRingoReportFilter
-                {
-                    Operator = filter.Operator,
-                    From = filter.From,
-                    To = filter.To
-                });
-
-                foreach (var item in GetData(listSintesiRecipient, filter, true))
-                {
-                    if (!dicAllData.ContainsKey(item.Key))
-                        dicAllData.Add(item.Key, item.Value);
-                }
-
-                foreach (var item in GetData(listSintesiSender, filter, false))
-                {
-                    if (!dicAllData.ContainsKey(item.Key))
-                        dicAllData.Add(item.Key, item.Value);
-                }
-            }
-            else
-            {
-                IEnumerable<DettaglioRingoMessageEntity> listDettaglioRecipient = ringoMessageManager.GetDettaglioRingoMessageEntityByRecipient(new TCRRingoReportFilter
-                {
-                    Operator = filter.Operator,
-                    From = filter.From,
-                    To = filter.To
-                });
-
-                IEnumerable<DettaglioRingoMessageEntity> listDettaglioSender = ringoMessageManager.GetDettaglioRingoMessageEntityBySender(new TCRRingoReportFilter
-                {
-                    Operator = filter.Operator,
-                    From = filter.From,
-                    To = filter.To
-                });
-
-                foreach (var item in GetData(listDettaglioRecipient, filter, true))
-                {
-                    if (!dicAllData.ContainsKey(item.Key))
-                        dicAllData.Add(item.Key, item.Value);
-                }
-
-                foreach (var item in GetData(listDettaglioSender, filter, false))
-                {
-                    if (!dicAllData.ContainsKey(item.Key))
-                        dicAllData.Add(item.Key, item.Value);
-                }
+                case TCRReportType.Sintesi:
+                    filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, 01, 00, 00, 00);
+                    filter.To = new DateTime(filter.From.Value.Year, filter.From.Value.Month, DateTime.DaysInMonth(filter.From.Value.Year, filter.From.Value.Month), 23, 59, 59);
+                    GenerateSintesiReport(filter, dicAllData, ringoMessageManager);
+                    break;
+                case TCRReportType.Dettaglio:
+                    filter.From = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 00, 00, 00);
+                    filter.To = new DateTime(filter.From.Value.Year, filter.From.Value.Month, filter.From.Value.Day, 23, 59, 59);
+                    GenerateDettaglioReport(filter, dicAllData, ringoMessageManager);
+                    break;
             }
 
             return Compress(dicAllData);
         }
 
-
         #region Private Methods
+        void GenerateDettaglioReport(TCRRingoReportFilter filter, Dictionary<string, byte[]> dicAllData, RingoMessageManager ringoMessageManager)
+        {
+            IEnumerable<DettaglioRingoMessageEntity> listDettaglioRecipient = ringoMessageManager.GetDettaglioRingoMessageEntityByRecipient(new TCRRingoReportFilter
+            {
+                Operator = filter.Operator,
+                From = filter.From,
+                To = filter.To
+            });
+
+            IEnumerable<DettaglioRingoMessageEntity> listDettaglioSender = ringoMessageManager.GetDettaglioRingoMessageEntityBySender(new TCRRingoReportFilter
+            {
+                Operator = filter.Operator,
+                From = filter.From,
+                To = filter.To
+            });
+
+            foreach (var item in GetData(listDettaglioRecipient, filter, true))
+            {
+                if (!dicAllData.ContainsKey(item.Key))
+                    dicAllData.Add(item.Key, item.Value);
+            }
+
+            foreach (var item in GetData(listDettaglioSender, filter, false))
+            {
+                if (!dicAllData.ContainsKey(item.Key))
+                    dicAllData.Add(item.Key, item.Value);
+            }
+        }
+
+        void GenerateSintesiReport(TCRRingoReportFilter filter, Dictionary<string, byte[]> dicAllData, RingoMessageManager ringoMessageManager)
+        {
+            IEnumerable<SintesiRingoMessageEntity> listSintesiRecipient = ringoMessageManager.GetSintesiRingoMessageEntityByRecipient(new TCRRingoReportFilter
+            {
+                Operator = filter.Operator,
+                From = filter.From,
+                To = filter.To
+            });
+
+            IEnumerable<SintesiRingoMessageEntity> listSintesiSender = ringoMessageManager.GetSintesiRingoMessageEntityBySender(new TCRRingoReportFilter
+            {
+                Operator = filter.Operator,
+                From = filter.From,
+                To = filter.To
+            });
+
+            foreach (var item in GetData(listSintesiRecipient, filter, true))
+            {
+                if (!dicAllData.ContainsKey(item.Key))
+                    dicAllData.Add(item.Key, item.Value);
+            }
+
+            foreach (var item in GetData(listSintesiSender, filter, false))
+            {
+                if (!dicAllData.ContainsKey(item.Key))
+                    dicAllData.Add(item.Key, item.Value);
+            }
+        }
 
         private Dictionary<string, byte[]> GetData(IEnumerable<SintesiRingoMessageEntity> listSintesiRecipient, TCRRingoReportFilter filter, bool recipient)
         {
@@ -439,11 +442,9 @@ namespace Retail.Ringo.Business
 
         private static byte[] Compress(Dictionary<string, byte[]> data)
         {
-
             System.IO.MemoryStream memoryStream = new System.IO.MemoryStream();
             ZipOutputStream s = new ZipOutputStream(memoryStream);
             s.SetLevel(9);
-            int i = 0;
             foreach (var item in data)
             {
                 ZipEntry entry = new ZipEntry(item.Key + ".txt");
