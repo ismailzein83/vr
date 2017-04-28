@@ -152,7 +152,7 @@ namespace Mediation.Teles.Business
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             dynamic cookedCDR = Activator.CreateInstance(dataRecordTypeManager.GetDataRecordRuntimeType(cookedCDRRecordTypeName));
-            cookedCDR.AttemptDateTime = startCDR.TC_SESSIONINITIATIONTIME;
+            cookedCDR.AttemptDateTime = startCDR.TC_SESSIONINITIATIONTIME != null ? startCDR.TC_SESSIONINITIATIONTIME : startCDR.TC_TIMESTAMP;
             cookedCDR.ConnectDateTime = startCDR.TC_TIMESTAMP;
             cookedCDR.DiconnectDateTime = disconnectDateTime;
             cookedCDR.DisconnectReason = startCDR.TC_DISCONNECTREASON;
