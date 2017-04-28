@@ -106,12 +106,6 @@
       <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
-  <ItemGroup>
-    <XamlAppDef Include="ReProcessingCommitChangesProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

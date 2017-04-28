@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Activities;
-using System.Linq;
 using Vanrise.Entities;
-using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -27,28 +25,9 @@ namespace Vanrise.BusinessProcess.WFActivities
             DateTime to = this.To.Get(context);
             TimeSpan timeSpan = this.TimeSpan.Get(context);
 
-            double intervalInMinutes = timeSpan.TotalMinutes;
-            List<DateTimeRange> dateTimeRanges = new List<DateTimeRange>();
+            IEnumerable<DateTimeRange> dateTimeRanges = Vanrise.Common.Utilities.GenerateDateTimeRanges(from, to, timeSpan);
 
-            DateTime endDate = from;
-            DateTime startDate = endDate;
-
-            while (endDate != to)
-            {
-                startDate = endDate;
-
-                DateTime tempToDate = endDate.AddMinutes(intervalInMinutes);
-
-                if (tempToDate > to)
-                    endDate = to;
-                else
-                    endDate = tempToDate;
-
-
-                dateTimeRanges.Add(new DateTimeRange() { From = startDate, To = endDate });
-            }
-
-            this.DateTimeRanges.Set(context, dateTimeRanges.OrderBy(itm => itm.From));
+            this.DateTimeRanges.Set(context, dateTimeRanges);
         }
     }
 }
