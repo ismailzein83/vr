@@ -41,9 +41,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             foreach (ExistingZone countryZone in countryZones)
             {
-                if (countryZone.EED.HasValue)
-                    continue;
-
                 List<SaleRate> spZoneRates = spZoneRatesByZone.GetRecord(countryZone.ZoneId);
 
                 if (spZoneRates == null || spZoneRates.Count == 0 || !spZoneRates.Any(spZoneRate => spZoneRate.IsEffective(countryToAdd.BED)))
