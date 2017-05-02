@@ -64,21 +64,21 @@
             $scope.scopeModel.isLoading = true;
 
             if ($scope.scopeModel.isEditMode) {
-                //getFinancialAccount().then(function () {
-                //    loadAllControls();
-                //}).catch(function () {
-                //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                //    $scope.scopeModel.isLoading = false;
-                //});;
+                getFinancialAccount().then(function () {
+                    loadAllControls();
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
             } else {
                 loadAllControls();
             }
         }
 
         function getFinancialAccount() {
-            //return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccountEditorRuntime(financialAccountId).then(function (response) {
-            //    financialAccountEntity = response;
-            //});
+            return Retail_BE_FinancialAccountAPIService.GetFinancialAccountEditorRuntime(accountBEDefinitionId, accountId, sequenceNumber).then(function (response) {
+                financialAccountEntity = response;
+            });
         }
 
         function loadAllControls() {
@@ -114,7 +114,7 @@
                         //        IsEditMode: $scope.scopeModel.isEditMode
                         //    }]
                         //},
-                        selectedIds: financialAccountEntity != undefined ? financialAccountEntity.FinancialAccountDefinitionId : undefined
+                        selectedIds: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined ? financialAccountEntity.FinancialAccount.FinancialAccountDefinitionId : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(financialAccountDefinitionSelectorDirectiveAPI, payload, loadFinancialAccountDefinitionSelectorPromiseDeferred);
                 });

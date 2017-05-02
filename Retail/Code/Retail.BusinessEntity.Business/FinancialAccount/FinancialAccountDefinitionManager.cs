@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -36,7 +37,13 @@ namespace Retail.BusinessEntity.Business
         {
             return s_componentTypeManager.GetComponentType<FinancialAccountDefinitionSettings, FinancialAccountDefinition>(financialAccountDefinitionId);
         }
-     
+        public IEnumerable<FinancialAccountDefinitionConfig> GetFinancialAccountDefinitionsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<FinancialAccountDefinitionConfig>(FinancialAccountDefinitionConfig.EXTENSION_TYPE);
+        }
+
+
         #region Mappers
         private FinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(FinancialAccountDefinition financialAccountDefinition)
         {

@@ -148,6 +148,8 @@
     <Compile Include="AccountViews\AccountPackages.cs" />
     <Compile Include="AccountViews\AccountHistoryView.cs" />
     <Compile Include="AccountViews\FinancialAccounts.cs" />
+    <Compile Include="FinancialAccount\PostpaidFinancialAccount.cs" />
+    <Compile Include="FinancialAccount\PostpaidFinancialAccountDefinition.cs" />
     <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\InvoiceRecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\InvoiceRecurChargePackageSettings.cs" />

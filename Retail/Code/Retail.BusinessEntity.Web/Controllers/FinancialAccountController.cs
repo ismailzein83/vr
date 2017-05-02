@@ -33,5 +33,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateFinancialAccount(financialAccountToEdit);
         }
+        [HttpGet]
+        [Route("GetFinancialAccountEditorRuntime")]
+        public FinancialAccountRuntimeEditor GetFinancialAccountEditorRuntime(Guid accountBEDefinitionId, long accountId, int sequenceNumber)
+        {
+            return _manager.GetFinancialAccountEditorRuntime(accountBEDefinitionId, accountId, sequenceNumber);
+        }
     }
 }

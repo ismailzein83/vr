@@ -337,6 +337,11 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDAccountRelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDSynchronizerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccountDefinition.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-extendedsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-search.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-selector.js" />

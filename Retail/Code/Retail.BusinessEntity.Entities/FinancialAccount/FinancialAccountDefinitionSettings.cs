@@ -20,5 +20,7 @@ namespace Retail.BusinessEntity.Entities
     public abstract class FinancialAccountDefinitionExtendedSettings
     {
         public abstract Guid ConfigId { get; }
+        public abstract string RuntimeEditor { get; }
+
     }
 }

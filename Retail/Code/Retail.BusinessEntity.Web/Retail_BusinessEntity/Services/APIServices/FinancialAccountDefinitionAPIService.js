@@ -12,9 +12,13 @@
                 filter: filter
             });
         }
-
+        function GetFinancialAccountDefinitionsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountDefinitionsConfigs"));
+        }
+        
         return {
-            GetFinancialAccountDefinitionsInfo: GetFinancialAccountDefinitionsInfo
+            GetFinancialAccountDefinitionsInfo: GetFinancialAccountDefinitionsInfo,
+            GetFinancialAccountDefinitionsConfigs: GetFinancialAccountDefinitionsConfigs
         };
     }
 

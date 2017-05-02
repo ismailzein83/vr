@@ -18,8 +18,17 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFinancialAccountDefinitionsInfo")]
         public IEnumerable<FinancialAccountDefinitionInfo> GetFinancialAccountDefinitionsInfo(string filter = null)
         {
-            FinancialAccountDefinitionInfoFilter deserializedFlter =filter!= null? Vanrise.Common.Serializer.Deserialize<FinancialAccountDefinitionInfoFilter>(filter):null;
+            FinancialAccountDefinitionInfoFilter deserializedFlter = filter!= null? Vanrise.Common.Serializer.Deserialize<FinancialAccountDefinitionInfoFilter>(filter):null;
             return _manager.GetFinancialAccountDefinitionsInfo(deserializedFlter);
         }
+
+        [HttpGet]
+        [Route("GetFinancialAccountDefinitionsConfigs")]
+        public IEnumerable<FinancialAccountDefinitionConfig> GetFinancialAccountDefinitionsConfigs()
+        {
+            return _manager.GetFinancialAccountDefinitionsConfigs();
+        }
+
+        
     }
 }

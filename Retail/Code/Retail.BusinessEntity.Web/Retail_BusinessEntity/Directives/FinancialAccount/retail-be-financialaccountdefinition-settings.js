@@ -23,6 +23,12 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
             var invoiceTypeSelectorAPI;
             var invoiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var balanceAccountTypeSelectorAPI;
+            var balanceAccountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var extendedSettingsDirectiveAPI;
+            var extendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -31,9 +37,19 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     invoiceTypeSelectorReadyDeferred.resolve();
                 };
 
-                UtilsService.waitMultiplePromises([invoiceTypeSelectorReadyDeferred.promise]).then(function () {
+                $scope.scopeModel.onBalanceAccountTypeSelectorReady = function (api) {
+                    balanceAccountTypeSelectorAPI = api;
+                    balanceAccountTypeSelectorReadyDeferred.resolve();
+                };
+
+
+                $scope.scopeModel.onExtendedSettingsDirectiveReady = function (api) {
+                    extendedSettingsDirectiveAPI = api;
+                    extendedSettingsDirectiveReadyDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([invoiceTypeSelectorReadyDeferred.promise, balanceAccountTypeSelectorReadyDeferred.promise, extendedSettingsDirectiveReadyDeferred.promise]).then(function () {
                     defineAPI();
-                })
+                });
             }
 
             function defineAPI() {
@@ -50,16 +66,32 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     }
 
                     var promises = [];
-
                     function loadInvoiceTypeSelector() {
                         var invoiceTypeSelectorPayload;
-                        if (financialAccountDefinitionSettings != undefined) {
-                            invoiceTypeSelectorPayload = { selectedIds: financialAccountDefinitionSettings.InvoiceTypeId };
+                        if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
+                            invoiceTypeSelectorPayload = { selectedIds: financialAccountDefinitionSettings.Settings.InvoiceTypeId };
                         }
                         return invoiceTypeSelectorAPI.load(invoiceTypeSelectorPayload);
                     }
-
                     promises.push(loadInvoiceTypeSelector());
+
+                    function loadBalanceAccountTypeSelector() {
+                        var balanceAccountTypeSelectorPayload;
+                        if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
+                            balanceAccountTypeSelectorPayload = { selectedIds: financialAccountDefinitionSettings.Settings.BalanceAccountTypeId };
+                        }
+                        return balanceAccountTypeSelectorAPI.load(balanceAccountTypeSelectorPayload);
+                    }
+                    promises.push(loadBalanceAccountTypeSelector());
+
+                    function loadExtendedSettingsDirective() {
+                        var extendedSettingsDirectivePayload;
+                        if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
+                            extendedSettingsDirectivePayload = { extendedSettings: financialAccountDefinitionSettings.Settings.ExtendedSettings };
+                        }
+                        return extendedSettingsDirectiveAPI.load(extendedSettingsDirectivePayload);
+                    }
+                    promises.push(loadExtendedSettingsDirective());
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -69,7 +101,9 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                         Name: $scope.scopeModel.name,
                         Settings: {
                             $type: "Retail.BusinessEntity.Entities.FinancialAccountDefinitionSettings, Retail.BusinessEntity.Entities",
-                            InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds()
+                            InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
+                            BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
+                            ExtendedSettings: extendedSettingsDirectiveAPI.getData()
                         }
                     };
                 };

@@ -7,6 +7,14 @@
     function FinancialAccountAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
         var controllerName = 'FinancialAccount';
 
+        function GetFinancialAccountEditorRuntime(accountBEDefinitionId,accountId, sequenceNumber) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountEditorRuntime"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+                sequenceNumber: sequenceNumber
+            });
+        }
+
         function GetFilteredFinancialAccounts(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredFinancialAccounts"), input);
         }
@@ -22,7 +30,8 @@
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
-            UpdateFinancialAccount: UpdateFinancialAccount
+            UpdateFinancialAccount: UpdateFinancialAccount,
+            GetFinancialAccountEditorRuntime: GetFinancialAccountEditorRuntime
         };
     }
 
