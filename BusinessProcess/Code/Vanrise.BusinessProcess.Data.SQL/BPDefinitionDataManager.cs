@@ -43,7 +43,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 Title = reader["Title"] as string,
                 WorkflowType = Type.GetType(reader["FQTN"] as string)
             };
-            bpDefinition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", bpDefinition.BPDefinitionID);
             string config = reader["Config"] as string;
             if (!String.IsNullOrWhiteSpace(config))
                 bpDefinition.Configuration = Serializer.Deserialize<BPConfiguration>(config);

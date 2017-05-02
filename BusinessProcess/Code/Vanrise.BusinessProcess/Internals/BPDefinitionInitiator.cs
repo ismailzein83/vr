@@ -51,6 +51,7 @@ namespace Vanrise.BusinessProcess
         static IEnumerable<BPInstanceStatus> s_acceptableBPStatusesToRun = new BPInstanceStatus[] { BPInstanceStatus.New, BPInstanceStatus.Postponed };
         public BPDefinitionInitiator(BusinessProcessRuntime runtime, BPDefinition definition)
         {
+            definition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", definition.BPDefinitionID);
             _definition = definition;
             _definitionId = definition.BPDefinitionID;
             _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
