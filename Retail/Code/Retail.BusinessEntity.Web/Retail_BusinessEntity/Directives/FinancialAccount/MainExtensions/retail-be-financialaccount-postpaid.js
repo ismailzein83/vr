@@ -19,27 +19,48 @@ app.directive('retailBeFinancialaccountPostpaid', ['UtilsService', 'VRUIUtilsSer
 
         function postpaidFinancialAccountCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var creditClassSelectorAPI;
+            var creditClassSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-                defineAPI();
-
+                $scope.scopeModel.onCreditClassSelectorReady = function (api) {
+                    creditClassSelectorAPI = api;
+                    creditClassSelectorReadyDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([creditClassSelectorReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var extendedSettings;
                     if (payload != undefined) {
+                        extendedSettings = payload.extendedSettings;
                     }
 
                     var promises = [];
+
+                    var creditClassSelectorLoadPromise = loadCreditClassSelector();
+                    promises.push(creditClassSelectorLoadPromise);
+
+                    function loadCreditClassSelector() {
+                        var payloadSelector = {
+                            selectedIds: extendedSettings != undefined ? extendedSettings.CreditClassId : undefined
+                        };
+                        return creditClassSelectorAPI.load(payloadSelector);
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.FinancialAccount.PostpaidFinancialAccount, Retail.BusinessEntity.MainExtensions",
+                        CreditClassId: creditClassSelectorAPI.getSelectedIds(),
                     };
                 };
 

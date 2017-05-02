@@ -42,8 +42,7 @@ namespace Retail.BusinessEntity.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<FinancialAccountDefinitionConfig>(FinancialAccountDefinitionConfig.EXTENSION_TYPE);
         }
-
-
+     
         #region Mappers
         private FinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(FinancialAccountDefinition financialAccountDefinition)
         {

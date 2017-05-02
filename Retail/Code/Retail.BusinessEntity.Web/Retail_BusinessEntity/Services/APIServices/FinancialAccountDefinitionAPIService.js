@@ -12,13 +12,19 @@
                 filter: filter
             });
         }
+        function GetFinancialAccountDefinitionSettings(financialAccountDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountDefinitionSettings"), {
+                financialAccountDefinitionId: financialAccountDefinitionId
+            });
+        }
         function GetFinancialAccountDefinitionsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountDefinitionsConfigs"));
         }
         
         return {
             GetFinancialAccountDefinitionsInfo: GetFinancialAccountDefinitionsInfo,
-            GetFinancialAccountDefinitionsConfigs: GetFinancialAccountDefinitionsConfigs
+            GetFinancialAccountDefinitionsConfigs: GetFinancialAccountDefinitionsConfigs,
+            GetFinancialAccountDefinitionSettings: GetFinancialAccountDefinitionSettings
         };
     }
 

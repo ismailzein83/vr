@@ -2,9 +2,9 @@
 
     'use strict';
 
-    financialAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_FinancialAccountAPIService'];
+    financialAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_FinancialAccountAPIService','Retail_BE_FinancialAccountDefinitionAPIService'];
 
-    function financialAccountEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_FinancialAccountAPIService) {
+    function financialAccountEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_FinancialAccountAPIService, Retail_BE_FinancialAccountDefinitionAPIService) {
         var accountId;
         var accountBEDefinitionId;
 
@@ -13,6 +13,10 @@
         var financialAccountDefinitionSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
         $scope.scopeModel = {};
         var financialAccountEntity;
+
+        var directiveAPI;
+        var directiveReadyDeferred;
+
 
         loadParameters();
         defineScope();
@@ -37,6 +41,24 @@
                 financialAccountDefinitionSelectorDirectiveReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onFinancialAccountDefinitionSelectionChanged = function (value) {
+                if (value != undefined) {
+                    $scope.scopeModel.isLoading = true;
+                    getFinancialAccountDefinitionSetting().finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                } else {
+                    $scope.scopeModel.financialAccountTypeRuntimeDirective = undefined;
+                }
+            };
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingDirective = value;
+                };
+                var directivePayload;
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+            };
             $scope.scopeModel.validateDates = function (date) {
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
@@ -73,6 +95,14 @@
             } else {
                 loadAllControls();
             }
+        }
+
+        function getFinancialAccountDefinitionSetting() {
+            var selectedfinancialAccountDefinitionId = financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds();
+            return Retail_BE_FinancialAccountDefinitionAPIService.GetFinancialAccountDefinitionSettings(selectedfinancialAccountDefinitionId).then(function (response) {
+                if (response != undefined && response.ExtendedSettings != undefined)
+                    $scope.scopeModel.financialAccountTypeRuntimeDirective = response.ExtendedSettings.RuntimeEditor;
+            });
         }
 
         function getFinancialAccount() {
@@ -121,7 +151,23 @@
                 return loadFinancialAccountDefinitionSelectorPromiseDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFinancialAccountDefinitionSelector]).catch(function (error) {
+            function loadDirective() {
+                if (financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined && financialAccountEntity.FinancialAccount.ExtendedSettings != undefined) {
+                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    directiveReadyDeferred.promise.then(function () {
+                        directiveReadyDeferred = undefined;
+                        var directivePayload = { extendedSettings: financialAccountEntity.FinancialAccount.ExtendedSettings};
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                    });
+
+                    return directiveLoadDeferred.promise;
+                }
+
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFinancialAccountDefinitionSelector, loadDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -168,7 +214,8 @@
                     SequenceNumber: sequenceNumber,
                     FinancialAccountDefinitionId: financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds(),
                     BED: $scope.scopeModel.beginEffectiveDate,
-                    EED: $scope.scopeModel.endEffectiveDate
+                    EED: $scope.scopeModel.endEffectiveDate,
+                    ExtendedSettings: directiveAPI.getData()
                 },
                 AccountId: accountId,
                 AccountBEDefinitionId: accountBEDefinitionId

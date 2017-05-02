@@ -4,6 +4,11 @@
             <vr-columns width="1/2row">
                 <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
             </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+                                                                  customlabel="Account Definition" isrequired="true" hideremoveicon>
+                </vr-genericdata-businessentitydefinition-selector>
+            </vr-columns>
             <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorReady" normal-col-num="6"></vr-invoicetype-selector>
             <vr-accountbalance-accounttype-selector on-ready="scopeModel.onBalanceAccountTypeSelectorReady" normal-col-num="6"></vr-accountbalance-accounttype-selector>
            

@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.MainExtensions.FinancialAccount
 {
     public class PostpaidFinancialAccount : FinancialAccountExtendedSettings
     {
+        public int CreditClassId { get; set; }
     }
 }

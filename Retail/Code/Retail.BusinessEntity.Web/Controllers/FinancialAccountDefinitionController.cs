@@ -28,7 +28,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetFinancialAccountDefinitionsConfigs();
         }
-
+        [HttpGet]
+        [Route("GetFinancialAccountDefinitionSettings")]
+        public FinancialAccountDefinitionSettings GetFinancialAccountDefinitionSettings(Guid financialAccountDefinitionId)
+        {
+            return _manager.GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+        }
+        
         
     }
 }

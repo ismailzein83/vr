@@ -9,7 +9,8 @@ namespace Retail.BusinessEntity.Entities
     public class FinancialAccountDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
     {
         public override Guid VRComponentTypeConfigId { get { return new Guid("3ED8A0C3-99E7-486A-A560-5789BA1DEAEE"); } }
-   
+
+        public Guid AccountBEDefinitionId { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }
 
         public Guid? InvoiceTypeId { get; set; }

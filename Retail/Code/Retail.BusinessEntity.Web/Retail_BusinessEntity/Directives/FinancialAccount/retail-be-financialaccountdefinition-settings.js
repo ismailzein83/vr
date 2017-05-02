@@ -29,12 +29,21 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
             var extendedSettingsDirectiveAPI;
             var extendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var businessEntityDefinitionSelectorAPI;
+            var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
                     invoiceTypeSelectorAPI = api;
                     invoiceTypeSelectorReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                    businessEntityDefinitionSelectorAPI = api;
+                    businessEntityDefinitionSelectorReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onBalanceAccountTypeSelectorReady = function (api) {
@@ -66,6 +75,22 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     }
 
                     var promises = [];
+
+                    var businessEntityDefinitionSelectorLoadPromise = loadBusinessEntityDefinitionSelector();
+                    promises.push(businessEntityDefinitionSelectorLoadPromise);
+
+                    function loadBusinessEntityDefinitionSelector() {
+                        var payloadSelector = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business",
+                                }]
+                            },
+                            selectedIds: financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined ? financialAccountDefinitionSettings.Settings.AccountBEDefinitionId : undefined
+                        };
+                        return businessEntityDefinitionSelectorAPI.load(payloadSelector);
+                    }
+
                     function loadInvoiceTypeSelector() {
                         var invoiceTypeSelectorPayload;
                         if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
@@ -103,6 +128,7 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                             $type: "Retail.BusinessEntity.Entities.FinancialAccountDefinitionSettings, Retail.BusinessEntity.Entities",
                             InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
                             BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
+                            AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
                             ExtendedSettings: extendedSettingsDirectiveAPI.getData()
                         }
                     };
