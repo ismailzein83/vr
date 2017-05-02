@@ -89,8 +89,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return true;
                 };
             }
-
-            return allZoneServiceConfigs.FindAllRecords(filterExpression).MapRecords(ZoneServiceConfigInfoMapper);
+            return allZoneServiceConfigs.FindAllRecords(filterExpression).OrderBy(it => it.Settings.Weight).MapRecords(ZoneServiceConfigInfoMapper);
         }
 
         public IEnumerable<ZoneServiceConfig> GetAllZoneServices()
@@ -116,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetZoneServicesNames(List<int> services)
         {
-            var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x=>services.Contains(x.Key));
+            var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x => services.Contains(x.Key));
             if (allZoneServiceConfigs == null)
                 return null;
             return String.Join(",", allZoneServiceConfigs.Select(x => x.Value.Symbol).ToList());
@@ -141,7 +140,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public ZoneServiceConfig GetZoneServiceConfig(int zoneServiceConfigId)
         {
-            return GetZoneServiceConfig(zoneServiceConfigId,false);
+            return GetZoneServiceConfig(zoneServiceConfigId, false);
         }
         public string GetServiceSymbol(int serviceId)
         {
@@ -330,7 +329,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Weight" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 35});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 35 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Flag" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ParentName" });
 

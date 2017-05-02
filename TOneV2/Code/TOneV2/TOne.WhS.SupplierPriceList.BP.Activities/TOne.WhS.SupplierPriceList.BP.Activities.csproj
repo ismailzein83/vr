@@ -130,6 +130,7 @@
     <Compile Include="ReserveIdForPriceList.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="SetImportSPLContext.cs" />
+    <Compile Include="ShifTime.cs" />
     <Compile Include="StructureImportedZones.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureDataByCountries.cs" />
