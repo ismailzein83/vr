@@ -9,8 +9,6 @@
     </vr-datagridcolumn>
 
     <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Draft Status'" ng-show="ShowDraftStatus" type="'Text'">
         <span ng-show="dataItem.ShowDraftStatusIcon">
             <vr-icon iconurl="dataItem.DraftStatusIconUrl" tooltip="dataItem.DraftStatusIconTooltip"></vr-icon>
@@ -21,4 +19,6 @@
             <vr-icon iconurl="dataItem.StatusIconUrl" tooltip="dataItem.StatusIconTooltip"></vr-icon>
         </span>
     </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>
