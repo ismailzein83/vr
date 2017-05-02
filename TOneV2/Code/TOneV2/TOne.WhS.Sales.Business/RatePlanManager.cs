@@ -201,12 +201,12 @@ namespace TOne.WhS.Sales.Business
             }
         }
 
-        private IEnumerable<CustomerCountry2> GetSoldCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<DraftNewCountry> draftNewCountries)
+        private IEnumerable<CustomerCountry2> GetSoldCountries(int customerId, DateTime effectiveOn, bool isEffectiveInFuture, IEnumerable<DraftNewCountry> draftNewCountries)
         {
             var allCountries = new List<CustomerCountry2>();
             var customerCountryManager = new CustomerCountryManager();
 
-            IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, isEffectiveInFuture);
+            IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetEffectiveOrFutureCustomerCountries(customerId, effectiveOn);
             if (soldCountries != null)
                 allCountries.AddRange(soldCountries);
 

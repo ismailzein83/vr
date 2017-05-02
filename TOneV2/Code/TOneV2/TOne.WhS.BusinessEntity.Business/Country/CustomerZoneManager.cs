@@ -162,6 +162,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return customerCountries.FindAllRecords(x => x.IsEffective(effectiveOn, isEffectiveInFuture));
         }
 
+        public IEnumerable<CustomerCountry2> GetEffectiveOrFutureCustomerCountries(int customerId, DateTime date)
+        {
+            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
+            return (customerCountries != null) ? customerCountries.FindAllRecords(x => x.IsEffectiveOrFuture(date)) : null;
+        }
+
         public IEnumerable<CustomerCountry2> GetSoldCountries(int customerId, DateTime effectiveOn)
         {
             IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
