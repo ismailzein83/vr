@@ -15,7 +15,7 @@
         var payload = {};
 
         function defineScope() {
-            $scope.effectiveOn = utilsService.getDateFromDateTime(new Date());
+            $scope.effectiveOn = new Date();
 
             $scope.searchClicked = function () {
                 setFilterObject();
