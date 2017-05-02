@@ -74,7 +74,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                     var labelSendValue = "Resend";
                     var salePriceListPreview =
                     {
-                        name: "Preview PriceList",
+                        name: "Preview",
                         clicked: PreviewPriceList
                     };
                     menuActions.push(salePriceListPreview);
