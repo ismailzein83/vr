@@ -117,12 +117,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             SalePriceList customerPricelist = _salePriceListManager.GetPriceListByCustomerAndProcessInstanceId(processInstanceId, customerId);
             if (customerPricelist == null)
-                throw new DataIntegrityValidationException(string.Format("Customer with id {0} does not have a price list", customerId));
+                throw new DataIntegrityValidationException(string.Format("Customer with id {0} does not have a pricelist", customerId));
 
             VRFile file = _fileManager.GetFile(customerPricelist.FileId);
 
             if (file == null || file.Content == null)
-                throw new DataIntegrityValidationException(string.Format("No price list file saved for customer {0}", customer.CarrierAccountId));
+                throw new DataIntegrityValidationException(string.Format("Pricelist with Id {0} for customer {1} does not have a file",
+                    customerPricelist.PriceListId, _carrierAccountManager.GetCarrierAccountName(customerId)));
 
             MemoryStream memoryStream = new MemoryStream(file.Content);
             memoryStream.Position = 0;
