@@ -41,8 +41,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CostDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IProcessedCDRCostDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

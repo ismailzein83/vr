@@ -8,6 +8,8 @@ namespace Retail.Cost.Entities
 {
     public class ProcessedCDRCost
     {
+        public long ProcessedCDRCostId { get; set; }
+
         public DateTime AttemptDateTime { get; set; }
 
         public string CGPN { get; set; }

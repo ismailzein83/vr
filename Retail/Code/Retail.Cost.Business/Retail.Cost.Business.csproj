@@ -67,6 +67,10 @@
     <Compile Include="QueueActivators\ApplyCostQueueActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.Cost.Data\Retail.Cost.Data.csproj">
+      <Project>{2e3d5dc7-5e87-4196-bf49-168f5470a319}</Project>
+      <Name>Retail.Cost.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Cost.Entities\Retail.Cost.Entities.csproj">
       <Project>{84a54068-1858-4009-8687-5aab7e7b8901}</Project>
       <Name>Retail.Cost.Entities</Name>
