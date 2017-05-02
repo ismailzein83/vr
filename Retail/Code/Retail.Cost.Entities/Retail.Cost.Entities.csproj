@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDRCost\CDRCostBatchRequest.cs" />
+    <Compile Include="CDRCost\CDRCostRequest.cs" />
+    <Compile Include="CDRCost\CDRCostResponse.cs" />
+    <Compile Include="ProcessedCDRCost\ProcessedCDRCost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
