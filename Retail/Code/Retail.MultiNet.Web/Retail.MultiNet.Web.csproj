@@ -121,11 +121,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retail_MultiNet\Reports\Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Retail_MultiNet\Reports\Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_MultiNet\Constant\ModuleConfig.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-invoice-invoicetype-multinetsubscriberinvoicesettings.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\MultiNetnvoiceSettingsTemplate.html" />
+    <Content Include="Retail_MultiNet\Reports\Reporting.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
