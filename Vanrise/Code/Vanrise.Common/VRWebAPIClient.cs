@@ -14,6 +14,12 @@ namespace Vanrise.Common
     {
         public static Q Post<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null, bool serializeWithFullType = false)
         {
+            VRWebAPIResponse<Q> response = Post<T, Q>(url, actionPath, request,false, headers, serializeWithFullType);
+            return response.Response;
+        }
+
+        public static VRWebAPIResponse<Q> Post<T, Q>(string url, string actionPath, T request, bool withResponseHeaders,  Dictionary<string, string> headers = null, bool serializeWithFullType = false)
+        {
             using (var client = new HttpClient())
             {
                 // New code:
@@ -41,11 +47,17 @@ namespace Vanrise.Common
                     throw responseTask.Exception;
                 if (responseTask.Result.IsSuccessStatusCode)
                 {
+                    VRWebAPIResponse<Q> response = new VRWebAPIResponse<Q>();
+                    if (withResponseHeaders)
+                    {
+                        response.Headers.Location = responseTask.Result.Headers.Location;
+                    }
                     var rsltTask = responseTask.Result.Content.ReadAsAsync<Q>();
                     rsltTask.Wait();
                     if (rsltTask.Exception != null)
                         throw rsltTask.Exception;
-                    return rsltTask.Result;
+                    response.Response =  rsltTask.Result;
+                    return response;
                 }
                 else
                 {
@@ -53,7 +65,6 @@ namespace Vanrise.Common
                 }
             }
         }
-
         public static Q Put<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null)
         {
             using (var client = new HttpClient())
@@ -117,5 +128,15 @@ namespace Vanrise.Common
                 client.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
         }
+    }
+
+    public class VRWebAPIResponse<T>
+    {
+        public VRWebAPIResponseHeader Headers { get; set; }
+        public T Response { get; set; }
+    }
+    public class VRWebAPIResponseHeader
+    {
+        public Uri Location { get; set; }
     }
 }
