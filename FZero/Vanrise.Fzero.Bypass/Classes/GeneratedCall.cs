@@ -544,6 +544,18 @@ namespace Vanrise.Fzero.Bypass
 
                         rc.MobileOperatorID = null;
 
+                        string Cleanb_number = rc.b_number;
+
+                        if (rc.b_number.StartsWith("+"))
+                        {
+                            Cleanb_number = rc.b_number.Substring(1);
+                        }
+
+                        else if (rc.b_number.StartsWith("00"))
+                        {
+                            Cleanb_number = rc.b_number.Substring(2);
+                        }
+
 
                         foreach (MobileOperator j in lstMobileOperators)
                         {
@@ -556,7 +568,7 @@ namespace Vanrise.Fzero.Bypass
                                     int result = 0;
                                     if (int.TryParse(p, out result))
                                     {
-                                        if (NumberWithoutAreaCodeCLI.StartsWith(p))
+                                        if (Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode + p))
                                         {
                                             rc.MobileOperatorID = j.ID;
                                         }
@@ -1873,6 +1885,8 @@ namespace Vanrise.Fzero.Bypass
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Verified)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reopened)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Ignored)
+                                  && (u.MobileOperatorID == 15 || u.MobileOperatorID == 16)
+                                  && (u.AttemptDateTime >= new DateTime(2017, 04, 24, 0, 0, 0))
                                   )
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();
