@@ -21,8 +21,12 @@
     [AttemptDateTime]      DATETIME        NULL,
     [SendCallType]         TINYINT         NULL,
     [ReveiveCallType]      TINYINT         NULL,
+    [FileName]             NVARCHAR (255)  NULL,
+    [ReplacedCallId]       NVARCHAR (255)  NULL,
     CONSTRAINT [PK_CookedCDR] PRIMARY KEY CLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

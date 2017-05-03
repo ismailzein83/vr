@@ -17,7 +17,11 @@
     [DurationInSeconds]    DECIMAL (10, 4) NULL,
     [AttemptDateTime]      DATETIME        NULL,
     [SendCallType]         TINYINT         NULL,
-    [ReveiveCallType]      TINYINT         NULL);
+    [ReveiveCallType]      TINYINT         NULL,
+    [FileName]             NVARCHAR (255)  NULL,
+    [ReplacedCallId]       NVARCHAR (255)  NULL);
+
+
 
 
 

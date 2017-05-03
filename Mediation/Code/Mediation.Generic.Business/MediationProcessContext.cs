@@ -66,7 +66,7 @@ namespace Mediation.Generic.Business
             return sessionId;
         }
 
-        public void DeleteSessionId(string sessionId)
+        public bool DeleteSessionId(string sessionId)
         {
             MultiLegSessionIdsMemoryStore sessionIdsMemStore = GetSessionIdsMemStore();
             DeleteSessionIdFromDB(sessionId);
@@ -79,6 +79,7 @@ namespace Mediation.Generic.Business
                     sessionIdsMemStore.SessionIdsByLegId.Remove(legId);
                 }
             }
+            return true;
         }
 
         #endregion

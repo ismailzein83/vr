@@ -168,6 +168,10 @@ namespace Mediation.Teles.Business
             cookedCDR.CallProgressState = startCDR.TC_CALLPROGRESSSTATE;
             cookedCDR.SendCallType = (int)sendCallType;
             cookedCDR.ReceiveCallType = (int)receiveCallType;
+            cookedCDR.CallId = startCDR.TC_CALLID;
+            cookedCDR.TransferredCallId = startCDR.TC_TRANSFERREDCALLID;
+            cookedCDR.ReplacedCallId = startCDR.TC_REPLACECALLID;
+            cookedCDR.FileName = startCDR.FileName;
             cookedCDR.DurationInSeconds = (disconnectDateTime.HasValue && !isZeroDuration ? (decimal)(cookedCDR.DiconnectDateTime - cookedCDR.ConnectDateTime).TotalSeconds : 0);
             return cookedCDR;
         }

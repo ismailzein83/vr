@@ -8,7 +8,7 @@ namespace Mediation.Generic.Entities
 {
     public class MediationRecord
     {
-        public int EventId { get; set; }
+        public long EventId { get; set; }
         public string SessionId { get; set; }
         public DateTime EventTime { get; set; }
         public EventStatus EventStatus { get; set; }

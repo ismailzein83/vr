@@ -17,6 +17,10 @@
         var dataParsedRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var dataParsedRecordTypeSelectedPromiseDeferred;
 
+        var dataBadRecordTypeSelectorAPI;
+        var dataBadRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataBadRecordTypeSelectedPromiseDeferred;
+
         var dataCookedRecordTypeSelectedPromiseDeferred;
 
         //#endregion
@@ -71,7 +75,11 @@
                 dataParsedRecordTypeSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.selectedCookedDataRecordType;
+            $scope.scopeModel.selectedBadDataRecordType;
+            $scope.scopeModel.onBadDataRecordTypeSelectorReady = function (api) {
+                dataBadRecordTypeSelectorAPI = api;
+                dataBadRecordTypeSelectorReadyDeferred.resolve();
+            };
 
 
             $scope.scopeModel.onParsedRecordTypeSelectionChanged = function () {
@@ -90,6 +98,25 @@
                         dataRecordTypeId: selectedParsedDataRecordTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataParsedRecordTypeFieldsTimeSelectorAPI, timePayload, setTimeLoader, dataParsedRecordTypeSelectedPromiseDeferred);
+                }
+            };
+
+            $scope.scopeModel.onBadRecordTypeSelectionChanged = function () {
+                var selectedBadDataRecordTypeId = dataBadRecordTypeSelectorAPI.getSelectedIds();
+                if (selectedBadDataRecordTypeId != undefined) {
+
+                    var setSessionIdLoader = function (value) { $scope.scopeModel.isLoadingBadSessionID = value };
+                    var sessionIdPayload = {
+                        dataRecordTypeId: selectedBadDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataBadRecordTypeFieldsSessionIdSelectorAPI, sessionIdPayload, setSessionIdLoader, dataBadRecordTypeSelectedPromiseDeferred);
+
+
+                    var setTimeLoader = function (value) { $scope.scopeModel.isLoadingBadSessionID = value };
+                    var timePayload = {
+                        dataRecordTypeId: selectedBadDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataBadRecordTypeFieldsTimeSelectorAPI, timePayload, setTimeLoader, dataBadRecordTypeSelectedPromiseDeferred);
                 }
             };
 

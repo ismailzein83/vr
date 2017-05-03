@@ -62,8 +62,14 @@ namespace Mediation.Generic.BP.Activities
                             var contextRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == "context");
                             if (contextRecordType != null)
                                 context.SetRecordValue("context", mediationProcessContext);
+
                             var details = mediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
                             context.SetRecordValue(inputArgument.MediationDefinition.ParsedTransformationSettings.ParsedRecordName, details);
+
+                            var sessionIdRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == "sessionId");
+                            if (sessionIdRecordType != null)
+                                context.SetRecordValue("sessionId", details.Select(itm => itm.MultiLegSessionId).First());
+                           
                         });
 
                         foreach (var processHandler in processHandlers)
@@ -94,7 +100,7 @@ namespace Mediation.Generic.BP.Activities
             else
             {
                 dynamic record = output.GetRecordValue(processHandler.RecordName);
-                if(record !=null)
+                if (record != null)
                     processHandler.CdrBatch.BatchRecords.Add(record);
             }
 

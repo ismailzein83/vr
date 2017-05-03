@@ -12,12 +12,21 @@
                     </vr-row>
 
                     <vr-row>
-                        <vr-columns width="1/4row">
+                        <vr-columns width="1/2row">
                             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onParsedDataRecordTypeSelectorReady"
                                                                     selectedvalues="scopeModel.selectedParsedDataRecordType"
                                                                     onselectionchanged="scopeModel.onParsedRecordTypeSelectionChanged"
                                                                     isrequired="true"
                                                                     label="Parsed Record Type"
+                                                                    hideremoveicon>
+                            </vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onBadDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModel.selectedBadDataRecordType"
+                                                                    onselectionchanged="scopeModel.onBadRecordTypeSelectionChanged"
+                                                                    isrequired="true"
+                                                                    label="Bad Record Type"
                                                                     hideremoveicon>
                             </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
@@ -109,7 +118,7 @@
 
                 </vr-tab>
                 <vr-tab header="'Output Handlers'">
-                    <vr-row>                       
+                    <vr-row>
                         <vr-validator validate="scopeModel.validateHandlers()">
                             <vr-columns width="normal">
                                 <vr-button type="Add" data-onclick="scopeModel.addHandler" standalone vr-disabled="scopeModel.selectedDataTransformationDefinitionInsert ==  undefined"></vr-button>
@@ -123,8 +132,19 @@
                         </vr-validator>
                     </vr-row>
                 </vr-tab>
-                <vr-tab ng-show="false" header="'Bad Record Settings'">
-                    <div><p>Under Construction</p></div>
+                <vr-tab header="'Bad Record Settings'">
+                    <vr-row>
+
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingDataTransformationDefinitionInsertParsed">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModel.onDataTransformationDefinitionBadRecordReady" selectedvalues="scopeModel.selectedDataTransformationDefinitionBadRecord"
+                                                                                        isrequired="true"
+                                                                                        customlabel="Bad Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+
+                    </vr-row>
                 </vr-tab>
 
             </vr-tabs>

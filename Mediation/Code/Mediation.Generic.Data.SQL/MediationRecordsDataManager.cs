@@ -128,7 +128,7 @@ namespace Mediation.Generic.Data.SQL
         {
             return new MediationRecord()
             {
-                EventId = (int)reader["EventId"],
+                EventId = (long)reader["EventId"],
                 SessionId = reader["SessionId"] as string,
                 EventTime = GetReaderValue<DateTime>(reader, "EventTime"),
                 EventStatus = (EventStatus)GetReaderValue<byte>(reader, "EventStatus"),
