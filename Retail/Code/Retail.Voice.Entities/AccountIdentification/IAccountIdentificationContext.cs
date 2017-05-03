@@ -6,6 +6,8 @@ namespace Retail.Voice.Entities
         dynamic RawCDR { get; }
         string CallingNumber { get; }
         string CalledNumber { get; }
+        bool IsCallingAccountOnNet { set; }
+        bool IsCalledAccountOnNet { set; }
         long? CallingAccountId { set; }
         long? CalledAccountId { set; }
     }
