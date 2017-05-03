@@ -799,10 +799,26 @@
             return diffDays;
         }
 
+        var isShouldSubsctractOffsetfromDate;
+
+        function shouldSubsctractOffsetfromDate()
+        {
+            if (isShouldSubsctractOffsetfromDate == undefined) {
+                var convertedDate = new Date("2000-01-01T00:00:00");
+                isShouldSubsctractOffsetfromDate = (convertedDate.getHours() != 0);
+            }
+            return isShouldSubsctractOffsetfromDate;
+        }
+
         function createDateFromString(value) {
             var date = new Date(value);
-            var userTimezoneOffset = date.getTimezoneOffset() * 60000;
-            return new Date(date.getTime() + userTimezoneOffset);
+            if (shouldSubsctractOffsetfromDate()) {
+                var userTimezoneOffset = date.getTimezoneOffset() * 60000;
+                return new Date(date.getTime() + userTimezoneOffset);
+            }
+            else {
+                return date;
+            }
         }
 
         function getDateFromDateTime(dateTime) {
