@@ -32,7 +32,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             List<CustomerPriceListChange> allCustomersPricelistChanges = new List<CustomerPriceListChange>();
 
             var carrierAccountManager = new CarrierAccountManager();
-            IEnumerable<CarrierAccountInfo> customersForThisSellingNumberPlan = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
+            IEnumerable<CarrierAccountInfo> customersForThisSellingNumberPlan = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId, true);
 
             if (customersForThisSellingNumberPlan != null && customersForThisSellingNumberPlan.Any())
             {
