@@ -214,14 +214,17 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
-        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingNumberPlanId(int sellingNumberPlanId)
+        public IEnumerable<CarrierAccountInfo> GetCustomersBySellingNumberPlanId(int sellingNumberPlanId, bool onlyActive = false)
         {
             Func<CarrierAccount, bool> filterPredicate = (carr) =>
             {
-                if (carr.AccountType != CarrierAccountType.Supplier && carr.SellingNumberPlanId.Value == sellingNumberPlanId)
-                    return true;
+                if (carr.AccountType == CarrierAccountType.Supplier || carr.SellingNumberPlanId.Value != sellingNumberPlanId)
+                    return false;
 
-                return false;
+                if (onlyActive && carr.CarrierAccountSettings != null && carr.CarrierAccountSettings.ActivationStatus != ActivationStatus.Active)
+                    return false;
+
+                return true;
             };
 
             return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
