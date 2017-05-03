@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Retail.MultiNet.Entities
 {
-    public class RDLCInvoiceDetails
+    public class RDLCSummaryDetails
     {
-        public Decimal TotalAmount { get; set; }
-
-        public decimal TotalDuration { get; set; }
-
-        public int CountCDRs { get; set; }
-
-        public RDLCInvoiceDetails()
+        public string UsageDescription { get; set; }
+        public int Quantity { get; set; }
+        public Decimal NetAmount { get; set; }
+        public Guid ChargeableEntityId { get; set; }
+        public Decimal SalesTaxAmount { get; set; }
+        public Decimal AmountWithTaxes { get; set; }
+        public RDLCSummaryDetails()
         {
 
         }
 
-        public IEnumerable<RDLCInvoiceDetails> GetRDLCInvoiceDetailsSchema()
+        public IEnumerable<RDLCSummaryDetails> GetRDLCSummaryDetailsSchema()
         {
             return null;
         }

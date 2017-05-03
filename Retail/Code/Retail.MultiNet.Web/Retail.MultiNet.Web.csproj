@@ -136,7 +136,14 @@
     <Content Include="Retail_MultiNet\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.MultiNet.Entities\Retail.MultiNet.Entities.csproj">
+      <Project>{73608c81-84ad-480a-a988-74244ee9c8f8}</Project>
+      <Name>Retail.MultiNet.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
