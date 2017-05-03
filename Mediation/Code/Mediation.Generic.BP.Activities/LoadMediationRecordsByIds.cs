@@ -7,6 +7,7 @@ using Mediation.Generic.Entities;
 using Mediation.Generic.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
+using Vanrise.Common;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -44,23 +45,19 @@ namespace Mediation.Generic.BP.Activities
             MediationRecordsManager manager = new MediationRecordsManager();
 
             var mediationRecords = manager.GetMediationRecordsByIds(inputArgument.MediationDefinition.MediationDefinitionId, inputArgument.EventIds, inputArgument.MediationDefinition.ParsedRecordTypeId);
-            string sessionId = "";
-            Dictionary<string, List<MediationRecord>> records = new Dictionary<string, List<MediationRecord>>();
-            List<MediationRecord> lstMediationRecords;
+            Dictionary<string, SessionRecords> recordsBySessionId = new Dictionary<string, SessionRecords>();
             foreach (var stagingRecord in mediationRecords)
             {
-                if (!records.TryGetValue(stagingRecord.SessionId, out lstMediationRecords))
-                {
-                    if (!string.IsNullOrEmpty(sessionId))
-                        inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { MediationRecords = records[sessionId] });
-                    sessionId = stagingRecord.SessionId;
-                    lstMediationRecords = new List<MediationRecord>();
-                    records.Add(stagingRecord.SessionId, lstMediationRecords);
-                }
-                lstMediationRecords.Add(stagingRecord);
+                SessionRecords sessionRecords = recordsBySessionId.GetOrCreateItem(stagingRecord.SessionId, 
+                    () => new SessionRecords { MinEventId = stagingRecord.EventId, Records = new List<MediationRecord>() });
+                sessionRecords.Records.Add(stagingRecord);
+                if (stagingRecord.EventId < sessionRecords.MinEventId)
+                    sessionRecords.MinEventId = stagingRecord.EventId;
             }
-            if (records.TryGetValue(sessionId, out lstMediationRecords))
-                inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { MediationRecords = lstMediationRecords });
+            foreach(var sessionRecords in recordsBySessionId.Values.OrderBy(itm => itm.MinEventId))
+            {
+                inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { MediationRecords = sessionRecords.Records });
+            }
         }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -72,6 +69,13 @@ namespace Mediation.Generic.BP.Activities
             if (this.MediationDefinition.Get(context) == null)
                 this.MediationDefinition.Set(context, new MediationDefinition());
             base.OnBeforeExecute(context, handle);
+        }
+
+        private class SessionRecords
+        {
+            public long MinEventId { get; set; }
+
+            public List<MediationRecord> Records { get; set; }
         }
     }
 }
