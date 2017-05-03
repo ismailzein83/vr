@@ -24,6 +24,12 @@ namespace Retail.Teles.Business
             var finalActionPath = GetURL(this.ActionPrefix, actionPath);
             return VRWebAPIClient.Post<T, Q>(this.URL, finalActionPath, request, headers);
         }
+        public VRWebAPIResponse<Q> Post<T, Q>(string actionPath, T request, bool withResponseHeader)
+        {
+            var headers = GetHeaders(this.Token, this.Authorization);
+            var finalActionPath = GetURL(this.ActionPrefix, actionPath);
+            return VRWebAPIClient.Post<T, Q>(this.URL, finalActionPath, request, withResponseHeader, headers);
+        }
         public T Get<T>(string actionPath)
         {
             var headers = GetHeaders(this.Token, this.Authorization);

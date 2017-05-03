@@ -50,6 +50,34 @@ namespace Retail.Teles.Business
             cachedEnterprises.TryGetValue(enterpriseId, out enterpriseInfo);
             return enterpriseInfo;
         }
+
+        public int CreateEnterprise(Guid vrConnectionId,string centrexFeatSet, dynamic request)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", telesRestConnection.DefaultDomainId, centrexFeatSet);
+             VRWebAPIResponse<dynamic> response = telesRestConnection.Post<dynamic, string>(actionPath, request,true);
+          //  if(response.Headers != null)
+            // var locationArray = response.Headers.Location.Query;
+            return default(int);
+        }
+        public int CreateSite(Guid vrConnectionId,int enterpriseId, string centrexFeatSet, dynamic request)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", enterpriseId, centrexFeatSet);
+            VRWebAPIResponse<dynamic> response = telesRestConnection.Post<dynamic, string>(actionPath, request, true);
+            //  if(response.Headers != null)
+            // var locationArray = response.Headers.Location.Query;
+            return default(int);
+        }
+        public int CreateScreenedNumber(Guid vrConnectionId, int siteId, dynamic request)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/domain/{0}/screenNum", siteId);
+            VRWebAPIResponse<dynamic> response = telesRestConnection.Post<dynamic, string>(actionPath, request, true);
+            //  if(response.Headers != null)
+            // var locationArray = response.Headers.Location.Query;
+            return default(int);
+        }
         public string GetEnterpriseName(Guid vrConnectionId, dynamic enterpriseId)
         {
             var cachedEnterprises = GetCachedEnterprises(vrConnectionId, true);

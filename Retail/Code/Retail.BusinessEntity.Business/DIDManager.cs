@@ -39,6 +39,21 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDDetailMapper), handler);
         }
 
+        public List<DID> GetDIDsByParentId(string parentId, DateTime effectiveOn)
+        {
+            BEParentChildRelationManager beParentChildRelationManager = new Vanrise.GenericData.Business.BEParentChildRelationManager();
+            var relationItems = beParentChildRelationManager.GetChildren(_accountDIDRelationDefinitionId, parentId, effectiveOn);
+            List<DID> dids = null;
+            if (relationItems != null)
+            {
+                dids = new List<DID>();
+                foreach (var item in relationItems)
+                {
+                    dids.Add(GetDID(Convert.ToInt32(item.ChildBEId)));
+                }
+            }
+            return dids;
+        }
         public DID GetDID(int didId, bool isViewedFromUI)
         {
             var dids = GetCachedDIDs();
