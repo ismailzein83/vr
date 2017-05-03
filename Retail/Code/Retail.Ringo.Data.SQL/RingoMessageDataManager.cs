@@ -49,7 +49,7 @@ namespace Retail.Ringo.Data.SQL
 
         public IEnumerable<RingoMessageCountEntity> GetSenderRingoMessageRecords_EightSheet(RingoMessageFilter firstFilter, RingoMessageFilter secondFilter)
         {
-            return GetItemsText(string.Format(query_RingoMessage_GetCountSender_CTE, BuildConditionClause(firstFilter), BuildConditionClause(secondFilter)), RingoMessageCountMapper, GetCommandAction(firstFilter));
+            return GetItemsText(string.Format(query_RingoMessage_EighthReportCTE, BuildConditionClause(firstFilter), BuildConditionClause(secondFilter)), RingoMessageCountMapper, GetCommandAction(firstFilter));
         }
 
         public IEnumerable<SintesiRingoMessageEntity> GetSintesiRingoMessageEntityByRecipient(TCRRingoReportFilter filter)
@@ -370,7 +370,7 @@ namespace Retail.Ringo.Data.SQL
                                             from cte1 join cte6 on cte1.Msisdn=cte6.msisdn 
                                             and cte1.sender=cte6.sender)
 
-                                            select sender, AVG(diff) from ctejoin
+                                            select sender Name, AVG(diff) as Total from ctejoin
                                             group by sender";
         #endregion
 

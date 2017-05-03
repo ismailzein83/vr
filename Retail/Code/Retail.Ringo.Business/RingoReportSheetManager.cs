@@ -125,7 +125,7 @@ namespace Retail.Ringo.Business
             UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords_CTE(new RingoMessageFilter
             {
                 MessageTypes = new List<int>() { 6 },
-                Sender = "ICSI",
+                Recipient = "ICSI",
                 From = filter.FromDate,
                 To = filter.ToDate
             }), wbk, 8, 13, 1, 170, 168);
@@ -141,11 +141,11 @@ namespace Retail.Ringo.Business
 
 
             //7N
-            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords(new RingoMessageFilter
+            UpdateWorkSheetByColumn(ringoMessageManager.GetSenderRingoMessageRecords_CTE(new RingoMessageFilter
             {
                 MessageTypes = new List<int> { 6 },
                 Recipient = "ICSI",
-                From = DateTime.Parse("2015-01-01"),
+                From = DateTime.Parse("2015-05-01"),
                 To = filter.ToDate
             }), wbk, 12, 13, 1, 170, 168);
 
