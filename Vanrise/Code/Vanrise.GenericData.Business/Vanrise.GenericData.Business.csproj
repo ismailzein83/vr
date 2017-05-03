@@ -53,6 +53,7 @@
     <Compile Include="BEParentChildRelationManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManagerContext.cs" />
+    <Compile Include="BusinessEntity\Definition\BEDefinitionOverriddenConfiguration.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionFilterContext.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\IGenericRuleStructureBehavior.cs" />
+    <Compile Include="GenericRules\GenericRuleDefinitionOverriddenConfiguration.cs" />
     <Compile Include="GetRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\GetStorageRowCountContext.cs" />
     <Compile Include="RecordFilterManager.cs" />
