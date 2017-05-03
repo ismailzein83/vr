@@ -18,7 +18,7 @@
                 var analyticDataProviderSettings = new AnalyticDataProviderSettings($scope, ctrl, $attrs);
                 analyticDataProviderSettings.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "providerCtrl",
             bindToController: true,
             templateUrl: '/Client/Modules/Analytic/Directives/AnalyticDataProvider/Templates/AnalyticDataProviderSettings.html'
         };

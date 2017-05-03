@@ -433,7 +433,7 @@ namespace Vanrise.Analytic.Business
             return GetRecordDimensionsGroupingKey(requestedDimensionNames, record.Time, getDimensionValue);
         }
 
-        private string GetRecordDimensionsGroupingKey(List<string> requestedDimensionNames, DateTime? recordTime, Func<string, object> getDimensionValue)
+        internal static string GetRecordDimensionsGroupingKey(List<string> requestedDimensionNames, DateTime? recordTime, Func<string, object> getDimensionValue)
         {
             StringBuilder builder = new StringBuilder();
             if (recordTime.HasValue)
