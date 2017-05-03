@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Business
         public NewZoneRateLocator(int sellingNumberPlanId)
         {
             this.SellingNumberPlanId = sellingNumberPlanId;
-            
+
             SettingManager settingManager = new SettingManager();
             this.SaleAreaSettings = settingManager.GetSetting<SaleAreaSettingsData>(TOne.WhS.BusinessEntity.Business.Constants.SaleAreaSettings);
 
@@ -68,7 +68,7 @@ namespace TOne.WhS.CodePreparation.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             CarrierAccount customer = carrierAccountManager.GetCarrierAccount(ownerId);
 
-            if(customer == null)
+            if (customer == null)
                 throw new DataIntegrityValidationException(String.Format("Customer with id {0} does not exist", ownerId));
 
             if (customer.CarrierAccountSettings == null)
@@ -83,6 +83,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         protected List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<ExistingZone> matchedZones, ExistingRatesByZoneName existingRatesByZoneName)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
             List<ExistingRate> effectiveExistingRates;
@@ -97,6 +98,12 @@ namespace TOne.WhS.CodePreparation.Business
                             continue;
 
                         SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
+                        if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
+                        {
+                            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
+                            if (customer.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                                continue;
+                        }
                         existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
                     }
                 }
@@ -126,12 +133,12 @@ namespace TOne.WhS.CodePreparation.Business
 
         private Decimal GetHighestRate(IEnumerable<ExistingRate> existingRates, int targetCurrencyId)
         {
-            if(existingRates != null && existingRates.Count() > 0)
+            if (existingRates != null && existingRates.Count() > 0)
             {
                 CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
                 SaleRateManager saleRateManager = new SaleRateManager();
                 List<decimal> convertedRates = new List<decimal>();
-                
+
                 foreach (ExistingRate item in existingRates)
                 {
                     int rateCurrencyId = saleRateManager.GetCurrencyId(item.RateEntity);
@@ -144,6 +151,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             return 0;
         }
-        
+
     }
 }
