@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Business
         #region Ctor/Properties
 
         static AccountBEDefinitionManager _accountBEDefinitionManager;
-
+        static AccountTypeManager s_accountTypeManager = new AccountTypeManager();
         public AccountBEManager()
         {
             _accountBEDefinitionManager = new AccountBEDefinitionManager();
@@ -440,6 +440,20 @@ namespace Retail.BusinessEntity.Business
             {
                 return null;
             }
+        }
+
+        public dynamic GetAccountGenericFieldValue(Guid accountBEDefinitionId, long accountId, string fieldName)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+            return GetAccountGenericFieldValue(accountBEDefinitionId, account, fieldName);
+        }
+
+        public dynamic GetAccountGenericFieldValue(Guid accountBEDefinitionId, Account account, string fieldName)
+        {
+            var accountGenericField = s_accountTypeManager.GetAccountGenericField(accountBEDefinitionId, fieldName);
+            accountGenericField.ThrowIfNull("accountGenericField", fieldName);
+            return accountGenericField.GetValue(new AccountGenericFieldContext(account));
         }
 
         #endregion
