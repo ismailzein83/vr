@@ -35,17 +35,29 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             List<RatePreview> ratesPreview = new List<RatePreview>();
 
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
                 ratesPreview.AddRange(zoneToProcess.RatesToAdd.MapRecords(RateToAddPreviewMapper));
-                ratesPreview.AddRange(zoneToProcess.NotImportedNormalRates.MapRecords(NotImportedRatePreviewMapper));
+                foreach (var notImportedRate in zoneToProcess.NotImportedNormalRates)
+                {
+                    if (notImportedRate.OwnerType == SalePriceListOwnerType.Customer)
+                    {
+                        CarrierAccount customer = carrierAccountManager.GetCarrierAccount(notImportedRate.OwnerId);
+                        if (customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                        {
+                            ratesPreview.Add(NotImportedRatePreviewMapper(notImportedRate));
+                        }
+                    }
+                }
+                // ratesPreview.AddRange(zoneToProcess.NotImportedNormalRates.MapRecords(NotImportedRatePreviewMapper));
             }
 
             foreach (NotImportedZone notImportedZone in notImportedZones)
             {
                 ratesPreview.AddRange(notImportedZone.NotImportedNormalRates.MapRecords(NotImportedRatePreviewMapper));
             }
-            
+
             previewRatesQueue.Enqueue(ratesPreview);
 
             PreviewRates.Set(context, ratesPreview);
