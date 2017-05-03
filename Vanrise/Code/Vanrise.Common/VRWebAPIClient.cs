@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -10,8 +11,22 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common
 {
+
+    public class MyPolicy : ICertificatePolicy
+    {
+        public bool CheckValidationResult(ServicePoint srvPoint, System.Security.Cryptography.X509Certificates.X509Certificate certificate, WebRequest request, int certificateProblem)
+        {
+            return true;
+        }
+    }
+
     public static class VRWebAPIClient
     {
+        static VRWebAPIClient()
+        {
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            ServicePointManager.CertificatePolicy = new MyPolicy();
+        }
         public static Q Post<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null, bool serializeWithFullType = false)
         {
             VRWebAPIResponse<Q> response = Post<T, Q>(url, actionPath, request,false, headers, serializeWithFullType);
@@ -20,6 +35,7 @@ namespace Vanrise.Common
 
         public static VRWebAPIResponse<Q> Post<T, Q>(string url, string actionPath, T request, bool withResponseHeaders,  Dictionary<string, string> headers = null, bool serializeWithFullType = false)
         {
+
             using (var client = new HttpClient())
             {
                 // New code:
@@ -50,6 +66,7 @@ namespace Vanrise.Common
                     VRWebAPIResponse<Q> response = new VRWebAPIResponse<Q>();
                     if (withResponseHeaders)
                     {
+                        response.Headers = new VRWebAPIResponseHeader();
                         response.Headers.Location = responseTask.Result.Headers.Location;
                     }
                     var rsltTask = responseTask.Result.Content.ReadAsAsync<Q>();
