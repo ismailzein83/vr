@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ProvisioningScreenedNumbers/Templates/ProvisioningScreenedNumbersDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ProvisioningScreenedNumbers/Templates/ProvisionAccountDefinitionSettingsTemplate.html"
 
         };
         function ProvisionerDefinitionsettings($scope, ctrl, $attrs) {
@@ -63,7 +63,6 @@
                         mainPayload = payload;
                         provisionerDefinitionSettings = payload.provisionerDefinitionSettings;
                         if (provisionerDefinitionSettings != undefined) {
-                            $scope.scopeModel.actionType = provisionerDefinitionSettings.ActionType;
                             $scope.scopeModel.countryCode = provisionerDefinitionSettings.CountryCode;
                             $scope.scopeModel.centrexFeatSet = provisionerDefinitionSettings.CentrexFeatSet;
                             $scope.scopeModel.enterpriseMaxCalls = provisionerDefinitionSettings.EnterpriseMaxCalls;
@@ -113,8 +112,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.Teles.Business.Provisioning.ProvisioningScreenedNumbersDefinitionSettings,Retail.Teles.Business",
-                        ActionType: $scope.scopeModel.actionType,
+                        $type: "Retail.Teles.Business.Provisioning.ProvisionAccountDefinitionSettings,Retail.Teles.Business",
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
                         CountryCode: $scope.scopeModel.countryCode,
                         CentrexFeatSet: $scope.scopeModel.centrexFeatSet,
@@ -140,6 +138,6 @@
         }
     }
 
-    app.directive('retailTelesProvisionerDefinitionsettingsScreenednumbers', ProvisionerDefinitionsettingsDirective);
+    app.directive('retailTelesProvisionerDefinitionsettingsProvisionaccount', ProvisionerDefinitionsettingsDirective);
 
 })(app);

@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ProvisioningScreenedNumbers/Templates/ProvisioningScreenedNumbersRuntimeSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ProvisioningScreenedNumbers/Templates/ProvisionAccountRuntimeSettingsTemplate.html"
 
         };
         function ProvisionerRuntimesettings($scope, ctrl, $attrs) {
@@ -57,7 +57,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.Teles.Business.Provisioning.ProvisioningScreenedNumbersRuntimeSettings,Retail.Teles.Business",
+                        $type: "Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings,Retail.Teles.Business",
                         EnterpriseName: $scope.scopeModel.enterpriseName
                     };
                     return data;
@@ -66,6 +66,6 @@
         }
     }
 
-    app.directive('retailTelesProvisionerRuntimesettingsScreenednumbers', ProvisionerRuntimesettingsDirective);
+    app.directive('retailTelesProvisionerRuntimesettingsProvisionaccount', ProvisionerRuntimesettingsDirective);
 
 })(app);

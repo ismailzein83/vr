@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Business.Provisioning
 {
-    public class ProvisioningScreenedNumbersDefinitionSettings : AccountProvisionerDefinitionSettings
+    public class ProvisionAccountDefinitionSettings : AccountProvisionerDefinitionSettings
     {
         public override Guid ConfigId
         {
             get { return new Guid("FD6ED9B7-F870-4C6D-A51E-36FD2219F64B"); }
         }
         public Guid VRConnectionId { get; set; }
-        public string ActionType { get; set; }
         public string CentrexFeatSet { get; set; }
         
         public string CountryCode { get; set; }

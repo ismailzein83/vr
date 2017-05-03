@@ -173,10 +173,10 @@
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\ChangeUsersRGsProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\retail-teles-accountextrafield-internationalcallsblocked.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\Templates\InternationalCallsBlockedExtraFieldTemplate.html" />
-    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-screenednumbers.js" />
-    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-runtimesettings-screenednumbers.js" />
-    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisioningScreenedNumbersDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisioningScreenedNumbersRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-provisionaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-runtimesettings-provisionaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionAccountDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionAccountRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\retail-teles-routinggroupcondition-routinggroupfilter.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\MainExtensions\Templates\RoutingGroupFilterTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\retail-teles-routinggroupcondition.js" />

@@ -12,12 +12,14 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
 using Retail.Teles.Business.AccountBEActionTypes;
+using System.Security.Policy;
 
 namespace Retail.Teles.Business
 {
     public class TelesEnterpriseManager : IBusinessEntityManager
     {
         #region Public Methods
+        AccountBEManager _accountBEManager = new AccountBEManager();
 
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
@@ -51,32 +53,34 @@ namespace Retail.Teles.Business
             return enterpriseInfo;
         }
 
-        public int CreateEnterprise(Guid vrConnectionId,string centrexFeatSet, dynamic request)
+        public long CreateEnterprise(Guid vrConnectionId, string centrexFeatSet, Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Enterprise request)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
             var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", telesRestConnection.DefaultDomainId, centrexFeatSet);
-             VRWebAPIResponse<dynamic> response = telesRestConnection.Post<dynamic, string>(actionPath, request,true);
-          //  if(response.Headers != null)
-            // var locationArray = response.Headers.Location.Query;
-            return default(int);
+            VRWebAPIResponse<string> response = telesRestConnection.Post<Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Enterprise, string>(actionPath, request, true);
+            response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
+            var enterpriseId = response.Headers.Location.Segments.Last();
+            enterpriseId.ThrowIfNull("enterpriseId", enterpriseId);
+            return Convert.ToInt64(enterpriseId);
         }
-        public int CreateSite(Guid vrConnectionId,int enterpriseId, string centrexFeatSet, dynamic request)
+        public long CreateSite(Guid vrConnectionId, dynamic enterpriseId, string centrexFeatSet, Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Site request)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
             var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", enterpriseId, centrexFeatSet);
-            VRWebAPIResponse<dynamic> response = telesRestConnection.Post<dynamic, string>(actionPath, request, true);
-            //  if(response.Headers != null)
-            // var locationArray = response.Headers.Location.Query;
-            return default(int);
+            VRWebAPIResponse<string> response = telesRestConnection.Post<Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Site, string>(actionPath, request, true);
+            response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
+            var siteId = response.Headers.Location.Segments.Last();
+            siteId.ThrowIfNull("siteId", siteId);
+            return Convert.ToInt64(siteId);
         }
-        public int CreateScreenedNumber(Guid vrConnectionId, int siteId, dynamic request)
+        public long CreateScreenedNumber(Guid vrConnectionId, dynamic siteId, Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.ScreenedNumber request)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
             var actionPath = string.Format("/domain/{0}/screenNum", siteId);
-            VRWebAPIResponse<dynamic> response = telesRestConnection.Post<dynamic, string>(actionPath, request, true);
-            //  if(response.Headers != null)
-            // var locationArray = response.Headers.Location.Query;
-            return default(int);
+            VRWebAPIResponse<string> response = telesRestConnection.Post<Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.ScreenedNumber, string>(actionPath, request, true);
+            var screenedNumberId = response.Headers.Location.Segments.Last();
+            screenedNumberId.ThrowIfNull("screenedNumberId", screenedNumberId);
+            return Convert.ToInt64(screenedNumberId);
         }
         public string GetEnterpriseName(Guid vrConnectionId, dynamic enterpriseId)
         {
@@ -137,15 +141,11 @@ namespace Retail.Teles.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            AccountBEManager accountBEManager = new AccountBEManager();
-            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new EnterpriseAccountMappingInfo { TelesEnterpriseId = input.TelesEnterpriseId };
-            bool result = accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(input.AccountBEDefinitionId, input.AccountId,
-                enterpriseAccountMappingInfo);
+            bool result = TryMapEnterpriseToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesEnterpriseId);
             if (result)
             {
-                accountBEManager.TrackAndLogObjectCustomAction(input.AccountBEDefinitionId, input.AccountId, "Map To Teles Enterprise",null, enterpriseAccountMappingInfo);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
+                updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(input.AccountBEDefinitionId);
             }
             else
@@ -154,6 +154,18 @@ namespace Retail.Teles.Business
             }
 
             return updateOperationOutput;
+
+        }
+        public bool TryMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesEnterpriseId)
+        {
+
+            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new EnterpriseAccountMappingInfo { TelesEnterpriseId = telesEnterpriseId };
+
+            var result = _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
+                enterpriseAccountMappingInfo);
+            if (result)
+            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Map To Teles Enterprise", null, enterpriseAccountMappingInfo);
+            return result;
 
         }
         public Dictionary<dynamic, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)

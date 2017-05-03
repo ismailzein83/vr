@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Business.Provisioning
 {
-    public class ProvisioningScreenedNumbersRuntimeSettings : AccountProvisioner
+    public class ProvisionAccountRuntimeSettings : AccountProvisioner
     {
         TelesEnterpriseManager _telesEnterpriseManager = new TelesEnterpriseManager();
         AccountBEManager _accountBEManager = new AccountBEManager();
@@ -16,12 +16,12 @@ namespace Retail.Teles.Business.Provisioning
         public string EnterpriseName { get; set; }
         public override void Execute(IAccountProvisioningContext context)
         {
-            var definitionSettings = context.DefinitionSettings as ProvisioningScreenedNumbersDefinitionSettings;
+            var definitionSettings = context.DefinitionSettings as ProvisionAccountDefinitionSettings;
             if (definitionSettings == null)
                 throw new NullReferenceException("definitionSettings");
             CreateEnterprise(definitionSettings,context.AccountBEDefinitionId, context.AccountId);
         }
-        private void CreateEnterprise(ProvisioningScreenedNumbersDefinitionSettings definitionSettings,Guid accountBEDefinitionId,long accountId )
+        private void CreateEnterprise(ProvisionAccountDefinitionSettings definitionSettings,Guid accountBEDefinitionId,long accountId )
         {
             Account account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
             Enterprise enterprise = new Enterprise
@@ -36,10 +36,12 @@ namespace Retail.Teles.Business.Provisioning
                 maxBusinessTrunkCalls = definitionSettings.EnterpriseMaxBusinessTrunkCalls,
                 maxUsers = definitionSettings.EnterpriseMaxUsers,
             };
-            int enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, definitionSettings.CentrexFeatSet, Vanrise.Common.Serializer.Serialize(enterprise));
+            var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, definitionSettings.CentrexFeatSet, enterprise);
+
+            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId);
             CreateSites(definitionSettings, enterpriseId,accountBEDefinitionId, accountId);
         }
-        private void CreateSites(ProvisioningScreenedNumbersDefinitionSettings definitionSettings, int enterpriseId, Guid accountBEDefinitionId,long accountId)
+        private void CreateSites(ProvisionAccountDefinitionSettings definitionSettings, dynamic enterpriseId, Guid accountBEDefinitionId,long accountId)
         {
             var sites = _accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId, false);
             if(sites != null)
@@ -62,13 +64,13 @@ namespace Retail.Teles.Business.Provisioning
                         registrarEnabled = true,
                         ringBackUri = "ringback",
                     };
-                    int siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId,definitionSettings.CentrexFeatSet, Vanrise.Common.Serializer.Serialize(newsite));
+                    dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, definitionSettings.CentrexFeatSet, newsite);
                     CreateScreendedNumbers(definitionSettings, site.AccountId,siteId);
                 }
             }
         }
 
-        private void CreateScreendedNumbers(ProvisioningScreenedNumbersDefinitionSettings definitionSettings,long siteAccountId,int siteId)
+        private void CreateScreendedNumbers(ProvisionAccountDefinitionSettings definitionSettings, long siteAccountId, dynamic siteId)
         {
            var dids = _didManager.GetDIDsByParentId(siteAccountId.ToString(),DateTime.Now);
             if(dids != null)
@@ -85,11 +87,11 @@ namespace Retail.Teles.Business.Provisioning
                         netNumber = true,
                         type = "FIXED_NETWORK",
                     };
-                    _telesEnterpriseManager.CreateScreenedNumber(definitionSettings.VRConnectionId,siteId,Vanrise.Common.Serializer.Serialize(screenedNumber));
+                    _telesEnterpriseManager.CreateScreenedNumber(definitionSettings.VRConnectionId, siteId, screenedNumber);
                 }
             }
         }
-        private class Enterprise
+        public class Enterprise
         {
             public string name { get; set; }
             public string description { get; set; }
@@ -101,7 +103,7 @@ namespace Retail.Teles.Business.Provisioning
             public int maxBusinessTrunkCalls { get; set; }
             public int maxUsers { get; set; }
         }
-        private class Site
+        public class Site
         {
             public string name { get; set; }
             public string description { get; set; }
@@ -118,7 +120,7 @@ namespace Retail.Teles.Business.Provisioning
             public bool presenceEnabled { get; set; }
 
         }
-         private class ScreenedNumber
+        public class ScreenedNumber
         {
             public string cc { get; set; }
             public string sn { get; set; }
