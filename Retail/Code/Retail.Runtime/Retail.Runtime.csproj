@@ -622,6 +622,34 @@
       <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
       <Name>Retail.Ringo.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.BP.Activities\Retail.Cost.BP.Activities.csproj">
+      <Project>{004efc23-3577-4d54-b935-901ca21c4a4f}</Project>
+      <Name>Retail.Cost.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.BP.Arguments\Retail.Cost.BP.Arguments.csproj">
+      <Project>{af85b6f6-461d-477d-8e5a-459fba704d8a}</Project>
+      <Name>Retail.Cost.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.BP\Retail.Cost.BP.csproj">
+      <Project>{0997fa79-93ef-4ef4-a700-e5915e09cba9}</Project>
+      <Name>Retail.Cost.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Business\Retail.Cost.Business.csproj">
+      <Project>{72d1f349-fc2a-4f5e-bf3c-6fe371790137}</Project>
+      <Name>Retail.Cost.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Data.SQL\Retail.Cost.Data.SQL.csproj">
+      <Project>{ce3db7e6-a8af-4ab6-a83e-05e95cd6de58}</Project>
+      <Name>Retail.Cost.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Data\Retail.Cost.Data.csproj">
+      <Project>{2e3d5dc7-5e87-4196-bf49-168f5470a319}</Project>
+      <Name>Retail.Cost.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Entities\Retail.Cost.Entities.csproj">
+      <Project>{84a54068-1858-4009-8687-5aab7e7b8901}</Project>
+      <Name>Retail.Cost.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
       <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
       <Name>Retail.Data.Entities</Name>

@@ -691,6 +691,26 @@
       <Project>{47686853-e160-48ec-99bc-b81088ad84e3}</Project>
       <Name>Retail.BusinessEntity.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Business\Retail.Cost.Business.csproj">
+      <Project>{72d1f349-fc2a-4f5e-bf3c-6fe371790137}</Project>
+      <Name>Retail.Cost.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Data.SQL\Retail.Cost.Data.SQL.csproj">
+      <Project>{ce3db7e6-a8af-4ab6-a83e-05e95cd6de58}</Project>
+      <Name>Retail.Cost.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Data\Retail.Cost.Data.csproj">
+      <Project>{2e3d5dc7-5e87-4196-bf49-168f5470a319}</Project>
+      <Name>Retail.Cost.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Entities\Retail.Cost.Entities.csproj">
+      <Project>{84a54068-1858-4009-8687-5aab7e7b8901}</Project>
+      <Name>Retail.Cost.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Web\Retail.Cost.Web.csproj">
+      <Project>{2f04a10e-321f-4cbf-9b0e-9f55c017db59}</Project>
+      <Name>Retail.Cost.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
       <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
       <Name>Retail.Data.Entities</Name>

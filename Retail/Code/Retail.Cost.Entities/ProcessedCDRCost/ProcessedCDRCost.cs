@@ -16,10 +16,10 @@ namespace Retail.Cost.Entities
 
         public string CDPN { get; set; }
 
-        public double DurationInSeconds { get; set; }
+        public decimal DurationInSeconds { get; set; }
 
-        public double Rate { get; set; }
+        public decimal Rate { get; set; }
 
-        public double Amount { get; set; }
+        public decimal? Amount { get; set; }
     }
 }

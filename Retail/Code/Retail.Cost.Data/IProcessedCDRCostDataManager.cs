@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Retail.Cost.Data
 {
-    public interface IProcessedCDRCostDataManager //: IDataManager
+    public interface IProcessedCDRCostDataManager : IDataManager
     {
-        //public List<ProcessedCDRCost> GetProcessedCDRCostByCDPNs(List<CDRCostBatchRequest> cdrCostBatchRequests);
+        List<ProcessedCDRCost> GetProcessedCDRCostByCDPNs(CDRCostBatchRequest cdrCostBatchRequests);
     }
 }

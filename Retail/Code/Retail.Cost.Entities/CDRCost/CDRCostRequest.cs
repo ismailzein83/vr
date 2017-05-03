@@ -8,7 +8,7 @@ namespace Retail.Cost.Entities
 {
     public class CDRCostRequest
     {
-        public object OriginalCDR { get; set; }
+        public dynamic OriginalCDR { get; set; }
 
         public DateTime AttemptDateTime { get; set; }
 

@@ -10,10 +10,10 @@ namespace Retail.Cost.Entities
     {
         public CDRCostRequest Request { get; set; }
 
-        public decimal CostAmount { get; set; }
-
         public decimal CostRate { get; set; }
 
-        public int CurrencyId { get; set; }
+        public decimal? CostAmount { get; set; }
+
+        //public int CurrencyId { get; set; }
     }
 }
