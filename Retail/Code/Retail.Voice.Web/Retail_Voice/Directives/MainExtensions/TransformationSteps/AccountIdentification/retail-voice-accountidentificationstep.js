@@ -44,6 +44,12 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
             var calledNumberDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             //Output Fields
+            var isCallingAccountOnNetDirectiveReadyAPI;
+            var isCallingAccountOnNetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var isCalledAccountOnNetDirectiveReadyAPI;
+            var isCalledAccountOnNetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var callingAccountIdDirectiveReadyAPI;
             var callingAccountIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -58,18 +64,24 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
                     rawCDRDirectiveReadyAPI = api;
                     rawCDRDirectiveReadyPromiseDeferred.resolve();
                 };
-
                 $scope.scopeModel.onCallingNumberReady = function (api) {
                     callingNumberDirectiveReadyAPI = api;
                     callingNumberDirectiveReadyPromiseDeferred.resolve();
                 };
-
                 $scope.scopeModel.onCalledNumberReady = function (api) {
                     calledNumberDirectiveReadyAPI = api;
                     calledNumberDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 //Output
+                $scope.scopeModel.IsCallingAccountOnNet = function (api) {
+                    isCallingAccountOnNetDirectiveReadyAPI = api;
+                    isCallingAccountOnNetDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.IsCalledAccountOnNet = function (api) {
+                    isCalledAccountOnNetDirectiveReadyAPI = api;
+                    isCalledAccountOnNetDirectiveReadyPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onCallingAccountIdReady = function (api) {
                     callingAccountIdDirectiveReadyAPI = api;
                     callingAccountIdDirectiveReadyPromiseDeferred.resolve();
@@ -78,6 +90,8 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
                     calledAccountIdDirectiveReadyAPI = api;
                     calledAccountIdDirectiveReadyPromiseDeferred.resolve();
                 };
+
+
                 defineAPI();
             }
             function defineAPI() {
@@ -102,6 +116,14 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
                     promises.push(calledNumberDirectivePromiseDeferred.promise);
 
                     //Output
+                    //Loading IsCallingAccountOnNet Directive
+                    var isCallingAccountOnNetDirectivePromiseDeferred = getIsCallingAccountOnNetDirectivePromiseDeferred();
+                    promises.push(isCallingAccountOnNetDirectivePromiseDeferred.promise);
+
+                    //Loading IsCalledAccountOnNet Directive
+                    var isCalledAccountOnNetDirectivePromiseDeferred = getIsCalledAccountOnNetDirectivePromiseDeferred();
+                    promises.push(isCalledAccountOnNetDirectivePromiseDeferred.promise);
+
                     //Loading CallingAccountId Directive
                     var callingAccountIdDirectivePromiseDeferred = getCallingAccountIdDirectivePromiseDeferred();
                     promises.push(callingAccountIdDirectivePromiseDeferred.promise);
@@ -110,7 +132,7 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
                     var calledAccountIdDirectivePromiseDeferred = getCalledAccountIdDirectivePromiseDeferred();
                     promises.push(calledAccountIdDirectivePromiseDeferred.promise);
 
-                    
+
                     function getRawCDRDirectiveLoadPromiseDeferred() {
                         var rawCDRDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -155,8 +177,36 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
 
                         return calledNumberDirectiveLoadPromiseDeferred;
                     }
-                    
-                    
+
+                    function getIsCallingAccountOnNetDirectivePromiseDeferred() {
+                        var isCallingAccountOnNetDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        isCallingAccountOnNetDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var isCallingAccountOnNetPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                isCallingAccountOnNetPayload.selectedRecords = payload.stepDetails.IsCallingAccountOnNet;
+
+                            VRUIUtilsService.callDirectiveLoad(isCallingAccountOnNetDirectiveReadyAPI, isCallingAccountOnNetPayload, isCallingAccountOnNetDirectiveLoadPromiseDeferred);
+                        });
+
+                        return isCallingAccountOnNetDirectiveLoadPromiseDeferred;
+                    }
+
+                    function getIsCalledAccountOnNetDirectivePromiseDeferred() {
+                        var isCalledAccountOnNetDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        isCalledAccountOnNetDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var isCalledAccountOnNetPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                isCalledAccountOnNetPayload.selectedRecords = payload.stepDetails.IsCalledAccountOnNet;
+
+                            VRUIUtilsService.callDirectiveLoad(isCalledAccountOnNetDirectiveReadyAPI, isCalledAccountOnNetPayload, isCalledAccountOnNetDirectiveLoadPromiseDeferred);
+                        });
+
+                        return isCalledAccountOnNetDirectiveLoadPromiseDeferred;
+                    }
 
                     function getCallingAccountIdDirectivePromiseDeferred() {
                         var callingAccountIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -187,6 +237,7 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
 
                         return calledAccountIdDirectiveLoadPromiseDeferred;
                     }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -196,6 +247,8 @@ app.directive('retailVoiceAccountidentificationstep', ['UtilsService', 'VRUIUtil
                         RawCDR: rawCDRDirectiveReadyAPI.getData(),
                         CallingNumber: callingNumberDirectiveReadyAPI.getData(),
                         CalledNumber: calledNumberDirectiveReadyAPI.getData(),
+                        IsCallingAccountOnNet: isCallingAccountOnNetDirectiveReadyAPI.getData(),
+                        IsCalledAccountOnNet: isCalledAccountOnNetDirectiveReadyAPI.getData(),
                         CallingAccountId: callingAccountIdDirectiveReadyAPI.getData(),
                         CalledAccountId: calledAccountIdDirectiveReadyAPI.getData()
                     };

@@ -40,9 +40,6 @@
                 $scope.scopeModel.hasAddPermission = true; //TODO: Security
 
                 $scope.scopeModel.onGridReady = function (api) {
-
-                    console.log(api);
-
                     gridAPI = api;
                     defineAPI();
                 };

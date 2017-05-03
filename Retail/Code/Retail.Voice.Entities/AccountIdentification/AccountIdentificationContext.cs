@@ -10,6 +10,5 @@ namespace Retail.Voice.Entities
         public bool IsCalledAccountOnNet { get; set; }
         public long? CallingAccountId { get; set; }
         public long? CalledAccountId { get; set; }
-
     }
 }

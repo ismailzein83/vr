@@ -14,6 +14,12 @@
 <vr-section title="Output Fields">
     <vr-row>
         <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.IsCallingAccountOnNet" label="Is Calling Account OnNet"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.IsCalledAccountOnNet" label="Is Called Account OnNet"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
             <vr-genericdata-expressionbuilder on-ready="scopeModel.onCallingAccountIdReady" label="Calling Account Id"></vr-genericdata-expressionbuilder>
         </vr-columns>
         <vr-columns width="fullrow">

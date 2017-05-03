@@ -121,6 +121,18 @@ app.directive('retailVoiceAccountidentificationstepPreview', ['UtilsService', 'V
             }
             function fillOutputFieldsArray(data, array) {
 
+                if (data.IsCallingAccountOnNet != undefined) {
+                    array.push({
+                        FieldName: data.IsCallingAccountOnNet,
+                        Value: "Is Calling Account OnNet"
+                    });
+                }
+                if (data.IsCalledAccountOnNet != undefined) {
+                    array.push({
+                        FieldName: data.IsCalledAccountOnNet,
+                        Value: "Is Called Account OnNet"
+                    });
+                }
                 if (data.CallingAccountId != undefined) {
                     array.push({
                         FieldName: data.CallingAccountId,

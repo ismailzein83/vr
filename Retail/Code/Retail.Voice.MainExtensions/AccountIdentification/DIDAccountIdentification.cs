@@ -10,20 +10,20 @@ namespace Retail.Voice.MainExtensions
     public class DIDAccountIdentification : AccountIdentification
     {
         public override Guid ConfigId { get { return new Guid("1A73D2E9-1419-4B41-AD2B-6AB04930466B"); } }
-
+         
         public override void Execute(IAccountIdentificationContext context)
         {
-            ConfigManager beConfigManager = new ConfigManager();
-            Guid accountDIDRelationDefinitionID = beConfigManager.GetAccountDIDRelationDefinitionId();
             DIDManager didManager = new DIDManager();
-
             BEParentChildRelationManager beParentChildRelationManager = new BEParentChildRelationManager();
+            Guid accountDIDRelationDefinitionID = new ConfigManager().GetAccountDIDRelationDefinitionId();
+
             long? callingAccountId;
             if (IsAccountOnNet(context.CallingNumber, accountDIDRelationDefinitionID, context.RawCDR.AttemptDateTime, didManager, beParentChildRelationManager, out callingAccountId))
             {
                 context.IsCallingAccountOnNet = true;
                 context.CallingAccountId = callingAccountId;
             }
+
             long? calledAccountId;
             if (IsAccountOnNet(context.CalledNumber, accountDIDRelationDefinitionID, context.RawCDR.AttemptDateTime, didManager, beParentChildRelationManager, out calledAccountId))
             {

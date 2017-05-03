@@ -11,8 +11,10 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         public string RawCDR { get; set; }
         public string CallingNumber { get; set; }
         public string CalledNumber { get; set; }
-
+        
         //Output Fields
+        public string IsCallingAccountOnNet { get; set; }
+        public string IsCalledAccountOnNet { get; set; }
         public string CallingAccountId { get; set; }
         public string CalledAccountId { get; set; }
 
@@ -31,6 +33,12 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.CalledNumber = {1};", accountIdentificationContext, this.CalledNumber);
 
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Execute({1});", accountIdentification, accountIdentificationContext);
+
+            if (this.IsCallingAccountOnNet != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.IsCallingAccountOnNet;", this.IsCallingAccountOnNet, accountIdentificationContext);
+
+            if (this.IsCalledAccountOnNet != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.IsCalledAccountOnNet;", this.IsCalledAccountOnNet, accountIdentificationContext);
 
             if (this.CallingAccountId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CallingAccountId;", this.CallingAccountId, accountIdentificationContext);
