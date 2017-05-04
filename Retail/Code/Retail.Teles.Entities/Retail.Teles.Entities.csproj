@@ -54,6 +54,7 @@
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsAccountState.cs" />
     <Compile Include="RoutingGroupCondition.cs" />
     <Compile Include="RoutingGroupConditionConfig.cs" />
+    <Compile Include="SiteAccountMappingInfo.cs" />
     <Compile Include="TelesEnterpriseFilter.cs" />
     <Compile Include="TelesEnterpriseInfo.cs" />
   </ItemGroup>

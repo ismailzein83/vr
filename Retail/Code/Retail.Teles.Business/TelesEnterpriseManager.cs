@@ -168,6 +168,18 @@ namespace Retail.Teles.Business
             return result;
 
         }
+        public bool TryMapSiteToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesSiteId)
+        {
+
+            SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesSiteId = telesSiteId };
+
+            var result = _accountBEManager.UpdateAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId,
+                siteAccountMappingInfo);
+            if (result)
+                _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Map To Teles Site", null, siteAccountMappingInfo);
+            return result;
+
+        }
         public Dictionary<dynamic, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}", accountBEDefinitionId), accountBEDefinitionId, () =>

@@ -65,6 +65,7 @@ namespace Retail.Teles.Business.Provisioning
                         ringBackUri = "ringback",
                     };
                     dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, definitionSettings.CentrexFeatSet, newsite);
+                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId);
                     CreateScreendedNumbers(definitionSettings, site.AccountId,siteId);
                 }
             }
