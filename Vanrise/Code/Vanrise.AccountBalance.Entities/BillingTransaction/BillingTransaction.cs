@@ -19,6 +19,23 @@ namespace Vanrise.AccountBalance.Entities
         public string Notes { get; set; }
         public string Reference { get; set; }
         public bool IsBalanceUpdated { get; set; }
+
+        public BillingTransactionSettings Settings { get; set; }
+
         public string SourceId { get; set; }
+    }
+
+    public class BillingTransactionSettings
+    {
+        public List<BillingTransactionUsageOverride> UsageOverrides { get; set; }
+    }
+
+    public class BillingTransactionUsageOverride
+    {
+        public Guid TransactionTypeId { get; set; }
+
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
     }
 }
