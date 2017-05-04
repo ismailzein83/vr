@@ -109,8 +109,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
                 ctrl.rotateHeader = true;
-                ctrl.el = $element;
-
                 ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'nowrap' };
 
                 if ($attrs.rotate == undefined) {
@@ -122,7 +120,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 var actionsAttribute = hasActionMenu ? $scope.$parent.$eval($attrs.menuactions) : undefined;
                 var enableDraggableRow = $attrs.enabledraggablerow != undefined ? $scope.$parent.$eval($attrs.enabledraggablerow) : false;
                 var deleteRowFunction = $attrs.ondeleterow != undefined ? $scope.$parent.$eval($attrs.ondeleterow) : undefined;
-                var dataGridObj = new DataGrid(ctrl, $scope, $attrs);
+                var dataGridObj = new DataGrid(ctrl, $scope, $attrs, $element);
                 dataGridObj.initializeController();
                 if (retrieveDataFunction != undefined)
                     dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType);
@@ -134,6 +132,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 dataGridObj.defineDeleteRowAction(deleteRowFunction);
                 dataGridObj.calculateDataColumnsSectionWidth();
                 dataGridObj.defineAPI();
+                dataGridObj = null;
 
             },
             controllerAs: 'ctrl',
@@ -142,7 +141,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 element.append('<vr-datagridrows></vr-datagridrows>');
 
                 return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {                      
                         var ctrl = $scope.ctrl;
                         if (iAttrs.pagersettings != undefined) {
                             ctrl.pagerSettings = $scope.$parent.$eval(iAttrs.pagersettings);
@@ -181,7 +180,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
     + '</div>';
 
 
-        function DataGrid(ctrl, scope, attrs) {
+        function DataGrid(ctrl, scope, attrs ,elem) {
 
             var gridApi = {};
             var maxHeight;
@@ -861,8 +860,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                     if (pagingOnScrollEnabled) {
                         // to rigth padding in old data loading methode in bi
-                        var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                        if (ctrl.datasource.length < 24) {
+                        var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
+                        var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+                        var mh = $(div).css('max-height');
+                        mh = parseInt(mh.substring(0, mh.length - 1));
+                        if (ctrl.datasource.length * 25 < mh) {
                             $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                             ctrl.headerStyle = {
                                 "padding-right": "0px"
@@ -1020,7 +1022,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                                 if (ctrl.datasource.length - initialLength < getPageSize())
                                     stopPagingOnScroll = true;
                                 ctrl.isLoadingMoreData = false;
-                                var div = $(ctrl.el).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
+                                var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                                 var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
                                 if (hasVerticalScrollbar) {
                                     $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
@@ -1043,7 +1045,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
             }
             function isInModal() {
-                return ($(ctrl.el).find("#gridBodyContainer").parents('.modal-body').length > 0);
+                return ($(elem).find("#gridBodyContainer").parents('.modal-body').length > 0);
             }
 
             function getPageSize() {
