@@ -146,7 +146,6 @@ namespace Retail.Teles.Business
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(input.AccountBEDefinitionId);
             }
             else
             {
@@ -164,7 +163,12 @@ namespace Retail.Teles.Business
             var result = _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
             if (result)
-            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Map To Teles Enterprise", null, enterpriseAccountMappingInfo);
+            {
+                _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Map To Teles Enterprise", null, enterpriseAccountMappingInfo);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(accountBEDefinitionId);
+
+            }
             return result;
 
         }
@@ -176,7 +180,10 @@ namespace Retail.Teles.Business
             var result = _accountBEManager.UpdateAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId,
                 siteAccountMappingInfo);
             if (result)
+            {
                 _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Map To Teles Site", null, siteAccountMappingInfo);
+
+            }
             return result;
 
         }
