@@ -248,6 +248,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrCommonOverriddenconfigurationOverriddensettings', OverriddenSettings);
+    app.directive('vrCommonOverriddenconfigurationBedefinition', OverriddenSettings);
 
 })(app);
