@@ -74,7 +74,7 @@ namespace Retail.BusinessEntity.Entities
 
     public interface IOperatorSetting
     {
-        bool IsMobile { get; }
+        bool IsMobileOperator { get; }
     }
 
     public class PaymentMethod

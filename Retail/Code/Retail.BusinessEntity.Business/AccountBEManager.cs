@@ -199,7 +199,7 @@ namespace Retail.BusinessEntity.Business
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
-           
+
             return updateOperationOutput;
         }
         public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountBEDefinitionId, string nameFilter, AccountFilter filter)
@@ -456,6 +456,23 @@ namespace Retail.BusinessEntity.Business
             return accountGenericField.GetValue(new AccountGenericFieldContext(account));
         }
 
+        public bool IsMobileOperator(Guid accountBEDefinitionId, long accountId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+
+            if (account.Settings != null && account.Settings.Parts != null)
+            {
+                foreach (var part in account.Settings.Parts)
+                {
+                    IOperatorSetting operatorSetting = part.Value.Settings as IOperatorSetting;
+                    if (operatorSetting != null)
+                        return operatorSetting.IsMobileOperator;
+                }
+            }
+            return false;
+        }
+
         #endregion
 
         #region ExtendedSettings
@@ -512,7 +529,7 @@ namespace Retail.BusinessEntity.Business
             else
                 return default(T);
         }
-        public void TrackAndLogObjectCustomAction(Guid accountBEDefinitionId, long accountId, string action,string actionDescription, Object technicalInfo)
+        public void TrackAndLogObjectCustomAction(Guid accountBEDefinitionId, long accountId, string action, string actionDescription, Object technicalInfo)
         {
             VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), action, true, GetAccount(accountBEDefinitionId, accountId), actionDescription, technicalInfo);
         }
@@ -580,9 +597,9 @@ namespace Retail.BusinessEntity.Business
         {
             ValidateAccountToEdit(accountToEdit);
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            if( dataManager.Update(accountToEdit))
+            if (dataManager.Update(accountToEdit))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);                
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);
                 account = GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountBELoggableEntity(accountToEdit.AccountBEDefinitionId), account);
                 return true;
@@ -611,7 +628,7 @@ namespace Retail.BusinessEntity.Business
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
 
-            if(dataManager.Insert(accountToInsert, out accountId))
+            if (dataManager.Insert(accountToInsert, out accountId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
@@ -680,7 +697,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 var accountBEDefinitionSettings = new AccountBEDefinitionManager().GetAccountBEDefinitionSettings(_query.AccountBEDefinitionId);
                 if (accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions != null)
                 {

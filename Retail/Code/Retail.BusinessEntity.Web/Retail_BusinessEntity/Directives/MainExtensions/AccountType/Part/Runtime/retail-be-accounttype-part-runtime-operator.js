@@ -37,13 +37,13 @@ app.directive('retailBeAccounttypePartRuntimeOperator', ["UtilsService", "VRUIUt
                         partSettings = payload.partSettings;
                     }
 
-                    $scope.scopeModel.isMobile = partSettings != undefined ? partSettings.IsMobile : undefined;
+                    $scope.scopeModel.isMobileOperator = partSettings != undefined ? partSettings.IsMobileOperator : undefined;
                 };
 
                 api.getData = function () {
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartOperatorSetting, Retail.BusinessEntity.MainExtensions',
-                        IsMobile: $scope.scopeModel.isMobile
+                        IsMobileOperator: $scope.scopeModel.isMobileOperator
                     };
                 };
 

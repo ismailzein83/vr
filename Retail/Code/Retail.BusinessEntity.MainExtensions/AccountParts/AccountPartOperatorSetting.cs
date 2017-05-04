@@ -11,6 +11,15 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     {
         public override Guid ConfigId { get { return new Guid("A2F223CF-3570-4469-BFB6-4A918ACF016B"); } }
 
-        public bool IsMobile { get; set; }
+        public bool IsMobileOperator { get; set; }
+
+        public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            switch (context.FieldName)
+            {
+                case "MobileOperator": return this.IsMobileOperator;
+                default: return null;
+            }
+        }
     }
 }

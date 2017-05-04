@@ -18,23 +18,24 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {
             #region Runtime
-            //ExecuteRuntime executeRuntime = new ExecuteRuntime();
-            //executeRuntime.Runtime_Main();
+            //ExecuteRuntime.Runtime_Main();
             #endregion
 
             #region RetailAccountPropertyEvaluatorTask
-            //RetailAccountPropertyEvaluatorTask retailAccountPropertyEvaluatorTask = new RetailAccountPropertyEvaluatorTask();
-            //retailAccountPropertyEvaluatorTask.RetailAccountPropertyEvaluator_Main();
+            //RetailAccountPropertyEvaluatorTask.RetailAccountPropertyEvaluator_Main();
             #endregion
 
-            //accountManager.GetAccountGridColumnAttributes();
-            //accountManager.GetAccountViewRuntimeEditors();
+            //AccountBEManager accountBEManager = new AccountBEManager();
+            //bool isPulDorMobileOperator =  accountBEManager.IsMobileOperator(new Guid("a5c1852b-2c92-4d66-b959-e3f49304338a"), 421538);
+            //bool isOperator2MobileOperator = accountBEManager.IsMobileOperator(new Guid("a5c1852b-2c92-4d66-b959-e3f49304338a"), 422086);
+            //bool isDistMobileOperator = accountBEManager.IsMobileOperator(new Guid("2f57cde2-033e-48f9-bd33-03113d77c9ac"), 418094);
+            //bool isErrorMobileOperator = accountBEManager.IsMobileOperator(new Guid("a5c1852b-2c92-4d66-b959-e3f49304338a"), 418094); 
         }
     }
 
     public class ExecuteRuntime
     {
-        public void Runtime_Main()
+        public static void Runtime_Main()
         {
             var runtimeServices = new List<RuntimeService>();
 
@@ -71,7 +72,7 @@ namespace Retail.Runtime.Tasks
 
     public class RetailAccountPropertyEvaluatorTask
     {
-        public void RetailAccountPropertyEvaluator_Main()
+        public static void RetailAccountPropertyEvaluator_Main()
         {
             Console.WriteLine("RetailAccountPropertyEvaluator has started!!");
 
@@ -105,7 +106,6 @@ namespace Retail.Runtime.Tasks
             Console.ReadLine();
         }
     }
-
 }
 
 
