@@ -14,5 +14,6 @@ namespace Vanrise.AccountBalance.Entities
         public decimal? Debit { get; set; }
         public decimal? Credit { get; set; }
         public decimal? Balance { get; set; }
+        public string BalanceFlagDescription { get; set; }
     }
 }

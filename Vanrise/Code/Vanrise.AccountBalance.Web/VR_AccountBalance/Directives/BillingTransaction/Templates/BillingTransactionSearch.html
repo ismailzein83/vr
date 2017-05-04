@@ -12,6 +12,7 @@
         <div class="pull-right">
             <vr-label isvalue>Current Balance:</vr-label>
             <vr-label>{{scopeModel.balance |  vrtextOrNumber : 2}}</vr-label>
+            <vr-label ng-show="scopeModel.balance != undefined">({{scopeModel.balanceFlagDescription}})</vr-label>
             <vr-label isvalue>{{scopeModel.currency}}</vr-label>
         </div>
     </vr-columns>

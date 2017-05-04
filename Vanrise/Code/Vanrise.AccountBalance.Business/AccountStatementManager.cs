@@ -47,7 +47,8 @@ namespace Vanrise.AccountBalance.Business
                     ResultKey = input.ResultKey,
                     Data =  allRecords.VRGetPage(input),
                     TotalCount = allRecords.Count(),
-                    CurrentBalance = _currenctBalance,
+                    CurrentBalance = Math.Abs(_currenctBalance),
+                    BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(_currenctBalance),
                     Currency = _currencyName,
                     TotalCredit = _totalCredit,
                     TotalDebit = _totalDebit
@@ -56,6 +57,7 @@ namespace Vanrise.AccountBalance.Business
             }
             private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int currencyId)
             {
+                
                 CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
                 BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
 
@@ -120,16 +122,17 @@ namespace Vanrise.AccountBalance.Business
                             accountStatementItem.Debit = amount;
                             _totalDebit += amount;
                         }
-                        accountStatementItem.Balance = balance;
-
+                        accountStatementItem.Balance = Math.Abs(balance);
+                        accountStatementItem.BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(balance);
                         accountStatementItems.Add(accountStatementItem);
                     }
                    
                 }
                 accountStatementItems.Insert(0,new AccountStatementItem
                 {
-                    Balance = previousBalance,
+                    Balance = Math.Abs(previousBalance) ,
                     Description = "Balance brought forward",
+                    BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(previousBalance)
                 });
                 return accountStatementItems;
 

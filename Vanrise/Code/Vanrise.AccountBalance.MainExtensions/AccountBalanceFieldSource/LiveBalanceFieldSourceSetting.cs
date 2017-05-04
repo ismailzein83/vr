@@ -46,6 +46,11 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
                     Name = "Actions",
                     Title = "Actions",
                     FieldType = new FieldTextType(),
+                },
+                 new AccountBalanceFieldDefinition { 
+                    Name = "BalanceFlagDescription",
+                    Title = "Balance Flag Description",
+                    FieldType = new FieldTextType(),
                 }
             };
             return accountBalanceFieldDefinitions;
@@ -66,10 +71,11 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
             switch(context.FieldName)
             {
                 case "ID": return context.AccountBalance.AccountBalanceId;
-                case "CurrentBalance": return context.AccountBalance.CurrentBalance;
+                case "CurrentBalance": return Math.Abs(context.AccountBalance.CurrentBalance);
                 case "CurrencyId": return context.AccountBalance.CurrencyId;
                 case "AccountName": return new AccountManager().GetAccountName(context.AccountBalance.AccountTypeId, context.AccountBalance.AccountId);
                 case "Actions": return vrBalanceAlertRuleManager.GetBalanceAlertRuleSettingDescription(context.AccountBalance.AlertRuleID);
+                case "BalanceFlagDescription": return LiveBalanceManager.GetBalanceFlagDescription(context.AccountBalance.CurrentBalance);
                 default: return null;
             }
         }

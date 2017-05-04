@@ -10,5 +10,6 @@ namespace Vanrise.AccountBalance.Entities
     {
         public string CurrencyDescription { get; set; }
         public decimal CurrentBalance { get; set; }
+        public string BalanceFlagDescription { get; set; }
     }
 }

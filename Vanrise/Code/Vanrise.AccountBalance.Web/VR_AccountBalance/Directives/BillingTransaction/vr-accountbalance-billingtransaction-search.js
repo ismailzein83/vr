@@ -125,6 +125,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 if (response) {
                     $scope.scopeModel.balance = response.CurrentBalance;
                     $scope.scopeModel.currency = response.CurrencyDescription;
+                    $scope.scopeModel.balanceFlagDescription = response.BalanceFlagDescription;
                 }
             });
         }

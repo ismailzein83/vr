@@ -42,6 +42,8 @@ app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_Accoun
                                 ctrl.currentBalance = response.CurrentBalance;
                                 ctrl.totalDebit = response.TotalDebit;
                                 ctrl.totalCredit = response.TotalCredit;
+                                ctrl.balanceFlagDescription = response.BalanceFlagDescription;
+
                             }
                             
                         }

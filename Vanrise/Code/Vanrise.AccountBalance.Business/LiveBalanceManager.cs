@@ -22,6 +22,10 @@ namespace Vanrise.AccountBalance.Business
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             return dataManager.GetLiveBalance(accountTypeId, accountId);
         }
+        public static string  GetBalanceFlagDescription(decimal balanceValue)
+        {
+            return balanceValue > 0 ? "Credit" : "Debit";
+        }
         public bool CheckIfAccountHasTransactions(Guid accountTypeId, String accountId)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
@@ -36,7 +40,8 @@ namespace Vanrise.AccountBalance.Business
             return new CurrentAccountBalance
             {
                 CurrencyDescription = currencyManager.GetCurrencyName(liveBalance.CurrencyId),
-                CurrentBalance = liveBalance.CurrentBalance
+                CurrentBalance = Math.Abs(liveBalance.CurrentBalance),
+                BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(liveBalance.CurrentBalance)
             };
         }
 
@@ -53,7 +58,7 @@ namespace Vanrise.AccountBalance.Business
         private AccountBalanceDetail AccountBalanceDetailMapper(AccountBalanceEntity accountBalance)
         {
             return new AccountBalanceDetail {
-                Entity = accountBalance
+                Entity = accountBalance,
             };
          
         }
