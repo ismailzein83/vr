@@ -63,6 +63,7 @@ set identity_insert [BI].[SchemaConfiguration] off;
 ----------------------------------------------------------------------------------------------------
 end
 
+delete from[common].[ExtensionConfiguration] where ID='84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36'--'WhS_Sales_CostCalculationMethod_MarginPercentage'
 --[common].[ExtensionConfiguration]-------------------------------------------------------------------
 begin
 set nocount on;
@@ -123,7 +124,7 @@ as (select * from (values
 ('08F128D1-67D6-45BD-B0DA-B6FA535FFD99','Profile','Profile','VR_Common_ObjectType'															,'{"Editor":"vr-whs-be-profileobjecttype", "PropertyEvaluatorExtensionType": "WhS_BE_Profile_PropertyEvaluator"}'),
 
 ('3E5AF0D9-AA44-4F38-9ACD-2368416C6044','Fixed','Fixed','WhS_Sales_SellingRuleSettingsType'														,'{"Editor":"vr-whs-sales-sellingrulesettings-fixed"}'),
-('84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36','WhS_Sales_CostCalculationMethod_MarginPercentage','Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}'),
+--('84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36','WhS_Sales_CostCalculationMethod_MarginPercentage','Margin Percentage','WhS_Sales_RateCalculationMethod','{"Editor":"vr-whs-sales-marginpercentageratecalculation"}'),
 ('8008678D-16D0-4026-8094-D8E7364E6F58','WhS_Sales_CostCalculationMethod_RoutePercentage','Route Percentage','WhS_Sales_CostCalculationMethod'	,'{"Editor":"vr-whs-sales-routepercentagecostcalculation"}'),
 ('04FDCF7E-BA4F-4274-8DA8-3C40DB867170','Margin','Margin','WhS_Sales_SellingRuleSettingsType'													,'{"Editor":"vr-whs-sales-sellingrulesettings-margin"}'),
 ('AD64C73F-4F20-447A-93C8-6C0FBCE85E37','WhS_Sales_CostCalculationMethod_Fixed','Fixed','WhS_Sales_RateCalculationMethod'						,'{"Editor":"vr-whs-sales-fixedratecalculation"}'),
