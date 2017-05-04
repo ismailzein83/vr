@@ -20,16 +20,17 @@ namespace Vanrise.Invoice.Business
             }
         }
         public bool ByOriginalId { get; set; }
+        public bool IsUpdateOnly { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
             InvoiceManager invoiceManager = new InvoiceManager();
-            Entities.Invoice invoice = ByOriginalId ? invoiceManager.GetInvoice((long)context.SourceBEId) : invoiceManager.GetInvoiceBySourceId(InvoiceTypeId, context.SourceBEId.ToString());
+            Entities.Invoice invoice = ByOriginalId ? invoiceManager.GetInvoice(long.Parse(context.SourceBEId.ToString())) : invoiceManager.GetInvoiceBySourceId(InvoiceTypeId, context.SourceBEId.ToString());
             if (invoice != null)
             {
                 context.TargetBE = new SourceInvoice
                 {
-                    Invoice = invoice// Serializer.Deserialize<Entities.Invoice>(Serializer.Serialize(invoice))
+                    Invoice = invoice
                 };
                 return true;
             }
@@ -38,7 +39,9 @@ namespace Vanrise.Invoice.Business
 
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
-            throw new NotImplementedException();
+            if (IsUpdateOnly)
+                return;
+            //TODO Insert Invoice
         }
 
         public override void UpdateBEs(ITargetBESynchronizerUpdateBEsContext context)

@@ -42,6 +42,7 @@ app.directive('vrInvoiceSynchronizerEditor', ['VRUIUtilsService', 'UtilsService'
                     if (payload != undefined) {
                         invoiceTypeId = payload.InvoiceTypeId;
                         $scope.scopeModel.byOriginalId = payload.ByOriginalId;
+                        $scope.scopeModel.isUpdateOnly = payload.IsUpdateOnly;
                     }
 
                     var invoiceTypeSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
@@ -62,7 +63,8 @@ app.directive('vrInvoiceSynchronizerEditor', ['VRUIUtilsService', 'UtilsService'
                     return {
                         $type: "Vanrise.Invoice.Business.InvoiceSynchronizer, Vanrise.Invoice.Business",
                         InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
-                        ByOriginalId: $scope.scopeModel.byOriginalId
+                        ByOriginalId: $scope.scopeModel.byOriginalId,
+                        IsUpdateOnly: $scope.scopeModel.isUpdateOnly
                     };
                 };
                 if (ctrl.onReady != null)

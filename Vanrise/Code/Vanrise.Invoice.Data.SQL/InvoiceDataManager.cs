@@ -94,10 +94,11 @@ namespace Vanrise.Invoice.Data.SQL
                                                                          invoice.TimeZoneOffset,
                                                                          invoice.IssueDate,
                                                                          invoice.DueDate,
-                                                                         invoice.Details,
+                                                                         Vanrise.Common.Serializer.Serialize(invoice.Details),
                                                                          invoice.PaidDate,
                                                                          invoice.LockDate,
-                                                                         invoice.Note) > 0;
+                                                                         invoice.Note,
+                                                                         invoice.SourceId) > 0;
         }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
@@ -117,7 +118,21 @@ namespace Vanrise.Invoice.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object invoiceId;
-                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, invoiceEntity.UserId, invoiceEntity.InvoiceTypeId, invoiceEntity.PartnerId, invoiceEntity.SerialNumber, invoiceEntity.FromDate, invoiceEntity.ToDate, invoiceEntity.TimeZoneId, invoiceEntity.TimeZoneOffset, invoiceEntity.IssueDate, invoiceEntity.DueDate, Vanrise.Common.Serializer.Serialize(invoiceEntity.Details), invoiceEntity.Note, invoiceIdToDelete);
+                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId,
+                                                                                       invoiceEntity.UserId,
+                                                                                       invoiceEntity.InvoiceTypeId,
+                                                                                       invoiceEntity.PartnerId,
+                                                                                       invoiceEntity.SerialNumber,
+                                                                                       invoiceEntity.FromDate,
+                                                                                       invoiceEntity.ToDate,
+                                                                                       invoiceEntity.TimeZoneId,
+                                                                                       invoiceEntity.TimeZoneOffset,
+                                                                                       invoiceEntity.IssueDate,
+                                                                                       invoiceEntity.DueDate,
+                                                                                       Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
+                                                                                       invoiceEntity.Note,
+                                                                                       invoiceIdToDelete,
+                                                                                       invoiceEntity.SourceId);
                 insertedInvoiceId = Convert.ToInt64(invoiceId);
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems((long)invoiceId, invoiceItemSets);
