@@ -9,7 +9,23 @@ namespace TOne.WhS.Sales.Business
 {
     public class RateCalculationMethodContext : IRateCalculationMethodContext
     {
-        public decimal? Cost { get; set; }
+        #region Fields / Constructors
+
+        private Func<Guid, int?> _getCostCalculationMethodIndex;
+
+        public RateCalculationMethodContext(Func<Guid, int?> getCostCalculationMethodIndex)
+        {
+            _getCostCalculationMethodIndex = getCostCalculationMethodIndex;
+        }
+
+        #endregion
+
+        public ZoneItem ZoneItem { get; set; }
+
+        public int? GetCostCalculationMethodIndex(Guid costCalculationMethodId)
+        {
+            return _getCostCalculationMethodIndex(costCalculationMethodId);
+        }
 
         public decimal? Rate { get; set; }
     }

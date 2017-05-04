@@ -24,9 +24,6 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 
         var bulkActionContext;
 
-        var costCalculationMethodSelectorAPI;
-        var costCalculationMethodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         var rateCalculationMethodSelectorAPI;
         var rateCalculationMethodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -36,17 +33,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
         function initializeController() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.costCalculationMethods = [];
             $scope.scopeModel.rateCalculationMethods = [];
-
-            $scope.scopeModel.onCostCalculationMethodSelectorReady = function (api) {
-                costCalculationMethodSelectorAPI = api;
-                costCalculationMethodSelectorReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.isCostCalculationMethodRequired = function () {
-                return (directiveAPI != undefined && directiveAPI.isCostColumnRequired());
-            };
 
             $scope.scopeModel.onRateCalculationMethodSelectorReady = function (api) {
                 rateCalculationMethodSelectorAPI = api;
@@ -68,11 +55,10 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                 WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
             };
 
-            UtilsService.waitMultiplePromises([costCalculationMethodSelectorReadyDeferred.promise, rateCalculationMethodSelectorReadyDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([rateCalculationMethodSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
         }
-
         function defineAPI() {
 
             var api = {};
@@ -81,10 +67,8 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 
                 $scope.scopeModel.isLoading = true;
 
-                costCalculationMethodSelectorAPI.clearDataSource();
                 rateCalculationMethodSelectorAPI.clearDataSource();
 
-                var costCalculationMethod;
                 var rateCalculationMethod;
 
                 if (payload != undefined) {
@@ -92,18 +76,9 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                     bulkActionContext = payload.bulkActionContext;
 
                     if (payload.bulkAction != undefined) {
-                        costCalculationMethod = payload.bulkAction.CostCalculationMethod;
                         rateCalculationMethod = payload.bulkAction.RateCalculationMethod;
                         $scope.scopeModel.beginEffectiveDate = payload.bulkAction.BED;
                     }
-
-                    if (bulkActionContext.costCalculationMethods != undefined) {
-                        for (var i = 0; i < bulkActionContext.costCalculationMethods.length; i++)
-                            $scope.scopeModel.costCalculationMethods.push(bulkActionContext.costCalculationMethods[i]);
-                    }
-
-                    if (costCalculationMethod != undefined)
-                        $scope.selectedCostCalculationMethod = UtilsService.getItemByVal($scope.scopeModel.costCalculationMethods, costCalculationMethod.ConfigId, 'ConfigId');
                 }
 
                 var promises = [];
@@ -149,7 +124,6 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
             api.getData = function () {
                 return {
                     $type: 'TOne.WhS.Sales.MainExtensions.RateBulkAction, TOne.WhS.Sales.MainExtensions',
-                    CostCalculationMethod: $scope.scopeModel.selectedCostCalculationMethod,
                     RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
                     BED: ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate) : null
                 };

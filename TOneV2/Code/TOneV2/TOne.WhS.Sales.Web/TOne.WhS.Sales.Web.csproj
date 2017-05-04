@@ -160,6 +160,7 @@
   <ItemGroup>
     <Content Include="WhS_Sales\Constants\CountrySelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
+    <Content Include="WhS_Sales\Constants\MarginRateCalculateMethodType.js" />
     <Content Include="WhS_Sales\Constants\MarginTypesEnum.js" />
     <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
     <Content Include="WhS_Sales\Constants\PeriodTypes.js" />
@@ -189,10 +190,8 @@
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\WeightedAvgCostCalculation.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-weightedavgcostcalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\FixedRateCalculationTemplate.html" />
-    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginPercentageRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\Templates\MarginRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-fixedratecalculation.js" />
-    <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-marginpercentageratecalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\RateCalculation\vr-whs-sales-marginratecalculation.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\AvgCostCalculation.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\CostColumnsTemplate.html" />

@@ -5,7 +5,8 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
     return {
         restrict: "E",
         scope: {
-        	onReady: "=",
+            onReady: "=",
+            normalColNum: '@',
         	isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
@@ -61,10 +62,6 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
                     $type: "TOne.WhS.Sales.MainExtensions.RateCalculation.FixedRateCalculationMethod, TOne.WhS.Sales.MainExtensions",
                     FixedRate: ctrl.fixedRate
                 };
-            };
-
-            api.isCostColumnRequired = function () {
-                return false;
             };
 
             api.getDescription = function () {

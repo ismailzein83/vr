@@ -1,37 +1,28 @@
 ﻿<div vr-loader="scopeModel.isLoading">
-	<div style="width: 100%; display: inline-block">
-		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
-			<vr-select on-ready="scopeModel.onCostCalculationMethodSelectorReady"
-					   label="Cost Column"
-					   datasource="scopeModel.costCalculationMethods"
-					   selectedvalues="scopeModel.selectedCostCalculationMethod"
-					   onselectionchanged="scopeModel.onBulkActionChanged"
-					   datavaluefield="ConfigId"
-					   datatextfield="Title"
-					   isrequired="scopeModel.isCostCalculationMethodRequired()">
-			</vr-select>
-		</vr-columns>
-	</div>
-	<div style="width: 100%; display: inline-block">
-		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
-			<vr-select on-ready="scopeModel.onRateCalculationMethodSelectorReady"
-					   label="Rate Calculation Method"
-					   datasource="scopeModel.rateCalculationMethods"
-					   selectedvalues="scopeModel.selectedRateCalculationMethod"
-					   onselectitem="scopeModel.onBulkActionChanged"
-					   datavaluefield="ExtensionConfigurationId"
-					   datatextfield="Title"
-					   isrequired="rateBulkActionTypeCtrl.isrequired"
-					   hideremoveicon="rateBulkActionTypeCtrl.isrequired">
-			</vr-select>
-		</vr-columns>
-		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}" vr-loader="scopeModel.isLoadingDirective">
-			<vr-directivewrapper directive="scopeModel.selectedRateCalculationMethod.Editor" on-ready="scopeModel.onDirectiveReady" isrequired="rateBulkActionTypeCtrl.isrequired"></vr-directivewrapper>
-		</vr-columns>
-	</div>
-	<div style="width: 100%; display: inline-block">
-		<vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
-			<vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" onvaluechanged="scopeModel.onBulkActionChanged"></vr-datetimepicker>
-		</vr-columns>
-	</div>
+    <div style="width: 100%; display: inline-block">
+        <vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
+            <vr-select on-ready="scopeModel.onRateCalculationMethodSelectorReady"
+                       label="Rate Calculation Method"
+                       datasource="scopeModel.rateCalculationMethods"
+                       selectedvalues="scopeModel.selectedRateCalculationMethod"
+                       onselectitem="scopeModel.onBulkActionChanged"
+                       datavaluefield="ExtensionConfigurationId"
+                       datatextfield="Title"
+                       isrequired="rateBulkActionTypeCtrl.isrequired"
+                       hideremoveicon="rateBulkActionTypeCtrl.isrequired">
+            </vr-select>
+        </vr-columns>
+        <div vr-loader="scopeModel.isLoadingDirective">
+            <vr-directivewrapper directive="scopeModel.selectedRateCalculationMethod.Editor"
+                                 on-ready="scopeModel.onDirectiveReady"
+                                 normal-col-num="{{rateBulkActionTypeCtrl.normalColNum}}"
+                                 isrequired="rateBulkActionTypeCtrl.isrequired">
+            </vr-directivewrapper>
+        </div>
+    </div>
+    <div style="width: 100%; display: inline-block">
+        <vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
+            <vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" onvaluechanged="scopeModel.onBulkActionChanged"></vr-datetimepicker>
+        </vr-columns>
+    </div>
 </div>

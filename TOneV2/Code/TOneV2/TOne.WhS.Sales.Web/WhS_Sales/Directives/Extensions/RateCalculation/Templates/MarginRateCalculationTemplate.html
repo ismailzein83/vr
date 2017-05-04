@@ -1,5 +1,48 @@
-﻿<vr-row removeline>
-    <vr-columns width="1/2row">
-		<vr-textbox type="number" value="ctrl.margin" label="Margin" onvaluechanged="ctrl.onMarginChanged" isrequired="ctrl.isrequired"></vr-textbox>
+﻿<vr-columns colnum="12" haschildcolumns>
+    <vr-columns colnum="{{ctrl.normalColNum / 2}}">
+        <vr-select on-ready="scopeModel.onTypeSelectorReady"
+                   label="Pricing Type"
+                   datasource="scopeModel.types"
+                   onselectitem="scopeModel.onTypeSelected"
+                   selectedvalues="scopeModel.selectedType"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   isrequired="ctrl.isrequired"
+                   hideremoveicon>
+        </vr-select>
     </vr-columns>
-</vr-row>
+    <vr-columns colnum="{{ctrl.normalColNum / 2}}" ng-show="scopeModel.showCostColumnSelector">
+        <vr-select on-ready="scopeModel.onCostColumnSelectorReady"
+                   label="Cost Columns"
+                   datasource="scopeModel.costColumns"
+                   selectedvalues="scopeModel.selectedCostColumn"
+                   datavaluefield="ConfigId"
+                   datatextfield="Title"
+                   isrequired="scopeModel.showCostColumnSelector"
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns colnum="{{ctrl.normalColNum / 3}}" ng-show="scopeModel.showOptionNumber">
+        <vr-textbox type="number"
+                    value="scopeModel.rpRouteOptionNumber"
+                    label="Option Number"
+                    onvaluechanged="scopeModel.onRPRouteOptionNumberChagned"
+                    isrequired="scopeModel.showOptionNumber">
+        </vr-textbox>
+    </vr-columns>
+    <span ng-show="scopeModel.showSupplierSelector">
+        <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierSelectorReady"
+                                     normal-col-num="{{ctrl.normalColNum / 2}}"
+                                     isrequired="scopeModel.showSupplierSelector"
+                                     hideremoveicon>
+        </vr-whs-be-supplier-selector>
+    </span>
+    <vr-columns colnum="{{ctrl.normalColNum / 3}}">
+        <vr-label ng-show="scopeModel.showMarginLabel">Margin</vr-label>
+        <vr-label ng-show="scopeModel.showMarginPercentageLabel">Margin %</vr-label>
+        <vr-textbox type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" isrequired="ctrl.isrequired"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="{{ctrl.normalColNum / 3}}">
+        <vr-switch value="scopeModel.isPercentage" label="Percentage" onvaluechanged="scopeModel.onIsPercentageChanged"></vr-switch>
+    </vr-columns>
+</vr-columns>

@@ -34,8 +34,6 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #endregion
 
-        public CostCalculationMethod CostCalculationMethod { get; set; }
-
         public RateCalculationMethod RateCalculationMethod { get; set; }
 
         public DateTime? BED { get; set; }
@@ -50,6 +48,7 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ValidateZone(IZoneValidationContext context)
         {
             ZoneItem contextZoneItem = context.GetContextZoneItem(context.ZoneId);
+
             if (contextZoneItem == null)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("ZoneItem of Zone '{0}' was not found", context.ZoneId));
 
@@ -60,22 +59,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
             var validationResult = context.ValidationResult as RateBulkActionValidationResult;
 
-            decimal? cost = null;
-            int? costCalculationMethodIndex = null;
-
-            if (CostCalculationMethod != null)
-                costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
-
-            if (costCalculationMethodIndex.HasValue)
-            {
-                if (contextZoneItem.Costs != null)
-                    cost = contextZoneItem.Costs.ElementAt(costCalculationMethodIndex.Value);
-            }
-
-            var rateCalculationContext = new RateCalculationMethodContext()
-            {
-                Cost = cost
-            };
+            var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = contextZoneItem };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             var validationResultType = RateBulkActionValidationResultType.Valid;
@@ -174,21 +158,9 @@ namespace TOne.WhS.Sales.MainExtensions
                 RateTypeId = null
             };
 
-            decimal? cost = null;
-            int? costCalculationMethodIndex = null;
-
-            if (CostCalculationMethod != null)
-                costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
-
             ZoneItem zoneItem = context.GetContextZoneItem(context.ZoneItem.ZoneId);
 
-            if (costCalculationMethodIndex.HasValue)
-            {
-                if (zoneItem.Costs != null)
-                    cost = zoneItem.Costs.ElementAt(costCalculationMethodIndex.Value);
-            }
-
-            var rateCalculationContext = new RateCalculationMethodContext() { Cost = cost };
+            var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = zoneItem };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
@@ -214,24 +186,9 @@ namespace TOne.WhS.Sales.MainExtensions
                 RateTypeId = null,
             };
 
-            decimal? cost = null;
-            int? costCalculationMethodIndex = null;
-
-            if (CostCalculationMethod != null)
-                costCalculationMethodIndex = context.GetCostCalculationMethodIndex(CostCalculationMethod.ConfigId);
-
             ZoneItem zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
 
-            if (costCalculationMethodIndex.HasValue)
-            {
-                if (zoneItem.Costs != null)
-                    cost = zoneItem.Costs.ElementAt(costCalculationMethodIndex.Value);
-            }
-
-            var rateCalculationContext = new RateCalculationMethodContext()
-            {
-                Cost = cost
-            };
+            var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = zoneItem };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);

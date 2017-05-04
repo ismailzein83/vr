@@ -84,7 +84,6 @@
     <Compile Include="CostCalculation\WeightedAvgCostCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateCalculation\FixedRateCalculationMethod.cs" />
-    <Compile Include="RateCalculation\MarginPercentageRateCalculationMethod.cs" />
     <Compile Include="RateCalculation\MarginRateCalculationMethod.cs" />
     <Compile Include="TQIMethods\FirstOptionTQIMethod.cs" />
     <Compile Include="TQIMethods\SuggestedPercentagesTQIMethod.cs" />

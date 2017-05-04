@@ -8,7 +8,9 @@ namespace TOne.WhS.Sales.Entities
 {
     public interface IRateCalculationMethodContext
     {
-        Decimal? Cost { get; }
+        ZoneItem ZoneItem { get; }
+
+        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 
         Decimal? Rate { set; }
     }
