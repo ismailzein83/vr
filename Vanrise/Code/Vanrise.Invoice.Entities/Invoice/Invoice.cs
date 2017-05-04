@@ -29,12 +29,11 @@ namespace Vanrise.Invoice.Entities
         public string Note { get; set; }
         public int? TimeZoneId { get; set; }
         public string TimeZoneOffset { get; set; }
+        public string SourceId { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {
             return null;
         }
-    }
-
-         
+    }         
 }

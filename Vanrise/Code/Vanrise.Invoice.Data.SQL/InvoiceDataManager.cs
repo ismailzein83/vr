@@ -43,6 +43,12 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
         }
+
+
+        public Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId)
+        {
+            return GetItemSP("VR_Invoice.sp_Invoice_GetBySourceId", InvoiceMapper, invoiceTypeId, sourceId);
+        }
         public bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId)
         {
             int numberOfRecords = GetItemSP("VR_Invoice.sp_Invoice_CheckOverlaping", (reader) => { return (int)reader["CountNb"]; }, invoiceTypeId, partnerId, fromDate, toDate, invoiceId);
@@ -67,16 +73,32 @@ namespace Vanrise.Invoice.Data.SQL
             }
             partnerInvoiceTypeTable.EndLoadData();
             if (partnerInvoiceTypeTable.Rows.Count > 0)
-             return  GetItemsSPCmd("[VR_Invoice].[sp_Invoice_GetUnpaidByPartner]",InvoiceMapper,
-                       (cmd) =>
-                       {
-                           var dtPrm = new System.Data.SqlClient.SqlParameter("@PartnerInvoiceTypeTable", SqlDbType.Structured);
-                           dtPrm.Value = partnerInvoiceTypeTable;
-                           cmd.Parameters.Add(dtPrm);
-                       });
+                return GetItemsSPCmd("[VR_Invoice].[sp_Invoice_GetUnpaidByPartner]", InvoiceMapper,
+                          (cmd) =>
+                          {
+                              var dtPrm = new System.Data.SqlClient.SqlParameter("@PartnerInvoiceTypeTable", SqlDbType.Structured);
+                              dtPrm.Value = partnerInvoiceTypeTable;
+                              cmd.Parameters.Add(dtPrm);
+                          });
             return null;
         }
-
+        public bool Update(Entities.Invoice invoice)
+        {
+            return ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Update]", invoice.InvoiceId,
+                                                                         invoice.InvoiceTypeId,
+                                                                         invoice.PartnerId,
+                                                                         invoice.SerialNumber,
+                                                                         invoice.FromDate,
+                                                                         invoice.ToDate,
+                                                                         invoice.TimeZoneId,
+                                                                         invoice.TimeZoneOffset,
+                                                                         invoice.IssueDate,
+                                                                         invoice.DueDate,
+                                                                         invoice.Details,
+                                                                         invoice.PaidDate,
+                                                                         invoice.LockDate,
+                                                                         invoice.Note) > 0;
+        }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetInvoiceCount", (reader) =>
@@ -95,7 +117,7 @@ namespace Vanrise.Invoice.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 object invoiceId;
-                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, invoiceEntity.UserId, invoiceEntity.InvoiceTypeId, invoiceEntity.PartnerId, invoiceEntity.SerialNumber, invoiceEntity.FromDate, invoiceEntity.ToDate,invoiceEntity.TimeZoneId,invoiceEntity.TimeZoneOffset, invoiceEntity.IssueDate, invoiceEntity.DueDate, Vanrise.Common.Serializer.Serialize(invoiceEntity.Details), invoiceEntity.Note, invoiceIdToDelete);
+                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId, invoiceEntity.UserId, invoiceEntity.InvoiceTypeId, invoiceEntity.PartnerId, invoiceEntity.SerialNumber, invoiceEntity.FromDate, invoiceEntity.ToDate, invoiceEntity.TimeZoneId, invoiceEntity.TimeZoneOffset, invoiceEntity.IssueDate, invoiceEntity.DueDate, Vanrise.Common.Serializer.Serialize(invoiceEntity.Details), invoiceEntity.Note, invoiceIdToDelete);
                 insertedInvoiceId = Convert.ToInt64(invoiceId);
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems((long)invoiceId, invoiceItemSets);
@@ -155,6 +177,7 @@ namespace Vanrise.Invoice.Data.SQL
                 Note = reader["Notes"] as string,
                 TimeZoneId = GetReaderValue<int?>(reader, "TimeZoneId"),
                 TimeZoneOffset = reader["TimeZoneOffset"] as string,
+                SourceId = reader["SourceID"] as string
             };
             return invoice;
         }
