@@ -75,6 +75,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
@@ -83,6 +86,7 @@
     <Compile Include="AccountConvertor.cs" />
     <Compile Include="Account\InvoiceEnabledAccountFilter.cs" />
     <Compile Include="Convertors\DIDConvertor.cs" />
+    <Compile Include="Convertors\InvoiceGPInfoConvertor.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceGenerator.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceSettings.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberPartnerSettings.cs" />

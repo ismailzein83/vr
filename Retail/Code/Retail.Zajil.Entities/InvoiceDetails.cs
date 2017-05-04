@@ -18,5 +18,6 @@ namespace Retail.Zajil.Entities
         public string VoiceCustomerNo { get; set; }
         public string SalesAgent { get; set; }
         public string CustomerPO { get; set; }
+        public string GPReferenceNumber { get; set; }
     }
 }
