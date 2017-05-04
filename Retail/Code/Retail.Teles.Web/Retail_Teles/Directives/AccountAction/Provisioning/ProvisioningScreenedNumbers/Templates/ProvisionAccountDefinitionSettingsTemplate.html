@@ -1,61 +1,8 @@
 ﻿<vr-row>
     <vr-common-connection-selector on-ready="scopeModel.onConectionTypeReady" normal-col-num="4" isrequired="true"></vr-common-connection-selector>
-   
-    <vr-columns width="1/3row">
-        <vr-textbox value="scopeModel.centrexFeatSet" label="Centrex FeatSet" isrequired="true"></vr-textbox>
-    </vr-columns>
     <vr-columns width="1/3row">
         <vr-textbox value="scopeModel.countryCode" label="Country Code" isrequired="true"></vr-textbox>
     </vr-columns>
-
-    <vr-tabs>
-        <vr-tab header="'Enterprise Settings'">
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxCalls" label="Max Calls" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxCallsPerUser" label="Max Calls Per User" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxRegistrations" label="Max Registrations" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxRegsPerUser" label="Max Regs Per User" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxSubsPerUser" label="Max Subs Per User" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxBusinessTrunkCalls" label="Max Business Trunk Calls" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.enterpriseMaxUsers" label="Max Users" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-
-        </vr-tab>
-        <vr-tab header="'Site Settings'">
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxCalls" label="Max Calls" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxCallsPerUser" label="Max Calls Per User" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxRegistrations" label="Max Registrations" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxRegsPerUser" label="Max Regs Per User" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxSubsPerUser" label="Max Subs Per User" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxBusinessTrunkCalls" label="Max Business Trunk Calls" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.siteMaxUsers" label="Max Users" isrequired="true" type="number"></vr-textbox>
-            </vr-columns>
-        </vr-tab>
-    </vr-tabs>
-    
 </vr-row>
+<retail-teles-provisioner-provisionaccount-settings on-ready="scopeModel.onProvisionAccountSettingsReady"></retail-teles-provisioner-provisionaccount-settings>
+

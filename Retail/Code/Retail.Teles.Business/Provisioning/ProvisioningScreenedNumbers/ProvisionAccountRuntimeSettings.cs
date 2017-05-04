@@ -14,6 +14,9 @@ namespace Retail.Teles.Business.Provisioning
         AccountBEManager _accountBEManager = new AccountBEManager();
         DIDManager _didManager = new DIDManager();
         public string EnterpriseName { get; set; }
+
+        public ProvisionAccountSetting Settings { get; set; }
+      
         public override void Execute(IAccountProvisioningContext context)
         {
             var definitionSettings = context.DefinitionSettings as ProvisionAccountDefinitionSettings;
@@ -28,15 +31,15 @@ namespace Retail.Teles.Business.Provisioning
             {
                 description = account.Name,
                 name = this.EnterpriseName,
-                maxCalls = definitionSettings.EnterpriseMaxCalls,
-                maxCallsPerUser = definitionSettings.EnterpriseMaxCallsPerUser,
-                maxRegistrations = definitionSettings.EnterpriseMaxRegistrations,
-                maxRegsPerUser = definitionSettings.EnterpriseMaxRegsPerUser,
-                maxSubsPerUser = definitionSettings.EnterpriseMaxSubsPerUser,
-                maxBusinessTrunkCalls = definitionSettings.EnterpriseMaxBusinessTrunkCalls,
-                maxUsers = definitionSettings.EnterpriseMaxUsers,
+                maxCalls = Settings.EnterpriseAccountSetting.EnterpriseMaxCalls,
+                maxCallsPerUser = Settings.EnterpriseAccountSetting.EnterpriseMaxCallsPerUser,
+                maxRegistrations = Settings.EnterpriseAccountSetting.EnterpriseMaxRegistrations,
+                maxRegsPerUser = Settings.EnterpriseAccountSetting.EnterpriseMaxRegsPerUser,
+                maxSubsPerUser = Settings.EnterpriseAccountSetting.EnterpriseMaxSubsPerUser,
+                maxBusinessTrunkCalls = Settings.EnterpriseAccountSetting.EnterpriseMaxBusinessTrunkCalls,
+                maxUsers = Settings.EnterpriseAccountSetting.EnterpriseMaxUsers,
             };
-            var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, definitionSettings.CentrexFeatSet, enterprise);
+            var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, Settings.CentrexFeatSet, enterprise);
 
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId);
             CreateSites(definitionSettings, enterpriseId,accountBEDefinitionId, accountId);
@@ -52,19 +55,19 @@ namespace Retail.Teles.Business.Provisioning
                     {
                         name = string.Format("{0}.{1}", site.Name.ToLower().Replace(" ", ""), this.EnterpriseName),
                         description = site.Name,
-                        maxCalls = definitionSettings.SiteMaxCalls,
-                        maxCallsPerUser = definitionSettings.SiteMaxCallsPerUser,
-                        maxRegistrations = definitionSettings.SiteMaxRegistrations,
-                        maxRegsPerUser = definitionSettings.SiteMaxRegsPerUser,
-                        maxSubsPerUser = definitionSettings.SiteMaxSubsPerUser,
-                        maxBusinessTrunkCalls = definitionSettings.SiteMaxBusinessTrunkCalls,
-                        maxUsers = definitionSettings.SiteMaxUsers,
+                        maxCalls = Settings.SiteAccountSetting.SiteMaxCalls,
+                        maxCallsPerUser = Settings.SiteAccountSetting.SiteMaxCallsPerUser,
+                        maxRegistrations = Settings.SiteAccountSetting.SiteMaxRegistrations,
+                        maxRegsPerUser = Settings.SiteAccountSetting.SiteMaxRegsPerUser,
+                        maxSubsPerUser = Settings.SiteAccountSetting.SiteMaxSubsPerUser,
+                        maxBusinessTrunkCalls = Settings.SiteAccountSetting.SiteMaxBusinessTrunkCalls,
+                        maxUsers = Settings.SiteAccountSetting.SiteMaxUsers,
                         presenceEnabled = true,
                         registrarAuthRequired = true,
                         registrarEnabled = true,
                         ringBackUri = "ringback",
                     };
-                    dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, definitionSettings.CentrexFeatSet, newsite);
+                    dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
                     _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId);
                     CreateScreendedNumbers(definitionSettings, site.AccountId,siteId);
                 }

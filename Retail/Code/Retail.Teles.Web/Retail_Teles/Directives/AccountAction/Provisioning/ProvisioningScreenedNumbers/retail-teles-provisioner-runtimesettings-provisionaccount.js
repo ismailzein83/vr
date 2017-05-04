@@ -22,19 +22,29 @@
         };
         function ProvisionerRuntimesettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var provisionAccountSettingsAPI;
+            var provisionAccountSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
             var mainPayload;
             function initializeController() {
                 $scope.scopeModel = {};
-
-                defineAPI();
+                $scope.scopeModel.onProvisionAccountSettingsReady = function (api) {
+                    provisionAccountSettingsAPI = api;
+                    provisionAccountSettingsReadyDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([provisionAccountSettingsReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var provisionerDefinitionSettings; 
                     var provisionerRuntimeSettings;
                     if (payload != undefined) {
+                        provisionerDefinitionSettings = payload.provisionerDefinitionSettings;
                         mainPayload = payload;
                         provisionerRuntimeSettings = payload.provisionerRuntimeSettings;
                         if (provisionerRuntimeSettings != undefined) {
@@ -45,6 +55,18 @@
 
                     var promises = [];
 
+                    promises.push(loadProvisionAccountSettings());
+
+                    function loadProvisionAccountSettings() {
+
+                        var provisionAccountSettingsPayload = {};
+                        if (provisionerDefinitionSettings != undefined)
+                            provisionAccountSettingsPayload.provisionAccountSettings = provisionerDefinitionSettings.Settings;
+                        if (provisionerRuntimeSettings != undefined) {
+                            provisionAccountSettingsPayload.provisionAccountSettings = provisionerRuntimeSettings.Settings;
+                        }
+                        return provisionAccountSettingsAPI.load(provisionAccountSettingsPayload);
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -58,7 +80,8 @@
                 function getData() {
                     var data = {
                         $type: "Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings,Retail.Teles.Business",
-                        EnterpriseName: $scope.scopeModel.enterpriseName
+                        EnterpriseName: $scope.scopeModel.enterpriseName,
+                        Settings: provisionAccountSettingsAPI.getData()
                     };
                     return data;
                 }

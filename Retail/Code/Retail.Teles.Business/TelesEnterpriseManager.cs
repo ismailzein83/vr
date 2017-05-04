@@ -166,8 +166,6 @@ namespace Retail.Teles.Business
             {
                 _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Map To Teles Enterprise", null, enterpriseAccountMappingInfo);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().SetCacheExpired(accountBEDefinitionId);
-
             }
             return result;
 
