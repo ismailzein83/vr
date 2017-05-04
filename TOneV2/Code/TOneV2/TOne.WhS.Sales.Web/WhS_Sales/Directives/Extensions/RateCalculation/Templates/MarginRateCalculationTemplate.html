@@ -44,7 +44,7 @@
     <vr-columns colnum="{{ctrl.normalColNum / 3}}">
         <vr-label ng-show="scopeModel.showMarginLabel">Margin</vr-label>
         <vr-label ng-show="scopeModel.showMarginPercentageLabel">Margin %</vr-label>
-        <vr-textbox type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" isrequired="ctrl.isrequired"></vr-textbox>
+        <vr-textbox type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" isrequired="ctrl.isrequired" customvalidate="scopeModel.validateMargin()"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="{{ctrl.normalColNum / 3}}">
         <vr-switch value="scopeModel.isPercentage" label="Percentage" onvaluechanged="scopeModel.onIsPercentageChanged"></vr-switch>

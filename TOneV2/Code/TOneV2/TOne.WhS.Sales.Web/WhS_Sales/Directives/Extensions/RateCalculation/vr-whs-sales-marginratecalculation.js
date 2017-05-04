@@ -101,6 +101,20 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 supplierSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.validateMargin = function () {
+                if ($scope.scopeModel.margin == undefined)
+                    return;
+                if ($scope.scopeModel.isPercentage) {
+                    if ($scope.scopeModel.margin < 0 || $scope.scopeModel.margin > 100)
+                        return 'Margin % must be between 0 and 100';
+                }
+                else {
+                    if ($scope.scopeModel.margin < 0)
+                        return 'Margin must be a postive number';
+                }
+                return null;
+            };
+
             UtilsService.waitMultiplePromises([typeSelectorReadyDeferred.promise, costColumnSelectorReadyDeferred.promise, optionNumberSelectorReadyDeferred.promise, supplierSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
