@@ -110,7 +110,10 @@ as (select * from (values
 ('fb232763-6ac1-49b5-a410-fa792980055c','RetailBE_AccountView_AccountHistory','Account History','Retail_BE_AccountViewDefinitionConfig'											,'{"Editor":"retail-be-accountviewdefinitionsettings-acounthistory"}'),
 
 ('52525041-7A8B-4AE1-9599-A3F34A87CB38','Retail Account Balance','Retail Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'							,'{"Editor":"retail-be-accountbalancenotificationtype-settings"}'),
-('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}')
+('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}'),
+
+('88D62CA6-AABF-4059-A008-279DDFBCEC9C','VR_BEBridge_BESynchronizer_Invoice','Invoice Synchronizer','VR_BEBridge_BESynchronizer','{"Editor":"vr-invoice-synchronizer-editor"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
