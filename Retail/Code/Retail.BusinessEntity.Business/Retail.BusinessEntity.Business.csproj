@@ -135,6 +135,8 @@
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationExtendedQuery.cs" />
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
+    <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
+    <Compile Include="AccountTypeOverriddenConfiguration.cs" />
     <Compile Include="Extensions\AccountMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\DIDSynchronizer.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\ChargeableEntityDefinitionFilter.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="RecurringChargeManager.cs" />
     <Compile Include="RequestManager.cs" />
     <Compile Include="RevenueComparisonManager.cs" />
+    <Compile Include="ServiceTypeOverriddenConfiguration.cs" />
     <Compile Include="StatusChargingManager.cs" />
     <Compile Include="StatusDefinitionManager.cs" />
     <Compile Include="SwitchManager.cs" />
