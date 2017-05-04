@@ -72,6 +72,11 @@ namespace Retail.BusinessEntity.Entities
         List<string> PhoneNumbers { get; }
     }
 
+    public interface IOperatorSetting
+    {
+        bool IsMobile { get; }
+    }
+
     public class PaymentMethod
     {
         public int PaymentMethodId { get; set; }
