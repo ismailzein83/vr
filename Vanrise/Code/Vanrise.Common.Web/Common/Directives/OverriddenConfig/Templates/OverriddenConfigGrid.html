@@ -1,0 +1,13 @@
+﻿<vr-datagrid datasource="overridenConfigs"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="OverriddenConfigurationId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'OverriddenConfigurationId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'OverriddenConfiguration Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'OverriddenConfiguration Group'" field="'OverriddenConfigurationGroupName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

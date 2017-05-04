@@ -6,17 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class OverriddenConfigurationGroup
+   public class OverriddenConfigurationGroupInfo
     {
         public Guid OverriddenConfigurationGroupId { get; set; }
-
-        public string Name { get; set; }
-    }
-
-    public class OverriddenConfigGroupDetail
-    {
-        public Guid OverriddenConfigurationGroupId { get; set; }
-
         public string Name { get; set; }
     }
 }

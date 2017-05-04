@@ -1,0 +1,42 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_OverridddenConfigEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formOverriddenConfigEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/2row" haschildcolumns>
+                            <vr-common-overriddenconfiggroup-selector on-ready="scopeModel.onOverrinddenConfigGroupSelectorReady" isrequired="true" showaddbutton></vr-common-overriddenconfiggroup-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-select datasource="scopeModel.overriddenConfigSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
+                            </vr-select>
+                        </vr-columns>
+                    </vr-row>
+                    </vr-tab>
+                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"
+                                     ng-if="scopeModel.selectedSetingsTypeConfig != undefined"
+                                     directive="scopeModel.selectedSetingsTypeConfig.Editor"
+                                     on-ready="scopeModel.onSettingDirectiveReady"
+                                     normal-col-num="4"
+                                     isrequired="true">
+                </vr-directivewrapper>
+                </vr-tabs>
+            
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formOverriddenConfigEditor" data-onclick="saveOverriddenConfig"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

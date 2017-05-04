@@ -124,6 +124,8 @@
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\GenericLKUPController.cs" />
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
+    <Compile Include="Controllers\OverriddenConfigurationController.cs" />
+    <Compile Include="Controllers\OverriddenConfigurationGroupController.cs" />
     <Compile Include="Controllers\VRMailController.cs" />
     <Compile Include="Controllers\VRObjectTrackingController.cs" />
     <Compile Include="Controllers\UISettingsController.cs" />
@@ -232,6 +234,11 @@
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-interapprestconnection-editor.js" />
     <Content Include="Common\Directives\ObjectTracking\Templates\ObjectTrackingGridTemplate.html" />
     <Content Include="Common\Directives\ObjectTracking\vr-common-objecttracking-grid.js" />
+    <Content Include="Common\Directives\OverriddenConfig\MainExtentions\vr-common-overriddenconfiguration-genericruledefinition.js" />
+    <Content Include="Common\Directives\OverriddenConfig\MainExtentions\vr-common-overriddenconfiguration-overriddensettings.js" />
+    <Content Include="Common\Directives\OverriddenConfig\Templates\OverriddenConfigGrid.html" />
+    <Content Include="Common\Directives\OverriddenConfig\vr-common-overriddenconfig-grid.js" />
+    <Content Include="Common\Directives\OverriddenConfigGroup\vr-common-overriddenconfiggroup-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
@@ -357,6 +364,8 @@
     <Content Include="Common\Services\APIServices\GenericLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\GenericLKUPDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
+    <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
+    <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
@@ -385,6 +394,8 @@
     <Content Include="Common\Services\BankDetailService.js" />
     <Content Include="Common\Services\GenericLKUPService.js" />
     <Content Include="Common\Services\ObjectTrackingService.js" />
+    <Content Include="Common\Services\OverriddenConfigGroupService.js" />
+    <Content Include="Common\Services\OverriddenConfigService.js" />
     <Content Include="Common\Services\StatusDefinitionService.js" />
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRConnectionService.js" />
@@ -452,6 +463,12 @@
     <Content Include="Common\Views\Logger\LoggerManagementController.js" />
     <Content Include="Common\Views\MasterLog\MasterLogManagement.html" />
     <Content Include="Common\Views\MasterLog\MasterLogManagementController.js" />
+    <Content Include="Common\Views\OverriddenConfigGroup\OverriddenConfigGroupEditor.html" />
+    <Content Include="Common\Views\OverriddenConfigGroup\OverriddenConfigGroupEditorController.js" />
+    <Content Include="Common\Views\OverriddenConfig\OverriddenConfigEditor.html" />
+    <Content Include="Common\Views\OverriddenConfig\OverriddenConfigEditorController.js" />
+    <Content Include="Common\Views\OverriddenConfig\OverriddenConfigManagement.html" />
+    <Content Include="Common\Views\OverriddenConfig\OverriddenConfigManagementController.js" />
     <Content Include="Common\Views\RateType\RateTypeEditor.html" />
     <Content Include="Common\Views\RateType\RateTypeEditorController.js" />
     <Content Include="Common\Views\RateType\RateTypeManagement.html" />

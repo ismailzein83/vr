@@ -47,6 +47,8 @@
     <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />
+    <Compile Include="OverriddenConfigurationDataManager.cs" />
+    <Compile Include="OverriddenConfigurationGroupDataManage.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="VRActionAuditDataManager.cs" />
     <Compile Include="VRActionAuditLKUPDataManager.cs" />

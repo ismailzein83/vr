@@ -76,6 +76,9 @@
     <Compile Include="OverriddenConfig\OverriddenConfiguration.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationConfig.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationGroup.cs" />
+    <Compile Include="OverriddenConfig\OverriddenConfigurationGroupInfo.cs" />
+    <Compile Include="OverriddenConfig\OverriddenConfigurationGroupInfoFilter.cs" />
+    <Compile Include="OverriddenConfig\OverriddenConfigurationQuery.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationSettings.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />

@@ -261,6 +261,8 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbusinessentity-runtime-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbusinessentity-runtime-row.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbusinessentity-runtime-section.js" />
+    <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Templates\GenericRuleDefinitionSettings.html" />
+    <Content Include="VR_GenericData\Directives\GenericRuleDefinition\vr-genericdata-genericruledefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleCriteriaTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-criteria.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\ParentBusinessEntityFieldFormulaTemplate.html" />

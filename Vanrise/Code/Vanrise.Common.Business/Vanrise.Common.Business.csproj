@@ -75,6 +75,8 @@
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionManager.cs" />
     <Compile Include="GenericLKUP\GenericLKUPManager.cs" />
+    <Compile Include="OverriddenConfigurationGroupManager.cs" />
+    <Compile Include="OverriddenConfiguration\OverriddenConfigurationManager.cs" />
     <Compile Include="StatusDefinitionFilterContext.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPManager.cs" />
     <Compile Include="VRActionAudit\VRActionAuditManager.cs" />

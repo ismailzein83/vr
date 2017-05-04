@@ -42,7 +42,7 @@
                 };
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
-                    console.log(api);
+
                     directiveAPI = api;
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;

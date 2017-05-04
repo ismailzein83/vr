@@ -17,23 +17,8 @@
         var genericRuleDefinitionId;
         var genericRuleDefinitionEntity;
 
-        var objectDirectiveAPI;
-        var objectDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var criteriaDirectiveAPI;
-        var criteriaDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var settingsDirectiveAPI;
-        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var viewPermissionAPI;
-        var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var addPermissionAPI;
-        var addPermissionReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var editPermissionAPI;
-        var editPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+        var genericRuleDefinitionSettingsAPI;
+        var genericRuleDefinitionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -54,30 +39,9 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onObjectDirectiveReady = function (api) {
-                objectDirectiveAPI = api;
-                objectDirectiveReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
-                criteriaDirectiveAPI = api;
-                criteriaDirectiveReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
-                settingsDirectiveAPI = api;
-                settingsDirectiveReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
-                viewPermissionAPI = api;
-                viewPermissionReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onAddRequiredPermissionReady = function (api) {
-                addPermissionAPI = api;
-                addPermissionReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onEditRequiredPermissionReady = function (api) {
-                editPermissionAPI = api;
-                editPermissionReadyDeferred.resolve();
+            $scope.scopeModel.onGenericRuleDefinfitionSettingsReady = function (api) {
+                genericRuleDefinitionSettingsAPI = api;
+                genericRuleDefinitionSettingsReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -126,7 +90,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCriteriaDirective, loadSettingsDirective, loadObjectDirective, loadViewRequiredPermission, loadAddRequiredPermission, loadEditRequiredPermission]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGenericRuleDefintionSettings]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -144,103 +108,27 @@
                 $scope.scopeModel.name = genericRuleDefinitionEntity.Name;
                 $scope.scopeModel.title = genericRuleDefinitionEntity.Title;
             }
-            function loadObjectDirective() {
-                var objectDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                objectDirectiveReadyDeferred.promise.then(function () {
-                    var objectDirectivePayload;
-
-                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Objects != null) {
-
-                        objectDirectivePayload = {
-                            objects: genericRuleDefinitionEntity.Objects
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(objectDirectiveAPI, objectDirectivePayload, objectDirectiveLoadDeferred);
-                });
-
-                return objectDirectiveLoadDeferred.promise;
-            }
-            function loadCriteriaDirective() {
-                var criteriaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                criteriaDirectiveReadyDeferred.promise.then(function () {
-                    var criteriaDirectivePayload = { context: buildContext() };
-
-                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.CriteriaDefinition != null) {
-                        criteriaDirectivePayload.GenericRuleDefinitionCriteriaFields = genericRuleDefinitionEntity.CriteriaDefinition.Fields
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriaDirectivePayload, criteriaDirectiveLoadDeferred);
-                });
-
-                return criteriaDirectiveLoadDeferred.promise;
-            }
-            function loadSettingsDirective() {
-                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                settingsDirectiveReadyDeferred.promise.then(function () {
+           
+            function loadGenericRuleDefintionSettings() {
+                
+                var genericRuleDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                genericRuleDefinitionSettingsReadyDeferred.promise.then(function () {
                     var payload;
-                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.SettingsDefinition != null)
-                        payload = genericRuleDefinitionEntity.SettingsDefinition;
-                    else if (settingsTypeName != undefined)
-                        payload = { settingsTypeName: settingsTypeName };
-                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
-                });
-
-                return settingsDirectiveLoadDeferred.promise;
-            }
-            function loadViewRequiredPermission() {
-                var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                viewPermissionReadyDeferred.promise.then(function () {
-                    var payload;
-
-                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Security != undefined && genericRuleDefinitionEntity.Security.ViewRequiredPermission != null) {
+                    if (genericRuleDefinitionEntity != undefined) {
                         payload = {
-                            data: genericRuleDefinitionEntity.Security.ViewRequiredPermission
+                            objects: genericRuleDefinitionEntity.Objects,
+                            criteriaDefinition: genericRuleDefinitionEntity.CriteriaDefinition,
+                            settingsDefinition: genericRuleDefinitionEntity.SettingsDefinition,
+                            security: genericRuleDefinitionEntity.Security,
+                            settingsTypeName: settingsTypeName
                         };
+                       
                     }
 
-                    VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, payload, viewPermissionLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionSettingsAPI, payload, genericRuleDefinitionSettingsLoadDeferred);
                 });
 
-                return viewPermissionLoadDeferred.promise;
-            }
-            function loadAddRequiredPermission() {
-                var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                addPermissionReadyDeferred.promise.then(function () {
-                    var payload;
-
-                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Security != undefined && genericRuleDefinitionEntity.Security.AddRequiredPermission != null) {
-                        payload = {
-                            data: genericRuleDefinitionEntity.Security.AddRequiredPermission
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(addPermissionAPI, payload, addPermissionLoadDeferred);
-                });
-
-                return addPermissionLoadDeferred.promise;
-            }
-            function loadEditRequiredPermission() {
-                var editPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                editPermissionReadyDeferred.promise.then(function () {
-                    var payload;
-
-                    if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.Security != undefined && genericRuleDefinitionEntity.Security.EditRequiredPermission != null) {
-                        payload = {
-                            data: genericRuleDefinitionEntity.Security.EditRequiredPermission
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(editPermissionAPI, payload, editPermissionLoadDeferred);
-                });
-
-                return editPermissionLoadDeferred.promise;
+                return genericRuleDefinitionSettingsLoadDeferred.promise;
             }
         }
 
@@ -289,18 +177,15 @@
             return context;
         }
         function buildGenericRuleDefinitionObjectFromScope() {
+            var genericRuleDefinitionSettings = genericRuleDefinitionSettingsAPI.getData();
             return {
                 GenericRuleDefinitionId: genericRuleDefinitionId,
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
-                CriteriaDefinition: criteriaDirectiveAPI.getData(),
-                SettingsDefinition: settingsDirectiveAPI.getData(),
-                Objects: objectDirectiveAPI.getData(),
-                Security: {
-                    ViewRequiredPermission: viewPermissionAPI.getData(),
-                    AddRequiredPermission: addPermissionAPI.getData(),
-                    EditRequiredPermission: editPermissionAPI.getData()
-                }
+                CriteriaDefinition: genericRuleDefinitionSettings.criteriaDefinition,
+                SettingsDefinition: genericRuleDefinitionSettings.settingsDefinition,
+                Objects: genericRuleDefinitionSettings.objects,
+                Security:genericRuleDefinitionSettings.security
             };
         }
     }

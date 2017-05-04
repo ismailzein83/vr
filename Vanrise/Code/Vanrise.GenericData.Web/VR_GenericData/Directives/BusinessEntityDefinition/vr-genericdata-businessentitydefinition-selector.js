@@ -52,6 +52,7 @@
                         ctrl.onReady(getDirectiveAPI());
                     }
                 };
+
             }
 
             function getDirectiveAPI() {

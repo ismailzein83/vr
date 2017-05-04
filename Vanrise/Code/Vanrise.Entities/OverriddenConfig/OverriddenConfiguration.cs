@@ -16,4 +16,13 @@ namespace Vanrise.Entities
 
         public OverriddenConfigurationSettings Settings { get; set; }
     }
+
+    public class OverriddenConfigurationDetail
+    {
+        public Guid OverriddenConfigurationId { get; set; }
+
+        public string Name { get; set; }
+
+        public string OverriddenConfigurationGroupName { get; set; }
+    }
 }

@@ -1,0 +1,30 @@
+﻿<vr-panel ng-controller="VRCommon_OveriddenConfigManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal" haschildcolumns>
+                    
+                    <vr-common-overriddenconfiggroup-selector on-ready="onOverrinddenConfigGroupSelectorReady" ismultipleselection></vr-common-overriddenconfiggroup-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addOverriddenConfig"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-common-overriddenconfig-grid on-ready="onGridReady"></vr-common-overriddenconfig-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+
+</vr-panel>
