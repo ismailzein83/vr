@@ -34,7 +34,7 @@ namespace Vanrise.Web.Base
 
         protected object GetExcelResponse(ExcelResult excelResult)
         {
-            return GetExcelResponse(excelResult.ExcelFileStream, "ExcelReport.xls");
+            return GetExcelResponse(excelResult.ExcelFileStream, "ExcelReport.xlsx");
         }
 
         protected object GetExcelResponse(Stream stream, string fileName)

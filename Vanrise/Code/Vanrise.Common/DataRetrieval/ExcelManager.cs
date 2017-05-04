@@ -132,19 +132,18 @@ namespace Vanrise.Common
                 throw new ArgumentNullException("excelSheet.Rows");
             ExcelResult<T> excelResult = new ExcelResult<T>();
 
-            Workbook wbk = new Workbook();
+            Workbook wbk = new Workbook(FileFormatType.Xlsx);
             Common.Utilities.ActivateAspose();
             wbk.Worksheets.Clear();
 
             Worksheet RateWorkSheet = wbk.Worksheets.Add(excelSheet.SheetName);
-            
+
             int rowIndex = 0;
             int colIndex = 0;
 
-
-            if (excelSheet.SummaryRows != null )
+            if (excelSheet.SummaryRows != null)
             {
-                foreach(var summaryRow in excelSheet.SummaryRows)
+                foreach (var summaryRow in excelSheet.SummaryRows)
                 {
                     if (summaryRow.Cells == null)
                         throw new NullReferenceException(String.Format("excelRow.Cells. RowIndex '{0}'", rowIndex));
@@ -172,13 +171,13 @@ namespace Vanrise.Common
                 Style style = cell.GetStyle();
                 style.Font.Name = "Times New Roman";
                 style.Font.Color = Color.FromArgb(255, 0, 0);
-               
+
                 style.Font.Size = 14;
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
                 colIndex++;
             }
-            
+
             rowIndex++;
             colIndex = 0;
 
@@ -190,14 +189,14 @@ namespace Vanrise.Common
                 if (excelRow.Cells.Count != excelSheet.Header.Cells.Count)
                     throw new Exception(String.Format("Invalid Row Cell Count. RowIndex '{0}'. Row Cell Count '{1}' Header Cell Count '{2}'", rowIndex, excelRow.Cells.Count, excelSheet.Header.Cells.Count));
                 colIndex = 0;
-                foreach(var cell in excelRow.Cells)
+                foreach (var cell in excelRow.Cells)
                 {
                     var excelCell = RateWorkSheet.Cells[rowIndex, colIndex];
                     if (colIndex >= excelSheet.Header.Cells.Count)
                         throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
                     var headerCell = excelSheet.Header.Cells[colIndex];
                     if (headerCell.CellType.HasValue)
-                        SetExcelCellFormat(excelCell, headerCell);                        
+                        SetExcelCellFormat(excelCell, headerCell);
                     excelCell.PutValue(cell.Value);
                     colIndex++;
                 }
@@ -207,12 +206,14 @@ namespace Vanrise.Common
 
 
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = wbk.SaveToStream();
+
+            wbk.Save(memoryStream, SaveFormat.Xlsx);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
             excelResult.ExcelFileStream = memoryStream;
             return excelResult;
         }
-   
+
         public ExcelResult ExportExcel(List<ExportExcelSheet> excelSheets)
         {
             Workbook wbk = new Workbook();
@@ -230,7 +231,7 @@ namespace Vanrise.Common
             excelResult.ExcelFileStream = memoryStream;
             return excelResult;
         }
-        private void BuildWorkBookSheet(Workbook wbk,ExportExcelSheet excelSheet)
+        private void BuildWorkBookSheet(Workbook wbk, ExportExcelSheet excelSheet)
         {
             ValidateSheet(excelSheet);
             Worksheet workSheet = wbk.Worksheets.Add(excelSheet.SheetName);
@@ -241,7 +242,7 @@ namespace Vanrise.Common
             colIndex = 0;
             BuildSheetRows(workSheet, excelSheet, excelSheet.Rows, rowIndex, colIndex);//filling result
         }
-        private void BuildHeaderCells( Worksheet workSheet,List<ExportExcelHeaderCell> exportExcelHeaderCells, int rowIndex, int colIndex)
+        private void BuildHeaderCells(Worksheet workSheet, List<ExportExcelHeaderCell> exportExcelHeaderCells, int rowIndex, int colIndex)
         {
             foreach (var headerCell in exportExcelHeaderCells)
             {
@@ -296,9 +297,9 @@ namespace Vanrise.Common
         private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell)
         {
             var cellStyle = excelCell.GetDisplayStyle();
-            switch(headerCell.CellType.Value)
+            switch (headerCell.CellType.Value)
             {
-                case ExcelCellType.DateTime: 
+                case ExcelCellType.DateTime:
                     if (!headerCell.DateTimeType.HasValue)
                         throw new NullReferenceException("headerCell.DateTimeType");
                     cellStyle.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
@@ -330,7 +331,7 @@ namespace Vanrise.Common
             {
                 foreach (var prop in entityProperties)
                 {
-                    excelSheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = prop.Name });                   
+                    excelSheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = prop.Name });
                 }
             }
 
