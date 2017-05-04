@@ -22,13 +22,17 @@
                    hideremoveicon>
         </vr-select>
     </vr-columns>
-    <vr-columns colnum="{{ctrl.normalColNum / 3}}" ng-show="scopeModel.showOptionNumber">
-        <vr-textbox type="number"
-                    value="scopeModel.rpRouteOptionNumber"
-                    label="Option Number"
-                    onvaluechanged="scopeModel.onRPRouteOptionNumberChagned"
-                    isrequired="scopeModel.showOptionNumber">
-        </vr-textbox>
+    <vr-columns colnum="{{ctrl.normalColNum / 3}}" ng-show="scopeModel.showOptionNumberSelector">
+        <vr-select on-ready="scopeModel.onOptionNumberSelectorReady"
+                   label="Option Number"
+                   datasource="scopeModel.optionNumbers"
+                   selectedvalues="scopeModel.selectedOptionNumber"
+                   onselectionchanged="scopeModel.onOptionNumberChanged"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   isrequired="scopeModel.showOptionNumberSelector"
+                   hideremoveicon>
+        </vr-select>
     </vr-columns>
     <span ng-show="scopeModel.showSupplierSelector">
         <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierSelectorReady"

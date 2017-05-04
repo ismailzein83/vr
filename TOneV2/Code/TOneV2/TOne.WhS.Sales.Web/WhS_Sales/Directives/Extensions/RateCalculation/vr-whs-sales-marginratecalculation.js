@@ -31,12 +31,17 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
         var costColumnSelectorAPI;
         var costColumnSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var optionNumberSelectorAPI;
+        var optionNumberSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var supplierSelectorAPI;
         var supplierSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
 
             $scope.scopeModel = {};
+
+            $scope.scopeModel.optionNumbers = [{ value: 1, description: '1' }, { value: 2, description: '2' }, { value: 3, description: '3' }];
 
             $scope.scopeModel.showMarginLabel = true;
             $scope.scopeModel.showMarginPercentageLabel = false;
@@ -51,7 +56,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
 
             $scope.scopeModel.onTypeSelected = function (selectedType) {
                 $scope.scopeModel.showCostColumnSelector = false;
-                $scope.scopeModel.showOptionNumber = false;
+                $scope.scopeModel.showOptionNumberSelector = false;
                 $scope.scopeModel.showSupplierSelector = false;
 
                 switch (selectedType.value) {
@@ -59,7 +64,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                         $scope.scopeModel.showCostColumnSelector = true;
                         break;
                     case WhS_Sales_MarginRateCalculationMethodType.RPRouteOption.value:
-                        $scope.scopeModel.showOptionNumber = true;
+                        $scope.scopeModel.showOptionNumberSelector = true;
                         break;
                     case WhS_Sales_MarginRateCalculationMethodType.Supplier.value:
                         $scope.scopeModel.showSupplierSelector = true;
@@ -82,12 +87,21 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 costColumnSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onOptionNumberSelectorReady = function (api) {
+                optionNumberSelectorAPI = api;
+                optionNumberSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onOptionNumberChanged = function () {
+                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+            };
+
             $scope.scopeModel.onSupplierSelectorReady = function (api) {
                 supplierSelectorAPI = api;
                 supplierSelectorReadyDeferred.resolve();
             };
 
-            UtilsService.waitMultiplePromises([typeSelectorReadyDeferred.promise, costColumnSelectorReadyDeferred.promise, supplierSelectorReadyDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([typeSelectorReadyDeferred.promise, costColumnSelectorReadyDeferred.promise, optionNumberSelectorReadyDeferred.promise, supplierSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
         }
@@ -104,6 +118,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 }
 
                 var selectedCostColumnConfigId;
+                var selectedOptionNumberValue;
                 var selectedSupplierId;
 
                 if (rateCalculationMethod != undefined) {
@@ -111,11 +126,12 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                     $scope.scopeModel.isPercentage = rateCalculationMethod.IsPercentage;
 
                     selectedCostColumnConfigId = rateCalculationMethod.CostCalculationMethodConfigId;
-                    $scope.scopeModel.rpRouteOptionNumber = rateCalculationMethod.RPRouteOptionNumber;
+                    selectedOptionNumberValue = rateCalculationMethod.RPRouteOptionNumber;
                     selectedSupplierId = rateCalculationMethod.SupplierId;
                 }
 
                 loadCostColumnSelector();
+                loadOptionNumberSelector();
 
                 var promises = [];
 
@@ -130,6 +146,10 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                         if (selectedCostColumnConfigId != undefined)
                             $scope.scopeModel.selectedCostColumn = UtilsService.getItemByVal($scope.scopeModel.costColumns, selectedCostColumnConfigId, 'ConfigId');
                     }
+                }
+                function loadOptionNumberSelector() {
+                    if (selectedOptionNumberValue != undefined)
+                        $scope.scopeModel.selectedOptionNumber = UtilsService.getItemByVal($scope.scopeModel.optionNumbers, selectedOptionNumberValue, 'value');
                 }
                 function loadSupplierSelector() {
                     var supplierSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -151,11 +171,12 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                     Margin: $scope.scopeModel.margin,
                     IsPercentage: $scope.scopeModel.isPercentage,
                     Type: $scope.scopeModel.selectedType.value,
-                    RPRouteOptionNumber: $scope.scopeModel.rpRouteOptionNumber,
                     SupplierId: supplierSelectorAPI.getSelectedIds()
                 };
                 if ($scope.scopeModel.selectedCostColumn != undefined)
                     data.CostCalculationMethodConfigId = $scope.scopeModel.selectedCostColumn.ConfigId;
+                if ($scope.scopeModel.selectedOptionNumber != undefined)
+                    data.RPRouteOptionNumber = $scope.scopeModel.selectedOptionNumber.value;
                 return data;
             };
 
