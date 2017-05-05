@@ -70,6 +70,7 @@
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
+    <Compile Include="ComponentType\VRComponentTypeOverriddenConfiguration.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Filters\GenericLKUPBEDefinitionFilter.cs" />
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="GenericLKUP\GenericLKUPManager.cs" />
     <Compile Include="OverriddenConfigurationGroupManager.cs" />
     <Compile Include="OverriddenConfiguration\OverriddenConfigurationManager.cs" />
+    <Compile Include="Setting\SettingOverriddenConfiguration.cs" />
     <Compile Include="StatusDefinitionFilterContext.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPManager.cs" />
     <Compile Include="VRActionAudit\VRActionAuditManager.cs" />
@@ -127,11 +129,13 @@
     <Compile Include="Setting\SettingManager.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationManager.cs" />
     <Compile Include="TypeManager.cs" />
+    <Compile Include="VRMail\VRMailMessageTypeOverriddenConfiguration.cs" />
     <Compile Include="VRObject\VRObjectEvaluator.cs" />
     <Compile Include="VRObject\VRObjectExpressionEvaluator.cs" />
     <Compile Include="VRObject\VRObjectExpressionEvaluatorManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorManager.cs" />
     <Compile Include="VRObject\VRObjectTypeDefinitionManager.cs" />
+    <Compile Include="VRObject\VRObjectTypeDefinitionOverriddenConfiguration.cs" />
     <Compile Include="VRObject\VRObjectTypeManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />
     <Compile Include="VRFileManager.cs" />
