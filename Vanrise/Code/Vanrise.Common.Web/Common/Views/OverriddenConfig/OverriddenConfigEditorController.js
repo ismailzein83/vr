@@ -173,6 +173,7 @@
                         var directivePayload = {
                             extendedSettings: overriddenConfigurationEntity.Settings.ExtendedSettings
                         };
+                        settingReadyPromiseDeferred = undefined;
                         VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                     });
 

@@ -111,10 +111,6 @@
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                directiveAPI.getSelectedIds = function () {
-                    return beDefinitionSelectorApi.getSelectedIds();
-                };
-
                 directiveAPI.getData = function () {
                     var settings;
                     if (settingsAPI != undefined)

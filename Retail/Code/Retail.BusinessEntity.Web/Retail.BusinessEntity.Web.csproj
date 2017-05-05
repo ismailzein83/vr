@@ -288,7 +288,9 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\Templates\AccountPackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\retail-be-accountpartdefinition-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\retail-be-accountpartdefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\retail-overriddenconfiguration-accountpartdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\Templates\AccountPartDefinitionGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\Templates\OverriddenConfigurationAccountPartDefinition.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\retail-be-accountservice-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountService\Templates\AccountServiceGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountSynchronizerHandler\AccountSynchronizerInsertHandlerEditorController.js" />

@@ -53,7 +53,7 @@
                 $scope.scopeModel.loadSettings = function () {
                     loadOverriddenSettingsEditor();
                 };
-                $scope.scopeModel.genericRuleDefinitionSelector = function () {
+                $scope.scopeModel.genericRuleDefinitionSelectorSelectionChanged = function () {
                     if (selectedIds != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
@@ -94,6 +94,7 @@
                 var directiveAPI = {};
 
                 directiveAPI.load = function (payload) {
+                    var promises = [];
                     if (payload) {
                         extendedSettings = payload.extendedSettings;
                         selectedIds = extendedSettings.RuleDefinitionId;
@@ -103,9 +104,8 @@
                         overriddenSecurity = extendedSettings.OverriddenSecurity;
                         $scope.scopeModel.genericRuleDefinitionTitle = extendedSettings.OverriddenTitle;
                         $scope.scopeModel.showSettings = (overriddenCriteriaDefinition != undefined || overriddenObjects != undefined || overriddenSettingsDefinition != undefined || overriddenSecurity!=undefined) ? true : false;
-                        loadOverriddenSettingsEditor();
+                        promises.push(loadOverriddenSettingsEditor());
                     }
-                    var promises = [];
 
                     promises.push(loadGenericRuleDefinitionSelector());
 
@@ -122,11 +122,6 @@
                     });
                     return UtilsService.waitMultiplePromises(promises);
                 };
-
-                directiveAPI.getSelectedIds = function () {
-                    return genericRuleDefinitionSelectorApi.getSelectedIds();
-                };
-
                 directiveAPI.getData = function () {
                     var settings;
                     if (settingsAPI != undefined)
@@ -151,10 +146,11 @@
             }
 
             function loadOverriddenSettingsEditor() {
+                var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                 if ($scope.scopeModel.showSettings == true) {
 
                     settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                 
                     if (overriddenCriteriaDefinition == undefined && overriddenObjects == undefined && overriddenSettingsDefinition == undefined && overriddenSecurity == undefined)
                     {
                        
