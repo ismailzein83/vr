@@ -102,6 +102,10 @@ namespace Retail.BusinessEntity.Business
                         if (handle.Stop)
                             return;
                     }
+                    else if(processedAccountPackage.AccountPackage.BED < effectiveTime)
+                    {
+                        break;
+                    }
                 }
                 if (withInheritence && accountInfo.Account.ParentAccountId.HasValue)
                     LoadAccountPackagesByPriority(accountBEDefinitionId, accountInfo.Account.ParentAccountId.Value, effectiveTime, withInheritence, OnPackageLoaded);

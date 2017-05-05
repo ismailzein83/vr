@@ -25,7 +25,7 @@ namespace Retail.Voice.Business
             VoiceEventPrice voiceEventPrice = new VoiceEventPrice();
             voiceEventPrice.VoiceEventPricedParts = new List<VoiceEventPricedPart>();
 
-            var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountId, serviceTypeId, eventTime);
+            var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountBEDefinitionId, accountId, serviceTypeId, eventTime);
             if (voiceUsageChargers == null || voiceUsageChargers.Count == 0)
                 return null;
             Decimal remainingDurationToPrice = duration;
@@ -116,6 +116,8 @@ namespace Retail.Voice.Business
 
         private struct GetVoiceUsageChargersByPriorityCacheName
         {
+            public Guid AccountDefinitionId { get; set; }
+
             public long AccountId { get; set; }
 
             public Guid ServiceTypeId { get; set; }
@@ -123,11 +125,12 @@ namespace Retail.Voice.Business
             public DateTime EventDate { get; set; }
         }
 
-        private List<VoiceUsageChargerWithParentPackage> GetVoiceUsageChargersByPriority(long accountId, Guid serviceTypeId, DateTime eventTime)
+        private List<VoiceUsageChargerWithParentPackage> GetVoiceUsageChargersByPriority(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, DateTime eventTime)
         {
-            var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
+            var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountDefinitionId = accountBEDefinitionId, AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
 
             //needs caching
+
             List<Package> accountPackagesByPriority = GetAccountPackagesByPriority(accountId, eventTime); //get account packages by priority
 
             if (accountPackagesByPriority == null)
@@ -143,10 +146,10 @@ namespace Retail.Voice.Business
                     if (packageSettingVoiceUsageCharger.TryGetVoiceUsageCharger(serviceTypeId, out voiceUsageCharger))
                     {
                         voiceUsageChargersByPriority.Add(new VoiceUsageChargerWithParentPackage
-                            {
-                                VoiceUsageCharger = voiceUsageCharger,
-                                ParentPackage = package
-                            });
+                        {
+                            VoiceUsageCharger = voiceUsageCharger,
+                            ParentPackage = package
+                        });
                     }
                 }
                 else
