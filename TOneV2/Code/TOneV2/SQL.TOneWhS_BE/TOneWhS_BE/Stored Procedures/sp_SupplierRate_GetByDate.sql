@@ -15,6 +15,6 @@ BEGIN
 	SELECT  sr.[ID],sr.Rate,sr.RateTypeID,sr.PriceListID,sr.CurrencyId,sr.ZoneID,sr.BED,sr.EED,sr.Change
 	FROM	[TOneWhS_BE].SupplierRate sr WITH(NOLOCK) 
 			LEFT JOIN [TOneWhS_BE].SupplierPriceList pl WITH(NOLOCK) ON sr.PriceListID = pl.ID 
-	Where  (sr.EED is null or sr.EED > @When_local)
+	Where  (sr.EED is null or (sr.EED > @When_local and sr.EED <> sr.BED ))
 			and pl.SupplierID = @SupplierId_local
 END
