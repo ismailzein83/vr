@@ -34,12 +34,6 @@ namespace Retail.Zajil.MainExtensions.Convertors
                 try
                 {
                     InvoiceManager invoiceManager = new InvoiceManager();
-                    if (invoiceId <= 0)
-                    {
-                        context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Invoice GP Info (SourceId: '{0}')", invoiceId);
-                        continue;
-                    }
-
                     SourceInvoice sourceInvoice = new SourceInvoice
                     {
                         Invoice = new Invoice
@@ -48,8 +42,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
                             Details = new InvoiceDetails
                             {
                                 GPReferenceNumber = row[GPReferenceNumberColumn] as string
-                            },
-                            SourceId = invoiceId.ToString()
+                            }
                         }
                     };
                     transactionTargetBEs.Add(sourceInvoice);
@@ -78,39 +71,12 @@ namespace Retail.Zajil.MainExtensions.Convertors
 
         private Invoice GetInvoice(Invoice newInvoice, Invoice existingInvoice)
         {
-            newInvoice.CreatedTime = existingInvoice.CreatedTime;
-            var gpRefNumber = (newInvoice.Details as InvoiceDetails).GPReferenceNumber;
-            newInvoice.Details = GetInvoiceDetails(existingInvoice.Details as InvoiceDetails);
-            (newInvoice.Details as InvoiceDetails).GPReferenceNumber = gpRefNumber;
-            newInvoice.DueDate = existingInvoice.DueDate;
-            newInvoice.FromDate = existingInvoice.FromDate;
-            newInvoice.InvoiceTypeId = existingInvoice.InvoiceTypeId;
-            newInvoice.IssueDate = existingInvoice.IssueDate;
-            newInvoice.LockDate = existingInvoice.LockDate;
-            newInvoice.Note = existingInvoice.Note;
-            newInvoice.PaidDate = existingInvoice.PaidDate;
-            newInvoice.PartnerId = existingInvoice.PartnerId;
-            newInvoice.SerialNumber = existingInvoice.SerialNumber;
-            newInvoice.TimeZoneId = existingInvoice.TimeZoneId;
-            newInvoice.TimeZoneOffset = existingInvoice.TimeZoneOffset;
-            newInvoice.ToDate = existingInvoice.ToDate;
-            newInvoice.UserId = existingInvoice.UserId;
-            return newInvoice;
-        }
+            Invoice invoice = Serializer.Deserialize<Invoice>(Serializer.Serialize(existingInvoice));
 
-        private dynamic GetInvoiceDetails(InvoiceDetails invoiceDetails)
-        {
-            InvoiceDetails newDetails = new InvoiceDetails();
-            newDetails.GPReferenceNumber = invoiceDetails.GPReferenceNumber;
-            newDetails.CountCDRs = invoiceDetails.CountCDRs;
-            newDetails.CurrencyId = invoiceDetails.CurrencyId;
-            newDetails.CustomerPO = invoiceDetails.CustomerPO;
-            newDetails.DuePeriod = invoiceDetails.DuePeriod;
-            newDetails.SalesAgent = invoiceDetails.SalesAgent;
-            newDetails.TotalAmount = invoiceDetails.TotalAmount;
-            newDetails.TotalDuration = invoiceDetails.TotalDuration;
-            newDetails.VoiceCustomerNo = invoiceDetails.VoiceCustomerNo;
-            return newDetails;
+            var gpRefNumber = (newInvoice.Details as InvoiceDetails).GPReferenceNumber;
+            (invoice.Details as InvoiceDetails).GPReferenceNumber = gpRefNumber;
+
+            return invoice;
         }
     }
 }
