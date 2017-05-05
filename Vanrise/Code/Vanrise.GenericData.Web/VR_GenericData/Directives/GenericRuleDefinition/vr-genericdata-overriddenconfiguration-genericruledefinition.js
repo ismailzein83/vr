@@ -50,8 +50,14 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.loadSettings = function () {
-                    loadOverriddenSettingsEditor();
+                $scope.scopeModel.isSettingsOverriddenValuechanged = function () {
+                    if ($scope.scopeModel.isSettingsOverridden==true)
+                    {
+                        loadOverriddenSettingsEditor();
+                     }
+                    else{
+                        hideOverriddenSettingsEditor();
+                    }
                 };
                 $scope.scopeModel.genericRuleDefinitionSelectorSelectionChanged = function () {
                     if (selectedIds != undefined) {
@@ -59,19 +65,19 @@
                             selectedPromiseDeferred.resolve();
                         }
                         else {
-                            $scope.scopeModel.genericRuleDefinitionTitle = "";
-                            $scope.scopeModel.showSettings = false;
+                            $scope.scopeModel.title = "";
+                            $scope.scopeModel.isSettingsOverridden = false;
                             overriddenCriteriaDefinition = undefined;
                             overriddenObjects = undefined;
                             overriddenSettingsDefinition = undefined;
                             overriddenSecurity = undefined;
+                            settingsAPI = undefined;
                             $scope.scopeModel.showDirectiveSettings = false;
-                            loadOverriddenSettingsEditor();
                         }
                     }
                        
                 };
-                $scope.scopeModel.showSettings = false;
+                $scope.scopeModel.isSettingsOverridden = false;
                 $scope.scopeModel.onGenericRuleDefinfitionSettingsReady = function (api) {
                     settingsAPI = api;
                     var setLoader = function (value) {
@@ -102,9 +108,12 @@
                         overriddenObjects = extendedSettings.OverriddenObjects;
                         overriddenSettingsDefinition = extendedSettings.OverriddenSettingsDefinition;
                         overriddenSecurity = extendedSettings.OverriddenSecurity;
-                        $scope.scopeModel.genericRuleDefinitionTitle = extendedSettings.OverriddenTitle;
-                        $scope.scopeModel.showSettings = (overriddenCriteriaDefinition != undefined || overriddenObjects != undefined || overriddenSettingsDefinition != undefined || overriddenSecurity!=undefined) ? true : false;
-                        promises.push(loadOverriddenSettingsEditor());
+                        $scope.scopeModel.title = extendedSettings.OverriddenTitle;
+                        $scope.scopeModel.isSettingsOverridden = (overriddenCriteriaDefinition != undefined || overriddenObjects != undefined || overriddenSettingsDefinition != undefined || overriddenSecurity != undefined) ? true : false;
+                        if ($scope.scopeModel.isSettingsOverridden)
+                        {
+                            promises.push(loadOverriddenSettingsEditor());
+                        }
                     }
 
                     promises.push(loadGenericRuleDefinitionSelector());
@@ -130,25 +139,22 @@
                     genericRuleDefinitionOverriddenConfiguration.$type = "Vanrise.GenericData.Business.GenericRuleDefinitionOverriddenConfiguration ,Vanrise.GenericData.Business";
                     genericRuleDefinitionOverriddenConfiguration.ConfigId = '';
                     genericRuleDefinitionOverriddenConfiguration.RuleDefinitionId = genericRuleDefinitionSelectorApi.getSelectedIds();
-                    genericRuleDefinitionOverriddenConfiguration.OverriddenTitle = $scope.scopeModel.genericRuleDefinitionTitle;
-                    if (settings != undefined)
-                    {
+                    genericRuleDefinitionOverriddenConfiguration.OverriddenTitle = $scope.scopeModel.title;
+                    if (settings != undefined) {
                         genericRuleDefinitionOverriddenConfiguration.OverriddenCriteriaDefinition = settings.criteriaDefinition;
                         genericRuleDefinitionOverriddenConfiguration.OverriddenObjects = settings.objects;
                         genericRuleDefinitionOverriddenConfiguration.OverriddenSettingsDefinition = settings.settingsDefinition;
                         genericRuleDefinitionOverriddenConfiguration.OverriddenSecurity = settings.security;
                     }
-                   
+
                     return genericRuleDefinitionOverriddenConfiguration;
-                }
+                };
 
                 return directiveAPI;
             }
 
             function loadOverriddenSettingsEditor() {
                 var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                if ($scope.scopeModel.showSettings == true) {
-
                     settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                  
                     if (overriddenCriteriaDefinition == undefined && overriddenObjects == undefined && overriddenSettingsDefinition == undefined && overriddenSecurity == undefined)
@@ -171,15 +177,8 @@
                         genericRuleDefinitionSecurity = overriddenSecurity;
                             loadSettings();
                     }
-                }
-                else {
-                    settingsAPI = undefined;
-                    $scope.scopeModel.showDirectiveSettings = false;
-                    loadSettingDirectivePromiseDeferred.resolve();
-                }
+                
                 function loadSettings() {
-
-                    if (genericRuleDefinitionCriteriaDefinition != undefined || genericRuleDefinitionObjects != undefined || genericRuleDefinitionSettingsDefinition != undefined || genericRuleDefinitionSecurity != undefined) {
 
                         $scope.scopeModel.showDirectiveSettings = true;
                         settingReadyPromiseDeferred.promise
@@ -194,9 +193,12 @@
                                 VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
 
-                    }
                 }
                 return loadSettingDirectivePromiseDeferred.promise;
+            }
+            function hideOverriddenSettingsEditor() {
+                $scope.scopeModel.showDirectiveSettings = false;
+                settingsAPI = undefined;
             }
             function getGenericRuleDefinition() {
                 return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionSelectorApi.getSelectedIds()).then(function (genericRuleEntityDefinition) {

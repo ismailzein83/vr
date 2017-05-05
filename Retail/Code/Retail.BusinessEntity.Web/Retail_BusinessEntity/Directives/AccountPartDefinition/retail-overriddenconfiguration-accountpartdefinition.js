@@ -44,25 +44,28 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.loadSettings = function () {
-                    loadOverriddenSettingsEditor();
-                };
+                $scope.scopeModel.isSettingsOverriddenValuechanged = function () {
+                    if ($scope.scopeModel.isSettingsOverridden==true)
+                    {loadOverriddenSettingsEditor();}
+                    else
+                     {hideOverriddenSettingsEditor();}
+                          }
                 $scope.scopeModel.accountPartDefinitionSelectorSelectionChanged = function () {
                     if (selectedIds != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
                         }
                         else {
-                            $scope.scopeModel.accountPartDefinitionTitle = "";
-                            $scope.scopeModel.showSettings = false;
+                            $scope.scopeModel.title = "";
+                            $scope.scopeModel.isSettingsOverridden = false;
                             overriddenSettings = undefined;
                             $scope.scopeModel.showDirectiveSettings = false;
-                            loadOverriddenSettingsEditor();
+                            settingsAPI = undefined;
                         }
                     }
 
                 };
-                $scope.scopeModel.showSettings = false;
+                $scope.scopeModel.isSettingsOverridden = false;
                 $scope.scopeModel.accountPartDefinitionDirectiveReady = function (api) {
                     settingsAPI = api;
                     var setLoader = function (value) {
@@ -90,9 +93,12 @@
                         extendedSettings = payload.extendedSettings;
                         selectedIds = extendedSettings.AccountPartDefinitionId;
                         overriddenSettings = extendedSettings.OverriddenSettings;
-                        $scope.scopeModel.accountPartDefinitionTitle = extendedSettings.OverriddenTitle;
-                        $scope.scopeModel.showSettings = (overriddenSettings != undefined) ? true : false;
-                        promises.push(loadOverriddenSettingsEditor());
+                        $scope.scopeModel.title = extendedSettings.OverriddenTitle;
+                        $scope.scopeModel.isSettingsOverridden = (overriddenSettings != undefined) ? true : false;
+                        if ($scope.scopeModel.isSettingsOverridden)
+                        {
+                            promises.push(loadOverriddenSettingsEditor());
+                        }
                     }
 
                     promises.push(loadAccountPartDefinitionSelector());
@@ -118,17 +124,16 @@
                     accountPartDefinitionOverriddenConfiguration.$type = "Retail.BusinessEntity.Business.AccountPartDefinitionOverriddenConfiguration ,Retail.BusinessEntity.Business";
                     accountPartDefinitionOverriddenConfiguration.ConfigId = '';
                     accountPartDefinitionOverriddenConfiguration.AccountPartDefinitionId = accountPartDefinitionSelectorApi.getSelectedIds();
-                    accountPartDefinitionOverriddenConfiguration.OverriddenTitle = $scope.scopeModel.accountPartDefinitionTitle;
+                    accountPartDefinitionOverriddenConfiguration.OverriddenTitle = $scope.scopeModel.title;
                     accountPartDefinitionOverriddenConfiguration.OverriddenSettings = settings;
                     return accountPartDefinitionOverriddenConfiguration;
-                }
+                };
 
                 return directiveAPI;
             }
 
             function loadOverriddenSettingsEditor() {
                 var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                if ($scope.scopeModel.showSettings == true) {
 
                     settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -145,15 +150,8 @@
                         accountPartDefinitionSettings = overriddenSettings;
                         loadSettings();
                     }
-                }
-                else {
-                    settingsAPI = undefined;
-                    $scope.scopeModel.showDirectiveSettings = false;
-                    loadSettingDirectivePromiseDeferred.resolve();
-                }
-                function loadSettings() {
 
-                    if (accountPartDefinitionSettings!=undefined) {
+                function loadSettings() {
 
                         $scope.scopeModel.showDirectiveSettings = true;
                         settingReadyPromiseDeferred.promise
@@ -164,10 +162,12 @@
                                 };
                                 VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
-
-                    }
                 }
                 return loadSettingDirectivePromiseDeferred.promise;
+            }
+            function hideOverriddenSettingsEditor() {
+                $scope.scopeModel.showDirectiveSettings = false;
+                settingsAPI = undefined;
             }
             function getAccountPartDefinition() {
                 return Retail_BE_AccountPartDefinitionAPIService.GetAccountPartDefinition(accountPartDefinitionSelectorApi.getSelectedIds()).then(function (accountPartDefinition) {

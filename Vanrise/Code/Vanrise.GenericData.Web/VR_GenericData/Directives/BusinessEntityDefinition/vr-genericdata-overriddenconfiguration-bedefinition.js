@@ -44,8 +44,14 @@
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.bEDefinitionSelectedValue;
-                $scope.scopeModel.loadSettings = function () {
-                    loadOverriddenSettingsEditor();
+                $scope.scopeModel.isSettingsOverriddenValuechanged = function () {
+                    if($scope.scopeModel.isSettingsOverridden==true)
+                    {
+                        loadOverriddenSettingsEditor();
+                    }
+                    else{
+                        hideOverriddenSettingsEditor();
+                    }
                 };
                 $scope.scopeModel.businessEntityDefinitionSelectorSelectionChanged = function (value) {
                     if (value != undefined)
@@ -54,14 +60,15 @@
                             selectedPromiseDeferred.resolve();
                         }
                         else {
-                            $scope.scopeModel.businessEntityTitle = "";
-                            $scope.scopeModel.showSettings = false;
+                            $scope.scopeModel.title = "";
+                            $scope.scopeModel.isSettingsOverridden = false;
                             overriddenSettings = undefined;
-                            loadOverriddenSettingsEditor();
+                            settingsAPI = undefined;
+                            $scope.scopeModel.selectedSetingsTypeConfig = undefined;
                         }
                     }
                 };
-                $scope.scopeModel.showSettings = false;
+                $scope.scopeModel.isSettingsOverridden = false;
                 $scope.scopeModel.onSettingsEditorReady = function (api) {
                     settingsAPI = api;
                     var setLoader = function (value) {
@@ -90,9 +97,12 @@
                          var extendedSettings = payload.extendedSettings;
                          selectedIds = extendedSettings.BusinessEntityDefinitionId;
                         overriddenSettings = extendedSettings.OverriddenSettings;
-                        $scope.scopeModel.businessEntityTitle = extendedSettings.OverriddenTitle;
-                        $scope.scopeModel.showSettings = (extendedSettings.OverriddenSettings != undefined) ? true : false;
-                        promises.push(loadOverriddenSettingsEditor());
+                        $scope.scopeModel.title = extendedSettings.OverriddenTitle;
+                        $scope.scopeModel.isSettingsOverridden = (extendedSettings.OverriddenSettings != undefined) ? true : false;
+                        if ($scope.scopeModel.isSettingsOverridden)
+                        {
+                            promises.push(loadOverriddenSettingsEditor());
+                        }
                     }
                    
 
@@ -119,17 +129,16 @@
                     beDefinitionOverriddenConfiguration.$type = "Vanrise.GenericData.Business.BEDefinitionOverriddenConfiguration ,Vanrise.GenericData.Business";
                     beDefinitionOverriddenConfiguration.ConfigId = '';
                     beDefinitionOverriddenConfiguration.BusinessEntityDefinitionId = beDefinitionSelectorApi.getSelectedIds();
-                    beDefinitionOverriddenConfiguration.OverriddenTitle = $scope.scopeModel.businessEntityTitle;
+                    beDefinitionOverriddenConfiguration.OverriddenTitle = $scope.scopeModel.title;
                     beDefinitionOverriddenConfiguration.OverriddenSettings = settings;
                     return beDefinitionOverriddenConfiguration;
-                }
+                };
 
                 return directiveAPI;
             }
             
             function loadOverriddenSettingsEditor() {
                 var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                if ($scope.scopeModel.showSettings == true) {
                     settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     if (overriddenSettings == undefined) {
                         getBEDefinitionSettingConfigs().then(
@@ -156,15 +165,7 @@
 
                     }
                     
-                }
-                else {
-                    $scope.scopeModel.selectedSetingsTypeConfig = undefined;
-                    settingsAPI = undefined;
-                    loadSettingDirectivePromiseDeferred.resolve();
-                }
                 function loadSettings() {
-
-                    if (beDefinitionSettings != undefined) {
 
                         $scope.scopeModel.selectedSetingsTypeConfig = UtilsService.getItemByVal($scope.scopeModel.bEDefinitionSettingConfigs, beDefinitionSettings.ConfigId, "ExtensionConfigurationId");
                         settingReadyPromiseDeferred.promise
@@ -175,10 +176,15 @@
                                 };
                                 VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
-                    }
                 }
                 return loadSettingDirectivePromiseDeferred.promise;
             }
+
+          function hideOverriddenSettingsEditor()
+             {$scope.scopeModel.selectedSetingsTypeConfig = undefined;
+                   settingsAPI = undefined;
+                }
+
             function getBEDefinitionSettingConfigs() {
                 return VR_GenericData_BusinessEntityDefinitionAPIService.GetBEDefinitionSettingConfigs().then(function (response) {
                     if (response) {
