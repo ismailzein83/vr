@@ -16,10 +16,11 @@ namespace TOne.WhS.Sales.Business
     {
         #region Fields / Constructors
 
-        private IEnumerable<RPRouteDetail> _routes;
         private List<CostCalculationMethod> _costCalculationMethods;
         private Guid? _rateCalculationCostColumnConfigId;
         private RateCalculationMethod _rateCalculationMethod;
+
+        private Dictionary<long, RPRouteDetail> _rpRoutesByZoneId = new Dictionary<long, RPRouteDetail>();
 
         public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
         {
@@ -28,7 +29,8 @@ namespace TOne.WhS.Sales.Business
                 int? customerId = null;
                 if (ownerType == SalePriceListOwnerType.Customer)
                     customerId = ownerId;
-                _routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId, customerId);
+                IEnumerable<RPRouteDetail> routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId, customerId);
+                StructureRPRoutesByZoneId(routes);
             }
 
             _costCalculationMethods = costCalculationMethods;
@@ -44,29 +46,32 @@ namespace TOne.WhS.Sales.Business
             if (zoneItems == null)
                 return;
 
-            List<object> customObjects = new List<object>();
+            IEnumerable<long> zoneIds = zoneItems.MapRecords(x => x.ZoneId);
 
-            foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
-                customObjects.Add(null);
+            var customObjects = new List<object>();
+            var emptyCosts = new List<decimal?>(); // This list is used for display purposes
 
-            IEnumerable<long> zoneIds = zoneItems.Select(x => x.ZoneId);
+            if (_costCalculationMethods != null)
+            {
+                foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
+                {
+                    customObjects.Add(null);
+                    emptyCosts.Add(null);
+                }
+            }
 
             foreach (ZoneItem zoneItem in zoneItems)
             {
-                RPRouteDetail route = _routes.FindRecord(x => x.SaleZoneId == zoneItem.ZoneId);
+                RPRouteDetail route = _rpRoutesByZoneId.GetRecord(zoneItem.ZoneId);
                 zoneItem.RPRouteDetail = route;
+
                 if (route != null && route.RouteOptionsDetails != null && route.RouteOptionsDetails.Count() > 0)
                 {
                     SetCosts(zoneIds, zoneItem, route, customObjects);
                     SetZoneMarginProperties(zoneItem);
                 }
                 else if (_costCalculationMethods != null)
-                {
-                    zoneItem.Costs = new List<decimal?>();
-                    foreach (CostCalculationMethod costCalculationMethod in _costCalculationMethods)
-                        zoneItem.Costs.Add(null);
-                }
-                //SetCalculatedRate(zoneItem);
+                    zoneItem.Costs = emptyCosts;
             }
         }
 
@@ -96,6 +101,18 @@ namespace TOne.WhS.Sales.Business
                 decimal margin = zoneItem.CurrentRate.Value - firstSupplierRate.Value;
                 zoneItem.Margin = margin;
                 zoneItem.MarginPercentage = (margin / firstSupplierRate.Value) * 100;
+            }
+        }
+
+        private void StructureRPRoutesByZoneId(IEnumerable<RPRouteDetail> rpRoutes)
+        {
+            if (rpRoutes == null || rpRoutes.Count() == 0)
+                return;
+
+            foreach (RPRouteDetail rpRoute in rpRoutes)
+            {
+                if (!_rpRoutesByZoneId.ContainsKey(rpRoute.SaleZoneId))
+                    _rpRoutesByZoneId.Add(rpRoute.SaleZoneId, rpRoute);
             }
         }
 

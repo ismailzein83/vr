@@ -53,7 +53,6 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 context.Cost = weightedAverageCost.Value;
             else
             {
-                context.CustomObject = null;
                 new AvgCostCalculation().CalculateCost(context);
             }
         }
