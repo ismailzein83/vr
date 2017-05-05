@@ -67,5 +67,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_SalePricelistController', salePricelistController);
+    appControllers.controller('WhS_BE_SalePricelistManagementController', salePricelistController);
 })(appControllers);
