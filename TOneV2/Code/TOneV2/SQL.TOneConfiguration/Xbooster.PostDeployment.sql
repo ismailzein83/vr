@@ -21,10 +21,12 @@ delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308',-
 										'DCF8CA21-852C-41B9-9101-6990E545509D',--'Organizational Charts'
 										'52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD',--'Component Types'
 										'8AC4B99E-01A0-41D1-AE54-09E679309086',--'Status Definitions'
+										'604B2CB5-B839-4E51-8D13-3C1C84D05DEE',--'Countries'
 										'25994374-CB99-475B-8047-3CDB7474A083',--'Cities'
 										'9F691B87-4936-4C4C-A757-4B3E12F7E1D9', --'Currencies'
 										'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', --'Exchange Rates'
 										'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', --'Time Zone'
+										'2CF7E0BE-1396-4305-AA27-11070ACFC18F',--'Application Visibilities'
 										'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712'--'Rate Types'
 										)
 GO
