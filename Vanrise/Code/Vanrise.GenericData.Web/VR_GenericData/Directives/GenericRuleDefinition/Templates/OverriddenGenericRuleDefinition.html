@@ -1,0 +1,23 @@
+﻿<vr-tab header="'RuleDefinitionSettings'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onGenericRuleDefinitionSelectorReady" isrequired="true"
+                                                           customlabel="'RuleDefinitionSettings'"
+                                                           onselectionchanged="scopeModel.genericRuleDefinitionSelector">
+                </<vr-genericdata-genericruledefinition-selector>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.genericRuleDefinitionTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-switch value="scopeModel.showSettings" label="Change Settings" onvaluechanged="scopeModel.loadSettings"></vr-switch>
+        </vr-columns>
+    </vr-row>
+</vr-tab> 
+<div ng-if="scopeModel.showDirectiveSettings">
+    <vr-genericdata-genericruledefinition-settings on-ready="scopeModel.onGenericRuleDefinfitionSettingsReady"></vr-genericdata-genericruledefinition-settings>
+</div>

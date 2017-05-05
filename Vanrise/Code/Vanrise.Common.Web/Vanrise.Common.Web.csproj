@@ -234,8 +234,8 @@
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-interapprestconnection-editor.js" />
     <Content Include="Common\Directives\ObjectTracking\Templates\ObjectTrackingGridTemplate.html" />
     <Content Include="Common\Directives\ObjectTracking\vr-common-objecttracking-grid.js" />
-    <Content Include="Common\Directives\OverriddenConfig\MainExtentions\vr-common-overriddenconfiguration-genericruledefinition.js" />
-    <Content Include="Common\Directives\OverriddenConfig\MainExtentions\vr-common-overriddenconfiguration-bedefinition.js" />
+    <Content Include="Common\Directives\OverriddenConfig\MainExtentions\Templates\OverriddenConfigurationAccountPartDefinition.html" />
+    <Content Include="Common\Directives\OverriddenConfig\MainExtentions\vr-common-overriddenconfiguration-accountpartdefinition.js" />
     <Content Include="Common\Directives\OverriddenConfig\Templates\OverriddenConfigGrid.html" />
     <Content Include="Common\Directives\OverriddenConfig\vr-common-overriddenconfig-grid.js" />
     <Content Include="Common\Directives\OverriddenConfigGroup\vr-common-overriddenconfiggroup-selector.js" />

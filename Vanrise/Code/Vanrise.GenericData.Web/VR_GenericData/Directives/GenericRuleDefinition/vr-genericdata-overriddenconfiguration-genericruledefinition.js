@@ -10,19 +10,9 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                onselectionchanged: '=',
-                ismultipleselection: '@',
-                isrequired: '=',
-                normalColNum: '@',
-                selectedvalues: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                ctrl.datasource = [];
-
-                ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined && $attrs.ismultipleselection != null)
-                    ctrl.selectedvalues = [];
                 var overriddenSettingsDirective = new OverriddenSettingsDirective(ctrl, $scope, $attrs);
                 overriddenSettingsDirective.initializeController();
             },
@@ -35,9 +25,7 @@
                     }
                 };
             },
-            template: function (element, attrs) {
-                return getDirectiveTemplate(attrs);
-            }
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/Templates/OverriddenGenericRuleDefinition.html'
         };
 
         function OverriddenSettingsDirective(ctrl, $scope, attrs) {
@@ -65,7 +53,7 @@
                 $scope.scopeModel.loadSettings = function () {
                     loadOverriddenSettingsEditor();
                 };
-                $scope.scopeModel.changeFlag = function () {
+                $scope.scopeModel.genericRuleDefinitionSelector = function () {
                     if (selectedIds != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
@@ -176,6 +164,8 @@
                             genericRuleDefinitionSettingsDefinition = genericRuleEntityDefinitionEntity.SettingsDefinition;
                             genericRuleDefinitionSecurity = genericRuleEntityDefinitionEntity.Security;
                             loadSettings();
+                        }).catch(function (error) {
+                            loadSettingDirectivePromiseDeferred.reject();
                         });
                     }
                     else {
@@ -189,6 +179,7 @@
                 else {
                     settingsAPI = undefined;
                     $scope.scopeModel.showDirectiveSettings = false;
+                    loadSettingDirectivePromiseDeferred.resolve();
                 }
                 function loadSettings() {
 
@@ -207,9 +198,9 @@
                                 VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
 
-                        return loadSettingDirectivePromiseDeferred.promise;
                     }
                 }
+                return loadSettingDirectivePromiseDeferred.promise;
             }
             function getGenericRuleDefinition() {
                 return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionSelectorApi.getSelectedIds()).then(function (genericRuleEntityDefinition) {
@@ -218,47 +209,10 @@
             }
         }
 
-        function getDirectiveTemplate(attrs) {
-
-            var ismultipleselection = '';
-            var labelTab = "'RuleDefinitionSettings'";
-            var label = 'RuleDefinitionSettings';
-            if (attrs.ismultipleselection != undefined && attrs.ismultipleselection != null) {
-                ismultipleselection = ' ismultipleselection';
-            }
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
-            return ' <vr-tab header="' + labelTab + '">\
-                <vr-row>\
-                <vr-columns colnum="{{ctrl.normalColNum}}">\
-                     <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onGenericRuleDefinitionSelectorReady" isrequired="true"    \
-                      selectedvalues="ctrl.selectedvalues" \
-                      customlabel="' + label + '"\
-                      ' + ismultipleselection +
-                     ' onselectionchanged="scopeModel.changeFlag">\
-                    </<vr-genericdata-genericruledefinition-selector>\
-                    </vr-columns>\
-                    </vr-row>\
-                    <vr-row>\
-                        <vr-columns width="1/2row">\
-                            <vr-textbox value="scopeModel.genericRuleDefinitionTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>\
-                        </vr-columns>\
-                    </vr-row>\
-                    <vr-row>\
-                    <vr-columns width="1/2row">\
-                            <vr-switch value="scopeModel.showSettings" label="Use Record Type" onvaluechanged="scopeModel.loadSettings" ></vr-switch>\
-                    </vr-columns>\
-                     </vr-row>\
-                        </vr-tab> \
-<div ng-if="scopeModel.showDirectiveSettings">\
-<vr-genericdata-genericruledefinition-settings on-ready="scopeModel.onGenericRuleDefinfitionSettingsReady"></vr-genericdata-genericruledefinition-settings>\
-</div>\
-';
-        }
 
         return directiveDefinitionObject;
     }
 
-    app.directive('vrCommonOverriddenconfigurationGenericruledefinition', OverriddenSettings);
+    app.directive('vrGenericdataOverriddenconfigurationGenericruledefinition', OverriddenSettings);
 
 })(app);

@@ -9,20 +9,10 @@
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '=',
-                onselectionchanged: '=',
-                ismultipleselection: '@',
-                isrequired: '=',
-                normalColNum: '@',
-                selectedvalues: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                ctrl.datasource = [];
-
-                ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined && $attrs.ismultipleselection != null)
-                    ctrl.selectedvalues = [];
                 var overriddenSettingsDirective = new OverriddenSettingsDirective(ctrl, $scope, $attrs);
                 overriddenSettingsDirective.initializeController();
             },
@@ -35,9 +25,7 @@
                     }
                 };
             },
-            template: function (element, attrs) {
-                return getDirectiveTemplate(attrs);
-            }
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/Templates/OverriddenBEDefinition.html'
         };
 
         function OverriddenSettingsDirective(ctrl, $scope, attrs) {
@@ -55,11 +43,12 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
+                $scope.scopeModel.bEDefinitionSelectedValue;
                 $scope.scopeModel.loadSettings = function () {
                     loadOverriddenSettingsEditor();
                 };
-                $scope.scopeModel.changeFlag = function () {
-                    if (selectedIds != undefined)
+                $scope.scopeModel.businessEntityDefinitionSelectorSelectionChanged = function (value) {
+                    if (value != undefined)
                     {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
@@ -95,7 +84,7 @@
                 var directiveAPI = {};
 
                 directiveAPI.load = function (payload) {
-                    
+                    var promises = [];
                     if (payload) {
                          
                          var extendedSettings = payload.extendedSettings;
@@ -103,9 +92,9 @@
                         overriddenSettings = extendedSettings.OverriddenSettings;
                         $scope.scopeModel.businessEntityTitle = extendedSettings.OverriddenTitle;
                         $scope.scopeModel.showSettings = (extendedSettings.OverriddenSettings != undefined) ? true : false;
-                        loadOverriddenSettingsEditor();
+                        promises.push(loadOverriddenSettingsEditor());
                     }
-                    var promises = [];
+                   
 
                     promises.push(loadBusinessEntityDefinitionSelector());
 
@@ -143,10 +132,9 @@
             }
             
             function loadOverriddenSettingsEditor() {
+                var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                 if ($scope.scopeModel.showSettings == true) {
-
                     settingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var loadSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     if (overriddenSettings == undefined) {
                         getBEDefinitionSettingConfigs().then(
                             function () {
@@ -154,21 +142,29 @@
 
                                     beDefinitionSettings = businessEntityDefinitionEntity.Settings;
                                     loadSettings();
+                                }).catch(function (error) {
+                                    loadSettingDirectivePromiseDeferred.reject();
                                 });
                             }
-                            )
+                            ).catch(function (error) {
+                                loadSettingDirectivePromiseDeferred.reject();
+                            });
                     }
                     else {
                         getBEDefinitionSettingConfigs().then(function () {
                             beDefinitionSettings = overriddenSettings;
                             loadSettings();
+                        }).catch(function (error) {
+                            loadSettingDirectivePromiseDeferred.reject();
                         });
 
                     }
+                    
                 }
                 else {
                     $scope.scopeModel.selectedSetingsTypeConfig = undefined;
                     settingsAPI = undefined;
+                    loadSettingDirectivePromiseDeferred.resolve();
                 }
                 function loadSettings() {
 
@@ -183,10 +179,9 @@
                                 };
                                 VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
-
-                        return loadSettingDirectivePromiseDeferred.promise;
                     }
                 }
+                return loadSettingDirectivePromiseDeferred.promise;
             }
             function getBEDefinitionSettingConfigs() {
                 return VR_GenericData_BusinessEntityDefinitionAPIService.GetBEDefinitionSettingConfigs().then(function (response) {
@@ -203,51 +198,9 @@
             }
         }
 
-        function getDirectiveTemplate(attrs) {
-
-            var ismultipleselection = '';
-            var labelTab = "'BEDefinitionSettings'";
-            var label = 'BEDefinitionSettings';
-            if (attrs.ismultipleselection != undefined && attrs.ismultipleselection != null) {
-                ismultipleselection = ' ismultipleselection';
-            }
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
-            return ' <vr-tab header="'+labelTab+'">\
-                <vr-row>\
-                <vr-columns colnum="{{ctrl.normalColNum}}">\
-                     <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"    \
-                      isrequired="ctrl.isrequired" \
-                      selectedvalues="ctrl.selectedvalues" \
-                      customlabel="' + label + '"\
-                      ' + ismultipleselection +
-                     ' onselectionchanged="scopeModel.changeFlag">\
-                    </vr-genericdata-businessentitydefinition-selector>\
-                    </vr-columns>\
-                    </vr-row>\
-                    <vr-row>\
-                        <vr-columns width="1/2row">\
-                            <vr-textbox value="scopeModel.businessEntityTitle" isrequired="true" label="Title" customvalidate="scopeModel.validate()"></vr-textbox>\
-                        </vr-columns>\
-                    </vr-row>\
-                    <vr-row>\
-                    <vr-columns width="1/2row">\
-                            <vr-switch value="scopeModel.showSettings" label="Use Record Type" onvaluechanged="scopeModel.loadSettings" ></vr-switch>\
-                    </vr-columns>\
-                     </vr-row>\
-                        </vr-tab> \
-  <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"\
-            ng-if="scopeModel.selectedSetingsTypeConfig!=undefined"\
-            directive="scopeModel.selectedSetingsTypeConfig.Editor"\
-            on-ready="scopeModel.onSettingsEditorReady"\
-            normal-col-num="4"\
-            isrequired="true">\
-</vr-directivewrapper>';
-        }
-
         return directiveDefinitionObject;
     }
 
-    app.directive('vrCommonOverriddenconfigurationBedefinition', OverriddenSettings);
+    app.directive('vrGenericdataOverriddenconfigurationBedefinition', OverriddenSettings);
 
 })(app);
