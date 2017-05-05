@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountStatementManager.cs" />
+    <Compile Include="LiveBalanceManager.cs" />
+    <Compile Include="LiveBalanceTileDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailAccountUserManager.cs" />
   </ItemGroup>

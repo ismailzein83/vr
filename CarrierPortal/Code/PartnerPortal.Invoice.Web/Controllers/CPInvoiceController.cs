@@ -20,6 +20,13 @@ namespace PartnerPortal.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return GetWebResponse(input, manager.GetFilteredInvoices(input));
         }
+        [HttpGet]
+        [Route("GetRemoteLastInvoice")]
+        public Vanrise.Invoice.Entities.Invoice GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetRemoteLastInvoice(connectionId, invoiceTypeId);
+        }
       
     }
 }

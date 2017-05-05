@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountStatementController.cs" />
+    <Compile Include="Controllers\LiveBalanceController.cs" />
     <Compile Include="Controllers\RetailAccountUserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -152,6 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PartnerPortal_CustomerAccess\Constant\ModuleConfig.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetiledefinitionsettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetileruntimesettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\Templates\LiveBalanceTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\Templates\LiveBalanceTileRuntimeSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Services\APIService\LiveBalanceAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatementhandler-template.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatementhandler-selector.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\Templates\AccountSatementHandlerTemplate.html" />

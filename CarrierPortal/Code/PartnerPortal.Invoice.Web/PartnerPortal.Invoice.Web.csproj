@@ -144,6 +144,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PartnerPortal_Invoice\Constant\ModuleConfig.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceTile\Directives\partnerportal-invoice-invoicetiledefinitionsettings.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceTile\Directives\partnerportal-invoice-invoicetileruntimesettings.js" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceTile\Directives\Templates\InvoiceTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_Invoice\Elements\InvoiceTile\Directives\Templates\InvoiceTileRuntimeSettings.html" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceType\Directives\partnerportal-invoice-invoicecustomfield-remoteselector.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceType\Directives\partnerportal-invoice-invoiceattachments-remoteselector.js" />
     <Content Include="PartnerPortal_Invoice\Elements\InvoiceType\Directives\partnerportal-invoice-invoicefield-remoteselector.js" />
