@@ -3,11 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [VR_Invoice].[sp_Invoice_Get]
-		@InvoiceId bigint
+create PROCEDURE [VR_Invoice].sp_Invoice_GetBySourceId
+		@InvoiceTypeId uniqueidentifier,
+		@SourceId nvarchar(100)
 AS
 BEGIN
 	SELECT	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,TimeZoneId,TimeZoneOffset, SourceId
 	FROM	VR_Invoice.Invoice with(nolock)
-	where	ID = @InvoiceId  
+	where  InvoiceTypeID =  @InvoiceTypeId and 	SourceId = @SourceId
 END

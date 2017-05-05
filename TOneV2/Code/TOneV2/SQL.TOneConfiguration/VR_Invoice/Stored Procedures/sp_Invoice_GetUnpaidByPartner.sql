@@ -21,7 +21,8 @@ BEGIN
 			inv.CreatedTime,
 			inv.LockDate,Notes,
 			inv.TimeZoneId,
-			inv.TimeZoneOffset
+			inv.TimeZoneOffset,
+			SourceId
 	FROM	VR_Invoice.Invoice inv with(nolock)
 	join @PartnerInvoiceTypeTable pit on  inv.InvoiceTypeID = pit.InvoiceTypeID AND inv.PartnerID = pit.PartnerId 
 	where PaidDate IS NULL AND DueDate <= GETDATE() AND (IsDeleted IS NULL OR IsDeleted = 0 )

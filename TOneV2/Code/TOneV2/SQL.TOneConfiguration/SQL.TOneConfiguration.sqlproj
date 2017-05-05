@@ -588,6 +588,18 @@
     <Build Include="Security\dataparser.sql" />
     <Build Include="common\Tables\GenericLKUP.sql" />
     <Build Include="VR_AccountBalance\Tables\AccountUsageOverride.sql" />
+    <Build Include="common\Tables\OverriddenConfigurationGroup.sql" />
+    <Build Include="common\Tables\OverriddenConfiguration.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetBySourceId.sql" />
+    <Build Include="common\Stored Procedures\sp_OverriddenConfigurationGroup_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_OverriddenConfigurationGroup_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_OverriddenConfiguration_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_OverriddenConfiguration_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_OverriddenConfiguration_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_GenericLKUP_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_GenericLKUP_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_GenericLKUP_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
