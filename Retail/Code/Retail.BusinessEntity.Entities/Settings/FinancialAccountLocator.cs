@@ -22,5 +22,9 @@ namespace Retail.BusinessEntity.Entities
         DateTime EffectiveOn { get; }
 
         long FinancialAccountId { set; }
+
+        string BalanceAccountId { set; }
+
+        Guid BalanceAccountTypeId { set; }
     }
 }
