@@ -59,9 +59,9 @@
                             {
                                 $scope.scopeModel.enterpriseMaxCalls = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxCalls;
                                 $scope.scopeModel.enterpriseMaxCallsPerUser = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxCallsPerUser;
-                                $scope.scopeModel.enterpriseMaxRegistrations = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxRegistrations
+                                $scope.scopeModel.enterpriseMaxRegistrations = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxRegistrations;
                                 $scope.scopeModel.enterpriseMaxRegsPerUser = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxRegsPerUser;
-                                $scope.scopeModel.enterpriseMaxSubsPerUser = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxSubsPerUser
+                                $scope.scopeModel.enterpriseMaxSubsPerUser = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxSubsPerUser;
                                 $scope.scopeModel.enterpriseMaxBusinessTrunkCalls = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxBusinessTrunkCalls;
                                 $scope.scopeModel.enterpriseMaxUsers = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxUsers;
                             }
@@ -71,9 +71,9 @@
                             {
                                 $scope.scopeModel.siteMaxCalls = provisionAccountSettings.SiteAccountSetting.SiteMaxCalls;
                                 $scope.scopeModel.siteMaxCallsPerUser = provisionAccountSettings.SiteAccountSetting.SiteMaxCallsPerUser;
-                                $scope.scopeModel.siteMaxRegistrations = provisionAccountSettings.SiteAccountSetting.SiteMaxRegistrations
+                                $scope.scopeModel.siteMaxRegistrations = provisionAccountSettings.SiteAccountSetting.SiteMaxRegistrations;
                                 $scope.scopeModel.siteMaxRegsPerUser = provisionAccountSettings.SiteAccountSetting.SiteMaxRegsPerUser;
-                                $scope.scopeModel.siteMaxSubsPerUser = provisionAccountSettings.SiteAccountSetting.SiteMaxSubsPerUser
+                                $scope.scopeModel.siteMaxSubsPerUser = provisionAccountSettings.SiteAccountSetting.SiteMaxSubsPerUser;
                                 $scope.scopeModel.siteMaxBusinessTrunkCalls = provisionAccountSettings.SiteAccountSetting.SiteMaxBusinessTrunkCalls;
                                 $scope.scopeModel.siteMaxUsers = provisionAccountSettings.SiteAccountSetting.SiteMaxUsers;
                             }
