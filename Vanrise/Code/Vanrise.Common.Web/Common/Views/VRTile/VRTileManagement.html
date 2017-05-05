@@ -1,0 +1,11 @@
+﻿<vr-panel ng-controller="VRCommon_VRTileManagementController">
+    <vr-form validationcontext="VRTileManagementForm">
+        <vr-row ng-if="scopeModel.vrTiles.length > 0">
+            <div class="list-group ">
+                <vr-columns ng-repeat="vrTile in scopeModel.vrTiles" colnum="2">
+                    <vr-directivewrapper directive="vrTile.Settings.ExtendedSettings.RuntimeDirective" title="vrTile.Name" on-ready="vrTile.onVRTileDirectiveReady"></vr-directivewrapper>
+                </vr-columns>
+            </div>
+        </vr-row>
+    </vr-form>
+</vr-panel>

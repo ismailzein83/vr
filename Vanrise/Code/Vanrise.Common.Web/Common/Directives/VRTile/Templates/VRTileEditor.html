@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_VRTileEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRTileEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.tileName" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-common-tile-extendedsettings on-ready="scopeModel.onExtendedSettingsDirectiveReady" normal-col-num="6"></vr-common-tile-extendedsettings>
+                    </vr-row>               
+                 </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRTileEditor" data-onclick="scopeModel.saveVRTile"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

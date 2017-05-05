@@ -137,6 +137,7 @@
     <Compile Include="Controllers\VRApplicationVisibilityController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
+    <Compile Include="Controllers\VRTileController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -266,6 +267,13 @@
     <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
     <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
+    <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
+    <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />
+    <Content Include="Common\Directives\VRTile\Templates\VRTileViewEditor.html" />
+    <Content Include="Common\Directives\VRTile\vr-common-tile-vieweditor.js" />
+    <Content Include="Common\Directives\VRTile\VRTileEditorController.js" />
+    <Content Include="Common\Directives\VRTile\vr-common-tiles.js" />
+    <Content Include="Common\Directives\VRTile\vr-common-tile-extendedsettings.js" />
     <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-selector.js" />
@@ -366,6 +374,7 @@
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRTileAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />
     <Content Include="Common\Services\APIServices\MasterLogAPIService.js" />
@@ -401,6 +410,7 @@
     <Content Include="Common\Services\VRConnectionService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
     <Content Include="Common\Services\VRMailService.js" />
+    <Content Include="Common\Services\VRTileService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
     <Content Include="Common\Services\VRConcatenatedPartService.js" />
@@ -513,6 +523,8 @@
     <Content Include="Common\Views\VRConnection\VRConnectionEditorController.js" />
     <Content Include="Common\Views\VRConnection\VRConnectionManagement.html" />
     <Content Include="Common\Views\VRConnection\VRConnectionManagementController.js" />
+    <Content Include="Common\Views\VRTile\VRTileManagement.html" />
+    <Content Include="Common\Views\VRTile\VRTileManagementController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditor.html" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditorController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneManagement.html" />

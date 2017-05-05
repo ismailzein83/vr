@@ -149,6 +149,9 @@
     <Compile Include="VRTax\VRTaxItem.cs" />
     <Compile Include="VRTax\VRTaxItemDefinition.cs" />
     <Compile Include="VRTax\VRTaxSetting.cs" />
+    <Compile Include="VRTile\VRTile.cs" />
+    <Compile Include="VRTile\VRTileExtendedSettingsConfig.cs" />
+    <Compile Include="VRTile\VRTileSettings.cs" />
     <Compile Include="VRTimeZone.cs" />
     <Compile Include="VRConcatenatedPart\ConcatenatedPartSettingsConfig.cs" />
     <Compile Include="VRConcatenatedPart\VRConcatenatedPart.cs" />

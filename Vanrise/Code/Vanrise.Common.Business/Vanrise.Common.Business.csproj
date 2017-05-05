@@ -139,6 +139,8 @@
     <Compile Include="VRObject\VRObjectTypeManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />
     <Compile Include="VRFileManager.cs" />
+    <Compile Include="VRTile\VRTileManager.cs" />
+    <Compile Include="VRTile\VRTileViewSettings.cs" />
     <Compile Include="VRTimeZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>
