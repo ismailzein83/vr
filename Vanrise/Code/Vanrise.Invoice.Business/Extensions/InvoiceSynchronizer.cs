@@ -19,13 +19,12 @@ namespace Vanrise.Invoice.Business
                 return "Invoice Synchronizer";
             }
         }
-        public bool ByOriginalId { get; set; }
         public bool IsUpdateOnly { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public override bool TryGetExistingBE(ITargetBESynchronizerTryGetExistingBEContext context)
         {
-            InvoiceManager invoiceManager = new InvoiceManager();
-            Entities.Invoice invoice = ByOriginalId ? invoiceManager.GetInvoice(long.Parse(context.SourceBEId.ToString())) : invoiceManager.GetInvoiceBySourceId(InvoiceTypeId, context.SourceBEId.ToString());
+            Entities.Invoice invoice = GetInvoice(context);
+
             if (invoice != null)
             {
                 context.TargetBE = new SourceInvoice
@@ -34,7 +33,31 @@ namespace Vanrise.Invoice.Business
                 };
                 return true;
             }
+            else if (IsUpdateOnly)
+                context.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice '{0}' is not Updated", context.TargetBEId != null ? context.TargetBEId : context.SourceBEId);
+
             return false;
+        }
+
+        Entities.Invoice GetInvoice(ITargetBESynchronizerTryGetExistingBEContext context)
+        {
+            InvoiceManager invoiceManager = new InvoiceManager();
+            long invoiceId = 0;
+            Entities.Invoice invoice = null;
+
+            if (context.TargetBEId != null)
+            {
+                long.TryParse(context.TargetBEId.ToString(), out invoiceId);
+                invoice = invoiceManager.GetInvoice(invoiceId);
+            }
+            else if (context.SourceBEId != null)
+            {
+                invoice = invoiceManager.GetInvoiceBySourceId(InvoiceTypeId, context.SourceBEId.ToString());
+            }
+            else
+                throw new NullReferenceException("SourceBEId");
+
+            return invoice;
         }
 
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)

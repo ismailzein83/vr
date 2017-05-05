@@ -61,12 +61,15 @@ namespace Vanrise.BEBridge.BP.Activities
                         foreach (ITargetBE targetBe in targetBEs)
                         {
                             ITargetBE existingBE = null;
-                            if (targetBe.SourceBEId != null && !existingTargetBEsBySourceId.TryGetValue(targetBe.SourceBEId, out existingBE))
+                            var beId = targetBe.TargetBEId == null ? targetBe.SourceBEId : targetBe.TargetBEId;
+                            if (beId != null && !existingTargetBEsBySourceId.TryGetValue(beId, out existingBE))
                             {
                                 TargetBETryGetExistingContext tryGetExistingContext = new TargetBETryGetExistingContext(handle);
 
                                 tryGetExistingContext.InitializationData = inputArgument.SynchronizerInitializeContext.InitializationData;
                                 tryGetExistingContext.SourceBEId = targetBe.SourceBEId;
+                                tryGetExistingContext.TargetBEId = targetBe.TargetBEId;
+
                                 if (inputArgument.TargetBeSynchronizer.TryGetExistingBE(tryGetExistingContext))
                                     existingBE = tryGetExistingContext.TargetBE;
                             }
@@ -83,18 +86,19 @@ namespace Vanrise.BEBridge.BP.Activities
                                 {
                                     targetsToUpdate.Add(mergeContext.FinalBE);
                                     totalUpdateTargets++;
-                                    if (existingTargetBEsBySourceId.ContainsKey(mergeContext.FinalBE.SourceBEId))
-                                        existingTargetBEsBySourceId[mergeContext.FinalBE.SourceBEId] = mergeContext.FinalBE;
+                                    var finalBEId = mergeContext.FinalBE.TargetBEId == null ? mergeContext.FinalBE.SourceBEId : mergeContext.FinalBE.TargetBEId;
+                                    if (existingTargetBEsBySourceId.ContainsKey(finalBEId))
+                                        existingTargetBEsBySourceId[finalBEId] = mergeContext.FinalBE;
                                     else
-                                        existingTargetBEsBySourceId.Add(mergeContext.FinalBE.SourceBEId, mergeContext.FinalBE);
+                                        existingTargetBEsBySourceId.Add(finalBEId, mergeContext.FinalBE);
                                 }
                             }
                             else
                             {
                                 targetsToInsert.Add(targetBe);
                                 totalInsertTargets++;
-                                if (targetBe.SourceBEId != null)
-                                    existingTargetBEsBySourceId.Add(targetBe.SourceBEId, targetBe);
+                                if (beId != null)
+                                    existingTargetBEsBySourceId.Add(beId, targetBe);
                             }
                         }
                         if (totalInsertTargets > 0)
@@ -204,6 +208,11 @@ namespace Vanrise.BEBridge.BP.Activities
                 set;
             }
 
+            public object TargetBEId
+            {
+                get;
+                set;
+            }
             public ITargetBE TargetBE
             {
                 set;

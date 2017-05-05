@@ -32,7 +32,7 @@ namespace Vanrise.BEBridge.Entities
     public interface ITargetBESynchronizerTryGetExistingBEContext
     {
         object SourceBEId { get; }
-
+        object TargetBEId { get; }
         ITargetBE TargetBE { set; }
 
         Object InitializationData { get; }
