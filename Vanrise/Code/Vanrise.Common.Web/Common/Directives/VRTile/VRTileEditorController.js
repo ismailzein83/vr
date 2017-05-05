@@ -94,7 +94,7 @@
                 VRTileId: vrTileEntity != undefined ? vrTileEntity.VRTileId : UtilsService.guid(),
                 Name: $scope.scopeModel.tileName,
                 Settings: {
-                    ExtendedSettings: currencyDirectiveApi.getData()
+                    ExtendedSettings: extendedSettingsDirectiveApi.getData()
                 }
             };
             return obj;

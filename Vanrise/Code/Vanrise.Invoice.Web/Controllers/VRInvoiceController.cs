@@ -134,5 +134,12 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.DownloadAttachment(invoiceTypeId, invoiceAttachmentId, invoiceId);
         }
+        [HttpGet]
+        [Route("GetLastInvoice")]
+        public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetLastInvoice(invoiceTypeId, partnerId);
+        }
     }
 }

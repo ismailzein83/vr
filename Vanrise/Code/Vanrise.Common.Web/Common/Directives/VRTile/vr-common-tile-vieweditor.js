@@ -52,8 +52,8 @@ app.directive("vrCommonTileVieweditor", ["UtilsService", "VRUIUtilsService",
 
                     function loadVRTilesDirective() {
                         var vrTilesPayload;
-                        if (payload != undefined && payload.RetailUserHomePageViewData != undefined) {
-                            vrTilesPayload = { tiles: payload.RetailUserHomePageViewData.VRTiles };
+                        if (payload != undefined && payload.VRTileViewData != undefined) {
+                            vrTilesPayload = { tiles: payload.VRTileViewData.VRTiles };
                         };
                         return vrTilesDirectiveApi.load(vrTilesPayload);
                     }

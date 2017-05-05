@@ -22,5 +22,6 @@ namespace Vanrise.Invoice.Data
         IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes);
         bool Update(Entities.Invoice invoice);
         Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId);
+        Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId);
     }
 }

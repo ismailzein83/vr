@@ -154,6 +154,10 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
         }
+        public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
+        {
+            return GetItemSP("VR_Invoice.sp_Invoice_GetLast", InvoiceMapper, invoiceTypeId, partnerId);
+        }
         #endregion
 
         #region Private Methods
@@ -198,5 +202,8 @@ namespace Vanrise.Invoice.Data.SQL
         }
         #endregion
 
+
+
+       
     }
 }

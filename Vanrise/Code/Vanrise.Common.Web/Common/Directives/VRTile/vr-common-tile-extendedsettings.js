@@ -112,9 +112,7 @@
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
-                    return {
-                        StyleFormatingSettings: data
-                    };
+                    return data;
                 };
 
                 if (ctrl.onReady != null) {

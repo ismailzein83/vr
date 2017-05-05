@@ -1,7 +1,7 @@
 ﻿"use strict";
-VRTileManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService','VR_Sec_ViewAPIService'];
+VRTileManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService','VR_Sec_ViewAPIService','UtilsService','VRNotificationService'];
 
-function VRTileManagementController($scope, VRUIUtilsService, VRNavigationService, VR_Sec_ViewAPIService) {
+function VRTileManagementController($scope, VRUIUtilsService, VRNavigationService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService) {
     var viewId;
 
     var viewEntity;
@@ -20,16 +20,6 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
     function defineScope() {
         $scope.scopeModel = {};
         $scope.scopeModel.vrTiles = [];
-        //$scope.scopeModel.onPreviewAPIReady = function (api) {
-        //    previewDirectiveAPI = api;
-        //    var payload = {
-        //        viewId: viewId
-        //    };
-        //    var setLoader = function (value) {
-        //        $scope.isLoadingPreviewDirective = value;
-        //    };
-        //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, previewDirectiveAPI, payload, setLoader);
-        //};
     }
 
     function load() {
@@ -46,7 +36,33 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
 
         function loadVRTiles() {
             var promises = [];
-            console.log(viewEntity);
+            if (viewEntity != undefined && viewEntity.Settings != undefined && viewEntity.Settings.VRTileViewData != undefined)
+            {
+                var tiles = viewEntity.Settings.VRTileViewData.VRTiles;
+                if(tiles != undefined)
+                {
+                    for (var i = 0, tilesLength = tiles.length; i < tilesLength; i++) {
+                        var tileEntity = tiles[i];
+                        addTile(tileEntity);
+                    }
+                }
+            }
+            function addTile(tileEntity)
+            {
+                var tile = {
+                    name: tileEntity.Name,
+                    runtimeEditor: tileEntity.Settings.ExtendedSettings.RuntimeEditor,
+                };
+                tile.onVRTileDirectiveReady = function (api) {
+                    tile.tileAPI = api;
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isDirectiveLoading = value;
+                    };
+                    var payload = { definitionSettings: tileEntity.Settings.ExtendedSettings };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, tile.tileAPI, payload, setLoader);
+                };
+                $scope.scopeModel.vrTiles.push(tile);
+            }
             return UtilsService.waitMultiplePromises(promises);
         }
 

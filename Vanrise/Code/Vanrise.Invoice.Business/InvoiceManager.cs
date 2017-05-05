@@ -421,6 +421,12 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
         }
+        public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetLastInvoice(invoiceTypeId, partnerId);
+
+        }
         #endregion
 
         #region Mappers
