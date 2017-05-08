@@ -383,6 +383,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Documents\User_Guide.pdf" />
+    <Content Include="appSettings.config" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\Xbooster.pubxml" />
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
