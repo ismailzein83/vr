@@ -19,5 +19,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         private List<SalePricelistRateChange> _rateChanges = new List<SalePricelistRateChange>();
         public List<SalePricelistRateChange> RateChanges { get { return this._rateChanges; } }
+
+
+        private List<SalePricelistRPChange> _routingProductChanges = new List<SalePricelistRPChange>();
+        public List<SalePricelistRPChange> RoutingProductChanges { get { return this._routingProductChanges; } }
     }
 }

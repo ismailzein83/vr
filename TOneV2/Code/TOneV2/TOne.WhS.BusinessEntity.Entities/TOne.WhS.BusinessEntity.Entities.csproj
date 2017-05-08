@@ -130,6 +130,7 @@
     <Compile Include="RoutingCarrierInfo\RoutingCarrierInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingCustomerInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingSupplierInfo.cs" />
+    <Compile Include="SalePricelistChanges\SalePricelistRPChange.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRates.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryQuery.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryRecord.cs" />
