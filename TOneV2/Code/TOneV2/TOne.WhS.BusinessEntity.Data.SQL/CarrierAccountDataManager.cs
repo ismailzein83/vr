@@ -52,14 +52,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         #region Private Methods
 
-        internal static DataTable BuildRoutingCustomerInfoTable(IEnumerable<RoutingCustomerInfo> customerInfos)
+        internal static DataTable BuildRoutingCustomerInfoTable(IEnumerable<int> customerIds)
         {
             DataTable dtCustomerInfos = GetRoutingCustomerInfoTable();
             dtCustomerInfos.BeginLoadData();
-            foreach (var c in customerInfos)
+            foreach (var customerId in customerIds)
             {
                 DataRow dr = dtCustomerInfos.NewRow();
-                dr["CustomerId"] = c.CustomerId;
+                dr["CustomerId"] = customerId;
                 dtCustomerInfos.Rows.Add(dr);
             }
             dtCustomerInfos.EndLoadData();

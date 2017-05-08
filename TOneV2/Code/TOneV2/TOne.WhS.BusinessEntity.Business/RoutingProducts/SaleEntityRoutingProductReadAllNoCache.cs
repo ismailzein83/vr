@@ -16,18 +16,24 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         public SaleEntityRoutingProductReadAllNoCache(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+            : this(customerInfos.Select(x => x.CustomerId), effectiveOn, isEffectiveInFuture)
         {
-            _saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
-            _allSaleZoneRoutingProductsByOwner = GetAllSaleZoneRoutingProductsByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
-            _allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(customerInfos, effectiveOn, isEffectiveInFuture);
+            
         }
 
-        private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        public SaleEntityRoutingProductReadAllNoCache(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            _saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+            _allSaleZoneRoutingProductsByOwner = GetAllSaleZoneRoutingProductsByOwner(customerIds, effectiveOn, isEffectiveInFuture);
+            _allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(customerIds, effectiveOn, isEffectiveInFuture);
+        }
+
+        private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             DefaultRoutingProductsByOwner result = new DefaultRoutingProductsByOwner();
             result.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
             result.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
-            List<DefaultRoutingProduct> defaultRoutingProducts = _saleEntityRoutingProductDataManager.GetDefaultRoutingProducts(customerInfos, effectiveOn, isEffectiveInFuture).ToList();
+            List<DefaultRoutingProduct> defaultRoutingProducts = _saleEntityRoutingProductDataManager.GetDefaultRoutingProducts(customerIds, effectiveOn, isEffectiveInFuture).ToList();
 
             foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
             {
@@ -39,14 +45,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return result;
         }
 
-        private SaleZoneRoutingProductsByOwner GetAllSaleZoneRoutingProductsByOwner(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
+        private SaleZoneRoutingProductsByOwner GetAllSaleZoneRoutingProductsByOwner(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             SaleZoneRoutingProductsByOwner result = new SaleZoneRoutingProductsByOwner();
 
             result.SaleZoneRoutingProductsByCustomer = new Dictionary<int, SaleZoneRoutingProductsByZone>();
             result.SaleZoneRoutingProductsByProduct = new Dictionary<int, SaleZoneRoutingProductsByZone>();
 
-            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = _saleEntityRoutingProductDataManager.GetSaleZoneRoutingProducts(customerInfos, effectiveOn, isEffectiveInFuture);
+            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = _saleEntityRoutingProductDataManager.GetSaleZoneRoutingProducts(customerIds, effectiveOn, isEffectiveInFuture);
 
             foreach (SaleZoneRoutingProduct saleZoneRoutingProduct in saleZoneRoutingProducts)
             {
