@@ -109,8 +109,8 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                         return 'Margin % must be between 0 and 100';
                 }
                 else {
-                    if ($scope.scopeModel.margin < 0)
-                        return 'Margin must be a postive number';
+                    if ($scope.scopeModel.margin == 0)
+                        return 'Margin must be different than 0';
                 }
                 return null;
             };
