@@ -39,12 +39,22 @@ namespace Retail.Voice.Entities
     {
         public int ChargingPolicyId { get; set; }
 
-        public Decimal? Rate { get; set; }
+        public Decimal? SaleRate { get; set; }
 
-        public Decimal? Amount { get; set; }
+        public Decimal? SaleAmount { get; set; }
 
-        public int? RateTypeId { get; set; }
+        public int? SaleRateTypeId { get; set; }
 
-        public int CurrencyId { get; set; }
+        public int SaleCurrencyId { get; set; }
+
+        public Decimal? SaleDurationInSeconds { get; set; }
+
+        public int? SaleRateValueRuleId {get; set;}
+
+        public int? SaleRateTypeRuleId { get; set; }
+
+        public int? SaleTariffRuleId { get; set; }
+
+        public int? SaleExtraChargeRuleId { get; set; }
     }
 }

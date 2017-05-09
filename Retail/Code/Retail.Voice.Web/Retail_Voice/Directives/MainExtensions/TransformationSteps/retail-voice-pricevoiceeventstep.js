@@ -31,6 +31,8 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
         };
 
         function PriceVoiceEventStepCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var stepPayload;
 
             //Input Fields
@@ -62,6 +64,9 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
             var chargingPolicyIdDirectiveReadyAPI;
             var chargingPolicyIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var saleDurationInSecondsDirectiveReadyAPI;
+            var saleDurationInSecondsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var rateDirectiveReadyAPI;
             var rateDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -73,6 +78,18 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
             var currencyIdDirectiveReadyAPI;
             var currencyIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var saleRateValueRuleIdDirectiveReadyAPI;
+            var saleRateValueRuleIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var saleRateTypeRuleIdDirectiveReadyAPI;
+            var saleRateTypeRuleIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var saleTariffRuleIdDirectiveReadyAPI;
+            var saleTariffRuleIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var saleExtraChargeRuleIdDirectiveReadyAPI;
+            var saleExtraChargeRuleIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var voiceEventPricedPartsDirectiveReadyAPI;
             var voiceEventPricedPartsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -119,6 +136,10 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                     chargingPolicyIdDirectiveReadyAPI = api;
                     chargingPolicyIdDirectiveReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onSaleDurationInSecondsReady = function (api) {
+                    saleDurationInSecondsDirectiveReadyAPI = api;
+                    saleDurationInSecondsDirectiveReadyPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onRateReady = function (api) {
                     rateDirectiveReadyAPI = api;
                     rateDirectiveReadyPromiseDeferred.resolve();
@@ -134,6 +155,22 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 $scope.scopeModel.onCurrencyIdReady = function (api) {
                     currencyIdDirectiveReadyAPI = api;
                     currencyIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSaleRateValueRuleIdReady = function (api) {
+                    saleRateValueRuleIdDirectiveReadyAPI = api;
+                    saleRateValueRuleIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSaleRateTypeRuleIdReady = function (api) {
+                    saleRateTypeRuleIdDirectiveReadyAPI = api;
+                    saleRateTypeRuleIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSaleTariffRuleIdReady = function (api) {
+                    saleTariffRuleIdDirectiveReadyAPI = api;
+                    saleTariffRuleIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSaleExtraChargeRuleIdReady = function (api) {
+                    saleExtraChargeRuleIdDirectiveReadyAPI = api;
+                    saleExtraChargeRuleIdDirectiveReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onVoiceEventPricedPartsReady = function (api) {
                     voiceEventPricedPartsDirectiveReadyAPI = api;
@@ -184,25 +221,45 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                     var packageIdDirectivePromiseDeferred = getPackageIdDirectivePromiseDeferred();
                     promises.push(packageIdDirectivePromiseDeferred.promise);
 
-                    //Loading CahrgingPolicyId Directive
+                    //Loading ChargingPolicyId Directive
                     var chargingPolicyIdDirectivePromiseDeferred = getChargingPolicyIdDirectivePromiseDeferred();
                     promises.push(chargingPolicyIdDirectivePromiseDeferred.promise);
 
-                    //Loading Rate Directive
+                    //Loading SaleDurationInSeconds Directive
+                    var saleDurationInSecondsDirectivePromiseDeferred = getSaleDurationInSecondsDirectivePromiseDeferred();
+                    promises.push(saleDurationInSecondsDirectivePromiseDeferred.promise);
+
+                    //Loading SaleRate Directive
                     var rateDirectivePromiseDeferred = getRateDirectivePromiseDeferred();
                     promises.push(rateDirectivePromiseDeferred.promise);
 
-                    //Loading Amount Directive
+                    //Loading SaleAmount Directive
                     var amountDirectivePromiseDeferred = getAmountDirectivePromiseDeferred();
                     promises.push(amountDirectivePromiseDeferred.promise);
 
-                    //Loading RateTypeId Directive
+                    //Loading SaleRateTypeId Directive
                     var rateTypeIdDirectivePromiseDeferred = getRateTypeIdDirectivePromiseDeferred();
                     promises.push(rateTypeIdDirectivePromiseDeferred.promise);
 
-                    //Loading CurrencyId Directive
+                    //Loading SaleCurrencyId Directive
                     var currencyIdDirectivePromiseDeferred = getCurrencyIdDirectivePromiseDeferred();
                     promises.push(currencyIdDirectivePromiseDeferred.promise);
+
+                    //Loading SaleRateValueRuleId Directive
+                    var saleRateValueRuleIdPromiseDeferred = getSaleRateValueRuleIdDirectivePromiseDeferred();
+                    promises.push(saleRateValueRuleIdPromiseDeferred.promise);
+
+                    //Loading SaleRateTypeRuleId Directive
+                    var saleRateTypeRuleIdDirectivePromiseDeferred = getSaleRateTypeRuleIdDirectivePromiseDeferred();
+                    promises.push(saleRateTypeRuleIdDirectivePromiseDeferred.promise);
+
+                    //Loading SaleTariffRuleId Directive
+                    var saleTariffRuleIdDirectivePromiseDeferred = getSaleTariffRuleIdDirectivePromiseDeferred();
+                    promises.push(saleTariffRuleIdDirectivePromiseDeferred.promise);
+
+                    //Loading SaleExtraChargeRuleId Directive
+                    var saleExtraChargeRuleIdDirectivePromiseDeferred = getSaleExtraChargeRuleIdDirectivePromiseDeferred();
+                    promises.push(saleExtraChargeRuleIdDirectivePromiseDeferred.promise);
 
                     //Loading VoiceEventPricedParts Directive
                     var voiceEventPricedPartsDirectivePromiseDeferred = getVoiceEventPricedPartsDirectivePromiseDeferred();
@@ -335,6 +392,20 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                         return chargingPolicyIdDirectiveLoadPromiseDeferred;
                     }
+                    function getSaleDurationInSecondsDirectivePromiseDeferred() {
+                        var saleDurationInSecondsDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        chargingPolicyIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var saleDurationInSecondsPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                saleDurationInSecondsPayload.selectedRecords = payload.stepDetails.SaleDurationInSeconds;
+
+                            VRUIUtilsService.callDirectiveLoad(saleDurationInSecondsDirectiveReadyAPI, saleDurationInSecondsPayload, saleDurationInSecondsDirectiveLoadPromiseDeferred);
+                        });
+
+                        return saleDurationInSecondsDirectiveLoadPromiseDeferred;
+                    }
                     function getRateDirectivePromiseDeferred() {
                         var rateDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -342,7 +413,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                             var ratePayload = { context: payload.context };
                             if (payload.stepDetails != undefined)
-                                ratePayload.selectedRecords = payload.stepDetails.Rate;
+                                ratePayload.selectedRecords = payload.stepDetails.SaleRate;
 
                             VRUIUtilsService.callDirectiveLoad(rateDirectiveReadyAPI, ratePayload, rateDirectiveLoadPromiseDeferred);
                         });
@@ -356,7 +427,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                             var amountPayload = { context: payload.context };
                             if (payload.stepDetails != undefined)
-                                amountPayload.selectedRecords = payload.stepDetails.Amount;
+                                amountPayload.selectedRecords = payload.stepDetails.SaleAmount;
 
                             VRUIUtilsService.callDirectiveLoad(amountDirectiveReadyAPI, amountPayload, amountDirectiveLoadPromiseDeferred);
                         });
@@ -370,7 +441,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                             var rateTypeIdPayload = { context: payload.context };
                             if (payload.stepDetails != undefined)
-                                rateTypeIdPayload.selectedRecords = payload.stepDetails.RateTypeId;
+                                rateTypeIdPayload.selectedRecords = payload.stepDetails.SaleRateTypeId;
 
                             VRUIUtilsService.callDirectiveLoad(rateTypeIdDirectiveReadyAPI, rateTypeIdPayload, rateTypeIdDirectiveLoadPromiseDeferred);
                         });
@@ -384,12 +455,68 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                             var currencyIdPayload = { context: payload.context };
                             if (payload.stepDetails != undefined)
-                                currencyIdPayload.selectedRecords = payload.stepDetails.CurrencyId;
+                                currencyIdPayload.selectedRecords = payload.stepDetails.SaleCurrencyId;
 
                             VRUIUtilsService.callDirectiveLoad(currencyIdDirectiveReadyAPI, currencyIdPayload, currencyIdDirectiveLoadPromiseDeferred);
                         });
 
                         return currencyIdDirectiveLoadPromiseDeferred;
+                    }
+                    function getSaleRateValueRuleIdDirectivePromiseDeferred() {
+                        var saleRateValueRuleIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        currencyIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var saleRateValueRuleIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                saleRateValueRuleIdPayload.selectedRecords = payload.stepDetails.SaleRateValueRuleId;
+
+                            VRUIUtilsService.callDirectiveLoad(saleRateValueRuleIdDirectiveReadyAPI, saleRateValueRuleIdPayload, saleRateValueRuleIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return saleRateValueRuleIdDirectiveLoadPromiseDeferred;
+                    }
+                    function getSaleRateTypeRuleIdDirectivePromiseDeferred() {
+                        var saleRateTypeRuleIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        saleRateTypeRuleIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var saleRateTypeRuleIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                saleRateTypeRuleIdPayload.selectedRecords = payload.stepDetails.SaleRateTypeRuleId;
+
+                            VRUIUtilsService.callDirectiveLoad(saleRateTypeRuleIdDirectiveReadyAPI, saleRateTypeRuleIdPayload, saleRateTypeRuleIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return saleRateTypeRuleIdDirectiveLoadPromiseDeferred;
+                    }
+                    function getSaleTariffRuleIdDirectivePromiseDeferred() {
+                        var saleTariffRuleIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        saleRateTypeRuleIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var saleTariffRuleIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                saleTariffRuleIdPayload.selectedRecords = payload.stepDetails.SaleTariffRuleId;
+
+                            VRUIUtilsService.callDirectiveLoad(saleTariffRuleIdDirectiveReadyAPI, saleTariffRuleIdPayload, saleTariffRuleIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return saleTariffRuleIdDirectiveLoadPromiseDeferred;
+                    }
+                    function getSaleExtraChargeRuleIdDirectivePromiseDeferred() {
+                        var saleExtraChargeRuleIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        saleExtraChargeRuleIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var saleExtraChargeRuleIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                saleExtraChargeRuleIdPayload.selectedRecords = payload.stepDetails.SaleExtraChargeRuleId;
+
+                            VRUIUtilsService.callDirectiveLoad(saleExtraChargeRuleIdDirectiveReadyAPI, saleExtraChargeRuleIdPayload, saleExtraChargeRuleIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return saleExtraChargeRuleIdDirectiveLoadPromiseDeferred;
                     }
                     function getVoiceEventPricedPartsDirectivePromiseDeferred() {
                         var voiceEventPricedPartsDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -412,7 +539,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 api.getData = function () {
                     return {
                         $type: "Retail.Voice.MainExtensions.TransformationSteps.PriceVoiceEventStep, Retail.Voice.MainExtensions",
-                        AccountBEDefinitionID:accountBEDefinitionIdDirectiveReadyAPI.getData(),
+                        AccountBEDefinitionID: accountBEDefinitionIdDirectiveReadyAPI.getData(),
                         AccountId: accountIdDirectiveReadyAPI.getData(),
                         ServiceTypeId: serviceTypeIdDirectiveReadyAPI.getData(),
                         RawCDR: rawCDRDirectiveReadyAPI.getData(),
@@ -422,10 +549,15 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
 
                         PackageId: packageIdDirectiveReadyAPI.getData(),
                         UsageChargingPolicyId: chargingPolicyIdDirectiveReadyAPI.getData(),
-                        Rate: rateDirectiveReadyAPI.getData(),
-                        Amount: amountDirectiveReadyAPI.getData(),
-                        RateTypeId: rateTypeIdDirectiveReadyAPI.getData(),
-                        CurrencyId: currencyIdDirectiveReadyAPI.getData(),
+                        SaleDurationInSeconds: saleDurationInSecondsDirectiveReadyAPI.getData(),
+                        SaleRate: rateDirectiveReadyAPI.getData(),
+                        SaleAmount: amountDirectiveReadyAPI.getData(),
+                        SaleRateTypeId: rateTypeIdDirectiveReadyAPI.getData(),
+                        SaleCurrencyId: currencyIdDirectiveReadyAPI.getData(),
+                        SaleRateValueRuleId: saleRateValueRuleIdDirectiveReadyAPI.getData(),
+                        SaleRateTypeRuleId: saleRateTypeRuleIdDirectiveReadyAPI.getData(),
+                        SaleTariffRuleId: saleTariffRuleIdDirectiveReadyAPI.getData(),
+                        SaleExtraChargeRuleId:  saleExtraChargeRuleIdDirectiveReadyAPI.getData(),
                         VoiceEventPricedParts: voiceEventPricedPartsDirectiveReadyAPI.getData()
                     };
                 };
@@ -433,8 +565,6 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

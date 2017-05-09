@@ -147,28 +147,58 @@ app.directive('retailVoicePricevoiceeventstepPreview', ['UtilsService', 'VRUIUti
                         Value: "Charging Policy Id"
                     });
                 }
-                if (data.Rate != undefined) {
+                if (data.SaleDurationInSeconds != undefined) {
                     array.push({
-                        FieldName: data.Rate,
-                        Value: "Rate"
+                        FieldName: data.SaleDurationInSeconds,
+                        Value: "Sale Duration"
                     });
                 }
-                if (data.Amount != undefined) {
+                if (data.SaleRate != undefined) {
                     array.push({
-                        FieldName: data.Amount,
-                        Value: "Amount"
+                        FieldName: data.SaleRate,
+                        Value: "Sale Rate"
                     });
                 }
-                if (data.RateTypeId != undefined) {
+                if (data.SaleAmount != undefined) {
                     array.push({
-                        FieldName: data.RateTypeId,
-                        Value: "Rate Type Id"
+                        FieldName: data.SaleAmount,
+                        Value: "Sale Amount"
                     });
                 }
-                if (data.CurrencyId != undefined) {
+                if (data.SaleRateTypeId != undefined) {
                     array.push({
-                        FieldName: data.CurrencyId,
-                        Value: "Currency Id"
+                        FieldName: data.SaleRateTypeId,
+                        Value: "Sale Rate Type Id"
+                    });
+                }
+                if (data.SaleCurrencyId != undefined) {
+                    array.push({
+                        FieldName: data.SaleCurrencyId,
+                        Value: "Sale Currency Id"
+                    });
+                }
+                if (data.SaleRateValueRuleId != undefined) {
+                    array.push({
+                        FieldName: data.SaleRateValueRuleId,
+                        Value: "Sale Rate Value Rule Id"
+                    });
+                }
+                if (data.SaleRateTypeRuleId != undefined) {
+                    array.push({
+                        FieldName: data.SaleRateTypeRuleId,
+                        Value: "Sale Rate Type Rule Id"
+                    });
+                }
+                if (data.SaleTariffRuleId != undefined) {
+                    array.push({
+                        FieldName: data.SaleTariffRuleId,
+                        Value: "Sale Tariff Rule Id"
+                    });
+                }
+                if (data.SaleExtraChargeRuleId != undefined) {
+                    array.push({
+                        FieldName: data.SaleExtraChargeRuleId,
+                        Value: "Sale Extra Charge Rule Id"
                     });
                 }
                 if (data.VoiceEventPricedParts != undefined) {

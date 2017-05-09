@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [Retail_CDR].[CDR] (
     [ID]                   BIGINT          NOT NULL,
     [Call_Id]              VARCHAR (100)   NULL,
+    [AttemptDateTime]      DATETIME        NULL,
     [ConnectDateTime]      DATETIME        NULL,
     [DisconnectDateTime]   DATETIME        NULL,
     [DurationInSeconds]    DECIMAL (20, 4) NULL,
@@ -18,10 +19,13 @@
     [TransferredCall_Id]   VARCHAR (100)   NULL,
     [OriginatorIP]         VARCHAR (50)    NULL,
     [TerminatorIP]         VARCHAR (50)    NULL,
-    [AttemptDateTime]      DATETIME        NULL,
+    [InitiationCallType]   INT             NULL,
+    [TerminationCallType]  INT             NULL,
     [FileName]             VARCHAR (200)   NULL,
     [QueueItemId]          BIGINT          NULL
 );
+
+
 
 
 

@@ -28,6 +28,7 @@ namespace Retail.Voice.Business
             var voiceUsageChargers = GetVoiceUsageChargersByPriority(accountBEDefinitionId, accountId, serviceTypeId, eventTime);
             if (voiceUsageChargers == null || voiceUsageChargers.Count == 0)
                 return null;
+
             Decimal remainingDurationToPrice = duration;
             Dictionary<IPackageVoiceUsageCharger, Object> chargersChargingInfos = new Dictionary<IPackageVoiceUsageCharger, object>();
             foreach (var voiceUsageCharger in voiceUsageChargers)
@@ -42,6 +43,7 @@ namespace Retail.Voice.Business
                     Duration = remainingDurationToPrice,
                     EventTime = eventTime
                 };
+
                 voiceUsageCharger.VoiceUsageCharger.TryChargeVoiceEvent(context);
                 if (context.PricedPartInfos != null)
                 {
@@ -49,8 +51,6 @@ namespace Retail.Voice.Business
                     {
                         pricedPart.PackageId = voiceUsageCharger.ParentPackage.PackageId;
                         voiceEventPrice.VoiceEventPricedParts.Add(pricedPart);
-
-                        voiceEventPrice.Amount = pricedPart.Amount;
 
                         remainingDurationToPrice -= pricedPart.PricedDuration;
                     });
@@ -60,23 +60,26 @@ namespace Retail.Voice.Business
                 }
             }
 
-
-
             if (voiceEventPrice.VoiceEventPricedParts.Count > 1)
                 throw new NotSupportedException("Case of multipler VoiceEventPricedParts not supported yet.");
-
 
             if (voiceEventPrice.VoiceEventPricedParts.Count > 0)
             {
                 if (remainingDurationToPrice > 0)
                     throw new Exception(String.Format("Can't price entire duration. remaining duration '{0}'", remainingDurationToPrice));
+
                 var voiceEventPricedPart = voiceEventPrice.VoiceEventPricedParts[0];
                 voiceEventPrice.PackageId = voiceEventPricedPart.PackageId;
                 voiceEventPrice.UsageChargingPolicyId = voiceEventPricedPart.UsageChargingPolicyId;
-                voiceEventPrice.Rate = voiceEventPricedPart.Rate;
-                voiceEventPrice.Amount = voiceEventPricedPart.Amount;
-                voiceEventPrice.RateTypeId = voiceEventPricedPart.RateTypeId;
-                voiceEventPrice.CurrencyId = voiceEventPricedPart.CurrencyId;
+                voiceEventPrice.SaleRate = voiceEventPricedPart.SaleRate;
+                voiceEventPrice.SaleAmount = voiceEventPricedPart.SaleAmount;
+                voiceEventPrice.SaleRateTypeId = voiceEventPricedPart.SaleRateTypeId;
+                voiceEventPrice.SaleCurrencyId = voiceEventPricedPart.SaleCurrencyId;
+                voiceEventPrice.SaleDurationInSeconds = voiceEventPricedPart.SaleDurationInSeconds;
+                voiceEventPrice.SaleRateValueRuleId = voiceEventPricedPart.SaleRateValueRuleId;
+                voiceEventPrice.SaleRateTypeRuleId = voiceEventPricedPart.SaleRateTypeRuleId;
+                voiceEventPrice.SaleTariffRuleId = voiceEventPricedPart.SaleTariffRuleId;
+                voiceEventPrice.SaleExtraChargeRuleId = voiceEventPricedPart.SaleExtraChargeRuleId;
 
                 foreach(var entry in chargersChargingInfos)
                 {

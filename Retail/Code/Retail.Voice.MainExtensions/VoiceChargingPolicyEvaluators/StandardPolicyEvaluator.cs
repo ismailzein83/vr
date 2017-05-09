@@ -7,6 +7,7 @@ using System.Linq;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Pricing;
+using Vanrise.Common;
 
 namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 {
@@ -22,6 +23,10 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
         public override void ApplyChargingPolicyToVoiceEvent(IVoiceChargingPolicyEvaluatorContext context)
         {
+            VoiceEventPricingInfo voiceEventPricingInfo = new VoiceEventPricingInfo();
+            voiceEventPricingInfo.ChargingPolicyId = context.ChargingPolicyId;
+            context.EventPricingInfo = voiceEventPricingInfo;
+
             GenericRuleTarget genericRuleTarget = BuildingGenericRuleTarget(context);
 
             //Rate Value Rules
@@ -30,28 +35,42 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
             if (rateValueRuleContext.Rule != null)
             {
+                RateValueRule rateValueRule = rateValueRuleContext.Rule.CastWithValidate<RateValueRule>("rateValueRule", rateValueRuleContext.Rule);
+                voiceEventPricingInfo.SaleRateValueRuleId = rateValueRule.RuleId;
+                decimal rate = rateValueRuleContext.NormalRate;
+
                 //Rate Type Rules
                 RateTypeRuleContext rateTypeRuleContext = new RateTypeRuleContext();
                 ApplyRateTypeRule(context, rateTypeRuleContext, genericRuleTarget, rateValueRuleContext.RatesByRateType);
 
+                if(rateTypeRuleContext.Rule != null)
+                {
+                    RateTypeRule rateTypeRule = rateTypeRuleContext.Rule.CastWithValidate<RateTypeRule>("rateTypeRule", rateTypeRuleContext.Rule);
+                    voiceEventPricingInfo.SaleRateTypeRuleId = rateTypeRule.RuleId;
+
+                    if (rateTypeRuleContext.RateTypeId.HasValue && !rateValueRuleContext.RatesByRateType.TryGetValue(rateTypeRuleContext.RateTypeId.Value, out rate))
+                        throw new Exception(string.Format("rate of rateTypeId: {0} not found at rateValueRuleContext.RatesByRateType", rateTypeRuleContext.RateTypeId.Value));
+
+                    voiceEventPricingInfo.SaleRateTypeId = rateTypeRuleContext.RateTypeId;
+                }
+
+                voiceEventPricingInfo.SaleRate = rate;
+
                 //Tariff Rules 
                 TariffRuleContext tariffRuleContext = new TariffRuleContext();
-
-                decimal rate = rateValueRuleContext.NormalRate;
-                if (rateTypeRuleContext.RateTypeId.HasValue && !rateValueRuleContext.RatesByRateType.TryGetValue(rateTypeRuleContext.RateTypeId.Value, out rate))
-                    throw new Exception(string.Format("rate of rateTypeId: {0} not found at rateValueRuleContext.RatesByRateType", rateTypeRuleContext.RateTypeId.Value));
-
                 ApplyTariffRule(context, tariffRuleContext, genericRuleTarget, rateValueRuleContext.CurrencyId != 0 ? rateValueRuleContext.CurrencyId : default(int?), rate);
-                VoiceEventPricingInfo voiceEventPricingInfo = new VoiceEventPricingInfo();
-                voiceEventPricingInfo.ChargingPolicyId = context.ChargingPolicyId;
-                voiceEventPricingInfo.Amount = tariffRuleContext.TotalAmount;
-                voiceEventPricingInfo.RateTypeId = rateTypeRuleContext.RateTypeId;
-                voiceEventPricingInfo.CurrencyId = tariffRuleContext.DestinationCurrencyId.HasValue ? tariffRuleContext.DestinationCurrencyId.Value : tariffRuleContext.SourceCurrencyId;
-                voiceEventPricingInfo.Rate = tariffRuleContext.Rate;
-                context.EventPricingInfo = voiceEventPricingInfo;
+
+                if (tariffRuleContext.Rule != null)
+                {
+                    TariffRule tariffRule = tariffRuleContext.Rule.CastWithValidate<TariffRule>("tariffRule", tariffRuleContext.Rule);
+                    voiceEventPricingInfo.SaleTariffRuleId = tariffRule.RuleId;
+
+                    voiceEventPricingInfo.SaleAmount = tariffRuleContext.TotalAmount;
+                    voiceEventPricingInfo.SaleCurrencyId = tariffRuleContext.DestinationCurrencyId.HasValue ? tariffRuleContext.DestinationCurrencyId.Value : tariffRuleContext.SourceCurrencyId;
+                    voiceEventPricingInfo.SaleDurationInSeconds = tariffRuleContext.EffectiveDurationInSeconds;
+                }
             }
         }
-
 
         private GenericRuleTarget BuildingGenericRuleTarget(IVoiceChargingPolicyEvaluatorContext context)
         {

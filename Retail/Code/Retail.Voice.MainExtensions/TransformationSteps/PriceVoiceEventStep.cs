@@ -12,6 +12,7 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         public override Guid ConfigId { get { return new Guid("FB2D7DC4-AF79-4068-8452-1058AF7544D7"); } }
 
         //Input Fields
+        public string AccountBEDefinitionID { get; set; }
         public string AccountId { get; set; }
         public string ServiceTypeId { get; set; }
         public string RawCDR { get; set; }
@@ -22,13 +23,17 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         //Output Fields
         public string PackageId { get; set; }
         public string UsageChargingPolicyId { get; set; }
-        public string Rate { get; set; }
-        public string Amount { get; set; }
-        public string RateTypeId { get; set; }
-        public string CurrencyId { get; set; }
+        public string SaleDurationInSeconds { get; set; }
+        public string SaleRate { get; set; }
+        public string SaleAmount { get; set; }
+        public string SaleRateTypeId { get; set; }
+        public string SaleCurrencyId { get; set; }
         public string VoiceEventPricedParts { get; set; }
-        public string AccountBEDefinitionID { get; set; }
-
+        public string SaleRateValueRuleId { get; set; }
+        public string SaleRateTypeRuleId { get; set; }
+        public string SaleTariffRuleId { get; set; }
+        public string SaleExtraChargeRuleId { get; set; }
+        
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             var voiceChargingManagerVariableName = context.GenerateUniqueMemberName("voiceChargingManager");
@@ -39,24 +44,40 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
                 voiceChargingManagerVariableName,this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
 
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", voiceEventPriceVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{");
+            context.AddCodeToCurrentInstanceExecutionBlock("{"); 
+
             if (this.PackageId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.PackageId;", this.PackageId, voiceEventPriceVariableName);
 
             if (this.UsageChargingPolicyId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.UsageChargingPolicyId;", this.UsageChargingPolicyId, voiceEventPriceVariableName);
 
-            if (this.Rate != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Rate;", this.Rate, voiceEventPriceVariableName);
+            if (this.SaleDurationInSeconds != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleDurationInSeconds;", this.SaleDurationInSeconds, voiceEventPriceVariableName);
 
-            if (this.Amount != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.Amount;", this.Amount, voiceEventPriceVariableName);
+            if (this.SaleRate != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleRate;", this.SaleRate, voiceEventPriceVariableName);
 
-            if (this.RateTypeId != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RateTypeId;", this.RateTypeId, voiceEventPriceVariableName);
+            if (this.SaleAmount != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleAmount;", this.SaleAmount, voiceEventPriceVariableName);
 
-            if (this.CurrencyId != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CurrencyId;", this.CurrencyId, voiceEventPriceVariableName);
+            if (this.SaleRateTypeId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleRateTypeId;", this.SaleRateTypeId, voiceEventPriceVariableName);
+
+            if (this.SaleCurrencyId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleCurrencyId;", this.SaleCurrencyId, voiceEventPriceVariableName);
+
+            if (this.SaleRateValueRuleId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleRateValueRuleId;", this.SaleRateValueRuleId, voiceEventPriceVariableName);
+
+            if (this.SaleRateTypeRuleId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleRateTypeRuleId;", this.SaleRateTypeRuleId, voiceEventPriceVariableName);
+
+            if (this.SaleTariffRuleId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleTariffRuleId;", this.SaleTariffRuleId, voiceEventPriceVariableName);
+
+            if (this.SaleExtraChargeRuleId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.SaleExtraChargeRuleId;", this.SaleExtraChargeRuleId, voiceEventPriceVariableName);
 
             if (this.VoiceEventPricedParts != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.VoiceEventPricedParts;", this.VoiceEventPricedParts, voiceEventPriceVariableName);

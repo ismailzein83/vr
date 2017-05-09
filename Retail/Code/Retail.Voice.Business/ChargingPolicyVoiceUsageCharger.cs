@@ -28,15 +28,19 @@ namespace Retail.Voice.Business
                     {
                         UsageChargingPolicyId = _chargingPolicyId,
                         PricedDuration = context.Duration,
-                        Rate = pricingInfo.Rate,
-                        Amount = pricingInfo.Amount,
-                        RateTypeId = pricingInfo.RateTypeId,
-                        CurrencyId = pricingInfo.CurrencyId
+                        SaleRate = pricingInfo.SaleRate,
+                        SaleAmount = pricingInfo.SaleAmount,
+                        SaleRateTypeId = pricingInfo.SaleRateTypeId,
+                        SaleCurrencyId = pricingInfo.SaleCurrencyId,
+                        SaleDurationInSeconds = pricingInfo.SaleDurationInSeconds,
+                        SaleRateValueRuleId = pricingInfo.SaleRateValueRuleId,
+                        SaleRateTypeRuleId = pricingInfo.SaleRateTypeRuleId,
+                        SaleTariffRuleId = pricingInfo.SaleTariffRuleId,
+                        SaleExtraChargeRuleId = pricingInfo.SaleExtraChargeRuleId
                     }
                 };
             }
         }
-
 
         public void DeductFromBalances(IVoiceUsageChargerDeductFromBalanceContext context)
         {

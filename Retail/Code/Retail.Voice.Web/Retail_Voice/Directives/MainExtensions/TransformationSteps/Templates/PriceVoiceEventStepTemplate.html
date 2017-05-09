@@ -1,5 +1,4 @@
-﻿
-<vr-section title="Input Fields">
+﻿<vr-section title="Input Fields">
     <vr-row>
         <vr-columns width="fullrow">
             <vr-genericdata-expressionbuilder on-ready="scopeModel.onAccountBEDefinitionIdReady" label="Account BE Definition Id" isrequired="true"></vr-genericdata-expressionbuilder>
@@ -45,16 +44,31 @@
             <vr-genericdata-expressionbuilder on-ready="scopeModel.onChargingPolicyIdReady" label="Charging Policy Id"></vr-genericdata-expressionbuilder>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRateReady" label="Rate"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onSaleDurationInSecondsReady" label="Sale Duration"></vr-genericdata-expressionbuilder>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-genericdata-expressionbuilder on-ready="scopeModel.onAmountReady" label="Amount"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRateReady" label="Sale Rate"></vr-genericdata-expressionbuilder>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRateTypeIdReady" label="Rate Type Id"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onAmountReady" label="Sale Amount"></vr-genericdata-expressionbuilder>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-genericdata-expressionbuilder on-ready="scopeModel.onCurrencyIdReady" label="Currency Id"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onRateTypeIdReady" label="Sale Rate Type Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onCurrencyIdReady" label="Sale Currency Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onSaleRateValueRuleIdReady" label="Sale Rate Value Rule Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onSaleRateTypeRuleIdReady" label="Sale Rate Type Rule Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onSaleTariffRuleIdReady" label="Sale Tariff Rule Id"></vr-genericdata-expressionbuilder>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-genericdata-expressionbuilder on-ready="scopeModel.onSaleExtraChargeRuleIdReady" label="Sale Extra Charge Rule Id"></vr-genericdata-expressionbuilder>
         </vr-columns>
         <vr-columns width="fullrow">
             <vr-genericdata-expressionbuilder on-ready="scopeModel.onVoiceEventPricedPartsReady" label="Voice Event Priced Parts"></vr-genericdata-expressionbuilder>

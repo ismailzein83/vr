@@ -120,5 +120,6 @@
     <Build Include="Retail_EDR\Tables\EDR.sql" />
     <Build Include="Retail_EDR\User Defined Types\vw_EDRsType.sql" />
     <Build Include="Retail_EDR\User Defined Types\EDRType.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>
