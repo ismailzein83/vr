@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,5 +10,15 @@ namespace Vanrise.DataParser.Entities
     public interface IDataParserInput
     {
         byte[] Data { get; }
+    }
+
+    public class StreamDataParserInput : IDataParserInput
+    {
+        public Stream Stream { get; set; }
+
+        public byte[] Data
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

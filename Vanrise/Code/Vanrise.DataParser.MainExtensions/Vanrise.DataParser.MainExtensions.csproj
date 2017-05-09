@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HexTLV2\FieldParsers\BoolFieldParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\IntFieldParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\SequenceFieldParser.cs" />
+    <Compile Include="HexTLV2\RecordParsers\CreateRecordRecordParser.cs" />
+    <Compile Include="HexTLV2\RecordParsers\ExecuteTemplateRecordParser.cs" />
+    <Compile Include="HexTLV2\RecordParsers\SplitByTagRecordParser.cs" />
     <Compile Include="HexTLV\RecordReaders\TagRecordReader.cs" />
     <Compile Include="HexTLV\TagValueParsers\BoolParser.cs" />
     <Compile Include="HexTLV\TagValueParsers\IntParser.cs" />

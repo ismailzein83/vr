@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Vanrise.DataParser.Entities.HexTLV2
+{
+    public class HexTLVRecordParser
+    {
+        public HexTLVRecordParserSettings Settings { get; set; }
+    }
+
+    public abstract class HexTLVRecordParserSettings
+    {
+        public abstract Guid ConfigId { get; }
+
+        public abstract void Execute(IHexTLVRecordParserContext context);
+    }
+
+    public interface IHexTLVRecordParserContext
+    {
+        Stream RecordStream { get; }
+
+        ParsedRecord CreateRecord(string recordType);
+
+        void OnRecordParsed(ParsedRecord parsedRecord);
+
+        HexTLVRecordParser GetParserTemplate(Guid templateId);
+    }
+}

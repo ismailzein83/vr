@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HexTLV2\HexTLVFieldParser.cs" />
+    <Compile Include="HexTLV2\HexTLVFieldParserCollection.cs" />
+    <Compile Include="HexTLV2\HexTLVRecordParser.cs" />
+    <Compile Include="HexTLV2\ParsedRecordFieldConstantValue.cs" />
     <Compile Include="HexTLV\HexTLVRecordReadersConfig.cs" />
     <Compile Include="HexTLV\HexTLVTagType.cs" />
     <Compile Include="HexTLV\HexTLVTagValueParserConfig.cs" />
