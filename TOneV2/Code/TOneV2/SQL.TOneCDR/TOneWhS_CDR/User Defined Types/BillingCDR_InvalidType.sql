@@ -32,7 +32,11 @@
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
     [CountryId]                   INT             NULL,
+    [SaleTariffRuleId]            INT             NULL,
+    [CostTariffRuleId]            INT             NULL,
     [QueueItemId]                 BIGINT          NULL);
+
+
 
 
 

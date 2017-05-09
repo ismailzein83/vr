@@ -32,8 +32,12 @@
     [CostRateId]                  BIGINT          NULL,
     [SaleRateId]                  BIGINT          NULL,
     [CountryId]                   INT             NULL,
-    [QueueItemId]                 BIGINT          NULL
+    [QueueItemId]                 BIGINT          NULL,
+    [SaleTariffRuleId]            INT             NULL,
+    [CostTariffRuleId]            INT             NULL
 );
+
+
 
 
 
