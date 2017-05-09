@@ -26,22 +26,9 @@ namespace Vanrise.DataParser.Business.HexTLV
                 ParsedRecord parsedRecord = context.CreateRecord(recordType);
                 while (position < stream.Length)
                 {
-                    HexTLVTagType hexTLVTagType;
-                    string tag = ParserHelper.GetStringValue(stream, 1);
-                    position++;
-                    int recordLength = ParserHelper.GetIntValue(stream, 1);
-                    position += recordLength;
-                    byte[] fieldData = new byte[recordLength];
-                    stream.Read(fieldData, 0, recordLength);
-                    if (tagTypes.TryGetValue(tag, out hexTLVTagType))
-                    {
-                        TagValueParserExecuteContext tagValueParserExecuteContext = new TagValueParserExecuteContext
-                        {
-                            TagValue = fieldData,
-                            Record = parsedRecord
-                        };
-                        hexTLVTagType.ValueParser.Execute(tagValueParserExecuteContext);
-                    }
+                    string tag = "";
+                    byte[] fieldData = ParserHelper.ParseData(stream, out tag, ref position);
+                    ParserHelper.EvaluteParser(tagTypes, tag, fieldData, parsedRecord);
                 }
             };
             RecordReaderExecuteContext recordReaderExecuteContext = new RecordReaderExecuteContext(onRecordRead)
@@ -51,8 +38,6 @@ namespace Vanrise.DataParser.Business.HexTLV
             };
             RecordReader.Execute(recordReaderExecuteContext);
         }
-
-
         class RecordReaderExecuteContext : IRecordReaderExecuteContext
         {
             Action<string, byte[], Dictionary<string, HexTLVTagType>> _OnRecordRead;
@@ -72,20 +57,21 @@ namespace Vanrise.DataParser.Business.HexTLV
                 _OnRecordRead(recordType, recordData, tagTypes);
             }
         }
-        class TagValueParserExecuteContext : ITagValueParserExecuteContext
-        {
-            public byte[] TagValue
-            {
-                get;
-                set;
-            }
 
-            public ParsedRecord Record
-            {
-                get;
-                set;
-            }
+
+    }
+    public class TagValueParserExecuteContext : ITagValueParserExecuteContext
+    {
+        public byte[] TagValue
+        {
+            get;
+            set;
         }
 
+        public ParsedRecord Record
+        {
+            get;
+            set;
+        }
     }
 }

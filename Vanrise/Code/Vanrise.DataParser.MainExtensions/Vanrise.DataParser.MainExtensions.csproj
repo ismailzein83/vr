@@ -49,6 +49,7 @@
     <Compile Include="HexTLV\TagValueParsers\IPv4Parser.cs" />
     <Compile Include="HexTLV\TagValueParsers\SequenceParser.cs" />
     <Compile Include="HexTLV\TagValueParsers\StringParser.cs" />
+    <Compile Include="HexTLV\TagValueParsers\TBCDNumberParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

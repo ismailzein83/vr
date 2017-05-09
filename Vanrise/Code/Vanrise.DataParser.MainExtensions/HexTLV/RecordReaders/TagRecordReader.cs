@@ -29,7 +29,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders
                 stream.SkipBytes(NumberOfBytesToSkip);
                 position += NumberOfBytesToSkip;
                 int recordLength = ParserHelper.GetIntValue(stream, 1);
-                position += recordLength;
+                position += recordLength + 1;
                 TagRecordType tagRecordType;
                 byte[] recordData = new byte[recordLength];
                 stream.Read(recordData, 0, recordLength);
