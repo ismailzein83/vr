@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HexTLV\HexTLVParserType.cs" />
+    <Compile Include="ParserHelper.cs" />
     <Compile Include="ParserTypeConfigsManager.cs" />
     <Compile Include="ParserTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

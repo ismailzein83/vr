@@ -13,9 +13,5 @@ namespace Vanrise.DataParser.Entities
         public string Name { get; set; }
         public ParserTypeSettings Settings { get; set; }
 
-    }
-
-  
-   
-   
+    }   
 }

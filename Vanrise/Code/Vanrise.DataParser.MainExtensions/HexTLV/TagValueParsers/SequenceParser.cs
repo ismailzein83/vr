@@ -17,7 +17,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 
         public override void Execute(ITagValueParserExecuteContext context)
         {
-            throw new NotImplementedException();
+            foreach (var tagType in this.TagTypes)
+            {
+                tagType.Value.ValueParser.Execute(context);
+            }
         }
     }
 }

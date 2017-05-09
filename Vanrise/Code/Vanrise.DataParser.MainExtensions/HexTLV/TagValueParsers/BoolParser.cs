@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities.HexTLV;
+using Vanrise.DataParser.MainExtensions.HexTLV.RecordReaders;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 {
@@ -17,6 +19,8 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers
 
         public override void Execute(ITagValueParserExecuteContext context)
         {
+            bool value = Convert.ToBoolean(ParserHelper.ByteToNumber(context.TagValue));
+            context.Record.SetFieldValue(this.FieldName, value);
         }
     }
 }
