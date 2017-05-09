@@ -48,10 +48,10 @@ namespace Vanrise.GenericData.Pricing
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveRate;", this.EffectiveRate, ruleContextVariableName);
 
             if (this.EffectiveDurationInSeconds != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds.Value;", this.EffectiveDurationInSeconds, ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("if({0}.EffectiveDurationInSeconds.HasValue){1} = {0}.EffectiveDurationInSeconds.Value;", ruleContextVariableName, this.EffectiveDurationInSeconds);
 
             if (this.TotalAmount != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount.Value;", this.TotalAmount, ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("if({0}.TotalAmount.HasValue){1} = {0}.TotalAmount.Value;", ruleContextVariableName, this.TotalAmount);
 
             if (this.ExtraChargeValue != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.ExtraChargeValue;", this.ExtraChargeValue, ruleContextVariableName);
