@@ -1,0 +1,12 @@
+﻿<vr-tab header="'Charging Policy Definition'">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <retail-be-servicetype-chargingpolicy-definition on-ready="scopeModel.onChargingPolicyReady" normal-col-num="2"></retail-be-servicetype-chargingpolicy-definition>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+<vr-directivewrapper ng-if="scopeModel.selectedExtendedSettingsTemplateConfig != undefined"
+                     directive="scopeModel.selectedExtendedSettingsTemplateConfig.Editor"
+                     on-ready="scopeModel.onExtendedSettingsDirectiveReady"
+                     vr-loader="scopeModel.isExtendedSettingsDirectiveLoading">
+</vr-directivewrapper>

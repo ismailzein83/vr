@@ -17,71 +17,10 @@
                             </vr-genericdata-businessentitydefinition-selector>
                         </vr-columns>
                     </vr-row>
+                 
                 </vr-tab>
-                <vr-tab header="'Settings'" ng-show="scopeModel.showSettings">
-                    <vr-row>
-                        <span vr-loader="scopeModel.isAccountTypeSelectorLoading">
-                            <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
-                                                            normal-col-num="6"
-                                                            ismultipleselection="true"
-                                                            customlabel="Parent Account Types"
-                                                            isrequired="!scopeModel.canBeRootAccount">
-                            </retail-be-accounttype-selector>
-                        </span>
-                        <vr-columns width="1/2row">
-                            <vr-switch label="Can Be Root Account" value="scopeModel.canBeRootAccount"></vr-switch>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-switch label="Show Concatenated Name" value="scopeModel.showConcatenatedName"></vr-switch>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <span vr-loader="scopeModel.isStatusDefinitionSelectorLoading">
-                            <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady"
-                                                                 customlabel="Initial Status"
-                                                                 normal-col-num="6"
-                                                                 isrequired="true">
-                            </vr-common-statusdefinition-selector>
-                        </span>
-                    </vr-row>
-                    <vr-row>
-                        <retail-be-accountpartdefinition-selector on-ready="scopeModel.onPartDefinitionSelectorReady"
-                                                                  onselectitem="scopeModel.onSelectItem"
-                                                                  ondeselectitem="scopeModel.onDeselectItem"
-                                                                  selectedvalues="scopeModel.selectedPartDefinitions"
-                                                                  normal-col-num="6"
-                                                                  customlabel="Sections"
-                                                                  ismultipleselection="true">
-                        </retail-be-accountpartdefinition-selector>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-datagrid datasource="scopeModel.datasource"
-                                         on-ready="onGridReady" ondeleterow="scopeModel.removeFilter" hidegridmenu norowhighlightonclick="'true'" enabledraggablerow="true">
-                                <vr-datagridcolumn headertext="'Title'" field="'title'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Availability Settings'" widthfactor="10" disablesorting="true">
-                                    <vr-select datasource="viewScope.scopeModel.accountPartAvailability"
-                                               selectedvalues="dataItem.selectedAccountPartAvailability"
-                                               datavaluefield="value"
-                                               datatextfield="description"
-                                               isrequired="true"
-                                               hideremoveicon>
-                                    </vr-select>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Required Settings'" widthfactor="10" disablesorting="true">
-                                    <vr-select datasource="viewScope.scopeModel.accountPartRequiredOptions"
-                                               selectedvalues="dataItem.selectedAccountPartRequiredOptions"
-                                               datavaluefield="value"
-                                               datatextfield="description"
-                                               isrequired="true"
-                                               hideremoveicon>
-                                    </vr-select>
-                                </vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-            </vr-tabs>
+                <retail-be-accounttype-settings on-ready="scopeModel.onAccountTypeSettingsReady" ng-show="scopeModel.showSettings"></retail-be-accounttype-settings>
+</vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

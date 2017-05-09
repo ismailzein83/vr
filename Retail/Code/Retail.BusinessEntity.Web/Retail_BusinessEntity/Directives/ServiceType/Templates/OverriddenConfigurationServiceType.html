@@ -1,0 +1,23 @@
+﻿<vr-tab header="'ServiceTypeSettings'">
+    <vr-row>
+        <retail-be-servicetype-selector on-ready="scopeModel.onServiceTypeSelectorReady" isrequired="true"
+                                        customlabel="RuleDefinitionSettings"
+                                        normal-col-num="6"
+                                        onselectionchanged="scopeModel.serviceTypeSelectorSelectionChanged">
+        </retail-be-servicetype-selector>
+
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.title" label="Title"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-switch value="scopeModel.isSettingsOverridden" label="Change Settings" onvaluechanged="scopeModel.isSettingsOverriddenValuechanged"></vr-switch>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+<div ng-if="scopeModel.showDirectiveSettings">
+    <retail-be-servicetype-settings on-ready="scopeModel.onServiceTypeSettingsReady"></retail-be-servicetype-settings>
+</div>
