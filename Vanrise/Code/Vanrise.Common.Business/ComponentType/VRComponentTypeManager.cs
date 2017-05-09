@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
-using Vanrise.Common;
 using Vanrise.Common.Data;
-using Vanrise.Caching;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class VRComponentTypeManager
+    public class VRComponentTypeManager : IBusinessEntityManager
     {
         #region Ctor/Variables
 
@@ -32,7 +28,7 @@ namespace Vanrise.Common.Business
                     return false;
                 return true;
             };
-           
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRComponentTypes.ToBigResult(input, filterExpression, VRComponentTypeDetailMapper));
         }
 
@@ -253,10 +249,10 @@ namespace Vanrise.Common.Business
         {
 
             Guid _vrComponentTypeConfigId;
-            
+
             public VRComponentTypeLoggableEntity(Guid vrComponentTypeConfigId)
             {
-                _vrComponentTypeConfigId=vrComponentTypeConfigId;
+                _vrComponentTypeConfigId = vrComponentTypeConfigId;
             }
 
             static VRComponentTypeManager s_vrComponentTypeManager = new VRComponentTypeManager();
@@ -311,5 +307,67 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
+
+        #region IBusinessEntityManager
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    public class VRComponentTypeBESettings : BusinessEntityDefinitionSettings
+    {
+        public static Guid s_configId = new Guid("0873C4D8-C6CC-4DDB-ACCA-E8EC850C9186");
+        public override Guid ConfigId { get { return s_configId; } }
+
+        public override string SelectorFilterEditor { get; set; }
+
+        public override string DefinitionEditor { get { return "vr-common-componenttypebe-editor"; } }
+
+        public override string IdType { get { return "System.Guid"; } }
+
+        public override string ManagerFQTN { get { return "Vanrise.Common.Business.VRComponentTypeManager, Vanrise.Common.Business"; } }
+
+        public override string SelectorUIControl { get { return ""; } }
+
+        public Guid VRComponentTypeConfigId { get; set; }
     }
 }
