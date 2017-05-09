@@ -209,7 +209,27 @@ namespace TOne.WhS.Sales.BP.Activities
             if (allCountries.Count == 0)
                 throw new DataIntegrityValidationException(string.Format("No countries are sold to Customer '{0}'", customerId));
 
-            return allCountries.ToDictionary(x => x.CountryId);
+            var countriesByCountryId = new Dictionary<int, RatePlanCustomerCountry>();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+            var duplicatedCountryNames = new List<string>();
+
+            foreach (RatePlanCustomerCountry country in allCountries)
+            {
+                if (countriesByCountryId.ContainsKey(country.CountryId))
+                {
+                    string countryName = countryManager.GetCountryName(country.CountryId);
+                    duplicatedCountryNames.Add(countryName);
+                    continue;
+                }
+                countriesByCountryId.Add(country.CountryId, country);
+            }
+
+            if (duplicatedCountryNames.Count > 0)
+            {
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The following countries are duplicated: {0}", string.Join(", ", duplicatedCountryNames)));
+            }
+
+            return countriesByCountryId;
         }
 
         private RatePlanCustomerCountry GetRatePlanCustomerCountry(Dictionary<int, RatePlanCustomerCountry> customerCountriesByCountryId, SaleZoneManager saleZoneManager, long saleZoneId)
