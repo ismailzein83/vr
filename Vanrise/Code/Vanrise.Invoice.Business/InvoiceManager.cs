@@ -421,11 +421,14 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetUnPaidPartnerInvoices(partnerInvoiceTypes);
         }
-        public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
+        public InvoiceClientDetail GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetLastInvoice(invoiceTypeId, partnerId);
-
+            var invoice =  dataManager.GetLastInvoice(invoiceTypeId, partnerId);
+            if(invoice == null)
+                return null;
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
+            return InvoiceDetailMapper1( invoice, invoiceType);
         }
         #endregion
 

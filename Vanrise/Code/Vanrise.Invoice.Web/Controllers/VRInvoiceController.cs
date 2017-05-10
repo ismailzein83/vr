@@ -136,7 +136,7 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("GetLastInvoice")]
-        public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
+        public InvoiceClientDetail GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             InvoiceManager manager = new InvoiceManager();
             return manager.GetLastInvoice(invoiceTypeId, partnerId);
