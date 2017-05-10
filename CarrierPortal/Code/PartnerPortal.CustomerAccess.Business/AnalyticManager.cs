@@ -18,18 +18,27 @@ namespace PartnerPortal.CustomerAccess.Business
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
             var accountId = manager.GetRetailAccountId(userId);
-            AnalyticTileInfo analyticTileInfo = new AnalyticTileInfo
-            {
-                Fields = new List<AnalyticTileField>()
-            };
-            //analyticTileInfo.TileTitle = analyticDefinitionSettings.Queries
+           
+            Dictionary<Guid, AnalyticTileField> fieldsDic = new Dictionary<Guid, AnalyticTileField>();
             foreach(var query in analyticDefinitionSettings.Queries)
             {
                 VRTimePeriodContext context = new VRTimePeriodContext();
                 query.TimePeriod.GetTimePeriod(context);
                 List<string> measures = query.Measures.Select(x => x.MeasureName).ToList();
                 var analyticData = GetFilteredRecords(query.VRConnectionId, query.TableId, measures, query.UserDimensionName, accountId, context.FromTime, context.ToTime);
-                AddAnalyticTileFields(analyticData.Data, analyticTileInfo.Fields, query.Measures);
+                AddAnalyticTileFields(analyticData.Data, fieldsDic, query.Measures);
+            }
+            AnalyticTileInfo analyticTileInfo = new AnalyticTileInfo
+            {
+                Fields = new List<AnalyticTileField>()
+            };
+            foreach (var measureId in analyticDefinitionSettings.OrderedMeasureIds)
+            {
+                AnalyticTileField analyticTileField;
+                if (fieldsDic.TryGetValue(measureId, out analyticTileField))
+                {
+                   analyticTileInfo.Fields.Add(analyticTileField);
+                }
             }
             return analyticTileInfo;
         }
@@ -60,7 +69,7 @@ namespace PartnerPortal.CustomerAccess.Business
             return connectionSettings.Post<Vanrise.Entities.DataRetrievalInput<Vanrise.Analytic.Entities.AnalyticQuery>, AnalyticSummaryBigResult<AnalyticRecord>>(string.Format("/api/VR_Analytic/Analytic/GetFilteredRecords"), analyticQuery);
         }
 
-        private void AddAnalyticTileFields(IEnumerable<AnalyticRecord> analyticRecords, List<AnalyticTileField> fields, List<MeasureItem> listMeasures)
+        private void AddAnalyticTileFields(IEnumerable<AnalyticRecord> analyticRecords, Dictionary<Guid,AnalyticTileField> fieldsDic, List<MeasureItem> listMeasures)
         {
             if (analyticRecords != null)
             {
@@ -71,7 +80,7 @@ namespace PartnerPortal.CustomerAccess.Business
                         MeasureValue measureValue = GetMeasureValue(analyticRecord, listMeasure.MeasureName);
                         if (measureValue != null)
                         {
-                            fields.Add(new AnalyticTileField
+                            fieldsDic.Add(listMeasure.MeasureItemId,new AnalyticTileField
                             {
                                 Description = listMeasure.MeasureTitle,
                                 Value = measureValue.Value
