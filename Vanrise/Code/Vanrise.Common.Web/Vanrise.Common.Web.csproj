@@ -138,6 +138,7 @@
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
     <Compile Include="Controllers\VRTileController.cs" />
+    <Compile Include="Controllers\VRTimePeriodController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
     <Compile Include="Controllers\StyleDefinitionController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -274,6 +275,11 @@
     <Content Include="Common\Directives\VRTile\VRTileEditorController.js" />
     <Content Include="Common\Directives\VRTile\vr-common-tiles.js" />
     <Content Include="Common\Directives\VRTile\vr-common-tile-extendedsettings.js" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\TodayDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\CurrentMonthDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-today.js" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-currentmonth.js" />
+    <Content Include="Common\Directives\VRTimePeriod\vr-common-timeperiod.js" />
     <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-selector.js" />
@@ -383,6 +389,7 @@
     <Content Include="Common\Services\APIServices\UISettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\VRComponentTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRTimePeriodAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTimeZoneAPIService.js" />
     <Content Include="Common\Services\APIServices\SettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\EmailTemplateAPIService.js" />

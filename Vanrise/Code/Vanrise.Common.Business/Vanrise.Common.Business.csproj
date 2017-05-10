@@ -141,6 +141,7 @@
     <Compile Include="VRFileManager.cs" />
     <Compile Include="VRTile\VRTileManager.cs" />
     <Compile Include="VRTile\VRTileViewSettings.cs" />
+    <Compile Include="VRTimePeriod\VRTimePeriodManager.cs" />
     <Compile Include="VRTimeZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ app.directive('vrCommonTiles', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VR
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new BankDetailsSettingsEditor(ctrl, $scope, $attrs);
+                var ctor = new TilesEditor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -21,7 +21,7 @@ app.directive('vrCommonTiles', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VR
             templateUrl: "/Client/Modules/Common/Directives/VRTile/Templates/VRTilesGridTemplate.html"
         };
 
-        function BankDetailsSettingsEditor(ctrl, $scope, $attrs) {
+        function TilesEditor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var gridAPI;

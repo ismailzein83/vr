@@ -152,6 +152,8 @@
     <Compile Include="VRTile\VRTile.cs" />
     <Compile Include="VRTile\VRTileExtendedSettingsConfig.cs" />
     <Compile Include="VRTile\VRTileSettings.cs" />
+    <Compile Include="VRTimePeriod\VRTimePeriod.cs" />
+    <Compile Include="VRTimePeriod\VRTimePeriodConfig.cs" />
     <Compile Include="VRTimeZone.cs" />
     <Compile Include="VRConcatenatedPart\ConcatenatedPartSettingsConfig.cs" />
     <Compile Include="VRConcatenatedPart\VRConcatenatedPart.cs" />
