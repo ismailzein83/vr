@@ -15,14 +15,10 @@
         var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var businessEntityDefinitionSelectionChangedDeferred;
 
-        var accountTypeSelectorAPI;
-        var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountTypeSettingsAPI;
+        var accountTypeSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var partDefinitionSelectorAPI;
-        var partDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var statusDefinitionSelectorAPI;
-        var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+      
 
 
         loadParameters();
@@ -37,93 +33,50 @@
             isEditMode = (accountTypeId != undefined);
         }
         function defineScope() {
-            $scope.scopeModel = {};
-            $scope.scopeModel.showSettings = false;
-            $scope.scopeModel.datasource = [];
-
-            $scope.scopeModel.accountPartAvailability = UtilsService.getArrayEnum(Retail_BE_AccountPartAvailabilityOptionsEnum);
-            $scope.scopeModel.accountPartRequiredOptions = UtilsService.getArrayEnum(Retail_BE_AccountPartRequiredOptionsEnum);
+           $scope.scopeModel = {};
+          $scope.scopeModel.showSettings = false;
+            
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 businessEntityDefinitionSelectorAPI = api;
                 businessEntityDefinitionSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
-                accountTypeSelectorAPI = api;
-                accountTypeSelectorReadyDeferred.resolve();
+
+            $scope.scopeModel.onAccountTypeSettingsReady = function (api) {
+                accountTypeSettingsAPI = api;
+              accountTypeSettingsReadyDeferred.resolve();
             };
-            $scope.scopeModel.onPartDefinitionSelectorReady = function (api) {
-                partDefinitionSelectorAPI = api;
-                partDefinitionSelectorReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
-                statusDefinitionSelectorAPI = api;
-                statusDefinitionSelectorReadyDeferred.resolve();
-            };
+
+            
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (selectedItem) {
 
                 if (selectedItem != undefined) {
                     accountBEDefinitionId = selectedItem.BusinessEntityDefinitionId;
                     $scope.scopeModel.showSettings = true;
-                    var businessEntityDefinitionForAccountTypeDeferred;
-                    var businessEntityDefinitionForStatusDefinitionDeferred;
+                    var businessEntityDefinitionForAccountTypeSettingsDeferred;
                     if (businessEntityDefinitionSelectionChangedDeferred != undefined) {
-                        businessEntityDefinitionForAccountTypeDeferred = UtilsService.createPromiseDeferred();
-                        businessEntityDefinitionForStatusDefinitionDeferred = UtilsService.createPromiseDeferred();
+                        businessEntityDefinitionForAccountTypeSettingsDeferred = UtilsService.createPromiseDeferred();
 
-                        UtilsService.waitMultiplePromises([businessEntityDefinitionForAccountTypeDeferred.promise, businessEntityDefinitionForStatusDefinitionDeferred.promise]).then(function () {
-                            businessEntityDefinitionForAccountTypeDeferred = undefined;
-                            businessEntityDefinitionForStatusDefinitionDeferred = undefined;
+                        UtilsService.waitMultiplePromises([businessEntityDefinitionForAccountTypeSettingsDeferred.promise]).then(function () {
+                            businessEntityDefinitionForAccountTypeSettingsDeferred = undefined;
                             if (businessEntityDefinitionSelectionChangedDeferred != undefined)
                                 businessEntityDefinitionSelectionChangedDeferred.resolve();
                         });
 
                     }
-                    var accountTypeSelectorPayload = {
-                        filter: {
+                    var accountTypeSettingsPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId
-                        }
                     };
                     var setLoader = function (value) {
-                        $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                        $scope.scopeModel.isAccountTypeSettingsLoading = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, accountTypeSelectorPayload, setLoader, businessEntityDefinitionForAccountTypeDeferred);
-
-                    var statusDefinitionSelectorPayload = {
-                        filter: {
-                            Filters: [{
-                                $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter,Retail.BusinessEntity.Business",
-                                AccountBEDefinitionId: accountBEDefinitionId
-                            }]
-                        }
-                    };
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isStatusDefinitionSelectorLoading = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, setLoader, businessEntityDefinitionForStatusDefinitionDeferred);
-
-
-
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSettingsAPI, accountTypeSettingsPayload, setLoader, businessEntityDefinitionForAccountTypeSettingsDeferred);
 
                 }
             };
 
-            $scope.scopeModel.onSelectItem = function (dataItem) {
-                addAccountPart(dataItem);
-            };
-            $scope.scopeModel.onDeselectItem = function (dataItem) {
-                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.AccountPartDefinitionId, 'AccountPartDefinitionId');
-                $scope.scopeModel.datasource.splice(datasourceIndex, 1);
-            };
-
-            $scope.scopeModel.removeFilter = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedPartDefinitions, dataItem.AccountPartDefinitionId, 'AccountPartDefinitionId');
-                $scope.scopeModel.selectedPartDefinitions.splice(index, 1);
-
-                var datasourceIndex = $scope.scopeModel.datasource.indexOf(dataItem);
-                $scope.scopeModel.datasource.splice(datasourceIndex, 1);
-            };
+            
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateAccountType() : insertAccountType();
@@ -177,10 +130,7 @@
                 $scope.scopeModel.name = accountTypeEntity.Name;
                 $scope.scopeModel.title = accountTypeEntity.Title;
 
-                if (accountTypeEntity.Settings != undefined) {
-                    $scope.scopeModel.canBeRootAccount = accountTypeEntity.Settings.CanBeRootAccount;
-                    $scope.scopeModel.showConcatenatedName = accountTypeEntity.Settings.ShowConcatenatedName;
-                }
+                
 
             }
             function loadBusinessEntityDefinitionSelector() {
@@ -200,76 +150,36 @@
 
                 return businessEntityDefinitionSelectorLoadDeferred.promise;
             }
-            function loadAccountTypeSelector() {
+            function loadAccountTypeSettings() {
                 if (!isEditMode)
                     return;
 
                 if (businessEntityDefinitionSelectionChangedDeferred == undefined)
+                {
+                    
                     businessEntityDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                }
+                    
 
-                var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
+                var accountTypeSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                UtilsService.waitMultiplePromises([accountTypeSettingsReadyDeferred.promise, businessEntityDefinitionSelectionChangedDeferred.promise]).then(function () {
                     businessEntityDefinitionSelectionChangedDeferred = undefined;
 
-                    var accountTypeSelectorPayload = {
-                        filter: {
+                    var accountTypeSettingsPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId
-                        }
                     };
-                    if (accountTypeEntity != undefined && accountTypeEntity.Settings != null) {
-                        accountTypeSelectorPayload.selectedIds = accountTypeEntity.Settings.SupportedParentAccountTypeIds;
+                    if (accountTypeEntity != undefined && accountTypeEntity.Settings!=null) {
+                        accountTypeSettingsPayload.accountTypeSettings = accountTypeEntity.Settings;
                     }
-                    VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+                
+                    VRUIUtilsService.callDirectiveLoad(accountTypeSettingsAPI, accountTypeSettingsPayload, accountTypeSettingsLoadDeferred);
                 });
 
-                return accountTypeSelectorLoadDeferred.promise;
+                return accountTypeSettingsLoadDeferred.promise;
             }
-            function loadPartDefinitionSection() {
-                var partDefinitionIds;
-                if (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.PartDefinitionSettings != undefined) {
-                    partDefinitionIds = [];
-                    for (var i = 0; i < accountTypeEntity.Settings.PartDefinitionSettings.length; i++) {
-                        var partDefinitionSetting = accountTypeEntity.Settings.PartDefinitionSettings[i];
-                        partDefinitionIds.push(partDefinitionSetting.PartDefinitionId);
-                    }
-                }
-                var partDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                partDefinitionSelectorReadyDeferred.promise.then(function () {
-                    var partDefinitionSelectorPayload = partDefinitionIds != undefined ? { selectedIds: partDefinitionIds } : undefined;
-                    VRUIUtilsService.callDirectiveLoad(partDefinitionSelectorAPI, partDefinitionSelectorPayload, partDefinitionSelectorLoadDeferred);
-                });
+            
 
-                return partDefinitionSelectorLoadDeferred.promise.then(function () {
-                    if (accountTypeEntity != undefined && accountTypeEntity.Settings != null && accountTypeEntity.Settings.PartDefinitionSettings != undefined) {
-                        for (var i = 0; i < accountTypeEntity.Settings.PartDefinitionSettings.length; i++) {
-                            var selectedPartDefinition = $scope.scopeModel.selectedPartDefinitions[i];
-                            var partDefinitionSetting = accountTypeEntity.Settings.PartDefinitionSettings[i];
-                            addAccountPart(selectedPartDefinition, partDefinitionSetting);
-                        }
-                    }
-                });
-            }
-            function loadStatusDefinitionSelector() {
-                if (!isEditMode)
-                    return;
-                var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                    var statusDefinitionSelectorPayload = {
-                        filter: {
-                            Filters: [{
-                                $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter,Retail.BusinessEntity.Business",
-                                AccountBEDefinitionId: accountTypeEntity != undefined ? accountTypeEntity.AccountBEDefinitionId : undefined
-                            }]
-                        },
-                        selectedIds: accountTypeEntity != undefined && accountTypeEntity.Settings != undefined ? accountTypeEntity.Settings.InitialStatusId : undefined
-                    };
-                    VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-                });
-                return statusDefinitionSelectorLoadDeferred.promise;
-            }
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBusinessEntityDefinitionSelector, loadAccountTypeSelector, loadPartDefinitionSection, loadStatusDefinitionSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBusinessEntityDefinitionSelector, loadAccountTypeSettings])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
@@ -277,15 +187,7 @@
                 });
         }
 
-        function addAccountPart(part, payload) {
-            var dataItem = {
-                AccountPartDefinitionId: part.AccountPartDefinitionId,
-                title: part.Title,
-                selectedAccountPartAvailability: payload != undefined ? UtilsService.getItemByVal($scope.scopeModel.accountPartAvailability, payload.AvailabilitySettings, "value") : $scope.scopeModel.accountPartAvailability[0],
-                selectedAccountPartRequiredOptions: payload != undefined ? UtilsService.getItemByVal($scope.scopeModel.accountPartRequiredOptions, payload.RequiredSettings, "value") : $scope.scopeModel.accountPartRequiredOptions[0]
-            };
-            $scope.scopeModel.datasource.push(dataItem);
-        }
+        
 
         function insertAccountType() {
             $scope.scopeModel.isLoading = true;
@@ -324,29 +226,12 @@
         }
 
         function buildAccountTypeObjFromScope() {
-            var partDefinitionSettings;
-            if ($scope.scopeModel.datasource.length > 0) {
-                partDefinitionSettings = [];
-                for (var i = 0 ; i < $scope.scopeModel.datasource.length ; i++) {
-                    var dataItem = $scope.scopeModel.datasource[i];
-                    partDefinitionSettings.push({
-                        PartDefinitionId: dataItem.AccountPartDefinitionId,
-                        AvailabilitySettings: dataItem.selectedAccountPartAvailability.value,
-                        RequiredSettings: dataItem.selectedAccountPartRequiredOptions.value,
-                    });
-                }
-            }
+           
             var obj = {
                 AccountTypeId: accountTypeId,
                 Name: $scope.scopeModel.name,
                 Title: $scope.scopeModel.title,
-                Settings: {
-                    CanBeRootAccount: $scope.scopeModel.canBeRootAccount,
-                    SupportedParentAccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
-                    PartDefinitionSettings: partDefinitionSettings,
-                    InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
-                    ShowConcatenatedName: $scope.scopeModel.showConcatenatedName,
-                },
+                Settings: accountTypeSettingsAPI.getData(),
                 AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
             };
             return obj;

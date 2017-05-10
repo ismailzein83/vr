@@ -299,6 +299,10 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountSynchronizerHandler\Templates\AccountSynchronizerHandlerGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountSynchronizerHandler\Templates\AccountSynchronizerHandlerSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountSynchronizerHandler\Templates\AccountSynchronizerInsertHandlerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-overriddenconfiguration-accounttype.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypeSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\OverriddenConfigurationAccountType.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accounthistory-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountidentificationrules-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountinfo-view.js" />
@@ -567,6 +571,7 @@
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\Templates\RingoAccountConvertorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-overriddenconfiguration-servicetype.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-ruledefinition-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-selector.js" />
@@ -575,6 +580,9 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\AccountGridDefinitionManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\retail-be-accountviewdefinitions-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\Templates\AccountViewDefinitionsManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\OverriddenConfigurationServiceType.html" />
+    <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-didtechnicalsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\DIDTechnicalSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
