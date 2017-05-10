@@ -50,8 +50,8 @@
                     else
                      {hideOverriddenSettingsEditor();}
                           }
-                $scope.scopeModel.accountPartDefinitionSelectorSelectionChanged = function () {
-                    if (selectedIds != undefined) {
+                $scope.scopeModel.accountPartDefinitionSelectorSelectionChanged = function (value) {
+                    if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
                         }

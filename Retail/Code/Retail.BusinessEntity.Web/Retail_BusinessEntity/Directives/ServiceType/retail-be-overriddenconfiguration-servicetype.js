@@ -52,8 +52,8 @@
                         hideOverriddenSettingsEditor();
                     }
                 };
-                $scope.scopeModel.serviceTypeSelectorSelectionChanged = function () {
-                    if (selectedIds != undefined) {
+                $scope.scopeModel.serviceTypeSelectorSelectionChanged = function (value) {
+                    if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
                         }
@@ -167,17 +167,18 @@
                 function loadSettings() {
 
                     $scope.scopeModel.showDirectiveSettings = true;
+                    getServiceType().then(function () {
                         settingReadyPromiseDeferred.promise
                        .then(function () {
                            var directivePayload = {
                                serviceTypeSettings: serviceTypeSettings,
-                               accountBEDefinitionId: serviceTypeSelectorApi.getSelectedIds()
+                               accountBEDefinitionId: serviceTypeEntity.AccountBEDefinitionId
                            };
                            VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                        }).catch(function (error) {
                            loadSettingDirectivePromiseDeferred.reject();
                        });
-
+                    });
                 }
                 return loadSettingDirectivePromiseDeferred.promise;
             }

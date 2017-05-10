@@ -52,8 +52,8 @@
                         hideOverriddenSettingsEditor();
                     }
                 };
-                $scope.scopeModel.accountTypeSelectorSelectionChanged = function () {
-                    if (selectedIds != undefined) {
+                $scope.scopeModel.accountTypeSelectorSelectionChanged = function (value) {
+                    if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
                         }
