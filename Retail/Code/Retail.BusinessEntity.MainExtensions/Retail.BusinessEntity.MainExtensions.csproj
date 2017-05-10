@@ -210,6 +210,7 @@
     <Compile Include="AccountParts\AccountPartResidentialProfileDefinition.cs" />
     <Compile Include="AccountActions\SendEmailAction.cs" />
     <Compile Include="AccountBalanceAlertRule\FixedBalanceAlertThreshold.cs" />
+    <Compile Include="TransformationSteps\RetrieveFinancialInfoStep.cs" />
     <Compile Include="VRObjectTypes\RetailAccountPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountObjectType.cs" />
   </ItemGroup>
