@@ -568,7 +568,8 @@ namespace Vanrise.Fzero.Bypass
                                     int result = 0;
                                     if (int.TryParse(p, out result))
                                     {
-                                        if (Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode + p))
+                                        //if (Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode + p))
+                                        if (NumberWithoutAreaCodeCLI.StartsWith(p) && Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode))
                                         {
                                             rc.MobileOperatorID = j.ID;
                                         }
@@ -987,7 +988,19 @@ namespace Vanrise.Fzero.Bypass
                             }
                         }
 
-                        
+
+                        string Cleanb_number = gc.b_number;
+
+                        if (gc.b_number.StartsWith("+"))
+                        {
+                            Cleanb_number = gc.b_number.Substring(1);
+                        }
+
+                        else if (gc.b_number.StartsWith("00"))
+                        {
+                            Cleanb_number = gc.b_number.Substring(2);
+                        }
+
                         
                         foreach (MobileOperator j in lstMobileOperators)
                         {
@@ -1009,9 +1022,10 @@ namespace Vanrise.Fzero.Bypass
                                     int result = 0;
                                     if (int.TryParse(p, out result))
                                     {
-                                        if (NumberWithoutAreaCodeCLI.StartsWith(p))
+                                        //if (Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode + p))
+                                        if (NumberWithoutAreaCodeCLI.StartsWith(p) && (Cleanb_number.StartsWith(ListClients.Where(x => x.ID == j.User.ClientID.Value).First().CountryCode)) )
                                         {
-                                            gc.MobileOperatorID = j.ID;
+                                                gc.MobileOperatorID = j.ID;
                                         }
                                     }
 
@@ -1885,8 +1899,6 @@ namespace Vanrise.Fzero.Bypass
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Verified)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reopened)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Ignored)
-                                  && (u.MobileOperatorID == 15 || u.MobileOperatorID == 16)
-                                  && (u.AttemptDateTime >= new DateTime(2017, 04, 24, 0, 0, 0))
                                   )
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();

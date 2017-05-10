@@ -95,7 +95,7 @@ BEGIN
            Values
  (         8
            ,@MobileOperatorID
-           ,4
+           ,2
            ,NULL
            ,1
            ,@DurationInSeconds
