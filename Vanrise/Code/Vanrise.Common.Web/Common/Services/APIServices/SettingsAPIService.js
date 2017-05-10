@@ -37,6 +37,11 @@
                 settingHistoryId: settingHistoryId
             });
         }
+        function GetSettingsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, 'GetSettingsInfo'), {
+                filter: filter
+            });
+        }
         return ({
             GetFilteredSettings: GetFilteredSettings,
             UpdateSetting: UpdateSetting,
@@ -44,7 +49,8 @@
             GetDistinctSettingCategories: GetDistinctSettingCategories,
             HasUpdateSettingsPermission: HasUpdateSettingsPermission,
             HasUpdateTechnicalSettingsPermission: HasUpdateTechnicalSettingsPermission,
-            GetSettingHistoryDetailbyHistoryId: GetSettingHistoryDetailbyHistoryId
+            GetSettingHistoryDetailbyHistoryId: GetSettingHistoryDetailbyHistoryId,
+            GetSettingsInfo: GetSettingsInfo
         });
     }
 

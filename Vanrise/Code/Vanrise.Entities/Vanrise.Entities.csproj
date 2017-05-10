@@ -80,6 +80,8 @@
     <Compile Include="OverriddenConfig\OverriddenConfigurationGroupInfoFilter.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationQuery.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationSettings.cs" />
+    <Compile Include="Settings\SettingInfo.cs" />
+    <Compile Include="Settings\SettingInfoFilter.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
     <Compile Include="VRActionAudit\VRActionAuditDetail.cs" />

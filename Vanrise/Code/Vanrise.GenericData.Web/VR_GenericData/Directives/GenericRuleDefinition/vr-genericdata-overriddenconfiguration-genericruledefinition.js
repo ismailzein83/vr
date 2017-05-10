@@ -59,8 +59,8 @@
                         hideOverriddenSettingsEditor();
                     }
                 };
-                $scope.scopeModel.genericRuleDefinitionSelectorSelectionChanged = function () {
-                    if (selectedIds != undefined) {
+                $scope.scopeModel.genericRuleDefinitionSelectorSelectionChanged = function (value) {
+                    if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
                         }

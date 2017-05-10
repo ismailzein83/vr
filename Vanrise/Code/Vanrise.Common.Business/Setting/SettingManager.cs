@@ -48,6 +48,28 @@ namespace Vanrise.Common.Business
             VRActionLogger.Current.LogGetFilteredAction(SettingLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allSettings.ToBigResult(input, filterExpression, SettingDetailMapper));
         }
+
+        public IEnumerable<SettingInfo> GetSettingsInfo(SettingInfoFilter filter)
+        {
+            var cachedSettings = GetCachedSettings();
+            Func<Setting, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                filterExpression = (item) =>
+                {
+                    if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.SettingId))
+                        return false;
+
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(item, filter.Filters))
+                        return false;
+
+                    return true;
+                };
+            }
+
+            return cachedSettings.MapRecords(SettingInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
         public string GetSettingName(Setting setting)
         {
 
@@ -175,6 +197,17 @@ namespace Vanrise.Common.Business
             }
         }
 
+        private bool CheckIfFilterIsMatch(Setting setting, List<ISettingFilter> filters)
+        {
+            SettingFilterContext context = new SettingFilterContext { setting = setting };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
+
         private class SettingLoggableEntity : VRLoggableEntityBase
         {
             public static SettingLoggableEntity Instance = new SettingLoggableEntity();
@@ -218,6 +251,15 @@ namespace Vanrise.Common.Business
                 return s_settingManager.GetSettingName(setting);
             }
 
+        }
+
+        SettingInfo SettingInfoMapper(Setting setting)
+        {
+            return new SettingInfo()
+            {
+                SettingId = setting.SettingId,
+                Name = setting.Name
+            };
         }
 
         #region Security

@@ -65,5 +65,14 @@ namespace Vanrise.Common.Web.Controllers
             SettingManager manager = new SettingManager();
             return manager.GetDistinctSettingCategories();
         }
+
+        [HttpGet]
+        [Route("GetSettingsInfo")]
+        public IEnumerable<SettingInfo> GetSettingsInfo(string filter = null)
+        {
+            SettingManager manager = new SettingManager();
+            SettingInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<SettingInfoFilter>(filter) : null;
+            return manager.GetSettingsInfo(deserializedFilter);
+        }
     }
 }
