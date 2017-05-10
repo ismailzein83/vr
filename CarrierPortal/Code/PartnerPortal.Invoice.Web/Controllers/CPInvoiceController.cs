@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Invoice.Entities;
 using Vanrise.Web.Base;
 
 namespace PartnerPortal.Invoice.Web.Controllers
@@ -22,7 +23,7 @@ namespace PartnerPortal.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("GetRemoteLastInvoice")]
-        public Vanrise.Invoice.Entities.Invoice GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId)
+        public InvoiceClientDetail GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId)
         {
             InvoiceManager manager = new InvoiceManager();
             return manager.GetRemoteLastInvoice(connectionId, invoiceTypeId);

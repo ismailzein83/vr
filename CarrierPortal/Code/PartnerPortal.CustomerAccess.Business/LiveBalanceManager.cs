@@ -11,7 +11,7 @@ namespace PartnerPortal.CustomerAccess.Business
 {
     public class LiveBalanceManager
     {
-        public LiveBalance GetCurrentAccountBalance(Guid connectionId, Guid accountTypeId)
+        public CurrentAccountBalance GetCurrentAccountBalance(Guid connectionId, Guid accountTypeId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
@@ -21,7 +21,7 @@ namespace PartnerPortal.CustomerAccess.Business
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            return connectionSettings.Get<LiveBalance>(string.Format("/api/VR_AccountBalance/LiveBalance/GetCurrentAccountBalance?accountId={0}&accountTypeId={1}", accountId, accountTypeId));
+            return connectionSettings.Get<CurrentAccountBalance>(string.Format("/api/VR_AccountBalance/LiveBalance/GetCurrentAccountBalance?accountId={0}&accountTypeId={1}", accountId, accountTypeId));
         }
     }
 }

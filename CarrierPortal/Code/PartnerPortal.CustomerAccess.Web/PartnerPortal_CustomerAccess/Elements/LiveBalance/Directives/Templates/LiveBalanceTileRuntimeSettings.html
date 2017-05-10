@@ -1,4 +1,4 @@
-﻿<div ng-style="{'width':'250px', 'height':'100px', 'margin-top':'10px', 'background': '#CD0000','color' :'#fff' }">
+﻿<div ng-style="{'width':'300px', 'height':'100px', 'margin-top':'10px', 'background': '#CD0000','color' :'#fff' }">
     <vr-row>
         <vr-columns width="fullrow">
             {{scopeModel.tileTitle}}
@@ -6,7 +6,7 @@
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow">
-            Current Balance: {{scopeModel.currentBalance}}
+            Current Balance: {{scopeModel.currentBalance}} ({{scopeModel.balanceFlagDescription}}) {{scopeModel.currencyDescription}} 
         </vr-columns>
     </vr-row>
 </div>

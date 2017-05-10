@@ -15,7 +15,7 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
     {
         [HttpGet]
         [Route("GetCurrentAccountBalance")]
-        public LiveBalance GetCurrentAccountBalance(Guid accountTypeId,Guid connectionId)
+        public CurrentAccountBalance GetCurrentAccountBalance(Guid accountTypeId, Guid connectionId)
         {
             LiveBalanceManager manager = new LiveBalanceManager();
             return manager.GetCurrentAccountBalance(connectionId, accountTypeId);

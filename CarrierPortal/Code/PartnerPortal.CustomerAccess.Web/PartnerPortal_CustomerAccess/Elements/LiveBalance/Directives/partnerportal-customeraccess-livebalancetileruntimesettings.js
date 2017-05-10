@@ -42,13 +42,14 @@ app.directive("partnerportalCustomeraccessLivebalancetileruntimesettings", ["Uti
                     }
                     if(definitionSettings != undefined)
                     {
-                        console.log(definitionSettings);
                         promises.push(loadLiveBalance());
                     }
                     function loadLiveBalance()
                     {
                         return PartnerPortal_CustomerAccess_LiveBalanceAPIService.GetCurrentAccountBalance(definitionSettings.VRConnectionId, definitionSettings.AccountTypeId).then(function (response) {
                             $scope.scopeModel.currentBalance = response.CurrentBalance;
+                            $scope.scopeModel.currencyDescription = response.CurrencyDescription;
+                            $scope.scopeModel.balanceFlagDescription = response.BalanceFlagDescription;
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises);

@@ -47,8 +47,25 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
                     function loadLastInvoice()
                     {
                         return  PartnerPortal_Invoice_InvoiceAPIService.GetRemoteLastInvoice(definitionSettings.VRConnectionId,definitionSettings.InvoiceTypeId).then(function(response){
-                            $scope.scopeModel.invoiceBalance = response.Details.TotalAmount;
-                            $scope.scopeModel.dueDate = response.DueDate;
+                            if(response != undefined)
+                            {
+                                if (response.Entity != undefined)
+                                    $scope.scopeModel.dueDate = UtilsService.createDateFromString(response.Entity.DueDate);
+                                if(response.Items != undefined)
+                                {
+                                    for (var i = 0, length = response.Items.length ; i < length; i++)
+                                    {
+                                        var item = response.Items[i];
+                                        if (item.FieldName == "TotalAmount")
+                                        {
+                                            $scope.scopeModel.invoiceBalance = item.Description;
+                                        } else if (item.FieldName == "CurrencyId")
+                                        {
+                                            $scope.scopeModel.invoiceCurrency = item.Description;
+                                        }
+                                    }
+                                }
+                            }
 
                         });
                     }

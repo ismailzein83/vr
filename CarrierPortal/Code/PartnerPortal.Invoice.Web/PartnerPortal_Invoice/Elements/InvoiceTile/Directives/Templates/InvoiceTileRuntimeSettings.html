@@ -6,10 +6,10 @@
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow">
-            Amount: {{scopeModel.invoiceBalance}}
+            Amount: {{scopeModel.invoiceBalance}} {{scopeModel.invoiceCurrency}}
         </vr-columns>
         <vr-columns width="fullrow">
-           Date:{{scopeModel.dueDate}}
+           Date: {{scopeModel.dueDate | date:'yyyy-MM-dd'}}
         </vr-columns>
     </vr-row>
 </div>
