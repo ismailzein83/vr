@@ -107,6 +107,29 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
+        //#region Private Validation Methods
+
+        //private void CheckFinancialAccountOverlaping(Guid accountTypeId, int sequenceNumber,FinancialAccount mainFinancialAccount, IEnumerable<FinancialAccountData> financialAccounts, out string message, out bool result)
+        //{
+        //    foreach (var financialAccount in financialAccounts)
+        //    {
+        //        if (financialAccount.FinancialAccount.SequenceNumber != sequenceNumber)
+        //        {
+        //            if (mainFinancialAccount.IsOverlappedWith(financialAccount.FinancialAccount))
+        //            {
+        //                message = string.Format("Financial account must not overlap.");
+        //                result = false;
+        //                return;
+        //            }
+        //        }
+        //    }
+        //    message = null;
+        //    result = true;
+        //}
+        //#endregion
+
+
+
         #region Private Methods
         private AccountBEFinancialAccountsSettings GetAccountBEFinancialAccountsSettings(Guid accountBEDefinitionId, long accountId)
         {
