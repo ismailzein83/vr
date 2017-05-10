@@ -1,0 +1,12 @@
+﻿<div ng-style="{'width':'250px', 'height':'100px', 'margin-top':'10px', 'background': '#CD0000','color' :'#fff' }">
+    <vr-row>
+        <vr-columns width="fullrow">
+            {{scopeModel.tileTitle}}
+        </vr-columns>
+    </vr-row>
+     <vr-row ng-repeat="item in scopeModel.fields">
+        <vr-columns width="fullrow">
+            {{item.Description}}: {{item.Value}}
+        </vr-columns>
+    </vr-row>
+</div>

@@ -1,0 +1,50 @@
+﻿<div vr-modalcontent ng-controller="PartnerPortal_CustomerAccess_AnalyticQueryEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formAnalyticQueryEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.queryName" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.userDimensionName" label="User Dimension Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-common-connection-selector on-ready="scopeModel.onConnectionSelectorReady" isrequired="true" normal-col-num="6" onselectionchanged="scopeModel.onConenctionSelectionChanged"></vr-common-connection-selector>
+                        <vr-columns width="1/2row">
+                            <vr-analytic-table-remoteselector on-ready="scopeModel.onAnalyticTableSelectorReady" isrequired="true" onselectionchanged="scopeModel.onAnalyticTableSelectionChanged"></vr-analytic-table-remoteselector>
+                        </vr-columns>
+                        <vr-analytic-measure-remoteselector on-ready="scopeModel.onAnalyticMeasureSelectorReady"  normal-col-num="6" ismultipleselection hideselectedvaluessection onselectitem="    scopeModel.onSelectMeasure" ondeselectitem="    scopeModel.onDeselectMeasure" selectedvalues="scopeModel.selectedMeasures"></vr-analytic-measure-remoteselector>
+                        <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingDirective" withemptyline>
+                            <vr-validator validate="scopeModel.isValid()">
+                                <vr-datagrid datasource="scopeModel.gridMeasures"
+                                             on-ready="onGridReady" ondeleterow="scopeModel.removeMeasure" hidegridmenu norowhighlightonclick="'true'">
+                                    <vr-datagridcolumn headertext="'Measure Name'" field="'Entity.MeasureName'" widthfactor="5"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Measure Title'"  widthfactor="10">
+                                        <vr-textbox value="dataItem.Entity.MeasureTitle" isrequired="true"></vr-textbox>
+                                    </vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-validator>
+                        </vr-columns>
+
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Time Period Settings'">
+                    <vr-common-timeperiod on-ready="scopeModel.onTimePeriodDirectiveReady" isrequired="true"></vr-common-timeperiod>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formAnalyticQueryEditor" data-onclick="scopeModel.saveAnalyticQuery"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿<vr-columns width="2/3row">
+    <vr-button type="Add" data-onclick="ctrl.addQuery" standalone></vr-button>
+
+    <vr-validator validate="ctrl.isValid()">
+        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                     on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeQuery" hidegridmenu>
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-datagrid datasource="ctrl.orderedMeasures" norowhighlightonclick="true" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true"  hidegridmenu>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.MeasureTitle'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>
+

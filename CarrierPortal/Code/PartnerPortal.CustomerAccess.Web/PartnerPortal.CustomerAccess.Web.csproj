@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountStatementController.cs" />
+    <Compile Include="Controllers\CPAnalyticController.cs" />
     <Compile Include="Controllers\LiveBalanceController.cs" />
     <Compile Include="Controllers\RetailAccountUserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -153,6 +154,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PartnerPortal_CustomerAccess\Constant\ModuleConfig.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\AnalyticQueryEditorController.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\partnerportal-customeraccess-analytictiledefinitionsettings-queries.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\partnerportal-customeraccess-analytictiledefinitionsettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\partnerportal-customeraccess-analytictileruntimesettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\Templates\AnalyticQueryEditor.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\Templates\AnalyticTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\Templates\AnalyticTileRuntimeSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\Templates\QueriesAnalyticTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Services\AnalyticService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Services\APIService\AnalyticAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetiledefinitionsettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetileruntimesettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\Templates\LiveBalanceTileDefinitionSettings.html" />
