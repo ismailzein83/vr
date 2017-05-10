@@ -95,5 +95,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountExtraFieldDefinitionSettingsConfigs();
         }
+        [HttpGet]
+        [Route("CheckUseRemoteSelector")]
+        public bool CheckUseRemoteSelector(Guid accountBEDefinitionId)
+        {
+            return _manager.CheckUseRemoteSelector(accountBEDefinitionId);
+        }
     }
 }

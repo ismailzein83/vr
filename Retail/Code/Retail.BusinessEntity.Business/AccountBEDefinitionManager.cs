@@ -135,7 +135,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions = businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
                 }
-
+                accountBEDefinitionSettings.UseRemoteSelector = businessEntityDefinitionSettings.UseRemoteSelector;
                 //Security
                 if (businessEntityDefinitionSettings.Security != null)
                     accountBEDefinitionSettings.Security = businessEntityDefinitionSettings.Security;
@@ -326,7 +326,11 @@ namespace Retail.BusinessEntity.Business
             }
             return accountBEActions.MapRecords(AccountActionDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
-
+        public bool CheckUseRemoteSelector(Guid accountBEDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            return accountBEDefinitionSettings.UseRemoteSelector;
+        }
         public List<AccountExtraFieldDefinition> GetAccountExtraFieldDefinitions(Guid accountBEDefinitionId)
         {
             AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);

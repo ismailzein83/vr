@@ -63,6 +63,11 @@
         function GetAccountExtraFieldDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountExtraFieldDefinitionSettingsConfigs"));
         }
+        function CheckUseRemoteSelector(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "CheckUseRemoteSelector"), {
+                accountBEDefinitionId: accountBEDefinitionId
+            });
+        }
         return {
             GetAccountBEDefinitionSettingsWithHidden: GetAccountBEDefinitionSettingsWithHidden,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
@@ -73,7 +78,8 @@
             GetAccountActionDefinitions: GetAccountActionDefinitions,
             GetAccountActionDefinitionsInfo: GetAccountActionDefinitionsInfo,
             GetAccountActionDefinition: GetAccountActionDefinition,
-            GetAccountExtraFieldDefinitionSettingsConfigs: GetAccountExtraFieldDefinitionSettingsConfigs
+            GetAccountExtraFieldDefinitionSettingsConfigs: GetAccountExtraFieldDefinitionSettingsConfigs,
+            CheckUseRemoteSelector: CheckUseRemoteSelector
         };
     }
 

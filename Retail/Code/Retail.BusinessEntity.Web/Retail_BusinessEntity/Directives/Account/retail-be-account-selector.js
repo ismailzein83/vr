@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUIUtilsService', 'UtilsService',
-    function (Retail_BE_AccountBEAPIService, VRUIUtilsService, UtilsService) {
+app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUIUtilsService', 'UtilsService','Retail_BE_AccountBEDefinitionAPIService',
+    function (Retail_BE_AccountBEAPIService, VRUIUtilsService, UtilsService, Retail_BE_AccountBEDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -38,7 +38,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
           
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<vr-label>{{ctrl.fieldTitle}}</vr-label>'
-                   + '<vr-select on-ready="ctrl.onSelectorReady"'
+                   + '<vr-select on-ready="ctrl.onSelectorReady" ng-if="ctrl.useRemoteSelector"' //Remote Selector
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
                    + '  datasource="ctrl.search"'
@@ -49,38 +49,51 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
             //       + ' entityName="ctrl.fieldTitle"'
                    + '  >'
                    + '</vr-select>'
+
+                  + '<vr-select ng-if="!ctrl.useRemoteSelector" on-ready="ctrl.onSelectorReady"' //DataSource Selector
+                   + '  selectedvalues="ctrl.selectedvalues"'
+                   + '  onselectionchanged="ctrl.onselectionchanged"'
+                   + '  datasource="ctrl.datasource"'
+                   + '  datavaluefield="AccountId"'
+                   + '  datatextfield="Name"'
+                   + '  ' + multipleselection
+                   + '  isrequired="ctrl.isrequired"'
+            //       + ' entityName="ctrl.fieldTitle"'
+                   + '  >'
+                   + '</vr-select>'
+
                    + '</vr-columns>';
         }
 
         function AccountCtor(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
-
+            ctrl.useRemoteSelector = false;
             var filter = {};
             var selectorAPI;
             var accountBeDefinitionId;
             function initializeController() {
-                 ctrl.fieldTitle = "Account";
-                if (attrs.ismultipleselection != undefined) {
+                ctrl.datasource = [];
+
+                ctrl.fieldTitle = "Account";
+
+                 if (attrs.ismultipleselection != undefined) {
                     ctrl.fieldTitle = "Accounts";
                 }
+
                 if (attrs.customlabel != undefined) {
                     ctrl.fieldTitle = attrs.customlabel;
                 }
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
-
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(defineAPI());
                     }
                 };
 
-
                 ctrl.search = function (nameFilter) {
-                    var serializedFilter = "";
-                    if (filter != undefined)
-                        serializedFilter = UtilsService.serializetoJson(filter);
-                    return Retail_BE_AccountBEAPIService.GetAccountsInfo(accountBeDefinitionId, nameFilter, serializedFilter);
+                    return GetAccountsInfo(nameFilter);
                 };
 
             }
@@ -97,35 +110,59 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                             accountBeDefinitionId = payload.businessEntityDefinitionId;
                         else
                             accountBeDefinitionId = payload.AccountBEDefinitionId;
-                        if (payload.fieldTitle != undefined)
-                            ctrl.fieldTitle = payload.fieldTitle;
-                        selectedIds = payload.selectedIds;
-                        filter = payload.filter;
-                        if (payload.beFilter != undefined) {
-                            if (filter == undefined)
-                                filter = {};
-                            if (filter.Filters == undefined)
-                                filter.Filters = [];
-                            filter.Filters.push({
-                                $type: "Retail.BusinessEntity.Business.AccountConditionAccountFilter,Retail.BusinessEntity.Business",
-                                AccountCondition: payload.beFilter
-                            });
-                        }
+
+                        var loadSelectorPromise = UtilsService.createPromiseDeferred();
+
+                        Retail_BE_AccountBEDefinitionAPIService.CheckUseRemoteSelector(accountBeDefinitionId).then(function (response) {
+                            ctrl.useRemoteSelector = response;
+
+                            if (payload.fieldTitle != undefined)
+                                ctrl.fieldTitle = payload.fieldTitle;
+                            selectedIds = payload.selectedIds;
+                            filter = payload.filter;
+                            if (payload.beFilter != undefined) {
+                                if (filter == undefined)
+                                    filter = {};
+                                if (filter.Filters == undefined)
+                                    filter.Filters = [];
+                                filter.Filters.push({
+                                    $type: "Retail.BusinessEntity.Business.AccountConditionAccountFilter,Retail.BusinessEntity.Business",
+                                    AccountCondition: payload.beFilter
+                                });
+                            }
+                            // check BEDefinitionID name
+                            if (ctrl.useRemoteSelector) {
+                                if (selectedIds != undefined) {
+                                    var selectedAccountIds = [];
+                                    if (attrs.ismultipleselection != undefined)
+                                        selectedAccountIds = selectedIds;
+                                    else
+                                        selectedAccountIds.push(selectedIds);
+
+                                    GetAccountsInfoByIds(attrs, ctrl, selectedAccountIds).then(function () {
+                                        loadSelectorPromise.resolve();
+                                    });
+                                }else
+                                {
+                                    loadSelectorPromise.resolve();
+                                }
+                            } else {
+                                GetAccountsInfo(null, selectedIds).then(function (response) {
+                                    angular.forEach(response, function (item) {
+                                        ctrl.datasource.push(item);
+                                    });
+                                    if (selectedIds != undefined)
+                                        VRUIUtilsService.setSelectedValues(selectedIds, 'AccountId', attrs, ctrl);
+                                    loadSelectorPromise.resolve();
+                                });
+                            }
+
+                        }).catch(function (error) {
+                            loadSelectorPromise.reject(error);
+                        });
+                        return loadSelectorPromise.promise;
                     }
-                    // check BEDefinitionID name
-                    if (selectedIds != undefined) {
-                        var selectedAccountIds = [];
-                        if (attrs.ismultipleselection != undefined)
-                            selectedAccountIds = selectedIds;
-                        else
-                            selectedAccountIds.push(selectedIds);
-
-                        return GetAccountsInfo(attrs, ctrl, selectedAccountIds);
-                    }
-
-
                 };
-
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);
@@ -138,7 +175,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
 
             }
 
-            function GetAccountsInfo(attrs, ctrl, selectedIds) {
+            function GetAccountsInfoByIds(attrs, ctrl, selectedIds) {
                 ctrl.datasource = [];
                 var filter = {
                     AccountBEDefinition: accountBeDefinitionId,
@@ -151,6 +188,14 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'AccountId', attrs, ctrl);
                 });
+            }
+
+            function GetAccountsInfo(nameFilter, selectedIds)
+            {
+                var serializedFilter = "";
+                if (filter != undefined)
+                    serializedFilter = UtilsService.serializetoJson(filter);
+                return Retail_BE_AccountBEAPIService.GetAccountsInfo(accountBeDefinitionId, nameFilter, serializedFilter);
             }
         }
 

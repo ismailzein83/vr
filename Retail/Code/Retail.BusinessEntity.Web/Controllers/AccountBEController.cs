@@ -73,7 +73,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountsInfo")]
-        public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountBEDefinitionId, string nameFilter, string serializedFilter)
+        public IEnumerable<AccountInfo> GetAccountsInfo(Guid accountBEDefinitionId, string serializedFilter, string nameFilter = null)
         {
             AccountFilter accountFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<AccountFilter>(serializedFilter) : null;
             return _manager.GetAccountsInfo(accountBEDefinitionId, nameFilter, accountFilter);

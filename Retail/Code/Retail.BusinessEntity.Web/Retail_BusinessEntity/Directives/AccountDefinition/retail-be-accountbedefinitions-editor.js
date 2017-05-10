@@ -106,6 +106,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
+                            $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
                         }
                     }
 
@@ -240,6 +241,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionSettings, Retail.BusinessEntity.Entities",
                         StatusBEDefinitionId: statusBEDefinitionSelectorAPI.getSelectedIds(),
+                        UseRemoteSelector:$scope.scopeModel.useRemoteSelector,
                         GridDefinition: gridDefinition,
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
