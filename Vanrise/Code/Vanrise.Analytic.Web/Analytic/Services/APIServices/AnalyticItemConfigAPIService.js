@@ -16,6 +16,12 @@
                 filter: filter
             });
         }
+        function GetRemoteMeasuresInfo(connectionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRemoteMeasuresInfo"), {
+                connectionId:connectionId,
+                filter: filter
+            });
+        }
         function GetJoinsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetJoinsInfo"), {
                 filter: filter
@@ -60,7 +66,8 @@
             AddAnalyticItemConfig: AddAnalyticItemConfig,
             UpdateAnalyticItemConfig: UpdateAnalyticItemConfig,
             GetAnalyticItemConfigs: GetAnalyticItemConfigs,
-            GetAnalyticDimensionEditorRuntime: GetAnalyticDimensionEditorRuntime
+            GetAnalyticDimensionEditorRuntime: GetAnalyticDimensionEditorRuntime,
+            GetRemoteMeasuresInfo: GetRemoteMeasuresInfo
         });
     }
 

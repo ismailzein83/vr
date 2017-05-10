@@ -34,6 +34,15 @@ namespace Vanrise.Analytic.Business
            
             return analyticTables.MapRecords(AnalyticTableInfoMapper);
         }
+        public IEnumerable<AnalyticTableInfo> GetRemoteAnalyticTablesInfo(Guid connectionId, string serializedFilter)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+
+            return connectionSettings.Get<IEnumerable<AnalyticTableInfo>>(string.Format("/api/VR_Analytic/AnalyticTable/GetAnalyticTablesInfo?filter={0}", serializedFilter));
+        }
+
         public AnalyticTable GetAnalyticTableById(int analyticTableId)
         {
             var analyticTables = GetCachedAnalyticTables();

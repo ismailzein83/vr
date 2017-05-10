@@ -32,6 +32,21 @@ namespace Vanrise.Analytic.Web.Controllers
             return manager.GetMeasuresInfo(serializedFilter);
         }
         [HttpGet]
+        [Route("GetRemoteMeasuresInfo")]
+        public IEnumerable<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(string filter)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            AnalyticMeasureConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticMeasureConfigInfoFilter>(filter) : null;
+            return manager.GetRemoteMeasuresInfo(serializedFilter);
+        }
+        [HttpGet]
+        [Route("GetRemoteMeasuresInfo")]
+        public IEnumerable<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(Guid connectionId, string filter)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return manager.GetRemoteMeasuresInfo(connectionId, filter);
+        }
+        [HttpGet]
         [Route("GetJoinsInfo")]
         public IEnumerable<AnalyticJoinConfigInfo> GetJoinsInfo(string filter)
         {

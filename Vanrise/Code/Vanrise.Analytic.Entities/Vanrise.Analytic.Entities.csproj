@@ -105,6 +105,7 @@
     <Compile Include="Config\Measure\AnalyticMeasureConfig.cs" />
     <Compile Include="Config\Measure\IMeasureEvaluator.cs" />
     <Compile Include="Config\Measure\AnalyticMeasureConfigQuery.cs" />
+    <Compile Include="Config\Measure\RemoteAnalyticMeasureConfigInfo.cs" />
     <Compile Include="DataAnalysis\Common\DARecordAggregate.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcOutputFieldFilter.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcOutputField.cs" />

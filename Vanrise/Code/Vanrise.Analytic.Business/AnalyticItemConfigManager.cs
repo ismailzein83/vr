@@ -186,6 +186,26 @@ namespace Vanrise.Analytic.Business
             }
             return measureConfigs;
         }
+        public List<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(AnalyticMeasureConfigInfoFilter filter)
+        {
+            if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
+                throw new NullReferenceException("filter");
+            List<RemoteAnalyticMeasureConfigInfo> measureConfigs = new List<RemoteAnalyticMeasureConfigInfo>();
+            foreach (var tableId in filter.TableIds)
+            {
+                var measures = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
+                measureConfigs.AddRange(measures.MapRecords(RemoteAnalyticMeasureConfigInfoMapper));
+            }
+            return measureConfigs;
+        }
+        public IEnumerable<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(Guid connectionId, string filter)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+
+            return connectionSettings.Get<List<RemoteAnalyticMeasureConfigInfo>>(string.Format("/api/VR_Analytic/AnalyticItemConfig/GetRemoteMeasuresInfo?filter={0}", filter));
+        }
         public IEnumerable<AnalyticJoinConfigInfo> GetJoinsInfo(AnalyticJoinConfigInfoFilter filter)
         {
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
@@ -529,6 +549,15 @@ namespace Vanrise.Analytic.Business
                 Name = analyticItemConfig.Name,
                 Title = analyticItemConfig.Title,
 
+            };
+        }
+        RemoteAnalyticMeasureConfigInfo RemoteAnalyticMeasureConfigInfoMapper(AnalyticItemConfig<AnalyticMeasureConfig> analyticItemConfig)
+        {
+            return new RemoteAnalyticMeasureConfigInfo
+            {
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title,
             };
         }
         #endregion

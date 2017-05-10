@@ -13,6 +13,14 @@ namespace Vanrise.Analytic.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "AnalyticTable")]
     public class AnalyticTableController : Vanrise.Web.Base.BaseAPIController
     {
+        
+        [HttpGet]
+        [Route("GetRemoteAnalyticTablesInfo")]
+        public IEnumerable<AnalyticTableInfo> GetRemoteAnalyticTablesInfo(Guid connectionId, string filter = null)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.GetRemoteAnalyticTablesInfo(connectionId, filter);
+        }
         [HttpGet]
         [Route("GetAnalyticTablesInfo")]
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(string filter = null)

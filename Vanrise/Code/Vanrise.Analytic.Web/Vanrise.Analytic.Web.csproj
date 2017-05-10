@@ -130,11 +130,13 @@
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\Templates\AdvancedMeasureOrderOptionsTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\vr-analytic-ordertype-advancedmeasureorderoptions.js" />
+    <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-remoteselector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-ordertype-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-aggregate-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-join-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />
+    <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-table-remoteselector.js" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\Templates\AnalyticDataProviderSettings.html" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\vr-analytic-dataprovider-settings.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\AggregateEditorTemplate.html" />

@@ -12,6 +12,14 @@
                     filter: filter
                 });
         }
+
+        function GetRemoteAnalyticTablesInfo(connectionId,filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRemoteAnalyticTablesInfo"),
+                {
+                    connectionId:connectionId,
+                    filter: filter
+                });
+        }
         function GetTableById(tableId)
         {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetTableById"),
@@ -45,7 +53,8 @@
             AddAnalyticTable: AddAnalyticTable,
             HasAddAnalyticTablePermission: HasAddAnalyticTablePermission,
             UpdateAnalyticTable: UpdateAnalyticTable,
-            HasEditAnalyticTablePermission: HasEditAnalyticTablePermission
+            HasEditAnalyticTablePermission: HasEditAnalyticTablePermission,
+            GetRemoteAnalyticTablesInfo: GetRemoteAnalyticTablesInfo
         });
     }
 
