@@ -170,7 +170,8 @@
                         settingReadyPromiseDeferred.promise
                        .then(function () {
                            var directivePayload = {
-                               serviceTypeSettings: serviceTypeSettings
+                               serviceTypeSettings: serviceTypeSettings,
+                               accountBEDefinitionId: serviceTypeSelectorApi.getSelectedIds()
                            };
                            VRUIUtilsService.callDirectiveLoad(settingsAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                        }).catch(function (error) {
