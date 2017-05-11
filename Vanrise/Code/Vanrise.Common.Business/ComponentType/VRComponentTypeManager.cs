@@ -234,7 +234,7 @@ namespace Vanrise.Common.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRComponentTypeDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRComponentTypeDataManager>();
             object _updateHandle;
