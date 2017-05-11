@@ -257,7 +257,7 @@ namespace Retail.BusinessEntity.Business
 
         private void FillAccountServiceCommonGenericFields(List<AccountServiceGenericField> fields)
         {
-            fields.Add(new AccountServiceStatusGenericField());
+            //fields.Add(new AccountServiceStatusGenericField());
         }
 
         #endregion
