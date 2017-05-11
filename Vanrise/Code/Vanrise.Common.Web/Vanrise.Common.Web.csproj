@@ -276,6 +276,10 @@
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
     <Content Include="Common\Directives\VRMail\Templates\OverriddenConfigurationVRMailType.html" />
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
+    <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />
+    <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />
+    <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-settings.js" />
+    <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-overriddenconfiguration-objecttypedefinition.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileViewEditor.html" />
