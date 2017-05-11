@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.Entities
 
         public object TargetBEId
         {
-            get { return this.BillingTransaction.AccountBillingTransactionId; }
+            get { return this.BillingTransaction.AccountBillingTransactionId > 0 ? (object)this.BillingTransaction.AccountBillingTransactionId : null; }
         }
 
         public object SourceBEId

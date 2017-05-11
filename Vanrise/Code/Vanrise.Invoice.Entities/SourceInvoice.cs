@@ -12,7 +12,7 @@ namespace Vanrise.Invoice.Entities
         public Invoice Invoice { get; set; }
         public object TargetBEId
         {
-            get { return this.Invoice.InvoiceId; }
+            get { return this.Invoice.InvoiceId > 0 ? (object)Invoice.InvoiceId : null; }
         }
 
         public object SourceBEId
