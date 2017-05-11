@@ -430,6 +430,19 @@ namespace Vanrise.Common
 
         #region Miscellaneous
 
+        public delegate bool TryParseHandler<T>(string value, out T result);
+        public static T TryParseWithValidate<T>(this string valueToBeConverted, TryParseHandler<T> handler)
+        {
+            if (String.IsNullOrEmpty(valueToBeConverted))
+                throw new ArgumentNullException("valueToBeConverted");
+
+            T result;
+            if (handler(valueToBeConverted, out result))
+                return result;
+
+            throw new Exception(String.Format("Unable to convert value '{0}' to type '{1}'", valueToBeConverted, typeof(T)));
+        }
+
         /// <summary>
         /// Check if object with reference type is null and throw a null reference excpetion with formated string.
         /// </summary>
