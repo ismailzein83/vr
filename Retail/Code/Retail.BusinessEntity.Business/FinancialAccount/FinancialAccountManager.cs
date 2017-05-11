@@ -30,7 +30,20 @@ namespace Retail.BusinessEntity.Business
             var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInherited(accountDefinitionId) : GetCachedFinancialAccounts(accountDefinitionId);
             return cachedFinancialAccounts.GetRecord(accountId);
         }
-        
+        public IEnumerable<FinancialAccountData> GetFinancialAccountsWithInheritedAndChilds(Guid accountDefinitionId, long accountId)
+        {
+            var allFinancialAccountsData = GetFinancialAccounts(accountDefinitionId, accountId, true).ToList();
+            var accounts = s_accountManager.GetChildAccounts(accountDefinitionId, accountId, true);
+            foreach( var account in accounts)
+            {
+                AccountBEFinancialAccountsSettings accountFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(account);
+                if (accountFinancialAccountsSettings != null && accountFinancialAccountsSettings.FinancialAccounts != null && accountFinancialAccountsSettings.FinancialAccounts.Count > 0)
+                {
+                    allFinancialAccountsData.AddRange(accountFinancialAccountsSettings.FinancialAccounts.Select(itm => CreateFinancialAccountData(itm, account)));
+                }
+            }
+            return allFinancialAccountsData;
+        }
         public bool TryGetFinancialAccount(Guid accountDefinitionId, long accountId, bool withInherited, DateTime effectiveOn, out FinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountDefinitionId, accountId, withInherited);
@@ -123,7 +136,7 @@ namespace Retail.BusinessEntity.Business
 
         public bool CheckAllowAddFinancialAccounts(Guid accountDefinitionId, long accountId)
         {
-            var financialAccountsData = GetFinancialAccounts(accountDefinitionId, accountId, true);
+            var financialAccountsData =  GetFinancialAccountsWithInheritedAndChilds( accountDefinitionId,  accountId);
             foreach (var financialAccount in financialAccountsData)
             {
                 if (!financialAccount.FinancialAccount.EED.HasValue)
@@ -175,7 +188,7 @@ namespace Retail.BusinessEntity.Business
                 message = "EED must not be less than today.";
                 return false;
             }
-            var financialAccountsData = GetFinancialAccounts(accountDefinitionId, accountId, true);
+            var financialAccountsData = GetFinancialAccountsWithInheritedAndChilds(accountDefinitionId, accountId);
             bool result = true;
             CheckFinancialAccountOverlaping(mainFinancialAccount, financialAccountsData, out message, out result);
             return result;
@@ -287,6 +300,7 @@ namespace Retail.BusinessEntity.Business
                 }
             }
         }
+
         private Vanrise.Caching.BaseCacheManager<Guid> GetCacheManager()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>();
