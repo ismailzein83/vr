@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Entities
 
         public object TargetBEId
         {
-            get { return PointOfSale.Id; }
+            get { return PointOfSale.Id > 0 ? (object)PointOfSale.Id : null; }
         }
     }
 }

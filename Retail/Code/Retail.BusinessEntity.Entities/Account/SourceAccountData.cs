@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Entities
         }
         public object TargetBEId
         {
-            get { return this.Account.AccountId; }
+            get { return this.Account.AccountId > 0 ? (object)this.Account.AccountId : null; }
         }
         public List<MappingRule> IdentificationRulesToInsert { get; set; }
         public List<MappingRule> IdentificationRulesToUpdate { get; set; }

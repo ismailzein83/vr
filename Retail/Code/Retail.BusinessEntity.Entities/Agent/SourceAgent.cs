@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Entities
 
         public object TargetBEId
         {
-            get { return Agent.Id; }
+            get { return Agent.Id > 0 ? (object)Agent.Id : null; }
         }
     }
 }
