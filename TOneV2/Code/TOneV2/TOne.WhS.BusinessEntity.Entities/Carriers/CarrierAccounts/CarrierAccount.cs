@@ -18,16 +18,15 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierAccountCustomerSettings CustomerSettings { get; set; }
         public string SourceId { get; set; }
         public DateTime CreatedTime { get; set; }
-
     }
 
     public class CarrierAccount : BaseCarrierAccount
     {
         public int CarrierProfileId { get; set; }
-        public int? SellingNumberPlanId { get; set; }
-        public Dictionary<string, Object> ExtendedSettings { get; set; }
         public CarrierAccountType AccountType { get; set; }
-
+        public int? SellingNumberPlanId { get; set; }
+        public int? SellingProductId { get; set; }
+        public Dictionary<string, Object> ExtendedSettings { get; set; }
         public bool IsDeleted { get; set; }
     }
 

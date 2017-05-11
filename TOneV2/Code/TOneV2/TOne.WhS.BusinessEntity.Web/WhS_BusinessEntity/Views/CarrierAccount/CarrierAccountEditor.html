@@ -60,18 +60,28 @@
                         <vr-columns width="1/2row">
                             <vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
                         </vr-columns>
-
                         <span vr-loader="scopeModel.isLoadingSellingNumberPlan" ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan">
-                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" selectedvalues="scopeModel.sellingNumberPlan" on-ready="scopeModel.onSellingNumberPlanDirectiveReady" isrequired="scopeModel.showSellingNumberPlan">
+                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlanDirectiveReady"
+                                                                  selectedvalues="scopeModel.sellingNumberPlan"
+                                                                  normal-col-num="6"
+                                                                  isrequired="scopeModel.showSellingNumberPlan"
+                                                                  hideremoveicon>
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
+                        <span vr-disabled="scopeModel.isSellingProductSelectorDisabled" vr-loader="scopeModel.isLoadingSellingProductSelector">
+                            <vr-whs-be-sellingproduct-selector on-ready="scopeModel.onSellingProductSelectorReady"
+                                                               normal-col-num="6"
+                                                               isrequired="true"
+                                                               hideremoveicon>
+                            </vr-whs-be-sellingproduct-selector>
+                        </span>
+                        <vr-whs-be-routingstatus-selector on-ready="scopeModel.onCustomerRoutingStatusDirectiveReady"
+                                                          normal-col-num="6"
+                                                          isrequired="true"
+                                                          hideremoveicon>
+                        </vr-whs-be-routingstatus-selector>
                         <vr-columns width="1/2row">
-
-                            <vr-whs-be-routingstatus-selector hideremoveicon="true" isrequired on-ready="scopeModel.onCustomerRoutingStatusDirectiveReady">
-                            </vr-whs-be-routingstatus-selector>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-switch value="scopeModel.isAToZ" label="A To Z Pricelist"></vr-switch>
+                            <vr-switch value="scopeModel.isAToZ" label="A to Z Pricelist"></vr-switch>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

@@ -21,11 +21,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #region Public Methods
         public bool Insert(CarrierAccount carrierAccount, out int insertedId)
         {
-
             object carrierAccountId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
-                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            int recordsEffected = ExecuteNonQuerySP
+            (
+                "TOneWhS_BE.sp_CarrierAccount_Insert",
+                out carrierAccountId,
+                carrierAccount.NameSuffix,
+                carrierAccount.CarrierProfileId,
+                carrierAccount.AccountType,
+                carrierAccount.SellingNumberPlanId,
+                carrierAccount.SellingProductId,
+                Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
+                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings),
+                Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings)
+            );
+
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
@@ -93,6 +104,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region  Mappers
+
         private CarrierAccount CarrierAccountMapper(IDataReader reader)
         {
             CarrierAccount carrierAccount = new CarrierAccount
@@ -103,6 +115,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
                 CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
                 SellingNumberPlanId = GetReaderValue<int?>(reader, "SellingNumberPlanID"),
+                SellingProductId = GetReaderValue<int?>(reader, "SellingProductID"),
                 CarrierProfileId = (int)reader["CarrierProfileId"],
                 CarrierAccountSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
                 SourceId = reader["SourceID"] as string,
@@ -110,9 +123,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
             };
             carrierAccount.ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, Object>;
-
             return carrierAccount;
         }
+
         #endregion
     }
 }

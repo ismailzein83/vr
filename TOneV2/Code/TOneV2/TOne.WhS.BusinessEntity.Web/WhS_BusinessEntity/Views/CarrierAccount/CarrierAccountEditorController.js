@@ -36,8 +36,10 @@
 
         var bpBusinessRuleSetDirectiveAPI;
         var bpBusinessRuleSetReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        
         var sellingNumberPlanDirectiveAPI;
+        var sellingProductSelectorAPI;
+
         var isEditMode;
         var context;
         var isViewHistoryMode;
@@ -67,6 +69,7 @@
             $scope.scopeModel.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode;
             $scope.scopeModel.disableCarrierAccountType = isEditMode;
             $scope.scopeModel.disableSellingNumberPlan = isEditMode;
+            $scope.scopeModel.isSellingProductSelectorDisabled = isEditMode;
             $scope.scopeModel.showZoneServiceConfig = false;
 
             $scope.scopeModel.showInvoiceSetting = function () {
@@ -132,6 +135,17 @@
                     };
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
+            };
+
+            $scope.scopeModel.onSellingProductSelectorReady = function (api) {
+                sellingProductSelectorAPI = api;
+
+                var sellingProductSelectorPayload = {
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SellingProductId : undefined
+                };
+
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingProductSelector = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductSelectorAPI, sellingProductSelectorPayload, setLoader, undefined);
             };
 
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
@@ -522,8 +536,8 @@
 
             if (!isEditMode) {
                 obj.CarrierProfileId = carrierProfileDirectiveAPI.getSelectedIds();
-
                 obj.SellingNumberPlanId = sellingNumberPlanDirectiveAPI != undefined ? sellingNumberPlanDirectiveAPI.getSelectedIds() : null;
+                obj.SellingProductId = (sellingProductSelectorAPI != undefined) ? sellingProductSelectorAPI.getSelectedIds() : null;
                 obj.AccountType = $scope.scopeModel.selectedCarrierAccountType.value;
             }
 

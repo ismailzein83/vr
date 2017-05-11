@@ -17,13 +17,16 @@ namespace TOne.WhS.BusinessEntity.Business
     public class CarrierAccountManager : IBusinessEntityManager, ICarrierAccountManager
     {
         #region ctor/Local Variables
+
         CarrierProfileManager _carrierProfileManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
-        
+        SellingProductManager _sellingProductManager;
+
         public CarrierAccountManager()
         {
             _carrierProfileManager = new CarrierProfileManager();
             _sellingNumberPlanManager = new SellingNumberPlanManager();
+            _sellingProductManager = new SellingProductManager();
         }
 
         #endregion
@@ -84,7 +87,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierProfile.CustomerSettings");
             if (carrierAccount.CustomerSettings.InvoiceTimeZone && carrierAccount.CustomerSettings.TimeZoneId.HasValue)
                 return carrierAccount.CustomerSettings.TimeZoneId.Value;
-           return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
+            return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
         }
         public int GetSupplierTimeZoneId(int carrierAccountId)
         {
@@ -94,7 +97,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierAccount.CustomerSettings == null)
                 throw new NullReferenceException("carrierProfile.CustomerSettings");
             return carrierAccount.SupplierSettings.TimeZoneId;
-           // return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
+            // return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
         }
         public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId, bool getCustomers, bool getSuppliers)
         {
@@ -258,7 +261,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierAccount.CarrierAccountId = carrierAccountId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
-               
+
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
@@ -284,7 +287,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-        public bool TryUpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit,bool withTracking)
+        public bool TryUpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit, bool withTracking)
         {
             int carrierProfileId;
 
@@ -300,7 +303,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                if(withTracking)
+                if (withTracking)
                 {
                     var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
@@ -309,7 +312,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
-         
+
         public void UpdateCarrierAccountExtendedSetting<T>(int carrierAccountId, T extendedSettings) where T : class
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
@@ -331,7 +334,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
         }
-        public bool UpdateCustomerRoutingStatus(int carrierAccountId, RoutingStatus routingStatus,bool withTracking)
+        public bool UpdateCustomerRoutingStatus(int carrierAccountId, RoutingStatus routingStatus, bool withTracking)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
             carrierAccount.CustomerSettings.RoutingStatus = routingStatus;
@@ -442,15 +445,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccount.IsDeleted;
         }
-		public bool IsCarrierAccountActive(int carrierAccountId)
-		{
-			var carrierAccount = GetCarrierAccount(carrierAccountId);
-			if (carrierAccount == null)
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Carrier Account '{0}' was not found", carrierAccountId));
-			if (carrierAccount.CarrierAccountSettings == null)
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of Carrier Account '{0}' were not found", carrierAccountId));
-			return (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active);
-		}
+        public bool IsCarrierAccountActive(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Carrier Account '{0}' was not found", carrierAccountId));
+            if (carrierAccount.CarrierAccountSettings == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of Carrier Account '{0}' were not found", carrierAccountId));
+            return (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active);
+        }
         public int? GetCarrierProfileId(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
@@ -770,13 +773,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Carrier Accounts",
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name", Width = 40});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name", Width = 25});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Name", Width = 40 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Profile Name", Width = 25 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Account Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Activation Status" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan", Width = 40});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan", Width = 40 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Services" });
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -816,7 +819,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             };
         }
-        
+
         #endregion
         public class CarrierAccountLoggableEntity : VRLoggableEntityBase
         {
@@ -921,12 +924,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
 
-            if (carrierAccount.SellingNumberPlanId != null)
-            {
-                var sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan((int)carrierAccount.SellingNumberPlanId);
-                if (sellingNumberPlan != null)
-                    carrierAccountDetail.SellingNumberPlanName = sellingNumberPlan.Name;
-            }
+            if (carrierAccount.SellingNumberPlanId.HasValue)
+                carrierAccountDetail.SellingNumberPlanName = _sellingNumberPlanManager.GetSellingNumberPlanName(carrierAccount.SellingNumberPlanId.Value);
+
+            if (carrierAccount.SellingProductId.HasValue)
+                carrierAccountDetail.SellingProductName = _sellingProductManager.GetSellingProductName(carrierAccount.SellingProductId.Value);
 
             if (carrierAccount.CarrierAccountSettings != null)
                 carrierAccountDetail.ActivationStatusDescription = Vanrise.Common.Utilities.GetEnumDescription(carrierAccount.CarrierAccountSettings.ActivationStatus);
