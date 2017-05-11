@@ -458,5 +458,16 @@ namespace Vanrise.Common
         }
 
         #endregion
+
+        #region Object Extensions
+
+        public static T VRDeepCopy<T>(this T obj)
+        {
+            if (obj == null)
+                return obj;
+            return Serializer.Deserialize<T>(Serializer.Serialize(obj));
+        }
+
+        #endregion
     }
 }
