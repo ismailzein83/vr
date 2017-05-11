@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeFinancialaccountSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'Retail_BE_FinancialAccountService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, Retail_BE_FinancialAccountService) {
+app.directive("retailBeFinancialaccountSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'Retail_BE_FinancialAccountService','Retail_BE_FinancialAccountAPIService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, Retail_BE_FinancialAccountService, Retail_BE_FinancialAccountAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -31,12 +31,16 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var accountId;
         var accountBEDefinitionId;
         this.initializeController = initializeController;
+        var context;
 
         function initializeController() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.addFinancialAccount = function () {
                 var onFinancialAccountAdded = function (obj) {
+                    if (context != undefined) {
+                        context.checkAllowAddFinancialAccount();
+                    }
                     gridAPI.onFinancialAccountAdded(obj);
                 };
                 Retail_BE_FinancialAccountService.addFinancialAccount(onFinancialAccountAdded,accountBEDefinitionId, accountId);
@@ -46,7 +50,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 gridAPI = api;
                 gridPromiseDeferred.resolve();
             };
-
+            defineContext();
             defineAPI();
         }
 
@@ -59,10 +63,13 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     accountId = payload.accountId;
                     accountBEDefinitionId = payload.accountBEDefinitionId;
                 }
-
-                return loadFinancialAccountsGrid().finally(function () {
+                var promises = [];
+                promises.push(checkAllowAddFinancialAccount());
+                promises.push(loadFinancialAccountsGrid());
+                return UtilsService.waitMultiplePromises(promises).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
+               
             };
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -81,12 +88,27 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 var payload = {
                     query: getFilterObject(),
                     accountBEDefinitionId: accountBEDefinitionId,
-                    accountId: accountId
+                    accountId: accountId,
+                    context: context
                 };
                 gridAPI.loadGrid(payload);
             });
         }
-       
+        function checkAllowAddFinancialAccount() {
+            return Retail_BE_FinancialAccountAPIService.CheckAllowAddFinancialAccounts(accountBEDefinitionId, accountId).then(function (response) {
+                $scope.scopeModel.showAddButton = response;
+            });
+        }
+        function defineContext() {
+            context = {
+                checkAllowAddFinancialAccount: function () {
+                    $scope.scopeModel.isLoading = true;
+                    return checkAllowAddFinancialAccount().finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }
+            };
+        }
     }
 
     return directiveDefinitionObject;

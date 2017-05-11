@@ -22,6 +22,8 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
         var gridAPI;
         var accountBEDefinitionId;
         var accountId;
+        var context;
+
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.financialAccounts = [];
@@ -47,6 +49,8 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
 
             api.loadGrid = function (payload) {
                 accountBEDefinitionId = payload.accountBEDefinitionId;
+                context = payload.context;
+
                 accountId = payload.accountId;
                 return gridAPI.retrieveData(payload.query);
             };
@@ -68,6 +72,8 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
 
         function editFinancialAccount(financialAccount) {
             var onFinancialAccountUpdated = function (updatedFinancialAccount) {
+                if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
+                    context.checkAllowAddFinancialAccount();
                 gridAPI.itemUpdated(updatedFinancialAccount);
             };
             Retail_BE_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated,accountBEDefinitionId,accountId, financialAccount.SequenceNumber);

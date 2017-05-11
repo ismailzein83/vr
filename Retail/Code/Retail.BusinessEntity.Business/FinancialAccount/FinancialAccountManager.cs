@@ -51,22 +51,27 @@ namespace Retail.BusinessEntity.Business
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-
-            var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId);
-            accountBEFinancialAccountsSettings.LastTakenSequenceNumber++;
-            financialAccountToInsert.FinancialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
-            accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToInsert.FinancialAccount);
-
-            if(s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId,financialAccountToInsert.AccountId,accountBEFinancialAccountsSettings))
+            string message = null;
+            if (CheckFinancialAccountOverlaping(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, financialAccountToInsert.FinancialAccount, out  message))
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
-            }
-            else
-            {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-            }
+                var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId);
+                accountBEFinancialAccountsSettings.LastTakenSequenceNumber++;
+                financialAccountToInsert.FinancialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
+                accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToInsert.FinancialAccount);
 
+                if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, accountBEFinancialAccountsSettings))
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
+            }else
+            {
+                insertOperationOutput.Message = message;
+            }
             return insertOperationOutput;
         }
         
@@ -75,19 +80,26 @@ namespace Retail.BusinessEntity.Business
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            
-            var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
-            var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
-            accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
-            accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
-            if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
+            string message = null;
+            if (CheckFinancialAccountOverlaping(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out  message))
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
+                var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
+                var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
+                accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
+                accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
+                if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
+                }
+                else
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
             }
             else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                updateOperationOutput.Message = message;
             }
 
             return updateOperationOutput;
@@ -107,6 +119,19 @@ namespace Retail.BusinessEntity.Business
                 };
             }
             return null;
+        }
+
+        public bool CheckAllowAddFinancialAccounts(Guid accountDefinitionId, long accountId)
+        {
+            var financialAccountsData = GetFinancialAccounts(accountDefinitionId, accountId, true);
+            foreach (var financialAccount in financialAccountsData)
+            {
+                if (!financialAccount.FinancialAccount.EED.HasValue)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         //public AccountFinancialInfo GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
@@ -139,26 +164,40 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        //#region Private Validation Methods
+        #region Private Validation Methods
+       
 
-        //private void CheckFinancialAccountOverlaping(Guid accountTypeId, int sequenceNumber,FinancialAccount mainFinancialAccount, IEnumerable<FinancialAccountData> financialAccounts, out string message, out bool result)
-        //{
-        //    foreach (var financialAccount in financialAccounts)
-        //    {
-        //        if (financialAccount.FinancialAccount.SequenceNumber != sequenceNumber)
-        //        {
-        //            if (mainFinancialAccount.IsOverlappedWith(financialAccount.FinancialAccount))
-        //            {
-        //                message = string.Format("Financial account must not overlap.");
-        //                result = false;
-        //                return;
-        //            }
-        //        }
-        //    }
-        //    message = null;
-        //    result = true;
-        //}
-        //#endregion
+        private bool CheckFinancialAccountOverlaping(Guid accountDefinitionId, long accountId,FinancialAccount mainFinancialAccount,out string message)
+        {
+
+            if (mainFinancialAccount.EED.HasValue && mainFinancialAccount.EED.Value < new DateTime())
+            {
+                message = "EED must not be less than today.";
+                return false;
+            }
+            var financialAccountsData = GetFinancialAccounts(accountDefinitionId, accountId, true);
+            bool result = true;
+            CheckFinancialAccountOverlaping(mainFinancialAccount, financialAccountsData, out message, out result);
+            return result;
+        }
+        private void CheckFinancialAccountOverlaping(FinancialAccount mainFinancialAccount, IEnumerable<FinancialAccountData> financialAccounts, out string message, out bool result)
+        {
+            foreach (var financialAccount in financialAccounts)
+            {
+                if (financialAccount.FinancialAccount.SequenceNumber != mainFinancialAccount.SequenceNumber)
+                {
+                    if (mainFinancialAccount.IsOverlappedWith(financialAccount.FinancialAccount))
+                    {
+                        message = string.Format("Financial account must not overlap.");
+                        result = false;
+                        return;
+                    }
+                }
+            }
+            message = null;
+            result = true;
+        }
+        #endregion
          
         #region Private Methods
         private AccountBEFinancialAccountsSettings GetAccountBEFinancialAccountsSettings(Guid accountBEDefinitionId, long accountId)

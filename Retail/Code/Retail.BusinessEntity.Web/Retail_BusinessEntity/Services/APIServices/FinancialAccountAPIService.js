@@ -14,7 +14,12 @@
                 sequenceNumber: sequenceNumber
             });
         }
-
+        function CheckAllowAddFinancialAccounts(accountBEDefinitionId, accountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "CheckAllowAddFinancialAccounts"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+            });
+        }
         function GetFilteredFinancialAccounts(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFilteredFinancialAccounts"), input);
         }
@@ -31,7 +36,8 @@
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
             UpdateFinancialAccount: UpdateFinancialAccount,
-            GetFinancialAccountEditorRuntime: GetFinancialAccountEditorRuntime
+            GetFinancialAccountEditorRuntime: GetFinancialAccountEditorRuntime,
+            CheckAllowAddFinancialAccounts: CheckAllowAddFinancialAccounts
         };
     }
 

@@ -39,5 +39,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetFinancialAccountEditorRuntime(accountBEDefinitionId, accountId, sequenceNumber);
         }
+        [HttpGet]
+        [Route("CheckAllowAddFinancialAccounts")]
+        public bool CheckAllowAddFinancialAccounts(Guid accountBEDefinitionId, long accountId)
+        {
+            return _manager.CheckAllowAddFinancialAccounts(accountBEDefinitionId, accountId);
+        }
     }
 }
