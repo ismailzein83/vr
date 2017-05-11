@@ -39,7 +39,7 @@ namespace Vanrise.AccountBalance.Business
                 return null;
             return new CurrentAccountBalance
             {
-                CurrencyDescription = currencyManager.GetCurrencyName(liveBalance.CurrencyId),
+                CurrencyDescription = currencyManager.GetCurrencySymbol(liveBalance.CurrencyId),
                 CurrentBalance = Math.Abs(liveBalance.CurrentBalance),
                 BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(liveBalance.CurrentBalance)
             };

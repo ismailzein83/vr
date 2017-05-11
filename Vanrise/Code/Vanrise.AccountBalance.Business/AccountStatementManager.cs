@@ -35,7 +35,7 @@ namespace Vanrise.AccountBalance.Business
                 var accountInfo = accountManager.GetAccountInfo(input.Query.AccountTypeId, input.Query.AccountId);
                 int currencyId = accountInfo.CurrencyId;
                 CurrencyManager currencyManager = new CurrencyManager();
-                _currencyName = currencyManager.GetCurrencyName(currencyId);
+                _currencyName = currencyManager.GetCurrencySymbol(currencyId);
                  return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, currencyId);
             }
             protected override BigResult<AccountStatementItem> AllRecordsToBigResult(DataRetrievalInput<AccountStatementQuery> input, IEnumerable<AccountStatementItem> allRecords)
