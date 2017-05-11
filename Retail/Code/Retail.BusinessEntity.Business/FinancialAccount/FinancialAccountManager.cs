@@ -24,11 +24,13 @@ namespace Retail.BusinessEntity.Business
             };
             return DataRetrievalManager.Instance.ProcessResult(input, cachedFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
         }
+        
         public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited)
         {
             var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInherited(accountDefinitionId) : GetCachedFinancialAccounts(accountDefinitionId);
             return cachedFinancialAccounts.GetRecord(accountId);
         }
+        
         public bool TryGetFinancialAccount(Guid accountDefinitionId, long accountId, bool withInherited, DateTime effectiveOn, out FinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountDefinitionId, accountId, withInherited);
@@ -43,6 +45,7 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
+
         public Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> AddFinancialAccount(FinancialAccountToInsert financialAccountToInsert)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail>();
@@ -66,6 +69,7 @@ namespace Retail.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+        
         public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
@@ -105,6 +109,34 @@ namespace Retail.BusinessEntity.Business
             return null;
         }
 
+        //public AccountFinancialInfo GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        //{
+        //    var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();
+        //    financialAccountLocatorContext.AccountDefinitionId = accountDefinitionId;
+        //    financialAccountLocatorContext.AccountId = accountId;
+        //    financialAccountLocatorContext.EffectiveOn = effectiveOn;
+
+        //    FinancialAccountLocator financialAccountLocator = GetFinancialAccountLocator(accountDefinitionId, accountId, effectiveOn);
+        //    financialAccountLocator.ThrowIfNull("financialAccountLocator");
+
+        //    if (financialAccountLocator.TryGetFinancialAccountId(financialAccountLocatorContext))
+        //    {
+        //        return new AccountFinancialInfo()
+        //        {
+        //            FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
+        //            BalanceAccountId = financialAccountLocatorContext.FinancialAccountId.ToString(),
+        //            BalanceAccountTypeId = financialAccountLocatorContext.BalanceAccountTypeId
+        //        };
+        //    }
+
+        //    return null;
+        //}
+
+        //public FinancialAccountLocator GetFinancialAccountLocator(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        //{
+        //    return new DefaultFinancialAccountLocator();
+        //}
+
         #endregion
 
         //#region Private Validation Methods
@@ -127,9 +159,7 @@ namespace Retail.BusinessEntity.Business
         //    result = true;
         //}
         //#endregion
-
-
-
+         
         #region Private Methods
         private AccountBEFinancialAccountsSettings GetAccountBEFinancialAccountsSettings(Guid accountBEDefinitionId, long accountId)
         {
