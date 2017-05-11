@@ -143,6 +143,8 @@
     <Compile Include="FinancialAccount\FinancialAccountBalanceAccountFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccount\FinancialAccountInvoiceAccountFilter.cs" />
+    <Compile Include="FinancialAccount\DefaultFinancialAccountLocator.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountLocatorContext.cs" />
     <Compile Include="FinancialAccount\FinancialAccountManager.cs" />
     <Compile Include="ProductFamilyAddOrEditFilter.cs" />
     <Compile Include="ProductDefinitionAddOrEditFilter.cs" />
