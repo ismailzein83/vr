@@ -134,33 +134,33 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
-        //public AccountFinancialInfo GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
-        //{
-        //    var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();
-        //    financialAccountLocatorContext.AccountDefinitionId = accountDefinitionId;
-        //    financialAccountLocatorContext.AccountId = accountId;
-        //    financialAccountLocatorContext.EffectiveOn = effectiveOn;
+        public BalanceFinancialAccount GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        {
+            var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();
+            financialAccountLocatorContext.AccountDefinitionId = accountDefinitionId;
+            financialAccountLocatorContext.AccountId = accountId;
+            financialAccountLocatorContext.EffectiveOn = effectiveOn;
 
-        //    FinancialAccountLocator financialAccountLocator = GetFinancialAccountLocator(accountDefinitionId, accountId, effectiveOn);
-        //    financialAccountLocator.ThrowIfNull("financialAccountLocator");
+            FinancialAccountLocator financialAccountLocator = GetFinancialAccountLocator(accountDefinitionId, accountId, effectiveOn);
+            financialAccountLocator.ThrowIfNull("financialAccountLocator");
 
-        //    if (financialAccountLocator.TryGetFinancialAccountId(financialAccountLocatorContext))
-        //    {
-        //        return new AccountFinancialInfo()
-        //        {
-        //            FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
-        //            BalanceAccountId = financialAccountLocatorContext.FinancialAccountId.ToString(),
-        //            BalanceAccountTypeId = financialAccountLocatorContext.BalanceAccountTypeId
-        //        };
-        //    }
+            if (financialAccountLocator.TryGetFinancialAccountId(financialAccountLocatorContext))
+            {
+                return new BalanceFinancialAccount()
+                {
+                    FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
+                    BalanceAccountId = financialAccountLocatorContext.FinancialAccountId.ToString(),
+                    BalanceAccountTypeId = financialAccountLocatorContext.BalanceAccountTypeId
+                };
+            }
 
-        //    return null;
-        //}
+            return null;
+        }
 
-        //public FinancialAccountLocator GetFinancialAccountLocator(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
-        //{
-        //    return new DefaultFinancialAccountLocator();
-        //}
+        public FinancialAccountLocator GetFinancialAccountLocator(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        {
+            return new DefaultFinancialAccountLocator();
+        }
 
         #endregion
 
