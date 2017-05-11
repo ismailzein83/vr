@@ -60,6 +60,7 @@
                         }
                         else {
                             $scope.scopeModel.name = "";
+                            $scope.scopeModel.category = "";
                             $scope.scopeModel.isSettingsOverridden = false;
                             overriddenData = undefined;
                             settingsAPI = undefined;

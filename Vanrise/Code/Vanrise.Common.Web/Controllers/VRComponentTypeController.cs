@@ -56,5 +56,12 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.GetVRComponentTypeExtensionConfigById(extensionConfigId);
         }
+        [HttpGet]
+        [Route("GetComponentTypeInfo")]
+        public IEnumerable<ComponentTypeInfo> GetComponentTypeInfo(string filter = null)
+        {
+            ComponentTypeInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<ComponentTypeInfoFilter>(filter) : null;
+            return _manager.GetComponentTypeInfo(deserializedFilter);
+        }
     }
 }

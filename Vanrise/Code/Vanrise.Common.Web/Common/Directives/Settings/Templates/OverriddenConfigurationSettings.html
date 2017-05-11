@@ -22,10 +22,10 @@
         </vr-columns>
     </vr-row>
 </vr-tab>
-<div ng-if="scopeModel.showDirectiveSettings">
-    <vr-section title="Settings">
+<vr-tab header="'Details'">
+    <div ng-if="scopeModel.showDirectiveSettings">
         <vr-row removeline>
             <vr-directivewrapper directive="settingEditor" on-ready="scopeModel.onSettingsEditorReady"></vr-directivewrapper>
         </vr-row>
-    </vr-section>
-</div>
+    </div>
+</vr-tab>

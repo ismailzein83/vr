@@ -1,9 +1,31 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-tab header="'ComponentTypeSettings'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-common-componenttype-selector on-ready="scopeModel.onComponentTypeSelectorReady"
+                                              isrequired="true"
+                                              customlabel="ComponentTypeSettings"
+                                              onselectionchanged="scopeModel.componentTypeSelectorSelectionChanged">
+            </vr-common-componenttype-selector>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-switch value="scopeModel.isSettingsOverridden" label="Change Settings" onvaluechanged="scopeModel.isSettingsOverriddenValuechanged"></vr-switch>
+        </vr-columns>
+    </vr-row>
+    <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"
+                         ng-if="scopeModel.selectedSetingsTypeConfig!=undefined"
+                         directive="scopeModel.selectedSetingsTypeConfig.Editor"
+                         on-ready="scopeModel.onSettingsEditorReady"
+                         normal-col-num="4"
+                         isrequired="true">
+    </vr-directivewrapper>
+</vr-tab>
 
-</body>
-</html>
+        
+

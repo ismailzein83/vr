@@ -45,7 +45,11 @@
                 extensionConfigId: extensionConfigId
             });
         }
-
+        function GetComponentTypeInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetComponentTypeInfo'), {
+                filter: filter
+            });
+        }
         return ({
             GetFilteredVRComponentTypes: GetFilteredVRComponentTypes,
             GetVRComponentType: GetVRComponentType,
@@ -54,7 +58,8 @@
             HasAddVRComponentTypePermission: HasAddVRComponentTypePermission,
             HasEditVRComponentTypePermission: HasEditVRComponentTypePermission,
             GetVRComponentTypeExtensionConfigs: GetVRComponentTypeExtensionConfigs,
-            GetVRComponentTypeExtensionConfigById: GetVRComponentTypeExtensionConfigById
+            GetVRComponentTypeExtensionConfigById: GetVRComponentTypeExtensionConfigById,
+            GetComponentTypeInfo: GetComponentTypeInfo
         });
     }
 
