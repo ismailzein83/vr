@@ -62,8 +62,9 @@
     <add key="CP_DBConnStringKey"                               value="ConfigurationDBConnString"/>
     <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>    
-
+    <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    
     <add key="ExposedConnectionStringNames" value=""/>
   </appSettings>
   <runtime>
