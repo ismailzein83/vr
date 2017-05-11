@@ -20,11 +20,9 @@ namespace Retail.BusinessEntity.Business
 
         AccountBEManager _accountBEManager = new AccountBEManager();
         PackageManager _packageManager = new PackageManager();
-        const string fieldMessage="Package Assignment Failed. It overlaps with other assignement";
+        const string fieldMessage = "Package Assignment Failed. It overlaps with other assignement";
         #endregion
-
-
-
+            
         #region Public Methods
 
         public IDataRetrievalResult<AccountPackageDetail> GetFilteredAccountPackages(DataRetrievalInput<AccountPackageQuery> input)
@@ -52,6 +50,7 @@ namespace Retail.BusinessEntity.Business
             var accountInfo = GetAccountInfo(accountId);
             return accountInfo != null ? accountInfo.AccountPackages : null;
         }
+
         public int GetAccountPackagesCount(long accountId)
         {
             var accountInfo = GetAccountInfo(accountId);
@@ -88,21 +87,21 @@ namespace Retail.BusinessEntity.Business
             return null;
         }
 
-        public void LoadAccountPackagesByPriority(Guid accountBEDefinitionId,long accountId,  DateTime effectiveTime, bool withInheritence, Action<Package, LoadPackageHandle> OnPackageLoaded)
+        public void LoadAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence, Action<Package, LoadPackageHandle> OnPackageLoaded)
         {
             var accountInfo = GetAccountInfo(accountId);
-            if(accountInfo != null)
+            if (accountInfo != null)
             {
                 LoadPackageHandle handle = new LoadPackageHandle();
-                foreach(var processedAccountPackage in accountInfo.AssignedPackages)
+                foreach (var processedAccountPackage in accountInfo.AssignedPackages)
                 {
-                    if(processedAccountPackage.AccountPackage.IsEffective(effectiveTime))
+                    if (processedAccountPackage.AccountPackage.IsEffective(effectiveTime))
                     {
                         OnPackageLoaded(processedAccountPackage.Package, handle);
                         if (handle.Stop)
                             return;
                     }
-                    else if(processedAccountPackage.AccountPackage.BED < effectiveTime)
+                    else if (processedAccountPackage.AccountPackage.BED < effectiveTime)
                     {
                         break;
                     }
@@ -112,10 +111,11 @@ namespace Retail.BusinessEntity.Business
             }
             else
             {
-                if(withInheritence)
+                if (withInheritence)
                 {
                     var account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
                     account.ThrowIfNull("account", accountBEDefinitionId);
+
                     if (account.ParentAccountId.HasValue)
                         LoadAccountPackagesByPriority(accountBEDefinitionId, account.ParentAccountId.Value, effectiveTime, withInheritence, OnPackageLoaded);
                 }
@@ -132,8 +132,8 @@ namespace Retail.BusinessEntity.Business
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
                 insertOperationOutput.Message = fieldMessage;
                 insertOperationOutput.ShowExactMessage = true;
-            }   
-            else 
+            }
+            else
             {
                 IAccountPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
                 int accountPackageId = -1;
@@ -147,10 +147,10 @@ namespace Retail.BusinessEntity.Business
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd);
                 }
-                else 
+                else
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-                }  
+                }
             }
             return insertOperationOutput;
         }
@@ -166,8 +166,8 @@ namespace Retail.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
                 updateOperationOutput.Message = fieldMessage;
                 updateOperationOutput.ShowExactMessage = true;
-            }   
-            else 
+            }
+            else
             {
                 IAccountPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
                 if (dataManager.Update(accountPackageToEdit))
@@ -188,9 +188,6 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-
-
-
         public bool IsOverLappedAccoutPackage(int accountPackageId, long accountId, int packageId, DateTime bed, DateTime? eed)
         {
             var accountPackages = GetAccountPackagesByAccountId(accountId);
@@ -204,28 +201,28 @@ namespace Retail.BusinessEntity.Business
             }
             return false;
         }
+
         public bool DoesUserHaveViewAccountPackageAccess(Guid accountBEDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return new AccountBEDefinitionManager().DoesUserHaveViewAccountPackageAccess(userId, accountBEDefinitionId);
         }
-
         public bool DoesUserHaveAddAccountPackageAccess(Guid accountBEDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return new AccountBEDefinitionManager().DoesUserHaveAddAccountPackageAccess(userId, accountBEDefinitionId);
         }
-
         public bool DoesUserHaveEditAccountPackageAccess(int accountPackageId)
         {
             var accountpackage = GetAccountPackage(accountPackageId);
             var accountBEDefinitionId = _packageManager.GetPackageAccountDefinitionId(accountpackage.PackageId);
             return DoesUserHaveAddAccountPackageAccess(accountBEDefinitionId);
         }
+
         #endregion
 
         #region Private Classes
-        
+
         private class AccountPackageExcelExportHandler : ExcelExportHandler<AccountPackageDetail>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountPackageDetail> context)
@@ -327,11 +324,11 @@ namespace Retail.BusinessEntity.Business
                   Dictionary<long, List<ProcessedAccountPackage>> accountPackages = new Dictionary<long, List<ProcessedAccountPackage>>();
                   foreach (var accountPackage in GetCachedAccountPackages().Values)
                   {
-                      Package package = allPackages.GetRecord(accountPackage.PackageId);                      
+                      Package package = allPackages.GetRecord(accountPackage.PackageId);
                       if (package != null)
                       {
                           AccountInfo accountInfo;
-                          if(!accountInfos.TryGetValue(accountPackage.AccountId, out accountInfo))
+                          if (!accountInfos.TryGetValue(accountPackage.AccountId, out accountInfo))
                           {
                               Account account = accountBEManager.GetAccount(accountDefinitionIdsByPackageId[accountPackage.PackageId], accountPackage.AccountId);
                               if (account == null)
@@ -340,10 +337,10 @@ namespace Retail.BusinessEntity.Business
                               accountInfos.Add(accountPackage.AccountId, accountInfo);
                           }
                           accountInfo.AccountPackages.Add(accountPackage);
-                          accountPackages.GetOrCreateItem(accountPackage.AccountId).Add(new ProcessedAccountPackage { AccountPackage = accountPackage, Package = package});
+                          accountPackages.GetOrCreateItem(accountPackage.AccountId).Add(new ProcessedAccountPackage { AccountPackage = accountPackage, Package = package });
                       }
                   }
-                  foreach(var accountInfo in accountInfos.Values)
+                  foreach (var accountInfo in accountInfos.Values)
                   {
                       accountInfo.AssignedPackages = accountPackages[accountInfo.Account.AccountId].OrderByDescending(itm => itm.AccountPackage.EED.HasValue ? itm.AccountPackage.EED.Value : DateTime.MaxValue);
                   }
@@ -355,7 +352,7 @@ namespace Retail.BusinessEntity.Business
         {
             Dictionary<int, Guid> accountDefinitionIdsByPackageId = new Dictionary<int, Guid>();
             PackageDefinitionManager packageDefinitionManager = new PackageDefinitionManager();
-            foreach(var package in allPackages.Values)
+            foreach (var package in allPackages.Values)
             {
                 package.Settings.ThrowIfNull("package.Settings", package.PackageId);
                 var packageDefinition = packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
