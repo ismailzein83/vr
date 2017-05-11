@@ -274,6 +274,8 @@
     <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
     <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
+    <Content Include="Common\Directives\VRMail\Templates\OverriddenConfigurationVRMailType.html" />
+    <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileViewEditor.html" />
