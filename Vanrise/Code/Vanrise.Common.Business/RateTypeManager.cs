@@ -45,6 +45,14 @@ namespace Vanrise.Common.Business
                 VRActionLogger.Current.LogObjectViewed(RateTypeLoggableEntity.Instance, rateType);
             return rateType;
         }
+
+
+        public RateType GetRateTypeHistoryDetailbyHistoryId(int rateTypeHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var rateType = s_vrObjectTrackingManager.GetObjectDetailById(rateTypeHistoryId);
+            return rateType.CastWithValidate<RateType>("RateType : historyId ", rateTypeHistoryId);
+        }
         public Vanrise.Entities.RateType GetRateType(int rateTypeId)
         {
 

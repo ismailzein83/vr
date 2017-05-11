@@ -8,7 +8,8 @@
         var isEditMode;
         var rateTypetId;
         var rateTypeEntity;
-
+        var context;
+        var isViewHistoryMode;
         defineScope();
         loadParameters();
         load();
@@ -18,8 +19,9 @@
 
             if (parameters) {
                 rateTypetId = parameters.RateTypeId;
+                context = parameters.context;
             }
-
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (rateTypetId != undefined);
         }
 
@@ -57,11 +59,27 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
+            else if (isViewHistoryMode) {
+                getRateTypeHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        rateTypeEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
         }
+        function getRateTypeHistory() {
+            return VRCommon_RateTypeAPIService.GetRateTypeHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                rateTypeEntity = response;
 
+            });
+        }
         function getRateType() {
             return VRCommon_RateTypeAPIService.GetRateType(rateTypetId).then(function (response) {
                 rateTypeEntity = response;
@@ -77,7 +95,13 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(rateTypeEntity ? rateTypeEntity.Name : null, 'Rate Type') : UtilsService.buildTitleForAddEditor('Rate Type');
+         
+            if (isEditMode && rateTypeEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(rateTypeEntity.Name, "Rate Type");
+            else if (isViewHistoryMode && rateTypeEntity != undefined)
+                $scope.title = "View Rate Type: " + rateTypeEntity.Name;
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor("Rate Type");
         }
 
         function loadStaticControls() {

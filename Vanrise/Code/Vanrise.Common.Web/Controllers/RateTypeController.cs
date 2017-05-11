@@ -36,7 +36,14 @@ namespace Vanrise.Web.Controllers
             RateTypeManager manager = new RateTypeManager();
             return manager.GetRateType(rateTypeId,true);
         }
-
+        
+        [HttpGet]
+        [Route("GetRateTypeHistoryDetailbyHistoryId")]
+        public RateType GetRateTypeHistoryDetailbyHistoryId(int rateTypeHistoryId)
+        {
+             RateTypeManager manager = new RateTypeManager();
+            return manager.GetRateTypeHistoryDetailbyHistoryId(rateTypeHistoryId);
+        }
         [HttpPost]
         [Route("AddRateType")]
         public Vanrise.Entities.InsertOperationOutput<Vanrise.Entities.RateTypeDetail> AddRateType(Vanrise.Entities.RateType rateType)

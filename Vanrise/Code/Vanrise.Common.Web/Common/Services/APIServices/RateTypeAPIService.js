@@ -37,7 +37,12 @@
         function HasAddRateTypePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddRateType']));
         }
+        function GetRateTypeHistoryDetailbyHistoryId(rateTypeHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetRateTypeHistoryDetailbyHistoryId'), {
+                rateTypeHistoryId: rateTypeHistoryId
+            });
+        }
         return ({
             GetFilteredRateTypes: GetFilteredRateTypes,
             GetAllRateTypes: GetAllRateTypes,
@@ -45,7 +50,8 @@
             UpdateRateType: UpdateRateType,
             AddRateType: AddRateType,
             HasAddRateTypePermission: HasAddRateTypePermission,
-            HasUpdateRateTypePermission: HasUpdateRateTypePermission
+            HasUpdateRateTypePermission: HasUpdateRateTypePermission,
+            GetRateTypeHistoryDetailbyHistoryId: GetRateTypeHistoryDetailbyHistoryId
         });
     }
 
