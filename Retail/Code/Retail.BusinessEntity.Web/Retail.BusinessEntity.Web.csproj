@@ -209,6 +209,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\TrafficDirectionEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
@@ -338,6 +339,7 @@
     <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\Templates\ChargeableEntitySettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\Templates\CRMAccountConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\CRMAccount\retail-be-crmaccount-convertor-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-didnumbertype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-didaccountrelations-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
@@ -369,6 +371,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinitions\Templates\ActionDefinitionSendEmailSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\retail-be-balancealertrule-threshold-percentage.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\Templates\PercentageBalanceAlertThresholdTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\retail-be-didnumbertype-range.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\retail-be-didnumbertype-number.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\Templates\DIDRange.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\Templates\DIDNumber.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep-preview.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepPreviewTemplate.html" />

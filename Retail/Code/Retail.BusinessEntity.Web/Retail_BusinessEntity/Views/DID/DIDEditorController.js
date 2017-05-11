@@ -11,6 +11,12 @@
         var dIDId;
         var dIDEntity;
 
+        var didNumberTypeSelectorAPI;
+        var didNumberTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var directiveAPI;
+        var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -26,7 +32,7 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-          
+
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -38,6 +44,16 @@
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
+            };
+
+            $scope.scopeModel.onDIDNumberTypeSelectorReady = function (api) {
+                didNumberTypeSelectorAPI = api;
+                didNumberTypeSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                directiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.hasSaveDIDPermission = function () {
@@ -74,7 +90,7 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDIDNumberTypeSelector, loadDIDNumberTypeDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -85,15 +101,43 @@
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(dIDEntity ? dIDEntity.Number : undefined, 'DID') : UtilsService.buildTitleForAddEditor('DID');
         }
+
+
+        function loadDIDNumberTypeDirective() {
+            if (dIDEntity == undefined)
+                return;
+
+            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            directiveReadyDeferred.promise.then(function () {
+                var didNumberTypeDirectivePayload = { didObj: dIDEntity };
+                VRUIUtilsService.callDirectiveLoad(directiveAPI, didNumberTypeDirectivePayload, directiveLoadDeferred);
+            });
+            return directiveLoadDeferred.promise;
+        };
+
+        function loadDIDNumberTypeSelector() {
+            var didNumberTypeSelectorDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            didNumberTypeSelectorReadyDeferred.promise.then(function () {
+                var didNumberTypePayload;
+                if (dIDEntity != undefined) {
+                    didNumberTypePayload = { selectedIds: dIDEntity.DIDNumberType };
+                }
+                VRUIUtilsService.callDirectiveLoad(didNumberTypeSelectorAPI, didNumberTypePayload, didNumberTypeSelectorDirectiveLoadDeferred);
+            });
+            return didNumberTypeSelectorDirectiveLoadDeferred.promise;
+        };
+
         function loadStaticData() {
             if (dIDEntity == undefined)
                 return;
 
-            $scope.scopeModel.number = dIDEntity.Number;
+            //$scope.scopeModel.number = dIDEntity.Number;
             $scope.scopeModel.isInternational = dIDEntity.Settings.IsInternational;
             $scope.scopeModel.numberOfChannels = dIDEntity.Settings.NumberOfChannels;
         }
-      
+
         function insertDID() {
             $scope.scopeModel.isLoading = true;
 
@@ -131,12 +175,13 @@
         function buildDIDObjFromScope() {
             var obj = {
                 DIDId: dIDId,
-                Number: $scope.scopeModel.number,
+                //Number: $scope.scopeModel.number,
                 Settings: {
                     IsInternational: $scope.scopeModel.isInternational,
                     NumberOfChannels: $scope.scopeModel.numberOfChannels
                 }
             };
+            directiveAPI.setData(obj);
             return obj;
         }
     }

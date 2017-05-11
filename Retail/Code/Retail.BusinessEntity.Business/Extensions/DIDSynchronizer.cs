@@ -38,7 +38,7 @@ namespace Retail.BusinessEntity.Business
                 didManager.TryAddDID(sourceDID.DID, out DIDId);
                 if (DIDId > 0)
                 {
-                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "New DID Number '{0}' is Added", sourceDID.DID.Number);
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "New DID Number '{0}' is Added", sourceDID.DID.Settings.Numbers.First());
                     sourceDID.DID.DIDId = DIDId;
                     var cachedDIDs = didManager.GetCachedDIDs();
                     if (!cachedDIDs.ContainsKey((DIDId)))
@@ -47,7 +47,7 @@ namespace Retail.BusinessEntity.Business
                 }
                 else
                 {
-                    context.WriteBusinessTrackingMsg(LogEntryType.Warning, "DID Number '{0}' was not Added", sourceDID.DID.Number);
+                    context.WriteBusinessTrackingMsg(LogEntryType.Warning, "DID Number '{0}' was not Added", sourceDID.DID.Settings.Numbers.First());
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     string accountName = new AccountBEManager().GetAccountName(AccountBEDefinitionId, accountData.AccountId.Value);
                     InsertParentChildRelation(accountData, accountDIDRelationDefinitionId, parentChildRelationManager, didIdAsString, accountIdAsString);
-                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account {1} effective on {2}", accountData.DID.Number,  accountName, accountData.BED.Value.ToShortDateString());
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account {1} effective on {2}", accountData.DID.Settings.Numbers.First(),  accountName, accountData.BED.Value.ToShortDateString());
                 }
             }
             else
@@ -90,7 +90,7 @@ namespace Retail.BusinessEntity.Business
                             string accountName = new AccountBEManager().GetAccountName(AccountBEDefinitionId, long.Parse(existingRelatedAccount.ParentBEId.ToString()));
                             existingRelatedAccount.EED = Utilities.Min(existingRelatedAccount.BED, dateToCloseExistingAccounts);
                             parentChildRelationManager.UpdateBEParentChildRelation(existingRelatedAccount);
-                            context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} link to Account {1} is closed at EED {2}.", accountData.DID.Number, accountName, existingRelatedAccount.EED.Value.ToShortDateString());
+                            context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} link to Account {1} is closed at EED {2}.", accountData.DID.Settings.Numbers.First(), accountName, existingRelatedAccount.EED.Value.ToShortDateString());
                         }
                     }
                 }
@@ -98,7 +98,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     string accountName = new AccountBEManager().GetAccountName(AccountBEDefinitionId, accountData.AccountId.Value);
                     InsertParentChildRelation(accountData, accountDIDRelationDefinitionId, parentChildRelationManager, didIdAsString, accountIdAsString);
-                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account {1} effective on {2}", accountData.DID.Number, accountName, accountData.BED.Value.ToShortDateString());
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account {1} effective on {2}", accountData.DID.Settings.Numbers.First(), accountName, accountData.BED.Value.ToShortDateString());
                 }
             }
         }
@@ -159,7 +159,7 @@ namespace Retail.BusinessEntity.Business
                 DIDManager didManager = new DIDManager();
                 if (didManager.TryUpdateDID(sourceDIDData.DID))
                 {
-                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number '{0}' is Updated", sourceDIDData.DID.Number);
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number '{0}' is Updated", sourceDIDData.DID.Settings.Numbers.First());
                     ProcessRelatedAccounts(sourceDIDData, sourceDIDData.DID.DIDId, false, context);
                 }
             }

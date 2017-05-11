@@ -52,11 +52,11 @@ namespace Retail.Zajil.MainExtensions.Convertors
                     {
                         DID = new DID
                         {
-                            Number = ((double)row[this.DIDColumn]).ToString(),
                             SourceId = sourceId,
                             Settings = new DIDSettings
                             {
-                                IsInternational = (row[InternationalColumn] == DBNull.Value ? 0 : double.Parse(row[InternationalColumn].ToString())) == 1
+                                IsInternational = (row[InternationalColumn] == DBNull.Value ? 0 : double.Parse(row[InternationalColumn].ToString())) == 1,
+                                Numbers = new List<string>() { ((double)row[this.DIDColumn]).ToString() }
                             }
                         },
                         AccountId = accountId,

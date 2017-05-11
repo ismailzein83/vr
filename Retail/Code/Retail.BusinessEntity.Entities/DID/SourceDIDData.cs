@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Entities
 
         public object TargetBEId
         {
-            get { return this.DID.DIDId; }
+            get { return this.DID.DIDId > 0 ? (object)this.DID.DIDId : null; }
         }
     }
 }
