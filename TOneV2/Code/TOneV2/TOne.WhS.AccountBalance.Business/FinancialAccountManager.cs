@@ -194,7 +194,7 @@ namespace TOne.WhS.AccountBalance.Business
             else
                 currencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(carrierAccountId.Value);
             CurrencyManager currencyManager = new CurrencyManager();
-            return currencyManager.GetCurrencyName(currencyId);
+            return currencyManager.GetCurrencySymbol(currencyId);
         }
 
         #region Financial Accounts Validation
