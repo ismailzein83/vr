@@ -54,7 +54,7 @@ namespace Vanrise.AccountBalance.Business
             return new BillingTransactionDetail
             {
                 Entity = billingTransaction,
-                CurrencyDescription = currencyManager.GetCurrencyName(billingTransaction.CurrencyId),
+                CurrencyDescription = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId),
                 TransactionTypeDescription = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId),
                 AccountInfo = accountManager.GetAccountInfo(billingTransaction.AccountTypeId, billingTransaction.AccountId),
                 Credit = isCredit ? (double?)billingTransaction.Amount : null,
