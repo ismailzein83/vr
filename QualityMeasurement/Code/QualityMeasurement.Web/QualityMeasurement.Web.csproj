@@ -335,6 +335,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appSettings.config" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\QualityMeasurement.pubxml" />
     <None Include="Web.config.exclude" />
     <None Include="Web.config.Debug.exclude">
