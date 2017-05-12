@@ -34,5 +34,22 @@ namespace Retail.Zajil.MainExtensions
         public string Discount { get; set; }
 
         public string Achievement { get; set; }
+
+        public double ParentSo { get; set; }
+
+        public string ChildSo { get; set; }
+
+        public string SalesAgent { get; set; }
+
+        public string Type { get; set; }
+
+        public DateTime? ConfirmDate { get; set; }
+
+        public DateTime? CloseDate { get; set; }
+
+        public string Remarks { get; set; }
+
+        public int SONo { get; set; }
+
     }
 }

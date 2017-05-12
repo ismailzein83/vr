@@ -197,7 +197,15 @@ namespace Retail.Zajil.MainExtensions
                 Installation = GetDoubleValue(row, "Installation"),
                 Payment = row["Payment"] as string,
                 ThirdParty = GetDoubleValue(row, "ThirdParty"),
-                TotalContract = GetDoubleValue(row, "total_contract")
+                TotalContract = GetDoubleValue(row, "total_contract"),
+                ParentSo = GetDoubleValue(row, "ParentSO"),
+                ChildSo = row["ChildSO"] as string,
+                SalesAgent = row["SalesAgent"] as string,
+                Type = row["Type"] as string,
+                ConfirmDate = GetDateValue(row, "ConfirmDate"),
+                CloseDate = GetDateValue(row, "CloseDate"),
+                Remarks = row["Remarks"] as string,
+                SONo = (int)row["SO_NO"]
             };
         }
         decimal GetDecimalValue(DataRow row, string columnName)
@@ -209,6 +217,11 @@ namespace Retail.Zajil.MainExtensions
         {
             return row[columnName] == DBNull.Value ? 0 : double.Parse(row[columnName].ToString());
         }
+        DateTime? GetDateValue(DataRow row, string columnName)
+        {
+            return row[columnName] == DBNull.Value ? null  : (DateTime?)DateTime.Parse(row[columnName].ToString());
+        }
+
         Dictionary<string, AccountCompanyContact> GetContactsList(DataRow row)
         {
             Dictionary<string, AccountCompanyContact> contacts = new Dictionary<string, AccountCompanyContact>();

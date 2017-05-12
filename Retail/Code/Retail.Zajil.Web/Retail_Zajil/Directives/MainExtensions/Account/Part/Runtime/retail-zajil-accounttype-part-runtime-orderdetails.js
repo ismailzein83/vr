@@ -72,7 +72,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
                     tab.push({
                         OrderId: orderDetail.OrderId,
                         Charges: orderDetail.Charges,
-                        Payment: orderDetail.payment,
+                        Payment: orderDetail.Payment,
                         ContractPeriod: orderDetail.ContractPeriod,
                         ContractRemain: orderDetail.ContractRemain,
                         ContractDays: orderDetail.ContractDays,
@@ -83,12 +83,17 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
                         Installation: orderDetail.Installation,
                         ThirdParty: orderDetail.ThirdParty,
                         Discount: orderDetail.Discount,
-                        Achievement: orderDetail.Achievement
+                        Achievement: orderDetail.Achievement,
+                        ParentSo: orderDetail.ParentSo,
+                        ChildSo: orderDetail.ChildSo,
+                        SalesAgent: orderDetail.SalesAgent,
+                        Type: orderDetail.Type,
+                        ConfirmDate: orderDetail.ConfirmDate,
+                        CloseDate: orderDetail.CloseDate,
+                        Remarks: orderDetail.Remarks
                     });
                 }
             }
-           
-
             return tab;
         }
     }

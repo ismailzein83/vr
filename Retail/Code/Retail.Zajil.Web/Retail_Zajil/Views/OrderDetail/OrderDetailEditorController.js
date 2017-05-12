@@ -76,6 +76,15 @@
                     $scope.scopeModel.thirdParty = orderDetailObj.ThirdParty;
                     $scope.scopeModel.discount = orderDetailObj.Discount;
                     $scope.scopeModel.achievement = orderDetailObj.Achievement;
+
+                    $scope.scopeModel.parentSo = orderDetailObj.ParentSo;
+                    $scope.scopeModel.childSo = orderDetailObj.ChildSo;
+                    $scope.scopeModel.salesAgent = orderDetailObj.SalesAgent;
+                    $scope.scopeModel.type = orderDetailObj.Type;
+                    $scope.scopeModel.confirmDate = orderDetailObj.ConfirmDate;
+                    $scope.scopeModel.closeDate = orderDetailObj.CloseDate;
+                    $scope.scopeModel.remarks = orderDetailObj.Remarks;
+
                 }
             }
         }
@@ -95,7 +104,14 @@
                 Installation: $scope.scopeModel.installation,
                 ThirdParty: $scope.scopeModel.thirdParty,
                 Discount: $scope.scopeModel.discount,
-                Achievement: $scope.scopeModel.achievement
+                Achievement: $scope.scopeModel.achievement,
+                ParentSo:$scope.scopeModel.parentSo,
+                ChildSo:$scope.scopeModel.childSo,
+                SalesAgent:$scope.scopeModel.salesAgent,
+                Type:$scope.scopeModel.type,
+                ConfirmDate:$scope.scopeModel.confirmDate,
+                CloseDate:$scope.scopeModel.closeDate,
+                Remarks:$scope.scopeModel.remarks
             };
             return obj;
         }
