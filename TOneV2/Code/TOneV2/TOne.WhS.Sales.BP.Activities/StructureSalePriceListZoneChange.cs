@@ -809,7 +809,7 @@ namespace TOne.WhS.Sales.BP.Activities
             private List<SaleZoneRoutingProductToAdd> _zoneRoutingProductsToAdd = new List<SaleZoneRoutingProductToAdd>();
             public List<SaleZoneRoutingProductToAdd> ZoneRoutingProductsToAdd { get { return this._zoneRoutingProductsToAdd; } }
 
-            private List<SaleZoneRoutingProductToClose> _zoneRoutinProductsToClose { get; set; }
+            private List<SaleZoneRoutingProductToClose> _zoneRoutinProductsToClose= new List<SaleZoneRoutingProductToClose>();
             public List<SaleZoneRoutingProductToClose> ZoneRoutinProductsToClose { get { return this._zoneRoutinProductsToClose; } }
         }
 
