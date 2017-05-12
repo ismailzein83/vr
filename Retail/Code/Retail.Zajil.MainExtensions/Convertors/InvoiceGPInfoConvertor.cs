@@ -31,6 +31,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 long invoiceId = (long)row[this.SourceIdColumn];
+                var gpReferencenumber = row[GPReferenceNumberColumn] as string;
                 try
                 {
                     InvoiceManager invoiceManager = new InvoiceManager();
@@ -41,8 +42,9 @@ namespace Retail.Zajil.MainExtensions.Convertors
                             InvoiceId = invoiceId,
                             Details = new InvoiceDetails
                             {
-                                GPReferenceNumber = row[GPReferenceNumberColumn] as string
-                            }
+                                GPReferenceNumber = gpReferencenumber
+                            },
+                            SourceId = gpReferencenumber
                         }
                     };
                     transactionTargetBEs.Add(sourceInvoice);
@@ -72,7 +74,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
         private Invoice GetInvoice(Invoice newInvoice, Invoice existingInvoice)
         {
             Invoice invoice = Serializer.Deserialize<Invoice>(Serializer.Serialize(existingInvoice));
-
+            invoice.SourceId = newInvoice.SourceId;
             var gpRefNumber = (newInvoice.Details as InvoiceDetails).GPReferenceNumber;
             (invoice.Details as InvoiceDetails).GPReferenceNumber = gpRefNumber;
 

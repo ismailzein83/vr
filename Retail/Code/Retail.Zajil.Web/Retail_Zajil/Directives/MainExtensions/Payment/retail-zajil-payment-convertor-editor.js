@@ -63,6 +63,7 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         $scope.scopeModel.timeColumn = payload.TimeColumn;
                         $scope.scopeModel.accountColumn = payload.SourceAccountIdColumn;
                         $scope.scopeModel.sourceIdColumn = payload.SourceIdColumn;
+                        $scope.scopeModel.invoiceSourceIdColumn = payload.InvoiceSourceIdColumn;
                     }
 
                     var promises = [];
@@ -138,7 +139,8 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         AmountColumn: $scope.scopeModel.amountColumn,
                         TimeColumn: $scope.scopeModel.timeColumn,
                         SourceAccountIdColumn: $scope.scopeModel.accountColumn,
-                        SourceIdColumn: $scope.scopeModel.sourceIdColumn
+                        SourceIdColumn: $scope.scopeModel.sourceIdColumn,
+                        InvoiceSourceIdColumn: $scope.scopeModel.invoiceSourceIdColumn
                     };
                     return data;
                 };

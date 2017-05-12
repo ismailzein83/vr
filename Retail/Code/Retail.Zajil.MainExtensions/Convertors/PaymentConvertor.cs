@@ -27,6 +27,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public string SourceAccountIdColumn { get; set; }
         public string AmountColumn { get; set; }
         public string SourceIdColumn { get; set; }
+        public string InvoiceSourceIdColumn { get; set; }
         public string TimeColumn { get; set; }
         public int CurrencyId { get; set; }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
@@ -64,7 +65,8 @@ namespace Retail.Zajil.MainExtensions.Convertors
                                                     row["Document_Type_and_Number"] as string,
                                                     row["PONUMBER"] as string,
                                                     row["Description"] as string)
-                        }
+                        },
+                        InvoiceSourceId = row[InvoiceSourceIdColumn] as string
                     };
                     transactionTargetBEs.Add(sourceTransaction);
                 }
