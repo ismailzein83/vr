@@ -191,12 +191,15 @@ namespace Retail.BusinessEntity.Business
         public bool IsOverLappedAccoutPackage(int accountPackageId, long accountId, int packageId, DateTime bed, DateTime? eed)
         {
             var accountPackages = GetAccountPackagesByAccountId(accountId);
-            foreach (var accountPackage in accountPackages)
+            if (accountPackages != null)
             {
-                if (accountPackage.PackageId == packageId && accountPackage.AccountPackageId != accountPackageId)
+                foreach (var accountPackage in accountPackages)
                 {
-                    if (Utilities.AreTimePeriodsOverlapped(bed, eed, accountPackage.BED, accountPackage.EED))
-                        return true;
+                    if (accountPackage.PackageId == packageId && accountPackage.AccountPackageId != accountPackageId)
+                    {
+                        if (Utilities.AreTimePeriodsOverlapped(bed, eed, accountPackage.BED, accountPackage.EED))
+                            return true;
+                    }
                 }
             }
             return false;
