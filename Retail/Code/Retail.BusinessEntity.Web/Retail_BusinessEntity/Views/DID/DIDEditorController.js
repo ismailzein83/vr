@@ -125,9 +125,9 @@
             var didNumberTypeSelectorDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
             didNumberTypeSelectorReadyDeferred.promise.then(function () {
-                var didNumberTypePayload;
+                var didNumberTypePayload = { setDefaultValue: true };
                 if (didNumberType != undefined) {
-                    didNumberTypePayload = { selectedIds: didNumberType };
+                    didNumberTypePayload.selectedIds = didNumberType;
                 }
                 VRUIUtilsService.callDirectiveLoad(didNumberTypeSelectorAPI, didNumberTypePayload, didNumberTypeSelectorDirectiveLoadDeferred);
             });

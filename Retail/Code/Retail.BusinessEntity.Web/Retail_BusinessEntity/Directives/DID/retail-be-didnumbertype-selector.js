@@ -57,10 +57,12 @@ app.directive('retailBeDidnumbertypeSelector', ['UtilsService', 'VRUIUtilsServic
 
                     var selectedIds;
                     var filter;
+                    var setDefaultValue;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        setDefaultValue = payload.setDefaultValue;
                     }
                     var didNumberTypes = UtilsService.getArrayEnum(Retail_BE_DIDNumberTypeEnum);
 
@@ -71,6 +73,9 @@ app.directive('retailBeDidnumbertypeSelector', ['UtilsService', 'VRUIUtilsServic
 
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                        }
+                        else if (setDefaultValue) {
+                            VRUIUtilsService.setSelectedValues(didNumberTypes[0].value, 'value', attrs, ctrl);
                         }
                     }
                 };
