@@ -36,3 +36,25 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Invoice_Type]
+    ON [VR_Invoice].[Invoice]([InvoiceTypeID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Invoice_Partner]
+    ON [VR_Invoice].[Invoice]([PartnerID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Invoice_IssueDate]
+    ON [VR_Invoice].[Invoice]([IssueDate] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Invoice_FromDate]
+    ON [VR_Invoice].[Invoice]([FromDate] ASC);
+

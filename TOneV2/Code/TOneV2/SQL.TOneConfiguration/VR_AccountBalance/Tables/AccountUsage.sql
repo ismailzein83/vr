@@ -12,7 +12,8 @@
     [CorrectionProcessID] UNIQUEIDENTIFIER NULL,
     [CreatedTime]         DATETIME         CONSTRAINT [DF_AccountUsage_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]           ROWVERSION       NULL,
-    CONSTRAINT [PK_AccountUsage] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_AccountUsage] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [IX_AccountUsage] UNIQUE NONCLUSTERED ([AccountTypeID] ASC, [AccountID] ASC, [TransactionTypeID] ASC, [PeriodStart] ASC)
 );
 
 
@@ -20,7 +21,8 @@
 
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IX_AccountUsage]
-    ON [VR_AccountBalance].[AccountUsage]([AccountID] ASC, [AccountTypeID] ASC, [TransactionTypeID] ASC, [PeriodStart] ASC);
+
 

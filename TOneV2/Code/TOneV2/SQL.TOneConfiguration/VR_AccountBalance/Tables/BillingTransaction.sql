@@ -22,3 +22,20 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BillingTransaction_Time]
+    ON [VR_AccountBalance].[BillingTransaction]([TransactionTime] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BillingTransaction_CreatedByInvoice]
+    ON [VR_AccountBalance].[BillingTransaction]([CreatedByInvoiceID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BillingTransaction_AccountTypeAndID]
+    ON [VR_AccountBalance].[BillingTransaction]([AccountTypeID] ASC, [AccountID] ASC);
+

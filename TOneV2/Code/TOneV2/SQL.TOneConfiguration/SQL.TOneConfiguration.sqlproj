@@ -601,9 +601,9 @@
     <Build Include="common\Stored Procedures\sp_GenericLKUP_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_GenericLKUP_GetAll.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLast.sql" />
-    <Build Include="VR_AccountBalance\Tables\BalanceUsageQueue1.sql" />
     <Build Include="Security\VANRISE_wissam.ajamy.sql" />
     <Build Include="Security\VANRISE_development.sql" />
+    <Build Include="VR_Invoice\Tables\InvoicePartner.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
