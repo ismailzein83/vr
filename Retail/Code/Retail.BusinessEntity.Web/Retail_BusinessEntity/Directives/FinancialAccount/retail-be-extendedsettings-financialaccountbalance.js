@@ -21,7 +21,7 @@ app.directive("retailBeExtendedsettingsFinancialaccountbalance", ["UtilsService"
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Extensions/FinancialAccount/Templates/FinancialAccountBalanceTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FinancialAccount/Templates/FinancialAccountBalanceTemplate.html"
 
         };
 

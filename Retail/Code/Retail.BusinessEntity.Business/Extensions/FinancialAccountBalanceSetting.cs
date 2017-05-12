@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Notification.Entities;
 
-namespace Retail.BusinessEntity.Business.Extensions
+namespace Retail.BusinessEntity.Business
 {
     public class FinancialAccountBalanceSetting : AccountTypeExtendedSettings
     {
