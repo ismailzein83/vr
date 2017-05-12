@@ -7,11 +7,15 @@
     [PeriodStart]         DATETIME         NOT NULL,
     [PeriodEnd]           DATETIME         NOT NULL,
     [UsageBalance]        DECIMAL (20, 6)  NOT NULL,
+    [IsOverridden]        BIT              NULL,
+    [OverriddenAmount]    DECIMAL (20, 6)  NULL,
     [CorrectionProcessID] UNIQUEIDENTIFIER NULL,
     [CreatedTime]         DATETIME         CONSTRAINT [DF_AccountUsage_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]           ROWVERSION       NULL,
     CONSTRAINT [PK_AccountUsage] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

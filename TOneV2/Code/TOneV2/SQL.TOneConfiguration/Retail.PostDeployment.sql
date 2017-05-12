@@ -92,6 +92,7 @@ as (select * from (values
 ('70D4A6AD-10CC-4F0B-8364-7D8EF3C044C4','Account Business Entity','Account BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig'									,'{"Editor":"retail-be-accountbedefinitions-editor"}'),
 
 ('44F7D357-CD66-4397-A159-7A597A8C1164','ProductDefinition','Product Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-productdefinition-settings"}'),
+('CE9260A7-732F-4573-BEF8-9A3F8FC7BCC6','PackageDefinition','Package Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-packagedefinition-settings"}'),
 ('82B558C6-CEF2-4318-8819-A8495097E770','VR_GenericData_BEParentChildRelationDefinition','Parent-Child Relation Definition','VR_Common_VRComponentType'		,'{"Editor":"vr-genericdata-beparentchildrelationdefinition-settings"}'),
 
 ('AC102D41-B0DB-4E02-A26B-DB8D6BFE47F3','Postpaid','Postpaid','Retail_BE_ProductDefinition'		,'{"DefinitionEditor":"retail-be-productdefinition-extendedsettings-postpaid"}'),
@@ -126,32 +127,6 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 
 END
-
-
-
---[common].[VRComponentType]------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-
-BEGIN
-
-set nocount on;
-;with cte_data([ID],[Name],[ConfigID],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('DBE3F2D8-1148-49B9-AC33-F2CDD87C1496','Account Action','D96F17C8-29D7-4C0C-88DC-9D5FBCA2178F','{"$type":"Vanrise.Notification.Entities.VRActionDefinitionSettings, Vanrise.Notification.Entities","VRComponentTypeConfigId":"d96f17c8-29d7-4c0c-88dc-9d5fbca2178f","ExtendedSettings":{"$type":"Retail.BusinessEntity.Business.Extensions.BalanceAlertActionDefinitionSettings, Retail.BusinessEntity.Business","AccountBEDefinitionId":"9a427357-cf55-4f33-99f7-745206dee7cd","ConfigId":"820856b8-c29d-43d9-9950-18ae7af22bb9","RuntimeEditor":"retail-be-action-balancealertaccount"}}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigID],[Settings]))
-merge	[common].[VRComponentType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigID],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
-END
-
 
 
 --[sec].[Module]------------------------------------------------------------------------------------
@@ -343,29 +318,6 @@ set nocount on;;with cte_data([ID],[Name],[Title],[Settings])as (select * from
 ----------------------------------------------------------------------------------------------------
 END
 
---[Retail_BE].[AccountPartDefinition]---------------------------------------------------------------
-BEGIN
-set nocount on;
-;with cte_data([ID],[Title],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('05FECF19-6413-402F-BD65-64B0EEF1FB52','Residential Profile','Residential Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"05fecf19-6413-402f-bd65-64b0eef1fb52","Name":"Residential Profile","Title":"Residential Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartResidentialProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"747d0c68-a508-4aa3-8d02-0d3cdfe72149"}}'),
-('82228BE2-E633-4EF8-B383-9894F28C8CB0','Financial','Financial','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0","Name":"Financial","Title":"Financial","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"ba425fa1-13ca-4f44-883a-2a12b7e3f988"}}'),
-('A46ABF18-DEEC-4F78-9178-F433790B5AEB','Personal Info','Personal Info','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"a46abf18-deec-4f78-9178-f433790b5aeb","Name":"Personal Info","Title":"Personal Info","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartPersonalInfoDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"3900317c-b982-4d8b-bd0d-01215ac1f3d9"}}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Title],[Name],[Details]))
-merge	[Retail_BE].[AccountPartDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Title] = s.[Title],[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Title],[Name],[Details])
-	values(s.[ID],s.[Title],s.[Name],s.[Details]);
-----------------------------------------------------------------------------------------------------
-END
-
 --[common].[StyleDefinition]------------------------------------------------------------------------
 BEGIN
 set nocount on;
@@ -399,8 +351,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('049A1012-A30B-457D-96AE-51E1CA388191','Retail_BE_ActionBPInputArgument_17817576-4de9-4c00-9bef-0505007b4f53','Account Action','Retail.BusinessEntity.MainActionBPs.RegularActionBP,Retail.BusinessEntity.MainActionBPs','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"IsPersistable":false,"HasChildProcesses":true,"HasBusinessRules":false,"NotVisibleInManagementScreen":true,"ExtendedSettings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.BPAccountActionBPDefinitionSettings, Retail.BusinessEntity.MainExtensions"}}'),
-('DD5BEB84-AAA3-4777-AF2F-A20BACBA5C07','Vanrise.BEBridge.BP.Arguments.SourceBESyncProcessInput','Source BE Sync','Vanrise.BEBridge.BP.BEBridgeProcess,Vanrise.BEBridge.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ManualExecEditor":"vr-bebridge-process-manual","ScheduledExecEditor":"vr-bebridge-process-scheduled","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"ExtendedSettings":{"$type":"Vanrise.BEBridge.Business.BEReceiveDefinitionBPExtentedSettings, Vanrise.BEBridge.Business"}}')
+('049A1012-A30B-457D-96AE-51E1CA388191','Retail_BE_ActionBPInputArgument_17817576-4de9-4c00-9bef-0505007b4f53','Account Action','Retail.BusinessEntity.MainActionBPs.RegularActionBP,Retail.BusinessEntity.MainActionBPs','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"IsPersistable":false,"HasChildProcesses":true,"HasBusinessRules":false,"NotVisibleInManagementScreen":true,"ExtendedSettings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.BPAccountActionBPDefinitionSettings, Retail.BusinessEntity.MainExtensions"}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[FQTN],[Config]))
 merge	[bp].[BPDefinition] as t
@@ -436,7 +387,7 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[logging].[LoggableEntity]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('A392AE14-74F2-4DD8-B7F6-E6728C9559A0','VR_Common_ComponentType_44f7d357-cd66-4397-a159-7a597a8c1164','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_ComponentType__ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);
+--[logging].[LoggableEntity]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('A392AE14-74F2-4DD8-B7F6-E6728C9559A0','VR_Common_ComponentType_44f7d357-cd66-4397-a159-7a597a8c1164','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_ComponentType__ViewHistoryItem"}'),('316AC1CB-AFD0-47B6-B3A0-0A6B7FF44DF6','VR_Common_ComponentType_ce9260a7-732f-4573-bef8-9a3f8fc7bcc6','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_ComponentType__ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);
 
 Delete from [runtime].[SchedulerTaskActionType] where Id='0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9' --Exchange Rate
 
