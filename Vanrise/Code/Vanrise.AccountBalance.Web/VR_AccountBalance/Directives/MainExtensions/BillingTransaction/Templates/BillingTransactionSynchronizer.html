@@ -1,17 +1,32 @@
 ﻿
-<vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
-                                        normal-col-num="6"
-                                        isrequired="true">
-</vr-accountbalance-accounttype-selector>
+<vr-row>
+    <vr-accountbalance-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                            normal-col-num="6"
+                                            isrequired="true">
+    </vr-accountbalance-accounttype-selector>
+</vr-row>
 
-<vr-columns colnum="2">
-    <vr-switch value="scopeModel.checkExisting" label="Check Existing"></vr-switch>
-</vr-columns>
-<vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady"
-                                                   isrequired="false"
-                                                   normal-col-num="4"
-                                                   ismultipleselection
-                                                   ng-show="scopeModel.checkExisting == true"
-                                                   hideremoveicon>
-</vr-accountbalance-billingtransactiontype-selector>
+<vr-row>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.checkExisting" label="Check Existing"></vr-switch>
+    </vr-columns>
+    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady"
+                                                       normal-col-num="4"
+                                                       ismultipleselection
+                                                       ng-show="scopeModel.checkExisting == true"
+                                                       isrequired="scopeModel.checkExisting"
+                                                       hideremoveicon>
+    </vr-accountbalance-billingtransactiontype-selector>
+</vr-row>
 
+<vr-row>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.updateInvoicePaidDate" label="Update Invoice Paid Date"></vr-switch>
+    </vr-columns>
+    <vr-invoicetype-selector normal-col-num="4"
+                             on-ready="scopeModel.onInvoiceTypeSelectorReady"
+                             isrequired="scopeModel.updateInvoicePaidDate"
+                             ng-show="scopeModel.updateInvoicePaidDate == true"
+                             hideremoveicon>
+    </vr-invoicetype-selector>
+</vr-row>

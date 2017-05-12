@@ -30,6 +30,10 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
             var transactionTypeDirectiveAPI;
             var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var invoiceTypeSelectorAPI;
+            var invoiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
@@ -40,6 +44,10 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                 transactionTypeDirectiveAPI = api;
                 transactionTypeDirectiveReadyDeferred.resolve();
             };
+            $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
+                invoiceTypeSelectorAPI = api;
+                invoiceTypeSelectorReadyDeferred.resolve();
+            };
             function initializeController() {
                 defineAPI();
             }
@@ -47,8 +55,11 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    var invoiceTypeId;
                     if (payload != undefined) {
                         $scope.scopeModel.checkExisting = payload.CheckExisting;
+                        $scope.scopeModel.updateInvoicePaidDate = payload.UpdateInvoicePaidDate;
+                        invoiceTypeId = payload.InvoiceTypeId;
                     }
                     var promises = [];
 
@@ -81,6 +92,18 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                         return billingTransactionTypeLoadDeferred.promise;
                     };
 
+
+                    var invoiceTypeSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(invoiceTypeSelectorPayloadLoadDeferred.promise);
+
+                    invoiceTypeSelectorReadyDeferred.promise.then(function () {
+                        var invoiceTypeSelectorPayload;
+                        if (invoiceTypeId != undefined) {
+                            invoiceTypeSelectorPayload = { selectedIds: invoiceTypeId };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, invoiceTypeSelectorPayload, invoiceTypeSelectorPayloadLoadDeferred);
+                    });
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -91,7 +114,10 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                         Name: "Billing Transaction Synchronizer",
                         BalanceAccountTypeId: accountTypeSelectorApi.getSelectedIds(),
                         CheckExisting: $scope.scopeModel.checkExisting,
-                        BillingTransactionTypeIds: $scope.scopeModel.checkExisting ? transactionTypeDirectiveAPI.getSelectedIds() : undefined
+                        BillingTransactionTypeIds: $scope.scopeModel.checkExisting ? transactionTypeDirectiveAPI.getSelectedIds() : undefined,
+                        UpdateInvoicePaidDate: $scope.scopeModel.updateInvoicePaidDate,
+                        InvoiceTypeId: $scope.scopeModel.updateInvoicePaidDate ? invoiceTypeSelectorAPI.getSelectedIds() : undefined,
+
                     };
                     return data;
                 };

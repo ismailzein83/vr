@@ -76,6 +76,12 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetInvoiceBySourceId(invoiceTypeId, sourceId);
         }
+
+        public bool UpdateInvoicePaidDateBySourceId(Guid invoiceTypeId, string sourceId, DateTime paidDate)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.UpdateInvoicePaidDateBySourceId(invoiceTypeId, sourceId, paidDate);
+        }
         public UpdateOperationOutput<InvoiceDetail> ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceDetail>();
@@ -424,11 +430,11 @@ namespace Vanrise.Invoice.Business
         public InvoiceClientDetail GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            var invoice =  dataManager.GetLastInvoice(invoiceTypeId, partnerId);
-            if(invoice == null)
+            var invoice = dataManager.GetLastInvoice(invoiceTypeId, partnerId);
+            if (invoice == null)
                 return null;
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
-            return InvoiceDetailMapper1( invoice, invoiceType);
+            return InvoiceDetailMapper1(invoice, invoiceType);
         }
         #endregion
 

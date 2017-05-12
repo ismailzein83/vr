@@ -29,6 +29,11 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoicePaid", invoiceId, paidDate);
             return (affectedRows > -1);
         }
+        public bool UpdateInvoicePaidDateBySourceId(Guid invoiceTypeId, string sourceId, DateTime paidDate)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoicePaidBySourceId", invoiceTypeId, sourceId, paidDate);
+            return (affectedRows > -1);
+        }
         public bool UpdateInvoiceNote(long invoiceId, string invoiceNote)
         {
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceNote", invoiceId, invoiceNote);
@@ -202,8 +207,5 @@ namespace Vanrise.Invoice.Data.SQL
         }
         #endregion
 
-
-
-       
     }
 }

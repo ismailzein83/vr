@@ -130,6 +130,14 @@
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
       <Name>Vanrise.Integration.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.Business\Vanrise.Invoice.Business.csproj">
+      <Project>{3fc94003-b550-4f8d-b31e-0d389dccc801}</Project>
+      <Name>Vanrise.Invoice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
+      <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
+      <Name>Vanrise.Invoice.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
       <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>
       <Name>Vanrise.Notification.Business</Name>

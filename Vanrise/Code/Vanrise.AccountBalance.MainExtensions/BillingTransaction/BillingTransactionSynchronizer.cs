@@ -7,6 +7,7 @@ using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.Invoice.Business;
 
 namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
 {
@@ -22,6 +23,8 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
         public List<Guid> BillingTransactionTypeIds { get; set; }
         public Guid BalanceAccountTypeId { get; set; }
         public bool CheckExisting { get; set; }
+        public bool UpdateInvoicePaidDate { get; set; }
+        public Guid InvoiceTypeId { get; set; }
 
         public override void Initialize(ITargetBESynchronizerInitializeContext context)
         {
@@ -50,7 +53,7 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             context.TargetBE.ThrowIfNull("context.TargetBE", "");
-            var accountManager  =new AccountManager();
+            var accountManager = new AccountManager();
             var billingTransactionTypeManager = new BillingTransactionTypeManager();
             var currencyManager = new Vanrise.Common.Business.CurrencyManager();
             BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
@@ -61,15 +64,30 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
                 string transactionType = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId);
                 try
                 {
-                    long billingTransactionId;                    
+                    long billingTransactionId;
                     sourceTransaction.BillingTransaction.AccountTypeId = this.BalanceAccountTypeId;
                     billingTransactionManager.TryAddBillingTransaction(sourceTransaction.BillingTransaction, out billingTransactionId);
-                    string accountName = accountManager.GetAccountName(billingTransaction.AccountTypeId, billingTransaction.AccountId);                    
+                    string accountName = accountManager.GetAccountName(billingTransaction.AccountTypeId, billingTransaction.AccountId);
                     string currencyName = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId);
                     context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "New {0} Transaction imported for '{1}'. Transaction Amount is {2} {3}",
                         transactionType, accountName, billingTransaction.Amount, currencyName);
+
+                    if (this.UpdateInvoicePaidDate)
+                    {
+                        InvoiceManager invoiceManager = new InvoiceManager();
+                        if (invoiceManager.UpdateInvoicePaidDateBySourceId(InvoiceTypeId, sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime))
+                        {
+                            context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "Invoice Paid Date {1} with Source Id {0} is updated",
+                                                    sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
+                        }
+                        else
+                        {
+                            context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, "Invoice Paid Date {1} with Source Id {0} was not updated",
+                                                 sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
+                        }
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     var finalException = Utilities.WrapException(ex, String.Format("Failed to import {0} Transaction. Source Transaction Id '{1}'", transactionType, billingTransaction.SourceId));
                     context.WriteBusinessHandledException(finalException);

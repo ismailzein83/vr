@@ -23,5 +23,7 @@ namespace Vanrise.Invoice.Data
         bool Update(Entities.Invoice invoice);
         Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId);
         Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId);
+
+        bool UpdateInvoicePaidDateBySourceId(Guid invoiceTypeId, string sourceId, DateTime paidDate);
     }
 }
