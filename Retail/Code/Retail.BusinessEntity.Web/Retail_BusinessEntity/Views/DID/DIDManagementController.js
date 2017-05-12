@@ -8,6 +8,9 @@
 
         var gridAPI;
 
+        var didNumberTypeSelectorAPI;
+        var didNumberTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -30,19 +33,45 @@
                 return Retail_BE_DIDAPIService.HasAddDIDPermission();
             };
 
+            $scope.scopeModel.onDIDNumberTypeSelectorReady = function (api) {
+                didNumberTypeSelectorAPI = api;
+                didNumberTypeSelectorReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.load({});
             };
-        }
-        function load() {
+        };
 
-        }
+        function load() {
+            $scope.isGettingData = true;
+            loadAllControls();
+        };
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadDIDNumberTypeSelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isGettingData = false;
+              });
+        };
+
+        function loadDIDNumberTypeSelector() {
+            var didNumberTypeSelectorDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            didNumberTypeSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(didNumberTypeSelectorAPI, undefined, didNumberTypeSelectorDirectiveLoadDeferred);
+            });
+            return didNumberTypeSelectorDirectiveLoadDeferred.promise;
+        };
 
         function buildGridQuery() {
             return {
-                Number: $scope.scopeModel.number
+                Number: $scope.scopeModel.number,
+                DIDNumberTypes: didNumberTypeSelectorAPI.getSelectedIds()
             };
         }
     }

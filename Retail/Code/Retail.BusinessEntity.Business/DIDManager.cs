@@ -29,7 +29,16 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<DIDDetail> GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
             var allDIDs = GetCachedDIDs();
-            Func<DID, bool> filterExpression = (did) => (input.Query.Number == null || IsDIDContainNumber(did, input.Query.Number));
+            Func<DID, bool> filterExpression = (did) =>
+                {
+                    if (!string.IsNullOrEmpty(input.Query.Number) && !IsDIDContainNumber(did, input.Query.Number))
+                        return false;
+
+                    if (input.Query.DIDNumberTypes != null && !input.Query.DIDNumberTypes.Contains(GetDIDNumberType(did)))
+                        return false;
+
+                    return true;
+                };
 
             ResultProcessingHandler<DIDDetail> handler = new ResultProcessingHandler<DIDDetail>()
             {

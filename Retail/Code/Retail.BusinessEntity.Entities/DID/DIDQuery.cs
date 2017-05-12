@@ -9,5 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class DIDQuery
     {
         public string Number { get; set; }
+
+        public List<DIDNumberType> DIDNumberTypes { get; set; }
     }
 }

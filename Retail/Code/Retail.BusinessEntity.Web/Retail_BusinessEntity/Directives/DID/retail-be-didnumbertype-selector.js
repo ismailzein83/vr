@@ -101,10 +101,14 @@ app.directive('retailBeDidnumbertypeSelector', ['UtilsService', 'VRUIUtilsServic
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = ' hideremoveicon ';
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                         '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
                             + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
-                            + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                            + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                         '</vr-select>' +
                     '</vr-columns>';
         }
