@@ -23,11 +23,36 @@ namespace Vanrise.Common.Business
                     {
                         IVRLoggableEntityDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLoggableEntityDataManager>();
                         id = dataManager.AddOrUpdateLoggableEntity(loggableEntity.EntityUniqueName, new VRLoggableEntitySettings { ViewHistoryItemClientActionName = loggableEntity.ViewHistoryItemClientActionName });
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         s_loggableEntityIds.Add(loggableEntity.EntityUniqueName, id);
                     }
                 }
             }
             return id;
+        }
+
+        public string GenerateLoggableEntitiesScript(List<VRLoggableEntityBase> loggableEntitiesBehaviors, out string scriptEntityName)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            HashSet<Guid> addedloggableEntityIds = new HashSet<Guid>();
+            foreach(var loggableEntityBehavior in loggableEntitiesBehaviors)
+            {                
+                Guid loggableEntityId = GetLoggableEntityId(loggableEntityBehavior);
+                if (addedloggableEntityIds.Contains(loggableEntityId))
+                    continue;
+                VRLoggableEntity loggableEntity = GetCachedvrLoggableEntities().GetRecord(loggableEntityId);
+                loggableEntity.ThrowIfNull("loggableEntityId", loggableEntityId);
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", loggableEntityId, loggableEntity.UniqueName, Serializer.Serialize(loggableEntity.Settings));
+                addedloggableEntityIds.Add(loggableEntityId);
+            }
+            string script = String.Format(@"set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);", scriptBuilder);
+            scriptEntityName = "[logging].[LoggableEntity]";
+            return script;
         }
 
         public Guid GetLoggableEntityId(string uniqueName)

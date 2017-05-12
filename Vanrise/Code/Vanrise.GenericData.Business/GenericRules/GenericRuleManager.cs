@@ -471,7 +471,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        private class GenericRuleLoggableEntity : RuleLoggableEntity
+        internal class GenericRuleLoggableEntity : RuleLoggableEntity
         {
             Guid _ruleDefinitionId;
             static GenericRuleDefinitionManager s_ruleDefinitionManager = new GenericRuleDefinitionManager();

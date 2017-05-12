@@ -151,7 +151,7 @@ namespace Vanrise.Notification.Business
             }
         }
 
-        private class VRAlertRuleLoggableEntity : VRLoggableEntityBase
+        public class VRAlertRuleLoggableEntity : VRLoggableEntityBase
         {
 
             Guid _ruleTypeId;

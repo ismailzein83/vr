@@ -85,6 +85,7 @@
     <Compile Include="Group\GroupManager.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="UserManager.cs" />
+    <Compile Include="ViewOverriddenConfiguration.cs" />
     <Compile Include="ViewTypeManager.cs" />
     <Compile Include="ViewUserAccessContext.cs" />
     <Compile Include="WidgetDefinitionManager.cs" />

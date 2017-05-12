@@ -102,6 +102,67 @@ namespace Vanrise.Common.Business
             return extensionConfigurationManager.GetExtensionConfigurations<OverriddenConfigurationConfig>(OverriddenConfigurationConfig.EXTENSION_TYPE);
         }
 
+        public string GenerateOverriddenConfigurationGroupScript(Guid overriddenConfigurationGroupId)
+        {
+            List<OverriddenConfiguration> overriddenConfigurations = GetCachedOverriddenConfigurations().Values.Where(itm => itm.GroupId == overriddenConfigurationGroupId).ToList();
+            Dictionary<Type, List<OverriddenConfiguration>> configsByBehaviorType = new Dictionary<Type, List<OverriddenConfiguration>>();
+            foreach(var config in overriddenConfigurations)
+            {
+                config.Settings.ThrowIfNull("config.Settings", config.OverriddenConfigurationId);
+                config.Settings.ExtendedSettings.ThrowIfNull("config.Settings.ExtendedSettings", config.OverriddenConfigurationId);
+                var behaviorType = config.Settings.ExtendedSettings.GetBehaviorType(null);
+                behaviorType.ThrowIfNull("behaviorType", config.OverriddenConfigurationId);
+                configsByBehaviorType.GetOrCreateItem(behaviorType).Add(config);
+            }
+            StringBuilder builder = new StringBuilder();
+            foreach (var configsByBehaviorTypeEntry in configsByBehaviorType)
+            {
+                OverriddenConfigurationBehavior behavior = Activator.CreateInstance(configsByBehaviorTypeEntry.Key).CastWithValidate<OverriddenConfigurationBehavior>("behavior");
+                StringBuilder modScriptBuilder = new StringBuilder();
+                Action<string, string> addEntityScriptAction = (entityName, entityScript) =>
+                {
+                    modScriptBuilder.AppendLine();
+                    modScriptBuilder.AppendFormat("-------------- START Entity '{0}' -------------------", entityName);
+                    modScriptBuilder.AppendLine();
+                    modScriptBuilder.AppendLine("-----------------------------------------------------------------------------------------");
+                    modScriptBuilder.AppendLine("BEGIN");
+                    modScriptBuilder.AppendLine();
+                    modScriptBuilder.AppendLine(entityScript);
+                    modScriptBuilder.AppendLine();
+                    modScriptBuilder.AppendLine("END");
+                    modScriptBuilder.AppendLine("-----------------------------------------------------------------------------------------");
+                    modScriptBuilder.AppendFormat("-------------- END Entity '{0}' -------------------", entityName);
+                    modScriptBuilder.AppendLine();
+                };
+                var context = new OverriddenConfigurationBehaviorGenerateScriptContext(configsByBehaviorTypeEntry.Value, addEntityScriptAction);
+
+                behavior.GenerateScript(context);
+                if (modScriptBuilder.Length > 0)
+                {
+                    string moduleName = behavior.ModuleName;
+                    if (!string.IsNullOrEmpty(moduleName))
+                    {
+                        builder.AppendLine();
+                        builder.AppendFormat("-------------- START Module Id '{0}' -------------------", moduleName);
+                        builder.AppendLine();
+                        builder.AppendLine("-----------------------------------------------------------------------------------------");
+                    }
+
+                    builder.AppendLine();
+                    builder.AppendLine(modScriptBuilder.ToString());
+                    builder.AppendLine();
+
+                    if (!string.IsNullOrEmpty(moduleName))
+                    {
+                        builder.AppendLine("-----------------------------------------------------------------------------------------");
+                        builder.AppendFormat("-------------- END Module Id '{0}' -------------------", moduleName);
+                        modScriptBuilder.AppendLine();
+                    }
+                }
+            }
+            return builder.ToString();
+        }
+
         #endregion
 
         #region Private Classes
@@ -160,6 +221,33 @@ namespace Vanrise.Common.Business
                 return s_overriddenConfigManager.GetOverriddenConfigurationName(overriddenConfiguration.OverriddenConfigurationId);
             }
         }
+
+        private class OverriddenConfigurationBehaviorGenerateScriptContext : IOverriddenConfigurationBehaviorGenerateScriptContext
+        {
+            Action<string, string> _addEntityScriptAction;
+
+            public OverriddenConfigurationBehaviorGenerateScriptContext(List<OverriddenConfiguration> configs, Action<string, string> addEntityScriptAction)
+            {
+                configs.ThrowIfNull("configs");
+                addEntityScriptAction.ThrowIfNull("addEntityScriptAction");
+                _configs = configs;
+                _addEntityScriptAction = addEntityScriptAction;
+            }
+
+            List<OverriddenConfiguration> _configs;
+            public List<OverriddenConfiguration> Configs
+            {
+                get
+                {
+                    return _configs;
+                }
+            }
+            public void AddEntityScript(string entityName, string entityScript)
+            {
+                _addEntityScriptAction(entityName, entityScript);
+            }
+        }
+
         #endregion
 
         #region Private Methods

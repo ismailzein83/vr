@@ -28,8 +28,7 @@ namespace Vanrise.Common.Business
 
         public VRApplicationVisibility GetVRApplicationVisibility()
         {
-            Dictionary<Guid, VRApplicationVisibility> cachedVRApplicationVisibilities = this.GetCachedVRApplicationVisibilities();
-            return cachedVRApplicationVisibilities.FirstOrDefault(itm => itm.Value.IsCurrent.HasValue && itm.Value.IsCurrent.Value == true).Value;
+            return null;
         }
         public VRApplicationVisibility GetVRApplicationVisibility(Guid vrApplicationVisibilityId)
         {
