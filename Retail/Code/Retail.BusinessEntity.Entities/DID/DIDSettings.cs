@@ -15,6 +15,8 @@ namespace Retail.BusinessEntity.Entities
         public List<string> Numbers { get; set; }
 
         public List<DIDRange> Ranges { get; set; }
+
+        public int? DIDSo { get; set; }
     }
 
     public class DIDRange

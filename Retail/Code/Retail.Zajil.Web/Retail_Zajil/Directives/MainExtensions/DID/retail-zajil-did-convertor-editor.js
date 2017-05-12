@@ -50,6 +50,8 @@ app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsServic
                         $scope.scopeModel.sourceIdColumn = payload.SourceIdColumn;
                         $scope.scopeModel.internationalColumn = payload.InternationalColumn;
                         $scope.scopeModel.didColumn = payload.DIDColumn;
+                        $scope.scopeModel.didSoColumn = payload.DIDSoColumn;
+
                     }
 
                     var promises = [];
@@ -89,7 +91,8 @@ app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsServic
                         SourceIdColumn: $scope.scopeModel.sourceIdColumn,
                         BEDColumn: $scope.scopeModel.bedColumn,
                         AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
-                        InternationalColumn: $scope.scopeModel.internationalColumn
+                        InternationalColumn: $scope.scopeModel.internationalColumn,                        
+                        DIDSoColumn : $scope.scopeModel.didSoColumn
                     };
                     return data;
                 };

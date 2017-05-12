@@ -18,6 +18,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public string BEDColumn { get; set; }
         public string DIDColumn { get; set; }
         public string InternationalColumn { get; set; }
+        public string DIDSoColumn { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
 
         public override string Name
@@ -56,7 +57,8 @@ namespace Retail.Zajil.MainExtensions.Convertors
                             Settings = new DIDSettings
                             {
                                 IsInternational = (row[InternationalColumn] == DBNull.Value ? 0 : double.Parse(row[InternationalColumn].ToString())) == 1,
-                                Numbers = new List<string>() { ((double)row[this.DIDColumn]).ToString() }
+                                Numbers = new List<string>() { ((double)row[this.DIDColumn]).ToString() },
+                                DIDSo = row[DIDSoColumn] == DBNull.Value ? null : (int?)int.Parse(row[DIDSoColumn].ToString())
                             }
                         },
                         AccountId = accountId,
