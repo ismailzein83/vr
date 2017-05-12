@@ -8,5 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class FinancialAccountInfoFilter
     {
+        public FinancialAccountEffective? FinancialAccountEffective { get; set; }
+        public List<long> AccountIds { get; set; }
     }
 }

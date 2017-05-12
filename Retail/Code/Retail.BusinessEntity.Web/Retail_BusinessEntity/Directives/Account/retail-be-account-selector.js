@@ -102,8 +102,9 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectedIds;
+                    selectorAPI.clearDataSource();
 
+                    var selectedIds;
 
                     if (payload != undefined) {
                         if (payload.businessEntityDefinitionId != undefined)

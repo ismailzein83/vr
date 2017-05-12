@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
+    public enum FinancialAccountEffective { EffectiveOnly = 0, All = 1 }
+
     public class FinancialAccount : Vanrise.Entities.IDateEffectiveSettings
     {
         public int SequenceNumber { get; set; }

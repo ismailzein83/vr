@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class FinancialAccountData
     {
+        public string FinancialAccountId { get; set; }
         public FinancialAccount FinancialAccount { get; set; }
 
         public Account Account { get; set; }

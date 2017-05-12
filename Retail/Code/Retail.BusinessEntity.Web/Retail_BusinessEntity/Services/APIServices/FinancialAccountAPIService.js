@@ -32,12 +32,19 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "UpdateFinancialAccount"), financialAccountToEdit);
         }
 
+        function GetFinancialAccountsInfo(accountBEDefinitionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountsInfo"), {
+                accountBEDefinitionId:accountBEDefinitionId,
+                filter: filter,
+            });
+        }
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
             UpdateFinancialAccount: UpdateFinancialAccount,
             GetFinancialAccountEditorRuntime: GetFinancialAccountEditorRuntime,
-            CheckAllowAddFinancialAccounts: CheckAllowAddFinancialAccounts
+            CheckAllowAddFinancialAccounts: CheckAllowAddFinancialAccounts,
+            GetFinancialAccountsInfo: GetFinancialAccountsInfo
         };
     }
 

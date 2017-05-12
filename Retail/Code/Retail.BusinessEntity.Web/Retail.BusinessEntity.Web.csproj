@@ -210,6 +210,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\FinancialAccountEffectiveEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\TrafficDirectionEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />
@@ -349,11 +350,16 @@
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccountDefinition.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-account-financialaccount-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-extendedsettings-financialaccountbalance.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-extendedsettings-financialaccount-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-extendedsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccount-search.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\retail-be-financialaccountdefinition-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountBalanceTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountDefinitionSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountSearchTemplate.html" />

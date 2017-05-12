@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_FinancialAccountDefinitionAPIService', 'VRUIUtilsService',
-    function (Retail_BE_FinancialAccountDefinitionAPIService, VRUIUtilsService) {
+app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAPIService', 'VRUIUtilsService',
+    function (Retail_BE_FinancialAccountAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -17,7 +17,7 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
 
                 var ctrl = this;
                 ctrl.datasource = [];
-                var ctor = new FinancialAccountDefinitionSelectorCtor(ctrl, $scope, $attrs);
+                var ctor = new FinancialAccountSelectorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             },
@@ -37,10 +37,10 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
 
 
         function getTemplate(attrs) {
-            var label = "Financial Account Type";
+            var label = "Financial Account";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "Financial Account Types";
+                label = "Financial Accounts";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
@@ -55,8 +55,8 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
                        + '  selectedvalues="ctrl.selectedvalues"'
                        + '  onselectionchanged="ctrl.onselectionchanged"'
                        + '  datasource="ctrl.datasource"'
-                       + '  datavaluefield="FinancialAccountDefinitionId"'
-                       + '  datatextfield="Name"'
+                       + '  datavaluefield="FinancialAccountId"'
+                       + '  datatextfield="Description"'
                        + '  ' + multipleselection
                        + '  ' + hideremoveicon
                        + '  isrequired="ctrl.isrequired"'
@@ -67,7 +67,7 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
               + '</vr-columns>';
         }
 
-        function FinancialAccountDefinitionSelectorCtor(ctrl, $scope, attrs) {
+        function FinancialAccountSelectorCtor(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
@@ -87,43 +87,32 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
+                    var accountBEDefinitionId;
                     var selectedIds;
                     var filter;
-                    var selectfirstitem;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
-                        selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
 
-                    return Retail_BE_FinancialAccountDefinitionAPIService.GetFinancialAccountDefinitionsInfo(filter).then(function (response) {
+                    return Retail_BE_FinancialAccountAPIService.GetFinancialAccountsInfo(accountBEDefinitionId,filter).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountDefinitionId', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
                             }
-                            else if (selectfirstitem == true) {
-                                var defaultValue = ctrl.datasource[0].FinancialAccountDefinitionId;
-                                if (attrs.ismultipleselection != undefined)
-                                    defaultValue = [defaultValue];;
-                                VRUIUtilsService.setSelectedValues(defaultValue, 'FinancialAccountDefinitionId', attrs, ctrl);
-                            }
-
                         }
                     });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('FinancialAccountDefinitionId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('FinancialAccountId', attrs, ctrl);
                 };
 
-                api.hasSingleItem = function () {
-                    return ctrl.datasource.length == 1;
-                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

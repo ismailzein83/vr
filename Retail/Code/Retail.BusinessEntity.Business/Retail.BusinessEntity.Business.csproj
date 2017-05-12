@@ -139,7 +139,10 @@
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
     <Compile Include="Extensions\AccountMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\DIDSynchronizer.cs" />
+    <Compile Include="Extensions\FinancialAccountBalanceManager.cs" />
+    <Compile Include="Extensions\FinancialAccountBalanceSetting.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\ChargeableEntityDefinitionFilter.cs" />
+    <Compile Include="Filters\IAccountFilter\FinancialAccountBEFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountBalanceAccountFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccount\FinancialAccountInvoiceAccountFilter.cs" />

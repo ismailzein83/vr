@@ -45,5 +45,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.CheckAllowAddFinancialAccounts(accountBEDefinitionId, accountId);
         }
+        [HttpGet]
+        [Route("GetFinancialAccountsInfo")]
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBEDefinitionId,string filter = null)
+        {
+            var deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<FinancialAccountInfoFilter>(filter) : null;
+            return _manager.GetFinancialAccountsInfo(accountBEDefinitionId, deserializedFilter);
+        }
     }
 }

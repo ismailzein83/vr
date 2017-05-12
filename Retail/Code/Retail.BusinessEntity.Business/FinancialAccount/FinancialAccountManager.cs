@@ -117,7 +117,7 @@ namespace Retail.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
+         
         public FinancialAccountRuntimeEditor GetFinancialAccountEditorRuntime(Guid accountBEDefinitionId, long accountId, int sequenceNumber)
         {
             IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
@@ -173,6 +173,46 @@ namespace Retail.BusinessEntity.Business
         public FinancialAccountLocator GetFinancialAccountLocator(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
         {
             return new DefaultFinancialAccountLocator();
+        }
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBEDefinitionId ,FinancialAccountInfoFilter filter)
+        {
+            List<FinancialAccountInfo> financialAccountsInfo = new List<FinancialAccountInfo>();
+            if (filter != null && filter.AccountIds != null)
+            {
+                foreach (var accountId in filter.AccountIds)
+                {
+                    var cachedFinancialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
+                    Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
+                    {
+                        if (filter.FinancialAccountEffective.HasValue)
+                        {
+                            switch (filter.FinancialAccountEffective)
+                            {
+                                case Entities.FinancialAccountEffective.All: return true;
+                                case Entities.FinancialAccountEffective.EffectiveOnly:
+                                    if (financialAccountData.FinancialAccount.BED < DateTime.Now && (!financialAccountData.FinancialAccount.EED.HasValue || financialAccountData.FinancialAccount.EED.Value > DateTime.Now))
+                                        return true;
+                                    break;
+                            }
+                            return false;
+                        }
+                        return true;
+                    };
+                    financialAccountsInfo.AddRange(cachedFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterExpression));
+
+                }
+            }
+            return financialAccountsInfo;
+        }
+
+        public string GetFinancialAccountId(long accountId, int sequenceNumber)
+        {
+            return string.Format("{0}_{1}", accountId, sequenceNumber);
+        }
+        public FinancialAccountData GetFinancialAccountData(Guid accountBEDefinitionId, string financialAccountId)
+        {
+            var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
+            return cachedFinancialAccountsData.GetRecord(financialAccountId);
         }
 
         #endregion
@@ -248,10 +288,32 @@ namespace Retail.BusinessEntity.Business
         {
             return new FinancialAccountData
             {
+                FinancialAccountId = GetFinancialAccountId(account.AccountId, financialAccount.SequenceNumber),
                 FinancialAccount = financialAccount,
                 Account = account
             };
         }
+        private Dictionary<string, FinancialAccountData> GetCachedFinancialAccountDataByFinancialAccountId(Guid accountDefinitionId)
+        {
+            return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccountDataByFinancialAccountId", accountDefinitionId,
+                () =>
+                {
+                    var cachedFinancialAccounts = GetCachedFinancialAccounts(accountDefinitionId);
+                    Dictionary<string, FinancialAccountData> financialAccountDataByFinancialAccountId = new Dictionary<string, FinancialAccountData>();
+                    foreach (var cachedFinancialAccount in cachedFinancialAccounts)
+                    {
+                        if (cachedFinancialAccount.Value != null)
+                        {
+                            foreach (var financialAccountData in cachedFinancialAccount.Value)
+                            {
+                                financialAccountDataByFinancialAccountId.Add(financialAccountData.FinancialAccountId, financialAccountData);
+                            }
+                        }
+                    }
+                    return financialAccountDataByFinancialAccountId;
+                });
+        }
+
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithInherited(Guid accountDefinitionId)
         {
             return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccountsWithInherited", accountDefinitionId,
@@ -318,6 +380,30 @@ namespace Retail.BusinessEntity.Business
                 EED = financialAccount.EED,
                 FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId)
             };
+        }
+        private FinancialAccountInfo FinancialAccountInfoMapper(FinancialAccountData financialAccountData)
+        {
+            return new FinancialAccountInfo
+            {
+                FinancialAccountId = financialAccountData.FinancialAccountId,
+                Description = GetFinancialAccountDescription(financialAccountData.FinancialAccount)
+            };
+        }
+        private string GetFinancialAccountDescription(FinancialAccount financialAccount)
+        {
+            StringBuilder description = new StringBuilder();
+            description.Append(s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId));
+            description.Append(" ");
+            if(financialAccount.BED > DateTime.Now)
+            {
+                description.Append("Future");
+            }
+            else if (financialAccount.EED.HasValue && financialAccount.EED.Value < DateTime.Now)
+            {
+                var dateTimeFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
+                description.AppendFormat("{0} -> {1}", financialAccount.BED.ToString(dateTimeFormat), financialAccount.EED.Value.ToString(dateTimeFormat));
+            }
+           return description.ToString();
         }
         #endregion
     }
