@@ -71,8 +71,8 @@ function (UtilsService, VRNotificationService, WhS_BE_StateBackupAPIService) {
             }];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.Entity.RestoreDate == null)
-                    return menuActions;
+                // if (dataItem.Entity.RestoreDate == null)
+                return menuActions;
             };
         }
 
