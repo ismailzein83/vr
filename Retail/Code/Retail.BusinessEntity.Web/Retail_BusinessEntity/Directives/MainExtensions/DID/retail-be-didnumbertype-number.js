@@ -43,7 +43,7 @@ app.directive('retailBeDidnumbertypeNumber', ['UtilsService', 'VRUIUtilsService'
                 api.load = function (payload) {
                     if (payload != undefined && payload.didObj != undefined && payload.didObj.Settings != undefined
                         && payload.didObj.Settings.Numbers != undefined && payload.didObj.Settings.Numbers.length > 0) {
-                        $scope.scopeModel.number = payload.didObj.Settings.Numbers[0];
+                        $scope.scopeModel.numbers = payload.didObj.Settings.Numbers;
                     }
                 };
 
@@ -51,13 +51,7 @@ app.directive('retailBeDidnumbertypeNumber', ['UtilsService', 'VRUIUtilsService'
                     if (didObj.Settings == undefined)
                         didObj.Settings = {};
 
-                    if (didObj.Settings.Numbers == undefined)
-                        didObj.Settings.Numbers = [];
-
-                    if (didObj.Settings.Numbers.length > 0) {
-                        didObj.Settings.Numbers.length = 0;
-                    }
-                    didObj.Settings.Numbers.push($scope.scopeModel.number);
+                    didObj.Settings.Numbers = $scope.scopeModel.numbers;
                 };
 
                 if (ctrl.onReady != null)

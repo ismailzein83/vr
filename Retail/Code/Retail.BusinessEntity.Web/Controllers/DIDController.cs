@@ -22,6 +22,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return GetWebResponse(input, manager.GetFilteredDIDs(input));
         }
+
+        [HttpGet]
+        [Route("GetDIDRuntimeEditor")]
+        public DIDRuntimeEditor GetDIDRuntimeEditor(int dIDId)
+        {
+            return manager.GetDIDRuntimeEditor(dIDId);
+        }
         
         [HttpGet]
         [Route("GetDID")]

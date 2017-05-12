@@ -10,6 +10,8 @@
 
         var dIDId;
         var dIDEntity;
+        var description;
+        var didNumberType;
 
         var didNumberTypeSelectorAPI;
         var didNumberTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -83,25 +85,27 @@
         }
 
         function getDID() {
-            return Retail_BE_DIDAPIService.GetDID(dIDId).then(function (response) {
-                dIDEntity = response;
+            return Retail_BE_DIDAPIService.GetDIDRuntimeEditor(dIDId).then(function (response) {
+                dIDEntity = response.DID;
+                description = response.Description;
+                didNumberType = response.DIDNumberType;
             });
         }
 
         function loadAllControls() {
-
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDIDNumberTypeSelector, loadDIDNumberTypeDirective])
                .catch(function (error) {
+
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
                .finally(function () {
                    $scope.scopeModel.isLoading = false;
                });
         }
-        function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(dIDEntity ? dIDEntity.Number : undefined, 'DID') : UtilsService.buildTitleForAddEditor('DID');
-        }
 
+        function setTitle() {
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(description ? description : undefined, 'DID') : UtilsService.buildTitleForAddEditor('DID');
+        };
 
         function loadDIDNumberTypeDirective() {
             if (dIDEntity == undefined)
@@ -110,6 +114,7 @@
             var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
             directiveReadyDeferred.promise.then(function () {
+
                 var didNumberTypeDirectivePayload = { didObj: dIDEntity };
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, didNumberTypeDirectivePayload, directiveLoadDeferred);
             });
@@ -121,8 +126,8 @@
 
             didNumberTypeSelectorReadyDeferred.promise.then(function () {
                 var didNumberTypePayload;
-                if (dIDEntity != undefined) {
-                    didNumberTypePayload = { selectedIds: dIDEntity.DIDNumberType };
+                if (didNumberType != undefined) {
+                    didNumberTypePayload = { selectedIds: didNumberType };
                 }
                 VRUIUtilsService.callDirectiveLoad(didNumberTypeSelectorAPI, didNumberTypePayload, didNumberTypeSelectorDirectiveLoadDeferred);
             });

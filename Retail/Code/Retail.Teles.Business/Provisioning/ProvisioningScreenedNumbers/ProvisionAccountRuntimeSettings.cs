@@ -82,7 +82,8 @@ namespace Retail.Teles.Business.Provisioning
             {
                 foreach (var did in dids)
                 {
-                    switch (did.DIDNumberType)
+                    DIDNumberType didNumberType = _didManager.GetDIDNumberType(did);
+                    switch (didNumberType)
                     {
                         case DIDNumberType.Number:
                             foreach (string number in did.Settings.Numbers)

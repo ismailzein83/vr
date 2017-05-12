@@ -11,5 +11,7 @@ namespace Retail.BusinessEntity.Entities
         public DID Entity { get; set; }
 
         public string AccountName { get; set; }
+
+        public string Description { get; set; }
     }
 }

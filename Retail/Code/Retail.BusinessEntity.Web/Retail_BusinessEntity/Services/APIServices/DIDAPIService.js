@@ -19,6 +19,12 @@
             });
         }
 
+        function GetDIDRuntimeEditor(dIDId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetDIDRuntimeEditor'), {
+                dIDId: dIDId
+            });
+        }
+
         function AddDID(dID) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddDID'), dID);
         }
@@ -62,7 +68,8 @@
             HasUpdateDIDPermission: HasUpdateDIDPermission,
             GetDIDsInfo: GetDIDsInfo,
             GetAccountDIDRelationDefinitionId: GetAccountDIDRelationDefinitionId,
-            IsDIDAssignedToParentWithoutEED: IsDIDAssignedToParentWithoutEED
+            IsDIDAssignedToParentWithoutEED: IsDIDAssignedToParentWithoutEED,
+            GetDIDRuntimeEditor: GetDIDRuntimeEditor
         });
     }
 

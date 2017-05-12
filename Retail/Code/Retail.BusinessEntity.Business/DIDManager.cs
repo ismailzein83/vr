@@ -8,7 +8,6 @@ using Retail.BusinessEntity.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
-using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -30,7 +29,7 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<DIDDetail> GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
             var allDIDs = GetCachedDIDs();
-            Func<DID, bool> filterExpression = (did) => (input.Query.Number == null || did.ContainNumber(input.Query.Number));
+            Func<DID, bool> filterExpression = (did) => (input.Query.Number == null || IsDIDContainNumber(did, input.Query.Number));
 
             ResultProcessingHandler<DIDDetail> handler = new ResultProcessingHandler<DIDDetail>()
             {
@@ -55,6 +54,18 @@ namespace Retail.BusinessEntity.Business
             }
             return dids;
         }
+
+        public DIDRuntimeEditor GetDIDRuntimeEditor(int didId)
+        {
+            DID did = GetDID(didId, true);
+            return new DIDRuntimeEditor()
+            {
+                DID = did,
+                Description = GetDIDDescription(did),
+                DIDNumberType = GetDIDNumberType(did)
+            };
+        }
+
         public DID GetDID(int didId, bool isViewedFromUI)
         {
             var dids = GetCachedDIDs();
@@ -63,20 +74,21 @@ namespace Retail.BusinessEntity.Business
                 VRActionLogger.Current.LogObjectViewed(DIDLoggableEntity.Instance, did);
             return did;
         }
+
         public DID GetDID(int didId)
         {
             return GetDID(didId, false);
         }
 
-        public string GetDIDNumberDescription(int didId)
-        {
-            var DIDs = GetCachedDIDs();
-            DID did = DIDs.GetRecord(didId);
-            if (did == null)
-                throw new NullReferenceException(string.Format("DID ID {0}", didId));
+        //public string GetDIDNumberDescription(int didId)
+        //{
+        //    var DIDs = GetCachedDIDs();
+        //    DID did = DIDs.GetRecord(didId);
+        //    if (did == null)
+        //        throw new NullReferenceException(string.Format("DID ID {0}", didId));
 
-            return did.Description;
-        }
+        //    return GetDIDDescription(did);
+        //}
 
         public DID GetDIDByNumber(string number)
         {
@@ -103,35 +115,14 @@ namespace Retail.BusinessEntity.Business
             didId = 0;
             var cachedDIDs = GetCachedDIDsGroupByNumber();
             bool alreadyExist = false;
-            switch (did.DIDNumberType)
+
+            ManipulateDIDs(did, (number, handle) =>
             {
-                case DIDNumberType.Number:
-                    foreach (string number in did.Settings.Numbers)
-                    {
-                        alreadyExist = cachedDIDs.ContainsKey(number);
-                        if (alreadyExist)
-                            break;
-                    }
-                    break;
-                case DIDNumberType.Range:
-                    foreach (DIDRange range in did.Settings.Ranges)
-                    {
-                        long from = range.From.TryParseWithValidate<long>(long.TryParse);
-                        long to = range.To.TryParseWithValidate<long>(long.TryParse);
+                alreadyExist = cachedDIDs.ContainsKey(number);
+                if (alreadyExist)
+                    handle.Stop = true;
+            });
 
-                        for (long index = from; index <= to; index++)
-                        {
-                            alreadyExist = cachedDIDs.ContainsKey(index.ToString());
-                            if (alreadyExist)
-                                break;
-                        }
-
-                        if (alreadyExist)
-                            break;
-                    }
-                    break;
-                default: throw new Exception("Invalid Type for DID.");
-            }
             if (!alreadyExist)
             {
                 IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
@@ -170,35 +161,13 @@ namespace Retail.BusinessEntity.Business
             var cachedDIDs = GetCachedDIDsGroupByNumber();
             bool alreadyExist = false;
             DID tempDID;
-            switch (did.DIDNumberType)
+            ManipulateDIDs(did, (number, handle) =>
             {
-                case DIDNumberType.Number:
-                    foreach (string number in did.Settings.Numbers)
-                    {
-                        alreadyExist = cachedDIDs.TryGetValue(number, out tempDID) && tempDID.DIDId != did.DIDId;
-                        if (alreadyExist)
-                            break;
-                    }
-                    break;
-                case DIDNumberType.Range:
-                    foreach (DIDRange range in did.Settings.Ranges)
-                    {
-                        long from = range.From.TryParseWithValidate<long>(long.TryParse);
-                        long to = range.To.TryParseWithValidate<long>(long.TryParse);
+                alreadyExist = cachedDIDs.TryGetValue(number, out tempDID) && tempDID.DIDId != did.DIDId;
+                if (alreadyExist)
+                    handle.Stop = true;
+            });
 
-                        for (long index = from; index <= to; index++)
-                        {
-                            alreadyExist = cachedDIDs.TryGetValue(index.ToString(), out tempDID) && tempDID.DIDId != did.DIDId;
-                            if (alreadyExist)
-                                break;
-                        }
-
-                        if (alreadyExist)
-                            break;
-                    }
-                    break;
-                default: throw new Exception("Invalid Type for DID.");
-            }
             if (!alreadyExist)
             {
                 IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
@@ -257,6 +226,80 @@ namespace Retail.BusinessEntity.Business
             return new BEParentChildRelationManager().IsChildAssignedToParentWithoutEED(accountDIDRelationDefinitionId, childId);
         }
 
+        public bool IsDIDContainNumber(DID did, string number)
+        {
+            did.ThrowIfNull("did");
+            did.Settings.ThrowIfNull("did.Settings");
+
+            if (string.IsNullOrEmpty(number))
+                return true;
+
+            string lowerNumber = number.ToLower();
+
+            if (did.Settings.Numbers != null && did.Settings.Numbers.Count > 0)
+            {
+                if (did.Settings.Numbers.Select(itm => itm.ToLower()).Contains(lowerNumber))
+                    return true;
+            }
+
+            if (did.Settings.Ranges != null && did.Settings.Ranges.Count > 0)
+            {
+                long numberAsLong = number.TryParseWithValidate<long>(long.TryParse);
+                foreach (DIDRange range in did.Settings.Ranges)
+                {
+                    long from = range.From.TryParseWithValidate<long>(long.TryParse);
+                    long to = range.To.TryParseWithValidate<long>(long.TryParse);
+                    if (numberAsLong >= from && numberAsLong <= to)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public string GetDIDDescription(int didId)
+        {
+            var cachedDIDs = GetCachedDIDs();
+            DID did = cachedDIDs.GetRecord(didId);
+            return GetDIDDescription(did);
+        }
+
+        public string GetDIDDescription(DID did)
+        {
+            DIDNumberType didNumberType = GetDIDNumberType(did);
+            switch (didNumberType)
+            {
+                case Entities.DIDNumberType.Number:
+                    return string.Format("{0}", string.Join<string>(", ", did.Settings.Numbers));
+
+                case Entities.DIDNumberType.Range:
+                    return string.Format("{0}", string.Join<string>(", ", did.Settings.Ranges.Select(itm => string.Format("{0} -> {1}", itm.From, itm.To))));
+
+                default: throw new Exception("Invalid Type for DID.");
+            }
+        }
+
+        public DIDNumberType GetDIDNumberType(int didId)
+        {
+            var cachedDIDs = GetCachedDIDs();
+            DID did = cachedDIDs.GetRecord(didId);
+            return GetDIDNumberType(did);
+        }
+
+        public DIDNumberType GetDIDNumberType(DID did)
+        {
+            did.ThrowIfNull("did");
+            did.Settings.ThrowIfNull("did.Settings");
+
+            if (did.Settings.Numbers != null && did.Settings.Numbers.Count > 0)
+                return Entities.DIDNumberType.Number;
+
+            if (did.Settings.Ranges != null && did.Settings.Ranges.Count > 0)
+                return Entities.DIDNumberType.Range;
+
+            throw new Exception("Invalid Type for DID.");
+        }
+
         #endregion
 
         #region Private Methods
@@ -270,32 +313,44 @@ namespace Retail.BusinessEntity.Business
 
                    var dids = GetCachedDIDs();
                    foreach (var did in dids)
-                   {
-                       switch (did.Value.DIDNumberType)
-                       {
-                           case DIDNumberType.Number:
-                               foreach (var number in did.Value.Settings.Numbers)
-                               {
-                                   result.Add(number, did.Value);
-                               }
-                               break;
-                           case DIDNumberType.Range:
-                               foreach (var range in did.Value.Settings.Ranges)
-                               {
-                                   long from = range.From.TryParseWithValidate<long>(long.TryParse);
-                                   long to = range.To.TryParseWithValidate<long>(long.TryParse);
-
-                                   for (long index = from; index <= to; index++)
-                                   {
-                                       result.Add(index.ToString(), did.Value);
-                                   }
-                               }
-                               break;
-                           default: throw new Exception("Invalid Type for DID.");
-                       }
-                   }
+                       ManipulateDIDs(did.Value, (number, handle) => { result.Add(number, did.Value); });
                    return result;
                });
+        }
+
+        private void ManipulateDIDs(DID did, Action<string, DIDNumberHandle> onNumberLoaded)
+        {
+            DIDNumberType didNumberType = GetDIDNumberType(did);
+            switch (didNumberType)
+            {
+                case DIDNumberType.Number:
+                    foreach (var number in did.Settings.Numbers)
+                    {
+                        DIDNumberHandle handle = new DIDNumberHandle();
+                        onNumberLoaded(number, handle);
+                        if (handle.Stop)
+                            break;
+                    }
+                    break;
+                case DIDNumberType.Range:
+                    foreach (var range in did.Settings.Ranges)
+                    {
+                        DIDNumberHandle handle = new DIDNumberHandle();
+                        long from = range.From.TryParseWithValidate<long>(long.TryParse);
+                        long to = range.To.TryParseWithValidate<long>(long.TryParse);
+
+                        for (long index = from; index <= to; index++)
+                        {
+                            onNumberLoaded(index.ToString(), handle);
+                            if (handle.Stop)
+                                break;
+                        }
+                        if (handle.Stop)
+                            break;
+                    }
+                    break;
+                default: throw new Exception("Invalid Type for DID.");
+            }
         }
         public Dictionary<string, DID> GetCachedDIDsGroupBySourceId()
         {
@@ -349,6 +404,7 @@ namespace Retail.BusinessEntity.Business
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
+                    DIDManager didManager = new DIDManager();
                     foreach (var record in context.BigResult.Data)
                     {
                         if (record.Entity != null && record.Entity.Settings != null)
@@ -357,7 +413,7 @@ namespace Retail.BusinessEntity.Business
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.NumberOfChannels });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
+                            row.Cells.Add(new ExportExcelCell { Value = didManager.GetDIDDescription(record.Entity) });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.IsInternational });
                         }
                     }
@@ -411,7 +467,7 @@ namespace Retail.BusinessEntity.Business
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
             {
                 DID did = context.Object.CastWithValidate<DID>("context.Object");
-                return !string.IsNullOrEmpty(did.Description) ? did.Description : did.DIDId.ToString();
+                return s_didManager.GetDIDDescription(did);
             }
         }
 
@@ -423,6 +479,7 @@ namespace Retail.BusinessEntity.Business
         {
             DIDDetail didDetail = new DIDDetail();
             didDetail.Entity = did;
+            didDetail.Description = GetDIDDescription(did);
 
             BEParentChildRelation beParentChildRelation = new BEParentChildRelationManager().GetParent(_accountDIDRelationDefinitionId, did.DIDId.ToString(), DateTime.Now);
             if (beParentChildRelation != null)
@@ -438,7 +495,7 @@ namespace Retail.BusinessEntity.Business
             return new DIDInfo()
             {
                 DIDId = did.DIDId,
-                Number = did.Description,
+                Number = GetDIDDescription(did)
             };
         }
 
@@ -458,7 +515,7 @@ namespace Retail.BusinessEntity.Business
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetDIDNumberDescription(Int32.Parse(context.EntityId.ToString()));
+            return GetDIDDescription(Int32.Parse(context.EntityId.ToString()));
         }
 
         public dynamic GetEntityId(IBusinessEntityIdContext context)
@@ -488,5 +545,10 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+
+        private class DIDNumberHandle
+        {
+            public bool Stop { get; set; }
+        }
     }
 }
