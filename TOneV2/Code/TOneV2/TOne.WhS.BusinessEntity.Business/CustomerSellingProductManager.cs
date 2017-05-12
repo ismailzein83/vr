@@ -63,85 +63,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<int> GetCustomerIdsAssignedToSellingProduct(int sellingProductId, DateTime effectiveOn)
         {
-            Dictionary<int, CustomerSellingProduct> effectiveCustomerSellingProductsByCustomerId = GetEffectiveCustomerSellingProductsByActiveCustomerId(sellingProductId, effectiveOn);
-
-            if (effectiveCustomerSellingProductsByCustomerId != null && effectiveCustomerSellingProductsByCustomerId.Count > 0)
-                return effectiveCustomerSellingProductsByCustomerId.Keys;
-            else
-                return null;
-        }
-
-        public Dictionary<int, CustomerSellingProduct> GetEffectiveCustomerSellingProductsByActiveCustomerId(int sellingProductId, DateTime effectiveOn)
-        {
-            IEnumerable<CustomerSellingProduct> customerSellingProducts = GetCachedCustomerSellingProductsBySellingProductId().GetRecord(sellingProductId);
-
-            if (customerSellingProducts == null || customerSellingProducts.Count() == 0)
-                return null;
-
-            var effectiveCustomerSellingProductsByCustomerId = new Dictionary<int, CustomerSellingProduct>();
-            var carrierAccountManager = new CarrierAccountManager();
-
-            foreach (CustomerSellingProduct customerSellingProduct in customerSellingProducts)
-            {
-                if (!carrierAccountManager.IsCarrierAccountActive(customerSellingProduct.CustomerId))
-                    continue;
-                if (customerSellingProduct.BED > effectiveOn)
-                    continue;
-
-                CustomerSellingProduct effectiveCustomerSellingProduct;
-
-                if (effectiveCustomerSellingProductsByCustomerId.TryGetValue(customerSellingProduct.CustomerId, out effectiveCustomerSellingProduct))
-                {
-                    if (customerSellingProduct.BED > effectiveCustomerSellingProduct.BED)
-                        effectiveCustomerSellingProduct = customerSellingProduct;
-                }
-                else
-                    effectiveCustomerSellingProductsByCustomerId.Add(customerSellingProduct.CustomerId, customerSellingProduct);
-            }
-
-            return (effectiveCustomerSellingProductsByCustomerId.Count > 0) ? effectiveCustomerSellingProductsByCustomerId : null;
+            return new CarrierAccountManager().GetCarrierAccountIdsAssignedToSellingProduct(sellingProductId);
         }
 
         public IEnumerable<CarrierAccountInfo> GetCustomersBySellingProductId(int sellingProductId, DateTime effectiveOn)
         {
-            Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsBySellingProductId = GetCachedCustomerSellingProductsBySellingProductId();
-
-            IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductsBySellingProductId.GetRecord(sellingProductId);
-
-            Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsByCustomerId = new Dictionary<int, List<CustomerSellingProduct>>();
-
-            if (customerSellingProducts != null)
-            {
-                foreach (CustomerSellingProduct item in customerSellingProducts)
-                {
-                    List<CustomerSellingProduct> customerSellingProductsTemp = null;
-                    customerSellingProductsByCustomerId.TryGetValue(item.CustomerId, out customerSellingProductsTemp);
-                    if (customerSellingProductsTemp == null)
-                    {
-                        customerSellingProductsTemp = new List<CustomerSellingProduct>();
-                        customerSellingProductsByCustomerId.Add(item.CustomerId, customerSellingProductsTemp);
-                    }
-
-                    customerSellingProductsTemp.Add(item);
-                }
-            }
-
-            Dictionary<int, CustomerSellingProduct> filteredCustomerSellingProducts = new Dictionary<int, CustomerSellingProduct>();
-            foreach (KeyValuePair<int, List<CustomerSellingProduct>> kvp in customerSellingProductsByCustomerId)
-            {
-                CustomerSellingProduct effectiveCustomerSellingProduct = kvp.Value.OrderByDescending(x => x.BED).FirstOrDefault(x => effectiveOn >= x.BED);
-                if (effectiveCustomerSellingProduct != null)
-                    filteredCustomerSellingProducts.Add(effectiveCustomerSellingProduct.CustomerSellingProductId, effectiveCustomerSellingProduct);
-            }
-
-            return filteredCustomerSellingProducts.MapRecords(CarrierAccountInfoMapper, null);
+            return new CarrierAccountManager().GetCarrierAccountsAssignedToSellingProduct(sellingProductId);
         }
 
         public IEnumerable<CarrierAccountInfo> GetOrderedCustomersBySellingProductId(int sellingProductId)
         {
-            IEnumerable<CarrierAccountInfo> customersBySellingProduct = this.GetCustomersBySellingProductId(sellingProductId, DateTime.Today);
-
-            return customersBySellingProduct.OrderBy(itm => itm.Name);
+            IEnumerable<CarrierAccountInfo> customers = GetCustomersBySellingProductId(sellingProductId, DateTime.Today);
+            return (customers != null) ? customers.OrderBy(x => x.Name) : null;
         }
 
         private Dictionary<int, CustomerSellingProduct> GetEffectiveSellingProducts(DateTime? effectiveOn)
@@ -188,25 +121,24 @@ namespace TOne.WhS.BusinessEntity.Business
         public CustomerSellingProduct GetEffectiveSellingProduct(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             var cacheName = new EffectiveSellingProductCacheName { CustomerId = customerId, EffectiveOn = effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), IsEffectiveInFuture = isEffectiveInFuture };// String.Concat("GetEffectiveSellingProduct_", customerId, effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), isEffectiveInFuture);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
-              () =>
-              {
-                  var orderedCustomerSellingProducts = GetCachedCustomerSellingProducts().Values.OrderByDescending(x => x.BED);
 
-                  CustomerSellingProduct customerSellingProduct = orderedCustomerSellingProducts.FirstOrDefault(itm => itm.CustomerId == customerId && ((effectiveOn.HasValue && effectiveOn.Value >= itm.BED) || isEffectiveInFuture));
-                  if (customerSellingProduct != null)
-                  {
-                      return new CustomerSellingProduct
-                      {
-                          SellingProductId = customerSellingProduct.SellingProductId,
-                          CustomerSellingProductId = customerSellingProduct.CustomerSellingProductId,
-                          CustomerId = customerSellingProduct.CustomerId,
-                          BED = customerSellingProduct.BED
-                      };
-                  }
-                  else
-                      return null;
-              });
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
+            {
+                int? sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+
+                if (!sellingProductId.HasValue)
+                    return null;
+                else
+                {
+                    return new CustomerSellingProduct()
+                    {
+                        CustomerSellingProductId = -1,
+                        CustomerId = customerId,
+                        SellingProductId = sellingProductId.Value,
+                        BED = DateTime.MinValue
+                    };
+                }
+            });
         }
 
         public InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
@@ -299,27 +231,18 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<CustomerSellingProduct> GetEffectiveInFutureCustomerSellingProduct()
         {
             var customerSellingProducts = GetCachedCustomerSellingProducts();
-
             return customerSellingProducts.Values.FindAllRecords(x => x.BED > DateTime.Now);
         }
 
         public bool IsCustomerAssignedToSellingProduct(int customerId)
         {
-            var customerSellingProducts = GetCachedCustomerSellingProducts();
-            return customerSellingProducts.Values.Any(x => x.BED > DateTime.Now && x.CustomerId == customerId);
-
-
+            int? sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+            return sellingProductId.HasValue;
         }
 
         public int? GetEffectiveSellingProductId(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            int? sellingProductId = null;
-            CustomerSellingProduct customerSellingProduct = GetEffectiveSellingProduct(customerId, effectiveOn, isEffectiveInFuture);
-
-            if (customerSellingProduct != null)
-                sellingProductId = customerSellingProduct.SellingProductId;
-
-            return sellingProductId;
+            return new CarrierAccountManager().GetSellingProductId(customerId);
         }
 
         public IEnumerable<ProcessedCustomerSellingProduct> GetProcessedCustomerSellingProducts(int customerId)
@@ -328,17 +251,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return entitiesByCustomerId.GetRecord(customerId);
         }
 
-        /// <summary>
-        /// I'm not sure if the method will return duplicate customer ids in some cases, but it's not a big deal
-        /// </summary>
-        /// <param name="sellingProductId"></param>
-        /// <param name="minimumDate"></param>
-        /// <returns></returns>
         public IEnumerable<int> GetEffectiveOrFutureAssignedCustomerIds(int sellingProductId, DateTime minimumDate)
         {
-            Dictionary<int, List<ProcessedCustomerSellingProduct>> customerSellingProductsBySellingProductId = GetCachedProcessedCustomerSellingProductsBySellingProductId();
-            List<ProcessedCustomerSellingProduct> customerSellingProducts = customerSellingProductsBySellingProductId.GetRecord(sellingProductId);
-            return (customerSellingProducts != null) ? customerSellingProducts.MapRecords(x => x.CustomerId, x => x.IsEffectiveOrFuture(minimumDate)) : null;
+            return new CarrierAccountManager().GetCarrierAccountIdsAssignedToSellingProduct(sellingProductId);
         }
 
         #endregion
@@ -406,104 +321,37 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-        private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetCachedProcessedCustomerSellingProductsBySellingProductId()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedProcessedCustomerSellingProductsBySellingProductId", () =>
-            {
-                var entitiesBySellingProductId = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
-
-                Dictionary<int, CustomerSellingProduct> cachedCustomerSellingProducts = GetCachedCustomerSellingProducts();
-
-                if (cachedCustomerSellingProducts != null)
-                {
-                    foreach (CustomerSellingProduct customerSellingProduct in cachedCustomerSellingProducts.Values.OrderBy(x => x.BED))
-                    {
-                        List<ProcessedCustomerSellingProduct> sellingProductEntities;
-
-                        if (!entitiesBySellingProductId.TryGetValue(customerSellingProduct.SellingProductId, out sellingProductEntities))
-                        {
-                            sellingProductEntities = new List<ProcessedCustomerSellingProduct>();
-                            entitiesBySellingProductId.Add(customerSellingProduct.SellingProductId, sellingProductEntities);
-                        }
-
-                        var sellingProductEntity = new ProcessedCustomerSellingProduct()
-                        {
-                            CustomerId = customerSellingProduct.CustomerId,
-                            SellingProductId = customerSellingProduct.SellingProductId,
-                            BED = customerSellingProduct.BED
-                        };
-
-                        if (sellingProductEntities.Count > 0)
-                            sellingProductEntities.Last().EED = sellingProductEntity.BED;
-
-                        sellingProductEntities.Add(sellingProductEntity);
-                    }
-                }
-
-                return entitiesBySellingProductId;
-            });
-        }
-
         private Dictionary<int, List<ProcessedCustomerSellingProduct>> GetCachedProcessedCustomerSellingProductsByCustomerId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedProcessedCustomerSellingProductsByCustomerId", () =>
             {
                 var entitiesByCustomerId = new Dictionary<int, List<ProcessedCustomerSellingProduct>>();
 
-                Dictionary<int, CustomerSellingProduct> cachedCustomerSellingProducts = GetCachedCustomerSellingProducts();
+                var carrierAccountManager = new CarrierAccountManager();
+                IEnumerable<CarrierAccount> allCustomers = carrierAccountManager.GetAllCustomers();
 
-                if (cachedCustomerSellingProducts != null)
+                if (allCustomers != null && allCustomers.Count() > 0)
                 {
-                    var carrierAccountManager = new CarrierAccountManager();
-
-                    foreach (CustomerSellingProduct customerSellingProduct in cachedCustomerSellingProducts.Values.OrderBy(x => x.BED))
+                    foreach (CarrierAccount carrierAccount in allCustomers)
                     {
-                        List<ProcessedCustomerSellingProduct> customerEntities;
-
-                        if (!entitiesByCustomerId.TryGetValue(customerSellingProduct.CustomerId, out customerEntities))
+                        if (carrierAccountManager.IsCarrierAccountActive(carrierAccount.CarrierAccountId) && carrierAccount.SellingProductId.HasValue)
                         {
-                            customerEntities = new List<ProcessedCustomerSellingProduct>();
-                            entitiesByCustomerId.Add(customerSellingProduct.CustomerId, customerEntities);
+                            entitiesByCustomerId.Add(carrierAccount.CarrierAccountId, new List<ProcessedCustomerSellingProduct>()
+                            {
+                                new ProcessedCustomerSellingProduct()
+                                {
+                                    CustomerId = carrierAccount.CarrierAccountId,
+                                    SellingProductId = carrierAccount.SellingProductId.Value,
+                                    BED = DateTime.MinValue,
+                                    EED = null
+                                }
+                            });
                         }
-
-                        var customerEntity = new ProcessedCustomerSellingProduct()
-                        {
-                            CustomerId = customerSellingProduct.CustomerId,
-                            SellingProductId = customerSellingProduct.SellingProductId,
-                            BED = customerSellingProduct.BED
-                        };
-
-                        if (customerEntities.Count > 0)
-                            customerEntities.Last().EED = customerEntity.BED;
-
-                        customerEntities.Add(customerEntity);
                     }
                 }
 
                 return entitiesByCustomerId;
             });
-        }
-
-        private Dictionary<int, List<CustomerSellingProduct>> GetCachedCustomerSellingProductsBySellingProductId()
-        {
-            Dictionary<int, CustomerSellingProduct> allSellingProducts = GetCachedCustomerSellingProducts();
-            var customerSellingProductsBySellingProductId = new Dictionary<int, List<CustomerSellingProduct>>();
-
-            if (allSellingProducts.Values != null)
-            {
-                List<CustomerSellingProduct> customerSellingProductList;
-                foreach (CustomerSellingProduct customerSellingProduct in allSellingProducts.Values)
-                {
-                    if (!customerSellingProductsBySellingProductId.TryGetValue(customerSellingProduct.SellingProductId, out customerSellingProductList))
-                    {
-                        customerSellingProductList = new List<CustomerSellingProduct>();
-                        customerSellingProductsBySellingProductId.Add(customerSellingProduct.SellingProductId, customerSellingProductList);
-                    }
-                    customerSellingProductList.Add(customerSellingProduct);
-                }
-            }
-
-            return customerSellingProductsBySellingProductId;
         }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager

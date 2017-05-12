@@ -28,10 +28,8 @@ namespace TOne.WhS.Sales.Business
 
         public bool ValidateCustomer(int customerId, DateTime effectiveOn)
         {
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
-
-            return customerSellingProduct != null;
+            int? sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+            return sellingProductId.HasValue;
         }
 
         #region Get Zone Letters

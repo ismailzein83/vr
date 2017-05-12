@@ -312,7 +312,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return false;
         }
-
         public void UpdateCarrierAccountExtendedSetting<T>(int carrierAccountId, T extendedSettings) where T : class
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
@@ -339,6 +338,37 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccount = GetCarrierAccount(carrierAccountId);
             carrierAccount.CustomerSettings.RoutingStatus = routingStatus;
             return TryUpdateCarrierAccount(ConvertCarrierAccountToEdit(carrierAccount), withTracking);
+        }
+        public int? GetSellingProductId(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            return (carrierAccount != null) ? carrierAccount.SellingProductId : null;
+        }
+        public IEnumerable<int> GetCarrierAccountIdsAssignedToSellingProduct(int sellingProductId)
+        {
+            var carrierAccountIds = new List<int>();
+            Dictionary<int, CarrierAccount> carrierAccountsById = GetCachedCarrierAccounts();
+
+            foreach (CarrierAccount carrierAccount in carrierAccountsById.Values)
+            {
+                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount.CarrierAccountId) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
+                    carrierAccountIds.Add(carrierAccount.CarrierAccountId);
+            }
+
+            return carrierAccountIds;
+        }
+        public IEnumerable<CarrierAccountInfo> GetCarrierAccountsAssignedToSellingProduct(int sellingProductId)
+        {
+            var carrierAccounts = new List<CarrierAccountInfo>();
+            Dictionary<int, CarrierAccount> carrierAccountsById = GetCachedCarrierAccounts();
+
+            foreach (CarrierAccount carrierAccount in carrierAccountsById.Values)
+            {
+                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount.CarrierAccountId) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
+                    carrierAccounts.Add(CarrierAccountInfoMapper(carrierAccount));
+            }
+
+            return carrierAccounts;
         }
         #endregion
 
@@ -821,6 +851,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+
         public class CarrierAccountLoggableEntity : VRLoggableEntityBase
         {
             public static CarrierAccountLoggableEntity Instance = new CarrierAccountLoggableEntity();
@@ -864,6 +895,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return s_carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
             }
         }
+
         #region  Mappers
 
         private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)

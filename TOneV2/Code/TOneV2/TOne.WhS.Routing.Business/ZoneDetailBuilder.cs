@@ -27,16 +27,19 @@ namespace TOne.WhS.Routing.Business
             SaleEntityServiceLocator customerServiceLocator = null;
             HashSet<int> saleZoneServices = null;
 
+            var carrierAccountManager = new CarrierAccountManager();
+
             foreach (RoutingCustomerInfo customerInfo in customerInfos)
             {
-                CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
-                if (customerSellingProduct == null)
+                int? sellingProductId = carrierAccountManager.GetSellingProductId(customerInfo.CustomerId);
+
+                if (!sellingProductId.HasValue)
                     continue;
 
                 RoutingCustomerInfoDetails item = new RoutingCustomerInfoDetails()
                 {
                     CustomerId = customerInfo.CustomerId,
-                    SellingProductId = customerSellingProduct.SellingProductId
+                    SellingProductId = sellingProductId.Value
                 };
 
                 customerInfoDetails.Add(item);
@@ -50,7 +53,7 @@ namespace TOne.WhS.Routing.Business
                 customerServiceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
             }
 
-			var saleZoneManager = new SaleZoneManager();
+            var saleZoneManager = new SaleZoneManager();
 
             Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
@@ -65,16 +68,15 @@ namespace TOne.WhS.Routing.Business
             IncludedRulesConfiguration includedRulesConfiguration = routingConfigManager.GetIncludedRulesConfiguration();
 
             DataTransformer dataTransformer = new DataTransformer();
-            var carrierAccountManager = new CarrierAccountManager();
 
             RPRouteManager rpRouteManager = new RPRouteManager();
 
             foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
                 int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerInfo.CustomerId, CarrierAccountType.Customer);
-				IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
-                
-				if (customerSaleZones == null)
+                IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
+
+                if (customerSaleZones == null)
                     continue;
 
                 foreach (var customerZone in customerSaleZones)

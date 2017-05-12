@@ -46,14 +46,15 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Func<SellingProduct, bool> filterPredicate = null;
 
-            if(filter != null)
+            if (filter != null)
             {
                 CarrierAccount assignableToCustomer = null;
-                CustomerSellingProduct effectiveCustomerSellingProduct = null;
+                int? effectiveSellingProductId = null;
+
                 if (filter.AssignableToCustomerId.HasValue)
                 {
                     assignableToCustomer = LoadCustomer(filter.AssignableToCustomerId.Value);
-                    effectiveCustomerSellingProduct = LoadEffectiveCustomerSellingProduct(filter.AssignableToCustomerId.Value);
+                    effectiveSellingProductId = new CarrierAccountManager().GetSellingProductId(filter.AssignableToCustomerId.Value);
                 }
 
                 filterPredicate = (prod) =>
@@ -61,7 +62,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (filter.SellingNumberPlanId.HasValue && prod.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
                         return false;
 
-                    if (filter.AssignableToCustomerId.HasValue && !IsAssignableToCustomer(prod, filter.AssignableToCustomerId.Value, assignableToCustomer, effectiveCustomerSellingProduct))
+                    if (filter.AssignableToCustomerId.HasValue && !IsAssignableToCustomer(prod, filter.AssignableToCustomerId.Value, assignableToCustomer, effectiveSellingProductId))
                         return false;
 
                     return true;
@@ -83,7 +84,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public SellingProduct GetSellingProduct(int sellingProductId, bool isViewedFromUI)
         {
             var sellingProducts = GetCachedSellingProducts();
-            var sellingProduct= sellingProducts.GetRecord(sellingProductId);
+            var sellingProduct = sellingProducts.GetRecord(sellingProductId);
             if (sellingProduct != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SellingProductLoggableEntity.Instance, sellingProduct);
             return sellingProduct;
@@ -187,16 +188,16 @@ namespace TOne.WhS.BusinessEntity.Business
             if (String.IsNullOrWhiteSpace(spName))
                 throw new MissingArgumentValidationException("SellingProduct.Name");
         }
-        
+
         #endregion
 
         #region Private Methods
 
-        private bool IsAssignableToCustomer(SellingProduct sellingProduct, int customerId, CarrierAccount customer, CustomerSellingProduct effectiveCustomerSellingProduct)
+        private bool IsAssignableToCustomer(SellingProduct sellingProduct, int customerId, CarrierAccount customer, int? effectiveSellingProductId)
         {
             if (sellingProduct.SellingNumberPlanId != customer.SellingNumberPlanId.Value)
                 return false;
-            if (effectiveCustomerSellingProduct != null && effectiveCustomerSellingProduct.SellingProductId == sellingProduct.SellingProductId)
+            if (effectiveSellingProductId.HasValue && effectiveSellingProductId.Value == sellingProduct.SellingProductId)
                 return false;
             return true;
         }
@@ -213,12 +214,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return customer;
         }
 
-        private CustomerSellingProduct LoadEffectiveCustomerSellingProduct(int customerId)
-        {
-            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            return customerSellingProductManager.GetEffectiveSellingProduct(customerId, DateTime.Now, false);
-        }
-
         #endregion
 
         #region Private Members
@@ -232,10 +227,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Selling Products",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 45});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan", Width = 40});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 45 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Selling Number Plan", Width = 40 });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -279,6 +274,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
         #endregion
+
         public class SellingProductLoggableEntity : VRLoggableEntityBase
         {
             public static SellingProductLoggableEntity Instance = new SellingProductLoggableEntity();
@@ -344,7 +340,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SellingProductId = sellingProduct.SellingProductId,
                 Name = sellingProduct.Name,
-				SellingNumberPlanId = sellingProduct.SellingNumberPlanId
+                SellingNumberPlanId = sellingProduct.SellingNumberPlanId
             };
         }
         #endregion
