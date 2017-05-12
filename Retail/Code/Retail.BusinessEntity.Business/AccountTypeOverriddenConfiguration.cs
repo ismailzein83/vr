@@ -43,7 +43,10 @@ namespace Retail.BusinessEntity.Business
                     accountType.ThrowIfNull("accountType", accountTypeConfig.AccountTypeId);
                     accountType = accountType.VRDeepCopy();
                     if (!String.IsNullOrEmpty(accountTypeConfig.OverriddenTitle))
+                    {
+                        accountType.Name = accountTypeConfig.OverriddenTitle;
                         accountType.Title = accountTypeConfig.OverriddenTitle;
+                    }
                     if (accountTypeConfig.OverriddenSettings != null)
                         accountType.Settings = accountTypeConfig.OverriddenSettings;
                     if (scriptBuilder.Length > 0)

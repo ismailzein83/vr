@@ -43,7 +43,10 @@ namespace Retail.BusinessEntity.Business
                     accountPart.ThrowIfNull("accountPart", accountPartConfig.AccountPartDefinitionId);
                     accountPart = accountPart.VRDeepCopy();
                     if (!String.IsNullOrEmpty(accountPartConfig.OverriddenTitle))
+                    {
+                        accountPart.Name = accountPartConfig.OverriddenTitle;
                         accountPart.Title = accountPartConfig.OverriddenTitle;
+                    }
                     if (accountPartConfig.OverriddenSettings != null)
                         accountPart.Settings = accountPartConfig.OverriddenSettings;
                     if (scriptBuilder.Length > 0)
@@ -51,7 +54,7 @@ namespace Retail.BusinessEntity.Business
                         scriptBuilder.Append(",");
                         scriptBuilder.AppendLine();
                     }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", accountPart.AccountPartDefinitionId, accountPart.Title, accountPart.Name, Serializer.Serialize(accountPart.Settings));
+                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", accountPart.AccountPartDefinitionId, accountPart.Title, accountPart.Name, Serializer.Serialize(accountPart));
                 }
                 string script = String.Format(@"set nocount on;
 ;with cte_data([ID],[Title],[Name],[Details])
