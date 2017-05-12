@@ -26,3 +26,10 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Account_Type]
+    ON [Retail].[Account]([TypeID] ASC);
+
