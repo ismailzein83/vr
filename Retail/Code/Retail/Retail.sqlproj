@@ -114,7 +114,6 @@
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPartDefinition_Update.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPartDefinition_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPartDefinition_GetAll.sql" />
-    <Build Include="Security\VR_AccountBalance.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_ActionDefinition_Update.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_ActionDefinition_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_ActionDefinition_GetAll.sql" />
@@ -171,5 +170,6 @@
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_GetAll.sql" />
     <Build Include="Retail\Stored Procedures\sp_Account_UpdateExtendedSettings.sql" />
+    <Build Include="Retail\Stored Procedures\sp_AccountPackage_Update.sql" />
   </ItemGroup>
 </Project>

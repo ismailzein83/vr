@@ -11,7 +11,7 @@ CREATE PROCEDURE [Retail].[sp_AccountPackage_Insert]
 	@ID INT OUT
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM Retail.AccountPackage WHERE AccountID = @AccountID AND PackageID = @PackageID)
+	
 	BEGIN
 		INSERT INTO Retail.AccountPackage (AccountID, PackageID, BED, EED)
 		VALUES (@AccountID, @PackageID, @BED, @EED)

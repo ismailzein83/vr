@@ -14,8 +14,8 @@ namespace Retail.Runtime.Tasks
     {
         public void Execute()
         {
-            Vanrise.Common.Business.VRApplicationVisibilityManager appVisibilityManager = new Vanrise.Common.Business.VRApplicationVisibilityManager();
-            var zajilScript = appVisibilityManager.GenerateApplicationScript(new Guid("bf998656-2e6d-4e30-afb5-e67d87237211"));
+            Vanrise.Common.Business.OverriddenConfigurationManager overriddenConfigurationManager = new Vanrise.Common.Business.OverriddenConfigurationManager();
+            var zajilScript = overriddenConfigurationManager.GenerateOverriddenConfigurationGroupScript(new Guid("CF1EAF73-93DB-416F-92FC-F8C0E7EE6EA7"));
             var runtimeServices = new List<RuntimeService>();
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };

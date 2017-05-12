@@ -473,6 +473,11 @@ namespace Retail.BusinessEntity.Business
             return false;
         }
 
+        public VRLoggableEntityBase GetAccountLoggableEntity(Guid accountBEDefinitionId)
+        {
+            return new AccountBELoggableEntity(accountBEDefinitionId);
+        }
+
         #endregion
 
         #region ExtendedSettings

@@ -44,6 +44,11 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
         public AccountBEDefinitionSecurity Security { get; set; }
+
+        public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
+        {
+            return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
+        }
     }
 
     public class AccountExtraFieldDefinition
