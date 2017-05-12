@@ -36,7 +36,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
             {
                 long? accountId = null;
 
-                string sourceId = ((double)row[this.SourceIdColumn]).ToString();
+                string sourceId = ((int)row[this.SourceIdColumn]).ToString();
                 try
                 {
                     AccountBEManager accountManager = new AccountBEManager();
@@ -49,6 +49,10 @@ namespace Retail.Zajil.MainExtensions.Convertors
                         childAccount.ThrowIfNull("childAccount: ParentId", account.AccountId);
                         accountId = childAccount.AccountId;
                     }
+
+                    var isInternational = row[InternationalColumn] == DBNull.Value ? false : row[InternationalColumn].ToString().TryParseWithValidate<bool>(bool.TryParse);
+                    var didSO = row[DIDSoColumn] == DBNull.Value ? null : (int?)row[DIDSoColumn].ToString().TryParseWithValidate<int>(int.TryParse);
+                    var did = row[this.DIDColumn].ToString().TryParseWithValidate<double>(double.TryParse);
                     SourceDIDData didData = new SourceDIDData
                     {
                         DID = new DID
@@ -56,9 +60,9 @@ namespace Retail.Zajil.MainExtensions.Convertors
                             SourceId = sourceId,
                             Settings = new DIDSettings
                             {
-                                IsInternational = (row[InternationalColumn] == DBNull.Value ? 0 : double.Parse(row[InternationalColumn].ToString())) == 1,
-                                Numbers = new List<string>() { ((double)row[this.DIDColumn]).ToString() },
-                                DIDSo = row[DIDSoColumn] == DBNull.Value ? null : (int?)int.Parse(row[DIDSoColumn].ToString())
+                                IsInternational = isInternational,
+                                Numbers = new List<string>() { did.ToString() },
+                                DIDSo = didSO
                             }
                         },
                         AccountId = accountId,
