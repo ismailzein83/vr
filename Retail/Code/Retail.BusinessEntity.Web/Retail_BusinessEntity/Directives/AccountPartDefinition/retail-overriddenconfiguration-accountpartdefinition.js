@@ -45,11 +45,11 @@
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.isSettingsOverriddenValuechanged = function () {
-                    if ($scope.scopeModel.isSettingsOverridden==true)
-                    {loadOverriddenSettingsEditor();}
+                    if ($scope.scopeModel.isSettingsOverridden == true)
+                    { loadOverriddenSettingsEditor(); }
                     else
-                     {hideOverriddenSettingsEditor();}
-                          }
+                    { hideOverriddenSettingsEditor(); }
+                };
                 $scope.scopeModel.accountPartDefinitionSelectorSelectionChanged = function (value) {
                     if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {

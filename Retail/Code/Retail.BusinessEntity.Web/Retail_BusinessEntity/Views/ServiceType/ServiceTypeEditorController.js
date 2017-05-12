@@ -51,7 +51,7 @@
                     accountBEDefinitionId = selectedItem.BusinessEntityDefinitionId;
                     $scope.scopeModel.showServiceTypeSettingsDirective = true;
 
-                    var servicetypeSettingsPayload = { accountBEDefinitionId: accountBEDefinitionId }
+                    var servicetypeSettingsPayload = { accountBEDefinitionId: accountBEDefinitionId };
                     var setLoader = function (value) {
                         $scope.scopeModel.isServiceTypeSettingsLoading = value;
                     };
