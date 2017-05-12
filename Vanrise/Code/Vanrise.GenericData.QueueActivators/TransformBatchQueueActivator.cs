@@ -56,7 +56,7 @@ namespace Vanrise.GenericData.QueueActivators
                         var stageQueueItemType = stage.QueueItemType as DataRecordBatchQueueItemType;
                         if (stageQueueItemType == null)
                             throw new Exception(String.Format("stage '{0}' QueueItemType is not of type DataRecordBatchQueueItemType", stageName));
-                        DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(transformedList, stageQueueItemType.BatchDescription, recordTypeId);
+                        DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(transformedList, stageQueueItemType.BatchDescription, stageQueueItemType.DataRecordTypeId);
                         if (transformedBatch != null && transformedBatch.GetRecordCount() > 0)
                             context.OutputItems.Add(stageName, transformedBatch);
                     }
