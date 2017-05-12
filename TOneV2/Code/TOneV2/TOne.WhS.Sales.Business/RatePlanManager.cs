@@ -696,7 +696,10 @@ namespace TOne.WhS.Sales.Business
                 DefaultChanges = new DefaultChanges()
             };
             if (draft != null)
+            {
+                newDraft.DefaultChanges = draft.DefaultChanges;
                 newDraft.CountryChanges = draft.CountryChanges;
+            }
 
             foreach (SaleZone zone in filteredSaleZones)
             {
