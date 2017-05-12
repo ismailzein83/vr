@@ -41,9 +41,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             SetWorkbookData(orderedListofZones, workbook);
 
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-            return memoryStream.ToArray();
+            byte[] array;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                workbook.Save(ms, SaveFormat.Xlsx);
+                array = ms.ToArray();
+            }
+
+            return array;
         }
 
         #region Private Methods

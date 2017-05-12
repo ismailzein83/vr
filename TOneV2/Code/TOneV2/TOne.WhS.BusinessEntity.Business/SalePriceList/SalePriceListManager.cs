@@ -389,6 +389,9 @@ namespace TOne.WhS.BusinessEntity.Business
             var customerCountryManager = new CustomerCountryManager();
             var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveDate, processInstanceId);
 
+            if (soldCountries == null)
+                return salePlZoneNotifications;
+
             foreach (var soldCountry in soldCountries)
             {
                 if (changedCountryIds.Contains(soldCountry.CountryId))
@@ -517,13 +520,13 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
             string customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
-            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xls");
+            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xlsx");
             return new VRFile
             {
                 Content = salePlTemplateBytes,
                 Name = fileName,
                 ModuleName = "WhS_BE_SalePriceList",
-                Extension = "xls",
+                Extension = "xlsx",
                 CreatedTime = DateTime.Today,
             };
         }
