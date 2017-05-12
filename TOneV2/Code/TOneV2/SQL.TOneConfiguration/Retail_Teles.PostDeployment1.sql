@@ -24,7 +24,8 @@ as (select * from (values
 ('F5AEB249-3D8A-4235-8C7B-2BA5B99D0B0D','RevertUsersRGs','Revert Users Routing Group','Retail_BE_ProvisionerDefinition'									,'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-revertusersrgs", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-revertusersrgs"}'),
 ('DFFBF1F9-EF68-43FA-BE34-AD181031CDDA','Teles Enterprise Extra Field','Teles Enterprise Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig'		,'{"Editor":"retail-teles-accountextrafield-enterprise"}'),
 ('E02E72EA-56BD-4F86-A404-F08BE3A2E619','Teles Enterprise Business Entity','Teles Enterprise BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"retail-teles-enterprisebedefinition-editor"}'),
-('E440C268-19B9-4D43-820B-C407604C7EF3','InternationalCallsBlocked','International Calls Blocked','Retail_BE_AccountExtraFieldDefinitionConfig'			,'{"Editor":"retail-teles-accountextrafield-internationalcallsblocked"}')
+('E440C268-19B9-4D43-820B-C407604C7EF3','InternationalCallsBlocked','International Calls Blocked','Retail_BE_AccountExtraFieldDefinitionConfig'			,'{"Editor":"retail-teles-accountextrafield-internationalcallsblocked"}'),
+('fd6ed9b7-f870-4c6d-a51e-36fd2219f64b', 'Provisioning Screened Numbers',	'Provisioning Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionaccount", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
