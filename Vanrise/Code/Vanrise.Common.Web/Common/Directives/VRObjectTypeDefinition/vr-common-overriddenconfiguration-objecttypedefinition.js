@@ -49,7 +49,7 @@
                     { loadOverriddenSettingsEditor(); }
                     else
                     { hideOverriddenSettingsEditor(); }
-                }
+                };
                 $scope.scopeModel.ObjectTypeDefinitionSelectorSelectionChanged = function (value) {
                     if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {
