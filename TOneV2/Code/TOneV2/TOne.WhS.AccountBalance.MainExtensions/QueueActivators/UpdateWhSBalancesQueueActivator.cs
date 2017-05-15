@@ -87,52 +87,5 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                 }
             }
         }
-
-        //private List<AccountBalanceType> GetCachedAccountBalanceTypeCombinations()
-        //{
-        //    return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountBalanceTypeCombinations",
-        //    () =>
-        //    {
-        //        List<AccountBalanceType> accountBalanceTypeCombinations = new List<AccountBalanceType>();
-
-        //        AccountTypeFilter accountTypeFilter = new AccountTypeFilter()
-        //        {
-        //            Filters = new List<IAccountTypeExtendedSettingsFilter>()
-        //                {
-        //                    new AccountTypeExtendedSettingsFilter<AccountBalanceSettings>()
-        //                }
-        //        };
-
-        //        IEnumerable<AccountType> accountTypes = new AccountTypeManager().GetAccountTypes(accountTypeFilter);
-        //        if (accountTypes == null)
-        //            throw new NullReferenceException("accountTypes");
-
-        //        IEnumerable<BillingTransactionType> billingTransactionTypes = new BillingTransactionTypeManager().GetBillingTransactionTypes();
-        //        if (billingTransactionTypes == null)
-        //            throw new NullReferenceException("billingTransactionTypes");
-
-        //        foreach (var accountType in accountTypes)
-        //        {
-        //            foreach (var billingTransactionType in billingTransactionTypes)
-        //            {
-        //                accountBalanceTypeCombinations.Add(new AccountBalanceType()
-        //                {
-        //                    AccountTypeId = accountType.VRComponentTypeId,
-        //                    TransactionTypeId = billingTransactionType.BillingTransactionTypeId
-        //                });
-        //            }
-        //        }
-
-        //        return accountBalanceTypeCombinations;
-        //    });
-        //}
-
-        //private class CacheManager : Vanrise.Caching.BaseCacheManager
-        //{
-        //    protected override bool IsTimeExpirable
-        //    {
-        //        get { return true; }
-        //    }
-        //}
     }
 }
