@@ -141,6 +141,7 @@
             //$scope.scopeModel.number = dIDEntity.Number;
             $scope.scopeModel.isInternational = dIDEntity.Settings.IsInternational;
             $scope.scopeModel.numberOfChannels = dIDEntity.Settings.NumberOfChannels;
+            $scope.scopeModel.soNumber = dIDEntity.Settings.DIDSo;
         }
 
         function insertDID() {
@@ -183,7 +184,8 @@
                 //Number: $scope.scopeModel.number,
                 Settings: {
                     IsInternational: $scope.scopeModel.isInternational,
-                    NumberOfChannels: $scope.scopeModel.numberOfChannels
+                    NumberOfChannels: $scope.scopeModel.numberOfChannels,
+                    DIDSo: $scope.scopeModel.soNumber
                 }
             };
             directiveAPI.setData(obj);
