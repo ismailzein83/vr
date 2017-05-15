@@ -32,7 +32,7 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     $scope.scopeModel.cRMCompanyAccountNo = payload.partSettings.CRMCompanyAccountNo;
                     $scope.scopeModel.salesAgent = payload.partSettings.SalesAgent;
                     $scope.scopeModel.serviceType =  payload.partSettings.ServiceType ;
-                    $scope.scopeModel.remarks =  payload.partSettings.Remarks ;
+                    $scope.scopeModel.companyId = payload.partSettings.CompanyId;
                     $scope.scopeModel.gPVoiceCustomerNo =  payload.partSettings.GPVoiceCustomerNo ;
                     $scope.scopeModel.serviceId = payload.partSettings.ServiceId;
                     $scope.scopeModel.customerPO = payload.partSettings.CustomerPO;
@@ -47,7 +47,7 @@ app.directive('retailZajilAccounttypePartRuntimeCompanyextendedinfo', ["UtilsSer
                     CRMCompanyAccountNo: $scope.scopeModel.cRMCompanyAccountNo,
                     SalesAgent: $scope.scopeModel.salesAgent,
                     ServiceType: $scope.scopeModel.serviceType,
-                    Remarks: $scope.scopeModel.remarks,
+                    CompanyId: $scope.scopeModel.companyId,
                     GPVoiceCustomerNo: $scope.scopeModel.gPVoiceCustomerNo,
                     ServiceId: $scope.scopeModel.serviceId,
                     CustomerPO: $scope.scopeModel.customerPO

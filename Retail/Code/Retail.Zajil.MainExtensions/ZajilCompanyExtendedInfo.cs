@@ -21,7 +21,7 @@ namespace Retail.Zajil.MainExtensions
 
         public string ServiceType {get ; set;}
 
-        public string Remarks { get; set; }
+        public int CompanyId { get; set; }
 
         public string GPVoiceCustomerNo { get; set; }
 
@@ -37,7 +37,7 @@ namespace Retail.Zajil.MainExtensions
                 case "CRMCompanyAccountNo": return this.CRMCompanyAccountNo;
                 case "SalesAgent": return this.SalesAgent;
                 case "ServiceType": return this.ServiceType;
-                case "Remarks": return this.Remarks;
+                case "CompanyId": return this.CompanyId;
                 case "GPVoiceCustomerNo": return this.GPVoiceCustomerNo;
                 case "ServiceId": return this.ServiceId;
                 case "CustomerPO": return this.CustomerPO;

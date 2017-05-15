@@ -173,7 +173,7 @@ namespace Retail.Zajil.MainExtensions
                     CRMCompanyAccountNo = row["CRM_Company_AccountNo"] as string,
                     SalesAgent = row["SalesAgent"] as string,
                     ServiceType = row["ServiceType"] as string,
-                    Remarks = row["Remarks"] as string,
+                    CompanyId = GetIntValue(row, "CompanyID"),
                     GPVoiceCustomerNo = row["GP_VoiceCustomer_No"] as string,
                     ServiceId = row["ServiceID"] as string,
                     CustomerPO = row["customer_po"] as string
@@ -216,6 +216,10 @@ namespace Retail.Zajil.MainExtensions
         double GetDoubleValue(DataRow row, string columnName)
         {
             return row[columnName] == DBNull.Value ? 0 : double.Parse(row[columnName].ToString());
+        }
+        int GetIntValue(DataRow row, string columnName)
+        {
+            return row[columnName] == DBNull.Value ? 0 : int.Parse(row[columnName].ToString());
         }
         DateTime? GetDateValue(DataRow row, string columnName)
         {

@@ -41,9 +41,9 @@ namespace Retail.Zajil.MainExtensions
                     },
                     new GenericFieldDefinition()
                     {
-                        Name = "Remarks",
-                        Title = "Remarks",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                        Name = "CompanyId",
+                        Title = "Company Id",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType()
                     },
                     new GenericFieldDefinition()
                     {
