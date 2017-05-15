@@ -75,7 +75,7 @@
                             ctrl.datasource.push(item);
                         });
                         if (selectedIds != undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', $attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', attrs, ctrl);
 
                     });
                 };

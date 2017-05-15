@@ -69,6 +69,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
+    <Compile Include="ComponentType\VRComponentTypeBESettings.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeOverriddenConfiguration.cs" />
     <Compile Include="ConfigManager.cs" />

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBalance_BillingTransactionTypeAPIService', 'VRUIUtilsService','UtilsService',
+app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBalance_BillingTransactionTypeAPIService', 'VRUIUtilsService', 'UtilsService',
     function (VR_AccountBalance_BillingTransactionTypeAPIService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
@@ -9,10 +9,10 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: "=",
-                isdisabled: "=",
                 selectedvalues: '=',
                 normalColNum: '@',
-                hideremoveicon: '@'
+                hideremoveicon: '@',
+                hidelabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -47,19 +47,21 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
+            var labelTitle = attrs.hidelabel == undefined ? '  label="' + label + '"' : '';
+
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
-                   + '  datasource="ctrl.datasource"`'
-                   + ' ' + hideremoveicon 
+                   + '  datasource="ctrl.datasource"'
+                   + ' ' + hideremoveicon
                    + '  datavaluefield="Id"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isrequired"'
-                   + '  label="' + label + '"'
+                   + labelTitle
                    + ' entityName="' + label + '"'
                    + '  >'
                    + '</vr-select>'
@@ -77,10 +79,7 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
 
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(defineAPI());
-                    }
+                    defineAPI();
                 };
             }
 
@@ -89,6 +88,7 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
+                    ctrl.datasource.length = 0;
 
                     var selectedIds;
                     var filter;
@@ -113,7 +113,7 @@ app.directive('vrAccountbalanceBillingtransactiontypeSelector', ['VR_AccountBala
                     return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
 
                 return api;

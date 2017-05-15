@@ -33,28 +33,46 @@
         function QueueActivatorUpdateAccountBalancesCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
-            var accountTypeSelectorAPI;
-            var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var balanceAccountTypeSelectorAPI;
+            var balanceAccountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var billingTransactionTypeSelectorAPI;
             var billingTransactionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var updateAccountBalanceSettingsDirectiveAPI;
+            var updateAccountBalanceSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.isBalanceAccountTypeSelectorRequired = false;
 
-                $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
-                    accountTypeSelectorAPI = api;
-                    accountTypeSelectorReadyDeferred.resolve();
+                $scope.scopeModel.onBalanceAccountTypeSelectorReady = function (api) {
+                    balanceAccountTypeSelectorAPI = api;
+                    balanceAccountTypeSelectorReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onBillingTransactionTypeSelectorReady = function (api) {
                     billingTransactionTypeSelectorAPI = api;
                     billingTransactionTypeSelectorReadyDeferred.resolve();
                 };
-
-                $scope.scopeModel.ongridReady = function (api) {
+                $scope.scopeModel.onUpdateAccountBalanceSettingsDirectiveReady = function (api) {
+                    updateAccountBalanceSettingsDirectiveAPI = api;
+                    updateAccountBalanceSettingsDirectiveReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                };
+
+                $scope.scopeModel.isDataRecordFieldRequired = function (dataItem) {
+
+                    if (dataItem.RecordName == "BalanceAccountTypeId" && $scope.scopeModel.selectedBalanceAccountType != undefined)
+                        return false;
+
+                    if (dataItem.RecordName == "TransactionTypeId" && $scope.scopeModel.selectedBillingTransactionType != undefined)
+                        return false;
+
+                    return true;
                 };
 
                 defineAPI();
@@ -65,29 +83,35 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    var accountTypeId;
-                    var transactionTypeId;
-                    var accountId;
-                    var effectiveOn;
-                    var amount;
-                    var currencyId;
                     var dataRecordTypeId;
+                    var balanceAccountTypeId;
+                    var transactionTypeId;
+                    var accountIdFieldName;
+                    var effectiveOnFieldName;
+                    var amountFieldName;
+                    var currencyIdFieldName;
+                    var balanceAccountTypeIdFieldName;
+                    var transactionTypeIdFieldName;
+                    var updateAccountBalanceSettings;
 
                     if (payload != undefined) {
                         dataRecordTypeId = payload.DataRecordTypeId;
 
                         if (payload.QueueActivator != undefined) {
+                            balanceAccountTypeId = payload.QueueActivator.BalanceAccountTypeId;
                             transactionTypeId = payload.QueueActivator.TransactionTypeId;
-                            accountTypeId = payload.QueueActivator.AccountTypeId;
-                            accountId = payload.QueueActivator.AccountId;
-                            effectiveOn = payload.QueueActivator.EffectiveOn;
-                            amount = payload.QueueActivator.Amount;
-                            currencyId = payload.QueueActivator.CurrencyId;
+                            accountIdFieldName = payload.QueueActivator.AccountIdFieldName;
+                            effectiveOnFieldName = payload.QueueActivator.EffectiveOnFieldName;
+                            amountFieldName = payload.QueueActivator.AmountFieldName;
+                            currencyIdFieldName = payload.QueueActivator.CurrencyIdFieldName;
+                            balanceAccountTypeIdFieldName = payload.QueueActivator.BalanceAccountTypeIdFieldName;
+                            transactionTypeIdFieldName = payload.QueueActivator.TransactionTypeIdFieldName;
+                            updateAccountBalanceSettings = payload.QueueActivator.UpdateAccountBalanceSettings;
                         }
                     }
 
-                    var accountTypeSelectorLoadPromise = getAccountTypeSelectorLoadPromise();
-                    promises.push(accountTypeSelectorLoadPromise);
+                    var balanceAccountTypeSelectorLoadPromise = getBalanceAccountTypeSelectorLoadPromise();
+                    promises.push(balanceAccountTypeSelectorLoadPromise);
 
                     var billingTransactionTypeSelectorLoadPromise = getBillingTransactionTypeSelectorLoadPromise();
                     promises.push(billingTransactionTypeSelectorLoadPromise);
@@ -95,26 +119,29 @@
                     var gridLoadPromise = getGridLoadPromise();
                     promises.push(gridLoadPromise);
 
+                    var updateAccountBalanceSettingsDirectiveLoadPromise = getUpdateAccountBalanceSettingsDirectiveLoadPromise();
+                    promises.push(updateAccountBalanceSettingsDirectiveLoadPromise);
 
-                    function getAccountTypeSelectorLoadPromise() {
-                        var accountTypeLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        accountTypeSelectorReadyDeferred.promise.then(function () {
+                    function getBalanceAccountTypeSelectorLoadPromise() {
+                        var balanceAccountTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        balanceAccountTypeSelectorReadyDeferred.promise.then(function () {
 
                             $scope.scopeModel.isAccountTypeSelectorLoading = true;
 
-                            var accountTypeSelectorPayload;
-                            if (accountTypeId != undefined) {
-                                accountTypeSelectorPayload = {
-                                    selectedIds: accountTypeId
+                            var balanceAccountTypeSelectorPayload;
+                            if (balanceAccountTypeId != undefined) {
+                                balanceAccountTypeSelectorPayload = {
+                                    selectedIds: balanceAccountTypeId
                                 };
                             }
-                            VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(balanceAccountTypeSelectorAPI, balanceAccountTypeSelectorPayload, balanceAccountTypeLoadDeferred);
                         });
 
-                        return accountTypeLoadDeferred.promise.then(function () {
+                        return balanceAccountTypeLoadDeferred.promise.then(function () {
                             $scope.scopeModel.isAccountTypeSelectorLoading = false;
-                        });;
+                        });
                     }
 
                     function getBillingTransactionTypeSelectorLoadPromise() {
@@ -140,10 +167,12 @@
                         $scope.scopeModel.isGridLoading = true;
 
                         $scope.scopeModel.dataRecordFields = [
-                            { RecordName: "AccountId", RecordValue: accountId },
-                            { RecordName: "EffectiveOn", RecordValue: effectiveOn },
-                            { RecordName: "Amount", RecordValue: amount },
-                            { RecordName: "CurrencyId", RecordValue: currencyId }
+                         { RecordName: "AccountId", RecordValue: accountIdFieldName },
+                         { RecordName: "EffectiveOn", RecordValue: effectiveOnFieldName },
+                         { RecordName: "Amount", RecordValue: amountFieldName },
+                         { RecordName: "CurrencyId", RecordValue: currencyIdFieldName },
+                         { RecordName: "BalanceAccountTypeId", RecordValue: balanceAccountTypeIdFieldName },
+                         { RecordName: "TransactionTypeId", RecordValue: transactionTypeIdFieldName }
                         ];
 
                         for (var index = 0; index < $scope.scopeModel.dataRecordFields.length; index++) {
@@ -152,25 +181,43 @@
                             promises.push(currentItem.dataRecordFieldSelectorLoadDeferred.promise);
                         }
 
+                        function extendDataRecordFieldObject(dataRecordField) {
+
+                            dataRecordField.dataRecordFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                            dataRecordField.onDataRecordFieldSelectorReady = function (api) {
+                                dataRecordField.dataRecordFieldSelectorAPI = api;
+
+                                var dataRecordFieldPayload;
+                                if (dataRecordField != undefined) {
+                                    dataRecordFieldPayload = {
+                                        selectedIds: dataRecordField.RecordValue,
+                                        dataRecordTypeId: dataRecordTypeId
+                                    };
+                                }
+                                VRUIUtilsService.callDirectiveLoad(dataRecordField.dataRecordFieldSelectorAPI, dataRecordFieldPayload, dataRecordField.dataRecordFieldSelectorLoadDeferred);
+                            };
+                        }
+
                         return UtilsService.waitMultiplePromises(promises).then(function () {
                             $scope.scopeModel.isGridLoading = false;
                         });
                     }
-                    function extendDataRecordFieldObject(dataRecordField) {
 
-                        dataRecordField.dataRecordFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        dataRecordField.onDataRecordFieldSelectorReady = function (api) {
-                            dataRecordField.dataRecordFieldSelectorAPI = api;
+                    function getUpdateAccountBalanceSettingsDirectiveLoadPromise() {
+                        var updateAccountBalanceSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            var dataRecordFieldPayload;
-                            if (dataRecordField != undefined) {
-                                dataRecordFieldPayload = {
-                                    selectedIds: dataRecordField.RecordValue,
-                                    dataRecordTypeId: dataRecordTypeId
+                        updateAccountBalanceSettingsDirectiveReadyDeferred.promise.then(function () {
+
+                            var payload;
+                            if (updateAccountBalanceSettings != undefined) {
+                                payload = {
+                                    updateAccountBalanceSettings: updateAccountBalanceSettings
                                 };
                             }
-                            VRUIUtilsService.callDirectiveLoad(dataRecordField.dataRecordFieldSelectorAPI, dataRecordFieldPayload, dataRecordField.dataRecordFieldSelectorLoadDeferred);
-                        };
+                            VRUIUtilsService.callDirectiveLoad(updateAccountBalanceSettingsDirectiveAPI, payload, updateAccountBalanceSettingsDirectiveLoadDeferred);
+                        });
+
+                        return updateAccountBalanceSettingsDirectiveLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -179,26 +226,36 @@
                 api.getData = function () {
 
                     var accountIdEntity = UtilsService.getItemByVal($scope.scopeModel.dataRecordFields, "AccountId", 'RecordName');
-                    var accountId = accountIdEntity && accountIdEntity.dataRecordFieldSelectorAPI ? accountIdEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+                    var accountIdFieldName = accountIdEntity && accountIdEntity.dataRecordFieldSelectorAPI ? accountIdEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
 
                     var effeciveOnEntity = UtilsService.getItemByVal($scope.scopeModel.dataRecordFields, "EffectiveOn", 'RecordName');
-                    var effeciveOn = effeciveOnEntity && effeciveOnEntity.dataRecordFieldSelectorAPI ? effeciveOnEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+                    var effeciveOnFieldName = effeciveOnEntity && effeciveOnEntity.dataRecordFieldSelectorAPI ? effeciveOnEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
 
                     var amountEntity = UtilsService.getItemByVal($scope.scopeModel.dataRecordFields, "Amount", 'RecordName');
-                    var amount = amountEntity && amountEntity.dataRecordFieldSelectorAPI ? amountEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+                    var amountFieldName = amountEntity && amountEntity.dataRecordFieldSelectorAPI ? amountEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
 
                     var currencyIdEntity = UtilsService.getItemByVal($scope.scopeModel.dataRecordFields, "CurrencyId", 'RecordName');
-                    var currencyId = currencyIdEntity && currencyIdEntity.dataRecordFieldSelectorAPI ? currencyIdEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+                    var currencyIdFieldName = currencyIdEntity && currencyIdEntity.dataRecordFieldSelectorAPI ? currencyIdEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
 
-                    return {
+                    var balanceAccountTypeIdEntity = UtilsService.getItemByVal($scope.scopeModel.dataRecordFields, "BalanceAccountTypeId", 'RecordName');
+                    var balanceAccountTypeIdFieldName = balanceAccountTypeIdEntity && balanceAccountTypeIdEntity.dataRecordFieldSelectorAPI ? balanceAccountTypeIdEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+
+                    var transactionTypeIdEntity = UtilsService.getItemByVal($scope.scopeModel.dataRecordFields, "TransactionTypeId", 'RecordName');
+                    var transactionTypeIdFieldName = transactionTypeIdEntity && transactionTypeIdEntity.dataRecordFieldSelectorAPI ? transactionTypeIdEntity.dataRecordFieldSelectorAPI.getSelectedIds() : undefined;
+
+                    var obj = {
                         $type: 'Vanrise.AccountBalance.MainExtensions.QueueActivators.UpdateAccountBalancesQueueActivator, Vanrise.AccountBalance.MainExtensions',
-                        AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
-                        TransactionTypeId: $scope.scopeModel.selectedBillingTransactionType.Id,
-                        AccountId: accountId,
-                        EffectiveOn: effeciveOn,
-                        Amount: amount,
-                        CurrencyId: currencyId
+                        BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
+                        TransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds(),
+                        AccountIdFieldName: accountIdFieldName,
+                        EffectiveOnFieldName: effeciveOnFieldName,
+                        AmountFieldName: amountFieldName,
+                        CurrencyIdFieldName: currencyIdFieldName,
+                        BalanceAccountTypeIdFieldName: balanceAccountTypeIdFieldName,
+                        TransactionTypeIdFieldName: transactionTypeIdFieldName,
+                        UpdateAccountBalanceSettings: updateAccountBalanceSettingsDirectiveAPI.getData()
                     };
+                    return obj;
                 };
 
                 if (ctrl.onReady != null)

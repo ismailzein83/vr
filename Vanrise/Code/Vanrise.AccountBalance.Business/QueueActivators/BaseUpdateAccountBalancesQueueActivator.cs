@@ -483,6 +483,23 @@ namespace Vanrise.AccountBalance.Business
             } while (batchStart < batchEnd);
         }
 
+        protected List<AccountBalanceType> GetAccountBalanceTypeCombinations(UpdateAccountBalanceSettings updateAccountBalanceSettings)
+        {
+            if (updateAccountBalanceSettings == null || updateAccountBalanceSettings.UpdateAccountBalanceTypeCombinations == null)
+                return null;
+
+            List<AccountBalanceType> accountBalanceTypeCombinations = new List<AccountBalanceType>();
+
+            foreach (var combination in updateAccountBalanceSettings.UpdateAccountBalanceTypeCombinations)
+            {
+                foreach (var transactionTypeId in combination.TransactionTypeIds)
+                {
+                    accountBalanceTypeCombinations.Add(new AccountBalanceType() { AccountTypeId = combination.BalanceAccountTypeId, TransactionTypeId = transactionTypeId });
+                }
+            }
+            return accountBalanceTypeCombinations;
+        }
+
         #endregion
 
         #region Private Classes

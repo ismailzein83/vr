@@ -267,6 +267,8 @@
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-selector.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttypeconfig-selector.js" />
     <Content Include="Common\Directives\VRComponentType\vr-common-overriddenconfiguration-componenttype.js" />
+    <Content Include="Common\Directives\VRComponentType\VRComponentTypeBE\Templates\VRComponentTypeBETemplate.html" />
+    <Content Include="Common\Directives\VRComponentType\VRComponentTypeBE\vr-common-componenttypebe-editor.js" />
     <Content Include="Common\Directives\VRConnection\Templates\VRConnectionGridTemplate.html" />
     <Content Include="Common\Directives\VRConnection\vr-common-connection-grid.js" />
     <Content Include="Common\Directives\VRConnection\vr-common-connectiontypeconfig-selector.js" />

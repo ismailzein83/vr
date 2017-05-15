@@ -11,7 +11,10 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
                 isrequired: "=",
                 isdisabled: "=",
                 selectedvalues: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                onselectitem: "=",
+                ondeselectitem: "=",
+                hideselectedvaluessection: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -50,19 +53,25 @@ app.directive('vrAccountbalanceAccounttypeSelector', ['VR_AccountBalance_Balance
             if (attrs.hideremoveicon!=undefined)
                 hideremoveicon = "hideremoveicon";
 
+            var hideselectedvaluessection = "";
+            if (attrs.hideselectedvaluessection != undefined)
+                hideselectedvaluessection = "hideselectedvaluessection";
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                        + ' <vr-select on-ready="ctrl.onSelectorReady"'
                        + '  selectedvalues="ctrl.selectedvalues"'
                        + '  onselectionchanged="ctrl.onselectionchanged"'
                        + '  datasource="ctrl.datasource"'
+                       + '  onselectitem="ctrl.onselectitem"'
+                       + '  ondeselectitem="ctrl.ondeselectitem"'
                        + '  datavaluefield="Id"'
                        + '  datatextfield="Name"'
                        + '  ' + multipleselection
                        + '  ' + hideremoveicon
+                       + '  ' + hideselectedvaluessection
                        + '  isrequired="ctrl.isrequired"'
                        + '  label="' + label + '"'
-                       + ' entityName="' + label + '"'
-                       + '  >'
+                       + ' entityName="' + label + '" >'
                        + '</vr-select>'
               + '</vr-columns>';
         }
