@@ -41,7 +41,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
 
             $scope.scopeModel = {};
 
-            $scope.scopeModel.optionNumbers = [{ value: 1, description: '1' }, { value: 2, description: '2' }, { value: 3, description: '3' }];
+            $scope.scopeModel.optionNumbers = [{ value: 1, description: 'Option 1' }, { value: 2, description: 'Option 2' }, { value: 3, description: 'Option 3' }];
 
             $scope.scopeModel.showMarginLabel = true;
             $scope.scopeModel.showMarginPercentageLabel = false;
