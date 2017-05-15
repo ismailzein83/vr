@@ -76,16 +76,15 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onAccountSelectorReady = function (api)
-                {
+                $scope.scopeModel.onAccountSelectorReady = function (api) {
                     accountSelectorAPI = api;
                     accountSelectorPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onFinancialAccountSelectorReady = function (api) {
                     financialAccountSelectorAPI = api;
                     financialAccountSelectorPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onFinancialAccountEffectiveSelectionChanged = function (value) {
                     if (value != undefined) {
