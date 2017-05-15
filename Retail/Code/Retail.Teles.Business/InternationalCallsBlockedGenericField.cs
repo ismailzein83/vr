@@ -11,14 +11,23 @@ namespace Retail.Teles.Business
 {
     public class InternationalCallsBlockedGenericField : AccountGenericField
     {
+        string _fieldName;
+        string _fieldTitle;
+        string _actionType;
+        public InternationalCallsBlockedGenericField(string fieldName,string fieldTitle, string actionType)
+        {
+            _fieldName = fieldName;
+            _fieldTitle = fieldTitle;
+            _actionType = actionType;
+        }
         public override string Name
         {
-            get { return "InternationalCallsBlocked"; }
+            get { return _fieldName; }
         }
 
         public override string Title
         {
-            get { return "International Calls Blocked"; }
+            get { return _fieldTitle; }
         }
 
         public override Vanrise.GenericData.Entities.DataRecordFieldType FieldType
@@ -32,7 +41,8 @@ namespace Retail.Teles.Business
             var changeUsersRGsAccountState = accountBEManager.GetExtendedSettings<ChangeUsersRGsAccountState>(context.Account);
             if (changeUsersRGsAccountState != null)
             {
-                return true;
+                if (changeUsersRGsAccountState.ChangesByActionType != null && changeUsersRGsAccountState.ChangesByActionType.ContainsKey(this._actionType))
+                   return true;
             }
             return false;
         }

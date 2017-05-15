@@ -13,10 +13,13 @@ namespace Retail.Teles.Business
         {
             get { return new Guid("E440C268-19B9-4D43-820B-C407604C7EF3"); }
         }
+        public string FieldName { get; set; }
+        public string FieldTitle { get; set; }
+        public string ActionType { get; set; }
         public override IEnumerable<AccountGenericField> GetFields(IAccountExtraFieldSettingsContext context)
         {
             List<AccountGenericField> accountGenericFields = new List<AccountGenericField>();
-            accountGenericFields.Add(new InternationalCallsBlockedGenericField());
+            accountGenericFields.Add(new InternationalCallsBlockedGenericField(FieldName, FieldTitle, ActionType));
             return accountGenericFields;
         }
     }

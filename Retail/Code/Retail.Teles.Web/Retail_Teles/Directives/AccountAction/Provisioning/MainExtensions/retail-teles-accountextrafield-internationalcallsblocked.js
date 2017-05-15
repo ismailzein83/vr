@@ -37,14 +37,24 @@ app.directive('retailTelesAccountextrafieldInternationalcallsblocked', ['UtilsSe
                 api.load = function (payload) {
                     var promises = [];
                 
-
+                    var accountExtraFieldDefinitionSettings;
                     if (payload != undefined) {
+                        accountExtraFieldDefinitionSettings = payload.accountExtraFieldDefinitionSettings;
+                        if(accountExtraFieldDefinitionSettings != undefined)
+                        {
+                            $scope.scopeModel.actionType = accountExtraFieldDefinitionSettings.ActionType;
+                            $scope.scopeModel.fieldTitle = accountExtraFieldDefinitionSettings.FieldTitle;
+                            $scope.scopeModel.fieldName = accountExtraFieldDefinitionSettings.FieldName;
+                        }
                     }
                 };
 
                 api.getData = function () {
                     return {
                         $type: 'Retail.Teles.Business.InternationalCallsBlockedFieldDefinition, Retail.Teles.Business',
+                        ActionType: $scope.scopeModel.actionType,
+                        FieldTitle: $scope.scopeModel.fieldTitle,
+                        FieldName: $scope.scopeModel.fieldName
                     };
                 };
 
