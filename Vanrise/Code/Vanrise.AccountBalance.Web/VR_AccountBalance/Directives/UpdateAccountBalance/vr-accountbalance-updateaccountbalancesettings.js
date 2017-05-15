@@ -83,7 +83,7 @@ app.directive('vrAccountbalanceUpdateaccountbalancesettings', ['UtilsService', '
                 api.load = function (payload) {
                     var promises = [];
 
-                    var updateAccountBalanceTypeCombinations
+                    var updateAccountBalanceTypeCombinations;
 
                     if (payload != undefined) {
                         var updateAccountBalanceSettings = payload.updateAccountBalanceSettings;
