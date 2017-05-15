@@ -82,8 +82,8 @@
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsRuntimeSettings.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\RevertUsersRGsDefinitionSettings.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\RevertUsersRGsRuntimeSettings.cs" />
-    <Compile Include="Provisioning\ProvisioningScreenedNumbers\ProvisionAccountDefinitionSettings.cs" />
-    <Compile Include="Provisioning\ProvisioningScreenedNumbers\ProvisionAccountRuntimeSettings.cs" />
+    <Compile Include="ProvisioningAccount\ProvisionAccountDefinitionSettings.cs" />
+    <Compile Include="ProvisioningAccount\ProvisionAccountRuntimeSettings.cs" />
     <Compile Include="Provisioning\RoutingGroupConditionContext.cs" />
     <Compile Include="RoutingGroupCondition\RoutingGroupFilter.cs" />
     <Compile Include="TelesEnterpriseBEDefinitionSettings.cs" />

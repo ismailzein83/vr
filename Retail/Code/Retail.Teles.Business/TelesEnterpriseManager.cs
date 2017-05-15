@@ -155,10 +155,10 @@ namespace Retail.Teles.Business
             return updateOperationOutput;
 
         }
-        public bool TryMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesEnterpriseId)
+        public bool TryMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesEnterpriseId, ProvisionStatus? status = null)
         {
 
-            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new EnterpriseAccountMappingInfo { TelesEnterpriseId = telesEnterpriseId };
+            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = new EnterpriseAccountMappingInfo { TelesEnterpriseId = telesEnterpriseId, Status = status };
 
             var result = _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
@@ -170,10 +170,10 @@ namespace Retail.Teles.Business
             return result;
 
         }
-        public bool TryMapSiteToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesSiteId)
+        public bool TryMapSiteToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesSiteId, ProvisionStatus? status = null)
         {
 
-            SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesSiteId = telesSiteId };
+            SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesSiteId = telesSiteId, Status = status };
 
             var result = _accountBEManager.UpdateAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId,
                 siteAccountMappingInfo);
@@ -226,7 +226,7 @@ namespace Retail.Teles.Business
                 return enterprisesByAccounts;
             });
         }
-
+     
         public bool DoesUserHaveExecutePermission(Guid accountBEDefinitionId)
         {
             var accountDefinitionActions = new AccountBEDefinitionManager().GetAccountActionDefinitions(accountBEDefinitionId);
@@ -313,13 +313,13 @@ namespace Retail.Teles.Business
                     throw new VRBusinessException("Cannot connect to Teles API");
             }
         }
-
+      
         private TelesRestConnection GetTelesRestConnection(Guid vrConnectionId)
         {
             VRConnectionManager vrConnectionManager = new VRConnectionManager();
             VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(vrConnectionId);
             return vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", vrConnectionId);
-        }
+        }  
         #endregion
 
         #region IBusinessEntityManager

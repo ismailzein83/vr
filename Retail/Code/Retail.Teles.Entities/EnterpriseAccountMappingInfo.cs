@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Entities
 {
+    public enum ProvisionStatus { Started = 0, Completed = 1 }
     public class EnterpriseAccountMappingInfo : BaseAccountExtendedSettings
     {
         public dynamic TelesEnterpriseId { get; set; }
+        public ProvisionStatus? Status { get; set; }
     }
 }

@@ -10,5 +10,7 @@ namespace Retail.Teles.Entities
     public class SiteAccountMappingInfo : BaseAccountExtendedSettings
     {
         public dynamic TelesSiteId { get; set; }
+        public ProvisionStatus? Status { get; set; }
+
     }
 }

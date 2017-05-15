@@ -1,5 +1,6 @@
 ﻿using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
+using Retail.Teles.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Retail.Teles.Business.Provisioning
         AccountBEManager _accountBEManager = new AccountBEManager();
         DIDManager _didManager = new DIDManager();
         public string EnterpriseName { get; set; }
-
+       
         public ProvisionAccountSetting Settings { get; set; }
 
         public override void Execute(IAccountProvisioningContext context)
@@ -40,9 +41,9 @@ namespace Retail.Teles.Business.Provisioning
                 maxBusinessTrunkCalls = Settings.EnterpriseAccountSetting.EnterpriseMaxBusinessTrunkCalls,
                 maxUsers = Settings.EnterpriseAccountSetting.EnterpriseMaxUsers,
             };
+            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, null, ProvisionStatus.Started);
             var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, Settings.CentrexFeatSet, enterprise);
-
-            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId);
+            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId, ProvisionStatus.Completed);
             CreateSites(definitionSettings, enterpriseId, accountBEDefinitionId, accountId);
         }
         private void CreateSites(ProvisionAccountDefinitionSettings definitionSettings, dynamic enterpriseId, Guid accountBEDefinitionId, long accountId)
@@ -68,8 +69,10 @@ namespace Retail.Teles.Business.Provisioning
                         registrarEnabled = true,
                         ringBackUri = "ringback",
                     };
+                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, null, ProvisionStatus.Started);
+
                     dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
-                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId);
+                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
                     CreateScreendedNumbers(definitionSettings, site.AccountId, siteId);
                 }
             }

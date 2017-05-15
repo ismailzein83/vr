@@ -164,6 +164,14 @@
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountActionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountEditor.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\ProvisionAccountEditorController.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\retail-teles-accountactiondefinitionsettings-provisionaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\retail-teles-accountactiondefinitionsettings-provisionaccount-settings.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\retail-teles-provisioner-runtimesettings-provisionaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\Templates\ProvisionAccountEditor.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\Templates\ProvisionAccountDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\Templates\ProvisionAccountRuntimeSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\ProvisioningAccount\Templates\ProvisionAccountSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-definitionsettings-revertusersrgs.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-definitionsettings-changeusersrgs.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-runtimesettings-revertusersrgs.js" />
