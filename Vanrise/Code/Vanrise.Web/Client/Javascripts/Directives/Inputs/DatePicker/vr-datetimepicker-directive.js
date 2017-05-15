@@ -33,11 +33,14 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             placeholder: '@'
         },
         controller: function ($scope, $element, $attrs) {
+            var divDatePicker = $element.find('#divDatePicker');
+          
             $scope.$on("$destroy", function () {
-                $element.off();
+                $element.parents().unbind('scroll', fixDateTimePickerPosition);
+                $(window).unbind('scroll', fixDateTimePickerPosition);                
                 updatewatch();
             });
-            var divDatePicker = $element.find('#divDatePicker');
+           
             //var inputElement = $element.find('#mainInput');
             //var validationOptions = {};
             //if ($attrs.isrequired !== undefined)
@@ -115,21 +118,15 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
 
                 });
 
-            $(divDatePicker.parents('div')).scroll(function () {
-                fixDateTimePickerPosition();
-            });
-            $(window).scroll(function () {
-                fixDateTimePickerPosition();
-            });
-
+            $element.parents().on('scroll', fixDateTimePickerPosition);
+            $(window).on('scroll',fixDateTimePickerPosition);
             $scope.$on('start-drag', function (event, args) {
                 fixDateTimePickerPosition();
             });
-            var fixDateTimePickerPosition = function () {
+            function fixDateTimePickerPosition() {
                 if (divDatePicker.data != undefined && divDatePicker.data("DateTimePicker"))
-                    divDatePicker.data("DateTimePicker").hide()
-
-            };
+                    divDatePicker.data("DateTimePicker").hide();
+            }
             ctrl.tabindex = "";
             setTimeout(function () {
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {

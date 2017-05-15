@@ -9,6 +9,9 @@ app.directive('vrDatagridexpandablerow', [function () {
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
                     dataGridCtrl.setExpandableRowTemplate(htmlTemplate);
+                    $scope.$on('$destroy', function () {
+                        iElem.remove();
+                    });
                 }
             };
         }

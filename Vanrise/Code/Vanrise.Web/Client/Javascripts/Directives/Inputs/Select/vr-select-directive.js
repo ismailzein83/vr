@@ -52,11 +52,14 @@
             },
             controller: function ($scope, $element, $attrs) {
                 $scope.$on("$destroy", function () {
-                    $element.off();
+                    $('div[name=' + $attrs.id + ']').parents('div').unbind('scroll', fixDropdownPosition);
+                    $(window).unbind('scroll', fixDropdownPosition);
+                    $(window).unbind('resize', fixDropdownPosition);
                     $(window).off("resize.Viewport");
                     datasourceWatch();
                     dataWatch();
                 });
+                
                 if (rootScope == undefined)
                     rootScope = $scope.$root;
 
@@ -570,22 +573,15 @@
                         });
                     }
                 }
-                $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
-                    fixDropdownPosition();
-                });
-                $(window).scroll(function () {
-                    fixDropdownPosition();
-                });
-                $(window).resize(function () {
-                    fixDropdownPosition();
-                });
-                var fixDropdownPosition = function () {
-                    hideAllOtherDropDown()
-                };
+                $('div[name=' + $attrs.id + ']').parents('div').on('scroll', fixDropdownPosition);
+                $(window).on('scroll', fixDropdownPosition);
+                $(window).on('resize', fixDropdownPosition);               
                 $scope.$on('start-drag', function (event, args) {
                     fixDropdownPosition();
                 });
-
+                function fixDropdownPosition() {
+                    hideAllOtherDropDown();
+                }
                 var api = {};
                 api.clearDataSource = function () {
                     if (controller.isRemoteLoad()) {
@@ -614,28 +610,28 @@
                 api.removeReadOnly = function (nameFilter) {
                     controller.readOnly = false;
                 };
-                api.openDropDown = function () {
-                    var event = $(window.event);
-                    if (event) {
-                        var target = event[0].srcElement;
-                        $(target).attr('open-trriger', $attrs.id);
-                    }
-                    if ($('div[name=' + $attrs.id + ']').hasClass('open-select') == false) {
-                        $timeout(function () {
-                            $('div[name=' + $attrs.id + ']').find('.dropdown-toggle').first().trigger("click");
-                        }, 1);
-                    }
-                };
+                //api.openDropDown = function () {
+                //    var event = $(window.event);
+                //    if (event) {
+                //        var target = event[0].srcElement;
+                //        $(target).attr('open-trriger', $attrs.id);
+                //    }
+                //    if ($('div[name=' + $attrs.id + ']').hasClass('open-select') == false) {
+                //        $timeout(function () {
+                //            $('div[name=' + $attrs.id + ']').find('.dropdown-toggle').first().trigger("click");
+                //        }, 1);
+                //    }
+                //};
 
-                api.closeDropDown = function () {
-                    if (!$('div[name=' + $attrs.id + ']').hasClass('open-select'))
-                        return;
-                    $timeout(function () {
-                        if ($('div[name=' + $attrs.id + ']').hasClass('open-select')) {
-                            $('div[name=' + $attrs.id + ']').find('.dropdown-toggle').first().trigger("click");
-                        }
-                    }, 1);
-                };
+                //api.closeDropDown = function () {
+                //    if (!$('div[name=' + $attrs.id + ']').hasClass('open-select'))
+                //        return;
+                //    $timeout(function () {
+                //        if ($('div[name=' + $attrs.id + ']').hasClass('open-select')) {
+                //            $('div[name=' + $attrs.id + ']').find('.dropdown-toggle').first().trigger("click");
+                //        }
+                //    }, 1);
+                //};
                 if (controller.onReady != null) {
                     controller.onReady(api);
                 }

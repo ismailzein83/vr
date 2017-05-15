@@ -18,7 +18,7 @@ app.directive('vrDatagridrows', [function () {
             element.find('#rowSection2').html(rowTemplate);
 
             return {
-                pre: function (scope, elem, attrs, dataGridCtrl) {                    
+                pre: function (scope, elem, attrs, dataGridCtrl) {
                     scope.isGridScope = true;
                     scope.ctrl = dataGridCtrl;
                     scope.gridParentScope = scope.$parent;
@@ -39,17 +39,23 @@ app.directive('vrDatagridrows', [function () {
                     scope.ctrl.ngClassLevel = "drill-down-level-" + drillDownLevel + rotateclass;
                     var lastScrollTop;
                     var gridBodyElement = elem.find("#gridBody");
-                    elem.find("#gridBodyContainer").scroll(function () {
+                    $(elem.find("#gridBodyContainer")).on('scroll',scrollGrid);
+                    function scrollGrid() {
 
-                        var scrollTop = $(this).scrollTop();
-                        var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
+                        var scrollTop = $(elem.find("#gridBodyContainer")).scrollTop();
+                        var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(elem.find("#gridBodyContainer")).height());
 
                         if (scrollTop > lastScrollTop) {
                             if (scrollPercentage > 80 && typeof dataGridCtrl.onScrolling == 'function')
                                 dataGridCtrl.onScrolling();
                         }
                         lastScrollTop = scrollTop;
+                    }
+                    elem.on('$destroy', function () {
+                        $(elem.find("#gridBodyContainer")).unbind('scroll', scrollGrid);
+                        scope.$destroy();
                     });
+
                 }
             };
         },

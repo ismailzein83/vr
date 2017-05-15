@@ -15,6 +15,10 @@ app.directive('vrDatagridcell', ['$compile', function ($compile) {
 
             $element.html(html);
             $compile($element.contents())($scope);
+
+            $scope.$on('$destroy', function () {
+                $element.remove();
+            });
         }
 
     };

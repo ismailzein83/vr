@@ -120,7 +120,6 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     });
                     $scope.$on("$destroy", function () {
                         removeColumnFromGridIfExists();
-                        iElem.off();
                         headertextWatch != undefined && headertextWatch();
                         ngshowWatch != undefined && ngshowWatch();
                     });

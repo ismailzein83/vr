@@ -23,9 +23,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 margin: '='
             },
             controller: function ($scope, $element, $attrs) {
-                $scope.$on("$destroy", function () {
-                    $element.off();
-                    $(window).off("resize.Viewport");
+                $scope.$on("$destroy", function () {                   
+                    $('.vr-grid-menu').parents('div').unbind('scroll', hideGridColumnsMenu);
+                    $(window).unbind('scroll', hideGridColumnsMenu);
+                    $(document).unbind('click', bindClickOutSideGridMenu);
+                    $element.remove();
                 });
                 var ctrl = this;
                 ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
@@ -60,53 +62,49 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.toggelGridMenu = function (e) {
                     var self = angular.element(e.currentTarget);
-                   
+
                     var menu = self.parent().find('.vr-grid-menu')[0];
                     if (ctrl.showgmenu == false) {
                         setTimeout(function () {
                             var selfHeight = $(self).height();
                             var selfOffset = $(self).offset();
+                            $(menu).css({ display: 'block' });
                             $(menu).addClass("open-grid-menu");
                             $(menu).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: 'auto' });
                             ctrl.showgmenu = true;
                             $scope.$root.$digest();
                         }, 1);
                         $(document).bind("click", bindClickOutSideGridMenu);
-            
+
                     }
                     else {
                         ctrl.showgmenu = false;
                         $(menu).removeClass("open-grid-menu");
                         $(document).unbind('click', bindClickOutSideGridMenu);
-                    }                        
+                    }
                 };
                 function bindClickOutSideGridMenu(e) {
                     if (!$('out-div').is(e.target) && $('out-div').has(e.target).length === 0 && $('.open-grid-menu').has(e.target).length === 0) {
                         $('out-div').removeClass("open-grid-menu");
-                          ctrl.showgmenu = false;
-                          $scope.$root.$digest();                                         
+                        ctrl.showgmenu = false;
+                        $scope.$root.$digest();
                     }
                 }
                 setTimeout(function () {
-                    $('.vr-grid-menu').parents('div').scroll(function () {
-                        var menu = $(window).find('.vr-grid-menu')[0];
-                        $(menu).css({ display: 'none' });
-                        if (ctrl.showgmenu == true) {
-                            ctrl.showgmenu = false;
-                            $scope.$apply();
-                        }
-                    });
-                    $(window).on('scroll', function () {
-                        var menu = $(window).find('.vr-grid-menu')[0];
-                        $(menu).css({ display: 'none' });
-                        if (ctrl.showgmenu == true) {
-                            ctrl.showgmenu = false;
-                            $scope.$apply();
-                        }
-                    });
-
+                    $('.vr-grid-menu').parents('div').on('scroll', hideGridColumnsMenu);
+                    $(window).on('scroll', hideGridColumnsMenu);
                 }, 1);
 
+                function hideGridColumnsMenu() {
+                    var menu = $('.vr-grid-menu');
+                    menu.css({ display: 'none' });
+                    $('out-div').removeClass("open-grid-menu");
+                    if (ctrl.showgmenu == true) {
+                        ctrl.showgmenu = false;
+                        $scope.$root.$digest();
+                    }
+
+                };
                 ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
                 ctrl.rotateHeader = true;
                 ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'nowrap' };
@@ -141,7 +139,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 element.append('<vr-datagridrows></vr-datagridrows>');
 
                 return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {                      
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+                        $scope.$on('$destroy', function () {
+                            iElem.find('vr-datagridrows').remove();
+                        });
+
                         var ctrl = $scope.ctrl;
                         if (iAttrs.pagersettings != undefined) {
                             ctrl.pagerSettings = $scope.$parent.$eval(iAttrs.pagersettings);
@@ -180,7 +182,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
     + '</div>';
 
 
-        function DataGrid(ctrl, scope, attrs ,elem) {
+        function DataGrid(ctrl, scope, attrs, elem) {
 
             var gridApi = {};
             var maxHeight;
@@ -366,12 +368,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 //    width -= 1;
                 ctrl.dataColumnsSectionWidth = "calc(100% - " + otherSectionsWidth + "px)";
             }
-            $(window).resize(function () {
+            scope.$on("$destroy", function () {
+                $(window).unbind('resize', calculateColumnsWidthResize);
+            });
+            $(window).on('resize', calculateColumnsWidthResize);
+            function calculateColumnsWidthResize() {
                 setTimeout(function () {
                     calculateColumnsWidth();
-                }, 100)
-            });
-
+                }, 100);
+            }
             function calculateColumnsWidth() {
                 var totalWidthFactors = 0;
                 var totalfixedWidth = 0;
@@ -618,6 +623,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.getCellContainerClass = function (dataItem, colDef) {
                     return colDef && colDef.cssClass;
                 };
+
                 function getRowCSSClass(dataItem) {
                     if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
                         var object = ctrl.getrowstyle(dataItem);
@@ -626,8 +632,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                 }
 
-                scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
-                scope.$watchCollection('ctrl.updateItems', onDataSourceChanged);
+                var datasourceWatch = scope.$watchCollection('ctrl.datasource', onDataSourceChanged);
+                var updateItems = scope.$watchCollection('ctrl.updateItems', onDataSourceChanged);
+
+                scope.$on('$destroy', function () {
+                    datasourceWatch();
+                    updateItems();
+                    ctrl.datasource.length = 0;
+                });
 
                 function onDataSourceChanged(newDataSource, oldNames) {
                     for (var i = 0; i < newDataSource.length; i++) {
@@ -861,9 +873,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (pagingOnScrollEnabled) {
                         // to rigth padding in old data loading methode in bi
                         var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                        var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
                         var mh = $(div).css('max-height');
-                        mh = parseInt(mh.substring(0, mh.length - 1));
+                        mh = mh &&  parseInt(mh.substring(0, mh.length - 1)) || 0;
                         if (ctrl.datasource.length * 25 < mh) {
                             $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                             ctrl.headerStyle = {
