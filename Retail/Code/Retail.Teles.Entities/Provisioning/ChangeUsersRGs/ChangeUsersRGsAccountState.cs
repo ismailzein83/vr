@@ -20,5 +20,6 @@ namespace Retail.Teles.Entities
     public class ChURGsUserCh
     {
         public dynamic OriginalRGId { get; set; }
+        public dynamic ChangedRGId { get; set; }
     }
 }

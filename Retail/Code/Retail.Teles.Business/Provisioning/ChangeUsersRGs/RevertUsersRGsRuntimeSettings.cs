@@ -79,11 +79,18 @@ namespace Retail.Teles.Business
                         foreach (var changesByUser in chURGsActionCh.ChangesByUser)
                         {
                             var user = GetUser(vrConnectionId, changesByUser.Key);
-                            if(user != null)
+                            if (user != null)
                             {
-                                context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Loaded.", user.loginName));
-                                user.routingGroupId = changesByUser.Value.OriginalRGId;
-                                changedUsers.Add(user);
+                                if (user.routingGroupId == changesByUser.Value.ChangedRGId)
+                                {
+                                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Loaded.", user.loginName));
+                                    user.routingGroupId = changesByUser.Value.OriginalRGId;
+                                    changedUsers.Add(user);
+                                }
+                                else
+                                {
+                                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Connot revert routing group of user {0} due to external change.", user.loginName));
+                                }
                             }
                         }
                     }

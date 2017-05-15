@@ -162,7 +162,7 @@ namespace Retail.Teles.Business
                             ChURGsUserCh chURGsUserCh;
                             if (!chURGsActionCh.ChangesByUser.TryGetValue(user.id, out chURGsUserCh))
                             {
-                                chURGsUserCh = new ChURGsUserCh { OriginalRGId = user.routingGroupId };
+                                chURGsUserCh = new ChURGsUserCh { OriginalRGId = user.routingGroupId, ChangedRGId = newRoutingGroup };
                                 chURGsActionCh.ChangesByUser.Add(user.id, chURGsUserCh);
                                 newChURGsActionCh.ChangesByUser.Add(user.id, chURGsUserCh);
                             }
