@@ -105,9 +105,10 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
                 return null;
             }
             function fillInputFieldsArray(data, array) {
+
                 array.push({
-                    FieldName: "AccountBEDefinitionID",
-                    Value: data.AccountBEDefinitionID
+                    FieldName: "AccountBEDefinitionId",
+                    Value: data.AccountBEDefinitionId
                 });
                 array.push({
                     FieldName: "AccountId",
@@ -132,6 +133,12 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
             }
             function fillOutputFieldsArray(data, array) {
 
+                if (data.FinancialAccountId != undefined) {
+                    array.push({
+                        FieldName: data.FinancialAccountId,
+                        Value: "FinancialAccountId"
+                    });
+                }
             }
 
             this.initializeController = initializeController;

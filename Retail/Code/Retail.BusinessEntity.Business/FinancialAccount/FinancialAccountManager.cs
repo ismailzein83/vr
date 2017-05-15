@@ -147,7 +147,7 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
-        public BalanceFinancialAccount GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        public FinancialAccountRuntimeData GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
         {
             var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();
             financialAccountLocatorContext.AccountDefinitionId = accountDefinitionId;
@@ -159,7 +159,7 @@ namespace Retail.BusinessEntity.Business
 
             if (financialAccountLocator.TryGetFinancialAccountId(financialAccountLocatorContext))
             {
-                return new BalanceFinancialAccount()
+                return new FinancialAccountRuntimeData()
                 {
                     FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
                     BalanceAccountId = financialAccountLocatorContext.FinancialAccountId.ToString(),

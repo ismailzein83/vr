@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class BalanceFinancialAccount
+    public class FinancialAccountRuntimeData
     {
         public long FinancialAccountId { get; set; }
 

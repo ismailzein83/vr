@@ -102,7 +102,7 @@
     <Compile Include="DID\IDIDFilter.cs" />
     <Compile Include="DID\SourceDIDData.cs" />
     <Compile Include="FinancialAccount\AccountBEFinancialAccountsSettings.cs" />
-    <Compile Include="FinancialAccount\BalanceFinancialAccount.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountRuntimeData.cs" />
     <Compile Include="FinancialAccount\FinancialAccount.cs" />
     <Compile Include="FinancialAccount\FinancialAccountData.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinition.cs" />

@@ -53,6 +53,10 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
             var updateBalanceRecordListDirectiveReadyAPI;
             var updateBalanceRecordListDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            //Output Fields
+            var financialAccountIdDirectiveReadyAPI;
+            var financialAccountIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -81,6 +85,12 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                 $scope.scopeModel.onUpdateBalanceRecordListReady = function (api) {
                     updateBalanceRecordListDirectiveReadyAPI = api;
                     updateBalanceRecordListDirectiveReadyPromiseDeferred.resolve();
+                };
+
+                //Output Fields
+                $scope.scopeModel.onFinancialAccountIdReady = function (api) {
+                    financialAccountIdDirectiveReadyAPI = api;
+                    financialAccountIdDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -118,6 +128,11 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                     var updateBalanceRecordListDirectivePromiseDeferred = getUpdateBalanceRecordListDirectivePromiseDeferred();
                     promises.push(updateBalanceRecordListDirectivePromiseDeferred.promise);
 
+                    //Output
+                    //Loading FinancialAccountId Directive
+                    var financialAccountIdDirectivePromiseDeferred = getFinancialAccountIdDirectivePromiseDeferred();
+                    promises.push(financialAccountIdDirectivePromiseDeferred.promise);
+
 
                     function getAccountBEDefinitionIdDirectiveLoadPromiseDeferred() {
                         var accountBEDefinitionIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -126,7 +141,7 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
 
                             var accountBEDefinitionIdPayload = { context: payload.context };
                             if (payload.stepDetails != undefined)
-                                accountBEDefinitionIdPayload.selectedRecords = payload.stepDetails.AccountBEDefinitionID;
+                                accountBEDefinitionIdPayload.selectedRecords = payload.stepDetails.AccountBEDefinitionId;
 
                             VRUIUtilsService.callDirectiveLoad(accountBEDefinitionIdDirectiveReadyAPI, accountBEDefinitionIdPayload, accountBEDefinitionIdDirectiveLoadPromiseDeferred);
                         });
@@ -204,18 +219,35 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                         return updateBalanceRecordListDirectiveLoadPromiseDeferred;
                     }
 
+                    function getFinancialAccountIdDirectivePromiseDeferred() {
+                        var financialAccountIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        financialAccountIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var financialAccountIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                financialAccountIdPayload.selectedRecords = payload.stepDetails.FinancialAccountId;
+
+                            VRUIUtilsService.callDirectiveLoad(financialAccountIdDirectiveReadyAPI, financialAccountIdPayload, financialAccountIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return financialAccountIdDirectiveLoadPromiseDeferred;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.TransformationSteps.RetrieveFinancialInfoStep, Retail.BusinessEntity.MainExtensions",
-                        AccountBEDefinitionID: accountBEDefinitionIdDirectiveReadyAPI.getData(),
+                        AccountBEDefinitionId: accountBEDefinitionIdDirectiveReadyAPI.getData(),
                         AccountId: accountIdDirectiveReadyAPI.getData(),
                         EffectiveOn: effectiveOnDirectiveReadyAPI.getData(),
                         Amount: amountDirectiveReadyAPI.getData(),
                         CurrencyId: currencyIdDirectiveReadyAPI.getData(),
-                        UpdateBalanceRecordList: updateBalanceRecordListDirectiveReadyAPI.getData()
+                        UpdateBalanceRecordList: updateBalanceRecordListDirectiveReadyAPI.getData(),
+
+                        FinancialAccountId: financialAccountIdDirectiveReadyAPI.getData()
                     };
                 };
 

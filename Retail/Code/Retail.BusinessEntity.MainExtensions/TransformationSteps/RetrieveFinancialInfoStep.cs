@@ -19,6 +19,9 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
         public string CurrencyId { get; set; }
         public string UpdateBalanceRecordList { get; set; }
 
+        //Output
+        public string FinancialAccountId { get; set; }
+
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
@@ -31,23 +34,30 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
             string fullTypeName = CSharpCompiler.TypeToString(runtimeType);
 
 
-            var accountFinancialInfoVariableName = context.GenerateUniqueMemberName("accountfinancialInfo");
-            context.AddCodeToCurrentInstanceExecutionBlock("Retail.BusinessEntity.Entities.AccountFinancialInfo {0} = new Retail.BusinessEntity.Business.FinancialAccountManager().RetrieveFinancialInfoStep({1},{2},{3})",
-                accountFinancialInfoVariableName, AccountBEDefinitionId, AccountId, EffectiveOn);
+            var financialAccountRuntimeDataVariableName = context.GenerateUniqueMemberName("accountfinancialInfo");
+            context.AddCodeToCurrentInstanceExecutionBlock("Retail.BusinessEntity.Entities.FinancialAccountRuntimeData {0} = new Retail.BusinessEntity.Business.FinancialAccountManager().GetAccountFinancialInfo({1},{2},{3});",
+                financialAccountRuntimeDataVariableName, AccountBEDefinitionId, AccountId, EffectiveOn);
 
-            context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", accountFinancialInfoVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", financialAccountRuntimeDataVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{");
+
+            context.AddCodeToCurrentInstanceExecutionBlock("if({0} > 0)", Amount);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
 
             var updateBalanceRecordVariableName = context.GenerateUniqueMemberName("updateBalanceRecord");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", updateBalanceRecordVariableName, fullTypeName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.BalanceAccountTypeId = {1}.BalanceAccountTypeId;", updateBalanceRecordVariableName, accountFinancialInfoVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.BalanceAccountId = {1}.BalanceAccountId;", updateBalanceRecordVariableName, accountFinancialInfoVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.FinancialAccountId = {1}.FinancialAccountId;", updateBalanceRecordVariableName, accountFinancialInfoVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.BalanceAccountTypeId = {1}.BalanceAccountTypeId;", updateBalanceRecordVariableName, financialAccountRuntimeDataVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.BalanceAccountId = {1}.BalanceAccountId;", updateBalanceRecordVariableName, financialAccountRuntimeDataVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.FinancialAccountId = {1}.FinancialAccountId;", updateBalanceRecordVariableName, financialAccountRuntimeDataVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", updateBalanceRecordVariableName, EffectiveOn);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Amount = {1};", updateBalanceRecordVariableName, Amount);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.CurrencyId = {1};", updateBalanceRecordVariableName, CurrencyId);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.Add({1});", UpdateBalanceRecordList, updateBalanceRecordVariableName);
 
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.add({1});", UpdateBalanceRecordList, updateBalanceRecordVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("}");
+
+            if (this.FinancialAccountId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.FinancialAccountId;", this.FinancialAccountId, financialAccountRuntimeDataVariableName);
 
             context.AddCodeToCurrentInstanceExecutionBlock("}");
         }

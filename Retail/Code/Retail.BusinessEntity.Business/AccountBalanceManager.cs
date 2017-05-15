@@ -10,18 +10,37 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountBalanceManager
     {
+        private struct GetAccountBalanceTypeIdCacheName
+        {
+            public Guid AccountBEDefinitionId { get; set; }
+        }
         public Guid GetAccountBalanceTypeId(Guid accountBEDefinitionId)
         {
-            Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            IEnumerable<AccountType> accountTypes = _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>();
+            var cacheName = new GetAccountBalanceTypeIdCacheName { AccountBEDefinitionId = accountBEDefinitionId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+                    IEnumerable<AccountType> accountTypes = _vrComponentTypeManager.GetComponentTypes<AccountTypeSettings, AccountType>();
 
-            foreach(var accountType in accountTypes)
+                    foreach (var accountType in accountTypes)
+                    {
+                        var extendedSettings = accountType.Settings.ExtendedSettings as SubscriberAccountBalanceSetting;
+                        if (extendedSettings != null && extendedSettings.AccountBEDefinitionId == accountBEDefinitionId)
+                            return accountType.VRComponentTypeId;
+                    }
+                    return Guid.Empty;
+                });
+        }
+
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            DateTime? _componentTypeCacheLastCheck;
+
+            protected override bool ShouldSetCacheExpired()
             {
-                var extendedSettings =accountType.Settings.ExtendedSettings as SubscriberAccountBalanceSetting;
-                if (extendedSettings != null && extendedSettings.AccountBEDefinitionId == accountBEDefinitionId)
-                    return accountType.VRComponentTypeId;
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Common.Business.VRComponentTypeManager.CacheManager>().IsCacheExpired(ref _componentTypeCacheLastCheck);
             }
-            return Guid.Empty;
         }
     }
 }
