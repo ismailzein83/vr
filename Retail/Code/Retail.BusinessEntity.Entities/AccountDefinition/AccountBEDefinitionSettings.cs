@@ -36,6 +36,7 @@ namespace Retail.BusinessEntity.Entities
         {
             get { return "retail-be-account-selector"; }
         }
+
         public bool UseRemoteSelector { get; set; }
         public Guid StatusBEDefinitionId { get; set; }
         public List<AccountExtraFieldDefinition> AccountExtraFieldDefinitions { get; set; }
@@ -62,6 +63,7 @@ namespace Retail.BusinessEntity.Entities
     public abstract class AccountExtraFieldDefinitionSettings
     {
         public abstract Guid ConfigId  { get; }
+
         public abstract IEnumerable<AccountGenericField> GetFields(IAccountExtraFieldSettingsContext context);
     }
     public interface IAccountExtraFieldSettingsContext
@@ -91,13 +93,8 @@ namespace Retail.BusinessEntity.Entities
         public RequiredPermissionSettings ViewAccountPackageRequiredPermission { get; set; }
         public RequiredPermissionSettings AddAccountPackageRequiredPermission { get; set; }
 
-
         public RequiredPermissionSettings ViewProductRequiredPermission { get; set; }
         public RequiredPermissionSettings AddProductRequiredPermission { get; set; }
         public RequiredPermissionSettings EditProductRequiredPermission { get; set; }
-
-
-
-
     }
 }
