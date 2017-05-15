@@ -56,6 +56,8 @@ as (select * from (values
 ('FB2D7DC4-AF79-4068-8452-1058AF7544D7','PriceVoiceEventStep','PriceVoiceEventStep','VR_GenericData_DataTransformationStepConfig'							,'{"Editor":"retail-voice-pricevoiceeventstep","StepPreviewUIControl":"retail-voice-pricevoiceeventstep-preview"}'),
 ('7F43E2A1-2F27-4AB2-B7A4-C74A9F6B704D','InternationalIdentificationStep','InternationalIdentificationStep','VR_GenericData_DataTransformationStepConfig'	,'{"Editor":"retail-voice-internationalidentificationstep","StepPreviewUIControl":"retail-voice-internationalidentificationstep-preview"}'),
 ('7AD561D3-0650-4345-8FFD-D51A10C656BE','AccountIdentificationStep','AccountIdentificationStep','VR_GenericData_DataTransformationStepConfig'				,'{"Editor":"retail-voice-accountidentificationstep","StepPreviewUIControl":"retail-voice-accountidentificationstep-preview"}'),
+('60BE8BF8-692D-4111-8038-63F7BCB62DAE','RetrieveFinancialInfoStep','RetrieveFinancialInfoStep','VR_GenericData_DataTransformationStepConfig'				,'{"Editor":"retail-be-retrievefinancialinfostep","StepPreviewUIControl":"retail-be-retrievefinancialinfostep-preview"}'),
+
 ('2FF81206-1E07-4E66-9E35-7F53BF049AB3','Retail_Voice_VoiceServiceType','Voice','Retail_BE_ServiceTypeExtendedSettingsConfig'								,'{"Editor":"retail-voice-voiceservicetype"}'),
 ('B0B5BC1F-E899-4AE5-AEFB-4FCD5D1BA140','Retail_Voice_StandardPolicyEvaluator','Standard','Retail_Voice_VoiceChargingPolicyEvaluatorConfig'					,'{"Editor":"retail-voice-standardpolicyevaluator"}'),
 ('1A73D2E9-1419-4B41-AD2B-6AB04930466B','DIDAccountIdentification','DID Account Identification','Retail_Voice_AccountIdentification'						,'{"Editor":"retail-voice-didaccountidentification"}'),
@@ -112,7 +114,6 @@ as (select * from (values
 
 ('52525041-7A8B-4AE1-9599-A3F34A87CB38','Retail Account Balance','Retail Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'							,'{"Editor":"retail-be-accountbalancenotificationtype-settings"}'),
 ('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}')
-
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -346,7 +347,7 @@ END
 
 
 --[bp].[BPDefinition]----------------------5001 to 6000---------------------------------------------
-BEGIN
+BEGIN 
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
 as (select * from (values
