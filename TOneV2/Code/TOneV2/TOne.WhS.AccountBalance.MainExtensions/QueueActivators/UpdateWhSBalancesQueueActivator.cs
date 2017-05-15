@@ -13,6 +13,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
     public class UpdateWhSBalancesQueueActivator : BaseUpdateAccountBalancesQueueActivator
     {
         static FinancialAccountManager s_financialAccountManager = new FinancialAccountManager();
+        public UpdateAccountBalanceSettings UpdateAccountBalanceSettings { get; set; }
 
         protected override void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context)
         {
@@ -71,7 +72,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
         {
             IEnumerable<AccountBalanceType> unFinalizedAccountBalanceTypes;
             List<AccountBalanceType> finalizedAccountBalanceTypes = context.FinalizedAccountBalanceTypes;
-            List<AccountBalanceType> allAccountBalanceTypeCombinations = this.GetCachedAccountBalanceTypeCombinations();
+            List<AccountBalanceType> allAccountBalanceTypeCombinations = GetAccountBalanceTypeCombinations(UpdateAccountBalanceSettings);
 
             if (finalizedAccountBalanceTypes == null || finalizedAccountBalanceTypes.Count == 0)
                 unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations;
@@ -82,61 +83,56 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
             {
                 foreach (var unFinalizedAccountBalanceType in unFinalizedAccountBalanceTypes)
                 {
-                    AccountBalanceType accountBalanceType = new AccountBalanceType() { AccountTypeId = unFinalizedAccountBalanceType.AccountTypeId, TransactionTypeId = unFinalizedAccountBalanceType.TransactionTypeId };
-                    context.GenerateEmptyBatch(accountBalanceType);
+                    context.GenerateEmptyBatch(unFinalizedAccountBalanceType);
                 }
             }
         }
 
-        private List<AccountBalanceType> GetCachedAccountBalanceTypeCombinations()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountBalanceTypeCombinations",
-            () =>
-            {
-                List<AccountBalanceType> accountBalanceTypeCombinations = new List<AccountBalanceType>();
+        //private List<AccountBalanceType> GetCachedAccountBalanceTypeCombinations()
+        //{
+        //    return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountBalanceTypeCombinations",
+        //    () =>
+        //    {
+        //        List<AccountBalanceType> accountBalanceTypeCombinations = new List<AccountBalanceType>();
 
-                AccountTypeFilter accountTypeFilter = new AccountTypeFilter()
-                {
-                    Filters = new List<IAccountTypeExtendedSettingsFilter>()
-                        {
-                            new AccountTypeExtendedSettingsFilter<AccountBalanceSettings>()
-                        }
-                };
+        //        AccountTypeFilter accountTypeFilter = new AccountTypeFilter()
+        //        {
+        //            Filters = new List<IAccountTypeExtendedSettingsFilter>()
+        //                {
+        //                    new AccountTypeExtendedSettingsFilter<AccountBalanceSettings>()
+        //                }
+        //        };
 
-                IEnumerable<AccountType> accountTypes = new AccountTypeManager().GetAccountTypes(accountTypeFilter);
-                if (accountTypes == null)
-                    throw new NullReferenceException("accountTypes");
+        //        IEnumerable<AccountType> accountTypes = new AccountTypeManager().GetAccountTypes(accountTypeFilter);
+        //        if (accountTypes == null)
+        //            throw new NullReferenceException("accountTypes");
 
-                IEnumerable<BillingTransactionType> billingTransactionTypes = new BillingTransactionTypeManager().GetBillingTransactionTypes();
-                if (billingTransactionTypes == null)
-                    throw new NullReferenceException("billingTransactionTypes");
+        //        IEnumerable<BillingTransactionType> billingTransactionTypes = new BillingTransactionTypeManager().GetBillingTransactionTypes();
+        //        if (billingTransactionTypes == null)
+        //            throw new NullReferenceException("billingTransactionTypes");
 
-                foreach (var accountType in accountTypes)
-                {
-                    foreach (var billingTransactionType in billingTransactionTypes)
-                    {
-                        accountBalanceTypeCombinations.Add(new AccountBalanceType()
-                        {
-                            AccountTypeId = accountType.VRComponentTypeId,
-                            TransactionTypeId = billingTransactionType.BillingTransactionTypeId
-                        });
-                    }
-                }
+        //        foreach (var accountType in accountTypes)
+        //        {
+        //            foreach (var billingTransactionType in billingTransactionTypes)
+        //            {
+        //                accountBalanceTypeCombinations.Add(new AccountBalanceType()
+        //                {
+        //                    AccountTypeId = accountType.VRComponentTypeId,
+        //                    TransactionTypeId = billingTransactionType.BillingTransactionTypeId
+        //                });
+        //            }
+        //        }
 
-                return accountBalanceTypeCombinations;
-            });
-        }
+        //        return accountBalanceTypeCombinations;
+        //    });
+        //}
 
-        #region Private Classes
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            protected override bool IsTimeExpirable
-            {
-                get { return true; }
-            }
-        }
-
-        #endregion
+        //private class CacheManager : Vanrise.Caching.BaseCacheManager
+        //{
+        //    protected override bool IsTimeExpirable
+        //    {
+        //        get { return true; }
+        //    }
+        //}
     }
 }
