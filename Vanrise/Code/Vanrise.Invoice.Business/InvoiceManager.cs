@@ -496,15 +496,13 @@ namespace Vanrise.Invoice.Business
                         var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
                         //Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
                         //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
-                        if (fieldValue != null)
+                        string description = fieldValue != null ? field.Type.GetDescription(fieldValue) : null;
+                        invoiceDetail.Items.Add(new InvoiceDetailObject
                         {
-                            invoiceDetail.Items.Add(new InvoiceDetailObject
-                            {
-                                FieldName = field.Name,
-                                Description = field.Type.GetDescription(fieldValue),
-                                Value = fieldValue
-                            });
-                        }
+                            FieldName = field.Name,
+                            Description = description,
+                            Value = fieldValue
+                        });
                     }
                    
                 }
