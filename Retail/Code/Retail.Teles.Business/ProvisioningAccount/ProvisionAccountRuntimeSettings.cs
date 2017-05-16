@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.Teles.Business.Provisioning
 {
@@ -24,9 +25,9 @@ namespace Retail.Teles.Business.Provisioning
             var definitionSettings = context.DefinitionSettings as ProvisionAccountDefinitionSettings;
             if (definitionSettings == null)
                 throw new NullReferenceException("definitionSettings");
-            CreateEnterprise(definitionSettings, context.AccountBEDefinitionId, context.AccountId);
+            CreateEnterprise(context,definitionSettings, context.AccountBEDefinitionId, context.AccountId);
         }
-        private void CreateEnterprise(ProvisionAccountDefinitionSettings definitionSettings, Guid accountBEDefinitionId, long accountId)
+        private void CreateEnterprise(IAccountProvisioningContext context,ProvisionAccountDefinitionSettings definitionSettings, Guid accountBEDefinitionId, long accountId)
         {
             Account account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
             Enterprise enterprise = new Enterprise
@@ -44,9 +45,10 @@ namespace Retail.Teles.Business.Provisioning
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, null, ProvisionStatus.Started);
             var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, Settings.CentrexFeatSet, enterprise);
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId, ProvisionStatus.Completed);
-            CreateSites(definitionSettings, enterpriseId, accountBEDefinitionId, accountId);
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Enterprise {0} created.", this.EnterpriseName));
+            CreateSites(context, definitionSettings, enterpriseId, accountBEDefinitionId, accountId);
         }
-        private void CreateSites(ProvisionAccountDefinitionSettings definitionSettings, dynamic enterpriseId, Guid accountBEDefinitionId, long accountId)
+        private void CreateSites(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, dynamic enterpriseId, Guid accountBEDefinitionId, long accountId)
         {
             var sites = _accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId, false);
             if (sites != null)
@@ -73,12 +75,13 @@ namespace Retail.Teles.Business.Provisioning
 
                     dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
                     _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
-                    CreateScreendedNumbers(definitionSettings, site.AccountId, siteId);
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
+                    CreateScreendedNumbers(context, definitionSettings, site.AccountId, siteId);
                 }
             }
         }
 
-        private void CreateScreendedNumbers(ProvisionAccountDefinitionSettings definitionSettings, long siteAccountId, dynamic siteId)
+        private void CreateScreendedNumbers(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, long siteAccountId, dynamic siteId)
         {
             var dids = _didManager.GetDIDsByParentId(siteAccountId.ToString(), DateTime.Now);
             if (dids != null)
@@ -91,7 +94,8 @@ namespace Retail.Teles.Business.Provisioning
                         case DIDNumberType.Number:
                             foreach (string number in did.Settings.Numbers)
                             {
-                                CreateScreenedNumber(definitionSettings, siteId, number);
+                                CreateScreenedNumber(context,definitionSettings, siteId, number);
+
                             }
                             break;
                         case DIDNumberType.Range:
@@ -101,7 +105,7 @@ namespace Retail.Teles.Business.Provisioning
                                 long to = range.To.TryParseWithValidate<long>(long.TryParse);
                                 for (var index = from; index <= to; index++)
                                 {
-                                    CreateScreenedNumber(definitionSettings, siteId, index.ToString());
+                                    CreateScreenedNumber(context,definitionSettings, siteId, index.ToString());
                                 }
                             }
                             break;
@@ -111,7 +115,7 @@ namespace Retail.Teles.Business.Provisioning
             }
         }
 
-        private void CreateScreenedNumber(ProvisionAccountDefinitionSettings definitionSettings, dynamic siteId, string number)
+        private void CreateScreenedNumber(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, dynamic siteId, string number)
         {
             ScreenedNumber screenedNumber = new ScreenedNumber
             {
@@ -124,6 +128,7 @@ namespace Retail.Teles.Business.Provisioning
                 type = "FIXED_NETWORK",
             };
             _telesEnterpriseManager.CreateScreenedNumber(definitionSettings.VRConnectionId, siteId, screenedNumber);
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Screened Number {0} created.", number));
         }
 
         public class Enterprise
