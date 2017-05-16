@@ -35,7 +35,7 @@ namespace Vanrise.Rules.RuleStructureBehaviors
         public override List<RuleNode> GetMatchedNodes(object target)
         {
             T key;
-            if (TryGetKeyFromTarget(target, out key))
+            if (TryGetKeyFromTarget(target, out key) && key != null)
             {
                 RuleNode ruleNode;
                 if (_ruleNodesByKey.TryGetValue(key, out ruleNode))
