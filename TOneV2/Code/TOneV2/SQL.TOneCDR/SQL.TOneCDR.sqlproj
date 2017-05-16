@@ -80,5 +80,7 @@
     <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_MainType.sql" />
     <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_InvalidType.sql" />
     <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_FailedType.sql" />
+    <Build Include="TOneWhS_CDR\Tables\BillingCDR_PartialPriced.sql" />
+    <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_PartialPricedType.sql" />
   </ItemGroup>
 </Project>
