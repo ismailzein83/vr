@@ -486,22 +486,30 @@ namespace Vanrise.Invoice.Business
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var dataRecordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
             invoiceDetail.Items = new List<InvoiceDetailObject>();
-            foreach (var field in dataRecordType.Fields)
-            {
-                var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
-                //Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
-                //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
 
-                if (fieldValue != null)
+            foreach (var item in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
+            {
+                foreach (var field in dataRecordType.Fields)
                 {
-                    invoiceDetail.Items.Add(new InvoiceDetailObject
+                    if(item.Field == InvoiceField.CustomField && item.CustomFieldName == field.Name)
                     {
-                        FieldName = field.Name,
-                        Description = field.Type.GetDescription(fieldValue),
-                        Value = fieldValue
-                    });
+                        var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
+                        //Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
+                        //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
+                        if (fieldValue != null)
+                        {
+                            invoiceDetail.Items.Add(new InvoiceDetailObject
+                            {
+                                FieldName = field.Name,
+                                Description = field.Type.GetDescription(fieldValue),
+                                Value = fieldValue
+                            });
+                        }
+                    }
+                   
                 }
             }
+          
         }
         private static InvoiceDetail InvoiceDetailMapper2(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
         {
