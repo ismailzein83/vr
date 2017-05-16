@@ -45,6 +45,7 @@ namespace Retail.Teles.Business.Provisioning
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, null, ProvisionStatus.Started);
             var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, Settings.CentrexFeatSet, enterprise);
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId, ProvisionStatus.Completed);
+            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId,"Provision", string.Format("Teles enterprise {0}", this.EnterpriseName), null);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Enterprise {0} created.", this.EnterpriseName));
             CreateSites(context, definitionSettings, enterpriseId, accountBEDefinitionId, accountId);
         }
@@ -75,6 +76,7 @@ namespace Retail.Teles.Business.Provisioning
 
                     dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
                     _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
+                    _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, site.AccountId, "Provision", string.Format("Teles site {0}", site.Name), null);
                     context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
                     CreateScreendedNumbers(context, definitionSettings, site.AccountId, siteId);
                 }
