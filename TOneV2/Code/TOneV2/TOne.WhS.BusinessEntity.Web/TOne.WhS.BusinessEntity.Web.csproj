@@ -522,6 +522,8 @@
     <Content Include="WhS_BusinessEntity\Views\SupplierCode\SupplierCodeManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierPricelist\SupplierPricelist.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierPricelist\SupplierPricelistController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierService\SupplierServiceEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SupplierService\SupplierServiceEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierService\SupplierServiceManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SupplierService\SupplierServiceManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SupplierRate\SupplierRateManagement.html" />
