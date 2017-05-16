@@ -305,7 +305,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Cos Net</Value>
+                              <Value>Cost Net</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>

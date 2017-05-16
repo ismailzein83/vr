@@ -450,17 +450,20 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 DimensionId = (object)reader["DimensionId"],
                 DimensionSuffix = (VariationReportRecordDimensionSuffix)reader["DimensionSuffix"],
-                OrderValue = (decimal)reader["OrderValue"],
-                Average = (decimal)reader["Average"],
-                Percentage = (decimal)reader["Percentage"],
-                PreviousPeriodPercentage = (decimal)reader["PreviousPeriodPercentage"]
+                OrderValue = GetReaderValue<decimal>(reader, "OrderValue"),
+                Average = GetReaderValue<decimal>(reader, "Average"),
+                Percentage = GetReaderValue<decimal>(reader, "Percentage"),
+                PreviousPeriodPercentage = GetReaderValue<decimal>(reader, "PreviousPeriodPercentage")
             };
 
             if (query != null)
             {
                 variationReportRecord.TimePeriodValues = new List<decimal>();
                 for (int i = 0; i < query.NumberOfPeriods; i++)
-                    variationReportRecord.TimePeriodValues.Add((decimal)reader[String.Format("Period{0}Sum", i + 1)]);
+                {
+                    string valueName = String.Format("Period{0}Sum", i + 1);
+                    variationReportRecord.TimePeriodValues.Add(GetReaderValue<decimal>(reader, valueName));
+                }
             }
 
             return variationReportRecord;
