@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(CarrierAccountToEdit carrierAccount, int carrierProfileId)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierProfileId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierProfileId, carrierAccount.SellingProductId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             return (recordsEffected > 0);
         }
 

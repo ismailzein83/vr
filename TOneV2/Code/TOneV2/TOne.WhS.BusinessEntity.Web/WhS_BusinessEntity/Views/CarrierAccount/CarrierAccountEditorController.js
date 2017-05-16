@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService) {
 
         // Definition
         var carrierProfileSelectorAPI;
@@ -79,7 +79,6 @@
             $scope.scopeModel.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode;
             $scope.scopeModel.disableCarrierAccountType = isEditMode;
             $scope.scopeModel.disableSellingNumberPlan = isEditMode;
-            $scope.scopeModel.isSellingProductSelectorDisabled = isEditMode;
             $scope.scopeModel.showZoneServiceConfig = false;
 
             // Definition
@@ -465,6 +464,9 @@
             if (carrierAccountEntity != undefined) {
                 var loadSellingProductSelectorPromise = loadSellingProductSelector();
                 promises.push(loadSellingProductSelectorPromise);
+
+                var areEffectiveOrFutureCountriesSoldToCustomerPromise = areEffectiveOrFutureCountriesSoldToCustomer();
+                promises.push(areEffectiveOrFutureCountriesSoldToCustomerPromise);
             }
 
             var loadCustomerRoutingStatusSelectorPromise = loadCustomerRoutingStatusSelector();
@@ -515,6 +517,11 @@
             });
 
             return sellingProductSelectorLoadDeferred.promise;
+        }
+        function areEffectiveOrFutureCountriesSoldToCustomer() {
+            return WhS_BE_CustomerCountryAPIService.AreEffectiveOrFutureCountriesSoldToCustomer(carrierAccountEntity.CarrierAccountId, UtilsService.getDateFromDateTime(new Date())).then(function (response) {
+                $scope.scopeModel.isSellingProductSelectorDisabled = (response === true);
+            });
         }
         function loadCustomerRoutingStatusSelector() {
             var customerRoutingStatusSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -650,6 +657,7 @@
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModel.name,
+                SellingProductId: (sellingProductSelectorAPI != undefined) ? sellingProductSelectorAPI.getSelectedIds() : null,
                 CarrierAccountSettings: {
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
@@ -680,7 +688,6 @@
             if (!isEditMode) {
                 obj.CarrierProfileId = carrierProfileSelectorAPI.getSelectedIds();
                 obj.SellingNumberPlanId = sellingNumberPlanSelectorAPI != undefined ? sellingNumberPlanSelectorAPI.getSelectedIds() : null;
-                obj.SellingProductId = (sellingProductSelectorAPI != undefined) ? sellingProductSelectorAPI.getSelectedIds() : null;
                 obj.AccountType = $scope.scopeModel.selectedCarrierAccountType.value;
             }
 

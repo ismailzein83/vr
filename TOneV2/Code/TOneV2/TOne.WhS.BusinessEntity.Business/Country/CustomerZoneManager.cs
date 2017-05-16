@@ -234,6 +234,13 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, List<CustomerCountry2>> allCustomerCountries = GetAllCachedCustomerCountries();
             return allCustomerCountries.GetRecord(customerId);
         }
+
+        public bool AreEffectiveOrFutureCountriesSoldToCustomer(int customerId, DateTime date)
+        {
+            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
+            return (customerCountries != null && customerCountries.Any(x => x.IsEffectiveOrFuture(date)));
+        }
+
         #endregion
 
         #region Private Classes
