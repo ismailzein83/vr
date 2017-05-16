@@ -48,6 +48,6 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public decimal? AvgMin { get; set; }
         public string AvgMinFormatted { get; set; }
         public DateTime SaleRateEffectiveDate { get; set; }
-        public DateTime CostRateEffectiveDate { get; set; }
+        public DateTime? CostRateEffectiveDate { get; set; }
     }
 }

@@ -114,7 +114,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                             carrierSummary.CostRateChangeFormatted = carrierSummary.CostRateChange;
                         }
                         var costRateEffectiveDate = analyticRecord.DimensionValues[11];
-                        if (costRateEffectiveDate != null)
+                        if (costRateEffectiveDate != null && costRateEffectiveDate.Value != null)
                         {
                             carrierSummary.CostRateEffectiveDate = Convert.ToDateTime(costRateEffectiveDate.Value);
                         }
