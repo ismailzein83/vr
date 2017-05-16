@@ -1,10 +1,9 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSellingproductGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService", "WhS_BE_SellingProductService", "WhS_BE_CustomerSellingProductService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService",
-function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, WhS_BE_CustomerSellingProductService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService) {
+app.directive("vrWhsBeSellingproductGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService", "WhS_BE_SellingProductService", "VRUIUtilsService",
+function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
-
         restrict: "E",
         scope: {
             onReady: "="
@@ -21,15 +20,16 @@ function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, W
 
         },
         templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SellingProduct/Templates/SellingProductGridTemplate.html"
-
     };
 
     function SellingProductGrid($scope, ctrl) {
 
-        var gridAPI;
         this.initializeController = initializeController;
+
+        var gridAPI;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
         var gridDrillDownTabsObj;
-        var drilldwonDefinitionArray = [];
+
         function initializeController() {
             $scope.sellingProducts = [];
 
@@ -37,64 +37,11 @@ function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, W
 
             $scope.gridReady = function (api) {
                 gridAPI = api;
-
-                var drillDownDefinitions = [];
-                var drillDownDefinition = {};
-
-                drillDownDefinition.title = "Customer Selling Product";
-                drillDownDefinition.directive = "vr-whs-be-customersellingproduct-grid";
-
-                drillDownDefinition.loadDirective = function (directiveAPI, dataItem) {
-                    dataItem.custormerSellingProductGridAPI = directiveAPI;
-                    var payload = {
-                        query: {
-                            SellingProductsIds: [dataItem.Entity.SellingProductId]
-                        },
-                        hideSellingProductColumn: true
-                    };
-                    return dataItem.custormerSellingProductGridAPI.loadGrid(payload);
-                };
-
-                drillDownDefinitions.push(drillDownDefinition);
-                AddObjectTrackingDrillDown();
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drilldwonDefinitionArray, gridAPI, $scope.gridMenuActions);
-
-                function AddObjectTrackingDrillDown() {
-                    var drillDownDefinition = {};
-                    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-                    drillDownDefinition.directive = "vr-common-objecttracking-grid";
-
-
-                    drillDownDefinition.loadDirective = function (directiveAPI, sellingProductItem) {
-                        sellingProductItem.objectTrackingGridAPI = directiveAPI;
-
-                        var query = {
-                            ObjectId: sellingProductItem.Entity.SellingProductId,
-                            EntityUniqueName: WhS_BE_SellingProductService.getEntityUniqueName(),
-
-                        };
-                        return sellingProductItem.objectTrackingGridAPI.load(query);
-                    };
-                    for (var i = 0; i < drillDownDefinitions.length; i++) {
-                        drilldwonDefinitionArray.push(drillDownDefinitions[i]);
-                    }
-                    drilldwonDefinitionArray.push(drillDownDefinition);
-
-                }
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
-                    };
-                    directiveAPI.onSellingProductAdded = function (sellingProductObject) {
-                        gridDrillDownTabsObj.setDrillDownExtensionObject(sellingProductObject);
-                        gridAPI.itemAdded(sellingProductObject);
-                    };
-                    return directiveAPI;
-                }
+                var drillDownDefinitions = getDrillDownDefinitions();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                gridReadyDeferred.resolve();
             };
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SellingProductAPIService.GetFilteredSellingProducts(dataRetrievalInput)
                     .then(function (response) {
@@ -110,6 +57,48 @@ function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, W
                     });
             };
 
+            UtilsService.waitMultiplePromises([gridReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
+        function defineAPI() {
+            var api = {};
+
+            api.loadGrid = function (query) {
+                return gridAPI.retrieveData(query);
+            };
+
+            api.onSellingProductAdded = function (sellingProductObject) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(sellingProductObject);
+                gridAPI.itemAdded(sellingProductObject);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        function getDrillDownDefinitions() {
+            var drillDownDefinitions = [];
+
+            AddObjectTrackingDrillDownDefinition();
+
+            function AddObjectTrackingDrillDownDefinition() {
+                var objectTrackingDrillDownDefinition = {
+                    title: VRCommon_ObjectTrackingService.getObjectTrackingGridTitle(),
+                    directive: 'vr-common-objecttracking-grid',
+                    loadDirective: function (directiveAPI, sellingProductItem) {
+                        sellingProductItem.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: sellingProductItem.Entity.SellingProductId,
+                            EntityUniqueName: WhS_BE_SellingProductService.getEntityUniqueName()
+                        };
+                        return sellingProductItem.objectTrackingGridAPI.load(query);
+                    }
+                };
+                drillDownDefinitions.push(objectTrackingDrillDownDefinition);
+            }
+
+            return drillDownDefinitions;
         }
 
         function defineMenuActions() {
@@ -117,23 +106,8 @@ function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, W
                 name: "Edit",
                 clicked: editSellingProduct,
                 haspermission: hasUpdateSellingProductPermission
-            },
-           {
-               name: "Assign Customer",
-               clicked: assignCustomer,
-               haspermission: hasAddCustomerSellingProductPermission
-           }
-            ];
+            }];
         }
-
-        function hasAddCustomerSellingProductPermission() {
-            return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
-        }
-
-        function hasUpdateSellingProductPermission() {
-            return WhS_BE_SellingProductAPIService.HasUpdateSellingProductPermission();
-        }
-
         function editSellingProduct(sellingProductObj) {
             var onSellingProductUpdated = function (sellingProduct) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(sellingProduct);
@@ -142,24 +116,10 @@ function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, W
 
             WhS_BE_SellingProductService.editSellingProduct(sellingProductObj.Entity, onSellingProductUpdated);
         }
-        function assignCustomer(dataItem) {
-            gridAPI.expandRow(dataItem);
-            var query = {
-                SellingProductsIds: [dataItem.Entity.SellingProductId]
-            };
-            gridDrillDownTabsObj.setDrillDownExtensionObject(dataItem);
-            var onCustomerSellingProductAdded = function (customerSellingProductObj) {
-                if (dataItem.custormerSellingProductGridAPI != undefined) {
-                    for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        dataItem.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
-
-                    }
-                }
-            };
-            WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
+        function hasUpdateSellingProductPermission() {
+            return WhS_BE_SellingProductAPIService.HasUpdateSellingProductPermission();
         }
     }
 
     return directiveDefinitionObject;
-
 }]);
