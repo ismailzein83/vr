@@ -304,7 +304,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             StringBuilder whereBuilder = new StringBuilder(@"lb.AccountTypeID = @AccountTypeID");
 
             if (query.AccountsIds!=null && query.AccountsIds.Count() > 0)
-                whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<String>(",", query.AccountsIds)));
+                whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<String>(",", query.AccountsIds.Select(x => string.Format("'{0}'", x)))));
 
             if (query.Sign != null)
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign , query.Balance));
