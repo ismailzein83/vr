@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]
-	@AccountID bigint,
+	@AccountID varchar(50),
 	@AccountTypeID uniqueidentifier,
 	@InitialBalance decimal(20,6),
 	@CurrencyId int,

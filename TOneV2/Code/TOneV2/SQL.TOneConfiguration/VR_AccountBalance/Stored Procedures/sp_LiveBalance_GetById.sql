@@ -6,7 +6,7 @@
 CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_GetById]
 	-- Add the parameters for the stored procedure here
 	@AccountTypeId uniqueidentifier,
-	@AccountID bigint
+	@AccountID varchar(50)
 	
 AS
 BEGIN

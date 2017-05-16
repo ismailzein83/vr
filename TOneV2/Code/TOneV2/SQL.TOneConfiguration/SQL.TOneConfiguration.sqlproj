@@ -602,6 +602,7 @@
     <Build Include="common\Stored Procedures\sp_GenericLKUP_GetAll.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLast.sql" />
     <Build Include="VR_Invoice\Tables\InvoicePartner.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoicePaidBySourceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
