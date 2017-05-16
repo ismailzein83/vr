@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
-        <vr-textbox value="scopeModel.enterpriseName" label="Enterprise Name" isrequired="true"></vr-textbox>
+        <vr-textbox value="scopeModel.enterpriseName" label="Enterprise Name" isrequired="true" customvalidate="scopeModel.validateEnterpriseName()"></vr-textbox>
     </vr-columns>
 </vr-row>
 <retail-teles-provisioner-provisionaccount-settings on-ready="scopeModel.onProvisionAccountSettingsReady"></retail-teles-provisioner-provisionaccount-settings>

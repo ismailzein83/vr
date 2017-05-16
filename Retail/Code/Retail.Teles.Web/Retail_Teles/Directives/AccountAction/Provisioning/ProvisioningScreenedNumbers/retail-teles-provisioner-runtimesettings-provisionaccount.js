@@ -32,6 +32,12 @@
                     provisionAccountSettingsAPI = api;
                     provisionAccountSettingsReadyDeferred.resolve();
                 };
+                var enterpriseNameRegex = new RegExp("^([a-z0-9]{3,}\.[a-z0-9]{3,}\.[a-z0-9]{3,})$");
+                $scope.scopeModel.validateEnterpriseName = function () {
+                    if (enterpriseNameRegex.test($scope.scopeModel.enterpriseName))
+                        return null;
+                    return "Expression should be in the form \"xxx.xxx.xxx\"";
+                };
                 UtilsService.waitMultiplePromises([provisionAccountSettingsReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
