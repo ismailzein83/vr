@@ -17,25 +17,32 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV2.RecordParsers
             get { return new Guid("3F2E745A-9AE6-44AA-AC8A-C7D383B4A3B7"); }
         }
 
-        public List<HexTLVRecordParser> DefaultSubRecordParsers { get; set; }
+        public HexTLVRecordParser DefaultSubRecordParser { get; set; }
 
-        public Dictionary<string, List<HexTLVRecordParser>> SubRecordsParsersByTag { get; set; }
+        public Dictionary<string, HexTLVRecordParser> SubRecordsParsersByTag { get; set; }
 
         public override void Execute(IHexTLVRecordParserContext context)
         {
             HexTLVHelper.ReadTagsFromStream(context.RecordStream,
                 (tagValue) =>
                 {
-                    List<HexTLVRecordParser> subRecordsParsers = null;
+                    HexTLVRecordParser subRecordsParser = null;
                     if (this.SubRecordsParsersByTag != null)
-                        this.SubRecordsParsersByTag.TryGetValue(tagValue.Tag, out subRecordsParsers);
+                        this.SubRecordsParsersByTag.TryGetValue(tagValue.Tag, out subRecordsParser);
 
-                    if (subRecordsParsers == null)
-                        subRecordsParsers = this.DefaultSubRecordParsers;
+                    if (subRecordsParser == null)
+                        subRecordsParser = this.DefaultSubRecordParser;
 
-                    if (subRecordsParsers != null)
-                        HexTLVHelper.ExecuteRecordParsers(subRecordsParsers, new MemoryStream(tagValue.Value), context);
+                    if (subRecordsParser != null)
+                        ExecuteRecordParser(subRecordsParser, new MemoryStream(tagValue.Value), context);
                 });
+        }
+
+        public static void ExecuteRecordParser(HexTLVRecordParser subRecordsParser, Stream recordStream, IHexTLVRecordParserContext parentRecordContext)
+        {
+            //subRecordsParser.Settings.ThrowIfNull("subRecordParser.Settings");
+            //var subRecordContext = new SubRecordHexTLVRecordParserContext(recordStream, parentRecordContext);
+            //subRecordsParser.Settings.Execute(subRecordContext);
         }
     }
 }
