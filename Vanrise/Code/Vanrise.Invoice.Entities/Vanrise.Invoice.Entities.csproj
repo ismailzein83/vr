@@ -65,6 +65,7 @@
     <Compile Include="InvoiceItem\GroupingInvoiceItemDetail.cs" />
     <Compile Include="InvoiceItem\GroupingInvoiceItemQuery.cs" />
     <Compile Include="InvoiceItem\IGroupingInvoiceItemQueryContext.cs" />
+    <Compile Include="InvoicePartner\InvoiceAccount.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceBatch.cs" />
     <Compile Include="InvoiceSetting\InvoiceSetting.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingDetail.cs" />

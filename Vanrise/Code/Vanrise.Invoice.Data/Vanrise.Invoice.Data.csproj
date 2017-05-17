@@ -47,6 +47,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="IInvoiceDataManager.cs" />
     <Compile Include="IInvoiceItemDataManager.cs" />
+    <Compile Include="IInvoiceAccountDataManager.cs" />
     <Compile Include="IInvoiceSequenceDataManager.cs" />
     <Compile Include="IInvoiceSettingDataManager.cs" />
     <Compile Include="IInvoiceTypeDataManager.cs" />

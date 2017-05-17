@@ -72,6 +72,7 @@
     <Compile Include="InvoiceItemManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoicePartnerFilter\NotAssignedPartnerToInvoiceSettingFilter.cs" />
+    <Compile Include="InvoiceAccountManager.cs" />
     <Compile Include="InvoiceSequenceManager.cs" />
     <Compile Include="InvoiceSettingManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />

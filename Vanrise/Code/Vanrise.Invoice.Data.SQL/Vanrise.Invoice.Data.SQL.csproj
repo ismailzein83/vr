@@ -47,6 +47,7 @@
     <Compile Include="BillingPeriodInfoDataManager.cs" />
     <Compile Include="InvoiceDataManager.cs" />
     <Compile Include="InvoiceItemDataManager.cs" />
+    <Compile Include="InvoiceAccountDataManager.cs" />
     <Compile Include="InvoiceSequenceDataManager.cs" />
     <Compile Include="InvoiceSettingDataManager.cs" />
     <Compile Include="InvoiceTypeDataManager.cs" />
