@@ -39,7 +39,7 @@ namespace Retail.MultiNet.Business
         AccountPackageManager _accountPackageManager = new AccountPackageManager();
         PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
         AnalyticManager _analyticManager = new AnalyticManager();
-
+        FinancialAccountManager _financialAccountManager = new FinancialAccountManager();
         public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
@@ -58,11 +58,10 @@ namespace Retail.MultiNet.Business
             List<string> listDimensions = new List<string> { "TrafficDirection", "ServiceType" };
 
             string dimensionName = "FinancialAccountId";
-            long accountId = Convert.ToInt32(context.PartnerId);
+            var financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
 
 
-            var accountPackages = _accountPackageManager.GetPackageIdsAssignedToAccount(accountId, DateTime.Now);
-            var account = _accountBEManager.GetAccount(this._acountBEDefinitionId, accountId);
+            var accountPackages = _accountPackageManager.GetPackageIdsAssignedToAccount(financialAccountData.Account.AccountId, DateTime.Now);
             IEnumerable<Package> packages = null;
             if(accountPackages != null)
             {
@@ -70,20 +69,20 @@ namespace Retail.MultiNet.Business
             }
             
             IAccountPayment accountPayment;
-            if (!_accountBEManager.HasAccountPayment(this._acountBEDefinitionId, accountId, false, out accountPayment))
-                throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", accountId));
+            if (!_accountBEManager.HasAccountPayment(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false, out accountPayment))
+                throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", financialAccountData.Account.AccountId));
             int currencyId = accountPayment.CurrencyId;
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.GeneratedToDate, currencyId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, financialAccountData.Account.AccountId, context.FromDate, context.GeneratedToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
 
-            Dictionary<string, List<dynamic>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, packages, account, currencyId);
+            Dictionary<string, List<dynamic>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, packages, financialAccountData.Account, currencyId);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
-            InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId, account);
+            InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId, financialAccountData.Account);
 
             context.Invoice = new GeneratedInvoice
             {

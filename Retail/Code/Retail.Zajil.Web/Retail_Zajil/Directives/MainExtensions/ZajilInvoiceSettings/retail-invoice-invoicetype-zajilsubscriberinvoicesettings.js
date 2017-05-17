@@ -70,7 +70,7 @@ app.directive("retailInvoiceInvoicetypeZajilsubscriberinvoicesettings", ["UtilsS
                                 }
                             };
                             if (payload != undefined && payload.extendedSettingsEntity != undefined) {
-                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AcountBEDefinitionId;
+                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AccountBEDefinitionId;
                             }
                             VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
                         });
@@ -98,7 +98,7 @@ app.directive("retailInvoiceInvoicetypeZajilsubscriberinvoicesettings", ["UtilsS
                 api.getData = function () {
                     return {
                         $type: "Retail.Zajil.MainExtensions.ZajilSubscriberInvoiceSettings, Retail.Zajil.MainExtensions",
-                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+                        AccountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
                         CompanyExtendedInfoPartdefinitionId: companyExtendedInfoSelectorAPI.getSelectedIds()
                     };
                 };

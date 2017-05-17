@@ -39,49 +39,46 @@ namespace Retail.MultiNet.Business
         {
             get
             {
-                return "retail-invoice-financialaccount-selector";
+                return "retail-multinet-account-invoice-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                return "retail-invoice-financialaccount-selector";
+                return "retail-multinet-account-invoice-selector";
             }
         }
 
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
-            return Convert.ToInt32(context.PartnerId);
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+            return financialAccountData.Account.AccountId;
         }
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             switch (context.InfoType)
             {
                 case "Account":
-                    AccountBEManager accountBeManager = new AccountBEManager();
-                    long accountId = 0;
-                    long.TryParse(context.PartnerId, out accountId);
-                    return accountBeManager.GetAccount(_acountBEDefinitionId, accountId);
+                       return financialAccountData.Account;
                 case "InvoiceRDLCReport":
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
-                    long partnerId = Convert.ToInt32(context.PartnerId);
                     CurrencyManager currencyManager = new CurrencyManager();
-
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(partnerId);
-                    var account = accountBEManager.GetAccount(this._acountBEDefinitionId, partnerId);
-                    string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, account.AccountId);
-
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(financialAccountData.Account.AccountId);
+                    string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     IAccountPayment accountPayment;
-                    accountBEManager.HasAccountPayment(this._acountBEDefinitionId, account.AccountId, false, out accountPayment);
+                    accountBEManager.HasAccountPayment(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false, out accountPayment);
                     string currencySymbol = currencyManager.GetCurrencySymbol(accountPayment.CurrencyId);
 
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountName, accountName, true);
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
 
                     IAccountProfile accountProfile;
-                    accountBEManager.HasAccountProfile(this._acountBEDefinitionId, account.AccountId, false, out accountProfile);
+                    accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false, out accountProfile);
 
                     if (accountProfile != null)
                     {
@@ -119,8 +116,10 @@ namespace Retail.MultiNet.Business
         }
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             AccountBEManager accountBEManager = new AccountBEManager();
-            return accountBEManager.GetAccountName(this._acountBEDefinitionId, Convert.ToInt64(context.PartnerId));
+            return accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
         }
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
         {

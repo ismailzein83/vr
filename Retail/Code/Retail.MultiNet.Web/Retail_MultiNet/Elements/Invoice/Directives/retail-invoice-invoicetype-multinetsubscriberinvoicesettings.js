@@ -59,7 +59,7 @@ app.directive("retailInvoiceInvoicetypeMultinetsubscriberinvoicesettings", ["Uti
                                 }
                             };
                             if (payload != undefined && payload.extendedSettingsEntity != undefined) {
-                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AcountBEDefinitionId;
+                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AccountBEDefinitionId;
                             }
                             VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
                         });
@@ -72,7 +72,7 @@ app.directive("retailInvoiceInvoicetypeMultinetsubscriberinvoicesettings", ["Uti
                 api.getData = function () {
                     return {
                         $type: "Retail.MultiNet.Business.MultiNetSubscriberInvoiceSettings, Retail.MultiNet.Business",
-                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
+                        AccountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds(),
 
                     };
                 };

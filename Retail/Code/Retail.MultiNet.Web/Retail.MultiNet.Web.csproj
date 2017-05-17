@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_MultiNet\Constant\ModuleConfig.js" />
+    <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-multinet-account-invoice-selector.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-invoice-invoicetype-multinetsubscriberinvoicesettings.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\MultiNetnvoiceSettingsTemplate.html" />
     <Content Include="Retail_MultiNet\Reports\Reporting.aspx" />

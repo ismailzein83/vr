@@ -70,7 +70,7 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                     promises.push(directiveLoadPromiseDeferred.promise);
 
                     directiveReadyPromiseDeferred.promise.then(function () {
-                        var selectorPayload = { filter: getAccountSelectorFilter(), AccountBEDefinitionId: extendedSettings.AcountBEDefinitionId };
+                        var selectorPayload = { filter: getAccountSelectorFilter(), AccountBEDefinitionId: extendedSettings.AccountBEDefinitionId };
                         if (selectedIds != undefined) {
                             selectorPayload.selectedIds = selectedIds;
                         }

@@ -13,7 +13,7 @@ namespace Retail.Invoice.Business
 {
     public class RetailSubscriberInvoiceSettings : InvoiceTypeExtendedSettings
     {
-        public Guid AcountBEDefinitionId { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
 
         public override Guid ConfigId
         {
@@ -27,7 +27,7 @@ namespace Retail.Invoice.Business
                 case "MailTemplate":
                     long accountId = Convert.ToInt32(context.Invoice.PartnerId);
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
+                    var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Account", account);
                     objects.Add("Invoice", context.Invoice);
@@ -40,19 +40,19 @@ namespace Retail.Invoice.Business
         {
             long accountId = Convert.ToInt32(context.PartnerId);
             AccountBEManager accountBEManager = new AccountBEManager();
-            var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
+            var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
             context.PartnerCreationDate = account.CreatedTime;
 
         }
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new RetailSubscriberInvoiceGenerator(this.AcountBEDefinitionId);
+            return new RetailSubscriberInvoiceGenerator(this.AccountBEDefinitionId);
         }
 
         public override InvoicePartnerManager GetPartnerManager()
         {
-            return new RetailSubscriberPartnerSettings(this.AcountBEDefinitionId);
+            return new RetailSubscriberPartnerSettings(this.AccountBEDefinitionId);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
@@ -62,7 +62,7 @@ namespace Retail.Invoice.Business
                 case PartnerRetrievalType.GetActive:
                 case PartnerRetrievalType.GetAll:
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    var financialAccounts = accountBEManager.GetFinancialAccounts(this.AcountBEDefinitionId);
+                    var financialAccounts = accountBEManager.GetFinancialAccounts(this.AccountBEDefinitionId);
                     if (financialAccounts == null)
                         return null;
                     return financialAccounts.Select(x => x.AccountId.ToString());

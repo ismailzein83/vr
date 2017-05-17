@@ -12,7 +12,7 @@ namespace Retail.MultiNet.Business
 {
     public class MultiNetSubscriberInvoiceSettings : InvoiceTypeExtendedSettings
     {
-        public Guid AcountBEDefinitionId { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
         public Guid CompanyExtendedInfoPartdefinitionId { get; set; }
         public List<Guid> SalesTaxChargeableEntities { get; set; }
         public List<Guid> WHTaxChargeableEntities { get; set; }
@@ -21,6 +21,7 @@ namespace Retail.MultiNet.Business
         public Guid SalesTaxRuleDefinitionId { get; set; }
         public Guid WHTaxRuleDefinitionId { get; set; }
         public Guid latePaymentRuleDefinitionId { get; set; }
+        
         public override Guid ConfigId
         {
             get { return new Guid("3C121314-56F2-445D-91C7-896D07D09BDD"); }
@@ -31,11 +32,10 @@ namespace Retail.MultiNet.Business
             switch (context.InfoType)
             {
                 case "MailTemplate":
-                    long accountId = Convert.ToInt32(context.Invoice.PartnerId);
-                    AccountBEManager accountBEManager = new AccountBEManager();
-                    var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
+                    FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                    var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("Account", account);
+                    objects.Add("Account", financialAccountData.Account);
                     objects.Add("Invoice", context.Invoice);
                     return objects;
             }
@@ -44,21 +44,20 @@ namespace Retail.MultiNet.Business
 
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            long accountId = Convert.ToInt32(context.PartnerId);
-            AccountBEManager accountBEManager = new AccountBEManager();
-            var account = accountBEManager.GetAccount(this.AcountBEDefinitionId, accountId);
-            context.PartnerCreationDate = account.CreatedTime;
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
+            context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
 
         }
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new MultiNetSubscriberInvoiceGenerator(this.AcountBEDefinitionId, this.SalesTaxChargeableEntities, this.WHTaxChargeableEntities, this.InComingChargeableEntity, this.OutGoingChargeableEntity, this.SalesTaxRuleDefinitionId, this.WHTaxRuleDefinitionId, this.latePaymentRuleDefinitionId);
+            return new MultiNetSubscriberInvoiceGenerator(this.AccountBEDefinitionId, this.SalesTaxChargeableEntities, this.WHTaxChargeableEntities, this.InComingChargeableEntity, this.OutGoingChargeableEntity, this.SalesTaxRuleDefinitionId, this.WHTaxRuleDefinitionId, this.latePaymentRuleDefinitionId);
         }
 
         public override InvoicePartnerManager GetPartnerManager()
         {
-            return new MultiNetSubscriberPartnerSettings(this.AcountBEDefinitionId);
+            return new MultiNetSubscriberPartnerSettings(this.AccountBEDefinitionId);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
@@ -67,11 +66,8 @@ namespace Retail.MultiNet.Business
             {
                 case PartnerRetrievalType.GetActive:
                 case PartnerRetrievalType.GetAll:
-                    AccountBEManager accountBEManager = new AccountBEManager();
-                    var financialAccounts = accountBEManager.GetFinancialAccounts(this.AcountBEDefinitionId);
-                    if (financialAccounts == null)
-                        return null;
-                    return financialAccounts.Select(x => x.AccountId.ToString());
+                    FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                    return financialAccountManager.GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
                 default:
                     return null;
             }

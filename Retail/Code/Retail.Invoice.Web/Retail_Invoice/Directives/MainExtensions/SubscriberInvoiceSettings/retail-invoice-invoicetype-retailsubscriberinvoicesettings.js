@@ -62,7 +62,7 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
                                 }
                             };
                             if (payload != undefined && payload.extendedSettingsEntity != undefined) {
-                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AcountBEDefinitionId;
+                                selectorPayload.selectedIds = payload.extendedSettingsEntity.AccountBEDefinitionId;
                             }
                             VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, selectorPayload, businessEntityDefinitionSelectorLoadDeferred);
                         });
@@ -76,7 +76,7 @@ app.directive("retailInvoiceInvoicetypeRetailsubscriberinvoicesettings", ["Utils
                 api.getData = function () {
                     return {
                         $type: "Retail.Invoice.Business.RetailSubscriberInvoiceSettings, Retail.Invoice.Business",
-                        AcountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
+                        AccountBEDefinitionId: beDefinitionSelectorApi.getSelectedIds()
                     };
                 };
 
