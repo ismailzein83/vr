@@ -212,7 +212,9 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-vieweditor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBusinessEntityDefinition\Templates\VRRestAPIBEDefinitionsEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBusinessEntityDefinition\vr-genericdata-restapibedefinitions-editor.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BEDefinitionRuntimeSelectorSettings.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\OverriddenBEDefinition.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-runtimeselectorsettings.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-overriddenconfiguration-bedefinition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\Templates\BusinessEntitySelectorTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-remoteselector.js" />

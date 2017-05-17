@@ -17,7 +17,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public Guid BusinessEntityDefinitionId { get; set; }
         public bool IsNullable { get; set; }
-        public Object SelectorFilter { get; set; }
+        public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
+        
         public override DataRecordFieldOrderType OrderType
         {
             get
@@ -152,9 +153,21 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
         }
 
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
+        {
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
+        }
+
+        public override string GetFilterDescription(RecordFilter filter)
+        {
+            ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
+            return string.Format(" {0} {1} ( {2} ) ", objectListRecordFilter.FieldName, Utilities.GetEnumDescription(objectListRecordFilter.CompareOperator), GetDescription(objectListRecordFilter.Values.Cast<Object>().ToList()));
+        }
+
         #endregion
 
         #region Private Methods
+
         BusinessEntityDefinition GetBusinessEntityDefinition()
         {
             var beDefinitionManager = new BusinessEntityDefinitionManager();
@@ -178,17 +191,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         #endregion
-
-        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
-        {
-            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
-        }
-
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-            ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
-            return string.Format(" {0} {1} ( {2} ) ", objectListRecordFilter.FieldName, Utilities.GetEnumDescription(objectListRecordFilter.CompareOperator), GetDescription(objectListRecordFilter.Values.Cast<Object>().ToList()));
-        }
-
     }
 }

@@ -1,0 +1,13 @@
+﻿<vr-columns colnum="{{ctrlRuntimeSelectorSettings.normalColNum}}">
+    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBEDefinitionSelectorReady"
+                                                      selectedvalues="scopeModel.selectedBusinessEntityDefinition"
+                                                      onselectionchanged="scopeModel.onBEDefinitionSelectionChanged"
+                                                      isrequired="true" customlabel="{{ctrlRuntimeSelectorSettings.customlabel}}" hideremoveicon>
+    </vr-genericdata-businessentitydefinition-selector>
+</vr-columns>
+<vr-directivewrapper vr-loader="scopeModel.isLoadingSelectorFilter"
+                     directive="scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor"
+                     on-ready="scopeModel.onSelectorFilterEditorDirectiveReady"
+                     ng-if="scopeModel.selectedBusinessEntityDefinition != undefined && scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor != undefined"
+                     normal-col-num="{{ctrlRuntimeSelectorSettings.normalColNum}}">
+</vr-directivewrapper>

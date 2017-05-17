@@ -1,28 +1,35 @@
-﻿
-<vr-tabs>
+﻿<vr-tabs>
     <vr-tab header="'Definition'">
+
         <vr-row>
             <vr-columns width="1/2row">
                 <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
             </vr-columns>
         </vr-row>
+
         <vr-row>
-            <vr-columns width="1/2row">
-                <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onParentBEDefinitionSelectorReady"
-                                                                  customlabel="Parent Business Entity" isrequired="true" hideremoveicon>
-                </vr-genericdata-businessentitydefinition-selector>
-            </vr-columns>
-            <vr-columns width="1/2row">
-                <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onChildBEDefinitionSelectorReady"
-                                                                  customlabel="Child Business Entity" isrequired="true" hideremoveicon>
-                </vr-genericdata-businessentitydefinition-selector>
+            <vr-columns width="fullrow">
+                <vr-section header="Parent BE Definition">
+                    <vr-genericdata-businessentitydefinition-runtimeselectorsettings on-ready="scopeModel.onParentBEDefinitionRuntimeSelectorSettingsReady"
+                                                                                     normal-col-num="6" customlabel="Parent Business Entity">
+                    </vr-genericdata-businessentitydefinition-runtimeselectorsettings>
+                </vr-section>
             </vr-columns>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-textarea value="scopeModel.childFilterFQTN" label="Child Filter FQTN"></vr-textarea>
+                <vr-section header="Child BE Definition">
+                    <vr-genericdata-businessentitydefinition-runtimeselectorsettings on-ready="scopeModel.onChildBEDefinitionRuntimeSelectorSettingsReady"
+                                                                                     normal-col-num="6" customlabel="Child Business Entity">
+                    </vr-genericdata-businessentitydefinition-runtimeselectorsettings>
+
+                    <vr-columns width="fullrow">
+                        <vr-textarea value="scopeModel.childFilterFQTN" label="Child Filter FQTN"></vr-textarea>
+                    </vr-columns>
+                </vr-section>
             </vr-columns>
         </vr-row>
+
     </vr-tab>
     <vr-tab header="'Security'">
         <vr-row>

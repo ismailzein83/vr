@@ -22,6 +22,15 @@
                 ctrl.datasource = [];
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
+                $scope.label = ctrl.customlabel;
+                if (ctrl.customlabel == "") {
+                    $scope.label = "Business Entity Definition";
+
+                    if ($attrs.ismultipleselection != undefined) {
+                        $scope.label = "Business Entity Definitions";
+                    }
+                }
+
                 var businessEntityDefinitionSelector = new BusinessEntityDefinitionSelector(ctrl, $scope, $attrs);
                 businessEntityDefinitionSelector.initializeController();
             },
@@ -104,23 +113,25 @@
 
         function getDirectiveTemplate(attrs) {
 
+            var label = '';
+            var entityName = 'Business Entity Definition';
             var multipleselection = '';
 
-            var label = 'Business Entity Definition';
+            //if (attrs.customlabel == '') {
+            //    var label = ' label = "Business Entity Definition"';
             if (attrs.ismultipleselection != undefined) {
-                label = 'Business Entity Definitions';
+                //label = ' label = "Business Entity Definitions"';
+                entityName = 'Business Entity Definitions';
                 multipleselection = 'ismultipleselection';
             }
+            // }
 
-            if (attrs.customlabel != undefined) {
-                label = attrs.customlabel;
-            }
+            var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : '';
 
-            var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
-
-            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
+            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
 
             return '<div>'
+                + '<vr-label >{{label}}</vr-label>'
                 + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
@@ -133,8 +144,8 @@
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
                     + ' ' + hideremoveicon
-                    + ' label="' + label + '"'
-                    + ' entityName="' + label + '"'
+                    // + ' ' + label
+                    + ' entityName="' + entityName + '">'
                 + '</vr-select>'
             + '</div>';
         }

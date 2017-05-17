@@ -58,6 +58,7 @@
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionFilter.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionInfo.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionQuery.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BERuntimeSelectorFilter.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinition.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionDetail.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionInfo.cs" />
@@ -229,7 +230,9 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BusinessEntities\SelectorFilter\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

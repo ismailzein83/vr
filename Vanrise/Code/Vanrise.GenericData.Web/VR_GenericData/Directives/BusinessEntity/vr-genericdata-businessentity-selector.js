@@ -29,8 +29,7 @@
             this.initializeController = initializeController;
 
             var businessEntityDefinitionId;
-            var businessEntityDefinitionEntity;
-            var filter;
+            var businessEntityDefinitionEntity, filter, beRuntimeSelectorFilter;
 
             var directiveAPI;
             var directiveReadyDeferred;
@@ -45,7 +44,8 @@
                     };
                     var directivePayload = {
                         businessEntityDefinitionId: businessEntityDefinitionId,
-                        filter: filter
+                        filter: filter,
+                        beRuntimeSelectorFilter: beRuntimeSelectorFilter
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -55,15 +55,17 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+                api.load = function (payload) { 
 
                     var promises = [];
+
                     var selectedIds;
 
                     if (payload != undefined) {
-                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         selectedIds = payload.selectedIds;
+                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
+                        beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
                     }
 
                     var businessEntityDefinitionPromise = getBusinessEntityDefinition(businessEntityDefinitionId);
@@ -90,10 +92,12 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
+
                             var directivePayload = {
                                 businessEntityDefinitionId: businessEntityDefinitionId,
                                 selectedIds: selectedIds,
-                                filter: filter
+                                filter: filter,
+                                beRuntimeSelectorFilter: beRuntimeSelectorFilter
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

@@ -33,108 +33,78 @@
         function BusinessEntity(ctrl, $scope) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
-            var selectedBusinessEntityDefinitionReadyPromiseDeferred;
-            var selectorFilterEditorAPI;
-            var selectorFilterEditorReadyDeferred;
-            var selectedSelector;
+            var beDefinitionRuntimeSelectorSettingsSelectorAPI;
+            var beDefinitionRuntimeSelectorSettingsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onSelectorFilterEditorDirectiveReady = function (api) {
-                    selectedSelector = $scope.scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor;
-                    selectorFilterEditorAPI = api;
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingSelectorFilter = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader, selectorFilterEditorReadyDeferred);
-                };
-                $scope.scopeModel.onBusinessEntityDefinitionSelectionChanged = function (value) {
-                    if (selectedBusinessEntityDefinitionReadyPromiseDeferred != undefined)
-                        selectedBusinessEntityDefinitionReadyPromiseDeferred.resolve();
-                    else
-                    {
-                        if (value != undefined && value.SelectorFilterEditor != undefined && selectedSelector == value.SelectorFilterEditor) {
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isLoadingSelectorFilter = value;
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorFilterEditorAPI, undefined, setLoader);
-                        }
-                    }
-                };
-                $scope.scopeModel.onSelectorReady = function (api) {
-                    selectorAPI = api;
 
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                $scope.scopeModel.onBEDefinitionRuntimeSelectorSettingsSelectorReady = function (api) {
+                    beDefinitionRuntimeSelectorSettingsSelectorAPI = api;
+                    beDefinitionRuntimeSelectorSettingsSelectorReadyPromiseDeferred.resolve();
                 };
+
+                defineAPI();
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectedId;
                     var promises = [];
+
+                    var isNullable;
+                    var beDefinitionId;
+                    var beRuntimeSelectorFilter;
+
                     if (payload != undefined) {
-                        selectedId = payload.BusinessEntityDefinitionId;
-                        $scope.scopeModel.isNullable = payload.IsNullable;
+                        isNullable = payload.IsNullable;
+                        beDefinitionId = payload.BusinessEntityDefinitionId;
+                        beRuntimeSelectorFilter = payload.BERuntimeSelectorFilter;
                     }
-                    promises.push(loadSelector());
-                    if (payload != undefined && payload.BusinessEntityDefinitionId != undefined)
-                    {
-                        selectedBusinessEntityDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        var selectorFilterPromise = UtilsService.createPromiseDeferred();
-                        promises.push(selectorFilterPromise.promise);
-                        VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(payload.BusinessEntityDefinitionId).then(function (response) {
-                            if (response && response.Settings != undefined && response.Settings.SelectorFilterEditor != undefined)
-                            {
-                                selectorFilterEditorReadyDeferred = UtilsService.createPromiseDeferred();
-                                loadSelectorFilterEditorDirectiveSection().then(function () {
-                                    selectorFilterPromise.resolve();
-                                }).catch(function (error) {
-                                    selectorFilterPromise.reject(error);
-                                });
-                            }else
-                            {
-                                selectorFilterPromise.resolve();
-                            }
-                        }).catch(function (error) {
-                            selectorFilterPromise.reject(error);
+
+                    $scope.scopeModel.isNullable = isNullable;
+
+                    var beDefinitionRuntimeSeletorSettingsLoadPromise = getBEDefinitionRuntimeSeletorSettingsLoadPromise();
+                    promises.push(beDefinitionRuntimeSeletorSettingsLoadPromise);
+
+
+                    function getBEDefinitionRuntimeSeletorSettingsLoadPromise() {
+                        var beDefinitionRuntimeSeletorSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        beDefinitionRuntimeSelectorSettingsSelectorReadyPromiseDeferred.promise.then(function () {
+                            var beDefinitionRuntimeSeletorSettingsPayload = {
+                                beDefinitionId: beDefinitionId,
+                                beRuntimeSelectorFilter: beRuntimeSelectorFilter
+                            };
+                            VRUIUtilsService.callDirectiveLoad(beDefinitionRuntimeSelectorSettingsSelectorAPI, beDefinitionRuntimeSeletorSettingsPayload, beDefinitionRuntimeSeletorSettingsLoadDeferred);
                         });
-                    }
-                    function loadSelector() {
-                        var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        var selectorPayload = { selectedIds: selectedId };
-                        VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
-                        return selectorLoadDeferred.promise;
-                    }
-                    function loadSelectorFilterEditorDirectiveSection() {
-                        var loadSelectorFilterEditorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([selectorFilterEditorReadyDeferred.promise, selectedBusinessEntityDefinitionReadyPromiseDeferred.promise])
-                            .then(function () {
-                                selectorFilterEditorReadyDeferred = undefined;
-                                selectedBusinessEntityDefinitionReadyPromiseDeferred = undefined;
-                                var directivePayload = { beFilter: payload.SelectorFilter };
-                                VRUIUtilsService.callDirectiveLoad(selectorFilterEditorAPI, directivePayload, loadSelectorFilterEditorPromiseDeferred);
-                            });
 
-                        return loadSelectorFilterEditorPromiseDeferred.promise;
+                        return beDefinitionRuntimeSeletorSettingsLoadDeferred.promise;
                     }
 
-                   return  UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
+
+                    var beDefinitionId, beRuntimeSelectorFilter;
+                    var beDefinitionRuntimeSelectorSettings = beDefinitionRuntimeSelectorSettingsSelectorAPI.getData();
+                    if (beDefinitionRuntimeSelectorSettings != undefined) {
+                        beDefinitionId = beDefinitionRuntimeSelectorSettings.beDefinitionId;
+                        beRuntimeSelectorFilter = beDefinitionRuntimeSelectorSettings.beRuntimeSelectorFilter;
+                    }
+
                     return {
                         $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions',
-                        BusinessEntityDefinitionId: selectorAPI.getSelectedIds(),
-                        SelectorFilter:selectorFilterEditorAPI != undefined? selectorFilterEditorAPI.getData():undefined,
-                        IsNullable: $scope.scopeModel.isNullable
+                        IsNullable: $scope.scopeModel.isNullable,
+                        BusinessEntityDefinitionId: beDefinitionId,
+                        BERuntimeSelectorFilter: beRuntimeSelectorFilter
                     };
                 };
 
-                return api;
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
+                    ctrl.onReady(api);
             }
         }
     }

@@ -15,6 +15,10 @@ namespace Vanrise.GenericData.Entities
 
         public Guid ChildBEDefinitionId { get; set; }
 
+        public BERuntimeSelectorFilter ParentBERuntimeSelectorFilter { get; set; }
+
+        public BERuntimeSelectorFilter ChildBERuntimeSelectorFilter { get; set; }
+
         public string ChildFilterFQTN { get; set; }
 
         public BEParentChildRelationDefinitionSecurity Security { get; set; }

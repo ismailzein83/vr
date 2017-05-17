@@ -1,10 +1,6 @@
 ﻿<vr-columns colnum="{{ctrl.normalColNum}}">
     <vr-switch label="Nullable" value="scopeModel.isNullable" isrequired="true"></vr-switch>
 </vr-columns>
-<vr-columns colnum="{{ctrl.normalColNum}}">
-    <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onSelectorReady" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedBusinessEntityDefinition" onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"></vr-genericdata-businessentitydefinition-selector>
-</vr-columns>
-<vr-columns colnum="12" >
-        <vr-directivewrapper vr-loader="scopeModel.isLoadingSelectorFilter" directive="scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor" on-ready="scopeModel.onSelectorFilterEditorDirectiveReady" ng-if="scopeModel.selectedBusinessEntityDefinition != undefined && scopeModel.selectedBusinessEntityDefinition.SelectorFilterEditor != undefined" normal-col-num="6">
-        </vr-directivewrapper>
-</vr-columns>
+<vr-genericdata-businessentitydefinition-runtimeselectorsettings on-ready="scopeModel.onBEDefinitionRuntimeSelectorSettingsSelectorReady" 
+                                                                 normal-col-num="4">
+</vr-genericdata-businessentitydefinition-runtimeselectorsettings>

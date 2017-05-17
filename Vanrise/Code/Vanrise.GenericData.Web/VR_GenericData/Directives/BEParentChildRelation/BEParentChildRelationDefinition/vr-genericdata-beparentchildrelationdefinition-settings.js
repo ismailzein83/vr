@@ -20,11 +20,12 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
         function BEParentChildRelationDefinitionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var parentBEDefinitionSelectorAPI;
-            var parentBEDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var parentBEDefinitionRuntimeSelectorSettingsAPI;
+            var parentBEDefinitionRuntimeSelectorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var childBEDefinitionSelectorAPI;
-            var childBEDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var childBEDefinitionRuntimeSelectorSettingsAPI;
+            var childBEDefinitionRuntimeSelectorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
 
             var viewPermissionAPI;
             var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
@@ -35,13 +36,13 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onParentBEDefinitionSelectorReady = function (api) {
-                    parentBEDefinitionSelectorAPI = api;
-                    parentBEDefinitionSelectorReadyDeferred.resolve();
+                $scope.scopeModel.onParentBEDefinitionRuntimeSelectorSettingsReady = function (api) {
+                    parentBEDefinitionRuntimeSelectorSettingsAPI = api;
+                    parentBEDefinitionRuntimeSelectorSettingsReadyDeferred.resolve();
                 };
-                $scope.scopeModel.onChildBEDefinitionSelectorReady = function (api) {
-                    childBEDefinitionSelectorAPI = api;
-                    childBEDefinitionSelectorReadyDeferred.resolve();
+                $scope.scopeModel.onChildBEDefinitionRuntimeSelectorSettingsReady = function (api) {
+                    childBEDefinitionRuntimeSelectorSettingsAPI = api;
+                    childBEDefinitionRuntimeSelectorSettingsReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
@@ -75,47 +76,51 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         }
                     }
 
-                    //Loading ParentBEDefinition selector
-                    var parentBEDefinitionSelectorLoadPromise = getParentBEDefinitionSelectorLoadPromise();
-                    promises.push(parentBEDefinitionSelectorLoadPromise);
+                    //Loading ParentBEDefinitionRuntimeSelectorSettings selector
+                    var parentBEDefinitionRuntimeSelectorSettingsLoadPromise = getParentBEDefinitionRuntimeSelectorSettingsLoadPromise();
+                    promises.push(parentBEDefinitionRuntimeSelectorSettingsLoadPromise);
 
-                    //Loading ChildBEDefinition selector
-                    var childBEDefinitionSelectorLoadPromise = getChildBEDefinitionSelectorLoadPromise();
-                    promises.push(childBEDefinitionSelectorLoadPromise);
-
-                    var loadViewRequiredPermissionPromise = loadViewRequiredPermission();
-                    promises.push(loadViewRequiredPermissionPromise);
-
-                    var loadAddRequiredPermissionPromise = loadAddRequiredPermission();
-                    promises.push(loadAddRequiredPermissionPromise);
+                    //Loading ChildBEDefinitionRuntimeSelectorSettings selector
+                    var childBEDefinitionRuntimeSelectorSettingsLoadPromise = getChildBEDefinitionRuntimeSelectorSettingsLoadPromise();
+                    promises.push(childBEDefinitionRuntimeSelectorSettingsLoadPromise);
 
                     //Loading ChildFilterFQTN
                     $scope.scopeModel.childFilterFQTN = beParentChildRelationDefinitionSettings ? beParentChildRelationDefinitionSettings.ChildFilterFQTN : undefined;
 
+                    //Loading ViewRequiredPermission directive
+                    var loadViewRequiredPermissionPromise = loadViewRequiredPermission();
+                    promises.push(loadViewRequiredPermissionPromise);
 
-                    function getParentBEDefinitionSelectorLoadPromise() {
-                        var parentBEDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    //Loading AddRequiredPermission directive
+                    var loadAddRequiredPermissionPromise = loadAddRequiredPermission();
+                    promises.push(loadAddRequiredPermissionPromise);
 
-                        parentBEDefinitionSelectorReadyDeferred.promise.then(function () {
-                            var payload = {
-                                selectedIds: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ParentBEDefinitionId : undefined
+
+                    function getParentBEDefinitionRuntimeSelectorSettingsLoadPromise() {
+                        var parentBEDefinitionRuntimeSelectorSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        parentBEDefinitionRuntimeSelectorSettingsReadyDeferred.promise.then(function () {
+                            var parentBEDefinitionRuntimeSelectorSettingsPayload = {
+                                beDefinitionId: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ParentBEDefinitionId : undefined,
+                                beRuntimeSelectorFilter: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ParentBERuntimeSelectorFilter : undefined
                             };
-                            VRUIUtilsService.callDirectiveLoad(parentBEDefinitionSelectorAPI, payload, parentBEDefinitionSelectorLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(parentBEDefinitionRuntimeSelectorSettingsAPI, parentBEDefinitionRuntimeSelectorSettingsPayload, parentBEDefinitionRuntimeSelectorSettingsLoadDeferred);
                         });
 
-                        return parentBEDefinitionSelectorLoadDeferred.promise;
+                        return parentBEDefinitionRuntimeSelectorSettingsLoadDeferred.promise;
                     }
-                    function getChildBEDefinitionSelectorLoadPromise() {
-                        var childBEDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    function getChildBEDefinitionRuntimeSelectorSettingsLoadPromise() {
+                        var childBEDefinitionRuntimeSelectorSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        childBEDefinitionSelectorReadyDeferred.promise.then(function () {
-                            var payload = {
-                                selectedIds: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ChildBEDefinitionId : undefined
+                        childBEDefinitionRuntimeSelectorSettingsReadyDeferred.promise.then(function () {
+                            var childBEDefinitionRuntimeSelectorSettingsPayload = {
+                                beDefinitionId: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ChildBEDefinitionId : undefined,
+                                beRuntimeSelectorFilter: beParentChildRelationDefinitionSettings != undefined ? beParentChildRelationDefinitionSettings.ChildBERuntimeSelectorFilter : undefined
                             };
-                            VRUIUtilsService.callDirectiveLoad(childBEDefinitionSelectorAPI, payload, childBEDefinitionSelectorLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(childBEDefinitionRuntimeSelectorSettingsAPI, childBEDefinitionRuntimeSelectorSettingsPayload, childBEDefinitionRuntimeSelectorSettingsLoadDeferred);
                         });
 
-                        return childBEDefinitionSelectorLoadDeferred.promise;
+                        return childBEDefinitionRuntimeSelectorSettingsLoadDeferred.promise;
                     }
 
                     function loadViewRequiredPermission() {
@@ -129,8 +134,6 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         });
                         return viewSettingPermissionLoadDeferred.promise;
                     }
-
-
                     function loadAddRequiredPermission() {
                         var addPermissionLoadDeferred = UtilsService.createPromiseDeferred();
                         addPermissionReadyDeferred.promise.then(function () {
@@ -143,18 +146,33 @@ app.directive('vrGenericdataBeparentchildrelationdefinitionSettings', ['UtilsSer
                         return addPermissionLoadDeferred.promise;
                     }
 
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
 
+                    var parentBEDefinitionId, parentBERuntimeSelectorFilter;
+                    var parentBEDefinitionRuntimeSelectorSettings = parentBEDefinitionRuntimeSelectorSettingsAPI.getData();
+                    if (parentBEDefinitionRuntimeSelectorSettings != undefined) {
+                        parentBEDefinitionId = parentBEDefinitionRuntimeSelectorSettings.beDefinitionId;
+                        parentBERuntimeSelectorFilter = parentBEDefinitionRuntimeSelectorSettings.beRuntimeSelectorFilter;
+                    }
+
+                    var childBEDefinitionId, childBERuntimeSelectorFilter;
+                    var childBEDefinitionRuntimeSelectorSettings = childBEDefinitionRuntimeSelectorSettingsAPI.getData();
+                    if (childBEDefinitionRuntimeSelectorSettings != undefined) {
+                        childBEDefinitionId = childBEDefinitionRuntimeSelectorSettings.beDefinitionId;
+                        childBERuntimeSelectorFilter = childBEDefinitionRuntimeSelectorSettings.beRuntimeSelectorFilter;
+                    }
+
                     return {
                         Name: $scope.scopeModel.name,
                         Settings: {
                             $type: "Vanrise.GenericData.Entities.BEParentChildRelationDefinitionSettings, Vanrise.GenericData.Entities",
-                            ParentBEDefinitionId: parentBEDefinitionSelectorAPI.getSelectedIds(),
-                            ChildBEDefinitionId: childBEDefinitionSelectorAPI.getSelectedIds(),
+                            ParentBEDefinitionId: parentBEDefinitionId,
+                            ParentBERuntimeSelectorFilter: parentBERuntimeSelectorFilter,
+                            ChildBEDefinitionId: childBEDefinitionId,
+                            ChildBERuntimeSelectorFilter: childBERuntimeSelectorFilter,
                             ChildFilterFQTN: $scope.scopeModel.childFilterFQTN,
                             Security: {
                                 ViewRequiredPermission: viewPermissionAPI.getData(),

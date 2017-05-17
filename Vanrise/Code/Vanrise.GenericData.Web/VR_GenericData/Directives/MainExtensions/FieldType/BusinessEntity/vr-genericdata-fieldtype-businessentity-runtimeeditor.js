@@ -148,12 +148,10 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                         var payload = {
                                             businessEntityDefinitionId: fieldType.BusinessEntityDefinitionId,
                                             fieldTitle: $scope.scopeModel.fieldTitle,
-                                            beFilter: fieldType.SelectorFilter
+                                            beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter
                                         };
                                         if (fieldValue != undefined) {
                                             payload.selectedIds = ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue;
-
-
                                         }
 
                                         VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);
