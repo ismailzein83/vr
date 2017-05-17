@@ -219,6 +219,12 @@ namespace Retail.BusinessEntity.Business
             var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
             return cachedFinancialAccountsData.Keys;
         }
+        public IEnumerable<long> GetAccountIdsByFinancialAccountIds(Guid accountBEDefinitionId, List<string> financialAccountIds)
+        {
+            var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
+            return cachedFinancialAccountsData.MapRecords(x=> x.Value.Account.AccountId, y=> financialAccountIds.Contains(y.Key));
+        }
+
 
         #endregion
 

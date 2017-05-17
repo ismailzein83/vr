@@ -38,13 +38,22 @@
                 filter: filter,
             });
         }
+
+        function GetAccountIdsByFinancialAccountIds(accountBEDefinitionId, financialAccountIds) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountIdsByFinancialAccountIds"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                financialAccountIds: financialAccountIds,
+            });
+        }
+
         return {
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             AddFinancialAccount: AddFinancialAccount,
             UpdateFinancialAccount: UpdateFinancialAccount,
             GetFinancialAccountEditorRuntime: GetFinancialAccountEditorRuntime,
             CheckAllowAddFinancialAccounts: CheckAllowAddFinancialAccounts,
-            GetFinancialAccountsInfo: GetFinancialAccountsInfo
+            GetFinancialAccountsInfo: GetFinancialAccountsInfo,
+            GetAccountIdsByFinancialAccountIds: GetAccountIdsByFinancialAccountIds
         };
     }
 

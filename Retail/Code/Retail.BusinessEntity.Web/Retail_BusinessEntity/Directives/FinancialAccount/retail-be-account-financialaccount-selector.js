@@ -102,16 +102,9 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountSelectorAPI, accountselectorPayload, setLoader, accountSelectorPromiseDeferred);
 
-                        var selectedIds = accountSelectorAPI.getSelectedIds();
-                        var accountIds = [selectedIds];
-                        if (attrs.ismultipleselection != undefined) {
-                            accountIds = selectedIds
-                        }
-
                         var selectorPayload = {
                             accountBEDefinitionId: accountBEDefinitionId,
                             filter: {
-                                AccountIds: accountIds,
                                 FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
                             }
                         };
@@ -125,7 +118,6 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
 
                 $scope.scopeModel.onAccountSelectionChanged = function (value) {
                     var selectedIds = accountSelectorAPI.getSelectedIds();
-                    
                     if (selectedIds != undefined) {
                         var accountIds = [selectedIds];
                         if (attrs.ismultipleselection != undefined) {
@@ -163,37 +155,75 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                     selectorAPI.clearDataSource();
                     $scope.scopeModel.financialAccountEffectiveValue = Retail_BE_FinancialAccountEffectiveEnum.EffectiveOnly;
                     ctrl.datasource = UtilsService.getArrayEnum(Retail_BE_FinancialAccountEffectiveEnum);
-
+                    var selectedIds;
                     if (payload != undefined) {
-                        accountBEDefinitionId =  payload.AccountBEDefinitionId;
+                        accountBEDefinitionId = payload.AccountBEDefinitionId;
+                        selectedIds = payload.selectedIds;
                     }
 
-
                     var promises = [];
+                    var financialAccountSelectedIds = selectedIds;
+                    if (selectedIds != undefined)
+                    {
+                        if (attrs.ismultipleselection == undefined) {
+                            financialAccountSelectedIds = [selectedIds];
+                        }
+                        var loadPromiseDeffered = UtilsService.createPromiseDeferred();
+                        promises.push(loadPromiseDeffered.promise);
 
-                    promises.push(loadAccountSelector());
+                        var accountSelectedIds;
+                        Retail_BE_FinancialAccountAPIService.GetAccountIdsByFinancialAccountIds(accountBEDefinitionId, financialAccountSelectedIds).then(function (response) {
+                            accountSelectedIds = response;
+                            if (attrs.ismultipleselection == undefined) {
+                                accountSelectedIds = response[0];
+                            }
 
-                    function loadAccountSelector() {
+                            loadAccountSelector(accountSelectedIds).then(function () {
+                                loadFinancialAccountSelector().then(function () {
+                                    loadPromiseDeffered.resolve();
+                                }).catch(function (error) {
+                                    loadPromiseDeffered.reject(error);
+                                });
+                            }).catch(function (error) {
+                                loadPromiseDeffered.reject(error);
+                            });
+                        }).catch(function (error) {
+                            loadPromiseDeffered.reject(error);
+                        });
+
+                        function loadFinancialAccountSelector() {
+                            var accountIds = accountSelectedIds;
+                            if (attrs.ismultipleselection == undefined) {
+                                accountIds = [accountSelectedIds];
+                            }
+                            var financialAccountPayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                selectedIds: selectedIds,
+                                filter: {
+                                    AccountIds: accountIds,
+                                    FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
+                                }
+                            };
+                           return financialAccountSelectorAPI.load(financialAccountPayload);
+                        }
+                    }
+
+                    if(selectedIds == undefined)
+                      promises.push(loadAccountSelector());
+
+                    function loadAccountSelector(accountSelectedIds) {
                         var selectorPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId,
                             filter: {
                                 Filters: [{
-                                    $type: "Retail.BusinessEntity.Business.FinancialAccountBEFilter, Retail.BusinessEntity.Business"
-                                }]
-                            }
+                                    $type: "Retail.BusinessEntity.Business.FinancialAccountBEFilter, Retail.BusinessEntity.Business",
+                                    FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
+                                }],
+                            },
+                            selectedIds:accountSelectedIds
                         };
                         return accountSelectorAPI.load(selectorPayload);
                     }
-
-                    //promises.push(loadFinancialAccountSelector());
-
-                    //function loadFinancialAccountSelector() {
-                    //    var financialAccountPayload = {
-                    //        accountBEDefinitionId: accountBEDefinitionId,
-
-                    //    };
-                    //    return financialAccountSelectorAPI.load(financialAccountPayload);
-                    //}
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         financialAccountSelectorPromiseDeferred = undefined;

@@ -52,5 +52,11 @@ namespace Retail.BusinessEntity.Web.Controllers
             var deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<FinancialAccountInfoFilter>(filter) : null;
             return _manager.GetFinancialAccountsInfo(accountBEDefinitionId, deserializedFilter);
         }
+        [HttpGet]
+        [Route("GetAccountIdsByFinancialAccountIds")]
+        public IEnumerable<long> GetAccountIdsByFinancialAccountIds(Guid accountBEDefinitionId, [FromUri] List<string> financialAccountIds)
+        {
+            return _manager.GetAccountIdsByFinancialAccountIds(accountBEDefinitionId, financialAccountIds);
+        }
     }
 }

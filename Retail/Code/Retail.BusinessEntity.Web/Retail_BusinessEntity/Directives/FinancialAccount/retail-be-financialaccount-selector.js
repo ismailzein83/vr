@@ -86,7 +86,7 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
                 var api = {};
 
                 api.load = function (payload) {
-                    selectorAPI.clearDataSource();
+                    ctrl.datasource.length = 0;
                     var accountBEDefinitionId;
                     var selectedIds;
                     var filter;
@@ -97,7 +97,8 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
 
-                    return Retail_BE_FinancialAccountAPIService.GetFinancialAccountsInfo(accountBEDefinitionId,filter).then(function (response) {
+                    return Retail_BE_FinancialAccountAPIService.GetFinancialAccountsInfo(accountBEDefinitionId, filter).then(function (response) {
+                        selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);

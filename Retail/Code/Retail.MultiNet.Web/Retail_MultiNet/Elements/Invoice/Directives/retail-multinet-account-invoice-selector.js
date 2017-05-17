@@ -70,8 +70,10 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                 var api = {};
 
                 api.load = function (payload) {
+                    var selectedIds;
                     if (payload != undefined && payload.extendedSettings != undefined) {
                         accountBEDefinitionId = payload.extendedSettings.AccountBEDefinitionId;
+                        selectedIds = payload.selectedIds;
                     }
 
                     var promises = [];
@@ -81,6 +83,7 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                     function loadFinancialAccountSelector() {
                         var financialAccountPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId,
+                            selectedIds:selectedIds
                         };
                         return financialAccountSelectorAPI.load(financialAccountPayload);
                     }
