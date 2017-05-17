@@ -27,7 +27,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             base.LogVerbose("Creating stream reader for file with name {0}", file.Name);
             StreamReaderImportedData data = new StreamReaderImportedData()
             {
-                StreamReader = new StreamReader(fileAdapterArgument.Directory + "/" + file.Name),
+                Stream = new FileStream(fileAdapterArgument.Directory + "/" + file.Name, FileMode.Open),
                 Modified = file.LastWriteTime,
                 Name = file.Name,
                 Size = file.Length

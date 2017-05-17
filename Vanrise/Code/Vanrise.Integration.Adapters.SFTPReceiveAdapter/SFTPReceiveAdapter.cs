@@ -102,10 +102,9 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             using (var ms = stream)
             {
                 ms.Position = 0;
-                var sr = new StreamReader(ms);
                 receiveData(new StreamReaderImportedData()
                 {
-                    StreamReader = new StreamReader(ms),
+                    Stream = ms,
                     Modified = fileObj.Modified,
                     Name = fileObj.Name,
                     Size = fileObj.Size

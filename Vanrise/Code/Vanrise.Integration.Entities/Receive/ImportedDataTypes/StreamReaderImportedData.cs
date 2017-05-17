@@ -9,6 +9,7 @@ namespace Vanrise.Integration.Entities
 {
     public class StreamReaderImportedData : IImportedData
     {
+        public Stream Stream { get; set; }
 
         public DateTime Accessed { get; set; }
 
@@ -22,8 +23,16 @@ namespace Vanrise.Integration.Entities
 
         public object Type { get; set; }
 
-
-        public StreamReader StreamReader { get; set; }
+        StreamReader _streamReader;
+        public StreamReader StreamReader
+        {
+            get
+            {
+                if (_streamReader == null)
+                    _streamReader = new StreamReader(this.Stream);
+                return _streamReader;
+            }
+        }
 
         public string Description
         {
