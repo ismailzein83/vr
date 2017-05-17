@@ -38,7 +38,7 @@ namespace Retail.BusinessEntity.Business
                 return new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType()
                 {
                     BusinessEntityDefinitionId = AccountType.BUSINESSENTITY_DEFINITION_ID,
-                    SelectorFilter = new AccountTypeBESelectorFilter() { AccountBEDefinitionId = _accountBEDefinitionId }
+                    BERuntimeSelectorFilter = new AccountTypeBESelectorFilter() { AccountBEDefinitionId = _accountBEDefinitionId }
                 };
             }
         }

@@ -9,9 +9,11 @@
                             <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                     </vr-row>
-                    <retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
-                                                          normal-col-num="6">
-                    </retail-be-accountcondition-selective>
+                    <vr-row>
+                        <retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
+                                                              normal-col-num="6">
+                        </retail-be-accountcondition-selective>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <retail-be-accountsynchronizerhandler-settings on-ready="scopeModel.onAccountSynchronizerHandlerSettingsReady"

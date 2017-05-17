@@ -19,10 +19,12 @@
                     <vr-switch value="scopeModel.IsAvailableInSubAccounts" label="Available In SubAccounts"></vr-switch>
                 </vr-columns>
             </vr-row>
-            <retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
-                                                  ng-show="scopeModel.IsAvailableInSubAccounts"
-                                                  normal-col-num="6">
-            </retail-be-accountcondition-selective>
+            <vr-row>
+                <retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
+                                                      ng-show="scopeModel.IsAvailableInSubAccounts"
+                                                      normal-col-num="6">
+                </retail-be-accountcondition-selective>
+            </vr-row>
 
         </vr-form>
     </vr-modalbody>

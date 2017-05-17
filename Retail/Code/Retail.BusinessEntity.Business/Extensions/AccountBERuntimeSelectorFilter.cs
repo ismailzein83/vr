@@ -8,21 +8,21 @@ using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountBERuntimeSelectorFilter //: BERuntimeSelectorFilter
+    public class AccountBERuntimeSelectorFilter : BERuntimeSelectorFilter
     {
-        //public AccountCondition AccountCondition { get; set; }
+        public AccountCondition AccountCondition { get; set; }
 
-        //public override bool IsMatched(IBERuntimeSelectorFilterSelectorFilterContext context)
-        //{
-        //    if (AccountCondition == null)
-        //        return true;
+        public override bool IsMatched(IBERuntimeSelectorFilterSelectorFilterContext context)
+        {
+            if (AccountCondition == null)
+                return true;
 
-        //    long accountId;
-        //    if (!long.TryParse(context.BusinessEntityId.ToString(), out accountId))
-        //        return false;
+            long accountId;
+            if (!long.TryParse(context.BusinessEntityId.ToString(), out accountId))
+                return false;
 
-        //    var accountConditionEvaluationContext = new AccountConditionEvaluationContext(context.BusinessEntityDefinitionId, accountId);
-        //    return AccountCondition.Evaluate(accountConditionEvaluationContext);
-        //}
+            var accountConditionEvaluationContext = new AccountConditionEvaluationContext(context.BusinessEntityDefinitionId, accountId);
+            return AccountCondition.Evaluate(accountConditionEvaluationContext);
+        }
     }
 }

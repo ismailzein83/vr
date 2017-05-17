@@ -1,13 +1,1 @@
-﻿<!--<vr-columns colnum="{{ctrl.normalColNum}}">
-    <vr-select on-ready="scopeModel.onSelectorReady"
-               datasource="scopeModel.templateConfigs"
-               selectedvalues="scopeModel.selectedTemplateConfig"
-               datavaluefield="ExtensionConfigurationId"
-               datatextfield="Title"
-               isrequired="false"
-               label="Availability Condition">
-    </vr-select>
-</vr-columns>
-<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"
-                     on-ready="scopeModel.onDirectiveReady" customvalidate="ctrl.customvalidate" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired">
-</vr-directivewrapper>-->
+﻿<retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady" normal-col-num="{{ctrl.normalColNum}}"></retail-be-accountcondition-selective>

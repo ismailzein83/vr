@@ -1,6 +1,4 @@
-﻿
-
-<vr-row>
+﻿<vr-row>
     <retail-be-recurringchargedefinition-selector on-ready="scopeModel.onRecurringChargeDefinitionSelectorReady"
                                                   selectedvalues="scopeModel.recurringChargeDefinitionSelectedValues"
                                                   isrequired="true" normal-col-num="6" customlabel="Recurring Charge">
@@ -11,11 +9,8 @@
                                   normal-col-num="6" isrequired="true">
 </retail-be-accountchargeevaluator>
 
-<retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
-                                      normal-col-num="6">
-</retail-be-accountcondition-selective>
-
-
-
-
-
+<vr-row>
+    <retail-be-accountcondition-selective on-ready="scopeModel.onAccountConditionSelectiveReady"
+                                          normal-col-num="6">
+    </retail-be-accountcondition-selective>
+</vr-row>

@@ -121,6 +121,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                                 ctrl.fieldTitle = payload.fieldTitle;
                             selectedIds = payload.selectedIds;
                             filter = payload.filter;
+
                             if (payload.beFilter != undefined) {
                                 if (filter == undefined)
                                     filter = {};
@@ -131,6 +132,18 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                                     AccountCondition: payload.beFilter
                                 });
                             }
+
+                            if (payload.beRuntimeSelectorFilter != undefined) {
+                                if (filter == undefined)
+                                    filter = {};
+                                if (filter.Filters == undefined)
+                                    filter.Filters = [];
+                                filter.Filters.push({
+                                    $type: "Retail.BusinessEntity.Business.AccountConditionAccountFilter,Retail.BusinessEntity.Business",
+                                    AccountCondition: payload.beRuntimeSelectorFilter.AccountCondition
+                                });
+                            }
+
                             // check BEDefinitionID name
                             if (ctrl.useRemoteSelector) {
                                 if (selectedIds != undefined) {

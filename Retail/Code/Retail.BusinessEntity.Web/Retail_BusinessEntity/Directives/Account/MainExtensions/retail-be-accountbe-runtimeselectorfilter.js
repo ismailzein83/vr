@@ -1,135 +1,99 @@
-﻿//(function (app) {
+﻿(function (app) {
 
-//    'use strict';
+    'use strict';
 
-//    AccountBERuntimeSelectorFilterDirective.$inject = ['Retail_BE_AccountConditionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    AccountBERuntimeSelectorFilterDirective.$inject = ['Retail_BE_AccountConditionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-//    function AccountBERuntimeSelectorFilterDirective(Retail_BE_AccountConditionAPIService, UtilsService, VRUIUtilsService) {
-//        return {
-//            restrict: "E",
-//            scope: {
-//                onReady: "=",
-//                normalColNum: '@',
-//                label: '@',
-//                customvalidate: '='
-//            },
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
-//                var ctor = new AccountBERuntimeSelectorFilterCtor($scope, ctrl, $attrs);
-//                ctor.initializeController();
-//            },
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Account/MainExtensions/Templates/AccountBERuntimeSelectorFilterTemplate.html"
-//        };
+    function AccountBERuntimeSelectorFilterDirective(Retail_BE_AccountConditionAPIService, UtilsService, VRUIUtilsService) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "=",
+                normalColNum: '@'
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new AccountBERuntimeSelectorFilterCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/Account/MainExtensions/Templates/AccountBERuntimeSelectorFilterTemplate.html"
+        };
 
-//        function AccountBERuntimeSelectorFilterCtor($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function AccountBERuntimeSelectorFilterCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            var accountBEDefinitionId;
+            var accountConditionSelectiveDirectiveAPI;
+            var accountConditionSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
-//            var selectorAPI;
+            function initializeController() {
+                $scope.scopeModel = {};
 
-//            var directiveAPI;
-//            var directiveReadyDeferred;
+                $scope.scopeModel.onAccountConditionSelectiveReady = function (api) {
+                    accountConditionSelectiveDirectiveAPI = api;
+                    accountConditionSelectiveDirectivePromiseDeferred.resolve();
+                };
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                $scope.scopeModel.templateConfigs = [];
-//                $scope.scopeModel.selectedTemplateConfig;
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
 
-//                $scope.scopeModel.onSelectorReady = function (api) {
-//                    selectorAPI = api;
-//                    defineAPI();
-//                };
+                api.load = function (payload) {
+                    var promises = [];
 
-//                $scope.scopeModel.onDirectiveReady = function (api) {
-//                    directiveAPI = api;
-//                    var setLoader = function (value) {
-//                        $scope.scopeModel.isLoadingDirective = value;
-//                    };
-//                    var directivePayload = {
-//                        accountBEDefinitionId: accountBEDefinitionId
-//                    };
-//                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
-//                };
-//            }
-//            function defineAPI() {
-//                var api = {};
+                    var accountBEDefinitionId;
+                    var beRuntimeSelectorFilter;
 
-//                api.load = function (payload) {
-//                    selectorAPI.clearDataSource();
+                    if (payload != undefined) {
+                        accountBEDefinitionId = payload.beDefinitionId;
+                        beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
+                    }
 
-//                    var promises = [];
-//                    var accountCondition;
-
-//                    if (payload != undefined) {
-//                        accountBEDefinitionId = payload.accountBEDefinitionId;
-//                        accountCondition = payload.beFilter;
-//                    }
-
-//                    var getAccountConditionTemplateConfigsPromise = getAccountConditionTemplateConfigs();
-//                    promises.push(getAccountConditionTemplateConfigsPromise);
-
-//                    if (accountCondition != undefined) {
-//                        var loadDirectivePromise = loadDirective();
-//                        promises.push(loadDirectivePromise);
-//                    }
+                    var accountConditionSelectiveDirectiveLoadPromise = getAccountConditionSelectiveDirectiveLoadPromise();
+                    promises.push(accountConditionSelectiveDirectiveLoadPromise);
 
 
-//                    function getAccountConditionTemplateConfigs() {
-//                        return Retail_BE_AccountConditionAPIService.GetAccountConditionConfigs().then(function (response) {
-//                            if (response != undefined) {
-//                                for (var i = 0; i < response.length; i++) {
-//                                    $scope.scopeModel.templateConfigs.push(response[i]);
-//                                }
-//                                if (accountCondition != undefined) {
-//                                    $scope.scopeModel.selectedTemplateConfig =
-//                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, accountCondition.ConfigId, 'ExtensionConfigurationId');
-//                                }
-//                            }
-//                        });
-//                    }
-//                    function loadDirective() {
-//                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    function getAccountConditionSelectiveDirectiveLoadPromise() {
+                        var accountConditionSelectiveDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-//                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        accountConditionSelectiveDirectivePromiseDeferred.promise.then(function () {
 
-//                        directiveReadyDeferred.promise.then(function () {
-//                            directiveReadyDeferred = undefined;
-//                            var directivePayload = {
-//                                accountBEDefinitionId: accountBEDefinitionId,
-//                                accountCondition: accountCondition
-//                            };
-//                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-//                        });
+                            var accountConditionSelectivePayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                beFilter: beRuntimeSelectorFilter != undefined ? beRuntimeSelectorFilter.AccountCondition : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(accountConditionSelectiveDirectiveAPI, accountConditionSelectivePayload, accountConditionSelectiveDirectiveLoadDeferred);
+                        });
 
-//                        return directiveLoadDeferred.promise;
-//                    }
+                        return accountConditionSelectiveDirectiveLoadDeferred.promise;
+                    }
 
-//                    return UtilsService.waitMultiplePromises(promises);
-//                };
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-//                api.getData = function () {
-//                    var data;
+                api.getData = function () {
 
-//                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
+                    var accountConditionSelectiveData = accountConditionSelectiveDirectiveAPI.getData();
+                    if (accountConditionSelectiveData == undefined)
+                        return;
 
-//                        data = directiveAPI.getData();
-//                        if (data != undefined) {
-//                            data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-//                        }
-//                    }
-//                    return data;
-//                };
+                    var obj = {
+                        $type: "Retail.BusinessEntity.Business.AccountBERuntimeSelectorFilter, Retail.BusinessEntity.Business",
+                        AccountCondition: accountConditionSelectiveData
+                    }
 
-//                if (ctrl.onReady != null) {
-//                    ctrl.onReady(api);
-//                }
-//            }
-//        }
-//    }
+                    return obj;
+                };
 
-//    app.directive('retailBeAccountbeRuntimeselectorfilter', AccountBERuntimeSelectorFilterDirective);
+                if (ctrl.onReady != null) {
+                    ctrl.onReady(api);
+                }
+            }
+        }
+    }
 
-//})(app);
+    app.directive('retailBeAccountbeRuntimeselectorfilter', AccountBERuntimeSelectorFilterDirective);
+
+})(app);

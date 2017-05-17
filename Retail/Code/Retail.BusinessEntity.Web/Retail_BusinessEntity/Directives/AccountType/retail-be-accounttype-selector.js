@@ -54,14 +54,18 @@ app.directive('retailBeAccounttypeSelector', ['Retail_BE_AccountTypeAPIService',
             api.load = function (payload) {
                 selectorAPI.clearDataSource();
 
+                console.log(payload);
+
                 var selectedIds;
                 var filter;
                 var beFilter;
+                var beRuntimeSelectorFilter;
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     filter = payload.filter;
                     beFilter = payload.beFilter;
+                    beRuntimeSelectorFilter = payload.beRuntimeSelectorFilter;
                 }
 
                 if (beFilter != undefined) {
@@ -69,6 +73,13 @@ app.directive('retailBeAccounttypeSelector', ['Retail_BE_AccountTypeAPIService',
                         filter = {};
 
                     filter.AccountBEDefinitionId = beFilter.AccountBEDefinitionId;
+                }
+
+                if (beRuntimeSelectorFilter != undefined) {
+                    if (filter == undefined)
+                        filter = {};
+
+                    filter.AccountBEDefinitionId = beRuntimeSelectorFilter.AccountBEDefinitionId;
                 }
 
                 return Retail_BE_AccountTypeAPIService.GetAccountTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {

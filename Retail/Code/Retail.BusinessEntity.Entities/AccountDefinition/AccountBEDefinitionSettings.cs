@@ -29,7 +29,7 @@ namespace Retail.BusinessEntity.Entities
 
         public override string SelectorFilterEditor
         {
-            get { return "retail-be-accountcondition-selective"; }
+            get { return "retail-be-accountbe-runtimeselectorfilter"; }
         }
 
         public override string SelectorUIControl
