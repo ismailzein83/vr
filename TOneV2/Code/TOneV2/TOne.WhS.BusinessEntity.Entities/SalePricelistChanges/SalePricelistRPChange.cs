@@ -9,9 +9,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePricelistRPChange
     {
         public int CountryId { get; set; }
-
+        public int PriceListId { get; set; }
         public string ZoneName { get; set; }
-
+        public long? ZoneId { get; set; }
         public int RoutingProductId { get; set; }
 
         public int? RecentRoutingProductId { get; set; }

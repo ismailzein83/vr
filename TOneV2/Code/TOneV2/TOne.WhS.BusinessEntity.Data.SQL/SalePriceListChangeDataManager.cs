@@ -15,11 +15,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         };
         private readonly string[] _salePricelistRateChangeColumns =
         {
-            "PricelistId","Rate","RecentRate","CountryID","ZoneName","Change","ProcessInstanceID","BED","EED"
+            "PricelistId","Rate","RecentRate","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID"
         };
         private readonly string[] _salePricelistCustomerChangeColumns =
         {
            "BatchID","PricelistID","CountryID","CustomerID"
+        };
+        private readonly string[] _salePricelistRPChangeColumns =
+        {
+            "ZoneName","ZoneID","RoutingProductId","RecentRoutingProductId","BED","EED","PriceListId","CountryId","ProcessInstanceID"
         };
         public SalePriceListChangeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -43,6 +47,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SalePricelistRateChange_GetFiltered", SalePricelistRateChangeMapper,
                 pricelistId, strcountryIds);
         }
+        public List<SalePricelistRPChange> GetFilteredSalePriceListRPChanges(int pricelistId, List<int> countryIds)
+        {
+            string strcountryIds = null;
+            if (countryIds != null && countryIds.Count > 0)
+                strcountryIds = string.Join(",", countryIds);
+            return GetItemsSP("TOneWhS_BE.sp_SalePricelistRPChange_GetFiltered", SalePricelistRPChangeMapper, pricelistId, strcountryIds);
+        }
         public List<SalePricelistCodeChange> GetNotSentCodechanges(IEnumerable<int> customerIds)
         {
             string strcustomerIds = null;
@@ -65,7 +76,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             foreach (SalePriceListCustomerChange salePriceList in salePriceLists)
                 WriteRecordToStream(salePriceList, dbApplyStream);
             Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelistCustomerChange_New", _salePricelistCustomerChangeColumns);
-            ApplySalePriceListsToDB(preparedSalePriceLists);
+            ApplyChangesToDataBase(preparedSalePriceLists);
         }
         public void SaveCustomerCodeChangesToDb(IEnumerable<SalePricelistCodeChange> codeChanges)
         {
@@ -74,7 +85,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             foreach (SalePricelistCodeChange codeChange in codeChanges)
                 WriteRecordToStream(codeChange, dbApplyStream);
             Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelistCodeChange_New", _salePricelistCodeChangeColumns);
-            ApplySalePriceListsToDB(preparedSalePriceLists);
+            ApplyChangesToDataBase(preparedSalePriceLists);
         }
         public void SaveCustomerRateChangesToDb(IEnumerable<SalePricelistRateChange> rateChanges, long processInstanceId)
         {
@@ -83,9 +94,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             foreach (SalePricelistRateChange rateChange in rateChanges)
                 WriteRecordToStream(rateChange, dbApplyStream, processInstanceId);
             Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelistRateChange_New", _salePricelistRateChangeColumns);
-            ApplySalePriceListsToDB(preparedSalePriceLists);
+            ApplyChangesToDataBase(preparedSalePriceLists);
         }
-
+        public void SaveCustomerRoutingProductChangesToDb(IEnumerable<SalePricelistRPChange> routingProductChanges, long processInstanceId)
+        {
+            if (routingProductChanges == null || !routingProductChanges.Any()) return;
+            Object dbApplyStream = InitialiazeStreamForDBApply();
+            foreach (SalePricelistRPChange routingProductChange in routingProductChanges)
+                WriteRecordToStream(routingProductChange, dbApplyStream, processInstanceId);
+            Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelistRPChange_New", _salePricelistRPChangeColumns);
+            ApplyChangesToDataBase(preparedSalePriceLists);
+        }
         #endregion
         #region Bulk Insert
         private void WriteRecordToStream(SalePriceListCustomerChange record, object dbApplyStream)
@@ -113,20 +132,37 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     GetDateTimeForBCP(record.EED),
                     record.CountryId);
         }
-        private void WriteRecordToStream(SalePricelistRateChange record, object dbApplyStream, long processInstanceId)
+        private void WriteRecordToStream(SalePricelistRPChange record, object dbApplyStream, long processInstanceId)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             if (streamForBulkInsert != null)
                 streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+                    record.ZoneName,
+                    record.ZoneId,
+                    record.RoutingProductId,
+                    record.RecentRoutingProductId,
+                    GetDateTimeForBCP(record.BED),
+                    GetDateTimeForBCP(record.EED),
+                    record.PriceListId,
+                    record.CountryId,
+                    processInstanceId);
+        }
+        private void WriteRecordToStream(SalePricelistRateChange record, object dbApplyStream, long processInstanceId)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            if (streamForBulkInsert != null)
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}",
                     record.PricelistId,
                     decimal.Round(record.Rate, 8),
                     record.RecentRate.HasValue ? decimal.Round(record.RecentRate.Value, 8) : record.RecentRate,
                     record.CountryId,
                     record.ZoneName,
+                    record.ZoneId,
                     (int)record.ChangeType,
                     processInstanceId,
                     GetDateTimeForBCP(record.BED),
-                    GetDateTimeForBCP(record.EED));
+                    GetDateTimeForBCP(record.EED),
+                    record.RoutingProductId);
         }
         private object FinishDBApplyStream(object dbApplyStream, string tableName, string[] columnNames)
         {
@@ -143,9 +179,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
 
         }
-        private void ApplySalePriceListsToDB(object preparedSalePriceLists)
+        private void ApplyChangesToDataBase(object preparedObject)
         {
-            InsertBulkToTable(preparedSalePriceLists as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
         }
         private object InitialiazeStreamForDBApply()
         {
@@ -171,7 +207,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         SalePricelistRateChange SalePricelistRateChangeMapper(IDataReader reader)
         {
-            SalePricelistRateChange salePricelistCodeChange = new SalePricelistRateChange
+            return new SalePricelistRateChange
             {
                 PricelistId = GetReaderValue<int>(reader, "PricelistID"),
                 CountryId = GetReaderValue<int>(reader, "CountryID"),
@@ -180,11 +216,25 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 RecentRate = GetReaderValue<decimal>(reader, "RecentRate"),
                 ChangeType = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductID")
+            };
+        }
+        SalePricelistRPChange SalePricelistRPChangeMapper(IDataReader reader)
+        {
+            SalePricelistRPChange salePricelistRpChange = new SalePricelistRPChange
+            {
+                ZoneName = GetReaderValue<string>(reader, "ZoneName"),
+                ZoneId = GetReaderValue<long?>(reader, "ZoneID"),
+                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
+                RecentRoutingProductId = GetReaderValue<int>(reader, "RecentRoutingProductId"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED")
             };
-            return salePricelistCodeChange;
+            return salePricelistRpChange;
         }
 
         #endregion
+
     }
 }

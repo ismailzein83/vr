@@ -12,6 +12,9 @@
         function GetFilteredSalePriceListRateChanges(input) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListRateChanges"), input);
         }
+        function GetFilteredSalePriceListRPChanges(input) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListRPChanges"), input);
+        }
         function GetOwnerName(priceListId) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerName"), {
                 priceListId: priceListId
@@ -20,6 +23,7 @@
         return ({
             GetFilteredSalePriceListCodeChanges: GetFilteredSalePriceListCodeChanges,
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
+            GetFilteredSalePriceListRPChanges: GetFilteredSalePriceListRPChanges,
             GetOwnerName: GetOwnerName
         });
     }

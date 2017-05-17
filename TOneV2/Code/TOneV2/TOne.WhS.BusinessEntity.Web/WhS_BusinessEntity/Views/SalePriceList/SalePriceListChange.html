@@ -46,6 +46,28 @@
                         </vr-row>
                     </vr-form>
                 </vr-tab>
+                <vr-tab header="'Routing Product'" dontload="true">
+                    <vr-form name="formRPFilter">
+                        <vr-row removeline>
+                            <vr-columns width="normal" haschildcolumns vr-loader="isLoadingRPCountryCode">
+                                <vr-common-country-selector on-ready="onCountryRPReady" ismultipleselection></vr-common-country-selector>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row removeline>
+                            <vr-actionbar showcollapsebutton="false" issectioncollapsed="filterSectionCollapsed">
+                                <div transclude-to="buttons">
+                                    <vr-button type="Search" formname="formRPFilter" data-onclick="searchRPClicked"></vr-button>
+                                </div>
+                            </vr-actionbar>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-be-salepricelistroutingproductchange-grid on-ready="onRPChangeGridReady">
+                                </vr-whs-be-salepricelistroutingproductchange-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-form>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

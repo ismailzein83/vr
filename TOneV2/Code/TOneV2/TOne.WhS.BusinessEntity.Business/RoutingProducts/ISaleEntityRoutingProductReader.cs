@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(SalePriceListOwnerType ownerType, int ownerId);
 
-        DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId);
+        DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, long? zoneId);
     }
 
     public class SaleZoneRoutingProductsByOwner

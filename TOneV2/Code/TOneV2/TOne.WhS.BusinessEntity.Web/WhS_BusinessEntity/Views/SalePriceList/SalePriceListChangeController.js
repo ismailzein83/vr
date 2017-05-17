@@ -9,8 +9,10 @@
         var ownerName;
         var codeChangeGridApi;
         var rateChangeGridApi;
+        var rpChangeGridApi;
         var countryCodeDirectiveApi;
         var countryRateDirectiveApi;
+        var countryRPDirectiveApi;
         var countryRateReadyPromiseDeferred = utilsService.createPromiseDeferred();
 
         loadParameters();
@@ -26,6 +28,10 @@
                 rateChangeGridApi = api;
                 rateChangeGridApi.loadGrid(filter);
             };
+            $scope.onRPChangeGridReady = function (api) {
+                rpChangeGridApi = api;
+                rpChangeGridApi.loadGrid(filter);
+            };
             $scope.onCountryCodeReady = function (api) {
                 countryCodeDirectiveApi = api;
                 var setLoader = function (value) { $scope.isLoadingCountryCode = value };
@@ -36,6 +42,12 @@
                 countryRateDirectiveApi = api;
                 countryRateReadyPromiseDeferred.resolve();
             };
+            $scope.onCountryRPReady = function (api) {
+                countryRPDirectiveApi = api;
+                var setLoader = function (value) { $scope.isLoadingRPCountryCode = value };
+                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, countryRPDirectiveApi, undefined, setLoader);
+            };
+            
             $scope.searchCodeClicked = function () {
                 SetFilteredCodeObject();
                 return codeChangeGridApi.loadGrid(filter);
@@ -43,6 +55,10 @@
             $scope.searchRateClicked = function () {
                 SetFilteredRateObject();
                 return rateChangeGridApi.loadGrid(filter);
+            };
+            $scope.searchRPClicked = function () {
+                SetFilteredRPObject();
+                return rpChangeGridApi.loadGrid(filter);
             };
         }
         function SetFilteredCodeObject() {
@@ -60,6 +76,15 @@
                 {
                     PriceListId: priceListId,
                     Countries: countryRateDirectiveApi.getSelectedIds()
+                }
+            }
+        }
+        function SetFilteredRPObject() {
+            if (priceListId != undefined) {
+                filter =
+                {
+                    PriceListId: priceListId,
+                    Countries: countryRPDirectiveApi.getSelectedIds()
                 }
             }
         }

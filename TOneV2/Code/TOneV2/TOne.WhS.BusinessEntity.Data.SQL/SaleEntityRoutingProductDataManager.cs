@@ -55,6 +55,23 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             });
         }
+        public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsByZoneIds(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture, List<long> zoneIds)
+        {
+            if (zoneIds == null || !zoneIds.Any())
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds were not passed");
+            string zoneIdsString = string.Join(",", zoneIds);
+            DataTable dtActiveCustomers = CarrierAccountDataManager.BuildRoutingCustomerInfoTable(customerIds);
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwnerAndZone]", SaleZoneRoutingProductMapper, cmd =>
+            {
+                var dtPrm = new SqlParameter("@ActiveCustomersInfo", SqlDbType.Structured) { Value = dtActiveCustomers };
+                cmd.Parameters.Add(dtPrm);
+                cmd.Parameters.Add(new SqlParameter("@CustomerOwnerType", SalePriceListOwnerType.Customer));
+                cmd.Parameters.Add(new SqlParameter("@EffectiveTime", effectiveOn));
+                cmd.Parameters.Add(new SqlParameter("@IsFuture", isEffectiveInFuture));
+                cmd.Parameters.Add(new SqlParameter("@IsDefault", false));
+                cmd.Parameters.Add(new SqlParameter("@ZoneIds", zoneIdsString));
+            });
+        }
         public IEnumerable<SaleZoneRoutingProduct> GetEffectiveZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetEffectiveZoneRoutingProducts", SaleZoneRoutingProductMapper, ownerType, ownerId, effectiveOn);

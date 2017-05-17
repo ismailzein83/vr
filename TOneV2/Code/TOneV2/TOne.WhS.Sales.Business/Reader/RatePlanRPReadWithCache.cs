@@ -34,9 +34,9 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-        public BusinessEntity.Entities.DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId)
+        public BusinessEntity.Entities.DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, long? saleZoneId)
         {
-            return IsSameOwner(ownerType, ownerId) ? _defaultRoutingProduct : _reader.GetDefaultRoutingProduct(ownerType, ownerId);
+            return IsSameOwner(ownerType, ownerId) ? _defaultRoutingProduct : _reader.GetDefaultRoutingProduct(ownerType, ownerId, saleZoneId);
         }
 
         public BusinessEntity.Business.SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(SalePriceListOwnerType ownerType, int ownerId)
@@ -69,7 +69,7 @@ namespace TOne.WhS.Sales.Business
                     return;
                 }
             }
-            DefaultRoutingProduct existingDefaultRP = _reader.GetDefaultRoutingProduct(_ownerType, _ownerId);
+            DefaultRoutingProduct existingDefaultRP = _reader.GetDefaultRoutingProduct(_ownerType, _ownerId, null);
             if (existingDefaultRP != null)
             {
                 _defaultRoutingProduct = new DefaultRoutingProduct()

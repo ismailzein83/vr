@@ -80,7 +80,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZoneRoutingProductByZone;
         }
 
-        public Entities.DefaultRoutingProduct GetDefaultRoutingProduct(Entities.SalePriceListOwnerType ownerType, int ownerId)
+        public Entities.DefaultRoutingProduct GetDefaultRoutingProduct(Entities.SalePriceListOwnerType ownerType, int ownerId, long? saleZoneId)
         {
             var defaultRoutingProductsByOwner = ownerType == SalePriceListOwnerType.Customer ? _allDefaultRoutingProductByOwner.DefaultRoutingProductsByCustomer : _allDefaultRoutingProductByOwner.DefaultRoutingProductsByProduct;
             DefaultRoutingProduct defaultRoutingProduct;

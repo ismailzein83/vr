@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
         }
 
-        public DefaultRoutingProduct GetDefaultRoutingProduct(Entities.SalePriceListOwnerType ownerType, int ownerId)
+        public DefaultRoutingProduct GetDefaultRoutingProduct(Entities.SalePriceListOwnerType ownerType, int ownerId, long? saleZoneId)
         {
             DefaultRoutingProductsByOwner _allDefaultRoutingProductsByOwner = GetCachedDefaultRoutingProducts();
             if (_allDefaultRoutingProductsByOwner != null)

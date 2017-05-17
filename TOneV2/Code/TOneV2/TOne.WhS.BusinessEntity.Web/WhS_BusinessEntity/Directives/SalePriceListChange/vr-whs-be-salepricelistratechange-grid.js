@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricelistratechangeGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePriceListChangeAPIService", "WhS_BE_RateChangeTypeEnum",
-function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiService, whSBeRateChangeTypeEnum) {
+app.directive("vrWhsBeSalepricelistratechangeGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePriceListChangeAPIService", "WhS_BE_RateChangeTypeEnum", "VRUIUtilsService",
+function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiService, whSBeRateChangeTypeEnum, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -51,6 +51,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var item = response.Data[i];
+                                setRPService(item);
                                 SetRateChangeIcon(item);
                             }
                         }
@@ -60,6 +61,14 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
                         vrNotificationService.notifyExceptionWithClose(error, $scope);
                     });
             };
+            function setRPService(item) {
+                item.RPserviceViewerLoadDeferred = utilsService.createPromiseDeferred();
+                item.onRPServiceViewerReady = function (api) {
+                    item.serviceViewerAPI = api;
+                    var routingProductserviceViewerPayload = { selectedIds: item.ServicesId };
+                    VRUIUtilsService.callDirectiveLoad(item.serviceViewerAPI, routingProductserviceViewerPayload, item.RPserviceViewerLoadDeferred);
+                };
+            }
         }
         function SetRateChangeIcon(dataItem) {
             switch (dataItem.ChangeType) {

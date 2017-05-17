@@ -152,14 +152,20 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     continue;
 
                 int sellingProductId = infoDetailsByCustomerId.GetRecord(customer.CarrierAccountId).SellingProductId;
-                CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange();
-                changesForThisCustomer.CustomerId = customerId;
+                CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange { CustomerId = customerId };
+
+                SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(
+                        new SaleEntityRoutingProductReadAllNoCache(new List<int> { customerId }, DateTime.Now, false));
+
+                var defaultRoutingProduct = routingProductLocator.GetCustomerDefaultRoutingProduct(customerId, sellingProductId);
 
                 foreach (var countryAction in actionsForSoldCountryOfThisCustomer)
                 {
-                    changesForThisCustomer.RateChanges.AddRange(
-                    this.GetRateChangesFromZonesToAdd(countryAction.NewZonesToAdd, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId));
+                    IEnumerable<SalePricelistRateChange> newRateChanges =
+                    this.GetRateChangesFromZonesToAdd(countryAction.NewZonesToAdd, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId, defaultRoutingProduct.RoutingProductId);
 
+                    changesForThisCustomer.RoutingProductChanges.AddRange(GetRPChangesFromNewRateChange(newRateChanges, defaultRoutingProduct));
+                    changesForThisCustomer.RateChanges.AddRange(newRateChanges);
                     changesForThisCustomer.RateChanges.AddRange(
                         this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, futureRateLocator, countryAction.CountryId, customerId, sellingProductId));
 
@@ -175,10 +181,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         }
 
         private IEnumerable<SalePricelistRateChange> GetRateChangesFromZonesToAdd(IEnumerable<NewZoneToAdd> newZonesToAdd, SaleEntityZoneRateLocator ratesToAddLocator, int countryId,
-            int customerId, int sellingProductId)
+            int customerId, int sellingProductId, int defaultRoutingProductId)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
 
             foreach (var zoneToAdd in newZonesToAdd)
             {
@@ -192,13 +197,27 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneName = zoneToAdd.ZoneName,
                     Rate = rateToSend.Rate.Rate,
                     ChangeType = RateChangeType.New,
-                    BED = rateToSend.Rate.BED
+                    BED = rateToSend.Rate.BED,
+                    RoutingProductId = defaultRoutingProductId
                 });
             }
 
             return rateChanges;
         }
 
+        private List<SalePricelistRPChange> GetRPChangesFromNewRateChange(IEnumerable<SalePricelistRateChange> rateChanges, SaleEntityZoneRoutingProduct defaultRoutingProduct)
+        {
+            List<SalePricelistRPChange> routingProductchanges =
+                rateChanges.Select(rateChange => new SalePricelistRPChange
+                {
+                    CountryId = rateChange.CountryId,
+                    ZoneName = rateChange.ZoneName,
+                    BED = defaultRoutingProduct.BED,
+                    EED = defaultRoutingProduct.EED,
+                    RoutingProductId = defaultRoutingProduct.RoutingProductId
+                }).ToList();
+            return routingProductchanges;
+        }
         private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToProcess> zonesToClose, SaleEntityZoneRateLocator futureRateLocator, int countryId, int customerId, int sellingProductId)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();

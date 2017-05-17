@@ -23,6 +23,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
             return GetWebResponse(input, manager.GetFilteredPricelistCodeChanges(input));
         }
+        [HttpPost]
+        [Route("GetFilteredSalePriceListRPChanges")]
+        public object GetFilteredSalePriceListRPChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
+        {
+            SalePriceListChangeManager manager = new SalePriceListChangeManager();
+            return GetWebResponse(input, manager.GetFilteredSalePriceListRPChanges(input));
+        }
         [HttpGet]
         [Route("GetOwnerName")]
         public string GetOwnerName(int priceListId)

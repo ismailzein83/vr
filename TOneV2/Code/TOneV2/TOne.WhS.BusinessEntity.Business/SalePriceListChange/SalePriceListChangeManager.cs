@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
@@ -10,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePriceListChangeManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<SalePricelistRateChange> GetFilteredPricelistRateChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<SalePricelistRateChangeDetail> GetFilteredPricelistRateChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(input.Query.PriceListId, input.Query.Countries);
@@ -22,6 +23,12 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistCodeChanges(input.Query.PriceListId, input.Query.Countries);
             return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistCodeChangeDetailMapper));
+        }
+        public Vanrise.Entities.IDataRetrievalResult<SalePricelistRPChangeDetail> GetFilteredSalePriceListRPChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            var salePriceListRateChanges = dataManager.GetFilteredSalePriceListRPChanges(input.Query.PriceListId, input.Query.Countries);
+            return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistRPChangeDetailMapper));
         }
 
         public string GetOwnerName(int priceListId)
@@ -39,11 +46,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public void SaveSalePriceListCustomerChanges(List<CustomerPriceListChange> customerPriceListChanges, long processInstanceId)
         {
-            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-            List<SalePriceListCustomerChange> todbCustomerChanges = new List<SalePriceListCustomerChange>();
-            List<SalePricelistCodeChange> todbCodeChanges = new List<SalePricelistCodeChange>();
-            List<SalePricelistRateChange> todbsaleRateChanges = new List<SalePricelistRateChange>();
-            Dictionary<string, SalePricelistCodeChange> salePricelistCodeChanges = new Dictionary<string, SalePricelistCodeChange>();
+            var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            var todbCustomerChanges = new List<SalePriceListCustomerChange>();
+            var todbCodeChanges = new List<SalePricelistCodeChange>();
+            var todbsaleRateChanges = new List<SalePricelistRateChange>();
+            var todbSaleRoutingProductchanges = new List<SalePricelistRPChange>();
+            var salePricelistCodeChanges = new Dictionary<string, SalePricelistCodeChange>();
 
             foreach (var priceListChange in customerPriceListChanges)
             {
@@ -84,25 +92,36 @@ namespace TOne.WhS.BusinessEntity.Business
                         todbCodeChanges.Add(salePricelistCodeChange);
                     }
                 }
-                foreach (var rate in priceListChange.RateChanges)
+                todbsaleRateChanges.AddRange(priceListChange.RateChanges.Select(rate => new SalePricelistRateChange
                 {
-                    SalePricelistRateChange rateChange = new SalePricelistRateChange
+                    CountryId = rate.CountryId,
+                    ZoneName = rate.ZoneName,
+                    ZoneId = rate.ZoneId,
+                    Rate = rate.Rate,
+                    PricelistId = priceListChange.PriceListId,
+                    ChangeType = rate.ChangeType,
+                    BED = rate.BED,
+                    RecentRate = rate.RecentRate,
+                    EED = rate.EED,
+                    RoutingProductId = rate.RoutingProductId
+                }));
+                todbSaleRoutingProductchanges.AddRange(priceListChange.RoutingProductChanges.Select(
+                    routingProduct => new SalePricelistRPChange
                     {
-                        CountryId = rate.CountryId,
-                        ZoneName = rate.ZoneName,
-                        Rate = rate.Rate,
-                        PricelistId = priceListChange.PriceListId,
-                        ChangeType = rate.ChangeType,
-                        BED = rate.BED,
-                        RecentRate = rate.RecentRate,
-                        EED = rate.EED
-                    };
-                    todbsaleRateChanges.Add(rateChange);
-                }
+                        CountryId = routingProduct.CountryId,
+                        ZoneName = routingProduct.ZoneName,
+                        ZoneId = routingProduct.ZoneId,
+                        BED = routingProduct.BED,
+                        EED = routingProduct.EED,
+                        PriceListId = priceListChange.PriceListId,
+                        RecentRoutingProductId = routingProduct.RecentRoutingProductId,
+                        RoutingProductId = routingProduct.RoutingProductId
+                    }));
             }
             dataManager.SaveCustomerChangesToDb(todbCustomerChanges);
             dataManager.SaveCustomerCodeChangesToDb(todbCodeChanges);
             dataManager.SaveCustomerRateChangesToDb(todbsaleRateChanges, processInstanceId);
+            dataManager.SaveCustomerRoutingProductChangesToDb(todbSaleRoutingProductchanges, processInstanceId);
         }
 
         public CustomerPriceListChange GetCustomerChangesByPriceListId(int pricelistId)
@@ -122,6 +141,9 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             List<SalePricelistCodeChange> codeChanges = dataManager.GetNotSentCodechanges(customerIds);
             List<SalePricelistRateChange> rateChanges = dataManager.GetNotSentRatechanges(customerIds);
+
+            //TODO we need to include RP changes in not sent?
+
             var customerPriceListChanges = new Dictionary<int, CustomerPriceListChange>();
             foreach (var codeChange in codeChanges)
             {
@@ -164,14 +186,51 @@ namespace TOne.WhS.BusinessEntity.Business
             return priceListByCustomerId;
         }
         #region Mapper
-        private SalePricelistRateChange SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)
+        private SalePricelistRateChangeDetail SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)
         {
-            return salePricelistRateChange;
+            RoutingProductManager routingProductManager = new RoutingProductManager();
+            return new SalePricelistRateChangeDetail
+            {
+                ZoneName = salePricelistRateChange.ZoneName,
+                BED = salePricelistRateChange.BED,
+                EED = salePricelistRateChange.EED,
+                Rate = salePricelistRateChange.Rate,
+                ServicesId = !salePricelistRateChange.ZoneId.HasValue
+                    ? routingProductManager.GetDefaultServiceIds(salePricelistRateChange.RoutingProductId)
+                    : routingProductManager.GetZoneServiceIds(salePricelistRateChange.RoutingProductId,
+                        salePricelistRateChange.ZoneId.Value)
+            };
         }
         private SalePricelistCodeChange SalePricelistCodeChangeDetailMapper(SalePricelistCodeChange salePricelistCodeChange)
         {
             return salePricelistCodeChange;
         }
+        private SalePricelistRPChangeDetail SalePricelistRPChangeDetailMapper(SalePricelistRPChange salePricelistRpChange)
+        {
+            RoutingProductManager routingProductManager = new RoutingProductManager();
+            SalePricelistRPChangeDetail salePricelistRpChangeDetail = new SalePricelistRPChangeDetail
+            {
+                ZoneName = salePricelistRpChange.ZoneName,
+                BED = salePricelistRpChange.BED,
+                EED = salePricelistRpChange.EED,
+                RoutingProductName = routingProductManager.GetRoutingProductName(salePricelistRpChange.RoutingProductId),
+                RoutingProductServicesId = !salePricelistRpChange.ZoneId.HasValue
+                    ? routingProductManager.GetDefaultServiceIds(salePricelistRpChange.RoutingProductId)
+                    : routingProductManager.GetZoneServiceIds(salePricelistRpChange.RoutingProductId,
+                        salePricelistRpChange.ZoneId.Value)
+            };
+            if (salePricelistRpChange.RecentRoutingProductId.HasValue)
+            {
+                int recentRoutingProductId = salePricelistRpChange.RecentRoutingProductId.Value;
+                salePricelistRpChangeDetail.RecentRoutingProductName = routingProductManager.GetRoutingProductName(recentRoutingProductId);
+
+                salePricelistRpChangeDetail.RecentRouringProductServicesId = !salePricelistRpChange.ZoneId.HasValue
+                    ? routingProductManager.GetDefaultServiceIds(recentRoutingProductId)
+                    : routingProductManager.GetZoneServiceIds(recentRoutingProductId, salePricelistRpChange.ZoneId.Value);
+            }
+            return salePricelistRpChangeDetail;
+        }
+
         #endregion
 
     }

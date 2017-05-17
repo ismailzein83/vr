@@ -64,6 +64,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (customerZoneNotifications.Count > 0)
                     {
+                        AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
                         VRFile file = GetPriceListFile(customerId, customerZoneNotifications);
                         SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId);
 
@@ -164,13 +165,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return this.GetType();
         }
-
         public bool SetCustomerPricelistsAsSent(IEnumerable<int> customerIds, int? priceListId)
         {
             ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
             return dataManager.SetCustomerPricelistsAsSent(customerIds, priceListId);
         }
-
         public IEnumerable<SalePriceList> GetCustomerSalePriceListsByProcessInstanceId(long processInstanceId)
         {
             Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceLists();
@@ -595,6 +594,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Structuring Methods
 
+        private Dictionary<string, SalePricelistRPChange> StructureCustomerSaleRpChangesByZoneName(IEnumerable<SalePricelistRPChange> routingProductChanges)
+        {
+            Dictionary<string, SalePricelistRPChange> routingProductChangesByZoneName = new Dictionary<string, SalePricelistRPChange>();
+            foreach (var rpChange in routingProductChanges)
+            {
+                if (!routingProductChangesByZoneName.ContainsKey(rpChange.ZoneName))
+                    routingProductChangesByZoneName.Add(rpChange.ZoneName, rpChange);
+            }
+            return routingProductChangesByZoneName;
+        }
         private List<CustomerSalePriceListInfo> StructureCustomerPriceListChanges(IEnumerable<CustomerPriceListChange> customerPriceListChanges)
         {
             var customers = new List<CustomerSalePriceListInfo>();
@@ -615,10 +624,16 @@ namespace TOne.WhS.BusinessEntity.Business
                     var zoneInfo = GetZoneChanges(countryInfo, rateChange.CountryId, rateChange.ZoneName);
                     zoneInfo.RateChanges = new List<SalePricelistRateChange> { rateChange };
                 }
+                foreach (var routingProductChange in customerChanges.RoutingProductChanges)
+                {
+                    var zoneInfo = GetZoneChanges(countryInfo, routingProductChange.CountryId, routingProductChange.ZoneName);
+                    zoneInfo.RoutingProductChanges = new List<SalePricelistRPChange> { routingProductChange };
+                }
                 customers.Add(new CustomerSalePriceListInfo
                 {
                     CustomerId = customerChanges.CustomerId,
-                    ZoneChangesByCountryId = countryInfo
+                    ZoneChangesByCountryId = countryInfo,
+                    RoutingProductChanges = customerChanges.RoutingProductChanges
                 });
             }
             return customers;
@@ -766,6 +781,50 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region  Private Members
 
+        private void AddRPChangesToSalePLNotification(IEnumerable<SalePLZoneNotification> customerZoneNotifications, List<SalePricelistRPChange> routingProductChanges, int customerId, int sellingProductId)
+        {
+            Dictionary<long, DateTime> rateBedByZoneId = StructureZoneIdsWithActionBED(customerZoneNotifications);
+            SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, rateBedByZoneId));
+            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(new List<int> { customerId }, DateTime.Now, false));
+
+            var routingProductChangesByZoneName = StructureCustomerSaleRpChangesByZoneName(routingProductChanges);
+            RoutingProductManager routingProductManager = new RoutingProductManager();
+            foreach (var zoneNotification in customerZoneNotifications)
+            {
+                if (zoneNotification.Rate.ServiceIds != null && zoneNotification.Rate.ServiceIds.Any()) continue;
+
+                SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct;
+                if (!zoneNotification.ZoneId.HasValue)
+                {
+                    saleEntityZoneRoutingProduct = effectiveRoutingProductLocator.GetCustomerDefaultRoutingProduct(customerId, sellingProductId);
+                    zoneNotification.Rate.ServiceIds = routingProductManager.GetDefaultServiceIds(saleEntityZoneRoutingProduct.RoutingProductId);
+                }
+                else
+                {
+                    int routingProductId;
+                    SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(zoneNotification.ZoneName);
+                    if (routinProductChange != null)
+                        routingProductId = routinProductChange.RoutingProductId;
+                    else
+                    {
+                        saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneNotification.ZoneId.Value);
+                        routingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
+                    }
+                    zoneNotification.Rate.ServiceIds = routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value);
+                }
+            }
+        }
+
+        private Dictionary<long, DateTime> StructureZoneIdsWithActionBED(IEnumerable<SalePLZoneNotification> customerZoneNotifications)
+        {
+            Dictionary<long, DateTime> zoneIdsWithRateBED = new Dictionary<long, DateTime>();
+            foreach (var notification in customerZoneNotifications)
+            {
+                if (notification.ZoneId.HasValue)
+                    zoneIdsWithRateBED.Add(notification.ZoneId.Value, notification.Rate.BED);
+            }
+            return zoneIdsWithRateBED;
+        }
         private Dictionary<int, SalePriceList> GetCustomerCachedSalePriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerCachedSalePriceLists", () =>
@@ -922,6 +981,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public ZoneChangesByCountryId ZoneChangesByCountryId { get; set; }
             public bool IsCustomerAtoZ { get; set; }
             public int SellingProductId { get; set; }
+            public List<SalePricelistRPChange> RoutingProductChanges { get; set; }
 
         }
         public class ZoneChangesByCountryId : Dictionary<int, ZoneChangesByZoneName> { }
@@ -931,6 +991,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public string ZoneName { get; set; }
             public List<SalePricelistRateChange> RateChanges { get; set; }
             public List<SalePricelistCodeChange> CodeChanges { get; set; }
+            public List<SalePricelistRPChange> RoutingProductChanges { get; set; }
         }
         private class ExistingSaleZone
         {
