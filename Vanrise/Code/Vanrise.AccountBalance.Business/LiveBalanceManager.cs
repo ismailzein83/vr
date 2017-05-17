@@ -37,10 +37,12 @@ namespace Vanrise.AccountBalance.Business
             CurrencyManager currencyManager = new CurrencyManager();
             if (liveBalance == null)
                 return null;
+            int normalPression = GenericParameterManager.Current.GetNormalPrecision();
+
             return new CurrentAccountBalance
             {
                 CurrencyDescription = currencyManager.GetCurrencySymbol(liveBalance.CurrencyId),
-                CurrentBalance = Math.Abs(liveBalance.CurrentBalance),
+                CurrentBalance = Math.Round(Math.Abs(liveBalance.CurrentBalance),normalPression),
                 BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(liveBalance.CurrentBalance)
             };
         }

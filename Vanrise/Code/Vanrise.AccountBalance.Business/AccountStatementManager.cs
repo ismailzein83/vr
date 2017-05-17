@@ -41,17 +41,18 @@ namespace Vanrise.AccountBalance.Business
             protected override BigResult<AccountStatementItem> AllRecordsToBigResult(DataRetrievalInput<AccountStatementQuery> input, IEnumerable<AccountStatementItem> allRecords)
             {
                 var query = input.Query;
-
+                int normalPression = GenericParameterManager.Current.GetNormalPrecision();
                 var analyticBigResult = new AccountStatementResult()
                 {
                     ResultKey = input.ResultKey,
                     Data =  allRecords.VRGetPage(input),
                     TotalCount = allRecords.Count(),
-                    CurrentBalance = Math.Abs(_currenctBalance),
+                    CurrentBalance = Math.Round(Math.Abs(_currenctBalance), normalPression),
                     BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(_currenctBalance),
                     Currency = _currencyName,
-                    TotalCredit = _totalCredit,
-                    TotalDebit = _totalDebit
+                    TotalCredit = Math.Round(_totalCredit, normalPression),
+                    TotalDebit = Math.Round(_totalDebit,normalPression),
+                    
                 };
                 return analyticBigResult;
             }

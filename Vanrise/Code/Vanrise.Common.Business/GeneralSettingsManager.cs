@@ -93,12 +93,34 @@ namespace Vanrise.Common.Business
                 return null;
             return parameter.Value;
         }
+        public int GetNormalPrecisionValue()
+        {
+            var generalSettings = GetGeneralSettingData();
+            if (generalSettings == null)
+                throw new NullReferenceException("generalSettings");
+            if (generalSettings.UIData == null )
+                throw new NullReferenceException("eneralSettings.UIData");
+            if (generalSettings.UIData.NormalPrecision == null)
+                throw new NullReferenceException("generalSettings.UIData.NormalPrecision");
+            return generalSettings.UIData.NormalPrecision.Value;
+        }
         public string GetLongPrecision()
         {
             var parameter = GetParameter("LongPrecision");
             if (parameter == null)
                 return null;
             return parameter.Value;
+        }
+        public int GetLongPrecisionValue()
+        {
+            var generalSettings = GetGeneralSettingData();
+            if (generalSettings == null)
+                throw new NullReferenceException("generalSettings");
+            if (generalSettings.UIData == null)
+                throw new NullReferenceException("eneralSettings.UIData");
+            if (generalSettings.UIData.LongPrecision == null)
+                throw new NullReferenceException("generalSettings.UIData.LongPrecision");
+            return generalSettings.UIData.LongPrecision.Value;
         }
         public string GetLongDateTimeFormat()
         {

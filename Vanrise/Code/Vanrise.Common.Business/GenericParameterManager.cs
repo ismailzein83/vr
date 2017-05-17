@@ -11,7 +11,7 @@ namespace Vanrise.Common.Business
         #region Singleton
 
         static GenericParameterManager s_current = new GenericParameterManager();
-
+        GeneralSettingsManager _generalSettingsManager;
         public static GenericParameterManager Current
         {
             get
@@ -22,18 +22,18 @@ namespace Vanrise.Common.Business
 
         private GenericParameterManager()
         {
-
+            _generalSettingsManager = new GeneralSettingsManager();
         }
 
         #endregion
         public int GetNormalPrecision()
         {
-            return 2;
+            return _generalSettingsManager.GetNormalPrecisionValue();
         }
 
         public int GetLongPrecision()
         {
-            return 4;
+            return _generalSettingsManager.GetLongPrecisionValue();
         }
     }
 }
