@@ -9,11 +9,11 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class RatePlanRPReadWithCache : BusinessEntity.Business.ISaleEntityRoutingProductReader
+    public class RatePlanReadWithDraft : BusinessEntity.Business.ISaleEntityRoutingProductReader
     {
         #region Fields / Constructors
 
-        private BusinessEntity.Business.SaleEntityRoutingProductReadWithCache _reader;
+        private ISaleEntityRoutingProductReader _reader;
 
         private SalePriceListOwnerType _ownerType;
         private int _ownerId;
@@ -21,12 +21,15 @@ namespace TOne.WhS.Sales.Business
         private BusinessEntity.Entities.DefaultRoutingProduct _defaultRoutingProduct;
         private BusinessEntity.Business.SaleZoneRoutingProductsByZone _routingProductsByZone;
 
-        public RatePlanRPReadWithCache(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft)
+        public RatePlanReadWithDraft(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft, bool readWithCache)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
 
-            _reader = new BusinessEntity.Business.SaleEntityRoutingProductReadWithCache(effectiveOn);
+            if (readWithCache) 
+                _reader = new SaleEntityRoutingProductReadWithCache(effectiveOn);
+            else 
+                _reader = new SaleEntityRoutingProductReadAllNoCache(new List<int> { ownerId }, effectiveOn, false);
 
             SetDefaultRoutingProduct(draft != null ? draft.DefaultChanges : null);
             SetRoutingProductsByZone(draft != null ? draft.ZoneChanges : null);

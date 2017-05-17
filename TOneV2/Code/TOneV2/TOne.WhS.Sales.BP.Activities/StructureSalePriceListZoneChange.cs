@@ -53,7 +53,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             List<int> customerIds;
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate, out customerIds);
-            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanRPReadWithCache(ownerType, ownerId, effectiveOn, draft));
+            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanReadWithDraft(ownerType, ownerId, effectiveOn, draft, false));
             SaleEntityZoneRoutingProductLocator currenRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false));
 
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
@@ -557,7 +557,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             Dictionary<long, DateTime> zoneIdsWithRateBED = StructureRateChangeByzoneIdWithRateBED(rateChanges);
             SaleEntityZoneRoutingProductLocator routingProductLocatorByRateBED = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWithRateBED));
-           
+
             var routingProductChangesByZoneName = StructureCustomerSaleRpChangesByZoneName(routingProductChanges);
             foreach (var rateChange in rateChanges)
             {
