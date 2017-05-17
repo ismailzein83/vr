@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
+    
     public class InvoiceRecurChargePackageDefinitionSettings : PackageDefinitionExtendedSettings
     {
         public override Guid ConfigId
@@ -25,5 +27,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         public Guid ChargeableEntityBEDefinitionId { get; set; }
 
         public Guid ChargeableEntityId { get; set; }
+
+        public RecurringChargeEvaluatorDefinitionSettings EvaluatorDefinitionSettings { get; set; }
     }
 }

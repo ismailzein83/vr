@@ -18,5 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         public Decimal Price { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public RecurringChargeEvaluatorSettings Evaluator { get; set; }
     }
 }

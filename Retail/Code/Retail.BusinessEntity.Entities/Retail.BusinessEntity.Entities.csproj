@@ -146,6 +146,10 @@
     <Compile Include="Product\Definition\ProductDefinitionInfo.cs" />
     <Compile Include="GenericFieldDefinition\GenericFieldDefinitionInfo.cs" />
     <Compile Include="IAccountBEDefinitionManager.cs" />
+    <Compile Include="RecurringCharge\Evaluator\RecurringChargeEvaluatorConfig.cs" />
+    <Compile Include="RecurringCharge\Evaluator\RecurringChargeEvaluatorDefinitionSettings.cs" />
+    <Compile Include="RecurringCharge\Evaluator\RecurringChargeEvaluatorOutput.cs" />
+    <Compile Include="RecurringCharge\Evaluator\RecurringChargeEvaluatorSettings.cs" />
     <Compile Include="Settings\DIDTechnicalSettings.cs" />
     <Compile Include="Package\Definition\PackageDefinition.cs" />
     <Compile Include="Package\Definition\PackageDefinitionConfig.cs" />
