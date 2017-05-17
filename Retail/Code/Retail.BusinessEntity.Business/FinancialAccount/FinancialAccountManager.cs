@@ -380,7 +380,9 @@ namespace Retail.BusinessEntity.Business
         }
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccountData financialAccountData)
         {
-            return FinancialAccountDetailMapper(financialAccountData.FinancialAccount);
+            var financialAccountDetail = FinancialAccountDetailMapper(financialAccountData.FinancialAccount);
+            financialAccountDetail.FinancialAccountId = financialAccountData.FinancialAccountId;
+            return financialAccountDetail;
         }
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
@@ -389,7 +391,8 @@ namespace Retail.BusinessEntity.Business
                 SequenceNumber = financialAccount.SequenceNumber,
                 BED = financialAccount.BED,
                 EED = financialAccount.EED,
-                FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId)
+                FinancialAccountDefinitionName = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId),
+                BalanceAccountTypeId = s_financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId)
             };
         }
         private FinancialAccountInfo FinancialAccountInfoMapper(FinancialAccountData financialAccountData)

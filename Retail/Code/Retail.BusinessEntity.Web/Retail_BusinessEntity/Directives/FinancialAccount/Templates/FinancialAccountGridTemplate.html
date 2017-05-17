@@ -3,9 +3,13 @@
              pagingtype="'Pager'"
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
-             idfield="FinancialAccountId">
+             idfield="FinancialAccountId"
+             showexpand="scopeModel.showFinancialTransactionGrid">
     <vr-datagridcolumn headertext="'ID'" field="'SequenceNumber'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Type'" field="'FinancialAccountDefinitionName'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'" widthfactor="'20'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'" widthfactor="'20'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

@@ -18,6 +18,12 @@ namespace Retail.BusinessEntity.Business
             financialAccountDefinitionSettings.ThrowIfNull("financialAccountDefinitionSettings");
             return financialAccountDefinitionSettings;
         }
+        public Guid? GetBalanceAccountTypeId(Guid financialAccountDefinitionId)
+        {
+            var financialAccountDefinitionSettings =  GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+            return financialAccountDefinitionSettings.BalanceAccountTypeId;
+        }
+
         public IEnumerable<FinancialAccountDefinitionInfo> GetFinancialAccountDefinitionsInfo(FinancialAccountDefinitionInfoFilter financialAccountDefinitionFilter)
         {
             Func<FinancialAccountDefinition, bool> filterExpression = (financialAccountDefinition) =>
