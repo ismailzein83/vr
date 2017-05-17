@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface ICodeOnEachRowMappedValueContext
-	{
-		string Zone { get; set; }
-		string Code { get; set; }
-		DateTime? CodeBED { get; set; }
-		DateTime? CodeEED { get; set; }
-		decimal? Rate { get; set; }
-		DateTime? RateBED { get; set; }
-		DateTime? RateEED { get; set; }
-		object Value { get; set; }
-	}
+    {
+        string Zone { get; set; }
+        string Code { get; set; }
+        DateTime? CodeBED { get; set; }
+        DateTime? CodeEED { get; set; }
+        decimal? Rate { get; set; }
+        DateTime? RateBED { get; set; }
+        DateTime? RateEED { get; set; }
+        IEnumerable<int> ServicesIds{ get; set; }
+        object Value { get; set; }
+    }
 }

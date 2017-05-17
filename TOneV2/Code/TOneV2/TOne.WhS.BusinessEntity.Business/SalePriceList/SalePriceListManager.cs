@@ -785,33 +785,24 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             Dictionary<long, DateTime> rateBedByZoneId = StructureZoneIdsWithActionBED(customerZoneNotifications);
             SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, rateBedByZoneId));
-            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(new List<int> { customerId }, DateTime.Now, false));
 
             var routingProductChangesByZoneName = StructureCustomerSaleRpChangesByZoneName(routingProductChanges);
             RoutingProductManager routingProductManager = new RoutingProductManager();
             foreach (var zoneNotification in customerZoneNotifications)
             {
-                if (zoneNotification.Rate.ServiceIds != null && zoneNotification.Rate.ServiceIds.Any()) continue;
+                IEnumerable<int> servicesIds = new List<int>();
 
-                SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct;
-                if (!zoneNotification.ZoneId.HasValue)
-                {
-                    saleEntityZoneRoutingProduct = effectiveRoutingProductLocator.GetCustomerDefaultRoutingProduct(customerId, sellingProductId);
-                    zoneNotification.Rate.ServiceIds = routingProductManager.GetDefaultServiceIds(saleEntityZoneRoutingProduct.RoutingProductId);
-                }
+                int routingProductId;
+                SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(zoneNotification.ZoneName);
+                if (routinProductChange != null)
+                    routingProductId = routinProductChange.RoutingProductId;
                 else
                 {
-                    int routingProductId;
-                    SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(zoneNotification.ZoneName);
-                    if (routinProductChange != null)
-                        routingProductId = routinProductChange.RoutingProductId;
-                    else
-                    {
-                        saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneNotification.ZoneId.Value);
-                        routingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
-                    }
-                    zoneNotification.Rate.ServiceIds = routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value);
+                    SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneNotification.ZoneId.Value);
+                    routingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
                 }
+                servicesIds = routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value);
+                zoneNotification.Rate.ServicesIds = servicesIds;
             }
         }
 

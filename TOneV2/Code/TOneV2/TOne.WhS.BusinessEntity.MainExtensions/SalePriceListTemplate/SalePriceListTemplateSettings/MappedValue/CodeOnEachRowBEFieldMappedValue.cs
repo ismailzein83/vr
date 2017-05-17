@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
@@ -15,7 +16,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         CodeEED = 3,
         Rate = 4,
         RateBED = 5,
-        RateEED = 6
+        RateEED = 6,
+        Services = 7
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -50,6 +52,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case CodeOnEachRowBEFieldType.RateEED:
                     context.Value = context.RateEED;
+                    break;
+                case CodeOnEachRowBEFieldType.Services:
+                    ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+                    var services = zoneServiceConfigManager.GetZoneServicesNames(context.ServicesIds.ToList());
+                    string servicesSymbol = string.Join(",", services);
+                    context.Value = servicesSymbol;
                     break;
             }
         }

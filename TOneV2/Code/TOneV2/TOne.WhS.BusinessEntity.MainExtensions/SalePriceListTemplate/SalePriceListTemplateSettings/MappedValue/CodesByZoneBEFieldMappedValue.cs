@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
@@ -14,7 +15,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         EffectiveDate = 2,
         Rate = 3,
         RateBED = 4,
-        RateEED = 5
+        RateEED = 5,
+        Services = 6
     }
 
     public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
@@ -49,6 +51,15 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 case CodesByZoneBEFieldType.RateEED:
                     if (context.ZoneNotification.Rate != null)
                         context.Value = context.ZoneNotification.Rate.EED;
+                    break;
+                case CodesByZoneBEFieldType.Services:
+                    if (context.ZoneNotification.Rate != null && context.ZoneNotification.Rate.ServicesIds != null)
+                    {
+                        ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+                        var services = zoneServiceConfigManager.GetZoneServicesNames(context.ZoneNotification.Rate.ServicesIds.ToList());
+                        string servicesSymbol = string.Join(",", services);
+                        context.Value = servicesSymbol;
+                    }
                     break;
             }
         }

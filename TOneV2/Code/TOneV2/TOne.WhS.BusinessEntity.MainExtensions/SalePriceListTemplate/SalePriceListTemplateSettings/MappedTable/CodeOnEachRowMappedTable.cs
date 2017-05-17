@@ -8,7 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public class CodeOnEachRowMappedTable : MappedTable 
+    public class CodeOnEachRowMappedTable : MappedTable
     {
         public override Guid ConfigId
         {
@@ -23,11 +23,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             foreach (SalePLZoneNotification zone in zoneNotificationList)
             {
                 foreach (var code in zone.Codes)
-                    {
-                        IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
-                        SetRecordData(sheets, concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat);
-                    }
-                        
+                {
+                    IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
+                    SetRecordData(sheets, concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat);
+                }
+
             }
             return sheets;
         }
@@ -61,6 +61,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 mappedValueContext.Rate = rate.Rate;
                 mappedValueContext.RateBED = rate.BED;
                 mappedValueContext.RateEED = rate.EED;
+                mappedValueContext.ServicesIds = rate.ServicesIds;
             }
 
             mappedCol.MappedValue.Execute(mappedValueContext);
@@ -70,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 if (mappedValueContext.Value is DateTime)
                     mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
 
-                sheets.Add(new SalePriceListTemplateTableCell()
+                sheets.Add(new SalePriceListTemplateTableCell
                 {
                     ColumnIndex = mappedCol.ColumnIndex,
                     RowIndex = rowIndex,

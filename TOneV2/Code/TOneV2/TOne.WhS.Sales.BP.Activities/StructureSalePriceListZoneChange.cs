@@ -53,9 +53,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
             List<int> customerIds;
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate, out customerIds);
-
-            SaleEntityZoneRoutingProductLocator routingProductEffectiveLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanRPReadWithCache(ownerType, ownerId, effectiveOn, draft));
-            SaleEntityZoneRoutingProductLocator routingProductCurrentLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false));
+            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanRPReadWithCache(ownerType, ownerId, effectiveOn, draft));
+            SaleEntityZoneRoutingProductLocator currenRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false));
 
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
 
@@ -68,16 +67,19 @@ namespace TOne.WhS.Sales.BP.Activities
                     #region Selling Product
 
                     var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
-                    SellingProductChangesContext sellingProductContext = new SellingProductChangesContext()
+
+                    SellingProductChangesContext sellingProductContext = new SellingProductChangesContext
                     {
                         ImportedZonesByCountryId = importedZonesByCountryId,
                         ExistingZonesByCountryId = existingZonesByCountryId,
                         Customers = dataByCustomer,
                         FutureLocator = futureRateLocator,
-                        MinimumDate = minimumDate
+                        MinimumDate = minimumDate,
+                        EffectiveRoutingProductLocator = effectiveRoutingProductLocator,
+                        CurrentRoutingProductLocator = currenRoutingProductLocator
                     };
 
-                    customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext, routingProductEffectiveLocator, routingProductCurrentLocator);
+                    customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext);
 
                     #endregion
                 }
@@ -200,7 +202,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (soldCountries != null)
                     {
                         List<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customerInfo.CustomerId, customerInfo.SellingProductId,
-                            soldCountries.Select(x => x.CountryId), existingZonesByCountryId, routingProductEffectiveLocator, routingProductCurrentLocator);
+                            soldCountries.Select(x => x.CountryId), existingZonesByCountryId, effectiveRoutingProductLocator, currenRoutingProductLocator);
                         changesForThisCustomer.RoutingProductChanges.AddRange(routingProductChanges);
                     }
 
@@ -209,7 +211,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     //Add routing productID to SaleRateChange
                     if (changesForThisCustomer.RateChanges.Any())
                     {
-                        SetRoutingProductId(customerInfo.CustomerId, customerInfo.SellingProductId, changesForThisCustomer.RateChanges, changesForThisCustomer.RoutingProductChanges);
+                        SetRoutingProductIdOnRateChange(customerInfo.CustomerId, customerInfo.SellingProductId, changesForThisCustomer.RateChanges, changesForThisCustomer.RoutingProductChanges);
                     }
                     customerPriceListChanges.Add(changesForThisCustomer);
 
@@ -224,7 +226,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Get Pricelist Changes from Selling Product Methods
 
-        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context, SaleEntityZoneRoutingProductLocator routingProductEffectiveLocator, SaleEntityZoneRoutingProductLocator routingProductCurrentLocator)
+        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context)
         {
             var customerCountryManager = new CustomerCountryManager();
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
@@ -239,7 +241,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     context.ImportedZonesByCountryId, context.FutureLocator);
 
                 IEnumerable<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customer.CustomerId, customer.SellingProductId,
-                    soldCountries.Select(itm => itm.CountryId), context.ExistingZonesByCountryId, routingProductEffectiveLocator, routingProductCurrentLocator);
+                    soldCountries.Select(itm => itm.CountryId), context.ExistingZonesByCountryId, context.EffectiveRoutingProductLocator, context.CurrentRoutingProductLocator);
 
                 if (rateChanges.Any())
                 {
@@ -249,7 +251,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     };
                     if (routingProductChanges.Any())
                     {
-                        SetRoutingProductId(customer.CustomerId, customer.SellingProductId, rateChanges, routingProductChanges);
+                        SetRoutingProductIdOnRateChange(customer.CustomerId, customer.SellingProductId, rateChanges, routingProductChanges);
                         changesForThisCustomer.RoutingProductChanges.AddRange(routingProductChanges);
                     }
                     changesForThisCustomer.RateChanges.AddRange(rateChanges);
@@ -551,32 +553,23 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private void SetRoutingProductId(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, IEnumerable<SalePricelistRPChange> routingProductChanges)
+        private void SetRoutingProductIdOnRateChange(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, IEnumerable<SalePricelistRPChange> routingProductChanges)
         {
             Dictionary<long, DateTime> zoneIdsWithRateBED = StructureRateChangeByzoneIdWithRateBED(rateChanges);
-            SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWithRateBED));
-            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(new List<int> { customerId }, DateTime.Now, false));
-
+            SaleEntityZoneRoutingProductLocator routingProductLocatorByRateBED = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWithRateBED));
+           
             var routingProductChangesByZoneName = StructureCustomerSaleRpChangesByZoneName(routingProductChanges);
             foreach (var rateChange in rateChanges)
             {
-                SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct;
-                if (!rateChange.ZoneId.HasValue)
-                {
-                    saleEntityZoneRoutingProduct = effectiveRoutingProductLocator.GetCustomerDefaultRoutingProduct(customerId, sellingProductId);
-                    rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
-                }
+                SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(rateChange.ZoneName);
+                if (routinProductChange != null)
+                    rateChange.RoutingProductId = routinProductChange.RoutingProductId;
                 else
                 {
-                    SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(rateChange.ZoneName);
-                    if (routinProductChange != null)
-                        rateChange.RoutingProductId = routinProductChange.RoutingProductId;
-                    else
-                    {
-                        saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);
-                        rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
-                    }
+                    var saleEntityZoneRoutingProduct = routingProductLocatorByRateBED.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);
+                    rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
                 }
+
             }
         }
         private Dictionary<string, SalePricelistRPChange> StructureCustomerSaleRpChangesByZoneName(IEnumerable<SalePricelistRPChange> routingProductChanges)
@@ -933,9 +926,9 @@ namespace TOne.WhS.Sales.BP.Activities
             public Dictionary<int, List<SaleZone>> ExistingZonesByCountryId { get; set; }
 
             public IEnumerable<RoutingCustomerInfoDetails> Customers { get; set; }
-
             public SaleEntityZoneRateLocator FutureLocator { get; set; }
-
+            public SaleEntityZoneRoutingProductLocator EffectiveRoutingProductLocator { get; set; }
+            public SaleEntityZoneRoutingProductLocator CurrentRoutingProductLocator { get; set; }
             public DateTime MinimumDate { get; set; }
         }
 
