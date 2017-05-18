@@ -39,6 +39,9 @@
         var customerRoutingStatusSelectorAPI;
         var customerRoutingStatusSelectorReadyDeferred;
 
+        var priceListExtensionFormatSelectorAPI;
+        var priceListExtensionFormatSelectorReadyDeferred;
+
         // Supplier Settings
         var supplierTimeZoneSelectorAPI;
         var supplierTimeZoneSelectorReadyDeferred;
@@ -203,6 +206,11 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerRoutingStatusSelector = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerRoutingStatusSelectorAPI, undefined, setLoader, customerRoutingStatusSelectorReadyDeferred);
             };
+            $scope.scopeModel.onPriceListExtensionFormatSelectorReady = function (api) {
+                priceListExtensionFormatSelectorAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPRiceListExtensionFormatSelector = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListExtensionFormatSelectorAPI, undefined, setLoader, priceListExtensionFormatSelectorReadyDeferred);
+            };
 
             // Supplier Settings
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
@@ -319,6 +327,7 @@
                     sellingNumberPlanSelectedDeferred = UtilsService.createPromiseDeferred();
                     sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     customerRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                    priceListExtensionFormatSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                 }
                 function setSupplierGlobalVars() {
                     supplierTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -472,6 +481,9 @@
             var loadCustomerRoutingStatusSelectorPromise = loadCustomerRoutingStatusSelector();
             promises.push(loadCustomerRoutingStatusSelectorPromise);
 
+            var loadPriceListExtensionFormatSelectorPromise = loadPriceListExtensionFormatSelector();
+            promises.push(loadPriceListExtensionFormatSelectorPromise);
+
             return UtilsService.waitMultiplePromises(promises);
         }
         function loadCustomerTimeZoneSelector() {
@@ -535,6 +547,18 @@
             });
 
             return customerRoutingStatusSelectorLoadDeferred.promise;
+        }
+        function loadPriceListExtensionFormatSelector() {
+            var priceListExtensionFormatSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            priceListExtensionFormatSelectorReadyDeferred.promise.then(function () {
+                priceListExtensionFormatSelectorReadyDeferred = undefined;
+                var priceListExtensionFormatSelectorPayload = {
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.CustomerSettings.PriceListExtensionFormat : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(priceListExtensionFormatSelectorAPI, priceListExtensionFormatSelectorPayload, priceListExtensionFormatSelectorLoadDeferred);
+            });
+            return priceListExtensionFormatSelectorLoadDeferred.promise;
         }
 
         function loadSupplierSettingsTab() {
@@ -681,7 +705,8 @@
                     TimeZoneId: customerTimeZoneSelectorAPI != undefined ? customerTimeZoneSelectorAPI.getSelectedIds() : undefined,
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
                     IsAToZ: $scope.scopeModel.isAToZ,
-                    InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone
+                    InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
+                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined
                 }
             };
 

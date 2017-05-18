@@ -33,9 +33,13 @@
 				<vr-columns width="1/2row">
 					<vr-textbox label="Effective Date Day Offset" type="number" value="ctrl.effectiveDateDayOffset" minvalue="0" isrequired="true"></vr-textbox>
 				</vr-columns>
-				<vr-columns width="1/2row">
-					<vr-textbox label="Retroactive Day Offset" type="number" value="ctrl.retroactiveDayOffset" minvalue="0" isrequired="true"></vr-textbox>
-				</vr-columns>
+			<vr-columns width="1/2row">
+			    <vr-textbox label="Retroactive Day Offset" type="number" value="ctrl.retroactiveDayOffset" minvalue="0" isrequired="true"></vr-textbox>
+			</vr-columns>
+                <vr-whs-be-pricelistextensionformat-selector on-ready="onPriceListExtensionFormatSelectorReady"
+                                                             normal-col-num="6"
+                                                             isrequired="true">
+                </vr-whs-be-pricelistextensionformat-selector>
 		</vr-tab>
 
 		<vr-tab header="'Keywords'">

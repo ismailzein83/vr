@@ -19,4 +19,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         Hours = 1,
         Minutes = 2
     }
+
+    public enum PriceListExtensionFormat
+    {
+        XLS = 1,
+        XLSX = 2
+    }
 }

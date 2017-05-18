@@ -207,6 +207,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\PriceListExtensionFormatEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SaleEntityZoneRoutingProductSourceTypeEnum.js" />
@@ -230,6 +231,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\TestCutomerTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-pricelistextensionformat-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-routingstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccountall-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customer-selector.js" />
