@@ -56,7 +56,6 @@
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundItemRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundRateCalcMethodConfig.cs" />
-    <Compile Include="SwapDeals\RouteRules\RouteRulesDefinition\SwapDealBuyRouteRuleDefinition.cs" />
     <Compile Include="SwapDeals\RouteRules\RouteRulesDefinition\SwapDealBuyRouteRuleDefinitionSettings.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRule.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleSettings.cs" />

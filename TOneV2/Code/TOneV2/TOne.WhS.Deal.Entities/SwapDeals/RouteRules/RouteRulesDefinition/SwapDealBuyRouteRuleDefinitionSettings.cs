@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public class SwapDealBuyRouteRuleDefinitionSettings : Vanrise.Entities.VRComponentTypeSettings
+    public class SwapDealBuyRouteRuleDefinitionSettings : Vanrise.Entities.VRRuleDefinitionExtendedSettings
     {
-        public override Guid VRComponentTypeConfigId { get { return new Guid("3CC81591-9860-4B9D-9755-0E5D7E87A596"); } }
+        public override Guid ConfigId { get { return new Guid("9B2DB188-650C-4F19-8BCD-15BECC653E46"); } }
     }
 }

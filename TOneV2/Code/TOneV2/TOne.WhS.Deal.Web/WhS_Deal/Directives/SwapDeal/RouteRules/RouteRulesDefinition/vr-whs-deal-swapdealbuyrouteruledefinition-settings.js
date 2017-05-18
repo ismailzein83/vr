@@ -32,11 +32,7 @@ app.directive('vrWhsDealSwapdealbuyrouteruledefinitionSettings', ['UtilsService'
                     var promises = [];
 
                     if (payload != undefined) {
-                        var beParentChildRelationDefinitionEntity = payload.componentType;
 
-                        if (beParentChildRelationDefinitionEntity != undefined) {
-                            $scope.scopeModel.name = beParentChildRelationDefinitionEntity.Name;
-                        }
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -45,10 +41,7 @@ app.directive('vrWhsDealSwapdealbuyrouteruledefinitionSettings', ['UtilsService'
                 api.getData = function () {
 
                     return {
-                        Name: $scope.scopeModel.name,
-                        Settings: {
-                            $type: "TOne.WhS.Deal.Entities.SwapDealBuyRouteRuleDefinitionSettings, TOne.WhS.Deal.Entities"
-                        }
+                        $type: "TOne.WhS.Deal.Entities.SwapDealBuyRouteRuleDefinitionSettings, TOne.WhS.Deal.Entities"
                     };
                 };
 
