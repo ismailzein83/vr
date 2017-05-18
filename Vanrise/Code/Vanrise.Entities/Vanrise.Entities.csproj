@@ -148,6 +148,7 @@
     <Compile Include="VRActionAudit\VRObjectTrackingMetaData.cs" />
     <Compile Include="VRObject\VRObjectTypeCreateObjectContext.cs" />
     <Compile Include="VRObject\VRRazorCompilationOutput.cs" />
+    <Compile Include="VRRule\VRRule.cs" />
     <Compile Include="VRTax\VRTaxDetail.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />
     <Compile Include="VRTax\VRTaxItem.cs" />
