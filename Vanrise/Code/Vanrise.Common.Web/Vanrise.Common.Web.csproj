@@ -116,9 +116,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Directives\VRObjectVariables\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
@@ -282,6 +280,8 @@
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-settings.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-overriddenconfiguration-objecttypedefinition.js" />
+    <Content Include="Common\Directives\VRRule\VRRuleDefinition\Templates\VRRuleDefinitionSettingsTemplate.html" />
+    <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-settings.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileViewEditor.html" />
