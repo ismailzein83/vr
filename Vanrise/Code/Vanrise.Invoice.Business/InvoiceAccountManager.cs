@@ -10,7 +10,7 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceAccountManager
     {
-        public bool TryAddInvoiceAccount(InvoiceAccount invoiceAccount, out long insertedId)
+        public bool TryAddInvoiceAccount(VRInvoiceAccount invoiceAccount, out long insertedId)
         {
             IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
            return dataManager.InsertInvoiceAccount(invoiceAccount, out insertedId);

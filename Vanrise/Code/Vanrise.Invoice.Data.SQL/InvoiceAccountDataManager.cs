@@ -20,7 +20,7 @@ namespace Vanrise.Invoice.Data.SQL
 
         #endregion
 
-        public bool InsertInvoiceAccount(InvoiceAccount invoiceAccount, out long insertedId)
+        public bool InsertInvoiceAccount(VRInvoiceAccount invoiceAccount, out long insertedId)
         {
             object insertedID;
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceAccount_Insert", out insertedID, invoiceAccount.InvoiceTypeId, invoiceAccount.PartnerId, invoiceAccount.BED, invoiceAccount.EED, invoiceAccount.Status, invoiceAccount.IsDeleted);
