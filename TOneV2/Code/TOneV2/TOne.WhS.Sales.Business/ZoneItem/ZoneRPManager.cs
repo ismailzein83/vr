@@ -21,7 +21,7 @@ namespace TOne.WhS.Sales.Business
         public ZoneRPManager(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft, SaleEntityZoneRoutingProductLocator zoneRPLocator)
         {
             _rpLocator = zoneRPLocator;
-            _ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new RatePlanReadWithDraft(ownerType, ownerId, effectiveOn, draft, true));
+            _ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithDraft(ownerType, ownerId, effectiveOn, draft, true));
             _rpManager = new RoutingProductManager();
         }
 

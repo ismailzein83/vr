@@ -9,7 +9,7 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class RatePlanReadWithDraft : BusinessEntity.Business.ISaleEntityRoutingProductReader
+    public class SaleEntityRoutingProductReadWithDraft : BusinessEntity.Business.ISaleEntityRoutingProductReader
     {
         #region Fields / Constructors
 
@@ -21,7 +21,7 @@ namespace TOne.WhS.Sales.Business
         private BusinessEntity.Entities.DefaultRoutingProduct _defaultRoutingProduct;
         private BusinessEntity.Business.SaleZoneRoutingProductsByZone _routingProductsByZone;
 
-        public RatePlanReadWithDraft(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft, bool readWithCache)
+        public SaleEntityRoutingProductReadWithDraft(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft, bool readWithCache)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;

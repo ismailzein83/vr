@@ -155,7 +155,7 @@
     <Compile Include="RatePlanManager.cs" />
     <Compile Include="Preview\RatePlanPreviewSummaryManager.cs" />
     <Compile Include="RatePlanPricingManager.cs" />
-    <Compile Include="Reader\RatePlanReadWithDraft.cs" />
+    <Compile Include="Reader\SaleEntityRoutingProductReadWithDraft.cs" />
     <Compile Include="RatePlanZoneManager.cs" />
     <Compile Include="Preview\RatePreviewManager.cs" />
     <Compile Include="Preview\SaleZoneRoutingProductPreviewManager.cs" />
