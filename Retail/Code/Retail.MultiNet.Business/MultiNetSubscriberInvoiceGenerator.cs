@@ -74,10 +74,10 @@ namespace Retail.MultiNet.Business
             int currencyId = accountPayment.CurrencyId;
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, financialAccountData.Account.AccountId, context.FromDate, context.GeneratedToDate, currencyId);
-            if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
-            {
-                throw new InvoiceGeneratorException("No data available between the selected period.");
-            }
+            //if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
+            //{
+            //    throw new InvoiceGeneratorException("No data available between the selected period.");
+            //}
 
             Dictionary<string, List<dynamic>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, packages, financialAccountData.Account, currencyId);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
