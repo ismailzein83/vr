@@ -11,6 +11,7 @@ namespace Vanrise.Common.Data.SQL
 {
     public class VRComponentTypeDataManager : BaseSQLDataManager, IVRComponentTypeDataManager
     {
+        #region Ctor/Properties
 
         public VRComponentTypeDataManager()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
@@ -18,20 +19,13 @@ namespace Vanrise.Common.Data.SQL
 
         }
 
+        #endregion
+
+        #region Public Mehods
 
         public List<VRComponentType> GetComponentTypes()
         {
             return GetItemsSP("[common].[sp_VRComponentType_GetAll]", VRComponentTypeMapper);
-        }
-
-        VRComponentType VRComponentTypeMapper(IDataReader reader)
-        {
-            return new VRComponentType
-            {
-                VRComponentTypeId = GetReaderValue<Guid>(reader, "ID"),
-                Name = reader["Name"] as string,
-                Settings = Serializer.Deserialize<VRComponentTypeSettings>(reader["Settings"] as string)
-            };
         }
 
         public bool Insert(VRComponentType componentType)
@@ -56,5 +50,21 @@ namespace Vanrise.Common.Data.SQL
         {
             return base.IsDataUpdated("common.VRComponentType", ref updateHandle);
         }
+
+        #endregion
+
+        #region Mappers
+
+        VRComponentType VRComponentTypeMapper(IDataReader reader)
+        {
+            return new VRComponentType
+            {
+                VRComponentTypeId = GetReaderValue<Guid>(reader, "ID"),
+                Name = reader["Name"] as string,
+                Settings = Serializer.Deserialize<VRComponentTypeSettings>(reader["Settings"] as string)
+            };
+        }
+
+        #endregion
     }
 }
