@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class VRRule<T> where T : class
+    public class VRRule
+    {
+        public long VRRuleId { get; set; }
+
+        public Guid VRRuleDefinitionId { get; set; }
+
+        public VRRuleSettings Settings { get; set; }
+    }
+
+    public abstract class VRRuleSettings
+    {
+        //public abstract Guid VRRuleSettingsConfigId { get; }
+    }
+
+    public class VRRule<T> where T : VRRuleSettings
     {
         public long VRRuleId { get; set; }
 

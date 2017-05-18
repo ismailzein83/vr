@@ -149,7 +149,9 @@
     <Compile Include="VRObject\VRObjectTypeCreateObjectContext.cs" />
     <Compile Include="VRObject\VRRazorCompilationOutput.cs" />
     <Compile Include="VRRule\VRRule.cs" />
+    <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionExtendedSettings.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinition.cs" />
+    <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionExtendedSettingsConfig.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionSettings.cs" />
     <Compile Include="VRTax\VRTaxDetail.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />

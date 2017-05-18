@@ -135,6 +135,7 @@
     <Compile Include="Controllers\VRApplicationVisibilityController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
+    <Compile Include="Controllers\VRRuleDefinitionController.cs" />
     <Compile Include="Controllers\VRTileController.cs" />
     <Compile Include="Controllers\VRTimePeriodController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
@@ -280,7 +281,9 @@
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-settings.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-overriddenconfiguration-objecttypedefinition.js" />
+    <Content Include="Common\Directives\VRRule\VRRuleDefinition\Templates\VRRuleDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\Templates\VRRuleDefinitionSettingsTemplate.html" />
+    <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-extendedsettings.js" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-settings.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />
@@ -394,6 +397,7 @@
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRRuleDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTileAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />

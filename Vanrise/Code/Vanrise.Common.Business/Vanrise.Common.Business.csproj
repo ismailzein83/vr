@@ -140,6 +140,7 @@
     <Compile Include="VRObject\VRObjectTypeManager.cs" />
     <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />
     <Compile Include="VRFileManager.cs" />
+    <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionManager.cs" />
     <Compile Include="VRTile\VRTileManager.cs" />
     <Compile Include="VRTile\VRTileViewSettings.cs" />
     <Compile Include="VRTimePeriod\VRTimePeriodManager.cs" />

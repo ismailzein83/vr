@@ -20,8 +20,16 @@ app.directive('vrCommonRuledefinitionSettings', ['UtilsService', 'VRUIUtilsServi
         function VRRuleDefinitionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var vrRuleDefinitionExtendedSettingsDirectiveAPI;
+            var vrRuleDefinitionExtendedSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onVRRuleDefinitionExtendedSettingsDirectiveReady = function (api) {
+                    vrRuleDefinitionExtendedSettingsDirectiveAPI = api;
+                    vrRuleDefinitionExtendedSettingsDirectiveReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -31,12 +39,37 @@ app.directive('vrCommonRuledefinitionSettings', ['UtilsService', 'VRUIUtilsServi
                 api.load = function (payload) {
                     var promises = [];
 
-                    if (payload != undefined) {
-                        var beParentChildRelationDefinitionEntity = payload.componentType;
+                    var vrRuleDefinitionSettings, vrRuleDefinitionExtendedSettings;
 
-                        if (beParentChildRelationDefinitionEntity != undefined) {
-                            $scope.scopeModel.name = beParentChildRelationDefinitionEntity.Name;
+                    if (payload != undefined) {
+                        var vrRuleDefinitionEntity = payload.componentType;
+
+                        if (vrRuleDefinitionEntity != undefined) {
+                            $scope.scopeModel.name = vrRuleDefinitionEntity.Name;
+                            vrRuleDefinitionSettings = vrRuleDefinitionEntity.Settings;
                         }
+
+                        if (vrRuleDefinitionSettings != undefined) {
+                            vrRuleDefinitionExtendedSettings = vrRuleDefinitionSettings.VRRuleDefinitionExtendedSettings;
+                        }
+                    }
+
+                    //Loading ParentBEDefinitionRuntimeSelectorSettings selector
+                    var vrRuleDefinitionExtendedSettingsDirectiveLoadPromise = getVRRuleDefinitionExtendedSettingsDirectiveLoadPromise();
+                    promises.push(vrRuleDefinitionExtendedSettingsDirectiveLoadPromise);
+
+
+                    function getVRRuleDefinitionExtendedSettingsDirectiveLoadPromise() {
+                        var vrRuleDefinitionExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        vrRuleDefinitionExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
+                            var vrRuleDefinitionExtendedSettingsDirectivePayload = {
+                                vrRuleDefinitionExtendedSettings: vrRuleDefinitionExtendedSettings
+                            };
+                            VRUIUtilsService.callDirectiveLoad(vrRuleDefinitionExtendedSettingsDirectiveAPI, vrRuleDefinitionExtendedSettingsDirectivePayload, vrRuleDefinitionExtendedSettingsDirectiveLoadDeferred);
+                        });
+
+                        return vrRuleDefinitionExtendedSettingsDirectiveLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -47,7 +80,8 @@ app.directive('vrCommonRuledefinitionSettings', ['UtilsService', 'VRUIUtilsServi
                     return {
                         Name: $scope.scopeModel.name,
                         Settings: {
-                            $type: "Vanrise.Entities.VRRuleDefinitionSettings, Vanrise.Entities"
+                            $type: "Vanrise.Entities.VRRuleDefinitionSettings, Vanrise.Entities",
+                            VRRuleDefinitionExtendedSettings: vrRuleDefinitionExtendedSettingsDirectiveAPI.getData()
                         }
                     };
                 };
