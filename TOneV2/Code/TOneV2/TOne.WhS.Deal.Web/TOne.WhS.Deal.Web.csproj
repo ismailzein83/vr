@@ -185,6 +185,8 @@
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdeal-settings-editor.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\RouteRulesDefinition\Templates\SwapDealBuyRouteRuleDefinitionSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\RouteRulesDefinition\vr-whs-deal-swapdealbuyrouteruledefinition-settings.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealOutboundGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealInboundGridTemplate.html" />
