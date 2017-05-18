@@ -379,8 +379,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer name", Width = 60 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Product Name", Width = 60 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer", Width = 60 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Product", Width = 60 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Effective On", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
                 if (context.BigResult != null && context.BigResult.Data != null)
