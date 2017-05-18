@@ -26,11 +26,18 @@ namespace TOne.WhS.Sales.Business
             _ownerType = ownerType;
             _ownerId = ownerId;
 
-            if (readWithCache) 
+            if (readWithCache)
                 _reader = new SaleEntityRoutingProductReadWithCache(effectiveOn);
-            else 
-                _reader = new SaleEntityRoutingProductReadAllNoCache(new List<int> { ownerId }, effectiveOn, false);
+            else
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
+                IEnumerable<int> customerIds = ownerType == SalePriceListOwnerType.SellingProduct
+                    ? carrierAccountManager.GetCarrierAccountIdsAssignedToSellingProduct(ownerId)
+                    : new List<int> { ownerId };
+
+                _reader = new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false);
+            }
             SetDefaultRoutingProduct(draft != null ? draft.DefaultChanges : null);
             SetRoutingProductsByZone(draft != null ? draft.ZoneChanges : null);
         }
