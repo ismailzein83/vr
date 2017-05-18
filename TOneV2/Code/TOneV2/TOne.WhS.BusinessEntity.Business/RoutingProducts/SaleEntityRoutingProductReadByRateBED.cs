@@ -102,7 +102,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     _defaultRoutingProductBySellingProductId.TryGetValue(ownerId, out defaultRoutingProducts);
 
                 if (defaultRoutingProducts != null)
-                    return defaultRoutingProducts.FirstOrDefault(defaultRp => defaultRp.BED <= rateBED && (!defaultRp.EED.HasValue || defaultRp.EED < rateBED));
+                    return defaultRoutingProducts.FirstOrDefault(defaultRp => defaultRp.BED <= rateBED && (!defaultRp.EED.HasValue || defaultRp.EED > rateBED));
             }
             return null;
         }
