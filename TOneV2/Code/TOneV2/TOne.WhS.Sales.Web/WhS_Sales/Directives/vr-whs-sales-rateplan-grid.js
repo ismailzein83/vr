@@ -416,15 +416,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
             setRouteOptionProperties(zoneItem);
+            setServiceViewerLoad(zoneItem)
             setNormalRateIconProperties(zoneItem);
 
-            zoneItem.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
-            zoneItem.onServiceViewerReady = function (api) {
-                zoneItem.serviceViewerAPI = api;
-                var serviceViewerPayload = { selectedIds: zoneItem.EffectiveServiceIds };
-                VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
-            };
-
+           
             zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
             if (zoneItem.NewRate != null) {
@@ -607,6 +602,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(zoneItem);
                     VRUIUtilsService.callDirectiveLoad(zoneItem.RouteOptionsAPI, routeOptionsDirectivePayload, zoneItem.RouteOptionsLoadDeferred);
                 };
+            }
+            function setServiceViewerLoad(zoneItem) {
+                zoneItem.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                zoneItem.onServiceViewerReady = function (api) {
+                    zoneItem.serviceViewerAPI = api;
+                    var serviceViewerPayload = { selectedIds: zoneItem.EffectiveServiceIds };
+                    VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
+                };                
             }
             function setNormalRateIconProperties(dataItem) {
                 if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
