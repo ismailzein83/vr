@@ -523,7 +523,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
             string customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
-            string extension = GetExtensionString(carrierAccountId, priceListExtensionFormat);
+            string extension = GetExtensionString(priceListExtensionFormat);
             string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, extension);
             return new VRFile
             {
@@ -535,7 +535,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        private string GetExtensionString(int carrierAccountId, PriceListExtensionFormat priceListExtension)
+        private string GetExtensionString(PriceListExtensionFormat priceListExtension)
         {
             switch (priceListExtension)
             {
