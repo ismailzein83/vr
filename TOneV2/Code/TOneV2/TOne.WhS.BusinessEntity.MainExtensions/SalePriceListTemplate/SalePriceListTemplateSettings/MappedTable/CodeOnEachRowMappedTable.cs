@@ -62,6 +62,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 mappedValueContext.RateBED = rate.BED;
                 mappedValueContext.RateEED = rate.EED;
                 mappedValueContext.ServicesIds = rate.ServicesIds;
+                mappedValueContext.RateChangeType = rate.RateChangeType;
             }
 
             mappedCol.MappedValue.Execute(mappedValueContext);

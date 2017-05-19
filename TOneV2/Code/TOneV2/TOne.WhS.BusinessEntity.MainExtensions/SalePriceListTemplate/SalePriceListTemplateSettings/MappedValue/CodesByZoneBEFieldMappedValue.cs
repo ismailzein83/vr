@@ -16,7 +16,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         Rate = 3,
         RateBED = 4,
         RateEED = 5,
-        Services = 6
+        Services = 6,
+        RateChangeType
     }
 
     public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
@@ -61,10 +62,28 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                         context.Value = servicesSymbol;
                     }
                     break;
+                case CodesByZoneBEFieldType.RateChangeType:
+                    if (context.ZoneNotification.Rate != null)
+                        context.Value = GetRateChange(context.ZoneNotification.Rate.RateChangeType);
+                    break;
             }
         }
 
-
+        private string GetRateChange(RateChangeType rateChangeType)
+        {
+            switch (rateChangeType)
+            {
+                case RateChangeType.Decrease:
+                    return "D";
+                case RateChangeType.Increase:
+                    return "I";
+                case RateChangeType.New:
+                    return "N";
+                case RateChangeType.NotChanged:
+                    return "S";
+            }
+            return "S";
+        }
         private string GetCodesValue(ICodesByZoneMappedValueContext context)
         {
             List<string> codes = new List<string>();

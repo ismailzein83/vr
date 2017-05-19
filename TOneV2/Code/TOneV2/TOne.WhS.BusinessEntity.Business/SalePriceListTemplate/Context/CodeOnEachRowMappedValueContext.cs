@@ -18,5 +18,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public DateTime? RateEED { get; set; }
         public IEnumerable<int> ServicesIds { get; set; }
         public object Value { get; set; }
+        public RateChangeType RateChangeType { get; set; }
     }
 }
