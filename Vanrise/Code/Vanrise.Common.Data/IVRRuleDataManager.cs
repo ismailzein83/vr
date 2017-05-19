@@ -9,12 +9,12 @@ namespace Vanrise.Common.Data
 {
     public interface IVRRuleDataManager : IDataManager
     {
-        IEnumerable<VRRule> GetVRRules(int vrRuleDefinitionId);
+        IEnumerable<VRRule> GetVRRules(Guid vrRuleDefinitionId);
 
-        bool AddVRRule(VRRule vrRule, out int vrRuleId);
+        bool Insert(VRRule vrRule, out long vrRuleId);
 
-        bool UpdateRule(VRRule vrRule);
+        bool Update(VRRule vrRule);
 
-        bool AreRulesUpdated(int vrRuleDefinitionId, ref object updateHandle);
+        bool AreRulesUpdated(Guid vrRuleDefinitionId, ref object updateHandle);
     }
 }

@@ -52,7 +52,7 @@ namespace Vanrise.Common.Business
             }
 
             return insertOperationOutput;
-        }
+        } 
 
         public Vanrise.Entities.UpdateOperationOutput<Q> UpdateVRRule(T vrRule)
         {
