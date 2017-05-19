@@ -144,6 +144,7 @@ namespace Vanrise.Caching
         
         public virtual void SetCacheExpired(ParamType parameter)
         {
+            ShouldSetCacheExpired(parameter);//trigger this method to refresh local update handle of the current cache manager if any
             CacheStore cacheDictionary = GetCacheDictionary(parameter);
             if (cacheDictionary != null)
                 cacheDictionary.Clear();
