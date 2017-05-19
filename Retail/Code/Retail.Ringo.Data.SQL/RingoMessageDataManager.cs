@@ -171,9 +171,10 @@ namespace Retail.Ringo.Data.SQL
 
         SintesiRingoMessageEntity SintesiRingoMessageMapper(IDataReader reader)
         {
+            var messageDateString = reader["MessageDate"] as string;
             return new SintesiRingoMessageEntity
             {
-                MessageDate = GetReaderValue<DateTime>(reader, "MessageDate"),
+                MessageDate = DateTime.ParseExact(messageDateString, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
                 Network = reader["Network"] as string,
                 NumberOfRows = (int)reader["NumberOfRows"],
                 Operator = reader["Operator"] as string,
@@ -186,7 +187,7 @@ namespace Retail.Ringo.Data.SQL
             return new DettaglioRingoMessageEntity
             {
                 Network = reader["Network"] as string,
-                RecipientRequestCode = reader["RecipientRequestCode"] as string,
+                RecipientRequestCode = reader["RequestCode"] as string,
                 Operator = reader["Operator"] as string,
                 TransferredCredit = (int)reader["TransferredCredit"]
             };
@@ -206,7 +207,7 @@ namespace Retail.Ringo.Data.SQL
                   ,[RecipientRequestCode]
                   ,[MessageType]
                   ,[FileName]
-                 ,[MessageDate]
+                 ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                   ,[StateRequest]
                   ,[FlagCredit]
                   ,[TransferredCredit]
@@ -216,7 +217,7 @@ namespace Retail.Ringo.Data.SQL
                WHERE messagetype IN (10,12) {0} )
 
                 -- Ringo --> other
-               SELECT Recipient,RecipientNetwork,RecipientRequestCode, TransferredCredit
+               SELECT Recipient Operator,RecipientNetwork Network,RecipientRequestCode RequestCode, TransferredCredit
                FROM ringo ";
 
         private const string query_GetDettaglio_ByICSISender = @"
@@ -229,7 +230,7 @@ namespace Retail.Ringo.Data.SQL
                   ,[RecipientRequestCode]
                   ,[MessageType]
                   ,[FileName]
-                 ,[MessageDate]
+                 ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                   ,[StateRequest]
                   ,[FlagCredit]
                   ,[TransferredCredit]
@@ -239,7 +240,7 @@ namespace Retail.Ringo.Data.SQL
                WHERE messagetype IN (10,12) {0} )
 
             --Other --> Ringo
-                 SELECT Sender Operator,SenderNetwork Network,RecipientRequestCode NumberOfRows, TransferredCredit TotalTransferredCredit
+                 SELECT Sender Operator,SenderNetwork Network,RecipientRequestCode RequestCode, TransferredCredit
                FROM ringo ";
 
         private const string query_GetSintesi_ByICSIRecipient = @"
@@ -252,7 +253,7 @@ namespace Retail.Ringo.Data.SQL
                     ,[RecipientRequestCode]
                     ,[MessageType]
                     ,[FileName]
-                    ,[MessageDate]
+                    ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                     ,[StateRequest]
                     ,[FlagCredit]
                     ,[TransferredCredit]
@@ -277,7 +278,7 @@ namespace Retail.Ringo.Data.SQL
                   ,[RecipientRequestCode]
                   ,[MessageType]
                   ,[FileName]
-                 ,[MessageDate]
+                 ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                   ,[StateRequest]
                   ,[FlagCredit]
                   ,[TransferredCredit]

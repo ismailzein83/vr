@@ -9,6 +9,7 @@ using Aspose.Cells;
 using Retail.Ringo.Entities;
 using Vanrise.Entities;
 using ICSharpCode.SharpZipLib.Zip;
+using Vanrise.Common;
 
 namespace Retail.Ringo.Business
 {
@@ -280,78 +281,122 @@ namespace Retail.Ringo.Business
             List<SintesiRingoMessageEntity> listOperators = listSintesiRecipient.ToList();
             Dictionary<string, byte[]> dicData = new Dictionary<string, byte[]>();
 
-            bool newOperator = true;
-            var sb = new StringBuilder();
+            Dictionary<string, List<SintesiRingoMessageEntity>> groupedOperatorsData = new Dictionary<string, List<SintesiRingoMessageEntity>>();
 
-            int incremental = 1;
+            foreach (var item in listSintesiRecipient)
+            {
+                var list = groupedOperatorsData.GetOrCreateItem(item.Operator, () => new List<SintesiRingoMessageEntity>());
+                list.Add(item);
+            }
+
+            bool newOperator = true;
+
+
+            int incremental = 0;
             int transactionCount = 0;
             int sumTransferredCredit = 0;
-
-            for (int i = 0; i < listOperators.Count(); i++)
+            foreach (var operatorData in groupedOperatorsData)
             {
-                if (newOperator)
-                {
-                    incremental = 1;
-                    transactionCount = 0;
-                    sumTransferredCredit = 0;
+                var sb = new StringBuilder();
+                incremental = 0;
+                transactionCount = 0;
+                sumTransferredCredit = 0;
 
-                    newOperator = false;
-                    if (recipient)
-                        sb.AppendLine(SintesiRingoOperatorRecipientHeader(listOperators[i], filter));
-                    else
-                        sb.AppendLine(SintesiRingoOperatorSenderHeader(listOperators[i], filter));
-                }
-
-                sumTransferredCredit = sumTransferredCredit + listOperators[i].TotalTransferredCredit;
-                transactionCount = transactionCount + listOperators[i].NumberOfRows;
-
-                if (i + 1 < listOperators.Count())
-                {
-                    if (listOperators[i].Operator != listOperators[i + 1].Operator)
-                    {
-                        sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
-
-                        if (recipient)
-                            sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter,
-                                transactionCount, sumTransferredCredit, incremental + 2));
-                        else
-                            sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter,
-                                transactionCount, sumTransferredCredit, incremental + 2));
-
-                        var myString = sb.ToString();
-                        var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
-
-                        dicData.Add(listOperators[i].Operator, myByteArray);
-                        newOperator = true;
-                    }
-                    else
-                    {
-                        sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
-                    }
-                }
+                if (recipient)
+                    sb.AppendLine(SintesiRingoOperatorRecipientHeader(operatorData.Value.First(), filter));
                 else
+                    sb.AppendLine(SintesiRingoOperatorSenderHeader(operatorData.Value.First(), filter));
+
+                var data = operatorData.Value;
+
+                foreach (var item in data)
                 {
-                    sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
-
-                    if (recipient)
-                        sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
-                    else
-                        sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
-
-                    var myString = sb.ToString();
-                    var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
-
-                    string fileName;
-                    if (recipient)
-                        fileName = "TCR_Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMM");
-                    else
-                        fileName = "TCR_" + listOperators[i].Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMM");
-
-                    dicData.Add(fileName, myByteArray);
+                    sb.AppendLine(SintesiRingoOperatorBody(item, incremental));
+                    sumTransferredCredit += item.TotalTransferredCredit;
+                    transactionCount += item.NumberOfRows;
+                    incremental++;
                 }
+                if (recipient)
+                    sb.AppendLine(SintesiRingoOperatorRecipientFooter(data.First(), filter,
+                        transactionCount, sumTransferredCredit, incremental + 2));
+                else
+                    sb.AppendLine(SintesiRingoOperatorSenderFooter(data.First(), filter,
+                       transactionCount, sumTransferredCredit, incremental + 2));
 
-                incremental++;
+                string fileName;
+                if (recipient)
+                    fileName = "TCR_Ringo_" + data.First().Operator + "_" + filter.From.Value.ToString("yyyyMM");
+                else
+                    fileName = "TCR_" + data.First().Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMM");
+
+                dicData.Add(fileName, System.Text.Encoding.UTF8.GetBytes(sb.ToString()));
             }
+
+            //for (int i = 0; i < listOperators.Count(); i++)
+            //{
+            //    if (newOperator)
+            //    {
+            //        incremental = 1;
+            //        transactionCount = 0;
+            //        sumTransferredCredit = 0;
+
+            //        newOperator = false;
+            //        if (recipient)
+            //            sb.AppendLine(SintesiRingoOperatorRecipientHeader(listOperators[i], filter));
+            //        else
+            //            sb.AppendLine(SintesiRingoOperatorSenderHeader(listOperators[i], filter));
+            //    }
+
+            //    sumTransferredCredit = sumTransferredCredit + listOperators[i].TotalTransferredCredit;
+            //    transactionCount = transactionCount + listOperators[i].NumberOfRows;
+
+            //    if (i + 1 < listOperators.Count())
+            //    {
+            //        if (listOperators[i].Operator != listOperators[i + 1].Operator)
+            //        {
+            //            sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
+
+            //            if (recipient)
+            //                sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter,
+            //                    transactionCount, sumTransferredCredit, incremental + 2));
+            //            else
+            //                sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter,
+            //                    transactionCount, sumTransferredCredit, incremental + 2));
+
+            //            var myString = sb.ToString();
+            //            var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
+
+            //            dicData.Add(listOperators[i].Operator, myByteArray);
+            //            newOperator = true;
+            //        }
+            //        else
+            //        {
+            //            sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
+
+            //        if (recipient)
+            //            sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
+            //        else
+            //            sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
+
+            //        var myString = sb.ToString();
+            //        var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
+
+            //        string fileName;
+            //        if (recipient)
+            //            fileName = "TCR_Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMM");
+            //        else
+            //            fileName = "TCR_" + listOperators[i].Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMM");
+
+            //        dicData.Add(fileName, myByteArray);
+            //    }
+
+            //    incremental++;
+            //}
             return dicData;
         }
 
@@ -404,7 +449,7 @@ namespace Retail.Ringo.Business
                         if (recipient)
                             fileName = "Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMMdd");
                         else
-                            fileName = listOperators[i].Operator + "_Ringo_" + "_" + filter.From.Value.ToString("yyyyMMdd");
+                            fileName = listOperators[i].Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMMdd");
 
                         dicData.Add(fileName, myByteArray);
                         newOperator = true;
@@ -430,7 +475,7 @@ namespace Retail.Ringo.Business
                     if (recipient)
                         fileName = "Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMMdd");
                     else
-                        fileName = listOperators[i].Operator + "_Ringo_" + "_" + filter.From.Value.ToString("yyyyMMdd");
+                        fileName = listOperators[i].Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMMdd");
 
                     dicData.Add(fileName, myByteArray);
                 }
@@ -464,11 +509,10 @@ namespace Retail.Ringo.Business
             filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
         }
 
-        string SintesiRingoOperatorBody(SintesiRingoMessageEntity sintesiRingoMessageEntity,
-            TCRRingoReportFilter filter, int incremental)
+        string SintesiRingoOperatorBody(SintesiRingoMessageEntity sintesiRingoMessageEntity, int incremental)
         {
             return (string.Format(" 20{0}{1}{2}{3}",
-                incremental.ToString("D10"), filter.From.Value.ToString("yyyyMMdd"), sintesiRingoMessageEntity.TotalTransferredCredit.ToString("D10"),
+                incremental.ToString("D10"), sintesiRingoMessageEntity.MessageDate.ToString("yyyyMMdd"), sintesiRingoMessageEntity.TotalTransferredCredit.ToString("D10"),
                 sintesiRingoMessageEntity.NumberOfRows.ToString("D10")));
         }
 
