@@ -311,6 +311,27 @@ namespace Retail.BusinessEntity.Business
             throw new Exception("Invalid Type for DID.");
         }
 
+        public Dictionary<string, DID> GetCachedDIDsGroupBySourceId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupBySourceId",
+               () =>
+               {
+                   var dids = GetCachedDIDs();
+                   return dids.Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value); ;
+               });
+        }
+
+        public Dictionary<int, DID> GetCachedDIDs()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllDIDs",
+               () =>
+               {
+                   IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
+                   IEnumerable<DID> DIDs = dataManager.GetAllDIDs();
+                   return DIDs.ToDictionary(x => x.DIDId, x => x);
+               });
+        }
+
         #endregion
 
         #region Private Methods
@@ -362,25 +383,6 @@ namespace Retail.BusinessEntity.Business
                     break;
                 default: throw new Exception("Invalid Type for DID.");
             }
-        }
-        public Dictionary<string, DID> GetCachedDIDsGroupBySourceId()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupBySourceId",
-               () =>
-               {
-                   var dids = GetCachedDIDs();
-                   return dids.Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value); ;
-               });
-        }
-        public Dictionary<int, DID> GetCachedDIDs()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllDIDs",
-               () =>
-               {
-                   IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
-                   IEnumerable<DID> DIDs = dataManager.GetAllDIDs();
-                   return DIDs.ToDictionary(x => x.DIDId, x => x);
-               });
         }
 
         private bool CheckIfFilterIsMatch(DID did, List<IDIDFilter> filters)
