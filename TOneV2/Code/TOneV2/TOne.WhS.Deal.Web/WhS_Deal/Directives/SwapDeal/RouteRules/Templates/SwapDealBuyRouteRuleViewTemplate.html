@@ -1,0 +1,12 @@
+﻿<div>
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="scopeModel.onSubAccountAdded" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row vr-loader="scopeModel.isGridLoading">
+        <vr-columns width="fullrow" simplecol>
+            <vr-whs-deal-swapdeal-buyrouterule-grid on-ready="scopeModel.onSwapDealBuyRouteRuleReady"></vr-whs-deal-swapdeal-buyrouterule-grid>
+        </vr-columns>
+    </vr-row>
+</div>

@@ -12,26 +12,26 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetFilteredSwapDealBuyRouteRules'), input);
         }
 
-        function GetVRRule(vrRuleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetVRRule'), {
-                vrRuleId: vrRuleId
+        function GetSwapDealBuyRouteRule(swapDealBuyRouteRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealBuyRouteRule'), {
+                swapDealBuyRouteRuleId: swapDealBuyRouteRuleId
             });
         }
 
-        function AddVRRule(swapDealBuyRouteRule) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'AddVRRule'), swapDealBuyRouteRule);
+        function AddSwapDealBuyRouteRule(swapDealBuyRouteRule) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'AddSwapDealBuyRouteRule'), swapDealBuyRouteRule);
         }
 
-        function UpdateVRRule(swapDealBuyRouteRule) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'AddVRRule'), swapDealBuyRouteRule);
+        function UpdateSwapDealBuyRouteRule(swapDealBuyRouteRule) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'UpdateSwapDealBuyRouteRule'), swapDealBuyRouteRule);
         }
 
 
         return ({
             GetFilteredSwapDealBuyRouteRules: GetFilteredSwapDealBuyRouteRules,
-            GetVRRule: GetVRRule,
-            AddVRRule: AddVRRule,
-            UpdateVRRule: UpdateVRRule,
+            GetSwapDealBuyRouteRule: GetSwapDealBuyRouteRule,
+            AddSwapDealBuyRouteRule: AddSwapDealBuyRouteRule,
+            UpdateSwapDealBuyRouteRule: UpdateSwapDealBuyRouteRule,
         });
     }
 

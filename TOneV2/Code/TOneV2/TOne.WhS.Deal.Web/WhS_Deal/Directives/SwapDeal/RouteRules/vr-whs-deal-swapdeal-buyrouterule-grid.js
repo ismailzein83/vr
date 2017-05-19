@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule', 'WhS_Deal_SwapDealBuyRouteRuleService', ,
+app.directive('vrWhsDealSwapdealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule', 'WhS_Deal_SwapDealBuyRouteRuleService',
     function (VRNotificationService, VRUIUtilsService, WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule, WhS_Deal_SwapDealBuyRouteRuleService) {
         return {
             restrict: 'E',

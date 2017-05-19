@@ -17,28 +17,28 @@ namespace TOne.WhS.Deal.Web.Controllers
 
         //[HttpPost]
         //[Route("GetFilteredSwapDealBuyRouteRules")]
-        //public object GetFilteredSwapDealBuyRouteRules(Vanrise.Entities.DataRetrievalInput<SwapDealBuyRouteRuleQuery> input) 
+        //public object GetFilteredSwapDealBuyRouteRules(Vanrise.Entities.DataRetrievalInput<SwapDealBuyRouteRuleQuery> input)
         //{
         //    return GetWebResponse(input, _manager.GetFilteredSwapDealBuyRouteRules(input));
         //}
 
         //[HttpGet]
-        //[Route("GetVRRule")]
-        //public SwapDealBuyRouteRule GetVRRule(long vrRuleId)
+        //[Route("GetSwapDealBuyRouteRule")]
+        //public SwapDealBuyRouteRule GetSwapDealBuyRouteRule(long swapDealBuyRouteRuleId)
         //{
-        //    return _manager.GetVRRule(vrRuleId);
+        //    return _manager.GetVRRule(swapDealBuyRouteRuleId);
         //}
 
         //[HttpPost]
-        //[Route("AddVRRule")]
-        //public Vanrise.Entities.InsertOperationOutput<SwapDealBuyRouteRuleDetails> AddVRRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
+        //[Route("AddSwapDealBuyRouteRule")]
+        //public Vanrise.Entities.InsertOperationOutput<SwapDealBuyRouteRuleDetails> AddSwapDealBuyRouteRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
         //{
         //    return _manager.AddVRRule(swapDealBuyRouteRule);
         //}
 
         //[HttpPost]
-        //[Route("UpdateVRRule")]
-        //public Vanrise.Entities.UpdateOperationOutput<SwapDealBuyRouteRuleDetails> UpdateVRRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
+        //[Route("UpdateSwapDealBuyRouteRule")]
+        //public Vanrise.Entities.UpdateOperationOutput<SwapDealBuyRouteRuleDetails> UpdateSwapDealBuyRouteRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
         //{
         //    return _manager.UpdateVRRule(swapDealBuyRouteRule);
         //}
