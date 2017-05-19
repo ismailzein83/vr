@@ -51,9 +51,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Teles", "Teles", "{2DA0E01F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Teles.Business", "Mediation.Teles.Business\Mediation.Teles.Business.csproj", "{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.CDR", "Mediation.CDR\Mediation.CDR.sqlproj", "{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -125,6 +127,10 @@ Global
 		SccProjectTopLevelParentUniqueName17 = Mediation.sln
 		SccProjectName17 = Mediation.Teles.Business
 		SccLocalPath17 = Mediation.Teles.Business
+		SccProjectUniqueName18 = Mediation.CDR\\Mediation.CDR.sqlproj
+		SccProjectTopLevelParentUniqueName18 = Mediation.sln
+		SccProjectName18 = Mediation.CDR
+		SccLocalPath18 = Mediation.CDR
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +207,12 @@ Global
 		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,5 +237,6 @@ Global
 		{53C6CF7D-FD79-413C-ABA1-01F34777A005} = {2CE5CE5E-EA99-448E-94AC-E90740D97697}
 		{2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2} = {E82A6672-DA4F-41B1-8696-C5CC1D4B1812}
 		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D} = {2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2}
+		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
 	EndGlobalSection
 EndGlobal
