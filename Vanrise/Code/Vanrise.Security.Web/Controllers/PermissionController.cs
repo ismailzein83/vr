@@ -63,8 +63,10 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("UpdatePermissions")]
-        public Vanrise.Entities.UpdateOperationOutput<object> UpdatePermissions(Permission[] permissionObject)
+        public object UpdatePermissions(Permission[] permissionObject)
         {
+            if (!_manager.HasUpdatePermissions(permissionObject))
+                return GetUnauthorizedResponse();
             return _manager.UpdatePermissions(permissionObject);
         } 
 

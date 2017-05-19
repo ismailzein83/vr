@@ -37,7 +37,7 @@ namespace Vanrise.Security.Business
             IEnumerable<Permission> filteredPermissions = GetEntityPermissions(input.Query.EntityType, input.Query.EntityId);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<PermissionDetail>(input, filteredPermissions.ToBigResult(input, null, PermissionDetailMapper));
         }
-
+               
         public IEnumerable<Permission> GetEntityPermissions(EntityType entityType, string entityId)
         {
             List<Permission> entityPermissions = new List<Permission>();
@@ -217,6 +217,38 @@ namespace Vanrise.Security.Business
 
             return resultWrapper;
         }
+        public bool HasUpdatePermissions(IEnumerable<Permission> permissions)
+        {
+           
+            StringBuilder builder = new StringBuilder();
+            bool isFirstPermission = true;
+            foreach (var p in permissions.OrderBy(itm => itm.EntityId))
+            {
+                if (!isFirstPermission)
+                    builder.Append("&");
+                isFirstPermission = false;
+                Guid entityId = new Guid(p.EntityId);
+                string beName = null;
+                if (p.EntityType == EntityType.ENTITY)
+                {
+                    var be  = new BusinessEntityManager().GetBusinessEntityById(entityId);
+                    be.ThrowIfNull("be", p.EntityId);
+                    beName = be.Name.Trim();
+                }
+                else
+                {
+                    var bem = new BusinessEntityModuleManager().GetBusinessEntityModuleById(entityId);
+                    bem.ThrowIfNull("be", p.EntityId);
+                    beName = bem.Name.Trim();
+                }                
+                builder.Append(beName);
+                builder.Append(":");
+
+                string permission = getDiffrenceWithCurrentPermissionFlags(p.PermissionFlags, p.HolderType, p.HolderId, p.EntityType, p.EntityId);
+                builder.Append(permission);
+            }
+            return ContextFactory.GetContext().IsAllowed(builder.ToString());
+        }
 
         public Vanrise.Entities.UpdateOperationOutput<object> UpdatePermissions(IEnumerable<Permission> permissions)
         {
@@ -305,7 +337,39 @@ namespace Vanrise.Security.Business
 
             return effectivePermissions;
         }
+        private string getDiffrenceWithCurrentPermissionFlags(List<PermissionFlag> checkflags, HolderType holderType, string holderId, EntityType entityType, string entityId)
+        {
+            StringBuilder builder = new StringBuilder();
+            HashSet<string> diffrencecheckflags = new HashSet<string>();
 
+            var currentuserpermission = GetCachedPermissions().FindRecord(x => x.HolderType == holderType && x.HolderId == holderId && x.EntityType == entityType && x.EntityId == entityId);
+            if (currentuserpermission != null)
+            {
+                foreach (var itm in currentuserpermission.PermissionFlags)
+                {
+                    if (checkflags == null || !checkflags.Any(x => x.Name == itm.Name && x.Value == itm.Value))
+                        diffrencecheckflags.Add(itm.Name);
+                }
+            }
+            if (checkflags != null)
+            {
+                foreach (var itm in checkflags)
+                {
+                    if (currentuserpermission == null || !currentuserpermission.PermissionFlags.Any(x => x.Name == itm.Name && x.Value == itm.Value))
+                        diffrencecheckflags.Add(itm.Name);
+                }
+            }
+            bool isFirstOption = true;
+            foreach (string s in diffrencecheckflags.Select(s => s.Trim()))
+            {
+                if (!isFirstOption)
+                    builder.Append(",");
+                isFirstOption = false;
+                builder.Append(s);
+            }
+
+            return builder.ToString();
+        }
         #endregion
 
         #region Private Classes
