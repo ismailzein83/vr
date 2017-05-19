@@ -1,0 +1,10 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.swapDealBuyRouteRules"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.VRRuleId">
+    
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRRuleId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Settings.Description'"></vr-datagridcolumn>
+</vr-datagrid>

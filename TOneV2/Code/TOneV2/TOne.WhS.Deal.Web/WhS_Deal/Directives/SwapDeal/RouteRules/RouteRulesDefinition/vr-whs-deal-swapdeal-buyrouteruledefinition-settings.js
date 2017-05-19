@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealbuyrouteruledefinitionSettings', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsDealSwapdealBuyrouteruledefinitionSettings', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
