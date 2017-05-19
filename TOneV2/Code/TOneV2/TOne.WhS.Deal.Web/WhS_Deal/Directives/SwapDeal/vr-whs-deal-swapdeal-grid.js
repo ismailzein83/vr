@@ -20,15 +20,17 @@
             templateUrl: '/Client/Modules/WhS_Deal/Directives/swapDeal/Templates/SwapDealGridTemplate.html'
         };
 
-        function SwapDealGrid($scope, ctrl, $attrs) {
-
+        function SwapDealGrid($scope, ctrl, $attrs) { 
             this.initializeController = initializeController;
 
-            var gridAPI;
             var gridDrillDownTabsObj;
+
+            var gridAPI;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.swapDeals = [];
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     var drillDownDefinitions = WhS_Deal_SwapDealService.getDrillDownDefinition();
