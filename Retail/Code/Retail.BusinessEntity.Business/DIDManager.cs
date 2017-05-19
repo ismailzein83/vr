@@ -29,6 +29,7 @@ namespace Retail.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<DIDDetail> GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
             var allDIDs = GetCachedDIDs();
+
             Func<DID, bool> filterExpression = (did) =>
                 {
                     if (!string.IsNullOrEmpty(input.Query.Number) && !IsDIDContainNumber(did, input.Query.Number))
@@ -45,6 +46,7 @@ namespace Retail.BusinessEntity.Business
                 ExportExcelHandler = new DIDExcelExportHandler()
             };
             VRActionLogger.Current.LogGetFilteredAction(DIDLoggableEntity.Instance, input);
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDDetailMapper), handler);
         }
 
@@ -395,41 +397,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Private Classes
-        private class DIDExcelExportHandler : ExcelExportHandler<DIDDetail>
-        {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DIDDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet()
-                {
-                    SheetName = "DIDs",
-                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
-                };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number of channels" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "International" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    DIDManager didManager = new DIDManager();
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null && record.Entity.Settings != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.NumberOfChannels });
-                            row.Cells.Add(new ExportExcelCell { Value = didManager.GetDIDDescription(record.Entity) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.IsInternational });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDIDDataManager _dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
@@ -440,7 +408,6 @@ namespace Retail.BusinessEntity.Business
                 return _dataManager.AreDIDsUpdated(ref _updateHandle);
             }
         }
-
 
         private class DIDLoggableEntity : VRLoggableEntityBase
         {
@@ -478,6 +445,47 @@ namespace Retail.BusinessEntity.Business
                 DID did = context.Object.CastWithValidate<DID>("context.Object");
                 return s_didManager.GetDIDDescription(did);
             }
+        }
+
+        private class DIDExcelExportHandler : ExcelExportHandler<DIDDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DIDDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "DIDs",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number of channels" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "International" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    DIDManager didManager = new DIDManager();
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null && record.Entity.Settings != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.NumberOfChannels });
+                            row.Cells.Add(new ExportExcelCell { Value = didManager.GetDIDDescription(record.Entity) });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.IsInternational });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+        private class DIDNumberHandle
+        {
+            public bool Stop { get; set; }
         }
 
         #endregion
@@ -554,10 +562,5 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
-
-        private class DIDNumberHandle
-        {
-            public bool Stop { get; set; }
-        }
     }
 }
