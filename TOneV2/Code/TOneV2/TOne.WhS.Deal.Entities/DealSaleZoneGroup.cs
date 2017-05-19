@@ -12,6 +12,11 @@ namespace TOne.WhS.Deal.Entities
 
         public int CustomerId { get; set; }
 
+        public List<DealSaleZoneGroupItem> Items { get; set; }
+    }
+
+    public class DealSaleZoneGroupItem
+    {
         public List<DealSaleZoneGroupZoneItem> Zones { get; set; }
 
         public List<DealSaleZoneGroupTier> Tiers { get; set; }

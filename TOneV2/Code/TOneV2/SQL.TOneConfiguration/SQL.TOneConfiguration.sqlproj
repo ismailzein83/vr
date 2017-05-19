@@ -654,6 +654,7 @@
     <None Include="Retail_Zajil_Overridden.PostDeployment.sql" />
     <None Include="Dev_Retail.PostDeployment.sql" />
     <None Include="Retail_Multinet_Overridden.PostDeployment.sql" />
+    <None Include="Retail_Multinet.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
