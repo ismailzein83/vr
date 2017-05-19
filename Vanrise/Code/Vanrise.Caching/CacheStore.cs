@@ -8,82 +8,103 @@ using Vanrise.Common;
 
 namespace Vanrise.Caching
 {
-    public class CacheStore
+    public class CacheStore : ConcurrentDictionary<Object, CachedObject>
     {
-        bool _hasFirstItem;
-        Object _firstItemKey;
-        CachedObject _firstItemValue;
-        VRDictionary<Object, CachedObject> _dictionary = new VRDictionary<object, CachedObject>();
-
         public DateTime LastExpirationCheckTime { get; set; }
-
         public void Add(Object key, CachedObject cachedObject)
         {
-            lock (this)
-            {
-                if (!_hasFirstItem)
-                {
-                    _firstItemKey = key;
-                    _firstItemValue = cachedObject;
-                    _hasFirstItem = true;
-                }
-                else
-                {
-                    _dictionary.Add(key, cachedObject);
-                }
-            }
-        }
-
-        public bool TryGetValue(Object key, out CachedObject cachedObject)
-        {
-            if (_hasFirstItem && _firstItemKey.Equals(key))
-            {
-                cachedObject = _firstItemValue;
-                return true;
-            }
-            else
-                return _dictionary.TryGetValue(key, out cachedObject);
+            base.TryAdd(key, cachedObject);
         }
 
         public void TryRemove(Object key)
         {
-            lock (this)
-            {
-                if (_hasFirstItem && _firstItemKey.Equals(key))
-                {
-                    _firstItemKey = null;
-                    _firstItemValue = null;
-                    _hasFirstItem = false;
-                }
-                else
-                {
-                    _dictionary.Remove(key);
-                }
-            }
-        }
-
-        public IEnumerable<CachedObject> Values
-        {
-            get
-            {
-                List<CachedObject> allValues = _dictionary.Values.ToList();
-                if (_hasFirstItem)
-                    allValues.Add(_firstItemValue);
-                return allValues;
-            }
-        }
-
-        internal void Clear()
-        {
-            lock (this)
-            {
-                _firstItemKey = null;
-                _firstItemValue = null;
-                _hasFirstItem = false;
-                _dictionary.Clear();
-            }
+            CachedObject dummy;
+            base.TryRemove(key, out dummy);
         }
     }
+
+    //public class CacheStore : VRDictionary<Object, CachedObject>
+    //{
+    //    bool _hasFirstItem;
+    //    Object _firstItemKey;
+    //    CachedObject _firstItemValue;
+    //    VRDictionary<Object, CachedObject> _dictionary = new VRDictionary<object, CachedObject>();
+
+    //    public DateTime LastExpirationCheckTime { get; set; }
+
+    //    public void Add(Object key, CachedObject cachedObject)
+    //    {
+    //        lock (this)
+    //        {
+    //            if (!_hasFirstItem)
+    //            {
+    //                _firstItemKey = key;
+    //                _firstItemValue = cachedObject;
+    //                _hasFirstItem = true;
+    //            }
+    //            else
+    //            {
+    //                _dictionary.Add(key, cachedObject);
+    //            }
+    //        }
+    //    }
+
+    //    public bool TryGetValue(Object key, out CachedObject cachedObject)
+    //    {
+    //        if (_hasFirstItem && _firstItemKey.Equals(key))
+    //        {
+    //            cachedObject = _firstItemValue;
+    //            return cachedObject != null;
+    //        }
+    //        else
+    //        {
+    //            return _dictionary.TryGetValue(key, out cachedObject);
+    //        }
+    //    }
+
+    //    public void TryRemove(Object key)
+    //    {
+    //        lock (this)
+    //        {
+    //            if (_hasFirstItem && _firstItemKey.Equals(key))
+    //            {
+    //                _firstItemKey = null;
+    //                _firstItemValue = null;
+    //                _hasFirstItem = false;
+    //            }
+    //            else
+    //            {
+    //                _dictionary.Remove(key);
+    //            }
+    //        }
+    //    }
+
+    //    public IEnumerable<CachedObject> Values
+    //    {
+    //        get
+    //        {
+    //            List<CachedObject> allValues = _dictionary.Values.ToList();
+    //            if (_hasFirstItem)
+    //            {
+    //                var firstItemValue = _firstItemValue;
+    //                if (firstItemValue != null)
+    //                    allValues.Add(firstItemValue);
+    //            }
+    //            return allValues;
+    //        }
+    //    }
+
+    //    internal void Clear()
+    //    {
+    //        lock (this)
+    //        {
+    //            _firstItemKey = null;
+    //            _firstItemValue = null;
+    //            _hasFirstItem = false;
+    //            _dictionary.Clear();
+    //        }
+    //    }
+    //}
 
     //public class CacheStore
     //{
