@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class City
+    public class Region
     {
-        public int CityId { get; set; }
+        public int RegionId { get; set; }
 
         public string Name { get; set; }
 
         public int CountryId { get; set; }
+
+        public RegionSettings Settings { get; set; }
     }
 
-    public class CitySettings
+    public class RegionSettings
     {
-        public int? RegionId { get; set; }
+
     }
 }
