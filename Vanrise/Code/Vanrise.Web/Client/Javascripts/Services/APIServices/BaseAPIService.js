@@ -148,6 +148,15 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                 deferred.reject(data);
             }
         }
+        else if (HttpStatusCodeEnum.Forbidden.value === status) {
+            console.log('Error Occured: ' + data);
+            notify.closeAll();
+            showErrorMessage(data);
+            setTimeout(function () {
+                notify.closeAll();
+            }, 3000);
+            deferred.reject(data);
+        }
         else {
             if (HttpStatusCodeEnum.PaymentRequired.value === status) {
                 redirectToPaymentPage();

@@ -244,9 +244,35 @@ namespace Vanrise.Security.Business
                 builder.Append(beName);
                 builder.Append(":");
 
-                string permission = getDiffrenceWithCurrentPermissionFlags(p.PermissionFlags, p.HolderType, p.HolderId, p.EntityType, p.EntityId);
+                string permission = GetDifferenceWithCurrentPermissionFlags(p.PermissionFlags, p.HolderType, p.HolderId, p.EntityType, p.EntityId);
                 builder.Append(permission);
             }
+            return ContextFactory.GetContext().IsAllowed(builder.ToString());
+        }
+
+        public bool HasDeletePermissions(HolderType holderType, string holderId, EntityType entityType, string entityId)
+        {
+
+            StringBuilder builder = new StringBuilder();           
+            Guid beentityId = new Guid(entityId);
+            string beName = null;
+            if (entityType == EntityType.ENTITY)
+            {
+                var be = new BusinessEntityManager().GetBusinessEntityById(beentityId);
+                be.ThrowIfNull("be", beentityId);
+                beName = be.Name.Trim();
+            }
+            else
+            {
+                var bem = new BusinessEntityModuleManager().GetBusinessEntityModuleById(beentityId);
+                bem.ThrowIfNull("be", beentityId);
+                beName = bem.Name.Trim();
+            }
+            builder.Append(beName);
+            builder.Append(":");
+
+            string permission = GetDifferenceWithCurrentPermissionFlags(null,holderType,holderId, entityType,entityId);
+            builder.Append(permission);
             return ContextFactory.GetContext().IsAllowed(builder.ToString());
         }
 
@@ -337,7 +363,7 @@ namespace Vanrise.Security.Business
 
             return effectivePermissions;
         }
-        private string getDiffrenceWithCurrentPermissionFlags(List<PermissionFlag> checkflags, HolderType holderType, string holderId, EntityType entityType, string entityId)
+        private string GetDifferenceWithCurrentPermissionFlags(List<PermissionFlag> checkflags, HolderType holderType, string holderId, EntityType entityType, string entityId)
         {
             StringBuilder builder = new StringBuilder();
             HashSet<string> diffrencecheckflags = new HashSet<string>();

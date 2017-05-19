@@ -72,8 +72,10 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("DeletePermissions")]
-        public Vanrise.Entities.UpdateOperationOutput<object> DeletePermissions(HolderType holderType, string holderId, EntityType entityType, string entityId)
+        public object DeletePermissions(HolderType holderType, string holderId, EntityType entityType, string entityId)
         {
+            if (!_manager.HasDeletePermissions(holderType, holderId, entityType, entityId))
+                return GetUnauthorizedResponse();
             return _manager.DeletePermissions(holderType, holderId, entityType, entityId);
         }
        
