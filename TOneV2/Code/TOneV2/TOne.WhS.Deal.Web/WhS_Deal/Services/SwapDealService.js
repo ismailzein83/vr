@@ -43,7 +43,6 @@
 		    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
 		    drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
-
 		    drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
 		        swapDealItem.objectTrackingGridAPI = directiveAPI;
 
@@ -56,7 +55,24 @@
 		    };
 
 		    addDrillDownDefinition(drillDownDefinition);
+		}
 
+		function registerSwapDealBuyRouteRuleViewToSwapDeal() {
+		    var drillDownDefinition = {};
+
+		    drillDownDefinition.title = "Buy Route Rules";
+		    drillDownDefinition.directive = "vr-whs-deal-swapdeal-buyrouterule-view";
+
+		    drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
+		        swapDealItem.SwapDealBuyRouteRuleGridAPI = directiveAPI;
+
+		        var query = {
+		            swapDealId: swapDealItem.Entity.DealId
+		        };
+		        return swapDealItem.SwapDealBuyRouteRuleGridAPI.load(query);
+		    };
+
+		    addDrillDownDefinition(drillDownDefinition);
 		}
 
 		function addDrillDownDefinition(drillDownDefinition) {
@@ -111,6 +127,7 @@
 		    addSwapDeal: addSwapDeal,
 		    editSwapDeal: editSwapDeal,
 		    registerObjectTrackingDrillDownToSwapDeal: registerObjectTrackingDrillDownToSwapDeal,
+		    registerSwapDealBuyRouteRuleViewToSwapDeal: registerSwapDealBuyRouteRuleViewToSwapDeal,
 		    getDrillDownDefinition: getDrillDownDefinition,
 		    registerHistoryViewAction: registerHistoryViewAction,
 		    analyzeSwapDeal: analyzeSwapDeal

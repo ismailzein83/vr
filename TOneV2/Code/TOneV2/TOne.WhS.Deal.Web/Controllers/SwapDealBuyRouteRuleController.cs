@@ -9,38 +9,38 @@ using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Web.Controllers
 {
-    //[JSONWithTypeAttribute]
-    //[RoutePrefix(Constants.ROUTE_PREFIX + "SwapDealBuyRouteRule")]
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "SwapDealBuyRouteRule")]
     public class SwapDealBuyRouteRuleController :  Vanrise.Web.Base.BaseAPIController
     {
-        //SwapDealBuyRouteRuleManager _manager = new SwapDealBuyRouteRuleManager();
+        SwapDealBuyRouteRuleManager _manager = new SwapDealBuyRouteRuleManager();
 
-        //[HttpPost]
-        //[Route("GetFilteredSwapDealBuyRouteRules")]
-        //public object GetFilteredSwapDealBuyRouteRules(Vanrise.Entities.DataRetrievalInput<SwapDealBuyRouteRuleQuery> input)
-        //{
-        //    return GetWebResponse(input, _manager.GetFilteredSwapDealBuyRouteRules(input));
-        //}
+        [HttpPost]
+        [Route("GetFilteredSwapDealBuyRouteRules")]
+        public object GetFilteredSwapDealBuyRouteRules(Vanrise.Entities.DataRetrievalInput<SwapDealBuyRouteRuleQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredSwapDealBuyRouteRules(input));
+        }
 
-        //[HttpGet]
-        //[Route("GetSwapDealBuyRouteRule")]
-        //public SwapDealBuyRouteRule GetSwapDealBuyRouteRule(long swapDealBuyRouteRuleId)
-        //{
-        //    return _manager.GetVRRule(swapDealBuyRouteRuleId);
-        //}
+        [HttpGet]
+        [Route("GetSwapDealBuyRouteRule")]
+        public SwapDealBuyRouteRule GetSwapDealBuyRouteRule(long swapDealBuyRouteRuleId)
+        {
+            return _manager.GetVRRule(swapDealBuyRouteRuleId);
+        }
 
-        //[HttpPost]
-        //[Route("AddSwapDealBuyRouteRule")]
-        //public Vanrise.Entities.InsertOperationOutput<SwapDealBuyRouteRuleDetails> AddSwapDealBuyRouteRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
-        //{
-        //    return _manager.AddVRRule(swapDealBuyRouteRule);
-        //}
+        [HttpPost]
+        [Route("AddSwapDealBuyRouteRule")]
+        public Vanrise.Entities.InsertOperationOutput<SwapDealBuyRouteRuleDetails> AddSwapDealBuyRouteRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
+        {
+            return _manager.AddVRRule(swapDealBuyRouteRule);
+        }
 
-        //[HttpPost]
-        //[Route("UpdateSwapDealBuyRouteRule")]
-        //public Vanrise.Entities.UpdateOperationOutput<SwapDealBuyRouteRuleDetails> UpdateSwapDealBuyRouteRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
-        //{
-        //    return _manager.UpdateVRRule(swapDealBuyRouteRule);
-        //}
+        [HttpPost]
+        [Route("UpdateSwapDealBuyRouteRule")]
+        public Vanrise.Entities.UpdateOperationOutput<SwapDealBuyRouteRuleDetails> UpdateSwapDealBuyRouteRule(SwapDealBuyRouteRule swapDealBuyRouteRule)
+        {
+            return _manager.UpdateVRRule(swapDealBuyRouteRule);
+        }
     }
 }

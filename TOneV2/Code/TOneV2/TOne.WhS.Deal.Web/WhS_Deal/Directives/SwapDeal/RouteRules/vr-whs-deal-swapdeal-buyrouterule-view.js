@@ -24,14 +24,13 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountViews/MainExtensions/Templates/SubAccountsViewTemplate.html'
+            templateUrl: '/Client/Modules/WhS_Deal/Directives/SwapDeal/RouteRules/Templates/SwapDealBuyRouteRuleViewTemplate.html'
         };
 
         function SubAccountsViewCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var accountBEDefinitionId;
-            var parentAccountId;
+            var swapDealId;
 
             var gridAPI;
 
@@ -48,7 +47,7 @@
                         gridAPI.onSwapDealBuyRouteRuleAdded(addedSubcAccount);
                     };
 
-                    WhS_Deal_SwapDealBuyRouteRuleService.addSwapDealBuyRouteRule(onSwapDealBuyRouteRuleAdded);
+                    WhS_Deal_SwapDealBuyRouteRuleService.addSwapDealBuyRouteRule(swapDealId, onSwapDealBuyRouteRuleAdded);
                 };
             }
             function defineAPI() {
@@ -59,7 +58,7 @@
                     $scope.scopeModel.isGridLoading = true;
 
                     if (payload != undefined) {
-
+                        swapDealId = payload.swapDealId;
                     }
 
                     return gridAPI.load(buildGridPayload(payload)).then(function () {

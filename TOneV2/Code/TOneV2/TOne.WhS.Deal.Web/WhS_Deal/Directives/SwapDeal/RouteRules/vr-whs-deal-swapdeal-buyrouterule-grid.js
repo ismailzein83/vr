@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule', 'WhS_Deal_SwapDealBuyRouteRuleService',
-    function (VRNotificationService, VRUIUtilsService, WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule, WhS_Deal_SwapDealBuyRouteRuleService) {
+app.directive('vrWhsDealSwapdealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_SwapDealBuyRouteRuleAPIService', 'WhS_Deal_SwapDealBuyRouteRuleService',
+    function (VRNotificationService, VRUIUtilsService, WhS_Deal_SwapDealBuyRouteRuleAPIService, WhS_Deal_SwapDealBuyRouteRuleService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,7 +33,7 @@ app.directive('vrWhsDealSwapdealBuyrouteruleGrid', ['VRNotificationService', 'VR
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule.GetFilteredSwapDealBuyRouteRules(dataRetrievalInput).then(function (response) {
+                    return WhS_Deal_SwapDealBuyRouteRuleAPIService.GetFilteredSwapDealBuyRouteRules(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

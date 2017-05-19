@@ -6,7 +6,11 @@
 
     function SwapDealBuyRouteRuleService(VRModalService) {
 
-        function addSwapDealBuyRouteRule(onSwapDealBuyRouteRuleAdded) {
+        function addSwapDealBuyRouteRule(swapDealId, onSwapDealBuyRouteRuleAdded) {
+
+            var parameters = {
+                swapDealId: swapDealId
+            };
 
             var settings = {};
 
@@ -14,13 +18,14 @@
                 modalScope.onSwapDealBuyRouteRuleAdded = onSwapDealBuyRouteRuleAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDeal/RouteRules/SwapDealBuyRouteRuleEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDeal/RouteRules/SwapDealBuyRouteRuleEditor.html', parameters, settings);
         }
 
-        function editSwapDealBuyRouteRule(swapDealBuyRouteRuleId, onSwapDealBuyRouteRuleUpdated) {
+        function editSwapDealBuyRouteRule(swapDealBuyRouteRuleId, swapDealId, onSwapDealBuyRouteRuleUpdated) {
 
             var parameters = {
-                swapDealBuyRouteRuleId: swapDealBuyRouteRuleId
+                swapDealBuyRouteRuleId: swapDealBuyRouteRuleId,
+                swapDealId: swapDealId
             };
 
             var settings = {};

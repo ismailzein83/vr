@@ -35,6 +35,6 @@
         });
     }
 
-    app.service('WhS_Deal_SwapDealBuyRouteRuleBuyRouteRule', SwapDealBuyRouteRuleAPIService);
+    app.service('WhS_Deal_SwapDealBuyRouteRuleAPIService', SwapDealBuyRouteRuleAPIService);
 
 })(app);

@@ -249,6 +249,8 @@
     <Content Include="WhS_Deal\Directives\SwapDeal\SwapDealOutboundEditorController.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\Templates\SwapDealInboundEditor.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\SwapDealInboundEditorController.js" />
+    <Content Include="WhS_Deal\Views\SwapDeal\RouteRules\SwapDealBuyRouteRuleEditor.html" />
+    <Content Include="WhS_Deal\Views\SwapDeal\RouteRules\SwapDealBuyRouteRuleEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealEditor.html" />
     <Content Include="WhS_Deal\Views\SwapDeal\SwapDealEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysis\SwapDealAnalysis.html" />
@@ -264,9 +266,7 @@
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagement.html" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Deal\Views\SwapDeal\RouteRules\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
