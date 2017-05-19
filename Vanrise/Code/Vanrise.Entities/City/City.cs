@@ -13,6 +13,8 @@ namespace Vanrise.Entities
         public string Name { get; set; }
 
         public int CountryId { get; set; }
+
+        public CitySettings Settings { get; set; }
     }
 
     public class CitySettings
