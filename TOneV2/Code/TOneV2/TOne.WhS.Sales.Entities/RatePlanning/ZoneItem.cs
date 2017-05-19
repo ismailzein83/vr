@@ -30,6 +30,7 @@ namespace TOne.WhS.Sales.Entities
         #region Rate
         public long? CurrentRateId { get; set; }
         public Decimal? CurrentRate { get; set; }
+        public int? CurrentRateCurrencyId { get; set; }
         public DateTime? CurrentRateBED { get; set; }
         public DateTime? CurrentRateEED { get; set; }
         public DateTime? CurrentRateNewEED { get; set; }
@@ -134,6 +135,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public int RateTypeId { get; set; }
         public decimal Rate { get; set; }
+        public int CurrencyId { get; set; }
         public bool IsRateEditable { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }

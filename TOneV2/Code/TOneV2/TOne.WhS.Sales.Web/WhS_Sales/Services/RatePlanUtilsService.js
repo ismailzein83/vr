@@ -103,7 +103,7 @@
             }
         }
 
-        function validateNewRate(dataItem)
+        function validateNewRate(dataItem, ownerCurrencyId)
         {
             var newRate = Number(dataItem.NewRate);
             
@@ -111,7 +111,7 @@
                 return 'New rate must be a number';
             if (newRate <= 0)
                 return 'New rate must be greater than 0';
-            if (dataItem.CurrentRate != null && Number(dataItem.CurrentRate) == newRate)
+            if (dataItem.CurrentRate != null && dataItem.CurrentRateCurrencyId == ownerCurrencyId && Number(dataItem.CurrentRate) == newRate)
                 return 'New rate must be different than the current rate';
 
             return null;

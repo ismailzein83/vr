@@ -185,15 +185,15 @@
                         var saveChangesPromise = saveDraft(false);
                         promises.push(saveChangesPromise);
 
-                        var deleteChangedRatesDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(deleteChangedRatesDeferred.promise);
+                        var defineNewRatesConvertedToCurrencyDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(defineNewRatesConvertedToCurrencyDeferred.promise);
 
                         saveChangesPromise.then(function () {
-                            WhS_Sales_RatePlanAPIService.DeleteChangedRates(ownerTypeSelectorAPI.getSelectedIds(), getOwnerId(), selectedId).then(function () {
+                            WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(getOwnerId(), selectedId, UtilsService.getDateFromDateTime(new Date())).then(function () {
                                 draftCurrencyId = selectedId;
-                                deleteChangedRatesDeferred.resolve();
+                                defineNewRatesConvertedToCurrencyDeferred.resolve();
                             }).catch(function (error) {
-                                deleteChangedRatesDeferred.reject(error);
+                                defineNewRatesConvertedToCurrencyDeferred.reject(error);
                             });
                         });
 

@@ -195,11 +195,10 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("DeleteChangedRates")]
-        public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
+        [Route("DefineNewRatesConvertedToCurrency")]
+        public void DefineNewRatesConvertedToCurrency(int customerId, int newCurrencyId, DateTime effectiveOn)
         {
-            var manager = new RatePlanDraftManager();
-            manager.DeleteChangedRates(ownerType, ownerId, newCurrencyId);
+            new RatePlanDraftManager().DefineNewRatesConvertedToCurrency(customerId, newCurrencyId, effectiveOn);
         }
 
         [HttpPost]

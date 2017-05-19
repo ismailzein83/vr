@@ -23,6 +23,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
         var gridAPI;
         var zoneItem;
         var settings;
+        var ownerCurrencyId;
 
         function initializeController() {
 
@@ -36,7 +37,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             $scope.areOtherRatesEditable = function () {
                 if (zoneItem.CurrentRate != null)
                     return true;
-                if (zoneItem.NewRate != null && WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem) == null)
+                if (zoneItem.NewRate != null && WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem, ownerCurrencyId) == null)
                     return true;
                 return false;
             };
@@ -60,7 +61,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             };
 
             $scope.validateNewRate = function (otherRate) {
-                return WhS_Sales_RatePlanUtilsService.validateNewRate(otherRate);
+                return WhS_Sales_RatePlanUtilsService.validateNewRate(otherRate, ownerCurrencyId);
             };
 
             $scope.validateNewRateDates = function (otherRate) {
@@ -75,6 +76,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             {
             	zoneItem = query.zoneItem;
             	settings = query.settings;
+            	ownerCurrencyId = query.ownerCurrencyId;
+
             	$scope.isCountryEnded = query.zoneItem.IsCountryEnded;
             	$scope.isZonePendingClosed = query.zoneItem.IsZonePendingClosed;
 
@@ -108,7 +111,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             		if (zoneItem.CurrentOtherRates != null) {
             			var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.RateTypeId];
             			if (currentOtherRate != undefined) {
-            				otherRate.CurrentRate = currentOtherRate.Rate;
+            			    otherRate.CurrentRate = currentOtherRate.Rate;
+            			    otherRate.CurrentRateCurrencyId = currentOtherRate.CurrencyId;
             				otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
             				otherRate.CurrentRateBED = currentOtherRate.BED;
             				otherRate.CurrentRateEED = currentOtherRate.EED;

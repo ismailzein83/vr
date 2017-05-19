@@ -134,36 +134,111 @@ namespace TOne.WhS.Sales.Business
             return null;
         }
 
-        public void DeleteChangedRates(SalePriceListOwnerType ownerType, int ownerId, int newCurrencyId)
+        public void DefineNewRatesConvertedToCurrency(int customerId, int newCurrencyId, DateTime effectiveOn)
         {
-            Changes draft = GetDraft(ownerType, ownerId);
+            var ratePlanManager = new RatePlanManager();
+
+            Changes draft = GetDraft(SalePriceListOwnerType.Customer, customerId);
+            IEnumerable<SaleZone> allZones = ratePlanManager.GetSaleZones(SalePriceListOwnerType.Customer, customerId, effectiveOn, true);
+
+            var updatedZoneDrafts = new List<ZoneChanges>();
+            var zoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
 
             if (draft != null)
             {
                 draft.CurrencyId = newCurrencyId;
 
                 if (draft.ZoneChanges != null)
-                {
-                    foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
-                        zoneDraft.NewRates = GetChangedOtherRates(zoneDraft.NewRates);
-                }
-
-                SaveDraft(ownerType, ownerId, draft);
+                    zoneDraftsByZoneId = draft.ZoneChanges.ToDictionary(x => x.ZoneId);
             }
+            else
+            {
+                draft = new Changes();
+                draft.CurrencyId = newCurrencyId;
+                draft.ZoneChanges = new List<ZoneChanges>();
+            }
+
+            var saleRateManager = new SaleRateManager();
+            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+            var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+
+            int? sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+            if (!sellingProductId.HasValue)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product", customerId));
+
+            Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(customerId, effectiveOn, true);
+
+            if (allZones != null)
+            {
+                foreach (SaleZone zone in allZones)
+                {
+                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId.Value, zone.SaleZoneId);
+
+                    if (zoneRate != null && zoneRate.Rate != null)
+                    {
+                        ZoneChanges zoneDraft = zoneDraftsByZoneId.GetOrCreateItem(zone.SaleZoneId, () =>
+                        {
+                            return new ZoneChanges()
+                            {
+                                ZoneId = zone.SaleZoneId,
+                                ZoneName = zone.Name,
+                                CountryId = zone.CountryId
+                            };
+                        });
+
+                        var newRates = new List<DraftRateToChange>();
+                        DateTime newRateBED = Utilities.Max(countryBEDsByCountryId.GetRecord(zone.CountryId), DateTime.Today);
+
+                        newRates.Add(new DraftRateToChange()
+                        {
+                            RateTypeId = null,
+                            ZoneId = zone.SaleZoneId,
+                            Rate = GetConvertedAndRoundedRate(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), newCurrencyId, effectiveOn, currencyExchangeRateManager),
+                            CurrencyId = newCurrencyId,
+                            BED = newRateBED,
+                            EED = null
+                        });
+
+                        if (zoneRate.RatesByRateType != null)
+                        {
+                            foreach (SaleRate otherRate in zoneRate.RatesByRateType.Values)
+                            {
+                                newRates.Add(new DraftRateToChange()
+                                {
+                                    RateTypeId = otherRate.RateTypeId,
+                                    ZoneId = zone.SaleZoneId,
+                                    Rate = GetConvertedAndRoundedRate(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), newCurrencyId, effectiveOn, currencyExchangeRateManager),
+                                    CurrencyId = newCurrencyId,
+                                    BED = newRateBED,
+                                    EED = null
+                                });
+                            }
+                        }
+
+                        zoneDraft.NewRates = newRates;
+                        updatedZoneDrafts.Add(zoneDraft);
+                    }
+                    else
+                    {
+                        ZoneChanges zoneDraft = zoneDraftsByZoneId.GetRecord(zone.SaleZoneId);
+
+                        if (zoneDraft != null)
+                        {
+                            zoneDraft.NewRates = null;
+                            updatedZoneDrafts.Add(zoneDraft);
+                        }
+                    }
+                }
+            }
+
+            draft.ZoneChanges = updatedZoneDrafts;
+            SaveDraft(SalePriceListOwnerType.Customer, customerId, draft);
         }
 
-        private IEnumerable<DraftRateToChange> GetChangedOtherRates(IEnumerable<DraftRateToChange> changedRates)
+        private decimal GetConvertedAndRoundedRate(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime effectiveOn, Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager)
         {
-            var changedOtherRates = new List<DraftRateToChange>();
-            if (changedRates != null)
-            {
-                foreach (DraftRateToChange changedRate in changedRates)
-                {
-                    if (changedRate.RateTypeId.HasValue)
-                        changedOtherRates.Add(changedRate);
-                }
-            }
-            return changedOtherRates.Count > 0 ? changedOtherRates : null;
+            decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(rate, fromCurrencyId, toCurrencyId, effectiveOn);
+            return decimal.Round(convertedRate, 4);
         }
     }
 

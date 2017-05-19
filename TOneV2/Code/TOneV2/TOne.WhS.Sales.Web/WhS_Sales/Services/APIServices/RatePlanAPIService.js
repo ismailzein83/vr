@@ -104,11 +104,11 @@
             });
         }
 
-        function DeleteChangedRates(ownerType, ownerId, newCurrencyId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DeleteChangedRates"), {
-                ownerType: ownerType,
-                ownerId: ownerId,
-                newCurrencyId: newCurrencyId
+        function DefineNewRatesConvertedToCurrency(customerId, newCurrencyId, effectiveOn) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DefineNewRatesConvertedToCurrency"), {
+                customerId: customerId,
+                newCurrencyId: newCurrencyId,
+                effectiveOn: effectiveOn
             });
         }
 
@@ -192,7 +192,7 @@
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetSaleAreaSettingsData: GetSaleAreaSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
-            DeleteChangedRates: DeleteChangedRates,
+            DefineNewRatesConvertedToCurrency: DefineNewRatesConvertedToCurrency,
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
             GetZoneInheritedService: GetZoneInheritedService,
             GetFilteredSoldCountries: GetFilteredSoldCountries,

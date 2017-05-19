@@ -218,7 +218,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             newRateDayOffset: newRateDayOffset,
                             increasedRateDayOffset: increasedRateDayOffset,
                             decreasedRateDayOffset: decreasedRateDayOffset
-                        }
+                        },
+                        ownerCurrencyId: gridQuery.CurrencyId
                     };
                     return rateTypeGridAPI.loadGrid(query);
                 }
@@ -445,7 +446,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             zoneItem.validateNewRate = function () {
-                return WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem);
+                return WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem, gridQuery.CurrencyId);
             };
 
             zoneItem.onCurrentRateEEDChanged = function (zoneItem) {
