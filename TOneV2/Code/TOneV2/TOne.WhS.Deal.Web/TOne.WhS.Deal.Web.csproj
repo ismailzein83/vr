@@ -162,8 +162,9 @@
     <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />
-    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
-    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />
+    <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-dealdefinition-selector.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\FixedInboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\SuppliersInboundRateCalcMethodEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\SuppliersInboundRateCalcMethodItemEditorTemplate.html" />
@@ -224,6 +225,7 @@
     <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-max.js" />
     <Content Include="WhS_Deal\Directives\ZoneRateEval\vr-whs-deal-zonerateeval-traffic.js" />
     <Content Include="WhS_Deal\ModuleInitialization.js" />
+    <Content Include="WhS_Deal\Services\APIServices\DealDefinitionAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealBuyRouteRuleAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\VolCommitmentDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAPIService.js" />
