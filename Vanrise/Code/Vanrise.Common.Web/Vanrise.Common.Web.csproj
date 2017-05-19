@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\GenericLKUPController.cs" />
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationController.cs" />
@@ -206,6 +207,9 @@
     <Content Include="Common\Directives\ActionAudit\vr-common-actionaudit-search.js" />
     <Content Include="Common\Directives\ActionAudit\vr-common-actionauditlkup-selector.js" />
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
+    <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
+    <Content Include="Common\Directives\Region\vr-common-region-grid.js" />
+    <Content Include="Common\Directives\Region\vr-common-region-selector.js" />
     <Content Include="Common\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Common\Directives\City\Templates\citySelectorTemplate.html" />
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
@@ -391,6 +395,7 @@
     <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
+    <Content Include="Common\Services\APIServices\RegionAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\GenericLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\GenericLKUPDefinitionAPIService.js" />
@@ -424,6 +429,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
+    <Content Include="Common\Services\RegionService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
     <Content Include="Common\Services\GenericLKUPService.js" />
@@ -460,6 +466,10 @@
     <Content Include="Common\Services\VRObjectVariableService.js" />
     <Content Include="Common\Views\ActionAudit\ActionAuditManagement.html" />
     <Content Include="Common\Views\ActionAudit\ActionAuditManagementController.js" />
+    <Content Include="Common\Views\Region\RegionEditor.html" />
+    <Content Include="Common\Views\Region\RegionEditorController.js" />
+    <Content Include="Common\Views\Region\RegionManagement.html" />
+    <Content Include="Common\Views\Region\RegionManagementController.js" />
     <Content Include="Common\Views\CompanySettings\CompanySettingsEditor.html" />
     <Content Include="Common\Views\CompanySettings\CompanySettingsEditorController.js" />
     <Content Include="Common\Views\BankDetails\BankDetailsEditor.html" />

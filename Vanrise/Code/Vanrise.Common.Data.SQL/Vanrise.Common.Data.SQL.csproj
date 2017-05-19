@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigDataServiceDataManager.cs" />
+    <Compile Include="RegionDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />
     <Compile Include="OverriddenConfigurationDataManager.cs" />

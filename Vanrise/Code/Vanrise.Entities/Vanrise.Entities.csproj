@@ -82,6 +82,10 @@
     <Compile Include="OverriddenConfig\OverriddenConfigurationGroupInfoFilter.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationQuery.cs" />
     <Compile Include="OverriddenConfig\OverriddenConfigurationSettings.cs" />
+    <Compile Include="Region\RegionDetail.cs" />
+    <Compile Include="Region\RegionInfo.cs" />
+    <Compile Include="Region\RegionInfoFilter.cs" />
+    <Compile Include="Region\RegionQuery.cs" />
     <Compile Include="Region\Region.cs" />
     <Compile Include="Settings\SettingInfo.cs" />
     <Compile Include="Settings\SettingInfoFilter.cs" />
