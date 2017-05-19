@@ -513,21 +513,39 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(priceListTemplateId);
             if (template == null)
                 throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", carrierAccountId));
+
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(carrierAccountId);
             ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext
             {
-                Zones = customerZonesNotifications
+                Zones = customerZonesNotifications,
+                PriceListExtensionFormat = priceListExtensionFormat
             };
+
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
             string customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
-            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, ".xlsx");
+            string extension = GetExtensionString(carrierAccountId, priceListExtensionFormat);
+            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, extension);
             return new VRFile
             {
                 Content = salePlTemplateBytes,
                 Name = fileName,
                 ModuleName = "WhS_BE_SalePriceList",
-                Extension = "xlsx",
-                CreatedTime = DateTime.Today,
+                Extension = extension,
+                CreatedTime = DateTime.Today
             };
+        }
+
+        private string GetExtensionString(int carrierAccountId, PriceListExtensionFormat priceListExtension)
+        {
+            switch (priceListExtension)
+            {
+                case PriceListExtensionFormat.XLS:
+                    return ".xls";
+                case PriceListExtensionFormat.XLSX:
+                    return ".xlsx";
+                default:
+                    return ".xls";
+            }
         }
         private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists)
         {

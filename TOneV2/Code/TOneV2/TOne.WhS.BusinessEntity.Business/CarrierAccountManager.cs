@@ -78,6 +78,22 @@ namespace TOne.WhS.BusinessEntity.Business
                    return dic;
                });
         }
+
+        public PriceListExtensionFormat GetPriceListExtensionFormat(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+
+            carrierAccount.ThrowIfNull("Carrier Account", carrierAccountId);
+            carrierAccount.CustomerSettings.ThrowIfNull("CarrierAccount.CustomerSetting", carrierAccountId);
+
+            var customerPRiceListExtensionFormat = carrierAccount.CustomerSettings.PriceListExtensionFormat;
+
+            if (customerPRiceListExtensionFormat != PriceListExtensionFormat.Default)
+                return customerPRiceListExtensionFormat;
+
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetSaleAreaPriceListExtensionFormatId();
+        }
         public int GetCustomerTimeZoneId(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);

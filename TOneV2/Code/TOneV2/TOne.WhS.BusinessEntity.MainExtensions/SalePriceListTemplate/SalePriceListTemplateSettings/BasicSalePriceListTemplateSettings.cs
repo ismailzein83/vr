@@ -42,12 +42,22 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             SetWorkbookData(orderedListofZones, workbook);
 
             byte[] array;
+
             using (MemoryStream ms = new MemoryStream())
             {
-                workbook.Save(ms, SaveFormat.Xlsx);
+                switch (context.PriceListExtensionFormat)
+                {
+                    case PriceListExtensionFormat.XLS:
+                        workbook.Save(ms, SaveFormat.Excel97To2003);
+
+                        break;
+                    case PriceListExtensionFormat.XLSX:
+                        workbook.Save(ms, SaveFormat.Xlsx);
+
+                        break;
+                }
                 array = ms.ToArray();
             }
-
             return array;
         }
 

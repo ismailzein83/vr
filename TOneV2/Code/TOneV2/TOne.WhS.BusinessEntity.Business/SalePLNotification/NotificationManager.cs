@@ -52,12 +52,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             MemoryStream memoryStream = new MemoryStream(file.Content) { Position = 0 };
 
-            var attachment = new Attachment(memoryStream, "SalePriceList.xlsx")
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customerPricelist.OwnerId);
+
+            PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat);
+
+            var attachment = new Attachment(memoryStream, priceListSetting.PriceListName)
             {
-                ContentType = new ContentType("application/vnd.ms-excel"),
+                ContentType = priceListSetting.ContentType,
                 TransferEncoding = TransferEncoding.Base64,
                 NameEncoding = Encoding.UTF8,
-                Name = "SalePriceList.xls"
+                Name = priceListSetting.PriceListName
             };
 
             User initiator = _userManager.GetUserbyId(initiatorId);
@@ -125,14 +129,19 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new DataIntegrityValidationException(string.Format("Pricelist with Id {0} for customer {1} does not have a file",
                     customerPricelist.PriceListId, _carrierAccountManager.GetCarrierAccountName(customerId)));
 
-            MemoryStream memoryStream = new MemoryStream(file.Content);
-            memoryStream.Position = 0;
+            MemoryStream memoryStream = new MemoryStream(file.Content) { Position = 0 };
 
-            var attachment = new Attachment(memoryStream, "SalePriceList.xlsx");
-            attachment.ContentType = new ContentType("application/vnd.ms-excel");
-            attachment.TransferEncoding = TransferEncoding.Base64;
-            attachment.NameEncoding = Encoding.UTF8;
-            attachment.Name = "SalePriceList.xls";
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customerPricelist.OwnerId);
+
+            PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat);
+
+            var attachment = new Attachment(memoryStream, priceListSetting.PriceListName)
+            {
+                ContentType = priceListSetting.ContentType,
+                TransferEncoding = TransferEncoding.Base64,
+                NameEncoding = Encoding.UTF8,
+                Name = priceListSetting.PriceListName
+            };
 
             User initiator = _userManager.GetUserbyId(initiatorId);
 
@@ -177,7 +186,41 @@ namespace TOne.WhS.BusinessEntity.Business
 
         }
 
+        private PriceListSetting GetPriceListSetting(PriceListExtensionFormat priceListExtensionFormat)
+        {
+            ContentType contentType;
+            string priceListName;
+            switch (priceListExtensionFormat)
+            {
+                case PriceListExtensionFormat.XLS:
+                    contentType = new ContentType("application/x-msexcel");
+                    priceListName = "SalePriceList.xls";
+                    break;
+                case PriceListExtensionFormat.XLSX:
+                    contentType = new ContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    priceListName = "SalePriceList.xlsx";
+                    break;
+                default:
+                    contentType = new ContentType("application/x-msexcel");
+                    priceListName = "SalePriceList.xls";
+                    break;
+            }
+            return new PriceListSetting
+            {
+                ContentType = contentType,
+                PriceListName = priceListName
+            };
+        }
+
         #endregion
 
+        #region private class
+
+        public class PriceListSetting
+        {
+            public ContentType ContentType { get; set; }
+            public string PriceListName { get; set; }
+        }
+        #endregion
     }
 }

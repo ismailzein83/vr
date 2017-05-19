@@ -7,8 +7,9 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-	public class SalePriceListTemplateSettingsContext : ISalePriceListTemplateSettingsContext
-	{
-		public IEnumerable<SalePLZoneNotification> Zones { get; set; }
-	}
+    public class SalePriceListTemplateSettingsContext : ISalePriceListTemplateSettingsContext
+    {
+        public IEnumerable<SalePLZoneNotification> Zones { get; set; }
+        public PriceListExtensionFormat PriceListExtensionFormat { get; set; }
+    }
 }
