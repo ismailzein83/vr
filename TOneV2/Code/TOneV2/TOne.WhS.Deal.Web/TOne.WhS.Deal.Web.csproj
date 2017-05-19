@@ -162,6 +162,8 @@
     <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\FixedInboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\SuppliersInboundRateCalcMethodEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\SuppliersInboundRateCalcMethodItemEditorTemplate.html" />
