@@ -24,7 +24,7 @@
               <Width>1.27249in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.11458in</Width>
+              <Width>1.22916in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -45,7 +45,7 @@
               <Width>1.20833in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09375in</Width>
+              <Width>1.23083in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1in</Width>
@@ -130,7 +130,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>S. Destination	</Value>
+                              <Value EvaluationMode="Constant">S. Zone</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -267,7 +267,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Effective Date	</Value>
+                              <Value EvaluationMode="Constant">S. Effective Date</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -507,7 +507,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Effective Date</Value>
+                              <Value EvaluationMode="Constant">C. Effective Date</Value>
                               <Style>
                                 <FontWeight>SemiBold</FontWeight>
                                 <Color>DarkRed</Color>
@@ -2374,7 +2374,7 @@
         <DataSetName>DetailedCarrier</DataSetName>
         <Top>0.125in</Top>
         <Height>1in</Height>
-        <Width>23.46874in</Width>
+        <Width>23.7204in</Width>
         <Style />
       </Tablix>
     </ReportItems>
