@@ -19,16 +19,16 @@ namespace Vanrise.Common.Data.SQL
             return GetItemsSP("[common].[sp_Region_GetAll]", RegionMapper);
         }
 
-        public bool Update(Entities.Region Region)
+        public bool Update(Region region)
         {
-            int recordsEffected = ExecuteNonQuerySP("[common].[sp_Region_Update]", Region.RegionId, Region.Name, Region.CountryId, Vanrise.Common.Serializer.Serialize(Region.Settings));
+            int recordsEffected = ExecuteNonQuerySP("[common].[sp_Region_Update]", region.RegionId, region.Name, region.CountryId, Vanrise.Common.Serializer.Serialize(region.Settings));
             return (recordsEffected > 0);
         }
 
-        public bool Insert(Entities.Region Region, out int insertedId)
+        public bool Insert(Region region, out int insertedId)
         {
             object RegionId;
-            int recordsEffected = ExecuteNonQuerySP("[common].[sp_Region_Insert]", out RegionId, Region.Name, Region.CountryId, Vanrise.Common.Serializer.Serialize(Region.Settings));
+            int recordsEffected = ExecuteNonQuerySP("[common].[sp_Region_Insert]", out RegionId, region.Name, region.CountryId, Vanrise.Common.Serializer.Serialize(region.Settings));
             insertedId = (int)RegionId;
             return (recordsEffected > 0);
         }

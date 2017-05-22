@@ -16,10 +16,23 @@ namespace Vanrise.Common.Business
         {
             var allCities = GetCachedCities();
 
-            Func<City, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                 &&
-                 (input.Query.CountryIds == null || input.Query.CountryIds.Contains(prod.CountryId));
+            Func<City, bool> filterExpression  = (x) =>
+            {
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.CountryIds != null && !input.Query.CountryIds.Contains(x.CountryId))
+                    return false;
+                if (input.Query.RegionIds!=null)
+                {
+                    if (x.Settings == null)
+                        return false;
+                    if (x.Settings.RegionId == null)
+                        return false;
+                    if (!input.Query.RegionIds.Contains(x.Settings.RegionId.Value))
+                        return false;
+                }
+                return true;
+            };
 
             ResultProcessingHandler<CityDetail> handler = new ResultProcessingHandler<CityDetail>()
             {
@@ -135,6 +148,8 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "City Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Region" });
+
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -148,6 +163,7 @@ namespace Vanrise.Common.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.CityId });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
                             row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.RegionName });
                         }
                     }
                 }
@@ -233,9 +249,18 @@ namespace Vanrise.Common.Business
 
             CountryManager countryManager = new CountryManager();
             Country country = countryManager.GetCountry(city.CountryId);
+            string regionName = null;
+            if (city.Settings != null && city.Settings.RegionId.HasValue)
+            {
+                RegionManager regionManager = new RegionManager();
+                Region region = regionManager.GetRegion(city.Settings.RegionId.Value);
+                regionName = (region != null ? region.Name : string.Empty);
+            }
+
 
             cityDetail.Entity = city;
             cityDetail.CountryName = (country != null ? country.Name : string.Empty);
+            cityDetail.RegionName = regionName;
             return cityDetail;
         }
 

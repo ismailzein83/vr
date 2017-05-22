@@ -11,9 +11,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredRegions"), input);
         }
 
-        function GetRegionsInfo(countryId) {
+        function GetRegionsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetRegionsInfo"), {
-                countryId: countryId
+                filter: filter
             });
         }
 

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class RegionManager
+    public class RegionManager : IBusinessEntityManager
     {
         #region Public Methods
 
@@ -36,9 +37,17 @@ namespace Vanrise.Common.Business
             return Region.CastWithValidate<Region>("Region : historyId ", RegionHistoryId);
         }
 
-        public IEnumerable<RegionInfo> GetRegionsInfo(int countryId)
+        public IEnumerable<RegionInfo> GetRegionsInfo(RegionInfoFilter filter)
         {
-            return this.GetCachedRegions().MapRecords(RegionInfoMapper, Region => Region.CountryId == countryId).OrderBy(Region => Region.Name);
+            Func<Region, bool> filterExpression = null;
+            if (filter!=null)
+             filterExpression = (x) =>
+            {
+                if (filter.CountryId.HasValue  && x.CountryId != filter.CountryId.Value)
+                    return false;             
+                return true;
+            };
+            return this.GetCachedRegions().MapRecords(RegionInfoMapper,filterExpression).OrderBy(Region => Region.Name);
         }
 
         public IEnumerable<int> GetDistinctCountryIdsByRegionIds(IEnumerable<int> RegionIds)
@@ -118,6 +127,15 @@ namespace Vanrise.Common.Business
                 return Region.Name;
             else
                 return null;
+        }
+
+        public IEnumerable<Region> GetAllRegions()
+        {
+            var allRegions = GetCachedRegions();
+            if (allRegions == null)
+                return null;
+
+            return allRegions.Values;
         }
 
         #endregion
@@ -246,6 +264,52 @@ namespace Vanrise.Common.Business
             RegionInfo.Name = Region.Name;
             RegionInfo.CountryId = Region.CountryId;
             return RegionInfo;
+        }
+
+        #endregion
+
+
+        #region IBusinessEntityManager
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetRegionName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var country = context.Entity as Country;
+            return country.CountryId;
+        }
+
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetAllRegions().Select(itm => itm as dynamic).ToList();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetRegion(context.EntityId);
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

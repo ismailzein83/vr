@@ -11,5 +11,7 @@ namespace Vanrise.Entities
         public string Name { get; set; }
 
         public List<int> CountryIds { get; set; }
+
+        public List<int> RegionIds { get; set; }
     }
 }

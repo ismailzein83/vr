@@ -1,11 +1,12 @@
 ﻿
-app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService', 'VRCommon_CityAPIService', 'VRCommon_ObjectTrackingService',
-    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService, VRCommon_ObjectTrackingService) {
+app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService', 'VRCommon_CityAPIService', 'VRCommon_ObjectTrackingService','VRCommon_RegionService',
+    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService, VRCommon_ObjectTrackingService, VRCommon_RegionService) {
         var drillDownDefinitions = [];
         return ({
             editCity: editCity,
             addCity: addCity,
             registerDrillDownToCountry: registerDrillDownToCountry,
+            registerDrillDownToRegion:registerDrillDownToRegion,
             registerObjectTrackingDrillDownToCity: registerObjectTrackingDrillDownToCity,
             getDrillDownDefinition: getDrillDownDefinition,
             registerHistoryViewAction: registerHistoryViewAction
@@ -35,7 +36,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }
-        function addCity(onCityAdded , countryId) {
+        function addCity(onCityAdded , countryId , regionId) {
             var settings = {
             };
 
@@ -45,6 +46,10 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             var parameters = {};
             if (countryId != undefined) {
                 parameters.CountryId = countryId; 
+            }
+
+            if (countryId != undefined) {
+                parameters.RegionId = regionId;
             }
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
@@ -131,6 +136,40 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             };
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
+        }
+
+        function registerDrillDownToRegion() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Cities";
+            drillDownDefinition.directive = "vr-common-city-grid";
+            drillDownDefinition.parentMenuActions = [{
+                name: "New City",
+                clicked: function (regionItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(regionItem);
+
+                    var onCityAdded = function (cityObj) {
+                        if (regionItem.cityGridAPI != undefined) {
+                            regionItem.cityGridAPI.onCityAdded(cityObj);
+                        }
+                    };
+                    addCity(onCityAdded, regionItem.Entity.CountryId, regionItem.Entity.RegionId);
+                },
+                haspermission: hasNewCityPermission
+            }];
+
+            drillDownDefinition.loadDirective = function (directiveAPI, regionItem) {
+                regionItem.cityGridAPI = directiveAPI;
+                var query = {
+                    CountryIds: [regionItem.Entity.CountryId],
+                    RegionIds: [regionItem.Entity.RegionId]
+                };
+
+                return regionItem.cityGridAPI.loadGrid(query);
+            };
+
+            VRCommon_RegionService.addDrillDownDefinition(drillDownDefinition);
         }
 
         function hasNewCityPermission() {

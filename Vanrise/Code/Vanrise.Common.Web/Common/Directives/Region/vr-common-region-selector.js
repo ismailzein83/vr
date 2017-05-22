@@ -90,7 +90,6 @@ app.directive('vrCommonRegionSelector', ['VRCommon_RegionAPIService', 'VRCommon_
             api.load = function (payload) {
 
                 selectorAPI.clearDataSource();
-
                 var selectedIds;
                 var filter;
 
@@ -105,6 +104,9 @@ app.directive('vrCommonRegionSelector', ['VRCommon_RegionAPIService', 'VRCommon_
                 return VRUIUtilsService.getIdSelectedIds('RegionId', attrs, ctrl);
             };
 
+            api.clearDataSource = function () {
+                selectorAPI.clearDataSource();
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

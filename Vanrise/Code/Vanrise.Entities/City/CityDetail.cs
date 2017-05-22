@@ -11,5 +11,8 @@ namespace Vanrise.Entities
         public City Entity { get; set; }
 
         public string CountryName { get; set; }
+
+        public string RegionName { get; set; }
+
     }
 }

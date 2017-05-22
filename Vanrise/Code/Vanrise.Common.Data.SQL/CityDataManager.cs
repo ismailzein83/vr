@@ -21,14 +21,14 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Update(Entities.City city)
         {
-            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Update]", city.CityId, city.Name, city.CountryId);
+            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Update]", city.CityId, city.Name, city.CountryId, Vanrise.Common.Serializer.Serialize(city.Settings));
             return (recordsEffected > 0);
         }
 
         public bool Insert(Entities.City city, out int insertedId)
         {
             object cityId;
-            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Insert]", out cityId, city.Name, city.CountryId);
+            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Insert]", out cityId, city.Name, city.CountryId, Vanrise.Common.Serializer.Serialize(city.Settings));
             insertedId = (int)cityId;
             return (recordsEffected > 0);
         }
@@ -43,10 +43,13 @@ namespace Vanrise.Common.Data.SQL
 
         City CityMapper(IDataReader reader)
         {
+            var settings = reader["Settings"] as string;
+
             City city = new City();
             city.CityId = (int)reader["ID"];
             city.Name = reader["Name"] as string;
             city.CountryId = (int)reader["CountryID"];
+            city.Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<CitySettings>(settings) : null;
             return city;
         }
 

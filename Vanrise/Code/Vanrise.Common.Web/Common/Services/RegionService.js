@@ -8,7 +8,8 @@ app.service('VRCommon_RegionService', ['VRModalService', 'VRNotificationService'
             registerDrillDownToCountry: registerDrillDownToCountry,
             registerObjectTrackingDrillDownToRegion: registerObjectTrackingDrillDownToRegion,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            addDrillDownDefinition: addDrillDownDefinition
         });
 
         function viewHistoryRegion(context) {

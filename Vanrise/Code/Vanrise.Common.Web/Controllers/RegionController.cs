@@ -31,10 +31,11 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("GetRegionsInfo")]
-        public IEnumerable<RegionInfo> GetRegionsInfo(int countryId)
-        {
+        public IEnumerable<RegionInfo> GetRegionsInfo(string filter = null)
+		{
+            RegionInfoFilter countryFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<RegionInfoFilter>(filter) : null;
             RegionManager manager = new RegionManager();
-            return manager.GetRegionsInfo(countryId);
+            return manager.GetRegionsInfo(countryFilter);
         }
         [HttpGet]
         [Route("GetRegion")]

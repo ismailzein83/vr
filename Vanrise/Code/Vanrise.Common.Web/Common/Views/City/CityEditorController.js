@@ -8,10 +8,17 @@
 
         var cityId;
         var countryId;
+        var regionId;
         var editMode;
         var cityEntity;
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var countrySelectedPromiseDeferred;
+
+        var regionDirectiveApi;
+        var regionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var disableCountry;
         var context;
         var isViewHistoryMode;
@@ -24,13 +31,14 @@
             if (parameters != undefined && parameters != null) {
                 cityId = parameters.CityId;
                 countryId = parameters.CountryId;
+                regionId = parameters.RegionId;
                 disableCountry = parameters.disableCountry;
                 context = parameters.context;
             }
             editMode = (cityId != undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
             $scope.disableCountry = editMode || disableCountry;
-           
+
         }
 
         function defineScope() {
@@ -39,7 +47,24 @@
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             };
-
+            $scope.onRegionDirectiveReady = function (api) {
+                regionDirectiveApi = api;
+                regionReadyPromiseDeferred.resolve();
+            };
+            $scope.onCountrySelectionChanged = function () {
+                var selectedCountryId = countryDirectiveApi.getSelectedIds();
+                if (selectedCountryId != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingRegions = value };
+                    var payload = {
+                        filter: {
+                            CountryId: selectedCountryId
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, regionDirectiveApi, payload, setLoader, countrySelectedPromiseDeferred);
+                }
+                else if (regionDirectiveApi != undefined)
+                    regionDirectiveApi.clearDataSource();
+            };
             $scope.saveCity = function () {
                 if (editMode)
                     return updateCity();
@@ -98,7 +123,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountryRegionSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -107,8 +132,7 @@
               });
         }
 
-        function setTitle()
-        {
+        function setTitle() {
             if (editMode && cityEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(cityEntity.Name, "City");
             else if (isViewHistoryMode && cityEntity != undefined)
@@ -125,29 +149,60 @@
             $scope.name = cityEntity.Name;
         }
 
-        function loadCountrySelector() {
-            var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            countryReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {
-                        selectedIds: cityEntity != undefined ? cityEntity.CountryId : (countryId != undefined) ? countryId : undefined
+
+
+        function loadCountryRegionSection() {
+            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+            promises.push(loadCountryPromiseDeferred.promise);
+
+            var payload;
+
+            if (cityEntity != undefined && cityEntity.CountryId != undefined || countryId !=undefined ) {
+                payload = {};
+                payload.selectedIds = cityEntity && cityEntity.CountryId || countryId || undefined;
+                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
+            countryReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+            });
+
+            if (cityEntity != undefined && cityEntity.CountryId != undefined || countryId != undefined) {
+                var loadRegionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                promises.push(loadRegionPromiseDeferred.promise);
+
+                UtilsService.waitMultiplePromises([regionReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
+                    var regionPayload = {
+                        filter: {
+                            CountryId: cityEntity != undefined && cityEntity.CountryId  || countryId || undefined
+                        },
+                        selectedIds: cityEntity && cityEntity.Settings != undefined && cityEntity.Settings.RegionId || regionId || undefined
                     };
 
-                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(regionDirectiveApi, regionPayload, loadRegionPromiseDeferred);
+                    countrySelectedPromiseDeferred = undefined;
                 });
-            return countryLoadPromiseDeferred.promise;
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function buildCityObjFromScope() {
+            var regionId = regionDirectiveApi.getSelectedIds();
             var obj = {
                 CityId: (cityId != null) ? cityId : 0,
                 Name: $scope.name,
-                CountryId: countryDirectiveApi.getSelectedIds()
+                CountryId: countryDirectiveApi.getSelectedIds(),
+                Settings: regionId != undefined ? { RegionId: regionId } : null
             };
+
             return obj;
         }
 
-        
+
         function insertCity() {
             $scope.isLoading = true;
 
