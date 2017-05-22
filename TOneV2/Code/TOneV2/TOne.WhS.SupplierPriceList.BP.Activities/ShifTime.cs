@@ -33,13 +33,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             IEnumerable<ImportedZoneService> importedZonesServices = ImportedZonesServices.Get(context);
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            CarrierAccount supplier = carrierAccountManager.GetCarrierAccount(supplieId);
-            
-            supplier.ThrowIfNull("Supplier", supplieId);
-            supplier.SupplierSettings.ThrowIfNull("SupplierSettings", supplieId);
-
             VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
-            VRTimeZone supplierTimeZone = timeZoneManager.GetVRTimeZone(supplier.SupplierSettings.TimeZoneId);
+            VRTimeZone supplierTimeZone = timeZoneManager.GetVRTimeZone(carrierAccountManager.GetSupplierTimeZoneId(supplieId));
             
             supplierTimeZone.ThrowIfNull("SupplierTimeZone",supplieId);
             supplierTimeZone.Settings.ThrowIfNull("SupplierTimeZoneSettings", supplieId);
