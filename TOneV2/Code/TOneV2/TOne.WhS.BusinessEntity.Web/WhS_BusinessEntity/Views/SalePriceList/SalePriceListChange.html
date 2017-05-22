@@ -71,4 +71,14 @@
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="SendEmail" formname="formSalePriceListPreview" data-onclick="scopeModel.SendPriceListByEmail"></vr-button>
+                <!--<vr-button type="Download" formname="formSalePriceListPreview" data-onclick="scopeModel.DownloadPriceList"></vr-button>-->
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
 </div>
