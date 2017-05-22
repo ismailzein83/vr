@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
@@ -71,6 +72,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         public bool IsDIDAssignedToParentWithoutEED(Guid accountDIDRelationDefinitionId, string childId)
         {
             return manager.IsDIDAssignedToParentWithoutEED(accountDIDRelationDefinitionId, childId);
+        }
+
+        [HttpGet]
+        [Route("GetAccountDIDRelationDefinition")]
+        public BEParentChildRelationDefinition GetAccountDIDRelationDefinition()
+        {
+            return manager.GetAccountDIDRelationDefinition();
         }
     }
 }

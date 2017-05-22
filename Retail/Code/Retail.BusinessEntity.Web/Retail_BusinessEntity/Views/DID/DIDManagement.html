@@ -1,5 +1,4 @@
-﻿
-<vr-panel ng-controller="Retail_BE_DIDManagementController" vr-loader="isGettingData">
+﻿<vr-panel ng-controller="Retail_BE_DIDManagementController" vr-loader="scopeModel.isLoading">
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed">
@@ -8,6 +7,7 @@
                     <vr-textbox label="Number" value="scopeModel.number" type="number" decimalprecision="0"></vr-textbox>
                 </vr-columns>
                 <retail-be-didnumbertype-selector on-ready="scopeModel.onDIDNumberTypeSelectorReady" normal-col-num="2" ismultipleselection></retail-be-didnumbertype-selector>
+                <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" normal-col-num="2" ismultipleselection></retail-be-account-selector>
             </vr-row>
         </div>
 

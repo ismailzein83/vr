@@ -38,6 +38,9 @@ namespace Retail.BusinessEntity.Business
                     if (input.Query.DIDNumberTypes != null && !input.Query.DIDNumberTypes.Contains(GetDIDNumberType(did)))
                         return false;
 
+                    if (!IsDIDAssignedToAccount(input.Query.AccountIds, did.DIDId))
+                        return false;
+
                     return true;
                 };
 
@@ -332,6 +335,12 @@ namespace Retail.BusinessEntity.Business
                });
         }
 
+        public BEParentChildRelationDefinition GetAccountDIDRelationDefinition()
+        {
+            var beParentChildRelationDefinition = new BEParentChildRelationDefinitionManager().GetBEParentChildRelationDefinition(_accountDIDRelationDefinitionId);
+            return beParentChildRelationDefinition;
+        }
+
         #endregion
 
         #region Private Methods
@@ -394,6 +403,18 @@ namespace Retail.BusinessEntity.Business
                     return false;
             }
             return true;
+        }
+
+        private bool IsDIDAssignedToAccount(List<long> accountIds, int didId)
+        {
+            if (accountIds == null || accountIds.Count == 0)
+                return true;
+
+            BEParentChildRelation beParentChildRelation = new BEParentChildRelationManager().GetParent(_accountDIDRelationDefinitionId, didId.ToString(), DateTime.Now);
+            if (beParentChildRelation == null)
+                return false;
+
+            return accountIds.Contains(long.Parse(beParentChildRelation.ParentBEId));
         }
 
         #endregion

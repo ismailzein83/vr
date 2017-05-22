@@ -59,6 +59,10 @@
             });
         }
 
+        function GetAccountDIDRelationDefinition() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountDIDRelationDefinition"));
+        }
+
         return ({
             GetFilteredDIDs: GetFilteredDIDs,
             GetDID: GetDID,
@@ -69,7 +73,8 @@
             GetDIDsInfo: GetDIDsInfo,
             GetAccountDIDRelationDefinitionId: GetAccountDIDRelationDefinitionId,
             IsDIDAssignedToParentWithoutEED: IsDIDAssignedToParentWithoutEED,
-            GetDIDRuntimeEditor: GetDIDRuntimeEditor
+            GetDIDRuntimeEditor: GetDIDRuntimeEditor,
+            GetAccountDIDRelationDefinition: GetAccountDIDRelationDefinition
         });
     }
 

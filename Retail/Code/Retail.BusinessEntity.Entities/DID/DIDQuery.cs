@@ -11,5 +11,7 @@ namespace Retail.BusinessEntity.Entities
         public string Number { get; set; }
 
         public List<DIDNumberType> DIDNumberTypes { get; set; }
+
+        public List<long> AccountIds { get; set; }
     }
 }
