@@ -44,7 +44,7 @@ namespace TOne.WhS.DBSync.Business
         public override void AddItems(List<CustomerCountry2> itemsToAdd)
         {
             dbSyncDataManager.ApplyCustomerZoneToTemp(itemsToAdd);
-            dbSyncDataManager.ApplyCustomerSellingProductToTemp(itemsToAdd, allCarrierAccounts.Values.ToList());
+            //dbSyncDataManager.ApplyCustomerSellingProductToTemp(itemsToAdd, allCarrierAccounts.Values.ToList());
 
             TotalRowsSuccess = itemsToAdd.Count;
 

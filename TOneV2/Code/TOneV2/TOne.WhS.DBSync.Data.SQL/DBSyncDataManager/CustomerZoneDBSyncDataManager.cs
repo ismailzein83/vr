@@ -49,29 +49,29 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-        public void ApplyCustomerSellingProductToTemp(List<CustomerCountry2> customerZones, List<CarrierAccount> carrierAccounts)
-        {
-            DataTable customerSellingProductDT = new DataTable();
-            customerSellingProductDT.TableName = MigrationUtils.GetTableName(_Schema, "CustomerSellingProduct", _UseTempTables);
-            customerSellingProductDT.Columns.Add("CustomerID", typeof(int));
-            customerSellingProductDT.Columns.Add("SellingProductID", typeof(int));
-            customerSellingProductDT.Columns.Add("BED", typeof(DateTime));
+        //public void ApplyCustomerSellingProductToTemp(List<CustomerCountry2> customerZones, List<CarrierAccount> carrierAccounts)
+        //{
+        //    DataTable customerSellingProductDT = new DataTable();
+        //    customerSellingProductDT.TableName = MigrationUtils.GetTableName(_Schema, "CustomerSellingProduct", _UseTempTables);
+        //    customerSellingProductDT.Columns.Add("CustomerID", typeof(int));
+        //    customerSellingProductDT.Columns.Add("SellingProductID", typeof(int));
+        //    customerSellingProductDT.Columns.Add("BED", typeof(DateTime));
 
-            IEnumerable<CarrierAccount> customers = carrierAccounts.FindAllRecords(item => item.AccountType != CarrierAccountType.Supplier);
-            customerSellingProductDT.BeginLoadData();
+        //    IEnumerable<CarrierAccount> customers = carrierAccounts.FindAllRecords(item => item.AccountType != CarrierAccountType.Supplier);
+        //    customerSellingProductDT.BeginLoadData();
 
-            foreach (var item in customers)
-            {
-                CustomerCountry2 customerZone = customerZones.FindRecord(itm => itm.CustomerId == item.CarrierAccountId);
-                DataRow customerSellingProductDR = customerSellingProductDT.NewRow();
-                customerSellingProductDR["CustomerID"] = item.CarrierAccountId;
-                customerSellingProductDR["SellingProductID"] = _SellingProductId;
-                customerSellingProductDR["BED"] = customerZone != null ? (DateTime)customerZone.BED : DateTime.Now.Date;
-                customerSellingProductDT.Rows.Add(customerSellingProductDR);
-            }
-            customerSellingProductDT.EndLoadData();
-            WriteDataTableToDB(customerSellingProductDT, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
-        }
+        //    foreach (var item in customers)
+        //    {
+        //        CustomerCountry2 customerZone = customerZones.FindRecord(itm => itm.CustomerId == item.CarrierAccountId);
+        //        DataRow customerSellingProductDR = customerSellingProductDT.NewRow();
+        //        customerSellingProductDR["CustomerID"] = item.CarrierAccountId;
+        //        customerSellingProductDR["SellingProductID"] = _SellingProductId;
+        //        customerSellingProductDR["BED"] = customerZone != null ? (DateTime)customerZone.BED : DateTime.Now.Date;
+        //        customerSellingProductDT.Rows.Add(customerSellingProductDR);
+        //    }
+        //    customerSellingProductDT.EndLoadData();
+        //    WriteDataTableToDB(customerSellingProductDT, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
+        //}
 
 
         public Dictionary<int, SourceCustomerZone> GetCustomerZones(bool useTempTables)

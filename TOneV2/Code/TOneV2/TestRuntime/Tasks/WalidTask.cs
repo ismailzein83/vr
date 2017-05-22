@@ -91,9 +91,9 @@ namespace TestRuntime.Tasks
                     case DBTableName.CustomerCountry:
                         migrationTables.Add(table);
                         break;
-                    case DBTableName.CustomerSellingProduct:
-                        migrationTables.Add(table);
-                        break;
+                    //case DBTableName.CustomerSellingProduct:
+                    //    migrationTables.Add(table);
+                    //    break;
                     case DBTableName.SwitchConnectivity:
                         migrationTables.Add(table);
                         break;

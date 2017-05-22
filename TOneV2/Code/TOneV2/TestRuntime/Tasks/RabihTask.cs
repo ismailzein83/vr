@@ -183,7 +183,9 @@ namespace TestRuntime
                     case DBTableName.SupplierZone:
                         migrationTables.Add(table);
                         break;
-
+                    case DBTableName.CustomerCountry:
+                        migrationTables.Add(table);
+                        break;
                     case DBTableName.SaleCode:
                         migrationTables.Add(table);
                         break;

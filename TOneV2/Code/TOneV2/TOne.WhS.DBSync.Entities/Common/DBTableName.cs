@@ -25,7 +25,7 @@ namespace TOne.WhS.DBSync.Entities
         [Description("ZoneServiceConfig")]
         ZoneServiceConfig,
 
-   
+
         [Description("CarrierAccount")]
         CarrierAccount,
 
@@ -61,8 +61,8 @@ namespace TOne.WhS.DBSync.Entities
         [Description("CustomerCountry")]
         CustomerCountry,
 
-        [Description("CustomerSellingProduct")]
-        CustomerSellingProduct,
+        //[Description("CustomerSellingProduct")]
+        //CustomerSellingProduct,
 
         [Description("File")]
         File,
