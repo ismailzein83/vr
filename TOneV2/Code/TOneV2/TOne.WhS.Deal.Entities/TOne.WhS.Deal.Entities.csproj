@@ -61,8 +61,10 @@
     <Compile Include="SwapDeal\RouteRules\RouteRulesDefinition\SwapDealBuyRouteRuleDefinitionSettings.cs" />
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRule.cs" />
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleDetails.cs" />
+    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleExtendedSettings.cs" />
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleQuery.cs" />
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleSettings.cs" />
+    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleExtendedSettingsConfig.cs" />
     <Compile Include="SwapDeal\SwapDealDetail.cs" />
     <Compile Include="SwapDeal\SwapDealQuery.cs" />
     <Compile Include="DealDefinition\DealDefinitionDetail.cs" />

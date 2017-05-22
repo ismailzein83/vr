@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -23,6 +24,12 @@ namespace TOne.WhS.Deal.Business
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, swapDealBuyRouteRules.ToBigResult(input, filterExpression, VRRuleDetailMapper));
+        }
+
+        public IEnumerable<SwapDealBuyRouteRuleExtendedSettingsConfig> GetSwapDealBuyRouteRuleExtendedSettingsConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<SwapDealBuyRouteRuleExtendedSettingsConfig>(SwapDealBuyRouteRuleExtendedSettingsConfig.EXTENSION_TYPE);
         }
 
         protected override Guid GetVRRuleDefinitionId()

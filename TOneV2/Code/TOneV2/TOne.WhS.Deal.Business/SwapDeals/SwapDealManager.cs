@@ -15,6 +15,7 @@ namespace TOne.WhS.Deal.Business
     public class SwapDealManager : BaseDealManager
     {
         #region Public Methods
+
         public SwapDealSettingsDetail GetSwapDealSettingsDetail(int dealId)
         {
             SwapDealSettings swapDealSettings = GetDealSettings<SwapDealSettings>(dealId);
@@ -32,7 +33,9 @@ namespace TOne.WhS.Deal.Business
                 CarrierAccountId = swapDealSettings.CarrierAccountId,
                 SellingNumberPlanId = sellingNumberPlan.Value,
                 SaleZoneIds = swapDealSettings.Inbounds.SelectMany(itm => itm.SaleZoneIds).ToList(),
-                SupplierZoneIds = swapDealSettings.Outbounds.SelectMany(itm => itm.SupplierZoneIds).ToList()
+                SupplierZoneIds = swapDealSettings.Outbounds.SelectMany(itm => itm.SupplierZoneIds).ToList(),
+                BED = swapDealSettings.BeginDate,
+                EED = swapDealSettings.EndDate
             };
         }
 
@@ -107,10 +110,12 @@ namespace TOne.WhS.Deal.Business
         {
             return GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
         }
+
         #endregion
 
 
         #region Private Classes
+
         private class SwapDealExcelExportHandler : ExcelExportHandler<DealDefinitionDetail>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DealDefinitionDetail> context)
