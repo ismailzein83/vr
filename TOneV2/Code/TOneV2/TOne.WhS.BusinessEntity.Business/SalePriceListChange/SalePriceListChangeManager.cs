@@ -195,10 +195,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 BED = salePricelistRateChange.BED,
                 EED = salePricelistRateChange.EED,
                 Rate = salePricelistRateChange.Rate,
+                ChangeType = salePricelistRateChange.ChangeType,
                 ServicesId = !salePricelistRateChange.ZoneId.HasValue
                     ? routingProductManager.GetDefaultServiceIds(salePricelistRateChange.RoutingProductId)
                     : routingProductManager.GetZoneServiceIds(salePricelistRateChange.RoutingProductId,
                         salePricelistRateChange.ZoneId.Value)
+
             };
         }
         private SalePricelistCodeChange SalePricelistCodeChangeDetailMapper(SalePricelistCodeChange salePricelistCodeChange)

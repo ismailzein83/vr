@@ -13,5 +13,6 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
         public IEnumerable<int> ServicesId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
+        public RateChangeType ChangeType { get; set; }
     }
 }
