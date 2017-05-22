@@ -30,7 +30,7 @@ namespace Vanrise.Common.Business
 
         #region Public Methods
 
-        public Vanrise.Entities.InsertOperationOutput<Q> AddVRRule(T vrRule)
+        public Vanrise.Entities.InsertOperationOutput<Q> AddVRRule(T vrRuleAsT)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Q>();
 
@@ -40,11 +40,19 @@ namespace Vanrise.Common.Business
 
             IVRRuleDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRRuleDataManager>();
 
-            if (_dataManager.Insert(vrRule as VRRule, out vrRuleId))
+            vrRuleAsT.VRRuleDefinitionId = _vrRuleDefinitionId;
+
+            VRRule vrRule = new VRRule()
+            {
+                VRRuleDefinitionId = _vrRuleDefinitionId,
+                Settings = vrRuleAsT.Settings as VRRuleSettings
+            };
+
+            if (_dataManager.Insert(vrRule, out vrRuleId))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                vrRule.VRRuleId = vrRuleId;
-                insertOperationOutput.InsertedObject = VRRuleDetailMapper(vrRule as T);
+                vrRuleAsT.VRRuleId = vrRuleId;
+                insertOperationOutput.InsertedObject = VRRuleDetailMapper(vrRuleAsT);
             }
             else
             {
@@ -52,22 +60,30 @@ namespace Vanrise.Common.Business
             }
 
             return insertOperationOutput;
-        } 
+        }
 
-        public Vanrise.Entities.UpdateOperationOutput<Q> UpdateVRRule(T vrRule)
+        public Vanrise.Entities.UpdateOperationOutput<Q> UpdateVRRule(T vrRuleAsT)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Q>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             IVRRuleDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRRuleDataManager>();
 
-            if (_dataManager.Update(vrRule as VRRule))
+            vrRuleAsT.VRRuleDefinitionId = _vrRuleDefinitionId;
+
+            VRRule vrRule = new VRRule()
+            {
+                VRRuleId = vrRuleAsT.VRRuleId,
+                VRRuleDefinitionId = _vrRuleDefinitionId,
+                Settings = vrRuleAsT.Settings as VRRuleSettings
+            };
+
+            if (_dataManager.Update(vrRule))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(_vrRuleDefinitionId);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = VRRuleDetailMapper(vrRule as T);
+                updateOperationOutput.UpdatedObject = VRRuleDetailMapper(vrRuleAsT);
             }
             else
             {

@@ -11,6 +11,15 @@ namespace Vanrise.Common.Data.SQL
 {
     public class VRRuleDataManager : BaseSQLDataManager, IVRRuleDataManager
     {
+        #region ctor/Local Variables
+        public VRRuleDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+        {
+
+        }
+
+        #endregion
+
         #region Public Methods
 
         public IEnumerable<VRRule> GetVRRules(Guid vrRuleDefinitionId)
@@ -25,7 +34,7 @@ namespace Vanrise.Common.Data.SQL
 
             int affectedRecords = ExecuteNonQuerySP("[common].[sp_VRRule_Insert]", out vrRuleID, vrRule.VRRuleDefinitionId, serializedSettings);
 
-            vrRuleId = (affectedRecords > 0) ? (int)vrRuleID : -1;
+            vrRuleId = (affectedRecords > 0) ? (long)vrRuleID : -1;
             return (affectedRecords > 0);
         }
 
@@ -49,7 +58,7 @@ namespace Vanrise.Common.Data.SQL
         {
             VRRule vrRule = new VRRule
             {
-                VRRuleId = (int)reader["ID"],
+                VRRuleId = (long)reader["ID"],
                 VRRuleDefinitionId = GetReaderValue<Guid>(reader, "RuleDefinitionId"),
                 Settings = Vanrise.Common.Serializer.Deserialize<VRRuleSettings>(reader["Settings"] as string)
             };
