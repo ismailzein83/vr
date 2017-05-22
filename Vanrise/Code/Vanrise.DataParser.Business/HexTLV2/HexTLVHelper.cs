@@ -4,40 +4,56 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.DataParser.Entities.HexTLV2;
 using Vanrise.Common;
 using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.Business.HexTLV2
+namespace Vanrise.DataParser.Business
 {
     public static class HexTLVHelper
     {
         public static void ReadTagsFromStream(Stream stream, Action<HexTLVTagValue> onTagValueRead)
-        {            
-            int position = 0;
-            while (position < stream.Length)
+        {
+            byte[] rawData = new byte[stream.Length];
+            stream.Read(rawData, 0, (int)stream.Length);
+            List<HexTLVTagValue> tags = new List<HexTLVTagValue>();
+
+            for (int i = 0, start = 0; i < rawData.Length; start = i)
             {
-                HexTLVTagValue tagValue = new HexTLVTagValue();
-                tagValue.Tag = ParserHelper.GetStringValue(stream, 1);
-                position++;
-                int valueLength = ParserHelper.GetIntValue(stream, 1);
-                tagValue.Length = valueLength;
-                position += valueLength;
-                tagValue.Value = new byte[valueLength];
-                stream.Read(tagValue.Value, 0, valueLength);
+                // parse Tag
+                bool constructedTlv = (rawData[i] & 0x20) != 0;
+                bool moreBytes = (rawData[i] & 0x1F) == 0x1F;
+                while (moreBytes && (rawData[++i] & 0x80) != 0) ;
+                i++;
+
+                int tag = ParserHelper.GetInt(rawData, start, i - start);
+
+                // parse Length
+                bool multiByteLength = (rawData[i] & 0x80) != 0;
+
+                int length = multiByteLength ? ParserHelper.GetInt(rawData, i + 1, rawData[i] & 0x1F) : rawData[i];
+                i = multiByteLength ? i + (rawData[i] & 0x1F) + 1 : i + 1;
+
+                // fill data
+                byte[] result = new byte[length];
+                Array.Copy(rawData, i, result, 0, length);
+
+                HexTLVTagValue tagValue = new HexTLVTagValue
+                {
+                    Value = result,
+                    Length = length,
+                    Tag = tag.ToString("X2")
+                };
+                tags.Add(tagValue);
+                i += length;
                 onTagValueRead(tagValue);
             }
         }
 
-        public static void ExecuteRecordParsers(List<HexTLVRecordParser> subRecordsParsers, Stream recordStream, IHexTLVRecordParserContext parentRecordContext)
+        public static void ExecuteRecordParser(HexTLVRecordParser subRecordsParser, Stream recordStream, IHexTLVRecordParserContext parentRecordContext)
         {
-            subRecordsParsers.ThrowIfNull("subRecordsParsers");
-            foreach (var subRecordParser in subRecordsParsers)
-            {
-                subRecordParser.Settings.ThrowIfNull("subRecordParser.Settings");
-                var subRecordContext = new SubRecordHexTLVRecordParserContext(recordStream, parentRecordContext);
-                subRecordParser.Settings.Execute(subRecordContext);
-            }
+            subRecordsParser.Settings.ThrowIfNull("subRecordParser.Settings");
+            var subRecordContext = new SubRecordHexTLVRecordParserContext(recordStream, parentRecordContext);
+            subRecordsParser.Settings.Execute(subRecordContext);
         }
 
         public static void ExecuteFieldParsers(HexTLVFieldParserCollection fieldParsers, ParsedRecord parsedRecord, Stream recordStream)
@@ -48,7 +64,7 @@ namespace Vanrise.DataParser.Business.HexTLV2
                 (tagValue) =>
                 {
                     HexTLVFieldParser fldParser;
-                    if(fieldParsers.FieldParsersByTag.TryGetValue(tagValue.Tag, out fldParser))
+                    if (fieldParsers.FieldParsersByTag.TryGetValue(tagValue.Tag, out fldParser))
                     {
                         var fieldParserContext = new HexTLVFieldParserContext { Record = parsedRecord, FieldValue = tagValue.Value };
                         fldParser.Settings.Execute(fieldParserContext);
@@ -106,9 +122,8 @@ namespace Vanrise.DataParser.Business.HexTLV2
     public class HexTLVTagValue
     {
         public string Tag { get; set; }
-
         public int Length { get; set; }
-
         public byte[] Value { get; set; }
+
     }
 }

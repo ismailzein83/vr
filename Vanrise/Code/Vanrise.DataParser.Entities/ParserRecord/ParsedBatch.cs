@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Entities
 {
-    public class HexTLVFieldParserCollection
+    public class ParsedBatch
     {
-        public Dictionary<string, HexTLVFieldParser> FieldParsersByTag { get; set; }
+        public List<FldDictParsedRecord> Records { get; set; }
+        public string RecordType { get; set; }
+
     }
 }

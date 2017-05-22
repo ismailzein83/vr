@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Entities;
-using Vanrise.Common;
 using System.IO;
-using Vanrise.DataParser.Entities.HexTLV2;
+using Vanrise.Common;
+using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.Business.HexTLV2
+namespace Vanrise.DataParser.Business
 {
     public class HexTLVParserType : ParserTypeExtendedSettings
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.DataParser.Entities.HexTLV2
+namespace Vanrise.DataParser.Entities
 {
     public class HexTLVRecordParser
     {

@@ -1,22 +1,21 @@
 ﻿using System;
-using Vanrise.DataParser.Business;
+using System.Linq;
 using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 {
-    public class BoolFieldParser : HexTLVFieldParserSettings
+    public class IPv4Parser : HexTLVFieldParserSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("3BD9B2B7-9993-4664-9E08-3AF2C2819489"); }
+            get { return new Guid("593CDE30-2D89-4303-972B-51F86378E30F"); }
         }
-
         public string FieldName { get; set; }
-
         public override void Execute(IHexTLVFieldParserContext context)
         {
-            bool value = Convert.ToBoolean(ParserHelper.ByteToNumber(context.FieldValue));
-            context.Record.SetFieldValue(this.FieldName, value);
+            string ipAddress = string.Join<int>(".", context.FieldValue.Select(itm => (int)itm));
+            context.Record.SetFieldValue(this.FieldName, ipAddress);
+
         }
     }
 }

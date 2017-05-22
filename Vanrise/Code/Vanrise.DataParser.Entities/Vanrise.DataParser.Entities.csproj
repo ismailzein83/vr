@@ -47,12 +47,20 @@
     <Compile Include="HexTLV2\HexTLVFieldParserCollection.cs" />
     <Compile Include="HexTLV2\HexTLVRecordParser.cs" />
     <Compile Include="HexTLV2\ParsedRecordFieldConstantValue.cs" />
-    <Compile Include="HexTLV\HexTLVRecordReadersConfig.cs" />
-    <Compile Include="HexTLV\HexTLVTagType.cs" />
-    <Compile Include="HexTLV\HexTLVTagValueParserConfig.cs" />
-    <Compile Include="HexTLV\RecordReader.cs" />
-    <Compile Include="HexTLV\TagValueParser.cs" />
+    <Compile Include="HexTLV\HexTLVRecordReadersConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HexTLV\HexTLVTagType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HexTLV\HexTLVTagValueParserConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HexTLV\TagValueParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParserRecord\FldDictParsedRecord.cs" />
+    <Compile Include="ParserRecord\ParsedBatch.cs" />
     <Compile Include="ParserTypeSettings\IDataParserInput.cs" />
     <Compile Include="ParserRecord\ParsedRecord.cs" />
     <Compile Include="ParserTypeSettings\ParserTypeSettings.cs" />

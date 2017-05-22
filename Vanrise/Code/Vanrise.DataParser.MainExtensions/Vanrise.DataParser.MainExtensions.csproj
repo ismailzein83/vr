@@ -44,18 +44,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HexTLV2\FieldParsers\BoolFieldParser.cs" />
-    <Compile Include="HexTLV2\FieldParsers\IntFieldParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\DateTimeParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\HexaParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\NumberFieldParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\IPv4Parser.cs" />
     <Compile Include="HexTLV2\FieldParsers\SequenceFieldParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\StringParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\BCDNumberParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\TBCDNumberParser.cs" />
     <Compile Include="HexTLV2\RecordParsers\CreateRecordRecordParser.cs" />
     <Compile Include="HexTLV2\RecordParsers\ExecuteTemplateRecordParser.cs" />
     <Compile Include="HexTLV2\RecordParsers\SplitByTagRecordParser.cs" />
-    <Compile Include="HexTLV\RecordReaders\TagRecordReader.cs" />
-    <Compile Include="HexTLV\TagValueParsers\BoolParser.cs" />
-    <Compile Include="HexTLV\TagValueParsers\IntParser.cs" />
-    <Compile Include="HexTLV\TagValueParsers\IPv4Parser.cs" />
-    <Compile Include="HexTLV\TagValueParsers\SequenceParser.cs" />
-    <Compile Include="HexTLV\TagValueParsers\StringParser.cs" />
-    <Compile Include="HexTLV\TagValueParsers\TBCDNumberParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

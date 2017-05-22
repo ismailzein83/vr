@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Business.HexTLV2;
-using Vanrise.DataParser.Entities.HexTLV2;
+using Vanrise.DataParser.Business;
+using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers
+namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 {
     public class SequenceFieldParser : HexTLVFieldParserSettings
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("300353A5-1105-4BAC-9207-1602BB0A3B1A"); }
         }
 
         public HexTLVFieldParserCollection FieldParsers { get; set; }

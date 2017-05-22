@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Entities.HexTLV2;
 using Vanrise.Common;
+using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV2.RecordParsers
+namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 {
     public class ExecuteTemplateRecordParser : HexTLVRecordParserSettings
     {

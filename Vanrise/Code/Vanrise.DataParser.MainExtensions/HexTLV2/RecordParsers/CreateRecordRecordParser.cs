@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Business.HexTLV2;
+using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
-using Vanrise.DataParser.Entities.HexTLV2;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV2.RecordParsers
+namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 {
     public class CreateRecordRecordParser : HexTLVRecordParserSettings
     {
@@ -36,6 +32,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV2.RecordParsers
                     parsedRecord.SetFieldValue(fldConstantValue.FieldName, fldConstantValue.Value);
                 }
             }
+            context.OnRecordParsed(parsedRecord);
         }
     }
 }

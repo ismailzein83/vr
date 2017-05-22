@@ -9,7 +9,7 @@ namespace Vanrise.DataParser.Entities
 {
     public interface IDataParserInput
     {
-        byte[] Data { get; }
+
     }
 
     public class StreamDataParserInput : IDataParserInput
@@ -18,7 +18,8 @@ namespace Vanrise.DataParser.Entities
 
         public byte[] Data
         {
-            get { throw new NotImplementedException(); }
+            get;
+            set;
         }
     }
 }

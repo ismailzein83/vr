@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Entities.HexTLV2;
-using Vanrise.Common;
-using Vanrise.DataParser.Business.HexTLV2;
 using System.IO;
+using Vanrise.DataParser.Business;
+using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV2.RecordParsers
+namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 {
     public class SplitByTagRecordParser : HexTLVRecordParserSettings
     {
@@ -34,15 +30,8 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV2.RecordParsers
                         subRecordsParser = this.DefaultSubRecordParser;
 
                     if (subRecordsParser != null)
-                        ExecuteRecordParser(subRecordsParser, new MemoryStream(tagValue.Value), context);
+                        HexTLVHelper.ExecuteRecordParser(subRecordsParser, new MemoryStream(tagValue.Value), context);
                 });
-        }
-
-        public static void ExecuteRecordParser(HexTLVRecordParser subRecordsParser, Stream recordStream, IHexTLVRecordParserContext parentRecordContext)
-        {
-            //subRecordsParser.Settings.ThrowIfNull("subRecordParser.Settings");
-            //var subRecordContext = new SubRecordHexTLVRecordParserContext(recordStream, parentRecordContext);
-            //subRecordsParser.Settings.Execute(subRecordContext);
         }
     }
 }
