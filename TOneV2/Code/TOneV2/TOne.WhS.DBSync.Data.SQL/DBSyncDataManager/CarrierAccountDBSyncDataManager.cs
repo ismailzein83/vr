@@ -32,6 +32,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("CustomerSettings", typeof(string));
             dt.Columns.Add("CarrierAccountSettings", typeof(string));
             dt.Columns.Add("SellingNumberPlanID", typeof(int));
+            dt.Columns.Add("SellingProductID", typeof(int));
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("IsDeleted", typeof(bool));
 
@@ -47,6 +48,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = Vanrise.Common.Serializer.Serialize(item.CustomerSettings);
                 row[index++] = Vanrise.Common.Serializer.Serialize(item.CarrierAccountSettings);
                 row[index++] = item.SellingNumberPlanId.HasValue ? (object)item.SellingNumberPlanId.Value : DBNull.Value;
+                row[index++] = item.SellingProductId.HasValue ? (object)item.SellingProductId.Value : DBNull.Value;
                 row[index++] = item.SourceId;
                 row[index++] = item.IsDeleted;
                 dt.Rows.Add(row);

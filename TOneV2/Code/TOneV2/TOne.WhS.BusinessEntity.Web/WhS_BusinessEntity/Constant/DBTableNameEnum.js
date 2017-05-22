@@ -6,7 +6,7 @@
     CarrierProfile: { value: 4, description: "CarrierProfile", defaultMigrate: true },
     ZoneServicesConfig: { value: 5, description: "Zone Services", defaultMigrate: true },
     VRTimeZone: { value: 6, description: "VRTimeZone", defaultMigrate: true },
-    CarrierAccount: { value: 7, description: "CarrierAccount", defaultMigrate: true},
+    CarrierAccount: { value: 7, description: "CarrierAccount", defaultMigrate: true },
     Switch: { value: 8, description: "Switch", defaultMigrate: true },
     SaleZone: { value: 9, description: "SaleZone", defaultMigrate: true },
     SupplierZone: { value: 10, description: "SupplierZone", defaultMigrate: true },
@@ -18,9 +18,9 @@
     SupplierRate: { value: 16, description: "SupplierRate", defaultMigrate: true },
     CustomerCountry: { value: 17, description: "CustomerCountry", defaultMigrate: false },
     //CustomerSellingProduct: { value: 18, description: "CustomerSellingProduct", defaultMigrate: false },
-    File: { value: 19, description: "File", defaultMigrate: false },
-    SwitchConnectivity: { value: 20, description: "SwitchConnectivity", defaultMigrate: true },
-    SupplierZoneServices: { value: 21, description: "Supplier Zone Services", defaultMigrate: true },
-    SaleEntityServices: { value: 22, description: "Sale Entity Services", defaultMigrate: true },
-    Rule: { value: 23, description: "Rules", defaultMigrate: true }
+    File: { value: 18, description: "File", defaultMigrate: false },
+    SwitchConnectivity: { value: 19, description: "SwitchConnectivity", defaultMigrate: true },
+    SupplierZoneServices: { value: 20, description: "Supplier Zone Services", defaultMigrate: true },
+    SaleEntityServices: { value: 21, description: "Sale Entity Services", defaultMigrate: true },
+    Rule: { value: 22, description: "Rules", defaultMigrate: true }
 });
