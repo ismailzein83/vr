@@ -95,13 +95,14 @@
                                                               hideremoveicon>
                             </vr-whs-be-routingstatus-selector>
                         </span>
-                        <vr-columns width="1/2row">
-                            <vr-switch value="scopeModel.isAToZ" label="A to Z Pricelist"></vr-switch>
-                        </vr-columns>
                         <vr-whs-be-pricelistextensionformat-selector on-ready="scopeModel.onPriceListExtensionFormatSelectorReady"
                                                                      normal-col-num="6"
                                                                      isrequired="false">
                         </vr-whs-be-pricelistextensionformat-selector>
+                        <vr-whs-be-salepricelisttype-selector on-ready="scopeModel.onPriceListTypeSelectorReady"
+                                                              normal-col-num="6"
+                                                              isrequired="false">
+                        </vr-whs-be-salepricelisttype-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">

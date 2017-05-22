@@ -52,9 +52,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (!sellingProductId.HasValue)
                         throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customerId));
 
-                    customerChange.IsCustomerAtoZ = customer.CustomerSettings.IsAToZ;
+                    //customerChange.IsCustomerAtoZ = customer.CustomerSettings.IsAToZ;
 
-                    SalePriceListType pricelistType = GetSalePriceListType(customer.CustomerSettings.IsAToZ, context.ChangeType);
+                    SalePriceListType pricelistType = GetSalePriceListType(customer.CustomerSettings.PriceListType, context.ChangeType);
 
                     ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
                        outputContext.NotSentChangesByCustomerId);
@@ -103,7 +103,6 @@ namespace TOne.WhS.BusinessEntity.Business
             int customerId = customerInfo.CustomerId;
 
             CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerInfo.CustomerId);
-            customerInfo.IsCustomerAtoZ = customer.CustomerSettings.IsAToZ;
 
             var customerSellingProductManager = new CustomerSellingProductManager();
             var sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerInfo.CustomerId, DateTime.Now, false);
@@ -916,14 +915,14 @@ namespace TOne.WhS.BusinessEntity.Business
             return "Currency Not Found";
         }
 
-        private SalePriceListType GetSalePriceListType(bool isAtoZ, SalePLChangeType changeType)
+        private SalePriceListType GetSalePriceListType(SalePriceListType priceListType, SalePLChangeType changeType)
         {
-            if (isAtoZ || changeType == SalePLChangeType.CountryAndRate)
+            if (priceListType == SalePriceListType.Full || changeType == SalePLChangeType.CountryAndRate)
                 return SalePriceListType.Full;
 
-            return (changeType == SalePLChangeType.CodeAndRate)
-                ? SalePriceListType.Country
-                : SalePriceListType.RateChange;
+            if(priceListType == SalePriceListType.Country || changeType == SalePLChangeType.CodeAndRate)
+                return SalePriceListType.Country;
+            return SalePriceListType.RateChange;
         }
 
         #endregion
@@ -988,7 +987,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             public int CustomerId { get; set; }
             public ZoneChangesByCountryId ZoneChangesByCountryId { get; set; }
-            public bool IsCustomerAtoZ { get; set; }
             public int SellingProductId { get; set; }
             public List<SalePricelistRPChange> RoutingProductChanges { get; set; }
 

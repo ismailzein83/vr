@@ -42,6 +42,9 @@
         var priceListExtensionFormatSelectorAPI;
         var priceListExtensionFormatSelectorReadyDeferred;
 
+        var priceLisTypeSelectorAPI;
+        var priceListTypeSelectorReadyDeferred;
+
         // Supplier Settings
         var supplierTimeZoneSelectorAPI;
         var supplierTimeZoneSelectorReadyDeferred;
@@ -211,7 +214,11 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingPRiceListExtensionFormatSelector = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListExtensionFormatSelectorAPI, undefined, setLoader, priceListExtensionFormatSelectorReadyDeferred);
             };
-
+            $scope.scopeModel.onPriceListTypeSelectorReady = function (api) {
+                priceLisTypeSelectorAPI = api;
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPriceListTypeFormatSelector = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceLisTypeSelectorAPI, undefined, setLoader, priceListTypeSelectorReadyDeferred);
+            };
             // Supplier Settings
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
                 supplierTimeZoneSelectorAPI = api;
@@ -328,6 +335,7 @@
                     sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     customerRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     priceListExtensionFormatSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                    priceListTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                 }
                 function setSupplierGlobalVars() {
                     supplierTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -381,7 +389,7 @@
                     }
 
                     if (carrierAccountEntity.CustomerSettings) {
-                        $scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ;
+                        //$scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ;
                         $scope.scopeModel.customerInvoiceTimeZone = carrierAccountEntity.CustomerSettings.InvoiceTimeZone;
                     }
                 }
@@ -486,6 +494,9 @@
             var loadPriceListExtensionFormatSelectorPromise = loadPriceListExtensionFormatSelector();
             promises.push(loadPriceListExtensionFormatSelectorPromise);
 
+            var loadPriceListTypeSelectorPromise = loadPriceListTypeSelector();
+            promises.push(loadPriceListTypeSelectorPromise);
+            
             return UtilsService.waitMultiplePromises(promises);
         }
         function loadCustomerTimeZoneSelector() {
@@ -562,6 +573,19 @@
             });
             return priceListExtensionFormatSelectorLoadDeferred.promise;
         }
+        function loadPriceListTypeSelector() {
+            var priceListTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            priceListTypeSelectorReadyDeferred.promise.then(function () {
+                priceListTypeSelectorReadyDeferred = undefined;
+                var priceListTypeSelectorPayload = {
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.CustomerSettings.PriceListType : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(priceLisTypeSelectorAPI, priceListTypeSelectorPayload, priceListTypeSelectorLoadDeferred);
+            });
+            return priceListTypeSelectorLoadDeferred.promise;
+        }
+
 
         function loadSupplierSettingsTab() {
             return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector]);
@@ -710,7 +734,8 @@
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
                     IsAToZ: $scope.scopeModel.isAToZ,
                     InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
-                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined
+                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
+                    PriceListType: priceLisTypeSelectorAPI != undefined ? priceLisTypeSelectorAPI.getSelectedIds() : undefined
                 }
             };
 
