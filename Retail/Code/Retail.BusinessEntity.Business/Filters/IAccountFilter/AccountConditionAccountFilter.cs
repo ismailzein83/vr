@@ -10,6 +10,7 @@ namespace Retail.BusinessEntity.Business
     public class AccountConditionAccountFilter : IAccountFilter
     {
         public AccountCondition AccountCondition { get; set; }
+
         public bool IsExcluded(IAccountFilterContext context)
         {
             if (context.Account != null && this.AccountCondition != null)
