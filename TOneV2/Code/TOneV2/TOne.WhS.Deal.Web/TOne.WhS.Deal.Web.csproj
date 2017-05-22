@@ -198,9 +198,15 @@
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\vr-whs-deal-swapdeal-settings-editor.js" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisResultTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDealAnalysis\Templates\SwapDealAnalysisSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\MainExtensions\Templates\BySaleDealBuyRouteRuleExtendedSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\MainExtensions\Templates\FixedBuyRouteRuleExtendedSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\MainExtensions\vr-whs-deal-swapdeal-buyrouterule-bysaledeal.js" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\MainExtensions\vr-whs-deal-swapdeal-buyrouterule-fixed.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\RouteRulesDefinition\Templates\SwapDealBuyRouteRuleDefinitionSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\Templates\SwapDealBuyRouteRuleExtendedSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\Templates\SwapDealBuyRouteRuleGridTemplate.html" />
     <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\Templates\SwapDealBuyRouteRuleViewTemplate.html" />
+    <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\vr-whs-deal-swapdeal-buyrouterule-extendedsettings.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\vr-whs-deal-swapdeal-buyrouterule-grid.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\RouteRulesDefinition\vr-whs-deal-swapdeal-buyrouteruledefinition-settings.js" />
     <Content Include="WhS_Deal\Directives\SwapDeal\RouteRules\vr-whs-deal-swapdeal-buyrouterule-view.js" />
