@@ -1,7 +1,7 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', 'VRCommon_EntityFilterEffectiveModeEnum', 'UtilsService', 'VRUIUtilsService',
     function (WhS_BE_SupplierZoneAPIService, VRCommon_EntityFilterEffectiveModeEnum, UtilsService, VRUIUtilsService) {
-
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -37,7 +37,6 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
             template: function (element, attrs) {
                 return getBeSupplierZoneTemplate(attrs);
             }
-
         };
 
 
@@ -64,8 +63,9 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
         }
 
         function supplierZoneCtor(ctrl, $scope, $attrs) {
+
             var filter;
-            var selectorApi;
+            var supplierId;
 
             var selectorApi;
             var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -73,7 +73,6 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
             var supplierDirectiveApi;
             var suppliersReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var supplierId;
 
             function initializeController() {
                 ctrl.datasource = [];
@@ -115,15 +114,12 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 UtilsService.waitMultiplePromises([suppliersReadyPromiseDeferred.promise, selectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
-
             }
-
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
                     selectorApi.clearDataSource();
 
                     var selectedIds;
@@ -246,8 +242,6 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', attrs, ctrl);
             });
         }
-
-
 
         return directiveDefinitionObject;
     }]);
