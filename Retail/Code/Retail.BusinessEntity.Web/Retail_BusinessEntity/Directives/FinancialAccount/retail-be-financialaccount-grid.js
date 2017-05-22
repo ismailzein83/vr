@@ -29,12 +29,11 @@ app.directive('retailBeFinancialaccountGrid', ['Retail_BE_FinancialAccountServic
             $scope.scopeModel = {};
             $scope.scopeModel.financialAccounts = [];
             $scope.scopeModel.menuActions = [];
-            $scope.scopeModel.showFinancialTransactionGrid = function(dataItem)
-            {
+            $scope.scopeModel.showFinancialTransactionGrid = function (dataItem) {
                 if (dataItem.BalanceAccountTypeId != undefined)
                     return true;
                 return false;
-            }
+            };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 var gridDrillDownTabDefinitions = getGridDrillDownTabDefinitions();

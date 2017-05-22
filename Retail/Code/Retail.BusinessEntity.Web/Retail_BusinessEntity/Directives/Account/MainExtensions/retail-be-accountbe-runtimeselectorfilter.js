@@ -82,7 +82,7 @@
                     var obj = {
                         $type: "Retail.BusinessEntity.Business.AccountBERuntimeSelectorFilter, Retail.BusinessEntity.Business",
                         AccountCondition: accountConditionSelectiveData
-                    }
+                    };
 
                     return obj;
                 };
