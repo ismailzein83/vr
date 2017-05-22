@@ -194,6 +194,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Download Template',
                     class: 'glyphicon glyphicon-download'
                 };
+            case 'DownloadFile':
+                return {
+                    text: 'Download',
+                    class: 'glyphicon glyphicon-download'
+                };
             case 'Settings':
                 return {
                     text: 'Settings',
