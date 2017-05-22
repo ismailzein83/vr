@@ -27,7 +27,7 @@
                 routingProductId: context != undefined ? context.routingProductId : undefined,
                 sellingNumberPlanId: context != undefined ? context.sellingNumberPlanId : undefined,
                 isLinkedRouteRule: false,
-                selectedCriteria: context != undefined ? context.selectedCriteria : undefined
+                defaultRouteRuleValues: context != undefined ? context.defaultRouteRuleValues : undefined
             };
 
             settings.onScopeReady = function (modalScope) {

@@ -23,5 +23,24 @@ namespace TOne.WhS.Routing.Entities
         public List<Guid> RouteRuleSettingsConfigIds { get; set; }
 
         public List<int> LinkedRouteRuleIds { get; set; }
+
+        public List<IRouteRuleFilter> Filters { get; set; }
+
+        public bool IsManagementScreen { get; set; }
+    }
+
+    public interface IRouteRuleFilter
+    {
+        bool IsMatched(IRouteRuleFilterContext context);
+    }
+
+    public interface IRouteRuleFilterContext
+    {
+        RouteRule RouteRule { get; }
+    }
+
+    public class RouteRuleFilterContext : IRouteRuleFilterContext
+    {
+        public RouteRule RouteRule { get; set; }
     }
 }

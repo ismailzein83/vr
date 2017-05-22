@@ -28,5 +28,10 @@ namespace TOne.WhS.Deal.MainExtensions.SwapDeal.RouteRuleCriteria
 
             return new TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup() { ZoneIds = ZoneIds, SellingNumberPlanId = sellingNumberPlan.Value };
         }
+
+        public override bool IsVisibleInManagementView()
+        {
+            return false;
+        }
     }
 }

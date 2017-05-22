@@ -25,5 +25,10 @@ namespace TOne.WhS.Routing.Entities
 
             return value;
         }
+
+        public virtual bool IsVisibleInManagementView()
+        {
+            return true;
+        }
     }
 }

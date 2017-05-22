@@ -39,6 +39,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
             var dealDefinitionSelectorAPI;
             var dealDefinitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var dealDefinitionSelectionChangedPromiseDeferred;
+            var defaultCriteriaValues;
 
             var saleZoneSelectorAPI;
             var saleZoneSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -90,6 +91,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                     $scope.scopeModel.disableCriteria = isLinkedRouteRule = payload.isLinkedRouteRule;
                     routingProductId = payload.routingProductId;
                     routeRuleCriteria = payload.routeRuleCriteria;
+                    defaultCriteriaValues = payload.defaultCriteriaValues;
 
                     var dealDefinitionLoadPromise = loadDealDefinitionSelectorPromise();
                     promises.push(dealDefinitionLoadPromise);
@@ -117,6 +119,9 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
 
                         if (routeRuleCriteria != undefined)
                             dealDefinitionSelectorPayload.selectedIds = routeRuleCriteria.SwapDealId;
+                        else
+                            dealDefinitionSelectorPayload.selectedIds = defaultCriteriaValues != undefined ? defaultCriteriaValues.swapDealId : undefined;
+
                         VRUIUtilsService.callDirectiveLoad(dealDefinitionSelectorAPI, dealDefinitionSelectorPayload, dealDefinitionSelectorLoadPromiseDeferred);
                     });
 

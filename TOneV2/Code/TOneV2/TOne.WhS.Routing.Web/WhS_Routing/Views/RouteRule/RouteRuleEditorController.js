@@ -15,7 +15,7 @@
         var routeRuleId;
         var routingProductId;
         var sellingNumberPlanId;
-        var selectedCriteria;
+        var defaultRouteRuleValues;
 
         var routeRuleEntity;
         var productRouteEntity;
@@ -48,7 +48,7 @@
                 linkedRouteRuleInput = parameters.linkedRouteRuleInput;
                 isLinkedRouteRule = parameters.isLinkedRouteRule;
                 linkedCode = parameters.linkedCode;
-                selectedCriteria = parameters.selectedCriteria;
+                defaultRouteRuleValues = parameters.defaultRouteRuleValues;
             }
             isEditMode = routeRuleId != undefined && (linkedRouteRuleInput == undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
@@ -94,7 +94,8 @@
                     isLinkedRouteRule: isLinkedRouteRule,
                     routingProductId: routingProductId,
                     sellingNumberPlanId: sellingNumberPlanId,
-                    linkedCode: linkedCode
+                    linkedCode: linkedCode,
+                    defaultCriteriaValues: defaultRouteRuleValues != undefined ? defaultRouteRuleValues.criteria : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleCriteriaAPI, routeRuleCriteriaPayload, setLoader, routeRuleCriteriaReadyPromiseDeferred);
@@ -313,13 +314,13 @@
 
             var loadRouteRuleCriteriaTemplatesPromise = UtilsService.createPromiseDeferred();
             promises.push(loadRouteRuleCriteriaTemplatesPromise.promise);
-            
+
             var routeRuleCriteriaTypePayload = {};
             if (routeRuleEntity != undefined && routeRuleEntity.Criteria != undefined) {
                 routeRuleCriteriaTypePayload.selectedIds = routeRuleEntity.Criteria.ConfigId;
             }
-            else if (selectedCriteria != undefined) {
-                routeRuleCriteriaTypePayload.selectedIds = selectedCriteria;
+            else if (defaultRouteRuleValues != undefined && defaultRouteRuleValues.selectedCriteria != undefined) {
+                routeRuleCriteriaTypePayload.selectedIds = defaultRouteRuleValues.selectedCriteria;
             }
             routeRuleCriteriaSelectorReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(routeRuleCriteriaSelectorAPI, routeRuleCriteriaTypePayload, loadRouteRuleCriteriaTemplatesPromise);

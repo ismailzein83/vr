@@ -51,6 +51,9 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateSuppliers.cs" />
     <Compile Include="SwapDealBuyRouteRules\FixedSwapDealBuyRouteRule.cs" />
     <Compile Include="SwapDealBuyRouteRules\BySaleDealSwapDealBuyRouteRule.cs" />
+    <Compile Include="SwapDeal\SwapDealRouteRuleDefinitionFilter.cs" />
     <Compile Include="SwapDeal\SwapDealDefinitionFilter.cs" />
   </ItemGroup>
   <ItemGroup>

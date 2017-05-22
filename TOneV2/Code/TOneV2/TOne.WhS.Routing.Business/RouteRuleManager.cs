@@ -79,6 +79,9 @@ namespace TOne.WhS.Routing.Business
             string ruleNameLower = !string.IsNullOrEmpty(input.Query.Name) ? input.Query.Name.ToLower() : null;
             Func<RouteRule, bool> filterExpression = (routeRule) =>
                 {
+                    if (input.Query.IsManagementScreen && !routeRule.Criteria.IsVisibleInManagementView())
+                        return false;
+
                     int? routingProductId = routeRule.Criteria.GetRoutingProductId();
                     if (!input.Query.RoutingProductId.HasValue && routingProductId.HasValue)
                         return false;
@@ -106,6 +109,16 @@ namespace TOne.WhS.Routing.Business
 
                     if (input.Query.LinkedRouteRuleIds != null && !input.Query.LinkedRouteRuleIds.Contains(routeRule.RuleId))
                         return false;
+
+                    if (input.Query.Filters != null)
+                    {
+                        RouteRuleFilterContext context = new RouteRuleFilterContext() { RouteRule = routeRule };
+                        foreach (IRouteRuleFilter filter in input.Query.Filters)
+                        {
+                            if (!filter.IsMatched(context))
+                                return false;
+                        }
+                    }
 
                     return true;
                 };

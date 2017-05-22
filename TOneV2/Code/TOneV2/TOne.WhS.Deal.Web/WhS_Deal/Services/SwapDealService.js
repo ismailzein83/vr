@@ -1,139 +1,172 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	SwapDealService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
+    SwapDealService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-	function SwapDealService(VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService)
-	{
-	    var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
+    function SwapDealService(VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService) {
+        var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
 
-	    var drillDownDefinitions = [];
+        var drillDownDefinitions = [];
 
-		function addSwapDeal(onSwapDealAdded) {
-		    var settings = {};
+        function addSwapDeal(onSwapDealAdded) {
+            var settings = {};
 
-		    settings.onScopeReady = function (modalScope) {
-		        modalScope.onSwapDealAdded = onSwapDealAdded;
-		    };
-		    VRModalService.showModal(editorUrl, null, settings);
-		}
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSwapDealAdded = onSwapDealAdded;
+            };
+            VRModalService.showModal(editorUrl, null, settings);
+        }
 
-		function editSwapDeal(dealId, onSwapDealUpdated) {
-		    var parameters = {
-		        dealId: dealId
-		    };
+        function editSwapDeal(dealId, onSwapDealUpdated) {
+            var parameters = {
+                dealId: dealId
+            };
 
-		    var settings = {};
+            var settings = {};
 
-		    settings.onScopeReady = function (modalScope) {
-		        modalScope.onSwapDealUpdated = onSwapDealUpdated;
-		    };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSwapDealUpdated = onSwapDealUpdated;
+            };
 
-		    VRModalService.showModal(editorUrl, parameters, settings);
-		}
+            VRModalService.showModal(editorUrl, parameters, settings);
+        }
 
-		function getEntityUniqueName() {
-		    return "WhS_Deal_SwapDeal";
-		}
+        function getEntityUniqueName() {
+            return "WhS_Deal_SwapDeal";
+        }
 
-		function registerObjectTrackingDrillDownToSwapDeal() {
-		    var drillDownDefinition = {};
+        function registerObjectTrackingDrillDownToSwapDeal() {
+            var drillDownDefinition = {};
 
-		    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-		    drillDownDefinition.directive = "vr-common-objecttracking-grid";
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
-		    drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
-		        swapDealItem.objectTrackingGridAPI = directiveAPI;
+            drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
+                swapDealItem.objectTrackingGridAPI = directiveAPI;
 
-		        var query = {
-		            ObjectId: swapDealItem.Entity.DealId,
-		            EntityUniqueName: getEntityUniqueName(),
+                var query = {
+                    ObjectId: swapDealItem.Entity.DealId,
+                    EntityUniqueName: getEntityUniqueName(),
 
-		        };
-		        return swapDealItem.objectTrackingGridAPI.load(query);
-		    };
+                };
+                return swapDealItem.objectTrackingGridAPI.load(query);
+            };
 
-		    addDrillDownDefinition(drillDownDefinition);
-		}
+            addDrillDownDefinition(drillDownDefinition);
+        }
 
-		function registerSwapDealBuyRouteRuleViewToSwapDeal() {
-		    var drillDownDefinition = {};
+        function registerSwapDealSellRouteRuleViewToSwapDeal() {
+            var drillDownDefinition = {};
 
-		    drillDownDefinition.title = "Buy Route Rules";
-		    drillDownDefinition.directive = "vr-whs-deal-swapdeal-buyrouterule-view";
+            drillDownDefinition.title = "Sell Route Rules";
+            drillDownDefinition.directive = "vr-whs-routing-routerule-view";
 
-		    drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
-		        swapDealItem.SwapDealBuyRouteRuleGridAPI = directiveAPI;
+            drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
+                swapDealItem.SwapDealSellRouteRuleGridAPI = directiveAPI;
 
-		        var query = {
-		            swapDealId: swapDealItem.Entity.DealId
-		        };
-		        return swapDealItem.SwapDealBuyRouteRuleGridAPI.load(query);
-		    };
+                var query = {
+                    hideCustomerColumn: true,
+                    hideIncludedCodesColumn: true,
+                    Filters: []
+                };
+                var filter = {
+                    $type: 'TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealRouteRuleDefinitionFilter, TOne.WhS.Deal.MainExtensions',
+                    SwapDealId: swapDealItem.Entity.DealId
+                };
+                query.Filters.push(filter);
 
-		    addDrillDownDefinition(drillDownDefinition);
-		}
+                var payload = {
+                    defaultRouteRuleValues: {
+                        selectedCriteria: '0ce291eb-790f-4b24-9dc1-512d457546c5',
+                        criteria: { swapDealId: swapDealItem.Entity.DealId }
+                    },
+                    query: query
+                };
+                return swapDealItem.SwapDealSellRouteRuleGridAPI.load(payload);
+            };
 
-		function addDrillDownDefinition(drillDownDefinition) {
-		    drillDownDefinitions.push(drillDownDefinition);
-		}
+            addDrillDownDefinition(drillDownDefinition);
+        }
 
-		function getDrillDownDefinition() {
-		    return drillDownDefinitions;
-		}
+        function registerSwapDealBuyRouteRuleViewToSwapDeal() {
+            var drillDownDefinition = {};
 
-		function viewHistorySwapDeal(context) {
-		    var modalParameters = {
-		        context: context
-		    };
-		    var modalSettings = {
-		    };
-		    modalSettings.onScopeReady = function (modalScope) {
-		        UtilsService.setContextReadOnly(modalScope);
-		    };
-		    VRModalService.showModal(editorUrl, modalParameters, modalSettings);
-		}
+            drillDownDefinition.title = "Buy Route Rules";
+            drillDownDefinition.directive = "vr-whs-deal-swapdeal-buyrouterule-view";
 
-		function registerHistoryViewAction() {
+            drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
+                swapDealItem.SwapDealBuyRouteRuleGridAPI = directiveAPI;
 
-		    var actionHistory = {
-		        actionHistoryName: "WhS_Deal_SwapDealManager_ViewHistoryItem",
-		        actionMethod: function (payload) {
+                var query = {
+                    swapDealId: swapDealItem.Entity.DealId
+                };
+                return swapDealItem.SwapDealBuyRouteRuleGridAPI.load(query);
+            };
 
-		            var context = {
-		                historyId: payload.historyId
-		            };
+            addDrillDownDefinition(drillDownDefinition);
+        }
 
-		            viewHistorySwapDeal(context);
-		        }
-		    };
-		    VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
-		}
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
 
-		function analyzeSwapDeal(onSwapDealAnalyzed) {
-		    var parameters = null;
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
 
-		    var settings = {};
-		    settings.onScopeReady = function (modalScope) {
-		        modalScope.onSwapDealAnalyzed = onSwapDealAnalyzed;
-		    };
+        function viewHistorySwapDeal(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            VRModalService.showModal(editorUrl, modalParameters, modalSettings);
+        }
 
-		    VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/SwapDealAnalysis.html', parameters, settings);
-		}
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "WhS_Deal_SwapDealManager_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistorySwapDeal(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
+        function analyzeSwapDeal(onSwapDealAnalyzed) {
+            var parameters = null;
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSwapDealAnalyzed = onSwapDealAnalyzed;
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/SwapDealAnalysis/SwapDealAnalysis.html', parameters, settings);
+        }
 
 
-		return {
-		    addSwapDeal: addSwapDeal,
-		    editSwapDeal: editSwapDeal,
-		    registerObjectTrackingDrillDownToSwapDeal: registerObjectTrackingDrillDownToSwapDeal,
-		    registerSwapDealBuyRouteRuleViewToSwapDeal: registerSwapDealBuyRouteRuleViewToSwapDeal,
-		    getDrillDownDefinition: getDrillDownDefinition,
-		    registerHistoryViewAction: registerHistoryViewAction,
-		    analyzeSwapDeal: analyzeSwapDeal
-		};
-	}
+        return {
+            addSwapDeal: addSwapDeal,
+            editSwapDeal: editSwapDeal,
+            registerObjectTrackingDrillDownToSwapDeal: registerObjectTrackingDrillDownToSwapDeal,
+            registerSwapDealSellRouteRuleViewToSwapDeal: registerSwapDealSellRouteRuleViewToSwapDeal,
+            registerSwapDealBuyRouteRuleViewToSwapDeal: registerSwapDealBuyRouteRuleViewToSwapDeal,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction,
+            analyzeSwapDeal: analyzeSwapDeal
+        };
+    }
 
-	appControllers.service('WhS_Deal_SwapDealService', SwapDealService);
+    appControllers.service('WhS_Deal_SwapDealService', SwapDealService);
 
 })(appControllers);

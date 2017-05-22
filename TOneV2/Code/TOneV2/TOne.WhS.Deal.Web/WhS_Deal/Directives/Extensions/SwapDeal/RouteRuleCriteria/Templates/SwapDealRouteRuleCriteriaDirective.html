@@ -1,14 +1,12 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
-        <vr-whs-deal-dealdefinition-selector on-ready="scopeModel.onDealDefinitionSelectorReady" isrequired="true" hideremoveicon
+    <span vr-disabled="true">
+        <vr-whs-deal-dealdefinition-selector on-ready="scopeModel.onDealDefinitionSelectorReady" isrequired="true" hideremoveicon normal-col-num="4"
                                              selectedvalues="scopeModel.selectedDeal" onselectionchanged="scopeModel.onDealDefinitionSelectionChanged"></vr-whs-deal-dealdefinition-selector>
-    </vr-columns>
+    </span>
 </vr-row>
 <vr-row>
-    <vr-columns width="1/2row">
-        <span ng-if="scopeModel.selectedDeal!=undefined" vr-loader="scopeModel.isLoadingSaleZone">
-            <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady" ismultipleselection></vr-whs-be-salezone-selector>
-        </span>
-    </vr-columns>
+    <span ng-if="scopeModel.selectedDeal!=undefined" vr-loader="scopeModel.isLoadingSaleZone">
+        <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady" ismultipleselection normal-col-num="4"></vr-whs-be-salezone-selector>
+    </span>
 </vr-row>
 
