@@ -80,7 +80,7 @@
 
             function setTitle() {
                 if (isEditMode) {
-                    var swapDealBuyRouteRuleName = (swapDealBuyRouteRuleEntity != undefined) ? swapDealBuyRouteRuleEntity.Name : null;
+                    var swapDealBuyRouteRuleName = (swapDealBuyRouteRuleEntity && swapDealBuyRouteRuleEntity.Settings) ? swapDealBuyRouteRuleEntity.Settings.Description : null;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealBuyRouteRuleName, 'Swap Deal Buy Route Rule');
                 }
                 else {
@@ -115,7 +115,7 @@
             $scope.scopeModel.isLoading = true;
 
             return WhS_Deal_SwapDealBuyRouteRuleAPIService.AddSwapDealBuyRouteRule(buildSwapDealBuyRouteRuleObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('SwapDealBuyRouteRule', response, 'Description')) {
+                if (VRNotificationService.notifyOnItemAdded('SwapDealBuyRouteRule', response, 'Settings.Description')) {
                     if ($scope.onSwapDealBuyRouteRuleAdded != undefined)
                         $scope.onSwapDealBuyRouteRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -130,7 +130,7 @@
             $scope.scopeModel.isLoading = true;
 
             return WhS_Deal_SwapDealBuyRouteRuleAPIService.UpdateSwapDealBuyRouteRule(buildSwapDealBuyRouteRuleObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('SwapDealBuyRouteRule', response, 'Description')) {
+                if (VRNotificationService.notifyOnItemUpdated('SwapDealBuyRouteRule', response, 'Settings.Description')) {
                     if ($scope.onSwapDealBuyRouteRuleUpdated != undefined) {
                         $scope.onSwapDealBuyRouteRuleUpdated(response.UpdatedObject);
                     }
@@ -144,7 +144,7 @@
         }
 
         function buildSwapDealBuyRouteRuleObjFromScope() {
-            var swapDealBuyRouteRuleSettings = settingsDirectiveAPI.getData();
+            //var swapDealBuyRouteRuleSettings = settingsDirectiveAPI.getData();
 
             return {
                 VRRuleId: swapDealBuyRouteRuleEntity != undefined ? swapDealBuyRouteRuleEntity.VRRuleId : undefined,

@@ -8,6 +8,7 @@ namespace TOne.WhS.Deal.Entities
 {
     public class SwapDealBuyRouteRuleQuery
     {
-
+        public int SwapDealId { get; set; } 
     }
 }
+ 

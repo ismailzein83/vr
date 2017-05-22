@@ -43,8 +43,8 @@
                 };
 
                 $scope.scopeModel.onSwapDealBuyRouteRuleAdded = function () {
-                    var onSwapDealBuyRouteRuleAdded = function (addedSubcAccount) {
-                        gridAPI.onSwapDealBuyRouteRuleAdded(addedSubcAccount);
+                    var onSwapDealBuyRouteRuleAdded = function (addedSwapDealBuyRouteRulet) {
+                        gridAPI.onSwapDealBuyRouteRuleAdded(addedSwapDealBuyRouteRulet);
                     };
 
                     WhS_Deal_SwapDealBuyRouteRuleService.addSwapDealBuyRouteRule(swapDealId, onSwapDealBuyRouteRuleAdded);

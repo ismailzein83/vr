@@ -16,6 +16,9 @@ namespace TOne.WhS.Deal.Business
 
             Func<SwapDealBuyRouteRule, bool> filterExpression = (rule) =>
             {
+                if (input.Query != null && input.Query.SwapDealId != rule.Settings.SwapDealId)
+                    return false;
+
                 return true;
             };
 
