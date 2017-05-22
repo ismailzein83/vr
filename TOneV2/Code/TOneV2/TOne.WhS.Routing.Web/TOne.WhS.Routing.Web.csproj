@@ -180,6 +180,9 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-marketprice.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-selector.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleCriteria\Templates\DefaultRouteRuleCriteriaDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleCriteria\vr-whs-routing-routerulecriteria-default.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleCriteria\vr-whs-routing-routerulecriteria-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByRateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByServiceDirective.html" />

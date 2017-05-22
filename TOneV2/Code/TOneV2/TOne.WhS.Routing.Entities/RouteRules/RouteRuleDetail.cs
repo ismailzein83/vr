@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -14,14 +10,18 @@ namespace TOne.WhS.Routing.Entities
 
         public string RouteRuleSettingsTypeName { get; set; }
 
-        public string IncludedCodes 
+        public string IncludedCodes
         {
             get
             {
-                if (this.Entity.Criteria != null && this.Entity.Criteria.CodeCriteriaGroupSettings != null)
-                    return this.Entity.Criteria.CodeCriteriaGroupSettings.GetDescription(this.Entity.GetCodeCriteriaGroupContext());
+                if (this.Entity.Criteria == null)
+                    return string.Empty;
 
-                return string.Empty;
+                CodeCriteriaGroupSettings codeCriteriaGroupSettings = this.Entity.Criteria.GetCodeCriteriaGroupSettings();
+                if (codeCriteriaGroupSettings == null)
+                    return string.Empty;
+
+                return codeCriteriaGroupSettings.GetDescription(this.Entity.GetCodeCriteriaGroupContext());
             }
         }
 
@@ -29,10 +29,14 @@ namespace TOne.WhS.Routing.Entities
         {
             get
             {
-                if (this.Entity.Criteria != null && this.Entity.Criteria.CustomerGroupSettings != null)
-                    return this.Entity.Criteria.CustomerGroupSettings.GetDescription(this.Entity.GetCustomerGroupContext());
+                if (this.Entity.Criteria == null)
+                    return string.Empty;
 
-                return string.Empty;
+                CustomerGroupSettings customerGroupSettings = this.Entity.Criteria.GetCustomerGroupSettings();
+                if (customerGroupSettings == null)
+                    return string.Empty;
+
+                return customerGroupSettings.GetDescription(this.Entity.GetCustomerGroupContext());
             }
         }
 
@@ -40,12 +44,15 @@ namespace TOne.WhS.Routing.Entities
         {
             get
             {
-                if (this.Entity.Criteria != null && this.Entity.Criteria.SaleZoneGroupSettings != null)
-                    return this.Entity.Criteria.SaleZoneGroupSettings.GetDescription(this.Entity.GetSaleZoneGroupContext());
+                if (this.Entity.Criteria == null)
+                    return string.Empty;
 
-                return string.Empty;
+                SaleZoneGroupSettings saleZoneGroupSettings = this.Entity.Criteria.GetSaleZoneGroupSettings();
+                if (saleZoneGroupSettings == null)
+                    return string.Empty;
+
+                return saleZoneGroupSettings.GetDescription(this.Entity.GetSaleZoneGroupContext());
             }
         }
-       
     }
 }

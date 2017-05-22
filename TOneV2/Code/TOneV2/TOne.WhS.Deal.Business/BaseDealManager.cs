@@ -1,39 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Data;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
-using TOne.WhS.Deal.Entities.Settings;
-using System.ComponentModel;
 
 namespace TOne.WhS.Deal.Business
 {
     public abstract class BaseDealManager
     {
-
         #region Public Methods
-
         public DealDefinition GetDeal(int dealId)
         {
             Dictionary<int, DealDefinition> cachedEntities = this.GetCachedDeals();
             return cachedEntities.GetRecord(dealId);
         }
+
         public string GetDealName(DealDefinition dealDefinition)
         {
             return dealDefinition != null ? dealDefinition.Name : null;
         }
+
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
-
-
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -49,7 +41,7 @@ namespace TOne.WhS.Deal.Business
                 deal.DealId = insertedId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(GetLoggableEntity(), deal);
 
-                insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal) ;
+                insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal);
             }
             else
             {
@@ -61,8 +53,6 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
-
-
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -86,27 +76,59 @@ namespace TOne.WhS.Deal.Business
             return updateOperationOutput;
         }
 
+        public T GetDealSettings<T>(int dealId) where T : DealSettings
+        {
+            DealDefinition deal = GetDeal(dealId);
+            deal.ThrowIfNull("deal", dealId);
+
+            T dealSettings = deal.Settings.CastWithValidate<T>("deal.Settings", dealId);
+            return dealSettings;
+        }
 
         public abstract DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal);
+
         public abstract BaseDealLoggableEntity GetLoggableEntity();
 
         #endregion
 
         #region Protected Methods
-            protected IEnumerable<DealDefinition> GetCachedSwapDeals()
+        protected Dictionary<Guid, List<DealDefinition>> GetCachedDealsByConfigId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDealsByConfig", () =>
             {
-                return this.GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
-            }
+                var allDeal = this.GetCachedDeals();
+                Dictionary<Guid, List<DealDefinition>> cachedByConfig = new Dictionary<Guid, List<DealDefinition>>();
+                List<DealDefinition> list;
+                foreach (var d in allDeal)
+                {
+                    if (!cachedByConfig.TryGetValue(d.Value.Settings.ConfigId, out list))
+                    {
+                        list = new List<DealDefinition>();
+                        list.Add(d.Value);
+                        cachedByConfig.Add(d.Value.Settings.ConfigId, list);
+                    }
+                    else
+                    {
+                        list.Add(d.Value);
+                    }
+                }
+                return cachedByConfig;
+            });
+        }
 
-            protected IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
+        protected Dictionary<int, DealDefinition> GetCachedDeals()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDeals", () =>
             {
-                return this.GetCachedDealsByConfigId().GetRecord(VolCommitmentDealSettings.VolCommitmentDealSettingsConfigId); ;
-            }
-
+                IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+                IEnumerable<DealDefinition> deals = dataManager.GetDeals();
+                return deals.ToDictionary(deal => deal.DealId, deal => deal);
+            });
+        }
 
         #endregion
-        #region Private Classes
 
+        #region Private Classes
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
@@ -129,49 +151,12 @@ namespace TOne.WhS.Deal.Business
                 DealDefinition dealDefinition = context.Object.CastWithValidate<DealDefinition>("context.Object");
                 return dealDefinition.DealId;
             }
-
-           
         }
+
         #endregion
 
-
-
         #region Private Methods
-     
-
-        Dictionary<Guid,List<DealDefinition>>  GetCachedDealsByConfigId()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDealsByConfig", () =>
-            {
-                var allDeal = this.GetCachedDeals();
-                Dictionary<Guid, List<DealDefinition>> cachedByConfig = new Dictionary<Guid, List<DealDefinition>>();
-                List<DealDefinition> list;
-                foreach(var d in allDeal){                   
-                    if (!cachedByConfig.TryGetValue(d.Value.Settings.ConfigId, out list))
-                    {
-                        list = new List<DealDefinition>();
-                        list.Add(d.Value);
-                        cachedByConfig.Add(d.Value.Settings.ConfigId, list); 
-                    }
-                    else
-                    {
-                        list.Add(d.Value);
-                    }
-                }
-                return cachedByConfig;
-            });
-        }
-
-
-        Dictionary<int, DealDefinition> GetCachedDeals()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDeals", () =>
-            {
-                IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-                IEnumerable<DealDefinition> deals = dataManager.GetDeals();
-                return deals.ToDictionary(deal => deal.DealId, deal => deal);
-            });
-        }
+        
 
         #endregion
     }

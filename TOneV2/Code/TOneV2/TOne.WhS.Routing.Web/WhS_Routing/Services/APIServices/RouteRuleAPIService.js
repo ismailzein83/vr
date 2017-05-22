@@ -37,6 +37,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteRuleSettingsTemplates"));
         };
 
+        function GetRouteRuleCriteriaTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteRuleCriteriaTemplates"));
+        };
+
         function HasAddRulePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Routing_ModuleConfig.moduleName, controllerName, ['AddRule']));
         };
@@ -66,6 +70,7 @@
             DeleteRule: DeleteRule,
             GetCodeCriteriaGroupTemplates: GetCodeCriteriaGroupTemplates,
             GetRouteRuleSettingsTemplates: GetRouteRuleSettingsTemplates,
+            GetRouteRuleCriteriaTemplates: GetRouteRuleCriteriaTemplates,
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
             HasDeleteRulePermission: HasDeleteRulePermission,

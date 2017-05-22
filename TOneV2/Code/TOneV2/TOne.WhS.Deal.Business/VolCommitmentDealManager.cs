@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.Data;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Caching;
-using TOne.WhS.Deal.Entities.Settings;
 using System.ComponentModel;
 
 namespace TOne.WhS.Deal.Business
 {
     public class VolCommitmentDealManager : BaseDealManager
     {
-
         #region Public Methods      
         
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
@@ -65,9 +57,15 @@ namespace TOne.WhS.Deal.Business
             var dealDefinition = s_vrObjectTrackingManager.GetObjectDetailById(volumeCommitmentHistoryId);
             return dealDefinition.CastWithValidate<DealDefinition>("DealDefinition : historyId ", volumeCommitmentHistoryId);
         }
+
         public override BaseDealLoggableEntity GetLoggableEntity()
         {
             return VolCommitmentDealLoggableEntity.Instance;
+        }
+
+        protected IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
+        {
+            return GetCachedDealsByConfigId().GetRecord(VolCommitmentDealSettings.VolCommitmentDealSettingsConfigId); ;
         }
         #endregion
 
@@ -116,7 +114,6 @@ namespace TOne.WhS.Deal.Business
                 context.MainSheet = sheet;
             }
         }
-        #endregion
       
         private class VolCommitmentDealLoggableEntity : BaseDealLoggableEntity
         {
@@ -146,14 +143,6 @@ namespace TOne.WhS.Deal.Business
                 return s_volCommitmentDealManager.GetDealName(dealDefinition);
             }
         }
-
-        #region Mappers      
-
-       
-
-        
-#endregion
-
-       
+        #endregion
     }
 }

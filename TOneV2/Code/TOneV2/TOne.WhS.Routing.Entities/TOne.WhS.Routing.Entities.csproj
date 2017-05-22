@@ -71,6 +71,8 @@
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
     <Compile Include="RouteBuildInterceptor\RouteBuildInterceptorSettings.cs" />
+    <Compile Include="RouteRuleCriteria\RouteRuleCriteriaConfig.cs" />
+    <Compile Include="RouteRuleCriteria\RouteRuleCriteria.cs" />
     <Compile Include="Routes\IFinalizeRouteContext.cs" />
     <Compile Include="SpecialRequestRouteRule\SpecialRequestRouteOptionSettings.cs" />
     <Compile Include="ProcessRuleConfig.cs" />
@@ -116,7 +118,7 @@
     <Compile Include="RouteOptionRules\RouteOptionRuleTarget.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleTypeSettings.cs" />
     <Compile Include="RouteRules\RouteRule.cs" />
-    <Compile Include="RouteRules\RouteRuleCriteria.cs" />
+    <Compile Include="RouteRuleCriteria\BaseRouteRuleCriteria.cs" />
     <Compile Include="RouteRules\RouteRuleDetail.cs" />
     <Compile Include="RouteRules\RouteRuleQuery.cs" />
     <Compile Include="RouteRules\RouteRuleSettings.cs" />
@@ -159,7 +161,9 @@
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

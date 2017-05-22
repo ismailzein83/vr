@@ -2,15 +2,18 @@
 
     'use strict';
 
-    DealDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig', 'SecurityService'];
+    DealDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Deal_ModuleConfig'];
 
-    function DealDefinitionAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig, SecurityService) {
-        var controllerName = 'SwapDeal';
+    function DealDefinitionAPIService(BaseAPIService, UtilsService, WhS_Deal_ModuleConfig) {
+        var controllerName = 'DealDefinition';
 
-        function GetDealDefinitionInfo(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetDealDefinitionInfo'), input);
+        function GetDealDefinitionInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealDefinitionInfo"),
+             {
+                 serializedFilter: serializedFilter
+             });
         }
-        
+
         return ({
             GetDealDefinitionInfo: GetDealDefinitionInfo
         });

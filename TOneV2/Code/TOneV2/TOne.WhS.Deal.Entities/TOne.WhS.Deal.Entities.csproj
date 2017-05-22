@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealDefinition\DealDefinitionFilter.cs" />
+    <Compile Include="DealDefinition\DealDefinitionInfo.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
@@ -63,18 +65,19 @@
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleSettings.cs" />
     <Compile Include="SwapDeal\SwapDealDetail.cs" />
     <Compile Include="SwapDeal\SwapDealQuery.cs" />
-    <Compile Include="DealDefinitionDetail.cs" />
+    <Compile Include="DealDefinition\DealDefinitionDetail.cs" />
     <Compile Include="DealSettingsConfig.cs" />
     <Compile Include="Settings\SwapDealSettingData.cs" />
     <Compile Include="SwapDeal\SwapDealAnalysisResult.cs" />
     <Compile Include="SwapDeal\SwapDealAnalysisDefinition.cs" />
     <Compile Include="SwapDeal\SwapDealOutbound.cs" />
     <Compile Include="SwapDeal\SwapDealInbound.cs" />
+    <Compile Include="SwapDeal\SwapDealSettingsDetail.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItemTier.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealSettings.cs" />
-    <Compile Include="DealDefinition.cs" />
+    <Compile Include="DealDefinition\DealDefinition.cs" />
     <Compile Include="DealSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwapDeal\SwapDealSettings.cs" />

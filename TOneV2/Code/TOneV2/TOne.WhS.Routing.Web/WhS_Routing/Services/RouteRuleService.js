@@ -19,14 +19,15 @@
             registerHistoryViewAction: registerHistoryViewAction
         });
 
-        function addRouteRule(onRouteRuleAdded, routingProductId, sellingNumberPlanId) {
+        function addRouteRule(onRouteRuleAdded, context) {
             var settings = {
             };
 
             var parameters = {
-                routingProductId: routingProductId,
-                sellingNumberPlanId: sellingNumberPlanId,
-                isLinkedRouteRule: false
+                routingProductId: context != undefined ? context.routingProductId : undefined,
+                sellingNumberPlanId: context != undefined ? context.sellingNumberPlanId : undefined,
+                isLinkedRouteRule: false,
+                selectedCriteria: context != undefined ? context.selectedCriteria : undefined
             };
 
             settings.onScopeReady = function (modalScope) {

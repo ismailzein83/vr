@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwapDeal\RouteRuleCriteria\SwapDealRouteRuleCriteria.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundItemRateFixed.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundItemRateSuppliers.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundRateFixed.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateSuppliers.cs" />
     <Compile Include="SwapDealBuyRouteRules\FixedSwapDealBuyRouteRule.cs" />
     <Compile Include="SwapDealBuyRouteRules\BySaleDealSwapDealBuyRouteRule.cs" />
+    <Compile Include="SwapDeal\SwapDealDefinitionFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
@@ -76,6 +78,14 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.MainExtensions\TOne.WhS.BusinessEntity.MainExtensions.csproj">
+      <Project>{31d4e637-c2d3-49b2-ae0a-0658aeddd9dd}</Project>
+      <Name>TOne.WhS.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">
+      <Project>{fcc59d3d-6e58-4558-bc27-8c6a01223cb7}</Project>
+      <Name>TOne.WhS.Deal.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>

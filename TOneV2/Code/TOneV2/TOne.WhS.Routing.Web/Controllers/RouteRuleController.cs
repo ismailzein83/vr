@@ -35,6 +35,14 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetRouteRuleCriteriaTemplates")]
+        public IEnumerable<RouteRuleCriteriaConfig> GetRouteRuleCriteriaTemplates()
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.GetRouteRuleCriteriaTemplates();
+        }
+
+        [HttpGet]
         [Route("GetCodeCriteriaGroupTemplates")]
         public IEnumerable<CodeCriteriaGroupConfig> GetCodeCriteriaGroupTemplates()
         {

@@ -40,7 +40,7 @@ namespace TOne.WhS.Routing.Business
             _routeRule = routeRule;
             SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
             {
-                RoutingProductId = routeRule.Criteria.RoutingProductId
+                RoutingProductId = routeRule.Criteria.GetRoutingProductId()
             };
             _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
             _addBlockedOptions = addBlockedOptions;

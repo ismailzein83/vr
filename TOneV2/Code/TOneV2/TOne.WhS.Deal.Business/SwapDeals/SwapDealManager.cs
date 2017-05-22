@@ -1,25 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.Data;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Caching;
 using TOne.WhS.Deal.Entities.Settings;
-using System.ComponentModel;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
-    public class SwapDealManager: BaseDealManager
+    public class SwapDealManager : BaseDealManager
     {
-
         #region Public Methods
+        public SwapDealSettingsDetail GetSwapDealSettingsDetail(int dealId)
+        {
+            SwapDealSettings swapDealSettings = GetDealSettings<SwapDealSettings>(dealId);
+
+            CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(swapDealSettings.CarrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAccount", swapDealSettings.CarrierAccountId);
+
+            int? sellingNumberPlan = carrierAccount.SellingNumberPlanId;
+            if (!sellingNumberPlan.HasValue)
+                throw new NullReferenceException(string.Format("sellingNumberPlan. CarrierAccountId: '{0}'", swapDealSettings.CarrierAccountId));
+
+            return new SwapDealSettingsDetail()
+            {
+                SwapDealId = dealId,
+                CarrierAccountId = swapDealSettings.CarrierAccountId,
+                SellingNumberPlanId = sellingNumberPlan.Value,
+                SaleZoneIds = swapDealSettings.Inbounds.SelectMany(itm => itm.SaleZoneIds).ToList(),
+                SupplierZoneIds = swapDealSettings.Outbounds.SelectMany(itm => itm.SupplierZoneIds).ToList()
+            };
+        }
 
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
@@ -41,8 +56,8 @@ namespace TOne.WhS.Deal.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDeinitionDetailMapper), handler);
         }
-       
-            public DealDefinition GetSwapDealHistoryDetailbyHistoryId(int swapDealHistoryId)
+
+        public DealDefinition GetSwapDealHistoryDetailbyHistoryId(int swapDealHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var dealDefinition = s_vrObjectTrackingManager.GetObjectDetailById(swapDealHistoryId);
@@ -86,6 +101,11 @@ namespace TOne.WhS.Deal.Business
         public override BaseDealLoggableEntity GetLoggableEntity()
         {
             return SwapDealLoggableEntity.Instance;
+        }
+
+        protected IEnumerable<DealDefinition> GetCachedSwapDeals()
+        {
+            return GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
         }
         #endregion
 
@@ -175,11 +195,6 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
-        #endregion
-
-        #region Mappers      
-
-       
         #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public string Name { get; set; }
 
-        public RouteRuleCriteria Criteria { get; set; }
+        public BaseRouteRuleCriteria Criteria { get; set; }
 
         public RouteRuleSettings Settings { get; set; }
 
@@ -27,11 +27,17 @@ namespace TOne.WhS.Routing.Entities
         {
             if (target == null)
                 throw new ArgumentNullException("target");
+
             RouteRuleTarget routeRuleTarget = target as RouteRuleTarget;
             if (routeRuleTarget == null)
                 throw new Exception(String.Format("target is not of type RouteRuleTarget. it is of type '{0}'", target.GetType()));
-            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(routeRuleTarget.Code))
-                return true;
+
+            if (this.Criteria != null)
+            {
+                List<string> excludedCodes = this.Criteria.GetExcludedCodes();
+                if (excludedCodes != null && excludedCodes.Contains(routeRuleTarget.Code))
+                    return true;
+            }
 
             if (routeRuleTarget.IsEffectiveInFuture)
             {
@@ -55,7 +61,7 @@ namespace TOne.WhS.Routing.Entities
             ISaleZoneGroupContext context = ContextFactory.CreateContext<ISaleZoneGroupContext>();
             context.FilterSettings = new SaleZoneFilterSettings
             {
-                RoutingProductId = this.Criteria.RoutingProductId
+                RoutingProductId = this.Criteria.GetRoutingProductId()
             };
             return context;
         }
@@ -79,14 +85,14 @@ namespace TOne.WhS.Routing.Entities
         {
             get
             {
-                if (this.Criteria != null && this.Criteria.CodeCriteriaGroupSettings != null)
-                {
-                    return GetCodeCriteriaGroupContext().GetGroupCodeCriterias(this.Criteria.CodeCriteriaGroupSettings);
-                }
-                else
-                {
+                if (this.Criteria == null)
                     return null;
-                }
+
+                CodeCriteriaGroupSettings codeCriteriaGroupSettings = this.Criteria.GetCodeCriteriaGroupSettings();
+                if (codeCriteriaGroupSettings == null)
+                    return null;
+
+                return GetCodeCriteriaGroupContext().GetGroupCodeCriterias(codeCriteriaGroupSettings);
             }
         }
 
@@ -94,14 +100,14 @@ namespace TOne.WhS.Routing.Entities
         {
             get
             {
-                if (this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
-                {
-                    return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
-                }
-                else
-                {
+                if (this.Criteria == null)
                     return null;
-                }
+
+                SaleZoneGroupSettings saleZoneGroupSettings = this.Criteria.GetSaleZoneGroupSettings();
+                if (saleZoneGroupSettings == null)
+                    return null;
+
+                return GetSaleZoneGroupContext().GetGroupZoneIds(saleZoneGroupSettings);
             }
         }
 
@@ -109,16 +115,30 @@ namespace TOne.WhS.Routing.Entities
         {
             get
             {
-                if (this.Criteria != null && this.Criteria.CustomerGroupSettings != null)
-                    return this.GetCustomerGroupContext().GetGroupCustomerIds(this.Criteria.CustomerGroupSettings);
-                else
+                if (this.Criteria == null)
                     return null;
+
+                CustomerGroupSettings customerGroupSettings = this.Criteria.GetCustomerGroupSettings();
+                if (customerGroupSettings == null)
+                    return null;
+
+                return this.GetCustomerGroupContext().GetGroupCustomerIds(customerGroupSettings);
             }
         }
 
         IEnumerable<int> IRuleRoutingProductCriteria.RoutingProductIds
         {
-            get { return this.Criteria != null && this.Criteria.RoutingProductId.HasValue ? new List<int> { this.Criteria.RoutingProductId.Value } : null; }
+            get
+            {
+                if (this.Criteria == null)
+                    return null;
+
+                int? routingProductId = this.Criteria.GetRoutingProductId();
+                if (!routingProductId.HasValue)
+                    return null;
+
+                return new List<int> { routingProductId.Value };
+            }
         }
 
         public DateTime BED

@@ -116,8 +116,8 @@
             var onRouteRuleAdded = function (addedItem) {
                 gridAPI.onRouteRuleAdded(addedItem);
             };
-
-            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded);
+            var context = {};
+            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, context);
         }
     }
 

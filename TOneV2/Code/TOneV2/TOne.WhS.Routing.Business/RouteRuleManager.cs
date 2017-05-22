@@ -14,6 +14,11 @@ namespace TOne.WhS.Routing.Business
     public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
     {
         #region Public Methods
+        public IEnumerable<RouteRuleCriteriaConfig> GetRouteRuleCriteriaTemplates()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<RouteRuleCriteriaConfig>(RouteRuleCriteriaConfig.EXTENSION_TYPE);
+        }
 
         public IEnumerable<RouteRule> GetEffectiveLinkedRouteRules(int customerId, string code, DateTime effectiveDate)
         {
@@ -28,7 +33,7 @@ namespace TOne.WhS.Routing.Business
             return linkedRouteRules.FindAllRecords(itm => itm.IsEffectiveOrFuture(effectiveDate));
         }
 
-            public RouteRule GetRouteRuleHistoryDetailbyHistoryId(int routeRuleHistoryId)
+        public RouteRule GetRouteRuleHistoryDetailbyHistoryId(int routeRuleHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var routeRule = s_vrObjectTrackingManager.GetObjectDetailById(routeRuleHistoryId);
@@ -45,22 +50,25 @@ namespace TOne.WhS.Routing.Business
 
             LinkedRouteRuleContext context = new LinkedRouteRuleContext() { RouteOptions = routeOptions };
             DateTime now = DateTime.Now;
-            RouteRule linkedRouteRule = new RouteRule()
-            {
-                BeginEffectiveTime = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second),
-                Settings = relatedRouteRule.Settings.BuildLinkedRouteRuleSettings(context),
-                Criteria = new RouteRuleCriteria()
-            };
+
+            RouteRuleCriteria routeRuleCriteria = new RouteRuleCriteria();
 
             if (customerId.HasValue && customerId.Value > 0)
-                linkedRouteRule.Criteria.CustomerGroupSettings = new SelectiveCustomerGroup() { CustomerIds = new List<int>() { customerId.Value } };
+                routeRuleCriteria.CustomerGroupSettings = new SelectiveCustomerGroup() { CustomerIds = new List<int>() { customerId.Value } };
 
 
             if (!string.IsNullOrEmpty(code))
             {
                 CodeCriteria codeCriteria = new BusinessEntity.Entities.CodeCriteria() { Code = code };
-                linkedRouteRule.Criteria.CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup() { Codes = new List<CodeCriteria>() { codeCriteria } };
+                routeRuleCriteria.CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup() { Codes = new List<CodeCriteria>() { codeCriteria } };
             }
+
+            RouteRule linkedRouteRule = new RouteRule()
+            {
+                BeginEffectiveTime = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second),
+                Settings = relatedRouteRule.Settings.BuildLinkedRouteRuleSettings(context),
+                Criteria = routeRuleCriteria
+            };
 
             return linkedRouteRule;
         }
@@ -71,10 +79,11 @@ namespace TOne.WhS.Routing.Business
             string ruleNameLower = !string.IsNullOrEmpty(input.Query.Name) ? input.Query.Name.ToLower() : null;
             Func<RouteRule, bool> filterExpression = (routeRule) =>
                 {
-                    if (!input.Query.RoutingProductId.HasValue && routeRule.Criteria.RoutingProductId.HasValue)
+                    int? routingProductId = routeRule.Criteria.GetRoutingProductId();
+                    if (!input.Query.RoutingProductId.HasValue && routingProductId.HasValue)
                         return false;
 
-                    if (input.Query.RoutingProductId.HasValue && (!routeRule.Criteria.RoutingProductId.HasValue || routeRule.Criteria.RoutingProductId.Value != input.Query.RoutingProductId.Value))
+                    if (input.Query.RoutingProductId.HasValue && (!routingProductId.HasValue || routingProductId.Value != input.Query.RoutingProductId.Value))
                         return false;
 
                     if (!string.IsNullOrEmpty(ruleNameLower) && (string.IsNullOrEmpty(routeRule.Name) || !routeRule.Name.ToLower().Contains(ruleNameLower)))
@@ -101,7 +110,7 @@ namespace TOne.WhS.Routing.Business
                     return true;
                 };
 
-            
+
             ResultProcessingHandler<RouteRuleDetail> handler = new ResultProcessingHandler<RouteRuleDetail>()
             {
                 ExportExcelHandler = new RouteRuleExcelExportHandler()
@@ -148,7 +157,7 @@ namespace TOne.WhS.Routing.Business
                             currentRules = new List<Vanrise.Rules.IVRRule>();
                         }
                         var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId
-                                                         && (!routingProductId.HasValue || (itm.Criteria.RoutingProductId.HasValue && routingProductId.Value == itm.Criteria.RoutingProductId.Value)));
+                                                         && (!routingProductId.HasValue || (itm.Criteria.GetRoutingProductId().HasValue && routingProductId.Value == itm.Criteria.GetRoutingProductId().Value)));
                         if (ruleTypeRules != null)
                             currentRules.AddRange(ruleTypeRules);
                     }
@@ -218,7 +227,8 @@ namespace TOne.WhS.Routing.Business
 
         private bool CheckIfCodeCriteriaSettingsContains(RouteRule routeRule, string code)
         {
-            if (routeRule.Criteria.CodeCriteriaGroupSettings != null)
+            CodeCriteriaGroupSettings codeCriteriaGroupSettings = routeRule.Criteria.GetCodeCriteriaGroupSettings();
+            if (codeCriteriaGroupSettings != null)
             {
                 IRuleCodeCriteria ruleCode = routeRule as IRuleCodeCriteria;
                 if (ruleCode.CodeCriterias != null && ruleCode.CodeCriterias.Any(x => x.Code.StartsWith(code)))
@@ -229,7 +239,8 @@ namespace TOne.WhS.Routing.Business
         }
         private bool CheckIfCustomerSettingsContains(RouteRule routeRule, IEnumerable<int> customerIds)
         {
-            if (routeRule.Criteria.CustomerGroupSettings != null)
+            CustomerGroupSettings customerGroupSettings = routeRule.Criteria.GetCustomerGroupSettings();
+            if (customerGroupSettings != null)
             {
                 IRuleCustomerCriteria ruleCode = routeRule as IRuleCustomerCriteria;
                 if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
@@ -240,7 +251,8 @@ namespace TOne.WhS.Routing.Business
         }
         private bool CheckIfSaleZoneSettingsContains(RouteRule routeRule, IEnumerable<long> saleZoneIds)
         {
-            if (routeRule.Criteria.SaleZoneGroupSettings != null)
+            SaleZoneGroupSettings saleZoneGroupSettings = routeRule.Criteria.GetSaleZoneGroupSettings();
+            if (saleZoneGroupSettings != null)
             {
                 IRuleSaleZoneCriteria ruleCode = routeRule as IRuleSaleZoneCriteria;
                 if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
@@ -271,7 +283,10 @@ namespace TOne.WhS.Routing.Business
                         {
                             if (routeRule.Value.Criteria != null)
                             {
-                                RouteRuleCriteria criteria = routeRule.Value.Criteria;
+                                RouteRuleCriteria criteria = routeRule.Value.Criteria as RouteRuleCriteria;
+
+                                if (criteria == null)
+                                    continue;
 
                                 string code = CheckAndReturnValidCode(criteria);
                                 if (string.IsNullOrEmpty(code))
@@ -281,7 +296,7 @@ namespace TOne.WhS.Routing.Business
                                 if (!customerId.HasValue)
                                     continue;
 
-                                RouteRuleIdentifier routeRuleIdentifier = new RouteRuleIdentifier() {Code = code, CustomerId =  customerId.Value };
+                                RouteRuleIdentifier routeRuleIdentifier = new RouteRuleIdentifier() { Code = code, CustomerId = customerId.Value };
                                 List<RouteRule> relatedRouteRules = linkedRouteRules.GetOrCreateItem(routeRuleIdentifier);
                                 relatedRouteRules.Add(routeRule.Value);
                             }
@@ -292,12 +307,13 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
-        public int? CheckAndReturnValidCustomer(RouteRuleCriteria criteria)
+        public int? CheckAndReturnValidCustomer(BaseRouteRuleCriteria criteria)
         {
-            if (criteria.CustomerGroupSettings == null)
+            CustomerGroupSettings customerGroupSettings = criteria.GetCustomerGroupSettings();
+            if (customerGroupSettings == null)
                 return null;
 
-            SelectiveCustomerGroup selectiveCustomerGroup = criteria.CustomerGroupSettings as SelectiveCustomerGroup;
+            SelectiveCustomerGroup selectiveCustomerGroup = customerGroupSettings as SelectiveCustomerGroup;
             if (selectiveCustomerGroup == null)
                 return null;
 
@@ -307,12 +323,13 @@ namespace TOne.WhS.Routing.Business
             return selectiveCustomerGroup.CustomerIds.First();
         }
 
-        public string CheckAndReturnValidCode(RouteRuleCriteria criteria)
+        public string CheckAndReturnValidCode(BaseRouteRuleCriteria criteria)
         {
-            if (criteria.CodeCriteriaGroupSettings == null)
+            CodeCriteriaGroupSettings codeCriteriaGroupSettings = criteria.GetCodeCriteriaGroupSettings();
+            if (codeCriteriaGroupSettings == null)
                 return null;
 
-            SelectiveCodeCriteriaGroup selectiveCodeCriteriaGroup = criteria.CodeCriteriaGroupSettings as SelectiveCodeCriteriaGroup;
+            SelectiveCodeCriteriaGroup selectiveCodeCriteriaGroup = codeCriteriaGroupSettings as SelectiveCodeCriteriaGroup;
             if (selectiveCodeCriteriaGroup == null)
                 return null;
 
@@ -320,7 +337,8 @@ namespace TOne.WhS.Routing.Business
                 return null;
             string code = selectiveCodeCriteriaGroup.Codes.First().Code;
 
-            if (criteria.ExcludedCodes != null && criteria.ExcludedCodes.Contains(code))
+            List<string> excludedCodes = criteria.GetExcludedCodes();
+            if (excludedCodes != null && excludedCodes.Contains(code))
                 return null;
 
             return code;
@@ -341,7 +359,7 @@ namespace TOne.WhS.Routing.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
@@ -382,7 +400,7 @@ namespace TOne.WhS.Routing.Business
             }
             public override string EntityDisplayName
             {
-                get {  return "Route Rules"; }
+                get { return "Route Rules"; }
             }
 
             public override string EntityUniqueName

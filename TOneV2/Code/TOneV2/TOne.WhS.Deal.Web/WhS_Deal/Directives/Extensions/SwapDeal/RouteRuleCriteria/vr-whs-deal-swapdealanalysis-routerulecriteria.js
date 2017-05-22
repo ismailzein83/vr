@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleAPIService', 'WhS_Routing_RouteRuleCriteriaTypeEnum',
-    function (UtilsService, VRUIUtilsService, WhS_Routing_RouteRuleAPIService, WhS_Routing_RouteRuleCriteriaTypeEnum) {
+app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VRUIUtilsService', 'WhS_Deal_SwapDealAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Deal_SwapDealAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -35,19 +35,48 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
             var routingProductId;
             var routeRuleCriteria;
             var sellingNumberPlanId;
-            var linkedCode;
+            var availableZoneIds;
+            var dealDefinitionSelectorAPI;
+            var dealDefinitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var dealDefinitionSelectionChangedPromiseDeferred;
 
-            //var saleZoneGroupSettingsAPI;
-            //var saleZoneGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            //var codeCriteriaGroupSettingsAPI;
-            //var codeCriteriaGroupSettingsReadyPromiseDeferred;
-
-            //var customerGroupSettingsAPI;
-            //var customerGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var saleZoneSelectorAPI;
+            var saleZoneSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onDealDefinitionSelectorReady = function (api) {
+                    dealDefinitionSelectorAPI = api;
+                    dealDefinitionSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onDealDefinitionSelectionChanged = function (selectedItem) {
+                    var selectedDealDefinitionId = dealDefinitionSelectorAPI.getSelectedIds();
+
+                    if (selectedItem != undefined) {
+
+                        WhS_Deal_SwapDealAPIService.GetSwapDealSettingsDetail(selectedDealDefinitionId).then(function (response) {
+                            sellingNumberPlanId = response.SellingNumberPlanId;
+                            availableZoneIds = response.SaleZoneIds;
+
+                            if (dealDefinitionSelectionChangedPromiseDeferred != undefined) {
+                                dealDefinitionSelectionChangedPromiseDeferred.resolve();
+                            }
+                            else {
+                                var saleZoneSelectorPayload = { sellingNumberPlanId: sellingNumberPlanId, availableZoneIds: availableZoneIds };
+
+                                var setLoader = function (value) { $scope.scopeModel.isLoadingSaleZone = value };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, saleZoneSelectorPayload, setLoader, undefined);
+                            }
+                        });
+                    }
+                }
+
+                $scope.scopeModel.onSaleZoneSelectorReady = function (api) {
+                    saleZoneSelectorAPI = api;
+                    saleZoneSelectorReadyPromiseDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -60,17 +89,64 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
 
                     $scope.scopeModel.disableCriteria = isLinkedRouteRule = payload.isLinkedRouteRule;
                     routingProductId = payload.routingProductId;
-                    sellingNumberPlanId = payload.sellingNumberPlanId;
                     routeRuleCriteria = payload.routeRuleCriteria;
-                    linkedCode = payload.linkedCode;
+
+                    var dealDefinitionLoadPromise = loadDealDefinitionSelectorPromise();
+                    promises.push(dealDefinitionLoadPromise);
+
+
+                    var saleZoneLoadPromise = loadSaleZoneSelectorPromise();
+                    if (saleZoneLoadPromise != undefined)
+                        promises.push(saleZoneLoadPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
+                };
+
+                function loadDealDefinitionSelectorPromise() {
+                    if (routeRuleCriteria != undefined && routeRuleCriteria.SwapDealId != undefined)
+                        dealDefinitionSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var dealDefinitionSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    dealDefinitionSelectorReadyPromiseDeferred.promise.then(function () {
+                        var dealDefinitionSelectorPayload = { filter: { Filters: [] } };
+                        var swapDealDefinitionFilter = {
+                            $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealDefinitionFilter, TOne.WhS.Deal.MainExtensions"
+                        };
+                        dealDefinitionSelectorPayload.filter.Filters.push(swapDealDefinitionFilter);
+
+                        if (routeRuleCriteria != undefined)
+                            dealDefinitionSelectorPayload.selectedIds = routeRuleCriteria.SwapDealId;
+                        VRUIUtilsService.callDirectiveLoad(dealDefinitionSelectorAPI, dealDefinitionSelectorPayload, dealDefinitionSelectorLoadPromiseDeferred);
+                    });
+
+                    return dealDefinitionSelectorLoadPromiseDeferred.promise;
+                };
+
+                function loadSaleZoneSelectorPromise() {
+                    if (routeRuleCriteria == undefined || routeRuleCriteria.SwapDealId == undefined)
+                        return;
+
+                    var saleZoneSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    UtilsService.waitMultiplePromises([saleZoneSelectorReadyPromiseDeferred.promise, dealDefinitionSelectionChangedPromiseDeferred.promise]).then(function () {
+                        dealDefinitionSelectionChangedPromiseDeferred = undefined;
+
+                        var saleZoneSelectorPayload = { sellingNumberPlanId: sellingNumberPlanId, availableZoneIds: availableZoneIds };
+
+                        if (routeRuleCriteria != undefined)
+                            saleZoneSelectorPayload.selectedIds = routeRuleCriteria.ZoneIds;
+                        VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZoneSelectorPayload, saleZoneSelectorLoadPromiseDeferred);
+                    });
+
+                    return saleZoneSelectorLoadPromiseDeferred.promise;
                 };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.RouteRuleCriteria.SwapDealRouteRuleCriteria, TOne.WhS.Deal.MainExtensions",
-                        SwapDealId: 12
+                        SwapDealId: dealDefinitionSelectorAPI.getSelectedIds(),
+                        ZoneIds: saleZoneSelectorAPI.getSelectedIds()
                     };
                 };
 

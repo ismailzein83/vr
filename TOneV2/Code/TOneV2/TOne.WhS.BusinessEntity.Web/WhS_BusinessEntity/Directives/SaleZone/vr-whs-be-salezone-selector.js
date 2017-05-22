@@ -115,13 +115,14 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
 
                 saleZoneSelectorCtrl.onSellingNumberPlanSelectionchanged = function () {
+                    if (selectorApi != undefined) {
+                        selectorApi.clearDataSource();
+                        var oldsellingNumberPlanId = sellingNumberPlanId;
 
-                    selectorApi.clearDataSource();
-                    var oldsellingNumberPlanId = sellingNumberPlanId;
-
-                    sellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
-                    if (sellingNumberPlanId == undefined)
-                        sellingNumberPlanId = oldsellingNumberPlanId;
+                        sellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
+                        if (sellingNumberPlanId == undefined)
+                            sellingNumberPlanId = oldsellingNumberPlanId;
+                    }
                 };
 
 

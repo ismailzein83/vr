@@ -19,9 +19,10 @@ namespace TOne.WhS.Routing.Business.Extensions
             ISaleZoneGroupCleanupContext saleZoneGroupContext = new SaleZoneGroupCleanupContext() { DeletedSaleZoneIds = context.SaleZoneIds };
             foreach (RouteRule rule in allRouteRules)
             {
-                if (rule.Criteria.SaleZoneGroupSettings != null)
+                SaleZoneGroupSettings saleZoneGroupSettings = rule.Criteria.GetSaleZoneGroupSettings();
+                if (saleZoneGroupSettings != null)
                 {
-                    rule.Criteria.SaleZoneGroupSettings.CleanDeletedZoneIds(saleZoneGroupContext);
+                    saleZoneGroupSettings.CleanDeletedZoneIds(saleZoneGroupContext);
                     //TODO: to implement updating rule process by MJA
                 }
                     
