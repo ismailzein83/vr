@@ -10,9 +10,12 @@
         function GetFilteredSupplierZoneServices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredSupplierZoneServices"), input);
         }
-
+        function UpdateSupplierZoneService(serviceObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSupplierZoneService"), serviceObject);
+        }
         return ({
-            GetFilteredSupplierZoneServices: GetFilteredSupplierZoneServices
+            GetFilteredSupplierZoneServices: GetFilteredSupplierZoneServices,
+            UpdateSupplierZoneService: UpdateSupplierZoneService
         });
     }
 

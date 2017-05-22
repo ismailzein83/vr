@@ -4,7 +4,14 @@
             <vr-row removeline>
                 
                 <vr-whs-be-carrieraccount-selector getsuppliers on-ready="onSupplierReady" normal-col-num="2" selectedvalues="selectedSupplier" isrequired="true" onselectitem="onSelectSupplier"></vr-whs-be-carrieraccount-selector>
-                 
+                <vr-columns width="normal">
+                    <span vr-loader="isLoadingZoneServiceConfigSelector">
+                        <vr-whs-be-zone-service-config-selector on-ready="onZoneServiceConfigSelectorReady"
+                                                                selectedvalues="zoneServiceConfigSelectedValues"
+                                                                ismultipleselection="true">
+                        </vr-whs-be-zone-service-config-selector>
+                    </span>
+                </vr-columns>
 
                 <vr-columns width="normal" ng-show="selectedSupplier!=undefined" vr-loader="isLoadingSupplierZonesSelector" haschildcolumns>
                     <vr-whs-be-supplierzone-selector ismultipleselection on-ready="onSupplierZoneDirectiveReady" selectedvalues="selectedSupplierZones"></vr-whs-be-supplierzone-selector>

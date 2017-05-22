@@ -137,6 +137,8 @@
     <Compile Include="SaleRate\History\SaleRateHistoryQuery.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryRecord.cs" />
     <Compile Include="SaleRate\History\SellingProductZoneRates.cs" />
+    <Compile Include="SupplierZone\SupplierZoneServiceToClose.cs" />
+    <Compile Include="SupplierZone\SupplierZoneServiceToEdit.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryRecord.cs" />
     <Compile Include="RoutingProduct\SaleEntityZoneRoutingProduct.cs" />

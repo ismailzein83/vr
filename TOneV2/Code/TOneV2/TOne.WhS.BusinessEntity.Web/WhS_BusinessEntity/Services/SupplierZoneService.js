@@ -2,14 +2,15 @@
 
     'use strict';
 
-    SupplierZoneService.$inject = [];
+    SupplierZoneService.$inject = ["VRModalService"];
 
-    function SupplierZoneService() {
+    function SupplierZoneService(VRModalService) {
         var drillDownDefinitions = [];
 
         return ({
             addDrillDownDefinition: addDrillDownDefinition,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            editSupplierService: editSupplierService
         });
 
         function addDrillDownDefinition(drillDownDefinition) {
@@ -18,6 +19,21 @@
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
+        }
+
+        function editSupplierService(supplierServiceObj, supplierId, effectiveOn, onSupplierServiceUpdated) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSupplierServiceUpdated = onSupplierServiceUpdated;
+            };
+            var parameters = {
+                SupplierServiceObj: supplierServiceObj,
+                SupplierId: supplierId,
+                EffectiveOn: effectiveOn
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SupplierService/SupplierServiceEditor.html', parameters, settings);
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSupplierzoneserviceGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierZoneServiceAPIService",
-function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIService) {
+app.directive("vrWhsBeSupplierzoneserviceGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SupplierZoneServiceAPIService", "WhS_BE_SupplierZoneService", "WhS_BE_SupplierEntityServiceSourceEnum", 'VRUIUtilsService',
+function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIService, WhS_BE_SupplierZoneService, WhS_BE_SupplierEntityServiceSourceEnum, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -26,24 +26,27 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
     function SupplierZoneServiceGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var supplierId;
+        var effectiveOn;
         this.initializeController = initializeController;
 
         function initializeController() {
-           
+
             $scope.supplierZoneServices = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-
+                        supplierId = query.SupplierId;
+                        effectiveOn = query.EffectiveOn;
                         return gridAPI.retrieveData(query);
                     };
-                   
+
                     return directiveAPI;
                 }
             };
@@ -51,24 +54,64 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
                 return WhS_BE_SupplierZoneServiceAPIService.GetFilteredSupplierZoneServices(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
+
+                            var serviceViewerLoadPromises = [];
+
                             for (var i = 0 ; i < response.Data.length; i++) {
-                                addReadySericeApi(response.Data[i]);
+                                var dataItem = response.Data[i];
+                                extendDataItem(dataItem);
+                                serviceViewerLoadPromises.push(dataItem.serviceViewerLoadDeferred.promise);
                             }
+
+                            onResponseReady(response);
+                            return UtilsService.waitMultiplePromises(serviceViewerLoadPromises);
                         }
-                         onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+            defineMenuActions();
+        }
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editSupplierService
+            }];
         }
 
-        var addReadySericeApi = function (dataItem) {
-            dataItem.onServiceReady = function (api) {
-                dataItem.ServieApi = api;
-                dataItem.ServieApi.load({ selectedIds: dataItem.Services });
+        function editSupplierService(supplierServiceObj) {
+            var onSupplierServiceUpdated = function (updatedObj) {
+                extendDataItem(updatedObj);
+                gridAPI.itemUpdated(updatedObj);
             };
-        };
+
+            WhS_BE_SupplierZoneService.editSupplierService(supplierServiceObj, supplierId, effectiveOn, onSupplierServiceUpdated);
+        }
+
+        function extendDataItem(dataItem) {
+
+            defineServiceViewerProperties();
+            defineIconProperties();
+
+            function defineServiceViewerProperties() {
+
+                dataItem.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+
+                dataItem.onServiceViewerReady = function (api) {
+                    dataItem.serviceViewerAPI = api;
+                    var serviceViewerPayload = {
+                        selectedIds: dataItem.Services
+                    };
+                    VRUIUtilsService.callDirectiveLoad(api, serviceViewerPayload, dataItem.serviceViewerLoadDeferred);
+                };
+
+            }
+            function defineIconProperties() {
+                if (dataItem.Source == WhS_BE_SupplierEntityServiceSourceEnum.Supplier.value)
+                    dataItem.iconType = "inherited";
+            }
+        }
     }
 
     return directiveDefinitionObject;

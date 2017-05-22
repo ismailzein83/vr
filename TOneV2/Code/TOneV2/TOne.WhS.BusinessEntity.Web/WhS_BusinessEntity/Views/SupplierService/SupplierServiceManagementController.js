@@ -10,6 +10,8 @@
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var supplierZoneDirectiveAPI;
         var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var zoneServiceConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var zoneServiceConfigSelectorAPI;
         defineScope();
         load();
         var filter = {};
@@ -39,7 +41,11 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
             };
 
-
+            $scope.onZoneServiceConfigSelectorReady = function (api) {
+                zoneServiceConfigSelectorAPI = api;
+                zoneServiceConfigSelectorReadyDeferred.resolve();
+               
+            };
 
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
@@ -62,7 +68,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadSupplierZoneSection])
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadZoneServiceConfigSelector, loadSupplierZoneSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -81,12 +87,24 @@
                 });
             return supplierLoadPromiseDeferred.promise;
         }
+        function loadZoneServiceConfigSelector() {
+            var zoneServiceConfigSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
+            zoneServiceConfigSelectorReadyDeferred.promise.then(function () {
+                zoneServiceConfigSelectorReadyDeferred = undefined;
+                var zoneServiceConfigSelectorPayload = {
+                };
+                VRUIUtilsService.callDirectiveLoad(zoneServiceConfigSelectorAPI, zoneServiceConfigSelectorPayload, zoneServiceConfigSelectorLoadDeferred);
+            });
+
+            return zoneServiceConfigSelectorLoadDeferred.promise;
+        }
         function setFilterObject() {
             filter = {
                 SupplierId: supplierDirectiveApi.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn,
-                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds()
+                ZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
+                ServiceIds: zoneServiceConfigSelectorAPI.getSelectedIds()
             };
         }
 
