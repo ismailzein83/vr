@@ -42,9 +42,8 @@ namespace Retail.Teles.Business.Provisioning
                 maxBusinessTrunkCalls = Settings.EnterpriseAccountSetting.EnterpriseMaxBusinessTrunkCalls,
                 maxUsers = Settings.EnterpriseAccountSetting.EnterpriseMaxUsers,
             };
-            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, null, ProvisionStatus.Started);
             var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, Settings.CentrexFeatSet, enterprise);
-            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId, ProvisionStatus.Completed);
+            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId, ProvisionStatus.Started);
             _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId,"Provision", string.Format("Teles enterprise {0}", this.EnterpriseName), null);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Enterprise {0} created.", this.EnterpriseName));
             CreateSites(context, definitionSettings, enterpriseId, accountBEDefinitionId, accountId);
@@ -72,15 +71,16 @@ namespace Retail.Teles.Business.Provisioning
                         registrarEnabled = true,
                         ringBackUri = "ringback",
                     };
-                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, null, ProvisionStatus.Started);
-
                     dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
-                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
+                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Started);
                     _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, site.AccountId, "Provision", string.Format("Teles site {0}", site.Name), null);
                     context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
                     CreateScreendedNumbers(context, definitionSettings, site.AccountId, siteId);
+                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
                 }
+
             }
+            _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, accountId, enterpriseId, ProvisionStatus.Completed);
         }
 
         private void CreateScreendedNumbers(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, long siteAccountId, dynamic siteId)
@@ -115,6 +115,7 @@ namespace Retail.Teles.Business.Provisioning
                     }
                 }
             }
+       
         }
 
         private void CreateScreenedNumber(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, dynamic siteId, string number)
