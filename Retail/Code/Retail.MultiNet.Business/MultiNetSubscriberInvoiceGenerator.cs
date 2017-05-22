@@ -69,7 +69,7 @@ namespace Retail.MultiNet.Business
             }
             
             IAccountPayment accountPayment;
-            if (!_accountBEManager.HasAccountPayment(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false, out accountPayment))
+            if (!_accountBEManager.HasAccountPayment(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountPayment))
                 throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", financialAccountData.Account.AccountId));
             int currencyId = accountPayment.CurrencyId;
 
