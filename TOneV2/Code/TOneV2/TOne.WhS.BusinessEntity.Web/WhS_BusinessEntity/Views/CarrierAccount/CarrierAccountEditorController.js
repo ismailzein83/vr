@@ -368,6 +368,8 @@
                     if (carrierAccountEntity.CarrierAccountSettings != undefined) {
                         $scope.scopeModel.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
                         $scope.scopeModel.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
+                        $scope.scopeModel.isInterconnectSwitch = carrierAccountEntity.CarrierAccountSettings.IsInterconnectSwitch;
+
                         if (carrierAccountEntity.CarrierAccountSettings.PriceListSettings) {
                             $scope.scopeModel.fileMask = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.FileMask;
                             $scope.scopeModel.automaticPriceListEmail = carrierAccountEntity.CarrierAccountSettings.PriceListSettings.Email;
@@ -677,6 +679,7 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+
         function buildCarrierAccountObjFromScope() {
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
@@ -686,8 +689,9 @@
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     Mask: $scope.scopeModel.mask,
-                    NominalCapacity: $scope.scopeModel.nominalCapacity,
                     CompanySettingId: companySettingsSelectorAPI.getSelectedIds(),
+                    NominalCapacity: $scope.scopeModel.nominalCapacity,
+                    IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
                     PriceListSettings: {
                         Email: $scope.scopeModel.automaticPriceListEmail,
                         FileMask: $scope.scopeModel.fileMask,

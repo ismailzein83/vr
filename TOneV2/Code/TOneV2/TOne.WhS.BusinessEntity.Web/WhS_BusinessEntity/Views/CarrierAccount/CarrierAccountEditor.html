@@ -35,6 +35,9 @@
                         <vr-columns width="1/2row">
                             <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.isInterconnectSwitch" label="Interconnect Switch"></vr-switch>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Pricelist Settings'" show-tab="false">
@@ -104,7 +107,7 @@
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
                     <vr-row>
                         <span vr-loader="scopeModel.isLoadingSupplierTimeZoneSelector">
-                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" normal-col-num="6" ></vr-common-timezone-selector>
+                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" normal-col-num="6"></vr-common-timezone-selector>
                         </span>
                         <span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfigSelector">
                             <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
