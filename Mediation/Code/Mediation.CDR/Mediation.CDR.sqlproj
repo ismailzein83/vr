@@ -65,6 +65,9 @@
     <Folder Include="Mobile_EDR\Tables\" />
     <Folder Include="Mobile_EDR\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="WHS\" />
+    <Folder Include="WHS\Tables\" />
+    <Folder Include="WHS\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mobile_EDR\Tables\GPRS.sql" />
@@ -74,5 +77,8 @@
     <Build Include="Mobile_EDR\User Defined Types\SMSType.sql" />
     <Build Include="Mobile_EDR\User Defined Types\GPRSType.sql" />
     <Build Include="Security\Mobile_EDR.sql" />
+    <Build Include="WHS\Tables\WHS_CDR.sql" />
+    <Build Include="WHS\User Defined Types\WHS_CDRType.sql" />
+    <Build Include="Security\WHS.sql" />
   </ItemGroup>
 </Project>

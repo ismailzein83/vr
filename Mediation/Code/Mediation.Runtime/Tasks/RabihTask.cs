@@ -21,11 +21,32 @@ namespace Mediation.Runtime.Tasks
     {
         public void Execute()
         {
+            //string called = "sip:2001@aaapartnership.multinet;sip:0@aaapartnership.multinet";
+
+            //var calls = StripAndGetNumbers(called);
 
             //DataParserTester tester = new DataParserTester();
             //tester.ReadFile();
 
             RunImportProcess();
+        }
+
+        List<string> StripAndGetNumbers(string numberIds)
+        {
+            List<string> numbers = new List<string>();
+
+            foreach (var numberId in numberIds.Split(';'))
+            {
+                string[] calls = numberId.Split(new char[] { ':', '@' });
+                if (calls.Length > 1)
+                {
+                    numbers.Add(calls[1]);
+                }
+                else
+                    numbers.Add(calls[0]);
+            }
+
+            return numbers;
         }
 
         void RunImportProcess()

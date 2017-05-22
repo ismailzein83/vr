@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [Mobile_EDR].[MobileCDR] (
+    [Id]                                BIGINT        IDENTITY (1, 1) NOT NULL,
     [RecordType]                        INT           NULL,
     [ServedIMSI]                        VARCHAR (100) NULL,
     [ServedIMEI]                        VARCHAR (100) NULL,
@@ -229,6 +230,14 @@
     [PCDRInfo]                          VARCHAR (100) NULL,
     [SciChargeNumber]                   VARCHAR (100) NULL,
     [SWIDTGID]                          VARCHAR (100) NULL,
-    [TransmissionMediumRequirement]     INT           NULL
+    [TransmissionMediumRequirement]     INT           NULL,
+    CONSTRAINT [PK_MobileCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_MobileCDR_SeizureTime]
+    ON [Mobile_EDR].[MobileCDR]([SeizureTime] ASC);
 

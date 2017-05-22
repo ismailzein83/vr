@@ -312,6 +312,24 @@
     <Reference Include="Vanrise.Queueing.Extensions">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Reprocess.BP">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Business">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Data">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Data.SQL">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Web">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
     </Reference>

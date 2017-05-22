@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [Mobile_EDR].[GPRS] (
+    [Id]                         BIGINT        IDENTITY (1, 1) NOT NULL,
     [RecordType]                 INT           NULL,
     [NetworkInitiation]          BIT           NULL,
     [ServedIMSI]                 VARCHAR (100) NULL,
@@ -44,6 +45,14 @@
     [DataVolumeGPRSUplink]       INT           NULL,
     [DataVolumeGPRSDownlink]     INT           NULL,
     [ChangeCondition]            INT           NULL,
-    [ChangeTime]                 DATETIME      NULL
+    [ChangeTime]                 DATETIME      NULL,
+    CONSTRAINT [PK_GPRS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_GPRS_RecordOpeningTime]
+    ON [Mobile_EDR].[GPRS]([RecordOpeningTime] ASC);
 

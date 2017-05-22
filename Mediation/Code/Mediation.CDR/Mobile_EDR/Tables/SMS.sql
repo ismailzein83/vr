@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [Mobile_EDR].[SMS] (
+    [Id]                              BIGINT        IDENTITY (1, 1) NOT NULL,
     [RecordType]                      INT           NULL,
     [ServedIMSI]                      VARCHAR (100) NULL,
     [ServedIMEI]                      VARCHAR (100) NULL,
@@ -55,6 +56,14 @@
     [SMSUserDataLength]               INT           NULL,
     [DeliveryTime]                    DATETIME      NULL,
     [Origination]                     VARCHAR (100) NULL,
-    [MTSMSBlackListFlag]              BIT           NULL
+    [MTSMSBlackListFlag]              BIT           NULL,
+    CONSTRAINT [PK_SMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SMS_OriginationTime]
+    ON [Mobile_EDR].[SMS]([OriginationTime] ASC);
 
