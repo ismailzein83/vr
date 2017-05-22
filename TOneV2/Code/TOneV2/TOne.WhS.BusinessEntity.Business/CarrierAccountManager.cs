@@ -110,10 +110,11 @@ namespace TOne.WhS.BusinessEntity.Business
             var carrierAccount = GetCarrierAccount(carrierAccountId);
             if (carrierAccount == null)
                 throw new NullReferenceException("carrierAccount");
-            if (carrierAccount.CustomerSettings == null)
-                throw new NullReferenceException("carrierProfile.CustomerSettings");
-            return carrierAccount.SupplierSettings.TimeZoneId;
-            // return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
+            if (carrierAccount.SupplierSettings == null)
+                throw new NullReferenceException("carrierProfile.SupplierSettings");
+            if(carrierAccount.SupplierSettings.TimeZoneId.HasValue)
+                return carrierAccount.SupplierSettings.TimeZoneId.Value;
+            return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
         }
         public IEnumerable<CarrierAccount> GetCarriersByProfileId(int carrierProfileId, bool getCustomers, bool getSuppliers)
         {

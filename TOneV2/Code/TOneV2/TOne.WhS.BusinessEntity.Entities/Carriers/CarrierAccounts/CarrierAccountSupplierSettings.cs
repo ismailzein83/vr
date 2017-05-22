@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<ZoneService> DefaultServices { get; set; }
 
-        public int TimeZoneId { get; set; }
+        public int? TimeZoneId { get; set; }
 
         public bool IncludeProcessingTimeZone { get; set; }
     }

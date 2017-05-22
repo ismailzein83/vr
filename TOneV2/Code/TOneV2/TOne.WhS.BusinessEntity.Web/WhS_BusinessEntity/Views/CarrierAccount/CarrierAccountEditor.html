@@ -104,7 +104,7 @@
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
                     <vr-row>
                         <span vr-loader="scopeModel.isLoadingSupplierTimeZoneSelector">
-                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" normal-col-num="6" isrequired="true"></vr-common-timezone-selector>
+                            <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" normal-col-num="6" ></vr-common-timezone-selector>
                         </span>
                         <span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfigSelector">
                             <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
