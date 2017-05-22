@@ -603,6 +603,14 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLast.sql" />
     <Build Include="VR_Invoice\Tables\InvoicePartner.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoicePaidBySourceId.sql" />
+    <Build Include="common\Tables\VRRule.sql" />
+    <Build Include="common\Tables\Region.sql" />
+    <Build Include="common\Stored Procedures\sp_VRRule_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRRule_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRRule_GetByDefinition.sql" />
+    <Build Include="common\Stored Procedures\sp_Region_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_Region_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_Region_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [common].[sp_City_Insert]
+﻿CREATE PROCEDURE [common].[sp_Region_Insert]
 	@Name nvarchar(255),
 	@CountryID int, 	
 	@Settings nvarchar(max),
@@ -6,9 +6,9 @@
 AS
 BEGIN
 SET @id =0;
-IF NOT EXISTS(SELECT 1 FROM common.[City] WHERE Name = @Name and CountryID=@CountryID)
+IF NOT EXISTS(SELECT 1 FROM common.[Region] WHERE Name = @Name and CountryID=@CountryID)
 	BEGIN
-		INSERT INTO common.[City](Name, CountryID,Settings)
+		INSERT INTO common.[Region](Name, CountryID,Settings)
 		VALUES (@Name, @CountryID,@Settings)
 
 		SET @id = SCOPE_IDENTITY()

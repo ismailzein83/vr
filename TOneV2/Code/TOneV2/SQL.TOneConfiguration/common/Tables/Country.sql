@@ -1,10 +1,14 @@
 ﻿CREATE TABLE [common].[Country] (
-    [ID]        INT            NOT NULL,
-    [Name]      NVARCHAR (255) NOT NULL,
-    [SourceID]  VARCHAR (255)  NULL,
-    [timestamp] ROWVERSION     NULL,
-    CONSTRAINT [PK_Common.Country] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [ID]          INT            NOT NULL,
+    [Name]        NVARCHAR (255) NOT NULL,
+    [SourceID]    VARCHAR (255)  NULL,
+    [timestamp]   ROWVERSION     NULL,
+    [CreatedTime] DATETIME       CONSTRAINT [DF_Country_CreatedTime] DEFAULT (getdate()) NULL,
+    CONSTRAINT [PK_Common.Country] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [IX_Country_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
