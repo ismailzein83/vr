@@ -195,10 +195,10 @@ namespace Vanrise.Invoice.Business
                 var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.TimeZoneId, offset, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod);
 
                 var serialNumber = new PartnerManager().GetPartnerSerialNumberPattern(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId); InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
-{
-    Invoice = invoice,
-    InvoiceTypeId = createInvoiceInput.InvoiceTypeId
-};
+                {
+                    Invoice = invoice,
+                    InvoiceTypeId = createInvoiceInput.InvoiceTypeId
+                };
                 foreach (var part in invoiceType.Settings.InvoiceSerialNumberSettings.SerialNumberParts)
                 {
                     if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", part.VariableName)))
@@ -225,6 +225,19 @@ namespace Vanrise.Invoice.Business
                         NextPeriodStart = createInvoiceInput.ToDate.AddDays(1)
                     };
                     billingPeriodInfoManager.InsertOrUpdateBillingPeriodInfo(billingPeriodInfo);
+                    var invoiceAccountData = partnerManager.GetInvoiceAccountData(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);
+                    if (invoiceAccountData == null)
+                        throw new NullReferenceException("invoiceAccountData");
+                    long invoiceAccountId;
+                    new InvoiceAccountManager().TryAddInvoiceAccount(new VRInvoiceAccount
+                    {
+                        InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
+                        Status = VRInvoiceAccountStatus.Active,
+                        IsDeleted = false,
+                        PartnerId = createInvoiceInput.PartnerId,
+                        BED = invoiceAccountData.BED,
+                        EED = invoiceAccountData.EED
+                    }, out invoiceAccountId);
                 }
                 else
                 {

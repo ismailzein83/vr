@@ -142,5 +142,15 @@ namespace Vanrise.Invoice.Business
                 return initialSequenceValueSettingPart.InitialValue;
             return 1;
         }
+        public VRInvoiceAccountData GetInvoiceAccountData(Guid invoiceTypeId, string partnerId)
+        {
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoiceAccountDataContext invoiceAccountDataContext = new InvoiceAccountDataContext
+            {
+                PartnerId = partnerId,
+            };
+            return invoicePartnerManager.GetInvoiceAccountData(invoiceAccountDataContext);
+        }
     }
 }

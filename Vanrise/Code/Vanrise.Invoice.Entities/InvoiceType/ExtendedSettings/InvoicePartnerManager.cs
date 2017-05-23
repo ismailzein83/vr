@@ -49,10 +49,16 @@ namespace Vanrise.Invoice.Entities
          
             return manager.GetInvoiceSettingDetailByType<T>(invoiceSetting.InvoiceSetting.InvoiceSettingId);
         }
+        public abstract VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context);
+
     }
     public interface IBasePartnerManagerContext
     {
         string PartnerId { get; }
+    }
+    public interface IInvoiceAccountDataContext : IBasePartnerManagerContext
+    {
+
     }
     public interface IInvoicePartnerSettingsContext : IBasePartnerManagerContext
     {

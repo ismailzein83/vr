@@ -27,6 +27,10 @@ namespace Vanrise.Invoice.Data.SQL
             insertedId = Convert.ToInt64(insertedID);
             return (affectedRows > -1);
         }
-
+        public bool UpdateInvoiceAccount(VRInvoiceAccount invoiceAccount)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceAccount_Update", invoiceAccount.InvoiceAccountId, invoiceAccount.InvoiceTypeId, invoiceAccount.PartnerId, invoiceAccount.BED, invoiceAccount.EED, invoiceAccount.Status, invoiceAccount.IsDeleted);
+            return (affectedRows > -1);
+        }
     }
 }
