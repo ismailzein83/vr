@@ -695,10 +695,13 @@ namespace TOne.WhS.Sales.Business
                 ZoneChanges = new List<ZoneChanges>(),
                 DefaultChanges = new DefaultChanges()
             };
+
             if (draft != null)
             {
-                newDraft.DefaultChanges = draft.DefaultChanges;
-                newDraft.CountryChanges = draft.CountryChanges;
+                if (draft.DefaultChanges != null)
+                    newDraft.DefaultChanges = draft.DefaultChanges;
+                if (draft.CountryChanges != null)
+                    newDraft.CountryChanges = draft.CountryChanges;
             }
 
             foreach (SaleZone zone in filteredSaleZones)
