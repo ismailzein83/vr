@@ -25,6 +25,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int RetroactiveDayOffset { get; set; }
         public PriceListExtensionFormat PriceListExtensionFormat { get; set; }
+
+        public decimal MaximumRate { get; set; }
     }
 
     public enum PrimarySaleEntity { SellingProduct = 0, Customer = 1 }

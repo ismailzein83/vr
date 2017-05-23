@@ -113,6 +113,11 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.EffectiveDateDayOffset;
         }
+        public decimal GetSaleAreaMaximumRate()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.MaximumRate;
+        }
         public int GetSaleAreaRetroactiveDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
@@ -127,6 +132,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.EffectiveDateDayOffset;
+        }
+        public decimal GetPurchaseAreaMaximumRate()
+        {
+            PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+            return purchaseAreaSettings.MaximumRate;
         }
         public int GetPurchaseAreaRetroactiveDayOffset()
         {

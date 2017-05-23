@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public int EffectiveDateDayOffset { get; set; }
 
 		public int RetroactiveDayOffset { get; set; }
+        public decimal MaximumRate { get; set; }
 	}
 }

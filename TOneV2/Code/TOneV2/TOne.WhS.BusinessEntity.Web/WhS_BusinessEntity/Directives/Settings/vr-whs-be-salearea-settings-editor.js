@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'WhS_BE_PrimarySaleEntityEnum',
-    function (UtilsService, VRUIUtilsService, WhS_BE_PrimarySaleEntityEnum) {
+app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'WhS_BE_PrimarySaleEntityEnum', 'VRCommon_CurrencyAPIService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, WhS_BE_PrimarySaleEntityEnum, VRCommon_CurrencyAPIService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -39,6 +39,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
             var priceListExtensionFormatSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+
                 ctrl.disabledAddFixedKeyword = true;
                 ctrl.disabledAddMobileKeyword = true;
 
@@ -103,7 +104,6 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 api.load = function (payload) {
 
                     var promises = [];
-
                     var data;
                     var selectedMailMsgTemplateId;
                     var selectedSalePLTemplateId;
@@ -130,6 +130,9 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     var loadPriceListExtensionFormatSelectorPromise = loadPriceListExtensionFormatSelector(selectedPriceListExtensionFormatId);
                     promises.push(loadPriceListExtensionFormatSelectorPromise);
 
+                    var getSystemCurrencyPromise = getSystemCurrency();
+                    promises.push(getSystemCurrencyPromise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -144,7 +147,8 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         DefaultSalePLTemplateId: salePLTemplateSelectorAPI.getSelectedIds(),
                         EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
                         RetroactiveDayOffset: ctrl.retroactiveDayOffset,
-                        PriceListExtensionFormat: priceListExtensionFormatSelectorAPI.getSelectedIds()
+                        PriceListExtensionFormat: priceListExtensionFormatSelectorAPI.getSelectedIds(),
+                        MaximumRate: ctrl.maximumRate
                     };
                 };
 
@@ -153,7 +157,6 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
             }
 
             function loadStaticData(data) {
-
                 if (data == undefined)
                     return;
 
@@ -161,7 +164,7 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 ctrl.primarySaleEntity = UtilsService.getItemByVal(ctrl.primarySaleEntities, data.PrimarySaleEntity, 'value');
                 ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
                 ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
-
+                ctrl.maximumRate = data.MaximumRate;
                 if (data.FixedKeywords != null) {
                     for (var i = 0; i < data.FixedKeywords.length; i++)
                         ctrl.fixedKeywords.push({ fixedKeyword: data.FixedKeywords[i] });
@@ -170,6 +173,13 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     for (var i = 0; i < data.MobileKeywords.length; i++)
                         ctrl.mobileKeywords.push({ mobileKeyword: data.MobileKeywords[i] });
                 }
+            }
+            function getSystemCurrency() {
+                return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
+                    if (response != undefined) {
+                        ctrl.systemCurrencySymbol = response.Symbol;
+                    }
+                });
             }
             function loadMailMsgTemplateSelector(selectedId) {
                 var mailMsgTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -206,6 +216,8 @@ app.directive('vrWhsBeSaleareaSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 });
                 return priceListExtensionFormatSelectorLoadDeferred.promise;
             }
+
+
         }
 
         return directiveDefinitionObject;
