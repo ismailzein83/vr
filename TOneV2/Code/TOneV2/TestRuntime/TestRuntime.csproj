@@ -877,6 +877,18 @@
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">
+      <Project>{fcc59d3d-6e58-4558-bc27-8c6a01223cb7}</Project>
+      <Name>TOne.WhS.Deal.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Data.SQL\TOne.WhS.Deal.Data.SQL.csproj">
+      <Project>{714bd80a-4b53-42a8-8a0e-96f1caea1134}</Project>
+      <Name>TOne.WhS.Deal.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Data\TOne.WhS.Deal.Data.csproj">
+      <Project>{e938eae6-4107-4a69-8f06-59f7be730a3d}</Project>
+      <Name>TOne.WhS.Deal.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
       <Name>TOne.WhS.Deal.Entities</Name>

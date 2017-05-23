@@ -6,6 +6,8 @@ using System.Activities;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -31,12 +33,31 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            RoutingDatabaseInformation information = GetDatabaseInformation(this.ProcessType.Get(context), this.Policies.Get(context), this.IncludeBlockedSupplierZones.Get(context));
+            RoutingProcessType processType = this.ProcessType.Get(context);
+            RoutingDatabaseInformation information = GetDatabaseInformation(processType, this.Policies.Get(context), this.IncludeBlockedSupplierZones.Get(context));
             RoutingDatabaseSettings settings = BuildRoutingDatabaseSettings();
 
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context), information, settings);
-            
+
+            IRoutingDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDataManager>();
+            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(databaseId);
+
+            if (processType == RoutingProcessType.CustomerRoute)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                IEnumerable<CarrierAccountInfo> carrierAccounts = carrierAccountManager.GetCarrierAccountInfo(null);
+
+                if (carrierAccounts != null)
+                    dataManager.StoreCarrierAccounts(carrierAccounts.ToList());
+            }
+
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            Dictionary<long, SaleZone> saleZones = saleZoneManager.GetCachedSaleZones();
+
+            if (saleZones != null)
+                dataManager.StoreSaleZones(saleZones.Values.ToList());
+
             this.DatabaseId.Set(context, databaseId);
         }
 

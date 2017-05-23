@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Text;
 using TOne.Data.SQL;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 
@@ -59,6 +61,32 @@ namespace TOne.WhS.Routing.Data.SQL
 
         }
 
+        public void StoreCarrierAccounts(List<CarrierAccountInfo> carrierAccounts)
+        {
+            CarrierAccountDataManager carrierAccountDataManager = new CarrierAccountDataManager();
+            carrierAccountDataManager.RoutingDatabase = this.RoutingDatabase;
+            var dbApplyStream = carrierAccountDataManager.InitialiazeStreamForDBApply();
+            foreach (var carrierAccount in carrierAccounts)
+            {
+                carrierAccountDataManager.WriteRecordToStream(carrierAccount, dbApplyStream);
+            }
+            var streamReadyToApply = carrierAccountDataManager.FinishDBApplyStream(dbApplyStream);
+            carrierAccountDataManager.ApplyCarrierAccountsToTable(streamReadyToApply);
+        }
+
+        public void StoreSaleZones(List<SaleZone> saleZones)
+        {
+            SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
+            saleZoneDataManager.RoutingDatabase = this.RoutingDatabase;
+            var dbApplyStream = saleZoneDataManager.InitialiazeStreamForDBApply();
+            foreach (var saleZone in saleZones)
+            {
+                saleZoneDataManager.WriteRecordToStream(saleZone, dbApplyStream);
+            }
+            var streamReadyToApply = saleZoneDataManager.FinishDBApplyStream(dbApplyStream);
+            saleZoneDataManager.ApplySaleZonesToTable(streamReadyToApply);
+        }
+
         /// <summary>
         /// Drop Routing Database if database already exists.
         /// </summary>
@@ -105,7 +133,8 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CodeMatchTable);
             //query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
-
+            query.AppendLine(query_SaleZoneTable);
+            query.AppendLine(query_CarrierAccountTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -121,6 +150,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_RoutingProductTable);
             query.AppendLine(query_CodeSaleZoneMatchTable);
             query.AppendLine(query_CodeSupplierZoneMatchTable);
+            query.AppendLine(query_SaleZoneTable);
             ExecuteNonQueryText(query.ToString(), null);
 
             //CREATE FUNCTION must be the only statement in the batch
@@ -128,6 +158,23 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
         #region Constants
+        const string query_SaleZoneTable = @"CREATE TABLE [dbo].[SaleZone](
+	                                         [ID] [int] NOT NULL,
+	                                         [Name] [varchar](max) NOT NULL,
+                                             CONSTRAINT [PK_SaleZone] PRIMARY KEY CLUSTERED 
+                                                  (
+	                                                  [ID] ASC
+                                                  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                             ) ON [PRIMARY]";
+
+        const string query_CarrierAccountTable = @"CREATE TABLE [dbo].[CarrierAccount](
+	                                               [ID] [int] NOT NULL,
+	                                               [Name] [varchar](max) NOT NULL,
+                                                   CONSTRAINT [PK_CarrierAccount] PRIMARY KEY CLUSTERED 
+                                                        (
+	                                                        [ID] ASC
+                                                        )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                   ) ON [PRIMARY]";
 
         const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
 	                                                    [SupplierId] [int] NOT NULL,

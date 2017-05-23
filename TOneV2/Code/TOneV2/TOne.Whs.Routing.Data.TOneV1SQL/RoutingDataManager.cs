@@ -74,6 +74,14 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             trackStep("Finishing System Paremeters update");
         }
 
+        public void StoreCarrierAccounts(List<CarrierAccountInfo> carrierAccounts)
+        {
+        }
+
+        public void StoreSaleZones(List<SaleZone> saleZones)
+        {
+        }
+
         /// <summary>
         /// Drop Routing Database if database already exists.
         /// </summary>
