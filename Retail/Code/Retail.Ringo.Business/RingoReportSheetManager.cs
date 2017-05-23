@@ -314,11 +314,11 @@ namespace Retail.Ringo.Business
                     incremental++;
                 }
                 if (recipient)
-                    sb.AppendLine(SintesiRingoOperatorRecipientFooter(data.First(), filter,
-                        transactionCount, sumTransferredCredit, incremental + 2));
+                    sb.Append(SintesiRingoOperatorRecipientFooter(data.First(), filter,
+                        transactionCount, sumTransferredCredit, incremental + 1));
                 else
-                    sb.AppendLine(SintesiRingoOperatorSenderFooter(data.First(), filter,
-                       transactionCount, sumTransferredCredit, incremental + 2));
+                    sb.Append(SintesiRingoOperatorSenderFooter(data.First(), filter,
+                       transactionCount, sumTransferredCredit, incremental + 1));
 
                 string fileName;
                 if (recipient)
