@@ -10,6 +10,13 @@
                 if (value == undefined || value.length == 0)
                     return ValidationMessagesEnum.required;
             }
+
+            if ($attrs.validateanyvalue != undefined) {//After discussion with Ismail {
+                var validateAnyValueError = $scope.$parent.$eval($attrs.validateanyvalue);
+                if (validateAnyValueError != null)
+                    return validateAnyValueError;
+            }
+
             if (value != undefined && value != null) {
                 if (validationOptions != undefined) {
                     if (validationOptions.emailValidation) {
@@ -31,6 +38,7 @@
                         return customerValidationError;
                 }
             }
+
             return null;
         }
 
@@ -44,12 +52,12 @@
             var ipParts = value.split(".");
             var valid = true;
             if (String(value).search(isIp_re) == -1)
-                valid=  false;              
+                valid = false;
             if (parseInt(ipParts[0]) > 255 || parseInt(ipParts[1]) > 255 || parseInt(ipParts[2]) > 255 || parseInt(ipParts[3]) > 255)
                 valid = false;
 
-           return valid;
-           // return String(value).search(isIp_re) != -1;
+            return valid;
+            // return String(value).search(isIp_re) != -1;
         }
         function validateNumber(value, validationOptions) {
             var decimalArray = String(value).split(".");
@@ -61,33 +69,33 @@
 
         function validateTimeRange(fromDate, toDate) {
 
-        	var errorMessage = "Invalid time range";
+            var errorMessage = "Invalid time range";
 
-        	var startDate = getDateObject(fromDate);
-        	var endDate = getDateObject(toDate);
+            var startDate = getDateObject(fromDate);
+            var endDate = getDateObject(toDate);
 
-        	if (startDate != undefined && endDate != undefined) {
-        		if (startDate.getTime() > endDate.getTime())
-        			return errorMessage;
-        	}
-        	else {
-        		if (fromDate instanceof Object && toDate instanceof Object) {
-        			if (toDate.Hour == 0 && toDate.Minute == 0)
-        				return null;
-        			else if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
-        				return errorMessage;
-        		}
-        	}
-        	return null;
+            if (startDate != undefined && endDate != undefined) {
+                if (startDate.getTime() > endDate.getTime())
+                    return errorMessage;
+            }
+            else {
+                if (fromDate instanceof Object && toDate instanceof Object) {
+                    if (toDate.Hour == 0 && toDate.Minute == 0)
+                        return null;
+                    else if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
+                        return errorMessage;
+                }
+            }
+            return null;
         }
 
         function getDateObject(date) {
-        	if (date instanceof Date)
-        		return date;
-        	else if (typeof (date) == 'string')
-        		return UtilsService.createDateFromString(date);
-        	else
-        		return undefined;
+            if (date instanceof Date)
+                return date;
+            else if (typeof (date) == 'string')
+                return UtilsService.createDateFromString(date);
+            else
+                return undefined;
         }
 
         function validateTimeEqualorGreaterthanToday(currentDate) {
@@ -124,7 +132,7 @@
         return ({
             validate: validate,
             validateEmail: validateEmail,
-            validateIp:validateIp,
+            validateIp: validateIp,
             validateTimeRange: validateTimeRange,
             validateTimeEqualorGreaterthanToday: validateTimeEqualorGreaterthanToday
         });
