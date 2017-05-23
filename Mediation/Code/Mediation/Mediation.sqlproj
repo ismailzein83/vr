@@ -72,12 +72,7 @@
     <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Mediation_Generic\Tables\MediationRecord.sql" />
     <Build Include="Mediation_Generic\Tables\MediationDefinition.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionIds.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByStatus.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByIds.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetAll.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationDefinition_Update.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationDefinition_Insert.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationDefinition_GetAll.sql" />
@@ -86,13 +81,6 @@
     <Build Include="dbo\User Defined Types\BigintIDType.sql" />
     <Build Include="Security\Mediation_Generic.sql" />
     <Build Include="Security\VANRISE_development.sql" />
-    <Build Include="Mediation_Generic\Tables\CookedCDR.sql" />
     <Build Include="Mediation_Generic\User Defined Types\CookedCDRType.sql" />
-    <Build Include="Mediation_Generic\Tables\MultiLegSessionID.sql" />
-    <Build Include="Mediation_Generic\Functions\GetLegIdsSessionTable.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_InsertSessionLegs.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_GetByMediationDefinitionID.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_DeleteSessionId.sql" />
-    <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
   </ItemGroup>
 </Project>
