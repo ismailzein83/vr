@@ -419,6 +419,9 @@
     <Content Include="Images\menu-icons\Administration.png" />
     <Content Include="Images\menu-icons\billing.png" />
     <Content Include="Images\menu-icons\Purchase Area.png" />
+    <Content Include="Images\tiles-icons\balance.png" />
+    <Content Include="Images\tiles-icons\calls.png" />
+    <Content Include="Images\tiles-icons\invoice.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
