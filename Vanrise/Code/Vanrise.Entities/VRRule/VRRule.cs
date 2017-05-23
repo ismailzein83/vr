@@ -17,7 +17,7 @@ namespace Vanrise.Entities
 
     public abstract class VRRuleSettings
     {
-        //public abstract Guid VRRuleSettingsConfigId { get; }
+
     }
 
     public class VRRule<T> where T : VRRuleSettings
