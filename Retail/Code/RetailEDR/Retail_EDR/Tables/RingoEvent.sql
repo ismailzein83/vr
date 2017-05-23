@@ -11,8 +11,12 @@
     [PromotionId]            INT              NULL,
     [ActivationDate]         DATETIME         NULL,
     [CustomerActivationDate] DATETIME         NULL,
-    [PackagePrice]           DECIMAL (20, 10) NULL
+    [PackagePrice]           DECIMAL (20, 10) NULL,
+    [Amount]                 INT              NULL,
+    [Balance]                DECIMAL (20, 10) NULL
 );
+
+
 
 
 

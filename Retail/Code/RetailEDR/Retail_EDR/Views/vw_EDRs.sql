@@ -26,7 +26,7 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                                                                  AS DestinationArea, NULL AS TypeConsumed, NULL AS Bag, NULL AS PricePlan, REPLACE(PromotionCode, '_', ' ') AS Promotion, FileName, NULL 
                                                                  AS FileDate, CreatedDate AS CreationDate, NULL AS Balance, NULL AS Zone, NULL AS Agent, NULL AS AgentCommission, AccountId, NULL 
                                                                  AS OriginatingZoneID, NULL AS TerminatingZoneID, 0 AS AirtimeRate, 0 AS AirtimeAmount, 0 AS TerminationRate, NULL AS TerminationAmount, 
-                                                                 0 AS SaleRate, 0 AS SaleAmount, 0 AS Credit, 0 AS MTRate, 0 AS MTAmount, 0 AS Profit, NULL AS TypeCalled, 0 AS Duration, 
+                                                                 0 AS SaleRate, 0 AS SaleAmount, 0 AS Credit, 0 AS MTRate, 0 AS MTAmount, PackagePrice AS Profit, NULL AS TypeCalled, 0 AS Duration, 
                                                                  PackagePrice AS OriginalAmount
                                         FROM            Retail_EDR.RingoEvent WITH (NOLOCK))
     SELECT        StartDate, TrafficType, DirectionTraffic, Calling, Called, TypeNet, SourceOperator, DestinationOperator, SourceArea, DestinationArea, TypeConsumed, Bag, 
@@ -36,7 +36,7 @@ WITH AllEDRs AS (SELECT        IdCDR, StartDate, TrafficType, DirectionTraffic, 
                               DATEPART(YYYY, StartDate)) AS Week, CONVERT(VARCHAR(7), StartDate, 120) AS Month, Duration, OriginalAmount, 1 AS NumberOfCalls, 
                               CASE WHEN Promotion = '' OR
                               Promotion IS NULL OR
-                              Promotion = 'Nessuna Promo' THEN 'No Promo' ELSE 'Promo' END AS InPromotion
+                              Promotion = 'Nessuna Promo' THEN 'No Promo' ELSE 'Promo' END AS InPromotion, Duration / 60 AS DurationInMinute
      FROM            AllEDRs AS AllEDRs_1
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
@@ -134,7 +134,7 @@ Begin DesignProperties =
    Begin DataPane = 
       Begin ParameterDefaults = ""
       End
-      Begin ColumnWidths = 43
+      Begin ColumnWidths = 44
          Width = 284
          Width = 1500
          Width = 1500
@@ -178,6 +178,7 @@ Begin DesignProperties =
          Width = 1500
          Width = 1500
          Width = 1500
+         Width = 1500
       End
    End
    Begin CriteriaPane = 
@@ -193,8 +194,9 @@ Begin DesignProperties =
          SortOrder = 1410
          GroupBy = 1350
          Filter = 1350
-         Or = 1350
-         Or ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+         ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 
@@ -208,12 +210,15 @@ Begin DesignProperties =
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'= 1350
+EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'Or = 1350
+         Or = 1350
          Or = 1350
       End
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'Retail_EDR', @level1type = N'VIEW', @level1name = N'vw_EDRs';
+
+
 
 
 
