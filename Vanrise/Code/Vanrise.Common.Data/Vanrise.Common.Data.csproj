@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICacheRefreshDataManager.cs" />
     <Compile Include="IRegionDataManager.cs" />
     <Compile Include="IGenericLKUPItemDataManager.cs" />
     <Compile Include="IOverriddenConfigurationDataManager.cs" />

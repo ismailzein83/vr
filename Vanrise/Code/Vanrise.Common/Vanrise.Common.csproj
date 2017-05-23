@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
+    <Compile Include="BusinessManagers\ICacheRefreshManager.cs" />
     <Compile Include="BusinessManagers\ISecurityRequiredPermissionSetManager.cs" />
     <Compile Include="BusinessManagers\ITypeManager.cs" />
     <Compile Include="BusinessManagers\IVRActionLogger.cs" />

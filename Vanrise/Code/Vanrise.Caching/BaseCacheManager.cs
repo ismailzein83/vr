@@ -75,6 +75,23 @@ namespace Vanrise.Caching
         {
             return base.IsCacheExpired(dummyParameter, ref lastCheckTime);
         }
+
+        protected override string GetCacheManagerInstanceUniqueName(object parameter)
+        {
+            return this.CacheManagerName;
+        }
+
+        Object _expirationUpdateHandle;
+
+        protected override object GetExpirationUpdateHandle(object parameter)
+        {
+            return _expirationUpdateHandle;
+        }
+
+        protected override void UpdateExpirationUpdateHandle(object parameter, object updateHandle)
+        {
+            _expirationUpdateHandle = updateHandle;
+        }
     }
 
     //public abstract class BaseTenantCacheManager : BaseCacheManager<int>

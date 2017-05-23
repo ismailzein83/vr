@@ -68,6 +68,7 @@
     <Compile Include="BigData\BigDataServiceCacheManager.cs" />
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
+    <Compile Include="CacheRefreshManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeBESettings.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />

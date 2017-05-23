@@ -40,6 +40,14 @@ namespace Vanrise.Caching
             }
         }
 
+        protected virtual bool UseCentralizedCacheRefresher
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         #region Local Variables
 
         ConcurrentDictionary<Object, object> _cacheNameLocks = new ConcurrentDictionary<Object, object>();
@@ -141,14 +149,32 @@ namespace Vanrise.Caching
             else
                 return false;
         }
-        
+
+        static ICacheRefreshManager s_cacheRefreshManager = BusinessManagerFactory.GetManager<ICacheRefreshManager>();
         public virtual void SetCacheExpired(ParamType parameter)
         {
-            ShouldSetCacheExpired(parameter);//trigger this method to refresh local update handle of the current cache manager if any
-            CacheStore cacheDictionary = GetCacheDictionary(parameter);
-            if (cacheDictionary != null)
-                cacheDictionary.Clear();
-            _cacheExpirationTimes.AddOrUpdate(parameter, VRClock.Now, (prm, existingValue) => VRClock.Now);
+            if (this.UseCentralizedCacheRefresher)
+                s_cacheRefreshManager.TriggerCacheExpiration(GetCacheManagerInstanceUniqueName(parameter));
+            ClearLocalCacheDictionary(parameter);
+        }
+
+        Dictionary<ParamType, string> _cacheManagerUniqueNamesByParameter = new Dictionary<ParamType, string>();
+
+        protected virtual string GetCacheManagerInstanceUniqueName(ParamType parameter)
+        {
+            string cacheManagerUniqueName;
+            if(!_cacheManagerUniqueNamesByParameter.TryGetValue(parameter, out cacheManagerUniqueName))
+            {
+                lock(_cacheManagerUniqueNamesByParameter)
+                {
+                    if (!_cacheManagerUniqueNamesByParameter.TryGetValue(parameter, out cacheManagerUniqueName))
+                    {
+                        cacheManagerUniqueName = string.Format("{0}_{1}", this.CacheManagerName, parameter);
+                        _cacheManagerUniqueNamesByParameter.Add(parameter, cacheManagerUniqueName);
+                    }
+                }
+            }
+            return cacheManagerUniqueName;
         }
 
 
@@ -186,10 +212,32 @@ namespace Vanrise.Caching
 
             public ParamType Parameter { get; set; }
         }
-
+        ConcurrentDictionary<ParamType, Object> _updateHandlesByParameter = new ConcurrentDictionary<ParamType, Object>();
         protected virtual bool ShouldSetCacheExpired(ParamType parameter)
         {
-            return false;
+            if (this.UseCentralizedCacheRefresher)
+            {
+                Object updateHandle = GetExpirationUpdateHandle(parameter);
+                bool isCacheExpired = s_cacheRefreshManager.ShouldRefreshCacheManager(GetCacheManagerInstanceUniqueName(parameter), ref updateHandle);
+                UpdateExpirationUpdateHandle(parameter, updateHandle);
+                return isCacheExpired;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected virtual Object GetExpirationUpdateHandle(ParamType parameter)
+        {
+            Object updateHandle;
+            _updateHandlesByParameter.TryGetValue(parameter, out updateHandle);
+            return updateHandle;
+        }
+
+        protected virtual void UpdateExpirationUpdateHandle(ParamType parameter, Object updateHandle)
+        {
+            _updateHandlesByParameter.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
         }
 
         #endregion
@@ -211,11 +259,20 @@ namespace Vanrise.Caching
                     isExpired = ShouldSetCacheExpired(parameter);
                 if (isExpired)
                 {
-                    SetCacheExpired(parameter);
+                    ClearLocalCacheDictionary(parameter);
                 }
 
                 cacheDictionaryInfo.LastExpirationCheckTime = VRClock.Now;
             }
+        }
+
+        private void ClearLocalCacheDictionary(ParamType parameter)
+        {
+            ShouldSetCacheExpired(parameter);//trigger this method to refresh local update handle of the current cache manager if any
+            CacheStore cacheDictionary = GetCacheDictionary(parameter);
+            if (cacheDictionary != null)
+                cacheDictionary.Clear();
+            _cacheExpirationTimes.AddOrUpdate(parameter, VRClock.Now, (prm, existingValue) => VRClock.Now);
         }
 
         #endregion
