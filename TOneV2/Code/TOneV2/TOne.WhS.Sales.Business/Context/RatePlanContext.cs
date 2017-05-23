@@ -51,6 +51,7 @@ namespace TOne.WhS.Sales.Business
                 return _processHasChanges;
             }
         }
+        public decimal MaximumRate { get; set; }
 
         #endregion
 
@@ -85,6 +86,7 @@ namespace TOne.WhS.Sales.Business
         IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; }
         Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; }
         bool ProcessHasChanges { get; }
+        decimal MaximumRate { get; }
 
         #endregion
 

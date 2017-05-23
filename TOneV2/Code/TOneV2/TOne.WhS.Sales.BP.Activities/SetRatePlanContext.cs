@@ -45,6 +45,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			ratePlanContext.EffectiveDate = effectiveDate;
 			ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
 			ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
+            ratePlanContext.MaximumRate = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
 		}
 
 		#region Private Methods

@@ -106,6 +106,7 @@
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateBEDIsGreaterThanSellingProductZoneRateBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateHasInvalidEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\DraftNewRateIsClosed.cs" />
+    <Compile Include="BusinessRules\Conditions\NewRateIsGreaterThanMaximumRateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductNormalRateDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
