@@ -611,6 +611,9 @@
     <Build Include="common\Stored Procedures\sp_Region_Update.sql" />
     <Build Include="common\Stored Procedures\sp_Region_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_Region_GetAll.sql" />
+    <Build Include="common\Tables\CacheRefreshHandle.sql" />
+    <Build Include="common\Stored Procedures\sp_CacheRefreshHandle_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_CacheRefreshHandle_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
