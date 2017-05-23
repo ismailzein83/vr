@@ -244,6 +244,14 @@ namespace Retail.Teles.Business
                     return true;
                 }
             }
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
+            
         }
 
         private class CachedEnterprisesInfo
