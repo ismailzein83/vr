@@ -173,13 +173,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     listSummaryByZone.Add(summaryByZone);
                 }
             //parameters.ServicesForCustomer = services;
-            parameters.NormalDuration = listSummaryByZone.Where(y => y.RateTypeFormatted == "Normal").Sum(x => Math.Round(x.DurationInSeconds, 2));
+            parameters.NormalDuration = listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.Normal.ToString()).Sum(x => Math.Round(x.DurationInSeconds, 2));
 
-            parameters.OffPeakDuration = Math.Ceiling(listSummaryByZone.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => Math.Round(x.DurationInSeconds, 2)));
+            parameters.OffPeakDuration = Math.Ceiling(listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.OffPeak.ToString()).Sum(x => Math.Round(x.DurationInSeconds, 2)));
 
-            parameters.NormalNet = listSummaryByZone.Where(y => y.RateTypeFormatted == "Normal").Sum(x => x.Net).Value;
+            parameters.NormalNet = listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.Normal.ToString()).Sum(x => x.Net).Value;
 
-            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateTypeFormatted == "OffPeak").Sum(x => x.Net).Value, 0);
+            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.OffPeak.ToString()).Sum(x => x.Net).Value, 0);
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 
