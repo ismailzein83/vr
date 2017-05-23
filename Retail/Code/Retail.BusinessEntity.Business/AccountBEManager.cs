@@ -132,8 +132,7 @@ namespace Retail.BusinessEntity.Business
                         var accountPartRuntime = new AccountPartRuntime();
 
                         AccountPartDefinition partDefinition = accountPartDefinitionManager.GetAccountPartDefinition(partSettings.PartDefinitionId);
-                        if (partDefinition == null)
-                            throw new NullReferenceException("partDefinition");
+                        partDefinition.ThrowIfNull("partDefinition", partSettings.PartDefinitionId);
 
                         accountPartRuntime.PartDefinition = partDefinition;
 
