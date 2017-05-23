@@ -19,9 +19,31 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             DataByZone zoneData = context.Target as DataByZone;
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
+            var errorMessages = new List<string>();
+
             if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.NormalRate > ratePlanContext.MaximumRate)
             {
-                context.Message = string.Format("New normal rate '{0}' of zone '{1}' is greater than the maximum rate '{2}'", zoneData.NormalRateToChange.NormalRate, zoneData.ZoneName, ratePlanContext.MaximumRate);
+                errorMessages.Add(string.Format("Normal '{0}'", zoneData.NormalRateToChange.NormalRate));
+            }
+
+            if (zoneData.OtherRatesToChange != null)
+            {
+                var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+
+                foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
+                {
+                    if (otherRateToChange.NormalRate > ratePlanContext.MaximumRate)
+                    {
+                        string rateTypeName = rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value);
+                        if (rateTypeName != null)
+                            errorMessages.Add(string.Format("{0} '{1}'", rateTypeName, otherRateToChange.NormalRate));
+                    }
+                }
+            }
+
+            if (errorMessages.Count > 0)
+            {
+                context.Message = string.Format("The following rates of zone '{0}' are greater than the maximum rate '{1}': {2}", zoneData.ZoneName, ratePlanContext.MaximumRate, string.Join(", ", errorMessages));
                 return false;
             }
 
