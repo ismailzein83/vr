@@ -289,16 +289,13 @@ namespace Retail.Ringo.Business
                 list.Add(item);
             }
 
-            bool newOperator = true;
-
-
             int incremental = 0;
             int transactionCount = 0;
             int sumTransferredCredit = 0;
             foreach (var operatorData in groupedOperatorsData)
             {
                 var sb = new StringBuilder();
-                incremental = 0;
+                incremental = 1;
                 transactionCount = 0;
                 sumTransferredCredit = 0;
 
@@ -332,71 +329,7 @@ namespace Retail.Ringo.Business
                 dicData.Add(fileName, System.Text.Encoding.UTF8.GetBytes(sb.ToString()));
             }
 
-            //for (int i = 0; i < listOperators.Count(); i++)
-            //{
-            //    if (newOperator)
-            //    {
-            //        incremental = 1;
-            //        transactionCount = 0;
-            //        sumTransferredCredit = 0;
 
-            //        newOperator = false;
-            //        if (recipient)
-            //            sb.AppendLine(SintesiRingoOperatorRecipientHeader(listOperators[i], filter));
-            //        else
-            //            sb.AppendLine(SintesiRingoOperatorSenderHeader(listOperators[i], filter));
-            //    }
-
-            //    sumTransferredCredit = sumTransferredCredit + listOperators[i].TotalTransferredCredit;
-            //    transactionCount = transactionCount + listOperators[i].NumberOfRows;
-
-            //    if (i + 1 < listOperators.Count())
-            //    {
-            //        if (listOperators[i].Operator != listOperators[i + 1].Operator)
-            //        {
-            //            sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
-
-            //            if (recipient)
-            //                sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter,
-            //                    transactionCount, sumTransferredCredit, incremental + 2));
-            //            else
-            //                sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter,
-            //                    transactionCount, sumTransferredCredit, incremental + 2));
-
-            //            var myString = sb.ToString();
-            //            var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
-
-            //            dicData.Add(listOperators[i].Operator, myByteArray);
-            //            newOperator = true;
-            //        }
-            //        else
-            //        {
-            //            sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
-            //        }
-            //    }
-            //    else
-            //    {
-            //        sb.AppendLine(SintesiRingoOperatorBody(listOperators[i], filter, incremental));
-
-            //        if (recipient)
-            //            sb.AppendLine(SintesiRingoOperatorRecipientFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
-            //        else
-            //            sb.AppendLine(SintesiRingoOperatorSenderFooter(listOperators[i], filter, transactionCount, sumTransferredCredit, incremental + 2));
-
-            //        var myString = sb.ToString();
-            //        var myByteArray = System.Text.Encoding.UTF8.GetBytes(myString);
-
-            //        string fileName;
-            //        if (recipient)
-            //            fileName = "TCR_Ringo_" + listOperators[i].Operator + "_" + filter.From.Value.ToString("yyyyMM");
-            //        else
-            //            fileName = "TCR_" + listOperators[i].Operator + "_Ringo_" + filter.From.Value.ToString("yyyyMM");
-
-            //        dicData.Add(fileName, myByteArray);
-            //    }
-
-            //    incremental++;
-            //}
             return dicData;
         }
 
@@ -504,8 +437,8 @@ namespace Retail.Ringo.Business
         #region Sintesi Functions
         string SintesiRingoOperatorRecipientHeader(SintesiRingoMessageEntity sintesiRingoMessageEntity, TCRRingoReportFilter filter)
         {
-            return (string.Format(" RS{0}NOVA{1}ICSI{2}RINGOT{3}", sintesiRingoMessageEntity.Operator,
-            sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Network,
+            return (string.Format(" RS{0}NOVA{1}ICSI{2}RINGOT{3}", sintesiRingoMessageEntity.Network,
+            sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
             filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
         }
 
@@ -528,8 +461,8 @@ namespace Retail.Ringo.Business
         string SintesiRingoOperatorSenderHeader(SintesiRingoMessageEntity sintesiRingoMessageEntity,
             TCRRingoReportFilter filter)
         {
-            return (string.Format(" RSNOVA{0}ICSI{1}{2}RINGIN{3}", sintesiRingoMessageEntity.Operator,
-            sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Network,
+            return (string.Format(" RSNOVA{0}ICSI{1}{2}RINGIN{3}", sintesiRingoMessageEntity.Network,
+            sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
             filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
         }
 
@@ -571,16 +504,16 @@ namespace Retail.Ringo.Business
 
         string DettaglioRingoOperatorSenderHeader(DettaglioRingoMessageEntity dettaglioRingoMessageEntity, TCRRingoReportFilter filter)
         {
-            return (string.Format(" PCNOVA{0}ICSI{1}{2}RINGIN{3}", dettaglioRingoMessageEntity.Operator,
-            dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Network,
+            return (string.Format(" PCNOVA{0}ICSI{1}{2}RINGIN{3}", dettaglioRingoMessageEntity.Network,
+            dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
             filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM")));
         }
 
         string DettaglioRingoOperatorSenderFooter(DettaglioRingoMessageEntity dettaglioRingoMessageEntity,
             TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
         {
-            return (string.Format(" EFNOVA{0}ICSI{1}{2}RINGIN{3}{4}{5}{6}", dettaglioRingoMessageEntity.Operator,
-                dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Network,
+            return (string.Format(" EFNOVA{0}ICSI{1}{2}RINGIN{3}{4}{5}{6}", dettaglioRingoMessageEntity.Network,
+                dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
                 filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
                 incremental.ToString("D10")));
         }
