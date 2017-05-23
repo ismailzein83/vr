@@ -515,6 +515,8 @@
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListChange.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListChangeController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SendSalePriceList.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SendSalePriceListController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleRate\SaleRateManagement.html" />
