@@ -14,5 +14,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
         void SetToTrueProcessHasChangesWithLock();
 
+        decimal MaximumRate { get; }
     }
 }

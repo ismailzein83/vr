@@ -81,6 +81,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDGreaterThanSystemPeriodCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateImportedZones\ImportedRateIsGreaterThanMaximumRateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\BEDBeforeRetroActiveMinDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\RateGreaterThanZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneServicesWithDifferentBEDCondition.cs" />

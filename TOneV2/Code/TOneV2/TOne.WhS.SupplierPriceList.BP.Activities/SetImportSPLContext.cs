@@ -6,73 +6,76 @@ using System.Text;
 using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
-{
-	public sealed class SetImportSPLContext : CodeActivity
-	{
-		protected override void CacheMetadata(CodeActivityMetadata metadata)
-		{
-			metadata.AddDefaultExtensionProvider<IImportSPLContext>(() => new ImportSPLContext());
-			base.CacheMetadata(metadata);
-		}
+{ 
+    public sealed class SetImportSPLContext : CodeActivity
+    {
+        protected override void CacheMetadata(CodeActivityMetadata metadata)
+        {
+            metadata.AddDefaultExtensionProvider<IImportSPLContext>(() => new ImportSPLContext());
+            base.CacheMetadata(metadata);
+        }
 
-		protected override void Execute(CodeActivityContext context)
-		{
+        protected override void Execute(CodeActivityContext context)
+        {
+            ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
+            importSPLContext.MaximumRate = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaMaximumRate();
+        }
+    }
 
-		}
-	}
+    internal static class ContextExtensionMethods
+    {
+        public static IImportSPLContext GetSPLParameterContext(this ActivityContext context)
+        {
+            var parameterContext = context.GetExtension<IImportSPLContext>();
+            if (parameterContext == null)
+                throw new NullReferenceException("parameterContext");
+            return parameterContext;
+        }
+    }
 
-	internal static class ContextExtensionMethods
-	{
-		public static IImportSPLContext GetSPLParameterContext(this ActivityContext context)
-		{
-			var parameterContext = context.GetExtension<IImportSPLContext>();
-			if (parameterContext == null)
-				throw new NullReferenceException("parameterContext");
-			return parameterContext;
-		}
-	}
+    public class ImportSPLContext : IImportSPLContext
+    {
+        private object _obj = new object();
 
-	public class ImportSPLContext : IImportSPLContext
-	{
-		private object _obj = new object();
+        private volatile bool _processHasChanges = false;
 
-		private volatile bool _processHasChanges = false;
+        private TimeSpan _codeCloseDateOffset;
 
-		private TimeSpan _codeCloseDateOffset;
+        public const string CustomDataKey = "ImportSPLContext";
 
-		public const string CustomDataKey = "ImportSPLContext";
+        public ImportSPLContext()
+        {
+            int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaEffectiveDateDayOffset();
+            _codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
+        }
 
-		public ImportSPLContext()
-		{
-			int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaEffectiveDateDayOffset();
-			_codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
-		}
+        public bool ProcessHasChanges
+        {
+            get
+            {
+                return this._processHasChanges;
+            }
+        }
 
-		public bool ProcessHasChanges
-		{
-			get
-			{
-				return this._processHasChanges;
-			}
-		}
+        public TimeSpan CodeCloseDateOffset
+        {
+            get
+            {
+                return _codeCloseDateOffset;
+            }
+        }
 
-		public TimeSpan CodeCloseDateOffset
-		{
-			get
-			{
-				return _codeCloseDateOffset;
-			}
-		}
+        public decimal MaximumRate { get; set; }
 
-		public void SetToTrueProcessHasChangesWithLock()
-		{
-			if (!_processHasChanges)
-			{
-				lock (_obj)
-				{
-					this._processHasChanges = true;
-				}
-			}
-		}
-	}
+        public void SetToTrueProcessHasChangesWithLock()
+        {
+            if (!_processHasChanges)
+            {
+                lock (_obj)
+                {
+                    this._processHasChanges = true;
+                }
+            }
+        }
+    }
 }

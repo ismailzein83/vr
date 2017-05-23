@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.WhS.SupplierPriceList.BP.SubProcess"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -171,6 +172,7 @@
       <Variable x:TypeArguments="x:Boolean" Default="False" Name="ProcessHasChanges" />
       <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="ImportedServiceTypeIds" />
       <Variable x:TypeArguments="x:Boolean" Name="IncludeServices" />
+      <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedZonesToValidate" />
     </Sequence.Variables>
     <twsba1:SetImportSPLContext sap2010:WorkflowViewState.IdRef="SetImportSPLContext_1" />
     <twsba1:LoadSupplierPriceListData sap2010:WorkflowViewState.IdRef="LoadSupplierPriceListData_1">
@@ -225,7 +227,7 @@
         </InArgument>
       </twsba1:LoadSupplierPriceListData.SupplierPriceListTemplateId>
     </twsba1:LoadSupplierPriceListData>
-    <twsba1:ShifTime>
+    <twsba1:ShifTime sap2010:WorkflowViewState.IdRef="ShifTime_1">
       <twsba1:ShifTime.ImportedCodes>
         <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">ImportedCodes</mca:CSharpValue>
@@ -246,7 +248,6 @@
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
         </InArgument>
       </twsba1:ShifTime.SupplierId>
-      <sap2010:WorkflowViewState.IdRef>ShifTime_1</sap2010:WorkflowViewState.IdRef>
     </twsba1:ShifTime>
     <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_5">
       <vbw:CombineLists.InputLists>
@@ -320,6 +321,27 @@
         </OutArgument>
       </twsba1:StructureImportedZones.ImportedZones>
     </twsba1:StructureImportedZones>
+    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget">
+      <vbw:CombineLists.InputLists>
+        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt;() { ImportedZones };</mca:CSharpValue>
+        </InArgument>
+      </vbw:CombineLists.InputLists>
+      <vbw:CombineLists.OutputList>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedZonesToValidate</mca:CSharpReference>
+        </OutArgument>
+      </vbw:CombineLists.OutputList>
+      <sap2010:WorkflowViewState.IdRef>CombineLists`1_6</sap2010:WorkflowViewState.IdRef>
+    </vbw:CombineLists>
+    <vbw:ExecuteRules BusinessRulesKey="ISP_ValidateImportedZones">
+      <vbw:ExecuteRules.ImportedDataToValidate>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedZonesToValidate</mca:CSharpValue>
+        </InArgument>
+      </vbw:ExecuteRules.ImportedDataToValidate>
+      <sap2010:WorkflowViewState.IdRef>ExecuteRules_5</sap2010:WorkflowViewState.IdRef>
+    </vbw:ExecuteRules>
     <Parallel DisplayName="GetExistingEntities" sap2010:WorkflowViewState.IdRef="Parallel_7">
       <twsba1:GetExistingZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingZones_3">
         <twsba1:GetExistingZones.ExistingZoneEntities>
@@ -972,7 +994,7 @@
           </Assign.Value>
         </Assign>
       </Sequence>
-      <local:ApplyEntitiesToDBProcess sap2010:WorkflowViewState.IdRef="ApplyEntitiesToDBProcess_1" xmlns:local="clr-namespace:TOne.WhS.SupplierPriceList.BP.SubProcess" xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger">
+      <local:ApplyEntitiesToDBProcess sap2010:WorkflowViewState.IdRef="ApplyEntitiesToDBProcess_1">
         <local:ApplyEntitiesToDBProcess.ChangedCodesQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
@@ -1165,30 +1187,32 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="ShifTime_1" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_4" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="StructureImportedZones_1" sap:VirtualizedContainerService.HintSize="3164,22" />
+      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ShifTime_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="StructureImportedZones_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_5" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetExistingZones_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingRates_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingZonesServices_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="3164,86" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_2" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="3164,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="3164,22" />
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="200,51" />
+      <sap2010:ViewStateData Id="StructureDataByCountries_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="PrepareExistingZones_3" sap:VirtualizedContainerService.HintSize="2736,22" />
       <sap2010:ViewStateData Id="PrepareExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareExistingRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -1270,8 +1294,8 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1620" />
-      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="3164,1666" />
-      <sap2010:ViewStateData Id="GetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="3164,22" />
+      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="200,51" />
+      <sap2010:ViewStateData Id="GetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_9" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -1296,18 +1320,19 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_8" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="3164,942" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="3186,3890">
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="200,51" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,1473">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="3226,3970">
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="262,1429">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+            <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
