@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InvoiceRecurChargePackageSettingsDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PricingPackageSettingsService'];
+    RecurchargeEvaluatorOnetimeDirective.$inject = ['UtilsService', 'VRNotificationService'];
 
-    function InvoiceRecurChargePackageSettingsDirective(UtilsService, VRNotificationService, Retail_BE_PricingPackageSettingsService) {
+    function RecurchargeEvaluatorOnetimeDirective(UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -13,7 +13,7 @@
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new InvoiceRecurChargePackageSettings($scope, ctrl);
+                var ctor = new RecurChargePackageSettings($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -25,10 +25,10 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/Templates/InvoiceRecurChargePackageSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package\PackageRuntime/MainExtensions/PackageTypes/MainExtensions/Templates/OneTimeEvaluatorTemplate.html'
         };
 
-        function InvoiceRecurChargePackageSettings($scope, ctrl) {
+        function RecurChargePackageSettings($scope, ctrl) {
             this.initializeController = initializeController;
 
             var gridAPI;
@@ -54,22 +54,21 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var extendedSettings;
+                    var evaluatorSettings;
                     if (payload != undefined) {
-                        extendedSettings = payload.extendedSettings;
-                        if(extendedSettings != undefined)
-                        {
-                            ctrl.price = extendedSettings.Price;
+                        evaluatorSettings = payload.evaluatorSettings;
+                        if (evaluatorSettings != undefined) {
+                            ctrl.price = evaluatorSettings.Price;
                         }
                     }
-                    var currencySelectorPayload = extendedSettings != undefined ? { selectedIds: extendedSettings.CurrencyId } : undefined;
-                    promises.push( currencySelectorAPI.load(currencySelectorPayload));
+                    var currencySelectorPayload = evaluatorSettings != undefined ? { selectedIds: evaluatorSettings.CurrencyId } : undefined;
+                    promises.push(currencySelectorAPI.load(currencySelectorPayload));
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var obj = {
-                        $type: "Retail.BusinessEntity.MainExtensions.PackageTypes.InvoiceRecurChargePackageSettings, Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators.OneTimeRecurringChargeEvaluator, Retail.BusinessEntity.MainExtensions",
                         Price: ctrl.price,
                         CurrencyId: currencySelectorAPI.getSelectedIds()
                     };
@@ -81,10 +80,10 @@
                 }
             }
 
-        
+
         }
     }
 
-    app.directive('retailBePackagesettingsExtendedsettingsInvoicerecurcharge', InvoiceRecurChargePackageSettingsDirective);
+    app.directive('retailBePackagesettingsRecurchargeEvaluatorOnetime', RecurchargeEvaluatorOnetimeDirective);
 
 })(app);

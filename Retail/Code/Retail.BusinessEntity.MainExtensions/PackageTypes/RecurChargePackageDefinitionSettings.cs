@@ -9,7 +9,7 @@ using Vanrise.Common;
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
     
-    public class InvoiceRecurChargePackageDefinitionSettings : PackageDefinitionExtendedSettings
+    public class RecurChargePackageDefinitionSettings : PackageDefinitionExtendedSettings
     {
         public override Guid ConfigId
         {
@@ -20,14 +20,9 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         {
             get
             {
-                return "retail-be-packagesettings-extendedsettings-invoicerecurcharge";
+                return "retail-be-packagesettings-extendedsettings-recurcharge";
             }
         }
-
-        public Guid ChargeableEntityBEDefinitionId { get; set; }
-
-        public Guid ChargeableEntityId { get; set; }
-
         public RecurringChargeEvaluatorDefinitionSettings EvaluatorDefinitionSettings { get; set; }
     }
 }

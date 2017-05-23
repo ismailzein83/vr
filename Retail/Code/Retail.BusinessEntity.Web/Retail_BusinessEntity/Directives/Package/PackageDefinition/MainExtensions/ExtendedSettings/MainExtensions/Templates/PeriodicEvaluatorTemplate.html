@@ -1,0 +1,17 @@
+﻿<vr-row>
+    <vr-common-genericlkupdefinition-selector on-ready="scopeModel.onGenericLKUPDefinitionSelectorReady"
+                                              isrequired="true"
+                                              normal-col-num="6"
+                                              customlabel="Chargeable Definition"
+                                              onselectionchanged="scopeModel.onGenericLKUPDefinitionSelectionChanged"
+                                              selectedvalues="scopeModel.selectedGenericLKUPDefinition">
+    </vr-common-genericlkupdefinition-selector>
+    <span ng-show="scopeModel.selectedGenericLKUPDefinition != undefined">
+        <vr-common-genericlkupitem-selector on-ready="scopeModel.onGenericLKUPItemSelectorReady"
+                                            isrequired="true"
+                                            normal-col-num="6"
+                                            customlabel="Chargeable Item">
+        </vr-common-genericlkupitem-selector>
+    </span>
+
+</vr-row>

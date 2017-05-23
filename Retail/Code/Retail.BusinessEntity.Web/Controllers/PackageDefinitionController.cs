@@ -29,5 +29,17 @@ namespace Retail.BusinessEntity.Web.Controllers
             PackageDefinitionFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<PackageDefinitionFilter>(serializedFilter) : null;
             return manager.GetPackageDefinitionsInfo(deserializedFilter);
         }
+        [HttpGet]
+        [Route("GetRecurringChargeEvaluatorConfigs")]
+        public IEnumerable<RecurringChargeEvaluatorConfig> GetRecurringChargeEvaluatorConfigs()
+        {
+            return manager.GetRecurringChargeEvaluatorConfigs();
+        }
+        [HttpGet]
+        [Route("GetPackageDefinition")]
+        public PackageDefinition GetPackageDefinition(Guid packageDefinitionId)
+        {
+            return manager.GetPackageDefinitionById(packageDefinitionId);
+        }
     }
 }

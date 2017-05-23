@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities
     public class PackageEditorRuntime
     {
         public Package Entity { get; set; }
-
         public PackageExtendedSettingsEditorRuntime ExtendedSettingsEditorRuntime { get; set; }
+        public PackageDefinition PackageDefinition { get; set; }
     }
 }

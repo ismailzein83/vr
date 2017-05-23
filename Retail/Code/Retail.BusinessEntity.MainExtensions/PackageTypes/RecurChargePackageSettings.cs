@@ -11,14 +11,8 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
-    public class InvoiceRecurChargePackageSettings : PackageExtendedSettings
+    public class RecurChargePackageSettings : PackageExtendedSettings
     {
-        public RecurringPeriodSettings RecurringPeriod { get; set; }
-
-        public Decimal Price { get; set; }
-
-        public int CurrencyId { get; set; }
-
         public RecurringChargeEvaluatorSettings Evaluator { get; set; }
     }
 }

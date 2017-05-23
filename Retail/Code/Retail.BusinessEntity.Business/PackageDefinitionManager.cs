@@ -27,6 +27,11 @@ namespace Retail.BusinessEntity.Business
             var packageDefinition = GetPackageDefinitionById(packageDefinitionId);
             return packageDefinition != null ? packageDefinition.Name : null;
         }
+        public IEnumerable<RecurringChargeEvaluatorConfig> GetRecurringChargeEvaluatorConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<RecurringChargeEvaluatorConfig>(RecurringChargeEvaluatorConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(PackageDefinitionFilter filter)
         {
             Dictionary<Guid, PackageDefinition> cachedPackageDefinitions = null;

@@ -147,5 +147,10 @@ namespace Retail.Invoice.Business
         {
             return null;
         }
+
+        public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
+        {
+            return new VRInvoiceAccountData();
+        }
     }
 }

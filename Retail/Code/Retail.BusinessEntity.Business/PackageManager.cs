@@ -65,7 +65,7 @@ namespace Retail.BusinessEntity.Business
                 throw new NullReferenceException(string.Format("packageEditorRuntime.Entity.Settings.ExtendedSettings for Package ID: {0} is null", packageId));
 
             packageEditorRuntime.ExtendedSettingsEditorRuntime = packageEditorRuntime.Entity.Settings.ExtendedSettings.GetEditorRuntime();
-
+            packageEditorRuntime.PackageDefinition = new PackageDefinitionManager().GetPackageDefinitionById(packageEditorRuntime.Entity.Settings.PackageDefinitionId);
             return packageEditorRuntime;
         }
         public string GetPackageName(int packageId)

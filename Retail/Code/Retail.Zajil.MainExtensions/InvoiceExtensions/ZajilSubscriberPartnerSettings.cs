@@ -148,5 +148,14 @@ namespace Retail.Zajil.MainExtensions
         {
             return null;
         }
+
+        public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
+        {
+            return new VRInvoiceAccountData
+            {
+                BED  = null,
+                EED = null
+            };
+        }
     }
 }

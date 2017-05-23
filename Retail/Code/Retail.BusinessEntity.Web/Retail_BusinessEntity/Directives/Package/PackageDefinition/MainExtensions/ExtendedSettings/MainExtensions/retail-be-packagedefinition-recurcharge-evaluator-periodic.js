@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBePackagedefinitionExtendedsettingsInvoicerecurcharge', ['UtilsService','VRUIUtilsService',
+app.directive('retailBePackagedefinitionRecurchargeEvaluatorPeriodic', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBePackagedefinitionExtendedsettingsInvoicerecurcharge', ['U
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new InvoiceRecurchargePackageDefinitionSettings($scope, ctrl, $attrs);
+                var ctor = new PeriodicEvaluator($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageDefinition/MainExtensions/ExtendedSettings/Templates/InvoiceRecurchargePackageDefinitionSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageDefinition/MainExtensions/ExtendedSettings/MainExtensions/Templates/PeriodicEvaluatorTemplate.html'
         };
 
-        function InvoiceRecurchargePackageDefinitionSettings($scope, ctrl, $attrs) {
+        function PeriodicEvaluator($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var genericLKUPDefinitionSelectorApi;
@@ -38,8 +38,7 @@ app.directive('retailBePackagedefinitionExtendedsettingsInvoicerecurcharge', ['U
                 };
 
                 $scope.scopeModel.onGenericLKUPDefinitionSelectionChanged = function (selectedValue) {
-                    if (selectedValue != undefined)
-                    {
+                    if (selectedValue != undefined) {
                         var setLoader = function (value) {
                             $scope.scopeModel.isLoadingDirective = value;
                         };
@@ -68,18 +67,17 @@ app.directive('retailBePackagedefinitionExtendedsettingsInvoicerecurcharge', ['U
 
                 api.load = function (payload) {
                     var promises = [];
-                    var extendedSettings;
-                    if (payload != undefined)
-                    {
-                        extendedSettings = payload.extendedSettings;
-                        if (extendedSettings != undefined)
-                         selectedGenericLKUPDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
+                    var evaluatorDefinitionSettings;
+                    if (payload != undefined) {
+                        evaluatorDefinitionSettings = payload.evaluatorDefinitionSettings;
+                        if (evaluatorDefinitionSettings != undefined)
+                            selectedGenericLKUPDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
                     }
 
                     promises.push(loadGenericLKUPDefinitionSelector());
                     function loadGenericLKUPDefinitionSelector() {
                         var payloadGenericLKUPDefinitionSelector = {
-                            selectedIds: extendedSettings != undefined ? extendedSettings.ChargeableEntityBEDefinitionId : undefined,
+                            selectedIds: evaluatorDefinitionSettings != undefined ? evaluatorDefinitionSettings.ChargeableEntityBEDefinitionId : undefined,
                             filter: {
                                 Filters: [{
                                     $type: "Retail.BusinessEntity.Business.ChargeableEntityDefinitionFilter, Retail.BusinessEntity.Business"
@@ -89,14 +87,14 @@ app.directive('retailBePackagedefinitionExtendedsettingsInvoicerecurcharge', ['U
                         return genericLKUPDefinitionSelectorApi.load(payloadGenericLKUPDefinitionSelector);
                     }
 
-                    if (extendedSettings != undefined)
-                     promises.push(loadGenericLKUPItemSelector());
+                    if (evaluatorDefinitionSettings != undefined)
+                        promises.push(loadGenericLKUPItemSelector());
 
                     function loadGenericLKUPItemSelector() {
                         var payloadGenericLKUPItemSelector = {
-                            selectedIds: extendedSettings.ChargeableEntityId,
+                            selectedIds: evaluatorDefinitionSettings.ChargeableEntityId,
                             filter: {
-                                BusinessEntityDefinitionId: extendedSettings.ChargeableEntityBEDefinitionId
+                                BusinessEntityDefinitionId: evaluatorDefinitionSettings.ChargeableEntityBEDefinitionId
                             }
                         };
                         var promise = UtilsService.createPromiseDeferred();
@@ -116,7 +114,7 @@ app.directive('retailBePackagedefinitionExtendedsettingsInvoicerecurcharge', ['U
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.PackageTypes.InvoiceRecurChargePackageDefinitionSettings, Retail.BusinessEntity.MainExtensions',
+                        $type: 'Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators.PeriodicRecurringChargeEvaluatorDefinitionSettings, Retail.BusinessEntity.MainExtensions',
                         ChargeableEntityBEDefinitionId: genericLKUPDefinitionSelectorApi.getSelectedIds(),
                         ChargeableEntityId: genericLKUPItemSelectorApi.getSelectedIds()
                     };

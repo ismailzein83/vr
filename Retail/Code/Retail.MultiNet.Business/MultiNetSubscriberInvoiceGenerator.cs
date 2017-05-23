@@ -176,20 +176,20 @@ namespace Retail.MultiNet.Business
 
                     foreach (var package in packages)
                     {
-                        var invoiceRecurChargePackageSettings = package.Settings.ExtendedSettings as InvoiceRecurChargePackageSettings;
+                        var invoiceRecurChargePackageSettings = package.Settings.ExtendedSettings as RecurChargePackageSettings;
                         if (invoiceRecurChargePackageSettings != null)
                         {
                             var packageDefinition = _packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
                             if (packageDefinition != null)
                             {
-                                var invoiceRecurChargePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as InvoiceRecurChargePackageDefinitionSettings;
+                                var invoiceRecurChargePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as RecurChargePackageDefinitionSettings;
                                 if (invoiceRecurChargePackageDefinitionSettings != null)
                                 {
                                     Summary summary = new Summary();
-                                    summary.ChargeableEntityId = invoiceRecurChargePackageDefinitionSettings.ChargeableEntityId;
-                                    summary.UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(invoiceRecurChargePackageDefinitionSettings.ChargeableEntityId);
+                                  //  summary.ChargeableEntityId = invoiceRecurChargePackageDefinitionSettings.ChargeableEntityId;
+                                    //summary.UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(invoiceRecurChargePackageDefinitionSettings.ChargeableEntityId);
                                     summary.Quantity = 1;
-                                    summary.NetAmount = invoiceRecurChargePackageSettings.Price;
+                                    //summary.NetAmount = invoiceRecurChargePackageSettings.Price;
                                     summary.SalesTaxAmount = GetSaleTaxAmount(account, summary.NetAmount, currencyId);
                                     summary.AmountWithTaxes = summary.NetAmount + summary.SalesTaxAmount;
                                     AddItemToDictionary(itemSetNamesDic, "Summary", summary);

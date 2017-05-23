@@ -11,8 +11,9 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("1F7F8131-E49E-4A1D-802A-0432BA92EBAB"); }
         }
+        public override string RuntimeEditor { get { return "retail-be-packagesettings-recurcharge-evaluator-periodic"; } }
 
         public Guid ChargeableEntityBEDefinitionId { get; set; }
 

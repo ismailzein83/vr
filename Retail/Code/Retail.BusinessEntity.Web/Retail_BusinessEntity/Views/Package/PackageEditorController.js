@@ -2,15 +2,16 @@
 
     "use strict";
 
-    packageEditorController.$inject = ['$scope', 'Retail_BE_PackageAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    packageEditorController.$inject = ['$scope', 'Retail_BE_PackageAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','Retail_BE_PackageDefinitionAPIService' ];
 
-    function packageEditorController($scope, Retail_BE_PackageAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function packageEditorController($scope, Retail_BE_PackageAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_PackageDefinitionAPIService) {
 
         var isEditMode;
 
         var packageId;
         var packageEntity;
         var extendedSettingsEditorRuntime;
+        var packageDefinition;
 
         var packageDefinitionSelectorAPI;
         var packageDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -45,15 +46,23 @@
             };
 
             $scope.scopeModel.onPackageDefinitionsSelectionChanged = function (selectedItem) {
-
                 if (selectedItem != undefined) {
-                    packageExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isPackageExtendedSettingsDirectiveLoading = value;
-                        };
-                        var payload = { context: getContext() };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageExtendedSettingsDirectiveAPI, payload, setLoader, packageDefinitionSelectionChangedDeferred);
-                    });
+                    if (packageDefinitionSelectionChangedDeferred != undefined)
+                        packageDefinitionSelectionChangedDeferred.resolve();
+                    else
+                    {
+                        getPackageDefinition(selectedItem.PackageDefinitionId).then(function (response) {
+                            if (response != undefined && response.Settings != undefined) {
+                                packageExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
+                                    var setLoader = function (value) {
+                                        $scope.scopeModel.isPackageExtendedSettingsDirectiveLoading = value;
+                                    };
+                                    var payload = { context: getContext(), extendedSettingsDefinition: response.Settings.ExtendedSettings };
+                                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageExtendedSettingsDirectiveAPI, payload, setLoader);
+                                });
+                            }
+                        });
+                    }
                 }
             };
 
@@ -92,7 +101,12 @@
             return Retail_BE_PackageAPIService.GetPackageEditorRuntime(packageId).then(function (packageEditorRuntimeObj) {
                 packageEntity = packageEditorRuntimeObj.Entity;
                 extendedSettingsEditorRuntime = packageEditorRuntimeObj.ExtendedSettingsEditorRuntime;
+                packageDefinition = packageEditorRuntimeObj.PackageDefinition;
             });
+        }
+        function getPackageDefinition(packageDefinitionId)
+        {
+           return Retail_BE_PackageDefinitionAPIService.GetPackageDefinition(packageDefinitionId);
         }
 
         function loadAllControls() {
@@ -150,6 +164,11 @@
                 if (packageEntity != undefined && packageEntity.Settings != undefined && packageEntity.Settings.ExtendedSettings) {
                     packageExtendedSettingsDirectivePayload.extendedSettings = packageEntity.Settings.ExtendedSettings;
                     packageExtendedSettingsDirectivePayload.extendedSettingsEditorRuntime = extendedSettingsEditorRuntime;
+                }
+
+                if (packageDefinition != undefined && packageDefinition.Settings != undefined)
+                {
+                    packageExtendedSettingsDirectivePayload.extendedSettingsDefinition = packageDefinition.Settings.ExtendedSettings;
                 }
                 VRUIUtilsService.callDirectiveLoad(packageExtendedSettingsDirectiveAPI, packageExtendedSettingsDirectivePayload, packageExtendedSettingsDirectiveLoadDeferred);
             });

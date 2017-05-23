@@ -15,9 +15,19 @@
                 serializedFilter: serializedFilter
             });
         }
+        function GetRecurringChargeEvaluatorConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetRecurringChargeEvaluatorConfigs"));
+        }
+        function GetPackageDefinition(packageDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackageDefinition"), {
+                packageDefinitionId: packageDefinitionId
+            });
+        }
         return ({
             GetPackageDefinitionsInfo: GetPackageDefinitionsInfo,
-            GetPackageDefinitionExtendedSettingsConfigs: GetPackageDefinitionExtendedSettingsConfigs
+            GetPackageDefinitionExtendedSettingsConfigs: GetPackageDefinitionExtendedSettingsConfigs,
+            GetRecurringChargeEvaluatorConfigs: GetRecurringChargeEvaluatorConfigs,
+            GetPackageDefinition: GetPackageDefinition
         });
     }
 

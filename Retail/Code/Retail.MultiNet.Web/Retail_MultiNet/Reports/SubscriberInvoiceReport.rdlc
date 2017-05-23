@@ -6,10 +6,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.73854in</Width>
+              <Width>6.74234in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09375in</Width>
+              <Width>1.09755in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -529,7 +529,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox120">
+                    <Textbox Name="Textbox16">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -548,7 +548,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox120</rd:DefaultName>
+                      <rd:DefaultName>Textbox16</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -563,7 +563,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox128">
+                    <Textbox Name="Textbox17">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -582,7 +582,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox128</rd:DefaultName>
+                      <rd:DefaultName>Textbox17</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -607,36 +607,20 @@
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <Group Name="Details" />
-            </TablixMember>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
         <Top>5.22681in</Top>
-        <Left>0.11625in</Left>
+        <Left>0.10865in</Left>
         <Height>2in</Height>
-        <Width>7.83229in</Width>
+        <Width>7.83989in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -912,7 +896,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy") + " - " + CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy") + " - " + CDate(Parameters!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1084,7 +1068,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox79">
+                    <Textbox Name="Textbox14">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1102,7 +1086,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox79</rd:DefaultName>
+                      <rd:DefaultName>Textbox14</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1118,14 +1102,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox81">
+                    <Textbox Name="Textbox15">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!SubscriberNumber.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1135,7 +1119,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox81</rd:DefaultName>
+                      <rd:DefaultName>Textbox15</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1160,24 +1144,12 @@
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <Group Name="Details3" />
-            </TablixMember>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
         <Top>1.95175in</Top>
@@ -1487,7 +1459,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox88">
+                    <Textbox Name="Textbox8">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1505,7 +1477,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox79</rd:DefaultName>
+                      <rd:DefaultName>Textbox8</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1520,7 +1492,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox89">
+                    <Textbox Name="Textbox9">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1537,7 +1509,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox81</rd:DefaultName>
+                      <rd:DefaultName>Textbox9</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1562,21 +1534,11 @@
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <KeepWithGroup>After</KeepWithGroup>
-            </TablixMember>
-            <TablixMember>
-              <Group Name="Details4" />
-            </TablixMember>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
         <Top>0.63231in</Top>
@@ -1594,16 +1556,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.23334in</Width>
+              <Width>1.23836in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.15458in</Width>
+              <Width>2.1596in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.7875in</Width>
+              <Width>1.79252in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.63937in</Width>
+              <Width>2.64439in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1860,9 +1822,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <Top>3.54181in</Top>
-        <Left>0.12875in</Left>
+        <Left>0.10865in</Left>
         <Height>0.75in</Height>
-        <Width>7.81479in</Width>
+        <Width>7.83487in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -2082,7 +2044,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Quantity.Value</Value>
+                              <Value>=RowNumber(Nothing)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2139,14 +2101,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SalesTaxAmount">
+                    <Textbox Name="Quantity1">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SalesTaxAmount.Value</Value>
+                              <Value>=Fields!Quantity.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2158,7 +2120,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SalesTaxAmount</rd:DefaultName>
+                      <rd:DefaultName>Quantity1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -2246,10 +2208,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.11458in</Width>
+              <Width>2.12463in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.7002in</Width>
+              <Width>5.71025in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2331,7 +2293,7 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox149">
+                    <Textbox Name="Bank">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -2348,7 +2310,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox149</rd:DefaultName>
+                      <rd:DefaultName>Bank</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -2370,7 +2332,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value EvaluationMode="Constant" />
+                              <Value />
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2414,9 +2376,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <Top>7.29625in</Top>
-        <Left>0.12875in</Left>
+        <Left>0.10865in</Left>
         <Height>0.5in</Height>
-        <Width>7.81478in</Width>
+        <Width>7.83488in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -2464,6 +2426,20 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <ReportItems>
           <Subreport Name="SubscriberInvoiceItemsReportName">
             <ReportName>SubscriberInvoiceItemsReport</ReportName>
+            <Parameters>
+              <Parameter Name="SubscriberName">
+                <Value>=Parameters!SubscriberNumber.Value</Value>
+              </Parameter>
+              <Parameter Name="AccountNumber">
+                <Value>=Parameters!SubscriberNumber.Value</Value>
+              </Parameter>
+              <Parameter Name="Email">
+                <Value>=Parameters!AccountName.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalUnitCalls">
+                <Value>=Parameters!Quantity.Value</Value>
+              </Parameter>
+            </Parameters>
             <Height>0.31181in</Height>
             <Width>7.98583in</Width>
             <Style>
@@ -2554,9 +2530,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>Retail.MultiNet.Entities</rd:DataSetName>
-        <rd:TableName>RDLCSummaryDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetRDLCSummaryDetailsSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>Retail.MultiNet.Entities.RDLCSummaryDetails, Retail.MultiNet.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCSummaryInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCSummaryInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>Retail.MultiNet.Entities.RDLCSummaryInvoiceItemDetails, Retail.MultiNet.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -2694,6 +2670,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="WHTaxAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Quantity">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

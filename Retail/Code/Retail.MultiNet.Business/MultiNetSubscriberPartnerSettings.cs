@@ -131,5 +131,16 @@ namespace Retail.MultiNet.Business
         {
             return null;
         }
+
+        public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
+        {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+            return new VRInvoiceAccountData
+            {
+                BED = financialAccountData.FinancialAccount.BED,
+                EED = financialAccountData.FinancialAccount.EED
+            };
+        }
     }
 }

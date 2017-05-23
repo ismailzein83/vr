@@ -38,6 +38,7 @@ namespace Retail.MultiNet.Business
                     objects.Add("Account", financialAccountData.Account);
                     objects.Add("Invoice", context.Invoice);
                     return objects;
+
             }
             return null;
         }
