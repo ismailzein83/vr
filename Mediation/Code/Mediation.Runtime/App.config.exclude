@@ -78,7 +78,9 @@
     
     <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=Mediation_Queueing;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=Mediation_Transaction;User ID=sa;Password= "/>
-    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>    
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=Mediation_Logging;User ID=sa;Password= "/>
+
+    <add name="Mediation_CDR_DBConnString" connectionString="Data Source=localhost;Initial Catalog=Mediation_CDR;User ID=sa; Password= " />
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
@@ -115,7 +117,7 @@
     <add key="BCPDonotDeleteFiles" value="false"/>
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
     
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>
