@@ -3237,3 +3237,52 @@ vr-overall-widget  .list-group-item {
 }
 /* end vr-overall-widget*/
 
+/* start vr-tile*/
+.vr-tile{
+    width:100%;
+    color:#fff;
+    margin:5px;
+    border-radius:10px;    
+    display: flex;
+}
+
+.vr-tile .thumbnail-section{
+    width:50%;
+}
+.vr-tile .thumbnail-section img{
+    height:125px;
+    padding: 10px;
+}
+.vr-tile .section {
+   width:50%;
+}
+
+.vr-tile-container{
+    position:relative;
+    height: 100%;
+    width: 100%;
+}
+.vr-tile-inner-container{
+    position:absolute;
+    top: 50%;
+    transform: translate(-20%,-50%);
+    width: 100%;
+}
+
+.vr-tile-inner-container .title{
+   font-size:16px;
+   font-weight:bold;
+   text-align: right;
+}
+
+
+.vr-tile-inner-container .tilevalue span{
+   font-size:11px;     
+   width:50%;
+   display:inline-block;
+   text-align: right;
+}
+/* end vr-tile*/
+
+
+
