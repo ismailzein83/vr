@@ -9,6 +9,7 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+Delete from [common].[VRComponentType] where ID='6AFCFAD7-6E4E-4B0B-AE48-0E3C30C60654'
 --[common].[ExtensionConfiguration]-----------------------------------------------------
 BEGIN
 set nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values
