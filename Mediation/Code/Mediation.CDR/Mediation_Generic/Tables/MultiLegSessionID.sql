@@ -7,5 +7,3 @@
     CONSTRAINT [PK_MultiLegSessionID] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
-
-

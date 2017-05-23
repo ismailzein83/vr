@@ -26,15 +26,3 @@
     CONSTRAINT [PK_CookedCDR] PRIMARY KEY CLUSTERED ([CDRID] ASC)
 );
 
-
-
-
-
-
-
-
-
-
-
-
-

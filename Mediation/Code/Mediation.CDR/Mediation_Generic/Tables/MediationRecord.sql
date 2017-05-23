@@ -8,7 +8,3 @@
     CONSTRAINT [PK_StoreStagingRecord] PRIMARY KEY CLUSTERED ([EventId] ASC)
 );
 
-
-
-
-

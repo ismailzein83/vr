@@ -71,6 +71,12 @@
     <Folder Include="Mediation_WHS\" />
     <Folder Include="Mediation_WHS\Tables\" />
     <Folder Include="Mediation_WHS\User Defined Types\" />
+    <Folder Include="Mediation_Generic\" />
+    <Folder Include="Mediation_Generic\Tables\" />
+    <Folder Include="Mediation_Generic\Functions\" />
+    <Folder Include="Mediation_Generic\Stored Procedures\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mobile_EDR\Tables\GPRS.sql" />
@@ -83,5 +89,19 @@
     <Build Include="Mediation_WHS\Tables\CDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\CDRType.sql" />
     <Build Include="Security\Mediation_WHS.sql" />
+    <Build Include="Mediation_Generic\Tables\MultiLegSessionID.sql" />
+    <Build Include="Mediation_Generic\Tables\MediationRecord.sql" />
+    <Build Include="Mediation_Generic\Tables\CookedCDR.sql" />
+    <Build Include="Mediation_Generic\Functions\GetLegIdsSessionTable.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_InsertSessionLegs.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_GetByMediationDefinitionID.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_DeleteSessionId.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByStatus.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByIds.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetAll.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionIds.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionId.sql" />
+    <Build Include="dbo\User Defined Types\StringIDType.sql" />
+    <Build Include="Security\Mediation_Generic.sql" />
   </ItemGroup>
 </Project>
