@@ -1,4 +1,5 @@
-﻿CREATE TYPE [WHS].[WHS_CDRType] AS TABLE (
+﻿CREATE TABLE [Mediation_WHS].[CDR] (
+    [Id]                        BIGINT       IDENTITY (1, 1) NOT NULL,
     [SwitchID]                  INT          NULL,
     [RecordType]                INT          NULL,
     [CDPN]                      VARCHAR (20) NULL,
@@ -6,7 +7,6 @@
     [RecordEntity]              VARCHAR (20) NULL,
     [MSCIncomingRoute]          VARCHAR (20) NULL,
     [MSCOutgoingRoute]          VARCHAR (20) NULL,
-    [AttemptDateTime]           DATETIME     NULL,
     [ConnectDateTime]           DATETIME     NULL,
     [DisconnectDateTime]        DATETIME     NULL,
     [DurationInSeconds]         INT          NULL,
@@ -31,5 +31,8 @@
     [RecordNumber]              BIGINT       NULL,
     [CallReference]             BIGINT       NULL,
     [LAC]                       INT          NULL,
-    [CauseForTermination]       INT          NULL);
+    [CauseForTermination]       INT          NULL,
+    [AttemptDateTime]           DATETIME     NULL,
+    CONSTRAINT [PK_WHS_CDR] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
 

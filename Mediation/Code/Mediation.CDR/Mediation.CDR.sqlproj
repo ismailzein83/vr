@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{359b0cda-41b7-4ac7-932c-a28c08e7dd85}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -68,6 +68,9 @@
     <Folder Include="WHS\" />
     <Folder Include="WHS\Tables\" />
     <Folder Include="WHS\User Defined Types\" />
+    <Folder Include="Mediation_WHS\" />
+    <Folder Include="Mediation_WHS\Tables\" />
+    <Folder Include="Mediation_WHS\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mobile_EDR\Tables\GPRS.sql" />
@@ -77,8 +80,8 @@
     <Build Include="Mobile_EDR\User Defined Types\SMSType.sql" />
     <Build Include="Mobile_EDR\User Defined Types\GPRSType.sql" />
     <Build Include="Security\Mobile_EDR.sql" />
-    <Build Include="WHS\Tables\WHS_CDR.sql" />
-    <Build Include="WHS\User Defined Types\WHS_CDRType.sql" />
-    <Build Include="Security\WHS.sql" />
+    <Build Include="Mediation_WHS\Tables\CDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\CDRType.sql" />
+    <Build Include="Security\Mediation_WHS.sql" />
   </ItemGroup>
 </Project>
