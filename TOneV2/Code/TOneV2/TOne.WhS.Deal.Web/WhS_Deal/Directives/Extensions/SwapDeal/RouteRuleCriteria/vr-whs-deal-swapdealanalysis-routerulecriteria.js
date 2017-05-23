@@ -40,6 +40,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
             var dealDefinitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var dealDefinitionSelectionChangedPromiseDeferred;
             var defaultCriteriaValues;
+            var routeRuleCriteriaContext;
 
             var saleZoneSelectorAPI;
             var saleZoneSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -60,7 +61,9 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                         WhS_Deal_SwapDealAPIService.GetSwapDealSettingsDetail(selectedDealDefinitionId).then(function (response) {
                             sellingNumberPlanId = response.SellingNumberPlanId;
                             availableZoneIds = response.SaleZoneIds;
-
+                            if (routeRuleCriteriaContext != undefined && routeRuleCriteriaContext.setTimeSettings != undefined && typeof (routeRuleCriteriaContext.setTimeSettings) == 'function') {
+                                routeRuleCriteriaContext.setTimeSettings(response.BED, response.EED);
+                            }
                             if (dealDefinitionSelectionChangedPromiseDeferred != undefined) {
                                 dealDefinitionSelectionChangedPromiseDeferred.resolve();
                             }
@@ -92,6 +95,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                     routingProductId = payload.routingProductId;
                     routeRuleCriteria = payload.routeRuleCriteria;
                     defaultCriteriaValues = payload.defaultCriteriaValues;
+                    routeRuleCriteriaContext = payload.routeRuleCriteriaContext;
 
                     var dealDefinitionLoadPromise = loadDealDefinitionSelectorPromise();
                     promises.push(dealDefinitionLoadPromise);

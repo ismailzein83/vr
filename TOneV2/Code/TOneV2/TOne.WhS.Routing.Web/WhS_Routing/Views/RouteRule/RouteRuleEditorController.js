@@ -33,9 +33,25 @@
         var routeRuleCriteriaReadyPromiseDeferred;
 
         var context;
+        var minBED;
+        var maxEED;
         loadParameters();
         defineScope();
         load();
+
+        function buildRouteRuleCriteriaContext() {
+            var routeRuleCriteriaContext = {
+                setTimeSettings: function (bed, eed) {
+                    if (bed != undefined)
+                        $scope.scopeModel.beginEffectiveDate = minBED = UtilsService.createDateFromString(bed);
+
+                    if (eed != undefined)
+                        $scope.scopeModel.endEffectiveDate = maxEED = UtilsService.createDateFromString(eed);
+                }
+            };
+
+            return routeRuleCriteriaContext;
+        }
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -95,7 +111,8 @@
                     routingProductId: routingProductId,
                     sellingNumberPlanId: sellingNumberPlanId,
                     linkedCode: linkedCode,
-                    defaultCriteriaValues: defaultRouteRuleValues != undefined ? defaultRouteRuleValues.criteria : undefined
+                    defaultCriteriaValues: defaultRouteRuleValues != undefined ? defaultRouteRuleValues.criteria : undefined,
+                    routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleCriteriaAPI, routeRuleCriteriaPayload, setLoader, routeRuleCriteriaReadyPromiseDeferred);
@@ -133,8 +150,51 @@
                     return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
             };
 
-            $scope.scopeModel.validateDates = function (date) {
-                return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+
+            //$scope.scopeModel.validateDates = function (date) {
+            //    if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+            //        var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+            //        if (validationResult != null)
+            //            return validationResult;
+            //    }
+
+
+
+
+            //}
+
+            $scope.scopeModel.validateBED = function () {
+                if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+                    var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+                    if (validationResult != null)
+                        return validationResult;
+                }
+
+                var bed = $scope.scopeModel.beginEffectiveDate;
+                if (bed != undefined && !(bed instanceof Date))
+                    bed = UtilsService.createDateFromString(bed);
+
+                if (minBED != undefined && bed != undefined && bed < minBED) {
+                    return 'BED should be greater than ' + UtilsService.dateToServerFormat(minBED);
+                }
+                return null;
+            };
+
+            $scope.scopeModel.validateEED = function () {
+                if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+                    var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+                    if (validationResult != null)
+                        return validationResult;
+                }
+
+                var eed = $scope.scopeModel.endEffectiveDate;
+                if (eed != undefined && !(eed instanceof Date))
+                    eed = UtilsService.createDateFromString(eed);
+
+                if (maxEED != undefined && (eed == undefined || eed > maxEED)) {
+                    return 'EED should be less than ' + UtilsService.dateToServerFormat(maxEED);
+                }
+                return null;
             };
 
             $scope.scopeModel.close = function () {
@@ -308,7 +368,8 @@
                     routingProductId: routingProductId,
                     sellingNumberPlanId: sellingNumberPlanId,
                     routeRuleCriteria: routeRuleEntity.Criteria,
-                    linkedCode: linkedCode
+                    linkedCode: linkedCode,
+                    routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
                 }
             }
 
