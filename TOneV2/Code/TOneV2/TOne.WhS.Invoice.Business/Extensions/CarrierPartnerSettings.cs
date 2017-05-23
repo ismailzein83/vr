@@ -175,6 +175,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 return carrierAccountManager.GetCustomerTimeZoneId(invoiceAccount.CarrierAccountId.Value);
             }
         }
+
+        public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
+        {
+            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
+            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            return new VRInvoiceAccountData
+            {
+                BED = invoiceAccount.BED,
+                EED = invoiceAccount.EED
+            };
+        }
     }
       
 }
