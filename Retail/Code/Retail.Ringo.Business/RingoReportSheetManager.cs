@@ -469,8 +469,8 @@ namespace Retail.Ringo.Business
         string SintesiRingoOperatorSenderFooter(SintesiRingoMessageEntity sintesiRingoMessageEntity,
             TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
         {
-            return (string.Format(" RFNOVA{0}ICSI{1}{2}RINGIN{3}{4}{5}{6}", sintesiRingoMessageEntity.Operator,
-                sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Network,
+            return (string.Format(" RFNOVA{0}ICSI{1}{2}RINGIN{3}{4}{5}{6}", sintesiRingoMessageEntity.Network,
+                sintesiRingoMessageEntity.Network == sintesiRingoMessageEntity.Operator ? "    " : sintesiRingoMessageEntity.Operator,
                 filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
                 incremental.ToString("D10")));
         }
@@ -496,8 +496,8 @@ namespace Retail.Ringo.Business
         string DettaglioRingoOperatorRecipientFooter(DettaglioRingoMessageEntity dettaglioRingoMessageEntity,
             TCRRingoReportFilter filter, int transactionCount, int sumTransferredCredit, int incremental)
         {
-            return (string.Format(" EF{0}NOVA{1}ICSI{2}RINGOT{3}{4}{5}{6}", dettaglioRingoMessageEntity.Operator,
-                dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Network,
+            return (string.Format(" EF{0}NOVA{1}ICSI{2}RINGOT{3}{4}{5}{6}", dettaglioRingoMessageEntity.Network,
+                dettaglioRingoMessageEntity.Network == dettaglioRingoMessageEntity.Operator ? "    " : dettaglioRingoMessageEntity.Operator,
                 filter.From.Value.ToString("yyyyMM"), filter.From.Value.ToString("yyMM"), transactionCount.ToString("D10"), sumTransferredCredit.ToString("D10"),
                 incremental.ToString("D10")));
         }
