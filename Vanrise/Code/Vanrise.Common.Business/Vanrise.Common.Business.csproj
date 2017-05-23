@@ -111,6 +111,7 @@
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
     <Compile Include="VRConnections\VRInterAppRestConnection.cs" />
+    <Compile Include="VREventManager.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeManager.cs" />

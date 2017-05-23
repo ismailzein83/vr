@@ -147,6 +147,9 @@
     <Compile Include="VRDocument\VRDocumentCategoryDefinition.cs" />
     <Compile Include="VRDocument\VRDocumentItemDefinition.cs" />
     <Compile Include="VRDocument\VRDocumentSetting.cs" />
+    <Compile Include="VREvent\VREventHandlerSettings.cs" />
+    <Compile Include="VREvent\VREventPayload.cs" />
+    <Compile Include="VREvent\VREventHandler.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
