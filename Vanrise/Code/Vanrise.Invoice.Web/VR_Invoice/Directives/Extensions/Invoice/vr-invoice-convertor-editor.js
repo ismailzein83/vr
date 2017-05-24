@@ -31,9 +31,9 @@ app.directive('vrInvoiceConvertorEditor', ['VRUIUtilsService', 'UtilsService',
                     gridDirectiveReadyPromiseDeferred.resolve();
                 };
 
-                $scope.scopeModel.addPartnerinfo = function () {
+                $scope.scopeModel.addPartnerinfo = function (item) {
                     var dataItem = {
-                        id: $scope.scopeModel.partnerInfoObjects + 1,
+                        id: $scope.scopeModel.partnerInfoObjects.length + 1,
                         ObjectName: '',
                         InfoType: ''
                     };
@@ -65,7 +65,7 @@ app.directive('vrInvoiceConvertorEditor', ['VRUIUtilsService', 'UtilsService',
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.Convertors.InvoiceToVRObjectConvertor, Vanrise.Invoice.MainExtensions",
-                        PartnerInfoObjects: $scope.scopeModel.partnerInfoObjects
+                        PartnerInfoObjects: GetPartnerInfoObjects()
                     };
                 };
                 if (ctrl.onReady != null)
@@ -77,6 +77,18 @@ app.directive('vrInvoiceConvertorEditor', ['VRUIUtilsService', 'UtilsService',
                     ObjectName: 'Invoice',
                     InfoType: 'Invoice'
                 });
+            }
+
+            function GetPartnerInfoObjects() {
+                var result = [];
+                for (var i = 0; i < $scope.scopeModel.partnerInfoObjects.length; i++) {
+                    var infoObject = $scope.scopeModel.partnerInfoObjects[i];
+                    result.push({
+                        InfoType: infoObject.InfoType,
+                        ObjectName: infoObject.ObjectName
+                    });
+                }
+                return result;
             }
         }
     }]);
