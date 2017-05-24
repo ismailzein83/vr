@@ -21,15 +21,15 @@ app.directive('vrWhsDealSwapdealTechnicalsettingsEditor', ['UtilsService', 'VRUI
         function SwapDealAnalysisTechnicalSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var componentTypeSelectorAPI;
-            var componentTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            var vrRuleDefinitionSelectorAPI;
+            var vrRuleDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onComponentTypeSelectorReady = function (api) {
-                    componentTypeSelectorAPI = api;
-                    componentTypePromiseDeferred.resolve();
+                $scope.scopeModel.onVRRuleDefinitionSelectorReady = function (api) {
+                    vrRuleDefinitionSelectorAPI = api;
+                    vrRuleDefinitionPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -49,30 +49,25 @@ app.directive('vrWhsDealSwapdealTechnicalsettingsEditor', ['UtilsService', 'VRUI
                     }
 
                     //Loading SupplierZone selector 
-                    var componentTypeSelectorLoadPromise = getComponentTypeSelectorLoadPromise();
-                    promises.push(componentTypeSelectorLoadPromise);
+                    var vrRuleDefinitionSelectorLoadPromise = getVRRuleDefinitionSelectorLoadPromise();
+                    promises.push(vrRuleDefinitionSelectorLoadPromise);
 
 
-                    function getComponentTypeSelectorLoadPromise() {
-                        var componentTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    function getVRRuleDefinitionSelectorLoadPromise() {
+                        var vrRuleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        componentTypePromiseDeferred.promise.then(function () {
+                        vrRuleDefinitionPromiseDeferred.promise.then(function () {
 
-                            var componentTypeSelectorPayload;
+                            var vrRuleDefinitionSelectorPayload;
                             if (swapDealTechnicalSettingData != undefined) {
-                                componentTypeSelectorPayload = {
-                                    filter: {
-                                        Filters: [{
-                                            $type: 'Vanrise.Common.Business.VRRuleDefinitionComponentTypeFilter, Vanrise.Common.Business'
-                                        }]
-                                    },
+                                vrRuleDefinitionSelectorPayload = {
                                     selectedIds: swapDealTechnicalSettingData.SwapDealBuyRouteRuleDefinitionId
                                 };
                             }
-                            VRUIUtilsService.callDirectiveLoad(componentTypeSelectorAPI, componentTypeSelectorPayload, componentTypeSelectorLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(vrRuleDefinitionSelectorAPI, vrRuleDefinitionSelectorPayload, vrRuleDefinitionSelectorLoadDeferred);
                         });
 
-                        return componentTypeSelectorLoadDeferred.promise;
+                        return vrRuleDefinitionSelectorLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -82,7 +77,7 @@ app.directive('vrWhsDealSwapdealTechnicalsettingsEditor', ['UtilsService', 'VRUI
 
                     var data = {
                         $type: 'TOne.WhS.Deal.Entities.SwapDealTechnicalSettingData, TOne.WhS.Deal.Entities',
-                        SwapDealBuyRouteRuleDefinitionId: componentTypeSelectorAPI.getSelectedIds()
+                        SwapDealBuyRouteRuleDefinitionId: vrRuleDefinitionSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };
