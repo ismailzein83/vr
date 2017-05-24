@@ -78,23 +78,29 @@ namespace PartnerPortal.CustomerAccess.Business
 
         private void AddAnalyticTileFields(IEnumerable<AnalyticRecord> analyticRecords, Dictionary<Guid,AnalyticTileField> fieldsDic, List<MeasureItem> listMeasures)
         {
-            if (analyticRecords != null)
+            if (analyticRecords != null && analyticRecords.Count() > 0)
             {
                 foreach (var analyticRecord in analyticRecords)
                 {
-                    foreach (var listMeasure in listMeasures)
-                    {
-                        MeasureValue measureValue = GetMeasureValue(analyticRecord, listMeasure.MeasureName);
-                        if (measureValue != null)
-                        {
-                            fieldsDic.Add(listMeasure.MeasureItemId,new AnalyticTileField
-                            {
-                                Description = listMeasure.MeasureTitle,
-                                Value = measureValue.Value
-                            });
-                        }
-                    }
+                    AddMeasureToDic(fieldsDic, listMeasures, analyticRecord);
                 }
+            }else
+            {
+                AddMeasureToDic(fieldsDic, listMeasures, null);
+            }
+        }
+        private void AddMeasureToDic(Dictionary<Guid, AnalyticTileField> fieldsDic, List<MeasureItem> listMeasures, AnalyticRecord analyticRecord)
+        {
+            foreach (var listMeasure in listMeasures)
+            {
+                MeasureValue measureValue = null;
+                if (analyticRecord != null)
+                    measureValue = GetMeasureValue(analyticRecord, listMeasure.MeasureName);
+                fieldsDic.Add(listMeasure.MeasureItemId, new AnalyticTileField
+                {
+                    Description = listMeasure.MeasureTitle,
+                    Value = measureValue != null ? measureValue.Value : 0
+                });
             }
         }
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)

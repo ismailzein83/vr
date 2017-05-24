@@ -53,9 +53,10 @@ app.directive("partnerportalCustomeraccessLivebalancetileruntimesettings", ["Uti
                             {
                                 if (response.CurrentAccountBalance != undefined) {
                                     $scope.scopeModel.fields.push({
-                                        name: "Current Balance",
-                                        value: $scope.scopeModel.currentBalance = response.CurrentAccountBalance.CurrentBalance + " " + response.CurrentAccountBalance.CurrencyDescription + " " + response.CurrentAccountBalance.BalanceFlagDescription
-
+                                        value: response.CurrentAccountBalance.CurrentBalance +" " + response.CurrentAccountBalance.BalanceFlagDescription
+                                    });
+                                    $scope.scopeModel.fields.push({
+                                        value:  response.CurrentAccountBalance.CurrencyDescription
                                     });
                                 }
                                 $scope.scopeModel.url = response.ViewURL;

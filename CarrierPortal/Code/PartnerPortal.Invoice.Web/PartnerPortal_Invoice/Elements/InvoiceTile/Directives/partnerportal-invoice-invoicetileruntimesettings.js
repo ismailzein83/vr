@@ -50,10 +50,12 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
                     {
                         return PartnerPortal_Invoice_InvoiceAPIService.GetRemoteLastInvoice(definitionSettings.VRConnectionId, definitionSettings.InvoiceTypeId,definitionSettings.ViewId).then(function (response) {
                             if (response != undefined) {
+                                var invoiceBalance = "";
+                                var invoiceCurrency = "";
+                                var toDate = "";
                                 if (response.InvoiceDetail != undefined) {
                                     if (response.InvoiceDetail.Items != undefined) {
-                                        var invoiceBalance;
-                                        var invoiceCurrency;
+                                      
                                         for (var i = 0, length = response.InvoiceDetail.Items.length ; i < length; i++) {
                                             var item = response.InvoiceDetail.Items[i];
                                             if (item.FieldName == "TotalAmount") {
@@ -63,20 +65,19 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
                                             }
                                         }
                                     }
-
-                                    $scope.scopeModel.fields.push({
-                                        name: "Amount",
-                                        value: invoiceBalance + " " + invoiceCurrency
-                                    });
                                     if (response.InvoiceDetail.Entity != undefined) {
-                                        var dueDate = UtilsService.createDateFromString(response.InvoiceDetail.Entity.DueDate);
-
-                                        $scope.scopeModel.fields.push({
-                                            name: "Date",
-                                            value: dueDate
-                                        });
+                                        toDate = UtilsService.createDateFromString(response.InvoiceDetail.Entity.ToDate);
                                     }
                                 }
+
+                                $scope.scopeModel.fields.push({
+                                    name: "Amount",
+                                    value: invoiceBalance + " " + invoiceCurrency
+                                });
+                                $scope.scopeModel.fields.push({
+                                        name: "Date",
+                                        value: toDate
+                                    });
                                 $scope.scopeModel.url = response.ViewURL;
                             }
                         });
