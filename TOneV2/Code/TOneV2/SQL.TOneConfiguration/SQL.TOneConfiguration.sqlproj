@@ -133,6 +133,7 @@
     <Folder Include="logging\Stored Procedures\" />
     <Folder Include="dataparser\" />
     <Folder Include="dataparser\Tables\" />
+    <Folder Include="dataparser\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -614,6 +615,9 @@
     <Build Include="common\Tables\CacheRefreshHandle.sql" />
     <Build Include="common\Stored Procedures\sp_CacheRefreshHandle_Update.sql" />
     <Build Include="common\Stored Procedures\sp_CacheRefreshHandle_GetAll.sql" />
+    <Build Include="dataparser\Stored Procedures\sp_ParserType_Update.sql" />
+    <Build Include="dataparser\Stored Procedures\sp_ParserType_Insert.sql" />
+    <Build Include="dataparser\Stored Procedures\sp_ParserType_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
