@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (HasSupplierZoneServices(supplierId, supplierZoneId, effectiveOn, out supplierZoneService))
             {
                 return new SupplierEntityService()
-                {
+                {   SupplierZoneServiceId = supplierZoneService.SupplierZoneServiceId,
                     Source = SupplierEntityServiceSource.SupplierZone,
                     Services = supplierZoneService.EffectiveServices,
                     BED = supplierZoneService.BED,
@@ -39,7 +39,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SupplierDefaultService defaultService = GetDefaultSupplierServices(supplierId, effectiveOn);
                 return new SupplierEntityService()
-                {
+                {  SupplierZoneServiceId=defaultService.SupplierZoneServiceId,
                     Source = SupplierEntityServiceSource.Supplier,
                     Services = defaultService.EffectiveServices,
                     BED = defaultService.BED,

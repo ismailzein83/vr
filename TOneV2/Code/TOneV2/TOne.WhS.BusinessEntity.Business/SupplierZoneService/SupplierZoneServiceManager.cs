@@ -22,6 +22,84 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierZonesServicesEffectiveAfter(supplierId, minimumDate);
         }
 
+        public List<SupplierDefaultService> GetSupplierDefaultServicesEffectiveAfter(int supplierId, DateTime minimumDate)
+        {
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.GetSupplierDefaultServicesEffectiveAfter(supplierId, minimumDate);
+        }
+
+        private IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneName(string ZoneName, int supplierId, DateTime effectiveDate, out SupplierZone effectiveSupplierZone)
+        {
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            SupplierZoneManager zoneManager = new SupplierZoneManager();
+            IEnumerable<long> zoneIds = zoneManager.GetSupplierZoneIdsEffectiveByZoneName(ZoneName, effectiveDate, supplierId);
+            string strZoneIds=null;
+            if (zoneIds != null && zoneIds.Count()>0)
+            {
+                strZoneIds = string.Join(",", zoneIds);
+            }
+            IEnumerable<SupplierZoneService> supplierZoneServiceList = dataManager.GetSupplierZonesServicesEffectiveAfterByZoneIds(supplierId, effectiveDate, strZoneIds);
+            effectiveSupplierZone = zoneManager.GetEffectiveSupplierZoneByZoneIds(zoneIds, effectiveDate);
+            return supplierZoneServiceList;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail> UpdateSupplierZoneService(SupplierZoneServiceToEdit serviceObject)
+        {
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+
+            SupplierZone effectiveSupplierZone;
+
+            IEnumerable<SupplierZoneService> listSupplierZoneService = GetSupplierZonesServicesEffectiveAfterByZoneName(serviceObject.ZoneName, serviceObject.SupplierId,
+                serviceObject.BED, out effectiveSupplierZone);
+
+            Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if(effectiveSupplierZone == null)
+            {
+                updateOperationOutput.Message = String.Format("Zone {0} is not effective at date {1}", serviceObject.ZoneName, serviceObject.BED);
+                return updateOperationOutput;
+            }
+
+            SupplierZoneManager zoneManager = new SupplierZoneManager();
+            List<SupplierZoneServiceToClose> listOfZoneServiceToClose = new List<SupplierZoneServiceToClose>();
+            SupplierZoneServiceToClose supplierZoneServiceToClose;
+
+            DateTime closeDate;
+            foreach (SupplierZoneService supplierZoneService in listSupplierZoneService)
+            {
+                closeDate = Utilities.Max(serviceObject.BED, supplierZoneService.BED);
+
+                supplierZoneServiceToClose = new SupplierZoneServiceToClose()
+                {
+                    SupplierZoneServiceId = supplierZoneService.SupplierZoneServiceId,
+                    CloseDate = closeDate
+                };
+
+                listOfZoneServiceToClose.Add(supplierZoneServiceToClose);
+            }
+
+            bool updateActionSucc = dataManager.Update(listOfZoneServiceToClose, effectiveSupplierZone.SupplierZoneId, this.ReserveIDRange(1), serviceObject);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                SupplierEntityServiceDetail supplierEntityServiceDetail = new SupplierEntityServiceDetail()
+                {
+                    SupplierZoneServiceId = serviceObject.SupplierZoneServiceId,
+                    Source = SupplierEntityServiceSource.SupplierZone,
+                    BED = serviceObject.BED,
+                    EED = null,
+                    ZoneName = serviceObject.ZoneName,
+                    Services = serviceObject.Services.Select(x => x.ServiceId)
+                };
+
+                updateOperationOutput.UpdatedObject = supplierEntityServiceDetail;
+            }
+            
+            return updateOperationOutput;
+        
+        }
         public Vanrise.Entities.IDataRetrievalResult<SupplierEntityServiceDetail> GetFilteredSupplierZoneServices(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
         {
             VRActionLogger.Current.LogGetFilteredAction(SupplierZoneServiceLoggableEntity.Instance, input);
@@ -42,6 +120,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
             return dataManager.Insert(supplierDefaultService); 
+        }
+
+        public bool InsertSupplierDefaultService(SupplierDefaultService supplierDefaultService)
+        {
+            supplierDefaultService.SupplierZoneServiceId = this.ReserveIDRange(1);
+
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.Insert(supplierDefaultService);
         }
 
         public void UpdateSupplierDefaultService(int supplierId, List<ZoneService> services)
@@ -73,55 +159,16 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-        private class SupplierZoneServiceLoggableEntity : VRLoggableEntityBase
-        {
-            public static SupplierZoneServiceLoggableEntity Instance = new SupplierZoneServiceLoggableEntity();
-
-            private SupplierZoneServiceLoggableEntity()
-            {
-
-            }
-
-
-
-            public override string EntityUniqueName
-            {
-                get { return "WhS_BusinessEntity_SupplierZoneService"; }
-            }
-
-            public override string ModuleName
-            {
-                get { return "Business Entity"; }
-            }
-
-            public override string EntityDisplayName
-            {
-                get { return "Supplier Zone Service"; }
-            }
-
-            public override string ViewHistoryItemClientActionName
-            {
-                get { return "WhS_BusinessEntity_SupplierZoneService_ViewHistoryItem"; }
-            }
-
-            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
-            {
-                SupplierZoneService supplierZoneSrvice = context.Object.CastWithValidate<SupplierZoneService>("context.Object");
-                return supplierZoneSrvice.SupplierZoneServiceId;
-            }
-
-            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
-            {
-                return null;
-            }
-        }
+        
         #region Private Methods
         private SupplierEntityServiceDetail SupplierEntityServiceDetailMapper(SupplierEntityService supplierEntityService)
         {
             SupplierEntityServiceDetail detail = new SupplierEntityServiceDetail()
             {
-                Entity = supplierEntityService
-               
+               Source = supplierEntityService.Source,
+               BED = supplierEntityService.BED,
+               EED=null,
+               Services=supplierEntityService.Services.Select(x => x.ServiceId)
             };
 
             return detail;
@@ -141,19 +188,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if(input.Query.ZoneIds != null)
                      supplierZones = supplierZones.FindAllRecords(item => input.Query.ZoneIds.Contains(item.SupplierZoneId));
-
+                
                 SupplierZoneServiceLocator zoneServiceLocator = new SupplierZoneServiceLocator(new SupplierZoneServiceReadAllWithCache(input.Query.EffectiveOn));
                 
                 List<SupplierEntityServiceDetail> supplierEntityServicesDetail = new List<SupplierEntityServiceDetail>();
-               
+
+                if (input.Query.ServiceIds != null)
+                    supplierZones = GetSupplierZoneServicesByServiceId(input.Query.ServiceIds, supplierZones, zoneServiceLocator, input.Query.EffectiveOn);
+
                 foreach (SupplierZone supplierZone in supplierZones)
-                {
+                {var Entity=zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId, input.Query.EffectiveOn);
                     SupplierEntityServiceDetail supplierEntityServiceDetail = new SupplierEntityServiceDetail();
-                    supplierEntityServiceDetail.Entity = zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId, input.Query.EffectiveOn);
+                    supplierEntityServiceDetail.SupplierZoneServiceId = Entity.SupplierZoneServiceId;
+                    supplierEntityServiceDetail.Source = Entity.Source;
+                    supplierEntityServiceDetail.BED = Entity.BED;
+                    supplierEntityServiceDetail.EED = Entity.EED;
                      supplierEntityServiceDetail.ZoneName = supplierZone.Name;
-                     supplierEntityServiceDetail.Services = supplierEntityServiceDetail.Entity.Services.Select(x => x.ServiceId).ToList();         
+                     supplierEntityServiceDetail.Services = Entity.Services.Select(x => x.ServiceId);         
                     supplierEntityServicesDetail.Add(supplierEntityServiceDetail);
                 }
+
                 return supplierEntityServicesDetail;
             }
 
@@ -188,21 +242,42 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var record in context.BigResult.Data)
                     {
-                        if (record.Entity != null)
+                        if (record != null)
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Services == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Services) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.EED });
                         }
                     }
                 }
                 context.MainSheet = sheet;
             }
         }
-        
+
+        private static List<SupplierZone> GetSupplierZoneServicesByServiceId(IEnumerable<int> servicesIds, IEnumerable<SupplierZone> supplierZones, 
+            SupplierZoneServiceLocator zoneServiceLocator, DateTime effectiveOn)
+        {
+            List<SupplierZone> supplierZoneFilterdByServiceId = new List<SupplierZone>();
+
+            foreach (SupplierZone supplierZone in supplierZones)
+            {
+                var entity = zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId, effectiveOn);
+                var services = entity.Services.Select(x => x.ServiceId);
+                foreach (var serviceId in servicesIds)
+                {
+                    if (services.Contains(serviceId))
+                    {
+                        supplierZoneFilterdByServiceId.Add(supplierZone);
+                        break;
+                    }
+                }
+            }
+
+            return supplierZoneFilterdByServiceId;
+        }
 
         private SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
         {
@@ -238,10 +313,52 @@ namespace TOne.WhS.BusinessEntity.Business
                 EffectiveServices = services,
                 ReceivedServices = services,
                 BED = DateTime.Today,
-                SupplierId = supplierId
+                SupplierId = supplierId,
+                EED=null
             };
         }
 
         #endregion
+
+        private class SupplierZoneServiceLoggableEntity : VRLoggableEntityBase
+        {
+            public static SupplierZoneServiceLoggableEntity Instance = new SupplierZoneServiceLoggableEntity();
+
+            private SupplierZoneServiceLoggableEntity()
+            {
+
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BusinessEntity_SupplierZoneService"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Supplier Zone Service"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BusinessEntity_SupplierZoneService_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SupplierZoneService supplierZoneSrvice = context.Object.CastWithValidate<SupplierZoneService>("context.Object");
+                return supplierZoneSrvice.SupplierZoneServiceId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                return null;
+            }
+        }
     }
 }

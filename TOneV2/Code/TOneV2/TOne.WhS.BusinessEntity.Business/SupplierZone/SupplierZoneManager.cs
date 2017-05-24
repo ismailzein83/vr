@@ -124,6 +124,12 @@ namespace TOne.WhS.BusinessEntity.Business
             var allSupplierZones = GetCachedSupplierZones();
             return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId)).OrderBy(x => x.Name);
         }
+        public IEnumerable<long> GetSupplierZoneIdsEffectiveByZoneName(String ZoneName, DateTime BED, int supplierId)
+        {
+            var allSupplierZones = GetCachedSupplierZones();
+           
+            return allSupplierZones.Values.Where(x => ((supplierId == x.SupplierId) && ZoneName.Equals(x.Name) && (!x.EED.HasValue || x.EED > BED))).Select(it => it.SupplierZoneId);
+        }
 
         public long ReserveIDRange(int numberOfIDs)
         {
@@ -158,6 +164,21 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<SupplierZoneGroupTemplate>(SupplierZoneGroupTemplate.EXTENSION_TYPE);
+        }
+
+        public SupplierZone GetEffectiveSupplierZoneByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate)
+        {
+            if(zoneIds != null)
+            {
+                foreach (var zoneId in zoneIds)
+                {
+                    var supplierZone = GetSupplierZone(zoneId);
+                    if (supplierZone.IsInTimeRange(effectiveDate))
+                        return supplierZone;
+                }
+            }
+
+            return null;
         }
 
         #endregion
@@ -232,7 +253,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = supplierZone.Name,
             };
         }
+        private SupplierZone SupplierZoneIdsMapper(SupplierZone supplierZone)
+        {
+            return supplierZone;
 
+        }
         private SupplierZoneDetails SupplierZoneDetailMapper(SupplierZone supplierZone)
         {
             SupplierZoneDetails supplierZoneDetail = new SupplierZoneDetails();

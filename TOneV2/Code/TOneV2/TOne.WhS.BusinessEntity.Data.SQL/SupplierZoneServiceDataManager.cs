@@ -10,7 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     public class SupplierZoneServiceDataManager : BaseSQLDataManager, ISupplierZoneServiceDataManager
     {
         #region ctor/Local Variables
-        
+
         public SupplierZoneServiceDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -18,15 +18,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-       
+
         #region Public Methods
-       
+
         public List<SupplierZoneService> GetSupplierZonesServicesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServices_GetByDate", SupplierZoneServiceMapper, supplierId, minimumDate);
         }
 
-
+        public List<SupplierDefaultService> GetSupplierDefaultServicesEffectiveAfter(int supplierId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierDefaultServices_GetByDate", SupplierDefaultServiceMapper, supplierId, minimumDate);
+        }
+        public IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneIds(int supplierId, DateTime effectiveDate, string strZoneIds)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServicesEffectiveAfter_GetByZone", SupplierZoneServiceMapper, supplierId, effectiveDate, strZoneIds);
+        }
         public SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
         {
             return GetItemSP("TOneWhS_BE.sp_SupplierZoneService_GetDefaultServiceBySupplier", SupplierDefaultServiceMapper, supplierId, effectiveOn);
@@ -39,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Insert(SupplierDefaultService supplierDefaultService)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Insert", supplierDefaultService.SupplierZoneServiceId, supplierDefaultService.SupplierId, Vanrise.Common.Serializer.Serialize(supplierDefaultService.ReceivedServices, false), Vanrise.Common.Serializer.Serialize(supplierDefaultService.EffectiveServices, false), supplierDefaultService.BED);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SupplierZoneService_Insert", supplierDefaultService.SupplierZoneServiceId, supplierDefaultService.SupplierId, Vanrise.Common.Serializer.Serialize(supplierDefaultService.ReceivedServices, false), Vanrise.Common.Serializer.Serialize(supplierDefaultService.EffectiveServices, false), supplierDefaultService.BED, supplierDefaultService.EED);
             return (recordsEffected > 0);
         }
 
@@ -106,11 +113,49 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             dtRoutingInfos.Columns.Add("SupplierId", typeof(Int32));
             return dtRoutingInfos;
         }
-       
+        public bool Update(List<SupplierZoneServiceToClose> listOfZoneServiceToClose, long effectiveZoneId, long SupplierZoneServiceId, SupplierZoneServiceToEdit supplierZoneServiceToEdit)
+        {
+            DataTable dtSupplierZoneServiceToClose = BuildSupplierZoneServiceTableToClose(listOfZoneServiceToClose);
+            return ExecuteNonQuerySPCmd("TOneWhS_BE.sp_SupplierZoneService_Update", (cmd) =>
+             {
+                 cmd.Parameters.Add(new SqlParameter("@Id", SupplierZoneServiceId));
+                 cmd.Parameters.Add(new SqlParameter("@SupplierId", supplierZoneServiceToEdit.SupplierId));
+                 cmd.Parameters.Add(new SqlParameter("@ZoneId", effectiveZoneId));
+                 cmd.Parameters.Add(new SqlParameter("@ReceivedServicesFlag", Vanrise.Common.Serializer.Serialize(supplierZoneServiceToEdit.Services, false)));
+                 cmd.Parameters.Add(new SqlParameter("@EffectiveServiceFlag", Vanrise.Common.Serializer.Serialize(supplierZoneServiceToEdit.Services, false)));
+                 cmd.Parameters.Add(new SqlParameter("@BED", supplierZoneServiceToEdit.BED));
+                 var dtPrm = new SqlParameter("@SupplierZoneServicesToClose", SqlDbType.Structured);
+                 dtPrm.Value = dtSupplierZoneServiceToClose;
+                 cmd.Parameters.Add(dtPrm);
+             }) > 0;
+        }
+
+        internal static DataTable BuildSupplierZoneServiceTableToClose(List<SupplierZoneServiceToClose> listOfZoneServiceToClose)
+        {
+            DataTable dtSupplierZoneServiceToClose = GetSupplierZoneServiceTableToClose();
+            dtSupplierZoneServiceToClose.BeginLoadData();
+            foreach (var zoneServiceToClose in listOfZoneServiceToClose)
+            {
+                DataRow drSupplierZoneServiceToClose = dtSupplierZoneServiceToClose.NewRow();
+                drSupplierZoneServiceToClose["SupplierZoneSeviceIdToClose"] = zoneServiceToClose.SupplierZoneServiceId;
+                drSupplierZoneServiceToClose["SupplierZoneSeviceEEDToClose"] = zoneServiceToClose.CloseDate;
+                dtSupplierZoneServiceToClose.Rows.Add(drSupplierZoneServiceToClose);
+            }
+            dtSupplierZoneServiceToClose.EndLoadData();
+            Console.WriteLine(dtSupplierZoneServiceToClose);
+            return dtSupplierZoneServiceToClose;
+        }
+        private static DataTable GetSupplierZoneServiceTableToClose()
+        {
+            DataTable dtSupplierZoneServiceToClose = new DataTable();
+            dtSupplierZoneServiceToClose.Columns.Add("SupplierZoneSeviceIdToClose", typeof(long));
+            dtSupplierZoneServiceToClose.Columns.Add("SupplierZoneSeviceEEDToClose", typeof(DateTime));
+            return dtSupplierZoneServiceToClose;
+        }
         #endregion
-       
+
         #region Mappers
-        
+
         SupplierZoneService SupplierZoneServiceMapper(IDataReader reader)
         {
             return new SupplierZoneService()

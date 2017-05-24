@@ -21,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class SupplierEntityService
     {
+        public long SupplierZoneServiceId { get; set; }
         public List<ZoneService> Services { get; set; }
 
         public SupplierEntityServiceSource Source { get; set; }
@@ -33,9 +34,14 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class SupplierEntityServiceDetail
     {
-        public SupplierEntityService Entity { get; set; }
+        public long SupplierZoneServiceId { get; set; }
+        public SupplierEntityServiceSource Source { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
         public String ZoneName { get; set; }
-        public List<int> Services { get; set; }
+        public IEnumerable<int> Services { get; set; }
     }
 
 

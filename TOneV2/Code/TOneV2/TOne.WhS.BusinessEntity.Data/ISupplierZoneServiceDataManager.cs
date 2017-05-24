@@ -21,10 +21,18 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Insert(SupplierDefaultService supplierZoneService);
 
+        bool Update(List<SupplierZoneServiceToClose> listOfZoneServiceToClose, long effectiveZoneId, long SupplierZoneServiceId, SupplierZoneServiceToEdit supplierZoneServiceToEdit);
+
         bool AreSupplierZoneServicesUpdated(ref object updateHandle);
 
         IEnumerable<SupplierDefaultService> GetEffectiveSupplierDefaultServices(DateTime from, DateTime to);
 
         IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime from, DateTime to);
+        
+        IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneIds(int supplierId, DateTime effectiveDate, string strZoneIds);
+
+        List<SupplierDefaultService> GetSupplierDefaultServicesEffectiveAfter(int supplierId, DateTime minimumDate);
+
+        
     }
 }

@@ -113,7 +113,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZoneServiceConfigs.FindAllRecords(filterExpression);
         }
 
-        public string GetZoneServicesNames(List<int> services)
+        public string GetZoneServicesNames(IEnumerable<int> services)
         {
             var allZoneServiceConfigs = GetCachedZoneServiceConfigs().FindAllRecords(x => services.Contains(x.Key));
             if (allZoneServiceConfigs == null)

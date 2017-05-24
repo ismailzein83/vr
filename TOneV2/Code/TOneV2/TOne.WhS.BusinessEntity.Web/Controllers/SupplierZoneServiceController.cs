@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -18,6 +19,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SupplierZoneServiceManager manager = new SupplierZoneServiceManager();
             return GetWebResponse(input, manager.GetFilteredSupplierZoneServices(input));
+        }
+
+        [HttpPost]
+        [Route("UpdateSupplierZoneService")]
+        public UpdateOperationOutput<SupplierEntityServiceDetail> UpdateSupplierZoneService(SupplierZoneServiceToEdit serviceObject)
+        {
+            SupplierZoneServiceManager manager = new SupplierZoneServiceManager();
+            return manager.UpdateSupplierZoneService(serviceObject);
         }
     }
 
