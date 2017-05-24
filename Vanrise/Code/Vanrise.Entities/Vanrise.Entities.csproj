@@ -162,6 +162,8 @@
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionExtendedSettings.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinition.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionExtendedSettingsConfig.cs" />
+    <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionInfo.cs" />
+    <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionInfoFilter.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionSettings.cs" />
     <Compile Include="VRTax\VRTaxDetail.cs" />
     <Compile Include="VRTax\VRTaxesDefinition.cs" />

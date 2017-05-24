@@ -12,9 +12,16 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRRuleDefinitionExtendedSettingsConfigs"));
         }
 
+        function GetVRRuleDefinitionsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRRuleDefinitionsInfo"), {
+                serializedFilter: serializedFilter
+            });
+        }
+
 
         return ({
-            GetVRRuleDefinitionExtendedSettingsConfigs: GetVRRuleDefinitionExtendedSettingsConfigs
+            GetVRRuleDefinitionExtendedSettingsConfigs: GetVRRuleDefinitionExtendedSettingsConfigs,
+            GetVRRuleDefinitionsInfo: GetVRRuleDefinitionsInfo
         });
     }
 

@@ -288,6 +288,7 @@
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\Templates\VRRuleDefinitionExtendedSettingsTemplate.html" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\Templates\VRRuleDefinitionSettingsTemplate.html" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-extendedsettings.js" />
+    <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-selector.js" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-settings.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />

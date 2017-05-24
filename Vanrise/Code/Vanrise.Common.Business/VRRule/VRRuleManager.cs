@@ -12,8 +12,8 @@ namespace Vanrise.Common.Business
 {
     public abstract class VRRuleManager<T, Q, S>
         where T : VRRule<S>
-        where S : VRRuleSettings
         where Q : class
+        where S : VRRuleSettings
     {
         #region Ctor/Variables
 

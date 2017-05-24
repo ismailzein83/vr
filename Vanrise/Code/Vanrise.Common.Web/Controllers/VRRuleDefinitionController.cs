@@ -21,5 +21,13 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.GetVRRuleDefinitionExtendedSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetVRRuleDefinitionsInfo")]
+        public IEnumerable<VRRuleDefinitionInfo> GetVRRuleDefinitionsInfo(string serializedFilter = null)
+        {
+            VRRuleDefinitionInfoFilter deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<VRRuleDefinitionInfoFilter>(serializedFilter) : null;
+            return _manager.GetVRRuleDefinitionsInfo(deserializedFilter);
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrCommonRuledefinitionSelector', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRRuleDefinitionAPIService',
 
-    function (VRCommon_StyleDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function (UtilsService, VRUIUtilsService, VRCommon_VRRuleDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -26,9 +26,8 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var styleDefinitionSelector = new StyleDefinitionSelector(ctrl, $scope, $attrs);
-                styleDefinitionSelector.initializeController();
-
+                var ctor = new VRRuleDefinitionCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -37,8 +36,7 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
             }
         };
 
-        function StyleDefinitionSelector(ctrl, $scope, attrs) {
-
+        function VRRuleDefinitionCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -62,7 +60,7 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
                         filter = payload.filter;
                     }
 
-                    return VRCommon_StyleDefinitionAPIService.GetStyleDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VRCommon_VRRuleDefinitionAPIService.GetVRRuleDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
@@ -70,14 +68,14 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
                             }
 
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'StyleDefinitionId', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'VRRuleDefinitionId', attrs, ctrl);
                             }
                         }
                     });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('StyleDefinitionId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('VRRuleDefinitionId', attrs, ctrl);
                 };
 
 
@@ -89,17 +87,17 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Style Definition";
+            var label = "VRRule Definition";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Style Definitions";
+                label = "VRRule Definitions";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StyleDefinitionId" isrequired="ctrl.isrequired" label="' + label +
+                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRRuleDefinitionId" isrequired="ctrl.isrequired" label="' + label +
                            '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                            '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                        '</vr-select>' +
