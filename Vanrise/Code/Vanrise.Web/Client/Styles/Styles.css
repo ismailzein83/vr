@@ -2656,6 +2656,11 @@ vr-tab vr-columns[tabs="true"] > div[class^="col"] {
 vr-columns[grouped] > div[class^="col"] {   
     padding: 0px 3px;
 }
+
+vr-columns[tileitem] > div[class^="col"] {   
+    padding: 0px 3px;
+    margin-bottom:-4px;
+}
 vr-panel[fullscreen] .panel-body {   
   padding: 15px 5px 0px 15px;
 }

@@ -41,7 +41,7 @@
                                                   + '<div class="vr-tile-inner-container" >'
                                                       + ' <div class="title">{{tileCtrl.title}}</div>'
                                                       + ' <div ng-repeat="i in tileCtrl.datasource" class="tilevalue">'
-                                                      + '   <span ng-if="i.name" class="itemlabel">{{i.name}} :</span><span class="itemvalue" ng-style="{\'width\': i.name ? \'50%\' : \'100%\'}">{{i.value}}</span>'
+                                                      + '   <span ng-if="i.name" class="itemlabel">{{i.name}}:</span><span class="itemvalue" ng-style="{\'width\': i.name ? \'50%\' : \'100%\'}">{{i.value}}</span>'
                                                       + ' </div>'
                                                   +'</div>'
                                             + '</div>'
