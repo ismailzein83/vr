@@ -3263,13 +3263,13 @@ vr-overall-widget  .list-group-item {
 .vr-tile-inner-container .title{
    font-size:16px;
    font-weight:bold;
-   text-align: right;
+   text-align: center;
 }
 .vr-tile-inner-container .tilevalue span{
    font-size:11px;     
    width:50%;
    display:inline-block;
-   text-align: right;
+   text-align: center;
 }
 @media (min-width: 1280px) {
    .vr-tile .thumbnail-section img {
@@ -3341,8 +3341,7 @@ vr-overall-widget  .list-group-item {
 }
 .vr-tile-inner-container{
     position:absolute;
-    top: 50%;
-    transform: translate(-20px,-50%);
+    transform: translate(-20px, 10px);
     width: 100%;
 }
 
