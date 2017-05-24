@@ -9,6 +9,8 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -81,51 +83,45 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
-
-            var carrierAccountManager = new CarrierAccountManager();
-            int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerPriceList.OwnerId);
-
-            var salePriceListChangeManager = new SalePriceListChangeManager();
-            var customerPriceListChange = salePriceListChangeManager.GetCustomerChangesByPriceListId(customerPriceList.PriceListId);
-            customerPriceListChange.CustomerId = customerPriceList.OwnerId;
-
-            SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
-            {
-                CustomerChanges = new List<CustomerPriceListChange> { customerPriceListChange },
-                EffectiveDate = customerPriceList.CreatedTime,
-                SellingNumberPlanId = sellingNumberPlanId,
-                ProcessInstanceId = customerPriceList.ProcessInstanceId
-            };
-
-            SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
-
-            CustomerSalePriceListInfo customerInfo = salePriceListOutput.CustomerChanges.First();
-            int customerId = customerInfo.CustomerId;
-
-            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerInfo.CustomerId);
-
-            var customerSellingProductManager = new CustomerSellingProductManager();
-            var sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerInfo.CustomerId, DateTime.Now, false);
-            if (!sellingProductId.HasValue)
-                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customerId));
-
-            CustomerSalePriceListInfo customerChange = salePriceListOutput.CustomerChanges.FindRecord(x => x.CustomerId == customerId);
-
-            ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
-                        salePriceListOutput.NotSentChangesByCustomerId);
-
-            List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, customerPriceList.PriceListType.Value, allChangesByCountryId,
-                salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, salePriceListContext.EffectiveDate, customerPriceList.ProcessInstanceId);
-
+            VRFile file = PreparePriceListVrFile(customerPriceList);
             var notificationManager = new NotificationManager();
-            if (customerZoneNotifications.Count > 0)
+            int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
+
+            return file != null && notificationManager.SendSalePriceList(userId, customerPriceList, file);
+        }
+
+        public VRMailEvaluatedTemplate EvaluateEmail(long pricelistId)
+        {
+            SalePriceListManager priceListManager = new SalePriceListManager();
+            var customerPricelist = priceListManager.GetPriceList((int)pricelistId);
+
+            if (customerPricelist == null)
+                return null;
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var customer = carrierAccountManager.GetCarrierAccount(customerPricelist.OwnerId);
+            var salePlmailTemplateId = carrierAccountManager.GetSalePLMailTemplateId(customerPricelist.OwnerId);
+
+            UserManager userManager = new UserManager();
+            User initiator = userManager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
+
+            var objects = new Dictionary<string, dynamic>
             {
-                int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
-                VRFile file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications);
-                if (file != null)
-                    return notificationManager.SendSalePriceList(userId, customerPriceList, file);
-            }
-            return false;
+                {"Customer", customer},
+                {"User", initiator},
+                {"Sale Pricelist", customerPricelist}
+            };
+            VRMailManager vrMailManager = new VRMailManager();
+            return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
+        }
+        public VRFile DownloadSalePriceList(long salePriceListId, SalePriceListType salePriceListType)
+        {
+            var salePriceListManager = new SalePriceListManager();
+            SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
+            customerPriceList.PriceListType = salePriceListType;
+
+            return PreparePriceListVrFile(customerPriceList);
+
         }
         public IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
@@ -467,7 +463,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SaleEntityZoneRate zoneRate = futureLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             if (zoneRate == null)
-                throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", zoneName));
+                throw new DataIntegrityValidationException(string.Format("Zone '{0}' neither has an explicit nor a default selling product rate", zoneName));
 
             return new SalePLRateNotification
             {
@@ -798,6 +794,53 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region  Private Members
 
+        private VRFile PreparePriceListVrFile(SalePriceList salePriceList)
+        {
+            VRFile file = null;
+
+            var carrierAccountManager = new CarrierAccountManager();
+            int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(salePriceList.OwnerId);
+
+            var salePriceListChangeManager = new SalePriceListChangeManager();
+            var customerPriceListChange = salePriceListChangeManager.GetCustomerChangesByPriceListId(salePriceList.PriceListId);
+            customerPriceListChange.CustomerId = salePriceList.OwnerId;
+
+            SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
+            {
+                CustomerChanges = new List<CustomerPriceListChange> { customerPriceListChange },
+                EffectiveDate = salePriceList.CreatedTime,
+                SellingNumberPlanId = sellingNumberPlanId,
+                ProcessInstanceId = salePriceList.ProcessInstanceId
+            };
+
+            SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
+
+            CustomerSalePriceListInfo customerInfo = salePriceListOutput.CustomerChanges.First();
+            int customerId = customerInfo.CustomerId;
+
+            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(customerInfo.CustomerId);
+
+            var customerSellingProductManager = new CustomerSellingProductManager();
+            var sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerInfo.CustomerId, DateTime.Now, false);
+            if (!sellingProductId.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customerId));
+
+            CustomerSalePriceListInfo customerChange = salePriceListOutput.CustomerChanges.FindRecord(x => x.CustomerId == customerId);
+
+            ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
+                        salePriceListOutput.NotSentChangesByCustomerId);
+
+            List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, salePriceList.PriceListType.Value, allChangesByCountryId,
+                salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, salePriceListContext.EffectiveDate, salePriceList.ProcessInstanceId);
+
+            if (customerZoneNotifications.Count > 0)
+            {
+                AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
+                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications);
+            }
+
+            return file;
+        }
         private void AddRPChangesToSalePLNotification(IEnumerable<SalePLZoneNotification> customerZoneNotifications, List<SalePricelistRPChange> routingProductChanges, int customerId, int sellingProductId)
         {
             Dictionary<long, DateTime> rateBedByZoneId = StructureZoneIdsWithActionBED(customerZoneNotifications);
@@ -920,7 +963,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (priceListType == SalePriceListType.Full || changeType == SalePLChangeType.CountryAndRate)
                 return SalePriceListType.Full;
 
-            if(priceListType == SalePriceListType.Country || changeType == SalePLChangeType.CodeAndRate)
+            if (priceListType == SalePriceListType.Country || changeType == SalePLChangeType.CodeAndRate)
                 return SalePriceListType.Country;
             return SalePriceListType.RateChange;
         }

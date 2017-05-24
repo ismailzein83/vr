@@ -1,6 +1,10 @@
-﻿using System.Web.Http;
+﻿using System.IO;
+using System.Web;
+using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -36,6 +40,32 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
             return manager.GetOwnerName(priceListId);
+        }
+        [HttpGet]
+        [Route("DownloadSalePriceList")]
+        public object DownloadSalePriceList(long salepriceListId, SalePriceListType salePriceListType)
+        {
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+            VRFile file = salePriceListManager.DownloadSalePriceList(salepriceListId, salePriceListType);
+            return GetExcelResponse(file.Content, file.Name);
+        }
+
+        [HttpGet]
+        [Route("GenerateSalePriceListFile")]
+        public long GenerateSalePriceListFile(long salepriceListId, SalePriceListType salePriceListType)
+        {
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+            VRFile file = salePriceListManager.DownloadSalePriceList(salepriceListId, salePriceListType);
+            VRFileManager fileManager = new VRFileManager();
+            return fileManager.AddFile(file);
+        }
+
+        [HttpGet]
+        [Route("EvaluateSalePriceListEmail")]
+        public VRMailEvaluatedTemplate EvaluateSalePriceListEmail(long salepriceListId)
+        {
+             SalePriceListManager salePriceListManager = new SalePriceListManager();
+            return salePriceListManager.EvaluateEmail(salepriceListId);
         }
     }
 }

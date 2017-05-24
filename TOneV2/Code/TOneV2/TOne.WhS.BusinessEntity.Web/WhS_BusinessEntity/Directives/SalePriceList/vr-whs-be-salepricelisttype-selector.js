@@ -74,6 +74,7 @@ app.directive('vrWhsBeSalepricelisttypeSelector', ['UtilsService', 'VRUIUtilsSer
         }
         function directiveCtor(ctrl, $scope, $attrs) {
             ctrl.datasource = UtilsService.getArrayEnum(WhS_BE_SalePriceListTypeEnum);
+            VRUIUtilsService.setSelectedValues(0, 'value', $attrs, ctrl);
 
             function initializeController() {
                 defineAPI();

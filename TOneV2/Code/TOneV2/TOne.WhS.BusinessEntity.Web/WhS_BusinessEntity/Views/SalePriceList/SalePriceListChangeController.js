@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    salePriceListPreviewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListChangeAPIService'];
+    salePriceListPreviewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListChangeAPIService', 'VRModalService'];
 
-    function salePriceListPreviewController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, whSBeSalePriceListChangeApiService) {
+    function salePriceListPreviewController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, whSBeSalePriceListChangeApiService, VRModalService) {
         var priceListId;
         var filter = {};
         var ownerName;
@@ -12,8 +12,12 @@
         var rpChangeGridApi;
         var countryCodeDirectiveApi;
         var countryRateDirectiveApi;
+
         var countryRPDirectiveApi;
         var countryRateReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
+        var priceLisTypeSelectorAPI;
+        var priceListTypeSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -47,7 +51,11 @@
                 var setLoader = function (value) { $scope.isLoadingRPCountryCode = value };
                 vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, countryRPDirectiveApi, undefined, setLoader);
             };
-            
+            $scope.onPriceListTypeSelectorReady = function (api) {
+                priceLisTypeSelectorAPI = api;
+                var setLoader = function (value) { $scope.isLoadingPriceListTypeFormatSelector = value };
+                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, priceLisTypeSelectorAPI, undefined, setLoader, priceListTypeSelectorReadyDeferred);
+            };
             $scope.searchCodeClicked = function () {
                 SetFilteredCodeObject();
                 return codeChangeGridApi.loadGrid(filter);
@@ -59,6 +67,42 @@
             $scope.searchRPClicked = function () {
                 SetFilteredRPObject();
                 return rpChangeGridApi.loadGrid(filter);
+            };
+            $scope.DownloadPriceList = function () {
+                return whSBeSalePriceListChangeApiService.DownloadSalePriceList(priceListId, priceLisTypeSelectorAPI.getSelectedIds()).then(function (response) {
+                    utilsService.downloadFile(response.data, response.headers);
+                });
+            };
+            $scope.SendPriceListByEmail = function () {
+
+                $scope.isLoadingFilter = true;
+                whSBeSalePriceListChangeApiService.GenerateSalePriceListFile(priceListId, priceLisTypeSelectorAPI.getSelectedIds()).then(function(response) {
+                    var fileId = response;
+                    whSBeSalePriceListChangeApiService.EvaluateSalePriceListEmail(priceListId).then(function(emailResponse) {
+                        var parametrs =
+                        {
+                            evaluatedEmail: emailResponse,
+                            fileId: fileId
+                        };
+                        VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRMailMessageEvaluator.html', parametrs, null);
+                    }).catch(function (error) {
+
+                        $scope.isLoadingFilter = false;
+                        vrNotificationService.notifyExceptionWithClose(error, $scope);
+
+                    }).finally(function() {
+                        $scope.isLoadingFilter = false;
+                    });
+                }).catch(function (error) {
+
+                    $scope.isLoadingFilter = false;
+                    vrNotificationService.notifyExceptionWithClose(error, $scope);
+
+                });
+            };
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
             };
         }
         function SetFilteredCodeObject() {

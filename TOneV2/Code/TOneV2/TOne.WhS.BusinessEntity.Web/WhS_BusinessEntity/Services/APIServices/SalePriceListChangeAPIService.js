@@ -20,11 +20,27 @@
                 priceListId: priceListId
             });
         }
+        function DownloadSalePriceList(pricelistId, priceListType) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DownloadSalePriceList"), { salepriceListId: pricelistId, salePriceListType: priceListType }, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
+        function GenerateSalePriceListFile(pricelistId, priceListType) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateSalePriceListFile"), { salepriceListId: pricelistId, salePriceListType: priceListType }
+            );
+        }
+        function EvaluateSalePriceListEmail(pricelistId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "EvaluateSalePriceListEmail"), { salepriceListId: pricelistId });
+        }
         return ({
             GetFilteredSalePriceListCodeChanges: GetFilteredSalePriceListCodeChanges,
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
             GetFilteredSalePriceListRPChanges: GetFilteredSalePriceListRPChanges,
-            GetOwnerName: GetOwnerName
+            GetOwnerName: GetOwnerName,
+            DownloadSalePriceList: DownloadSalePriceList,
+            GenerateSalePriceListFile: GenerateSalePriceListFile,
+            EvaluateSalePriceListEmail: EvaluateSalePriceListEmail
         });
     }
 

@@ -135,14 +135,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat);
 
-            var attachment = new Attachment(memoryStream, priceListSetting.PriceListName)
-            {
-                ContentType = priceListSetting.ContentType,
-                TransferEncoding = TransferEncoding.Base64,
-                NameEncoding = Encoding.UTF8,
-                Name = priceListSetting.PriceListName
-            };
-
+            var attachment = new Attachment(memoryStream, priceListSetting.PriceListName);
+            
             User initiator = _userManager.GetUserbyId(initiatorId);
 
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();

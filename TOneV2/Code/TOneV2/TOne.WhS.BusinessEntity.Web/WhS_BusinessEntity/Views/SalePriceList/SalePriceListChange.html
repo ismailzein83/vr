@@ -68,15 +68,23 @@
                         </vr-row>
                     </vr-form>
                 </vr-tab>
+                <vr-tab header="'Options'">
+                    <vr-row>
+                        <vr-whs-be-salepricelisttype-selector on-ready="onPriceListTypeSelectorReady"
+                                                              normal-col-num="6"
+                                                              isrequired="false">
+                        </vr-whs-be-salepricelisttype-selector>
+                    </vr-row>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="SendEmail" formname="formSalePriceListPreview" data-onclick="scopeModel.SendPriceListByEmail"></vr-button>
-                <!--<vr-button type="Download" formname="formSalePriceListPreview" data-onclick="scopeModel.DownloadPriceList"></vr-button>-->
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+                <vr-button type="SendEmail" formname="formSalePriceListPreview" data-onclick="SendPriceListByEmail"></vr-button>
+                <vr-button type="DownloadFile" formname="formSalePriceListPreview" data-onclick="DownloadPriceList"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
 
