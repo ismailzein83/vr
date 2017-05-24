@@ -20,5 +20,6 @@ namespace PartnerPortal.CustomerAccess.Business
         }
         public Guid VRConnectionId { get; set; }
         public Guid AccountTypeId { get; set; }
+        public Guid? ViewId { get; set; }
     }
 }

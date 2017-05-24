@@ -7,7 +7,8 @@ app.directive("partnerportalCustomeraccessLivebalancetileruntimesettings", ["Uti
             scope:
             {
                 onReady: "=",
-                title:'='
+                title: '=',
+                index:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -26,6 +27,7 @@ app.directive("partnerportalCustomeraccessLivebalancetileruntimesettings", ["Uti
          
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.fields = [];
                 $scope.scopeModel.tileTitle = ctrl.title;
                 defineAPI();
             }
@@ -46,10 +48,18 @@ app.directive("partnerportalCustomeraccessLivebalancetileruntimesettings", ["Uti
                     }
                     function loadLiveBalance()
                     {
-                        return PartnerPortal_CustomerAccess_LiveBalanceAPIService.GetCurrentAccountBalance(definitionSettings.VRConnectionId, definitionSettings.AccountTypeId).then(function (response) {
-                            $scope.scopeModel.currentBalance = response.CurrentBalance;
-                            $scope.scopeModel.currencyDescription = response.CurrencyDescription;
-                            $scope.scopeModel.balanceFlagDescription = response.BalanceFlagDescription;
+                        return PartnerPortal_CustomerAccess_LiveBalanceAPIService.GetCurrentAccountBalance(definitionSettings.VRConnectionId, definitionSettings.AccountTypeId, definitionSettings.ViewId).then(function (response) {
+                            if (response != undefined)
+                            {
+                                if (response.CurrentAccountBalance != undefined) {
+                                    $scope.scopeModel.fields.push({
+                                        name: "Current Balance",
+                                        value: $scope.scopeModel.currentBalance = response.CurrentAccountBalance.CurrentBalance + " " + response.CurrentAccountBalance.CurrencyDescription + " " + response.CurrentAccountBalance.BalanceFlagDescription
+
+                                    });
+                                }
+                                $scope.scopeModel.url = response.ViewURL;
+                            }
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises);

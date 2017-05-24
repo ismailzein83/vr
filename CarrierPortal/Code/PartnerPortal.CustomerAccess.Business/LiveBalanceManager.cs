@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PartnerPortal.CustomerAccess.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace PartnerPortal.CustomerAccess.Business
 {
     public class LiveBalanceManager
     {
-        public CurrentAccountBalance GetCurrentAccountBalance(Guid connectionId, Guid accountTypeId)
+        public CurrentAccountBalanceTile GetCurrentAccountBalance(Guid connectionId, Guid accountTypeId, Guid? viewId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
@@ -21,7 +22,18 @@ namespace PartnerPortal.CustomerAccess.Business
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            return connectionSettings.Get<CurrentAccountBalance>(string.Format("/api/VR_AccountBalance/LiveBalance/GetCurrentAccountBalance?accountId={0}&accountTypeId={1}", accountId, accountTypeId));
+            var currentAccountBalance =  connectionSettings.Get<CurrentAccountBalance>(string.Format("/api/VR_AccountBalance/LiveBalance/GetCurrentAccountBalance?accountId={0}&accountTypeId={1}", accountId, accountTypeId));
+            CurrentAccountBalanceTile currentAccountBalanceTile = new CurrentAccountBalanceTile
+            {
+                CurrentAccountBalance = currentAccountBalance
+            };
+            if (viewId.HasValue)
+            {
+                ViewManager viewManager = new ViewManager();
+                var view = viewManager.GetView(viewId.Value);
+                currentAccountBalanceTile.ViewURL = view.Url;
+            }
+            return currentAccountBalanceTile;
         }
     }
 }

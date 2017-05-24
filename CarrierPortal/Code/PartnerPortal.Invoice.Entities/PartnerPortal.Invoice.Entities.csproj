@@ -63,6 +63,7 @@
     <Compile Include="Invoice\InvoiceAppQuery.cs" />
     <Compile Include="InvoiceViewerType\InvoiceQueryInterceptor.cs" />
     <Compile Include="InvoiceViewerType\InvoiceQueryInterceptorTemplate.cs" />
+    <Compile Include="Invoice\InvoiceTile.cs" />
     <Compile Include="Invoice\InvoiceViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

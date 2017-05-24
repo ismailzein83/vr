@@ -20,6 +20,7 @@ namespace PartnerPortal.CustomerAccess.Business
         }
         public List<AnalyticQuery> Queries { get; set; }
         public List<Guid> OrderedMeasureIds { get; set; }
+        public Guid? ViewId { get; set; }
     }
     public class AnalyticQuery
     {

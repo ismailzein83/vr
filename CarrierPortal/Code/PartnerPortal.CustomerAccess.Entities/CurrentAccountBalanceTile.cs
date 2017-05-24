@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace PartnerPortal.CustomerAccess.Entities
 {
-    public  class AnalyticTileInfo
+    public class CurrentAccountBalanceTile
     {
+        public Vanrise.AccountBalance.Entities.CurrentAccountBalance CurrentAccountBalance { get; set; }
         public string ViewURL { get; set; }
-        public List<AnalyticTileField> Fields { get; set; }
-    }
-    public class AnalyticTileField
-    {
-        public string Description { get; set; }
-        public Object Value { get; set; }
     }
 }

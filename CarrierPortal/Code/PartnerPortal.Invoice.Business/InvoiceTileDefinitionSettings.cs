@@ -20,5 +20,7 @@ namespace PartnerPortal.Invoice.Business
         }
         public Guid VRConnectionId { get; set; }
         public Guid InvoiceTypeId { get; set; }
+        public Guid? ViewId { get; set; }
+
     }
 }

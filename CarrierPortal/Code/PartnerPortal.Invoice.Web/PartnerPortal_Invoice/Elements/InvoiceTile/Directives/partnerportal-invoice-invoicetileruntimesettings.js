@@ -1,13 +1,14 @@
 ﻿"use strict";
-app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService", "VRUIUtilsService", "PartnerPortal_Invoice_InvoiceAPIService",
-    function (UtilsService, VRUIUtilsService, PartnerPortal_Invoice_InvoiceAPIService) {
+app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService", "VRUIUtilsService", "PartnerPortal_Invoice_InvoiceAPIService","VRNavigationService",
+    function (UtilsService, VRUIUtilsService, PartnerPortal_Invoice_InvoiceAPIService, VRNavigationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
             scope:
             {
                 onReady: "=",
-                title:'='
+                title: '=',
+                index :'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,6 +28,7 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.tileTitle = ctrl.title;
+                $scope.scopeModel.fields = [];
                 defineAPI();
             }
 
@@ -46,27 +48,37 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
                     }
                     function loadLastInvoice()
                     {
-                        return  PartnerPortal_Invoice_InvoiceAPIService.GetRemoteLastInvoice(definitionSettings.VRConnectionId,definitionSettings.InvoiceTypeId).then(function(response){
-                            if(response != undefined)
-                            {
-                                if (response.Entity != undefined)
-                                    $scope.scopeModel.dueDate = UtilsService.createDateFromString(response.Entity.DueDate);
-                                if(response.Items != undefined)
-                                {
-                                    for (var i = 0, length = response.Items.length ; i < length; i++)
-                                    {
-                                        var item = response.Items[i];
-                                        if (item.FieldName == "TotalAmount")
-                                        {
-                                            $scope.scopeModel.invoiceBalance = item.Description;
-                                        } else if (item.FieldName == "CurrencyId")
-                                        {
-                                            $scope.scopeModel.invoiceCurrency = item.Description;
+                        return PartnerPortal_Invoice_InvoiceAPIService.GetRemoteLastInvoice(definitionSettings.VRConnectionId, definitionSettings.InvoiceTypeId,definitionSettings.ViewId).then(function (response) {
+                            if (response != undefined) {
+                                if (response.InvoiceDetail != undefined) {
+                                    if (response.InvoiceDetail.Items != undefined) {
+                                        var invoiceBalance;
+                                        var invoiceCurrency;
+                                        for (var i = 0, length = response.InvoiceDetail.Items.length ; i < length; i++) {
+                                            var item = response.InvoiceDetail.Items[i];
+                                            if (item.FieldName == "TotalAmount") {
+                                                invoiceBalance = item.Description;
+                                            } else if (item.FieldName == "CurrencyId") {
+                                                invoiceCurrency = item.Description;
+                                            }
                                         }
                                     }
-                                }
-                            }
 
+                                    $scope.scopeModel.fields.push({
+                                        name: "Amount",
+                                        value: invoiceBalance + " " + invoiceCurrency
+                                    });
+                                    if (response.InvoiceDetail.Entity != undefined) {
+                                        var dueDate = UtilsService.createDateFromString(response.InvoiceDetail.Entity.DueDate);
+
+                                        $scope.scopeModel.fields.push({
+                                            name: "Date",
+                                            value: dueDate
+                                        });
+                                    }
+                                }
+                                $scope.scopeModel.url = response.ViewURL;
+                            }
                         });
                     }
                     return UtilsService.waitMultiplePromises(promises);

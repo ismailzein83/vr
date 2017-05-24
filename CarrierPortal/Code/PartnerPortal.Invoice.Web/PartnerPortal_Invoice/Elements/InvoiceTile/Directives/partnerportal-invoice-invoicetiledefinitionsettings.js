@@ -30,12 +30,21 @@ app.directive("partnerportalInvoiceInvoicetiledefinitionsettings", ["UtilsServic
             var invoiceTypeApi;
             var invoiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var viewSelectorApi;
+            var viewSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
                     invoiceTypeApi = api;
                     invoiceTypeSelectorPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onViewSelectorReady = function (api) {
+                    viewSelectorApi = api;
+                    viewSelectorReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onConnectionSelectorReady = function (api) {
                     connectionSelectorApi = api;
@@ -96,8 +105,20 @@ app.directive("partnerportalInvoiceInvoicetiledefinitionsettings", ["UtilsServic
                         return connectionSelectorApi.load(payloadConnectionSelector);
 
                     }
-                 
                     promises.push(loadConnectionSelector());
+
+                    function loadViewSelectorDirective() {
+                        var viewSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        viewSelectorReadyPromiseDeferred.promise
+                            .then(function () {
+                                var directivePayload = {
+                                    selectedIds: tileExtendedSettings != undefined ? tileExtendedSettings.ViewId : undefined
+                                };
+                                VRUIUtilsService.callDirectiveLoad(viewSelectorApi, directivePayload, viewSelectorLoadPromiseDeferred);
+                            });
+                        return viewSelectorLoadPromiseDeferred.promise;
+                    }
+                    promises.push(loadViewSelectorDirective());
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         selectedConnectionPromiseDeffered = undefined;
@@ -108,7 +129,8 @@ app.directive("partnerportalInvoiceInvoicetiledefinitionsettings", ["UtilsServic
                     return {
                         $type: "PartnerPortal.Invoice.Business.InvoiceTileDefinitionSettings, PartnerPortal.Invoice.Business",
                         VRConnectionId: connectionSelectorApi.getSelectedIds(),
-                        InvoiceTypeId: invoiceTypeApi.getSelectedIds()
+                        InvoiceTypeId: invoiceTypeApi.getSelectedIds(),
+                        ViewId: viewSelectorApi.getSelectedIds(),
                     };
                 };
 

@@ -1,12 +1,2 @@
-﻿<div ng-style="{'width':'300px', 'height':'100px', 'margin-top':'10px', 'background': '#CD0000','color' :'#fff' }">
-    <vr-row>
-        <vr-columns width="fullrow">
-            {{scopeModel.tileTitle}}
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="fullrow">
-            Current Balance: {{scopeModel.currentBalance}} ({{scopeModel.balanceFlagDescription}}) {{scopeModel.currencyDescription}} 
-        </vr-columns>
-    </vr-row>
-</div>
+﻿<vr-tile index="{{ctrl.index}}" imgpath="Images/tiles-icons/balance.png" datasource="scopeModel.fields" title="{{scopeModel.tileTitle}}" target="{{scopeModel.url}}"></vr-tile>
+

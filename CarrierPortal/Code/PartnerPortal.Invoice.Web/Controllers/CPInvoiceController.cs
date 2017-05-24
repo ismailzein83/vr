@@ -23,10 +23,10 @@ namespace PartnerPortal.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("GetRemoteLastInvoice")]
-        public InvoiceClientDetail GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId)
+        public InvoiceTile GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId,Guid? viewId = null)
         {
             InvoiceManager manager = new InvoiceManager();
-            return manager.GetRemoteLastInvoice(connectionId, invoiceTypeId);
+            return manager.GetRemoteLastInvoice(connectionId, invoiceTypeId, viewId);
         }
       
     }

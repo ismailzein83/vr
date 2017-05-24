@@ -10,10 +10,11 @@
         function GetFilteredInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoices"), input);
         };
-        function GetRemoteLastInvoice(connectionId, invoiceTypeId) {
+        function GetRemoteLastInvoice(connectionId, invoiceTypeId, viewId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetRemoteLastInvoice"), {
                 connectionId: connectionId,
-                invoiceTypeId: invoiceTypeId
+                invoiceTypeId: invoiceTypeId,
+                viewId: viewId
             });
         };
 

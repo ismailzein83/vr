@@ -25,7 +25,9 @@ app.directive("partnerportalCustomeraccessLivebalancetiledefinitionsettings", ["
 
             var connectionSelectorApi;
             var connectionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-           
+            var viewSelectorApi;
+            var viewSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -33,8 +35,11 @@ app.directive("partnerportalCustomeraccessLivebalancetiledefinitionsettings", ["
                     connectionSelectorApi = api;
                     connectionSelectorPromiseDeferred.resolve();
                 };
-              
-                UtilsService.waitMultiplePromises([connectionSelectorPromiseDeferred.promise]).then(function(){
+                $scope.scopeModel.onViewSelectorReady = function (api) {
+                    viewSelectorApi = api;
+                    viewSelectorReadyPromiseDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([connectionSelectorPromiseDeferred.promise, viewSelectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -69,6 +74,14 @@ app.directive("partnerportalCustomeraccessLivebalancetiledefinitionsettings", ["
                  
                     promises.push(loadConnectionSelector());
 
+                    function loadViewSelectorDirective() {
+                        var directivePayload = {
+                            selectedIds: tileExtendedSettings != undefined ? tileExtendedSettings.ViewId : undefined
+                        };
+                        return viewSelectorApi.load(directivePayload);
+                    }
+                    promises.push(loadViewSelectorDirective());
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -76,7 +89,8 @@ app.directive("partnerportalCustomeraccessLivebalancetiledefinitionsettings", ["
                     return {
                         $type: "PartnerPortal.CustomerAccess.Business.LiveBalanceTileDefinitionSettings, PartnerPortal.CustomerAccess.Business",
                         AccountTypeId: $scope.scopeModel.accountTypeId,
-                        VRConnectionId: connectionSelectorApi.getSelectedIds()
+                        VRConnectionId: connectionSelectorApi.getSelectedIds(),
+                        ViewId: viewSelectorApi.getSelectedIds(),
                     };
                 };
 

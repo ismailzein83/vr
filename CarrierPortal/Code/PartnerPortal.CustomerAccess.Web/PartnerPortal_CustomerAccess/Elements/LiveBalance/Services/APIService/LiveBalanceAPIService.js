@@ -7,10 +7,11 @@
     function LiveBalanceAPIServiceAPIService(BaseAPIService, UtilsService, PartnerPortal_CustomerAccess_ModuleConfig, SecurityService) {
         var controllerName = 'LiveBalance';
 
-        function GetCurrentAccountBalance(connectionId, accountTypeId) {
+        function GetCurrentAccountBalance(connectionId, accountTypeId,viewId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, "GetCurrentAccountBalance"), {
                 accountTypeId: accountTypeId,
                 connectionId: connectionId,
+                viewId: viewId
             });
         };
         return {

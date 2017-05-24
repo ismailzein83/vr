@@ -7,7 +7,8 @@ app.directive("partnerportalCustomeraccessAnalytictileruntimesettings", ["UtilsS
             scope:
             {
                 onReady: "=",
-                title:'='
+                title: '=',
+                index:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -48,9 +49,19 @@ app.directive("partnerportalCustomeraccessAnalytictileruntimesettings", ["UtilsS
                     function loadLiveBalance()
                     {
                         return PartnerPortal_CustomerAccess_AnalyticAPIService.GetAnalyticTileInfo(definitionSettings).then(function (response) {
-                            if (response != undefined && response.Fields != undefined)
+                            if (response != undefined)
                             {
-                                $scope.scopeModel.fields = response.Fields;
+                                if (response.Fields != undefined)
+                                {
+                                    for (var i = 0, length = response.Fields.length; i < length; i++) {
+                                        var field = response.Fields[i];
+                                        $scope.scopeModel.fields.push({
+                                            name: field.Description,
+                                            value: field.Value
+                                        });
+                                    }
+                                }
+                                $scope.scopeModel.url = response.ViewURL;
                             }
                         });
                     }

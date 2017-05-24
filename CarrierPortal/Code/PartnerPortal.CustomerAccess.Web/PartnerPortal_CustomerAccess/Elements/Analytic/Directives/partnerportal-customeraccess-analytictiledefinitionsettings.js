@@ -26,6 +26,9 @@ app.directive("partnerportalCustomeraccessAnalytictiledefinitionsettings", ["Uti
             var analyticQueriesApi;
             var analyticQueriesPromiseDeferred = UtilsService.createPromiseDeferred();
            
+            var viewSelectorApi;
+            var viewSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -33,8 +36,11 @@ app.directive("partnerportalCustomeraccessAnalytictiledefinitionsettings", ["Uti
                     analyticQueriesApi = api;
                     analyticQueriesPromiseDeferred.resolve();
                 };
-              
-                UtilsService.waitMultiplePromises([analyticQueriesPromiseDeferred.promise]).then(function () {
+                $scope.scopeModel.onViewSelectorReady = function (api) {
+                    viewSelectorApi = api;
+                    viewSelectorReadyPromiseDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([analyticQueriesPromiseDeferred.promise ,viewSelectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -63,6 +69,14 @@ app.directive("partnerportalCustomeraccessAnalytictiledefinitionsettings", ["Uti
                  
                     promises.push(loadAnalyticQueries());
 
+                    function loadViewSelectorDirective() {
+                        var directivePayload = {
+                            selectedIds: tileExtendedSettings != undefined ? tileExtendedSettings.ViewId : undefined
+                        };
+                        return viewSelectorApi.load(directivePayload);
+                    }
+                    promises.push(loadViewSelectorDirective());
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -72,6 +86,7 @@ app.directive("partnerportalCustomeraccessAnalytictiledefinitionsettings", ["Uti
                         $type: "PartnerPortal.CustomerAccess.Business.AnalyticDefinitionSettings, PartnerPortal.CustomerAccess.Business",
                         Queries: queriesData != undefined ? queriesData.Queries : undefined,
                         OrderedMeasureIds: queriesData != undefined ? queriesData.OrderedMeasureIds : undefined,
+                        ViewId: viewSelectorApi.getSelectedIds(),
                     };
                 };
 

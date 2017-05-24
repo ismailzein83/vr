@@ -1,4 +1,5 @@
 ﻿using PartnerPortal.CustomerAccess.Business;
+using PartnerPortal.CustomerAccess.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
     {
         [HttpGet]
         [Route("GetCurrentAccountBalance")]
-        public CurrentAccountBalance GetCurrentAccountBalance(Guid accountTypeId, Guid connectionId)
+        public CurrentAccountBalanceTile GetCurrentAccountBalance(Guid accountTypeId, Guid connectionId, Guid? viewId = null)
         {
             LiveBalanceManager manager = new LiveBalanceManager();
-            return manager.GetCurrentAccountBalance(connectionId, accountTypeId);
+            return manager.GetCurrentAccountBalance(connectionId, accountTypeId, viewId);
         }
     }
 }

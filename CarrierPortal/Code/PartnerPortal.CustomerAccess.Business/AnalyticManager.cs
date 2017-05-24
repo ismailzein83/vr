@@ -40,6 +40,13 @@ namespace PartnerPortal.CustomerAccess.Business
                    analyticTileInfo.Fields.Add(analyticTileField);
                 }
             }
+
+            if(analyticDefinitionSettings.ViewId.HasValue)
+            {
+                 ViewManager viewManager = new ViewManager();
+                 var view = viewManager.GetView(analyticDefinitionSettings.ViewId.Value);
+                analyticTileInfo.ViewURL = view.Url;
+            }
             return analyticTileInfo;
         }
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(Guid connectionId, int tableId, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate)

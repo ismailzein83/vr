@@ -107,13 +107,24 @@ namespace PartnerPortal.Invoice.Business
             VRInterAppRestConnection connectionSettings = new InvoiceTypeManager().GetVRInterAppRestConnection(connectionId);
             return connectionSettings.Get<Vanrise.Invoice.Entities.Invoice>(string.Format("/api/VR_Invoice/Invoice/GetInvoice?invoiceId={0}", invoiceId));
         }
-        public InvoiceClientDetail GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId)
+        public InvoiceTile GetRemoteLastInvoice(Guid connectionId, Guid invoiceTypeId, Guid? viewId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
             string partnerId = manager.GetRetailAccountId(userId).ToString();
             VRInterAppRestConnection connectionSettings = new InvoiceTypeManager().GetVRInterAppRestConnection(connectionId);
-            return connectionSettings.Get<InvoiceClientDetail>(string.Format("/api/VR_Invoice/Invoice/GetLastInvoice?invoiceTypeId={0}&partnerId={1}", invoiceTypeId, partnerId));
+            var invoiceDetail = connectionSettings.Get<InvoiceClientDetail>(string.Format("/api/VR_Invoice/Invoice/GetLastInvoice?invoiceTypeId={0}&partnerId={1}", invoiceTypeId, partnerId));
+            InvoiceTile invoiceTile = new Entities.InvoiceTile
+            {
+                InvoiceDetail = invoiceDetail,
+            };
+            if(viewId.HasValue)
+            {
+                ViewManager viewManager = new ViewManager();
+                var view = viewManager.GetView(viewId.Value);
+                invoiceTile.ViewURL = view.Url;
+            }
+            return invoiceTile;
         }
     }
 }
