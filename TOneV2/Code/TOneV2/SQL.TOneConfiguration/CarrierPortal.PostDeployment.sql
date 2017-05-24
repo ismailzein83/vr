@@ -63,3 +63,27 @@ when not matched by target then
 end
 
 Delete from [runtime].[SchedulerTaskActionType] where Id in ('0A15BC35-A3A7-4ED3-B09B-1B41A7A9DDC9','7A35F562-319B-47B3-8258-EC1A704A82EB') --Exchange Rate, workflow
+
+--common.ExtensionConfiguration---------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('48FA768C-7482-476D-9DB0-26C6A0CEB9A0','LiveBalance','Live Balance','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-livebalancetiledefinitionsettings"}'),
+('BBEF1C92-DCEC-441B-86A2-7FC0C67716F5','PartnerPortal_Invoice_InvoiceView','Portal Invoice','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"partnerportal-invoice-vieweditor"}'),
+('3A02EEEA-6F38-4277-BAC4-9D8F88F71851','Invoice Viewer Type','Invoice Viewer Type','VR_Common_VRComponentType','{"Editor":"partnerportal-invoice-viewertypesettings"}'),
+('06CD79C8-B1C0-4A33-A757-A36EBD96EA5B','Analytic','Analytic','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-analytictiledefinitionsettings"}'),
+('A8A6C730-9EF7-41E3-B875-C9FF7B6696FC','InvoiceTileDefinition','Invoice Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-invoice-invoicetiledefinitionsettings"}'),
+('12371BE0-CF2C-4CDD-9F4C-E809D912A716','Partner Invoice Query','Partner Invoice Query','PartnerPortal_Invoice_InvoiceQueryInterceptor','{"Editor":"partnerportal-invoice-partnerinvoicequeryinterceptor"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ConfigType],[Settings]))
+merge	[common].[ExtensionConfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
