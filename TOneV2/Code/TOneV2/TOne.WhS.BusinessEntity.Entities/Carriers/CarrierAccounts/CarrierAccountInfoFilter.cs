@@ -23,5 +23,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public int? AssignableToUserId { get; set; }
 
 		public int? SellingNumberPlanId { get; set; }
+
+        public List<int> ExcludedCarrierAccountIds { get; set; }
 	}
 }

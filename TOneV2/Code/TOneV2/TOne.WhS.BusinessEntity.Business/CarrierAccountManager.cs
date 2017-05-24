@@ -107,7 +107,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("carrierAccount");
             if (carrierAccount.SupplierSettings == null)
                 throw new NullReferenceException("carrierProfile.SupplierSettings");
-            if(carrierAccount.SupplierSettings.TimeZoneId.HasValue)
+            if (carrierAccount.SupplierSettings.TimeZoneId.HasValue)
                 return carrierAccount.SupplierSettings.TimeZoneId.Value;
             return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
         }
@@ -201,6 +201,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 filterPredicate = (carr) =>
                 {
+                    if (filter.ExcludedCarrierAccountIds != null && filter.ExcludedCarrierAccountIds.Contains(carr.CarrierAccountId))
+                        return false;
+
                     if (filter.GetExchangeCarriers && carr.AccountType != CarrierAccountType.Exchange)
                         return false;
 
@@ -581,7 +584,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
-        #endregion 
+        #endregion
 
         #region ICarrierAccountManager Memebers
 

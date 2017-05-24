@@ -41,8 +41,10 @@ app.directive('vrWhsDealSwapdealBuyrouteruleFixed', ['UtilsService', 'VRUIUtilsS
                     var promises = [];
 
                     var customerId;
+                    var parentCarrierAccountId;
 
                     if (payload != undefined) {
+                        parentCarrierAccountId = payload.carrierAccountId;
                         var swapDealBuyRouteRuleExtendedSettings = payload.swapDealBuyRouteRuleExtendedSettings;
 
                         if (swapDealBuyRouteRuleExtendedSettings != undefined) {
@@ -62,7 +64,10 @@ app.directive('vrWhsDealSwapdealBuyrouteruleFixed', ['UtilsService', 'VRUIUtilsS
                         carrierAccountReadyPromiseDeferred.promise.then(function () {
 
                             var carrierAccountPayload = {
-                                selectedIds: customerId != undefined ? customerId : undefined
+                                selectedIds: customerId != undefined ? customerId : undefined,
+                                filter: {
+                                    ExcludedCarrierAccountIds: [parentCarrierAccountId]
+                                }
                             };
                             VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                         });

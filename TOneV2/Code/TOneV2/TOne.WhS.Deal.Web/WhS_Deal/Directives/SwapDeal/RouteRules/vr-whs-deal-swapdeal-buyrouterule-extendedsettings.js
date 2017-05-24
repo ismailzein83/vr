@@ -27,6 +27,7 @@
             this.initializeController = initializeController;
 
             var swapDealId;
+            var carrierAccountId;
 
             var selectorAPI;
 
@@ -49,7 +50,8 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var directivePayload = {
-                        swapDealId: swapDealId
+                        swapDealId: swapDealId,
+                        carrierAccountId: carrierAccountId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -64,6 +66,7 @@
 
                     if (payload != undefined) {
                         swapDealId = payload.swapDealId;
+                        carrierAccountId = payload.carrierAccountId;
                         swapDealBuyRouteRuleExtendedSettings = payload.swapDealBuyRouteRuleExtendedSettings;
                     }
 
@@ -99,6 +102,7 @@
 
                             var directivePayload = {
                                 swapDealId: swapDealId,
+                                carrierAccountId: carrierAccountId,
                                 swapDealBuyRouteRuleExtendedSettings: swapDealBuyRouteRuleExtendedSettings
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);

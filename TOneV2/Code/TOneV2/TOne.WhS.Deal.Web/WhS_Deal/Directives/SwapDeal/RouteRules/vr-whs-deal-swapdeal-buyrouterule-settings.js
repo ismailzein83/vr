@@ -55,9 +55,9 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
 
                     var swapDealId;
+
                     var swapDealBuyRouteRuleSettings;
                     var swapDealBuyRouteRuleContext;
 
@@ -67,47 +67,57 @@
                         swapDealBuyRouteRuleContext = payload.swapDealBuyRouteRuleContext;
                     }
 
-                    //Loading SupplierZone selector 
-                    var supplierZoneSelectorLoadPromise = getSupplierZoneSelectorLoadPromise();
-                    promises.push(supplierZoneSelectorLoadPromise);
+                    var loadSwapDealSettingsDirectivePromiseDeffered = UtilsService.createPromiseDeferred();
 
-                    //Loading ExtendedSettings directive
-                    var swapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise = getSwapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise();
-                    promises.push(swapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise);
+                    WhS_Deal_SwapDealAPIService.GetSwapDealSettingsDetail(swapDealId).then(function (response) {
+                        var swapDealSettingsDetail = response;
+
+                        var promises = [];
+
+                        //Loading SupplierZone selector 
+                        var supplierZoneSelectorLoadPromise = getSupplierZoneSelectorLoadPromise(swapDealSettingsDetail);
+                        promises.push(supplierZoneSelectorLoadPromise);
+
+                        //Loading ExtendedSettings directive
+                        var swapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise = getSwapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise(swapDealSettingsDetail);
+                        promises.push(swapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise);
 
 
-                    function getSupplierZoneSelectorLoadPromise() {
+                        UtilsService.waitMultiplePromises(promises).then(function () {
+                            loadSwapDealSettingsDirectivePromiseDeffered.resolve();
+                        });
+                    });
+
+
+                    function getSupplierZoneSelectorLoadPromise(swapDealSettingsDetail) {
                         var loadSupplierZoneSelectorDeferred = UtilsService.createPromiseDeferred();
 
-                        WhS_Deal_SwapDealAPIService.GetSwapDealSettingsDetail(swapDealId).then(function (response) {
-                            var swapDealSettingsDetail = response;
+                        if (swapDealBuyRouteRuleContext != undefined && swapDealBuyRouteRuleContext.setTimeSettings != undefined && typeof (swapDealBuyRouteRuleContext.setTimeSettings) == 'function') {
+                            swapDealBuyRouteRuleContext.setTimeSettings(swapDealSettingsDetail.BED, swapDealSettingsDetail.EED);
+                        }
 
-                            if (swapDealBuyRouteRuleContext != undefined && swapDealBuyRouteRuleContext.setTimeSettings != undefined && typeof (swapDealBuyRouteRuleContext.setTimeSettings) == 'function') {
-                                swapDealBuyRouteRuleContext.setTimeSettings(response.BED, response.EED);
+                        supplierZoneSelectorReadyDeferred.promise.then(function () {
+
+                            var supplierZoneSelectorPayload = {
+                                availableZoneIds: swapDealSettingsDetail != undefined ? swapDealSettingsDetail.SupplierZoneIds : undefined,
+                                supplierId: swapDealSettingsDetail != undefined ? swapDealSettingsDetail.CarrierAccountId : undefined
+                            };
+                            if (swapDealBuyRouteRuleSettings != undefined) {
+                                supplierZoneSelectorPayload.selectedIds = swapDealBuyRouteRuleSettings.SupplierZoneIds;
                             }
-
-                            supplierZoneSelectorReadyDeferred.promise.then(function () {
-
-                                var supplierZoneSelectorPayload = {
-                                    availableZoneIds: swapDealSettingsDetail != undefined ? swapDealSettingsDetail.SupplierZoneIds : undefined,
-                                    supplierId: swapDealSettingsDetail != undefined ? swapDealSettingsDetail.CarrierAccountId : undefined
-                                };
-                                if (swapDealBuyRouteRuleSettings != undefined) {
-                                    supplierZoneSelectorPayload.selectedIds = swapDealBuyRouteRuleSettings.SupplierZoneIds;
-                                }
-                                VRUIUtilsService.callDirectiveLoad(supplierZoneSelectorAPI, supplierZoneSelectorPayload, loadSupplierZoneSelectorDeferred);
-                            });
+                            VRUIUtilsService.callDirectiveLoad(supplierZoneSelectorAPI, supplierZoneSelectorPayload, loadSupplierZoneSelectorDeferred);
                         });
 
                         return loadSupplierZoneSelectorDeferred.promise;
                     }
-                    function getSwapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise() {
+                    function getSwapDealBuyRouteRuleExtendedSettingsDirectiveLoadPromise(swapDealSettingsDetail) {
                         var swapDealBuyRouteRuleExtendedSettingsDirectiveDeferred = UtilsService.createPromiseDeferred();
 
                         swapDealBuyRouteRuleExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
 
                             var swapDealBuyRouteRuleExtendedSettingsDirectivePayload = {
-                                swapDealId: swapDealId
+                                swapDealId: swapDealId,
+                                carrierAccountId: swapDealSettingsDetail != undefined ? swapDealSettingsDetail.CarrierAccountId : undefined
                             };
                             if (swapDealBuyRouteRuleSettings != undefined) {
                                 swapDealBuyRouteRuleExtendedSettingsDirectivePayload.swapDealBuyRouteRuleExtendedSettings = swapDealBuyRouteRuleSettings.ExtendedSettings;
@@ -118,7 +128,7 @@
                         return swapDealBuyRouteRuleExtendedSettingsDirectiveDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return loadSwapDealSettingsDirectivePromiseDeffered.promise;
                 };
 
                 api.getData = function () {
