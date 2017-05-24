@@ -26,12 +26,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'UpdateSwapDealBuyRouteRule'), swapDealBuyRouteRule);
         }
 
+        function GetSwapDealBuyRouteRuleExtendedSettingsConfigs() {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealBuyRouteRuleExtendedSettingsConfigs'));
+        }
+
 
         return ({
             GetFilteredSwapDealBuyRouteRules: GetFilteredSwapDealBuyRouteRules,
             GetSwapDealBuyRouteRule: GetSwapDealBuyRouteRule,
             AddSwapDealBuyRouteRule: AddSwapDealBuyRouteRule,
             UpdateSwapDealBuyRouteRule: UpdateSwapDealBuyRouteRule,
+            GetSwapDealBuyRouteRuleExtendedSettingsConfigs: GetSwapDealBuyRouteRuleExtendedSettingsConfigs
         });
     }
 

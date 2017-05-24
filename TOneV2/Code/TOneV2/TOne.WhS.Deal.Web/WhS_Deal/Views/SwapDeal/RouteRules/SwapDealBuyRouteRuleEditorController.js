@@ -12,8 +12,8 @@
         var swapDealBuyRouteRuleEntity;
         var swapDealId;
 
-        //var settingsDirectiveAPI;
-        //var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var swapDealBuyRouteRuleSettingsDirectiveAPI;
+        var swapDealBuyRouteRuleSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -32,10 +32,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            //$scope.scopeModel.onSettingsDirectiveReady = function (api) {
-            //    settingsDirectiveAPI = api;
-            //    settingsDirectiveReadyDeferred.resolve();
-            //};
+            $scope.scopeModel.onSwapDealBuyRouteRuleSettingsDirectiveReady = function (api) {
+                swapDealBuyRouteRuleSettingsDirectiveAPI = api;
+                swapDealBuyRouteRuleSettingsDirectiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -72,7 +72,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwapDealBuyRouteRuleSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -80,7 +80,7 @@
 
             function setTitle() {
                 if (isEditMode) {
-                    var swapDealBuyRouteRuleName = (swapDealBuyRouteRuleEntity && swapDealBuyRouteRuleEntity.Settings) ? swapDealBuyRouteRuleEntity.Settings.Description : null;
+                    var swapDealBuyRouteRuleName = (swapDealBuyRouteRuleEntity && swapDealBuyRouteRuleEntity.Settings) ? swapDealBuyRouteRuleEntity.Settings.Description : undefined;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealBuyRouteRuleName, 'Swap Deal Buy Route Rule');
                 }
                 else {
@@ -95,20 +95,22 @@
                     $scope.scopeModel.description = swapDealBuyRouteRuleEntity.Settings.Description;
                 }
             }
+            function loadSwapDealBuyRouteRuleSettingsDirective() {
+                var swapDealBuyRouteRuleSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
-            //function loadSettingsDirective() {
-            //    var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                swapDealBuyRouteRuleSettingsDirectiveReadyDeferred.promise.then(function () {
 
-            //    settingsDirectiveReadyDeferred.promise.then(function () {
-            //        var settingsDirectivePayload;
-            //        if (swapDealBuyRouteRuleEntity != undefined) {
-            //            settingsDirectivePayload = { swapDealBuyRouteRuleSettings: swapDealBuyRouteRuleEntity.SwapDealBuyRouteRuleSettings };
-            //        }
-            //        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-            //    });
+                    var swapDealBuyRouteRuleSettingsPayload = {
+                        swapDealId: swapDealId
+                    };
+                    if (swapDealBuyRouteRuleEntity && swapDealBuyRouteRuleEntity.Settings) {
+                        swapDealBuyRouteRuleSettingsPayload.swapDealBuyRouteRuleSettings = swapDealBuyRouteRuleEntity.Settings;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(swapDealBuyRouteRuleSettingsDirectiveAPI, swapDealBuyRouteRuleSettingsPayload, swapDealBuyRouteRuleSettingsLoadDeferred);
+                });
 
-            //    return settingsDirectiveLoadDeferred.promise;
-            //}
+                return swapDealBuyRouteRuleSettingsLoadDeferred.promise;
+            }
         }
 
         function insert() {
@@ -144,14 +146,17 @@
         }
 
         function buildSwapDealBuyRouteRuleObjFromScope() {
-            //var swapDealBuyRouteRuleSettings = settingsDirectiveAPI.getData();
+
+            var swapDealBuyRouteRuleSettings = swapDealBuyRouteRuleSettingsDirectiveAPI.getData();
+            if (swapDealBuyRouteRuleSettings == undefined)
+                swapDealBuyRouteRuleSettings = {};
+
+            swapDealBuyRouteRuleSettings.SwapDealId = swapDealId;
+            swapDealBuyRouteRuleSettings.Description = $scope.scopeModel.description;
 
             return {
                 VRRuleId: swapDealBuyRouteRuleEntity != undefined ? swapDealBuyRouteRuleEntity.VRRuleId : undefined,
-                Settings: {
-                    Description: $scope.scopeModel.description,
-                    SwapDealId: swapDealId
-                }
+                Settings: swapDealBuyRouteRuleSettings
             };
         }
     }

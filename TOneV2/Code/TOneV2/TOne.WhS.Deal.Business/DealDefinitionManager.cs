@@ -9,13 +9,23 @@ namespace TOne.WhS.Deal.Business
     public class DealDefinitionManager : BaseDealManager
     {
         #region Public Methods
+
         public IEnumerable<DealDefinitionInfo> GetDealDefinitionInfo(DealDefinitionFilter filter)
         {
             var cachedDeals = base.GetCachedDeals();
 
             Func<DealDefinition, bool> filterExpression = (dealDefinition) =>
             {
-                if (filter!=null && filter.Filters != null)
+                if (filter == null)
+                    return true;
+
+                if (filter.IncludedDealDefinitionIds != null && !filter.IncludedDealDefinitionIds.Contains(dealDefinition.DealId))
+                    return false;
+
+                if (filter.ExcludedDealDefinitionIds != null && filter.ExcludedDealDefinitionIds.Contains(dealDefinition.DealId))
+                    return false;
+
+                if (filter.Filters != null)
                 {
                     DealDefinitionFilterContext context = new DealDefinitionFilterContext() { DealDefinition = dealDefinition };
                     foreach (IDealDefinitionFilter dealDefinitionFilter in filter.Filters)
@@ -30,6 +40,12 @@ namespace TOne.WhS.Deal.Business
 
             return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
+
+        public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Mappers
@@ -42,16 +58,12 @@ namespace TOne.WhS.Deal.Business
                 Name = dealDefinition.Name
             };
         }
-        #endregion
 
         public override DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal)
         {
             throw new NotImplementedException();
         }
 
-        public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

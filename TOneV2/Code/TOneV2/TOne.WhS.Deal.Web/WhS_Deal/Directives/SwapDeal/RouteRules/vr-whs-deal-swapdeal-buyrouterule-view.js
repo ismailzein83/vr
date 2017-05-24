@@ -37,7 +37,7 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onSwapDealBuyRouteRuleReady = function (api) {
+                $scope.scopeModel.onSwapDealBuyRouteRuleGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
                 };

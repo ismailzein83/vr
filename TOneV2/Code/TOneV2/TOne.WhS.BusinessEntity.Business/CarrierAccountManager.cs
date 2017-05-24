@@ -33,13 +33,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Public Methods
 
-        public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
-        {
-            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
-            var carrierAccount = s_vrObjectTrackingManager.GetObjectDetailById(carrierAccountHistoryId);
-            return carrierAccount.CastWithValidate<CarrierAccount>("Carrier Account : historyId ", carrierAccountHistoryId);
-        }
         #region CarrierAccount
+
         public Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
@@ -387,6 +382,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccounts;
         }
+        public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var carrierAccount = s_vrObjectTrackingManager.GetObjectDetailById(carrierAccountHistoryId);
+            return carrierAccount.CastWithValidate<CarrierAccount>("Carrier Account : historyId ", carrierAccountHistoryId);
+        }
+        public bool IsInterconnectSwitch(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.CarrierAccountSettings.ThrowIfNull("carrierAccount.CarrierAccountSettings", carrierAccountId);
+
+            return carrierAccount.CarrierAccountSettings.IsInterconnectSwitch;
+        }
+
         #endregion
 
         #region ExtensionConfiguration
@@ -571,7 +581,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
-        #endregion
+        #endregion 
 
         #region ICarrierAccountManager Memebers
 
@@ -869,6 +879,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
+        #region Private Classes
+
         public class CarrierAccountLoggableEntity : VRLoggableEntityBase
         {
             public static CarrierAccountLoggableEntity Instance = new CarrierAccountLoggableEntity();
@@ -912,6 +924,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 return s_carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
             }
         }
+
+        #endregion
 
         #region  Mappers
 

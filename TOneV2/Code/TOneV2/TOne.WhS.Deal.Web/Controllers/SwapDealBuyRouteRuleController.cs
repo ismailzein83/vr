@@ -42,5 +42,12 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return _manager.UpdateVRRule(swapDealBuyRouteRule);
         }
+
+        [HttpPost]
+        [Route("GetSwapDealBuyRouteRuleExtendedSettingsConfigs")]
+        public IEnumerable<SwapDealBuyRouteRuleExtendedSettingsConfig> GetSwapDealBuyRouteRuleExtendedSettingsConfigs()
+        {
+            return _manager.GetSwapDealBuyRouteRuleExtendedSettingsConfigs();
+        }
     }
 }

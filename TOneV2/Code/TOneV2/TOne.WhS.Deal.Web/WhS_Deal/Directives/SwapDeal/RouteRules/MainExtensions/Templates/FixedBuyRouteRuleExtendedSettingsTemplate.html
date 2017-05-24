@@ -1,9 +1,8 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountDirectiveReady"
+                                   normal-col-num="{{controller.normalColNum}}"
+                                   isrequired="true" getcustomers>
+</vr-whs-be-carrieraccount-selector>
 
-</body>
-</html>
+<vr-columns colnum="{{controller.normalColNum}}">
+    <vr-textbox value="scopeModel.percentage" label="Percentage" type="number" minvalue="0" maxvalue="100" isrequired="true"></vr-textbox>
+</vr-columns>

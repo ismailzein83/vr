@@ -66,12 +66,14 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
             var filter;
             var supplierId;
-
-            var selectorApi;
-            var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var availableZoneIds;
+            var excludedZoneIds;
 
             var supplierDirectiveApi;
             var suppliersReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var selectorApi;
+            var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
             function initializeController() {
@@ -106,6 +108,12 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                     if (filter.EffectiveMode == undefined)
                         filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
 
+                    if (availableZoneIds != undefined)
+                        filter.AvailableZoneIds = availableZoneIds;
+
+                    if (excludedZoneIds != undefined)
+                        filter.ExcludedZoneIds = excludedZoneIds;
+
                     var serializedFilter = UtilsService.serializetoJson(filter);
 
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneInfo(searchValue, supplierId, serializedFilter);
@@ -124,11 +132,12 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
                     var selectedIds;
 
-
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                         supplierId = payload.supplierId;
+                        availableZoneIds = payload.availableZoneIds;
+                        excludedZoneIds = payload.excludedZoneIds;
                     }
 
                     if (supplierId != undefined) {
@@ -191,8 +200,6 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                                             VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', $attrs, ctrl);
                                             setSelectedSupplierZonesPromiseDeferred.resolve();
                                         })
-
-
                                     });
 
                                 });

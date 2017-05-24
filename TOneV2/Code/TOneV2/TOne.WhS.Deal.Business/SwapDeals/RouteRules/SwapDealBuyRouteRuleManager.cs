@@ -34,8 +34,7 @@ namespace TOne.WhS.Deal.Business
 
         protected override Guid GetVRRuleDefinitionId()
         {
-            Guid vrRuleDefinitionId = new Guid("3baf7ff7-2c85-4297-92de-7d333c27dea5");
-            return vrRuleDefinitionId;
+            return new ConfigManager().GetSwapDealBuyRouteRuleDefinitionId();
         }
 
         protected override SwapDealBuyRouteRuleDetails VRRuleDetailMapper(SwapDealBuyRouteRule vrRule)

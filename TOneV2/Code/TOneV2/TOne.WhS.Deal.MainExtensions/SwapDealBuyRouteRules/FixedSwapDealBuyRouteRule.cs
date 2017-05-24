@@ -9,10 +9,7 @@ namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
 {
     public class FixedSwapDealBuyRouteRule : SwapDealBuyRouteRuleExtendedSettings
     {
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override Guid ConfigId { get { return new Guid("C49A0C3B-CE93-430B-BE81-8440EEBD87B0"); } }
 
         public int CustomerId { get; set; }
 
