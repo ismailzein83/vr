@@ -50,6 +50,7 @@
     <Compile Include="DealDefinition\DealDefinitionInfo.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
+    <Compile Include="Settings\SwapDealTechnicalSettingData.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateOutboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Inbound\SwapDealAnalysisInboundItemRateCalcMethod.cs" />
