@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
@@ -24,6 +26,11 @@ namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
                 SaleZoneId = zoneId,
                 Percentage = this.Percentage
             }).ToList();
+        }
+
+        public override string GetDescription()
+        {
+            return string.Format("Customer '{0}':{1}%", new CarrierAccountManager().GetCarrierAccountName(CustomerId), Percentage);
         }
     }
 }

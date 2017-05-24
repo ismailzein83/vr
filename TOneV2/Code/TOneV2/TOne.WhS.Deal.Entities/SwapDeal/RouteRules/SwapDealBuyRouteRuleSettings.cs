@@ -15,5 +15,9 @@ namespace TOne.WhS.Deal.Entities
         public List<long> SupplierZoneIds { get; set; }
 
         public SwapDealBuyRouteRuleExtendedSettings ExtendedSettings { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
     }
 }

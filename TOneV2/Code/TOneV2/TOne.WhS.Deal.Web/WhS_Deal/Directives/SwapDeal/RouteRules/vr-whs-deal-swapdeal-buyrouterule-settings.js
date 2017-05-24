@@ -59,10 +59,12 @@
 
                     var swapDealId;
                     var swapDealBuyRouteRuleSettings;
+                    var swapDealBuyRouteRuleContext;
 
                     if (payload != undefined) {
                         swapDealId = payload.swapDealId;
                         swapDealBuyRouteRuleSettings = payload.swapDealBuyRouteRuleSettings;
+                        swapDealBuyRouteRuleContext = payload.swapDealBuyRouteRuleContext;
                     }
 
                     //Loading SupplierZone selector 
@@ -79,6 +81,10 @@
 
                         WhS_Deal_SwapDealAPIService.GetSwapDealSettingsDetail(swapDealId).then(function (response) {
                             var swapDealSettingsDetail = response;
+
+                            if (swapDealBuyRouteRuleContext != undefined && swapDealBuyRouteRuleContext.setTimeSettings != undefined && typeof (swapDealBuyRouteRuleContext.setTimeSettings) == 'function') {
+                                swapDealBuyRouteRuleContext.setTimeSettings(response.BED, response.EED);
+                            }
 
                             supplierZoneSelectorReadyDeferred.promise.then(function () {
 

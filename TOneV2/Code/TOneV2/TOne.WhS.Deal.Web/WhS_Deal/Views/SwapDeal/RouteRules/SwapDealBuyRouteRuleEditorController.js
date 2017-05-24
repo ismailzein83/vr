@@ -15,6 +15,9 @@
         var swapDealBuyRouteRuleSettingsDirectiveAPI;
         var swapDealBuyRouteRuleSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var minBED;
+        var maxEED;
+
         loadParameters();
         defineScope();
         load();
@@ -48,6 +51,41 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
+
+            $scope.scopeModel.validateBED = function () {
+                if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+                    var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+                    if (validationResult != null)
+                        return validationResult;
+                }
+
+                var bed = $scope.scopeModel.beginEffectiveDate;
+                if (bed != undefined && !(bed instanceof Date))
+                    bed = UtilsService.createDateFromString(bed);
+
+                if (minBED != undefined && bed != undefined && bed < minBED) {
+                    return 'BED should be greater than ' + UtilsService.dateToServerFormat(minBED);
+                }
+                return null;
+            };
+
+            $scope.scopeModel.validateEED = function () {
+                if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
+                    var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
+                    if (validationResult != null)
+                        return validationResult;
+                }
+
+                var eed = $scope.scopeModel.endEffectiveDate;
+                if (eed != undefined && !(eed instanceof Date))
+                    eed = UtilsService.createDateFromString(eed);
+
+                if (maxEED != undefined && (eed == undefined || eed > maxEED)) {
+                    return 'EED should be less than ' + UtilsService.dateToServerFormat(maxEED);
+                }
+                return null;
+            };
+
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -93,6 +131,8 @@
 
                 if (swapDealBuyRouteRuleEntity.Settings != undefined) {
                     $scope.scopeModel.description = swapDealBuyRouteRuleEntity.Settings.Description;
+                    $scope.scopeModel.beginEffectiveDate = swapDealBuyRouteRuleEntity.Settings.BED;
+                    $scope.scopeModel.endEffectiveDate = swapDealBuyRouteRuleEntity.Settings.EED;
                 }
             }
             function loadSwapDealBuyRouteRuleSettingsDirective() {
@@ -101,7 +141,8 @@
                 swapDealBuyRouteRuleSettingsDirectiveReadyDeferred.promise.then(function () {
 
                     var swapDealBuyRouteRuleSettingsPayload = {
-                        swapDealId: swapDealId
+                        swapDealId: swapDealId,
+                        swapDealBuyRouteRuleContext: buildSwapDealBuyRouteRuleContext()
                     };
                     if (swapDealBuyRouteRuleEntity && swapDealBuyRouteRuleEntity.Settings) {
                         swapDealBuyRouteRuleSettingsPayload.swapDealBuyRouteRuleSettings = swapDealBuyRouteRuleEntity.Settings;
@@ -153,11 +194,35 @@
 
             swapDealBuyRouteRuleSettings.SwapDealId = swapDealId;
             swapDealBuyRouteRuleSettings.Description = $scope.scopeModel.description;
+            swapDealBuyRouteRuleSettings.BED = $scope.scopeModel.beginEffectiveDate;
+            swapDealBuyRouteRuleSettings.EED = $scope.scopeModel.endEffectiveDate;
 
             return {
                 VRRuleId: swapDealBuyRouteRuleEntity != undefined ? swapDealBuyRouteRuleEntity.VRRuleId : undefined,
                 Settings: swapDealBuyRouteRuleSettings
             };
+        }
+
+        function buildSwapDealBuyRouteRuleContext() {
+            var swapDealBuyRouteRuleContext = {
+                setTimeSettings: function (bed, eed) {
+                    if (bed != undefined) {
+                        minBED = UtilsService.createDateFromString(bed);
+                        if (!isEditMode) {
+                            $scope.scopeModel.beginEffectiveDate = minBED;
+                        }
+                    }
+
+                    if (eed != undefined) {
+                        maxEED = UtilsService.createDateFromString(eed);
+                        if (!isEditMode) {
+                            $scope.scopeModel.endEffectiveDate = maxEED;
+                        }
+                    }
+                }
+            };
+
+            return swapDealBuyRouteRuleContext;
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
@@ -18,6 +19,11 @@ namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
         public override void Evaluate(ISwapDealBuyRouteRuleEvaluateContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public override string GetDescription()
+        {
+            return string.Format("Swap Deal '{0}':{1}%", new SwapDealManager().GetDealName(SwapDealId), Percentage);
         }
     }
 }

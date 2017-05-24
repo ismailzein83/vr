@@ -70,7 +70,7 @@ app.directive('vrWhsDealSwapdealBuyrouteruleGrid', ['VRNotificationService', 'VR
                     gridAPI.itemUpdated(updatedSwapDealBuyRouteRule);
                 };
 
-                WhS_Deal_SwapDealBuyRouteRuleService.editSwapDealBuyRouteRule(swapDealBuyRouteRuleItem.Entity.VRRuleId, swapDealBuyRouteRuleItem.Entity.Settings.SwapDealId, onSwapDealBuyRouteRuleUpdated);
+                WhS_Deal_SwapDealBuyRouteRuleService.editSwapDealBuyRouteRule(swapDealBuyRouteRuleItem.VRRuleId, swapDealBuyRouteRuleItem.SwapDealId, onSwapDealBuyRouteRuleUpdated);
             }
             //function hasEditSwapDealBuyRouteRulePermission() {
             //    return VRCommon_SwapDealBuyRouteRuleAPIService.HasEditSwapDealBuyRouteRulePermission();

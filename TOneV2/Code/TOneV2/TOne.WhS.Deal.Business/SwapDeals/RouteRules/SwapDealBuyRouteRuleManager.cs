@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -39,10 +40,26 @@ namespace TOne.WhS.Deal.Business
 
         protected override SwapDealBuyRouteRuleDetails VRRuleDetailMapper(SwapDealBuyRouteRule vrRule)
         {
+            Dictionary<Guid, SwapDealBuyRouteRuleExtendedSettingsConfig> swapDealBuyRouteRuleExtendedSettingsConfigsDict = GetSwapDealBuyRouteRuleExtendedSettingsConfigsDict();
+            SwapDealBuyRouteRuleExtendedSettingsConfig swapDealBuyRouteRuleExtendedSettingsConfig = swapDealBuyRouteRuleExtendedSettingsConfigsDict.GetRecord(vrRule.Settings.ExtendedSettings.ConfigId);
+
             return new SwapDealBuyRouteRuleDetails()
             {
-                Entity = vrRule
+                VRRuleId = vrRule.VRRuleId,
+                SwapDealId = vrRule.Settings.SwapDealId,
+                Description = vrRule.Settings.Description,
+                SupplierZonesDescription = new SupplierZoneManager().GetDescription(vrRule.Settings.SupplierZoneIds),
+                RuleType = swapDealBuyRouteRuleExtendedSettingsConfig.Title,
+                Settings = vrRule.Settings.ExtendedSettings.GetDescription(),
+                BED = vrRule.Settings.BED,
+                EED = vrRule.Settings.EED
             };
+        }
+
+        private Dictionary<Guid, SwapDealBuyRouteRuleExtendedSettingsConfig> GetSwapDealBuyRouteRuleExtendedSettingsConfigsDict()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurationsByType<SwapDealBuyRouteRuleExtendedSettingsConfig>(SwapDealBuyRouteRuleExtendedSettingsConfig.EXTENSION_TYPE);
         }
     }
 }

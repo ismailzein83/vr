@@ -24,6 +24,12 @@ namespace TOne.WhS.Deal.Business
             return dealDefinition != null ? dealDefinition.Name : null;
         }
 
+        public string GetDealName(int dealId)
+        {
+            DealDefinition dealDefinition = GetDeal(dealId);
+            return dealDefinition != null ? dealDefinition.Name : null;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail>();

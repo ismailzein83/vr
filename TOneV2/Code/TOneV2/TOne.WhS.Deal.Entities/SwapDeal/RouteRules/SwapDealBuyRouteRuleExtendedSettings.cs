@@ -11,6 +11,8 @@ namespace TOne.WhS.Deal.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract void Evaluate(ISwapDealBuyRouteRuleEvaluateContext context);
+
+        public abstract string GetDescription();
     }
 
     public interface ISwapDealBuyRouteRuleEvaluateContext

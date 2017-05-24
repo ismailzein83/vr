@@ -3,8 +3,13 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.menuActions"
-             idfield="Entity.VRRuleId">
+             idfield="VRRuleId">
     
-    <vr-datagridcolumn headertext="'Id'" field="'Entity.VRRuleId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Entity.Settings.Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Id'" field="'VRRuleId'" fixedwidth="'20'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier Zones'" field="'SupplierZonesDescription'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rule Type'" field="'RuleType'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Settings'" field="'Settings'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
 </vr-datagrid>
