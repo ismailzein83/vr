@@ -49,6 +49,20 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 });
             }
 
+            list.Add(new GenericFieldDefinition
+            {
+                Name = "Country",
+                Title = "Country",
+                FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = Vanrise.Entities.Country.BUSINESSENTITY_DEFINITION_ID }
+            });
+
+            list.Add(new GenericFieldDefinition
+            {
+                Name = "Region",
+                Title = "Region",
+                FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType { BusinessEntityDefinitionId = Vanrise.Entities.Region.BUSINESSENTITY_DEFINITION_ID }
+            });
+
            if (this.IncludeArabicName == true)
                list.Add(new GenericFieldDefinition()
                     {

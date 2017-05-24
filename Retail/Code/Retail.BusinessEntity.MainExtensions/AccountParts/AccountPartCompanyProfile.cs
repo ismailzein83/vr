@@ -11,7 +11,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
     public class AccountPartCompanyProfile : AccountPartSettings, IAccountProfile
     {
-        private static CountryManager s_countryManager = new CountryManager();
         private static CityManager s_cityManager = new CityManager();
 
         public override Guid ConfigId { get { return _ConfigId; } }
@@ -32,7 +31,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public string ArabicName { get; set; }
 
-        public Dictionary<string,AccountCompanyContact> Contacts { get; set; }
+        public Dictionary<string, AccountCompanyContact> Contacts { get; set; }
 
         #region IAccountProfile Memebers
 
@@ -50,16 +49,25 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             switch (context.FieldName)
             {
                 case "ArabicName": return this.ArabicName;
-
+                case "Country": return this.CountryId;
+                case "Region": return GetRegionId();
                 default:
-                    return GetDynamicFieldValue(context.FieldName);
-                   
+                    return GetContactFieldValue(context.FieldName);
+
             }
 
-           
+
         }
 
-        dynamic GetDynamicFieldValue(string FieldName)
+        private int? GetRegionId()
+        {
+            if (this.CityId.HasValue)
+                return s_cityManager.GetCityRegionId(this.CityId.Value);
+            else
+                return null;
+        }
+
+        dynamic GetContactFieldValue(string FieldName)
         {
             if (FieldName.Contains("Name"))
             {
@@ -77,7 +85,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
             {
                 List<string> namePart = FieldName.Split('_').ToList();
                 var contact = this.Contacts.GetRecord(namePart[0]);
-                return contact != null && contact.PhoneNumbers!=null ? string.Join(",", contact.PhoneNumbers) : null;
+                return contact != null && contact.PhoneNumbers != null ? string.Join(",", contact.PhoneNumbers) : null;
             }
             if (FieldName.Contains("Title"))
             {
@@ -85,11 +93,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 var contact = this.Contacts.GetRecord(namePart[0]);
                 return contact != null ? contact.Title : null;
             }
-            else 
+            else
                 return null;
-           
         }
-       
     }
 
     public class AccountCompanyContact
