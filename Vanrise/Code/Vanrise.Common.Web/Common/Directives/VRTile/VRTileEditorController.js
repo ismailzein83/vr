@@ -12,6 +12,7 @@
         var extendedSettingsDirectiveApi;
         var extendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    
         loadParameters();
         defineScope();
         load();
@@ -46,7 +47,7 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             loadAllControls()
         }
 
@@ -78,14 +79,14 @@
                     });
                 return extendedSettingsLoadPromiseDeferred.promise;
             }
-
+           
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExtendedSettingsDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
 
