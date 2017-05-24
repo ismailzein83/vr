@@ -13,18 +13,16 @@
                 index: '@',
                 imgpath: '@',
                 datasource: '=',
-                title:"@"
+                title: "@",
+                target:"@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.classIndex = ctrl.index % 16;
 
                 ctrl.onClickEvent = function () {
-                    if ($attrs.onclicktile != undefined) {
-                        var onClickTileMethod = $scope.$parent.$eval($attrs.onclicktile);
-                        if (onClickTileMethod != undefined && typeof (onClickTileMethod) == 'function') {
-                            onClickTileMethod();
-                        }
+                    if ($attrs.target != undefined) {
+                        window.location.href = $attrs.target
                     }
                 };
 
@@ -32,7 +30,8 @@
             controllerAs: 'tileCtrl',
             bindToController: true,
             template: function (element, attrs) {
-                var template = '<div class="vr-tile hand-cursor " ng-class="\'bgcolor-{{::tileCtrl.classIndex}}\'" ng-click="tileCtrl.onClickEvent($event)">'
+                var tileclass = attrs.target != undefined && "hand-cursor" || ""
+                var template = '<div class="vr-tile ' + tileclass + ' " ng-class="\'bgcolor-{{::tileCtrl.classIndex}}\'" ng-click="tileCtrl.onClickEvent($event)">'
                                     + '<div  class="section thumbnail-section" >'
                                       + '<img src="{{tileCtrl.imgpath}}" class="img-responsive" />'
                                     +'</div>'
