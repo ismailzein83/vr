@@ -3250,16 +3250,88 @@ vr-overall-widget  .list-group-item {
     border-radius:10px;    
     display: flex;
 }
-
-.vr-tile .thumbnail-section{
-    width:50%;
-}
 .vr-tile .thumbnail-section img{
-    height:125px;
     padding: 10px;
 }
-.vr-tile .section {
+.vr-tile .content-section {
+   width:100%;
+}
+.vr-tile .thumbnail-section img {
+        height:80px;
+        width:100px;
+ }
+.vr-tile-inner-container .title{
+   font-size:16px;
+   font-weight:bold;
+   text-align: right;
+}
+.vr-tile-inner-container .tilevalue span{
+   font-size:11px;     
    width:50%;
+   display:inline-block;
+   text-align: right;
+}
+@media (min-width: 1280px) {
+   .vr-tile .thumbnail-section img {
+        height:80px;
+        width:100px;
+   }
+   .vr-tile-inner-container .title{
+       font-size:16px;
+    }
+    .vr-tile-inner-container .tilevalue span{
+       font-size:11px;     
+    }
+}
+@media (min-width: 1440px) {
+
+   .vr-tile .thumbnail-section img {
+        height:100px;
+        width:120px;
+   }
+   .vr-tile-inner-container .title{
+       font-size:18px;
+    }
+    .vr-tile-inner-container .tilevalue span{
+       font-size:12px;     
+    }
+}
+
+@media (min-width: 1920px) {
+   .vr-tile .thumbnail-section img {
+        height:120px;
+        width:140px;
+   }
+   .vr-tile-inner-container .title{
+       font-size:20px;
+    }
+    .vr-tile-inner-container .tilevalue span{
+       font-size:13px;     
+    }
+}
+@media (min-width: 2240px) {
+   .vr-tile .thumbnail-section img {
+        height:140px;
+        width:160px;
+   }
+   .vr-tile-inner-container .title{
+       font-size:22px;
+    }
+    .vr-tile-inner-container .tilevalue span{
+       font-size:14px;     
+    }
+}
+@media (min-width: 2560px) {
+   .vr-tile .thumbnail-section img {
+        height:160px;
+        width:180px;
+   }
+   .vr-tile-inner-container .title{
+       font-size:24px;
+    }
+    .vr-tile-inner-container .tilevalue span{
+       font-size:14px;     
+    }
 }
 
 .vr-tile-container{
@@ -3270,23 +3342,10 @@ vr-overall-widget  .list-group-item {
 .vr-tile-inner-container{
     position:absolute;
     top: 50%;
-    transform: translate(-20%,-50%);
+    transform: translate(-20px,-50%);
     width: 100%;
 }
 
-.vr-tile-inner-container .title{
-   font-size:16px;
-   font-weight:bold;
-   text-align: right;
-}
-
-
-.vr-tile-inner-container .tilevalue span{
-   font-size:11px;     
-   width:50%;
-   display:inline-block;
-   text-align: right;
-}
 /* end vr-tile*/
 
 
