@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTile.$inject = ['UtilsService', 'MultiTranscludeService'];
+    vrTile.$inject = ['UtilsService', 'MultiTranscludeService', '$location'];
 
-    function vrTile( UtilsService, MultiTranscludeService) {
+    function vrTile(UtilsService, MultiTranscludeService, $location) {
 
         return {
             restrict: 'E',
@@ -21,9 +21,8 @@
                 ctrl.classIndex = ctrl.index % 16;
 
                 ctrl.onClickEvent = function () {
-                    if ($attrs.target != undefined) {
-                        window.location.href = $attrs.target
-                    }
+                    if ($attrs.target)
+                        $element.find("#link").click();
                 };
 
             },
@@ -31,7 +30,7 @@
             bindToController: true,
             template: function (element, attrs) {
                 var tileclass = attrs.target != undefined && "hand-cursor" || ""
-                var template = '<div class="vr-tile ' + tileclass + ' " ng-class="\'bgcolor-{{::tileCtrl.classIndex}}\'" ng-click="tileCtrl.onClickEvent($event)">'
+                var template = '<div class="vr-tile ' + tileclass + ' " ng-class="\'bgcolor-{{::tileCtrl.classIndex}}\'" ng-click="tileCtrl.onClickEvent()"><a ng-if="tileCtrl.target" ng-href="{{::tileCtrl.target}}" id="link"/>'
                                     + '<div  class="section thumbnail-section" >'
                                       + '<img src="{{tileCtrl.imgpath}}" class="img-responsive" />'
                                     +'</div>'
