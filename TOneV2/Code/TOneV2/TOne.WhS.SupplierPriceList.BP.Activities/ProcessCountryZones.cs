@@ -33,7 +33,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     }
 
     #endregion
-    
+
     public sealed class ProcessCountryZones : BaseAsyncActivity<ProcessCountryZonesInput, ProcessCountryZonesOutput>
     {
 
@@ -143,7 +143,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 return importedZone.NewZones.Min(item => item.BED);
 
             IEnumerable<ExistingZone> connectedExistingZones = this.GetConnectedExistingZones(importedZone.ExistingZones, importedZone.ZoneName);
-            return connectedExistingZones.First().BED;
+            return connectedExistingZones.Min(it => it.BED);
         }
 
         private DateTime? GetZoneEED(ImportedZone importedZone)
@@ -154,7 +154,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 return connectedEntites.Last().EED;
             }
 
-            return null;              
+            return null;
         }
 
         private IEnumerable<NotImportedZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
@@ -208,11 +208,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             if (connectedEntites == null)
             {
                 string message = "Not Imported Zone has missing existing zones";
-                if(zoneName != null)
+                if (zoneName != null)
                     message = string.Format("Zone {0} is missing existing zones", zoneName);
-             
+
                 throw new DataIntegrityValidationException(message);
-            }                
+            }
 
             return connectedEntites;
         }
