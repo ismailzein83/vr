@@ -20,5 +20,31 @@ namespace Vanrise.Common.Web.Controllers
             VRMailManager vrMailManager = new VRMailManager();
             vrMailManager.SendTestMail(setting.EmailSettingData, setting.ToEmail, setting.Subject, setting.Body);
         }
+        [HttpPost]
+        [Route("SendEmail")]
+        public void SendEmail(VRMail emailSetting)
+        {
+            var vrMailManager = new VRMailManager();
+            var vrFileManager = new VRFileManager();
+            var vrMailAttachements = emailSetting.AttachementFileIds.Select(fileId => vrFileManager.GetFile(fileId))
+                .Select(ConvertToAttachement);
+            vrMailManager.SendMail(emailSetting.To, emailSetting.CC, emailSetting.Subject, emailSetting.Body, vrMailAttachements.ToList());
+        }
+        [HttpGet]
+        [Route("GetFileName")]
+        public string GetFileName(long fileId)
+        {
+            var vrFileManager = new VRFileManager();
+            var file = vrFileManager.GetFile(fileId);
+            return file != null ? file.Name : string.Empty;
+        }
+        private VRMailAttachement ConvertToAttachement(VRFile file)
+        {
+            return new VRMailAttachmentExcel
+            {
+                Name = file.Name,
+                Content = file.Content
+            };
+        }
     }
 }

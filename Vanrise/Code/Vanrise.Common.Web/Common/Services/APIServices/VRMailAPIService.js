@@ -9,8 +9,16 @@
         function SendTestEmail(emailSettingDetail) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "SendTestEmail"), emailSettingDetail);
         }
+        function SendEmail(emailSettingDetail) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "SendEmail"), emailSettingDetail);
+        }
+        function GetFileName(fileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "GetFileName"), { fileId: fileId });
+        }
         return ({
-            SendTestEmail: SendTestEmail
+            SendTestEmail: SendTestEmail,
+            SendEmail: SendEmail,
+            GetFileName: GetFileName
         });
     }
 
