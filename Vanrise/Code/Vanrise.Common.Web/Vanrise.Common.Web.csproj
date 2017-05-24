@@ -558,6 +558,8 @@
     <Content Include="Common\Views\VRConnection\VRConnectionEditorController.js" />
     <Content Include="Common\Views\VRConnection\VRConnectionManagement.html" />
     <Content Include="Common\Views\VRConnection\VRConnectionManagementController.js" />
+    <Content Include="Common\Views\VRMail\VRMailMessageEvaluator.html" />
+    <Content Include="Common\Views\VRMail\VRMailMessageEvaluatorController.js" />
     <Content Include="Common\Views\VRTile\VRTileManagement.html" />
     <Content Include="Common\Views\VRTile\VRTileManagementController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditor.html" />
