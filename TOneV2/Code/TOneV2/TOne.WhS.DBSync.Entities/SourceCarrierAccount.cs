@@ -39,7 +39,8 @@ namespace TOne.WhS.DBSync.Entities
 
         public bool IsAToZ { get; set; }
         public bool IsDeleted { get; set; }
-
+        public bool RepresentsASwitch { get; set; }
+        
     }
 
     public class TimeZonesByProfile

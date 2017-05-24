@@ -138,7 +138,7 @@ namespace TOne.WhS.DBSync.Business
 
                 if (sourceItem.NominalCapacityInE1s.HasValue)
                     carrierAccountSettings.NominalCapacity = sourceItem.NominalCapacityInE1s.Value;
-
+                carrierAccountSettings.IsInterconnectSwitch = sourceItem.RepresentsASwitch;
                 return new CarrierAccount
                 {
                     AccountType = accountType,
