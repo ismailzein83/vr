@@ -427,7 +427,7 @@ when not matched by target then
         private List<VRComponentType> GetVisiblePackageDefinitions()
         {
             List<PackageDefinition> visiblePackageDefinitions = new List<PackageDefinition>();
-            var allPackageDefinitions = new PackageDefinitionManager().GetCachedPackageDefinitionswithHidden();
+            var allPackageDefinitions = new PackageDefinitionManager().GetCachedPackageDefinitionsWithHidden();
             if (allPackageDefinitions != null)
             {
                 foreach (var packageDefinition in allPackageDefinitions.Values)

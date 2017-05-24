@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
 
         public PackageDefinition GetPackageDefinitionById(Guid packageDefinitionId)
         {
-            var packageDefinitions = GetCachedPackageDefinitionswithHidden();
+            var packageDefinitions = GetCachedPackageDefinitionsWithHidden();
             return packageDefinitions.FindRecord(x => x.VRComponentTypeId == packageDefinitionId);
         }
 
@@ -27,11 +27,13 @@ namespace Retail.BusinessEntity.Business
             var packageDefinition = GetPackageDefinitionById(packageDefinitionId);
             return packageDefinition != null ? packageDefinition.Name : null;
         }
+
         public IEnumerable<RecurringChargeEvaluatorConfig> GetRecurringChargeEvaluatorConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<RecurringChargeEvaluatorConfig>(RecurringChargeEvaluatorConfig.EXTENSION_TYPE);
         }
+
         public IEnumerable<PackageDefinitionInfo> GetPackageDefinitionsInfo(PackageDefinitionFilter filter)
         {
             Dictionary<Guid, PackageDefinition> cachedPackageDefinitions = null;
@@ -40,7 +42,7 @@ namespace Retail.BusinessEntity.Business
             if (filter != null)
             {
                 if (filter.IncludeHiddenPackageDefinitions)
-                    cachedPackageDefinitions = this.GetCachedPackageDefinitionswithHidden();
+                    cachedPackageDefinitions = this.GetCachedPackageDefinitionsWithHidden();
 
                 filterExpression = (packageDefinition) =>
                 {
@@ -82,10 +84,9 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-
         #region Private Methods
 
-        public Dictionary<Guid, PackageDefinition> GetCachedPackageDefinitionswithHidden()
+        public Dictionary<Guid, PackageDefinition> GetCachedPackageDefinitionsWithHidden()
         {
             VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
             return vrComponentTypeManager.GetCachedComponentTypes<PackageDefinitionSettings, PackageDefinition>();
@@ -93,13 +94,13 @@ namespace Retail.BusinessEntity.Business
 
         private Dictionary<Guid, PackageDefinition> GetCachedPackageDefinitions()
         {
-            return new VRComponentTypeManager().GetCachedOrCreate("GetCachedProductDefinitions", () =>
+            return new VRComponentTypeManager().GetCachedOrCreate("GetPackageDefinitions", () =>
             {
                 var includedProductDefinitions = new Dictionary<Guid, PackageDefinition>();
                 VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
                 Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionPackageDefinition> visiblePackageDefinitionsById;
 
-                var allPackageDefinitions = this.GetCachedPackageDefinitionswithHidden();
+                var allPackageDefinitions = this.GetCachedPackageDefinitionsWithHidden();
 
                 if (retailBEVisibilityManager.ShouldApplyPackageDefinitionsVisibility(out visiblePackageDefinitionsById))
                 {
