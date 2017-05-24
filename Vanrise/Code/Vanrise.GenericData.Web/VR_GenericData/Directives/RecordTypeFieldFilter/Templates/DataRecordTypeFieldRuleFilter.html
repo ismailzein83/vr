@@ -4,7 +4,7 @@
                    datasource="scopeModel.datasource" selectedvalues="scopeModel.dataRecordTypeField" isrequired="true" hideremoveicon onselectionchanged="scopeModel.onDataRecordTypeFieldSelectionChanged"></vr-select>
     </vr-columns>
     <vr-columns width="normal">
-        <vr-select style="position: inherit;top: 23px;" datatextfield="description" datavaluefield="description"
+        <vr-select style="position: inherit;top: 21px;" datatextfield="description" datavaluefield="description"
                    datasource="scopeModel.conditions" selectedvalues="scopeModel.selectedCondition" isrequired="true" hideremoveicon></vr-select>
     </vr-columns>
     <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && !scopeModel.selectedCondition.showDirective" vr-loader="scopeModel.isLoading">
