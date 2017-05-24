@@ -8,6 +8,9 @@ namespace Vanrise.Entities
 {
     public class Region
     {
+        public const string BUSINESSENTITY_DEFINITION_NAME = "VR_Common_Region";
+        public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("878D74E5-4325-4A70-A247-9067798837FA");
+
         public int RegionId { get; set; }
 
         public string Name { get; set; }

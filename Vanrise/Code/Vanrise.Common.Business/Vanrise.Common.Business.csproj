@@ -82,7 +82,7 @@
     <Compile Include="OverriddenConfiguration\OverriddenConfigurationManager.cs" />
     <Compile Include="Region\RegionManager.cs" />
     <Compile Include="Setting\SettingOverriddenConfiguration.cs" />
-    <Compile Include="StatusDefinitionFilterContext.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionFilterContext.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPManager.cs" />
     <Compile Include="VRActionAudit\VRActionAuditManager.cs" />
     <Compile Include="VRActionAudit\VRActionLogger.cs" />
@@ -107,7 +107,7 @@
     <Compile Include="GenericParameterManager.cs" />
     <Compile Include="MasterLogManager.cs" />
     <Compile Include="MasterLogViewSettings.cs" />
-    <Compile Include="StatusDefinitionManager.cs" />
+    <Compile Include="StatusDefinition\StatusDefinitionManager.cs" />
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
     <Compile Include="VRConnections\VRInterAppRestConnection.cs" />

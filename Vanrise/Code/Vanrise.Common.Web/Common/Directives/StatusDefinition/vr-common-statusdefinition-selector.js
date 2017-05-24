@@ -64,12 +64,7 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                         {
                             if (filter == undefined)
                                 filter = {};
-                            if (filter.Filters == undefined)
-                                filter.Filters = [];
-                            filter.Filters.push({
-                                $type: "Vanrise.Common.Business.BEStatusDefinitionFilter ,Vanrise.Common.Business",
-                                BusinessEntityDefinitionId: businessEntityDefinitionId
-                            });
+                            filter.BusinessEntityDefinitionId = businessEntityDefinitionId;                           
                         }
 
                     }

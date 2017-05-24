@@ -133,6 +133,15 @@ namespace Vanrise.Common.Business
                 return null;
         }
 
+        public int? GetCityRegionId(int cityId)
+        {
+            City city = GetCity(cityId);
+            city.ThrowIfNull("city", cityId);
+            if (city.Settings == null)
+                return null;
+            return city.Settings.RegionId;
+        }
+
         #endregion
 
         #region Private Classes
