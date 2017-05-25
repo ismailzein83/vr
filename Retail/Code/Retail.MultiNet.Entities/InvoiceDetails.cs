@@ -12,7 +12,9 @@ namespace Retail.MultiNet.Entities
         public Decimal CurrentCharges { get; set; }
         public Decimal TotalCurrentCharges { get; set; }
         public Decimal SalesTaxAmount { get; set; }
+        public Decimal SalesTax{ get; set; }
         public Decimal WHTaxAmount { get; set; }
+        public Decimal WHTax { get; set; }
         public int CurrencyId { get; set; }
         public Decimal PayableByDueDate { get; set; }
         public Decimal LatePaymentCharges { get; set; }

@@ -25,7 +25,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package\PackageRuntime/MainExtensions/PackageTypes/MainExtensions/Templates/OneTimeEvaluatorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/MainExtensions/Templates/OneTimeEvaluatorTemplate.html'
         };
 
         function RecurChargePackageSettings($scope, ctrl) {
