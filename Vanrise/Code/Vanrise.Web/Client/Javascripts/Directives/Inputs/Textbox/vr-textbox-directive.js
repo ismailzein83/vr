@@ -44,15 +44,22 @@
                     return !$(this).parents('.divDisabled').length;
                 });
                 $quan.bind('keyup', function (e) {
+                    $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
                     var ind = $quan.index(this);
+                    var textbox;
                     if (e.which === 40 || e.which === 13 ) {
-                         $quan.eq(ind + 1).focus();
+                        textbox = $quan.eq(ind + 1);
                       
                     }
                     if (e.which === 38) {
                         var  el = $quan.eq(ind - 1);
-                        if(el)
-                          $quan.eq(ind - 1).focus();
+                        if (el) {
+                            textbox = $quan.eq(ind - 1);
+                        }
+                    }
+                    if (textbox) {
+                        $(textbox).focus();
+                        $(textbox).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
                     }
                 });
                 ctrl.validate = function () {                    

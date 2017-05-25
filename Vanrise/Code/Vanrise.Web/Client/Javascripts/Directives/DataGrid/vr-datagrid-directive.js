@@ -496,14 +496,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/ExpendableColumnPopup.html", null, modalSettings);
 
                 };
-                var lastSelectedRow;
+
                 ctrl.onRowClicked = function (evnt) {
                     if (ctrl.norowhighlightonclick == undefined || !ctrl.norowhighlightonclick) {
-                        if (lastSelectedRow != undefined)
-                            lastSelectedRow.removeClass('vr-datagrid-datacells-click');
-
-                        lastSelectedRow = angular.element(evnt.currentTarget);
-                        lastSelectedRow.addClass('vr-datagrid-datacells-click');
+                        $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
+                        $(evnt.target).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
                     }
                     ctrl.menuLeft = evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
                     ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
