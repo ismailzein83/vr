@@ -81,14 +81,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("filterValue");
             switch (stringRecordFilter.CompareOperator)
             {
-                case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, false) == 0;
-                case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, false) != 0;
-                case StringRecordFilterOperator.Contains: return valueAsString.Contains(filterValue);
-                case StringRecordFilterOperator.NotContains: return !valueAsString.Contains(filterValue);
-                case StringRecordFilterOperator.StartsWith: return valueAsString.StartsWith(filterValue);
-                case StringRecordFilterOperator.NotStartsWith: return !valueAsString.StartsWith(filterValue);
-                case StringRecordFilterOperator.EndsWith: return valueAsString.EndsWith(filterValue);
-                case StringRecordFilterOperator.NotEndsWith: return !valueAsString.EndsWith(filterValue);
+                case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, true) == 0;
+                case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, true) != 0;
+                case StringRecordFilterOperator.Contains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) >= 0;
+                case StringRecordFilterOperator.NotContains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) < 0;
+                case StringRecordFilterOperator.StartsWith: return valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.NotStartsWith: return !valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.EndsWith: return valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+                case StringRecordFilterOperator.NotEndsWith: return !valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
             }
             return false;
         }
