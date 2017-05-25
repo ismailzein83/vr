@@ -10,6 +10,7 @@
 
         var salePriceListGridAPI;
         var salePriceListGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var salePriceListGridContext;
 
         var customerPriceListIds;
 
@@ -25,6 +26,8 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+
+            setSalePriceListGridContext();
 
             $scope.scopeModel.onSalePriceListGridReady = function (api) {
                 salePriceListGridAPI = api;
@@ -104,7 +107,8 @@
                 var salePriceListGridPayload = {
                     query: {
                         IncludedSalePriceListIds: customerPriceListIds
-                    }
+                    },
+                    context: salePriceListGridContext
                 };
                 VRUIUtilsService.callDirectiveLoad(salePriceListGridAPI, salePriceListGridPayload, salePriceListGridLoadDeferred);
             });
@@ -114,6 +118,22 @@
 
         function sendCustomerPriceLists() {
             return WhS_BE_SalePricelistAPIService.SendCustomerPriceLists(customerPriceListIds);
+        }
+
+        function setSalePriceListGridContext() {
+            salePriceListGridContext = {
+                processInstanceId: processInstanceId,
+                onSalePriceListPreviewClosed: onSalePriceListPreviewClosed
+            };
+        }
+        function onSalePriceListPreviewClosed() {
+            $scope.scopeModel.isLoading = true;
+
+            return loadSalePriceListGrid().catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
         function doCustomerPriceListsExist() {

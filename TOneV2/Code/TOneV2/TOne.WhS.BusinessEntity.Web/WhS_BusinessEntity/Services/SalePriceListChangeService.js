@@ -9,14 +9,14 @@
             previewPriceList: previewPriceList
         });
 
-        function previewPriceList(priceListId) {
+        function previewPriceList(priceListId, onSalePriceListPreviewClosed) {
             var modalParameters = {
                 PriceListId: priceListId
             };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-
+                modalScope.onSalePriceListPreviewClosed = onSalePriceListPreviewClosed
             };
             vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SalePriceListChange.html', modalParameters, modalSettings);
         }

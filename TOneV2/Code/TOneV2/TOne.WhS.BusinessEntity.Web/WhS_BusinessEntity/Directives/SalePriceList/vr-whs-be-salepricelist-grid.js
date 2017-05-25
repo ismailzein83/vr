@@ -26,12 +26,16 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
 
     function SalePriceListGrid($scope, ctrl, $attrs) {
 
-        var gridAPI;
         this.initializeController = initializeController;
 
-        function initializeController() {
+        var gridAPI;
+        var context;
 
+        function initializeController() {
             $scope.salepricelist = [];
+
+            defineMenuActions();
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
@@ -39,13 +43,14 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                     ctrl.onReady(getDirectiveAPI());
 
                 function getDirectiveAPI() {
-
                     var directiveAPI = {};
+
                     directiveAPI.load = function (payload) {
                         var query;
 
                         if (payload != undefined) {
                             query = payload.query;
+                            context = payload.context;
                         }
 
                         return gridAPI.retrieveData(query);
@@ -54,7 +59,6 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                     return directiveAPI;
                 }
             };
-
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return whSBeSalePricelistApiService.GetFilteredSalePriceLists(dataRetrievalInput)
@@ -65,24 +69,22 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                         vrNotificationService.notifyExceptionWithClose(error, $scope);
                     });
             };
-
-            defineMenuActions();
         }
-
-
         function defineMenuActions() {
             $scope.gridMenuActions = function (dataItem) {
-
                 var menuActions = [];
                 var sourceId = dataItem.Entity.SourceId;
                 if (typeof sourceId == 'undefined' || sourceId == null) {
                     var labelSendValue = "Resend";
-                    var salePriceListPreview =
-                    {
-                        name: "Preview",
-                        clicked: PreviewPriceList
-                    };
-                    menuActions.push(salePriceListPreview);
+
+                    if (context == undefined || context.processInstanceId == undefined) {
+                        var salePriceListPreview = {
+                            name: "Preview",
+                            clicked: PreviewPriceList
+                        };
+                        menuActions.push(salePriceListPreview);
+                    }
+
                     if (dataItem.Entity.IsSent === false) {
                         labelSendValue = "Send";
                     }
@@ -102,8 +104,8 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                 }
                 return menuActions;
             };
-
         }
+
         function SendPriceList(priceListObj) {
             whSBeSalePricelistApiService.SendPriceList(priceListObj.Entity.PriceListId)
                 .then(function (response) {
@@ -111,7 +113,8 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                 });
         }
         function PreviewPriceList(priceListObj) {
-            whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId);
+            var onSalePriceListPreviewClosed = (context != undefined) ? context.onSalePriceListPreviewClosed : undefined;
+            whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId, onSalePriceListPreviewClosed);
         }
         function downloadPriceList(priceListObj) {
             fileApiService.DownloadFile(priceListObj.Entity.FileId)
