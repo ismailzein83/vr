@@ -30,5 +30,19 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SalePriceListManager manager = new SalePriceListManager();
             return manager.SendPriceList((long)priceListId);
         }
+
+        [HttpGet]
+        [Route("GetSalePriceListIdsByProcessInstanceId")]
+        public object GetSalePriceListIdsByProcessInstanceId(long processInstanceId)
+        {
+            return new SalePriceListManager().GetSalePriceListIdsByProcessInstanceId(processInstanceId);
+        }
+
+        [HttpPost]
+        [Route("SendCustomerPriceLists")]
+        public void SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
+        {
+            new SalePriceListManager().SendCustomerPriceLists(customerPriceListIds);
+        }
     }
 }

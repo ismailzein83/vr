@@ -132,6 +132,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 if (input.Query.CreationDate.HasValue && salePriceList.CreatedTime.Date != input.Query.CreationDate)
                     return false;
+                if (input.Query.IncludedSalePriceListIds != null && !input.Query.IncludedSalePriceListIds.Contains(salePriceList.PriceListId))
+                    return false;
                 return true;
             };
 
@@ -197,7 +199,34 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return processSalePricelists.FindRecord(itm => itm.OwnerId == customerId);
         }
+        public IEnumerable<int> GetSalePriceListIdsByProcessInstanceId(long processInstanceId)
+        {
+            return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId);
+        }
+        public void SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
+        {
+            if (customerPriceListIds == null)
+                return;
 
+            IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().MapRecords(x => x.Value, x => customerPriceListIds.Contains(x.Value.PriceListId));
+
+            if (customerPriceLists == null)
+                return;
+
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+
+            var notificationManager = new TOne.WhS.BusinessEntity.Business.NotificationManager();
+            var fileManager = new Vanrise.Common.Business.VRFileManager();
+
+            foreach (SalePriceList customerPriceList in customerPriceLists)
+            {
+                if (customerPriceList.IsSent)
+                    continue;
+
+                VRFile customerPriceListFile = fileManager.GetFile(customerPriceList.FileId);
+                notificationManager.SendSalePriceList(loggedInUserId, customerPriceList, customerPriceListFile);
+            }
+        }
         #endregion
 
         #region Generate Pricelist Methods

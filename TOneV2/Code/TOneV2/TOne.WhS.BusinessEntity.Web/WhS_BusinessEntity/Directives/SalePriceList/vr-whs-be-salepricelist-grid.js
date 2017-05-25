@@ -41,7 +41,12 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                 function getDirectiveAPI() {
 
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
+                    directiveAPI.load = function (payload) {
+                        var query;
+
+                        if (payload != undefined) {
+                            query = payload.query;
+                        }
 
                         return gridAPI.retrieveData(query);
                     };

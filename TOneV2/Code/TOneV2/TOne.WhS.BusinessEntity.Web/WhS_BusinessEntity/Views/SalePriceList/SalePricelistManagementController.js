@@ -7,7 +7,7 @@
     function salePricelistController($scope, utilsService, vrNotificationService, vruiUtilsService) {
 
         var gridApi;
-        var filter = {};
+        var gridQuery = {};
 
         var carrierAccountSelectorApi;
         var carrierAccountSelectorReadyDeferred = utilsService.createPromiseDeferred();
@@ -25,12 +25,14 @@
 
             $scope.onGridReady = function (api) {
                 gridApi = api;
-                gridApi.loadGrid(filter);
+                var gridPayload = { query: gridQuery };
+                gridApi.load(gridPayload);
             };
 
             $scope.searchClicked = function () {
-                setFilterObject();
-                return gridApi.loadGrid(filter);
+                setGridQuery();
+                var gridPayload = { query: gridQuery };
+                return gridApi.load(gridPayload);
             };
         }
         function load() {
@@ -60,10 +62,11 @@
             return carrierAccountSelectorLoadDeferred.promise;
         }
 
-        function setFilterObject() {
-            filter = {};
-            filter.OwnerId = carrierAccountSelectorApi.getSelectedIds();
-            filter.CreationDate = $scope.CreationDate;
+        function setGridQuery() {
+            gridQuery = {
+                OwnerId: carrierAccountSelectorApi.getSelectedIds(),
+                CreationDate: $scope.CreationDate
+            };
         }
     }
 
