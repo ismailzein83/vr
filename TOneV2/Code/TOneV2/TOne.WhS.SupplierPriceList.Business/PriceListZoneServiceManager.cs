@@ -7,15 +7,60 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
     public class PriceListZoneServiceManager
     {
+        #region ProcessRetroActive
+        private void ProcessRetroActiveZoneServices(int supplierId, DateTime minimumBED)
+        {
+            SupplierZoneServiceManager supplierZoneServiceManager = new SupplierZoneServiceManager();
+
+            IEnumerable<SupplierDefaultService> supplierDefaultServices = supplierZoneServiceManager.GetSupplierDefaultServicesEffectiveAfter(supplierId, minimumBED);
+
+            if (supplierDefaultServices == null)
+                throw new DataIntegrityValidationException(string.Format("Supplier with Id {0} does not have a default service", supplierId));
+
+            SupplierDefaultService effectiveSupplierDefaultService = GetEffectiveSupplierDefaultService(supplierDefaultServices, minimumBED);
+
+            if (effectiveSupplierDefaultService != null)
+                return;
+
+            effectiveSupplierDefaultService = new SupplierDefaultService()
+            {
+                EffectiveServices = supplierDefaultServices.First().EffectiveServices,
+                ReceivedServices = supplierDefaultServices.First().ReceivedServices,
+                BED = minimumBED,
+                EED = supplierDefaultServices.First().BED,
+                SupplierId = supplierId
+            };
+            supplierZoneServiceManager.InsertSupplierDefaultService(effectiveSupplierDefaultService);
+        }
+
+        private SupplierDefaultService GetEffectiveSupplierDefaultService(IEnumerable<SupplierDefaultService> supplierDefaultServices, DateTime effectiveDate)
+        {
+            foreach (var supplierDefaultService in supplierDefaultServices)
+            {
+                if (supplierDefaultService.BED <= effectiveDate && (effectiveDate <= supplierDefaultService.EED || !supplierDefaultService.EED.HasValue))
+                {
+                    return supplierDefaultService;
+                }
+            }
+            return null;
+        }
+
+        #endregion
+
         public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context, IEnumerable<int> importedServiceTypeIds, int supplierId)
         {
-            ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones, supplierId);
+            if (context.ImportedZones != null)
+            {
+                ProcessRetroActiveZoneServices(supplierId, context.MinimumDate);
+            }
 
+            ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones, supplierId);
             context.NewZonesServices = context.ImportedZones.FindAllRecords(item => item.ImportedZoneServiceGroup != null).SelectMany(itm => itm.ImportedZoneServiceGroup.NewZoneServices);
             context.ChangedZonesServices = context.ExistingZones.SelectMany(item => item.ExistingZonesServices.Where(itm => itm.ChangedZoneService != null).Select(x => x.ChangedZoneService));
         }
@@ -28,7 +73,6 @@ namespace TOne.WhS.SupplierPriceList.Business
             ProcessImportedData(importedZones, newAndExistingZones, existingZonesByName, existingZonesServicesByZoneName, pricelistDate, supplierId);
             ProcessNotImportedData(existingZones, notImportedZones, existingZonesServicesByZoneName);
         }
-
 
         #region Processing Imported Data Methods
 
