@@ -8,7 +8,8 @@
         return ({
             editBusinessProcessDefinition: editBusinessProcessDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToBPDefinition: registerObjectTrackingDrillDownToBPDefinition
+            registerObjectTrackingDrillDownToBPDefinition: registerObjectTrackingDrillDownToBPDefinition,
+            openCompletionView: openCompletionView
         });
 
         function editBusinessProcessDefinition(businessProcessDefinitionId, onBPDefenitionUpdated) {
@@ -37,7 +38,6 @@
 
 
             drillDownDefinition.loadDirective = function (directiveAPI, bpDefinitionItem) {
-                console.log(bpDefinitionItem);
                 bpDefinitionItem.objectTrackingGridAPI = directiveAPI;
                 var query = {
                     ObjectId: bpDefinitionItem.Entity.BPDefinitionID,
@@ -57,6 +57,20 @@
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
+        }
+
+        function openCompletionView(completionViewURL, processInstanceId, onCompletionViewClosed) {
+            var parameters = {
+                processInstanceId: processInstanceId
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onCompletionViewClosed = onCompletionViewClosed;
+            };
+
+            VRModalService.showModal(completionViewURL, parameters, settings);
         }
     }
     appControllers.service('BusinessProcess_BPDefinitionService', BusinessProcess_BPDefinitionService);

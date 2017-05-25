@@ -1,10 +1,12 @@
-﻿<div vr-modalcontent width="'80%'" ng-controller="BusinessProcess_BP_TrackingModalController">
+﻿<div vr-modalcontent width="'80%'" ng-controller="BusinessProcess_BP_TrackingModalController" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formBPTrackingModal">
 
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
-                <vr-columns  colnum="11"><vr-label isvalue breakline>{{process.Title}}</vr-label></vr-columns>
+                <vr-columns colnum="7"><vr-label isvalue breakline>{{process.Title}}</vr-label></vr-columns>
+                <vr-columns colnum="1"><vr-label>Status:</vr-label></vr-columns>
+                <vr-columns colnum="3"><span ng-class="getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{process.Status}}</vr-label></span></vr-columns>
             </vr-row>
 
             <vr-row>
@@ -14,8 +16,10 @@
                 <vr-columns colnum="1"><vr-label>Updated On:</vr-label></vr-columns>
                 <vr-columns colnum="3"><vr-label isvalue>{{process.StatusUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
 
-                <vr-columns colnum="1"><vr-label>Status</vr-label></vr-columns>
-                <vr-columns colnum="3"><span ng-class="getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{process.Status}}</vr-label></span></vr-columns>
+                <vr-columns colnum="1" ng-show="showCompletionViewLabel"><vr-label>{{completionViewLabel}}:</vr-label></vr-columns>
+                <vr-columns colnum="3" ng-show="showCompletionViewLabel">
+                    <vr-label isvalue><a ng-click="openCompletionView()">{{completionViewLabelValue}}</a></vr-label>
+                </vr-columns>
             </vr-row>
 
             <vr-tabs>
