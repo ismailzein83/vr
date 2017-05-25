@@ -16,9 +16,9 @@
                 <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.isExporting" />
             </li>
             <li role="presentation" ng-repeat="menuAction in ctrl.getGridMenuActions()">
-                <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.executeGridAction(menuAction)" vr-disabled="menuAction.isExecuting">{{menuAction.name}}</span>
-                <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="menuAction.isExecuting" />
-            </li>
+                    <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.executeGridAction(menuAction)">{{menuAction.name}}</span>
+                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="menuAction.isExecuting" />
+             </li>
             <li role="separator" class="divider"></li>
             <li style="color:#000" role="presentation" ng-repeat="colDef in ctrl.columnDefs" ng-if="!colDef.nonHiddable">
                 <a ng-click="ctrl.switchColumnVisibility(colDef)">

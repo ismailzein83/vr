@@ -10,7 +10,7 @@
         function showModal(viewUrl, parameters, settings) {
             var deferred = $q.defer();
             var modalScope = $rootScope.$new();
-
+            $rootScope.$broadcast("hidegridmenu");
             var modalUrl = viewUrl;
             var backdrop = "static";
             var modalInstance;
@@ -86,9 +86,9 @@
                 }
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
-            modalScope.$on("$destroy", function () {
-                $(window).off("resize.Viewport");
-            });
+            //modalScope.$on("$destroy", function () {
+            //   // $(window).off("resize.Viewport");
+            //});
             modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: "am-fade-and-scale" ,onHide:onhideModal });
             return deferred.promise;
         }
