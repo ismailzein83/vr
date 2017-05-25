@@ -41,6 +41,7 @@ namespace Vanrise.Invoice.Business
                 ResultKey = bigResult.ResultKey,
             };
             List<InvoiceDetail> invoiceDetails = null;
+            var totalCount = bigResult.TotalCount;
             if (bigResult.Data != null)
             {
                 invoiceDetails = new List<InvoiceDetail>();
@@ -49,12 +50,15 @@ namespace Vanrise.Invoice.Business
                     if (inActivePartners == null || !inActivePartners.Contains(item.Entity.PartnerId))
                     {
                         invoiceDetails.Add(item);
+                    }else
+                    {
+                        totalCount--;
                     }
 
                 }
             }
             finalResult.Data = invoiceDetails;
-            finalResult.TotalCount = invoiceDetails.Count();
+            finalResult.TotalCount = totalCount;
 
             if (!getClientInvoices && finalResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
