@@ -386,7 +386,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Reject",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
-                
+            case 'SendAll':
+                return {
+                    text: 'Send All',
+                    class: "glyphicon glyphicon-envelope"
+                };
         }
     }
 }]);
