@@ -253,6 +253,8 @@
     <Content Include="WhS_Sales\Views\AddCountriesController.js" />
     <Content Include="WhS_Sales\Views\BulkAction\BulkActionWizard.html" />
     <Content Include="WhS_Sales\Views\BulkAction\BulkActionWizardController.js" />
+    <Content Include="WhS_Sales\Views\CodeComparison\CodeComparisonManagement.html" />
+    <Content Include="WhS_Sales\Views\CodeComparison\CodeComparisonManagementController.js" />
     <Content Include="WhS_Sales\Views\Email.html" />
     <Content Include="WhS_Sales\Views\EmailController.js" />
     <Content Include="WhS_Sales\Views\EmailCustomer.html" />
