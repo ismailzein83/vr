@@ -55,7 +55,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
             }
 
             return '<span  ng-show="ctrl.isSellingNumberPlanVisible">'
-                   + ' <vr-whs-be-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}" on-ready="ctrl.onSellingNumberReady" isrequired="ctrl.isrequired"'
+                   + ' <vr-whs-be-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}" on-ready="ctrl.onSellingNumberReady" isrequired="ctrl.isrequired && ctrl.isSellingNumberPlanVisible"'
                    + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
                    + ' </span>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
