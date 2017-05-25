@@ -266,9 +266,18 @@ namespace Retail.BusinessEntity.Business
             IAccountPackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
             object _updateHandle;
 
+            //DateTime? _accountCacheLastCheck;
+            //AccountBEManager.CacheManager _accountCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>();
+            DateTime? _packageCacheLastCheck;
+            PackageManager.CacheManager _packageCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<PackageManager.CacheManager>();
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreAccountPackagesUpdated(ref _updateHandle);
+                return _dataManager.AreAccountPackagesUpdated(ref _updateHandle) 
+                    //|
+                    //_accountCacheManager.IsCacheExpired(ref _accountCacheLastCheck)
+                    |
+                   _packageCacheManager.IsCacheExpired(ref _packageCacheLastCheck); 
             }
         }
 
