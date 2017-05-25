@@ -18,7 +18,6 @@
                 emailObject = parameters.evaluatedEmail;
                 fileId = parameters.fileId;
             }
-            console.log(fileId);
         }
 
         function defineScope() {
@@ -45,6 +44,12 @@
                    $scope.scopeModel.isLoading = false;
                });
             }
+
+            $scope.scopeModel.downloadPriceList = function () {
+                return VRCommon_VRMailAPIService.GetSalePriceListFile(fileId).then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            };
         }
 
 
@@ -62,18 +67,12 @@
                     $scope.scopeModel.body = emailObject.Body;
                 }
                 $scope.scopeModel.priceListSheet = null;
-                //if (fileId != undefined)
-                //    $scope.scopeModel.priceListSheet = {
-                //        fileId: fileId
-                //    };
-                //else
-                //    $scope.scopeModel.priceListSheet = null;
             }
             function loadFileName() {
                 if (fileId != undefined) {
                     return VRCommon_VRMailAPIService.GetFileName(fileId)
-                        .then(function(response) {
-                            scopeModel.fileName = response;
+                        .then(function (response) {
+                            $scope.scopeModel.fileName = response;
                         });
                 }
             }
@@ -87,16 +86,12 @@
         }
 
         function buildEmailObjFromScope() {
-            var attachment =
-            {
-                $type: "VRMailMessageAttachment"
-            };
-
             var obj = {
-                ToEmail: $scope.toEmail,
-                Subject: $scope.subject,
-                Body: $scope.body,
-                atta: [attachment]
+                CC: $scope.scopeModel.cc,
+                To: $scope.scopeModel.to,
+                Subject: $scope.scopeModel.subject,
+                Body: $scope.scopeModel.body,
+                AttachementFileIds: [fileId]
             };
             return obj;
         }

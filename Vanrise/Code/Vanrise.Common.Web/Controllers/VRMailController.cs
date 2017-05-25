@@ -38,6 +38,14 @@ namespace Vanrise.Common.Web.Controllers
             var file = vrFileManager.GetFile(fileId);
             return file != null ? file.Name : string.Empty;
         }
+        [HttpGet]
+        [Route("GetSalePriceListFile")]
+        public object GetSalePriceListFile(long fileId)
+        {
+            VRFileManager fileManager = new VRFileManager();
+            VRFile file = fileManager.GetFile(fileId);
+            return GetExcelResponse(file.Content, file.Name);
+        }
         private VRMailAttachement ConvertToAttachement(VRFile file)
         {
             return new VRMailAttachmentExcel
