@@ -95,6 +95,10 @@ as (select * from (values
 
 ('44F7D357-CD66-4397-A159-7A597A8C1164','ProductDefinition','Product Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-productdefinition-settings"}'),
 ('CE9260A7-732F-4573-BEF8-9A3F8FC7BCC6','PackageDefinition','Package Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-packagedefinition-settings"}'),
+
+('76A889A4-9F93-4327-91C4-EE2F1EF2026E','Pricing','Pricing','Retail_BE_PackageDefinition'																				,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-pricing"}'),
+('E326482A-9AB5-4715-848F-11CAF4940040','InvoiceRecurCharge','Invoice RecurCharge','Retail_BE_PackageDefinition'														,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-invoicerecurcharge"}'),
+
 ('82B558C6-CEF2-4318-8819-A8495097E770','VR_GenericData_BEParentChildRelationDefinition','Parent-Child Relation Definition','VR_Common_VRComponentType'		,'{"Editor":"vr-genericdata-beparentchildrelationdefinition-settings"}'),
 
 ('AC102D41-B0DB-4E02-A26B-DB8D6BFE47F3','Postpaid','Postpaid','Retail_BE_ProductDefinition'		,'{"DefinitionEditor":"retail-be-productdefinition-extendedsettings-postpaid"}'),
@@ -111,6 +115,7 @@ as (select * from (values
 ('1bdacfe6-f050-4187-9e96-9647049605d3','RetailBE_VRNotification_VRAction_BalanceRetailAccountEMail','Balance Retail Account Email ','VR_Notification_VRActionDefinition'		,'{"Editor":"retail-be-actiondefinition-sendemailsettings"}'),
 ('820856b8-c29d-43d9-9950-18ae7af22bb9','RetailBE_VRNotification_VRAction_BalanceRetailAccountAction','Balance Retail Account Action','VR_Notification_VRActionDefinition'		,'{"Editor":"retail-be-actiondefinition-balancealertsettings"}'),
 ('fb232763-6ac1-49b5-a410-fa792980055c','RetailBE_AccountView_AccountHistory','Account History','Retail_BE_AccountViewDefinitionConfig'											,'{"Editor":"retail-be-accountviewdefinitionsettings-acounthistory"}'),
+('7B651637-EEE9-4804-91E4-51ECC82D8DD0','ChargeableEntity','Chargeable Entity','VRCommon_GenericLKUPDefinition'																	,'{"DefinitionEditor":"retail-be-chargeableentitydefinitionsettings"}'),
 
 ('52525041-7A8B-4AE1-9599-A3F34A87CB38','Retail Account Balance','Retail Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'							,'{"Editor":"retail-be-accountbalancenotificationtype-settings"}'),
 ('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}')
