@@ -61,9 +61,9 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
     };
     function getBeZoneServiceConfigTemplate(attrs) {
         var multipleselection = "";
-        var label = "Zone Service Selector";
+        var label = "Zone Service";
         if (attrs.ismultipleselection != undefined) {
-            label = "Zone Services Selector";
+            label = "Zone Services";
             multipleselection = "ismultipleselection";
         }
 
