@@ -367,7 +367,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (saleRateHistoryRecord != null)
                     {
-                        SaleRateDetail saleRate = GetSaleRateDetail(saleZone, saleRateHistoryRecord);
+                        SaleRateDetail saleRate = GetSaleRateDetail(SalePriceListOwnerType.SellingProduct, saleZone, saleRateHistoryRecord, null);
                         saleRates.Add(saleRate);
                     }
                 }
@@ -379,6 +379,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 var saleRates = new List<SaleRateDetail>();
                 var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(customerId, saleZoneIds, true, false));
+                var salePriceListManager = new SalePriceListManager();
 
                 int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(customerId, effectiveOn, false);
                 if (!sellingProductId.HasValue) return null;
@@ -389,7 +390,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (saleRateHistoryRecord != null)
                     {
-                        SaleRateDetail saleRate = GetSaleRateDetail(saleZone, saleRateHistoryRecord);
+                        SaleRateDetail saleRate = GetSaleRateDetail(SalePriceListOwnerType.Customer, saleZone, saleRateHistoryRecord, salePriceListManager);
                         saleRates.Add(saleRate);
                     }
                 }
@@ -397,7 +398,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleRates;
             }
 
-            private SaleRateDetail GetSaleRateDetail(SaleZone saleZone, SaleRateHistoryRecord saleRateHistoryRecord)
+            private SaleRateDetail GetSaleRateDetail(SalePriceListOwnerType ownerType, SaleZone saleZone, SaleRateHistoryRecord saleRateHistoryRecord, SalePriceListManager salePriceListManager)
             {
                 var saleRateDetail = new SaleRateDetail();
 
@@ -421,6 +422,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(saleRateHistoryRecord.CurrencyId);
                 saleRateDetail.ConvertedRate = saleRateHistoryRecord.ConvertedRate;
                 saleRateDetail.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
+
+                if (ownerType == SalePriceListOwnerType.Customer && !saleRateDetail.IsRateInherited)
+                {
+                    SalePriceList salePriceList = salePriceListManager.GetPriceList(saleRateDetail.Entity.PriceListId);
+                    if (salePriceList == null)
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Pricelist of rate '{0}' of zone '{1}' was not found", saleRateDetail.Entity.SaleRateId, saleRateDetail.ZoneName));
+                    saleRateDetail.PriceListFileId = salePriceList.FileId;
+                }
 
                 return saleRateDetail;
             }

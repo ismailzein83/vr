@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService", "VRUIUtilsService", 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum', 'WhS_BE_RateChangeTypeEnum',
-function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum, whSBeRateChangeTypeEnum) {
+app.directive("vrWhsBeSalerateGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SaleRateAPIService", "VRUIUtilsService", 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum', 'WhS_BE_RateChangeTypeEnum', 'FileAPIService',
+function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum, whSBeRateChangeTypeEnum, FileAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -35,6 +35,8 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
         function initializeController() {
             $scope.showGrid = false;
             $scope.salerates = [];
+
+            defineMenuActions();
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -74,6 +76,26 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = function (dataItem) {
+                var menuActions = [];
+
+                if (dataItem.PriceListFileId != null) {
+                    menuActions.push({
+                        name: 'Download Pricelist',
+                        clicked: downloadPriceList
+                    });
+                }
+
+                return menuActions;
+            };
+        }
+        function downloadPriceList(dataItem) {
+            FileAPIService.DownloadFile(dataItem.PriceListFileId).then(function (response) {
+                utilsService.downloadFile(response.data, response.headers);
+            });
         }
 
         function getDrillDownDefinitions() {
