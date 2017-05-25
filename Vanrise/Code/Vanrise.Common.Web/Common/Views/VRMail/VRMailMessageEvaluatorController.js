@@ -45,8 +45,8 @@
                });
             }
 
-            $scope.scopeModel.downloadPriceList = function () {
-                return VRCommon_VRMailAPIService.GetSalePriceListFile(fileId).then(function (response) {
+            $scope.scopeModel.downloadAttachement = function () {
+                return VRCommon_VRMailAPIService.DownloadAttachement(fileId).then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             };

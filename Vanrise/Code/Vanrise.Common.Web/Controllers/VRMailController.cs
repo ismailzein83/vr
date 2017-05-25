@@ -39,8 +39,8 @@ namespace Vanrise.Common.Web.Controllers
             return file != null ? file.Name : string.Empty;
         }
         [HttpGet]
-        [Route("GetSalePriceListFile")]
-        public object GetSalePriceListFile(long fileId)
+        [Route("DownloadAttachement")]
+        public object DownloadAttachement(long fileId)
         {
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileId);

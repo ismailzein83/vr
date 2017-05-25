@@ -15,8 +15,8 @@
         function GetFileName(fileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "GetFileName"), { fileId: fileId });
         }
-        function GetSalePriceListFile(fileId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "GetSalePriceListFile"), { fileId: fileId }, {
+        function DownloadAttachement(fileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "DownloadAttachement"), { fileId: fileId }, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
@@ -25,7 +25,7 @@
             SendTestEmail: SendTestEmail,
             SendEmail: SendEmail,
             GetFileName: GetFileName,
-            GetSalePriceListFile: GetSalePriceListFile
+            DownloadAttachement: DownloadAttachement
         });
     }
 
