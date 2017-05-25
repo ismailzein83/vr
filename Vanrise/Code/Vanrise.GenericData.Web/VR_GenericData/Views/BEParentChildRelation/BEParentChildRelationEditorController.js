@@ -96,7 +96,7 @@
             }
             else {
                 UtilsService.waitMultiplePromises([getBEParentChildRelationDefinition()]).then(function () {
-                    loadAllControls()
+                    loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;

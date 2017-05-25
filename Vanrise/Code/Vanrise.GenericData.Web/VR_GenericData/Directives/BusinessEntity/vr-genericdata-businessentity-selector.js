@@ -78,7 +78,6 @@
 
                     function getBusinessEntityDefinition(businessEntityDefinitionId) {
                         return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function (response) {
-
                             businessEntityDefinitionEntity = response;
 
                             if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined)

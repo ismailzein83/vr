@@ -90,9 +90,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
 
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(defineAPI());
-                    }
+                    defineAPI();
                 };
 
                 ctrl.search = function (nameFilter) {
@@ -105,6 +103,8 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
+
+                    console.log(payload);
 
                     var selectedIds;
 
@@ -186,11 +186,9 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                     return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
-
-                return api;
-
+                }
             }
 
             function GetAccountsInfoByIds(attrs, ctrl, selectedIds) {
