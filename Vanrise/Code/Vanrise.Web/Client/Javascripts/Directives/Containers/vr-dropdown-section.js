@@ -59,7 +59,7 @@
                                     addBackDrop();
                                     expandSectionDeferred.resolve();
                                     checkOnExpandMethode();
-                                    }, ft ? 0: 1200);
+                                    }, ft ? 0: 1500);
                                    
                             },0);
                             return expandSectionDeferred.promise;
