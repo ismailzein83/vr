@@ -106,7 +106,15 @@ app.directive("vrInvoicetypeSerialnumberPattern", ["UtilsService", "VRNotificati
                 if (currentContext.getParts == undefined)
                 {
                     currentContext.getParts = function () {
-                        return parts;
+                        var returnedParts = [];
+                        if (parts != undefined)
+                        {
+                            for (var i = 0, length = parts.length ; i < length; i++)
+                            {
+                                returnedParts.push(parts[i]);
+                            }
+                        }
+                        return returnedParts;
                     };
                 }
                 return currentContext;
