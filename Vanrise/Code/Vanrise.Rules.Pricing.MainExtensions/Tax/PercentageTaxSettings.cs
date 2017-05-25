@@ -56,6 +56,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tax
         {
             if (context.Amount > this.AmountToSkip)
             {
+                context.Percentage = this.TaxPercentage;
                 context.TaxAmount = (this.TaxPercentage * (context.Amount - this.AmountToSkip) / 100);
             }else
             {

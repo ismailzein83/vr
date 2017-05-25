@@ -21,6 +21,7 @@ namespace Vanrise.Rules.Pricing
                 TargetTime = context.TargetTime,
                 RuleCurrencyId = this.CurrencyId,
                 AmountCurrencyId = context.CurrencyId
+               
             };
             
             foreach (var action in this.Actions)
@@ -29,6 +30,7 @@ namespace Vanrise.Rules.Pricing
                 if (actionContext.TaxAmount.HasValue)
                 {
                     context.TaxAmount = actionContext.TaxAmount.Value;
+                    context.Percentage = actionContext.Percentage;
                     break;
                 }
             }

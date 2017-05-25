@@ -13,6 +13,7 @@ namespace Vanrise.Rules.Pricing
         Decimal Amount { get; set; }
 
         Decimal TaxAmount { set; }
+        decimal Percentage { set; }
 
         int CurrencyId { get; }
     }
