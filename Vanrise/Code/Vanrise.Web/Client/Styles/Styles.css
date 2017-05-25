@@ -3017,7 +3017,7 @@ vr-validator[vr-input] > div:nth-child(1){
         width: 90%;
     }
     .vr-modal-xl {
-        width: 99%;
+        width: 97%;
     }
 }
 @media (min-width: 1440px) {
@@ -3033,7 +3033,7 @@ vr-validator[vr-input] > div:nth-child(1){
         width: 90%;
     }
     .vr-modal-xl {
-        width: 99%;
+        width: 97%;
     }
 }
 
@@ -3050,7 +3050,7 @@ vr-validator[vr-input] > div:nth-child(1){
         width: 80%;
     }
     .vr-modal-xl {
-        width: 99%;
+        width: 95%;
     }
 }
 
