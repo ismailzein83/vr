@@ -128,6 +128,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PriceListExtensionFormat;
         }
+
+        public SalePriceListType GetSaleAreaPriceListType()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PriceListType;
+        }
         public int GetPurchaseAreaEffectiveDateDayOffset()
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();

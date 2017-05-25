@@ -89,6 +89,21 @@ namespace TOne.WhS.BusinessEntity.Business
             ConfigManager configManager = new ConfigManager();
             return configManager.GetSaleAreaPriceListExtensionFormatId();
         }
+
+        public SalePriceListType GetPriceListType(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+
+            carrierAccount.ThrowIfNull("Carrier Account", carrierAccountId);
+            carrierAccount.CustomerSettings.ThrowIfNull("CarrierAccount.CustomerSetting", carrierAccountId);
+
+            var customerPriceListType = carrierAccount.CustomerSettings.PriceListType;
+            if (customerPriceListType != SalePriceListType.Default)
+                return customerPriceListType;
+
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetSaleAreaPriceListType();
+        }
         public int GetCustomerTimeZoneId(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);

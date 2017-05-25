@@ -56,7 +56,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     //customerChange.IsCustomerAtoZ = customer.CustomerSettings.IsAToZ;
 
-                    SalePriceListType pricelistType = GetSalePriceListType(customer.CustomerSettings.PriceListType, context.ChangeType);
+                    var customerPriceListType = _carrierAccountManager.GetPriceListType(customerId);
+                    SalePriceListType pricelistType = GetSalePriceListType(customerPriceListType, context.ChangeType);
 
                     ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
                        outputContext.NotSentChangesByCustomerId);
