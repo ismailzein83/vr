@@ -54,8 +54,6 @@ app.directive('retailBeAccounttypeSelector', ['Retail_BE_AccountTypeAPIService',
             api.load = function (payload) {
                 selectorAPI.clearDataSource();
 
-                console.log(payload);
-
                 var selectedIds;
                 var filter;
                 var beFilter;

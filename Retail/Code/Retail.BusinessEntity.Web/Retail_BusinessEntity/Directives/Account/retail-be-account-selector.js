@@ -104,8 +104,6 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
 
-                    console.log(payload);
-
                     var selectedIds;
 
                     if (payload != undefined) {

@@ -32,6 +32,10 @@ namespace Retail.Voice.Entities
 
         DateTime EventTime { get; }
 
+        Guid AccountBEDefinitionId { get; }
+
+        long PackageAccountId { get; }
+
         VoiceEventPricingInfo EventPricingInfo { set; }
     }
 

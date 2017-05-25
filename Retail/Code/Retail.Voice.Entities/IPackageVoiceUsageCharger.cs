@@ -24,6 +24,8 @@ namespace Retail.Voice.Entities
 
         long AccountId { get; }
 
+        long PackageAccountId { get; }
+
         Guid ServiceTypeId { get; }
 
         dynamic RawCDR { get; }

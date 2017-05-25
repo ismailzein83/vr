@@ -37,6 +37,7 @@ namespace Retail.Voice.Business
                 {
                     AccountBEDefinitionId = accountBEDefinitionId,
                     AccountId = accountId,
+                    PackageAccountId = voiceUsageCharger.ParentPackageAccountId,
                     ServiceTypeId = serviceTypeId,
                     RawCDR = rawCDR,
                     MappedCDR = mappedCDR,
@@ -95,7 +96,7 @@ namespace Retail.Voice.Business
             return voiceEventPrice;
         }
 
-        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime)
+        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
         {
             VoiceChargingPolicyEvaluator chargingPolicyEvaluator = GetVoiceChargingPolicyEvaluator(serviceTypeId);
             var context = new VoiceChargingPolicyEvaluatorContext
@@ -105,7 +106,9 @@ namespace Retail.Voice.Business
                 RawCDR = rawCDR,
                 MappedCDR = mappedCDR,
                 Duration = duration,
-                EventTime = eventTime
+                EventTime = eventTime,
+                AccountBEDefinitionId = accountBEDefinitionId,
+                PackageAccountId = packageAccountId
             };
             chargingPolicyEvaluator.ApplyChargingPolicyToVoiceEvent(context);
             return context.EventPricingInfo;
@@ -133,15 +136,15 @@ namespace Retail.Voice.Business
             var cacheName = new GetVoiceUsageChargersByPriorityCacheName { AccountDefinitionId = accountBEDefinitionId, AccountId = accountId, ServiceTypeId = serviceTypeId, EventDate = eventTime.Date };
 
             //needs caching
-            List<Package> accountPackagesByPriority = GetAccountPackagesByPriority(accountBEDefinitionId, accountId, eventTime, true); //get account packages by priority
+            List<ProcessedAccountPackage> processedAccountPackagesByPriority = GetProcessedAccountPackagesByPriority(accountBEDefinitionId, accountId, eventTime, true); //get account packages by priority
 
-            if (accountPackagesByPriority == null)
+            if (processedAccountPackagesByPriority == null)
                 return null;
 
             List<VoiceUsageChargerWithParentPackage> voiceUsageChargersByPriority = new List<VoiceUsageChargerWithParentPackage>();
-            foreach (var package in accountPackagesByPriority)
+            foreach (var processedAccountPackage in processedAccountPackagesByPriority)
             {
-                IPackageSettingVoiceUsageCharger packageSettingVoiceUsageCharger = package.Settings.ExtendedSettings as IPackageSettingVoiceUsageCharger;
+                IPackageSettingVoiceUsageCharger packageSettingVoiceUsageCharger = processedAccountPackage.Package.Settings.ExtendedSettings as IPackageSettingVoiceUsageCharger;
                 if (packageSettingVoiceUsageCharger != null)
                 {
                     IPackageVoiceUsageCharger voiceUsageCharger;
@@ -150,13 +153,14 @@ namespace Retail.Voice.Business
                         voiceUsageChargersByPriority.Add(new VoiceUsageChargerWithParentPackage
                         {
                             VoiceUsageCharger = voiceUsageCharger,
-                            ParentPackage = package
+                            ParentPackage = processedAccountPackage.Package,
+                            ParentPackageAccountId = processedAccountPackage.AccountPackage.AccountId
                         });
                     }
                 }
                 else
                 {
-                    IPackageUsageChargingPolicy packageServiceUsageChargingPolicy = package.Settings.ExtendedSettings as IPackageUsageChargingPolicy;
+                    IPackageUsageChargingPolicy packageServiceUsageChargingPolicy = processedAccountPackage.Package.Settings.ExtendedSettings as IPackageUsageChargingPolicy;
                     if (packageServiceUsageChargingPolicy != null)
                     {
                         var context = new PackageServiceUsageChargingPolicyContext { ServiceTypeId = serviceTypeId };
@@ -165,7 +169,8 @@ namespace Retail.Voice.Business
                             voiceUsageChargersByPriority.Add(new VoiceUsageChargerWithParentPackage
                             {
                                 VoiceUsageCharger = new ChargingPolicyVoiceUsageCharger(context.ChargingPolicyId),
-                                ParentPackage = package
+                                ParentPackage = processedAccountPackage.Package,
+                                ParentPackageAccountId = processedAccountPackage.AccountPackage.AccountId
                             });
                         }
                     }
@@ -193,16 +198,16 @@ namespace Retail.Voice.Business
             return chargingPolicyEvaluator;
         }
 
-        private List<Package> GetAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence)
+        private List<ProcessedAccountPackage> GetProcessedAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence)
         {
-            List<Package> packages = new List<Package>();
+            List<ProcessedAccountPackage> processedAccountPackages = new List<ProcessedAccountPackage>();
 
-            new AccountPackageManager().LoadAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveTime, true, (package, handle) =>
+            new AccountPackageManager().LoadAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveTime, true, (processedAccountPackage, handle) =>
             {
-                packages.Add(package);
+                processedAccountPackages.Add(processedAccountPackage);
             });
 
-            return packages;
+            return processedAccountPackages;
         }
 
         //private List<Package> GetAccountPackagesByPriority(long accountId, DateTime effectiveTime)
@@ -250,49 +255,24 @@ namespace Retail.Voice.Business
     public class VoiceUsageChargerContext : IVoiceUsageChargerContext
     {
         public Guid AccountBEDefinitionId { get; set; }
-        public long AccountId
-        {
-            get;
-            set;
-        }
 
-        public Guid ServiceTypeId
-        {
-            get;
-            set;
-        }
+        public long AccountId { get; set; }
 
-        public dynamic RawCDR
-        {
-            get;
-            set;
-        }
+        public long PackageAccountId { get; set; }
 
-        public dynamic MappedCDR
-        {
-            get;
-            set;
-        }
+        public Guid ServiceTypeId{ get; set; }
 
-        public decimal Duration
-        {
-            get;
-            set;
-        }
+        public dynamic RawCDR { get; set; }
+
+        public dynamic MappedCDR{ get; set; }
+
+        public decimal Duration { get; set; }
 
         public DateTime EventTime { get; set; }
 
-        public List<VoiceEventPricedPart> PricedPartInfos
-        {
-            get;
-            set;
-        }
+        public List<VoiceEventPricedPart> PricedPartInfos { get; set; }
 
-        public object ChargeInfo
-        {
-            get;
-            set;
-        }
+        public object ChargeInfo { get; set; }
     }
 
     public class VoiceUsageChargerDeductFromBalanceContext : IVoiceUsageChargerDeductFromBalanceContext
@@ -319,37 +299,22 @@ namespace Retail.Voice.Business
     public class VoiceChargingPolicyEvaluatorContext : IVoiceChargingPolicyEvaluatorContext
     {
         public Guid ServiceTypeId { get; set; }
-        public int ChargingPolicyId
-        {
-            get;
-            set;
-        }
 
-        public dynamic RawCDR
-        {
-            get;
-            set;
-        }
+        public int ChargingPolicyId { get; set; }
 
-        public dynamic MappedCDR
-        {
-            get;
-            set;
-        }
+        public dynamic RawCDR { get; set; }
 
-        public decimal Duration
-        {
-            get;
-            set;
-        }
+        public dynamic MappedCDR { get; set; }
+
+        public decimal Duration { get; set; }
 
         public DateTime EventTime { get; set; }
 
-        public Entities.VoiceEventPricingInfo EventPricingInfo
-        {
-            get;
-            set;
-        }
+        public Guid AccountBEDefinitionId { get; set; }
+
+        public long PackageAccountId { get; set; }
+
+        public Entities.VoiceEventPricingInfo EventPricingInfo  { get; set; }
     }
 
     public class VoiceUsageChargerWithParentPackage
@@ -357,5 +322,7 @@ namespace Retail.Voice.Business
         public IPackageVoiceUsageCharger VoiceUsageCharger { get; set; }
 
         public Retail.BusinessEntity.Entities.Package ParentPackage { get; set; }
+
+        public long ParentPackageAccountId { get; set; }
     }
 }

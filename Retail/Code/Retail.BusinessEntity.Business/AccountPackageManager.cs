@@ -87,7 +87,7 @@ namespace Retail.BusinessEntity.Business
             return null;
         }
 
-        public void LoadAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence, Action<Package, LoadPackageHandle> OnPackageLoaded)
+        public void LoadAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence, Action<ProcessedAccountPackage, LoadPackageHandle> OnPackageLoaded)
         {
             var accountInfo = GetAccountInfo(accountId);
             if (accountInfo != null)
@@ -97,7 +97,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     if (processedAccountPackage.AccountPackage.IsEffective(effectiveTime))
                     {
-                        OnPackageLoaded(processedAccountPackage.Package, handle);
+                        OnPackageLoaded(processedAccountPackage, handle);
                         if (handle.Stop)
                             return;
                     }
@@ -252,7 +252,7 @@ namespace Retail.BusinessEntity.Business
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.AccountPackageId });
                             row.Cells.Add(new ExportExcelCell { Value = record.PackageName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED }); 
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
                         }
                     }
@@ -295,13 +295,6 @@ namespace Retail.BusinessEntity.Business
             }
 
             public IOrderedEnumerable<ProcessedAccountPackage> AssignedPackages { get; set; }
-        }
-
-        private class ProcessedAccountPackage
-        {
-            public AccountPackage AccountPackage { get; set; }
-
-            public Package Package { get; set; }
         }
 
         #endregion
@@ -398,5 +391,12 @@ namespace Retail.BusinessEntity.Business
     public class LoadPackageHandle
     {
         public bool Stop { get; set; }
+    }
+
+    public class ProcessedAccountPackage
+    {
+        public AccountPackage AccountPackage { get; set; }
+
+        public Package Package { get; set; }
     }
 }

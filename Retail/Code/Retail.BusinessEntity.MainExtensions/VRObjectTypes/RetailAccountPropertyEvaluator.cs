@@ -16,6 +16,7 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
         public GenericFieldDefinition GenericFieldDefinition { get; set; }
 
         public bool UseDescription { get; set; }
+
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             RetailAccountObjectType retailAccountObjectType = context.ObjectType as RetailAccountObjectType;
@@ -23,11 +24,11 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
             AccountGenericField accountGenericField = new AccountTypeManager().GetAccountGenericField(retailAccountObjectType.AccountBEDefinitionId, this.GenericFieldDefinition.Name);
             if (accountGenericField == null)
                 throw new NullReferenceException(String.Format("accountGenericField '{0}'", this.GenericFieldDefinition.Name));
+
             var fieldValue = accountGenericField.GetValue(new AccountGenericFieldContext(context.Object));
-            if(this.UseDescription)
-            {
+            if (this.UseDescription)
                 return accountGenericField.FieldType.GetDescription(fieldValue);
-            }
+
             return fieldValue;
         }
     }

@@ -74,6 +74,8 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
         private GenericRuleTarget BuildingGenericRuleTarget(IVoiceChargingPolicyEvaluatorContext context)
         {
+            Account packageAccount = new AccountBEManager().GetAccount(context.AccountBEDefinitionId, context.PackageAccountId);
+
             GenericRuleTarget genericRuleTarget = new GenericRuleTarget();
             genericRuleTarget.EffectiveOn = context.EventTime;
             genericRuleTarget.TargetFieldValues = new Dictionary<string, object>();
@@ -81,6 +83,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             genericRuleTarget.Objects = new Dictionary<string, dynamic>();
             genericRuleTarget.Objects.Add("RawCDR", context.RawCDR);
             genericRuleTarget.Objects.Add("MappedCDR", context.MappedCDR);
+            genericRuleTarget.Objects.Add("Account", packageAccount);
 
             return genericRuleTarget;
         }
