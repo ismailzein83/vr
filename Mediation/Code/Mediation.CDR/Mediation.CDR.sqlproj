@@ -77,6 +77,9 @@
     <Folder Include="Mediation_Generic\Stored Procedures\" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\User Defined Types\" />
+    <Folder Include="Mediation_Centrex\" />
+    <Folder Include="Mediation_Centrex\Tables\" />
+    <Folder Include="Mediation_Centrex\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mobile_EDR\Tables\GPRS.sql" />
@@ -91,7 +94,6 @@
     <Build Include="Security\Mediation_WHS.sql" />
     <Build Include="Mediation_Generic\Tables\MultiLegSessionID.sql" />
     <Build Include="Mediation_Generic\Tables\MediationRecord.sql" />
-    <Build Include="Mediation_Generic\Tables\CookedCDR.sql" />
     <Build Include="Mediation_Generic\Functions\GetLegIdsSessionTable.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_InsertSessionLegs.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_GetByMediationDefinitionID.sql" />
@@ -103,5 +105,8 @@
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionId.sql" />
     <Build Include="dbo\User Defined Types\StringIDType.sql" />
     <Build Include="Security\Mediation_Generic.sql" />
+    <Build Include="Mediation_Centrex\Tables\CookedCDR.sql" />
+    <Build Include="Mediation_Centrex\User Defined Types\CookedCDRType.sql" />
+    <Build Include="Security\Mediation_Centrex.sql" />
   </ItemGroup>
 </Project>
