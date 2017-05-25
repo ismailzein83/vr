@@ -11,7 +11,7 @@ using TOne.WhS.SupplierPriceList.Entities;
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    #region Public Classes 
+    #region Public Classes
 
     public class ProcessCountryZonesServicesInput
     {
@@ -32,6 +32,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
 
         public bool IncludeServices { get; set; }
+        public DateTime MinimumDate { get; set; }
 
     }
 
@@ -77,6 +78,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<bool> IncludeServices { get; set; }
 
+        public InArgument<DateTime> MinimumDate { get; set; }
+
         #endregion
 
         #region Output Arguments
@@ -103,9 +106,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 existingZones = inputArgument.ExistingZonesByZoneId.Select(item => item.Value);
 
             if (inputArgument.IncludeServices == false)
-                return new ProcessCountryZonesServicesOutput() { 
-                 ChangedZonesServices = new List<ChangedZoneService>(),
-                 NewZonesServices = new List<NewZoneService>()
+                return new ProcessCountryZonesServicesOutput()
+                {
+                    ChangedZonesServices = new List<ChangedZoneService>(),
+                    NewZonesServices = new List<NewZoneService>()
                 };
 
             ProcessCountryZonesServicesContext processCountryZonesServicesContext = new ProcessCountryZonesServicesContext()
@@ -115,7 +119,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 NewAndExistingZones = inputArgument.NewAndExistingZones,
                 PriceListDate = inputArgument.PriceListDate,
                 NotImportedZones = inputArgument.NotImportedZones,
-                ExistingZonesServices = inputArgument.ExistingZonesServices
+                ExistingZonesServices = inputArgument.ExistingZonesServices,
+                MinimumDate = inputArgument.MinimumDate
             };
 
             PriceListZoneServiceManager manager = new PriceListZoneServiceManager();
@@ -147,7 +152,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ImportedServiceTypeIds = this.ImportedServiceTypeIds.Get(context),
                 NotImportedZones = this.NotImportedZones.Get(context),
                 ExistingZonesServices = this.ExistingZonesServices.Get(context),
-                IncludeServices = this.IncludeServices.Get(context)
+                IncludeServices = this.IncludeServices.Get(context),
+                MinimumDate = this.MinimumDate.Get(context)
             };
         }
 

@@ -24,6 +24,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZoneService>> ImportedZonesServices { get; set; }
 
+        [RequiredArgument]
+        public InArgument<DateTime> MinimumDate { get; set; }
+
+        public OutArgument<DateTime> ShiftedMinimumDate { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -35,8 +39,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
             VRTimeZone supplierTimeZone = timeZoneManager.GetVRTimeZone(carrierAccountManager.GetSupplierTimeZoneId(supplieId));
-            
-            supplierTimeZone.ThrowIfNull("SupplierTimeZone",supplieId);
+
+            supplierTimeZone.ThrowIfNull("SupplierTimeZone", supplieId);
             supplierTimeZone.Settings.ThrowIfNull("SupplierTimeZoneSettings", supplieId);
 
             foreach (var importedCode in importedCodes)
@@ -54,6 +58,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 importedZoneService.BED = ShiftDateTime(importedZoneService.BED, supplierTimeZone.Settings.Offset).Value;
                 importedZoneService.EED = ShiftDateTime(importedZoneService.EED, supplierTimeZone.Settings.Offset);
             }
+
+            DateTime minimumDate = MinimumDate.Get(context);
+            var shiftedDate  = ShiftDateTime(minimumDate, supplierTimeZone.Settings.Offset).Value;
+            ShiftedMinimumDate.Set(context, shiftedDate);
         }
 
         private DateTime? ShiftDateTime(DateTime? date, TimeSpan offSet)

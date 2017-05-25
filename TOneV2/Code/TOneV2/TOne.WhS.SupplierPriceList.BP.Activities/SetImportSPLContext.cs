@@ -18,7 +18,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
-            importSPLContext.MaximumRate = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaMaximumRate();
         }
     }
 
@@ -47,6 +46,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaEffectiveDateDayOffset();
             _codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
+            MaximumRate = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaMaximumRate();
         }
 
         public bool ProcessHasChanges

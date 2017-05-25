@@ -23,5 +23,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         IEnumerable<ChangedZoneService> ChangedZonesServices { get; set; }
 
         IEnumerable<NotImportedZone> NotImportedZones { get; }
+        DateTime MinimumDate { get; set; }
     }
 }
