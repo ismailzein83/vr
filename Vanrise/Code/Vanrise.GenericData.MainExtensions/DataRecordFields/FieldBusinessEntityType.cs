@@ -158,12 +158,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-            ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
-            return string.Format(" {0} {1} ( {2} ) ", objectListRecordFilter.FieldName, Utilities.GetEnumDescription(objectListRecordFilter.CompareOperator), GetDescription(objectListRecordFilter.Values.Cast<Object>().ToList()));
-        }
-
         #endregion
 
         #region Private Methods

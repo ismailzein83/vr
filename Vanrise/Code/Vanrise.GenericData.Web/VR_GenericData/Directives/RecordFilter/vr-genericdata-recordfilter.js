@@ -42,7 +42,6 @@
                         };
                         VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter(context.getFields(), filterObj, onFilterAdded);
                     }
-
                 };
 
                 ctrl.resetFilter = function () {
@@ -65,18 +64,19 @@
                     if (payload != undefined) {
                         context = payload.context;
                         filterObj = payload.FilterGroup;
-                        var fieldsObj = [];
+
+                        var recordFilterFieldInfosByFieldName = {};
 
                         if (context != undefined) {
                             var fields = context.getFields();
                             for (var i = 0; i < fields.length; i++) {
                                 var field = fields[i];
-                                fieldsObj.push({ Name: field.FieldName, Type: field.Type })
+                                recordFilterFieldInfosByFieldName[field.FieldName] = { Name: field.FieldName, Title: field.FieldTitle, Type: field.Type };
                             }
                         }
 
                         if (filterObj != undefined)
-                            promises.push(buildRecordFilterGroupExpression(fieldsObj, filterObj));
+                            promises.push(buildRecordFilterGroupExpression(recordFilterFieldInfosByFieldName, filterObj));
 
                     }
                     return UtilsService.waitMultiplePromises(promises);
@@ -95,8 +95,8 @@
                     ctrl.onReady(api);
             }
 
-            function buildRecordFilterGroupExpression(fieldsObj, filterObj) {
-                return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: fieldsObj, FilterGroup: filterObj }).then(function (response) {
+            function buildRecordFilterGroupExpression(recordFilterFieldInfosByFieldName, filterObj) {
+                return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFilterFieldInfosByFieldName: recordFilterFieldInfosByFieldName, FilterGroup: filterObj }).then(function (response) {
                     ctrl.expression = response
                 });
             }

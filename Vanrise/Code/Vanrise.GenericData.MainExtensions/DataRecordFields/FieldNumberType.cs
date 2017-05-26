@@ -175,12 +175,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilterGroup;
         }
-
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-            NumberRecordFilter numberRecordFilter = filter as NumberRecordFilter;
-            return string.Format(" {0} {1} {2} ", numberRecordFilter.FieldName, Utilities.GetEnumDescription(numberRecordFilter.CompareOperator), GetDescription(numberRecordFilter.Value));
-        }
     }
 
     public enum FieldNumberDataType

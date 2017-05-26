@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public string BuildRecordFilterGroupExpression(RecordFilterGroupExpressionInput input)
         {
             RecordFilterManager recordFilterManager = new RecordFilterManager();
-            return recordFilterManager.BuildRecordFilterGroupExpression(input.FilterGroup, input.RecordFields);
+            return recordFilterManager.BuildRecordFilterGroupExpression(input.FilterGroup, input.RecordFilterFieldInfosByFieldName);
         }
     }
 }

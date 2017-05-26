@@ -9,6 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class RecordFilterGroupExpressionInput
     {
         public RecordFilterGroup FilterGroup { get; set; }
-        public List<RecordFilterFieldInfo> RecordFields { get; set; }
+        public Dictionary<string, RecordFilterFieldInfo> RecordFilterFieldInfosByFieldName { get; set; } 
     }
 }

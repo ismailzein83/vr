@@ -4,17 +4,24 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Entities
 {
     public class EmptyRecordFilter : RecordFilter
     {
-
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} Is Empty ", context.GetFieldTitle(FieldName));
+        }
     }
 
     public class NonEmptyRecordFilter : RecordFilter
     {
-
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} Is Non Empty ", context.GetFieldTitle(FieldName));
+        }
     }
 
     public enum StringRecordFilterOperator
@@ -43,6 +50,11 @@ namespace Vanrise.GenericData.Entities
         public string Value { get; set; }
 
         public Guid? ValueParameterId { get; set; }
+
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} {2} ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value));
+        }
 
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
         {
@@ -78,6 +90,11 @@ namespace Vanrise.GenericData.Entities
 
         public Guid? ValueParameterId { get; set; }
 
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} {2} ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value));
+        }
+
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
         {
             if (this.ValueParameterId.HasValue)
@@ -112,6 +129,11 @@ namespace Vanrise.GenericData.Entities
 
         public Guid? ValueParameterId { get; set; }
 
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} {2} ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value));
+        }
+
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
         {
             if (this.ValueParameterId.HasValue)
@@ -128,6 +150,11 @@ namespace Vanrise.GenericData.Entities
         public bool IsTrue { get; set; }
 
         public Guid? ValueParameterId { get; set; }
+
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} ", context.GetFieldTitle(FieldName), context.GetFieldValueDescription(FieldName, IsTrue));
+        }
 
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
         {
@@ -173,18 +200,25 @@ namespace Vanrise.GenericData.Entities
             base.SetValueFromParameters(context);
         }
     }
-
     public class NumberListRecordFilter : ListRecordFilter<Decimal>
     {
-
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} ( {2} ) ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Values));
+        }
     }
     public class StringListRecordFilter : ListRecordFilter<String>
     {
-
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} ( {2} ) ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Values));
+        }
     }
-
     public class ObjectListRecordFilter : ListRecordFilter<Object>
     {
-
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            return string.Format(" {0} {1} ( {2} ) ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Values.Cast<Object>().ToList()));
+        }
     }
 }

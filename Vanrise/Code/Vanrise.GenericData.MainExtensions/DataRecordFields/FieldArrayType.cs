@@ -49,10 +49,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             throw new NotImplementedException();
         }
-
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

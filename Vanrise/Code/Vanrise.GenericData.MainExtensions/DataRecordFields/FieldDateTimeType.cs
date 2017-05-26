@@ -172,12 +172,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilterGroup;
         }
-
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-            DateTimeRecordFilter dateTimeRecordFilter = filter as DateTimeRecordFilter;
-            return string.Format(" {0} {1} {2} ", dateTimeRecordFilter.FieldName, Utilities.GetEnumDescription(dateTimeRecordFilter.CompareOperator), GetDescription(dateTimeRecordFilter.Value));
-        }
     }
     public enum FieldDateTimeDataType
     {

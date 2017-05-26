@@ -117,11 +117,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilterGroup;
         }
-
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-            StringRecordFilter stringRecordFilter = filter as StringRecordFilter;
-            return string.Format(" {0} {1} {2} ", stringRecordFilter.FieldName, Utilities.GetEnumDescription(stringRecordFilter.CompareOperator), GetDescription(stringRecordFilter.Value));
-        }
     }
 }

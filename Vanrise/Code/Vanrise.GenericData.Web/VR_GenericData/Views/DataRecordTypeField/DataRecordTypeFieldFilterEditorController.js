@@ -35,20 +35,20 @@
 
             $scope.save = function () {
 
-                var fieldsObj = [];
+                var recordFilterFieldInfosByFieldName = {};
+
                 for (var i = 0; i < fields.length; i++)
                 {
                     var field = fields[i];
-                    fieldsObj.push({ Name: field.FieldName, Type: field.Type })
-
+                    recordFilterFieldInfosByFieldName[field.FieldName] = { Name: field.FieldName, Title: field.FieldTitle, Type: field.Type };
                 }
-                return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: fieldsObj, FilterGroup: groupFilterAPI.getData() }).then(function (response) {
+
+                return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFilterFieldInfosByFieldName: recordFilterFieldInfosByFieldName, FilterGroup: groupFilterAPI.getData() }).then(function (response) {
                     if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
                         $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), response);
                     }
                     $scope.modalContext.closeModal();
                 });
-               
             };
 
             $scope.close = function () {

@@ -10,57 +10,31 @@ namespace Vanrise.GenericData.Business
 {
     public class RecordFilterManager
     {
-        public string BuildRecordFilterGroupExpression(RecordFilterGroup filterGroup, List<RecordFilterFieldInfo> recordFields)
+        public string BuildRecordFilterGroupExpression(RecordFilterGroup filterGroup, Dictionary<string, RecordFilterFieldInfo> recordFilterFieldInfosByFieldName)
         {
             StringBuilder expression = new StringBuilder();
-            bool firstFilter = true;
+            var context = new RecordFilterGetDescriptionContext(recordFilterFieldInfosByFieldName);
+
+            bool isFirstFilter = true;
             foreach (var filter in filterGroup.Filters)
             {
-                BuildChildRecordFilterGroupExpression(filter, recordFields, expression, filterGroup.LogicalOperator, firstFilter);
-                firstFilter = false;
+                BuildChildRecordFilterGroupExpression(context, filter, expression, filterGroup.LogicalOperator, isFirstFilter);
+                isFirstFilter = false;
             }
+            
             return expression.ToString();
         }
 
-        public void BuildChildRecordFilterGroupExpression(RecordFilter recordFilter, List<RecordFilterFieldInfo> recordFields, StringBuilder expression, RecordQueryLogicalOperator logicalOperator, bool isFirstFilter)
+        public void BuildChildRecordFilterGroupExpression(IRecordFilterGetDescriptionContext context, RecordFilter recordFilter, StringBuilder expression, RecordQueryLogicalOperator logicalOperator, Boolean isFirstFilter)
         {
-            
-            RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
-            if (expression == null)
-                expression = new StringBuilder();
-            if (childFilterGroup != null)
-            {
-                if (expression.Length != 0)
-                  expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
-                bool firstFilter = true;
-                expression.Append(" ( ");
-                foreach (var filter in childFilterGroup.Filters)
-                {
-                    BuildChildRecordFilterGroupExpression(filter, recordFields, expression, childFilterGroup.LogicalOperator, firstFilter);
-                    firstFilter = false;
-                }
-                expression.Append(" ) ");
-            }
-
-            if (expression.Length != 0 && !isFirstFilter && childFilterGroup == null)
+            if (!isFirstFilter)
                 expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
 
-            if (recordFilter is EmptyRecordFilter)
-            {
-                expression.Append(string.Format(" {0} Is Empty ", recordFilter.FieldName));
-            }
-            else if (recordFilter is NonEmptyRecordFilter)
-            {
-                expression.Append(string.Format(" {0} Is Non Empty ", recordFilter.FieldName));
-            }
-            else if (recordFilter.FieldName != null)
-            {
-                var record = recordFields.FindRecord(x => x.Name == recordFilter.FieldName);
-                if (record != null)
-                {
-                    expression.Append(record.Type.GetFilterDescription(recordFilter));
-                }
-            }
+            RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
+            if (childFilterGroup != null)
+                expression.Append(childFilterGroup.GetDescription(context));
+            else
+                expression.Append(recordFilter.GetDescription(context));
         }
 
         public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, Dictionary<Guid, dynamic> parameterValues, IRecordFilterGenericFieldMatchContext context)
@@ -71,13 +45,13 @@ namespace Vanrise.GenericData.Business
         }
         public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, IRecordFilterGenericFieldMatchContext context)
         {
-            if(filterGroup == null)
+            if (filterGroup == null)
                 return true;
             if (filterGroup.Filters == null)
                 throw new NullReferenceException("filterGroup.Filters");
             if (filterGroup.Filters.Count == 0)
                 return true;
-            if(filterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
+            if (filterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
             {
                 foreach (var filter in filterGroup.Filters)
                 {
@@ -107,7 +81,7 @@ namespace Vanrise.GenericData.Business
 
             DataRecordFieldType fieldType;
             var fieldValue = context.GetFieldValue(filter.FieldName, out fieldType);
-            
+
             EmptyRecordFilter emptyFilter = filter as EmptyRecordFilter;
             if (emptyFilter != null)
                 return fieldValue == null;
@@ -150,7 +124,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public class RecordFilterSetValueFromParametersContext :IRecordFilterSetValueFromParametersContext
+        public class RecordFilterSetValueFromParametersContext : IRecordFilterSetValueFromParametersContext
         {
             Dictionary<Guid, dynamic> _parameterValues;
 
@@ -220,7 +194,7 @@ namespace Vanrise.GenericData.Business
         public DataRecordDictFilterGenericFieldMatchContext(Dictionary<string, dynamic> dataRecord, Guid recordTypeId)
             : this(dataRecord, (new DataRecordTypeManager()).GetDataRecordTypeFields(recordTypeId))
         {
-            
+
         }
 
         public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)

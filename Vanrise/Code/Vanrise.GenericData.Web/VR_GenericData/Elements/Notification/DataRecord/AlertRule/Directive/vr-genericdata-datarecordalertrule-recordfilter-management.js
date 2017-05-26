@@ -115,7 +115,13 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
         };
 
         function fillDataSource(currentRecordAlertRuleConfig) {
-            return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: context.recordfields, FilterGroup: currentRecordAlertRuleConfig.FilterGroup }).then(function (response) {
+
+            var buildRecordFilterGroupExpressionInput = {
+                RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(context.recordfields),
+                FilterGroup: currentRecordAlertRuleConfig.FilterGroup
+            }
+
+            return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression(buildRecordFilterGroupExpressionInput).then(function (response) {
                 ctrl.datasource.push({
                     AlertLevelName: getAlertLevelName(currentRecordAlertRuleConfig.AlertLevelId),
                     FilterExpression: response,
@@ -124,6 +130,20 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
                 });
             });
         };
+        function buildRecordFilterFieldInfosByFieldName(recordFields) {
+            if (recordFields == undefined)
+                return;
+
+            var recordFilterFieldInfosByFieldName = {};
+
+            for (var index = 0; index < recordFields.length; index++) {
+                var recordField = recordFields[index]
+                recordFilterFieldInfosByFieldName[recordField.Name] = { Name: recordField.Name, Title: recordField.Title, Type: recordField.Type };
+            }
+
+            return recordFilterFieldInfosByFieldName;
+        };
+
 
         function defineMenuActions() {
 

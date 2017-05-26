@@ -83,12 +83,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilterGroup;
         }
-
-        public override string GetFilterDescription(RecordFilter filter)
-        {
-
-            BooleanRecordFilter booleanRecordFilter = filter as BooleanRecordFilter;
-            return string.Format(" {0} {1} ", booleanRecordFilter.FieldName, GetDescription(booleanRecordFilter.IsTrue));
-        }
     }
 }

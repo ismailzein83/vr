@@ -101,6 +101,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     if (payload != undefined) {
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
@@ -121,16 +122,13 @@
                                 };
                                 VR_Analytic_AnalyticAPIService.GetRecordSearchFilterGroup(input).then(function (response) {
                                     filterObj = response;
-                                    var recordFields = [];
-                                    for (var i = 0; i < fields.length; i++) {
-                                        var field = fields[i];
-                                        recordFields.push({
-                                            Name: field.FieldName,
-                                            Type: field.Type,
-                                        });
-                                    };
 
-                                    VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFields: recordFields, FilterGroup: filterObj }).then(function (response) {
+                                    var buildRecordFilterGroupExpressionInput = {
+                                        RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(fields),
+                                        FilterGroup: filterObj
+                                    }
+
+                                    VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression(buildRecordFilterGroupExpressionInput).then(function (response) {
                                         $scope.expression = response;
                                         loadPromiseDeffer.resolve();
                                     }).catch(function (error) {
@@ -256,6 +254,20 @@
                     DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId
                 };
             }
+
+            function buildRecordFilterFieldInfosByFieldName(recordFields) {
+                if (recordFields == undefined)
+                    return;
+
+                var recordFilterFieldInfosByFieldName = {};
+
+                for (var index = 0; index < recordFields.length; index++) {
+                    var recordField = recordFields[index]
+                    recordFilterFieldInfosByFieldName[recordField.Name] = { Name: recordField.Name, Title: recordField.Title, Type: recordField.Type };
+                }
+
+                return recordFilterFieldInfosByFieldName;
+            };
         }
     }
 
