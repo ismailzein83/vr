@@ -6,9 +6,9 @@
                 <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
                 <vr-columns colnum="7"><vr-label isvalue breakline>{{process.Title}}</vr-label></vr-columns>
 
-                <vr-columns colnum="1" ng-show="showCompletionViewLabel"><vr-label>{{completionViewLabel}}:</vr-label></vr-columns>
-                <vr-columns colnum="3" ng-show="showCompletionViewLabel">
-                    <vr-label isvalue><a ng-click="openCompletionView()">{{completionViewLabelValue}}</a></vr-label>
+                <vr-columns colnum="1"></vr-columns>
+                <vr-columns colnum="3" ng-show="showCompletionViewLink">
+                    <vr-label isvalue><a ng-click="openCompletionView()" href="">{{completionViewLinkText}}</a></vr-label>
                 </vr-columns>
             </vr-row>
 

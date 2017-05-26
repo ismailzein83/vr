@@ -23,6 +23,7 @@
         var context;
 
         var completionViewURL;
+        var defaultCompletionViewLinkText = 'View Result';
 
         loadParameters();
         defineScope();
@@ -156,8 +157,7 @@
                 $scope.process.HasBusinessRules = response.Configuration.HasBusinessRules;
 
                 completionViewURL = response.Configuration.CompletionViewURL;
-                $scope.completionViewLabel = (response.Configuration.CompletionViewLabel != null) ? response.Configuration.CompletionViewLabel : 'View';
-                $scope.completionViewLabelValue = (response.Configuration.CompletionViewLabelValue != null) ? response.Configuration.CompletionViewLabelValue : 'Open';
+                $scope.completionViewLinkText = (response.Configuration.CompletionViewLinkText != null) ? response.Configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
             });
         }
 
@@ -172,7 +172,7 @@
                 $scope.process.Status = response.StatusDescription;
 
                 if (response.Status == BPInstanceStatusEnum.Completed.value && completionViewURL != undefined)
-                    $scope.showCompletionViewLabel = true;
+                    $scope.showCompletionViewLink = true;
 
                 $scope.process.StatusUpdatedTime = response.StatusUpdatedTime;
                 bpInstance = response;

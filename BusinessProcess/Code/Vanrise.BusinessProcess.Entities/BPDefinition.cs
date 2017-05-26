@@ -15,6 +15,7 @@ namespace Vanrise.BusinessProcess.Entities
         public string Title { get; set; }
 
         public Type WorkflowType { get; set; } // Type should inherit System.Activities.Activity
+
         public BPConfiguration Configuration { get; set; }
     }
 
@@ -29,14 +30,10 @@ namespace Vanrise.BusinessProcess.Entities
         public bool HasChildProcesses { get; set; }
         public bool HasBusinessRules { get; set; }
         public bool NotVisibleInManagementScreen { get; set; }
-
         public BPDefinitionExtendedSettings ExtendedSettings { get; set; }
-
         public BPDefinitionSecurity Security { get; set; }
-
         public string CompletionViewURL { get; set; }
-        public string CompletionViewLabel { get; set; }
-        public string CompletionViewLabelValue { get; set; }
+        public string CompletionViewLinkText { get; set; }
     }
 
     public abstract class BPDefinitionExtendedSettings
