@@ -11,6 +11,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Caching;
 using Vanrise.Invoice.Entities;
+//using TOne.WhS.BusinessEntity.Business.CarrierAccounts;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -291,10 +292,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierAccount.CarrierAccountId = carrierAccountId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
-
+         
+                //     VREventManager vrEventManager = new VREventManager();
+               // vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
+            
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
@@ -310,8 +314,12 @@ namespace TOne.WhS.BusinessEntity.Business
             if (TryUpdateCarrierAccount(carrierAccountToEdit, true))
             {
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
+               // VREventManager vrEventManager = new VREventManager();
+              //  vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
+
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
+                
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
