@@ -22,8 +22,11 @@
     [SaleRateValueRuleId]    INT              NULL,
     [SaleRateTypeRuleId]     INT              NULL,
     [SaleTariffRuleId]       INT              NULL,
-    [SaleExtraChargeRuleId]  INT              NULL
+    [SaleExtraChargeRuleId]  INT              NULL,
+    [Extension]              VARCHAR (20)     NULL
 );
+
+
 
 
 

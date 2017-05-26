@@ -31,7 +31,10 @@
     [SaleExtraChargeRuleId]  INT              NULL,
     [CostRate]               DECIMAL (20, 8)  NULL,
     [CostAmount]             DECIMAL (22, 6)  NULL,
+    [Extension]              VARCHAR (20)     NULL,
     [QueueItemId]            BIGINT           NULL);
+
+
 
 
 

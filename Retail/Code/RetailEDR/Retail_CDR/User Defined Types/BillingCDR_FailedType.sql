@@ -22,7 +22,10 @@
     [SaleRateTypeRuleId]     INT              NULL,
     [SaleTariffRuleId]       INT              NULL,
     [SaleExtraChargeRuleId]  INT              NULL,
+    [Extension]              VARCHAR (20)     NULL,
     [QueueItemId]            BIGINT           NULL);
+
+
 
 
 
