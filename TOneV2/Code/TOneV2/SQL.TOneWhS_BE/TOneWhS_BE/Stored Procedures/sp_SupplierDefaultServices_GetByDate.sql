@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierZonesServices_GetByDate] 
+CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierDefaultServices_GetByDate] 
 	-- Add the parameters for the stored procedure here
 	@SupplierId INT,
 	@When DateTime
@@ -16,6 +16,7 @@ BEGIN
 	SELECT  [ID],[PriceListID],[ZoneID], [SupplierID],[ReceivedServicesFlag],[EffectiveServiceFlag],[BED],[EED]
 	FROM	[TOneWhS_BE].SupplierZoneService WITH(NOLOCK) 	
 	Where	(EED is null or EED > @when)
-			and SupplierID=@SupplierId and ZoneID is not null
+			and SupplierID=@SupplierId and ZoneID is null
+	ORDER BY BED ASC
 	  
 END

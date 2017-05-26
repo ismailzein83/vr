@@ -8,9 +8,10 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierZoneService_Insert]
 	@SupplierId int,
 	@ReceivedServicesFlag nvarchar(max),
 	@EffectiveServiceFlag nvarchar(max),
-	@BED Datetime
+	@BED Datetime,
+	@EED Datetime
 AS
 BEGIN
-	Insert into TOneWhS_BE.SupplierZoneService(ID,SupplierID,ReceivedServicesFlag,EffectiveServiceFlag, BED)
-	Values(@Id, @SupplierId, @ReceivedServicesFlag, @EffectiveServiceFlag, @BED)
+	Insert into TOneWhS_BE.SupplierZoneService(ID,SupplierID,ReceivedServicesFlag,EffectiveServiceFlag, BED, EED)
+	Values(@Id, @SupplierId, @ReceivedServicesFlag, @EffectiveServiceFlag, @BED, @EED)
 END

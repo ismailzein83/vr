@@ -5,21 +5,21 @@
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierAccount_Insert]
 	@Name nvarchar(255),
-	@CarrierProfileId INT,
+	@CarrierProfileId int,
 	@AccountType int,
-	@SellingNumberPlanID int = NULL,
-	@CustomerSettings nvarchar(MAX),
-	@SupplierSettings nvarchar(MAX),
-	@CarrierAccountSettings nvarchar(MAX),
+	@SellingNumberPlanID int = null,
+	@SellingProductID int = null,
+	@CustomerSettings nvarchar(max),
+	@SupplierSettings nvarchar(max),
+	@CarrierAccountSettings nvarchar(max),	
 	@Id int out
 AS
 BEGIN
-SET @id =0;
-IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.CarrierAccount WHERE [NameSuffix] = @Name and [CarrierProfileID]=@CarrierProfileId)
-	BEGIN
-		Insert into TOneWhS_BE.CarrierAccount([NameSuffix],[CarrierProfileID],[AccountType],[SupplierSettings] ,[CustomerSettings],[CarrierAccountSettings],[SellingNumberPlanID] )
-		Values(@Name,@CarrierProfileId, @AccountType, @SupplierSettings,@CustomerSettings,@CarrierAccountSettings,@SellingNumberPlanID)
-	
-		Set @Id = SCOPE_IDENTITY()
-	END
+	set @id = 0;
+	if not exists(select 1 from TOneWhS_BE.CarrierAccount where [NameSuffix] = @Name and [CarrierProfileID] = @CarrierProfileId)
+	begin
+		insert into TOneWhS_BE.CarrierAccount([NameSuffix], [CarrierProfileID], [AccountType], [SupplierSettings], [CustomerSettings], [CarrierAccountSettings], [SellingNumberPlanID], [SellingProductID])
+		values (@Name, @CarrierProfileId, @AccountType, @SupplierSettings, @CustomerSettings, @CarrierAccountSettings, @SellingNumberPlanID, @SellingProductId)
+		set @Id = scope_identity()
+	end
 END

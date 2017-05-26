@@ -1,16 +1,17 @@
-﻿-- =============================================
--- Author:		Rabih
--- Create date: 11/16/2015
--- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwner]
+﻿
+
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwnerAndZone]
 	@CustomerOwnerType int,
 	@EffectiveTime DATETIME = NULL,
 	@IsFuture bit,
 	@IsDefault bit,
-	@ActiveCustomersInfo TOneWhS_BE.RoutingCustomerInfo READONLY
-	
+	@ActiveCustomersInfo TOneWhS_BE.RoutingCustomerInfo READONLY,
+	@ZoneIds nvarchar(max)
 AS
 BEGIN
+	DECLARE @ZoneIDsTable TABLE (ZoneID int)
+	INSERT INTO @ZoneIDsTable (ZoneID)
+	select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZoneIds)
 
 	SET NOCOUNT ON;
 
@@ -21,7 +22,8 @@ BEGIN
 		WHERE	((@IsFuture = 0 AND se.BED <= @EffectiveTime AND (se.EED > @EffectiveTime OR se.EED IS NULL))
 				OR (@IsFuture = 1 AND (se.BED > GETDATE() OR se.EED IS NULL)))
 				AND se.OwnerType = @CustomerOwnerType 
-				AND ((@IsDefault = 1 and se.ZoneId IS NULL) or (@IsDefault = 0 and se.ZoneId IS NOT NULL))
+				AND (@IsDefault = 1 OR se.ZoneId IS NOT NULL)
+				AND (@ZoneIds is null or se.ZoneID in (select ZoneID from @ZoneIDsTable))
 
 	Union
 	
@@ -30,5 +32,6 @@ BEGIN
 		WHERE	((@IsFuture = 0 AND se.BED <= @EffectiveTime AND (se.EED > @EffectiveTime OR se.EED IS NULL))
 				OR (@IsFuture = 1 AND (se.BED > GETDATE() OR se.EED IS NULL)))
 				AND se.OwnerType <> @CustomerOwnerType
-				AND ((@IsDefault = 1 and se.ZoneId IS NULL) or (@IsDefault = 0 and se.ZoneId IS NOT NULL))
+				AND (@IsDefault = 1 OR se.ZoneId IS NOT NULL)
+				AND (@ZoneIds is null or se.ZoneID in (select ZoneID from @ZoneIDsTable))
 END

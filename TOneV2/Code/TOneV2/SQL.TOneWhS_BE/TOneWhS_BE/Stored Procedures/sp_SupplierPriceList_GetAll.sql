@@ -13,6 +13,6 @@ BEGIN
 
     SELECT	[ID],[CreatedTime],[SupplierID],[CurrencyID],[FileID]
     FROM	[TOneWhS_BE].SupplierPriceList WITH(NOLOCK) 
-	ORDER BY ID DESC
+	
 
 END

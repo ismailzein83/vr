@@ -4,9 +4,13 @@
     [RecentRate]        DECIMAL (20, 8) NULL,
     [CountryID]         INT             NOT NULL,
     [ZoneName]          NVARCHAR (150)  NOT NULL,
+    [ZoneID]            BIGINT          NULL,
     [Change]            TINYINT         NULL,
     [ProcessInstanceID] INT             NULL,
     [BED]               DATETIME        NOT NULL,
-    [EED]               DATETIME        NULL
+    [EED]               DATETIME        NULL,
+    [RoutingProductID]  INT             NULL
 );
+
+
 

@@ -469,5 +469,13 @@
     <Build Include="TOneWhS_Invoice\Stored Procedures\sp_CarrierInvoiceAccount_Update.sql" />
     <Build Include="Security\TOneWhS_Invoice.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetSaleCodesEffectiveAfter.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistRPChange_New.sql" />
+    <Build Include="TOneWhS_BE\Tables\SalePricelistRPChange.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZonesServicesEffectiveAfter_GetByZone.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierDefaultServices_GetByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistRPChange_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetFilteredByOwnerAndZone.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\SupplierZoneServiceClose.sql" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@ BEGIN
 		ca.CustomerSettings,
 		ca.SupplierSettings,
 		ca.SellingNumberPlanID,
+		ca.SellingProductID,
 		ca.CarrierAccountSettings,
 		ca.sourceid,
 		ca.IsDeleted,

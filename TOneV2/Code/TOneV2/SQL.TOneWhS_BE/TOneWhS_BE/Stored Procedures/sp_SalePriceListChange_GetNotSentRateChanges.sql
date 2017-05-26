@@ -24,7 +24,7 @@ SELECT  scc.PricelistID
 		,spr.ZoneName
 		,spr.BED
 		,spr.EED
-
+		,spr.RoutingProductID
 FROM TOneWhS_BE.SalePricelistRateChange spr
 JOIN customerPricelist sp ON sp.id = spr.PricelistID
 JOIN TOneWhS_BE.SalePricelistCustomerChange scc ON scc.PricelistId= sp.ID 
