@@ -885,13 +885,19 @@ namespace TOne.WhS.BusinessEntity.Business
                 int routingProductId;
                 SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(zoneNotification.ZoneName);
                 if (routinProductChange != null)
+                {
                     routingProductId = routinProductChange.RoutingProductId;
+                    servicesIds = zoneNotification.ZoneId.HasValue
+                        ? routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value)
+                        : routingProductManager.GetDefaultServiceIds(routingProductId);
+
+                }
                 else
                 {
                     SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneNotification.ZoneId.Value);
                     routingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
+                    servicesIds = routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value);
                 }
-                servicesIds = routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value);
                 zoneNotification.Rate.ServicesIds = servicesIds;
             }
         }
