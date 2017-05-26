@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    supplierZoneServiceAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig"];
+    supplierZoneServiceAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig", "SecurityService"];
 
-    function supplierZoneServiceAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+    function supplierZoneServiceAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
 
         var controllerName = "SupplierZoneService";
 
@@ -13,9 +13,14 @@
         function UpdateSupplierZoneService(serviceObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSupplierZoneService"), serviceObject);
         }
+        function HasUpdateSupplierZoneServicePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSupplierZoneService']));
+        }
+
         return ({
             GetFilteredSupplierZoneServices: GetFilteredSupplierZoneServices,
-            UpdateSupplierZoneService: UpdateSupplierZoneService
+            UpdateSupplierZoneService: UpdateSupplierZoneService,
+            HasUpdateSupplierZoneServicePermission: HasUpdateSupplierZoneServicePermission
         });
     }
 

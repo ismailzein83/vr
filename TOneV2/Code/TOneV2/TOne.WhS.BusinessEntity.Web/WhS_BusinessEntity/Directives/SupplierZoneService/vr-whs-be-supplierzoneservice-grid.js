@@ -76,7 +76,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editSupplierService
+                clicked: editSupplierService,
+                haspermission: hasEditSupplierZoneServicePermission
             }];
         }
 
@@ -87,6 +88,10 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
             };
 
             WhS_BE_SupplierZoneService.editSupplierService(supplierServiceObj, supplierId, effectiveOn, onSupplierServiceUpdated);
+        }
+
+        function hasEditSupplierZoneServicePermission(){
+           return  WhS_BE_SupplierZoneServiceAPIService.HasUpdateSupplierZoneServicePermission();
         }
 
         function extendDataItem(dataItem) {
