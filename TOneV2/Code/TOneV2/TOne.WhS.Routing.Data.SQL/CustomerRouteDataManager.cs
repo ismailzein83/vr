@@ -241,13 +241,15 @@ namespace TOne.WhS.Routing.Data.SQL
 
         const string query_LoadCustomerRoutes = @"SELECT [CustomerID]
                                                                 ,[Code]
+                                                                ,sz.[Name] as SaleZoneName
+                                                                ,ca.[Name] as  CustomerName
                                                                 ,[SaleZoneID]
                                                                 ,[Rate]
                                                                 ,[SaleZoneServiceIds]
                                                                 ,[IsBlocked]
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]
-                                                  FROM [dbo].[CustomerRoute] with(nolock)
+                                                  FROM [dbo].[CustomerRoute] with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
                                                     #FILTER#";
 
         #endregion

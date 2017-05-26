@@ -216,12 +216,13 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private const string query_GetRPRoutesByRPZones = @"SELECT pr.[RoutingProductId],
                                                                 pr.[SaleZoneId],
+                                                                sz.[Name],
                                                                 pr.[SaleZoneServices],
                                                                 pr.[ExecutedRuleId],
                                                                 pr.[OptionsDetailsBySupplier],
                                                                 pr.[OptionsByPolicy],
                                                                 pr.[IsBlocked]
-                                                            FROM [dbo].[ProductRoute] pr with(nolock)
+                                                            FROM [dbo].[ProductRoute] pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
                                                             JOIN @RPZoneList z
                                                             ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
 
