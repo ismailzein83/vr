@@ -4,12 +4,7 @@
 
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
-                <vr-columns colnum="7"><vr-label isvalue breakline>{{process.Title}}</vr-label></vr-columns>
-
-                <vr-columns colnum="1"></vr-columns>
-                <vr-columns colnum="3" ng-show="showCompletionViewLink">
-                    <vr-label isvalue><a ng-click="openCompletionView()" href="">{{completionViewLinkText}}</a></vr-label>
-                </vr-columns>
+                <vr-columns colnum="11"><vr-label isvalue breakline>{{process.Title}}</vr-label></vr-columns>
             </vr-row>
 
             <vr-row>
@@ -20,7 +15,15 @@
                 <vr-columns colnum="3"><vr-label isvalue>{{process.StatusUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
 
                 <vr-columns colnum="1"><vr-label>Status:</vr-label></vr-columns>
-                <vr-columns colnum="3"><span ng-class="getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{process.Status}}</vr-label></span></vr-columns>
+                <vr-columns colnum="2" haschildcolumn>
+                    <vr-columns colnum="6">
+                        <span ng-class="getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{process.Status}}</vr-label></span>
+                    </vr-columns>
+                    <vr-columns colnum="6" ng-show="showCompletionViewLink">
+                        <vr-label isvalue><a ng-click="openCompletionView()" href="">{{completionViewLinkText}}</a></vr-label>
+                    </vr-columns>
+                </vr-columns>
+
             </vr-row>
 
             <vr-tabs>
