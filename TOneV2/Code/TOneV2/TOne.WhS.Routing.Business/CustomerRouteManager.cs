@@ -9,56 +9,24 @@ using Vanrise.Entities;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {
     public class CustomerRouteManager
     {
         CarrierAccountManager _carrierAccountManager;
-        SaleZoneManager _saleZoneManager;
         SupplierZoneManager _supplierZoneManager;
 
         public CustomerRouteManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
-            _saleZoneManager = new SaleZoneManager();
             _supplierZoneManager = new SupplierZoneManager();
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
-            ICustomerRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
-
-            if (routingDatabase == null)//in case of deleted database
-                routingDatabase = routingDatabaseManager.GetRoutingDatabaseFromDB(input.Query.RoutingDatabaseId);
-
-            if (routingDatabase == null)
-                throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId: {0}", input.Query.RoutingDatabaseId));
-
-            var latestRoutingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
-
-            if (latestRoutingDatabase == null)
-                return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, new BigResult<CustomerRouteDetail>());
-
-            manager.RoutingDatabase = latestRoutingDatabase;
-
-            BigResult<CustomerRoute> customerRouteResult = manager.GetFilteredCustomerRoutes(input);
-
-            BigResult<CustomerRouteDetail> customerRouteDetailResult = new BigResult<CustomerRouteDetail>()
-            {
-                ResultKey = customerRouteResult.ResultKey,
-                TotalCount = customerRouteResult.TotalCount,
-                Data = customerRouteResult.Data.MapRecords(CustomerRouteDetailMapper)
-            };
-
-            ResultProcessingHandler<CustomerRouteDetail> handler = new ResultProcessingHandler<CustomerRouteDetail>()
-            {
-                ExportExcelHandler = new CustomerRouteExcelExportHandler()
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult, handler);
+            return BigDataManager.Instance.RetrieveData(input, new CustomerRouteRequestHandler());
         }
 
         private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
@@ -72,8 +40,6 @@ namespace TOne.WhS.Routing.Business
             return new CustomerRouteDetail()
             {
                 Entity = customerRoute,
-                CustomerName = _carrierAccountManager.GetCarrierAccountName(customerRoute.CustomerId),
-                ZoneName = _saleZoneManager.GetSaleZoneName(customerRoute.SaleZoneId),
                 RouteOptionDetails = optionDetails,
                 LinkedRouteRuleIds = linkedRouteRules != null ? linkedRouteRules.Select(itm => itm.RuleId).ToList() : null
             };
@@ -141,8 +107,8 @@ namespace TOne.WhS.Routing.Business
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Code });
-                            row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CustomerName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleZoneName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Entity.SaleZoneServiceIds.ToList()) });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.IsBlocked });
@@ -178,5 +144,47 @@ namespace TOne.WhS.Routing.Business
                 dataManager.LoadRoutes(customerId, codePrefix, onRouteLoaded);
             }
         }
+
+
+        private class  CustomerRouteRequestHandler : BigDataRequestHandler<CustomerRouteQuery, CustomerRoute, CustomerRouteDetail>
+        {
+            CustomerRouteManager _manager =  new CustomerRouteManager();
+            
+            public override CustomerRouteDetail EntityDetailMapper(CustomerRoute entity)
+            {
+                return _manager.CustomerRouteDetailMapper(entity);
+            }
+
+            public override IEnumerable<CustomerRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
+            {
+                ICustomerRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+                RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+                var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
+
+                if (routingDatabase == null)//in case of deleted database
+                    routingDatabase = routingDatabaseManager.GetRoutingDatabaseFromDB(input.Query.RoutingDatabaseId);
+
+                if (routingDatabase == null)
+                    throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId: {0}", input.Query.RoutingDatabaseId));
+
+                var latestRoutingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
+                manager.RoutingDatabase = latestRoutingDatabase;
+                if (latestRoutingDatabase == null)
+                    return null;
+                  return manager.GetFilteredCustomerRoutes(input);
+
+            }
+
+            protected override ResultProcessingHandler<CustomerRouteDetail> GetResultProcessingHandler(DataRetrievalInput<CustomerRouteQuery> input, BigResult<CustomerRouteDetail> bigResult)
+            {
+                var resultProcessingHandler = new ResultProcessingHandler<CustomerRouteDetail>()
+                {
+                    ExportExcelHandler = new CustomerRouteExcelExportHandler()
+                };
+                return resultProcessingHandler;
+            }
+
+        }
+
     }
 }

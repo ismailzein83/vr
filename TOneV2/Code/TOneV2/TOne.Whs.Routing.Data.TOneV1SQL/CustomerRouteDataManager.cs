@@ -208,7 +208,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 _allCarrierProfiles = _carrierProfileManager.GetCachedCarrierProfiles();
         }
 
-        public Vanrise.Entities.BigResult<TOne.WhS.Routing.Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<TOne.WhS.Routing.Entities.CustomerRouteQuery> input)
+        public IEnumerable<TOne.WhS.Routing.Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<TOne.WhS.Routing.Entities.CustomerRouteQuery> input)
         {
             throw new NotImplementedException();
         }

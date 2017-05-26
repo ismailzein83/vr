@@ -65,13 +65,10 @@ namespace TOne.WhS.Routing.Data.SQL
                 record.Rate, saleZoneServiceIds, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
         }
 
-        public Vanrise.Entities.BigResult<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
+        public IEnumerable<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                query_GetFilteredCustomerRoutes.Replace("#TEMPTABLE#", tempTableName);
+           
                 query_GetFilteredCustomerRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
-
                 string customerIdsFilter = string.Empty;
 
                 if (input.Query.CustomerIds != null && input.Query.CustomerIds.Count > 0)
@@ -82,17 +79,13 @@ namespace TOne.WhS.Routing.Data.SQL
                 bool? isBlocked = null;
                 if (input.Query.RouteStatus.HasValue)
                     isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
-
-                ExecuteNonQueryText(query_GetFilteredCustomerRoutes.ToString(), (cmd) =>
+               
+                return GetItemsText(query_GetFilteredCustomerRoutes.ToString(), CustomerRouteMapper, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
                     cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
-                });
-            };
 
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-            return RetrieveData(input, createTempTableAction, CustomerRouteMapper);
+                });
         }
 
 
@@ -217,8 +210,10 @@ namespace TOne.WhS.Routing.Data.SQL
             return new CustomerRoute()
             {
                 CustomerId = (int)reader["CustomerID"],
+                CustomerName = reader["CustomerName"].ToString(),
                 Code = reader["Code"].ToString(),
                 SaleZoneId = (long)reader["SaleZoneID"],
+                SaleZoneName = reader["SaleZoneName"].ToString(),
                 Rate = GetReaderValue<decimal?>(reader, "Rate"),
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
@@ -229,20 +224,20 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Queries
 
-        private StringBuilder query_GetFilteredCustomerRoutes = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                                                        BEGIN
-                                                            SELECT TOP #LimitResult# [CustomerID]
-                                                                ,[Code]
-                                                                ,[SaleZoneID]
-                                                                ,[Rate]
-                                                                ,[SaleZoneServiceIds]
-                                                                ,[IsBlocked]
-                                                                ,[ExecutedRuleId]
-                                                                ,[RouteOptions]
-                                                            INTO #TEMPTABLE# FROM [dbo].[CustomerRoute] with(nolock)
+        private StringBuilder query_GetFilteredCustomerRoutes = new StringBuilder(@"
+                                                            SELECT TOP #LimitResult# cr.[CustomerID]
+                                                                ,cr.[Code]
+                                                                ,sz.Name as SaleZoneName
+                                                                ,ca.Name as  CustomerName
+                                                                ,cr.[SaleZoneID]
+                                                                ,cr.[Rate]
+                                                                ,cr.[SaleZoneServiceIds]
+                                                                ,cr.[IsBlocked]
+                                                                ,cr.[ExecutedRuleId]
+                                                                ,cr.[RouteOptions]
+                                                            FROM [dbo].[CustomerRoute] cr with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
                                                             Where (@Code is Null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked)
-                                                                #CUSTOMERIDS#
-                                                            END");
+                                                                #CUSTOMERIDS#");
 
         const string query_LoadCustomerRoutes = @"SELECT [CustomerID]
                                                                 ,[Code]

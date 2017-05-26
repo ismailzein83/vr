@@ -11,11 +11,6 @@ namespace TOne.WhS.Routing.Entities
         public string CustomerRouteDetailId { get { return string.Format("{0}@{1}", Entity.CustomerId, Entity.Code); } }
 
         public CustomerRoute Entity { get; set; }
-
-        public string CustomerName { get; set; }
-
-        public string ZoneName { get; set; }
-
         public List<CustomerRouteOptionDetail> RouteOptionDetails { get; set; }
 
         public List<int> LinkedRouteRuleIds { get; set; }

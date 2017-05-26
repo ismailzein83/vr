@@ -19,7 +19,6 @@ namespace TOne.WhS.Routing.Business
 
 		CarrierAccountManager _carrierAccountManager;
 		RoutingProductManager _routingProductManager;
-		SaleZoneManager _saleZoneManager;
 		CurrencyExchangeRateManager _currencyExchangeRateManager;
 
 		#endregion
@@ -30,7 +29,6 @@ namespace TOne.WhS.Routing.Business
 		{
 			_carrierAccountManager = new CarrierAccountManager();
 			_routingProductManager = new RoutingProductManager();
-			_saleZoneManager = new SaleZoneManager();
 			_currencyExchangeRateManager = new CurrencyExchangeRateManager();
 		}
 
@@ -40,31 +38,8 @@ namespace TOne.WhS.Routing.Business
 
 		public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
 		{
-			var latestRoutingDatabase = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
+            return BigDataManager.Instance.RetrieveData(input, new RPRouteRequestHandler());
 
-            if (latestRoutingDatabase == null)
-                return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, new BigResult<RPRouteDetail>());
-
-			IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-			dataManager.RoutingDatabase = latestRoutingDatabase;
-
-			bool includeBlockedSupplierZones = GetIncludeBlockedSupplierZones(latestRoutingDatabase);
-
-			BigResult<RPRoute> rpRouteResult = dataManager.GetFilteredRPRoutes(input);
-
-			BigResult<RPRouteDetail> customerRouteDetailResult = new BigResult<RPRouteDetail>()
-			{
-				ResultKey = rpRouteResult.ResultKey,
-				TotalCount = rpRouteResult.TotalCount,
-				Data = rpRouteResult.Data.MapRecords(x => RPRouteDetailMapper(x, input.Query.PolicyConfigId, input.Query.NumberOfOptions, null, null, includeBlockedSupplierZones, null))
-			};
-
-            ResultProcessingHandler<RPRouteDetail> handler = new ResultProcessingHandler<RPRouteDetail>()
-            {
-                ExportExcelHandler = new RPRouteExcelExportHandler()
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, customerRouteDetailResult, handler);
 		}
 
 		public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones)
@@ -264,6 +239,45 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
+        private class RPRouteRequestHandler : BigDataRequestHandler<RPRouteQuery, RPRoute, RPRouteDetail>
+        {
+            RPRouteManager _manager = new RPRouteManager();
+           
+            public override RPRouteDetail EntityDetailMapper(RPRoute entity)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override IEnumerable<RPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
+            {
+                IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+                var latestRoutingDatabase = _manager.GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
+                dataManager.RoutingDatabase = latestRoutingDatabase;
+                if (latestRoutingDatabase == null)
+                    return null;
+                return  dataManager.GetFilteredRPRoutes(input);
+
+            }
+
+            protected override BigResult<RPRouteDetail> AllRecordsToBigResult(DataRetrievalInput<RPRouteQuery> input, IEnumerable<RPRoute> allRecords)
+            {
+
+                var latestRoutingDatabase = _manager.GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
+                bool includeBlockedSupplierZones = _manager.GetIncludeBlockedSupplierZones(latestRoutingDatabase);
+                return allRecords.ToBigResult(input, null, (entity) => _manager.RPRouteDetailMapper(entity, input.Query.PolicyConfigId, input.Query.NumberOfOptions, null, null, includeBlockedSupplierZones, null));
+            }
+
+            protected override ResultProcessingHandler<RPRouteDetail> GetResultProcessingHandler(DataRetrievalInput<RPRouteQuery> input, BigResult<RPRouteDetail> bigResult)
+            {
+                var resultProcessingHandler = new ResultProcessingHandler<RPRouteDetail>()
+                {
+                    ExportExcelHandler = new RPRouteExcelExportHandler()
+                };
+                return resultProcessingHandler;
+            }
+
+        }
+
 		private RoutingDatabase GetLatestRoutingDatabase(int routingDatabaseId)
 		{
 			RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
@@ -286,8 +300,8 @@ namespace TOne.WhS.Routing.Business
 				RoutingProductId = rpRoute.RoutingProductId,
 				SaleZoneId = rpRoute.SaleZoneId,
                 SaleZoneServiceIds = rpRoute.SaleZoneServiceIds,
-				RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
-				SaleZoneName = _saleZoneManager.GetSaleZoneName(rpRoute.SaleZoneId),
+                RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
+				SaleZoneName = rpRoute.SaleZoneName,
 				IsBlocked = rpRoute.IsBlocked,
 				RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, includeBlockedSupplierZones, customerProfileId),
 				ExecutedRuleId = rpRoute.ExecutedRuleId

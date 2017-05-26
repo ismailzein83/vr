@@ -57,38 +57,32 @@ namespace TOne.WhS.Routing.Data.SQL
                 optionsDetailsBySupplier, rpOptionsByPolicy, record.IsBlocked ? 1 : 0);
         }
 
-        public Vanrise.Entities.BigResult<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input)
+        public IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input)
         {
-            Action<string> createTempTableAction = (tempTableName) =>
+            query_GetFilteredRPRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
+
+            string routingProductIdsFilter = " 1=1 ";
+            string saleZoneIdsFilter = " 1=1 ";
+
+            if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
+                routingProductIdsFilter = string.Format("RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
+
+            if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
+                saleZoneIdsFilter = string.Format("SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+
+            query_GetFilteredRPRoutes.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
+            query_GetFilteredRPRoutes.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
+
+            bool? isBlocked = null;
+            if (input.Query.RouteStatus.HasValue)
+                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
+         
+            return GetItemsText(query_GetFilteredRPRoutes.ToString(), RPRouteMapper, (cmd) =>
             {
-                query_GetFilteredRPRoutes.Replace("#TEMPTABLE#", tempTableName);
-                query_GetFilteredRPRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 
-                string routingProductIdsFilter = " 1=1 ";
-                string saleZoneIdsFilter = " 1=1 ";
+                cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
 
-                if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
-                    routingProductIdsFilter = string.Format("RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
-
-                if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
-                    saleZoneIdsFilter = string.Format("SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
-
-                query_GetFilteredRPRoutes.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
-                query_GetFilteredRPRoutes.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
-
-                bool? isBlocked = null;
-                if (input.Query.RouteStatus.HasValue)
-                    isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
-
-                ExecuteNonQueryText(query_GetFilteredRPRoutes.ToString(), (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
-                });
-            };
-
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-            return RetrieveData(input, createTempTableAction, RPRouteMapper);
+            });
         }
 
         public IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones)
@@ -172,6 +166,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneId = (long)reader["SaleZoneId"],
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServices) ? new HashSet<int>(saleZoneServices.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
+                SaleZoneName = reader["Name"] as string,
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
                 OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<int, RPRouteOptionSupplier>>(reader["OptionsDetailsBySupplier"].ToString()) : null,
                 RPOptionsByPolicy = reader["OptionsByPolicy"] != null ? Vanrise.Common.Serializer.Deserialize<Dictionary<Guid, IEnumerable<RPRouteOption>>>(reader["OptionsByPolicy"].ToString()) : null
@@ -199,18 +194,17 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Queries
 
-        private StringBuilder query_GetFilteredRPRoutes = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                                                        BEGIN
-                                                            SELECT TOP #LimitResult# [RoutingProductId]
-                                                                  ,[SaleZoneId]
-                                                                  ,[SaleZoneServices]
-                                                                  ,[ExecutedRuleId]
-                                                                  ,[OptionsDetailsBySupplier]
-                                                                  ,[OptionsByPolicy]
-                                                                  ,[IsBlocked]
-                                                            INTO #TEMPTABLE# FROM [dbo].[ProductRoute] with(nolock)
-                                                            Where (@IsBlocked is null or IsBlocked = @IsBlocked) AND #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS#
-                                                            END");
+        private StringBuilder query_GetFilteredRPRoutes = new StringBuilder(@"
+                                                            SELECT TOP #LimitResult# pr.[RoutingProductId]
+                                                                  ,pr.[SaleZoneId]
+                                                                  ,sz.[Name] 
+                                                                  ,pr.[SaleZoneServices]
+                                                                  ,pr.[ExecutedRuleId]
+                                                                  ,pr.[OptionsDetailsBySupplier]
+                                                                  ,pr.[OptionsByPolicy]
+                                                                  ,pr.[IsBlocked]
+                                                            FROM [dbo].[ProductRoute] as pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
+                                                            Where (@IsBlocked is null or IsBlocked = @IsBlocked) AND #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS#");
 
         private const string query_GetRouteOptions = @"SELECT [OptionsByPolicy]
                                                         FROM [dbo].[ProductRoute] 

@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Data
     {
         void ApplyProductRouteForDB(object preparedProductRoute);
 
-        Vanrise.Entities.BigResult<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input);
+        IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input);
 
         Dictionary<Guid, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId);
 
