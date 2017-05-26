@@ -76,6 +76,8 @@
     <Folder Include="Retail_CDR\User Defined Types\" />
     <Folder Include="Retail_EDR\Stored Procedures\" />
     <Folder Include="Retail_EDR\Views\" />
+    <Folder Include="Retail_CDR\Functions\" />
+    <Folder Include="Retail_CDR\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -120,5 +122,10 @@
     <Build Include="Retail_EDR\Tables\EDR.sql" />
     <Build Include="Retail_EDR\User Defined Types\vw_EDRsType.sql" />
     <Build Include="Retail_EDR\User Defined Types\EDRType.sql" />
+    <Build Include="Retail_CDR\Tables\ReceivedCDRCost.sql" />
+    <Build Include="Retail_CDR\Tables\ProcessedCDRCost.sql" />
+    <Build Include="Retail_CDR\Functions\ParseStringList.sql" />
+    <Build Include="Retail_CDR\Stored Procedures\sp_ProcessedCDRCost_GetByCDPNs.sql" />
+    <Build Include="Retail_CDR\User Defined Types\ReceivedCostCDRType.sql" />
   </ItemGroup>
 </Project>
