@@ -111,7 +111,11 @@
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
     <Compile Include="VRConnections\VRInterAppRestConnection.cs" />
-    <Compile Include="VREventManager.cs" />
+    <Compile Include="VREventHandler\VREventHandlerDetail.cs" />
+    <Compile Include="VREventHandler\VREventHandlerInfo.cs" />
+    <Compile Include="VREventHandler\VREventHandlerInfoFilter.cs" />
+    <Compile Include="VREventHandler\VREventHandlerQuery.cs" />
+    <Compile Include="VREventHandler\VREventManager.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeManager.cs" />

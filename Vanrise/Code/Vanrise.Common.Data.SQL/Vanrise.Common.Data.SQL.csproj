@@ -57,6 +57,7 @@
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="VRComponentTypeDataManager.cs" />
+    <Compile Include="VREventHandlerDataManager.cs" />
     <Compile Include="VRLoggableEntityDataManager.cs" />
     <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRRuleDataManager.cs" />

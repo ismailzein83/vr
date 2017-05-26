@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public enum VRInvoiceAccountStatus { Active = 0 }
+    public enum VRInvoiceAccountStatus { Active = 0 , InActive = 1}
     public class VRInvoiceAccount
     {
         public long InvoiceAccountId { get; set; }

@@ -15,5 +15,10 @@ namespace Vanrise.Invoice.Business
             IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
            return dataManager.InsertInvoiceAccount(invoiceAccount, out insertedId);
         }
+        public bool TryUpdateInvoiceAccount(VRInvoiceAccount invoiceAccount)
+        {
+            IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
+            return dataManager.TryUpdateInvoiceAccount(invoiceAccount);
+        }
     }
 }

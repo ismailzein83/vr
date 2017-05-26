@@ -10,6 +10,6 @@ namespace Vanrise.Invoice.Data
     public interface IInvoiceAccountDataManager:IDataManager
     {
         bool InsertInvoiceAccount(VRInvoiceAccount invoiceAccount, out long insertedId);
-        bool UpdateInvoiceAccount(VRInvoiceAccount invoiceAccount);
+        bool TryUpdateInvoiceAccount(VRInvoiceAccount invoiceAccount);
     }
 }
