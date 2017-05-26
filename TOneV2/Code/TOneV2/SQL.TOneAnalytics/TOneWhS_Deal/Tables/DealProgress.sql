@@ -1,13 +1,17 @@
 ﻿CREATE TABLE [TOneWhS_Deal].[DealProgress] (
-    [ID]                   BIGINT           IDENTITY (1, 1) NOT NULL,
-    [ZoneGroupId]          UNIQUEIDENTIFIER NOT NULL,
-    [IsSale]               BIT              NOT NULL,
-    [TierNb]               INT              NOT NULL,
-    [RateTierNb]           INT              NOT NULL,
-    [FromTime]             DATETIME         NOT NULL,
-    [ToTime]               DATETIME         NOT NULL,
-    [ReachedDurationInSec] DECIMAL (20, 4)  NOT NULL,
-    [CreatedTime]          DATETIME         CONSTRAINT [DF_DealProgress_CreatedTime] DEFAULT (getdate()) NULL,
-    CONSTRAINT [PK_DealSaleProgress_1] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [ID]                   BIGINT          IDENTITY (1, 1) NOT NULL,
+    [DealID]               INT             NOT NULL,
+    [ZoneGroupNb]          INT             NOT NULL,
+    [IsSale]               BIT             NOT NULL,
+    [CurrentTierNb]        INT             NOT NULL,
+    [CurrentRateTierNb]    INT             NOT NULL,
+    [ReachedDurationInSec] DECIMAL (20, 4) NULL,
+    [TargetDurationInSec]  DECIMAL (20, 4) NOT NULL,
+    [IsComplete]           AS              (case when [ReachedDurationInSec]=[TargetDurationInSec] then (1) else (0) end),
+    [CreatedTime]          DATETIME        CONSTRAINT [DF_DealProgress_CreatedTime] DEFAULT (getdate()) NOT NULL,
+    [timestamp]            ROWVERSION      NULL,
+    CONSTRAINT [PK_DealProgress] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

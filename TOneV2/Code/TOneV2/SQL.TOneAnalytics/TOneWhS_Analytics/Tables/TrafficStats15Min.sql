@@ -38,8 +38,12 @@
     [ReleaseSourceSCount]         INT              NULL,
     [SaleExtraCharges]            DECIMAL (26, 10) NULL,
     [CostExtraCharges]            DECIMAL (26, 10) NULL,
+    [CustomerInterconnectSwitch]  BIT              NULL,
+    [SupplierInterconnectSwitch]  BIT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

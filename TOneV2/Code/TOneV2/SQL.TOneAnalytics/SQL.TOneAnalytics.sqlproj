@@ -95,5 +95,7 @@
     <Build Include="TOneWhS_Analytics\User Defined Types\BillingStats30MinType.sql" />
     <Build Include="TOneWhS_Deal\Tables\DealProgress.sql" />
     <Build Include="Security\TOneWhS_Deal.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealReprocessInput.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealDetailedProgress.sql" />
   </ItemGroup>
 </Project>
