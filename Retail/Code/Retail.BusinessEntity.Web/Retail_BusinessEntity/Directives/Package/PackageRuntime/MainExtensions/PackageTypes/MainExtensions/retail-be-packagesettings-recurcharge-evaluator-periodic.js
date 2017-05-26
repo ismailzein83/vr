@@ -41,16 +41,13 @@
                 $scope.scopeModel.periodicRecurringChargePeriodTypes = UtilsService.getArrayEnum(Retail_BE_PeriodicRecurringChargePeriodTypeEnum);
                 $scope.scopeModel.selectedPeriodicRecurringChargePeriodType = Retail_BE_PeriodicRecurringChargePeriodTypeEnum.Monthly;
 
-                $scope.scopeModel.onPeriodTypeSelectionChanged = function(value)
-                {
-                    if(value != undefined && value.value == Retail_BE_PeriodicRecurringChargePeriodTypeEnum.Days.value)
-                    {
+                $scope.scopeModel.onPeriodTypeSelectionChanged = function (value) {
+                    if (value != undefined && value.value == Retail_BE_PeriodicRecurringChargePeriodTypeEnum.Days.value) {
                         $scope.scopeModel.showNumberOfDays = true;
-                    } else
-                    {
+                    } else {
                         $scope.scopeModel.showNumberOfDays = false;
                     }
-                }
+                };
 
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencySelectorAPI = api;
