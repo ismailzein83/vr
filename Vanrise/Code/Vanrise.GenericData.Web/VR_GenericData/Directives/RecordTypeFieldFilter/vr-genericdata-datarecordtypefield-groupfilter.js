@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum',
     function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
 
@@ -18,56 +19,60 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
 
             },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordTypeFieldFilter/Templates/DataRecordTypeFieldGroupFilter.html"
-
         };
 
         function recordTypeFieldGroupFilterCtor(ctrl, $scope, $attrs) {
+
             var filterObj;
             var context;
-            ctrl.isValid = function () {
-                if (ctrl.groups.length == 0 && ctrl.rules.length == 0)
-                    return 'At least one item should be added';
-                return null;
-            };
-            ctrl.addRule = function () {
-                var rule = {
-                    onRuleFilterReady: function (api) {
-                        var payload = {
-                            context: context
-                        };
-                        api.load(payload);
-                        rule.api = api;
-                    }
-                };
-                ctrl.rules.push(rule);
-            };
-            $scope.removeRule = function (rule) {
-                ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
-            };
 
-            $scope.removeGroup = function (group) {
-                ctrl.groups.splice(ctrl.groups.indexOf(group), 1);
-            };
-
-            ctrl.addGroup = function () {
-                var group = {
-                    onGroupFilterReady: function (api) {
-                        var payload = {
-                            context: context
-                        };
-                        api.load(payload);
-                        group.api = api;
-                    }
-                };
-
-
-                ctrl.groups.push(group);
-            };
-
-            ctrl.groups = [];
-            ctrl.rules = [];
+           
 
             function initializeController() {
+                ctrl.groups = [];
+                ctrl.rules = [];
+
+                ctrl.isValid = function () {
+                    if (ctrl.groups.length == 0 && ctrl.rules.length == 0)
+                        return 'At least one item should be added';
+                    return null;
+                };
+
+                ctrl.addRule = function () {
+                    var rule = {
+                        onRuleFilterReady: function (api) {
+                            var payload = {
+                                context: context
+                            };
+                            api.load(payload);
+                            rule.api = api;
+                        }
+                    };
+                    ctrl.rules.push(rule);
+                };
+
+                $scope.removeRule = function (rule) {
+                    ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
+                };
+
+                $scope.removeGroup = function (group) {
+                    ctrl.groups.splice(ctrl.groups.indexOf(group), 1);
+                };
+
+                ctrl.addGroup = function () {
+                    var group = {
+                        onGroupFilterReady: function (api) {
+                            var payload = {
+                                context: context
+                            };
+                            api.load(payload);
+                            group.api = api;
+                        }
+                    };
+
+                    ctrl.groups.push(group);
+                };
+
                 defineAPI();
             }
 
