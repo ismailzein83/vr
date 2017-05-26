@@ -618,6 +618,8 @@
     <Build Include="dataparser\Stored Procedures\sp_ParserType_Update.sql" />
     <Build Include="dataparser\Stored Procedures\sp_ParserType_Insert.sql" />
     <Build Include="dataparser\Stored Procedures\sp_ParserType_GetAll.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceAccount.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
