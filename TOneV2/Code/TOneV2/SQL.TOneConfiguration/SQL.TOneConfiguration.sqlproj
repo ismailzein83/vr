@@ -620,6 +620,10 @@
     <Build Include="dataparser\Stored Procedures\sp_ParserType_GetAll.sql" />
     <Build Include="VR_Invoice\Tables\InvoiceAccount.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_Insert.sql" />
+    <Build Include="common\Tables\VREventHandler.sql" />
+    <Build Include="common\Stored Procedures\sp_VREventHandler_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VREventHandler_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VREventHandler_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
