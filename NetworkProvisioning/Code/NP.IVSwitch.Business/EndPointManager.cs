@@ -25,6 +25,44 @@ namespace NP.IVSwitch.Business
             Dictionary<int, EndPoint> cachedEndPoint = this.GetCachedEndPoint();
             return cachedEndPoint.GetRecord(endPointId);
         }
+
+        public string GetEndPointDescription(EndPoint endPoint)
+        {
+            switch(endPoint.EndPointType)
+            {
+                case UserType.ACL: return String.Format("ACL - {0}", endPoint.Host);
+                case UserType.SIP: return String.Format("SIP - {0}", endPoint.SipLogin);
+                case UserType.VendroTermRoute: return string.Format("VendorTermRoute - {0}", endPoint.Description);
+                default: throw new NotSupportedException(endPoint.EndPointType.ToString());
+            }
+        }
+
+        public string GetEndPointDescription(int endPointId)
+        {
+            var endPoint = GetEndPoint(endPointId);
+            return endPoint != null ? GetEndPointDescription(endPoint) : null;
+        }
+
+        public List<int> GetCarrierAccountEndPointIds(CarrierAccount carrierAccount)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            EndPointCarrierAccountExtension endPointsExtendedSettings =
+                carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccount);
+            if (endPointsExtendedSettings == null) return null;
+            List<int> endPointIds = new List<int>();
+            if (endPointsExtendedSettings.AclEndPointInfo != null)
+                endPointIds.AddRange(endPointsExtendedSettings.AclEndPointInfo.Select(itm => itm.EndPointId));
+            if (endPointsExtendedSettings.UserEndPointInfo != null)
+                endPointIds.AddRange(endPointsExtendedSettings.UserEndPointInfo.Select(itm => itm.EndPointId));
+            return endPointIds;
+        }
+
+        public List<int> GetCarrierAccountEndPointIds(int carrierAccountId)
+        {
+            var carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
+            return carrierAccount != null ? GetCarrierAccountEndPointIds(carrierAccount) : null;
+        }
+
         public IDataRetrievalResult<EndPointDetail> GetFilteredEndPoints(DataRetrievalInput<EndPointQuery> input)
         {
             //Get Carrier by id
