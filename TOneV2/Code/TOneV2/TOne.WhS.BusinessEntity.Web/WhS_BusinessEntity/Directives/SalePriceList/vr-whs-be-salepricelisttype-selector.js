@@ -74,7 +74,6 @@ app.directive('vrWhsBeSalepricelisttypeSelector', ['UtilsService', 'VRUIUtilsSer
         }
         function directiveCtor(ctrl, $scope, $attrs) {
             ctrl.datasource = UtilsService.getArrayEnum(WhS_BE_SalePriceListTypeEnum);
-            VRUIUtilsService.setSelectedValues(0, 'value', $attrs, ctrl);
 
             function initializeController() {
                 defineAPI();
@@ -90,8 +89,9 @@ app.directive('vrWhsBeSalepricelisttypeSelector', ['UtilsService', 'VRUIUtilsSer
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
-                    if (selectedIds != undefined)
+                    if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
+                    }
                 };
 
                 if (ctrl.onReady != null)

@@ -84,7 +84,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
-            VRFile file = PreparePriceListVrFile(customerPriceList);
+            VRFile file = PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType);
             var notificationManager = new NotificationManager();
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
@@ -119,9 +119,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
-            customerPriceList.PriceListType = salePriceListType;
 
-            return PreparePriceListVrFile(customerPriceList);
+            return PreparePriceListVrFile(customerPriceList, salePriceListType);
 
         }
         public IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
@@ -824,7 +823,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region  Private Members
 
-        private VRFile PreparePriceListVrFile(SalePriceList salePriceList)
+        private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType? salePriceListType)
         {
             VRFile file = null;
 
@@ -860,7 +859,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
                         salePriceListOutput.NotSentChangesByCustomerId);
 
-            List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, salePriceList.PriceListType.Value, allChangesByCountryId,
+            List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, salePriceListType.Value, allChangesByCountryId,
                 salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, salePriceListContext.EffectiveDate, salePriceList.ProcessInstanceId);
 
             if (customerZoneNotifications.Count > 0)
@@ -885,19 +884,16 @@ namespace TOne.WhS.BusinessEntity.Business
                 int routingProductId;
                 SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(zoneNotification.ZoneName);
                 if (routinProductChange != null)
-                {
                     routingProductId = routinProductChange.RoutingProductId;
-                    servicesIds = zoneNotification.ZoneId.HasValue
-                        ? routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value)
-                        : routingProductManager.GetDefaultServiceIds(routingProductId);
-
-                }
                 else
                 {
                     SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneNotification.ZoneId.Value);
                     routingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
-                    servicesIds = routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value);
+
                 }
+                servicesIds = zoneNotification.ZoneId.HasValue
+                      ? routingProductManager.GetZoneServiceIds(routingProductId, zoneNotification.ZoneId.Value)
+                      : routingProductManager.GetDefaultServiceIds(routingProductId);
                 zoneNotification.Rate.ServicesIds = servicesIds;
             }
         }

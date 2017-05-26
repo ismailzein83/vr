@@ -15,8 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         Full = 0,
         Country = 1,
-        RateChange = 2,
-        Default = 3
+        RateChange = 2
     }
 
     public class SalePriceList

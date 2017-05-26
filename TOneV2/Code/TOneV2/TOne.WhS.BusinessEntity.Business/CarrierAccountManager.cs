@@ -84,8 +84,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             var customerPRiceListExtensionFormat = carrierAccount.CustomerSettings.PriceListExtensionFormat;
 
-            if (customerPRiceListExtensionFormat != PriceListExtensionFormat.Default)
-                return customerPRiceListExtensionFormat;
+            if (customerPRiceListExtensionFormat.HasValue)
+                return customerPRiceListExtensionFormat.Value;
 
             ConfigManager configManager = new ConfigManager();
             return configManager.GetSaleAreaPriceListExtensionFormatId();
@@ -99,8 +99,8 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierAccount.CustomerSettings.ThrowIfNull("CarrierAccount.CustomerSetting", carrierAccountId);
 
             var customerPriceListType = carrierAccount.CustomerSettings.PriceListType;
-            if (customerPriceListType != SalePriceListType.Default)
-                return customerPriceListType;
+            if (customerPriceListType.HasValue)
+                return customerPriceListType.Value;
 
             ConfigManager configManager = new ConfigManager();
             return configManager.GetSaleAreaPriceListType();
@@ -292,13 +292,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierAccount.CarrierAccountId = carrierAccountId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
-         
+
                 //     VREventManager vrEventManager = new VREventManager();
-               // vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
+                // vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
-            
+
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
@@ -314,12 +314,12 @@ namespace TOne.WhS.BusinessEntity.Business
             if (TryUpdateCarrierAccount(carrierAccountToEdit, true))
             {
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
-               // VREventManager vrEventManager = new VREventManager();
-              //  vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
+                // VREventManager vrEventManager = new VREventManager();
+                //  vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
 
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
-                
+
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;

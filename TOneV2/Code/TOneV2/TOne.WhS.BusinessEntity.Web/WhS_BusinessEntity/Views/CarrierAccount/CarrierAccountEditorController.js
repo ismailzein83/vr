@@ -496,7 +496,7 @@
 
             var loadPriceListTypeSelectorPromise = loadPriceListTypeSelector();
             promises.push(loadPriceListTypeSelectorPromise);
-            
+
             return UtilsService.waitMultiplePromises(promises);
         }
         function loadCustomerTimeZoneSelector() {
@@ -734,11 +734,10 @@
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
                     IsAToZ: $scope.scopeModel.isAToZ,
                     InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
-                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
-                    PriceListType: priceLisTypeSelectorAPI != undefined ? priceLisTypeSelectorAPI.getSelectedIds() : undefined
+                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI.getSelectedIds(),
+                    PriceListType:  priceLisTypeSelectorAPI.getSelectedIds() 
                 }
             };
-
             if (!isEditMode) {
                 obj.CarrierProfileId = carrierProfileSelectorAPI.getSelectedIds();
                 obj.SellingNumberPlanId = sellingNumberPlanSelectorAPI != undefined ? sellingNumberPlanSelectorAPI.getSelectedIds() : null;

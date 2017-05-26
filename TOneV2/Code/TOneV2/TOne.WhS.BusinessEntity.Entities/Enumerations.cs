@@ -22,7 +22,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public enum PriceListExtensionFormat
     {
-        Default = 0,
         XLS = 1,
         XLSX = 2
     }
