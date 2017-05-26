@@ -71,7 +71,11 @@
             $scope.scopeModel.isLoading = true;
 
             getSalePriceListIdsByProcessInstanceId().then(function () {
-                $scope.scopeModel.isSendAllButtonDisabled = !doCustomerPriceListsExist();
+                var doCustomerPriceListsExistReturnValue = doCustomerPriceListsExist();
+
+                $scope.scopeModel.doCustomerPriceListsExist = doCustomerPriceListsExistReturnValue;
+                $scope.scopeModel.isSendAllButtonDisabled = !doCustomerPriceListsExistReturnValue;
+
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);

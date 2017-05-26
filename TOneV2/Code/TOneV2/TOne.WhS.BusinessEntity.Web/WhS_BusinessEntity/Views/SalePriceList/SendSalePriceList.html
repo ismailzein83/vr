@@ -2,8 +2,11 @@
     <vr-modalbody>
         <vr-form name="formSendPriceList">
             <vr-row>
-                <vr-columns width="fullrow">
+                <vr-columns width="fullrow" ng-show="scopeModel.doCustomerPriceListsExist">
                     <vr-whs-be-salepricelist-grid on-ready="scopeModel.onSalePriceListGridReady"></vr-whs-be-salepricelist-grid>
+                </vr-columns>
+                <vr-columns width="fullrow" ng-hide="scopeModel.doCustomerPriceListsExist">
+                    <vr-label isvalue>No customer pricelists were found</vr-label>
                 </vr-columns>
             </vr-row>
         </vr-form>
