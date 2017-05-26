@@ -497,9 +497,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 };
 
+                var lastSelectedRow;
                 ctrl.onRowClicked = function (evnt) {
+                    $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
                     if (ctrl.norowhighlightonclick == undefined || !ctrl.norowhighlightonclick) {
-                        $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
+                        if (lastSelectedRow != undefined)
+                            lastSelectedRow.removeClass('vr-datagrid-datacells-click');
                         $(evnt.target).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
                     }
                     ctrl.menuLeft = evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
