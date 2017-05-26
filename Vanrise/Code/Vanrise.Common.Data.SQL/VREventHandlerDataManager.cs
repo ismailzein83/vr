@@ -63,7 +63,7 @@ namespace Vanrise.Common.Data.SQL
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<VREventHandlerSettings>(reader["Settings"] as string),
                 BED= GetReaderValue<DateTime>(reader,"BED"),
-                EED = GetReaderValue<DateTime>(reader, "EED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
             };
             return vREventHandler;
         }
