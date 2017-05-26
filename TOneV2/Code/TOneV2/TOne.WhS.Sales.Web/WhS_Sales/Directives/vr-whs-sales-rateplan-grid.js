@@ -417,7 +417,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
             setRouteOptionProperties(zoneItem);
-            setServiceViewerLoad(zoneItem)
+            setServiceViewerLoad(zoneItem);
             setNormalRateIconProperties(zoneItem);
 
            

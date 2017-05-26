@@ -75,7 +75,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                             }
                         });
                     }
-                }
+                };
 
                 $scope.scopeModel.onSaleZoneSelectorReady = function (api) {
                     saleZoneSelectorAPI = api;

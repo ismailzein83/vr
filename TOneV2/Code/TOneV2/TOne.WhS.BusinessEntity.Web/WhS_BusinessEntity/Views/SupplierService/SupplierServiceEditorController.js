@@ -125,11 +125,11 @@
             
             var obj = {
                 SupplierZoneServiceId: (supplierServiceEntity != undefined) ? supplierServiceEntity.SupplierZoneServiceId : null,
-                ZoneName:(supplierServiceEntity!=undefined)? supplierServiceEntity.ZoneName:null,
+                ZoneName: (supplierServiceEntity != undefined) ? supplierServiceEntity.ZoneName : null,
                 SupplierId: supplierId,
                 BED: $scope.scopeModel.bed,
                 Services: zoneServiceConfigSelectorAPI != undefined ? getSelectedServices() : null
-            }
+            };
             return obj;
         }
 
