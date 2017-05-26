@@ -91,7 +91,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                             name: labelSendValue,
                             clicked: SendPriceList
                         };
-                        menuActions.push(salePriceListSend);
+                        // menuActions.push(salePriceListSend);
                     }
                 }
                 if (dataItem.Entity.FileId !== 0) {
