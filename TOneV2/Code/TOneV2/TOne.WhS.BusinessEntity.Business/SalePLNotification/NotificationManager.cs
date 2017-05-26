@@ -54,7 +54,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customerPricelist.OwnerId);
 
-            PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat);
+            var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
+            PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat, customerName);
 
             var attachment = new Attachment(memoryStream, priceListSetting.PriceListName)
             {
@@ -133,16 +134,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
             PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customerPricelist.OwnerId);
 
-            PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat);
+            var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
+            PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat, customerName);
 
             var attachment = new Attachment(memoryStream, priceListSetting.PriceListName);
-            
+
             User initiator = _userManager.GetUserbyId(initiatorId);
 
-            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            objects.Add("Customer", customer);
-            objects.Add("User", initiator);
-            objects.Add("Sale Pricelist", customerPricelist);
+            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>
+            {
+                {"Customer", customer},
+                {"User", initiator},
+                {"Sale Pricelist", customerPricelist}
+            };
 
             VRMailEvaluatedTemplate evaluatedTemplate = _vrMailManager.EvaluateMailTemplate(salePLMailTemplateId, objects);
 
@@ -180,29 +184,29 @@ namespace TOne.WhS.BusinessEntity.Business
 
         }
 
-        private PriceListSetting GetPriceListSetting(PriceListExtensionFormat priceListExtensionFormat)
+        private PriceListSetting GetPriceListSetting(PriceListExtensionFormat priceListExtensionFormat, string customerName)
         {
             ContentType contentType;
-            string priceListName;
+            string extension;
             switch (priceListExtensionFormat)
             {
                 case PriceListExtensionFormat.XLS:
                     contentType = new ContentType("application/x-msexcel");
-                    priceListName = "SalePriceList.xls";
+                    extension = ".xls";
                     break;
                 case PriceListExtensionFormat.XLSX:
                     contentType = new ContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                    priceListName = "SalePriceList.xlsx";
+                    extension = ".xlsx";
                     break;
                 default:
                     contentType = new ContentType("application/x-msexcel");
-                    priceListName = "SalePriceList.xls";
+                    extension = ".xls";
                     break;
             }
             return new PriceListSetting
             {
                 ContentType = contentType,
-                PriceListName = priceListName
+                PriceListName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, extension)
             };
         }
 
