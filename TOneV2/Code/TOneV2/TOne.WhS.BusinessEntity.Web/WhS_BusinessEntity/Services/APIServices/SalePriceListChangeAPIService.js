@@ -33,6 +33,11 @@
         function EvaluateSalePriceListEmail(pricelistId) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "EvaluateSalePriceListEmail"), { salepriceListId: pricelistId });
         }
+        function GetOwnerPriceListType(priceListId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerPriceListType"), {
+                priceListId: priceListId
+            });
+        }
         return ({
             GetFilteredSalePriceListCodeChanges: GetFilteredSalePriceListCodeChanges,
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
@@ -40,7 +45,8 @@
             GetOwnerName: GetOwnerName,
             DownloadSalePriceList: DownloadSalePriceList,
             GenerateSalePriceListFile: GenerateSalePriceListFile,
-            EvaluateSalePriceListEmail: EvaluateSalePriceListEmail
+            EvaluateSalePriceListEmail: EvaluateSalePriceListEmail,
+            GetOwnerPriceListType: GetOwnerPriceListType
         });
     }
 

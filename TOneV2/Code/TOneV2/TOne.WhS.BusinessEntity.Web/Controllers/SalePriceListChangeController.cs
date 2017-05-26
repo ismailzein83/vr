@@ -42,6 +42,17 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetOwnerName(priceListId);
         }
         [HttpGet]
+        [Route("GetOwnerPriceListType")]
+        public int GetOwnerPriceListType(int priceListId)
+        {
+            var salePriceListManager = new SalePriceListManager();
+            var priceList = salePriceListManager.GetPriceList(priceListId);
+
+            var carrierAccountManager = new CarrierAccountManager();
+            return (int)carrierAccountManager.GetPriceListType(priceList.OwnerId);
+        }
+
+        [HttpGet]
         [Route("DownloadSalePriceList")]
         public object DownloadSalePriceList(long salepriceListId, SalePriceListType salePriceListType)
         {
@@ -64,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("EvaluateSalePriceListEmail")]
         public VRMailEvaluatedTemplate EvaluateSalePriceListEmail(long salepriceListId)
         {
-             SalePriceListManager salePriceListManager = new SalePriceListManager();
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
             return salePriceListManager.EvaluateEmail(salepriceListId);
         }
     }
