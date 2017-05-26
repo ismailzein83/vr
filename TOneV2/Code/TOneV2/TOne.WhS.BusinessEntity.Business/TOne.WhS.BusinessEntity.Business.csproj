@@ -106,6 +106,7 @@
   <ItemGroup>
     <Compile Include="AccountManagerManager.cs" />
     <Compile Include="BECacheExpirationChecker.cs" />
+    <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="CarrierAccounts\CustomerGroupContext.cs" />
     <Compile Include="CarrierAccounts\SupplierGroupContext.cs" />
