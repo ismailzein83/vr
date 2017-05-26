@@ -29,7 +29,7 @@
             controllerAs: 'tileCtrl',
             bindToController: true,
             template: function (element, attrs) {
-                var tileclass = attrs.target != undefined && "hand-cursor" || ""
+                var tileclass = attrs.target != undefined && "hand-cursor" || "";
                 var template = '<div class="vr-tile ' + tileclass + ' " ng-class="\'bgcolor-{{::tileCtrl.classIndex}}\'" ng-click="tileCtrl.onClickEvent()"><a ng-if="tileCtrl.target" ng-href="{{::tileCtrl.target}}" id="link"/>'
                                     + '<div  class="section thumbnail-section" >'
                                       + '<img src="{{tileCtrl.imgpath}}" class="img-responsive" />'
