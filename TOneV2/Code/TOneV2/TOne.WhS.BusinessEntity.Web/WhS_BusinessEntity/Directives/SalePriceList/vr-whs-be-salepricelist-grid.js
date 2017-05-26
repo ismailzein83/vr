@@ -77,24 +77,22 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                 if (typeof sourceId == 'undefined' || sourceId == null) {
                     var labelSendValue = "Resend";
 
-                    if (context != undefined || context.processInstanceId != undefined) {
-                        var salePriceListPreview = {
-                            name: "Preview",
-                            clicked: PreviewPriceList
-                        };
-                        menuActions.push(salePriceListPreview);
-                        return menuActions;
-                    }
-
-                    if (dataItem.Entity.IsSent === false) {
-                        labelSendValue = "Send";
-                    }
-                    var salePriceListSend =
-                    {
-                        name: labelSendValue,
-                        clicked: SendPriceList
+                    var salePriceListPreview = {
+                        name: "Preview",
+                        clicked: PreviewPriceList
                     };
-                    menuActions.push(salePriceListSend);
+                    menuActions.push(salePriceListPreview);
+                    if (context == undefined || context.processInstanceId == undefined) {
+                        if (dataItem.Entity.IsSent === false) {
+                            labelSendValue = "Send";
+                        }
+                        var salePriceListSend =
+                        {
+                            name: labelSendValue,
+                            clicked: SendPriceList
+                        };
+                        menuActions.push(salePriceListSend);
+                    }
                 }
                 if (dataItem.Entity.FileId !== 0) {
                     var downloadPricelist = {
