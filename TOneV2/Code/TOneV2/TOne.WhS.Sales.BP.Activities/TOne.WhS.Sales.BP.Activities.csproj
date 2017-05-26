@@ -87,6 +87,7 @@
     <Compile Include="ApplySaleZoneRoutingProductPreviewsToDB.cs" />
     <Compile Include="ApplySaleZoneServicePreviewsToDB.cs" />
     <Compile Include="BackupData.cs" />
+    <Compile Include="DeleteRatePlanDraft.cs" />
     <Compile Include="GetExistingCustomerCountries.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
     <Compile Include="PrepareCustomerCountryPreviews.cs" />
@@ -139,7 +140,6 @@
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureSalePriceListZoneChange.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
-    <Compile Include="UpdateState.cs" />
     <Compile Include="UpdateZonesData.cs" />
   </ItemGroup>
   <ItemGroup>

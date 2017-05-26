@@ -52,7 +52,7 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
         }
-        
+
         #endregion
 
         public bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status)
@@ -73,6 +73,12 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SalePriceList_SyncWithImportedData", processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
             return (affectedRows > 0);
+        }
+
+        public bool DeleteRatePlanDraft(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_Delete", ownerType, ownerId);
+            return affectedRows > 0;
         }
     }
 }
