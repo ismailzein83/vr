@@ -14,27 +14,7 @@ namespace Vanrise.GenericData.Business
         {
             StringBuilder expression = new StringBuilder();
             var context = new RecordFilterGetDescriptionContext(recordFilterFieldInfosByFieldName);
-
-            bool isFirstFilter = true;
-            foreach (var filter in filterGroup.Filters)
-            {
-                BuildChildRecordFilterGroupExpression(context, filter, expression, filterGroup.LogicalOperator, isFirstFilter);
-                isFirstFilter = false;
-            }
-            
-            return expression.ToString();
-        }
-
-        public void BuildChildRecordFilterGroupExpression(IRecordFilterGetDescriptionContext context, RecordFilter recordFilter, StringBuilder expression, RecordQueryLogicalOperator logicalOperator, Boolean isFirstFilter)
-        {
-            if (!isFirstFilter)
-                expression.Append(string.Format(" {0} ", Utilities.GetEnumDescription(logicalOperator)));
-
-            RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
-            if (childFilterGroup != null)
-                expression.Append(childFilterGroup.GetDescription(context));
-            else
-                expression.Append(recordFilter.GetDescription(context));
+            return filterGroup.GetDescription(context);
         }
 
         public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, Dictionary<Guid, dynamic> parameterValues, IRecordFilterGenericFieldMatchContext context)
@@ -124,7 +104,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public class RecordFilterSetValueFromParametersContext : IRecordFilterSetValueFromParametersContext
+        private class RecordFilterSetValueFromParametersContext : IRecordFilterSetValueFromParametersContext
         {
             Dictionary<Guid, dynamic> _parameterValues;
 
@@ -141,6 +121,34 @@ namespace Vanrise.GenericData.Business
                     value = null;
                     return false;
                 }
+            }
+        }
+
+        private class RecordFilterGetDescriptionContext : IRecordFilterGetDescriptionContext
+        {
+            Dictionary<string, RecordFilterFieldInfo> _recordFieldsByFieldName;
+
+            public RecordFilterGetDescriptionContext(Dictionary<string, RecordFilterFieldInfo> recordFieldsByFieldName)
+            {
+                _recordFieldsByFieldName = recordFieldsByFieldName;
+            }
+
+            public string GetFieldTitle(string fieldName)
+            {
+                RecordFilterFieldInfo recordFilterFieldInfo = _recordFieldsByFieldName.GetRecord(fieldName);
+                if (recordFilterFieldInfo == null)
+                    return null;
+
+                return recordFilterFieldInfo.Title;
+            }
+
+            public string GetFieldValueDescription(string fieldName, object fieldValue)
+            {
+                RecordFilterFieldInfo recordFilterFieldInfo = _recordFieldsByFieldName.GetRecord(fieldName);
+                if (recordFilterFieldInfo == null)
+                    return null;
+
+                return recordFilterFieldInfo.Type.GetDescription(fieldValue);
             }
         }
 

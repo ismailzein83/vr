@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.Entities
             }
 
             string logicalOperatorSymbol = string.Format(" {0} ", Utilities.GetEnumDescription(LogicalOperator));
-            string result = string.Format(" ( {0} ) ", string.Join(logicalOperatorSymbol, filterExpressions));
+            string result = string.Format("({0})", string.Join(logicalOperatorSymbol, filterExpressions));
 
             return result;
         }
@@ -70,33 +70,5 @@ namespace Vanrise.GenericData.Entities
         string GetFieldTitle(string fieldName);
 
         string GetFieldValueDescription(string fieldName, object fieldValue);
-    }
-
-    public class RecordFilterGetDescriptionContext : IRecordFilterGetDescriptionContext
-    {
-        Dictionary<string, RecordFilterFieldInfo> _recordFieldsByFieldName;
-
-        public RecordFilterGetDescriptionContext(Dictionary<string, RecordFilterFieldInfo> recordFieldsByFieldName)
-        {
-            _recordFieldsByFieldName = recordFieldsByFieldName;
-        }
-
-        public string GetFieldTitle(string fieldName)
-        {
-            RecordFilterFieldInfo recordFilterFieldInfo = _recordFieldsByFieldName.GetRecord(fieldName);
-            if (recordFilterFieldInfo == null)
-                return null;
-
-            return recordFilterFieldInfo.Title;
-        }
-
-        public string GetFieldValueDescription(string fieldName, object fieldValue)
-        {
-            RecordFilterFieldInfo recordFilterFieldInfo = _recordFieldsByFieldName.GetRecord(fieldName);
-            if (recordFilterFieldInfo == null)
-                return null;
-
-            return recordFilterFieldInfo.Type.GetDescription(fieldValue);
-        }
     }
 }
