@@ -98,7 +98,7 @@ as (select * from (values
 ('DD2B8C20-C9D2-44BE-9EF5-0890B52FCB9C','By Service Match','By Service Match','WhS_Routing_RouteRuleOptionFilterSettings'											,'{"Editor":"vr-whs-routing-routerulesettings-filter-service"}'),
 ('0D42AFB5-92E2-43A4-85EE-6A51079AEDC3','Margin','Margin','WhS_Routing_RoutingOptimizerSettings'																	,'{"Editor":"vr-whs-routing-routingoptimizersettings-margin"}'),
 ('0166E5C4-0F13-4741-BD77-2C771BCAFA24','SpecialRequest','Special Request','WhS_Routing_RouteRuleSettingsType'														,'{"Editor":"vr-whs-routing-routerulesettings-specialrequest", "DisplayOrder":"2"}'),
-('6FD3F59F-33F1-4D42-8364-7030AE79B249','WhS_Routing_DefaultRouteRuleCriteria','Default	WhS_Routing_RouteRuleCriteriaType'											,'{"Editor":"vr-whs-routing-routerulecriteria-default", "IsDefault":true}'),
+('6FD3F59F-33F1-4D42-8364-7030AE79B249','WhS_Routing_DefaultRouteRuleCriteria','Default','WhS_Routing_RouteRuleCriteriaType'										,'{"Editor":"vr-whs-routing-routerulecriteria-default", "IsDefault":true}'),
 
 ('63CFD19F-D742-4F37-87AE-2B79C140036E','CustomerZoneRate','CustomerZoneRate','VR_GenericData_DataTransformationStepConfig'													,'{"Editor":"vr-whs-be-datatransformation-customerzonerate","StepPreviewUIControl":"vr-whs-be-datatransformation-customerzonerate-preview"}'),
 ('9BEB5E90-D35E-4730-8B8F-E039C4FE6C90','SupplierZoneRate','SupplierZoneRate','VR_GenericData_DataTransformationStepConfig'													,'{"Editor":"vr-whs-be-datatransformation-supplierzonerate","StepPreviewUIControl":"vr-whs-be-datatransformation-supplierzonerate-preview"}'),
