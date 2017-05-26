@@ -241,10 +241,10 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
     }
 
     function setTitle() {
-        if (isEditMode && dataSourceTask != undefined && dataSourceTask.TaskData != undefined)
-            $scope.title = UtilsService.buildTitleForUpdateEditor(dataSourceTask.TaskData.Name, "Data Source");
-        else if (isViewHistoryMode && dataSourceEntity != undefined)
-            $scope.title = "View Data Source: " + dataSourceEntity.Name;
+        if (isEditMode && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined)
+            $scope.title = UtilsService.buildTitleForUpdateEditor(dataSourceEntity.Entity.Name, "Data Source");
+        else if (isViewHistoryMode && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined)
+            $scope.title = "View Data Source: " + dataSourceEntity.Entity.Name;
         else
             $scope.title = UtilsService.buildTitleForAddEditor("Data Source");
     }
