@@ -400,7 +400,7 @@ namespace Retail.BusinessEntity.Business
             return new FinancialAccountInfo
             {
                 FinancialAccountId = financialAccountData.FinancialAccountId,
-                Description = GetFinancialAccountDescription(financialAccountData.FinancialAccount)
+                Description = string.Format("{0} ({1})", GetFinancialAccountDescription(financialAccountData.FinancialAccount),s_accountManager.GetAccountName(financialAccountData.Account))
             };
         }
         private string GetFinancialAccountDescription(FinancialAccount financialAccount)
