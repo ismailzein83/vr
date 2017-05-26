@@ -103,7 +103,7 @@
                     return 'control-label vr-control-label ' + BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
                 }
                 return "";
-            }
+            };
 
             $scope.openCompletionView = function () {
                 var onCompletionViewClosed = function () { };
