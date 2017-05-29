@@ -734,8 +734,8 @@
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
                     IsAToZ: $scope.scopeModel.isAToZ,
                     InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
-                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI.getSelectedIds(),
-                    PriceListType:  priceLisTypeSelectorAPI.getSelectedIds() 
+                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
+                    PriceListType: priceLisTypeSelectorAPI != undefined ? priceLisTypeSelectorAPI.getSelectedIds() : undefined
                 }
             };
             if (!isEditMode) {
