@@ -159,6 +159,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                 var defaultRoutingProduct = routingProductLocator.GetCustomerDefaultRoutingProduct(customerId, sellingProductId);
 
+                if (defaultRoutingProduct == null)
+                    throw new DataIntegrityValidationException(string.Format("No default selling product for customer {0}", customer.Name));
+
                 foreach (var countryAction in actionsForSoldCountryOfThisCustomer)
                 {
                     IEnumerable<SalePricelistRateChange> newRateChanges =
