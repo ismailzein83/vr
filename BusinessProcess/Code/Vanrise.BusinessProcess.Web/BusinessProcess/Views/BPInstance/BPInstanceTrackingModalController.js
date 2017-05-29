@@ -20,6 +20,7 @@
         var validationMessageHistoryGridAPI;
 
         var bpInstance;
+        var bpInstanceStatusValue;
         var context;
 
         var completionViewURL;
@@ -94,8 +95,10 @@
                 }
 
                 if (context != undefined) {
-                    if (context.onClose != undefined)
-                        context.onClose();
+                    if (context.onClose != undefined) {
+                        var bpInstanceClosureContext = { bpInstanceStatusValue: bpInstanceStatusValue };
+                        context.onClose(bpInstanceClosureContext);
+                    }
                 }
             };
             $scope.getStatusColor = function () {
@@ -170,6 +173,7 @@
         function onTimerElapsed() {
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
                 $scope.process.Status = response.StatusDescription;
+                bpInstanceStatusValue = response.Status;
 
                 if (response.Status == BPInstanceStatusEnum.Completed.value && completionViewURL != undefined)
                     $scope.showCompletionViewLink = true;
