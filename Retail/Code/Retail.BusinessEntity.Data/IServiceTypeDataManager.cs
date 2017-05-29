@@ -14,5 +14,7 @@ namespace Retail.BusinessEntity.Data
         bool Update(Guid serviceTypeId, string title, Guid accountBEDefinitionId, ServiceTypeSettings serviceTypeSettings);
 
         bool AreServiceTypesUpdated(ref object updateHandle);
+
+        void GenerateScript(List<ServiceType> serviceTypes, Action<string, string> addEntityScript);
     }
 }

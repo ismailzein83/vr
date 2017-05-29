@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Retail.BusinessEntity.Data;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -33,8 +34,8 @@ namespace Retail.BusinessEntity.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
                 AccountTypeManager accountTypeManager = new AccountTypeManager();
+                List<AccountType> accountTypes = new List<AccountType>();
                 foreach (var config in context.Configs)
                 {
                     AccountTypeOverriddenConfiguration accountTypeConfig = config.Settings.ExtendedSettings.CastWithValidate<AccountTypeOverriddenConfiguration>("accountTypeConfig", config.OverriddenConfigurationId);
@@ -49,30 +50,29 @@ namespace Retail.BusinessEntity.Business
                     }
                     if (accountTypeConfig.OverriddenSettings != null)
                         accountType.Settings = accountTypeConfig.OverriddenSettings;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}','{4}')", accountType.AccountTypeId, accountType.Name, accountType.Title, accountType.AccountBEDefinitionId, Serializer.Serialize(accountType.Settings));
+                    accountTypes.Add(accountType);                    
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Title],[AccountBEDefinitionID],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[AccountBEDefinitionID],[Settings]))
-merge	[Retail_BE].[AccountType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[AccountBEDefinitionID] = s.[AccountBEDefinitionID],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Title],[AccountBEDefinitionID],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[AccountBEDefinitionID],s.[Settings]);", scriptBuilder);
-                context.AddEntityScript("[Retail_BE].[AccountType]", script);
+                GenerateScript(accountTypes, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<AccountTypeOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).AccountTypeId).Distinct();
+                AccountTypeManager accountTypeManager = new AccountTypeManager();
+                List<AccountType> accountTypes = new List<AccountType>();
+                foreach (var id in ids)
+                {
+                    var accountType = accountTypeManager.GetAccountType(id);
+                    accountType.ThrowIfNull("accountType", id);
+                    accountTypes.Add(accountType);
+                }
+                GenerateScript(accountTypes, context.AddEntityScript);
+            }
+
+            private void GenerateScript(List<AccountType> accountTypes, Action<string, string> addEntityScript)
+            {
+                IAccountTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountTypeDataManager>();
+                dataManager.GenerateScript(accountTypes, addEntityScript);
             }
         }
 

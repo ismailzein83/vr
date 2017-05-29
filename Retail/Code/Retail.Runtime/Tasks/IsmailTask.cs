@@ -17,6 +17,7 @@ namespace Retail.Runtime.Tasks
             Vanrise.Common.Business.OverriddenConfigurationManager overriddenConfigurationManager = new Vanrise.Common.Business.OverriddenConfigurationManager();
             var zajilScript = overriddenConfigurationManager.GenerateOverriddenConfigurationGroupScript(new Guid("CF1EAF73-93DB-416F-92FC-F8C0E7EE6EA7"));
             var multinetScript = overriddenConfigurationManager.GenerateOverriddenConfigurationGroupScript(new Guid("D79E9957-3EA5-49C1-AEDB-15F251BEDCDC"));
+            var devScript = overriddenConfigurationManager.GenerateOverriddenConfigurationDevScript();
             var runtimeServices = new List<RuntimeService>();
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };

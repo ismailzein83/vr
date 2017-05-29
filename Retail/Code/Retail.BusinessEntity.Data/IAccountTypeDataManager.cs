@@ -16,5 +16,7 @@ namespace Retail.BusinessEntity.Data
         bool Update(AccountTypeToEdit accountType);
 
         bool AreAccountTypesUpdated(ref object updateHandle);
+
+        void GenerateScript(List<AccountType> accountTypes, Action<string, string> addEntityScript);
     }
 }

@@ -14,5 +14,6 @@ namespace Retail.BusinessEntity.Data
         bool Update(AccountPartDefinition accountPartDefinition);
         bool AreAccountPartDefinitionsUpdated(ref object updateHandle);
 
+        void GenerateScript(List<AccountPartDefinition> accountParts, Action<string, string> addEntityScript);
     }
 }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 
 namespace Retail.BusinessEntity.Data.SQL
@@ -52,6 +53,37 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool AreAccountTypesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("Retail_BE.AccountType", ref updateHandle);
+        }
+
+        public void GenerateScript(List<AccountType> accountTypes, Action<string, string> addEntityScript)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var accountType in accountTypes)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}','{4}')", accountType.AccountTypeId, accountType.Name, accountType.Title, accountType.AccountBEDefinitionId, Serializer.Serialize(accountType.Settings));
+            }
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[Title],[AccountBEDefinitionID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[AccountBEDefinitionID],[Settings]))
+merge	[Retail_BE].[AccountType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[AccountBEDefinitionID] = s.[AccountBEDefinitionID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[AccountBEDefinitionID],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[AccountBEDefinitionID],s.[Settings]);", scriptBuilder);
+            addEntityScript("[Retail_BE].[AccountType]", script);
         }
 
         #endregion
