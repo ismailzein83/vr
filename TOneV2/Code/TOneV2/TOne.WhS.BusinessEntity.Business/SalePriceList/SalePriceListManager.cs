@@ -888,7 +888,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SalePricelistRPChange routinProductChange = routingProductChangesByZoneName.GetRecord(zoneNotification.ZoneName);
                 if (routinProductChange != null)
                     routingProductId = routinProductChange.RoutingProductId;
-                else if (routingProductLocator != null)
+                else if (routingProductLocator != null && zoneNotification.ZoneId.HasValue)
                 {
                     SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneNotification.ZoneId.Value);
                     if (saleEntityZoneRoutingProduct != null) routingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
@@ -901,7 +901,7 @@ namespace TOne.WhS.BusinessEntity.Business
                          : routingProductManager.GetDefaultServiceIds(routingProductId.Value);
                     zoneNotification.Rate.ServicesIds = servicesIds;
                 }
-                else throw new Exception(string.Format("No routing product for this zone {0} sold for customer {1}", zoneNotification.ZoneName, customerId));
+                else throw new Exception(string.Format("No routing product is assigned for zone {0}. Additional Info: country containing this zone is sold for customer with id {1}.", zoneNotification.ZoneName, customerId));
             }
         }
 

@@ -53,7 +53,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleZoneRoutingProductsByProduct = new Dictionary<int, SaleZoneRoutingProductsByZone>()
             };
             ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
-            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetSaleZoneRoutingProductsByZoneIds(customerIds, minimumDate, false, this._zoneIdsWithRateBED.Keys.ToList());
+            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetSaleZoneRoutingProductsByZoneIds(customerIds, 
+                minimumDate, this._zoneIdsWithRateBED.Keys.ToList());
 
             foreach (var saleZoneRoutingProduct in saleZoneRoutingProducts)
             {
