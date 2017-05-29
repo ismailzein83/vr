@@ -63,7 +63,7 @@ set identity_insert [BI].[SchemaConfiguration] off;
 ----------------------------------------------------------------------------------------------------
 end
 
-delete from[common].[ExtensionConfiguration] where ID='84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36'--'WhS_Sales_CostCalculationMethod_MarginPercentage'
+delete from[common].[ExtensionConfiguration] where ID IN ('84B2B3CD-2CFB-4A54-A619-EC51AE5CFA36','FA264705-917A-4A55-AC12-0A3418B9C7D7')--'WhS_Sales_CostCalculationMethod_MarginPercentage' ,'Routing Optimization'
 --[common].[ExtensionConfiguration]-------------------------------------------------------------------
 begin
 set nocount on;
