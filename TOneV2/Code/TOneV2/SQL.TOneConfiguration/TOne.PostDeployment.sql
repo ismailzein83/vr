@@ -82,7 +82,7 @@ as (select * from (values
 ('7A030E29-1FD6-42E6-92AD-66CCB566883C','Deal Completion Progress','Deal Completion Progress','WhS_Routing_RoutingOptimizerSettings'								,'{"Editor":"vr-whs-routing-routingoptimizersettings-dealcompletionprogress"}'),
 ('7DF74212-379A-4092-B025-701345FFDCE9','Quality','Quality','WhS_Routing_RoutingOptimizerSettings'																	,'{"Editor":"vr-whs-routing-routingoptimizersettings-quality"}'),
 ('CB8CC5ED-AFDA-4ED7-882D-1377666C141E','WhS_Routing_SupplierZoneToRPOptionType_HighestRate','Highest Rate','WhS_Routing_SupplierZoneToRPOptionType'				,'{"Editor":"vr-whs-routing-policy-rate-highest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionHighestRatePolicy, TOne.WhS.Routing.Business"}'),
-('FA264705-917A-4A55-AC12-0A3418B9C7D7','Routing Optimization','Routing Optimization','WhS_Routing_RouteRuleOptionPercentageSettings'								,'{"Editor":"vr-whs-routing-routerulesettings-percentage-optimization"}'),
+--('FA264705-917A-4A55-AC12-0A3418B9C7D7','Routing Optimization','Routing Optimization','WhS_Routing_RouteRuleOptionPercentageSettings'								,'{"Editor":"vr-whs-routing-routerulesettings-percentage-optimization"}'),
 ('49938AFB-0296-40F1-9EF7-9D790CD1EBA4','All Suppliers Except','All Suppliers Except','WhS_Routing_RouteOptionSettingsGroup'										,'{"Editor":"vr-whs-routing-routerulesettings-excluded"}'),
 ('E85F9E2F-1CE6-4CC3-9DF9-B664E63826F5','WhS_Routing_SupplierZoneToRPOptionType_LowestRate','Lowest Rate','WhS_Routing_SupplierZoneToRPOptionType'					,'{"Editor":"vr-whs-routing-policy-rate-lowest","BehaviorFQTN":"TOne.WhS.Routing.Business.SupplierZoneToRPOptionLowestRatePolicy, TOne.WhS.Routing.Business"}'),
 
