@@ -98,9 +98,12 @@ namespace TOne.WhS.Sales.Business
             if (zoneItem.CurrentRate.HasValue)
             {
                 decimal? firstSupplierRate = zoneItem.RPRouteDetail.RouteOptionsDetails.ElementAt(0).ConvertedSupplierRate;
-                decimal margin = zoneItem.CurrentRate.Value - firstSupplierRate.Value;
-                zoneItem.Margin = margin;
-                zoneItem.MarginPercentage = (margin / firstSupplierRate.Value) * 100;
+                if (firstSupplierRate.HasValue)
+                {
+                    decimal margin = zoneItem.CurrentRate.Value - firstSupplierRate.Value;
+                    zoneItem.Margin = margin;
+                    zoneItem.MarginPercentage = (firstSupplierRate.Value > 0) ? ((margin / firstSupplierRate.Value) * 100) : 0;
+                }
             }
         }
 
