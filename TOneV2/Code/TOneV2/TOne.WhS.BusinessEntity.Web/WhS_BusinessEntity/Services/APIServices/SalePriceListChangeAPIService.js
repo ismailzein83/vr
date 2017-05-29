@@ -26,15 +26,16 @@
                 responseTypeAsBufferArray: true
             });
         }
-        function GenerateSalePriceListFile(pricelistId, priceListType) {
-            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateSalePriceListFile"), { salepriceListId: pricelistId, salePriceListType: priceListType }
-            );
-        }
-        function EvaluateSalePriceListEmail(pricelistId) {
-            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "EvaluateSalePriceListEmail"), { salepriceListId: pricelistId });
+        function GenerateAndEvaluateSalePriceListEmail(pricelistId, priceListType) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePriceListEmail"), { salepriceListId: pricelistId, salePriceListType: priceListType });
         }
         function GetOwnerPriceListType(priceListId) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerPriceListType"), {
+                priceListId: priceListId
+            });
+        }
+        function SetPriceListAsSent(priceListId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "SetPriceListAsSent"), {
                 priceListId: priceListId
             });
         }
@@ -44,9 +45,9 @@
             GetFilteredSalePriceListRPChanges: GetFilteredSalePriceListRPChanges,
             GetOwnerName: GetOwnerName,
             DownloadSalePriceList: DownloadSalePriceList,
-            GenerateSalePriceListFile: GenerateSalePriceListFile,
-            EvaluateSalePriceListEmail: EvaluateSalePriceListEmail,
-            GetOwnerPriceListType: GetOwnerPriceListType
+            GenerateAndEvaluateSalePriceListEmail: GenerateAndEvaluateSalePriceListEmail,
+            GetOwnerPriceListType: GetOwnerPriceListType,
+            SetPriceListAsSent: SetPriceListAsSent
         });
     }
 

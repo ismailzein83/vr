@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
@@ -60,23 +61,31 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             VRFile file = salePriceListManager.DownloadSalePriceList(salepriceListId, salePriceListType);
             return GetExcelResponse(file.Content, file.Name);
         }
+        [HttpGet]
+        [Route("SetPriceListAsSent")]
+        public bool SetPriceListAsSent(int priceListId)
+        {
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+            var pricelist = salePriceListManager.GetPriceList(priceListId);
+            return salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { pricelist.OwnerId }, null);
+           
+        }
 
         [HttpGet]
-        [Route("GenerateSalePriceListFile")]
-        public long GenerateSalePriceListFile(long salepriceListId, SalePriceListType salePriceListType)
+        [Route("GenerateAndEvaluateSalePriceListEmail")]
+        public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(long salepriceListId, SalePriceListType salePriceListType)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             VRFile file = salePriceListManager.DownloadSalePriceList(salepriceListId, salePriceListType);
             VRFileManager fileManager = new VRFileManager();
-            return fileManager.AddFile(file);
+            long fileId = fileManager.AddFile(file);
+            var evaluatedObject = salePriceListManager.EvaluateEmail(salepriceListId);
+            return new SalePriceListEvaluatedEmail
+            {
+                FileId = fileId,
+                EvaluatedTemplate = evaluatedObject
+            };
         }
 
-        [HttpGet]
-        [Route("EvaluateSalePriceListEmail")]
-        public VRMailEvaluatedTemplate EvaluateSalePriceListEmail(long salepriceListId)
-        {
-            SalePriceListManager salePriceListManager = new SalePriceListManager();
-            return salePriceListManager.EvaluateEmail(salepriceListId);
-        }
     }
 }
