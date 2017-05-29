@@ -126,7 +126,7 @@
                                     var buildRecordFilterGroupExpressionInput = {
                                         RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(fields),
                                         FilterGroup: filterObj
-                                    }
+                                    };
 
                                     VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression(buildRecordFilterGroupExpressionInput).then(function (response) {
                                         $scope.expression = response;

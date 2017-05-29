@@ -119,7 +119,7 @@ function (UtilsService, VR_GenericData_DataRecordAlertRuleService, VR_GenericDat
             var buildRecordFilterGroupExpressionInput = {
                 RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(context.recordfields),
                 FilterGroup: currentRecordAlertRuleConfig.FilterGroup
-            }
+            };
 
             return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression(buildRecordFilterGroupExpressionInput).then(function (response) {
                 ctrl.datasource.push({
