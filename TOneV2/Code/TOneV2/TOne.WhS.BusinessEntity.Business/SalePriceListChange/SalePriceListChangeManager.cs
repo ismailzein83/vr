@@ -129,9 +129,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(pricelistId, null);
             var salePriceListCodeChanges = dataManager.GetFilteredSalePricelistCodeChanges(pricelistId, null);
+            var routingProductChanges = dataManager.GetFilteredSalePriceListRPChanges(pricelistId, null);
             CustomerPriceListChange changes = new CustomerPriceListChange();
             changes.CodeChanges.AddRange(salePriceListCodeChanges);
             changes.RateChanges.AddRange(salePriceListRateChanges);
+            changes.RoutingProductChanges.AddRange(routingProductChanges);
             changes.PriceListId = pricelistId;
 
             return changes;
