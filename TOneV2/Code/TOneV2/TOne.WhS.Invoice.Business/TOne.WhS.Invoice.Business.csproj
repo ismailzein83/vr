@@ -84,6 +84,7 @@
     <Compile Include="Extensions\CustomerInvoiceAccountSettings.cs" />
     <Compile Include="Extensions\CustomerInvoiceSettings.cs" />
     <Compile Include="Extensions\InvoiceCarrierAccountStatusChangedHandler.cs" />
+    <Compile Include="Extensions\InvoiceCarrierProfileStatusChangedHandler.cs" />
     <Compile Include="Extensions\InvoiceGeneratorActionPartnerCondition.cs" />
     <Compile Include="Extensions\SupplierInvoiceGenerator.cs" />
     <Compile Include="InvoiceAccountManager.cs" />

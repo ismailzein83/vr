@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business.CarrierProfiles;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -81,6 +82,7 @@ namespace TOne.WhS.BusinessEntity.Business
             int carrierProfileId = -1;
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            carrierProfile.Settings.ActivationStatus = CarrierProfileActivationStatus.InActive;
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
@@ -100,7 +102,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateCarrierProfileToEdit(carrierProfileToEdit);
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-
+            carrierProfileToEdit.Settings.ActivationStatus = GetCarrierProfileActivationStatus(carrierProfileToEdit.CarrierProfileId);
             bool updateActionSucc = dataManager.Update(carrierProfileToEdit);
             UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new UpdateOperationOutput<CarrierProfileDetail>();
 
@@ -122,6 +124,31 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<CarrierProfile> GetCarrierProfiles()
         {
             return GetCachedCarrierProfiles().Values;
+        }
+        public CarrierProfileActivationStatus GetCarrierProfileActivationStatus(int carrierProfileId)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            return carrierProfile.Settings.ActivationStatus;
+        }
+
+        public void ReevaluateCarrierProfileActivationStatus(int carrierProfileId,CarrierProfileActivationStatus status)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            if (carrierProfile.Settings.ActivationStatus != status)
+            {
+                carrierProfile.Settings.ActivationStatus = status;
+                ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+                bool updateActionSucc = dataManager.Update(new CarrierProfileToEdit
+                {
+                    CarrierProfileId = carrierProfile.CarrierProfileId,
+                    CreatedTime = carrierProfile.CreatedTime,
+                    Name = carrierProfile.Name,
+                    Settings = carrierProfile.Settings,
+                    SourceId = carrierProfile.SourceId
+                });
+                VREventManager vrEventManager = new VREventManager();
+                vrEventManager.ExecuteEventHandlersAsync(new CarrierProfileStatusChangedEventPayload { CarrierProfileId = carrierProfileId });
+            }
         }
         #endregion
 

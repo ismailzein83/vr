@@ -107,6 +107,7 @@
     <Compile Include="AccountManagerManager.cs" />
     <Compile Include="BECacheExpirationChecker.cs" />
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
+    <Compile Include="CarrierProfiles\BaseCarrierProfileEventPayload.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="CarrierAccounts\CustomerGroupContext.cs" />
     <Compile Include="CarrierAccounts\SupplierGroupContext.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Country\CountryNotSoldToCustomerFilter.cs" />
     <Compile Include="CustomerSellingProductManager.cs" />
     <Compile Include="Country\CustomerZoneManager.cs" />
+    <Compile Include="EventHandler\ReevaluateCarrierProfileStatusChangedHandler.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />

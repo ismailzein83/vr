@@ -8,6 +8,7 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
+    public enum CarrierProfileActivationStatus { Active = 0, InActive = 1 }
     public class BaseCarrierProfile
     {
         public int CarrierProfileId { get; set; }
@@ -22,6 +23,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class CarrierProfileSettings
     {
+        public CarrierProfileActivationStatus ActivationStatus { get; set; }
         public bool CustomerInvoiceByProfile { get; set; }
         public string Company { get; set; }
 

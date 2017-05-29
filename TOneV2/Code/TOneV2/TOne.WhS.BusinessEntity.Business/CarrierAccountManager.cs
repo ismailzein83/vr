@@ -11,7 +11,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Caching;
 using Vanrise.Invoice.Entities;
-//using TOne.WhS.BusinessEntity.Business.CarrierAccounts;
+using TOne.WhS.BusinessEntity.Business.CarrierAccounts;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -293,8 +293,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 carrierAccount.CarrierAccountId = carrierAccountId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(CarrierAccountLoggableEntity.Instance, carrierAccount);
 
-                //     VREventManager vrEventManager = new VREventManager();
-                // vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
+                VREventManager vrEventManager = new VREventManager();
+                vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountId });
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = carrierAccountDetail;
@@ -314,9 +314,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (TryUpdateCarrierAccount(carrierAccountToEdit, true))
             {
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
-                // VREventManager vrEventManager = new VREventManager();
-                //  vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
-
+      
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
 
@@ -346,6 +344,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
                 }
+                VREventManager vrEventManager = new VREventManager();
+                vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
                 return true;
             }
             return false;

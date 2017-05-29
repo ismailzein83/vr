@@ -36,15 +36,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 foreach (var invoiceAccount in invoiceAccounts)
                 {
-                    invoiceAccountManager.TryUpdateInvoiceAccount(new Vanrise.Invoice.Entities.VRInvoiceAccount
-                    {
-                        PartnerId = invoiceAccount.InvoiceAccountId.ToString(),
-                        IsDeleted = false,
-                        Status = vrInvoiceAccountStatus,
-                        BED = invoiceAccount.BED,
-                        EED = invoiceAccount.EED,
-                        InvoiceTypeId = invoiceAccount.Settings.InvoiceTypeId,
-                    });
+                    invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED , invoiceAccount.EED,vrInvoiceAccountStatus,false);
                 }
             }
         }

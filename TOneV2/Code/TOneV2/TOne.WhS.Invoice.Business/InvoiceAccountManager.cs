@@ -96,6 +96,7 @@ namespace TOne.WhS.Invoice.Business
                 if (updateActionSucc)
                 {
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    UpdateVRInvoiceAccount(invoiceAccount);
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = InvoiceAccountDetailMapper(invoiceAccount);
                 }
@@ -220,6 +221,8 @@ namespace TOne.WhS.Invoice.Business
             var invoiceAccounts = GetCachedInvoiceAccounts();
             return invoiceAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
         }
+
+
 
         #region LoadInvoiceValidationData
         public InvoiceValidationData LoadInvoiceValidationData(int? carrierProfileId, int? carrierAccountId, int invoiceAccountId)
@@ -757,6 +760,31 @@ namespace TOne.WhS.Invoice.Business
                 var customerAccount = _carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
                 invoiceAccountsData = invoiceAccountsDataDict.GetOrCreateItem(customerAccount.CarrierProfileId);
                 invoiceAccountsData.Add(carrierInvoiceAccountData);
+            }
+        }
+
+        private bool UpdateVRInvoiceAccount(InvoiceAccount invoiceAccount)
+        {
+            Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
+            VRInvoiceAccountStatus vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active;
+            if (invoiceAccount.CarrierAccountId.HasValue)
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
+                switch (carrierAccount.CarrierAccountSettings.ActivationStatus)
+                {
+                    case BusinessEntity.Entities.ActivationStatus.Active: vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active; break;
+                    case BusinessEntity.Entities.ActivationStatus.Inactive: vrInvoiceAccountStatus = VRInvoiceAccountStatus.InActive; break;
+                }
+                return invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrInvoiceAccountStatus, false);
+            }else
+            {
+                var carrierProfile = _carrierProfileManager.GetCarrierProfile(invoiceAccount.CarrierProfileId.Value);
+                switch (carrierProfile.Settings.ActivationStatus)
+                {
+                    case CarrierProfileActivationStatus.Active: vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active; break;
+                    case CarrierProfileActivationStatus.InActive: vrInvoiceAccountStatus = VRInvoiceAccountStatus.InActive; break;
+                }
+                return invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrInvoiceAccountStatus, false);
             }
         }
         #endregion
