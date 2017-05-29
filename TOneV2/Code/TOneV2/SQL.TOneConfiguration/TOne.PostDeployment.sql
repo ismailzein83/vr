@@ -285,6 +285,7 @@ delete from [sec].[View] where [Id] in ('3FB29A16-7107-42B7-851F-97ABA49C2EDF', 
 delete from [sec].[View] where [Id] in ('8544F681-3D7A-4489-82AD-0712349B005C', 'AA6326E5-CFD2-49B1-9AAF-DA0627BDCD11')
 --delete sale and purchase rules 
 delete from [sec].[View] where [Id] in ('81D8BD96-2074-43BD-A58C-C59D2CE15B3C', 'E2AD2BF1-51C3-4EC2-8A20-690FBEC34C90','9FD65F16-FE17-4207-9905-80C414F86B1B','108F776A-6269-40CE-868B-BD42FCED981A','6FC297C5-F82A-493A-9136-393118FC2D5F','6313A9A0-6B4D-4005-89AF-4157CC2450B4')
+delete from [sec].[View] where [Id] in ('31F69E85-8D77-488D-9726-907DC477FFA8')--,'Customer Product'
 
 delete from [sec].[Module] where [Id] in ('DD18AB4F-2317-4E1E-8CF7-D52C6C8271AF', '4E881659-0067-4FFF-B42F-E2750EC46B82')--pricing rules nodes
 delete from [sec].[Module] where [Id] in ('4A2282CA-525E-40A7-951D-DE29E3145F2A', '4E881659-0067-4FFF-B42F-E2750EC46B82')--'Account Manager'
@@ -324,7 +325,7 @@ as (select * from (values
 ('2B913255-F217-4975-ABB7-765EE7FC733F','Pricelists','Sale Pricelists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceListManagement'										,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35),
 ('A309D744-7798-4D62-9C85-29E5EFCF6352','Pricelist Template','Pricelist Template Management','#/view/WhS_BusinessEntity/Views/SalePriceListTemplate/SalePriceListTemplateManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','WhS_BE/SalePriceListTemplate/GetFilteredSalePriceListTemplates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',40),
 ('2D8901D2-4BF2-48E5-ABDD-353E572B7236','Zone Routing Product','Sale Zone Routing Product','#/view/WhS_BusinessEntity/Views/ZoneRoutingProduct/ZoneRoutingProductManagement'		,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/ZoneRoutingProduct/GetFilteredZoneRoutingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',45),
-('31F69E85-8D77-488D-9726-907DC477FFA8','Customer Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement'				,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50),
+--('31F69E85-8D77-488D-9726-907DC477FFA8','Customer Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement'				,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50),
 
 ('3A7700BB-4822-468D-BEBA-7404DE0ABD1F','Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan'													,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_Sales/RatePlan/GetRatePlanSettingsData',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('5DC5C8ED-6D09-44DA-A77F-85C4DC4354D0','Numbering Plan','Numbering Plan Management','#/view/WhS_CodePreparation/Views/CodePreparationManagement'	,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_CodePrep/CodePreparation/CheckCodePreparationState',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
