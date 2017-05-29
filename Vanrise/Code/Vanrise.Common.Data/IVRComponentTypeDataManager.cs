@@ -13,5 +13,7 @@ namespace Vanrise.Common.Data
         bool Insert(VRComponentType componentType);
         bool Update(VRComponentType componentType);
         bool AreVRComponentTypeUpdated(ref object updateHandle);
+
+        void GenerateScript(List<VRComponentType> componentTypes, Action<string, string> addEntityScript);
     }
 }

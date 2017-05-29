@@ -13,5 +13,7 @@ namespace Vanrise.Common.Data
         bool Update(OverriddenConfiguration overriddenConfiguration);
         bool Insert(OverriddenConfiguration overriddenConfiguration);
         bool AreOverriddenConfigurationsUpdated(ref object updateHandle);
+
+        void GenerateScript(List<OverriddenConfiguration> overriddenConfigurations, Action<string, string> addEntityScript);
     }
 }

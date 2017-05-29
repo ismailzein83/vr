@@ -13,5 +13,7 @@ namespace Vanrise.GenericData.Data
         bool UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition);
         bool AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition);
         bool AreGenericRuleDefinitionsUpdated(ref object updateHandle);
+
+        void GenerateScript(List<BusinessEntityDefinition> beDefinitions, Action<string, string> addEntityScript);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Data
@@ -10,5 +11,7 @@ namespace Vanrise.Common.Data
         bool UpdateSetting(SettingToEdit setting);
 
         bool AreSettingsUpdated(ref object updateHandle);
+
+        void GenerateScript(List<Setting> settings, Action<string, string> addEntityScript);
     }
 }

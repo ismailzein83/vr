@@ -16,5 +16,7 @@ namespace Vanrise.Common.Data
         bool Insert(VRObjectTypeDefinition vrObjectTypeDefinitionItem);
 
         bool Update(VRObjectTypeDefinition vrObjectTypeDefinitionItem);
+
+        void GenerateScript(List<VRObjectTypeDefinition> objTypeDefs, Action<string, string> addEntityScript);
     }
 }

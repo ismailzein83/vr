@@ -16,5 +16,7 @@ namespace Vanrise.Common.Data
         bool Insert(VRMailMessageType vrMailMessageTypeItem);
 
         bool Update(VRMailMessageType vrMailMessageTypeItem);
+
+        void GenerateScript(List<VRMailMessageType> mailTypes, Action<string, string> addEntityScript);
     }
 }

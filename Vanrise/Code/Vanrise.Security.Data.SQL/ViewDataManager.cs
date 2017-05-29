@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Security.Entities;
 
@@ -77,6 +78,44 @@ namespace Vanrise.Security.Data.SQL
         public bool AreViewsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[sec].[View]", ref updateHandle);
+        }
+        
+        public void GenerateScript(List<View> views, Action<string, string> addEntityScript)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var view in views)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}',{3},{4},{5},{6},{7},{8},{9},{10})",
+                    view.ViewId, view.Name, view.Title, GetStringSQLValue(view.Url), GetStringSQLValue(view.ModuleId.HasValue ? view.ModuleId.Value.ToString() : null), GetStringSQLValue(view.ActionNames),
+                    GetStringSQLValue(view.Audience != null ? Serializer.Serialize(view.Audience) : null), GetStringSQLValue(view.ViewContent != null ? Serializer.Serialize(view.ViewContent) : null),
+                    GetStringSQLValue(view.Settings != null ? Serializer.Serialize(view.Settings) : null), GetStringSQLValue(view.Type.ToString()), view.Rank);
+            }
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);", scriptBuilder);
+            addEntityScript("[sec].[View]", script);
+        }
+
+        private string GetStringSQLValue(string value)
+        {
+            return value != null ? string.Format("'{0}'", value) : "null";
         }
 
         #endregion

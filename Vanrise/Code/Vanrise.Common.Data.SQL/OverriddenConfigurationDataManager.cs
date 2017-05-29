@@ -42,6 +42,38 @@ namespace Vanrise.Common.Data.SQL
           int affectedRecords = ExecuteNonQuerySP("Common.sp_OverriddenConfiguration_Update", overriddenConfiguration.OverriddenConfigurationId, overriddenConfiguration.Name, overriddenConfiguration.GroupId, serializedSettings);
           return (affectedRecords > 0);
       }
+
+      public void GenerateScript(List<OverriddenConfiguration> overriddenConfigurations, Action<string, string> addEntityScript)
+      {
+          StringBuilder scriptBuilder = new StringBuilder();
+          foreach (var itm in overriddenConfigurations)
+          {
+              if (scriptBuilder.Length > 0)
+              {
+                  scriptBuilder.Append(",");
+                  scriptBuilder.AppendLine();
+              }
+              scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", itm.OverriddenConfigurationId, itm.Name, itm.GroupId, Serializer.Serialize(itm.Settings));
+          }
+          string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[GroupId],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[GroupId],[Settings]))
+merge	[common].[OverriddenConfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[GroupId] = s.[GroupId],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[GroupId],[Settings])
+	values(s.[ID],s.[Name],s.[GroupId],s.[Settings]);", scriptBuilder);
+          addEntityScript("[common].[OverriddenConfiguration]", script);
+      }
+
       #endregion
 
       #region Mappers
@@ -58,5 +90,6 @@ namespace Vanrise.Common.Data.SQL
       }
 
       #endregion
+
     }
 }

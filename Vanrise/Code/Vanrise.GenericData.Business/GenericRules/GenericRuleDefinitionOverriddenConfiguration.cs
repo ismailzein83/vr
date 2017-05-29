@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Data;
 
 namespace Vanrise.GenericData.Business
 {
@@ -39,9 +40,8 @@ namespace Vanrise.GenericData.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
                 GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-                List<VRLoggableEntityBase> loggableEntities = new List<VRLoggableEntityBase>();
+                List<GenericRuleDefinition> ruleDefinitions = new List<GenericRuleDefinition>();
                 foreach (var config in context.Configs)
                 {
                     GenericRuleDefinitionOverriddenConfiguration ruleDefinitionConfig = config.Settings.ExtendedSettings.CastWithValidate<GenericRuleDefinitionOverriddenConfiguration>("ruleDefinitionConfig", config.OverriddenConfigurationId);
@@ -62,34 +62,38 @@ namespace Vanrise.GenericData.Business
                         ruleDefinition.SettingsDefinition = ruleDefinitionConfig.OverriddenSettingsDefinition;
                     if (ruleDefinitionConfig.OverriddenSecurity != null)
                         ruleDefinition.Security = ruleDefinitionConfig.OverriddenSecurity;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", ruleDefinition.GenericRuleDefinitionId, ruleDefinition.Name, Serializer.Serialize(ruleDefinition));
-                    loggableEntities.Add(new GenericRuleManager<GenericRule>.GenericRuleLoggableEntity(ruleDefinitionConfig.RuleDefinitionId));
+                    ruleDefinitions.Add(ruleDefinition);
+                    
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Details]))
-merge	[genericdata].[GenericRuleDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Name],[Details])
-	values(s.[ID],s.[Name],s.[Details]);", scriptBuilder);
-                context.AddEntityScript("[genericdata].[GenericRuleDefinition]", script);
+                GenerateScript(ruleDefinitions, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<GenericRuleDefinitionOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).RuleDefinitionId).Distinct();
+                GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+                List<GenericRuleDefinition> ruleDefinitions = new List<GenericRuleDefinition>();
+                foreach (var id in ids)
+                {
+                    var ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(id);
+                    ruleDefinition.ThrowIfNull("ruleDefinition", id);
+                    ruleDefinitions.Add(ruleDefinition);
+                }
+                GenerateScript(ruleDefinitions, context.AddEntityScript);
+            } 
+
+            private void GenerateScript(List<GenericRuleDefinition> ruleDefinitions, Action<string, string> addEntityScript)
+            {
+                IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
+                dataManager.GenerateScript(ruleDefinitions, addEntityScript);
+                List<VRLoggableEntityBase> loggableEntities = new List<VRLoggableEntityBase>();
+                foreach (var ruleDefinition in ruleDefinitions)
+                {
+                    loggableEntities.Add(new GenericRuleManager<GenericRule>.GenericRuleLoggableEntity(ruleDefinition.GenericRuleDefinitionId));
+                }
                 string loggableEntityScriptEntityName;
                 var loggableEntitiesScript = new Vanrise.Common.Business.VRLoggableEntityManager().GenerateLoggableEntitiesScript(loggableEntities, out loggableEntityScriptEntityName);
-                context.AddEntityScript(String.Format("{0} - Generic Rules", loggableEntityScriptEntityName), loggableEntitiesScript);
+                addEntityScript(String.Format("{0} - Generic Rules", loggableEntityScriptEntityName), loggableEntitiesScript);
             }
         }
 

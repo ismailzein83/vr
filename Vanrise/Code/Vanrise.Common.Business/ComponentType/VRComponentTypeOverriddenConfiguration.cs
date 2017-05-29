@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -31,8 +32,8 @@ namespace Vanrise.Common.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
                 VRComponentTypeManager componentTypeManager = new VRComponentTypeManager();
+                List<VRComponentType> componentTypes = new List<VRComponentType>();
                 foreach (var config in context.Configs)
                 {
                     VRComponentTypeOverriddenConfiguration componentTypeConfig = config.Settings.ExtendedSettings.CastWithValidate<VRComponentTypeOverriddenConfiguration>("componentTypeConfig", config.OverriddenConfigurationId);
@@ -45,30 +46,29 @@ namespace Vanrise.Common.Business
                         componentType.Name = componentTypeConfig.OverriddenName;
                     if (componentTypeConfig.OverriddenSettings != null)
                         componentType.Settings = componentTypeConfig.OverriddenSettings;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", componentType.VRComponentTypeId, componentType.Name, componentType.Settings.VRComponentTypeConfigId, Serializer.Serialize(componentType.Settings));
+                    componentTypes.Add(componentType);
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[ConfigID],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[ConfigID],[Settings]))
-merge	[common].[VRComponentType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[ConfigID],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);", scriptBuilder);
-                context.AddEntityScript("[common].[VRComponentType]", script);
+                GenerateScript(componentTypes, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<VRComponentTypeOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).VRComponentTypeId).Distinct();
+                VRComponentTypeManager componentTypeManager = new VRComponentTypeManager();
+                List<VRComponentType> componentTypes = new List<VRComponentType>();
+                foreach (var id in ids)
+                {
+                    var componentType = componentTypeManager.GetComponentType(id);
+                    componentType.ThrowIfNull("componentType", id);
+                    componentTypes.Add(componentType);
+                }
+                GenerateScript(componentTypes, context.AddEntityScript);
+            }
+
+            private void GenerateScript(List<VRComponentType> componentTypes, Action<string, string> addEntityScript)
+            {
+                IVRComponentTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRComponentTypeDataManager>();
+                dataManager.GenerateScript(componentTypes, addEntityScript);
             }
         }
 

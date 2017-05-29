@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -33,8 +34,8 @@ namespace Vanrise.Common.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
                 SettingManager settingManager = new SettingManager();
+                List<Setting> settings = new List<Setting>();
                 foreach (var config in context.Configs)
                 {
                     SettingOverriddenConfiguration settingConfig = config.Settings.ExtendedSettings.CastWithValidate<SettingOverriddenConfiguration>("mailTypeConfig", config.OverriddenConfigurationId);
@@ -48,30 +49,31 @@ namespace Vanrise.Common.Business
                         setting.Category = settingConfig.OverriddenCategory;
                     if (settingConfig.OverriddenData!= null)
                         setting.Data = settingConfig.OverriddenData;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}','{4}','{5}',{6})", setting.SettingId, setting.Name,setting.Type, setting.Category, Serializer.Serialize(setting.Settings, true), Serializer.Serialize(setting.Data), setting.IsTechnical ? 1 : 0);
+                    settings.Add(setting);
+                    
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
-merge	[common].[Setting] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
-when not matched by target then
-	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);", scriptBuilder);
-                context.AddEntityScript("[common].[Setting]", script);
+                GenerateScript(settings, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<SettingOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).SettingId).Distinct();
+                SettingManager settingManager = new SettingManager();
+                List<Setting> settings = new List<Setting>();
+                foreach (var id in ids)
+                {
+                    var setting = settingManager.GetSetting(id);
+                    setting.ThrowIfNull("setting", id);
+                    settings.Add(setting);
+
+                }
+                GenerateScript(settings, context.AddEntityScript);
+            }
+
+            private void GenerateScript(List<Setting> settings, Action<string, string> addEntityScript)
+            {
+                ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
+                dataManager.GenerateScript(settings, addEntityScript);
             }
         }
 

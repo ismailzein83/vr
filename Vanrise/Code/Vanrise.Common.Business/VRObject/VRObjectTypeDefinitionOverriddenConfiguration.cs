@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -30,9 +31,9 @@ namespace Vanrise.Common.Business
         private class VRObjectTypeDefinitionOverriddenConfigurationBehavior : OverriddenConfigurationBehavior
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
-            {
-                StringBuilder scriptBuilder = new StringBuilder();
+            {                
                 VRObjectTypeDefinitionManager objTypeDefManager = new VRObjectTypeDefinitionManager();
+                List<VRObjectTypeDefinition> objTypeDefs = new List<VRObjectTypeDefinition>();
                 foreach (var config in context.Configs)
                 {
                     VRObjectTypeDefinitionOverriddenConfiguration objTypeDefConfig = config.Settings.ExtendedSettings.CastWithValidate<VRObjectTypeDefinitionOverriddenConfiguration>("objTypeDefConfig", config.OverriddenConfigurationId);
@@ -45,30 +46,30 @@ namespace Vanrise.Common.Business
                         objTypeDef.Name = objTypeDefConfig.OverriddenName;
                     if (objTypeDefConfig.OverriddenSettings != null)
                         objTypeDef.Settings = objTypeDefConfig.OverriddenSettings;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", objTypeDef.VRObjectTypeDefinitionId, objTypeDef.Name, Serializer.Serialize(objTypeDef.Settings));
+                    objTypeDefs.Add(objTypeDef);
+                    
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
-merge	[common].[VRObjectTypeDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);", scriptBuilder);
-                context.AddEntityScript("[common].[VRObjectTypeDefinition]", script);
+                GenerateScript(objTypeDefs, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<VRObjectTypeDefinitionOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).VRObjectTypeDefinitionId).Distinct();
+                VRObjectTypeDefinitionManager objTypeDefManager = new VRObjectTypeDefinitionManager();
+                List<VRObjectTypeDefinition> objTypeDefs = new List<VRObjectTypeDefinition>();
+                foreach (var id in ids)
+                {
+                    var objTypeDef = objTypeDefManager.GetVRObjectTypeDefinition(id);
+                    objTypeDef.ThrowIfNull("objTypeDef", id);
+                    objTypeDefs.Add(objTypeDef);
+                }
+                GenerateScript(objTypeDefs, context.AddEntityScript);
+            }
+
+            private void GenerateScript(List<VRObjectTypeDefinition> objTypeDefs, Action<string, string> addEntityScript)
+            {
+                IVRObjectTypeDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRObjectTypeDefinitionDataManager>();
+                dataManager.GenerateScript(objTypeDefs, addEntityScript);
             }
         }
 

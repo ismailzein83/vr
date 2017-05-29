@@ -33,6 +33,23 @@ namespace Vanrise.Common.Data.SQL
                 });
         }
 
+        public string GenerateScript(List<VRLoggableEntity> loggableEntities, out string scriptEntityName)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var loggableEntity in loggableEntities)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", loggableEntity.VRLoggableEntityId, loggableEntity.UniqueName, Serializer.Serialize(loggableEntity.Settings));
+            }
+            string script = String.Format(@"set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);", scriptBuilder);
+            scriptEntityName = "[logging].[LoggableEntity]";
+            return script;
+        }
+
         public bool AreVRObjectTrackingUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[logging].[LoggableEntity]", ref updateHandle);

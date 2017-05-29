@@ -16,5 +16,7 @@ namespace Vanrise.Notification.Data
         bool Insert(VRAlertRuleType vrAlertRuleTypeItem);
 
         bool Update(VRAlertRuleType vrAlertRuleTypeItem);
+
+        void GenerateScript(List<VRAlertRuleType> ruleTypes, Action<string, string> addEntityScript);
     }
 }

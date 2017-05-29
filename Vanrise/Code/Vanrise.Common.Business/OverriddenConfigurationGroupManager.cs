@@ -22,6 +22,12 @@ namespace Vanrise.Common.Business
         {
             return GetCachedOverriddenConfigurationGroups().GetRecord(overriddenConfigurationGroupId);
         }
+
+        public void GenerateScript(List<OverriddenConfigurationGroup> groups, Action<string, string> addEntityScript)
+        {
+            IOverriddenConfigurationGroupDataManager dataManager = CommonDataManagerFactory.GetDataManager<IOverriddenConfigurationGroupDataManager>();
+            dataManager.GenerateScript(groups, addEntityScript);
+        }
         public Vanrise.Entities.InsertOperationOutput<OverriddenConfigGroupDetail> AddOverriddenConfigurationGroup(OverriddenConfigurationGroup overriddenConfigurationGroup)
         {
             Vanrise.Entities.InsertOperationOutput<OverriddenConfigGroupDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<OverriddenConfigGroupDetail>();

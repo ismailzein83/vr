@@ -11,8 +11,9 @@ namespace Vanrise.Common.Data
     {
         Guid AddOrUpdateLoggableEntity( string entityUniqueName, VRLoggableEntitySettings loggableEntitySettings);
         bool AreVRObjectTrackingUpdated(ref object updateHandle);
-
  
         List<VRLoggableEntity> GetAll();
+
+        string GenerateScript(List<VRLoggableEntity> loggableEntities, out string scriptEntityName);
     }
 }

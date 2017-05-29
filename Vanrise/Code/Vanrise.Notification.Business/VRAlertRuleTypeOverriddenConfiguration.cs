@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
+using Vanrise.Notification.Data;
 
 namespace Vanrise.Notification.Business
 {
@@ -33,9 +34,8 @@ namespace Vanrise.Notification.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
                 VRAlertRuleTypeManager ruleTypeManager = new VRAlertRuleTypeManager();
-                List<VRLoggableEntityBase> loggableEntities = new List<VRLoggableEntityBase>();
+                List<VRAlertRuleType> ruleTypes = new List<VRAlertRuleType>();
                 foreach (var config in context.Configs)
                 {
                     VRAlertRuleTypeOverriddenConfiguration ruleTypeConfig = config.Settings.ExtendedSettings.CastWithValidate<VRAlertRuleTypeOverriddenConfiguration>("ruleTypeConfig", config.OverriddenConfigurationId);
@@ -47,34 +47,37 @@ namespace Vanrise.Notification.Business
                         ruleType.Name = ruleTypeConfig.OverriddenName;
                     if (ruleTypeConfig.OverriddenSettings != null)
                         ruleType.Settings = ruleTypeConfig.OverriddenSettings;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", ruleType.VRAlertRuleTypeId, ruleType.Name, Serializer.Serialize(ruleType.Settings));
-                    loggableEntities.Add(new VRAlertRuleManager.VRAlertRuleLoggableEntity(ruleTypeConfig.RuleTypeId));
+                    ruleTypes.Add(ruleType);                    
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
-merge	[VRNotification].[VRAlertRuleType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);", scriptBuilder);
-                context.AddEntityScript("[VRNotification].[VRAlertRuleType]", script);
+                GenerateScript(ruleTypes, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<VRAlertRuleTypeOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).RuleTypeId).Distinct();
+                VRAlertRuleTypeManager ruleTypeManager = new VRAlertRuleTypeManager();
+                List<VRAlertRuleType> ruleTypes = new List<VRAlertRuleType>();
+                foreach (var id in ids)
+                {
+                    var ruleType = ruleTypeManager.GetVRAlertRuleType(id);
+                    ruleType.ThrowIfNull("ruleType", id);
+                    ruleTypes.Add(ruleType);
+                }
+                GenerateScript(ruleTypes, context.AddEntityScript);
+            } 
+
+            private void GenerateScript( List<VRAlertRuleType> ruleTypes, Action<string, string> addEntityScript)
+            {
+                IVRAlertRuleTypeDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleTypeDataManager>();
+                dataManager.GenerateScript(ruleTypes, addEntityScript);
+                List<VRLoggableEntityBase> loggableEntities = new List<VRLoggableEntityBase>();
+                foreach (var ruleType in ruleTypes)
+                {
+                    loggableEntities.Add(new VRAlertRuleManager.VRAlertRuleLoggableEntity(ruleType.VRAlertRuleTypeId));
+                }
                 string loggableEntityScriptEntityName;
                 var loggableEntitiesScript = new Vanrise.Common.Business.VRLoggableEntityManager().GenerateLoggableEntitiesScript(loggableEntities, out loggableEntityScriptEntityName);
-                context.AddEntityScript(String.Format("{0} - Alert Rules", loggableEntityScriptEntityName), loggableEntitiesScript);
+                addEntityScript(String.Format("{0} - Alert Rules", loggableEntityScriptEntityName), loggableEntitiesScript);
             }
         }
 

@@ -16,5 +16,7 @@ namespace Vanrise.Security.Data
         bool UpdateViewRank(Guid viewId, Guid moduleId, int rank);
 
         bool AreViewsUpdated(ref object updateHandle);
+
+        void GenerateScript(List<View> views, Action<string, string> addEntityScript);
     }
 }

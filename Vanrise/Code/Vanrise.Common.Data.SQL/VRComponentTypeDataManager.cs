@@ -51,6 +51,37 @@ namespace Vanrise.Common.Data.SQL
             return base.IsDataUpdated("common.VRComponentType", ref updateHandle);
         }
 
+        public void GenerateScript(List<VRComponentType> componentTypes, Action<string, string> addEntityScript)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var componentType in componentTypes)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", componentType.VRComponentTypeId, componentType.Name, componentType.Settings.VRComponentTypeConfigId, Serializer.Serialize(componentType.Settings));
+            }
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[ConfigID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigID],[Settings]))
+merge	[common].[VRComponentType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigID],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);", scriptBuilder);
+            addEntityScript("[common].[VRComponentType]", script);
+        }
+
         #endregion
 
         #region Mappers

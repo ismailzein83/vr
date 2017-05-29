@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Data;
 
 namespace Vanrise.GenericData.Business
 {
@@ -32,9 +33,8 @@ namespace Vanrise.GenericData.Business
     {
         public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
         {
-            StringBuilder scriptBuilder = new StringBuilder();
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
-            List<VRLoggableEntityBase> loggableEntities = new List<VRLoggableEntityBase>();
+            List<BusinessEntityDefinition> beDefinitions = new List<BusinessEntityDefinition>();
             foreach (var config in context.Configs)
             {
                 BEDefinitionOverriddenConfiguration beDefinitionConfig = config.Settings.ExtendedSettings.CastWithValidate<BEDefinitionOverriddenConfiguration>("beDefinitionConfig", config.OverriddenConfigurationId);
@@ -46,12 +46,33 @@ namespace Vanrise.GenericData.Business
                     beDefinition.Title = beDefinitionConfig.OverriddenTitle;
                 if (beDefinitionConfig.OverriddenSettings != null)
                     beDefinition.Settings = beDefinitionConfig.OverriddenSettings;
-                if (scriptBuilder.Length > 0)
-                {
-                    scriptBuilder.Append(",");
-                    scriptBuilder.AppendLine();
-                }
-                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}','{3}')", beDefinition.BusinessEntityDefinitionId, beDefinition.Name, beDefinition.Title, Serializer.Serialize(beDefinition.Settings));
+                beDefinitions.Add(beDefinition);
+                
+            }
+            GenerateScript(beDefinitions, context.AddEntityScript);
+        }
+
+        public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+        {
+            IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<BEDefinitionOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).BusinessEntityDefinitionId).Distinct();
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+            List<BusinessEntityDefinition> beDefinitions = new List<BusinessEntityDefinition>();
+            foreach (var id in ids)
+            {
+                var beDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(id);
+                beDefinition.ThrowIfNull("beDefinition", id);
+                beDefinitions.Add(beDefinition);
+            }
+            GenerateScript(beDefinitions, context.AddEntityScript);
+        } 
+
+        private void GenerateScript(List<BusinessEntityDefinition> beDefinitions, Action<string, string> addEntityScript)
+        {
+            IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
+            dataManager.GenerateScript(beDefinitions, addEntityScript);
+            List<VRLoggableEntityBase> loggableEntities = new List<VRLoggableEntityBase>();
+            foreach (var beDefinition in beDefinitions)
+            {
                 if (beDefinition.Settings != null)
                 {
                     var loggableEntity = beDefinition.Settings.GetLoggableEntity(new BusinessEntityDefinitionSettingsGetLoggableEntityContext { BEDefinition = beDefinition });
@@ -59,28 +80,11 @@ namespace Vanrise.GenericData.Business
                         loggableEntities.Add(loggableEntity);
                 }
             }
-            string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Title],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Settings]))
-merge	[genericdata].[BusinessEntityDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Title],[Settings])
-	values(s.[ID],s.[Name],s.[Title],s.[Settings]);", scriptBuilder);
-            context.AddEntityScript("[genericdata].[BusinessEntityDefinition]", script);
-            if(loggableEntities.Count> 0)
+            if (loggableEntities.Count > 0)
             {
                 string loggableEntityScriptEntityName;
                 var loggableEntitiesScript = new Vanrise.Common.Business.VRLoggableEntityManager().GenerateLoggableEntitiesScript(loggableEntities, out loggableEntityScriptEntityName);
-                context.AddEntityScript(String.Format("{0} - Business Entity Definitions", loggableEntityScriptEntityName), loggableEntitiesScript);
+                addEntityScript(String.Format("{0} - Business Entity Definitions", loggableEntityScriptEntityName), loggableEntitiesScript);
             }
         }
 

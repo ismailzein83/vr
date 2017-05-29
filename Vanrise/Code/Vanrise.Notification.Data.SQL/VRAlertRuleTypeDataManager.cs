@@ -54,6 +54,37 @@ namespace Vanrise.Notification.Data.SQL
             return (affectedRecords > 0);
         }
 
+        public void GenerateScript(List<VRAlertRuleType> ruleTypes, Action<string, string> addEntityScript)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var ruleType in ruleTypes)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", ruleType.VRAlertRuleTypeId, ruleType.Name, Serializer.Serialize(ruleType.Settings));
+            }
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[VRNotification].[VRAlertRuleType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);", scriptBuilder);
+            addEntityScript("[VRNotification].[VRAlertRuleType]", script);
+        }
+
         #endregion
 
 

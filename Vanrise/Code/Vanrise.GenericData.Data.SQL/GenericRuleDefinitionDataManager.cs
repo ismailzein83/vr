@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Entities;
 
@@ -41,6 +42,38 @@ namespace Vanrise.GenericData.Data.SQL
         {
             int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Update", genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition.Name, Vanrise.Common.Serializer.Serialize(genericRuleDefinition));
             return (affectedRows == 1);
+        }
+
+        public void GenerateScript(List<GenericRuleDefinition> ruleDefinitions, Action<string, string> addEntityScript)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (var ruleDefinition in ruleDefinitions)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", ruleDefinition.GenericRuleDefinitionId, ruleDefinition.Name, Serializer.Serialize(ruleDefinition));
+            }
+
+            string script = String.Format(@"set nocount on;
+;with cte_data([ID],[Name],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Details]))
+merge	[genericdata].[GenericRuleDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Name],[Details])
+	values(s.[ID],s.[Name],s.[Details]);", scriptBuilder);
+            addEntityScript("[genericdata].[GenericRuleDefinition]", script);
         }
 
         #endregion

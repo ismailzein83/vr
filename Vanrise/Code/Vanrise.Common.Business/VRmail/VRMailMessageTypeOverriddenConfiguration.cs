@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -30,8 +31,8 @@ namespace Vanrise.Common.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
                 VRMailMessageTypeManager mailTypeManager = new VRMailMessageTypeManager();
+                List<VRMailMessageType> mailTypes = new List<VRMailMessageType>();
                 foreach (var config in context.Configs)
                 {
                     VRMailMessageTypeOverriddenConfiguration mailTypeConfig = config.Settings.ExtendedSettings.CastWithValidate<VRMailMessageTypeOverriddenConfiguration>("mailTypeConfig", config.OverriddenConfigurationId);
@@ -44,15 +45,29 @@ namespace Vanrise.Common.Business
                         mailType.Name = mailTypeConfig.OverriddenName;
                     if (mailTypeConfig.OverriddenSettings != null)
                         mailType.Settings = mailTypeConfig.OverriddenSettings;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", mailType.VRMailMessageTypeId, mailType.Name, Serializer.Serialize(mailType.Settings));
+                    mailTypes.Add(mailType);                   
                 }
-                string script = String.Format(@"set nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[common].[MailMessageType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);", scriptBuilder);
-                context.AddEntityScript("[common].[MailMessageType]", script);
+                GenerateScript(mailTypes, context.AddEntityScript);
+            }
+
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
+            {
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<VRMailMessageTypeOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).VRMailMessageTypeId).Distinct();
+                VRMailMessageTypeManager mailTypeManager = new VRMailMessageTypeManager();
+                List<VRMailMessageType> mailTypes = new List<VRMailMessageType>();
+                foreach(var id in ids)
+                {
+                    var mailType = mailTypeManager.GetMailMessageType(id);
+                    mailType.ThrowIfNull("mailType", id);
+                    mailTypes.Add(mailType);
+                }
+                GenerateScript(mailTypes, context.AddEntityScript);
+            }
+
+            private void GenerateScript(List<VRMailMessageType> mailTypes, Action<string, string> addEntityScript)
+            {
+                IVRMailMessageTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRMailMessageTypeDataManager>();
+                dataManager.GenerateScript(mailTypes, addEntityScript);
             }
         }
 

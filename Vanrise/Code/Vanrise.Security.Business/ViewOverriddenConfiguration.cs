@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Security.Entities;
+using Vanrise.Security.Data;
 
 namespace Vanrise.Security.Business
 {
@@ -45,8 +46,8 @@ namespace Vanrise.Security.Business
         {
             public override void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context)
             {
-                StringBuilder scriptBuilder = new StringBuilder();
-                ViewManager viewManager = new ViewManager();
+               ViewManager viewManager = new ViewManager();
+                List<View> views = new List<View>();
                 foreach (var config in context.Configs)
                 {
                     ViewOverriddenConfiguration viewConfig = config.Settings.ExtendedSettings.CastWithValidate<ViewOverriddenConfiguration>("viewConfig", config.OverriddenConfigurationId);
@@ -66,37 +67,29 @@ namespace Vanrise.Security.Business
                         view.Rank = viewConfig.OverriddenRank.Value;
                     if (viewConfig.OverriddenSettings != null)
                         view.Settings = viewConfig.OverriddenSettings;
-                    if (scriptBuilder.Length > 0)
-                    {
-                        scriptBuilder.Append(",");
-                        scriptBuilder.AppendLine();
-                    }
-                    scriptBuilder.AppendFormat(@"('{0}','{1}','{2}',{3},{4},{5},{6},{7},{8},{9},{10})", 
-                        view.ViewId, view.Name, view.Title, GetStringSQLValue(view.Url), GetStringSQLValue(view.ModuleId.HasValue ? view.ModuleId.Value.ToString() : null), GetStringSQLValue(view.ActionNames),
-                        GetStringSQLValue(view.Audience != null ? Serializer.Serialize(view.Audience) : null), GetStringSQLValue(view.ViewContent != null ? Serializer.Serialize(view.ViewContent) : null),
-                        GetStringSQLValue(view.Settings != null ? Serializer.Serialize(view.Settings) : null), GetStringSQLValue(view.Type.ToString()), view.Rank);
+                    views.Add(view);                    
                 }
-                string script = String.Format(@"set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);", scriptBuilder);
-                context.AddEntityScript("[sec].[View]", script);
+                GenerateScript(views, context.AddEntityScript);
             }
 
-            private string GetStringSQLValue(string value)
+            public override void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context)
             {
-                return value != null ? string.Format("'{0}'", value) : "null";
+                IEnumerable<Guid> ids = context.Configs.Select(config => config.Settings.ExtendedSettings.CastWithValidate<ViewOverriddenConfiguration>("config.Settings.ExtendedSettings", config.OverriddenConfigurationId).ViewId).Distinct();
+                ViewManager viewManager = new ViewManager();
+                List<View> views = new List<View>();
+                foreach (var id in ids)
+                {
+                    var view = viewManager.GetView(id);
+                    view.ThrowIfNull("view", id);
+                    views.Add(view); 
+                }
+                GenerateScript(views, context.AddEntityScript);
+            }
+
+            private void GenerateScript(List<View> views, Action<string, string> addEntityScript)
+            {
+                IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+                dataManager.GenerateScript(views, addEntityScript);
             }
         }
 

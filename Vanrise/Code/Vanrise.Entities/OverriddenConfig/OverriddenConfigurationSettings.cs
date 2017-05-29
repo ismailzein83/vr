@@ -27,9 +27,17 @@ namespace Vanrise.Entities
     {
         public virtual string ModuleName { get { return null; } }
         public abstract void GenerateScript(IOverriddenConfigurationBehaviorGenerateScriptContext context);
+
+        public abstract void GenerateDevScript(IOverriddenConfigurationBehaviorGenerateDevScriptContext context);
     }
 
     public interface IOverriddenConfigurationBehaviorGenerateScriptContext
+    {
+        List<OverriddenConfiguration> Configs { get; }
+        void AddEntityScript(string entityName, string entityScript);
+    }
+
+    public interface IOverriddenConfigurationBehaviorGenerateDevScriptContext
     {
         List<OverriddenConfiguration> Configs { get; }
         void AddEntityScript(string entityName, string entityScript);
