@@ -16,6 +16,7 @@ namespace Vanrise.BEBridge.BP.Activities
         public TargetBESynchronizer TargetBeSynchronizer { get; set; }
         public BaseQueue<BatchProcessingContext> BatchProcessingContextQueue { get; set; }
         public TargetBESynchronizerInitializeContext SynchronizerInitializeContext { get; set; }
+        public TargetBEConvertorInitializeContext ConvertorInitializeContext { get; set; }
         public BaseQueue<BatchProcessingContext> OutputQueue { get; set; }
 
     }
@@ -29,6 +30,8 @@ namespace Vanrise.BEBridge.BP.Activities
         public InArgument<BaseQueue<BatchProcessingContext>> BatchProcessingContextQueue { get; set; }
         [RequiredArgument]
         public InArgument<TargetBESynchronizerInitializeContext> SynchronizerInitializeContext { get; set; }
+        [RequiredArgument]
+        public InArgument<TargetBEConvertorInitializeContext> ConvertorInitializeContext { get; set; }
         [RequiredArgument]
         public OutArgument<BaseQueue<BatchProcessingContext>> OutputQueue { get; set; }
 
@@ -52,9 +55,12 @@ namespace Vanrise.BEBridge.BP.Activities
                         List<ITargetBE> targetsToInsert = new List<ITargetBE>();
                         List<ITargetBE> targetsToUpdate = new List<ITargetBE>();
                         TargetBEConvertorConvertSourceBEsContext targetBeConvertorContext =
-                            new TargetBEConvertorConvertSourceBEsContext(handle);
+                            new TargetBEConvertorConvertSourceBEsContext(handle)
+                            {
+                                InitializationData = inputArgument.ConvertorInitializeContext.InitializationData,
+                                SourceBEBatch = batchProcessingContextQueue.SourceBEBatch
+                            };
 
-                        targetBeConvertorContext.SourceBEBatch = batchProcessingContextQueue.SourceBEBatch;
                         inputArgument.TargetConverter.ConvertSourceBEs(targetBeConvertorContext);
                         List<ITargetBE> targetBEs = targetBeConvertorContext.TargetBEs;
 
@@ -122,6 +128,7 @@ namespace Vanrise.BEBridge.BP.Activities
                 TargetBeSynchronizer = this.TargetBeSynchronizer.Get(context),
                 BatchProcessingContextQueue = this.BatchProcessingContextQueue.Get(context),
                 SynchronizerInitializeContext = this.SynchronizerInitializeContext.Get(context),
+                ConvertorInitializeContext = this.ConvertorInitializeContext.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
@@ -159,7 +166,11 @@ namespace Vanrise.BEBridge.BP.Activities
                 get;
             }
 
-
+            public object InitializationData
+            {
+                get;
+                set;
+            }
             public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
             {
                 _handle.SharedInstanceData.WriteTrackingMessage(severity, messageFormat, args);

@@ -53,13 +53,13 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.MainExtensions</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.BEBridge.BP</AssemblyReference>
     </sco:Collection>
@@ -167,20 +167,30 @@
                 <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
                   <Sequence.Variables>
                     <Variable x:TypeArguments="vbba1:TargetBESynchronizerInitializeContext" Name="synchronizerContext" />
+                    <Variable x:TypeArguments="vbba1:TargetBEConvertorInitializeContext" Name="convertorContext" />
                   </Sequence.Variables>
-                  <vbba1:InitializeSynchronizer>
-                    <vbba1:InitializeSynchronizer.SynchronizerInitializeContext>
+                  <vbba1:InitializeTargetBEsData sap2010:WorkflowViewState.IdRef="InitializeTargetBEsData_1">
+                    <vbba1:InitializeTargetBEsData.ConvertorInitializeContext>
+                      <OutArgument x:TypeArguments="vbba1:TargetBEConvertorInitializeContext">
+                        <mca:CSharpReference x:TypeArguments="vbba1:TargetBEConvertorInitializeContext">convertorContext</mca:CSharpReference>
+                      </OutArgument>
+                    </vbba1:InitializeTargetBEsData.ConvertorInitializeContext>
+                    <vbba1:InitializeTargetBEsData.SynchronizerInitializeContext>
                       <OutArgument x:TypeArguments="vbba1:TargetBESynchronizerInitializeContext">
                         <mca:CSharpReference x:TypeArguments="vbba1:TargetBESynchronizerInitializeContext">synchronizerContext</mca:CSharpReference>
                       </OutArgument>
-                    </vbba1:InitializeSynchronizer.SynchronizerInitializeContext>
-                    <vbba1:InitializeSynchronizer.TargetBeSynchronizer>
+                    </vbba1:InitializeTargetBEsData.SynchronizerInitializeContext>
+                    <vbba1:InitializeTargetBEsData.TargetBeConvertor>
+                      <InArgument x:TypeArguments="vbe:TargetBEConvertor">
+                        <mca:CSharpValue x:TypeArguments="vbe:TargetBEConvertor">entitySyncDefinition.TargetBEConvertor</mca:CSharpValue>
+                      </InArgument>
+                    </vbba1:InitializeTargetBEsData.TargetBeConvertor>
+                    <vbba1:InitializeTargetBEsData.TargetBeSynchronizer>
                       <InArgument x:TypeArguments="vbe:TargetBESynchronizer">
                         <mca:CSharpValue x:TypeArguments="vbe:TargetBESynchronizer">entitySyncDefinition.TargetBESynchronizer</mca:CSharpValue>
                       </InArgument>
-                    </vbba1:InitializeSynchronizer.TargetBeSynchronizer>
-                    <sap2010:WorkflowViewState.IdRef>InitializeSynchronizer_1</sap2010:WorkflowViewState.IdRef>
-                  </vbba1:InitializeSynchronizer>
+                    </vbba1:InitializeTargetBEsData.TargetBeSynchronizer>
+                  </vbba1:InitializeTargetBEsData>
                   <Parallel DisplayName="ConvertAndSave_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_3">
                     <Parallel.Variables>
                       <Variable x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)" Name="queueSaveBatchProcessingContext" />
@@ -192,6 +202,11 @@
                           <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">queueBatchProcessingContextList[beRecieveDefinition.Settings.EntitySyncDefinitions.IndexOf(entitySyncDefinition)]</mca:CSharpValue>
                         </InArgument>
                       </vbba1:ConvertSourceToTargetBEs.BatchProcessingContextQueue>
+                      <vbba1:ConvertSourceToTargetBEs.ConvertorInitializeContext>
+                        <InArgument x:TypeArguments="vbba1:TargetBEConvertorInitializeContext">
+                          <mca:CSharpValue x:TypeArguments="vbba1:TargetBEConvertorInitializeContext">convertorContext</mca:CSharpValue>
+                        </InArgument>
+                      </vbba1:ConvertSourceToTargetBEs.ConvertorInitializeContext>
                       <vbba1:ConvertSourceToTargetBEs.OutputQueue>
                         <OutArgument x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">
                           <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vbba1:BatchProcessingContext)">queueSaveBatchProcessingContext</mca:CSharpReference>
@@ -265,7 +280,7 @@
         </Sequence>
       </ActivityAction>
     </ForEach>
-    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwsQwONAg4CAQFEBYsCDwIBAkcLR3QDAZACTgmJAhQCAQNUC18qAwGDAmALazEDAfYBbAt3JgMB6QF4C/wBFgIBEf0BC4gCKQIBBFcRV3kDAYoCXBFcYAMBhAJoEWiiAQMB/QFjEWNxAwH3AXQRdIsBAwHwAW8Rb+UBAwHqAX0NnAEjAwG4AZ0BDfsBHwIBEoACEYACYAIBC4UCEYUCWgIBBZQBE5QBhgEDAeEBgAETgAFiAwHZAYUBE4UBnAEDAdEBmQETmQF6AwHJAYoBE4oBZAMBwQGPAROPAYABAwG5AaABE6ABpAEDAbABpwER+QEcAgETqwETtwEyAwGbAbgBE/gBHgIBFK4BGa4BlQEDAaYBswEZswGQAQMBnAG9ARXhATYCAUbiARX3ASsCARXUARvUAY8BAwGPAcoBG8oBegMBgwHAARvAAewBAgF3zwEbzwGKAQIBa8UBG8UBogECAV/ZARvZAZIBAgFT3gEb3gGMAQIBR/QBG/QBkgECATrvARvvAY8BAgEu6gEb6gGCAQIBIuUBG+UBmgECARY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dzxDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQkVCcmlkZ2UuQlBcQkVCcmlkZ2VQcm9jZXNzLnhhbWwvQwOcAg4CAQFEBZoCDwIBAkcLR3QDAcACTgmYAhQCAQNUC18qAwGzAmALazEDAaYCbAt3JgMBmQJ4C4sCFgIBEYwCC5cCKQIBBFcRV3kDAboCXBFcYAMBtAJoEWiiAQMBrQJjEWNxAwGnAnQRdIsBAwGgAm8Rb+UBAwGaAn0NnAEjAwHoAZ0BDYoCHwIBEo8CEY8CYAIBC5QCEZQCWgIBBZQBE5QBhgEDAZECgAETgAFiAwGJAoUBE4UBnAEDAYECmQETmQF6AwH5AYoBE4oBZAMB8QGPAROPAYABAwHpAaABE6ABpAEDAeABpwERiAIcAgETrAETwQEzAwGzAcIBE4cCHgIBFK8BGa8BjwEDAdUBtAEZtAGVAQMBygG5ARm5AYoBAwG/Ab4BGb4BkAEDAbQBxwEV8AE2AgFK8QEVhgIrAgEVzwEbzwGJAQMBpgHjARvjAY8BAwGZAdkBG9kBegMBjAHKARvKAewBAgF/3gEb3gGKAQIBctQBG9QBogECAWXoARvoAZIBAgFY7QEb7QGMAQIBS4MCG4MCkgECAT3+ARv+AY8BAgEw+QEb+QGCAQIBI/QBG/QBmgECARY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -273,7 +288,7 @@
       <sap2010:ViewStateData Id="PrepareBatchProcessingContext_1" sap:VirtualizedContainerService.HintSize="960,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="960,22" />
       <sap2010:ViewStateData Id="ReadSourceBEs_1" sap:VirtualizedContainerService.HintSize="200,422" />
-      <sap2010:ViewStateData Id="InitializeSynchronizer_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="InitializeTargetBEsData_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="ConvertSourceToTargetBEs_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="SaveTargetBEs_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="554,86">

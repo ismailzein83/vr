@@ -15,4 +15,13 @@ namespace Vanrise.BEBridge.BP.Activities
             set;
         }
     }
+
+    public class TargetBEConvertorInitializeContext : ITargetBEConvertorInitializeContext
+    {
+        public object InitializationData
+        {
+            get;
+            set;
+        }
+    }
 }

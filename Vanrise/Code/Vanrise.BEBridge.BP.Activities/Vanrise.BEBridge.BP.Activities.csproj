@@ -59,7 +59,7 @@
     <Compile Include="ConvertSourceToTargetBEs.cs" />
     <Compile Include="GetBEReceiveDefinition.cs" />
     <Compile Include="BatchProcessingContext.cs" />
-    <Compile Include="InitializeSynchronizer.cs" />
+    <Compile Include="InitializeTargetBEsData.cs" />
     <Compile Include="PrepareBatchProcessingContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSourceBEs.cs" />
