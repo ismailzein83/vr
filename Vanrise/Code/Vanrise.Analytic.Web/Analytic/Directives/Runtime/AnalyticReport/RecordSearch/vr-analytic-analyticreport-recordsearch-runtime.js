@@ -262,7 +262,7 @@
                 var recordFilterFieldInfosByFieldName = {};
 
                 for (var index = 0; index < recordFields.length; index++) {
-                    var recordField = recordFields[index]
+                    var recordField = recordFields[index];
                     recordFilterFieldInfosByFieldName[recordField.Name] = { Name: recordField.Name, Title: recordField.Title, Type: recordField.Type };
                 }
 
