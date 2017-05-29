@@ -93,9 +93,14 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
             };
         }
         function downloadPriceList(dataItem) {
-            FileAPIService.DownloadFile(dataItem.PriceListFileId).then(function (response) {
-                utilsService.downloadFile(response.data, response.headers);
-            });
+            if (dataItem.PriceListFileId != null && dataItem.PriceListFileId != 0) {
+                FileAPIService.DownloadFile(dataItem.PriceListFileId).then(function (response) {
+                    utilsService.downloadFile(response.data, response.headers);
+                });
+            }
+            else {
+                vrNotificationService.showInformation('No file has been created for the pricelist of this rate');
+            }
         }
 
         function getDrillDownDefinitions() {
