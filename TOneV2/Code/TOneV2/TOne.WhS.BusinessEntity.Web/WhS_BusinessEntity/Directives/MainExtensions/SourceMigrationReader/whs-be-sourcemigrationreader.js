@@ -51,6 +51,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             function initializeController() {
                 $scope.useTempTables = true;
                 $scope.onlyEffective = false;
+                var migrationTablesBasetable = new Array();
                 $scope.migrationTables = [];
                 $scope.selectedParameterDefinitions = [];
                 $scope.selectedItems = [];
@@ -58,10 +59,10 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                 angular.forEach(UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum), function (dbTable) {
                     if (dbTable.defaultMigrate)
-                        $scope.migrationTables.push(dbTable);
+                        migrationTablesBasetable.push(dbTable);
                 });
-                $scope.migrationTablesSelectedValues = $scope.migrationTables;
-
+                $scope.migrationTables = UtilsService.cloneObject(migrationTablesBasetable,true);
+                $scope.migrationTablesSelectedValues = UtilsService.cloneObject(migrationTablesBasetable,true);
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
