@@ -2,7 +2,7 @@
 
     'use strict';
 
-    CustomerSellingProductService.CustomerSellingProductService = ['UtilsService', 'VRModalService', 'VRNotificationService','WhS_BE_CarrierAccountService','WhS_BE_CarrierAccountTypeEnum','WhS_BE_CustomerSellingProductAPIService','WhS_BE_CarrierAccountActivationStatusEnum'];
+    CustomerSellingProductService.$inject = ['UtilsService', 'VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountTypeEnum', 'WhS_BE_CustomerSellingProductAPIService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
 
     function CustomerSellingProductService(UtilsService, VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CarrierAccountActivationStatusEnum) {
         return ({
