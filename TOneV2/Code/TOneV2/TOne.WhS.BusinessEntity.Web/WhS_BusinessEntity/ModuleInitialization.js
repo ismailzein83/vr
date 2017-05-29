@@ -5,7 +5,7 @@ function (WhS_BE_SellingProductService, WhS_BE_SellingNumberPlanService, WhS_BE_
     WhS_BE_SupplierRateService.registerDrillDownToSupplierZone();
     WhS_BE_SupplierCodeService.registerDrillDownToSupplierZone();
     WhS_BE_SupplierZoneService_Service.registerDrillDownToSupplierZone();
-    WhS_BE_CustomerSellingProductService.registerDrillDownToCarrierAccount();
+   // WhS_BE_CustomerSellingProductService.registerDrillDownToCarrierAccount();
   
     WhS_BE_CodeGroupService.registerObjectTrackingDrillDownToCodeGroupe();
     WhS_BE_SwitchService.registerObjectTrackingDrillDownToSwitch();
