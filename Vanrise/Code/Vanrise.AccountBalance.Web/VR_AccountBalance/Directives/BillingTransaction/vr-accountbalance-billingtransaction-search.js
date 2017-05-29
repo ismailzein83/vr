@@ -133,7 +133,11 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function loadTransactionTypeSelector() {
             var transactionTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             transactionTypeSelectorReadyPromiseDeferred.promise.then(function () {
-                var transactionTypePayload = { AccountTypeId: accountTypeId };
+                var transactionTypePayload = {
+                    filter:{
+                        AccountTypeId: accountTypeId
+                    }
+                };
                 VRUIUtilsService.callDirectiveLoad(transactionTypeSelectorAPI, transactionTypePayload, transactionTypeSelectorLoadPromiseDeferred);
             });
             return transactionTypeSelectorLoadPromiseDeferred.promise;
