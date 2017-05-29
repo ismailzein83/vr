@@ -567,6 +567,7 @@
     <Compile Include="Tasks\MostafaTask.cs" />
     <Compile Include="Tasks\RabihTask.cs" />
     <Compile Include="Tasks\SamerTask.cs" />
+    <Compile Include="Tasks\ZeinabTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
