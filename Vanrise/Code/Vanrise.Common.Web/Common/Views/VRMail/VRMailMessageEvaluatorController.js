@@ -5,7 +5,7 @@
     emailEditorContorller.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRMailAPIService'];
 
     function emailEditorContorller($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_VRMailAPIService) {
-
+    
         var emailObject;
         var fileId;
         defineScope();
@@ -23,26 +23,29 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.sendEmail = function () {
-                return sendEmail();
+            $scope.scopeModel.confirmEmail = function () {
+                return confirmEmail();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
-            function sendEmail() {
-                $scope.scopeModel.isLoading = true;
+            function confirmEmail() {
+                //$scope.scopeModel.isLoading = true;
                 var emailObject = buildEmailObjFromScope();
-                return VRCommon_VRMailAPIService.SendEmail(emailObject)
-               .then(function (response) {
-                   VRNotificationService.showSuccess("Email sent successfully");
-                   $scope.modalContext.closeModal();
-               })
-               .catch(function (error) {
-                   VRNotificationService.notifyException(error, $scope);
-               }).finally(function () {
-                   $scope.scopeModel.isLoading = false;
-               });
+                if ($scope.onSalePriceListSendingEmail != undefined)
+                    $scope.onSalePriceListSendingEmail(emailObject);
+                $scope.modalContext.closeModal();
+               // return VRCommon_VRMailAPIService.SendEmail(emailObject)
+               //.then(function (response) {
+               //    VRNotificationService.showSuccess("Email sent successfully");
+               //    $scope.modalContext.closeModal();
+               //})
+               //.catch(function (error) {
+               //    VRNotificationService.notifyException(error, $scope);
+               //}).finally(function () {
+               //    $scope.scopeModel.isLoading = false;
+               //});
             }
 
             $scope.scopeModel.downloadAttachement = function () {
