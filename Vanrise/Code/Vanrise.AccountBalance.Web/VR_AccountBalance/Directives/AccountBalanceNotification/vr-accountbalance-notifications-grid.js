@@ -64,14 +64,14 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
 
                     if (dataItem.Entity.ExecuteBPInstanceID != undefined) {
                         menuActions.push({
-                            name: 'Executed Process',
+                            name: 'Action Process',
                             clicked: executeBPInstance
                         });
                     }
 
                     if (dataItem.Entity.ClearBPInstanceID != undefined) {
                         menuActions.push({
-                            name: 'Cleared Process',
+                            name: 'Rollback Process',
                             clicked: clearBPInstance
                         });
                     }
