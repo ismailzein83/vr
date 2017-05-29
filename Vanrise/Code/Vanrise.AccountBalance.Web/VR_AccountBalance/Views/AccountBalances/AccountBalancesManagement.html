@@ -23,7 +23,7 @@
                     <vr-textbox type="number" isrequired="scopeModel.sign!=undefined" value="scopeModel.balance"></vr-textbox>
                 </vr-columns>
                 <vr-columns colnum="1" ng-if="scopeModel.accountType && advancedSelected">
-                    <vr-select hideremoveicon="true" label="Balance Order By" datatextfield="description" datavaluefield="value"
+                    <vr-select hideremoveicon="true" label="Order By" datatextfield="description" datavaluefield="value"
                                datasource="scopeModel.orderByOptions" selectedvalues="scopeModel.orderBy" isrequired="true"></vr-select>
                 </vr-columns>
                 <vr-columns width="normal" ng-if="scopeModel.accountType && advancedSelected">
