@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -14,9 +11,7 @@ namespace TOne.WhS.Deal.Entities
 
         public DateTime? EndDate { get; set; }
 
-        public virtual void GetZoneGroups(IDealGetZoneGroupsContext context)
-        {
-        }
+        public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
     }
 
     public interface IDealGetZoneGroupsContext
@@ -24,5 +19,12 @@ namespace TOne.WhS.Deal.Entities
         List<DealSaleZoneGroup> SaleZoneGroups { set; }
 
         List<DealSupplierZoneGroup> SupplierZoneGroups { set; }
+    }
+
+    public class DealGetZoneGroupsContext : IDealGetZoneGroupsContext
+    {
+        public List<DealSaleZoneGroup> SaleZoneGroups { get; set; }
+
+        public List<DealSupplierZoneGroup> SupplierZoneGroups { get; set; }
     }
 }

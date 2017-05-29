@@ -56,6 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealDetailedProgressDataManager.cs" />
+    <Compile Include="DealProgressDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

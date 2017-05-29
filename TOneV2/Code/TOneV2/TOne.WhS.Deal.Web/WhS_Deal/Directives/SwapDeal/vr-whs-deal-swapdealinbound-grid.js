@@ -29,16 +29,16 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
             this.initializeController = initializeController;
             var mainPayload;
+            var lastInboundGroupNumber = 0;
             function initializeController() {
 
                 ctrl.datasource = [];
 
                 ctrl.addSwapDealInbound = function () {
-
-                    
                     var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
-                
                     var onSwapDealInboundAdded = function (addedSwapDealInbound) {
+                        lastInboundGroupNumber = lastInboundGroupNumber + 1;
+                        addedSwapDealInbound.ZoneGroupNumber = lastInboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealInbound);
                     };
                     WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId);
@@ -53,14 +53,17 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
                 api.load = function (payload) {
                     mainPayload = payload;
-                    
-                    if (payload != undefined && payload.Inbounds!=undefined) {
 
+                    if (payload != undefined && payload.Inbounds != undefined) {
                         ctrl.datasource = payload.Inbounds;
-                       
-                    }                        
-                    else
+                    }
+                    else {
                         ctrl.datasource.length = 0;
+                    }
+
+                    if (payload != undefined && payload.lastInboundGroupNumber != undefined) {
+                        lastInboundGroupNumber = payload.lastInboundGroupNumber;
+                    }
                 };
 
                 api.getData = function () {
@@ -74,17 +77,18 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,
                                 SaleZoneIds: currentItem.SaleZoneIds,
-                                CountryId: currentItem.CountryId
+                                CountryId: currentItem.CountryId,
+                                ZoneGroupNumber: currentItem.ZoneGroupNumber
                             });
-
                         }
-
                     }
-                    return inbounds;
+                    return { inbounds: inbounds, lastInboundGroupNumber: lastInboundGroupNumber };
                 };
+
                 api.hasData = function () {
                     return ctrl.datasource.length > 0;
                 };
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }
@@ -107,7 +111,8 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
             function editSwapDealInbound(dealInboundObj) {
                 var onDealInboundUpdated = function (dealInbound) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dealInboundObj.Name, 'Name');
+                    dealInbound.ZoneGroupNumber = dealInboundObj.ZoneGroupNumber;
+                    var index = ctrl.datasource.indexOf(dealInboundObj);
                     ctrl.datasource[index] = dealInbound;
                 };
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
@@ -123,10 +128,8 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
                 WhS_Deal_SwapDealInboundService.deleteSwapDealInbound($scope, swapDealInboundObj, onSwapDealInboundDeleted);
             }
-
         }
 
         return directiveDefinitionObject;
-
     }
 ]);

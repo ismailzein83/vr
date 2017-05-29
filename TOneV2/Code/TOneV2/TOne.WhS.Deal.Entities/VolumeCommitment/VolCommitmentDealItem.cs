@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
     public class VolCommitmentDealItem
     {
+        public int ZoneGroupNumber { get; set; }
+
         public string Name { get; set; }
 
         public int CountryId { get; set; }
@@ -16,6 +15,4 @@ namespace TOne.WhS.Deal.Entities
 
         public List<VolCommitmentDealItemTier> Tiers { get; set; }
     }
-
-
 }

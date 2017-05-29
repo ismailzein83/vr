@@ -41,6 +41,163 @@ namespace TOne.WhS.Deal.Business
             return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
 
+        public DealSaleZoneGroup GetDealSaleZoneGroup(int dealId, int zoneGroupNb)
+        {
+            var cachedDealSaleZoneGroups = GetCachedDealSaleZoneGroups();
+            return cachedDealSaleZoneGroups.GetRecord(new DealZoneGroup() {DealId = dealId, ZoneGroupNb = zoneGroupNb });
+        }
+
+        public DealSaleZoneGroup GetAccountSaleZoneGroup(int customerId, long saleZoneId, DateTime effectiveDate)
+        {
+            var cachedAccountSaleZoneGroups = GetCachedAccountSaleZoneGroups();
+            IOrderedEnumerable<DealSaleZoneGroup> dealSaleZoneGroups = cachedAccountSaleZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = customerId, ZoneId = saleZoneId });
+            if (dealSaleZoneGroups != null && dealSaleZoneGroups.Count() > 0)
+            {
+                foreach (DealSaleZoneGroup dealSaleZoneGroup in dealSaleZoneGroups)
+                {
+                    if (dealSaleZoneGroup.IsEffective(effectiveDate))
+                        return dealSaleZoneGroup;
+                }
+            }
+            return null;
+        }
+
+        public DealSupplierZoneGroup GetDealSupplierZoneGroup(int dealId, int zoneGroupNb)
+        {
+            var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroups();
+            return cachedDealSupplierZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
+        }
+
+        public DealSupplierZoneGroup GetAccountSupplierZoneGroup(int supplierId, long supplierZoneId, DateTime effectiveDate)
+        {
+            var cachedAccountSupplierZoneGroups = GetCachedAccountSupplierZoneGroups();
+            IOrderedEnumerable<DealSupplierZoneGroup> dealSupplierZoneGroups = cachedAccountSupplierZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = supplierId, ZoneId = supplierZoneId });
+            if (dealSupplierZoneGroups != null && dealSupplierZoneGroups.Count() > 0)
+            {
+                foreach (DealSupplierZoneGroup dealSupplierZoneGroup in dealSupplierZoneGroups)
+                {
+                    if (dealSupplierZoneGroup.IsEffective(effectiveDate))
+                        return dealSupplierZoneGroup;
+                }
+            }
+            return null;
+        }
+        Dictionary<DealZoneGroup, DealSaleZoneGroup> GetCachedDealSaleZoneGroups()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSaleZoneGroups", () =>
+            {
+                Dictionary<DealZoneGroup, DealSaleZoneGroup> result = new Dictionary<DealZoneGroup, DealSaleZoneGroup>();
+                var cachedDeals = base.GetCachedDeals();
+                foreach (DealDefinition dealDefinition in cachedDeals.Values)
+                {
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    dealDefinition.Settings.GetZoneGroups(context);
+                    if (context.SaleZoneGroups != null)
+                    {
+                        foreach (DealSaleZoneGroup dealSaleZoneGroup in context.SaleZoneGroups)
+                        {
+                            result.Add(new DealZoneGroup()
+                            {
+                                DealId = dealDefinition.DealId,
+                                ZoneGroupNb = dealSaleZoneGroup.DealSaleZoneGroupNb
+                            }
+                                , dealSaleZoneGroup);
+                        }
+                    }
+                }
+                return result;
+            });
+        }
+
+        Dictionary<DealZoneGroup, DealSupplierZoneGroup> GetCachedDealSupplierZoneGroups()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSupplierZoneGroups", () =>
+            {
+                Dictionary<DealZoneGroup, DealSupplierZoneGroup> result = new Dictionary<DealZoneGroup, DealSupplierZoneGroup>();
+                var cachedDeals = base.GetCachedDeals();
+                foreach (DealDefinition dealDefinition in cachedDeals.Values)
+                {
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    dealDefinition.Settings.GetZoneGroups(context);
+                    if (context.SupplierZoneGroups != null)
+                    {
+                        foreach (DealSupplierZoneGroup dealSupplierZoneGroup in context.SupplierZoneGroups)
+                        {
+                            result.Add(new DealZoneGroup()
+                            {
+                                DealId = dealDefinition.DealId,
+                                ZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb
+                            }
+                                , dealSupplierZoneGroup);
+                        }
+                    }
+                }
+                return result;
+            });
+        }
+
+        Dictionary<AccountZoneGroup, IOrderedEnumerable<DealSaleZoneGroup>> GetCachedAccountSaleZoneGroups()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountSaleZoneGroups", () =>
+            {
+                Dictionary<AccountZoneGroup, List<DealSaleZoneGroup>> result = new Dictionary<AccountZoneGroup, List<DealSaleZoneGroup>>();
+                var cachedDeals = base.GetCachedDeals();
+                foreach (DealDefinition dealDefinition in cachedDeals.Values)
+                {
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    dealDefinition.Settings.GetZoneGroups(context);
+                    if (context.SaleZoneGroups != null)
+                    {
+                        foreach (DealSaleZoneGroup dealSaleZoneGroup in context.SaleZoneGroups)
+                        {
+                            foreach (DealSaleZoneGroupZoneItem dealSaleZoneGroupZoneItem in dealSaleZoneGroup.Zones)
+                            {
+                                AccountZoneGroup accountZoneGroup = new AccountZoneGroup()
+                                {
+                                    AccountId = dealSaleZoneGroup.CustomerId,
+                                    ZoneId = dealSaleZoneGroupZoneItem.ZoneId
+                                };
+                                List<DealSaleZoneGroup> dealSaleZoneGroups = result.GetOrCreateItem(accountZoneGroup);
+                                dealSaleZoneGroups.Add(dealSaleZoneGroup);
+                            }
+                        }
+                    }
+                }
+                return result.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(item => item.BED));
+            });
+        }
+
+        Dictionary<AccountZoneGroup, IOrderedEnumerable<DealSupplierZoneGroup>> GetCachedAccountSupplierZoneGroups()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountSupplierZoneGroups", () =>
+            {
+                Dictionary<AccountZoneGroup, List<DealSupplierZoneGroup>> result = new Dictionary<AccountZoneGroup, List<DealSupplierZoneGroup>>();
+                var cachedDeals = base.GetCachedDeals();
+                foreach (DealDefinition dealDefinition in cachedDeals.Values)
+                {
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    dealDefinition.Settings.GetZoneGroups(context);
+                    if (context.SupplierZoneGroups != null)
+                    {
+                        foreach (DealSupplierZoneGroup dealSupplierZoneGroup in context.SupplierZoneGroups)
+                        {
+                            foreach (DealSupplierZoneGroupZoneItem dealSupplierZoneGroupZoneItem in dealSupplierZoneGroup.Zones)
+                            {
+                                AccountZoneGroup accountZoneGroup = new AccountZoneGroup()
+                                {
+                                    AccountId = dealSupplierZoneGroup.SupplierId,
+                                    ZoneId = dealSupplierZoneGroupZoneItem.ZoneId
+                                };
+                                List<DealSupplierZoneGroup> dealSupplierZoneGroups = result.GetOrCreateItem(accountZoneGroup);
+                                dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
+                            }
+                        }
+                    }
+                }
+                return result.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(item => item.BED));
+            });
+        }
+
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
         {
             throw new NotImplementedException();
@@ -50,7 +207,7 @@ namespace TOne.WhS.Deal.Business
 
         #region Mappers
 
-        public DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition)
+        DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition)
         {
             return new DealDefinitionInfo()
             {

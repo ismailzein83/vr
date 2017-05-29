@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public class DealSaleZoneGroup
+    public class DealSaleZoneGroup : IDateEffectiveSettings
     {
-        public Guid DealSaleZoneGroupId { get; set; }
+        public int DealSaleZoneGroupNb { get; set; }
 
         public int CustomerId { get; set; }
 
@@ -34,7 +35,9 @@ namespace TOne.WhS.Deal.Entities
 
         public int Volume { get; set; }
 
-        public DealSaleZoneRateEvaluator DefaultRateEvaluator { get; set; }
+        public Decimal Rate { get; set; }
+
+        //public DealSaleZoneRateEvaluator DefaultRateEvaluator { get; set; }
 
         public List<DealSaleZoneGroupTierZoneRate> ExceptionRates { get; set; }
     }
@@ -43,7 +46,9 @@ namespace TOne.WhS.Deal.Entities
     {
         public long ZoneId { get; set; }
 
-        public DealSaleZoneRateEvaluator RateEvaluator { get; set; }
+        public Decimal Rate { get; set; }
+
+        //public DealSaleZoneRateEvaluator RateEvaluator { get; set; }
     }
 
     public abstract class DealSaleZoneRateEvaluator

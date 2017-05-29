@@ -29,6 +29,8 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
 
             var gridAPI;
             var context;
+            var lastGroupNumber;
+
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
@@ -41,6 +43,8 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
 
                 ctrl.addItem = function () {
                     var onVolumeCommitmentItemAdded = function (volumeCommitmentItem) {
+                        lastGroupNumber = lastGroupNumber + 1;
+                        volumeCommitmentItem.ZoneGroupNumber = lastGroupNumber;
                         ctrl.datasource.push({ Entity: volumeCommitmentItem });
                     };
                     WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext());
@@ -73,15 +77,18 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                                 ZoneIds: currentItem.Entity.ZoneIds,
                                 CountryId: currentItem.Entity.CountryId,
                                 Tiers: currentItem.Entity.Tiers,
+                                ZoneGroupNumber: currentItem.Entity.ZoneGroupNumber
                             });
                         }
                     }
-                    return volumeCommitmentItems;
+                    return { lastGroupNumber: lastGroupNumber, volumeCommitmentItems: volumeCommitmentItems };
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
+                        lastGroupNumber = context.lastGroupNumber;
+
                         if (payload.volumeCommitmentItems != undefined) {
                             for (var i = 0; i < payload.volumeCommitmentItems.length; i++) {
                                 var volumeCommitmentItem = payload.volumeCommitmentItems[i];
@@ -111,13 +118,13 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
 
             function editVolumeCommitmentItem(volumeCommitmentItemObj) {
                 var onVolumeCommitmentItemUpdated = function (volumeCommitmentItem) {
+                    volumeCommitmentItem.ZoneGroupNumber = volumeCommitmentItemObj.Entity.ZoneGroupNumber;
                     var index = ctrl.datasource.indexOf(volumeCommitmentItemObj);
                     ctrl.datasource[index] = { Entity: volumeCommitmentItem };
                 };
                 WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext());
             }
-            function getContext()
-            {
+            function getContext() {
                 return context;
             }
         }

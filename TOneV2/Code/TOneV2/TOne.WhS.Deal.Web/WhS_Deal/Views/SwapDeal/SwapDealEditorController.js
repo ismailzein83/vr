@@ -39,10 +39,11 @@
         }
 
         function defineScope() {
-            
+
             $scope.scopeModel = {};
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
+            $scope.scopeModel.disabelType = isEditMode;
 
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
@@ -58,29 +59,29 @@
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId
                     };
-                    if (carrierAccountSelectedPromise != undefined){
+                    if (carrierAccountSelectedPromise != undefined) {
                         carrierAccountSelectedPromise.resolve();
                         oldselectedCarrier = $scope.scopeModel.carrierAcount;
                     }
-                    else if (oldselectedCarrier != undefined && oldselectedCarrier.CarrierAccountId != carrierAccountInfo.CarrierAccountId) {                       
+                    else if (oldselectedCarrier != undefined && oldselectedCarrier.CarrierAccountId != carrierAccountInfo.CarrierAccountId) {
                         if (dealInboundAPI.hasData() || dealOutboundAPI.hasData()) {
                             VRNotificationService.showConfirmation('Data will be lost,Are you sure you want to continue?').then(function (response) {
                                 if (response) {
-                                        dealInboundAPI.load(payload);
-                                        dealOutboundAPI.load(payloadOutbound);
-                                        oldselectedCarrier = carrierAccountInfo;
-                                    }
-                                    else {
-                                        $scope.scopeModel.carrierAcount = oldselectedCarrier;
-                                    }
-                              });
+                                    dealInboundAPI.load(payload);
+                                    dealOutboundAPI.load(payloadOutbound);
+                                    oldselectedCarrier = carrierAccountInfo;
+                                }
+                                else {
+                                    $scope.scopeModel.carrierAcount = oldselectedCarrier;
+                                }
+                            });
                         }
                         else {
                             dealInboundAPI.load(payload);
                             dealOutboundAPI.load(payloadOutbound);
                         }
                     }
-                    else if (oldselectedCarrier==undefined) {
+                    else if (oldselectedCarrier == undefined) {
                         oldselectedCarrier = carrierAccountInfo;
                         dealInboundAPI.load(payload);
                         dealOutboundAPI.load(payloadOutbound);
@@ -95,7 +96,7 @@
                 WhS_BE_SwapDealAnalysisService.openSwapDealAnalysis(buildSwapDealObjFromScope())
             };
 
-      
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -104,21 +105,21 @@
                 dealInboundAPI = api;
                 dealInboundReadyPromiseDeferred.resolve();
             };
-            
+
             $scope.scopeModel.onSwapDealOutboundDirectiveReady = function (api) {
                 dealOutboundAPI = api;
                 dealOutboundReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModel.validateDatesRange = function () {               
-                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            $scope.scopeModel.validateDatesRange = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
 
             $scope.scopeModel.validateSwapDealInbounds = function () {
                 var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
-                if (dealInboundAPI != undefined && dealInboundAPI.getData().length == 0)
+                if (dealInboundAPI != undefined && !dealInboundAPI.hasData())
                     return 'Please, one record must be added at least.';
                 return null;
             };
@@ -127,7 +128,7 @@
                 var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
-                if (dealOutboundAPI != undefined && dealOutboundAPI.getData().length == 0)
+                if (dealOutboundAPI != undefined && !dealOutboundAPI.hasData())
                     return 'Please,one record must be added at least.';
                 return null;
             };
@@ -173,7 +174,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection,loadGraceperiod]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection, loadGraceperiod]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -186,8 +187,8 @@
             var promises = [];
             promises.push(loadCarrierAccountPromiseDeferred.promise);
 
-            var payload ;
-            if(dealEntity != undefined && dealEntity.Settings!=undefined) {
+            var payload;
+            if (dealEntity != undefined && dealEntity.Settings != undefined) {
                 payload = { selectedIds: dealEntity.Settings.CarrierAccountId };
                 carrierAccountSelectedPromise = UtilsService.createPromiseDeferred();
 
@@ -211,12 +212,14 @@
                     var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
-                        Inbounds: dealEntity.Settings.Inbounds
+                        Inbounds: dealEntity.Settings.Inbounds,
+                        lastInboundGroupNumber: dealEntity.Settings.LastInboundGroupNumber
                     };
-                  
+
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId,
-                        Outbounds: dealEntity.Settings.Outbounds
+                        Outbounds: dealEntity.Settings.Outbounds,
+                        lastOutboundGroupNumber: dealEntity.Settings.LastOutboundGroupNumber
                     };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
@@ -248,17 +251,18 @@
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
+            $scope.scopeModel.difference = dealEntity.Settings.Difference;
         }
 
         function loadGraceperiod() {
-            if (dealEntity != undefined && dealEntity.Settings.GracePeriod != undefined){
+            if (dealEntity != undefined && dealEntity.Settings.GracePeriod != undefined) {
                 $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
-               return;
+                return;
             }
             return WhS_Deal_SwapDealAPIService.GetSwapDealSettingData().then(function (response) {
                 $scope.scopeModel.gracePeriod = response.GracePeriod;
             })
-               
+
         }
         function loadCarrierAccountSelector() {
             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -302,20 +306,26 @@
             });
         }
 
-        function buildSwapDealObjFromScope() {            
+        function buildSwapDealObjFromScope() {
+            var inboundData = dealInboundAPI.getData();
+            var outboundData = dealOutboundAPI.getData();
+
             var obj = {
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
                 Settings: {
                     $type: "TOne.WhS.Deal.Entities.SwapDealSettings, TOne.WhS.Deal.Entities",
-                    CarrierAccountId:carrierAccountSelectorAPI.getSelectedIds(),
+                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
                     EndDate: $scope.scopeModel.endDate,
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     DealContract: $scope.scopeModel.selectedContractType.value,
                     DealType: $scope.scopeModel.selectedAgreementType.value,
-                    Inbounds: dealInboundAPI.getData(),
-                    Outbounds: dealOutboundAPI.getData()
+                    Inbounds: inboundData != undefined ? inboundData.inbounds : undefined,
+                    Outbounds: outboundData != undefined ? outboundData.outbounds : undefined,
+                    LastInboundGroupNumber: inboundData != undefined ? inboundData.lastInboundGroupNumber : undefined,
+                    LastOutboundGroupNumber: outboundData != undefined ? outboundData.lastOutboundGroupNumber : undefined,
+                    Difference: $scope.scopeModel.difference
                 }
             };
             return obj;

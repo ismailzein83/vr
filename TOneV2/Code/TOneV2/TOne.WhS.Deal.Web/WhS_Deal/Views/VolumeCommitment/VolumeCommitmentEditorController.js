@@ -9,6 +9,7 @@
 
         var dealId;
         var volumeCommitmentEntity;
+        var lastGroupNumber = 0;
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred;
@@ -26,14 +27,13 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null)
-            {
+            if (parameters != undefined && parameters != null) {
                 dealId = parameters.dealId;
                 context = parameters.context;
             }
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (dealId != undefined);
-            
+
         };
 
         function defineScope() {
@@ -55,8 +55,8 @@
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined) {                   
-                    if (carrierAccountSelectedPromise != undefined) 
+                if (carrierAccountInfo != undefined) {
+                    if (carrierAccountSelectedPromise != undefined)
                         carrierAccountSelectedPromise.resolve();
                     else {
                         var payload = { context: getContext() };
@@ -126,6 +126,7 @@
         function getVolumeCommitment() {
             return WhS_Deal_VolCommitmentDealAPIService.GetDeal(dealId).then(function (response) {
                 volumeCommitmentEntity = response;
+                lastGroupNumber = volumeCommitmentEntity.Settings.LastGroupNumber;
             });
         };
         function loadAllControls() {
@@ -152,7 +153,7 @@
             $scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         };
-        
+
         function loadCarrierAccountDealItemsSection() {
             if (volumeCommitmentEntity == undefined)
                 return;
@@ -164,7 +165,7 @@
             promises.push(carrierAccountSelectorLoadDeferred.promise);
 
             var payload;
-            if (volumeCommitmentEntity != undefined &&  volumeCommitmentEntity.Settings != undefined) {
+            if (volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined) {
                 payload = { selectedIds: volumeCommitmentEntity.Settings.CarrierAccountId };
                 carrierAccountSelectedPromise = UtilsService.createPromiseDeferred();
 
@@ -175,7 +176,7 @@
             });
 
             if (volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined && volumeCommitmentEntity.Settings.Items.length > 0) {
-               
+
                 var volumeCommitmenetItemsLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(volumeCommitmenetItemsLoadDeferred.promise);
                 UtilsService.waitMultiplePromises([volumeCommitmenetItemsReadyDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
@@ -233,6 +234,7 @@
             });
         };
         function buildVolumeCommitmentObjFromScope() {
+            var volumeCommitmenetItemsData = volumeCommitmenetItemsAPI.getData();
             var obj = {
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
@@ -242,13 +244,15 @@
                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
                     EndDate: $scope.scopeModel.endDate,
-                    Items: volumeCommitmenetItemsAPI.getData()
+                    Items: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.volumeCommitmentItems : undefined,
+                    LastGroupNumber: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.lastGroupNumber : undefined
                 }
             };
             return obj;
         };
         function getContext() {
             var context = {
+                lastGroupNumber: lastGroupNumber,
                 getZoneSelector: function () {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined)
                         return $scope.scopeModel.selectedVolumeCommitmentType.zoneSelector;
@@ -283,7 +287,7 @@
                                     payload.selectedIds = item.ZoneIds;
                                     payload.filter = {
                                         ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds),
-                                        CountryIds: (item.CountryId!=undefined)?[item.CountryId]:undefined
+                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
                                     };
                                 }
                                 else
