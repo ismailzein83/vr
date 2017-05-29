@@ -138,6 +138,7 @@
             var loadAccountPromiseDeferred = UtilsService.createPromiseDeferred();
             accountDirectiveReadyDeferred.promise.then(function () {
                 var payload = {
+                 
                     accountTypeId: accountTypeAPI.getSelectedIds()
                 };
                 VRUIUtilsService.callDirectiveLoad(accountDirectiveAPI, payload, loadAccountPromiseDeferred);
@@ -147,7 +148,12 @@
         function loadTransactionTypeSelector() {
             var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
             transactionTypeDirectiveReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, undefined, loadTransactionTypePromiseDeferred);
+                var transactionTypePayload = {
+                    filter:{
+                        AccountTypeId: accountTypeAPI.getSelectedIds()
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, transactionTypePayload, loadTransactionTypePromiseDeferred);
             });
             return loadTransactionTypePromiseDeferred.promise;
         }
