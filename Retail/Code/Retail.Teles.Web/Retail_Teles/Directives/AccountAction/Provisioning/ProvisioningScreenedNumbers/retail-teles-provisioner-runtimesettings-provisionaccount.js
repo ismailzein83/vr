@@ -34,9 +34,9 @@
                 };
                 var enterpriseNameRegex = new RegExp("^([a-z0-9]{3,}\.[a-z0-9]{3,}\.[a-z0-9]{3,})$");
                 $scope.scopeModel.validateEnterpriseName = function () {
-                    if (enterpriseNameRegex.test($scope.scopeModel.enterpriseName))
+                    if ($scope.scopeModel.enterpriseName != undefined && $scope.scopeModel.enterpriseName.match(enterpriseNameRegex))
                         return null;
-                    return "Expression should be in the form \"xxx.xxx.xxx\"";
+                    return "Expression must be in this form \"xxx.xxx.xxx\"";
                 };
                 UtilsService.waitMultiplePromises([provisionAccountSettingsReadyDeferred.promise]).then(function () {
                     defineAPI();
