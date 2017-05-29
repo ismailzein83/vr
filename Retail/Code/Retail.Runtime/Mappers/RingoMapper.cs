@@ -243,12 +243,14 @@ namespace Retail.Runtime.Mappers
             return result;
         }
 
-        public Vanrise.Integration.Entities.MappingOutput ImportingMmsEDR_File(object localData)
+        public Vanrise.Integration.Entities.MappingOutput ImportingEventEDR_Files(object localData)
         {
+
             //Retail.Runtime.Mappers.RingoMapper mapper = new Retail.Runtime.Mappers.RingoMapper();
-            //return mapper.ImportingMmsEDR_File(data);
-            HashSet<string> lstPackages = new HashSet<string> { "PROMO_GEN_RNW_OK", "SIM_PROMO_GEN_SUB", "PROMO_GEN_UNSUB", "SIM_PROMO_EXPIRED" };
-            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            //return mapper.ImportingEventEDR_Files(data);
+            HashSet<string> lstPackages = new HashSet<string> { "PROMO_GEN_RNW_OK", "SIM_PROMO_GEN_SUB", "PROMO_GEN_UNSUB", "SIM_PROMO_EXPIRED", "SIM_REFUND_EVENT", "SIM_RECHARGE_EVENT" };
+            HashSet<string> simEvents = new HashSet<string> { "SIM_REFUND_EVENT", "SIM_RECHARGE_EVENT" };
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(localData));
             var ringoSmsEDRs = new List<dynamic>();
 
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -273,6 +275,7 @@ namespace Retail.Runtime.Mappers
                 edr.EventIdMvno = int.Parse(rowData[1]);
                 edr.EventId = int.Parse(rowData[2]);
                 edr.CreatedDate = DateTime.Now;
+                edr.ActivationDate = DateTime.Now;
                 string edrEvent = rowData[3];
                 edr.Event = edrEvent;
                 edr.Parameters = rowData[4];
@@ -280,33 +283,50 @@ namespace Retail.Runtime.Mappers
                 if (lstPackages.Contains(edrEvent))
                 {
                     string[] edrDetails = string.IsNullOrEmpty(edr.Parameters) ? null : edr.Parameters.Split(',');
+
                     if (edrDetails != null)
                     {
-                        string[] dateFormats = new string[] { "dd/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss" };
+                        string[] dateFormats = new string[] { "dd/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss" };
                         DateTime date;
-                        int promotionId = 0;
-                        if (edrEvent != "SIM_PROMO_EXPIRED")
+                        if (!simEvents.Contains(edrEvent))
                         {
-                            edr.PromotionCode = edrDetails[0];
 
-                            int.TryParse(edrDetails[1], out promotionId);
-                            edr.PromotionId = promotionId;
-                            if (edrDetails.Length > 3)
+                            int promotionId = 0;
+                            if (edrEvent != "SIM_PROMO_EXPIRED")
                             {
-                                DateTime.TryParseExact(edrDetails[3], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
-                                edr.CustomerActivationDate = date;
+                                edr.PromotionCode = edrDetails[0];
+
+                                int.TryParse(edrDetails[1], out promotionId);
+                                edr.PromotionId = promotionId;
+                                if (edrDetails.Length > 3)
+                                {
+                                    DateTime.TryParseExact(edrDetails[3], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                                    edr.CustomerActivationDate = date;// == DateTime.MinValue ? DateTime.Now : date;
+                                }
+                                DateTime.TryParseExact(edrDetails[2], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                                edr.ActivationDate = date;// == DateTime.MinValue ? DateTime.Now : date; ;
                             }
-                            DateTime.TryParseExact(edrDetails[2], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
-                            edr.ActivationDate = date;
+                            else
+                            {
+                                int.TryParse(edrDetails[0], out promotionId);
+                                edr.PromotionId = promotionId;
+                                DateTime.TryParseExact(edrDetails[1], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                                edr.ActivationDate = date;// == DateTime.MinValue ? DateTime.Now : date; ;
+                            }
+                            edr.CreatedDate = date;// == DateTime.MinValue ? DateTime.Now : date; ;
                         }
                         else
                         {
-                            int.TryParse(edrDetails[0], out promotionId);
-                            edr.PromotionId = promotionId;
-                            DateTime.TryParseExact(edrDetails[1], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
-                            edr.ActivationDate = date;
+                            int amount = 0;
+                            int.TryParse(edrDetails[0], out amount);
+                            edr.Amount = amount;
+                            decimal balance = 0;
+                            decimal.TryParse(edrDetails[1], out balance);
+                            edr.Balance = balance;
+                            DateTime.TryParseExact(edrDetails[2], dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+                            edr.ActivationDate = date;// == DateTime.MinValue ? DateTime.Now : date; 
+                            edr.CreatedDate = date;//== DateTime.MinValue ? DateTime.Now : date; 
                         }
-                        edr.CreatedDate = date;
                     }
                 }
 
@@ -314,7 +334,7 @@ namespace Retail.Runtime.Mappers
             }
 
             var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ringoSmsEDRs, "#RECORDSCOUNT# of Raw EDRs", "RingoEventEDR");
-            mappedBatches.Add("Ringo Event EDR Transformation", batch);
+            mappedBatches.Add("Event EDR Transformation", batch);
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;

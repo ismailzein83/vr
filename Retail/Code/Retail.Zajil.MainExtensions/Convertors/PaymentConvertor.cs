@@ -10,6 +10,7 @@ using Vanrise.BEBridge.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.Zajil.MainExtensions.Convertors
 {
@@ -23,6 +24,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
             }
         }
         public Guid TransactionTypeId { get; set; }
+        public Guid ZajilCompanyExtendedInfoId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
         public string SourceAccountIdColumn { get; set; }
         public string AmountColumn { get; set; }
@@ -30,8 +32,20 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public string InvoiceSourceIdColumn { get; set; }
         public string TimeColumn { get; set; }
         public int CurrencyId { get; set; }
+
+        public override void Initialize(ITargetBEConvertorInitializeContext context)
+        {
+            context.InitializationData = new AccountBEManager().GetAccounts(this.AccountBEDefinitionId)
+                .Where(v => v.Value.Settings != null 
+                    && v.Value.Settings.Parts[ZajilCompanyExtendedInfoId] != null 
+                    && (v.Value.Settings.Parts[ZajilCompanyExtendedInfoId].Settings as ZajilCompanyExtendedInfo) != null 
+                    && !string.IsNullOrEmpty((v.Value.Settings.Parts[ZajilCompanyExtendedInfoId].Settings as ZajilCompanyExtendedInfo).GPVoiceCustomerNo))
+                .ToDictionary(kvp => (kvp.Value.Settings.Parts[ZajilCompanyExtendedInfoId].Settings as ZajilCompanyExtendedInfo).GPVoiceCustomerNo, kvp => kvp.Value);
+        }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
+            Dictionary<string, Account> accountsByGPInvoiceNumber = context.InitializationData as Dictionary<string, Account>;
+
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
             foreach (DataRow row in sourceBatch.Data.Rows)
@@ -41,9 +55,8 @@ namespace Retail.Zajil.MainExtensions.Convertors
                 {
                     string accountId = row[this.SourceAccountIdColumn] as string;
                     accountId = string.IsNullOrEmpty(accountId) ? "" : accountId.Trim();
-                    AccountBEManager accountBeManager = new AccountBEManager();
-                    var account = accountBeManager.GetAccountBySourceId(AccountBEDefinitionId, accountId);
-                    if (account == null)
+                    Account account = null;
+                    if (!accountsByGPInvoiceNumber.TryGetValue(accountId, out account))
                     {
                         context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Payment (SourceId: '{0}', SourceAccountId: '{1}') due to unavailable account.", sourceId, accountId);
                         continue;

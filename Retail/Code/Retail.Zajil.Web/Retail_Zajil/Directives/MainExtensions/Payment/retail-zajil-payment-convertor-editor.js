@@ -33,6 +33,9 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             var currencySelectorAPI;
             var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var companyProfileDefinitionSelectorAPI;
+            var companyProfileDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onBillingTransactionTypeReady = function (api) {
@@ -48,6 +51,11 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onCompanyProfileDefinitionSelectorReady = function (api) {
+                companyProfileDefinitionSelectorAPI = api;
+                companyProfileDefinitionSelectorReadyDeferred.resolve();
             };
             function initializeController() {
                 defineAPI();
@@ -75,6 +83,8 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                     promises.push(loadAccountDefinitionTypePromise);
 
                     promises.push(loadCurrencySelector());
+
+                    promises.push(loadCompanyProfileDefinitionSelector());
 
                     function getAccountDefinitionSelectorLoadPromise() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -126,6 +136,21 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         return currencyLoadPromiseDeferred.promise;
                     };
 
+                    function loadCompanyProfileDefinitionSelector() {
+                        var companyProfileSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        companyProfileDefinitionSelectorReadyDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                filter: {
+                                    AccountPartDefinitionIds: getAccountPartDefinitionIds('F6630722-4E85-4DF2-915F-F9942074743C')
+                                },
+                                selectedIds: payload != undefined ? payload.ZajilCompanyExtendedInfoId : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(companyProfileDefinitionSelectorAPI, selectorPayload, companyProfileSelectorLoadDeferred);
+                        });
+                        return companyProfileSelectorLoadDeferred.promise;
+                    };
+
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -140,13 +165,19 @@ app.directive('retailZajilPaymentConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         TimeColumn: $scope.scopeModel.timeColumn,
                         SourceAccountIdColumn: $scope.scopeModel.accountColumn,
                         SourceIdColumn: $scope.scopeModel.sourceIdColumn,
-                        InvoiceSourceIdColumn: $scope.scopeModel.invoiceSourceIdColumn
+                        InvoiceSourceIdColumn: $scope.scopeModel.invoiceSourceIdColumn,
+                        ZajilCompanyExtendedInfoId: companyProfileDefinitionSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getAccountPartDefinitionIds(id) {
+                var partDefinitionIds = [];
+                partDefinitionIds.push(id);
+                return partDefinitionIds;
             }
 
         }
