@@ -806,18 +806,21 @@ namespace TOne.WhS.Sales.BP.Activities
                     SaleEntityZoneRoutingProduct effectiveRoutingProduct = routingProductEffectiveLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZone.SaleZoneId);
                     SaleEntityZoneRoutingProduct currentRoutingProduct = routingProductCurrentLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZone.SaleZoneId);
 
-                    if (effectiveRoutingProduct.RoutingProductId != currentRoutingProduct.RoutingProductId)
+                    if (currentRoutingProduct == null || effectiveRoutingProduct.RoutingProductId != currentRoutingProduct.RoutingProductId)
                     {
-                        routingProductChanges.Add(new SalePricelistRPChange
+                        var routingProduct = new SalePricelistRPChange
                         {
                             CountryId = saleZone.CountryId,
                             ZoneName = saleZone.Name,
                             ZoneId = saleZone.SaleZoneId,
                             RoutingProductId = effectiveRoutingProduct.RoutingProductId,
-                            RecentRoutingProductId = currentRoutingProduct.RoutingProductId,
                             BED = effectiveRoutingProduct.BED,
                             EED = effectiveRoutingProduct.EED
-                        });
+                        };
+                        if (currentRoutingProduct != null)
+                            routingProduct.RecentRoutingProductId = currentRoutingProduct.RoutingProductId;
+                        routingProductChanges.Add(routingProduct);
+
                     }
                 }
             }
