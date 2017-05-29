@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', "UtilsService", "VRUIUtilsService", "VRNotificationService"];
+    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'BPInstanceStatusEnum', "UtilsService", "VRUIUtilsService", "VRNotificationService"];
 
-    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, BPInstanceStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         var ownerTypeSelectorAPI;
         var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -898,7 +898,7 @@
                     });
                 }
             }, {
-                name: "Apply Draft",
+                name: "Apply Offer",
                 clicked: applyDraft
             }];
         }
@@ -933,38 +933,10 @@
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
 
                         var processTrackingContext = {
-                            onClose: function () {
-                                $scope.isLoading = true;
-                                var promises = [];
-
-                                var loadOwnerInfoPromise = loadOwnerInfo();
-                                promises.push(loadOwnerInfoPromise);
-
-                                if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-
-                                    var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
-                                    promises.push(doesOwnerDraftExistDeferred.promise);
-
-                                    var getCountryChangesPromise = getCountryChanges(ownerId);
-                                    promises.push(getCountryChangesPromise);
-
-                                    getCountryChangesPromise.then(function () {
-                                        doesOwnerDraftExist().then(function () {
-                                            doesOwnerDraftExistDeferred.resolve();
-                                        }).catch(function (error) {
-                                            doesOwnerDraftExistDeferred.reject(error);
-                                        });
-                                    });
+                            onClose: function (bpInstanceClosureContext) {
+                                if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+                                    resetRatePlan();
                                 }
-
-                                if (isRoutingInfoDefined()) {
-                                    var loadRatePlanPromise = loadRatePlan();
-                                    promises.push(loadRatePlanPromise);
-                                }
-
-                                UtilsService.waitMultiplePromises(promises).finally(function () {
-                                    $scope.isLoading = false;
-                                });
                             }
                         };
 
