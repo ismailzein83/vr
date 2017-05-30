@@ -6,7 +6,9 @@
     [BED]                    DATETIME       NULL,
     [EED]                    DATETIME       NULL,
     [PriceListId]            BIGINT         NULL,
-    [CountryId]              BIGINT         NULL,
+    [CountryId]              INT            NULL,
     [ProcessInstanceID]      INT            NULL
 );
+
+
 
