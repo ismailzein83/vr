@@ -59,8 +59,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     var customerPriceListType = _carrierAccountManager.GetPriceListType(customerId);
                     SalePriceListType pricelistType = GetSalePriceListType(customerPriceListType, context.ChangeType);
 
-                    ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
-                       outputContext.NotSentChangesByCustomerId);
+                    ZoneChangesByCountryId allChangesByCountryId = customerChange.ZoneChangesByCountryId;// MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,outputContext.NotSentChangesByCustomerId);
 
                     List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, pricelistType, allChangesByCountryId,
                         outputContext.ZoneWrappersByCountry, outputContext.FutureLocator, inputcontext.EffectiveDate, context.ProcessInstanceId);
@@ -165,7 +164,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool SetCustomerPricelistsAsSent(IEnumerable<int> customerIds, int? priceListId)
         {
             ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
-            bool setAsSent= dataManager.SetCustomerPricelistsAsSent(customerIds, priceListId);
+            bool setAsSent = dataManager.SetCustomerPricelistsAsSent(customerIds, priceListId);
             if (setAsSent) Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return setAsSent;
         }
@@ -252,8 +251,8 @@ namespace TOne.WhS.BusinessEntity.Business
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomerList = GetDataByCustomer(customerIdsWithChanges, context.EffectiveDate);
 
             var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomerList, context.EffectiveDate, true));
-            var salePriceListChanges = new SalePriceListChangeManager();
-            var notSentChanges = salePriceListChanges.GetNotSentChangesByCustomer(customerIdsWithChanges);
+            //var salePriceListChanges = new SalePriceListChangeManager();
+            var notSentChanges = new Dictionary<int, List<CustomerPriceListChange>>();// salePriceListChanges.GetNotSentChangesByCustomer(customerIdsWithChanges);
             return new SalePriceListOutputContext
             {
                 FutureLocator = futureRateLocator,
