@@ -494,7 +494,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             SaleEntityZoneRate zoneRate = futureLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             if (zoneRate == null)
-                throw new DataIntegrityValidationException(string.Format("Zone '{0}' neither has an explicit nor a default selling product rate", zoneName));
+                throw new DataIntegrityValidationException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate", zoneName));
 
             return new SalePLRateNotification
             {
