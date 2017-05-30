@@ -18,7 +18,11 @@
                 RouteId: RouteId
             });
         }
-
+        function GetRoutesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetRoutesInfo'), {
+                filter: filter
+            });
+        }
         function AddRoute(RouteItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'AddRoute'), RouteItem);
         }
@@ -47,7 +51,8 @@
             UpdateRoute: UpdateRoute,
             HasAddRoutePermission: HasAddRoutePermission,
             HasEditRoutePermission: HasEditRoutePermission,
-            GetSwitchDateTime: GetSwitchDateTime
+            GetSwitchDateTime: GetSwitchDateTime,
+            GetRoutesInfo: GetRoutesInfo
         });
     }
 

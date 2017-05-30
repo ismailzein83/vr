@@ -110,6 +110,7 @@
     <Compile Include="RouteManager.cs" />
     <Compile Include="CustomerRouteManager.cs" />
     <Compile Include="SwitchDashboardManager.cs" />
+    <Compile Include="SwitchMappingManager.cs" />
     <Compile Include="TranslationRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>

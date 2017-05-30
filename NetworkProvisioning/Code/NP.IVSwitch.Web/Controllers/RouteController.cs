@@ -29,7 +29,13 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return _manager.GetRoute(routeId);
         }
-
+        [HttpGet]
+        [Route("GetEndPointsInfo")]
+        public IEnumerable<RouteEntityInfo> GetEndPointsInfo(string filter = null)
+        {
+            RouteInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<RouteInfoFilter>(filter) : null;
+            return _manager.GetRoutesInfo(deserializedFilter);
+        }
         [HttpPost]
         [Route("AddRoute")]
         public Vanrise.Entities.InsertOperationOutput<RouteDetail> AddRoute(RouteToAdd routeItem)

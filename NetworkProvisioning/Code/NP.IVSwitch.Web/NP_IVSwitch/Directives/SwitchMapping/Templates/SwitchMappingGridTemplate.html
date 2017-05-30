@@ -1,0 +1,11 @@
+﻿<vr-datagrid on-ready="onGridReady"
+             datasource="switchmappings"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="CarrierAccountId" normalcell>
+    <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account'" field="'CarrierAccountName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Points'" field="'EndPointsDescription'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Routes'" field="'RoutesDescription'"></vr-datagridcolumn>
+</vr-datagrid>

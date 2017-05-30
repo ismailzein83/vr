@@ -1,0 +1,18 @@
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_AssignEndPointEditorController" size="'small'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formEndPointEditor">
+            <vr-columns colnum="6">
+                <np-ivswitch-endpoint-selector on-ready="scopeModel.onSelectorEndPointReady"
+                                               normal-col-num="6" isrequired="true"></np-ivswitch-endpoint-selector>
+            </vr-columns>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEndPointEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

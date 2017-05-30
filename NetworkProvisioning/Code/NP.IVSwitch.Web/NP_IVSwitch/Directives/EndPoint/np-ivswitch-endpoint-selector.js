@@ -1,21 +1,20 @@
 ﻿'use strict';
+app.directive('npIvswitchEndpointSelector',['NP_IVSwitch_EndPointAPIService', 'NP_IVSwitch_EndPointService', 'VRNotificationService', 'NP_IVSwitch_EndPointEnum', 'UtilsService',
+function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotificationService, NP_IVSwitch_EndPointEnum, UtilsService) {
 
-app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_EndPointEnum',
-
-    function (NP_IVSwitch_EndPointAPIService, UtilsService, VRUIUtilsService, NP_IVSwitch_EndPointEnum) {
-        return {
+        var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: '@',
-                selectedvalues: '=',
+                ismultipleselection: "@",
                 onselectionchanged: '=',
-                onselectitem: '=',
-                ondeselectitem: '=',
-                isrequired: '=',
-                hideremoveicon: '@',
-                normalColNum: '@',
-                customvalidate: '='
+                selectedvalues: '=',
+                isrequired: "=",
+                onselectitem: "=",
+                ondeselectitem: "=",
+                isdisabled: "=",
+                customlabel: "@",
+                onitemadded: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -26,88 +25,80 @@ app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', '
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var endPointSelector = new EndPointSelector(ctrl, $scope, $attrs);
-                endPointSelector.initializeController();
+                var ctor = new endPointCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
 
             },
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
-                return getTemplate(attrs);
+                return getUserTemplate(attrs);
             }
         };
 
-        function EndPointSelector(ctrl, $scope, attrs) {
 
-            this.initializeController = initializeController;
+        function getUserTemplate(attrs) {
 
-            var selectorAPI;
+            var multipleselection = "";
+
+            var label = "End Point";
+            if (attrs.ismultipleselection != undefined) {
+                label = "End Points";
+                multipleselection = "ismultipleselection";
+            }
+
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
+
+            return  '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="EndPointId" isrequired="ctrl.isrequired"'
+                    + ' label="' + label + '"  datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="'+label+'" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
+        }
+
+        function endPointCtor(ctrl, $scope, attrs) {
+
+            var selectorApi;
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
-
-                    selectorAPI = api;
+                    selectorApi = api;
                     defineAPI();
                 };
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
+                    selectorApi.clearDataSource();
                     var selectedIds;
                     var filter;
-
                     if (payload != undefined) {
-                        selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        selectedIds = payload.selectedIds;
                     }
+                    return NP_IVSwitch_EndPointAPIService.GetEndPointsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
 
+                        if (response) {
+                            for (var i = 0; i < response.length; i++) {
+                                ctrl.datasource.push(response[i]);
+                            }
+                        }
 
-                    var EnumArray = UtilsService.getArrayEnum(NP_IVSwitch_EndPointEnum);
-                    selectorAPI.clearDataSource();
-                    if (EnumArray != null) {
-                        ctrl.datasource = EnumArray;
-
-                    }
-                    if (selectedIds != undefined) {
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
-                    }
-
-
-
-
+                        if (selectedIds) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'EndPointId', attrs, ctrl);
+                        }
+                    });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('EndPointId', attrs, ctrl);
                 };
-
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            this.initializeController = initializeController;
         }
 
-        function getTemplate(attrs) {
-
-            var multipleselection = "";
-            var label = "Type";
-
-            if (attrs.ismultipleselection != undefined) {
-                label = "Type";
-                multipleselection = "ismultipleselection";
-            }
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
-
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                   '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
-                   '</vr-select>' +
-                   '</vr-columns>';
-        }
-
+        return directiveDefinitionObject;
     }]);
-

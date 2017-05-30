@@ -127,6 +127,7 @@
     <Compile Include="Controllers\CodecDefController.cs" />
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
+    <Compile Include="Controllers\SwitchMappingController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
     <Compile Include="Controllers\FirewallController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
@@ -163,11 +164,13 @@
     <Content Include="NP_IVSwitch\Directives\Domain\np-ivswitch-domain-selector.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-grid.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpoint-selector.js" />
+    <Content Include="NP_IVSwitch\Directives\EndPoint\np-ivswitch-endpointtype-selector.js" />
     <Content Include="NP_IVSwitch\Directives\EndPoint\Templates\EndPointGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CustomerRoute\np-ivswitch-customerroute-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Firewall\np-ivswitch-firewall-grid.js" />
     <Content Include="NP_IVSwitch\Directives\Firewall\Templates\FirewallGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-selector.js" />
     <Content Include="NP_IVSwitch\Directives\Route\Templates\RouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecDef\np-ivswitch-codecdef-grid.js" />
@@ -175,6 +178,8 @@
     <Content Include="NP_IVSwitch\Directives\CodecDef\Templates\CodecDefGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-grid.js" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\Templates\CodecProfileGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\SwitchMapping\np-ivswitch-switchmapping-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\SwitchMapping\Templates\SwitchMappingGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-grid.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-selector.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
@@ -183,9 +188,11 @@
     <Content Include="NP_IVSwitch\Services\APIServices\DomainAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\SwitchMappingAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CustomerRouteService.js" />
+    <Content Include="NP_IVSwitch\Services\SwitchMappingService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
     <Content Include="NP_IVSwitch\Services\FirewallService.js" />
     <Content Include="NP_IVSwitch\Services\RouteService.js" />
@@ -215,6 +222,10 @@
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboard.html" />
     <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboardController.js" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\AssignEndPointEditor.html" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\AssignEndPointEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\SwitchMappingManagement.html" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\SwitchMappingManagementController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditorController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagement.html" />

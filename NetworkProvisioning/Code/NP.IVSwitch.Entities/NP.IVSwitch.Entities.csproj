@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\Account.cs" />
@@ -62,6 +65,8 @@
     <Compile Include="EndPoint\EndPoint.cs" />
     <Compile Include="EndPoint\EndPointDetail.cs" />
     <Compile Include="EndPoint\EndPointCarrierAccountExtension.cs" />
+    <Compile Include="EndPoint\EndPointInfoFilter.cs" />
+    <Compile Include="EndPoint\EndPointEntityInfo.cs" />
     <Compile Include="EndPoint\EndPointQuery.cs" />
     <Compile Include="EndPoint\EndPointToAdd.cs" />
     <Compile Include="EndPoint\EndPointToUpdate.cs" />
@@ -74,10 +79,15 @@
     <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
     <Compile Include="CustomerRoute\CustomerRouteQuery.cs" />
     <Compile Include="Route\RouteCarrierAccountExtension.cs" />
+    <Compile Include="Route\RouteEntityInfo.cs" />
+    <Compile Include="Route\RouteInfoFilter.cs" />
     <Compile Include="Route\RouteToAdd.cs" />
     <Compile Include="Route\Route.cs" />
     <Compile Include="Route\RouteDetail.cs" />
     <Compile Include="Route\RouteQuery.cs" />
+    <Compile Include="SwitchMapping\SwitchMapping.cs" />
+    <Compile Include="SwitchMapping\SwitchMappingDetail.cs" />
+    <Compile Include="SwitchMapping\SwitchMappingQuery.cs" />
     <Compile Include="TranslationRule\TranslationRuleFilter.cs" />
     <Compile Include="TranslationRule\TranslationRuleInfo.cs" />
     <Compile Include="TranslationRule\TranslationRule.cs" />

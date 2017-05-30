@@ -21,6 +21,38 @@ namespace NP.IVSwitch.Business
             return cachedRoute.GetRecord(routeId);
         }
 
+        public string GetRouteDescription(Route route)
+        {
+            return route.Host;
+        }
+        public string GetRouteDescription(int routeId)
+        {
+            var route = GetRoute(routeId);
+            return route != null ? GetRouteDescription(route) : null;
+        }
+        public IEnumerable<RouteEntityInfo> GetRoutesInfo(RouteInfoFilter filter)
+        {
+            var assignRoutes = GetCarrierAccountIdsByRouteId();
+            var allRoutes = this.GetCachedRoutes();
+            Func<Route, bool> filterFunc = (x) =>
+            {
+                if (assignRoutes.ContainsKey(x.RouteId))
+                    return false;
+                return true;
+            };
+            return allRoutes.MapRecords(EndPointEntityInfoMapper, filterFunc);
+        }
+        public List<int> GetCarrierAccountRouteIds(CarrierAccount carrierAccount)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            RouteCarrierAccountExtension routeExtendedSettings =
+                carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccount);
+            if (routeExtendedSettings == null) return null;
+            List<int> routes = new List<int>();
+            if (routeExtendedSettings.RouteInfo != null)
+                routes.AddRange(routeExtendedSettings.RouteInfo.Select(itm => itm.RouteId));
+            return routes;
+        }
         public IDataRetrievalResult<RouteDetail> GetFilteredRoutes(DataRetrievalInput<RouteQuery> input)
         {
             //Get Carrier by id
@@ -307,6 +339,18 @@ namespace NP.IVSwitch.Business
             return routeDetail;
         }
 
+        public RouteEntityInfo EndPointEntityInfoMapper(Route route){
+
+            RouteEntityInfo routeInfo = new RouteEntityInfo()
+            {
+                RouteId = route.RouteId,
+                Description = GetRouteDescription(route)
+
+            };
+
+            return routeInfo;
+
+        }
         #endregion
     }
 }

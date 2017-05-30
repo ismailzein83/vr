@@ -19,6 +19,12 @@
             });
         }
 
+        function GetEndPointsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetEndPointsInfo'), {
+                filter: filter
+            });
+        }
+
         function AddEndPoint(EndPointItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'AddEndPoint'), EndPointItem);
         }
@@ -44,6 +50,7 @@
             UpdateEndPoint: UpdateEndPoint,
             HasAddEndPointPermission: HasAddEndPointPermission,
             HasEditEndPointPermission: HasEditEndPointPermission,
+            GetEndPointsInfo: GetEndPointsInfo
         });
     }
 

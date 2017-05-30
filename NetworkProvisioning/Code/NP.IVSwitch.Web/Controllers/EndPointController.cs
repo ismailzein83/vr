@@ -29,6 +29,13 @@ namespace NP.IVSwitch.Web.Controllers
             return _manager.GetEndPoint(endPointId);
         }
 
+        [HttpGet]
+        [Route("GetEndPointsInfo")]
+        public IEnumerable<EndPointEntityInfo> GetEndPointsInfo(string filter = null)
+        {
+            EndPointInfoFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<EndPointInfoFilter>(filter) : null;
+            return _manager.GetEndPointsInfo(deserializedFilter);
+        }
         [HttpPost]
         [Route("AddEndPoint")]
         public Vanrise.Entities.InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)

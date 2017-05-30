@@ -43,6 +43,18 @@ namespace NP.IVSwitch.Business
             return endPoint != null ? GetEndPointDescription(endPoint) : null;
         }
 
+        public IEnumerable<EndPointEntityInfo> GetEndPointsInfo(EndPointInfoFilter filter)
+        {
+            var assignEndPoints = GetCarrierAccountIdsByEndPointId();
+            var allEndPoints = this.GetCachedEndPoint();
+            Func<EndPoint,bool> filterFunc = (x) => {
+                if (assignEndPoints.ContainsKey(x.EndPointId))
+                    return false;
+                return true;
+            };
+            return allEndPoints.MapRecords(EndPointEntityInfoMapper, filterFunc);
+        }
+
         public List<int> GetCarrierAccountEndPointIds(CarrierAccount carrierAccount)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
@@ -369,6 +381,17 @@ namespace NP.IVSwitch.Business
             };
 
             return endPointDetail;
+        }
+
+        public EndPointEntityInfo EndPointEntityInfoMapper(EndPoint endPoint)
+        {
+            EndPointEntityInfo endPointEntityInfo = new EndPointEntityInfo
+            {
+               EndPointId = endPoint.EndPointId,
+               Description = GetEndPointDescription(endPoint)
+            };
+
+            return endPointEntityInfo;
         }
 
         #endregion
