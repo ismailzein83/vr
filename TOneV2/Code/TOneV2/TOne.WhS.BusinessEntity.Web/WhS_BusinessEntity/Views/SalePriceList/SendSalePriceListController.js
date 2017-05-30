@@ -57,6 +57,7 @@
 
                 return UtilsService.waitMultiplePromises(promises).then(function () {
                     $scope.scopeModel.isSendAllButtonDisabled = true;
+                    $scope.modalContext.closeModal();
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
