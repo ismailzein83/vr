@@ -85,14 +85,10 @@
             $scope.SendPriceListByEmail = function () {
                 $scope.isLoadingFilter = true;
 
-                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(priceListId, priceLisTypeSelectorAPI.getSelectedIds())
-                    .then(function (emailResponse) {
-                    WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSalePriceListSendingEmail);
+                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(priceListId, priceLisTypeSelectorAPI.getSelectedIds()).then(function (emailResponse) {
+                    WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSalePriceListEmailSent);
                 }).catch(function (error) {
-
-                    $scope.isLoadingFilter = false;
                     vrNotificationService.notifyException(error, $scope);
-
                 }).finally(function () {
                     $scope.isLoadingFilter = false;
                 });
@@ -102,13 +98,32 @@
                 $scope.modalContext.closeModal();
             };
         }
-        function onSalePriceListSendingEmail(evaluatedEmail) {
-            VRCommon_VRMailAPIService.SendEmail(evaluatedEmail)
-            .then(function () {
-                whSBeSalePriceListChangeApiService.SetPriceListAsSent(priceListId)
-                        .then(function () {
-                            $scope.modalContext.closeModal();
-                        });
+        function onSalePriceListEmailSent(evaluatedEmail) {
+            $scope.isLoadingFilter = true;
+            var promises = [];
+
+            var sendEmailPromise = VRCommon_VRMailAPIService.SendEmail(evaluatedEmail);
+            promises.push(sendEmailPromise);
+
+            var setPriceListAsSentDeferred = utilsService.createPromiseDeferred();
+            promises.push(setPriceListAsSentDeferred.promise);
+
+            sendEmailPromise.then(function () {
+                whSBeSalePriceListChangeApiService.SetPriceListAsSent(priceListId).then(function () {
+                    setPriceListAsSentDeferred.resolve();
+                }).catch(function (error) {
+                    setPriceListAsSentDeferred.reject(error);
+                });
+            });
+
+            return utilsService.waitMultiplePromises(promises).then(function () {
+                if ($scope.onSalePriceListPreviewClosed != undefined)
+                    $scope.onSalePriceListPreviewClosed();
+                $scope.modalContext.closeModal();
+            }).catch(function (error) {
+                vrNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingFilter = false;
             });
         }
         function SetFilteredCodeObject() {
