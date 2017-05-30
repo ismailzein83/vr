@@ -61,6 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealBillingSummary\DealBillingSummary.cs" />
+    <Compile Include="DealBillingSummary\DealBillingSummaryManager.cs" />
     <Compile Include="DealProgressManager.cs" />
     <Compile Include="DealDetailedProgressManager.cs" />
     <Compile Include="ConfigManager.cs" />
