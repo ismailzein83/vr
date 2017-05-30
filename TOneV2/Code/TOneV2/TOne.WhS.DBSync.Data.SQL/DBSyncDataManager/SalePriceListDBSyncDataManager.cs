@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("EffectiveOn", typeof(DateTime));
             dt.Columns.Add("CreatedTime", typeof(DateTime));
             dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("IsSent", typeof(bool));
             dt.BeginLoadData();
             foreach (var item in salePriceLists)
             {
@@ -40,6 +41,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row["SourceID"] = item.SourceId;
                 row["EffectiveOn"] = item.EffectiveOn;
                 row["CreatedTime"] = item.CreatedTime;
+                row["IsSent"] = item.IsSent;
                 row["ID"] = startingId++;
                 dt.Rows.Add(row);
             }
@@ -49,7 +51,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SalePriceList> GetSalePriceLists(bool useTempTables)
         {
-            return GetItemsText(string.Format("SELECT ID,  OwnerType, OwnerID, CurrencyID, EffectiveOn, SourceID FROM {0} {1}"
+            return GetItemsText(string.Format("SELECT ID,  OwnerType, OwnerID, CurrencyID, EffectiveOn, IsSent, SourceID FROM {0} {1}"
                 , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), "where sourceid is not null"), SalePriceListMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -62,7 +64,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 PriceListId = (int)reader["ID"],
                 OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 SourceId = reader["SourceID"] as string,
-                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn")
+                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn"),
+                IsSent = GetReaderValue<bool>(reader, "IsSent")
             };
         }
 

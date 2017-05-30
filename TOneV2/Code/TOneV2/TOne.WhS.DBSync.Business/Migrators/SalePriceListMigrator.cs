@@ -65,7 +65,8 @@ namespace TOne.WhS.DBSync.Business
                     CurrencyId = currency.CurrencyId,
                     SourceId = sourceItem.SourceId,
                     EffectiveOn = sourceItem.BED,
-                    CreatedTime = sourceItem.BED
+                    CreatedTime = sourceItem.BED,
+                    IsSent = true
                 };
             else
             {

@@ -18,5 +18,6 @@ namespace TOne.WhS.DBSync.Entities
         public byte[] SourceFileBytes { get; set; }
         public string SourceFileName { get; set; }
         public DateTime BED { get; set; }
+        public bool IsSent { get; set; }
     }
 }

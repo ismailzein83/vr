@@ -38,6 +38,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         private SourcePriceList SourcePriceListMapper(IDataReader arg)
         {
+            string isSent = (arg["IsSent"] as string);
             return new SourcePriceList()
             {
                 SourceId = arg["PriceListID"].ToString(),
@@ -47,19 +48,20 @@ namespace TOne.WhS.DBSync.Data.SQL
                 BED = (DateTime)arg["BeginEffectiveDate"],
                 SourceFileBytes = GetReaderValue<byte[]>(arg, "SourceFileBytes"),
                 SourceFileName = arg["SourceFileName"] as string,
+                IsSent = string.IsNullOrEmpty(isSent) || isSent.Equals("N") ? false : true
             };
         }
 
 
 
         const string query_getSaleSourcePriceLists = @"SELECT  PriceListID ,  SupplierID, CustomerID,  Description, CurrencyID,  BeginEffectiveDate ,  EndEffectiveDate,
-                                                            NULL SourceFileBytes, NULL SourceFileName FROM PriceList WITH (NOLOCK) where SupplierID = 'SYS' ";
+                                                            NULL SourceFileBytes, NULL SourceFileName, IsSent FROM PriceList WITH (NOLOCK) where SupplierID = 'SYS' ";
 
-        const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, NULL SourceFileName, p.BeginEffectiveDate , NULL SourceFileBytes
+        const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, NULL SourceFileName, p.BeginEffectiveDate , NULL SourceFileBytes, IsSent
                                                             FROM         PriceList AS p WITH (NOLOCK)
                                                             WHERE     (p.CustomerID = 'SYS')";
 
-        const string query_getSupplierSourcePriceListsWithData = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes
+        const string query_getSupplierSourcePriceListsWithData = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes, p.IsSent
                                                             FROM         PriceList AS p WITH (NOLOCK) LEFT JOIN
                                                                                     PriceListData AS data WITH (NOLOCK) ON p.PriceListID = data.PriceListID
                                                             WHERE     (p.CustomerID = 'SYS')";
