@@ -41,13 +41,16 @@
                 $scope.scopeModel.isLoading = true;
                 var promises = [];
 
+                var haveAllEmailsBeenSent;
+
                 var sendCustomerPriceListsPromise = sendCustomerPriceLists();
                 promises.push(sendCustomerPriceListsPromise);
 
                 var loadSalePriceListGridDeferred = UtilsService.createPromiseDeferred();
                 promises.push(loadSalePriceListGridDeferred.promise);
 
-                sendCustomerPriceListsPromise.then(function () {
+                sendCustomerPriceListsPromise.then(function (response) {
+                    haveAllEmailsBeenSent = response;
                     loadSalePriceListGrid().then(function () {
                         loadSalePriceListGridDeferred.resolve();
                     }).catch(function (error) {
@@ -56,8 +59,12 @@
                 });
 
                 return UtilsService.waitMultiplePromises(promises).then(function () {
-                    $scope.scopeModel.isSendAllButtonDisabled = true;
-                    $scope.modalContext.closeModal();
+                    if (haveAllEmailsBeenSent === false)
+                        VRNotificationService.showWarning('Some pricelists have failed to send');
+                    else {
+                        $scope.scopeModel.isSendAllButtonDisabled = true;
+                        $scope.modalContext.closeModal();
+                    }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {

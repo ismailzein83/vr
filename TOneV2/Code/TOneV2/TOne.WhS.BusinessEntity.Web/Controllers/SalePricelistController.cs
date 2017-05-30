@@ -40,9 +40,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("SendCustomerPriceLists")]
-        public void SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
+        public bool SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
         {
-            new SalePriceListManager().SendCustomerPriceLists(customerPriceListIds);
+            return new SalePriceListManager().SendCustomerPriceLists(customerPriceListIds);
         }
     }
 }

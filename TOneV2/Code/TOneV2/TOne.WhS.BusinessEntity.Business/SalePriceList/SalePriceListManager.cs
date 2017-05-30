@@ -204,20 +204,22 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId);
         }
-        public void SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
+        public bool SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
         {
-            if (customerPriceListIds == null)
-                return;
+            if (customerPriceListIds == null || customerPriceListIds.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("customerPriceListIds");
 
             IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().MapRecords(x => x.Value, x => customerPriceListIds.Contains(x.Value.PriceListId));
 
-            if (customerPriceLists == null)
-                return;
+            if (customerPriceLists == null || customerPriceLists.Count() < customerPriceListIds.Count())
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Some of the sale pricelists, with the following ids '{0}', were not found", string.Join(",", customerPriceListIds)));
 
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
 
             var notificationManager = new TOne.WhS.BusinessEntity.Business.NotificationManager();
             var fileManager = new Vanrise.Common.Business.VRFileManager();
+
+            var haveAllEmailsBeenSent = true;
 
             foreach (SalePriceList customerPriceList in customerPriceLists)
             {
@@ -225,8 +227,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     continue;
 
                 VRFile customerPriceListFile = fileManager.GetFile(customerPriceList.FileId);
-                notificationManager.SendSalePriceList(loggedInUserId, customerPriceList, customerPriceListFile);
+                bool hasEmailBeenSent = notificationManager.SendSalePriceList(loggedInUserId, customerPriceList, customerPriceListFile);
+
+                if (!hasEmailBeenSent)
+                    haveAllEmailsBeenSent = false;
             }
+
+            return haveAllEmailsBeenSent;
         }
         #endregion
 
