@@ -65,11 +65,11 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
                                             }
                                         }
                                     }
-                                    if (response.InvoiceDetail.Entity != undefined) {
-                                        toDate = UtilsService.createDateFromString(response.InvoiceDetail.Entity.ToDate);
-                                    }
+                                   
                                 }
-
+                                if (response != undefined) {
+                                    toDate = response.FormattedDate;
+                                }
                                 $scope.scopeModel.fields.push({
                                     name: "Amount",
                                     value: invoiceBalance + " " + invoiceCurrency

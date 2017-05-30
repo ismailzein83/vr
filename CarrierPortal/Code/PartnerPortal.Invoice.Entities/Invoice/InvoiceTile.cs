@@ -10,6 +10,7 @@ namespace PartnerPortal.Invoice.Entities
     public class InvoiceTile
     {
         public InvoiceClientDetail InvoiceDetail { get; set; }
+        public string FormattedDate { get; set; }
         public string ViewURL { get; set; }
     }
 }

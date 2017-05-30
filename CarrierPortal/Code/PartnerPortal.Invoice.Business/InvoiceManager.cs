@@ -118,6 +118,8 @@ namespace PartnerPortal.Invoice.Business
             {
                 InvoiceDetail = invoiceDetail,
             };
+            if (invoiceDetail != null && invoiceDetail.Entity != null)
+                invoiceTile.FormattedDate = invoiceDetail.Entity.ToDate.ToString(new GeneralSettingsManager().GetDateFormat()); 
             if(viewId.HasValue)
             {
                 ViewManager viewManager = new ViewManager();
