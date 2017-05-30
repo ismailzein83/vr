@@ -11,16 +11,37 @@ namespace Retail.BusinessEntity.Business
     {
         public override Guid ConfigId { get { return new Guid("63E3987B-302B-42BA-8E61-A7762FA7BFD3"); } }
 
+        public bool UseFinancialAccountModule { get; set; }
+
         public override bool TryGetFinancialAccountId(IFinancialAccountLocatorContext context)
         {
-            long? financialAccountId = new AccountBEManager().GetFinancialAccountId(context.AccountDefinitionId, context.AccountId);
-            if (!financialAccountId.HasValue)
-                return false;
+            if (this.UseFinancialAccountModule)
+            {
+                FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                FinancialAccountRuntimeData financialAccountData = financialAccountManager.GetAccountFinancialInfo(context.AccountDefinitionId, context.AccountId, context.EffectiveOn);
+                if(financialAccountData != null)
+                {
+                    context.FinancialAccountId = financialAccountData.FinancialAccountId;
+                    context.BalanceAccountTypeId = financialAccountData.BalanceAccountTypeId;
+                    context.BalanceAccountId = financialAccountData.BalanceAccountId;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                long? financialAccountId = new AccountBEManager().GetFinancialAccountId(context.AccountDefinitionId, context.AccountId);
+                if (!financialAccountId.HasValue)
+                    return false;
 
-            context.FinancialAccountId = financialAccountId.Value;
-            context.BalanceAccountId = financialAccountId.Value.ToString();
-            context.BalanceAccountTypeId = new AccountBalanceManager().GetAccountBalanceTypeId(context.AccountDefinitionId);
-            return true;
+                context.FinancialAccountId = financialAccountId.Value;
+                context.BalanceAccountId = financialAccountId.Value.ToString();
+                context.BalanceAccountTypeId = new AccountBalanceManager().GetAccountBalanceTypeId(context.AccountDefinitionId);
+                return true;
+            }
         }
     }
 }

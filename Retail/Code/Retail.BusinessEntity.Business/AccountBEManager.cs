@@ -477,6 +477,43 @@ namespace Retail.BusinessEntity.Business
             return new AccountBELoggableEntity(accountBEDefinitionId);
         }
 
+        public bool TryGetCurrencyId(Guid accountDefinitionId, Account account, out int currencyId)
+        {
+            IAccountPayment paymentPart;
+            if (HasAccountPayment(accountDefinitionId, true, account, out paymentPart))
+            {
+                currencyId = paymentPart.CurrencyId;
+                return true;
+            }
+            else
+            {
+                currencyId = 0;
+                return false;
+            }
+        }
+
+        public bool TryGetCurrencyId(Guid accountDefinitionId, long accountId, out int currencyId)
+        {
+            Account account = GetAccount(accountDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+            return TryGetCurrencyId(accountDefinitionId, account, out currencyId);
+        }
+
+        public int GetCurrencyId(Guid accountDefinitionId, long accountId)
+        {
+            Account account = GetAccount(accountDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+            return GetCurrencyId(accountDefinitionId, account);
+        }
+
+        public int GetCurrencyId(Guid accountDefinitionId, Account account)
+        {
+            int currencyId;
+            if (!TryGetCurrencyId(accountDefinitionId, account, out currencyId))
+                throw new Exception(string.Format("Account {0} does not have currency", account.AccountId));
+            return currencyId;
+        }
+
         #endregion
 
         #region ExtendedSettings
@@ -1045,32 +1082,12 @@ namespace Retail.BusinessEntity.Business
                         {
                             Name = account.Name,
                             StatusDescription = statusDesciption,
+                            CurrencyId = GetCurrencyId(context.EntityDefinitionId, account)
                         };
-                        var currency = GetCurrencyId(account.Settings.Parts.Values);
-                        if (currency.HasValue)
-                        {
-                            accountInfo.CurrencyId = currency.Value;
-                        }
-                        else
-                        {
-                            throw new Exception(string.Format("Account {0} does not have currency", accountInfo.Name));
-                        }
                         return accountInfo;
                     }
                 default: return null;
             }
-        }
-        private int? GetCurrencyId(IEnumerable<AccountPart> parts)
-        {
-            foreach (AccountPart part in parts)
-            {
-                var actionpartSetting = part.Settings as IAccountPayment;
-                if (actionpartSetting != null)
-                {
-                    return actionpartSetting.CurrencyId;
-                }
-            }
-            return null;
         }
 
         #endregion

@@ -44,6 +44,9 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountViewDefinition> AccountViewDefinitions { get; set; }
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
+
+        public FinancialAccountLocator FinancialAccountLocator { get; set; }
+
         public AccountBEDefinitionSecurity Security { get; set; }
 
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)

@@ -12,6 +12,7 @@ namespace Retail.BusinessEntity.Business
     public class FinancialAccountManager
     {
         static AccountBEManager s_accountManager = new AccountBEManager();
+        static AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
         static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
       
         #region Public Methods
@@ -172,7 +173,9 @@ namespace Retail.BusinessEntity.Business
 
         public FinancialAccountLocator GetFinancialAccountLocator(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
         {
-            return new DefaultFinancialAccountLocator();
+            var accountBEDefinitionSettings = s_accountBEDefinitionManager.GetAccountBEDefinitionSettings(accountDefinitionId);
+            accountBEDefinitionSettings.ThrowIfNull("accountBEDefinitionSettings", accountDefinitionId);
+            return accountBEDefinitionSettings.FinancialAccountLocator != null ? accountBEDefinitionSettings.FinancialAccountLocator : new DefaultFinancialAccountLocator();
         }
         public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBEDefinitionId ,FinancialAccountInfoFilter filter)
         {
