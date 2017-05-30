@@ -84,15 +84,10 @@
 
             $scope.SendPriceListByEmail = function () {
                 $scope.isLoadingFilter = true;
-                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(priceListId, priceLisTypeSelectorAPI.getSelectedIds()).then(function (emailResponse) {
 
+                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(priceListId, priceLisTypeSelectorAPI.getSelectedIds())
+                    .then(function (emailResponse) {
                     WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSalePriceListSendingEmail);
-                    whSBeSalePriceListChangeApiService.SetPriceListAsSent(priceListId)
-                        .then(function() {
-                            $scope.modalContext.closeModal();
-                        });
-
-
                 }).catch(function (error) {
 
                     $scope.isLoadingFilter = false;
@@ -108,7 +103,13 @@
             };
         }
         function onSalePriceListSendingEmail(evaluatedEmail) {
-            VRCommon_VRMailAPIService.SendEmail(evaluatedEmail);
+            VRCommon_VRMailAPIService.SendEmail(evaluatedEmail)
+            .then(function () {
+                whSBeSalePriceListChangeApiService.SetPriceListAsSent(priceListId)
+                        .then(function () {
+                            $scope.modalContext.closeModal();
+                        });
+            });
         }
         function SetFilteredCodeObject() {
             if (priceListId != undefined) {
