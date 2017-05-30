@@ -47,11 +47,8 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Vanrise.Analytic.Business">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Entities">
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -65,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculateBeginDate.cs" />
-    <Compile Include="LoadAndPrepareBillingSummaryRecords.cs" />
+    <Compile Include="LoadBillingSummaryRecords.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateProgressTables.cs" />
   </ItemGroup>
