@@ -165,7 +165,9 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool SetCustomerPricelistsAsSent(IEnumerable<int> customerIds, int? priceListId)
         {
             ISalePriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
-            return dataManager.SetCustomerPricelistsAsSent(customerIds, priceListId);
+            bool setAsSent= dataManager.SetCustomerPricelistsAsSent(customerIds, priceListId);
+            if (setAsSent) Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            return setAsSent;
         }
         public IEnumerable<SalePriceList> GetCustomerSalePriceListsByProcessInstanceId(long processInstanceId)
         {
