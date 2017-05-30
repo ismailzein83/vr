@@ -4,7 +4,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetFilteredByOwnerAnd
 	@CustomerOwnerType int,
 	@EffectiveTime DATETIME = NULL,
 	@ActiveCustomersInfo TOneWhS_BE.RoutingCustomerInfo READONLY,
-	@ZoneIds nvarchar(max)
+	@ZoneIds nvarchar(max) = null,
+	@IsDefault bit
 AS
 BEGIN
 	DECLARE @ZoneIDsTable TABLE (ZoneID int)
@@ -19,6 +20,7 @@ BEGIN
 		JOIN	@ActiveCustomersInfo ci on ci.CustomerId = se.OwnerId
 		WHERE	(se.EED > @EffectiveTime OR se.EED IS NULL)
 				AND se.OwnerType = @CustomerOwnerType
+				AND ((@IsDefault = 1 and se.ZoneId IS NULL) or (@IsDefault = 0 and se.ZoneId in (select ZoneID from @ZoneIDsTable)))
 				AND (@ZoneIds is null or se.ZoneID in (select ZoneID from @ZoneIDsTable))
 
 	Union
@@ -27,5 +29,6 @@ BEGIN
 		FROM    [TOneWhS_BE].[SaleEntityRoutingProduct] se WITH(NOLOCK) 
 		WHERE	(se.EED > @EffectiveTime OR se.EED IS NULL)
 				AND se.OwnerType <> @CustomerOwnerType
+				AND ((@IsDefault = 1 and se.ZoneId IS NULL) or (@IsDefault = 0 and se.ZoneId in (select ZoneID from @ZoneIDsTable)))
 				AND (@ZoneIds is null or se.ZoneID in (select ZoneID from @ZoneIDsTable))
 END
