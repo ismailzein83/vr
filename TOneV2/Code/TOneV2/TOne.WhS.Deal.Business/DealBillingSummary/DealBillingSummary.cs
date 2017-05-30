@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Business
 {
-    public class BaseDealBillingSummaryRecord
+    public class BaseDealBillingSummary
     {
         public DateTime BatchStart { get; set; }
 
@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Business
         public decimal DurationInSeconds { get; set; }
     }
 
-    public class DealBillingSummaryRecord : BaseDealBillingSummaryRecord
+    public class DealBillingSummary : BaseDealBillingSummary
     {
         public int DealTierNb { get; set; }
 

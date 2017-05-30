@@ -7,6 +7,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using TOne.WhS.Deal.Business;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -14,9 +15,9 @@ namespace TOne.WhS.Deal.BP.Activities
     {
         public InArgument<DateTime> BeginDate { get; set; }
 
-        public OutArgument<Dictionary<DealZoneGroup, DealBillingSummaryRecord>> CurrentDealBillingSummaryRecords { get; set; }
+        public OutArgument<Dictionary<DealZoneGroup, DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
 
-        public OutArgument<Dictionary<DealZoneGroup, DealBillingSummaryRecord>> ExpectedDealBillingSummaryRecords { get; set; }
+        public OutArgument<Dictionary<DealZoneGroup, DealBillingSummary>> ExpectedDealBillingSummaryRecords { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -37,8 +38,8 @@ namespace TOne.WhS.Deal.BP.Activities
                 //SortByColumnName = "DimensionValues[0].Name"
             };
             string direction = "Sale";
-            Dictionary<DealZoneGroup, DealBillingSummaryRecord> currentDealBillingSummaryRecords = new Dictionary<DealZoneGroup, DealBillingSummaryRecord>();
-            Dictionary<DealZoneGroup, BaseDealBillingSummaryRecord> expectedDealBillingSummaryRecords = new Dictionary<DealZoneGroup, BaseDealBillingSummaryRecord>();
+            Dictionary<DealZoneGroup, DealBillingSummary> currentDealBillingSummaryRecords = new Dictionary<DealZoneGroup, DealBillingSummary>();
+            Dictionary<DealZoneGroup, BaseDealBillingSummary> expectedDealBillingSummaryRecords = new Dictionary<DealZoneGroup, BaseDealBillingSummary>();
 
             var result = new AnalyticManager().GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null)
@@ -54,7 +55,7 @@ namespace TOne.WhS.Deal.BP.Activities
                     DealZoneGroup currentDealKeyData = new DealZoneGroup() { DealId = saleDealId, ZoneGroupNb = saleDealZoneGroupNb };
                     if (!currentDealBillingSummaryRecords.ContainsKey(currentDealKeyData))
                     {
-                        currentDealBillingSummaryRecords.Add(currentDealKeyData, new DealBillingSummaryRecord()
+                        currentDealBillingSummaryRecords.Add(currentDealKeyData, new DealBillingSummary()
                         {
                             BatchStart = time,
                             DealId = saleDealId,
@@ -65,7 +66,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         });
                     }
 
-                    BaseDealBillingSummaryRecord dealBillingSummaryRecord;
+                    BaseDealBillingSummary dealBillingSummaryRecord;
                     DealZoneGroup expectedDealKeyData = new DealZoneGroup() { DealId = origDealId, ZoneGroupNb = origDealZoneGroupNb };
                     if (expectedDealBillingSummaryRecords.TryGetValue(expectedDealKeyData, out dealBillingSummaryRecord))
                     {
@@ -73,7 +74,7 @@ namespace TOne.WhS.Deal.BP.Activities
                     }
                     else
                     {
-                        expectedDealBillingSummaryRecords.Add(expectedDealKeyData, new DealBillingSummaryRecord()
+                        expectedDealBillingSummaryRecords.Add(expectedDealKeyData, new DealBillingSummary()
                         {
                             BatchStart = time,
                             DealId = (int)analyticRecord.MeasureValues.GetRecord("OrigSaleDeal").Value,
