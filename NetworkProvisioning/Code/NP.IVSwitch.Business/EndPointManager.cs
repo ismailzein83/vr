@@ -45,11 +45,22 @@ namespace NP.IVSwitch.Business
 
         public IEnumerable<EndPointEntityInfo> GetEndPointsInfo(EndPointInfoFilter filter)
         {
-            var assignEndPoints = GetCarrierAccountIdsByEndPointId();
+            HashSet<int> assignEndPointIds = null;
+            int? carrierAccountSWCustomerAccountId = null;
+            if (filter.AssignableToCarrierAccountId.HasValue)
+            {
+                assignEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
+                carrierAccountSWCustomerAccountId = new AccountManager().GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value);
+            }
             var allEndPoints = this.GetCachedEndPoint();
             Func<EndPoint,bool> filterFunc = (x) => {
-                if (assignEndPoints.ContainsKey(x.EndPointId))
-                    return false;
+                if (filter.AssignableToCarrierAccountId.HasValue)
+                {
+                    if (assignEndPointIds.Contains(x.EndPointId))
+                        return false;
+                    if (carrierAccountSWCustomerAccountId.HasValue && x.AccountId != carrierAccountSWCustomerAccountId.Value)
+                        return false;
+                }
                 return true;
             };
             return allEndPoints.MapRecords(EndPointEntityInfoMapper, filterFunc);
@@ -170,6 +181,58 @@ namespace NP.IVSwitch.Business
         {
             return GetCarrierAccountIdsByEndPointId().GetRecord(endPointId);
         }
+
+        public void LinkCarrierAccountToEndPoints(int carrierAccountId, List<int> endPointIds)
+        {
+            if (endPointIds == null || endPointIds.Count == 0)
+                throw new ArgumentNullException("endPointIds");
+            List<EndPoint> endPoints = new List<EndPoint>();
+            int? customerAccountId = null;
+            foreach(var endPointId in endPointIds)
+            {                
+                var endPoint = GetEndPoint(endPointId);
+                endPoint.ThrowIfNull("endPoint", endPointId);
+                endPoints.Add(endPoint);
+                if (!customerAccountId.HasValue)
+                    customerAccountId = endPoint.AccountId;
+                else if (customerAccountId.Value != endPoint.AccountId)
+                    throw new Exception("All endpoints should have same AccountId");
+            }
+            new AccountManager().TrySetSWCustomerAccountId(carrierAccountId, customerAccountId.Value);
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            EndPointCarrierAccountExtension endPointCarrierAccountExtension = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccountId);
+            if (endPointCarrierAccountExtension == null)
+                endPointCarrierAccountExtension = new EndPointCarrierAccountExtension();
+            foreach(var endPoint in endPoints)
+            {
+                switch(endPoint.EndPointType)
+                {
+                    case UserType.ACL:
+                        {
+                            if (endPointCarrierAccountExtension.AclEndPointInfo == null)
+                                endPointCarrierAccountExtension.AclEndPointInfo = new List<EndPointInfo>();
+                            endPointCarrierAccountExtension.AclEndPointInfo.Add(new EndPointInfo { EndPointId = endPoint.EndPointId });
+                        }break;
+                    case UserType.SIP:
+                        {
+                            if (endPointCarrierAccountExtension.UserEndPointInfo == null)
+                                endPointCarrierAccountExtension.UserEndPointInfo = new List<EndPointInfo>();
+                            endPointCarrierAccountExtension.UserEndPointInfo.Add(new EndPointInfo { EndPointId = endPoint.EndPointId });
+                        }
+                        break;
+                    default: throw new NotSupportedException(String.Format("endPoint.EndPointType '{0}'", endPoint.EndPointType));
+                }
+            }
+
+            carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(
+                carrierAccountId, endPointCarrierAccountExtension);
+            string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+            foreach (var endPointId in endPointIds)
+            {
+                GenerateRule(carrierAccountId, endPointId, carrierAccountName);
+            }
+        }
+
 
         #endregion
 

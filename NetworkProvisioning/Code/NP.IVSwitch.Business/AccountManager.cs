@@ -75,6 +75,53 @@ namespace NP.IVSwitch.Business
             return GetSwitchAccountNamesByRouteId().GetRecord(routeId);
         }
 
+        public int? GetCarrierAccountSWCustomerAccountId(int carrierAccountId)
+        {
+            AccountCarrierProfileExtension carrierProfileExtension = GetCarrierProfileExtension(carrierAccountId);
+            if (carrierProfileExtension != null)
+                return carrierProfileExtension.CustomerAccountId;
+            else
+                return default(int?);
+        }
+
+        public int? GetCarrierAccountSWSupplierAccountId(int carrierAccountId)
+        {
+            AccountCarrierProfileExtension carrierProfileExtension = GetCarrierProfileExtension(carrierAccountId);
+            if (carrierProfileExtension != null)
+                return carrierProfileExtension.VendorAccountId;
+            else
+                return default(int?);
+        }
+
+        private AccountCarrierProfileExtension GetCarrierProfileExtension(int carrierAccountId)
+        {
+            int? carrierProfileId = new CarrierAccountManager().GetCarrierProfileId(carrierAccountId);
+            if (!carrierProfileId.HasValue)
+                throw new NullReferenceException(String.Format("carrierProfileId. '{0}'", carrierAccountId));
+            AccountCarrierProfileExtension carrierProfileExtension = new CarrierProfileManager().GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId.Value);
+            return carrierProfileExtension;
+        }
+
+        public void TrySetSWCustomerAccountId(int carrierAccountId, int swCustomerAccountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            int? carrierProfileId = carrierAccountManager.GetCarrierProfileId(carrierAccountId);
+            if (!carrierProfileId.HasValue)
+                throw new NullReferenceException(String.Format("carrierProfileId. '{0}'", carrierAccountId));
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            AccountCarrierProfileExtension accountCarrierProfileExtension =
+                carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId.Value);
+            if (accountCarrierProfileExtension == null || !accountCarrierProfileExtension.CustomerAccountId.HasValue)
+            {
+                if (accountCarrierProfileExtension == null)
+                    accountCarrierProfileExtension = new AccountCarrierProfileExtension();
+                accountCarrierProfileExtension.CustomerAccountId = swCustomerAccountId;
+                carrierProfileManager.UpdateCarrierProfileExtendedSetting(carrierProfileId.Value, accountCarrierProfileExtension);
+            }
+            else if (accountCarrierProfileExtension.CustomerAccountId.Value != swCustomerAccountId)
+                throw new Exception(String.Format("assigned SWCustomerAccountId '{0}' is different than endpoints AccountId '{1}'", accountCarrierProfileExtension.CustomerAccountId.Value, swCustomerAccountId));
+        }
 
         #endregion
 
