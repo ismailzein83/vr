@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Business
             _defaultRoutingProductByCustomerId = new Dictionary<int, List<DefaultRoutingProduct>>();
             _defaultRoutingProductBySellingProductId = new Dictionary<int, List<DefaultRoutingProduct>>();
             ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
-            IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = saleEntityRoutingProductDataManager.GetDefaultRoutingProducts(customerIds, minimumDate, false);
+            IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = saleEntityRoutingProductDataManager.GetDefaultRoutingProductsEffectiveAfter(customerIds, minimumDate);
             foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
             {
                 if (defaultRoutingProduct.OwnerType == SalePriceListOwnerType.Customer)
@@ -44,7 +44,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
         }
-       
+
         private SaleZoneRoutingProductsByOwner GetAllZoneRoutingProduct(IEnumerable<int> customerIds, DateTime minimumDate)
         {
             SaleZoneRoutingProductsByOwner saleZoneRoutingProductsByOwnerResult = new SaleZoneRoutingProductsByOwner
@@ -53,7 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaleZoneRoutingProductsByProduct = new Dictionary<int, SaleZoneRoutingProductsByZone>()
             };
             ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
-            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetSaleZoneRoutingProductsByZoneIds(customerIds, 
+            IEnumerable<SaleZoneRoutingProduct> saleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetSaleZoneRoutingProductsByZoneIds(customerIds,
                 minimumDate, this._zoneIdsWithRateBED.Keys.ToList());
 
             foreach (var saleZoneRoutingProduct in saleZoneRoutingProducts)

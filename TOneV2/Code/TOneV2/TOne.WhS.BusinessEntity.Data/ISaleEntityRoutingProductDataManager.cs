@@ -17,6 +17,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture);
 
         IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsByZoneIds(IEnumerable<int> customerIds, DateTime effectiveAfter, List<long> zoneIds);
+        IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProductsEffectiveAfter(IEnumerable<int> customerIds, DateTime? effectiveAfter);
 
         IEnumerable<SaleZoneRoutingProduct> GetEffectiveZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn);
 
