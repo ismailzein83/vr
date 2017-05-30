@@ -857,8 +857,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             CustomerSalePriceListInfo customerChange = salePriceListOutput.CustomerChanges.FindRecord(x => x.CustomerId == customerId);
 
-            ZoneChangesByCountryId allChangesByCountryId = MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,
-                        salePriceListOutput.NotSentChangesByCustomerId);
+            ZoneChangesByCountryId allChangesByCountryId = customerChange.ZoneChangesByCountryId;// MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,salePriceListOutput.NotSentChangesByCustomerId);
 
             List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, salePriceListType.Value, allChangesByCountryId,
                 salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, salePriceListContext.EffectiveDate, salePriceList.ProcessInstanceId);
