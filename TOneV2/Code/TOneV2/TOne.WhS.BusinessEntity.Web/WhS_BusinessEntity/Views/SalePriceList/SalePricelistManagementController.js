@@ -8,6 +8,7 @@
 
         var gridApi;
         var gridQuery = {};
+        var gridContext;
 
         var carrierAccountSelectorApi;
         var carrierAccountSelectorReadyDeferred = utilsService.createPromiseDeferred();
@@ -18,6 +19,8 @@
         function defineScope() {
             $scope.selectedCustomer = [];
 
+            setGridContext();
+
             $scope.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorApi = api;
                 carrierAccountSelectorReadyDeferred.resolve();
@@ -25,14 +28,11 @@
 
             $scope.onGridReady = function (api) {
                 gridApi = api;
-                var gridPayload = { query: gridQuery };
-                gridApi.load(gridPayload);
+                loadSalePriceListGrid();
             };
 
             $scope.searchClicked = function () {
-                setGridQuery();
-                var gridPayload = { query: gridQuery };
-                return gridApi.load(gridPayload);
+                return loadSalePriceListGrid();
             };
         }
         function load() {
@@ -61,6 +61,16 @@
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
+        function loadSalePriceListGrid() {
+            setGridQuery();
+
+            var gridPayload = {
+                query: gridQuery,
+                context: gridContext
+            };
+
+            return gridApi.load(gridPayload);
+        }
 
         function setGridQuery() {
             gridQuery = {
@@ -68,7 +78,15 @@
                 CreationDate: $scope.CreationDate
             };
         }
+        function setGridContext() {
+            gridContext = {
+                onSalePriceListPreviewClosed: function () {
+                    return loadSalePriceListGrid();
+                }
+            };
+        }
     }
 
     appControllers.controller('WhS_BE_SalePricelistManagementController', salePricelistController);
+
 })(appControllers);
