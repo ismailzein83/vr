@@ -9,14 +9,45 @@ CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetFiltered]
 	@PartnerPrefix nvarchar(50),
 	@FromDate datetime,
 	@ToDate datetime,
-	@IssueDate datetime
+	@IssueDate datetime,
+	@EffectiveDate  datetime = null,
+	@IsEffectiveInFuture bit,
+	@Status int = null
 AS
 BEGIN
 DECLARE @PartnerIdsTable TABLE (PartnerId nvarchar(50))
 INSERT INTO @PartnerIdsTable (PartnerId)
 select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@PartnerIds)
-	SELECT	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,TimeZoneId,TimeZoneOffset, sourceid
-	FROM	VR_Invoice.Invoice with(nolock)
-	where	(InvoiceTypeId = @InvoiceTypeId) AND  (@PartnerIds is Null or PartnerID IN (SELECT PartnerId FROM @PartnerIdsTable)) AND (@PartnerPrefix is null Or PartnerId like  (@PartnerPrefix +'%'))
-			AND FromDate >= @FromDate AND (@ToDate is null OR ToDate <= @ToDate)   AND (@IssueDate is null OR IssueDate =@IssueDate ) And IsDeleted != 1
+	
+	SELECT	vrIn.ID,
+			vrIn.InvoiceTypeID,
+			vrIn.PartnerID,SerialNumber,
+			vrIn.FromDate,
+			vrIn.ToDate,
+			vrIn.IssueDate,
+			vrIn.DueDate,
+			vrIn.Details,
+			vrIn.PaidDate,
+			vrIn.UserId,
+			vrIn.CreatedTime,
+			vrIn.LockDate,
+			vrIn.Notes,
+			vrIn.TimeZoneId,
+			vrIn.TimeZoneOffset, 
+			vrIn.SourceId
+	FROM	VR_Invoice.Invoice vrIn with(nolock)  
+	Inner Join VR_Invoice.InvoiceAccount vrInAcc 
+	on vrIn.InvoiceTypeID = vrInAcc.InvoiceTypeId and 
+	   vrIn.PartnerID = vrInAcc.PartnerID and 
+	   ISNULL(vrInAcc.IsDeleted, 0) = 0 and
+	   (@Status IS NULL OR vrInAcc.[Status] = @Status) AND
+	   (@EffectiveDate IS NULL OR (vrInAcc.BED <= @EffectiveDate AND (vrInAcc.EED > @EffectiveDate OR vrInAcc.EED IS NULL))) AND
+	   (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrInAcc.EED IS NULL or vrInAcc.EED >=  GETDATE()))  OR  (@IsEffectiveInFuture = 0 and  vrInAcc.EED <=  GETDATE()))
+	where	(vrIn.InvoiceTypeId = @InvoiceTypeId) AND  
+			(@PartnerIds is Null or vrIn.PartnerID IN (SELECT PartnerId FROM @PartnerIdsTable)) AND 
+			(@PartnerPrefix is null Or vrIn.PartnerId like  (@PartnerPrefix +'%')) AND 
+			vrIn.FromDate >= @FromDate AND 
+			(@ToDate is null OR vrIn.ToDate <= @ToDate)   AND 
+			(@IssueDate is null OR vrIn.IssueDate =@IssueDate ) And 
+			vrIn.IsDeleted != 1
 END
