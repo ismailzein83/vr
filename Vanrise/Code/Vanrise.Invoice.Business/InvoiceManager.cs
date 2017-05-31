@@ -35,39 +35,14 @@ namespace Vanrise.Invoice.Business
             var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
 
             var bigResult = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
-            var inActivePartners = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { PartnerRetrievalType = PartnerRetrievalType.GetInactive, InvoiceTypeId = input.Query.InvoiceTypeId });
-            Vanrise.Entities.BigResult<InvoiceDetail> finalResult = new BigResult<InvoiceDetail>
+            if (!getClientInvoices && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-                ResultKey = bigResult.ResultKey,
-            };
-            List<InvoiceDetail> invoiceDetails = null;
-            var totalCount = bigResult.TotalCount;
-            if (bigResult.Data != null)
-            {
-                invoiceDetails = new List<InvoiceDetail>();
-                foreach (var item in bigResult.Data)
-                {
-                    if (inActivePartners == null || !inActivePartners.Contains(item.Entity.PartnerId))
-                    {
-                        invoiceDetails.Add(item);
-                    }else
-                    {
-                        totalCount--;
-                    }
-
-                }
-            }
-            finalResult.Data = invoiceDetails;
-            finalResult.TotalCount = totalCount;
-
-            if (!getClientInvoices && finalResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
-            {
-                foreach (var accountDetail in finalResult.Data)
+                foreach (var accountDetail in bigResult.Data)
                 {
                     InvoiceDetailMapper2(accountDetail, invoiceType);
                 }
             }
-            return finalResult;
+            return bigResult;
         }
         public Entities.Invoice GetInvoice(long invoiceId)
         {

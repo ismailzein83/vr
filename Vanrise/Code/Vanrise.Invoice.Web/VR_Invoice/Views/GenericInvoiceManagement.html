@@ -2,7 +2,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
-                    <vr-invoice-accountstatus-selector on-ready="onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+                <vr-invoice-accountstatus-selector hideremoveicon on-ready="onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
              
                    <vr-directivewrapper vr-loader="isLoadingDirective" directive="invoiceTypeEntity.InvoicePartnerManager.PartnerFilterSelector" on-ready="onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
 
