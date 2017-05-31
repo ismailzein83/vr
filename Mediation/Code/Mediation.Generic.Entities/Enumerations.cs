@@ -16,7 +16,9 @@ namespace Mediation.Generic.Entities
         Routing = 6,
         Redirect = 7,
         VoiceMail = 8,
-        Cancel = 9
+        Cancel = 9,
+        NoResponse = 10,
+        Replaced = 11
     }
 
     public enum CentrixReceiveCallType
@@ -38,7 +40,11 @@ namespace Mediation.Generic.Entities
         [ReceiveCallTypeAttribute(CorrespondingSendCallType = CentrixSendCallType.VoiceMail)]
         VoiceMail = 8,
         [ReceiveCallTypeAttribute(CorrespondingSendCallType = CentrixSendCallType.Cancel)]
-        Cancel = 9
+        Cancel = 9,
+        [ReceiveCallTypeAttribute(CorrespondingSendCallType = CentrixSendCallType.NoResponse)]
+        NoResponse = 10,
+        [ReceiveCallTypeAttribute(CorrespondingSendCallType = CentrixSendCallType.Replaced)]
+        Replaced = 11
     }
 
     public class ReceiveCallTypeAttribute : Attribute
