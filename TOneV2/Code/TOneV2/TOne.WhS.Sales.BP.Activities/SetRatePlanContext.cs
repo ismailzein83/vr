@@ -7,101 +7,105 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
-using TOne.WhS.Sales.Business;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	public sealed class SetRatePlanContext : CodeActivity
-	{
-		#region Input Arguments
+    public sealed class SetRatePlanContext : CodeActivity
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+        [RequiredArgument]
+        public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
 
-		[RequiredArgument]
-		public InArgument<int> OwnerId { get; set; }
+        [RequiredArgument]
+        public InArgument<int> OwnerId { get; set; }
 
-		[RequiredArgument]
-		public InArgument<DateTime> EffectiveDate { get; set; }
+        [RequiredArgument]
+        public InArgument<int> CurrencyId { get; set; }
 
-		#endregion
+        [RequiredArgument]
+        public InArgument<DateTime> EffectiveDate { get; set; }
 
-		protected override void CacheMetadata(CodeActivityMetadata metadata)
-		{
-			metadata.AddDefaultExtensionProvider<IRatePlanContext>(() => new RatePlanContext());
-			base.CacheMetadata(metadata);
-		}
+        #endregion
 
-		protected override void Execute(CodeActivityContext context)
-		{
-			SalePriceListOwnerType ownerType = OwnerType.Get(context);
-			int ownerId = OwnerId.Get(context);
-			DateTime effectiveDate = EffectiveDate.Get(context);
+        protected override void CacheMetadata(CodeActivityMetadata metadata)
+        {
+            metadata.AddDefaultExtensionProvider<IRatePlanContext>(() => new RatePlanContext());
+            base.CacheMetadata(metadata);
+        }
 
-			RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
-			ratePlanContext.OwnerType = ownerType;
-			ratePlanContext.OwnerId = ownerId;
-			ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
-			ratePlanContext.EffectiveDate = effectiveDate;
-			ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
-			ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
+        protected override void Execute(CodeActivityContext context)
+        {
+            SalePriceListOwnerType ownerType = OwnerType.Get(context);
+            int ownerId = OwnerId.Get(context);
+            int currencyId = CurrencyId.Get(context);
+            DateTime effectiveDate = EffectiveDate.Get(context);
+
+            RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
+            ratePlanContext.OwnerType = ownerType;
+            ratePlanContext.OwnerId = ownerId;
+            ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
+            ratePlanContext.CurrencyId = currencyId;
+            ratePlanContext.EffectiveDate = effectiveDate;
+            ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
+            ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
             ratePlanContext.MaximumRate = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
-		}
+        }
 
-		#region Private Methods
+        #region Private Methods
 
-		private int GetOwnerSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
-		{
-			int? sellingNumberPlanId;
+        private int GetOwnerSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            int? sellingNumberPlanId;
 
-			if (ownerType == SalePriceListOwnerType.SellingProduct)
-			{
-				sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(ownerId);
-			}
-			else
-			{
-				sellingNumberPlanId = new CarrierAccountManager().GetCustomerSellingNumberPlanId(ownerId);
-			}
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(ownerId);
+            }
+            else
+            {
+                sellingNumberPlanId = new CarrierAccountManager().GetCustomerSellingNumberPlanId(ownerId);
+            }
 
-			if (!sellingNumberPlanId.HasValue)
-			{
-				string ownerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription<SalePriceListOwnerType>(ownerType);
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Could not find the Selling Number Plan of {0} '{1}'", ownerTypeDescription, ownerId));
-			}
+            if (!sellingNumberPlanId.HasValue)
+            {
+                string ownerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription<SalePriceListOwnerType>(ownerType);
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Could not find the Selling Number Plan of {0} '{1}'", ownerTypeDescription, ownerId));
+            }
 
-			return sellingNumberPlanId.Value;
-		}
+            return sellingNumberPlanId.Value;
+        }
 
-		private SaleEntityZoneRateLocator GetFutureRateLocator(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveDate)
-		{
-			if (ownerType == SalePriceListOwnerType.SellingProduct)
-				return null;
+        private SaleEntityZoneRateLocator GetFutureRateLocator(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveDate)
+        {
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+                return null;
 
-			int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(ownerId, effectiveDate, false);
-			if (!sellingProductId.HasValue)
-				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product on '{1}'", ownerId, UtilitiesManager.GetDateTimeAsString(effectiveDate)));
+            int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(ownerId, effectiveDate, false);
+            if (!sellingProductId.HasValue)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product on '{1}'", ownerId, UtilitiesManager.GetDateTimeAsString(effectiveDate)));
 
-			var dataByCustomer = new List<RoutingCustomerInfoDetails>();
-			dataByCustomer.Add(new RoutingCustomerInfoDetails()
-			{
-				CustomerId = ownerId,
-				SellingProductId = sellingProductId.Value
-			});
+            var dataByCustomer = new List<RoutingCustomerInfoDetails>();
+            dataByCustomer.Add(new RoutingCustomerInfoDetails()
+            {
+                CustomerId = ownerId,
+                SellingProductId = sellingProductId.Value
+            });
 
-			return new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
-		}
+            return new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, null, true));
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 
-	internal static class ContextExtensionMethods
-	{
-		public static IRatePlanContext GetRatePlanContext(this ActivityContext context)
-		{
-			IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
-			if (ratePlanContext == null)
-				throw new NullReferenceException("ratePlanContext");
-			return ratePlanContext;
-		}
-	}
+    internal static class ContextExtensionMethods
+    {
+        public static IRatePlanContext GetRatePlanContext(this ActivityContext context)
+        {
+            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+            if (ratePlanContext == null)
+                throw new NullReferenceException("ratePlanContext");
+            return ratePlanContext;
+        }
+    }
 }
