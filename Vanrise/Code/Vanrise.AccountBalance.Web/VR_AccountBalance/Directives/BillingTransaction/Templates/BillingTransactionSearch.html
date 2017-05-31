@@ -4,11 +4,11 @@
     <vr-columns colnum="6" haschildcolumns>
         <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromTime" to="scopeModel.toTime" period="selectedPeriod" isrequired="false"></vr-timerange>
     </vr-columns>
-    <vr-columns width="normal" withemptyline>
+    <vr-columns colnum="1" withemptyline haschildcolumns>
         <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked" vr-disabled="scopeModel.fromTime==undefined || scopeModel.fromTime== null ||  scopeModel.validateDateTime()!=null"></vr-button>
         <vr-button type="Add" standalone data-onclick="scopeModel.addTransaction" ng-show="scopeModel.hasAddTransaction"></vr-button>
     </vr-columns>
-    <vr-columns width="normal" withemptyline>
+    <vr-columns colnum="3" withemptyline>
         <div class="pull-right">
             <vr-label isvalue>Current Balance:</vr-label>
             <vr-label>{{scopeModel.balance |  vrtextOrNumber : 2}}</vr-label>
