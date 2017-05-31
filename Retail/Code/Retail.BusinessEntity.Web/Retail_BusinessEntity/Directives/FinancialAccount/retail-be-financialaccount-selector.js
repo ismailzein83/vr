@@ -72,7 +72,7 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
             this.initializeController = initializeController;
 
             var selectorAPI;
-
+            var setItemsSelected;
             function initializeController() {
 
                 ctrl.onSelectorReady = function (api) {
@@ -95,6 +95,7 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
+                        setItemsSelected = payload.setItemsSelected;
                     }
 
                     return Retail_BE_FinancialAccountAPIService.GetFinancialAccountsInfo(accountBEDefinitionId, filter).then(function (response) {
@@ -104,6 +105,22 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
                                 ctrl.datasource.push(response[i]);
                             }
                             if (selectedIds != undefined) {
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
+                            } else if (setItemsSelected)
+                            {
+                                for (var i = 0, length = ctrl.datasource.length; i < length; i++) {
+                                    var item = ctrl.datasource[i];
+                                    if (attrs.ismultipleselection == undefined) {
+                                        if (item.IsEffectiveAndActive) {
+                                            selectedIds = item.FinancialAccountId;
+                                            break;
+                                        }
+                                    } else {
+                                        if (selectedIds == undefined)
+                                            selectedIds = [];
+                                        selectedIds.push(item.FinancialAccountId);
+                                    }
+                                }
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
                             }
                         }

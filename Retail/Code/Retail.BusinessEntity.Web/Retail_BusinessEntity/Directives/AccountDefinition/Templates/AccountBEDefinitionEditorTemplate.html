@@ -9,6 +9,9 @@
             <vr-switch value="scopeModel.useRemoteSelector" label="Use Remote Selector"></vr-switch>
         </vr-columns>
     </vr-row>
+    <retail-be-accountbedefinition-financialaccountlocator on-ready="scopeModel.onFinancialAccountLocatorReady"
+                                                           normal-col-num="6" isrequired="true">
+    </retail-be-accountbedefinition-financialaccountlocator>
 </vr-tab>
 <vr-tab header="'Extra Fields'">
     <retail-be-accountextrafielddefinitions-management on-ready="scopeModel.onAccountExtraFieldDefinitionsReady" isrequired="true" normal-col-num="6"></retail-be-accountextrafielddefinitions-management>

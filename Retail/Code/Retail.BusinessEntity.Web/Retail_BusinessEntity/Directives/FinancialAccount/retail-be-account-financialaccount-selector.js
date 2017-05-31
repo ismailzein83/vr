@@ -89,7 +89,8 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                 Status: status,
                                 EffectiveDate: effectiveDate,
                                 IsEffectiveInFuture: isEffectiveInFuture
-                            }
+                            },
+                            setItemsSelected : true
                         };
                         var setLoader = function (value) {
                             $scope.scopeModel.isAccountTypeSelectorLoading = value;
@@ -159,7 +160,8 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                     Status: status,
                                     EffectiveDate: effectiveDate,
                                     IsEffectiveInFuture: isEffectiveInFuture
-                                }
+                                },
+                                setItemsSelected: true
                             };
                            return financialAccountSelectorAPI.load(financialAccountPayload);
                         }

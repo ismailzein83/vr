@@ -96,6 +96,12 @@ namespace Retail.BusinessEntity.Web.Controllers
             return _manager.GetAccountExtraFieldDefinitionSettingsConfigs();
         }
         [HttpGet]
+        [Route("GetFinancialAccountLocatorConfigs")]
+        public IEnumerable<FinancialAccountLocatorConfig> GetFinancialAccountLocatorConfigs()
+        {
+            return _manager.GetFinancialAccountLocatorConfigs();
+        }
+        [HttpGet]
         [Route("CheckUseRemoteSelector")]
         public bool CheckUseRemoteSelector(Guid accountBEDefinitionId)
         {

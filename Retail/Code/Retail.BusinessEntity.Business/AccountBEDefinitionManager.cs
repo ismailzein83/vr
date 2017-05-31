@@ -348,6 +348,11 @@ namespace Retail.BusinessEntity.Business
             var extensionConfigurationManager = new ExtensionConfigurationManager();
             return extensionConfigurationManager.GetExtensionConfigurations<AccountActionDefinitionConfig>(AccountActionDefinitionConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<FinancialAccountLocatorConfig> GetFinancialAccountLocatorConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<FinancialAccountLocatorConfig>(FinancialAccountLocatorConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<AccountExtraFieldDefinitionConfig> GetAccountExtraFieldDefinitionSettingsConfigs()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();

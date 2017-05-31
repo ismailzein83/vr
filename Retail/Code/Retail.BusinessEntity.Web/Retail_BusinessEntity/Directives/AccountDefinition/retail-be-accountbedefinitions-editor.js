@@ -27,6 +27,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var statusBEDefinitionSelectorAPI;
             var statusBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
 
+            var financialAccountLocatorAPI;
+            var financialAccountLocatorDeferred = UtilsService.createPromiseDeferred();
+
             var accountGridDefinitionDirectiveAPI;
             var accountGridDefinitionDirectiveDeferred = UtilsService.createPromiseDeferred();
 
@@ -52,6 +55,12 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     statusBEDefinitionSelectorAPI = api;
                     statusBEDefinitionSelectorDeferred.resolve();
                 };
+
+                $scope.scopeModel.onFinancialAccountLocatorReady = function (api) {
+                    financialAccountLocatorAPI = api;
+                    financialAccountLocatorDeferred.resolve();
+                };
+
                 $scope.scopeModel.onAccountGridDefinitionReady = function (api) {
                     accountGridDefinitionDirectiveAPI = api;
                     accountGridDefinitionDirectiveDeferred.resolve();
@@ -76,7 +85,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     securityDefinitionsDirectiveAPI = api;
                     securityDefinitionsDirectiveDeferred.resolve();
                 };
-                UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise, financialAccountLocatorDeferred.promise, accountGridDefinitionExportExcelDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -94,7 +103,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountActionDefinitions;
                     var accountExtraFieldDefinitions;
                     var securityDefinition;
-
+                    var financialAccountLocator;
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.businessEntityDefinitionId;
 
@@ -106,6 +115,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
+                            financialAccountLocator = payload.businessEntityDefinitionSettings.FinancialAccountLocator;
                             $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
                         }
                     }
@@ -136,99 +146,73 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountSecurityDefinitionsLoadPromise = getAccountSecurityDefinitionsLoadPromise();
                     promises.push(accountSecurityDefinitionsLoadPromise);
 
+                    var financialAccountLocatorLoadPromise = getFinancialAccountLocatorLoadPromise();
+                    promises.push(financialAccountLocatorLoadPromise);
+
                     function getStatusDefinitionSelectorLoadPromise() {
-                        var statusBEDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        statusBEDefinitionSelectorDeferred.promise.then(function () {
-                            var accountActionDefinitionPayload = {
-                                filter: {
-                                    Filters: [{
-                                        $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
-                                    }]
-                                },
-                                selectedIds: statusBEDefinitionId
-                            };
-                            VRUIUtilsService.callDirectiveLoad(statusBEDefinitionSelectorAPI, accountActionDefinitionPayload, statusBEDefinitionLoadDeferred);
-                        });
-
-                        return statusBEDefinitionLoadDeferred.promise;
+                        var accountActionDefinitionPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
+                                }]
+                            },
+                            selectedIds: statusBEDefinitionId
+                        };
+                        return statusBEDefinitionSelectorAPI.load(accountActionDefinitionPayload);
                     }
+
                     function getAccountGridDefinitionLoadPromise() {
-                        var accountGridDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        accountGridDefinitionDirectiveDeferred.promise.then(function () {
-                            var accountGridDefinitionPayload = {
-                                accountBEDefinitionId: accountBEDefinitionId,
-                                accountGridDefinition: accountGridDefinition
-                            };
-                            VRUIUtilsService.callDirectiveLoad(accountGridDefinitionDirectiveAPI, accountGridDefinitionPayload, accountGridDefitnionLoadDeferred);
-                        });
-
-                        return accountGridDefitnionLoadDeferred.promise;
+                        var accountGridDefinitionPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountGridDefinition: accountGridDefinition
+                        };
+                        return accountGridDefinitionDirectiveAPI.load(accountGridDefinitionPayload);
                     }
 
                     function getAccountGridDefinitionExportExcelLoadPromise() {
-                        var accountGridDefitnionExportExcelLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        accountGridDefinitionExportExcelDirectiveDeferred.promise.then(function () {
-                            var accountGridDefinitionExportExcelPayload = {
-                                accountBEDefinitionId: accountBEDefinitionId,
-                                accountGridDefinitionExportExcel: accountGridDefinitionExportExcel
-                            };
-                            VRUIUtilsService.callDirectiveLoad(accountGridDefinitionExportExcelDirectiveAPI, accountGridDefinitionExportExcelPayload, accountGridDefitnionExportExcelLoadDeferred);
-                        });
-
-                        return accountGridDefitnionExportExcelLoadDeferred.promise;
+                        var accountGridDefinitionExportExcelPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountGridDefinitionExportExcel: accountGridDefinitionExportExcel
+                        };
+                        return accountGridDefinitionExportExcelDirectiveAPI.load(accountGridDefinitionExportExcelPayload);
                     }
 
                     function getAccountViewDefinitionLoadPromise() {
-                        var accountViewDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        accountViewDefinitionDirectiveDeferred.promise.then(function () {
-                            var accountViewDefinitionPayload = {
-                                accountBEDefinitionId: accountBEDefinitionId,
-                                accountViewDefinitions: accountViewDefinitions
-                            };
-                            VRUIUtilsService.callDirectiveLoad(accountViewDefinitionDirectiveAPI, accountViewDefinitionPayload, accountViewDefitnionLoadDeferred);
-                        });
-
-                        return accountViewDefitnionLoadDeferred.promise;
+                        var accountViewDefinitionPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountViewDefinitions: accountViewDefinitions
+                        };
+                       return accountViewDefinitionDirectiveAPI.load(accountViewDefinitionPayload);
                     }
+
                     function getAccountActionDefinitionLoadPromise() {
-                        var accountActionDefitnionLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        accountActionDefinitionDirectiveDeferred.promise.then(function () {
-                            var accountActionDefinitionPayload = {
-                                accountBEDefinitionId: accountBEDefinitionId,
-                                accountActionDefinitions: accountActionDefinitions
-                            };
-                            VRUIUtilsService.callDirectiveLoad(accountActionDefinitionDirectiveAPI, accountActionDefinitionPayload, accountActionDefitnionLoadDeferred);
-                        });
-
-                        return accountActionDefitnionLoadDeferred.promise;
+                        var accountActionDefinitionPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountActionDefinitions: accountActionDefinitions
+                        };
+                       return accountActionDefinitionDirectiveAPI.load(accountActionDefinitionPayload);
                     }
+
                     function getAccountExtraFieldDefinitionsLoadPromise() {
-                        var accountExtraFieldDefinitionsLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        accountExtraFieldDefinitionsDirectiveDeferred.promise.then(function () {
-                            var accountExtraFieldDefinitionsDefinitionPayload = {
-                                accountBEDefinitionId: accountBEDefinitionId,
-                                accountExtraFieldDefinitions: accountExtraFieldDefinitions
-                            };
-                            VRUIUtilsService.callDirectiveLoad(accountExtraFieldDefinitionsDirectiveAPI, accountExtraFieldDefinitionsDefinitionPayload, accountExtraFieldDefinitionsLoadDeferred);
-                        });
-
-                        return accountExtraFieldDefinitionsLoadDeferred.promise;
+                        var accountExtraFieldDefinitionsDefinitionPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountExtraFieldDefinitions: accountExtraFieldDefinitions
+                        };
+                        return accountExtraFieldDefinitionsDirectiveAPI.load(accountExtraFieldDefinitionsDefinitionPayload);
                     }
+
                     function getAccountSecurityDefinitionsLoadPromise() {
-                        var securityDefinitionsLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        securityDefinitionsDirectiveDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(securityDefinitionsDirectiveAPI, securityDefinition, securityDefinitionsLoadDeferred);
-                        });
-
-                        return securityDefinitionsLoadDeferred.promise;
+                        return securityDefinitionsDirectiveAPI.load(securityDefinition);
                     }
+
+                    function getFinancialAccountLocatorLoadPromise() {
+                        var financialAccountLocatorPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            financialAccountLocator: financialAccountLocator
+                        };
+                        return financialAccountLocatorAPI.load(financialAccountLocatorPayload);
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -246,7 +230,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
-                        Security: securityDefinitionsDirectiveAPI.getData()
+                        Security: securityDefinitionsDirectiveAPI.getData(),
+                        FinancialAccountLocator: financialAccountLocatorAPI.getData()
                     };
                     return obj;
                 };

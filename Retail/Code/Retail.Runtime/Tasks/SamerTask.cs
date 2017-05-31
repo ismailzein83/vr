@@ -27,7 +27,7 @@ namespace Retail.Runtime.Tasks
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
 
             runtimeServices.Add(queueActivationService);
-            //runtimeServices.Add(schedulerService);
+            runtimeServices.Add(schedulerService);
           //  runtimeServices.Add(dsRuntimeService);
             runtimeServices.Add(queueActivationRuntimeService);
             runtimeServices.Add(bpRegulatorService);

@@ -61,6 +61,7 @@ app.directive("retailBeAccountextrafielddefinitionsManagement", ["UtilsService",
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
@@ -72,6 +73,8 @@ app.directive("retailBeAccountextrafielddefinitionsManagement", ["UtilsService",
                             }
                         }
                     }
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
 
                 api.getData = function () {

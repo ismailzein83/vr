@@ -415,8 +415,13 @@ namespace Retail.BusinessEntity.Business
             return new FinancialAccountInfo
             {
                 FinancialAccountId = financialAccountData.FinancialAccountId,
-                Description = string.Format("{0} ({1})", GetFinancialAccountDescription(financialAccountData.FinancialAccount),s_accountManager.GetAccountName(financialAccountData.Account))
+                Description = string.Format("{0} ({1})",s_accountManager.GetAccountName(financialAccountData.Account),GetFinancialAccountDescription(financialAccountData.FinancialAccount)),
+                IsEffectiveAndActive = IsFinancialAccountEffectiveAndActive(financialAccountData.FinancialAccount)
             };
+        }
+        private bool IsFinancialAccountEffectiveAndActive(FinancialAccount financialAccount)
+        {
+            return (financialAccount.BED <= DateTime.Now && !financialAccount.EED.HasValue || financialAccount.EED > DateTime.Now);
         }
         private string GetFinancialAccountDescription(FinancialAccount financialAccount)
         {

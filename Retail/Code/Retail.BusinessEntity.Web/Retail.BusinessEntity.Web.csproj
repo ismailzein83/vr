@@ -186,6 +186,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Retail_BusinessEntity\Directives\AccountDefinition\FinancialAccountLocator\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
@@ -278,6 +279,9 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\SubAccountsViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\AccountInfoViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\FinancialAccountLocator\MainExtensions\retail-be-accountbedefinition-financialaccountlocator-default.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\FinancialAccountLocator\MainExtensions\Templates\DefaultFinancialAccountLocatorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\FinancialAccountLocator\retail-be-accountbedefinition-financialaccountlocator.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountbedefinition-vieweditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\retail-be-accountbedefinitions-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitionsettings.js" />

@@ -52,6 +52,7 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
@@ -63,6 +64,8 @@ app.directive("retailBeAccountactiondefinitionsManagement", ["UtilsService", "VR
                             }
                         }
                     }
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
 
                 api.getData = function () {
