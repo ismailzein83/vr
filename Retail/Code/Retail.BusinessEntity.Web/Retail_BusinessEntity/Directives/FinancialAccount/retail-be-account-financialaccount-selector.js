@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAccountAPIService', 'VRUIUtilsService','Retail_BE_FinancialAccountEffectiveEnum','UtilsService',
-    function (Retail_BE_FinancialAccountAPIService, VRUIUtilsService, Retail_BE_FinancialAccountEffectiveEnum, UtilsService) {
+app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAccountAPIService', 'VRUIUtilsService','UtilsService',
+    function (Retail_BE_FinancialAccountAPIService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -41,29 +41,13 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">\
-                         <vr-select on-ready="ctrl.onSelectorReady"\
-                         selectedvalues="scopeModel.financialAccountEffectiveValue"\
-                         onselectionchanged="scopeModel.onFinancialAccountEffectiveSelectionChanged"\
-                         datasource="ctrl.datasource" \
-                         hideremoveicon \
-                         datavaluefield="value"\
-                         datatextfield="description"\
-                         isrequired="ctrl.isrequired"\
-                         label="Effective Type"\
-                         entityName="Effective Type" >\
-                       </vr-select>\
-                    </vr-columns>\
-                    <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="ctrl.isrequired" ' + multipleselection + '  normal-col-num = "{{ctrl.normalColNum}}" onselectionchanged="scopeModel.onAccountSelectionChanged"> </retail-be-account-selector>\
+            return '<retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="ctrl.isrequired" ' + multipleselection + '  normal-col-num = "{{ctrl.normalColNum}}" onselectionchanged="scopeModel.onAccountSelectionChanged"> </retail-be-account-selector>\
                     <retail-be-financialaccount-selector on-ready="scopeModel.onFinancialAccountSelectorReady" ' + multipleselection + ' isrequired="ctrl.isrequired" normal-col-num = "{{ctrl.normalColNum}}"> </retail-be-financialaccount-selector>';
         }
 
         function FinancialAccountSelectorCtor(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
-
-            var selectorAPI;
-            var selectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var accountSelectorAPI;
             var accountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -72,6 +56,10 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
             var financialAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var accountBEDefinitionId;
+
+            var status;
+            var effectiveDate;
+            var isEffectiveInFuture;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -86,36 +74,6 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                     financialAccountSelectorPromiseDeferred.resolve();
                 };
 
-                $scope.scopeModel.onFinancialAccountEffectiveSelectionChanged = function (value) {
-                    if (value != undefined) {
-                        var accountselectorPayload = {
-                            AccountBEDefinitionId: accountBEDefinitionId,
-                            filter: {
-                                Filters: [{
-                                    $type: "Retail.BusinessEntity.Business.FinancialAccountBEFilter, Retail.BusinessEntity.Business",
-                                    FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
-                                }]
-                            }
-                        };
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isAccountTypeSelectorLoading = value;
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountSelectorAPI, accountselectorPayload, setLoader, accountSelectorPromiseDeferred);
-
-                        var selectorPayload = {
-                            accountBEDefinitionId: accountBEDefinitionId,
-                            filter: {
-                                FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
-                            }
-                        };
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isAccountTypeSelectorLoading = value;
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, financialAccountSelectorAPI, selectorPayload, setLoader, financialAccountSelectorPromiseDeferred);
-
-                    }
-                };
-
                 $scope.scopeModel.onAccountSelectionChanged = function (value) {
                     var selectedIds = accountSelectorAPI.getSelectedIds();
                     if (selectedIds != undefined) {
@@ -128,7 +86,9 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                             accountBEDefinitionId: accountBEDefinitionId,
                             filter: {
                                 AccountIds: accountIds,
-                                FinancialAccountEffective:  $scope.scopeModel.financialAccountEffectiveValue.value
+                                Status: status,
+                                EffectiveDate: effectiveDate,
+                                IsEffectiveInFuture: isEffectiveInFuture
                             }
                         };
                         var setLoader = function (value) {
@@ -138,12 +98,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                     }
                 };
 
-                ctrl.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    selectorPromiseDeferred.resolve();
-                };
-
-                UtilsService.waitMultiplePromises([accountSelectorPromiseDeferred.promise, financialAccountSelectorPromiseDeferred.promise, selectorPromiseDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([accountSelectorPromiseDeferred.promise, financialAccountSelectorPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -152,13 +107,13 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                 var api = {};
 
                 api.load = function (payload) {
-                    selectorAPI.clearDataSource();
-                    $scope.scopeModel.financialAccountEffectiveValue = Retail_BE_FinancialAccountEffectiveEnum.EffectiveOnly;
-                    ctrl.datasource = UtilsService.getArrayEnum(Retail_BE_FinancialAccountEffectiveEnum);
                     var selectedIds;
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.AccountBEDefinitionId;
                         selectedIds = payload.selectedIds;
+                        status = payload.status;
+                        effectiveDate = payload.effectiveDate;
+                        isEffectiveInFuture = payload.isEffectiveInFuture;
                     }
 
                     var promises = [];
@@ -201,7 +156,9 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                 selectedIds: selectedIds,
                                 filter: {
                                     AccountIds: accountIds,
-                                    FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
+                                    Status: status,
+                                    EffectiveDate: effectiveDate,
+                                    IsEffectiveInFuture: isEffectiveInFuture
                                 }
                             };
                            return financialAccountSelectorAPI.load(financialAccountPayload);
@@ -217,7 +174,9 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                             filter: {
                                 Filters: [{
                                     $type: "Retail.BusinessEntity.Business.FinancialAccountBEFilter, Retail.BusinessEntity.Business",
-                                    FinancialAccountEffective: $scope.scopeModel.financialAccountEffectiveValue.value
+                                    Status: status,
+                                    EffectiveDate: effectiveDate,
+                                    IsEffectiveInFuture: isEffectiveInFuture
                                 }],
                             },
                             selectedIds:accountSelectedIds

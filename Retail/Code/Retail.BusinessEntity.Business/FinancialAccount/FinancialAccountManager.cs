@@ -103,6 +103,7 @@ namespace Retail.BusinessEntity.Business
                 accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
                 if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
                 {
+                    UpdateVRInvoiceAccount(financialAccountToEdit.AccountId,financialAccountToEdit.AccountBEDefinitionId,financialAccountToEdit.FinancialAccount);
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
                 }
@@ -183,21 +184,32 @@ namespace Retail.BusinessEntity.Business
             if (filter != null && filter.AccountIds != null)
             {
                 foreach (var accountId in filter.AccountIds)
-                {
+                { 
                     var cachedFinancialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
                     Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
                     {
-                        if (filter.FinancialAccountEffective.HasValue)
+                        if (filter.Status.HasValue)
                         {
-                            switch (filter.FinancialAccountEffective)
+                            switch (filter.Status.Value)
                             {
-                                case Entities.FinancialAccountEffective.All: return true;
-                                case Entities.FinancialAccountEffective.EffectiveOnly:
-                                    if (financialAccountData.FinancialAccount.BED < DateTime.Now && (!financialAccountData.FinancialAccount.EED.HasValue || financialAccountData.FinancialAccount.EED.Value > DateTime.Now))
-                                        return true;
+                                case VRAccountStatus.Active:
+                                    if (filter.IsEffectiveInFuture.HasValue)
+                                    {
+                                        if (filter.IsEffectiveInFuture.Value)
+                                        {
+                                            if (financialAccountData.FinancialAccount.EED.HasValue && financialAccountData.FinancialAccount.EED < DateTime.Now)
+                                                return false;
+                                        }
+                                    }
+                                    if (filter.EffectiveDate.HasValue)
+                                    {
+                                        if (financialAccountData.FinancialAccount.BED > filter.EffectiveDate.Value || (financialAccountData.FinancialAccount.EED.HasValue && financialAccountData.FinancialAccount.EED.Value < filter.EffectiveDate.Value))
+                                            return false;
+                                    }
+                                    break;
+                                case VRAccountStatus.InActive:
                                     break;
                             }
-                            return false;
                         }
                         return true;
                     };
@@ -421,6 +433,21 @@ namespace Retail.BusinessEntity.Business
                 description.AppendFormat("{0} -> {1}", financialAccount.BED.ToString(dateTimeFormat), financialAccount.EED.Value.ToString(dateTimeFormat));
             }
            return description.ToString();
+        }
+
+        private bool UpdateVRInvoiceAccount(long accountId, Guid accountBEDefinitionId, FinancialAccount financialAccount)
+        {
+            Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
+            VRAccountStatus vrAccountStatus = VRAccountStatus.InActive;
+            if(s_accountManager.IsAccountActive(accountBEDefinitionId, accountId))
+                vrAccountStatus = VRAccountStatus.InActive;
+            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+            if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
+            {
+                var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
+                return invoiceAccountManager.TryUpdateInvoiceAccount(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId, financialAccount.BED, financialAccount.EED, vrAccountStatus, false);
+            }
+            return false;
         }
         #endregion
     }

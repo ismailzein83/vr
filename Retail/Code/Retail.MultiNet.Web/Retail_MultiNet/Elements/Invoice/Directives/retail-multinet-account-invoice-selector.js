@@ -53,6 +53,10 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
 
             var accountBEDefinitionId;
 
+            var status;
+            var effectiveDate;
+            var isEffectiveInFuture;
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -71,9 +75,19 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
 
                 api.load = function (payload) {
                     var selectedIds;
-                    if (payload != undefined && payload.extendedSettings != undefined) {
-                        accountBEDefinitionId = payload.extendedSettings.AccountBEDefinitionId;
+                    if (payload != undefined) {
+                        if (payload.extendedSettings != undefined)
+                        {
+                            accountBEDefinitionId = payload.extendedSettings.AccountBEDefinitionId;
+                        }
+                        if (payload.filter != undefined)
+                        {
+                            status = payload.filter.Status;
+                            effectiveDate = payload.filter.EffectiveDate;
+                            isEffectiveInFuture = payload.filter.IsEffectiveInFuture;
+                        }
                         selectedIds = payload.selectedIds;
+                       
                     }
 
                     var promises = [];
@@ -83,7 +97,10 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                     function loadFinancialAccountSelector() {
                         var financialAccountPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId,
-                            selectedIds:selectedIds
+                            selectedIds: selectedIds,
+                            status : status,
+                            effectiveDate :effectiveDate,
+                            isEffectiveInFuture : isEffectiveInFuture,
                         };
                         return financialAccountSelectorAPI.load(financialAccountPayload);
                     }

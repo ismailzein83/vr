@@ -513,6 +513,10 @@ namespace Retail.BusinessEntity.Business
                 throw new Exception(string.Format("Account {0} does not have currency", account.AccountId));
             return currencyId;
         }
+        public bool IsAccountActive(Guid accountBEDefinitionId, long accountId)
+        {
+            return true;
+        }
 
         #endregion
 

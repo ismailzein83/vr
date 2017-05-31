@@ -154,7 +154,7 @@ namespace Retail.Zajil.MainExtensions
             return new VRInvoiceAccountData
             {
                 BED  = null,
-                EED = null
+                EED = null,
             };
         }
     }

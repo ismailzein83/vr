@@ -110,6 +110,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
@@ -135,6 +138,7 @@
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationExtendedQuery.cs" />
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
+    <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
     <Compile Include="Extensions\AccountBERuntimeSelectorFilter.cs" />

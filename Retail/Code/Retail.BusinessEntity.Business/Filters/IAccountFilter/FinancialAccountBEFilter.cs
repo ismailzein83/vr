@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
     public class FinancialAccountBEFilter : IAccountFilter
     {
         static AccountBEManager s_accountManager = new AccountBEManager();
-        public FinancialAccountEffective? FinancialAccountEffective { get; set; }
+        public VRAccountStatus? Status { get; set; }
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsEffectiveInFuture { get; set; }
         public bool IsExcluded(IAccountFilterContext context)
         {
             if (context.Account != null)
@@ -18,14 +21,26 @@ namespace Retail.BusinessEntity.Business
                 AccountBEFinancialAccountsSettings accountFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(context.Account);
                 if (accountFinancialAccountsSettings == null)
                     return true;
-                if(FinancialAccountEffective.HasValue)
+                if (this.Status.HasValue)
                 {
-                    switch(FinancialAccountEffective)
+                    switch (this.Status.Value)
                     {
-                        case Entities.FinancialAccountEffective.All:break;
-                        case Entities.FinancialAccountEffective.EffectiveOnly :
-                            if (!accountFinancialAccountsSettings.FinancialAccounts.Any(x => x.BED < DateTime.Now && (!x.EED.HasValue || x.EED.Value > DateTime.Now)))
-                                  return true;
+                        case  VRAccountStatus.Active:
+                            if (IsEffectiveInFuture.HasValue)
+                            {
+                                if(IsEffectiveInFuture.Value)
+                                {
+                                    if (!accountFinancialAccountsSettings.FinancialAccounts.Any(x => !x.EED.HasValue || x.EED > DateTime.Now))
+                                        return true;
+                                }
+                            }
+                            if(EffectiveDate.HasValue)
+                            {
+                                if (!accountFinancialAccountsSettings.FinancialAccounts.Any(x => x.BED < EffectiveDate.Value && (!x.EED.HasValue || x.EED.Value > EffectiveDate.Value)))
+                                    return true;
+                            }
+                            break;
+                        case VRAccountStatus.InActive:
                             break;
                     }
                 }
