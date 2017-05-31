@@ -17,7 +17,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         Rate = 4,
         RateBED = 5,
         RateEED = 6,
-        Services = 7
+        Services = 7,
+        RateChangeType
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -59,9 +60,26 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     string servicesSymbol = string.Join(",", services);
                     context.Value = servicesSymbol;
                     break;
+                case CodeOnEachRowBEFieldType.RateChangeType:
+                    context.Value = GetRateChange(context.RateChangeType);
+                    break;
             }
         }
-
+        private string GetRateChange(RateChangeType rateChangeType)
+        {
+            switch (rateChangeType)
+            {
+                case RateChangeType.Decrease:
+                    return "D";
+                case RateChangeType.Increase:
+                    return "I";
+                case RateChangeType.New:
+                    return "N";
+                case RateChangeType.NotChanged:
+                    return "S";
+            }
+            return "S";
+        }
 
     }
 }

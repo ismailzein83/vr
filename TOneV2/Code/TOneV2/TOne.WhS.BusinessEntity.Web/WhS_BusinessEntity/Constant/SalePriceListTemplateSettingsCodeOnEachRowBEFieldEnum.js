@@ -6,5 +6,6 @@
 	Rate: { value: 4, description: "Rate" },
 	RateBED: { value: 5, description: "RateBED" },
 	RateEED: { value: 6, description: "RateEED" },
-	Services: { value: 7, description: "Services" }
+	Services: { value: 7, description: "Services" },
+	RateChangeType: { value: 8, description: "RateChangeType" }
 });
