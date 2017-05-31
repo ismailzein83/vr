@@ -935,7 +935,35 @@
                         var processTrackingContext = {
                             onClose: function (bpInstanceClosureContext) {
                                 if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+                                    
                                     resetRatePlan();
+
+                                    $scope.isLoading = true;
+                                    var promises = [];
+
+                                    var loadOwnerInfoPromise = loadOwnerInfo();
+                                    promises.push(loadOwnerInfoPromise);
+
+                                    if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+
+                                        var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
+                                        promises.push(doesOwnerDraftExistDeferred.promise);
+
+                                        var getCountryChangesPromise = getCountryChanges(ownerId);
+                                        promises.push(getCountryChangesPromise);
+
+                                        getCountryChangesPromise.then(function () {
+                                            doesOwnerDraftExist().then(function () {
+                                                doesOwnerDraftExistDeferred.resolve();
+                                            }).catch(function (error) {
+                                                doesOwnerDraftExistDeferred.reject(error);
+                                            });
+                                        });
+                                    }
+
+                                    UtilsService.waitMultiplePromises(promises).finally(function () {
+                                        $scope.isLoading = false;
+                                    });
                                 }
                             }
                         };
