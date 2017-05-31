@@ -186,11 +186,13 @@
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\AggregateTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\CounterTypeEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoiceAccountStatusEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDailyTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDateEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceMonthlyTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Directives\AccountStatus\vr-invoice-accountstatus-selector.js" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\Templates\AutomaticInvoiceProcessManualTemplate.html" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\vr-invoice-automaticinvoiceprocess-manual.js" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\Templates\AutomaticInvoiceProcessScheduledTemplate.html" />

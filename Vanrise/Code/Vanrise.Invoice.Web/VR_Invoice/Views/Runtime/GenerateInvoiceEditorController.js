@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRButtonTypeEnum', 'VR_Invoice_InvoiceActionService'];
+    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRButtonTypeEnum', 'VR_Invoice_InvoiceActionService','VR_Invoice_InvoiceAccountStatusEnum'];
 
-    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService) {
+    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceAccountStatusEnum) {
         var invoiceTypeId;
         $scope.scopeModel = {};
         var invoiceId;
@@ -182,7 +182,16 @@
             function loadPartnerSelectorDirective() {
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
-                    var partnerSelectorPayload = { context: getContext(), extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings, invoiceTypeId: invoiceTypeId };
+                    var partnerSelectorPayload = {
+                        context: getContext(),
+                        extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings,
+                        invoiceTypeId: invoiceTypeId,
+                        filter: {
+                            Status: VR_Invoice_InvoiceAccountStatusEnum.Active.value,
+                            IsEffectiveInFuture:true,
+                            EffectiveDate:undefined
+                        }
+                    };
                     if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
                         partnerSelectorPayload.selectedIds = invoiceEntity.Invoice.PartnerId;
                     }

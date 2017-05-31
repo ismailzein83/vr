@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
-    public enum VRInvoiceAccountStatus { Active = 0 , InActive = 1}
     public class VRInvoiceAccount
     {
         public long InvoiceAccountId { get; set; }
@@ -14,7 +14,7 @@ namespace Vanrise.Invoice.Entities
         public string PartnerId { get; set; }
         public DateTime? BED { get; set; }
         public DateTime? EED { get; set; }
-        public VRInvoiceAccountStatus Status { get; set; }
+        public VRAccountStatus Status { get; set; }
         public bool IsDeleted { get; set; }
 
     }

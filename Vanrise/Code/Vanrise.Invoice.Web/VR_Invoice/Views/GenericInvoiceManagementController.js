@@ -7,8 +7,12 @@
     function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRNotificationService) {
         var invoiceTypeId;
         $scope.invoiceTypeEntity;
+        var accountStatusSelectorAPI;
+        var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         var gridAPI;
         loadParameters();
@@ -24,6 +28,30 @@
         }
 
         function defineScope() {
+
+            $scope.onAccountStatusSelectorReady = function (api) {
+                accountStatusSelectorAPI = api;
+                accountStatusSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onAccountStatusSelectionChanged = function(value)
+            {
+                if(value != undefined)
+                {
+                    if(partnerSelectorAPI != undefined)
+                    {
+                        var setLoader = function (value) {
+                            $scope.isLoadingDirective = value;
+                        };
+                        var partnerSelectorPayload = {
+                            extendedSettings: $scope.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings,
+                            invoiceTypeId: invoiceTypeId,
+                            filter: accountStatusSelectorAPI.getData()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerSelectorAPI, partnerSelectorPayload, setLoader, partnerSelectorReadyDeferred);
+                    }
+                }
+            }
             var date = new Date();
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
@@ -60,6 +88,8 @@
             var partnerObject;
             if (partnerSelectorAPI !=undefined)
                 partnerObject = partnerSelectorAPI.getData();
+
+            var accountStatusObj = accountStatusSelectorAPI.getData();
             var filter = {
                 mainGridColumns: $scope.invoiceTypeEntity.MainGridRuntimeColumns,
                 subSections: $scope.invoiceTypeEntity.InvoiceType.Settings.SubSections,
@@ -73,13 +103,40 @@
                     PartnerIds: partnerObject != undefined ? partnerObject.selectedIds : undefined,
                     PartnerPrefix:partnerObject != undefined?partnerObject.partnerPrefix:undefined,
                     InvoiceTypeId: invoiceTypeId,
-                    IssueDate: $scope.issueDate
+                    IssueDate: $scope.issueDate,
+                    EffectiveDate: accountStatusObj != undefined ? accountStatusObj.EffectiveDate : undefined,
+                    IsEffectiveInFuture: accountStatusObj != undefined ? accountStatusObj.IsEffectiveInFuture : undefined,
+                    Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
                 }
             };
             return filter;
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective]).then(function()
+
+            function loadPartnerSelectorDirective() {
+                var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                partnerSelectorReadyDeferred.promise.then(function () {
+                    partnerSelectorReadyDeferred = undefined;
+                    var partnerSelectorPayload = {
+                        extendedSettings: $scope.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings,
+                        invoiceTypeId: invoiceTypeId,
+                        filter: accountStatusSelectorAPI.getData()
+                    };
+                    VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
+                });
+                return partnerSelectorPayloadLoadDeferred.promise;
+            }
+
+            function loadAccountStatusSelectorDirective() {
+                var accountStatusSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                accountStatusSelectorReadyDeferred.promise.then(function () {
+                    var accountStatusSelectorPayload = { selectFirstItem: true };
+                    VRUIUtilsService.callDirectiveLoad(accountStatusSelectorAPI, accountStatusSelectorPayload, accountStatusSelectorPayloadLoadDeferred);
+                });
+                return accountStatusSelectorPayloadLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective]).then(function ()
             {
                 if(gridAPI != undefined)
                 {
@@ -89,10 +146,11 @@
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
-              .finally(function () {
+               .finally(function () {
                   $scope.isLoadingFilters = false;
               });
         }
+
         function getInvoiceTypeRuntime()
         {
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
@@ -107,14 +165,7 @@
 
             VR_Invoice_InvoiceActionService.generateInvoice(onGenerateInvoice, invoiceTypeId);
         }
-        function loadPartnerSelectorDirective() {
-            var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-            partnerSelectorReadyDeferred.promise.then(function () {
-                var partnerSelectorPayload = { extendedSettings: $scope.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings, invoiceTypeId: invoiceTypeId };
-                VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
-            });
-            return partnerSelectorPayloadLoadDeferred.promise;
-        }
+
     }
 
     appControllers.controller('VR_Invoice_GenericInvoiceManagementController', genericInvoiceManagementController);

@@ -236,7 +236,7 @@ namespace Vanrise.Invoice.Business
                     new InvoiceAccountManager().TryAddInvoiceAccount(new VRInvoiceAccount
                     {
                         InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
-                        Status = VRInvoiceAccountStatus.Active,
+                        Status = VRAccountStatus.Active,
                         IsDeleted = false,
                         PartnerId = createInvoiceInput.PartnerId,
                         BED = invoiceAccountData.BED,

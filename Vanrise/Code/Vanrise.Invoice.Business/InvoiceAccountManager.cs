@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 
@@ -21,7 +22,7 @@ namespace Vanrise.Invoice.Business
             return dataManager.TryUpdateInvoiceAccount(invoiceAccount);
         }
 
-        public bool TryAddInvoiceAccount(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed, VRInvoiceAccountStatus status, bool isDeleted)
+        public bool TryAddInvoiceAccount(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
         {
             IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
             long insertedId = -1;
@@ -35,7 +36,7 @@ namespace Vanrise.Invoice.Business
                 PartnerId = partnerId
             }, out insertedId);
         }
-        public bool TryUpdateInvoiceAccount(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed, VRInvoiceAccountStatus status, bool isDeleted)
+        public bool TryUpdateInvoiceAccount(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
         {
             IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
             return TryUpdateInvoiceAccount(new VRInvoiceAccount
