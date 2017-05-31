@@ -82,6 +82,16 @@ namespace TOne.WhS.Deal.Business
             }
             return null;
         }
+
+        public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Private Methods
+
         Dictionary<DealZoneGroup, DealSaleZoneGroup> GetCachedDealSaleZoneGroups()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSaleZoneGroups", () =>
@@ -196,11 +206,6 @@ namespace TOne.WhS.Deal.Business
                 }
                 return result.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(item => item.BED));
             });
-        }
-
-        public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
-        {
-            throw new NotImplementedException();
         }
 
         #endregion
