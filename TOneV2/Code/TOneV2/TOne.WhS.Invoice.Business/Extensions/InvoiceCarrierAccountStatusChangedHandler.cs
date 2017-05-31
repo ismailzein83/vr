@@ -24,11 +24,11 @@ namespace TOne.WhS.Invoice.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierAccount = carrierAccountManager.GetCarrierAccount(eventPayload.CarrierAccountId);
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
-            VRInvoiceAccountStatus vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active;
+            VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
             switch (carrierAccount.CarrierAccountSettings.ActivationStatus)
             {
-                case BusinessEntity.Entities.ActivationStatus.Active: vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active; break;
-                case BusinessEntity.Entities.ActivationStatus.Inactive: vrInvoiceAccountStatus = VRInvoiceAccountStatus.InActive; break;
+                case BusinessEntity.Entities.ActivationStatus.Active: vrAccountStatus = VRAccountStatus.Active; break;
+                case BusinessEntity.Entities.ActivationStatus.Inactive: vrAccountStatus = VRAccountStatus.InActive; break;
             }
             InvoiceAccountManager carrierInvoiceAccountManager = new Business.InvoiceAccountManager();
             var invoiceAccounts = carrierInvoiceAccountManager.GetInvoiceAccountsByCarrierAccountId(eventPayload.CarrierAccountId);
@@ -36,7 +36,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 foreach (var invoiceAccount in invoiceAccounts)
                 {
-                    invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED , invoiceAccount.EED,vrInvoiceAccountStatus,false);
+                    invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrAccountStatus, false);
                 }
             }
         }

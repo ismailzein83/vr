@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Business.CarrierProfiles;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace TOne.WhS.Invoice.Business
 {
     public class InvoiceCarrierProfileStatusChangedHandler : CarrierProfileStatusChangedEventHandler
@@ -23,11 +24,11 @@ namespace TOne.WhS.Invoice.Business
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
             var carrierProfile = carrierProfileManager.GetCarrierProfile(eventPayload.CarrierProfileId);
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
-            VRInvoiceAccountStatus vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active;
+            VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
             switch (carrierProfile.Settings.ActivationStatus)
             {
-                case BusinessEntity.Entities.CarrierProfileActivationStatus.Active: vrInvoiceAccountStatus = VRInvoiceAccountStatus.Active; break;
-                case BusinessEntity.Entities.CarrierProfileActivationStatus.InActive: vrInvoiceAccountStatus = VRInvoiceAccountStatus.InActive; break;
+                case BusinessEntity.Entities.CarrierProfileActivationStatus.Active: vrAccountStatus = VRAccountStatus.Active; break;
+                case BusinessEntity.Entities.CarrierProfileActivationStatus.InActive: vrAccountStatus = VRAccountStatus.InActive; break;
             }
             InvoiceAccountManager carrierInvoiceAccountManager = new Business.InvoiceAccountManager();
             var invoiceAccounts = carrierInvoiceAccountManager.GetCarrierProfileInvoiceAccounts(eventPayload.CarrierProfileId);
@@ -35,7 +36,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 foreach (var invoiceAccount in invoiceAccounts)
                 {
-                    invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrInvoiceAccountStatus, false);
+                    invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrAccountStatus, false);
                 }
             }
         }

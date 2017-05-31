@@ -122,6 +122,7 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
                 }
             }
         }
+
         function defineAPI() {
 
             var api = {};
@@ -164,7 +165,6 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
             if (filter == undefined)
                 filter = {};
             filter.InvoiceTypeId = invoiceTypeId;
-            filter.GetCurrentOnly = $scope.scopeModel.getCurrentOnly;
             filter.CarrierType = $scope.scopeModel.selectedCarrierType != undefined ? $scope.scopeModel.selectedCarrierType.value : undefined;
             return filter;
         }
@@ -202,9 +202,6 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
 				        isrequired="accountSelectorCtrl.isrequired"\
 				        hideremoveicon="accountSelectorCtrl.isrequired"\
                         ' + isMultipleSelection + '>\
-                            <vr-columns colnum="12">\
-                                <vr-switch label="Effective Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
-                            </vr-columns>\
                             <vr-columns colnum="12">\
                                 <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
 				                    label="Carrier Type"\

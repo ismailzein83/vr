@@ -344,8 +344,12 @@ namespace TOne.WhS.BusinessEntity.Business
                     var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
                 }
-                VREventManager vrEventManager = new VREventManager();
-                vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
+                if(cachedAccount.CarrierAccountSettings.ActivationStatus != carrierAccountToEdit.CarrierAccountSettings.ActivationStatus)
+                {
+                    VREventManager vrEventManager = new VREventManager();
+                    vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
+                }
+                
                 return true;
             }
             return false;
