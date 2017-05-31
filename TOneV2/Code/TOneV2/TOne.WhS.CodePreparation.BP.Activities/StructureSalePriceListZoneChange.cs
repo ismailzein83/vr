@@ -320,7 +320,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
 
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
-            CustomerCountry2 soldCountry = customerCountryManager.GetCustomerCountry(customerId, countryId, effectiveDate, true);
+            CustomerCountry2 soldCountry = customerCountryManager.GetEffectiveOrFutureCustomerCountry(customerId, countryId, effectiveDate);
+
+            soldCountry.ThrowIfNull("soldCountry");
 
             foreach (var codeToClose in codesToClose)
             {

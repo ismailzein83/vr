@@ -314,7 +314,7 @@ namespace TOne.WhS.Sales.BP.Activities
             context.RateChangesOutArgument = new List<SalePricelistRateChange>();
             context.CodeChangesOutArgument = new List<SalePricelistCodeChange>();
 
-            var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(new List<RoutingCustomerInfoDetails> { context.CustomerInfo }, context.MinimumDate, true));
+            var lastRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(new List<RoutingCustomerInfoDetails> { context.CustomerInfo }, context.MinimumDate));
             SaleZoneManager saleZoneManager = new SaleZoneManager();
 
             foreach (var countryToAdd in context.CountriesToAdd)
@@ -356,7 +356,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (!zoneIdsWithExplicitRates.Contains(zoneId))
                     {
                         //Ignore zones that have explicit rates
-                        var zoneRate = futureRateLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, zoneId);
+                        var zoneRate = lastRateLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, zoneId);
                         if (zoneRate == null)
                             throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneName));
 

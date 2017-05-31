@@ -154,6 +154,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
         }
 
+        public CustomerCountry2 GetEffectiveOrFutureCustomerCountry(int customerId, int countryId, DateTime date)
+        {
+            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
+            if (customerCountries != null)
+                return customerCountries.FindAllRecords(x => x.CountryId == countryId && x.IsEffectiveOrFuture(date)).FirstOrDefault();
+            else
+                return null;
+        }
+
         public IEnumerable<CustomerCountry2> GetCustomerCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);

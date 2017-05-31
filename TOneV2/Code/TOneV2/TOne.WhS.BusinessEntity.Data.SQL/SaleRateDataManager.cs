@@ -70,6 +70,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             });
         }
 
+        public List<SaleRate> GetEffectiveAfterByMultipleOwners(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime effectiveAfter)
+        {
+            DataTable saleRateOwners = BuildRoutingOwnerInfoTable(customerInfos);
+            return GetItemsSPCmd("[TOneWhS_BE].[sp_SaleRate_GetEffectiveAfterByMultipleOwners]", SaleRateMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@SaleRateOwner", SqlDbType.Structured);
+                dtPrm.Value = saleRateOwners;
+                cmd.Parameters.Add(dtPrm);
+                cmd.Parameters.Add(new SqlParameter("@EffectiveAfter", effectiveAfter));
+            });
+        }
         public bool AreSaleRatesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleRate", ref updateHandle);
@@ -223,5 +234,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
+
+
     }
 }
