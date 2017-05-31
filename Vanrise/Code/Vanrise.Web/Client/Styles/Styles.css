@@ -3242,6 +3242,14 @@ vr-overall-widget  .list-group-item {
 }
 /* end vr-overall-widget*/
 
+
+
+/* start fonts-colors*/
+.danger-font{
+    color: #ff0000 
+}
+/* end fonts-colors*/
+
 /* start vr-tile*/
 .vr-tile{
     width:100%;
