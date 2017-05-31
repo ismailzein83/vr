@@ -35,5 +35,19 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                 }
             };
         }
+
+        public override void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context)
+        {
+            if (!context.PackageAssignmentEnd.HasValue)
+            {
+                context.IsValid = false;
+                context.ErrorMessage = "Package end date must be specified.";
+            }
+            else
+            {
+                context.IsValid = true;
+
+            }
+        }
     }
 }

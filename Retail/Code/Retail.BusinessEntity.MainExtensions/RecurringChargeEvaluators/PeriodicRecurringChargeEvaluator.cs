@@ -60,5 +60,10 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                 }
             };
         }
+
+        public override void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context)
+        {
+            context.IsValid = true;
+        }
     }
 }

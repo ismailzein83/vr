@@ -14,5 +14,18 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
     public class RecurChargePackageSettings : PackageExtendedSettings
     {
         public RecurringChargeEvaluatorSettings Evaluator { get; set; }
+
+        public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
+        {
+            ValidateAssignmentRecurringChargeEvaluatorContext validateAssignmentRecurringChargeEvaluatorContext = new ValidateAssignmentRecurringChargeEvaluatorContext
+            {
+                Account = context.Account,
+                PackageAssignmentStart = context.BED,
+                PackageAssignmentEnd = context.EED
+            };
+            this.Evaluator.ValidatePackageAssignment(validateAssignmentRecurringChargeEvaluatorContext);
+            context.IsValid = validateAssignmentRecurringChargeEvaluatorContext.IsValid;
+            context.ErrorMessage = validateAssignmentRecurringChargeEvaluatorContext.ErrorMessage;
+        }
     }
 }

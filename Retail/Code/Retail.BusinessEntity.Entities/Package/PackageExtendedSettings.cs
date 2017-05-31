@@ -24,6 +24,7 @@ namespace Retail.BusinessEntity.Entities
         {
 
         }
+        public abstract void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context);
     }
 
     public abstract class PackageExtendedSettingsEditorRuntime
@@ -50,4 +51,29 @@ namespace Retail.BusinessEntity.Entities
 
         DateTime EED { get; }
     }
+
+     public interface IPackageSettingAssignementValidateContext
+    {
+        long AccountId { get; }
+
+        Account Account { get; }
+
+        DateTime BED { get; }
+
+        DateTime? EED { get; }
+        bool IsValid { set; }
+        string ErrorMessage { set; }
+    }
+     public class PackageSettingAssignementValidateContext : IPackageSettingAssignementValidateContext
+     {
+         public long AccountId { set; get; }
+
+         public Account Account { set; get; }
+
+         public DateTime BED { set; get; }
+
+         public DateTime? EED { set; get; }
+         public bool IsValid { set; get; }
+         public string ErrorMessage { set; get; }
+     }
 }

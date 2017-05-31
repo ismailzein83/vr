@@ -61,6 +61,11 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             else
                 return false;
         }
+
+        public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
+        {
+            context.IsValid = true;
+        }
     }
 
     public class ServiceTypeUsageChargingPolicySettings

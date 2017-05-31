@@ -135,6 +135,11 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         }
 
         #endregion
+
+        public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
+        {
+            context.IsValid = true;
+        }
     }
 
     public class VolumePackageItem
