@@ -34,8 +34,44 @@ namespace NP.IVSwitch.Business
                     EndPoints = _endPointManager.GetCarrierAccountEndPointIds(ca),
                     Routes =  _routeManager.GetCarrierAccountRouteIds(ca)                
                 });
-            }          
-            return DataRetrievalManager.Instance.ProcessResult(input, allRecords.ToBigResult(input, null, SwitchMappingDetailMapper));
+            }
+            Func<SwitchMapping, bool> filterFunc = (sw) =>
+            {
+                if (input.Query.Name != null && !_carrierAccountManager.GetCarrierAccountName(sw.CarrierAccount).ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, allRecords.ToBigResult(input, filterFunc, SwitchMappingDetailMapper));
+        }
+
+        public UpdateOperationOutput<SwitchMappingDetail> LinkCarrierToEndPoints(EndPointLink endPointLink)
+        {
+            var updateOperationOutput = new UpdateOperationOutput<SwitchMappingDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            _endPointManager.LinkCarrierAccountToEndPoints(endPointLink.CarrierAccountId, endPointLink.EndPointIds);
+            updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            SwitchMapping updatedSwitchMapping = GetSwitchMappingByCarierAccountId(endPointLink.CarrierAccountId);
+            updateOperationOutput.UpdatedObject = SwitchMappingDetailMapper(updatedSwitchMapping);
+            return updateOperationOutput;
+
+        }
+
+        public UpdateOperationOutput<SwitchMappingDetail> LinkCarrierToRoutes(RouteLink routeLink)
+        {
+            var updateOperationOutput = new UpdateOperationOutput<SwitchMappingDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            _routeManager.LinkCarrierAccountToRoutes(routeLink.CarrierAccountId, routeLink.RouteIds);
+            updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            SwitchMapping updatedSwitchMapping = GetSwitchMappingByCarierAccountId(routeLink.CarrierAccountId);
+            updateOperationOutput.UpdatedObject = SwitchMappingDetailMapper(updatedSwitchMapping);
+            return updateOperationOutput;
         }
         #region Mappers
         SwitchMappingDetail SwitchMappingDetailMapper(SwitchMapping switchMapping)
@@ -47,6 +83,24 @@ namespace NP.IVSwitch.Business
                 CarrierAccountType = switchMapping.CarrierAccount.AccountType,
                 EndPointsDescription =switchMapping.EndPoints!=null ? GetEndPointsDescription(switchMapping.EndPoints): null,
                 RoutesDescription = switchMapping.Routes!=null ? GetRoutesDescription(switchMapping.Routes) : null
+            };
+        }
+
+        SwitchMapping GetSwitchMappingByCarierAccountId(int carrierAccountId)
+        {
+            var carrierAccount = _carrierAccountManager.GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("CarrierAccount", carrierAccountId);
+            return GetSwitchMappingByCarierAccount(carrierAccount);
+        }
+
+
+        SwitchMapping GetSwitchMappingByCarierAccount(CarrierAccount carrierAccount)
+        {
+            return new SwitchMapping()
+            {
+                CarrierAccount = carrierAccount,
+                EndPoints = _endPointManager.GetCarrierAccountEndPointIds(carrierAccount),
+                Routes = _routeManager.GetCarrierAccountRouteIds(carrierAccount)
             };
         }
         #endregion

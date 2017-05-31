@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('npIvswitchEndpointSelector',['NP_IVSwitch_EndPointAPIService', 'NP_IVSwitch_EndPointService', 'VRNotificationService', 'NP_IVSwitch_EndPointEnum', 'UtilsService',
-function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotificationService, NP_IVSwitch_EndPointEnum, UtilsService) {
+app.directive('npIvswitchEndpointSelector', ['NP_IVSwitch_EndPointAPIService', 'NP_IVSwitch_EndPointService', 'VRNotificationService', 'VRUIUtilsService', 'UtilsService',
+function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotificationService, VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -14,7 +14,8 @@ function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotific
                 ondeselectitem: "=",
                 isdisabled: "=",
                 customlabel: "@",
-                onitemadded: "="
+                onitemadded: "=",
+                customvalidate:"="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -50,7 +51,7 @@ function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotific
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
-            return  '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="EndPointId" isrequired="ctrl.isrequired"'
+            return '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="EndPointId" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"'
                     + ' label="' + label + '"  datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="'+label+'" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
         }
 

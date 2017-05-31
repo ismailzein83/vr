@@ -8,5 +8,6 @@ namespace NP.IVSwitch.Entities
 {
     public class SwitchMappingQuery
     {
+        public string Name { get; set; }
     }
 }

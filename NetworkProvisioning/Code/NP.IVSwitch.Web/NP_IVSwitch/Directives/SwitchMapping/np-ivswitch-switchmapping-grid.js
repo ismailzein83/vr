@@ -56,12 +56,16 @@ function (NP_IVSwitch_SwitchMappingAPIService, NP_IVSwitch_SwitchMappingService,
 
                 var menuActions = [];
                 var addEndPointMenu = {
-                    name: "Add End Point",
-                    clicked: assignEndPoint
+                    name: "Link End Points",
+                    clicked: linkEndPoints,
+                    haspermission: hasLinkEndPointsPermission
                 };
                 var addRouteMenu = {
-                    name: "Add Route",
+                    name: "Link Routes",
+                    clicked: linkRoutes,
+                    haspermission: hasLinkRoutesPermission
                 };
+
                 if (dataItem.CarrierAccountType == NP_IVSwitch_CarrierAccountTypeEnum.Exchange.value || dataItem.CarrierAccountType == NP_IVSwitch_CarrierAccountTypeEnum.Customer.value)
                     menuActions.push(addEndPointMenu);
                 if (dataItem.CarrierAccountType == NP_IVSwitch_CarrierAccountTypeEnum.Exchange.value || dataItem.CarrierAccountType == NP_IVSwitch_CarrierAccountTypeEnum.Supplier.value)
@@ -70,8 +74,25 @@ function (NP_IVSwitch_SwitchMappingAPIService, NP_IVSwitch_SwitchMappingService,
                 return menuActions;                 
             };
         }
-        function assignEndPoint(dataItem) {
-            NP_IVSwitch_SwitchMappingService.assignEndPoint();
+        function linkEndPoints(dataItem) {
+            var onEndPointLinked = function (updatedSwitchMapping) {
+                gridAPI.itemUpdated(updatedSwitchMapping);
+            };
+            NP_IVSwitch_SwitchMappingService.linkEndPoints(dataItem.CarrierAccountId, onEndPointLinked);
+        }
+
+        function hasLinkEndPointsPermission() {
+            return NP_IVSwitch_SwitchMappingAPIService.HasLinkEndPointsPermission();
+        }
+        function linkRoutes(dataItem) {
+            var onRouteLinked = function (updatedSwitchMapping) {
+                gridAPI.itemUpdated(updatedSwitchMapping);
+            };
+            NP_IVSwitch_SwitchMappingService.linkRoutes(dataItem.CarrierAccountId, onRouteLinked);
+        }
+        function hasLinkRoutesPermission() {
+            return NP_IVSwitch_SwitchMappingAPIService.HasLinkRoutesPermission();
+
         }
            
     }

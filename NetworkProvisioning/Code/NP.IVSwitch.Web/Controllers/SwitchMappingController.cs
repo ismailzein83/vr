@@ -21,6 +21,18 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredSwitchMappings(input));
         }
+        [HttpPost]
+        [Route("LinkCarrierToEndPoints")]
+        public Vanrise.Entities.UpdateOperationOutput<SwitchMappingDetail> LinkCarrierToEndPoints(EndPointLink endPointLink)
+        {
+            return _manager.LinkCarrierToEndPoints(endPointLink);
+        }
+        [HttpPost]
+        [Route("LinkCarrierToRoutes")]
+        public Vanrise.Entities.UpdateOperationOutput<SwitchMappingDetail> LinkCarrierToEndPoints(RouteLink routeLink)
+        {
+            return _manager.LinkCarrierToRoutes(routeLink);
+        }
 
     }
 }

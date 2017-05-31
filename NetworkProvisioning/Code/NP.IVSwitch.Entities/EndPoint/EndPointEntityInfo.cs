@@ -13,5 +13,7 @@ namespace NP.IVSwitch.Entities
 
         public string Description { get; set; }
 
+        public int AccountId { get; set; }
+
     }
 }

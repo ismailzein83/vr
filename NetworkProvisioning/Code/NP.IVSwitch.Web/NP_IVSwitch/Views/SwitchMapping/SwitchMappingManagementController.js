@@ -22,7 +22,7 @@
 
         function buildGridQuery() {
             return {
-                
+                Name:$scope.name
             };
         }
     }

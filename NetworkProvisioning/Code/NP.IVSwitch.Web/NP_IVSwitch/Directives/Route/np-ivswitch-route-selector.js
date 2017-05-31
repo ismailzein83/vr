@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('npIvswitchRouteSelector', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService',  'UtilsService',
-function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService,  UtilsService) {
+app.directive('npIvswitchRouteSelector', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitch_RouteService', 'VRNotificationService',  'UtilsService','VRUIUtilsService',
+function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -14,7 +14,8 @@ function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationS
             ondeselectitem: "=",
             isdisabled: "=",
             customlabel: "@",
-            onitemadded: "="
+            onitemadded: "=",
+            customvalidate: "="
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -50,7 +51,7 @@ function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationS
         if (attrs.customlabel != undefined)
             label = attrs.customlabel;
 
-        return '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="RouteId" isrequired="ctrl.isrequired"'
+        return '<vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate" datatextfield="Description" datavaluefield="RouteId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '"  datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
     }
 

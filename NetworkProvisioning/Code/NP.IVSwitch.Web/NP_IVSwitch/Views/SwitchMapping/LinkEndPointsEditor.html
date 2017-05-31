@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent ng-controller="NP_IVSwitch_AssignEndPointEditorController" size="'small'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_LinkEndPointsEditorController" size="'small'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formEndPointEditor">
             <vr-columns colnum="6">
                 <np-ivswitch-endpoint-selector on-ready="scopeModel.onSelectorEndPointReady"
-                                               normal-col-num="6" isrequired="true"></np-ivswitch-endpoint-selector>
+                                               normal-col-num="6" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedEndPoints" customvalidate="scopeModel.validateEndPointAccount()"></np-ivswitch-endpoint-selector>
             </vr-columns>
         </vr-form>
     </vr-modalbody>

@@ -46,23 +46,28 @@ namespace NP.IVSwitch.Business
         public IEnumerable<EndPointEntityInfo> GetEndPointsInfo(EndPointInfoFilter filter)
         {
             HashSet<int> assignEndPointIds = null;
+            Func<EndPoint, bool> filterFunc = null;
             int? carrierAccountSWCustomerAccountId = null;
-            if (filter.AssignableToCarrierAccountId.HasValue)
-            {
-                assignEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
-                carrierAccountSWCustomerAccountId = new AccountManager().GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value);
-            }
             var allEndPoints = this.GetCachedEndPoint();
-            Func<EndPoint,bool> filterFunc = (x) => {
+            if (filter != null)
+            {
                 if (filter.AssignableToCarrierAccountId.HasValue)
                 {
-                    if (assignEndPointIds.Contains(x.EndPointId))
-                        return false;
-                    if (carrierAccountSWCustomerAccountId.HasValue && x.AccountId != carrierAccountSWCustomerAccountId.Value)
-                        return false;
+                    assignEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
+                    carrierAccountSWCustomerAccountId = new AccountManager().GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value);
                 }
-                return true;
-            };
+                filterFunc = (x) =>
+                {
+                    if (filter.AssignableToCarrierAccountId.HasValue)
+                    {
+                        if (assignEndPointIds.Contains(x.EndPointId))
+                            return false;
+                        if (carrierAccountSWCustomerAccountId.HasValue && x.AccountId != carrierAccountSWCustomerAccountId.Value)
+                            return false;
+                    }
+                    return true;
+                };
+            }          
             return allEndPoints.MapRecords(EndPointEntityInfoMapper, filterFunc);
         }
 
@@ -451,7 +456,8 @@ namespace NP.IVSwitch.Business
             EndPointEntityInfo endPointEntityInfo = new EndPointEntityInfo
             {
                EndPointId = endPoint.EndPointId,
-               Description = GetEndPointDescription(endPoint)
+               Description = GetEndPointDescription(endPoint),
+               AccountId = endPoint.AccountId
             };
 
             return endPointEntityInfo;

@@ -11,8 +11,24 @@
         function GetFilteredSwitchMappings(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetFilteredSwitchMappings'), input);
         }
+        function LinkCarrierToEndPoints(endPointLink) {
+            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'LinkCarrierToEndPoints'), endPointLink);
+        }
+        function HasLinkEndPointsPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['LinkCarrierToEndPoints']));
+        }
+        function LinkCarrierToRoutes(endPointLink) {
+            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'LinkCarrierToRoutes'), endPointLink);
+        }
+        function HasLinkRoutesPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['LinkCarrierToRoutes']));
+        }
         return ({
-            GetFilteredSwitchMappings: GetFilteredSwitchMappings
+            GetFilteredSwitchMappings: GetFilteredSwitchMappings,
+            LinkCarrierToEndPoints: LinkCarrierToEndPoints,
+            LinkCarrierToRoutes: LinkCarrierToRoutes,
+            HasLinkEndPointsPermission: HasLinkEndPointsPermission,
+            HasLinkRoutesPermission: HasLinkRoutesPermission
         });
     }
     appControllers.service('NP_IVSwitch_SwitchMappingAPIService', SwitchMappingAPIService);

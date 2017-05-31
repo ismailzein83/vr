@@ -123,6 +123,27 @@ namespace NP.IVSwitch.Business
                 throw new Exception(String.Format("assigned SWCustomerAccountId '{0}' is different than endpoints AccountId '{1}'", accountCarrierProfileExtension.CustomerAccountId.Value, swCustomerAccountId));
         }
 
+        public void TrySetSWVendorAccountId(int carrierAccountId, int swVendorAccountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            int? carrierProfileId = carrierAccountManager.GetCarrierProfileId(carrierAccountId);
+            if (!carrierProfileId.HasValue)
+                throw new NullReferenceException(String.Format("carrierProfileId. '{0}'", carrierAccountId));
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            AccountCarrierProfileExtension accountCarrierProfileExtension =
+                carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId.Value);
+            if (accountCarrierProfileExtension == null || !accountCarrierProfileExtension.VendorAccountId.HasValue)
+            {
+                if (accountCarrierProfileExtension == null)
+                    accountCarrierProfileExtension = new AccountCarrierProfileExtension();
+                accountCarrierProfileExtension.VendorAccountId = swVendorAccountId;
+                carrierProfileManager.UpdateCarrierProfileExtendedSetting(carrierProfileId.Value, accountCarrierProfileExtension);
+            }
+            else if (accountCarrierProfileExtension.VendorAccountId.Value != swVendorAccountId)
+                throw new Exception(String.Format("assigned SWVendorAccountId '{0}' is different than route AccountId '{1}'", accountCarrierProfileExtension.VendorAccountId.Value, swVendorAccountId));
+        }
+
         #endregion
 
         #region Private

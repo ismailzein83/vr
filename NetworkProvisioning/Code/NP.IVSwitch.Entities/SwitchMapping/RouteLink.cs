@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace NP.IVSwitch.Entities
 {
-    public class RouteEntityInfo
+    public class RouteLink
     {
-        public int RouteId { get; set; }
+        public int CarrierAccountId { get; set; }
 
-        public string Description { get; set; }
-
-        public int AccountId { get; set; }
+        public List<int> RouteIds { get; set; }
     }
 }

@@ -32,15 +32,67 @@ namespace NP.IVSwitch.Business
         }
         public IEnumerable<RouteEntityInfo> GetRoutesInfo(RouteInfoFilter filter)
         {
-            var assignRoutes = GetCarrierAccountIdsByRouteId();
+            HashSet<int> assignRoutesIds = null;
+            Func<Route, bool> filterFunc = null;
+            int? carrierAccountSWVendorAccountId = null;
             var allRoutes = this.GetCachedRoutes();
-            Func<Route, bool> filterFunc = (x) =>
+            if (filter != null)
             {
-                if (assignRoutes.ContainsKey(x.RouteId))
-                    return false;
-                return true;
-            };
-            return allRoutes.MapRecords(EndPointEntityInfoMapper, filterFunc);
+                if (filter.AssignableToCarrierAccountId.HasValue)
+                {
+                    assignRoutesIds = new HashSet<int>(GetCarrierAccountIdsByRouteId().Keys);
+                    carrierAccountSWVendorAccountId = new AccountManager().GetCarrierAccountSWSupplierAccountId(filter.AssignableToCarrierAccountId.Value);
+                }
+                filterFunc = (x) =>
+                {
+                    if (filter.AssignableToCarrierAccountId.HasValue)
+                    {
+                        if (assignRoutesIds.Contains(x.RouteId))
+                            return false;
+                        if (carrierAccountSWVendorAccountId.HasValue && x.AccountId != carrierAccountSWVendorAccountId.Value)
+                            return false;
+                    }
+                    return true;
+                };
+            }
+            return allRoutes.MapRecords(RouteEntityInfoMapper, filterFunc);
+        }
+
+        public void LinkCarrierAccountToRoutes(int carrierAccountId, List<int> routeIds)
+        {
+            if (routeIds == null || routeIds.Count == 0)
+                throw new ArgumentNullException("routeIds");
+            List<Route> routes = new List<Route>();
+            int? vendorAccountId = null;
+            foreach (var routeId in routeIds)
+            {
+                var route = GetRoute(routeId);
+                route.ThrowIfNull("route", routeId);
+                routes.Add(route);
+                if (!vendorAccountId.HasValue)
+                    vendorAccountId = route.AccountId;
+                else if (vendorAccountId.Value != route.AccountId)
+                    throw new Exception("All routes should have same AccountId");
+            }
+            new AccountManager().TrySetSWVendorAccountId(carrierAccountId, vendorAccountId.Value);
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            RouteCarrierAccountExtension routeCarrierAccountExtension = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(carrierAccountId);
+            if (routeCarrierAccountExtension == null)
+                routeCarrierAccountExtension = new RouteCarrierAccountExtension();
+            if (routeCarrierAccountExtension.RouteInfo == null)
+                routeCarrierAccountExtension.RouteInfo = new List<RouteInfo>();
+            foreach (var route in routes)
+            {  
+                routeCarrierAccountExtension.RouteInfo.Add(new RouteInfo { RouteId=route.RouteId });
+            }
+
+            carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(
+                carrierAccountId, routeCarrierAccountExtension);
+            string carrierAccountName = carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+            foreach (var routeId in routeIds)
+            {
+                GenerateRule(carrierAccountId, routeId, carrierAccountName);
+            }
         }
         public List<int> GetCarrierAccountRouteIds(CarrierAccount carrierAccount)
         {
@@ -339,12 +391,13 @@ namespace NP.IVSwitch.Business
             return routeDetail;
         }
 
-        public RouteEntityInfo EndPointEntityInfoMapper(Route route){
+        public RouteEntityInfo RouteEntityInfoMapper(Route route){
 
             RouteEntityInfo routeInfo = new RouteEntityInfo()
             {
                 RouteId = route.RouteId,
-                Description = GetRouteDescription(route)
+                Description = GetRouteDescription(route),
+                AccountId = route.AccountId
 
             };
 

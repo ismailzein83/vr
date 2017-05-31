@@ -222,8 +222,10 @@
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboard.html" />
     <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboardController.js" />
-    <Content Include="NP_IVSwitch\Views\SwitchMapping\AssignEndPointEditor.html" />
-    <Content Include="NP_IVSwitch\Views\SwitchMapping\AssignEndPointEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\LinkRoutesEditor.html" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\LinkEndPointsEditor.html" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\LinkRoutesEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\SwitchMapping\LinkEndPointsEditorController.js" />
     <Content Include="NP_IVSwitch\Views\SwitchMapping\SwitchMappingManagement.html" />
     <Content Include="NP_IVSwitch\Views\SwitchMapping\SwitchMappingManagementController.js" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleEditor.html" />

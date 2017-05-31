@@ -7,7 +7,7 @@
 
     function SwitchMappingService(VRModalService, WhS_BE_CarrierAccountService, UtilsService) {
 
-        function assignEndPoint(CarrierAccountId, onAssignEndPoint) {
+        function linkEndPoints(CarrierAccountId, onEndPointLinked) {
             var settings = {};
 
             var parameters = {
@@ -15,12 +15,12 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAssignEndPoint = onAssignEndPoint
+                modalScope.onEndPointLinked = onEndPointLinked
             };
-            VRModalService.showModal('/Client/Modules/NP_IVSwitch/Views/SwitchMapping/AssignEndPointEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/NP_IVSwitch/Views/SwitchMapping/LinkEndPointsEditor.html', parameters, settings);
         };
 
-        function assignRoute(CarrierAccountId, onAssignRoute) {
+        function linkRoutes(CarrierAccountId, onRouteLinked) {
             var settings = {};
 
             var parameters = {
@@ -28,14 +28,14 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAssignRoute = onAssignRoute
+                modalScope.onRouteLinked = onRouteLinked
             };
-            VRModalService.showModal('/Client/Modules/NP_IVSwitch/Views/SwitchMapping/AssignRouteEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/NP_IVSwitch/Views/SwitchMapping/LinkRoutesEditor.html', parameters, settings);
         };
        
         return {
-            assignEndPoint: assignEndPoint,
-            assignRoute: assignRoute
+            linkEndPoints: linkEndPoints,
+            linkRoutes: linkRoutes
         };
     }
 

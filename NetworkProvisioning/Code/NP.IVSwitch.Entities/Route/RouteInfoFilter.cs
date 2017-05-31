@@ -8,5 +8,6 @@ namespace NP.IVSwitch.Entities
 {
     public class RouteInfoFilter
     {
+        public int? AssignableToCarrierAccountId { get; set; }
     }
 }
