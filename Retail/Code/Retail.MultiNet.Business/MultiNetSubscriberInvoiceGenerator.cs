@@ -62,11 +62,7 @@ namespace Retail.MultiNet.Business
             //    throw new InvoiceGeneratorException("From date and To date should be within the effective date of financial account.");
             //}
 
-            IAccountPayment accountPayment;
-            if (!_accountBEManager.HasAccountPayment(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountPayment))
-                throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", financialAccountData.Account.AccountId));
-            int currencyId = accountPayment.CurrencyId;
-
+            int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
             List<Summary> summaryItemSet = new List<Summary>();
             List<UsageSummary> usageSummaryItemSet = new List<UsageSummary>();
 

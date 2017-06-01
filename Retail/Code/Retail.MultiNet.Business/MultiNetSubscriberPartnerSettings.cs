@@ -70,15 +70,14 @@ namespace Retail.MultiNet.Business
                     AccountBEManager accountBEManager = new AccountBEManager();
                     CompanySetting companySetting = accountBEManager.GetCompanySetting(financialAccountData.Account.AccountId);
                     string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    IAccountPayment accountPayment;
-                    accountBEManager.HasAccountPayment(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false, out accountPayment);
-                    string currencySymbol = currencyManager.GetCurrencySymbol(accountPayment.CurrencyId);
+                    int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    string currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
 
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountName, accountName, true);
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
 
                     IAccountProfile accountProfile;
-                    accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false, out accountProfile);
+                    accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile);
 
                     if (accountProfile != null)
                     {
