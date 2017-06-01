@@ -320,6 +320,8 @@
     <Content Include="Web.config.exclude" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appSettings.config" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\NetworkProvisioning.pubxml" />
   </ItemGroup>
   <PropertyGroup>
