@@ -1,0 +1,23 @@
+﻿<vr-columns width="1/2row">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onSourceDataRecordTypeFieldSelectorReady" 
+                                                  label="Source Field" isrequired="true">
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+
+<vr-columns width="1/2row">
+    <vr-select datasource="scopeModel.conditions"
+               datatextfield="description"
+               datavaluefield="value"
+               selectedvalues="scopeModel.selectedCondition"
+               label="Condition"
+               isrequired="true"
+               hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<vr-columns width="1/2row">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onTargetDataRecordTypeFieldSelectorReady"
+                                                  label="Target Field" isrequired="true">
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+

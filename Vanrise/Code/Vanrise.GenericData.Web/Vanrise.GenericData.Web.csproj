@@ -198,6 +198,7 @@
     <Content Include="VR_GenericData\Constants\FieldNumberDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
+    <Content Include="VR_GenericData\Constants\DataRecordFieldComparisonOperatorEnum.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\Templates\BELookupRuleDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-selector.js" />
@@ -300,6 +301,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\Templates\StopIterationStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\vr-genericdata-datatransformation-stopiterationstep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\vr-genericdata-datatransformation-stopiterationstep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectFieldComparisonTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectFieldTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjectfield.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\Templates\ArrayFieldTypeTemplate.html" />
@@ -363,6 +365,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-timeinterval-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-summarybatchstartidentification-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjectfieldcomparison.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjecttype.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />
