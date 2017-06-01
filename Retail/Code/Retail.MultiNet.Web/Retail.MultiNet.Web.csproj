@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -134,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_MultiNet\Constant\ModuleConfig.js" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\retail-multinet-accounttype-part-definition-companyextendedinfo.js" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\AccountTypePartCompanyExtendedInfoDefinitionTemplate.html" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\retail-multinet-accounttype-part-runtime-companyextendedinfo.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-multinet-account-invoice-selector.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-invoice-invoicetype-multinetsubscriberinvoicesettings.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\MultiNetnvoiceSettingsTemplate.html" />
