@@ -91,7 +91,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     BED = serviceObject.BED,
                     EED = null,
                     ZoneName = serviceObject.ZoneName,
-                    Services = serviceObject.Services.Select(x => x.ServiceId)
+                    Services = serviceObject.Services.Select(x => x.ServiceId).ToList()
                 };
 
                 updateOperationOutput.UpdatedObject = supplierEntityServiceDetail;
@@ -168,7 +168,7 @@ namespace TOne.WhS.BusinessEntity.Business
                Source = supplierEntityService.Source,
                BED = supplierEntityService.BED,
                EED=null,
-               Services=supplierEntityService.Services.Select(x => x.ServiceId)
+               Services=supplierEntityService.Services.Select(x => x.ServiceId).ToList()
             };
 
             return detail;
@@ -204,7 +204,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     supplierEntityServiceDetail.BED = Entity.BED;
                     supplierEntityServiceDetail.EED = Entity.EED;
                      supplierEntityServiceDetail.ZoneName = supplierZone.Name;
-                     supplierEntityServiceDetail.Services = Entity.Services.Select(x => x.ServiceId);         
+                     supplierEntityServiceDetail.Services = Entity.Services.Select(x => x.ServiceId).ToList();         
                     supplierEntityServicesDetail.Add(supplierEntityServiceDetail);
                 }
 
