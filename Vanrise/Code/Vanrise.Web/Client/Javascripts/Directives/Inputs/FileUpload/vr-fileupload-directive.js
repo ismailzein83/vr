@@ -114,19 +114,25 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 drop: function (e, data) {
                 },
                 done: function (e, data) {
-                    ctrl.value = {
-                        fileId: data.result.FileId,
-                        fileName: data.result.Name
-                    };
-                    var obj = ctrl.value;
-                    isInternalSetValue = true;
-                    $timeout(function () { $scope.complet = true }, 2000);
-                    $scope.isUploading = false;
-                    data.originalFiles.length = 0;
-                    if ($attrs.onvaluechanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
-                        if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod(obj);
+                    if (data == undefined || data.result == undefined || data.result.FileId == undefined) {
+                        $scope.broken = true;
+                        $scope.isUploading = false;
+                    }
+                    else {
+                        ctrl.value = {
+                            fileId: data.result.FileId,
+                            fileName: data.result.Name
+                        };
+                        var obj = ctrl.value;
+                        isInternalSetValue = true;
+                        $timeout(function () { $scope.complet = true }, 2000);
+                        $scope.isUploading = false;
+                        data.originalFiles.length = 0;
+                        if ($attrs.onvaluechanged != undefined) {
+                            var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
+                            if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
+                                onvaluechangedMethod(obj);
+                            }
                         }
                     }
                 },
