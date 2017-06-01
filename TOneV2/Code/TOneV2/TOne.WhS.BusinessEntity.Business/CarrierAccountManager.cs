@@ -509,6 +509,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public int GetCarrierAccountCurrencyId(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAcount", carrierAccountId);
             return GetCarrierAccountCurrencyId(carrierAccount);
         }
 

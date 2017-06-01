@@ -44,10 +44,12 @@ namespace TOne.WhS.AccountBalance.Business
             if (carrierProfileId.HasValue)
             {
                 carrierProfile = new CarrierProfileManager().GetCarrierProfile(carrierProfileId.Value);
+                carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId.Value);
             }
             else
             {
                 carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId.Value);
+                carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId.Value);
             }
         }
 
