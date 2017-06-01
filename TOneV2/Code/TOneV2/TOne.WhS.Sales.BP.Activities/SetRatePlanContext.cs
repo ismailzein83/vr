@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -40,6 +42,10 @@ namespace TOne.WhS.Sales.BP.Activities
             int ownerId = OwnerId.Get(context);
             int currencyId = CurrencyId.Get(context);
             DateTime effectiveDate = EffectiveDate.Get(context);
+            CurrencyManager currencyManager = new CurrencyManager();
+            var systemCurrency = currencyManager.GetSystemCurrency();
+            if (systemCurrency == null)
+                throw new DataIntegrityValidationException("System Currency was not found");
 
             RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
             ratePlanContext.OwnerType = ownerType;
@@ -49,7 +55,12 @@ namespace TOne.WhS.Sales.BP.Activities
             ratePlanContext.EffectiveDate = effectiveDate;
             ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
             ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
-            ratePlanContext.MaximumRate = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
+
+            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            var maximumRate = new BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
+            decimal convertedmaximumRate = currencyExchangeRateManager.ConvertValueToCurrency(maximumRate,
+                systemCurrency.CurrencyId, currencyId, DateTime.Now);
+            ratePlanContext.MaximumRate = convertedmaximumRate;
         }
 
         #region Private Methods
