@@ -38,13 +38,13 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                             }      
                         }
                         if (defaultCount==0)
-                            return "You Should add at least one default setting.";
+                            return "You Should add at least one default settings.";
                         if (defaultCount == 1)
                             return null;
                         if(defaultCount > 1)
                             return "Only one default settings is permitted.";
                     }
-                    return "You Should add at least one setting.";
+                    return "You Should add at least one settings.";
                 };
                 ctrl.addCompanySetting = function () {
                     var onCompanySettingAdded = function (companySetting) {
