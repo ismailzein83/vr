@@ -111,12 +111,13 @@ namespace NP.IVSwitch.Business
         }
 
         private void BuildTopCustomersResult(LiveDashboardResult liveDashboardResult, AnalyticSummaryBigResult<AnalyticRecord> topCustomersRecords)
-        {
-            
+        {            
             if (topCustomersRecords.Data != null)
             {
                 ConvertAnalyticDataToTopCustomersResult(liveDashboardResult, topCustomersRecords.Data);
-
+            }
+            if (topCustomersRecords.Summary != null)
+            {
                 MeasureValue attempts = GetMeasureValue(topCustomersRecords.Summary, "Attempts");
                 MeasureValue countConnected = GetMeasureValue(topCustomersRecords.Summary, "CountConnected");
                 MeasureValue percConnected = GetMeasureValue(topCustomersRecords.Summary, "PercConnected");
@@ -134,8 +135,9 @@ namespace NP.IVSwitch.Business
                     TotalDuration = Decimal.Round(Convert.ToDecimal(totalDuration == null ? 0.0 : totalDuration.Value ?? 0.0), 2),
                     ResponseDate = DateTime.Now
                 };
-
             }
+            else
+                liveDashboardResult.LiveSummaryResult = new LiveSummaryResult();
         }
 
         private AnalyticSummaryBigResult<AnalyticRecord> QueryTopCustomers()
