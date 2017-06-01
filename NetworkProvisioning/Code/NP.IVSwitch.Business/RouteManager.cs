@@ -32,16 +32,19 @@ namespace NP.IVSwitch.Business
         }
         public IEnumerable<RouteEntityInfo> GetRoutesInfo(RouteInfoFilter filter)
         {
-            HashSet<int> assignRoutesIds = null;
             Func<Route, bool> filterFunc = null;
-            int? carrierAccountSWVendorAccountId = null;
             var allRoutes = this.GetCachedRoutes();
             if (filter != null)
             {
+                int? carrierAccountSWVendorAccountId = null;
+                HashSet<int> assignRoutesIds = null;
+                HashSet<int> alreadyAssignedSWVendorAccountIds = null;
                 if (filter.AssignableToCarrierAccountId.HasValue)
                 {
+                    var accountManager = new AccountManager();
                     assignRoutesIds = new HashSet<int>(GetCarrierAccountIdsByRouteId().Keys);
-                    carrierAccountSWVendorAccountId = new AccountManager().GetCarrierAccountSWSupplierAccountId(filter.AssignableToCarrierAccountId.Value);
+                    carrierAccountSWVendorAccountId = accountManager.GetCarrierAccountSWSupplierAccountId(filter.AssignableToCarrierAccountId.Value);
+                    alreadyAssignedSWVendorAccountIds = new HashSet<int>(accountManager.GetAllAssignedSWVendorAccountIds());
                 }
                 filterFunc = (x) =>
                 {
@@ -50,6 +53,8 @@ namespace NP.IVSwitch.Business
                         if (assignRoutesIds.Contains(x.RouteId))
                             return false;
                         if (carrierAccountSWVendorAccountId.HasValue && x.AccountId != carrierAccountSWVendorAccountId.Value)
+                            return false;
+                        if (!carrierAccountSWVendorAccountId.HasValue && alreadyAssignedSWVendorAccountIds.Contains(x.AccountId))//if Route belongs to Switch Vendor that is assigned other Carrier Profile
                             return false;
                     }
                     return true;
@@ -162,9 +167,15 @@ namespace NP.IVSwitch.Business
             return insertOperationOutput;
         }
 
-        public int GetRouteCarrierAccountId(int routeId)
+        public int? GetRouteCarrierAccountId(int routeId)
         {
             return GetCarrierAccountIdsByRouteId().GetRecord(routeId);
+        }
+
+        public string GetRouteCarrierAccountName(int routeId)
+        {
+            int? carrierAccountId = GetRouteCarrierAccountId(routeId);
+            return carrierAccountId.HasValue ? new CarrierAccountManager().GetCarrierAccountName(carrierAccountId.Value) : null;
         }
 
         private bool Insert(RouteToAdd routeItem, out int routeId, out string mssg)

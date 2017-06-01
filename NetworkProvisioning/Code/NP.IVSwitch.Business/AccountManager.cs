@@ -102,6 +102,46 @@ namespace NP.IVSwitch.Business
             return carrierProfileExtension;
         }
 
+        public List<int> GetAllAssignedSWCustomerAccountIds()
+        {
+            List<int> assignedSWCustomerAccountIds = new List<int>();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var allProfiles = carrierProfileManager.GetCachedCarrierProfiles();
+            if (allProfiles != null)
+            {
+                foreach(var profile in allProfiles.Values)
+                {
+                    AccountCarrierProfileExtension accountCarrierProfileExtension =
+                carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profile);
+                    if (accountCarrierProfileExtension != null && accountCarrierProfileExtension.CustomerAccountId.HasValue)
+                    {
+                        assignedSWCustomerAccountIds.Add(accountCarrierProfileExtension.CustomerAccountId.Value);
+                    }
+                }
+            }
+            return assignedSWCustomerAccountIds;
+        }
+
+        public List<int> GetAllAssignedSWVendorAccountIds()
+        {
+            List<int> assignedSWVendorAccountIds = new List<int>();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var allProfiles = carrierProfileManager.GetCachedCarrierProfiles();
+            if (allProfiles != null)
+            {
+                foreach (var profile in allProfiles.Values)
+                {
+                    AccountCarrierProfileExtension accountCarrierProfileExtension =
+                carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profile);
+                    if (accountCarrierProfileExtension != null && accountCarrierProfileExtension.VendorAccountId.HasValue)
+                    {
+                        assignedSWVendorAccountIds.Add(accountCarrierProfileExtension.VendorAccountId.Value);
+                    }
+                }
+            }
+            return assignedSWVendorAccountIds;
+        }
+
         public void TrySetSWCustomerAccountId(int carrierAccountId, int swCustomerAccountId)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();

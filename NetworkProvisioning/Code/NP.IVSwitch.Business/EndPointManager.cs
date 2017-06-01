@@ -45,29 +45,34 @@ namespace NP.IVSwitch.Business
 
         public IEnumerable<EndPointEntityInfo> GetEndPointsInfo(EndPointInfoFilter filter)
         {
-            HashSet<int> assignEndPointIds = null;
             Func<EndPoint, bool> filterFunc = null;
-            int? carrierAccountSWCustomerAccountId = null;
             var allEndPoints = this.GetCachedEndPoint();
             if (filter != null)
             {
+                int? carrierAccountSWCustomerAccountId = null;
+                HashSet<int> assignedEndPointIds = null;
+                HashSet<int> alreadyAssignedSWCustomerAccountIds = null;
                 if (filter.AssignableToCarrierAccountId.HasValue)
                 {
-                    assignEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
-                    carrierAccountSWCustomerAccountId = new AccountManager().GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value);
+                    assignedEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
+                    var accountManager = new AccountManager();
+                    carrierAccountSWCustomerAccountId = accountManager.GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value);
+                    alreadyAssignedSWCustomerAccountIds = new HashSet<int>(accountManager.GetAllAssignedSWCustomerAccountIds());
                 }
                 filterFunc = (x) =>
                 {
                     if (filter.AssignableToCarrierAccountId.HasValue)
                     {
-                        if (assignEndPointIds.Contains(x.EndPointId))
+                        if (assignedEndPointIds.Contains(x.EndPointId))
                             return false;
                         if (carrierAccountSWCustomerAccountId.HasValue && x.AccountId != carrierAccountSWCustomerAccountId.Value)
+                            return false;
+                        if (!carrierAccountSWCustomerAccountId.HasValue && alreadyAssignedSWCustomerAccountIds.Contains(x.AccountId))//if end point belongs to Switch Customer that is assigned other Carrier Profile
                             return false;
                     }
                     return true;
                 };
-            }          
+            }
             return allEndPoints.MapRecords(EndPointEntityInfoMapper, filterFunc);
         }
 
@@ -182,9 +187,15 @@ namespace NP.IVSwitch.Business
             return updateOperationOutput;
         }
 
-        public int GetEndPointCarrierAccountId(int endPointId)
+        public int? GetEndPointCarrierAccountId(int endPointId)
         {
             return GetCarrierAccountIdsByEndPointId().GetRecord(endPointId);
+        }
+
+        public string GetEndPointAccountName(int routeId)
+        {
+            int? carrierAccountId = GetEndPointCarrierAccountId(routeId);
+            return carrierAccountId.HasValue ? new CarrierAccountManager().GetCarrierAccountName(carrierAccountId.Value) : null;
         }
 
         public void LinkCarrierAccountToEndPoints(int carrierAccountId, List<int> endPointIds)
