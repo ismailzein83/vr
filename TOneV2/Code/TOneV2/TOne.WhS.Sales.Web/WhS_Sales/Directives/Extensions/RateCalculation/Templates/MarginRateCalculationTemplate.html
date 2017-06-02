@@ -22,7 +22,7 @@
                    hideremoveicon>
         </vr-select>
     </vr-columns>
-    <vr-columns colnum="{{ctrl.normalColNum / 3}}" ng-show="scopeModel.showOptionNumberSelector">
+    <vr-columns colnum="{{ctrl.normalColNum / 2}}" ng-show="scopeModel.showOptionNumberSelector">
         <vr-select on-ready="scopeModel.onOptionNumberSelectorReady"
                    label="Option Number"
                    datasource="scopeModel.optionNumbers"
@@ -41,12 +41,12 @@
                                      hideremoveicon>
         </vr-whs-be-supplier-selector>
     </span>
-    <vr-columns colnum="{{ctrl.normalColNum / 3}}">
+    <vr-columns colnum="{{ctrl.normalColNum / 2}}">
         <vr-label ng-show="scopeModel.showMarginLabel">Margin</vr-label>
         <vr-label ng-show="scopeModel.showMarginPercentageLabel">Margin %</vr-label>
         <vr-textbox type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" isrequired="ctrl.isrequired" customvalidate="scopeModel.validateMargin()"></vr-textbox>
     </vr-columns>
-    <vr-columns colnum="{{ctrl.normalColNum / 3}}">
+    <vr-columns colnum="{{ctrl.normalColNum / 2}}">
         <vr-switch value="scopeModel.isPercentage" label="Percentage" onvaluechanged="scopeModel.onIsPercentageChanged"></vr-switch>
     </vr-columns>
 </vr-columns>
