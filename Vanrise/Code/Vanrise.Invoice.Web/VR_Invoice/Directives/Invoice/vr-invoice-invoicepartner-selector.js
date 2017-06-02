@@ -44,7 +44,7 @@
                     };
                     var directivePayload = {
                         filter: filter,
-                        extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings,
+                        extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? invoiceTypeEntity.Settings.ExtendedSettings:undefined,
                         invoiceTypeId: invoiceTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
@@ -81,10 +81,20 @@
 
                     var invoiceTypeSelectorPromise = getInvoiceTypeSelector(invoiceTypeId);
                     promises.push(invoiceTypeSelectorPromise);
+
+
                     var invoiceTypePromise = getInvoiceType(invoiceTypeId);
                     promises.push(invoiceTypePromise);
                     if (selectedIds != undefined) {
-                        var loadDirectivePromise = loadDirective();
+
+                        var loadDirectivePromise = UtilsService.createPromiseDeferred();
+                        UtilsService.waitMultiplePromises([invoiceTypeSelectorPromise, invoiceTypePromise]).then(function () {
+                            loadDirective().then(function () {
+                                loadDirectivePromise.resolve();
+                            }).catch(function (error) {
+                                loadDirectivePromise.reject(error);
+                            });
+                        });
                         promises.push(loadDirectivePromise);
                     }
 
@@ -107,7 +117,7 @@
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
                                 selectedIds: selectedIds,
-                                extendedSettings: invoiceTypeEntity.Settings.ExtendedSettings,
+                                extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? invoiceTypeEntity.Settings.ExtendedSettings:undefined,
                                 filter: filter,
                                 invoiceTypeId: invoiceTypeId
                             };
