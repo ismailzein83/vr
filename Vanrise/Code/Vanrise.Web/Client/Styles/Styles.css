@@ -2324,6 +2324,9 @@ vr-label[ellipsis] .vr-control-label {
     text-overflow: ellipsis !important;
     overflow: hidden !important;
 }
+vr-label[hasbackgroundcolor] .vr-control-label {   
+    display:inline !important;
+}
 .permmesion-background {
     background: url("../../Client/Images/bichartpermission.jpg") center no-repeat;
     background-size: contain;
