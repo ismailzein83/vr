@@ -11,6 +11,7 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using System.Drawing;
 using TOne.WhS.BusinessEntity.Business;
+using System.IO;
 
 namespace TOne.WhS.Analytics.Business
 {
@@ -184,10 +185,16 @@ namespace TOne.WhS.Analytics.Business
             CreateWorkSheetDurationAmount(wbk, "Monthly Traffic as Supplier", listBusinessCaseStatusDurationAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, chartTitle, style, currency, carrierName);
             CreateWorkSheet(wbk, "Traf Top Dest Amt Sup", listBusinessCaseStatusAmount, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Amount For Supplier", style, currency, carrierName);
             CreateWorkSheet(wbk, "Traf Top Dest Dur Sup", listBusinessCaseStatus, businessCaseStatusQuery.fromDate, businessCaseStatusQuery.toDate, businessCaseStatusQuery.topDestination, "Traffic Top Destination Duration For Supplier", style, duration, carrierName);
-
+            
+            byte[] array;
+            using (MemoryStream ms = new MemoryStream())
+            {     
+                wbk.Save(ms, SaveFormat.Xlsx);
+                array = ms.ToArray();
+            }
             ExcelResult excelResult = new ExcelResult
             {
-                ExcelFileStream = wbk.SaveToStream()
+                ExcelFileContent = array
             };
             return excelResult;
         }
