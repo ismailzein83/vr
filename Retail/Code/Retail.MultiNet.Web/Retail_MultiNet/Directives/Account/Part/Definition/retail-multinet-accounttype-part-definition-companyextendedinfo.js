@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailZajilAccounttypePartDefinitionCompanyextendedinfo', [function () {
+app.directive('retailMultinetAccounttypePartDefinitionCompanyextendedinfo', [function () {
     return {
         restrict: 'E',
         scope: {
