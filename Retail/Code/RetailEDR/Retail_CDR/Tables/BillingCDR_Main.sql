@@ -17,6 +17,7 @@
     [Called]                 VARCHAR (100)    NULL,
     [OtherPartyNumber]       VARCHAR (100)    NULL,
     [InterconnectOperatorId] BIGINT           NULL,
+    [SubscriberZoneId]       BIGINT           NULL,
     [Zone]                   BIGINT           NULL,
     [PackageId]              INT              NULL,
     [ChargingPolicyId]       INT              NULL,
@@ -34,6 +35,8 @@
     [CostAmount]             DECIMAL (22, 6)  NULL,
     [Extension]              VARCHAR (20)     NULL
 );
+
+
 
 
 

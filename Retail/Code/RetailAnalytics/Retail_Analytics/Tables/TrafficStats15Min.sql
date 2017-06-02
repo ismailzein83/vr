@@ -8,6 +8,7 @@
     [InitiationCallType]     INT              NULL,
     [TerminationCallType]    INT              NULL,
     [InterconnectOperatorId] BIGINT           NULL,
+    [SubscriberZoneId]       BIGINT           NULL,
     [ZoneId]                 BIGINT           NULL,
     [PackageId]              INT              NULL,
     [ChargingPolicyId]       INT              NULL,
@@ -19,6 +20,8 @@
     [NumberOfCDRs]           INT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

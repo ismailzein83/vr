@@ -17,6 +17,7 @@
     [Called]                 VARCHAR (100)    NULL,
     [OtherPartyNumber]       VARCHAR (100)    NULL,
     [InterconnectOperatorId] BIGINT           NULL,
+    [SubscriberZoneId]       BIGINT           NULL,
     [Zone]                   BIGINT           NULL,
     [SaleRateValueRuleId]    INT              NULL,
     [SaleRateTypeRuleId]     INT              NULL,
@@ -24,6 +25,8 @@
     [SaleExtraChargeRuleId]  INT              NULL,
     [Extension]              VARCHAR (20)     NULL,
     [QueueItemId]            BIGINT           NULL);
+
+
 
 
 
