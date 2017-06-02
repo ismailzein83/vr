@@ -50,11 +50,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
             var api = {};
 
             api.load = function (payload) {
-                var promises = [];
-                var accountTypeSelectorPayload;
-                var statusDefinitionSelectorPayload;
-
-                promises.push(getAccountDefinitionSelectorLoad());
+                var promises = [];              
 
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.cNIC = payload.partSettings.CNIC;
