@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.MultiNet.MainExtensions
 {
@@ -22,13 +23,17 @@ namespace Retail.MultiNet.MainExtensions
 
         public string AssignedNumber  { get; set; }
 
-        public AddressTypes AddressTypes { get; set; }
+        public AddressType AddressType { get; set; }
 
         public string InventoryDetails { get; set; }
 
         public string GPSiteID { get; set; }
 
         public MultiNetAccountType AccountType { get; set; }
+
+        public GenderType Gender { get; set; }
+
+        public SalutationType SalutationType { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
@@ -38,10 +43,12 @@ namespace Retail.MultiNet.MainExtensions
                 case "NTN": return this.NTN;
                 case "PassportNumber": return this.PassportNumber;
                 case "AssignedNumber": return this.AssignedNumber;
-                case "AddressTypes": return this.AddressTypes;
+                case "AddressTypes": return this.AddressType;
                 case "InventoryDetails": return this.InventoryDetails;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;
+                case "Gender": return this.Gender;
+                case "SalutationType": return this.SalutationType;
                 default: return null;
             }
         }

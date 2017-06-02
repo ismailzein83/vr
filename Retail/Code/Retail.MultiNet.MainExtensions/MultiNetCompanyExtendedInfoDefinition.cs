@@ -41,8 +41,8 @@ namespace Retail.MultiNet.MainExtensions
                     },
                     new GenericFieldDefinition()
                     {
-                        Name = "AddressTypes",
-                        Title = "Address Types",
+                        Name = "AddressType",
+                        Title = "Address Type",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
                     },
                     new GenericFieldDefinition()
@@ -55,6 +55,18 @@ namespace Retail.MultiNet.MainExtensions
                     {
                         Name = "AccountType",
                         Title = "Account Type",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
+                    },
+                    new GenericFieldDefinition()
+                    {
+                        Name = "Gender",
+                        Title = "Gender",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
+                    }, 
+                    new GenericFieldDefinition()
+                    {
+                        Name = "SalutationType",
+                        Title = "Salutation Type",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
                     }
                    
