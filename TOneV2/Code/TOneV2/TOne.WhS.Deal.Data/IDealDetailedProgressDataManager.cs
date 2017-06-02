@@ -9,5 +9,6 @@ namespace TOne.WhS.Deal.Data
 {
     public interface IDealDetailedProgressDataManager : IDataManager
     {
+        List<DealDetailedProgress> GetDealDetailedProgress(List<DealZoneGroup> dealZoneGroups);
     }
 }

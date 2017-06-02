@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,39 @@ namespace TOne.WhS.Deal.Data.SQL
         #endregion
 
         #region Public Methods
+        public List<DealDetailedProgress> GetDealDetailedProgress(List<DealZoneGroup> dealZoneGroups)
+        {
+            DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
+            return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDealZoneGroups]", DealDetailedProgressMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
+                dtPrm.Value = dtDealZoneGroup;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
 
+        DataTable BuildDealZoneGroupTable(List<DealZoneGroup> dealZoneGroups)
+        {
+            DataTable dtDealZoneGroup = GetDealZoneGroupTable();
+            dtDealZoneGroup.BeginLoadData();
+            foreach (var dealZoneGroup in dealZoneGroups)
+            {
+                DataRow dr = dtDealZoneGroup.NewRow();
+                dr["DealId"] = dealZoneGroup.DealId;
+                dr["ZoneGroupNb"] = dealZoneGroup.ZoneGroupNb;
+                dtDealZoneGroup.Rows.Add(dr);
+            }
+            dtDealZoneGroup.EndLoadData();
+            return dtDealZoneGroup;
+        }
+
+        DataTable GetDealZoneGroupTable()
+        {
+            DataTable dtDealZoneGroup = new DataTable();
+            dtDealZoneGroup.Columns.Add("DealId", typeof(Int32));
+            dtDealZoneGroup.Columns.Add("ZoneGroupNb", typeof(Int32));
+            return dtDealZoneGroup;
+        }
         #endregion
 
         #region  Mappers
