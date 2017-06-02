@@ -205,9 +205,7 @@ namespace Retail.Ringo.Data.SQL
                   ,[RecipientNetwork]
                   ,[MSISDN]
                   ,[RecipientRequestCode]
-                  ,[MessageType]
-                  ,[FileName]
-                 ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
+                  ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                   ,[StateRequest]
                   ,[FlagCredit]
                   ,[TransferredCredit]
@@ -228,9 +226,7 @@ namespace Retail.Ringo.Data.SQL
                   ,[RecipientNetwork]
                   ,[MSISDN]
                   ,[RecipientRequestCode]
-                  ,[MessageType]
-                  ,[FileName]
-                 ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
+                  ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                   ,[StateRequest]
                   ,[FlagCredit]
                   ,[TransferredCredit]
@@ -251,8 +247,6 @@ namespace Retail.Ringo.Data.SQL
                     ,[RecipientNetwork]
                     ,[MSISDN]
                     ,[RecipientRequestCode]
-                    ,[MessageType]
-                    ,[FileName]
                     ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                     ,[StateRequest]
                     ,[FlagCredit]
@@ -276,9 +270,7 @@ namespace Retail.Ringo.Data.SQL
                   ,[RecipientNetwork]
                   ,[MSISDN]
                   ,[RecipientRequestCode]
-                  ,[MessageType]
-                  ,[FileName]
-                 ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
+                  ,CONVERT(VARCHAR(10),[MessageDate],121) MessageDate
                   ,[StateRequest]
                   ,[FlagCredit]
                   ,[TransferredCredit]
