@@ -684,6 +684,5 @@
     <None Include="BI.PostDeployemnt.sql" />
     <None Include="ClearVoice.PostDeployment.sql" />
     <None Include="VR_BEBridge.PostDeployment.sql" />
-    <None Include="Dev_Retail_Centrex.PostDeployment.sql" />
   </ItemGroup>
 </Project>
