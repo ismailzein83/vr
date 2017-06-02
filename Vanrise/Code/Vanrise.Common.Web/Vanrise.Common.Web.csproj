@@ -193,7 +193,9 @@
   <ItemGroup>
     <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
     <Content Include="Common\Constant\EntityFilterEffectiveModeEnum.js" />
+    <Content Include="Common\Constant\SalutationTypeEnum.js" />
     <Content Include="Common\Constant\GridWidthFactorEnum.js" />
+    <Content Include="Common\Constant\GenderTypeEnum.js" />
     <Content Include="Common\Constant\LogEntryTypeEnum.js" />
     <Content Include="Common\Constant\LogAttributeEnum.js" />
     <Content Include="Common\Constant\HourEnum.js" />
@@ -207,6 +209,7 @@
     <Content Include="Common\Directives\ActionAudit\vr-common-actionaudit-search.js" />
     <Content Include="Common\Directives\ActionAudit\vr-common-actionauditlkup-selector.js" />
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
+    <Content Include="Common\Directives\Gender\vr-common-gender-selector.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
     <Content Include="Common\Directives\Region\vr-common-region-grid.js" />
     <Content Include="Common\Directives\Region\vr-common-region-selector.js" />
@@ -244,6 +247,7 @@
     <Content Include="Common\Directives\OverriddenConfig\Templates\OverriddenConfigGrid.html" />
     <Content Include="Common\Directives\OverriddenConfig\vr-common-overriddenconfig-grid.js" />
     <Content Include="Common\Directives\OverriddenConfigGroup\vr-common-overriddenconfiggroup-selector.js" />
+    <Content Include="Common\Directives\SalutationType\vr-common-salutationtype-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
