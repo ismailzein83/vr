@@ -41,16 +41,33 @@ namespace TOne.WhS.Deal.Business
             return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
 
+        public void FillOrigSaleValues(dynamic record)
+        {
+            record.OrigSaleRateId = record.SaleRateId;
+            record.OrigSaleRateValue = record.SaleRateValue;
+            record.OrigSaleNet = record.SaleNet;
+
+            DealSaleZoneGroup dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
+            if (dealSaleZoneGroup != null)
+            {
+                record.OrigSaleDealId = dealSaleZoneGroup.DealId;
+                record.OrigSaleDealZoneGroupNb = dealSaleZoneGroup.DealSaleZoneGroupNb;
+            }
+        }
+
         public DealSaleZoneGroup GetDealSaleZoneGroup(int dealId, int zoneGroupNb)
         {
             var cachedDealSaleZoneGroups = GetCachedDealSaleZoneGroups();
-            return cachedDealSaleZoneGroups.GetRecord(new DealZoneGroup() {DealId = dealId, ZoneGroupNb = zoneGroupNb });
+            return cachedDealSaleZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
         }
 
-        public DealSaleZoneGroup GetAccountSaleZoneGroup(int customerId, long saleZoneId, DateTime effectiveDate)
+        public DealSaleZoneGroup GetAccountSaleZoneGroup(int? customerId, long? saleZoneId, DateTime effectiveDate)
         {
+            if (!customerId.HasValue || !saleZoneId.HasValue)
+                return null;
+
             var cachedAccountSaleZoneGroups = GetCachedAccountSaleZoneGroups();
-            IOrderedEnumerable<DealSaleZoneGroup> dealSaleZoneGroups = cachedAccountSaleZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = customerId, ZoneId = saleZoneId });
+            IOrderedEnumerable<DealSaleZoneGroup> dealSaleZoneGroups = cachedAccountSaleZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = customerId.Value, ZoneId = saleZoneId.Value });
             if (dealSaleZoneGroups != null && dealSaleZoneGroups.Count() > 0)
             {
                 foreach (DealSaleZoneGroup dealSaleZoneGroup in dealSaleZoneGroups)
@@ -62,16 +79,33 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
+        public void FillOrigSupplierValues(dynamic record)
+        {
+            record.OrigCostRateId = record.CostRateId;
+            record.OrigCostRateValue = record.CostRateValue;
+            record.OrigCostNet = record.CostNet;
+
+            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
+            if (dealSupplierZoneGroup != null)
+            {
+                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
+                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
+            }
+        }
+
         public DealSupplierZoneGroup GetDealSupplierZoneGroup(int dealId, int zoneGroupNb)
         {
             var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroups();
             return cachedDealSupplierZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
         }
 
-        public DealSupplierZoneGroup GetAccountSupplierZoneGroup(int supplierId, long supplierZoneId, DateTime effectiveDate)
+        public DealSupplierZoneGroup GetAccountSupplierZoneGroup(int? supplierId, long? supplierZoneId, DateTime effectiveDate)
         {
+            if (!supplierId.HasValue || !supplierZoneId.HasValue)
+                return null;
+
             var cachedAccountSupplierZoneGroups = GetCachedAccountSupplierZoneGroups();
-            IOrderedEnumerable<DealSupplierZoneGroup> dealSupplierZoneGroups = cachedAccountSupplierZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = supplierId, ZoneId = supplierZoneId });
+            IOrderedEnumerable<DealSupplierZoneGroup> dealSupplierZoneGroups = cachedAccountSupplierZoneGroups.GetRecord(new AccountZoneGroup() { AccountId = supplierId.Value, ZoneId = supplierZoneId.Value });
             if (dealSupplierZoneGroups != null && dealSupplierZoneGroups.Count() > 0)
             {
                 foreach (DealSupplierZoneGroup dealSupplierZoneGroup in dealSupplierZoneGroups)
@@ -100,7 +134,7 @@ namespace TOne.WhS.Deal.Business
                 var cachedDeals = base.GetCachedDeals();
                 foreach (DealDefinition dealDefinition in cachedDeals.Values)
                 {
-                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext() { DealId = dealDefinition.DealId };
                     dealDefinition.Settings.GetZoneGroups(context);
                     if (context.SaleZoneGroups != null)
                     {
@@ -127,7 +161,7 @@ namespace TOne.WhS.Deal.Business
                 var cachedDeals = base.GetCachedDeals();
                 foreach (DealDefinition dealDefinition in cachedDeals.Values)
                 {
-                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext() { DealId = dealDefinition.DealId };
                     dealDefinition.Settings.GetZoneGroups(context);
                     if (context.SupplierZoneGroups != null)
                     {
@@ -154,7 +188,7 @@ namespace TOne.WhS.Deal.Business
                 var cachedDeals = base.GetCachedDeals();
                 foreach (DealDefinition dealDefinition in cachedDeals.Values)
                 {
-                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext() { DealId = dealDefinition.DealId };
                     dealDefinition.Settings.GetZoneGroups(context);
                     if (context.SaleZoneGroups != null)
                     {
@@ -185,7 +219,7 @@ namespace TOne.WhS.Deal.Business
                 var cachedDeals = base.GetCachedDeals();
                 foreach (DealDefinition dealDefinition in cachedDeals.Values)
                 {
-                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext();
+                    DealGetZoneGroupsContext context = new DealGetZoneGroupsContext() { DealId = dealDefinition.DealId };
                     dealDefinition.Settings.GetZoneGroups(context);
                     if (context.SupplierZoneGroups != null)
                     {

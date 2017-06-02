@@ -45,6 +45,7 @@ namespace TOne.WhS.Deal.Entities
                         {
                             DealSupplierZoneGroup dealSupplierZoneGroup = new DealSupplierZoneGroup()
                             {
+                                DealId = context.DealId,
                                 BED = BeginDate,
                                 DealSupplierZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber,
                                 EED = EndDate,
@@ -65,6 +66,7 @@ namespace TOne.WhS.Deal.Entities
                         {
                             DealSaleZoneGroup dealSaleZoneGroup = new DealSaleZoneGroup()
                             {
+                                DealId = context.DealId,
                                 BED = BeginDate,
                                 DealSaleZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber,
                                 EED = EndDate,
@@ -95,7 +97,7 @@ namespace TOne.WhS.Deal.Entities
             return dealSaleZoneGroupZoneItems;
         }
 
-        private List<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers)
+        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 return null;
@@ -115,9 +117,10 @@ namespace TOne.WhS.Deal.Entities
                     Rate = volCommitmentDealItemTier.DefaultRate,
                     ExceptionRates = BuildSaleExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates)
                 };
+                dealSaleZoneGroupTiers.Add(dealSaleZoneGroupTier);
                 tierNumber++;
             }
-            return dealSaleZoneGroupTiers;
+            return dealSaleZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
 
         private List<DealSaleZoneGroupTierZoneRate> BuildSaleExceptionRates(IEnumerable<VolCommitmentDealItemTierZoneRate> volCommitmentDealItemTierZoneRates)
@@ -161,7 +164,7 @@ namespace TOne.WhS.Deal.Entities
             return dealSupplierZoneGroupZoneItems;
         }
 
-        private List<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers)
+        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 return null;
@@ -181,9 +184,10 @@ namespace TOne.WhS.Deal.Entities
                     Rate = volCommitmentDealItemTier.DefaultRate,
                     ExceptionRates = BuildSupplierExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates)
                 };
+                dealSupplierZoneGroupTiers.Add(dealSupplierZoneGroupTier);
                 tierNumber++;
             }
-            return dealSupplierZoneGroupTiers;
+            return dealSupplierZoneGroupTiers.OrderBy(itm => itm.TierNumber); ;
         }
 
         private List<DealSupplierZoneGroupTierZoneRate> BuildSupplierExceptionRates(IEnumerable<VolCommitmentDealItemTierZoneRate> volCommitmentDealItemTierZoneRates)

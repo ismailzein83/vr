@@ -16,6 +16,8 @@ namespace TOne.WhS.Deal.Entities
 
     public interface IDealGetZoneGroupsContext
     {
+        int DealId { get; }
+
         List<DealSaleZoneGroup> SaleZoneGroups { set; }
 
         List<DealSupplierZoneGroup> SupplierZoneGroups { set; }
@@ -23,6 +25,8 @@ namespace TOne.WhS.Deal.Entities
 
     public class DealGetZoneGroupsContext : IDealGetZoneGroupsContext
     {
+        public int DealId { get; set; }
+
         public List<DealSaleZoneGroup> SaleZoneGroups { get; set; }
 
         public List<DealSupplierZoneGroup> SupplierZoneGroups { get; set; }

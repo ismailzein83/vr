@@ -13,8 +13,6 @@ namespace TOne.WhS.Deal.Entities
 
         public int CurrentTierNb { get; set; }
 
-        public int CurrentRateTierNb { get; set; }
-
         public decimal? ReachedDurationInSeconds { get; set; }
 
         public decimal TargetDurationInSeconds { get; set; }

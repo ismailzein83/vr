@@ -9,13 +9,15 @@ namespace TOne.WhS.Deal.Entities
 {
     public class DealSaleZoneGroup : IDateEffectiveSettings
     {
+        public int DealId { get; set; }
+
         public int DealSaleZoneGroupNb { get; set; }
 
         public int CustomerId { get; set; }
 
         public List<DealSaleZoneGroupZoneItem> Zones { get; set; }
 
-        public List<DealSaleZoneGroupTier> Tiers { get; set; }
+        public IOrderedEnumerable<DealSaleZoneGroupTier> Tiers { get; set; }
 
         public DateTime BED { get; set; }
 

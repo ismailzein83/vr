@@ -59,11 +59,11 @@ namespace TOne.WhS.Deal.Entities
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
-            context.SaleZoneGroups = BuildSaleZoneGroups();
-            context.SupplierZoneGroups = BuildSupplierZoneGroups();
+            context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId);
+            context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId);
         }
 
-        private List<DealSaleZoneGroup> BuildSaleZoneGroups()
+        private List<DealSaleZoneGroup> BuildSaleZoneGroups(int dealId)
         {
             if (Inbounds == null || Inbounds.Count == 0)
                 return null;
@@ -73,6 +73,7 @@ namespace TOne.WhS.Deal.Entities
             {
                 DealSaleZoneGroup dealSaleZoneGroup = new DealSaleZoneGroup()
                 {
+                    DealId = dealId,
                     BED = BeginDate,
                     CustomerId = CarrierAccountId,
                     DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber,
@@ -99,7 +100,7 @@ namespace TOne.WhS.Deal.Entities
             return dealSaleZoneGroupZoneItems;
         }
 
-        private List<DealSaleZoneGroupTier> BuildSaleTiers(SwapDealInbound swapDealInbound)
+        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(SwapDealInbound swapDealInbound)
         {
             DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier()
             {
@@ -109,10 +110,10 @@ namespace TOne.WhS.Deal.Entities
                 TierNumber = 0,
                 Volume = swapDealInbound.Volume
             };
-            return new List<DealSaleZoneGroupTier>() { dealSaleZoneGroupTier };
+            return new List<DealSaleZoneGroupTier>() { dealSaleZoneGroupTier }.OrderBy(itm => itm.TierNumber);
         }
 
-        private List<DealSupplierZoneGroup> BuildSupplierZoneGroups()
+        private List<DealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId)
         {
             if (Outbounds == null || Outbounds.Count == 0)
                 return null;
@@ -122,6 +123,7 @@ namespace TOne.WhS.Deal.Entities
             {
                 DealSupplierZoneGroup dealSupplierZoneGroup = new DealSupplierZoneGroup()
                 {
+                    DealId = dealId,
                     BED = BeginDate,
                     SupplierId = CarrierAccountId,
                     DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber,
@@ -148,7 +150,7 @@ namespace TOne.WhS.Deal.Entities
             return dealSupplierZoneGroupZoneItems;
         }
 
-        private List<DealSupplierZoneGroupTier> BuildSupplierTiers(SwapDealOutbound swapDealOutbound)
+        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(SwapDealOutbound swapDealOutbound)
         {
             DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier()
             {
@@ -158,7 +160,7 @@ namespace TOne.WhS.Deal.Entities
                 TierNumber = 0,
                 Volume = swapDealOutbound.Volume
             };
-            return new List<DealSupplierZoneGroupTier>() { dealSupplierZoneGroupTier };
+            return new List<DealSupplierZoneGroupTier>() { dealSupplierZoneGroupTier }.OrderBy(itm => itm.TierNumber);
         }
     }
 }

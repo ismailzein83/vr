@@ -1,20 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vanrise.Common;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Data;
-using Vanrise.Caching;
 
 namespace TOne.WhS.Deal.Business
 {
     public class DealProgressManager
     {
-        //public List<DealProgress> GetDealProgress(List<DealZoneGroup> dealZoneGroups)
-        //{
+        public Dictionary<DealZoneGroup, DealProgress> GetDealProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
+        {
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            List<DealProgress> dealProgressList = dealProgressDataManager.GetDealProgresses(dealZoneGroups, isSale);
+            if (dealProgressList == null || dealProgressList.Count == 0)
+                return null;
 
-        //}
+            return dealProgressList.ToDictionary(itm => new DealZoneGroup() { DealId = itm.DealID, ZoneGroupNb = itm.ZoneGroupNb }, itm => itm);
+        }
+
+        public void UpdateDealProgresses(IEnumerable<DealProgress> dealProgresses)
+        {
+            if (dealProgresses == null || dealProgresses.Count() == 0)
+                return;
+
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            dealProgressDataManager.UpdateDealProgresses(dealProgresses.ToList());
+        }
+
+        public void InsertDealProgresses(IEnumerable<DealProgress> dealProgresses)
+        {
+            if (dealProgresses == null || dealProgresses.Count() == 0)
+                return;
+
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            dealProgressDataManager.InsertDealProgresses(dealProgresses.ToList());
+        }
     }
 }
