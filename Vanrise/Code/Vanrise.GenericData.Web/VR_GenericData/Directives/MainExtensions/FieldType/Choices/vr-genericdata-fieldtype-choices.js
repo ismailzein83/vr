@@ -61,10 +61,11 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService','VRUIUtilsService
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined && payload.Choices != undefined && payload.Choices.length > 0) {
+
+                    if (payload != undefined) {
                         ctrl.isNullable = payload.IsNullable;
-                        
                     }
+
                     if (payload != undefined  && payload.ChoiceDefinitionId == undefined) {
                         choicesGridReadyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadChoicesGrid());
@@ -102,12 +103,14 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService','VRUIUtilsService
                 };
 
                 api.getData = function () {
-                    return {
+                    var data  = {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions",
                         Choices: choicesGridAPI.getData(),
                         IsNullable: ctrl.isNullable,
                         ChoiceDefinitionId: dataRecordFieldChoiceSelectorGridAPI.getSelectedIds()
                     };
+                    return data;
+
                 };
 
                 if (ctrl.onReady != null)
