@@ -30,9 +30,6 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
         var genderAPI;
         var genderSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var salutationAPI;
-        var salutationTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         $scope.scopeModel = {};
 
         $scope.scopeModel.onAddressTypeSelectorReady = function (api) {
@@ -45,15 +42,6 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
             accountTypeSelectorReadyDeferred.resolve();
         };
 
-        $scope.scopeModel.onGenderSelectorReady = function (api) {
-            genderAPI = api;
-            genderSelectorReadyDeferred.resolve();
-        };
-
-        $scope.scopeModel.onSalutationTypeSelectorReady = function (api) {
-            salutationAPI = api;
-            salutationTypeSelectorReadyDeferred.resolve();
-        };
 
         function initializeController() {
             defineAPI();
@@ -80,9 +68,6 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                 promises.push(loadAddressTypeSelector());
                 promises.push(loadAccountTypeSelector());
 
-                promises.push(loadGenderSelector());
-                promises.push(loadSalutationTypeSelector());
-
                 function loadAddressTypeSelector() {
                     var addressSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     addressTypeSelectorReadyDeferred.promise.then(function () {
@@ -105,27 +90,6 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     return accountSelectorLoadDeferred.promise;
                 };
 
-                function loadGenderSelector() {
-                    var genderSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    genderSelectorReadyDeferred.promise.then(function () {
-                        var selectorPayload = {
-                            selectedIds: payload != undefined && payload.partSettings != undefined && payload.partSettings.Gender || undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(genderAPI, selectorPayload, genderSelectorLoadDeferred);
-                    });
-                    return genderSelectorLoadDeferred.promise;
-                };
-
-                function loadSalutationTypeSelector() {
-                    var salutationTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    salutationTypeSelectorReadyDeferred.promise.then(function () {
-                        var selectorPayload = {
-                            selectedIds: payload != undefined && payload.partSettings != undefined && payload.partSettings.SalutationType || undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(salutationAPI, selectorPayload, salutationTypeSelectorLoadDeferred);
-                    });
-                    return salutationTypeSelectorLoadDeferred.promise;
-                };
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -139,15 +103,12 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     AddressType: addressTypeAPI.getSelectedIds(),
                     InventoryDetails: $scope.scopeModel.inventoryDetails,
                     GPSiteID: $scope.scopeModel.gPSiteID,
-                    AccountType: accountTypeAPI.getSelectedIds(),
-                    Gender: GenderAPI.getSelectedIds(),
-                    SalutationType: salutationAPI.getSelectedIds()
+                    AccountType: accountTypeAPI.getSelectedIds()
                 }
 
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
     }
 }]);

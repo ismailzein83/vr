@@ -31,10 +31,6 @@ namespace Retail.MultiNet.MainExtensions
 
         public MultiNetAccountType AccountType { get; set; }
 
-        public GenderType Gender { get; set; }
-
-        public SalutationType SalutationType { get; set; }
-
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
             switch (context.FieldName)
@@ -47,8 +43,6 @@ namespace Retail.MultiNet.MainExtensions
                 case "InventoryDetails": return this.InventoryDetails;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;
-                case "Gender": return this.Gender;
-                case "SalutationType": return this.SalutationType;
                 default: return null;
             }
         }

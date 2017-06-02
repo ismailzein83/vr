@@ -56,20 +56,7 @@ namespace Retail.MultiNet.MainExtensions
                         Name = "AccountType",
                         Title = "Account Type",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
-                    },
-                    new GenericFieldDefinition()
-                    {
-                        Name = "Gender",
-                        Title = "Gender",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
-                    }, 
-                    new GenericFieldDefinition()
-                    {
-                        Name = "SalutationType",
-                        Title = "Salutation Type",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
-                    }
-                   
+                    }                   
                 };
         }
     }

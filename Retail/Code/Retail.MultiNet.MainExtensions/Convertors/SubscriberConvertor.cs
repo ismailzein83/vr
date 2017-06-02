@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
@@ -11,25 +12,31 @@ using Vanrise.Common;
 
 namespace Retail.MultiNet.MainExtensions.Convertors
 {
-    public class CompanyConvertor : TargetBEConvertor
+    public class SubscriberConvertor : TargetBEConvertor
     {
         public Guid AccountBEDefinitionId { get; set; }
         public Guid AccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
-        public Guid CompanyProfilePartDefinitionId { get; set; }
-        public string AccountIdColumnName { get; set; }
+        public Guid UserProfilePartDefinitionId { get; set; }
+        public string BrachIdColumnName { get; set; }
+        public string SubscriberIdColumnName { get; set; }
 
+        public override void Initialize(ITargetBEConvertorInitializeContext context)
+        {
+            context.InitializationData = new AccountBEManager().GetCachedAccountsBySourceId(this.AccountBEDefinitionId);
+        }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             Dictionary<Int64, ITargetBE> maultiNetAccounts = new Dictionary<Int64, ITargetBE>();
-
-            sourceBatch.Data.DefaultView.Sort = "CUS_CUSTOMERID";
+            var accounts = context.InitializationData as Dictionary<string, Account>;
+            sourceBatch.Data.DefaultView.Sort = BrachIdColumnName;
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 ITargetBE targetMultiNetAccount;
-                var sourceId = (Int64)row["CUS_CUSTOMERID"];
-                string accountName = row["CUS_NAME"] as string;
+                var sourceId = (Int64)row[SubscriberIdColumnName];
+                var parentId = (Int64)row[BrachIdColumnName];
+                string accountName = row["SUB_SUBSCRIBERNAME"] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
                     try
@@ -38,6 +45,12 @@ namespace Retail.MultiNet.MainExtensions.Convertors
                         {
                             Account = new Account()
                         };
+
+                        Account parentAccount;
+                        if (accounts.TryGetValue(parentId.ToString(), out parentAccount))
+                        {
+                            accountData.Account.ParentAccountId = parentAccount.AccountId;
+                        }
 
                         accountData.Account.Name = accountName;
                         accountData.Account.CreatedTime = row["SU_INSERTDATE"] != DBNull.Value ? (DateTime)row["SU_INSERTDATE"] : default(DateTime);
@@ -79,25 +92,13 @@ namespace Retail.MultiNet.MainExtensions.Convertors
         void FillCompanyProfile(SourceAccountData accountData, DataRow row)
         {
 
-            accountData.Account.Settings.Parts.Add(this.CompanyProfilePartDefinitionId, new AccountPart
+            accountData.Account.Settings.Parts.Add(this.UserProfilePartDefinitionId, new AccountPart
             {
-                Settings = new AccountPartCompanyProfile
+                Settings = new AccountPartPersonalInfo
                 {
-                    Contacts = GetContactsList(row),
-                    Website = row["CUS_WEB"] as string
+                    FirstName = row["SUB_SUBSCRIBERNAME"] as string
                 }
             });
-        }
-        Dictionary<string, AccountCompanyContact> GetContactsList(DataRow row)
-        {
-            Dictionary<string, AccountCompanyContact> contacts = new Dictionary<string, AccountCompanyContact>();
-
-            contacts.Add("Main", new AccountCompanyContact
-            {
-                Email = row["CUS_EMAIL"] as string,
-            });
-
-            return contacts;
         }
         Account GetAccount(Account newAccount, Account existingAccount)
         {
