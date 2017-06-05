@@ -16,13 +16,13 @@ namespace Vanrise.Common.Business
         {
             var allCities = GetCachedCities();
 
-            Func<City, bool> filterExpression  = (x) =>
+            Func<City, bool> filterExpression = (x) =>
             {
                 if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 if (input.Query.CountryIds != null && !input.Query.CountryIds.Contains(x.CountryId))
                     return false;
-                if (input.Query.RegionIds!=null)
+                if (input.Query.RegionIds != null)
                 {
                     if (x.Settings == null)
                         return false;
@@ -62,15 +62,20 @@ namespace Vanrise.Common.Business
         public City GetCity(int cityId, bool isViewedFromUI)
         {
             var cities = GetCachedCities();
-            var city= cities.GetRecord(cityId);
+            var city = cities.GetRecord(cityId);
             if (city != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(CityLoggableEntity.Instance, city);
             return city;
         }
         public City GetCity(int cityId)
         {
-            
-            return GetCity(cityId,false);
+
+            return GetCity(cityId, false);
+        }
+
+        public City GetCityBySourceId(string sourceId)
+        {
+            return GetCachedCitiesBySourceId().GetRecord(sourceId);
         }
 
         public Vanrise.Entities.InsertOperationOutput<CityDetail> AddCity(City city)
@@ -245,6 +250,15 @@ namespace Vanrise.Common.Business
                   ICityDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
                   IEnumerable<City> cities = dataManager.GetCities();
                   return cities.ToDictionary(c => c.CityId, c => c);
+              });
+        }
+
+        private Dictionary<string, City> GetCachedCitiesBySourceId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCitiesBySourceId",
+              () =>
+              {
+                  return GetCachedCities().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
               });
         }
 

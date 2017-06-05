@@ -49,6 +49,7 @@ namespace Vanrise.Common.Data.SQL
             city.CityId = (int)reader["ID"];
             city.Name = reader["Name"] as string;
             city.CountryId = (int)reader["CountryID"];
+            city.SourceId = reader["SourceID"] as string;
             city.Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<CitySettings>(settings) : null;
             return city;
         }
