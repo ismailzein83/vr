@@ -76,7 +76,7 @@
     <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="CDRAnalysis.PostDeployment.sql" />
+    <PostDeploy Include="CDRAnalysisBE.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="FraudAnalysis\Tables\Strategy.sql" />
