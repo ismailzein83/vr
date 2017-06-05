@@ -29,13 +29,11 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
             BatchRecordType batchRecordType;
-
             DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
             var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
             if (queueItemType == null)
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
 
             HashSet<DealZoneGroup> saleDealZoneGroups = new HashSet<DealZoneGroup>();
             HashSet<DealZoneGroup> costDealZoneGroups = new HashSet<DealZoneGroup>();
@@ -62,8 +60,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             Dictionary<DealZoneGroup, DealProgress> saleDealProgresses = dealProgressManager.GetDealProgresses(saleDealZoneGroups, true);
             Dictionary<DealZoneGroup, DealProgress> costDealProgresses = dealProgressManager.GetDealProgresses(costDealZoneGroups, false);
 
-            Dictionary<string, string> salePropertyNames = BuildPropertyNames("Sale");
-            Dictionary<string, string> costPropertyNames = BuildPropertyNames("Cost");
+            Dictionary<PropertyName, string> salePropertyNames = BuildPropertyNames("Sale", "Sale");
+            Dictionary<PropertyName, string> costPropertyNames = BuildPropertyNames("Cost", "Supplier");
 
 
             List<DealProgress> newSaleDealProgresses = new List<DealProgress>();
@@ -80,34 +78,23 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             ManipulateRecords(batchRecords,
                 (saleDealZoneGroup, record) =>
                 {
-                    DealSaleZoneGroup dealSaleZoneGroup = dealDefinitionManager.GetDealSaleZoneGroup(saleDealZoneGroup.DealId, saleDealZoneGroup.ZoneGroupNb);
-                    Func<int?, DealZoneGroupTier> getSaleDealZoneGroupTier = (previousTierNumber) =>
-                    {
-                        DealSaleZoneGroupTier dealZoneGroupTier = dealSaleZoneGroup.Tiers.Where(itm => previousTierNumber.HasValue ? itm.TierNumber > previousTierNumber.Value : true).FirstOrDefault();
-                        if (dealZoneGroupTier == null)
-                            return null;
-                        return new DealZoneGroupTier() { TierNumber = dealZoneGroupTier.TierNumber, Volume = dealZoneGroupTier.Volume };
-                    };
-
+                    Func<int, DealZoneGroupTier> getSaleDealZoneGroupTier = GetSaleDealZoneGroupTier(saleDealZoneGroup);
                     UpdateBillingCDRData(saleDealProgresses, saleDealZoneGroup, record, true, salePropertyNames, getSaleDealZoneGroupTier, newSaleDealProgresses);
                 },
                 (costDealZoneGroup, record) =>
                 {
-                    DealSupplierZoneGroup dealSupplierZoneGroup = dealDefinitionManager.GetDealSupplierZoneGroup(costDealZoneGroup.DealId, costDealZoneGroup.ZoneGroupNb);
-                    Func<int?, DealZoneGroupTier> getSupplierDealZoneGroupTier = (previousTierNumber) =>
-                    {
-                        DealSupplierZoneGroupTier dealZoneGroupTier = dealSupplierZoneGroup.Tiers.Where(itm => previousTierNumber.HasValue ? itm.TierNumber > previousTierNumber.Value : true).FirstOrDefault();
-                        if (dealZoneGroupTier == null)
-                            return null;
-                        return new DealZoneGroupTier() { TierNumber = dealZoneGroupTier.TierNumber, Volume = dealZoneGroupTier.Volume };
-                    };
-
+                    Func<int, DealZoneGroupTier> getSupplierDealZoneGroupTier = GetSupplierDealZoneGroupTier(costDealZoneGroup);
                     UpdateBillingCDRData(costDealProgresses, costDealZoneGroup, record, false, costPropertyNames, getSupplierDealZoneGroupTier, newCostDealProgresses);
                 });
 
             dealProgressManager.UpdateDealProgresses(existingSaleDealProgresses.Union(existingCostDealProgresses));
             dealProgressManager.InsertDealProgresses(newSaleDealProgresses.Union(newCostDealProgresses));
 
+            SendOutputData(context, batchRecordType, queueItemType, recordTypeId, batchRecords);
+        }
+
+        private void SendOutputData(IQueueActivatorExecutionContext context, BatchRecordType batchRecordType, DataRecordBatchQueueItemType queueItemType, Guid recordTypeId, List<dynamic> batchRecords)
+        {
             DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription, recordTypeId);
             switch (batchRecordType)
             {
@@ -148,33 +135,57 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             }
         }
 
-        private Dictionary<string, string> BuildPropertyNames(string prefixPropName)
+        private Func<int, DealZoneGroupTier> GetSaleDealZoneGroupTier(DealZoneGroup saleDealZoneGroup)
         {
-            Dictionary<string, string> propertyNames = new Dictionary<string, string>();
+            Func<int, DealZoneGroupTier> getSaleDealZoneGroupTier = (targetTierNumber) =>
+            {
+                return new DealDefinitionManager().GetSaleDealZoneGroupTier(saleDealZoneGroup.DealId, saleDealZoneGroup.ZoneGroupNb, targetTierNumber);
+            };
+            return getSaleDealZoneGroupTier;
+        }
 
-            propertyNames.Add("DurationInSeconds", string.Format("{0}DurationInSeconds", prefixPropName));
-            propertyNames.Add("DealId", string.Format("{0}DealId", prefixPropName));
-            propertyNames.Add("DealZoneGroupNb", string.Format("{0}DealZoneGroupNb", prefixPropName));
-            propertyNames.Add("DealTierNb", string.Format("{0}DealTierNb", prefixPropName));
-            propertyNames.Add("DealRateTierNb", string.Format("{0}DealRateTierNb", prefixPropName));
-            propertyNames.Add("DealDurInSec", string.Format("{0}DealDurInSec", prefixPropName));
-            propertyNames.Add("SecondaryDealTierNb", string.Format("Secondary{0}DealTierNb", prefixPropName));
-            propertyNames.Add("SecondaryDealRateTierNb", string.Format("Secondary{0}DealRateTierNb", prefixPropName));
-            propertyNames.Add("SecondaryDealDurInSec", string.Format("Secondary{0}DealDurInSec", prefixPropName));
+        private Func<int, DealZoneGroupTier> GetSupplierDealZoneGroupTier(DealZoneGroup costDealZoneGroup)
+        {
+            Func<int, DealZoneGroupTier> getSaleDealZoneGroupTier = (targetTierNumber) =>
+            {
+                return new DealDefinitionManager().GetSupplierDealZoneGroupTier(costDealZoneGroup.DealId, costDealZoneGroup.ZoneGroupNb, targetTierNumber);
+            };
+            return getSaleDealZoneGroupTier;
+        }
 
-            propertyNames.Add("RateId", string.Format("{0}RateId", prefixPropName));
-            propertyNames.Add("RateValue", string.Format("{0}RateValue", prefixPropName));
-            propertyNames.Add("Net", string.Format("{0}Net", prefixPropName));
-            propertyNames.Add("TariffRuleId", string.Format("{0}TariffRuleId", prefixPropName));
-            propertyNames.Add("CurrencyId", string.Format("{0}CurrencyId", prefixPropName));
+        private Dictionary<PropertyName, string> BuildPropertyNames(string prefixPropName, string secondaryPrefixPropName)
+        {
+            Dictionary<PropertyName, string> propertyNames = new Dictionary<PropertyName, string>();
+
+            propertyNames.Add(PropertyName.AttemptDateTime, "AttemptDateTime");
+            propertyNames.Add(PropertyName.DurationInSeconds, "DurationInSeconds");
+            propertyNames.Add(PropertyName.PricedDurationInSeconds, string.Format("{0}DurationInSeconds", prefixPropName));
+            propertyNames.Add(PropertyName.DealId, string.Format("{0}DealId", prefixPropName));
+            propertyNames.Add(PropertyName.DealZoneGroupNb, string.Format("{0}DealZoneGroupNb", prefixPropName));
+            propertyNames.Add(PropertyName.DealTierNb, string.Format("{0}DealTierNb", prefixPropName));
+            propertyNames.Add(PropertyName.DealRateTierNb, string.Format("{0}DealRateTierNb", prefixPropName));
+            propertyNames.Add(PropertyName.DealDurInSec, string.Format("{0}DealDurInSec", prefixPropName));
+            propertyNames.Add(PropertyName.SecondaryDealTierNb, string.Format("Secondary{0}DealTierNb", prefixPropName));
+            propertyNames.Add(PropertyName.SecondaryDealRateTierNb, string.Format("Secondary{0}DealRateTierNb", prefixPropName));
+            propertyNames.Add(PropertyName.SecondaryDealDurInSec, string.Format("Secondary{0}DealDurInSec", prefixPropName));
+
+            propertyNames.Add(PropertyName.RateId, string.Format("{0}RateId", prefixPropName));
+            propertyNames.Add(PropertyName.RateValue, string.Format("{0}RateValue", prefixPropName));
+            propertyNames.Add(PropertyName.Net, string.Format("{0}Net", prefixPropName));
+            propertyNames.Add(PropertyName.TariffRuleId, string.Format("{0}TariffRuleId", prefixPropName));
+            propertyNames.Add(PropertyName.CurrencyId, string.Format("{0}CurrencyId", prefixPropName));
+            propertyNames.Add(PropertyName.ExtraChargeRateValue, string.Format("{0}ExtraChargeRateValue", prefixPropName));
+            propertyNames.Add(PropertyName.ExtraChargeValue, string.Format("{0}ExtraChargeValue", prefixPropName));
+
+            propertyNames.Add(PropertyName.Zone, string.Format("{0}ZoneId", secondaryPrefixPropName));
 
             return propertyNames;
         }
 
         private void UpdateBillingCDRData(Dictionary<DealZoneGroup, DealProgress> dealProgresses, DealZoneGroup dealZoneGroup, dynamic record, bool isSale,
-            Dictionary<string, string> propertyNames, Func<int?, DealZoneGroupTier> GetNextDealZoneGroupTier, List<DealProgress> newDealProgresses)
+            Dictionary<PropertyName, string> propertyNames, Func<int, DealZoneGroupTier> GetDealZoneGroupTier, List<DealProgress> newDealProgresses)
         {
-            decimal durationInSeconds = record.GetFieldValue(propertyNames["DurationInSeconds"]);
+            decimal durationInSeconds = record.GetFieldValue(propertyNames[PropertyName.DurationInSeconds]);
 
             DealProgress dealProgress;
             if (dealProgresses.TryGetValue(dealZoneGroup, out dealProgress))
@@ -185,6 +196,10 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 {
                     dealProgress.ReachedDurationInSeconds = reachedDuration + durationInSeconds;
                     SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealProgress.CurrentTierNb);
+                    DealZoneGroupTier currentDealZoneGroupTier = GetDealZoneGroupTier(dealProgress.CurrentTierNb);
+
+                    CDRPricingData firstPart = BuildCDRPricingData(record, propertyNames, dealProgress.DealID, durationInSeconds, 100, currentDealZoneGroupTier);
+                    SetPricingData(record, propertyNames, firstPart, null);
                 }
                 else
                 {
@@ -192,14 +207,17 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     decimal secondaryTierDurationInSeconds = durationInSeconds - primaryTierDurationInSeconds;
 
                     dealProgress.ReachedDurationInSeconds = dealProgress.TargetDurationInSeconds;
+                    DealZoneGroupTier previousDealZoneGroupTier = null;
 
                     bool isOnMultipleTier = secondaryTierDurationInSeconds != durationInSeconds;
                     if (isOnMultipleTier)
                     {
+                        previousDealZoneGroupTier = GetDealZoneGroupTier(dealProgress.CurrentTierNb);
                         SetPrimaryDealData(dealZoneGroup, record, propertyNames, primaryTierDurationInSeconds, dealProgress.CurrentTierNb);
                     }
 
-                    DealZoneGroupTier nextDealZoneGroupTier = GetNextDealZoneGroupTier(dealProgress.CurrentTierNb);
+                    int nextTierNb = dealProgress.CurrentTierNb++;
+                    DealZoneGroupTier nextDealZoneGroupTier = GetDealZoneGroupTier(nextTierNb);
 
                     if (nextDealZoneGroupTier != null)
                     {
@@ -208,20 +226,36 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                         dealProgress.ReachedDurationInSeconds = secondaryTierDurationInSeconds;
 
                         if (isOnMultipleTier)
+                        {
                             SetSecondaryDealData(record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNumber);
+
+                            CDRPricingData firstPart = BuildCDRPricingData(record, propertyNames, dealProgress.DealID, primaryTierDurationInSeconds, primaryTierDurationInSeconds / durationInSeconds * 100, previousDealZoneGroupTier);
+                            CDRPricingData secondPart = BuildCDRPricingData(record, propertyNames, dealProgress.DealID, secondaryTierDurationInSeconds, secondaryTierDurationInSeconds / durationInSeconds * 100, nextDealZoneGroupTier);
+                            SetPricingData(record, propertyNames, firstPart, secondPart);
+                        }
                         else
+                        {
                             SetPrimaryDealData(dealZoneGroup, record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNumber);
+                            CDRPricingData firstPart = BuildCDRPricingData(record, propertyNames, dealProgress.DealID, primaryTierDurationInSeconds, 100, nextDealZoneGroupTier);
+                            SetPricingData(record, propertyNames, firstPart, null);
+                        }
                     }
                     else
                     {
                         if (isOnMultipleTier)
+                        {
                             SetSecondaryDealData(record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNumber);
+
+                            CDRPricingData firstPart = BuildCDRPricingData(record, propertyNames, dealProgress.DealID, primaryTierDurationInSeconds, primaryTierDurationInSeconds / durationInSeconds * 100, previousDealZoneGroupTier);
+                            CDRPricingData secondPart = BuildCDRPricingData(record, propertyNames, null, secondaryTierDurationInSeconds, secondaryTierDurationInSeconds / durationInSeconds * 100, null);
+                            SetPricingData(record, propertyNames, firstPart, secondPart);
+                        }
                     }
                 }
             }
             else
             {
-                DealZoneGroupTier newDealZoneGroupTier = GetNextDealZoneGroupTier(null);
+                DealZoneGroupTier newDealZoneGroupTier = GetDealZoneGroupTier(0);
                 if (newDealZoneGroupTier != null)
                 {
                     dealProgress = new DealProgress()
@@ -237,76 +271,113 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     newDealProgresses.Add(dealProgress);
 
                     SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealProgress.CurrentTierNb);
+                    CDRPricingData firstPart = BuildCDRPricingData(record, propertyNames, dealProgress.DealID, durationInSeconds, 100, newDealZoneGroupTier);
+                    SetPricingData(record, propertyNames, firstPart, null);
                 }
             }
         }
 
-        private void SetPricingData(dynamic record, Dictionary<string, string> propertyNames, CDRPricingData firstPart, CDRPricingData secondPart)
+        private CDRPricingData BuildCDRPricingData(dynamic record, Dictionary<PropertyName, string> propertyNames, int? dealId, decimal durationInSeconds,
+            decimal percentage, DealZoneGroupTier dealZoneGroupTier)
+        {
+            if (dealZoneGroupTier == null)
+                return new CDRPricingData() { DurationInSeconds = durationInSeconds };
+
+            long zoneId = record.GetFieldValue(propertyNames[PropertyName.Zone]);
+            decimal zoneRate;
+            if (dealZoneGroupTier.ExceptionRates == null || !dealZoneGroupTier.ExceptionRates.TryGetValue(zoneId, out zoneRate))
+                zoneRate = dealZoneGroupTier.Rate;
+
+            return new CDRPricingData()
+            {
+                DealId = dealId,
+                DurationInSeconds = durationInSeconds,
+                Percentage = percentage,
+                Rate = zoneRate
+            };
+        }
+
+        private void SetPricingData(dynamic record, Dictionary<PropertyName, string> propertyNames, CDRPricingData firstPart, CDRPricingData secondPart)
         {
             if (secondPart == null)
             {
-                record.SetFieldValue(propertyNames["RateValue"], firstPart.Rate);
-                record.SetFieldValue(propertyNames["RateId"], null);
-                record.SetFieldValue(propertyNames["Net"], firstPart.Rate * firstPart.DurationInSeconds / 60);
+                record.SetFieldValue(propertyNames[PropertyName.RateValue], firstPart.Rate);
+                record.SetFieldValue(propertyNames[PropertyName.RateId], null);
+                record.SetFieldValue(propertyNames[PropertyName.Net], firstPart.Rate * firstPart.DurationInSeconds / 60);
+                record.SetFieldValue(propertyNames[PropertyName.ExtraChargeRateValue], null);
+                record.SetFieldValue(propertyNames[PropertyName.ExtraChargeValue], null);
+                record.SetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds], firstPart.DurationInSeconds);
             }
             else
             {
                 decimal secondPartNet;
+                decimal secondPartDuration;
                 if (secondPart.DealId.HasValue)
                 {
-                    record.SetFieldValue(propertyNames["RateId"], null);
+                    record.SetFieldValue(propertyNames[PropertyName.RateId], null);
+                    record.SetFieldValue(propertyNames[PropertyName.ExtraChargeRateValue], null);
+                    record.SetFieldValue(propertyNames[PropertyName.ExtraChargeValue], null);
                     secondPartNet = secondPart.Rate * secondPart.DurationInSeconds / 60;
+                    secondPartDuration = secondPart.DurationInSeconds;
                 }
                 else
                 {
-                    ApplyTariffRule(record, propertyNames, secondPart.DurationInSeconds);
+                    decimal secondaryRate;
+                    ApplyTariffRule(record, propertyNames, secondPart.DurationInSeconds, out secondPartNet, out secondaryRate, out secondPartDuration);
+                    secondPart.Rate = secondaryRate;
                 }
                 decimal rate = firstPart.Rate * firstPart.Percentage + secondPart.Rate * secondPart.Percentage;
-                record.SetFieldValue(propertyNames["RateValue"], rate);
+                record.SetFieldValue(propertyNames[PropertyName.RateValue], rate);
+
+                decimal totalNet = firstPart.Rate * firstPart.DurationInSeconds / 60 + secondPartNet;
+                record.SetFieldValue(propertyNames[PropertyName.Net], totalNet);
+                record.SetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds], (firstPart.DurationInSeconds + secondPartDuration));
             }
         }
 
-        private void ApplyTariffRule(dynamic record, Dictionary<string, string> propertyNames, decimal durationInSeconds)
+        private void ApplyTariffRule(dynamic record, Dictionary<PropertyName, string> propertyNames, decimal durationInSeconds, out decimal totalAmount, out decimal effectiveRate, out decimal pricedDuration)
         {
-            int tariffRuleId = record.GetFieldValue(propertyNames["TariffRuleId"]);
+            int tariffRuleId = record.GetFieldValue(propertyNames[PropertyName.TariffRuleId]);
             TariffRuleManager tarrifRuleManager = new TariffRuleManager();
             TariffRule tarrifRule = tarrifRuleManager.GetRule(tariffRuleId);
 
-            decimal? extraChargeRate = record.GetFieldValue(propertyNames["ExtraChargeRateValue"]);
+            decimal? extraChargeRate = record.GetFieldValue(propertyNames[PropertyName.ExtraChargeRateValue]);
             TariffRuleContext context = new TariffRuleContext()
             {
-                TargetTime = record.GetFieldValue(propertyNames["AttemptDateTime"]),
-                DestinationCurrencyId = record.GetFieldValue(propertyNames["CurrencyId"]),
-                Rate = record.GetFieldValue(propertyNames["RateValue"]),
+                TargetTime = record.GetFieldValue(PropertyName.AttemptDateTime),
+                DestinationCurrencyId = record.GetFieldValue(propertyNames[PropertyName.CurrencyId]),
+                Rate = record.GetFieldValue(propertyNames[PropertyName.RateValue]),
                 DurationInSeconds = durationInSeconds,
                 ExtraChargeRate = extraChargeRate.HasValue ? extraChargeRate.Value : 0,
                 SourceCurrencyId = tarrifRule.Settings.CurrencyId
             };
             tarrifRule.Settings.ApplyTariffRule(context);
 
-            record.SetFieldValue(propertyNames["RateValue"], context.EffectiveDurationInSeconds);
-            record.SetFieldValue(propertyNames["RateValue"], context.TotalAmount);
-            record.SetFieldValue(propertyNames["RateValue"], context.EffectiveRate);
-            record.SetFieldValue(propertyNames["RateValue"], context.ExtraChargeValue);
+            record.SetFieldValue(propertyNames[PropertyName.SecondaryDealDurInSec], context.EffectiveDurationInSeconds);
+            record.SetFieldValue(propertyNames[PropertyName.ExtraChargeValue], context.ExtraChargeValue);
+
+            totalAmount = context.TotalAmount.HasValue ? context.TotalAmount.Value : default(decimal);
+            effectiveRate = context.EffectiveRate;
+            pricedDuration = context.EffectiveDurationInSeconds.HasValue ? context.EffectiveDurationInSeconds.Value : default(decimal);
         }
 
-        private void SetSecondaryDealData(dynamic record, Dictionary<string, string> propertyNames, decimal secondaryTierDurationInSeconds, int? tierNumber)
+        private void SetSecondaryDealData(dynamic record, Dictionary<PropertyName, string> propertyNames, decimal secondaryTierDurationInSeconds, int? tierNumber)
         {
             if (tierNumber.HasValue)
             {
-                record.SetFieldValue(propertyNames["SecondaryDealTierNb"], tierNumber);
-                record.SetFieldValue(propertyNames["SecondaryDealRateTierNb"], tierNumber);
+                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealTierNb], tierNumber);
+                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealRateTierNb], tierNumber);
             }
-            record.SetFieldValue(propertyNames["SecondaryDealDurInSec"], secondaryTierDurationInSeconds);
+            record.SetFieldValue(propertyNames[PropertyName.SecondaryDealDurInSec], secondaryTierDurationInSeconds);
         }
 
-        private void SetPrimaryDealData(DealZoneGroup dealZoneGroup, dynamic record, Dictionary<string, string> propertyNames, decimal durationInSeconds, int tierNumber)
+        private void SetPrimaryDealData(DealZoneGroup dealZoneGroup, dynamic record, Dictionary<PropertyName, string> propertyNames, decimal durationInSeconds, int tierNumber)
         {
-            record.SetFieldValue(propertyNames["DealId"], dealZoneGroup.DealId);
-            record.SetFieldValue(propertyNames["DealZoneGroupNb"], dealZoneGroup.ZoneGroupNb);
-            record.SetFieldValue(propertyNames["DealTierNb"], tierNumber);
-            record.SetFieldValue(propertyNames["DealRateTierNb"], tierNumber);
-            record.SetFieldValue(propertyNames["DealDurInSec"], durationInSeconds);
+            record.SetFieldValue(propertyNames[PropertyName.DealId], dealZoneGroup.DealId);
+            record.SetFieldValue(propertyNames[PropertyName.DealZoneGroupNb], dealZoneGroup.ZoneGroupNb);
+            record.SetFieldValue(propertyNames[PropertyName.DealTierNb], tierNumber);
+            record.SetFieldValue(propertyNames[PropertyName.DealRateTierNb], tierNumber);
+            record.SetFieldValue(propertyNames[PropertyName.DealDurInSec], durationInSeconds);
         }
 
         private void ManipulateRecords(List<dynamic> batchRecords, Action<DealZoneGroup, dynamic> onSaleDealZoneGroupLoaded, Action<DealZoneGroup, dynamic> onCostDealZoneGroupLoaded)
@@ -378,13 +449,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         }
         #endregion
 
-        private class DealZoneGroupTier
-        {
-            public int TierNumber { get; set; }
-            public decimal Volume { get; set; }
-        }
-
-
         private enum BatchRecordType { Main, PartialPriced }
 
         private class CDRPricingData
@@ -396,6 +460,29 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             public decimal Percentage { get; set; }
 
             public decimal DurationInSeconds { get; set; }
+        }
+
+        private enum PropertyName
+        {
+            DurationInSeconds,
+            PricedDurationInSeconds,
+            DealId,
+            DealZoneGroupNb,
+            DealTierNb,
+            DealRateTierNb,
+            DealDurInSec,
+            SecondaryDealTierNb,
+            SecondaryDealRateTierNb,
+            SecondaryDealDurInSec,
+            RateId,
+            RateValue,
+            Net,
+            TariffRuleId,
+            CurrencyId,
+            ExtraChargeRateValue,
+            ExtraChargeValue,
+            Zone,
+            AttemptDateTime
         }
     }
 }

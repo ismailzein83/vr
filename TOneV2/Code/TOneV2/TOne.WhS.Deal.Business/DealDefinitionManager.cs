@@ -82,6 +82,34 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
+        public DealZoneGroupTier GetSaleDealZoneGroupTier(int dealId, int zoneGroupNb, int tierNb)
+        {
+            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
+
+            DealSaleZoneGroupTier dealZoneGroupTier = dealSaleZoneGroup.Tiers.Where(itm => itm.TierNumber == tierNb).FirstOrDefault();
+            if (dealZoneGroupTier == null)
+                return null;
+         
+            return new DealZoneGroupTier() { TierNumber = dealZoneGroupTier.TierNumber, Volume = dealZoneGroupTier.Volume, Rate = dealZoneGroupTier.Rate, ExceptionRates = BuildSaleExceptionRates(dealZoneGroupTier.ExceptionRates) };
+        }
+
+        public void FillOrigSupplierValues(dynamic record)
+        {
+            record.OrigCostRateId = record.CostRateId;
+            record.OrigCostRateValue = record.CostRateValue;
+            record.OrigCostNet = record.CostNet;
+            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
+            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
+            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
+
+            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
+            if (dealSupplierZoneGroup != null)
+            {
+                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
+                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
+            }
+        }
+
         public DealSupplierZoneGroup GetDealSupplierZoneGroup(int dealId, int zoneGroupNb)
         {
             var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroups();
@@ -106,21 +134,15 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        public void FillOrigSupplierValues(dynamic record)
+        public DealZoneGroupTier GetSupplierDealZoneGroupTier(int dealId, int zoneGroupNb, int tierNb)
         {
-            record.OrigCostRateId = record.CostRateId;
-            record.OrigCostRateValue = record.CostRateValue;
-            record.OrigCostNet = record.CostNet;
-            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
-            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
-            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
+            DealSupplierZoneGroup dealSupplierZoneGroup = GetDealSupplierZoneGroup(dealId, zoneGroupNb);
 
-            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
-            if (dealSupplierZoneGroup != null)
-            {
-                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
-                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
-            }
+            DealSupplierZoneGroupTier dealZoneGroupTier = dealSupplierZoneGroup.Tiers.Where(itm => itm.TierNumber == tierNb).FirstOrDefault();
+            if (dealZoneGroupTier == null)
+                return null;
+
+            return new DealZoneGroupTier() { TierNumber = dealZoneGroupTier.TierNumber, Volume = dealZoneGroupTier.Volume, Rate = dealZoneGroupTier.Rate, ExceptionRates = BuildSupplierExceptionRates(dealZoneGroupTier.ExceptionRates) };
         }
 
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
@@ -268,6 +290,32 @@ namespace TOne.WhS.Deal.Business
                 }
                 return result.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(item => item.BED));
             });
+        }
+
+        private Dictionary<long, decimal> BuildSupplierExceptionRates(List<DealSupplierZoneGroupTierZoneRate> exceptionRates)
+        {
+            if (exceptionRates == null || exceptionRates.Count == 0)
+                return null;
+
+            Dictionary<long, decimal> exceptionalRates = new Dictionary<long, decimal>();
+            foreach (DealSupplierZoneGroupTierZoneRate exceptionRate in exceptionRates)
+            {
+                exceptionalRates.Add(exceptionRate.ZoneId, exceptionRate.Rate);
+            }
+            return exceptionalRates;
+        }
+
+        private Dictionary<long, decimal> BuildSaleExceptionRates(List<DealSaleZoneGroupTierZoneRate> exceptionRates)
+        {
+            if (exceptionRates == null || exceptionRates.Count == 0)
+                return null;
+
+            Dictionary<long, decimal> exceptionalRates = new Dictionary<long, decimal>();
+            foreach (DealSaleZoneGroupTierZoneRate exceptionRate in exceptionRates)
+            {
+                exceptionalRates.Add(exceptionRate.ZoneId, exceptionRate.Rate);
+            }
+            return exceptionalRates;
         }
 
         #endregion

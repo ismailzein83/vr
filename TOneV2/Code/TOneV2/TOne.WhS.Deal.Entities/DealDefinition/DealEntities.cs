@@ -17,4 +17,12 @@ namespace TOne.WhS.Deal.Entities
         public int AccountId { get; set; }
         public long ZoneId { get; set; }
     }
+
+    public class DealZoneGroupTier
+    {
+        public int TierNumber { get; set; }
+        public decimal Volume { get; set; }
+        public decimal Rate { get; set; }
+        public Dictionary<long, decimal> ExceptionRates { get; set; }
+    }
 }
