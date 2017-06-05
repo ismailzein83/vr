@@ -13,7 +13,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/MainExtensions/Account/Part/Runtime/Templates/AccountTypePartCompanyExtendedInfoRuntimeTemplate.html'
+        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/Account/Part/Runtime/Templates/AccountTypePartCompanyExtendedInfoRuntimeTemplate.html'
     };
 
     function AccountTypeExtendedInfoRuntime($scope, ctrl, $attrs) {

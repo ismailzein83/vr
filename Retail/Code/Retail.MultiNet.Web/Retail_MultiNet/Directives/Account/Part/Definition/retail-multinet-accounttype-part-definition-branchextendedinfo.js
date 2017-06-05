@@ -14,7 +14,7 @@ app.directive('retailMultinetAccounttypePartDefinitionBranchextendedinfo', [func
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/MainExtensions/Account/Part/Definition/Templates/AccountTypePartBranchExtendedInfoDefinitionTemplate.html'
+        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/Account/Part/Definition/Templates/AccountTypePartBranchExtendedInfoDefinitionTemplate.html'
     };
 
     function BranchPartDefinition($scope, ctrl, $attrs)

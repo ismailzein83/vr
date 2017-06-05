@@ -14,7 +14,7 @@ app.directive('retailMultinetAccounttypePartDefinitionCompanyextendedinfo', [fun
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/MainExtensions/Account/Part/Definition/Templates/AccountTypePartCompanyExtendedInfoDefinitionTemplate.html'
+        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/Account/Part/Definition/Templates/MultiNetCompanyExtendedInfoDefinitionTemplate.html'
     };
 
     function AccountTypeExtendedInfoDefinition($scope, ctrl, $attrs)

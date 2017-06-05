@@ -13,7 +13,7 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/MainExtensions/Account/Part/Runtime/Templates/AccountTypePartBranchExtendedInfoRuntimeTemplate.html'
+        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/Account/Part/Runtime/Templates/AccountTypePartBranchExtendedInfoRuntimeTemplate.html'
     };
 
     function BranchExtendedInfoRuntime($scope, ctrl, $attrs) {
@@ -27,6 +27,7 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
         function defineAPI() {
             var api = {};
             api.load = function (payload) {
+                console.log(payload);
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.branchCode = payload.partSettings.BranchCode;
                     $scope.scopeModel.contractReferenceNumber = payload.partSettings.ContractReferenceNumber;

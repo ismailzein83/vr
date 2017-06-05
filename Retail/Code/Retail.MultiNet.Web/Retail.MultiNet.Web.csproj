@@ -143,7 +143,7 @@
     <Content Include="Retail_MultiNet\Directives\AddressType\retail-multinet-addresstype-selector.js" />
     <Content Include="Retail_MultiNet\Directives\AccountType\retail-multinet-accounttype-selector.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\retail-multinet-accounttype-part-definition-companyextendedinfo.js" />
-    <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\AccountTypePartCompanyExtendedInfoDefinitionTemplate.html" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\MultiNetCompanyExtendedInfoDefinitionTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\retail-multinet-accounttype-part-runtime-companyextendedinfo.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartCompanyExtendedInfoRuntimeTemplate.html" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-multinet-account-invoice-selector.js" />

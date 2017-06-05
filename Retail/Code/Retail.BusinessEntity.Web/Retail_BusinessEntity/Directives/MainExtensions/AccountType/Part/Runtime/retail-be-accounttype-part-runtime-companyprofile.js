@@ -137,19 +137,18 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                                 disabledphone: true,
                                 phoneNumbers: settings != undefined ? phoneNumbers : []
                             };
-                            
+
                             contact.onSalutationReady = function (api) {
                                 contact.salutationAPI = api;
                                 gridField.readyPromiseDeferred.resolve();
                             };
-                            console.log(settings.Salutation)
                             gridField.readyPromiseDeferred.promise
                                 .then(function () {
                                     var payload = {
-                                        selectedIds: settings.Salutation
+                                        selectedIds: settings != undefined ? settings.Salutation : undefined
                                     };
                                     VRUIUtilsService.callDirectiveLoad(contact.salutationAPI, payload, gridField.loadPromiseDeferred);
-                            });
+                                });
                             $scope.scopeModel.contacts.push(contact);
                         }
                     }
@@ -197,7 +196,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             Title: contact.title,
                             Email: contact.email,
                             PhoneNumbers: contact.phoneNumbers,
-                            Salutation: contact.salutationAPI !=undefined ? contact.salutationAPI.getSelectedIds(): undefined
+                            Salutation: contact.salutationAPI != undefined ? contact.salutationAPI.getSelectedIds() : undefined
                         };
                         if (obj != null)
                             contacts[contact.contactType] = obj;
