@@ -82,23 +82,6 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        public void FillOrigSupplierValues(dynamic record)
-        {
-            record.OrigCostRateId = record.CostRateId;
-            record.OrigCostRateValue = record.CostRateValue;
-            record.OrigCostNet = record.CostNet;
-            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
-            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
-            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
-
-            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
-            if (dealSupplierZoneGroup != null)
-            {
-                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
-                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
-            }
-        }
-
         public DealSupplierZoneGroup GetDealSupplierZoneGroup(int dealId, int zoneGroupNb)
         {
             var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroups();
@@ -123,9 +106,48 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
+        public void FillOrigSupplierValues(dynamic record)
+        {
+            record.OrigCostRateId = record.CostRateId;
+            record.OrigCostRateValue = record.CostRateValue;
+            record.OrigCostNet = record.CostNet;
+            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
+            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
+            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
+
+            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
+            if (dealSupplierZoneGroup != null)
+            {
+                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
+                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
+            }
+        }
+
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
         {
             throw new NotImplementedException();
+        }
+
+        public DealSaleZoneGroupTier GetUpToVolumeDealSaleZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal reachedDurationInSec)
+        {
+            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
+            dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
+
+            DealSaleZoneGroupTier previousDealSaleZoneGroupTier = null;
+
+            foreach (var dealSaleZoneGroupTierItm in dealSaleZoneGroup.Tiers)
+            {
+                if (dealSaleZoneGroupTierItm.Volume > totalReachedDurationInSec)
+                {
+                    reachedDurationInSec = previousDealSaleZoneGroupTier != null ? totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume : totalReachedDurationInSec;
+                    return dealSaleZoneGroupTierItm;
+                }
+
+                previousDealSaleZoneGroupTier = dealSaleZoneGroupTierItm;
+            }
+
+            reachedDurationInSec = totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume;
+            return null;
         }
 
         #endregion
