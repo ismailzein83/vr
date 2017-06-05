@@ -46,6 +46,9 @@ namespace TOne.WhS.Deal.Business
             record.OrigSaleRateId = record.SaleRateId;
             record.OrigSaleRateValue = record.SaleRateValue;
             record.OrigSaleNet = record.SaleNet;
+            record.OrigSaleExtraChargeRateValue = record.SaleExtraChargeRateValue;
+            record.OrigSaleExtraChargeValue = record.SaleExtraChargeValue;
+            record.OrigSaleDurationInSeconds = record.SaleDurationInSeconds;
 
             DealSaleZoneGroup dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
             if (dealSaleZoneGroup != null)
@@ -84,6 +87,9 @@ namespace TOne.WhS.Deal.Business
             record.OrigCostRateId = record.CostRateId;
             record.OrigCostRateValue = record.CostRateValue;
             record.OrigCostNet = record.CostNet;
+            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
+            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
+            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
 
             DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
             if (dealSupplierZoneGroup != null)
