@@ -21,15 +21,15 @@ namespace Retail.MultiNet.MainExtensions
 
         public string PassportNumber { get; set; }
 
-        public string AssignedNumber  { get; set; }
+        public string AssignedNumber { get; set; }
 
-        public AddressType AddressType { get; set; }
+        public AddressType? AddressType { get; set; }
 
         public string InventoryDetails { get; set; }
 
         public string GPSiteID { get; set; }
 
-        public MultiNetAccountType AccountType { get; set; }
+        public MultiNetAccountType? AccountType { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
@@ -39,7 +39,7 @@ namespace Retail.MultiNet.MainExtensions
                 case "NTN": return this.NTN;
                 case "PassportNumber": return this.PassportNumber;
                 case "AssignedNumber": return this.AssignedNumber;
-                case "AddressTypes": return this.AddressType;
+                case "AddressType": return this.AddressType;
                 case "InventoryDetails": return this.InventoryDetails;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;

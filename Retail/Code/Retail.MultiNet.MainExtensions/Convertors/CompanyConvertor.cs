@@ -8,6 +8,8 @@ using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Retail.MultiNet.MainExtensions.Convertors
 {
@@ -17,6 +19,7 @@ namespace Retail.MultiNet.MainExtensions.Convertors
         public Guid AccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
+        public Guid FinancialPartDefinitionId { get; set; }
         public string AccountIdColumnName { get; set; }
 
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
@@ -76,15 +79,44 @@ namespace Retail.MultiNet.MainExtensions.Convertors
             context.FinalBE = finalBe;
         }
 
+        void FillCompanyExtendedInfo(SourceAccountData accountData, DataRow row)
+        {
+            accountData.Account.Settings.Parts.Add(new Guid("DAF99C84-8DC3-4C77-99CD-C0D631693D70"), new AccountPart
+            {
+                Settings = new MultiNetCompanyExtendedInfo
+                {
+
+                }
+            });
+        }
         void FillCompanyProfile(SourceAccountData accountData, DataRow row)
         {
+
+            CityManager cityManager = new CityManager();
+            City city = cityManager.GetCityBySourceId(((int)row["CI_CITYID"]).ToString());
 
             accountData.Account.Settings.Parts.Add(this.CompanyProfilePartDefinitionId, new AccountPart
             {
                 Settings = new AccountPartCompanyProfile
                 {
                     Contacts = GetContactsList(row),
-                    Website = row["CUS_WEB"] as string
+                    Website = row["CUS_WEB"] as string,
+                    CityId = city != null ? city.CityId : 0
+                }
+            });
+            FillFinancialInfo(accountData, row);
+            FillCompanyExtendedInfo(accountData, row);
+        }
+        void FillFinancialInfo(SourceAccountData accountData, DataRow row)
+        {
+            CurrencyManager currencyManager = new CurrencyManager();
+            Currency currency = currencyManager.GetCurrencyBySourceId(((int)row["C_CURRENCYID"]).ToString());
+
+            accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
+            {
+                Settings = new AccountPartFinancial
+                {
+                    CurrencyId = currency != null ? currency.CurrencyId : 0
                 }
             });
         }
@@ -94,7 +126,7 @@ namespace Retail.MultiNet.MainExtensions.Convertors
 
             contacts.Add("Main", new AccountCompanyContact
             {
-                Email = row["CUS_EMAIL"] as string,
+                Email = row["CUS_EMAIL"] as string
             });
 
             return contacts;

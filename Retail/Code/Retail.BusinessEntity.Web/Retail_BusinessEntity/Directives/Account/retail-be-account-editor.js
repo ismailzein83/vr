@@ -27,6 +27,7 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
             var isEditMode;
             var accountBEDefinitionId;
             var accountId;
+            var sourceId;
             var accountEntity;
             var parentAccountId;
             var onAccountLoaded;
@@ -83,16 +84,18 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                 api.load = function (payload) {
 
                     if (payload != undefined) {
+                        console.log(payload);
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountId = payload.accountId;
                         parentAccountId = payload.parentAccountId;
+                        sourceId = payload.sourceId;
                         onAccountLoaded = payload.onAccountLoaded;
 
                         isEditMode = (accountId != undefined);
                     }
 
                     var accountEditorDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    
+
                     if (isEditMode) {
                         getAccount().then(function () {
                             loadAllControls();
@@ -187,6 +190,7 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                         var obj = {
                             AccountBEDefinitionId: accountBEDefinitionId,
                             AccountId: accountId,
+                            SourceId: sourceId,
                             Name: $scope.scopeModel.name,
                             TypeId: accountTypeSelectorAPI.getSelectedIds()
                         };

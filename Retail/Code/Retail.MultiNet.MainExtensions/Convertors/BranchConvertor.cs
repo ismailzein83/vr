@@ -9,6 +9,8 @@ using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Retail.MultiNet.MainExtensions.Convertors
 {
@@ -18,18 +20,31 @@ namespace Retail.MultiNet.MainExtensions.Convertors
         public Guid AccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
+        public Guid BranchInfoPartDefinitionId { get; set; }
         public string BrachIdColumnName { get; set; }
         public string CompanyIdColumnName { get; set; }
-
+        public Guid FinancialPartDefinitionId { get; set; }
         public override void Initialize(ITargetBEConvertorInitializeContext context)
         {
-            context.InitializationData = new AccountBEManager().GetCachedAccountsBySourceId(this.AccountBEDefinitionId);
+            Dictionary<int, Guid> statuses = new Dictionary<int, Guid>();
+
+            statuses.Add(15, new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf"));
+            statuses.Add(2, new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd"));
+            statuses.Add(4, new Guid("f8388386-0011-4133-a64b-5247a480ef5e"));
+            statuses.Add(13, new Guid("931d3708-1911-4ff1-8e83-feef8115930f"));
+            statuses.Add(0, new Guid("7378cdbb-f5b4-452c-8b61-e09997e4dca1"));
+
+            context.InitializationData = new AccountsInitializationData()
+            {
+                Accounts = new AccountBEManager().GetCachedAccountsBySourceId(this.AccountBEDefinitionId),
+                Statuses = statuses
+            };
         }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             Dictionary<Int64, ITargetBE> maultiNetAccounts = new Dictionary<Int64, ITargetBE>();
-            var accounts = context.InitializationData as Dictionary<string, Account>;
+            var accountsInitializationData = context.InitializationData as AccountsInitializationData;
             sourceBatch.Data.DefaultView.Sort = BrachIdColumnName;
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
@@ -47,23 +62,24 @@ namespace Retail.MultiNet.MainExtensions.Convertors
                         };
 
                         Account parentAccount;
-                        if (accounts.TryGetValue(parentId.ToString(), out parentAccount))
+                        if (accountsInitializationData.Accounts.TryGetValue(parentId.ToString(), out parentAccount))
                         {
                             accountData.Account.ParentAccountId = parentAccount.AccountId;
                         }
-
+                        int state = (int)row["AS_ACCTSTATEID"];
                         accountData.Account.Name = accountName;
                         accountData.Account.CreatedTime = row["SU_INSERTDATE"] != DBNull.Value ? (DateTime)row["SU_INSERTDATE"] : default(DateTime);
                         accountData.Account.SourceId = sourceId.ToString();
                         accountData.Account.TypeId = this.AccountTypeId;
-                        accountData.Account.StatusId = this.InitialStatusId;
+                        Guid statusId = accountsInitializationData.Statuses.GetOrCreateItem(state, () => this.InitialStatusId);
+                        accountData.Account.StatusId = statusId;
 
                         accountData.Account.Settings = new AccountSettings
                         {
                             Parts = new AccountPartCollection()
                         };
 
-                        FillCompanyProfile(accountData, row);
+                        FillBranchInfo(accountData, row);
                         maultiNetAccounts.Add(sourceId, accountData);
                     }
                     catch (Exception ex)
@@ -89,14 +105,42 @@ namespace Retail.MultiNet.MainExtensions.Convertors
             context.FinalBE = finalBe;
         }
 
-        void FillCompanyProfile(SourceAccountData accountData, DataRow row)
+        void FillBranchInfo(SourceAccountData accountData, DataRow row)
         {
+            CityManager cityManager = new CityManager();
+            City city = cityManager.GetCityBySourceId(((int)row["CI_CITYID"]).ToString());
 
             accountData.Account.Settings.Parts.Add(this.CompanyProfilePartDefinitionId, new AccountPart
             {
                 Settings = new AccountPartCompanyProfile
                 {
-                    Contacts = GetContactsList(row)
+                    Contacts = GetContactsList(row),
+                    CityId = city != null ? city.CityId : 0
+                }
+            });
+
+            accountData.Account.Settings.Parts.Add(this.BranchInfoPartDefinitionId, new AccountPart
+            {
+                Settings = new MultiNetBranchExtendedInfo
+                {
+                    BranchCode = row["AC_BRANCHCODE"] as string,
+                    ContractReferenceNumber = row["AC_CONTRACTREFNO"] as string
+                }
+            });
+
+            FillFinancialInfo(accountData, row);
+        }
+
+        void FillFinancialInfo(SourceAccountData accountData, DataRow row)
+        {
+            CurrencyManager currencyManager = new CurrencyManager();
+            Currency currency = currencyManager.GetCurrencyBySourceId(((int)row["C_CURRENCYID"]).ToString());
+
+            accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
+            {
+                Settings = new AccountPartFinancial
+                {
+                    CurrencyId = currency != null ? currency.CurrencyId : 0
                 }
             });
         }
@@ -119,5 +163,11 @@ namespace Retail.MultiNet.MainExtensions.Convertors
 
             return account;
         }
+    }
+
+    public class AccountsInitializationData
+    {
+        public Dictionary<int, Guid> Statuses { get; set; }
+        public Dictionary<string, Account> Accounts { get; set; }
     }
 }

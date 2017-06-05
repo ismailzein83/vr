@@ -11,6 +11,7 @@
         var accountId;
         var accountEntity;
         var parentAccountId;
+        var sourceId;
 
         var accountEditorDirectiveAPI;
         var accountEditorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -26,6 +27,7 @@
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountId = parameters.accountId;
                 parentAccountId = parameters.parentAccountId;
+                sourceId = parameters.sourceId;
             }
 
             isEditMode = (accountId != undefined);
@@ -87,6 +89,7 @@
                     accountBEDefinitionId: accountBEDefinitionId,
                     accountId: accountId,
                     parentAccountId: parentAccountId,
+                    sourceId: sourceId,
                     onAccountLoaded: buildOnAccountLoaded()
                 };
                 VRUIUtilsService.callDirectiveLoad(accountEditorDirectiveAPI, accountEditorDirectivePayload, accountEditorLoadDeferred);

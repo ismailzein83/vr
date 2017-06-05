@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Retail.MultiNet.Entities;
+using Vanrise.Common;
 
 namespace Retail.MultiNet.MainExtensions
 {
@@ -43,7 +46,9 @@ namespace Retail.MultiNet.MainExtensions
                     {
                         Name = "AddressType",
                         Title = "Address Type",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType{
+                        Choices = GetChoicesFrlomEnum<AddressType>()
+                        }
                     },
                     new GenericFieldDefinition()
                     {
@@ -55,9 +60,27 @@ namespace Retail.MultiNet.MainExtensions
                     {
                         Name = "AccountType",
                         Title = "Account Type",
-                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType()
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType{
+                         Choices = GetChoicesFrlomEnum<MultiNetAccountType>()
+                        }
+                         
                     }                   
                 };
+        }
+
+        private List<Choice> GetChoicesFrlomEnum<T>() where T : struct
+        {
+            List<Choice> choices = new List<Choice>();
+
+            foreach (var enumValue in Enum.GetValues(typeof(T)))
+            {
+                choices.Add(new Choice
+                {
+                    Value = (int)enumValue,
+                    Text = Utilities.GetEnumDescription<T>((T)enumValue)
+                });
+            }
+            return choices;
         }
     }
 }
