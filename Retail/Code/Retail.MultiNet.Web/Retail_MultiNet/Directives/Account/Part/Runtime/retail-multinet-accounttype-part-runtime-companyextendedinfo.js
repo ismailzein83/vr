@@ -8,8 +8,8 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var runtimeEditor = new AccountTypeExtendedInfoRuntime($scope, ctrl, $attrs);
-            runtimeEditor.initializeController();
+            var ctor = new AccountTypeExtendedInfoRuntime($scope, ctrl, $attrs);
+            ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,

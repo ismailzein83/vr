@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailMultinetAccounttypePartDefinitionCompanyextendedinfo', [function () {
+app.directive('retailMultinetAccounttypePartDefinitionBranchextendedinfo', [function () {
     return {
         restrict: 'E',
         scope: {
@@ -9,15 +9,15 @@ app.directive('retailMultinetAccounttypePartDefinitionCompanyextendedinfo', [fun
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new AccountTypeExtendedInfoDefinition($scope, ctrl, $attrs);
+            var ctor = new BranchPartDefinition($scope, ctrl, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/MainExtensions/Account/Part/Definition/Templates/AccountTypePartCompanyExtendedInfoDefinitionTemplate.html'
+        templateUrl: '/Client/Modules/Retail_MultiNet/Directives/MainExtensions/Account/Part/Definition/Templates/AccountTypePartBranchExtendedInfoDefinitionTemplate.html'
     };
 
-    function AccountTypeExtendedInfoDefinition($scope, ctrl, $attrs)
+    function BranchPartDefinition($scope, ctrl, $attrs)
     {
         this.initializeController = initializeController;
 
@@ -36,7 +36,7 @@ app.directive('retailMultinetAccounttypePartDefinitionCompanyextendedinfo', [fun
 
             api.getData = function () {
                 return {
-                    $type: 'Retail.MultiNet.MainExtensions.MultiNetCompanyExtendedInfoDefinition, Retail.MultiNet.MainExtensions'
+                    $type: 'Retail.MultiNet.MainExtensions.MultiNetBranchExtendedInfoDefinition, Retail.MultiNet.MainExtensions'
                 };
             };
 

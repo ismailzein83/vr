@@ -136,6 +136,10 @@
     <Content Include="Retail_MultiNet\Constant\AccountTypeEnum.js" />
     <Content Include="Retail_MultiNet\Constant\AddressTypeEnum.js" />
     <Content Include="Retail_MultiNet\Constant\ModuleConfig.js" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\retail-multinet-accounttype-part-definition-branchextendedinfo.js" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\AccountTypePartBranchExtendedInfoDefinitionTemplate.html" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\retail-multinet-accounttype-part-runtime-branchextendedinfo.js" />
+    <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartBranchExtendedInfoRuntimeTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\AddressType\retail-multinet-addresstype-selector.js" />
     <Content Include="Retail_MultiNet\Directives\AccountType\retail-multinet-accounttype-selector.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\retail-multinet-accounttype-part-definition-companyextendedinfo.js" />
