@@ -55,12 +55,7 @@ namespace TOne.WhS.Sales.BP.Activities
             ratePlanContext.EffectiveDate = effectiveDate;
             ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
             ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
-
-            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            var maximumRate = new BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
-            decimal convertedmaximumRate = currencyExchangeRateManager.ConvertValueToCurrency(maximumRate,
-                systemCurrency.CurrencyId, currencyId, DateTime.Now);
-            ratePlanContext.MaximumRate = convertedmaximumRate;
+            ratePlanContext.PriceListCurrencyId = currencyId;
         }
 
         #region Private Methods

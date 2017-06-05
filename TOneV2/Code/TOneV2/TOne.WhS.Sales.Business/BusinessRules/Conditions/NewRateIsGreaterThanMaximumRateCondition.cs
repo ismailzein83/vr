@@ -21,9 +21,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             var errorMessages = new List<string>();
 
-            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.NormalRate > ratePlanContext.MaximumRate)
+            if (zoneData.NormalRateToChange != null)
             {
-                errorMessages.Add(string.Format("Normal '{0}'", zoneData.NormalRateToChange.NormalRate));
+                int rateToChangeCurrencyId = ratePlanContext.GetRateToChangeCurrencyId(zoneData.NormalRateToChange);
+                var convertedMaximumRate = ratePlanContext.GetMaximumRateConverted(rateToChangeCurrencyId);
+                if (zoneData.NormalRateToChange.NormalRate > convertedMaximumRate)
+                    errorMessages.Add(string.Format("Normal '{0}'", zoneData.NormalRateToChange.NormalRate));
             }
 
             if (zoneData.OtherRatesToChange != null)
@@ -32,7 +35,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                 {
-                    if (otherRateToChange.NormalRate > ratePlanContext.MaximumRate)
+                    int rateToChangeCurrencyId = ratePlanContext.GetRateToChangeCurrencyId(zoneData.NormalRateToChange);
+                    var convertedMaximumRate = ratePlanContext.GetMaximumRateConverted(rateToChangeCurrencyId);
+                    if (otherRateToChange.NormalRate > convertedMaximumRate)
                     {
                         string rateTypeName = rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value);
                         if (rateTypeName != null)
