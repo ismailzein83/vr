@@ -64,6 +64,9 @@
 <vr-tab header="'Contacts'">
     <vr-section title="{{c.label}} Contact" ng-repeat="c in scopeModel.contacts">
         <vr-columns width="1/2row">
+            <vr-common-salutationtype-selector on-ready="c.onSalutationReady"></vr-common-salutationtype-selector>
+        </vr-columns>
+        <vr-columns width="1/2row">
             <vr-label>Contact Name </vr-label>
             <vr-textbox value="c.name" type="c.inputetype"></vr-textbox>
         </vr-columns>
@@ -72,11 +75,11 @@
             <vr-textbox value="c.title" type="c.inputetype"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
+            <vr-textbox-multiple label="Phones" datatype="number" value="c.phoneNumbers"></vr-textbox-multiple>
+        </vr-columns>
+        <vr-columns width="1/2row">
             <vr-label>Email</vr-label>
             <vr-textbox value="c.email" type="c.inputetype"></vr-textbox>
         </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-textbox-multiple label="Phones" datatype="number" value="c.phoneNumbers"></vr-textbox-multiple>
-        </vr-columns>        
     </vr-section>
 </vr-tab>

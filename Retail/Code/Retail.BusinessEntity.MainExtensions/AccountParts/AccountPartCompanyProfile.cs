@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
@@ -103,10 +104,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public string ContactName { get; set; }
         public string Title { get; set; }
         public string Email { get; set; }
-
         public List<string> PhoneNumbers { get; set; }
-
-      
+        public SalutationType? Salutation { get; set; }      
     }
 
    

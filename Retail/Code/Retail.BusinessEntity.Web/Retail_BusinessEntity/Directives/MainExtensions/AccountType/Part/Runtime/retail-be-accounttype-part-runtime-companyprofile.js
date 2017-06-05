@@ -97,6 +97,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
 
             api.load = function (payload) {
                 mainPayload = payload;
+                var promises = [];
                 if (payload != undefined) {
                     if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
                         $scope.scopeModel.contacts.length = 0;
@@ -109,11 +110,17 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                                 if (payload.partSettings != undefined && payload.partSettings.Contacts != undefined) {
                                     settings = payload.partSettings.Contacts[contactType.Name];
                                 }
-                                addContact(contactType, settings);
+                                var gridField = {
+                                    payload: settings,
+                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                addContact(contactType, settings, gridField);
+                                promises.push(gridField.loadPromiseDeferred.promise);
 
                             }
                         }
-                        function addContact(contactType, settings) {
+                        function addContact(contactType, settings, gridField) {
 
                             var phoneNumbers = [];
                             if (settings != undefined && settings.PhoneNumbers != undefined) {
@@ -130,6 +137,19 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                                 disabledphone: true,
                                 phoneNumbers: settings != undefined ? phoneNumbers : []
                             };
+                            
+                            contact.onSalutationReady = function (api) {
+                                contact.salutationAPI = api;
+                                gridField.readyPromiseDeferred.resolve();
+                            };
+                            console.log(settings.Salutation)
+                            gridField.readyPromiseDeferred.promise
+                                .then(function () {
+                                    var payload = {
+                                        selectedIds: settings.Salutation
+                                    };
+                                    VRUIUtilsService.callDirectiveLoad(contact.salutationAPI, payload, gridField.loadPromiseDeferred);
+                            });
                             $scope.scopeModel.contacts.push(contact);
                         }
                     }
@@ -162,8 +182,9 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
 
                     }
                 }
+                promises.push(loadCountryCitySection());
+                return UtilsService.waitMultiplePromises(promises);
 
-                return loadCountryCitySection();
             };
 
             api.getData = function () {
@@ -175,7 +196,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             ContactName: contact.name,
                             Title: contact.title,
                             Email: contact.email,
-                            PhoneNumbers: contact.phoneNumbers
+                            PhoneNumbers: contact.phoneNumbers,
+                            Salutation: contact.salutationAPI !=undefined ? contact.salutationAPI.getSelectedIds(): undefined
                         };
                         if (obj != null)
                             contacts[contact.contactType] = obj;

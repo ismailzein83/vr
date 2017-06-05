@@ -68,7 +68,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     var addressSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     addressTypeSelectorReadyDeferred.promise.then(function () {
                         var selectorPayload = {
-                            selectedIds: payload != undefined && payload.partSettings != undefined && payload.partSettings.AddressType || undefined
+                            selectedIds: payload != undefined && payload.partSettings != undefined ? payload.partSettings.AddressType : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(addressTypeAPI, selectorPayload, addressSelectorLoadDeferred);
                     });
@@ -79,7 +79,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     accountTypeSelectorReadyDeferred.promise.then(function () {
                         var selectorPayload = {
-                            selectedIds: payload != undefined && payload.partSettings != undefined && payload.partSettings.AccountType || undefined
+                            selectedIds: payload != undefined && payload.partSettings != undefined ? payload.partSettings.AccountType : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(accountTypeAPI, selectorPayload, accountSelectorLoadDeferred);
                     });

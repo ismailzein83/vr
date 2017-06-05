@@ -19,6 +19,11 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
 
     function AccountTypePersonalInfoPartRuntime($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
+
+        var genderApi;
+        var genderSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -27,8 +32,13 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
 
         var countrySelectedPromiseDeferred;
         var mainPayload;
+
         function initializeController() {
             $scope.scopeModel = {};
+            $scope.scopeModel.onGenderSelectorReady = function (api) {
+                genderApi =  api;
+                genderSelectorReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
@@ -38,6 +48,7 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             };
+
 
 
             $scope.scopeModel.onCountrySelectionChanged = function () {
@@ -63,14 +74,18 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
 
             api.load = function (payload) {
                 mainPayload = payload;
+                var promises = [];
+
                 if (payload != undefined && payload.partSettings != undefined) {
 
                     $scope.scopeModel.firstName = payload.partSettings.FirstName;
                     $scope.scopeModel.lastName = payload.partSettings.LastName;
                     $scope.scopeModel.dob = payload.partSettings.BirthDate;
-                    $scope.scopeModel.gender = payload.partSettings.Gender;
                 }
-                return loadCountryCitySection();
+                promises.push(loadCountryCitySection());
+                promises.push(loadGenderSelector());
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
@@ -81,7 +96,7 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
                     FirstName: $scope.scopeModel.firstName,
                     LastName: $scope.scopeModel.lastName,
                     BirthDate: $scope.scopeModel.dob,
-                    Gender: $scope.scopeModel.gender
+                    Gender: genderApi.getSelectedIds()
                 };
             };
 
@@ -126,6 +141,17 @@ app.directive('retailBeAccounttypePartRuntimePersonalinfo', ["UtilsService", "VR
             }
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+
+        function loadGenderSelector() {
+            var genderSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            genderSelectorReadyPromiseDeferred.promise.then(function () {
+                var selectorPayload = {
+                    selectedIds: mainPayload != undefined && mainPayload.partSettings != undefined ? mainPayload.partSettings.Gender : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(genderApi, selectorPayload, genderSelectorLoadDeferred);
+            });
+            return genderSelectorLoadDeferred.promise;
         }
     }
 }]);
