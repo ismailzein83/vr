@@ -51,15 +51,19 @@
                 limitcharactercount: '='
             },
             controller: function ($scope, $element, $attrs) {
+                var divDropdown = angular.element($element[0].querySelector('.dropdown'));
+                $attrs.id = baseDirService.generateHTMLElementName();
+                divDropdown.attr('name', $attrs.id);
                 $scope.$on("$destroy", function () {
-                    $('div[name=' + $attrs.id + ']').parents('div').unbind('scroll', fixDropdownPosition);
                     $(window).unbind('scroll', fixDropdownPosition);
                     $(window).unbind('resize', fixDropdownPosition);
                     $(window).off("resize.Viewport");
                     datasourceWatch();
                     dataWatch();
                 });
-                
+                $element.on('$destroy', function () {
+                    $('div[name=' + $attrs.id + ']').parents('div').unbind('scroll', fixDropdownPosition);
+                });
                 if (rootScope == undefined)
                     rootScope = $scope.$root;
 
@@ -650,9 +654,6 @@
                     var divDropdown = angular.element(element[0].querySelector('.dropdown'));
                     var ulDropdown = angular.element(element[0].querySelector('.dropdown-menu'));
                     var tabindex = '';
-                    attrs.id = baseDirService.generateHTMLElementName();
-                    divDropdown.attr('name', attrs.id);
-
                     if ($(divDropdown).parents().hasClass('divDisabled') == true) {
                         tabindex = 'tabindex=-1'
                     }
