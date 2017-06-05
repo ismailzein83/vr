@@ -108,37 +108,32 @@ namespace Vanrise.AccountBalance.Business
         }
 
         #region Private Classes
-        private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransaction, BillingTransactionDetail>
+
+        private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransactionResultItem, BillingTransactionDetail>
         {
-            public override BillingTransactionDetail EntityDetailMapper(BillingTransaction entity)
+            static BillingTransactionManager s_billingTransactionManager = new BillingTransactionManager();
+            public override BillingTransactionDetail EntityDetailMapper(BillingTransactionResultItem entity)
             {
-                return null;
+                return s_billingTransactionManager.BillingTransactionDetailMapper(entity.BillingTransaction, entity.Source);
             }
 
-            public override IEnumerable<BillingTransaction> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
+            public override IEnumerable<BillingTransactionResultItem> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
             {
+                List<BillingTransactionResultItem> rslt = new List<BillingTransactionResultItem>();
                 IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
-                return dataManager.GetFilteredBillingTransactions(input.Query);
-            
-            }
-            protected override BigResult<BillingTransactionDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input, IEnumerable<BillingTransaction> allRecords)
-            {
+                var billingTransactions = dataManager.GetFilteredBillingTransactions(input.Query);
+                if (billingTransactions != null)
+                    rslt.AddRange(billingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = BillingTransactionSource.BillingTransaction }));
                 AccountUsageManager accountUsageManager = new AccountUsageManager();
                 var accountUsages = accountUsageManager.GetAccountUsageForBillingTransactions(input.Query.AccountTypeId, input.Query.TransactionTypeIds, input.Query.AccountsIds, input.Query.FromTime, input.Query.ToTime);
-                BillingTransactionManager manager = new BillingTransactionManager();
-                var convertedBillingTransactions = manager.ConvertAccountUsagesToBillingTransactions(accountUsages);
-
-                List<BillingTransactionDetail> billingTransactionDetails = new List<BillingTransactionDetail>();
-                billingTransactionDetails.AddRange(allRecords.MapRecords(x => manager.BillingTransactionDetailMapper(x, BillingTransactionSource.BillingTransaction)));
-                billingTransactionDetails.AddRange(convertedBillingTransactions.MapRecords(x => manager.BillingTransactionDetailMapper(x, BillingTransactionSource.AccountUsage)));
-
-                return new BigResult<BillingTransactionDetail>
-                {
-                    ResultKey = input.ResultKey,
-                    Data = billingTransactionDetails,
-                    TotalCount = billingTransactionDetails.Count
-                };
+                if (accountUsages != null)
+                {                   
+                    var usagesAsBillingTransactions = s_billingTransactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages);
+                    rslt.AddRange(usagesAsBillingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = BillingTransactionSource.AccountUsage }));
+                }
+                return rslt;
             }
+
             protected override ResultProcessingHandler<BillingTransactionDetail> GetResultProcessingHandler(DataRetrievalInput<BillingTransactionQuery> input, BigResult<BillingTransactionDetail> bigResult)
             {
                 return new ResultProcessingHandler<BillingTransactionDetail>
@@ -146,6 +141,13 @@ namespace Vanrise.AccountBalance.Business
                     ExportExcelHandler = new BillingTransactionExcelExportHandler(input.Query)
                 };
             }
+        }
+
+        private class BillingTransactionResultItem
+        {
+            public BillingTransaction BillingTransaction { get; set; }
+
+            public BillingTransactionSource Source { get; set; }
         }
         private class BillingTransactionExcelExportHandler : ExcelExportHandler<BillingTransactionDetail>
         {
