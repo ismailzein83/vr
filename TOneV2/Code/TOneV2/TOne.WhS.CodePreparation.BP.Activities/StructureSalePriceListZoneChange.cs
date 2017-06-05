@@ -105,7 +105,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                 foreach (ZoneToProcess zoneData in countryData.ZonesToProcess)
                 {
-                    if (zoneData.ChangeType == ZoneChangeType.New)
+                    if (zoneData.ChangeType == ZoneChangeType.New || zoneData.ChangeType == ZoneChangeType.Renamed)
                     {
                         if (!zoneData.AddedZones.Any())
                             throw new Exception(string.Format("New Zone with name {0} to be created without Added Zones", zoneData.ZoneName));
