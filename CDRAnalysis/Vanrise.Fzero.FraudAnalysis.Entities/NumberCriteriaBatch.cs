@@ -19,6 +19,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public String number;
 
         public Dictionary<int, decimal> criteriaValues;
+        
+        public override DateTime GetBatchEnd()
+        {
+            return DateTime.Today;
+        }
 
+        public override DateTime GetBatchStart()
+        {
+            return DateTime.Today;
+        }
+
+        public override void SetBatchEnd(DateTime batchEnd)
+        {
+        }
+
+        public override void SetBatchStart(DateTime batchStart)
+        {
+        }
     }
 }

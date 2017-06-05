@@ -66,6 +66,7 @@
     <add key="OperatorType" value="1" />    <!--  1 =Mobile ,  2 = PSTN -->
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="DWFactBatchSize" value="100000" />
     <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
     <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString"/>

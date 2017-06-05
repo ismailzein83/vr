@@ -153,9 +153,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Client">
-      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Data">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
     </Reference>
@@ -164,6 +161,9 @@
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
