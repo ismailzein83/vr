@@ -136,10 +136,11 @@ end
 --[sec].[View]-----------------------------9001 to 10000--------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [sec].[View] on;
+
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
+('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-common-actionaudit-search","Title":"Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('f09a8ccf-f0ee-4eef-bb19-24b1abf902ae','Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','PSTN_BE/NormalizationRule/GetFilteredNormalizationRules',null,null,null,0,31),
 ('9d9043eb-18e8-4c52-a69b-ee10954dcfa5','Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement','c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null,null,null,0,1),
 ('949681f0-3701-4d43-85e5-1bb61bce7f28','Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement','c49f3a08-1d96-4f56-b0c6-f81eb8aac9ca','Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null,null,null,0,2),
@@ -162,7 +163,7 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
-set identity_insert [sec].[View] off;
+
 ---------------------------------------------------------------------------------------------------------------
 
 end
