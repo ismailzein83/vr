@@ -192,6 +192,40 @@ END
 
 
 
+-------------- START Entity '[Retail_BE].[AccountPartDefinition]' -------------------
+-----------------------------------------------------------------------------------------
+BEGIN
+
+set nocount on;
+;with cte_data([ID],[Title],[Name],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0766a528-4ac9-4036-95fa-82d0105806c7','Branch Info','Branch Info','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"0766a528-4ac9-4036-95fa-82d0105806c7","Name":"Branch Info","Title":"Branch Info","Settings":{"$type":"Retail.MultiNet.MainExtensions.MultiNetBranchExtendedInfoDefinition, Retail.MultiNet.MainExtensions","ConfigId":"f82d421e-443e-418c-8cc6-e10597a46442"}}'),
+('b0717c4f-e409-4ae2-8c00-5add4ca828c5','Company Profile','Company Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"b0717c4f-e409-4ae2-8c00-5add4ca828c5","Name":"Company Profile","Title":"Company Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"1aff2bf7-1f15-4e0b-accf-457edf36a342","IncludeArabicName":false,"ContactTypes":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions","Name":"Main","Title":"Main"},{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions","Name":"Finance","Title":"Finance"}]}}}'),
+('ee7fee18-ebfc-4f85-955b-95ea98519abb','Company Info','Company Info','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"ee7fee18-ebfc-4f85-955b-95ea98519abb","Name":"Company Info","Title":"Company Info","Settings":{"$type":"Retail.MultiNet.MainExtensions.MultiNetCompanyExtendedInfoDefinition, Retail.MultiNet.MainExtensions","ConfigId":"daf99c84-8dc3-4c77-99cd-c0d631693d70"}}'),
+('82228be2-e633-4ef8-b383-9894f28c8cb0','Financial','Financial','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0","Name":"Financial","Title":"Financial","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"ba425fa1-13ca-4f44-883a-2a12b7e3f988"}}'),
+('d9ff19a8-7bb2-4a08-8e77-4ebe75e43155','User Profile','User Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"d9ff19a8-7bb2-4a08-8e77-4ebe75e43155","Name":"User Profile","Title":"User Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartPersonalInfoDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"3900317c-b982-4d8b-bd0d-01215ac1f3d9"}}'),
+('83715d18-0db8-4af4-a9cd-e3ce321e71ad','Operator Profile','Operator Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"83715d18-0db8-4af4-a9cd-e3ce321e71ad","Name":"Operator Profile","Title":"Operator Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"1aff2bf7-1f15-4e0b-accf-457edf36a342","IncludeArabicName":false}}'),
+('158359de-da10-409d-bf51-f0f23f6bea7d','Operator Settings','Operator Settings','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"158359de-da10-409d-bf51-f0f23f6bea7d","Name":"Operator Settings","Title":"Operator Settings","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartOperatorSettingDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"f21a72dc-48bf-43f4-a2a7-97e72f75b391"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Title],[Name],[Details]))
+merge	[Retail_BE].[AccountPartDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Title] = s.[Title],[Name] = s.[Name],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Title],[Name],[Details])
+	values(s.[ID],s.[Title],s.[Name],s.[Details]);
+
+END
+-----------------------------------------------------------------------------------------
+-------------- END Entity '[Retail_BE].[AccountPartDefinition]' -------------------
+
+
+
+
 -------------- START Entity '[common].[Setting]' -------------------
 -----------------------------------------------------------------------------------------
 BEGIN
@@ -261,8 +295,8 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[AccountBEDefinitionID],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('5ff96aee-cdf0-4415-a643-6b275f47e791','Branch','Branch','9a427357-cf55-4f33-99f7-745206dee7cd','{"$type":"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities","ShowConcatenatedName":true,"CanBeRootAccount":false,"SupportedParentAccountTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["046078a0-3434-4934-8f4d-272608cffebf"]},"PartDefinitionSettings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"b0717c4f-e409-4ae2-8c00-5add4ca828c5"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":2,"PartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":2,"PartDefinitionId":"0766a528-4ac9-4036-95fa-82d0105806c7"}]},"InitialStatusId":"dadc2977-a348-4504-89c9-c92f8f9008dd"}'),
-('046078a0-3434-4934-8f4d-272608cffebf','Company','Company','9a427357-cf55-4f33-99f7-745206dee7cd','{"$type":"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities","ShowConcatenatedName":false,"CanBeRootAccount":true,"PartDefinitionSettings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"b0717c4f-e409-4ae2-8c00-5add4ca828c5"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":2,"PartDefinitionId":"ee7fee18-ebfc-4f85-955b-95ea98519abb"}]},"InitialStatusId":"dadc2977-a348-4504-89c9-c92f8f9008dd"}'),
+('5ff96aee-cdf0-4415-a643-6b275f47e791','Branch','Branch','9a427357-cf55-4f33-99f7-745206dee7cd','{"$type":"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities","ShowConcatenatedName":true,"CanBeRootAccount":false,"SupportedParentAccountTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["046078a0-3434-4934-8f4d-272608cffebf"]},"PartDefinitionSettings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"b0717c4f-e409-4ae2-8c00-5add4ca828c5"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":2,"PartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"0766a528-4ac9-4036-95fa-82d0105806c7"}]},"InitialStatusId":"dadc2977-a348-4504-89c9-c92f8f9008dd"}'),
+('046078a0-3434-4934-8f4d-272608cffebf','Company','Company','9a427357-cf55-4f33-99f7-745206dee7cd','{"$type":"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities","ShowConcatenatedName":false,"CanBeRootAccount":true,"PartDefinitionSettings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"b0717c4f-e409-4ae2-8c00-5add4ca828c5"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"ee7fee18-ebfc-4f85-955b-95ea98519abb"}]},"InitialStatusId":"dadc2977-a348-4504-89c9-c92f8f9008dd"}'),
 ('954557d8-c871-4636-9ec9-1677485543a9','Operator','Operator','a5c1852b-2c92-4d66-b959-e3f49304338a','{"$type":"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities","ShowConcatenatedName":false,"CanBeRootAccount":true,"PartDefinitionSettings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"83715d18-0db8-4af4-a9cd-e3ce321e71ad"},{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"158359de-da10-409d-bf51-f0f23f6bea7d"}]},"InitialStatusId":"dadc2977-a348-4504-89c9-c92f8f9008dd"}'),
 ('4c3a921a-e097-4ea8-858d-bb4e7a7142bc','User','User','9a427357-cf55-4f33-99f7-745206dee7cd','{"$type":"Retail.BusinessEntity.Entities.AccountTypeSettings, Retail.BusinessEntity.Entities","ShowConcatenatedName":false,"CanBeRootAccount":false,"SupportedParentAccountTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["5ff96aee-cdf0-4415-a643-6b275f47e791"]},"PartDefinitionSettings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountTypePartSettings, Retail.BusinessEntity.Entities","AvailabilitySettings":0,"RequiredSettings":0,"PartDefinitionId":"d9ff19a8-7bb2-4a08-8e77-4ebe75e43155"}]},"InitialStatusId":"dadc2977-a348-4504-89c9-c92f8f9008dd"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -280,38 +314,6 @@ when not matched by target then
 END
 -----------------------------------------------------------------------------------------
 -------------- END Entity '[Retail_BE].[AccountType]' -------------------
-
-
-
-
--------------- START Entity '[Retail_BE].[AccountPartDefinition]' -------------------
------------------------------------------------------------------------------------------
-BEGIN
-
-set nocount on;
-;with cte_data([ID],[Title],[Name],[Details])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('b0717c4f-e409-4ae2-8c00-5add4ca828c5','Company Profile','Company Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"b0717c4f-e409-4ae2-8c00-5add4ca828c5","Name":"Company Profile","Title":"Company Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"1aff2bf7-1f15-4e0b-accf-457edf36a342","IncludeArabicName":false,"ContactTypes":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions","Name":"Main","Title":"Main"},{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.CompanyProfileContactType, Retail.BusinessEntity.MainExtensions","Name":"Finance","Title":"Finance"}]}}}'),
-('82228be2-e633-4ef8-b383-9894f28c8cb0','Financial','Financial','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"82228be2-e633-4ef8-b383-9894f28c8cb0","Name":"Financial","Title":"Financial","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"ba425fa1-13ca-4f44-883a-2a12b7e3f988"}}'),
-('d9ff19a8-7bb2-4a08-8e77-4ebe75e43155','User Profile','User Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"d9ff19a8-7bb2-4a08-8e77-4ebe75e43155","Name":"User Profile","Title":"User Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartPersonalInfoDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"3900317c-b982-4d8b-bd0d-01215ac1f3d9"}}'),
-('83715d18-0db8-4af4-a9cd-e3ce321e71ad','Operator Profile','Operator Profile','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"83715d18-0db8-4af4-a9cd-e3ce321e71ad","Name":"Operator Profile","Title":"Operator Profile","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfileDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"1aff2bf7-1f15-4e0b-accf-457edf36a342","IncludeArabicName":false}}'),
-('158359de-da10-409d-bf51-f0f23f6bea7d','Operator Settings','Operator Settings','{"$type":"Retail.BusinessEntity.Entities.AccountPartDefinition, Retail.BusinessEntity.Entities","AccountPartDefinitionId":"158359de-da10-409d-bf51-f0f23f6bea7d","Name":"Operator Settings","Title":"Operator Settings","Settings":{"$type":"Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartOperatorSettingDefinition, Retail.BusinessEntity.MainExtensions","ConfigId":"f21a72dc-48bf-43f4-a2a7-97e72f75b391"}}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Title],[Name],[Details]))
-merge	[Retail_BE].[AccountPartDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Title] = s.[Title],[Name] = s.[Name],[Details] = s.[Details]
-when not matched by target then
-	insert([ID],[Title],[Name],[Details])
-	values(s.[ID],s.[Title],s.[Name],s.[Details]);
-
-END
------------------------------------------------------------------------------------------
--------------- END Entity '[Retail_BE].[AccountPartDefinition]' -------------------
 
 
 
