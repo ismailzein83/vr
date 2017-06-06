@@ -39,6 +39,22 @@ namespace NP.IVSwitch.Business
                 int? carrierAccountSWVendorAccountId = null;
                 HashSet<int> assignRoutesIds = null;
                 HashSet<int> alreadyAssignedSWVendorAccountIds = null;
+                HashSet<int> supplierIds = null;
+                HashSet<int> routeIds = new HashSet<int>();
+                if (filter.SupplierIds != null)
+                {
+                    supplierIds = new HashSet<int>(filter.SupplierIds);
+                    foreach (var Id in supplierIds)
+                    {
+                        var supplierRouteIds = (GetCarrierAccountRouteIds(Id) != null) ? GetCarrierAccountRouteIds(Id) : null;
+                        if (supplierRouteIds != null)
+                        {
+                            foreach (int routeId in supplierRouteIds)
+                            { routeIds.Add(routeId); }
+                        }
+
+                    }
+                }
                 if (filter.AssignableToCarrierAccountId.HasValue)
                 {
                     var accountManager = new AccountManager();
@@ -56,6 +72,13 @@ namespace NP.IVSwitch.Business
                             return false;
                         if (!carrierAccountSWVendorAccountId.HasValue && alreadyAssignedSWVendorAccountIds.Contains(x.AccountId))//if Route belongs to Switch Vendor that is assigned other Carrier Profile
                             return false;
+                    }
+                    if (routeIds != null)
+                    {
+                        if (!routeIds.Contains(x.RouteId))
+                        {
+                            return false;
+                        }
                     }
                     return true;
                 };
@@ -110,6 +133,13 @@ namespace NP.IVSwitch.Business
                 routes.AddRange(routeExtendedSettings.RouteInfo.Select(itm => itm.RouteId));
             return routes;
         }
+
+        public List<int> GetCarrierAccountRouteIds(int carrierAccountId)
+        {
+            var carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
+            return carrierAccount != null ? GetCarrierAccountRouteIds(carrierAccount) : null;
+        }
+
         public IDataRetrievalResult<RouteDetail> GetFilteredRoutes(DataRetrievalInput<RouteQuery> input)
         {
             //Get Carrier by id

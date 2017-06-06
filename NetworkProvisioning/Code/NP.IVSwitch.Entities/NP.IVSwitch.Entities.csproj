@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +44,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="TOne.WhS.BusinessEntity.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +77,9 @@
     <Compile Include="Firewall\Firewall.cs" />
     <Compile Include="Firewall\FirewallDetail.cs" />
     <Compile Include="Firewall\FirewallQuery.cs" />
+    <Compile Include="LiveCdr\LiveCdrItem.cs" />
+    <Compile Include="LiveCdr\LiveCdrItemDetail.cs" />
+    <Compile Include="LiveCdr\LiveCdrQuery.cs" />
     <Compile Include="LiveDashboardResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomerRoute\CustomerRoute.cs" />
@@ -96,7 +103,12 @@
     <Compile Include="TranslationRule\TranslationRuleDetail.cs" />
     <Compile Include="TranslationRule\TranslationRuleQuery.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Fakes Include="Fakes\Vanrise.Common.Business.fakes" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

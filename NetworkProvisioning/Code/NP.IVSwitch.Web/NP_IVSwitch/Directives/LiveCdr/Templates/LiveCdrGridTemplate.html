@@ -1,0 +1,23 @@
+﻿<div>
+    <vr-datagrid datasource="liveCdrs"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="onGridReady"
+                 defaultsortbyfieldname="'customerName'"
+                 idfield="sourceIP" enableautoexport="true">
+
+        <vr-datagridcolumn headertext="'Customer'" field="'customerName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'SourceIP'" field="'sourceIP'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Attempt Date'" field="'attemptDate'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'CLI'" field="'cli'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Destination Code'" field="'destinationCode'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Destination Name'" field="'destinationName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Supplier'" field="'supplierName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'RouteIP'" field="'routeIP'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Supplier Code'" field="'supplierCode'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Supplier Zone'" field="'supplierZone'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Alert Date'" field="'alertDate'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Connection Date'" field="'connectDate'" type="'Text'"></vr-datagridcolumn>
+
+    </vr-datagrid>
+</div>

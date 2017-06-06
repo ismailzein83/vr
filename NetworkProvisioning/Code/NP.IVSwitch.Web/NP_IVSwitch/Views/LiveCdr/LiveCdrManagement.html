@@ -1,0 +1,37 @@
+﻿<vr-panel ng-controller="NP_IVSwitch_LiveCdrManagementController">
+
+        <vr-form name="formFilter">
+            <div ng-hide="filterSectionCollapsed">
+                <vr-row removeline>
+                    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady" onselectionchanged="    onCustomerSelectionChanged"></vr-whs-be-customer-selector>
+                    <vr-columns colnum="2">
+                        <np-ivswitch-endpoint-selector on-ready="onSelectorEndPointReady" normal-col-num="2"  ismultipleselection selectedvalues="selectedEndPoints" ></np-ivswitch-endpoint-selector>
+                    </vr-columns>
+                    <vr-columns width="normal">
+                        <vr-textbox label="Source IP" value="sourceIP"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady" onselectionchanged="onSupplierSelectionChanged"></vr-whs-be-supplier-selector>
+                    <vr-columns colnum="2">
+                        <np-ivswitch-route-selector on-ready="onSelectorRouteReady" normal-col-num="2"  ismultipleselection selectedvalues="selectedRoutes"></np-ivswitch-route-selector>
+                    </vr-columns>
+                    <vr-columns width="normal">
+                        <vr-textbox label="Route IP" value="routeIP"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+            </div>
+            <vr-row removeline>
+                <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                    <div transclude-to="buttons">
+                        <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                    </div>
+                </vr-actionbar>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="12" simplecol>
+                    <np-ivswitch-livecdr-grid on-ready="onGridReady"></np-ivswitch-livecdr-grid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-panel>

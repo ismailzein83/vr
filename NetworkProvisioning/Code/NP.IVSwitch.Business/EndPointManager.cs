@@ -52,6 +52,21 @@ namespace NP.IVSwitch.Business
                 int? carrierAccountSWCustomerAccountId = null;
                 HashSet<int> assignedEndPointIds = null;
                 HashSet<int> alreadyAssignedSWCustomerAccountIds = null;
+                HashSet<int> customerIds=null;
+                HashSet<int> endPointIds = new  HashSet<int>();
+                if(filter.CustomerIds!=null)
+                {customerIds=new HashSet<int>(filter.CustomerIds);
+                foreach (var Id in customerIds)
+                {
+                    var customerEndpointIds = (GetCarrierAccountEndPointIds(Id) != null) ? GetCarrierAccountEndPointIds(Id) : null;
+                    if (customerEndpointIds != null)
+                    {
+                        foreach (int endpointId in customerEndpointIds)
+                        { endPointIds.Add(endpointId); }
+                    }
+                    
+                }   
+                }
                 if (filter.AssignableToCarrierAccountId.HasValue)
                 {
                     assignedEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
@@ -69,6 +84,14 @@ namespace NP.IVSwitch.Business
                             return false;
                         if (!carrierAccountSWCustomerAccountId.HasValue && alreadyAssignedSWCustomerAccountIds.Contains(x.AccountId))//if end point belongs to Switch Customer that is assigned other Carrier Profile
                             return false;
+                    }
+
+                    if (endPointIds != null)
+                    {
+                        if (!endPointIds.Contains(x.EndPointId))
+                        {
+                            return false;
+                        }
                     }
                     return true;
                 };

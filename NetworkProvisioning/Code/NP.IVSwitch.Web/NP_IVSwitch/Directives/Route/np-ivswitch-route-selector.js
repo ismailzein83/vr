@@ -72,21 +72,30 @@ function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationS
             api.load = function (payload) {
                 selectorApi.clearDataSource();
                 var selectedIds;
+                var selectedAllIds = [];
                 var filter;
+                var selectAll;
                 if (payload != undefined) {
                     filter = payload.filter;
                     selectedIds = payload.selectedIds;
+                    selectAll = payload.selectAll;
                 }
                 return NP_IVSwitch_RouteAPIService.GetRoutesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
 
                     if (response) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
+                            if (selectAll == true) {
+                                selectedAllIds.push(response[i].RouteId);
+                            }
                         }
                     }
 
                     if (selectedIds) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'RouteId', attrs, ctrl);
+                    }
+                    if (selectedAllIds) {
+                        VRUIUtilsService.setSelectedValues(selectedAllIds, 'RouteId', attrs, ctrl);
                     }
                 });
             };

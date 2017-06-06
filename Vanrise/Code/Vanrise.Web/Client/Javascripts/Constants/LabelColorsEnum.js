@@ -10,5 +10,6 @@
     New: { color: "label label-info" },
     Processing: { color: "label label-warning" },
     Failed: { color: "label label-danger" },
-    Processed: { color: "label label-success" }
+    Processed: { color: "label label-success" },
+    DangerFont: { color: "danger-font " }
 });

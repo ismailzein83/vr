@@ -127,6 +127,7 @@
     <Compile Include="Controllers\CodecDefController.cs" />
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
+    <Compile Include="Controllers\LiveCdrController.cs" />
     <Compile Include="Controllers\SwitchMappingController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
     <Compile Include="Controllers\FirewallController.cs" />
@@ -170,6 +171,8 @@
     <Content Include="NP_IVSwitch\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Firewall\np-ivswitch-firewall-grid.js" />
     <Content Include="NP_IVSwitch\Directives\Firewall\Templates\FirewallGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\LiveCdr\np-ivswitch-livecdr-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\LiveCdr\Templates\LiveCdrGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-selector.js" />
     <Content Include="NP_IVSwitch\Directives\Route\Templates\RouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-grid.js" />
@@ -188,6 +191,7 @@
     <Content Include="NP_IVSwitch\Services\APIServices\DomainAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\LiveCdrAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchMappingAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />
@@ -218,6 +222,8 @@
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallEditorController.js" />
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagement.html" />
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
+    <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagement.html" />
+    <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagementController.js" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditor.html" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboard.html" />

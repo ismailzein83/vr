@@ -72,21 +72,32 @@ function (NP_IVSwitch_EndPointAPIService, NP_IVSwitch_EndPointService, VRNotific
                 api.load = function (payload) {
                     selectorApi.clearDataSource();
                     var selectedIds;
+                    var selectedAllIds = [];
                     var filter;
+                    var selectAll;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        selectAll = payload.selectAll;
                     }
-                    return NP_IVSwitch_EndPointAPIService.GetEndPointsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
 
+                    return NP_IVSwitch_EndPointAPIService.GetEndPointsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
+                                if (selectAll == true) {
+                                    selectedAllIds.push(response[i].EndPointId);
+                                }
                             }
+                           
                         }
 
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'EndPointId', attrs, ctrl);
+                        }
+                        if (selectedAllIds) {
+                            VRUIUtilsService.setSelectedValues(selectedAllIds, 'EndPointId', attrs, ctrl);
                         }
                     });
                 };

@@ -9,6 +9,7 @@ namespace NP.IVSwitch.Entities
     public class EndPointInfoFilter
     {
         public int? AssignableToCarrierAccountId { get; set; }
+        public List<int> CustomerIds { get; set; }
 
     }
 }

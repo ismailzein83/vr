@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("npIvswitchFirewallGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_FirewallAPIService", "NP_IVSwitch_FirewallService",
-function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npIvSwitchFirewallService) {
+app.directive("npIvswitchFirewallGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_LiveCdrAPIService",
+function (utilsService, vrNotificationService, NP_IVSwitch_LiveCdrAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -33,7 +33,7 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
                 defineAPI();
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return npIvSwitchFirewallApiService.GetFilteredFirewalls(dataRetrievalInput)
+                return NP_IVSwitch_LiveCdrAPIService.GetFilteredLiveCdrs(dataRetrievalInput)
                    .then(function (response) {
                        onResponseReady(response);
                    })
@@ -51,29 +51,8 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
                 return gridAPI.retrieveData(query);
             };
 
-            api.onFirewallAdded = function (addedFirewall) {
-                gridAPI.itemAdded(addedFirewall);
-            };
-
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
-
-        function defineMenuActions() {
-            $scope.scopeModel.menuActions.push({
-                name: 'Edit',
-                clicked: editFirewall,
-                haspermission: hasEditFirewallPermission
-            });
-        }
-        function editFirewall(firewallItem) {
-            var onFirewallUpdated = function (updatedFirewall) {
-                gridAPI.itemUpdated(updatedFirewall);
-            };
-            npIvSwitchFirewallService.editFirewall(firewallItem.Entity.Id, onFirewallUpdated);
-        }
-        function hasEditFirewallPermission() {
-            return npIvSwitchFirewallApiService.HasEditFirewallPermission();
         }
         this.initializeController = initializeController;
     }

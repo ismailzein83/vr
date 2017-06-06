@@ -1,14 +1,24 @@
-﻿using System;
+﻿using NP.IVSwitch.Entities;
+using Npgsql;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.RouteSync.IVSwitch;
 using Vanrise.Data.Postgres;
 
 namespace NP.IVSwitch.Data.Postgres
 {
     public class CDRDataManager : BasePostgresDataManager, ICDRDataManager
     {
+        public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
+        protected override string GetConnectionString()
+        {
+            return IvSwitchSync.CdrConnectionString;
+        }
+
         public bool InsertHelperUser(int accountId, string logAlias)
         {
             string query = @"INSERT INTO ui_helper_accounts(
@@ -22,10 +32,57 @@ namespace NP.IVSwitch.Data.Postgres
             });
             return recordsEffected > 0;
         }
-        protected override string GetConnectionString()
+
+        public IEnumerable<Entities.LiveCdrItem> GetFilteredLiveCdrs(List<int> endPointIds, List<int> routeIds, string sourceIP, string routeIP)
         {
-            return IvSwitchSync.CdrConnectionString;
+            StringBuilder queryBuilder = new StringBuilder(@"
+                                SELECT user_id,src_ip,det_date,cli,dest_code,dest_name,route_id,route_ip,route_dest_code,route_dest_name,
+                                prg_date,con_date FROM cdrs_buffer WHERE 1=1 ");
+            if (endPointIds != null && endPointIds.Count() > 0)
+            {
+                string ePIds = null;
+                ePIds = string.Join<int>(",", endPointIds);
+                queryBuilder.Append(string.Format(" AND user_id in ({0})", ePIds));
+            }
+            if (routeIds != null && routeIds.Count() > 0)
+            {
+                string rtIds = null;
+                rtIds = string.Join<int>(",", routeIds);
+                queryBuilder.Append(string.Format(" AND route_id in ({0})",rtIds));
+            }
+            if (sourceIP != null)
+            {
+                queryBuilder.Append(string.Format(" AND src_ip like '%{0}%' ", sourceIP));
+            }
+            if (routeIP != null)
+            {
+                queryBuilder.Append(string.Format(" AND route_ip like '%{0}%' ", routeIP));
+            }
+            return GetItemsText(queryBuilder.ToString(), LiveCdrMapper, (cmd) =>
+            {
+            });
         }
-        public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
+
+
+        private LiveCdrItem LiveCdrMapper(IDataReader reader)
+        {
+            LiveCdrItem liveCdrItem = new LiveCdrItem
+            {
+                customerId = (int)reader["user_id"],
+                sourceIP = reader["src_ip"] as string,
+                attemptDate = (DateTime)reader["det_date"],
+                cli = reader["cli"] as string,
+                destinationCode = reader["dest_code"] as string,
+                destinationName = reader["dest_name"] as string,
+                routeId = (int)reader["route_id"],
+                routeIP = reader["route_ip"] as string,
+                supplierCode = reader["route_dest_code"] as string,
+                supplierZone = reader["route_dest_name"] as string,
+                alertDate = GetReaderValue<DateTime>(reader, "prg_date"),
+                connectDate = GetReaderValue<DateTime>(reader, "con_date")
+            };
+
+            return liveCdrItem;
+        }
     }
 }
