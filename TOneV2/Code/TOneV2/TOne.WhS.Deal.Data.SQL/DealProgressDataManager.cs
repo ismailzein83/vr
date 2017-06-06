@@ -71,8 +71,8 @@ namespace TOne.WhS.Deal.Data.SQL
                 dr["ZoneGroupNb"] = dealProgress.ZoneGroupNb;
                 dr["IsSale"] = dealProgress.IsSale;
                 dr["CurrentTierNb"] = dealProgress.CurrentTierNb;
-                dr["ReachedDurationInSec"] = dealProgress.ReachedDurationInSeconds.HasValue ? dealProgress.ReachedDurationInSeconds.Value : default(decimal);
-                dr["TargetDurationInSec"] = dealProgress.TargetDurationInSeconds;
+                dr["ReachedDurationInSec"] = dealProgress.ReachedDurationInSeconds.HasValue ? dealProgress.ReachedDurationInSeconds.Value : default(decimal?);
+                dr["TargetDurationInSec"] = dealProgress.TargetDurationInSeconds.HasValue ? dealProgress.TargetDurationInSeconds.Value : default(decimal?);
                 dtDealProgress.Rows.Add(dr);
             }
             dtDealProgress.EndLoadData();
@@ -129,7 +129,7 @@ namespace TOne.WhS.Deal.Data.SQL
                 CurrentTierNb = (int)reader["CurrentTierNb"],
                 IsSale = (bool)reader["IsSale"],
                 ReachedDurationInSeconds = GetReaderValue<decimal?>(reader, "ReachedDurationInSec"),
-                TargetDurationInSeconds = (decimal)reader["TargetDurationInSec"],
+                TargetDurationInSeconds = GetReaderValue<decimal?>(reader, "TargetDurationInSec"),
                 CreatedTime = (DateTime)reader["CreatedTime"]
             };
             return dealProgress;

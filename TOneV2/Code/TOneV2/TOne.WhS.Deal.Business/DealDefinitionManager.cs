@@ -93,26 +93,33 @@ namespace TOne.WhS.Deal.Business
             return BuildDealZoneGroupTier(dealZoneGroupTier);
         }
 
-        public DealZoneGroupTier GetUpToVolumeDealSaleZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal reachedDurationInSec)
+        public DealZoneGroupTier GetUpToVolumeDealSaleZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
         {
             DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
             dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
 
-            DealSaleZoneGroupTier previousDealSaleZoneGroupTier = null;
+            decimal remainingDurationInSec = totalReachedDurationInSec;
+            DealZoneGroupTier dealZoneGroupTier = null;
 
-            foreach (var dealSaleZoneGroupTierItem in dealSaleZoneGroup.Tiers)
+            foreach (var dealSaleZoneGroupTier in dealSaleZoneGroup.Tiers)
             {
-                if (dealSaleZoneGroupTierItem.Volume > totalReachedDurationInSec)
+                if (!dealSaleZoneGroupTier.Volume.HasValue)
                 {
-                    reachedDurationInSec = previousDealSaleZoneGroupTier != null ? totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume : totalReachedDurationInSec;
-                    return BuildDealZoneGroupTier(dealSaleZoneGroupTierItem);
+                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSaleZoneGroupTier);
+                    break;
                 }
 
-                previousDealSaleZoneGroupTier = dealSaleZoneGroupTierItem;
+                remainingDurationInSec -= dealSaleZoneGroupTier.Volume.Value;
+
+                if (remainingDurationInSec < 0)
+                {
+                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSaleZoneGroupTier);
+                    break;
+                }
             }
 
-            reachedDurationInSec = totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume;
-            return null;
+            tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
+            return dealZoneGroupTier;
         }
 
         public void FillOrigSupplierValues(dynamic record)
@@ -173,20 +180,27 @@ namespace TOne.WhS.Deal.Business
             dealSupplierZoneGroup.Tiers.ThrowIfNull("dealSupplierZoneGroup.Tiers");
 
             decimal remainingDurationInSec = totalReachedDurationInSec;
+            DealZoneGroupTier dealZoneGroupTier = null;
 
-            foreach (var dealSupplierZoneGroupTierItem in dealSupplierZoneGroup.Tiers)
+            foreach (var dealSupplierZoneGroupTier in dealSupplierZoneGroup.Tiers)
             {
-                remainingDurationInSec -= dealSupplierZoneGroupTierItem.Volume;
+                if (!dealSupplierZoneGroupTier.Volume.HasValue)
+                {
+                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSupplierZoneGroupTier);
+                    break;
+                }
+
+                remainingDurationInSec -= dealSupplierZoneGroupTier.Volume.Value;
 
                 if (remainingDurationInSec < 0)
                 {
-                    tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
-                    return BuildDealZoneGroupTier(dealSupplierZoneGroupTierItem);
+                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSupplierZoneGroupTier);
+                    break;
                 }
             }
 
-            tierReachedDurationInSec = 0;
-            return null;
+            tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
+            return dealZoneGroupTier;
         }
 
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()

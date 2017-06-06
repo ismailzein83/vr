@@ -16,9 +16,9 @@ namespace TOne.WhS.Deal.Entities
 
         public decimal? ReachedDurationInSeconds { get; set; }
 
-        public decimal TargetDurationInSeconds { get; set; }
+        public decimal? TargetDurationInSeconds { get; set; }
 
-        public bool IsComplete { get { return TargetDurationInSeconds == ReachedDurationInSeconds; } }
+        public bool IsComplete { get { return TargetDurationInSeconds.HasValue && TargetDurationInSeconds == ReachedDurationInSeconds; } }
 
         public DateTime CreatedTime { get; set; }
 
