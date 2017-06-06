@@ -76,6 +76,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
                     };
                     try
                     {
+                        switchItem.Settings.ThrowIfNull("switchItem.Settings", switchItem.SwitchId);
+                        switchItem.Settings.RouteSynchronizer.ThrowIfNull("switchItem.Settings.RouteSynchronizer", switchItem.SwitchId);
+
                         if (switchItem.Settings.RouteSynchronizer.TryBlockCustomer(context))
                         {
                             blockingInfo.Add(switchItem.SwitchId,

@@ -314,7 +314,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (TryUpdateCarrierAccount(carrierAccountToEdit, true))
             {
                 CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
-      
+
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
 
@@ -344,12 +344,12 @@ namespace TOne.WhS.BusinessEntity.Business
                     var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
                 }
-                if(cachedAccount.CarrierAccountSettings.ActivationStatus != carrierAccountToEdit.CarrierAccountSettings.ActivationStatus)
+                if (cachedAccount.CarrierAccountSettings.ActivationStatus != carrierAccountToEdit.CarrierAccountSettings.ActivationStatus)
                 {
                     VREventManager vrEventManager = new VREventManager();
                     vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
                 }
-                
+
                 return true;
             }
             return false;
@@ -904,7 +904,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 CustomerSettings = carrierAccount.CustomerSettings,
                 NameSuffix = carrierAccount.NameSuffix,
                 CreatedTime = carrierAccount.CreatedTime,
-
+                SellingProductId = carrierAccount.SellingProductId
             };
         }
 
