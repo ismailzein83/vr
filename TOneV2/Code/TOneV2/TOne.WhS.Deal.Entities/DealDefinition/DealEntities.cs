@@ -25,4 +25,30 @@ namespace TOne.WhS.Deal.Entities
         public decimal Rate { get; set; }
         public Dictionary<long, decimal> ExceptionRates { get; set; }
     }
-}
+
+    public class DealZoneGroupData
+    {
+        public int DealID { get; set; }
+
+        public int ZoneGroupNb { get; set; }
+
+        public bool IsSale { get; set; }
+
+        public decimal? TotalZoneGroupDurationInSeconds { get; set; }
+    }
+
+    public class DealProgressData
+    {
+        public int DealID { get; set; }
+
+        public int ZoneGroupNb { get; set; }
+
+        public bool IsSale { get; set; }
+
+        public int CurrentTierNb { get; set; }
+
+        public decimal? ReachedDurationInSeconds { get; set; }
+
+        public decimal TargetDurationInSeconds { get; set; }
+    }
+} 

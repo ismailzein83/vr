@@ -9,9 +9,16 @@
 
         var dealId;
         var dealEntity;
+        var carrierAccountSelectedPromise;
+        var context;
+        var isViewHistoryMode;
+        var oldselectedCarrier;
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var currencyDirectiveAPI;
+        var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var dealInboundAPI;
         var dealInboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -19,13 +26,10 @@
         var dealOutboundAPI;
         var dealOutboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var carrierAccountSelectedPromise;
-        var context;
-        var isViewHistoryMode;
+
         loadParameters();
         defineScope();
         load();
-        var oldselectedCarrier;
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -33,17 +37,17 @@
             if (parameters != undefined && parameters != null) {
                 dealId = parameters.dealId;
                 context = parameters.context;
+
+                isViewHistoryMode = context != undefined && context.historyId != undefined;
             }
-            isViewHistoryMode = (context != undefined && context.historyId != undefined);
+            
             isEditMode = (dealId != undefined);
         }
-
         function defineScope() {
-
             $scope.scopeModel = {};
+            $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
-            $scope.scopeModel.disabelType = isEditMode;
 
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
@@ -88,17 +92,14 @@
                     }
                 }
             };
-            $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
+
+            $scope.scopeModel.onCurrencySelectReady = function (api) {
+                currencyDirectiveAPI = api;
+                currencyDirectiveReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.analyse = function () {
                 WhS_BE_SwapDealAnalysisService.openSwapDealAnalysis(buildSwapDealObjFromScope())
-            };
-
-
-            $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onSwapDealInboundDirectiveReady = function (api) {
@@ -111,11 +112,22 @@
                 dealOutboundReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.save = function () {
+                return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
+            };
+
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
+
             $scope.scopeModel.validateDatesRange = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
 
             $scope.scopeModel.validateSwapDealInbounds = function () {
+                if (carrierAccountSelectorAPI == undefined)
+                    return null;
+
                 var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
@@ -125,6 +137,9 @@
             };
 
             $scope.scopeModel.validateSwapDealOutbounds = function () {
+                if (carrierAccountSelectorAPI == undefined)
+                    return null;
+
                 var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
@@ -133,7 +148,6 @@
                 return null;
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
@@ -161,6 +175,7 @@
                 loadAllControls();
             }
         }
+
         function getSwapDealHistory() {
             return WhS_Deal_SwapDealAPIService.GetSwapDealHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 dealEntity = response;
@@ -174,17 +189,36 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection, loadGraceperiod]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection, loadGraceperiod, loadCurrencySelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
-
+        function setTitle() {
+            if (isEditMode) {
+                if (dealEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealEntity.Name, 'Swap Deal');
+            }
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor('Swap Deal');
+        }
+        function loadStaticData() {
+            if (dealEntity == undefined)
+                return;
+            $scope.scopeModel.description = dealEntity.Name;
+            //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
+            $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
+            $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
+            $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
+            $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
+            $scope.scopeModel.active = dealEntity.Settings.Active;
+            $scope.scopeModel.difference = dealEntity.Settings.Difference;
+        }
         function loadCarrierBoundsSection() {
-            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var promises = [];
+
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
             promises.push(loadCarrierAccountPromiseDeferred.promise);
 
             var payload;
@@ -197,8 +231,6 @@
 
                 VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, loadCarrierAccountPromiseDeferred);
             });
-
-
 
             if (dealEntity != undefined && dealEntity.Settings != undefined) {
 
@@ -231,29 +263,6 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-
-        function setTitle() {
-            if (isEditMode) {
-                if (dealEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(dealEntity.Name, 'Swap Deal');
-            }
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor('Swap Deal');
-        }
-
-        function loadStaticData() {
-            if (dealEntity == undefined)
-                return;
-            $scope.scopeModel.description = dealEntity.Name;
-            //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
-            $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
-            $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
-            $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
-            $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
-            $scope.scopeModel.active = dealEntity.Settings.Active;
-            $scope.scopeModel.difference = dealEntity.Settings.Difference;
-        }
-
         function loadGraceperiod() {
             if (dealEntity != undefined && dealEntity.Settings.GracePeriod != undefined) {
                 $scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
@@ -264,17 +273,24 @@
             })
 
         }
-        function loadCarrierAccountSelector() {
-            var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadCurrencySelector() {
+            var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            carrierAccountSelectorReadyDeferred.promise.then(function () {
-                var payload = (dealEntity != undefined) ? { selectedIds: dealEntity.Settings.CarrierAccountId } : undefined;
-                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorLoadDeferred);
-                $scope.scopeModel.isLoading = false;
+            var currencyPayload;
+            if (dealEntity != undefined && dealEntity.Settings != undefined && dealEntity.Settings.CurrencyId > 0) {
+                currencyPayload = { selectedIds: dealEntity.Settings.CurrencyId };
+            }
+            else {
+                currencyPayload = { selectSystemCurrency: true };
+            }
+
+            currencyDirectiveReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
+
             });
 
-            return carrierAccountSelectorLoadDeferred.promise;
-        }
+            return loadCurrencySelectorPromiseDeferred.promise;
+        };
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;
@@ -290,7 +306,6 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
-
         function updateSwapDeal() {
             $scope.scopeModel.isLoading = true;
             return WhS_Deal_SwapDealAPIService.UpdateDeal(buildSwapDealObjFromScope()).then(function (response) {
@@ -325,7 +340,8 @@
                     Outbounds: outboundData != undefined ? outboundData.outbounds : undefined,
                     LastInboundGroupNumber: inboundData != undefined ? inboundData.lastInboundGroupNumber : undefined,
                     LastOutboundGroupNumber: outboundData != undefined ? outboundData.lastOutboundGroupNumber : undefined,
-                    Difference: $scope.scopeModel.difference
+                    Difference: $scope.scopeModel.difference,
+                    CurrencyId: currencyDirectiveAPI.getSelectedIds()
                 }
             };
             return obj;

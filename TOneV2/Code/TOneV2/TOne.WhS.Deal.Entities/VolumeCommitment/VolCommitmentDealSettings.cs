@@ -9,7 +9,6 @@ namespace TOne.WhS.Deal.Entities
 {
     public enum VolCommitmentDealType
     {
-
         [Description("Buy")]
         Buy = 0,
 
@@ -19,11 +18,7 @@ namespace TOne.WhS.Deal.Entities
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
-
-        public override Guid ConfigId
-        {
-            get { return VolCommitmentDealSettingsConfigId; }
-        }
+        public override Guid ConfigId { get { return VolCommitmentDealSettingsConfigId; } }
 
         public VolCommitmentDealType DealType { get; set; }
 
@@ -32,6 +27,8 @@ namespace TOne.WhS.Deal.Entities
         public List<VolCommitmentDealItem> Items { get; set; }
 
         public int LastGroupNumber { get; set; }
+
+        public int CurrencyId { get; set; }
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
@@ -106,19 +103,20 @@ namespace TOne.WhS.Deal.Entities
             IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume.HasValue ? itm.UpToVolume.Value : Int32.MaxValue);
 
             List<DealSaleZoneGroupTier> dealSaleZoneGroupTiers = new List<DealSaleZoneGroupTier>();
-
+            int previousVolumeAssigned = 0;
             foreach (VolCommitmentDealItemTier volCommitmentDealItemTier in orderedVolCommitmentDealItemTiers)
             {
                 DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier()
                 {
                     RetroActiveFromTierNumber = volCommitmentDealItemTier.RetroActiveFromTierNumber,
-                    Volume = volCommitmentDealItemTier.UpToVolume.HasValue ? volCommitmentDealItemTier.UpToVolume.Value : Int32.MaxValue,
+                    Volume = volCommitmentDealItemTier.UpToVolume.HasValue ? (volCommitmentDealItemTier.UpToVolume.Value - previousVolumeAssigned) : Int32.MaxValue,
                     TierNumber = tierNumber,
                     Rate = volCommitmentDealItemTier.DefaultRate,
                     ExceptionRates = BuildSaleExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates)
                 };
                 dealSaleZoneGroupTiers.Add(dealSaleZoneGroupTier);
                 tierNumber++;
+                previousVolumeAssigned += dealSaleZoneGroupTier.Volume;
             }
             return dealSaleZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
@@ -173,19 +171,20 @@ namespace TOne.WhS.Deal.Entities
             IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume.HasValue ? itm.UpToVolume.Value : Int32.MaxValue);
 
             List<DealSupplierZoneGroupTier> dealSupplierZoneGroupTiers = new List<DealSupplierZoneGroupTier>();
-
+            int previousVolumeAssigned = 0;
             foreach (VolCommitmentDealItemTier volCommitmentDealItemTier in orderedVolCommitmentDealItemTiers)
             {
                 DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier()
                 {
                     RetroActiveFromTierNumber = volCommitmentDealItemTier.RetroActiveFromTierNumber,
-                    Volume = volCommitmentDealItemTier.UpToVolume.HasValue ? volCommitmentDealItemTier.UpToVolume.Value : Int32.MaxValue,
+                    Volume = volCommitmentDealItemTier.UpToVolume.HasValue ? (volCommitmentDealItemTier.UpToVolume.Value - previousVolumeAssigned) : Int32.MaxValue,
                     TierNumber = tierNumber,
                     Rate = volCommitmentDealItemTier.DefaultRate,
                     ExceptionRates = BuildSupplierExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates)
                 };
                 dealSupplierZoneGroupTiers.Add(dealSupplierZoneGroupTier);
                 tierNumber++;
+                previousVolumeAssigned += dealSupplierZoneGroupTier.Volume;
             }
             return dealSupplierZoneGroupTiers.OrderBy(itm => itm.TierNumber); ;
         }

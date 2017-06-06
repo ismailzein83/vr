@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace TOne.WhS.Deal.Entities
 {
     public enum DealContract
     {
-
         [Description("Balanced Amount")]
         BalancedAmount = 0,
 
@@ -33,11 +31,7 @@ namespace TOne.WhS.Deal.Entities
     public class SwapDealSettings : DealSettings
     {
         public static Guid SwapDealSettingsConfigId = new Guid("63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65");
-
-        public override Guid ConfigId
-        {
-            get { return SwapDealSettingsConfigId; }
-        }
+        public override Guid ConfigId { get { return SwapDealSettingsConfigId; } }
 
         public int CarrierAccountId { get; set; }
 
@@ -56,6 +50,8 @@ namespace TOne.WhS.Deal.Entities
         public int LastOutboundGroupNumber { get; set; }
 
         public int GracePeriod { get; set; }
+
+        public int CurrencyId { get; set; }
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
