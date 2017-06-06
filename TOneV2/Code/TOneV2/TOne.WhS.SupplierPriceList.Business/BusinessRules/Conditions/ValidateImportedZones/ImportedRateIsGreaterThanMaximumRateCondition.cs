@@ -20,18 +20,25 @@ namespace TOne.WhS.SupplierPriceList.Business.BusinessRules
             ImportedZone importedZone = context.Target as ImportedZone;
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
             var errorMessages = new List<string>();
-            if (importedZone.ImportedNormalRate != null && importedZone.ImportedNormalRate.Rate > importSPLContext.MaximumRate)
+
+            if (importedZone.ImportedNormalRate != null)
             {
-                errorMessages.Add(string.Format("Normal '{0}'", importedZone.ImportedNormalRate.Rate));
+                var currencyId = importSPLContext.GetImportedRateCurrencyId(importedZone.ImportedNormalRate);
+                var convertedMaximumRate = importSPLContext.GetMaximumRateConverted(currencyId);
+                if (importedZone.ImportedNormalRate.Rate > convertedMaximumRate)
+                    errorMessages.Add(string.Format("Normal '{0}'", importedZone.ImportedNormalRate.Rate));
             }
 
             if (importedZone.ImportedOtherRates.Values != null)
             {
+                //--OTher Rate
                 var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
 
                 foreach (ImportedRate otherImportedRate in importedZone.ImportedOtherRates.Values)
                 {
-                    if (otherImportedRate.Rate > importSPLContext.MaximumRate)
+                    var currencyId = importSPLContext.GetImportedRateCurrencyId(importedZone.ImportedNormalRate);
+                    var convertedMaximumRate = importSPLContext.GetMaximumRateConverted(currencyId);
+                    if (otherImportedRate.Rate > convertedMaximumRate)
                     {
                         string rateTypeName = rateTypeManager.GetRateTypeName(otherImportedRate.RateTypeId.Value);
                         if (rateTypeName != null)
@@ -45,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.Business.BusinessRules
                 context.Message = string.Format("The following rates of zone '{0}' are greater than the maximum rate '{1}': {2}", importedZone.ZoneName, importSPLContext.MaximumRate, string.Join(", ", errorMessages));
                 return false;
             }
-           
+
 
             return true;
         }
