@@ -43,7 +43,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidRateTypeNames.Count > 0)
             {
-                context.Message = string.Format("New rates of types'{0}' of zone '{1}' cannot be closed", string.Join(",", invalidRateTypeNames, zoneData.ZoneName));
+                context.Message = string.Format("New rates of types'{0}' of zone '{1}' cannot be closed", string.Join(",", invalidRateTypeNames), zoneData.ZoneName);
                 return false;
             }
 
