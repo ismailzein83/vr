@@ -136,9 +136,16 @@ namespace TOne.WhS.CodePreparation.Business
             currencyId = null;
             if (existingRates == null || !existingRates.Any()) return 0;
 
-            var highestRate = existingRates.Max();
-            currencyId = saleRateManager.GetCurrencyId(highestRate.RateEntity);
-            return highestRate.RateEntity.Rate;
+            decimal highestRate = 0;
+            foreach (var existingRate in existingRates)
+            {
+                if (existingRate.RateEntity.Rate > highestRate)
+                {
+                    highestRate = existingRate.RateEntity.Rate;
+                    currencyId = existingRate.RateEntity.CurrencyId;
+                }
+            }
+            return highestRate;
         }
 
     }
