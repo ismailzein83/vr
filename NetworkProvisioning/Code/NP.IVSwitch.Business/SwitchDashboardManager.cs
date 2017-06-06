@@ -171,6 +171,7 @@ namespace NP.IVSwitch.Business
 
                     liveDashboardResult.TopCustomersResult.CustomerResults.Add(new CustomerResult
                     {
+                        CustomerId = customer.Value is int ? (int)customer.Value : 0,
                         CustomerName = customer.Name !=null?customer.Name:"Null",
                         CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
@@ -223,6 +224,7 @@ namespace NP.IVSwitch.Business
 
                     liveDashboardResult.TopSuppliersResult.SupplierResults.Add(new SupplierResult
                     {
+                        SupplierId = (supplier.Value is int) ? (int)supplier.Value : 0,
                         SupplierName = supplier.Name != null ? supplier.Name : "Null",
                         CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
