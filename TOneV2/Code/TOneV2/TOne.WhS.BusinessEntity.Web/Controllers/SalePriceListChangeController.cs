@@ -48,9 +48,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             var salePriceListManager = new SalePriceListManager();
             var priceList = salePriceListManager.GetPriceList(priceListId);
-
-            var carrierAccountManager = new CarrierAccountManager();
-            return (int)carrierAccountManager.GetPriceListType(priceList.OwnerId);
+            return (int)priceList.PriceListType;
         }
 
         [HttpGet]
@@ -68,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             var pricelist = salePriceListManager.GetPriceList(priceListId);
             return salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { pricelist.OwnerId }, null);
-           
+
         }
 
         [HttpGet]
