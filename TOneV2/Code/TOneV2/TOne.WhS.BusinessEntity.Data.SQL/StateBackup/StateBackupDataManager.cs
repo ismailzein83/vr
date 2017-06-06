@@ -70,10 +70,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Update", stateBackupId, DateTime.Now, userId);
-
                 string restoreCommand = _stateBackupBehavior.GetRestoreCommands(stateBackup.StateBackupId);
                 ExecuteNonQueryText(restoreCommand, null);
+
+                ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Update", stateBackupId, DateTime.Now, userId);
 
                 scope.Complete();
                 result = true;
