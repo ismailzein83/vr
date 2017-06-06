@@ -142,7 +142,7 @@ namespace TOne.WhS.CodePreparation.Business
                 if (existingRate.RateEntity.Rate > highestRate)
                 {
                     highestRate = existingRate.RateEntity.Rate;
-                    currencyId = existingRate.RateEntity.CurrencyId;
+                    currencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
                 }
             }
             return highestRate;
