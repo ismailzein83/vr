@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.Data.SQL
         public void UpdateDealProgresses(List<DealProgress> dealProgresses)
         {
             DataTable dtDealProgress = BuildDealZoneGroupTable(dealProgresses);
-            ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Update]", (cmd) =>
+            ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Update]", (cmd) => 
             {
                 var dtPrm = new SqlParameter("@DealProgresses", SqlDbType.Structured);
                 dtPrm.Value = dtDealProgress;
@@ -57,7 +57,7 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #endregion
 
-        #region private methods
+        #region Private Methods
 
         DataTable BuildDealZoneGroupTable(List<DealProgress> dealProgresses)
         {
@@ -114,6 +114,7 @@ namespace TOne.WhS.Deal.Data.SQL
             dtDealZoneGroup.Columns.Add("ZoneGroupNb", typeof(Int32));
             return dtDealZoneGroup;
         }
+
         #endregion
 
         #region  Mappers
