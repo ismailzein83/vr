@@ -848,7 +848,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
             {
                 CustomerChanges = new List<CustomerPriceListChange> { customerPriceListChange },
-                EffectiveDate = salePriceList.CreatedTime,
+                EffectiveDate = salePriceList.CreatedTime.Date,
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = salePriceList.ProcessInstanceId
             };
