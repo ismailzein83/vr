@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace TOne.WhS.Deal.Entities
 {
     public class DealProgress
@@ -20,5 +21,28 @@ namespace TOne.WhS.Deal.Entities
         public bool IsComplete { get { return TargetDurationInSeconds == ReachedDurationInSeconds; } }
 
         public DateTime CreatedTime { get; set; }
+
+        public bool IsEqual(DealProgress dealProgress)
+        {
+            if (DealID != dealProgress.DealID)
+                return false;
+
+            if (ZoneGroupNb != dealProgress.ZoneGroupNb)
+                return false;
+
+            if (ReachedDurationInSeconds != dealProgress.ReachedDurationInSeconds)
+                return false;
+
+            if (TargetDurationInSeconds != dealProgress.TargetDurationInSeconds)
+                return false;
+
+            if (CurrentTierNb != dealProgress.CurrentTierNb)
+                return false;
+
+            if (IsSale != dealProgress.IsSale)
+                return false;
+
+            return true;
+        }
     }
 }
