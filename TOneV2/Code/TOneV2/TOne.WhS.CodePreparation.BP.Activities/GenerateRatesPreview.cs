@@ -83,7 +83,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 OwnerId = rateToAdd.PriceListToAdd.OwnerId,
                 Rate = rateToAdd.Rate,
                 BED = GetRateToAddBED(rateToAdd.AddedRates),
-                EED = GetRateToAddEED(rateToAdd.AddedRates)
+                EED = GetRateToAddEED(rateToAdd.AddedRates),
+                CurrencyId = rateToAdd.CurrencyId
             };
         }
 

@@ -13,7 +13,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 {
     public class SaleRatePreviewDataManager : BaseTOneDataManager, ISaleRatePreviewDataManager
     {
-        readonly string[] _columns = { "ProcessInstanceID", "ZoneName", "OwnerType", "OwnerID", "Rate", "BED", "EED" };
+        readonly string[] _columns = { "ProcessInstanceID", "ZoneName", "OwnerType", "OwnerID", "Rate", "BED", "EED", "CurrencyID" };
 
         public long ProcessInstanceId
         {
@@ -40,7 +40,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
             return GetItemsSP("[TOneWhs_CP].[sp_SaleRate_Preview_GetFiltered]", RatePreviewMapper, query.ProcessInstanceId, query.ZoneName);
         }
- 
+
 
         object Vanrise.Data.IBulkApplyDataManager<RatePreview>.InitialiazeStreamForDBApply()
         {
@@ -50,14 +50,15 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         public void WriteRecordToStream(RatePreview record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
                 _processInstanceID,
                 record.ZoneName,
                 (int)record.OnwerType,
                 record.OwnerId,
                 decimal.Round(record.Rate, 8),
                GetDateTimeForBCP(record.BED),
-               GetDateTimeForBCP(record.EED));
+               GetDateTimeForBCP(record.EED),
+               record.CurrencyId);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -81,10 +82,11 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             RatePreview ratePreview = new RatePreview
             {
                 OnwerType = (SalePriceListOwnerType)GetReaderValue<byte>(reader, "OwnerType"),
-                OwnerId = (int) reader["OwnerID"],
-                Rate = (decimal) reader["Rate"],
-                BED = (DateTime) reader["BED"],
-                EED = GetReaderValue<DateTime?>(reader, "EED")
+                OwnerId = (int)reader["OwnerID"],
+                Rate = (decimal)reader["Rate"],
+                BED = (DateTime)reader["BED"],
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CurrencyId = (int)reader["CurrencyID"]
             };
             return ratePreview;
         }

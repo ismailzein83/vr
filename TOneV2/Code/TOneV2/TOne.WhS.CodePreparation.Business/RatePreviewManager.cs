@@ -17,7 +17,7 @@ namespace TOne.WhS.CodePreparation.Business
     {
 
         #region ctor/Local Variables
-    
+
         SellingProductManager _sellingProductManager;
         CarrierAccountManager _carrierAccountManager;
         public RatePreviewManager()
@@ -62,10 +62,13 @@ namespace TOne.WhS.CodePreparation.Business
         #region Private Mappers
         private RatePreviewDetail RatePreviewDetailMapper(RatePreview ratePreview)
         {
+            CurrencyManager currencyManager = new CurrencyManager();
             RatePreviewDetail ratePreviewDetail = new RatePreviewDetail();
             ratePreviewDetail.Entity = ratePreview;
             ratePreviewDetail.OwnerName = GetOwnerName(ratePreview);
             ratePreviewDetail.OwnerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription(ratePreview.OnwerType);
+            if (ratePreview.CurrencyId.HasValue)
+                ratePreviewDetail.CurrencySymbol = currencyManager.GetCurrencySymbol(ratePreview.CurrencyId.Value);
             return ratePreviewDetail;
         }
 
@@ -81,6 +84,6 @@ namespace TOne.WhS.CodePreparation.Business
         }
 
         #endregion
-       
+
     }
 }

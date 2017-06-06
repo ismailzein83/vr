@@ -18,12 +18,13 @@ namespace TOne.WhS.CodePreparation.Entities
         public RateChangeType ChangeType { get; set; }
 
         public int OwnerId { get; set; }
-        
+
         public decimal Rate { get; set; }
-        
+
         public DateTime BED { get; set; }
-        
+
         public DateTime? EED { get; set; }
+        public int? CurrencyId { get; set; }
     }
 
     public class RatePreviewDetail
@@ -33,5 +34,6 @@ namespace TOne.WhS.CodePreparation.Entities
         public string OwnerTypeDescription { get; set; }
 
         public string OwnerName { get; set; }
+        public string CurrencySymbol { get; set; }
     }
 }
