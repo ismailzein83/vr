@@ -103,7 +103,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     BED = rate.BED,
                     RecentRate = rate.RecentRate,
                     EED = rate.EED,
-                    RoutingProductId = rate.RoutingProductId
+                    RoutingProductId = rate.RoutingProductId,
+                    CurrencyId = rate.CurrencyId
                 }));
                 todbSaleRoutingProductchanges.AddRange(priceListChange.RoutingProductChanges.Select(
                     routingProduct => new SalePricelistRPChange
@@ -191,7 +192,8 @@ namespace TOne.WhS.BusinessEntity.Business
         private SalePricelistRateChangeDetail SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)
         {
             RoutingProductManager routingProductManager = new RoutingProductManager();
-            return new SalePricelistRateChangeDetail
+            CurrencyManager currencyManager = new CurrencyManager();
+            var salePricelistRateChangeDetail = new SalePricelistRateChangeDetail
             {
                 ZoneName = salePricelistRateChange.ZoneName,
                 BED = salePricelistRateChange.BED,
@@ -202,8 +204,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     ? routingProductManager.GetDefaultServiceIds(salePricelistRateChange.RoutingProductId)
                     : routingProductManager.GetZoneServiceIds(salePricelistRateChange.RoutingProductId,
                         salePricelistRateChange.ZoneId.Value)
-
             };
+            if (salePricelistRateChange.CurrencyId.HasValue)
+                salePricelistRateChangeDetail.CurrencySymbol = currencyManager.GetCurrencySymbol(salePricelistRateChange.CurrencyId.Value);
+
+            return salePricelistRateChangeDetail;
         }
         private SalePricelistCodeChange SalePricelistCodeChangeDetailMapper(SalePricelistCodeChange salePricelistCodeChange)
         {

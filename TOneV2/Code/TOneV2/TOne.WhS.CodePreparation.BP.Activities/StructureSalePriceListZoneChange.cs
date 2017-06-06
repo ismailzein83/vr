@@ -48,15 +48,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 IEnumerable<RoutingCustomerInfoDetails> customersInfoDetails = GetCustomersInfoDetails(customersForThisSellingNumberPlan, effectiveDate);
                 Dictionary<int, RoutingCustomerInfoDetails> infoDetailsByCustomerId = customersInfoDetails.ToDictionary(x => x.CustomerId);
 
-                SaleEntityZoneRateLocator futureRateLocator = null;
+                SaleEntityZoneRateLocator lastRateNoCacheLocator = null;
                 IEnumerable<ZoneToProcess> allZonesToClose = allCountryActions.SelectMany(x => x.ZonesToClose);
                 if (allZonesToClose.Any())
                 {
-                    futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customersInfoDetails, effectiveDate, true));
+                    lastRateNoCacheLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(customersInfoDetails, effectiveDate));
                 }
 
                 allCustomersPricelistChanges = GetCustomerPriceListChanges(allCountryActions, customersForThisSellingNumberPlan, ratesToAddLocator,
-                     futureRateLocator, infoDetailsByCustomerId, effectiveDate);
+                     lastRateNoCacheLocator, infoDetailsByCustomerId, effectiveDate);
             }
 
             CustomerChange.Set(context, allCustomersPricelistChanges);
@@ -131,7 +131,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         }
 
         private List<CustomerPriceListChange> GetCustomerPriceListChanges(IEnumerable<StructuredCountryActions> allCountryActions, IEnumerable<CarrierAccountInfo> customers,
-            SaleEntityZoneRateLocator ratesToAddLocator, SaleEntityZoneRateLocator futureRateLocator, Dictionary<int, RoutingCustomerInfoDetails> infoDetailsByCustomerId,
+            SaleEntityZoneRateLocator ratesToAddLocator, SaleEntityZoneRateLocator lastRateNoCacheLocator, Dictionary<int, RoutingCustomerInfoDetails> infoDetailsByCustomerId,
             DateTime effectiveDate)
         {
             var customerPriceListChanges = new List<CustomerPriceListChange>();
@@ -170,7 +170,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     changesForThisCustomer.RoutingProductChanges.AddRange(GetRPChangesFromNewRateChange(newRateChanges, defaultRoutingProduct));
                     changesForThisCustomer.RateChanges.AddRange(newRateChanges);
                     changesForThisCustomer.RateChanges.AddRange(
-                        this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, futureRateLocator, countryAction.CountryId, customerId, sellingProductId));
+                        this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, lastRateNoCacheLocator, countryAction.CountryId, customerId, sellingProductId));
 
                     changesForThisCustomer.CodeChanges.AddRange(this.GetCodeChangesFromCodeToAdd(countryAction.CodesToAdd, countryAction.CountryId));
                     changesForThisCustomer.CodeChanges.AddRange(this.GetCodeChangesFromCodeToMove(countryAction.CodesToMove, countryAction.CountryId));
@@ -201,7 +201,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     Rate = rateToSend.Rate.Rate,
                     ChangeType = RateChangeType.New,
                     BED = rateToSend.Rate.BED,
-                    RoutingProductId = defaultRoutingProductId
+                    RoutingProductId = defaultRoutingProductId,
+                    CurrencyId = rateToSend.Rate.CurrencyId
                 });
             }
 
@@ -221,7 +222,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }).ToList();
             return routingProductchanges;
         }
-        private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToProcess> zonesToClose, SaleEntityZoneRateLocator futureRateLocator, int countryId, int customerId, int sellingProductId)
+        private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToProcess> zonesToClose, SaleEntityZoneRateLocator lastRateNoCacheLocator, int countryId, int customerId, int sellingProductId)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
 
@@ -247,7 +248,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 if (existingZoneAtCloureTime == null)
                     throw new DataIntegrityValidationException(string.Format("Could not find existing zone at closure time for Zone {0}", zoneToClose.ZoneName));
 
-                var closedRate = futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, existingZoneAtCloureTime.ZoneId);
+                var closedRate = lastRateNoCacheLocator.GetCustomerZoneRate(customerId, sellingProductId, existingZoneAtCloureTime.ZoneId);
                 if (closedRate == null)
                     throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneToClose.ZoneName));
 
@@ -258,7 +259,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     Rate = closedRate.Rate.Rate,
                     ChangeType = RateChangeType.Deleted,
                     BED = closedRate.Rate.BED, //TODO: The same gap in Rate Plan when it is a selling product rate the BED is not correclt the same as the one on customer side
-                    EED = zoneToClose.EED
+                    EED = zoneToClose.EED,
+                    CurrencyId = closedRate.Rate.CurrencyId
                 });
             }
 

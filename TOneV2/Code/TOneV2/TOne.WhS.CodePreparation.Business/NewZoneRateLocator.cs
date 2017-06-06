@@ -86,6 +86,7 @@ namespace TOne.WhS.CodePreparation.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
+
             List<ExistingRate> effectiveExistingRates;
             foreach (ExistingZone existingZone in matchedZones)
             {
@@ -115,41 +116,29 @@ namespace TOne.WhS.CodePreparation.Business
             while (e.MoveNext())
             {
                 Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
-                int ownerCurrencyId = GetCurrencyForNewRate(owner.OwnerId, owner.OwnerType);
-
-                NewZoneRateEntity zoneRate = new NewZoneRateEntity()
+                int? currencyId;
+                Decimal zoneRateValue = GetHighestRate(e.Current.Value, out currencyId);
+                NewZoneRateEntity zoneRate = new NewZoneRateEntity
                 {
                     OwnerId = owner.OwnerId,
                     OwnerType = owner.OwnerType,
-                    CurrencyId = ownerCurrencyId,
-                    Rate = this.GetHighestRate(e.Current.Value, ownerCurrencyId)
+                    CurrencyId = currencyId,
+                    Rate = zoneRateValue
                 };
-
                 ratesEntities.Add(zoneRate);
             }
-
             return ratesEntities;
         }
 
-        private Decimal GetHighestRate(IEnumerable<ExistingRate> existingRates, int targetCurrencyId)
+        private Decimal GetHighestRate(IEnumerable<ExistingRate> existingRates, out int? currencyId)
         {
-            if (existingRates != null && existingRates.Count() > 0)
-            {
-                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                SaleRateManager saleRateManager = new SaleRateManager();
-                List<decimal> convertedRates = new List<decimal>();
+            SaleRateManager saleRateManager = new SaleRateManager();
+            currencyId = null;
+            if (existingRates == null || !existingRates.Any()) return 0;
 
-                foreach (ExistingRate item in existingRates)
-                {
-                    int rateCurrencyId = saleRateManager.GetCurrencyId(item.RateEntity);
-                    decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(item.RateEntity.Rate, rateCurrencyId, targetCurrencyId, DateTime.Now);
-                    convertedRates.Add(convertedRate);
-                }
-
-                return convertedRates.Max();
-            }
-
-            return 0;
+            var highestRate = existingRates.Max();
+            currencyId = saleRateManager.GetCurrencyId(highestRate.RateEntity);
+            return highestRate.RateEntity.Rate;
         }
 
     }

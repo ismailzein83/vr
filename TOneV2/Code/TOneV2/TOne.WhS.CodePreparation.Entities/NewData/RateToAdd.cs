@@ -13,12 +13,14 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public PriceListToAdd PriceListToAdd { get; set; }
 
         public decimal Rate { get; set; }
+        public int? CurrencyId { get; set; }
 
         private List<AddedRate> _addedRate = new List<AddedRate>();
 
         public List<AddedRate> AddedRates
         {
-            get {
+            get
+            {
                 return this._addedRate;
             }
         }

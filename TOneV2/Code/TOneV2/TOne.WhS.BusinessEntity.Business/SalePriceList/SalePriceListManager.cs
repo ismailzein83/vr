@@ -483,7 +483,8 @@ namespace TOne.WhS.BusinessEntity.Business
                             Rate = rateChange.Rate,
                             BED = rateChange.BED,
                             RateChangeType = rateChange.ChangeType,
-                            EED = rateChange.EED
+                            EED = rateChange.EED,
+                            CurrencyId = rateChange.CurrencyId
                         };
                     }
                     else
@@ -499,6 +500,7 @@ namespace TOne.WhS.BusinessEntity.Business
         private SalePLRateNotification GetRateNotificationFromExistingData(int customerId, int sellingProductId, long zoneId, string zoneName, SaleEntityZoneRateLocator futureLocator)
         {
             SaleEntityZoneRate zoneRate = futureLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+            SaleRateManager saleRateManager = new SaleRateManager();
             if (zoneRate == null)
                 throw new DataIntegrityValidationException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate", zoneName));
 
@@ -507,7 +509,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 Rate = zoneRate.Rate.Rate,
                 BED = zoneRate.Rate.BED,
                 EED = zoneRate.Rate.EED,
-                RateChangeType = zoneRate.Rate.RateChange
+                RateChangeType = zoneRate.Rate.RateChange,
+                CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
             };
         }
 

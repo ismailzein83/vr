@@ -14,5 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public RateChangeType ChangeType { get; set; }
+        public string CurrencySymbol { get; set; }
     }
 }

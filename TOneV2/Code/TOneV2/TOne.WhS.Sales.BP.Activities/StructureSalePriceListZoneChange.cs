@@ -10,6 +10,7 @@ using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
@@ -66,14 +67,15 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     #region Selling Product
 
-                    var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
+                    //var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
+                    var lastRateNoCachelocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomer, ratePlanContext.EffectiveDate));
 
                     SellingProductChangesContext sellingProductContext = new SellingProductChangesContext
                     {
                         ImportedZonesByCountryId = importedZonesByCountryId,
                         ExistingZonesByCountryId = existingZonesByCountryId,
                         Customers = dataByCustomer,
-                        FutureLocator = futureRateLocator,
+                        LastRateNoCachelocator = lastRateNoCachelocator,
                         MinimumDate = minimumDate,
                         EffectiveRoutingProductLocator = effectiveRoutingProductLocator,
                         CurrentRoutingProductLocator = currenRoutingProductLocator
@@ -143,7 +145,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             CustomerInfo = customerInfo,
                             MinimumDate = minimumDate,
                             RatesToAddForNewCountriesbyCountryId = structuredZoneActions.RatesToAddForNewCountriesbyCountryId,
-                            SaleCodesByZoneId = saleCodesByZoneId
+                            SaleCodesByZoneId = saleCodesByZoneId,
+                            CurrencyId = ratePlanContext.CurrencyId
                         };
 
                         this.GetChangesForNewCountries(customerNewCountriesContext);
@@ -165,7 +168,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             CustomerInfo = customerInfo,
                             ProcessEffectiveDate = ratePlanContext.EffectiveDate,
                             RateChangeLocator = rateChangeLocator,
-                            SaleCodesByZoneId = saleCodesByZoneId
+                            SaleCodesByZoneId = saleCodesByZoneId,
+                            CurrencyId = ratePlanContext.CurrencyId
                         };
 
                         this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
@@ -186,9 +190,9 @@ namespace TOne.WhS.Sales.BP.Activities
                         {
                             CustomerInfo = customerInfo,
                             RateChangeLocator = rateChangeLocator,
-                            StructuredRateActions = structuredZoneActions
+                            StructuredRateActions = structuredZoneActions,
+                            CurrencyId = ratePlanContext.CurrencyId
                         };
-
                         this.GetChangesForRateActions(customerRateActionContext);
                         changesForThisCustomer.RateChanges.AddRange(customerRateActionContext.RateChangesOutArgument);
                     }
@@ -238,7 +242,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     continue;
 
                 List<SalePricelistRateChange> rateChanges = this.GetRateChangesForCustomer(customer.CustomerId, customer.SellingProductId, soldCountries.Select(x => x.CountryId),
-                    context.ImportedZonesByCountryId, context.FutureLocator);
+                    context.ImportedZonesByCountryId, context.LastRateNoCachelocator);
 
                 IEnumerable<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customer.CustomerId, customer.SellingProductId,
                     soldCountries.Select(itm => itm.CountryId), context.ExistingZonesByCountryId, context.EffectiveRoutingProductLocator, context.CurrentRoutingProductLocator);
@@ -263,9 +267,10 @@ namespace TOne.WhS.Sales.BP.Activities
         }
 
         private List<SalePricelistRateChange> GetRateChangesForCustomer(int customerId, int sellingProductId, IEnumerable<int> soldCountriesIds,
-            Dictionary<int, List<DataByZone>> importedZonesByCountryId, SaleEntityZoneRateLocator futureLocator)
+            Dictionary<int, List<DataByZone>> importedZonesByCountryId, SaleEntityZoneRateLocator lastRateNoCachelocator)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
+            var saleRateManager = new SaleRateManager();
 
             foreach (int countryId in soldCountriesIds)
             {
@@ -276,7 +281,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 foreach (var zone in zones)
                 {
-                    SaleEntityZoneRate zoneRate = futureLocator.GetCustomerZoneRate(customerId, sellingProductId, zone.ZoneId);
+                    SaleEntityZoneRate zoneRate = lastRateNoCachelocator.GetCustomerZoneRate(customerId, sellingProductId, zone.ZoneId);
 
                     if (zoneRate != null && zoneRate.Source == SalePriceListOwnerType.Customer)
                         continue; // customer has explicit rate and no need to notify him with this change
@@ -291,7 +296,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             Rate = zone.NormalRateToChange.NormalRate,
                             ChangeType = zone.NormalRateToChange.ChangeType,
                             BED = zone.NormalRateToChange.BED,
-                            EED = zone.NormalRateToChange.EED
+                            EED = zone.NormalRateToChange.EED,
+                            CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                         };
 
                         if (zone.NormalRateToChange.RecentExistingRate != null)
@@ -315,7 +321,8 @@ namespace TOne.WhS.Sales.BP.Activities
             context.CodeChangesOutArgument = new List<SalePricelistCodeChange>();
 
             var lastRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(new List<RoutingCustomerInfoDetails> { context.CustomerInfo }, context.MinimumDate));
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            var saleZoneManager = new SaleZoneManager();
+            var saleRateManager = new SaleRateManager();
 
             foreach (var countryToAdd in context.CountriesToAdd)
             {
@@ -337,7 +344,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             Rate = rate.NormalRate,
                             ChangeType = RateChangeType.New,
                             BED = rate.BED,
-                            EED = rate.EED
+                            EED = rate.EED,
+                            CurrencyId = rate.CurrencyId
                         });
                     }
                 }
@@ -367,7 +375,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             ZoneName = zoneName,
                             Rate = zoneRate.Rate.Rate,
                             ChangeType = RateChangeType.New,
-                            BED = countryToAdd.BED
+                            BED = countryToAdd.BED,
+                            CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                         });
 
                     }
@@ -412,6 +421,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+            var saleRateManager = new SaleRateManager();
 
             foreach (var countryToClose in context.CountriesToClose)
             {
@@ -435,7 +445,8 @@ namespace TOne.WhS.Sales.BP.Activities
                         Rate = zoneRate.Rate.Rate,
                         ChangeType = RateChangeType.Deleted,
                         BED = zoneRate.Rate.BED, //TODO: There is a gap here that we need to fix, if the rate is got from selling product BED is not exaclty the one we sent to customer
-                        EED = countryToClose.CloseEffectiveDate
+                        EED = countryToClose.CloseEffectiveDate,
+                        CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                     });
 
                     #endregion
@@ -468,7 +479,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             context.RateChangesOutArgument = new List<SalePricelistRateChange>();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-
+            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            var saleRateManager = new SaleRateManager();
             #region Processing Rate To Change Increase and Decrease
 
             foreach (var rateToChange in context.StructuredRateActions.RatesToChange)
@@ -476,6 +488,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToChange.ZoneId);
                 if (countryId == null)
                     throw new DataIntegrityValidationException(string.Format("Zone with Id {0} is not assigned to any country", rateToChange.ZoneId));
+
 
                 context.RateChangesOutArgument.Add(new SalePricelistRateChange
                 {
@@ -486,7 +499,8 @@ namespace TOne.WhS.Sales.BP.Activities
                     RecentRate = rateToChange.RecentExistingRate.ConvertedRate,
                     ChangeType = rateToChange.ChangeType,
                     BED = rateToChange.BED,
-                    EED = rateToChange.EED
+                    EED = rateToChange.EED,
+                    CurrencyId = context.CurrencyId
                 });
             }
 
@@ -504,17 +518,22 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (recentRate == null)
                     throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToAdd.ZoneName));
 
-                context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                var salePricelistRateChange = new SalePricelistRateChange
                 {
                     CountryId = countryId.Value,
                     ZoneId = rateToAdd.ZoneId,
                     ZoneName = rateToAdd.ZoneName,
                     Rate = rateToAdd.NormalRate,
-                    RecentRate = recentRate.Rate.Rate,
-                    ChangeType = recentRate.Rate.Rate > rateToAdd.NormalRate ? RateChangeType.Decrease : RateChangeType.Increase,
+                    RecentRate = currencyExchangeRateManager.ConvertValueToCurrency(recentRate.Rate.Rate,
+                            saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now),
                     BED = rateToAdd.BED,
-                    EED = null
-                });
+                    EED = null,
+                    CurrencyId = context.CurrencyId
+                };
+                salePricelistRateChange.ChangeType = salePricelistRateChange.RecentRate.Value > rateToAdd.NormalRate
+                    ? RateChangeType.Decrease
+                    : RateChangeType.Increase;
+                context.RateChangesOutArgument.Add(salePricelistRateChange);
             }
 
             #endregion
@@ -533,17 +552,23 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 var recentRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, rateToClose.ZoneId);
 
-                context.RateChangesOutArgument.Add(new SalePricelistRateChange
+                var salePriceListRateChange = new SalePricelistRateChange
                 {
                     CountryId = countryId.Value,
                     ZoneId = rateToClose.ZoneId,
                     ZoneName = rateToClose.ZoneName,
-                    Rate = newRate.Rate.Rate,
-                    RecentRate = recentRate.Rate.Rate,
-                    ChangeType = recentRate.Rate.Rate > newRate.Rate.Rate ? RateChangeType.Decrease : RateChangeType.Increase,
+                    Rate = currencyExchangeRateManager.ConvertValueToCurrency(newRate.Rate.Rate,
+                        saleRateManager.GetCurrencyId(newRate.Rate), context.CurrencyId, DateTime.Now),
+                    RecentRate = currencyExchangeRateManager.ConvertValueToCurrency(recentRate.Rate.Rate,
+                        saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now),
                     BED = rateToClose.CloseEffectiveDate,
-                    EED = null
-                });
+                    EED = null,
+                    CurrencyId = saleRateManager.GetCurrencyId(newRate.Rate)
+                };
+                salePriceListRateChange.ChangeType = salePriceListRateChange.Rate > salePriceListRateChange.RecentRate
+                    ? RateChangeType.Decrease
+                    : RateChangeType.Increase;
+                context.RateChangesOutArgument.Add(salePriceListRateChange);
             }
 
             #endregion
@@ -567,7 +592,12 @@ namespace TOne.WhS.Sales.BP.Activities
                 else
                 {
                     var saleEntityZoneRoutingProduct = routingProductLocatorByRateBED.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);
-                    rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
+                    if (saleEntityZoneRoutingProduct != null)
+                        rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
+                    else
+                    {
+                        throw new Exception(string.Format("No routing product assigned for customer {0}", customerId));
+                    }
                 }
 
             }
@@ -929,7 +959,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public Dictionary<int, List<SaleZone>> ExistingZonesByCountryId { get; set; }
 
             public IEnumerable<RoutingCustomerInfoDetails> Customers { get; set; }
-            public SaleEntityZoneRateLocator FutureLocator { get; set; }
+            public SaleEntityZoneRateLocator LastRateNoCachelocator { get; set; }
             public SaleEntityZoneRoutingProductLocator EffectiveRoutingProductLocator { get; set; }
             public SaleEntityZoneRoutingProductLocator CurrentRoutingProductLocator { get; set; }
             public DateTime MinimumDate { get; set; }
@@ -950,6 +980,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public Dictionary<int, List<RateToChange>> RatesToAddForNewCountriesbyCountryId { get; set; }
 
             public DateTime MinimumDate { get; set; }
+            public int CurrencyId { get; set; }
 
             #endregion
 
@@ -977,6 +1008,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public Dictionary<long, List<SaleCode>> SaleCodesByZoneId { get; set; }
 
             public DateTime ProcessEffectiveDate { get; set; }
+            public int CurrencyId { get; set; }
 
             #endregion
 
@@ -998,6 +1030,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public SaleEntityZoneRateLocator RateChangeLocator { get; set; }
 
             public RoutingCustomerInfoDetails CustomerInfo { get; set; }
+            public int CurrencyId { get; set; }
 
             #endregion
 

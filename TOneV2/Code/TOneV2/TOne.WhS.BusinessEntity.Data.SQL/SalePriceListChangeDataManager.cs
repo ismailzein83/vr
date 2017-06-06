@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         };
         private readonly string[] _salePricelistRateChangeColumns =
         {
-            "PricelistId","Rate","RecentRate","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID"
+            "PricelistId","Rate","RecentRate","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID","CurrencyID"
         };
         private readonly string[] _salePricelistCustomerChangeColumns =
         {
@@ -151,7 +151,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             if (streamForBulkInsert != null)
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}",
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}",
                     record.PricelistId,
                     decimal.Round(record.Rate, 8),
                     record.RecentRate.HasValue ? decimal.Round(record.RecentRate.Value, 8) : record.RecentRate,
@@ -162,7 +162,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     processInstanceId,
                     GetDateTimeForBCP(record.BED),
                     GetDateTimeForBCP(record.EED),
-                    record.RoutingProductId);
+                    record.RoutingProductId,
+                    record.CurrencyId);
         }
         private object FinishDBApplyStream(object dbApplyStream, string tableName, string[] columnNames)
         {
@@ -217,7 +218,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ChangeType = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductID")
+                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductID"),
+                CurrencyId = GetReaderValue<int>(reader, "CurrencyID")
             };
         }
         SalePricelistRPChange SalePricelistRPChangeMapper(IDataReader reader)

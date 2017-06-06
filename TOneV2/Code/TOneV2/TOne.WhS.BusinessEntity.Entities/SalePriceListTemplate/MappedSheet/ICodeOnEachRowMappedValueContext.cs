@@ -18,5 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         RateChangeType RateChangeType { get; set; }
         IEnumerable<int> ServicesIds { get; set; }
         object Value { get; set; }
+        int? CurrencyId { get; set; }
     }
 }

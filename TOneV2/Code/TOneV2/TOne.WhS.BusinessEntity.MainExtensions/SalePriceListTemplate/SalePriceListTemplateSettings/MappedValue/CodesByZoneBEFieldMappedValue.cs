@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -17,7 +18,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         RateBED = 4,
         RateEED = 5,
         Services = 6,
-        RateChangeType
+        RateChangeType = 7,
+        Currency = 8
     }
 
     public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
@@ -65,6 +67,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 case CodesByZoneBEFieldType.RateChangeType:
                     if (context.ZoneNotification.Rate != null)
                         context.Value = GetRateChange(context.ZoneNotification.Rate.RateChangeType);
+                    break;
+                case CodesByZoneBEFieldType.Currency:
+                    if (context.ZoneNotification.Rate != null && context.ZoneNotification.Rate.CurrencyId.HasValue)
+                    {
+                        var currencyManager = new CurrencyManager();
+                        context.Value = currencyManager.GetCurrencySymbol(context.ZoneNotification.Rate.CurrencyId.Value);
+                    }
                     break;
             }
         }

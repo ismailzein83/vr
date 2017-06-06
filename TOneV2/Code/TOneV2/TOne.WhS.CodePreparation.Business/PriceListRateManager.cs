@@ -234,7 +234,7 @@ namespace TOne.WhS.CodePreparation.Business
                         OwnerId = zoneRate.OwnerId,
                         OwnerType = zoneRate.OwnerType,
                         EffectiveOn = effectiveDate,
-                        CurrencyId = zoneRate.CurrencyId
+                        CurrencyId = GetOwnerCurreny(zoneRate.OwnerId,zoneRate.OwnerType)
                     };
 
                     priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
@@ -243,12 +243,13 @@ namespace TOne.WhS.CodePreparation.Business
                     {
                         PriceListToAdd = priceListToAdd,
                         Rate = zoneRate.Rate,
-                        ZoneName = zoneToProcess.ZoneName
+                        ZoneName = zoneToProcess.ZoneName,
+                        CurrencyId = zoneRate.CurrencyId
                     };
 
                     foreach (AddedZone addedZone in zoneToProcess.AddedZones)
                     {
-                        rateToAdd.AddedRates.Add(new AddedRate()
+                        rateToAdd.AddedRates.Add(new AddedRate
                         {
                             BED = addedZone.BED,
                             EED = addedZone.EED,
@@ -257,11 +258,20 @@ namespace TOne.WhS.CodePreparation.Business
                             AddedZone = addedZone
                         });
                     }
-
                     zoneToProcess.RatesToAdd.Add(rateToAdd);
                 }
         }
+        private int GetOwnerCurreny(int ownerId, SalePriceListOwnerType ownerType)
+        {
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                CurrencyManager currencyManager = new CurrencyManager();
+                return currencyManager.GetSystemCurrency().CurrencyId;
+            }
 
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            return carrierAccountManager.GetCarrierAccountCurrencyId(ownerId);
+        }
         private void CloseRatesForClosedZones(IEnumerable<ExistingZone> existingZones)
         {
             foreach (var existingZone in existingZones)
