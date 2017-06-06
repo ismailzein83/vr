@@ -89,8 +89,30 @@ namespace TOne.WhS.Deal.Business
             DealSaleZoneGroupTier dealZoneGroupTier = dealSaleZoneGroup.Tiers.Where(itm => itm.TierNumber == tierNb).FirstOrDefault();
             if (dealZoneGroupTier == null)
                 return null;
-         
-            return new DealZoneGroupTier() { TierNumber = dealZoneGroupTier.TierNumber, Volume = dealZoneGroupTier.Volume, Rate = dealZoneGroupTier.Rate, ExceptionRates = BuildSaleExceptionRates(dealZoneGroupTier.ExceptionRates) };
+
+            return BuildDealZoneGroupTier(dealZoneGroupTier);
+        }
+
+        public DealZoneGroupTier GetUpToVolumeDealSaleZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal reachedDurationInSec)
+        {
+            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
+            dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
+
+            DealSaleZoneGroupTier previousDealSaleZoneGroupTier = null;
+
+            foreach (var dealSaleZoneGroupTierItem in dealSaleZoneGroup.Tiers)
+            {
+                if (dealSaleZoneGroupTierItem.Volume > totalReachedDurationInSec)
+                {
+                    reachedDurationInSec = previousDealSaleZoneGroupTier != null ? totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume : totalReachedDurationInSec;
+                    return BuildDealZoneGroupTier(dealSaleZoneGroupTierItem);
+                }
+
+                previousDealSaleZoneGroupTier = dealSaleZoneGroupTierItem;
+            }
+
+            reachedDurationInSec = totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume;
+            return null;
         }
 
         public void FillOrigSupplierValues(dynamic record)
@@ -142,34 +164,34 @@ namespace TOne.WhS.Deal.Business
             if (dealZoneGroupTier == null)
                 return null;
 
-            return new DealZoneGroupTier() { TierNumber = dealZoneGroupTier.TierNumber, Volume = dealZoneGroupTier.Volume, Rate = dealZoneGroupTier.Rate, ExceptionRates = BuildSupplierExceptionRates(dealZoneGroupTier.ExceptionRates) };
+            return BuildDealZoneGroupTier(dealZoneGroupTier);
+        }
+
+        public DealZoneGroupTier GetUpToVolumeDealSupplierZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
+        {
+            DealSupplierZoneGroup dealSupplierZoneGroup = GetDealSupplierZoneGroup(dealId, zoneGroupNb);
+            dealSupplierZoneGroup.Tiers.ThrowIfNull("dealSupplierZoneGroup.Tiers");
+
+            decimal remainingDurationInSec = totalReachedDurationInSec;
+
+            foreach (var dealSupplierZoneGroupTierItem in dealSupplierZoneGroup.Tiers)
+            {
+                remainingDurationInSec -= dealSupplierZoneGroupTierItem.Volume;
+
+                if (remainingDurationInSec < 0)
+                {
+                    tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
+                    return BuildDealZoneGroupTier(dealSupplierZoneGroupTierItem);
+                }
+            }
+
+            tierReachedDurationInSec = 0;
+            return null;
         }
 
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
         {
             throw new NotImplementedException();
-        }
-
-        public DealSaleZoneGroupTier GetUpToVolumeDealSaleZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal reachedDurationInSec)
-        {
-            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
-            dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
-
-            DealSaleZoneGroupTier previousDealSaleZoneGroupTier = null;
-
-            foreach (var dealSaleZoneGroupTierItm in dealSaleZoneGroup.Tiers)
-            {
-                if (dealSaleZoneGroupTierItm.Volume > totalReachedDurationInSec)
-                {
-                    reachedDurationInSec = previousDealSaleZoneGroupTier != null ? totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume : totalReachedDurationInSec;
-                    return dealSaleZoneGroupTierItm;
-                }
-
-                previousDealSaleZoneGroupTier = dealSaleZoneGroupTierItm;
-            }
-
-            reachedDurationInSec = totalReachedDurationInSec - previousDealSaleZoneGroupTier.Volume;
-            return null;
         }
 
         #endregion
@@ -292,7 +314,7 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        private Dictionary<long, decimal> BuildSupplierExceptionRates(List<DealSupplierZoneGroupTierZoneRate> exceptionRates)
+        Dictionary<long, decimal> BuildSupplierExceptionRates(List<DealSupplierZoneGroupTierZoneRate> exceptionRates)
         {
             if (exceptionRates == null || exceptionRates.Count == 0)
                 return null;
@@ -305,7 +327,7 @@ namespace TOne.WhS.Deal.Business
             return exceptionalRates;
         }
 
-        private Dictionary<long, decimal> BuildSaleExceptionRates(List<DealSaleZoneGroupTierZoneRate> exceptionRates)
+        Dictionary<long, decimal> BuildSaleExceptionRates(List<DealSaleZoneGroupTierZoneRate> exceptionRates)
         {
             if (exceptionRates == null || exceptionRates.Count == 0)
                 return null;
@@ -316,6 +338,28 @@ namespace TOne.WhS.Deal.Business
                 exceptionalRates.Add(exceptionRate.ZoneId, exceptionRate.Rate);
             }
             return exceptionalRates;
+        }
+
+        DealZoneGroupTier BuildDealZoneGroupTier(DealSaleZoneGroupTier dealSaleZoneGroupTier)
+        {
+            return new DealZoneGroupTier()
+            {
+                TierNumber = dealSaleZoneGroupTier.TierNumber,
+                Volume = dealSaleZoneGroupTier.Volume,
+                Rate = dealSaleZoneGroupTier.Rate,
+                ExceptionRates = BuildSaleExceptionRates(dealSaleZoneGroupTier.ExceptionRates)
+            };
+        }
+
+        DealZoneGroupTier BuildDealZoneGroupTier(DealSupplierZoneGroupTier dealSupplierZoneGroupTier)
+        {
+            return new DealZoneGroupTier()
+            {
+                TierNumber = dealSupplierZoneGroupTier.TierNumber,
+                Volume = dealSupplierZoneGroupTier.Volume,
+                Rate = dealSupplierZoneGroupTier.Rate,
+                ExceptionRates = BuildSupplierExceptionRates(dealSupplierZoneGroupTier.ExceptionRates)
+            };
         }
 
         #endregion
