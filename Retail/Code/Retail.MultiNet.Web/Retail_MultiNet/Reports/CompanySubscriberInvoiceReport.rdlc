@@ -2304,7 +2304,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!Bank.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2336,7 +2336,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!AccountNumber.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2379,7 +2379,7 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>RDLCRetail</DataSetName>
+        <DataSetName>BankDetails</DataSetName>
         <Top>7.29625in</Top>
         <Left>0.10865in</Left>
         <Height>0.5in</Height>
@@ -2412,8 +2412,8 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>7.85181in</Top>
-        <Left>0.10865in</Left>
+        <Top>8.04387in</Top>
+        <Left>0.10363in</Left>
         <Height>0.68752in</Height>
         <Width>7.83989in</Width>
         <ZIndex>8</ZIndex>
@@ -2552,6 +2552,13 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       </ConnectionProperties>
       <rd:DataSourceID>1ac423be-e212-4f04-bca3-bc4d2ea8d7a7</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="VanriseInvoiceEntities">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>d1e54795-7431-4973-a3de-0636f368d8d6</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="RDLCRetail">
@@ -2636,6 +2643,60 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <rd:TableName>RDLCBranchSummaryDetails</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>GetRDLCBranchSummaryDetailsSchema</rd:ObjectDataSourceSelectMethod>
         <rd:ObjectDataSourceType>Retail.MultiNet.Entities.RDLCBranchSummaryDetails, Retail.MultiNet.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="BankDetails">
+      <Query>
+        <DataSourceName>VanriseInvoiceEntities</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Bank">
+          <DataField>Bank</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyId">
+          <DataField>CurrencyId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyName">
+          <DataField>CurrencyName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountCode">
+          <DataField>AccountCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountHolder">
+          <DataField>AccountHolder</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IBAN">
+          <DataField>IBAN</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Address">
+          <DataField>Address</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AccountNumber">
+          <DataField>AccountNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SwiftCode">
+          <DataField>SwiftCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SortCode">
+          <DataField>SortCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>Vanrise.Invoice.Entities</rd:DataSetName>
+        <rd:TableName>RDLCBankDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetBankDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>Vanrise.Invoice.Entities.RDLCBankDetails, Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

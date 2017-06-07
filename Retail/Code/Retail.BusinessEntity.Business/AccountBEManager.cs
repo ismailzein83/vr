@@ -322,6 +322,13 @@ namespace Retail.BusinessEntity.Business
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             return configManager.GetDefaultCompanySetting();
         }
+        public IEnumerable<Guid> GetBankDetailsIds(long accountId)
+        {
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            var companySettings = GetCompanySetting(accountId);
+            return companySettings.BankDetails;
+        }
+       
         public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
         {
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);

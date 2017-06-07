@@ -31,15 +31,23 @@ namespace Retail.MultiNet.Business
         }
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
+
             switch (context.InfoType)
             {
                 case "MailTemplate":
-                    FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-                    var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Account", financialAccountData.Account);
                     objects.Add("Invoice", context.Invoice);
                     return objects;
+                case "BankDetails":
+                    {
+                        #region BankDetails
+                        AccountBEManager accountBEManager = new AccountBEManager();
+                        return accountBEManager.GetBankDetailsIds(financialAccountData.Account.AccountId);
+                        #endregion
+                    }
 
             }
             return null;
