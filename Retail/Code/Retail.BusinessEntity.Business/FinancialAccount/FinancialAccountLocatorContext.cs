@@ -19,6 +19,13 @@ namespace Retail.BusinessEntity.Business
 
         public string BalanceAccountId { get; set; }
 
-        public Guid BalanceAccountTypeId { get; set; }
+        internal Guid? _balanceAccountTypeId;
+        public Guid BalanceAccountTypeId
+        {
+            set
+            {
+                _balanceAccountTypeId = value;
+            }
+        }
     }
 }

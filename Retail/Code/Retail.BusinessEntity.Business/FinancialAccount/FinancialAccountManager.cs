@@ -164,8 +164,8 @@ namespace Retail.BusinessEntity.Business
                 return new FinancialAccountRuntimeData()
                 {
                     FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
-                    BalanceAccountId = financialAccountLocatorContext.FinancialAccountId.ToString(),
-                    BalanceAccountTypeId = financialAccountLocatorContext.BalanceAccountTypeId
+                    BalanceAccountId = financialAccountLocatorContext.BalanceAccountId,
+                    BalanceAccountTypeId = financialAccountLocatorContext._balanceAccountTypeId
                 };
             }
 
@@ -380,6 +380,7 @@ namespace Retail.BusinessEntity.Business
                             {
                                 FinancialAccount = itm.FinancialAccount,
                                 Account = itm.Account,
+                                FinancialAccountId = itm.FinancialAccountId,
                                 CreditLimit = itm.CreditLimit,
                                 IsInherited = true
                             }).ToList());

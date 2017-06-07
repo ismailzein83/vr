@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -13,17 +14,24 @@ namespace Retail.BusinessEntity.Business
 
         public bool UseFinancialAccountModule { get; set; }
 
+        static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
+
         public override bool TryGetFinancialAccountId(IFinancialAccountLocatorContext context)
         {
             if (this.UseFinancialAccountModule)
             {
                 FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-                FinancialAccountRuntimeData financialAccountData = financialAccountManager.GetAccountFinancialInfo(context.AccountDefinitionId, context.AccountId, context.EffectiveOn);
-                if(financialAccountData != null)
+                FinancialAccountData financialAccountData;
+                if(financialAccountManager.TryGetFinancialAccount(context.AccountDefinitionId, context.AccountId, true, context.EffectiveOn, out financialAccountData))
                 {
-                    context.FinancialAccountId = financialAccountData.FinancialAccountId;
-                    context.BalanceAccountTypeId = financialAccountData.BalanceAccountTypeId;
-                    context.BalanceAccountId = financialAccountData.BalanceAccountId;
+                    context.FinancialAccountId = financialAccountData.Account.AccountId;
+                    var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
+                    financialAccountDefinitionSettings.ThrowIfNull("financialAccountDefinitionSettings", financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
+                    if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
+                    {
+                        context.BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId.Value;
+                        context.BalanceAccountId = financialAccountData.FinancialAccountId;
+                    }
                     return true;
                 }
                 else

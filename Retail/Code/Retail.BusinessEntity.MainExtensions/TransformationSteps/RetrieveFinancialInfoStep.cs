@@ -41,7 +41,7 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", financialAccountRuntimeDataVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
 
-            context.AddCodeToCurrentInstanceExecutionBlock("if({0} > 0)", Amount);
+            context.AddCodeToCurrentInstanceExecutionBlock("if({0}.BalanceAccountTypeId.HasValue && {1} > 0)", financialAccountRuntimeDataVariableName, Amount);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
 
             var updateBalanceRecordVariableName = context.GenerateUniqueMemberName("updateBalanceRecord");

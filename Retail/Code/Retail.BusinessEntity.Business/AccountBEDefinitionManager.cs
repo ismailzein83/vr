@@ -41,107 +41,11 @@ namespace Retail.BusinessEntity.Business
             return businessEntityDefinition.Settings as AccountBEDefinitionSettings;
         }
 
-        private struct GetAccountBEDefinitionSettingsCacheName
-        {
-            public Guid AccountBEDefinitionId { get; set; }
-        }
         public AccountBEDefinitionSettings GetAccountBEDefinitionSettings(Guid accountBEDefinitionId)
         {
-            var cacheName = new GetAccountBEDefinitionSettingsCacheName { AccountBEDefinitionId = accountBEDefinitionId };
-            return s_businessEntityDefinitionManager.GetCachedOrCreate(cacheName, () =>
-            {
-                var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
-
-                if (businessEntityDefinition == null)
-                    throw new NullReferenceException(string.Format("businessEntityDefinition Id : {0}", accountBEDefinitionId));
-
-                if (businessEntityDefinition.Settings == null)
-                    throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", accountBEDefinitionId));
-
-                var businessEntityDefinitionSettings = businessEntityDefinition.Settings as AccountBEDefinitionSettings;
-
-                VRRetailBEVisibilityManager retailBEVisibilityManager = new VRRetailBEVisibilityManager();
-                AccountBEDefinitionSettings accountBEDefinitionSettings = new AccountBEDefinitionSettings();
-                accountBEDefinitionSettings.StatusBEDefinitionId = businessEntityDefinitionSettings.StatusBEDefinitionId;
-
-                //GridColumns
-                Dictionary<string, VRRetailBEVisibilityAccountDefinitionGridColumns> visibleGridColumnsByFieldName;
-
-                if (businessEntityDefinitionSettings.GridDefinition != null && businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions != null)
-                {
-                    if (retailBEVisibilityManager.ShouldApplyGridColumnsVisibility(out visibleGridColumnsByFieldName))
-                    {
-                        accountBEDefinitionSettings.GridDefinition = new AccountGridDefinition();
-                        accountBEDefinitionSettings.GridDefinition.ColumnDefinitions = new List<AccountGridColumnDefinition>();
-
-                        foreach (var gridColumn in businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions)
-                        {
-                            if (IsColumnVisible(visibleGridColumnsByFieldName, gridColumn))
-                                accountBEDefinitionSettings.GridDefinition.ColumnDefinitions.Add(gridColumn);
-                        }
-                    }
-                    else
-                    {
-                        accountBEDefinitionSettings.GridDefinition = businessEntityDefinitionSettings.GridDefinition;
-                    }
-
-                }
-
-                //Views
-                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionView> visibleViewsById;
-
-                if (businessEntityDefinitionSettings.AccountViewDefinitions != null)
-                {
-                    if (retailBEVisibilityManager.ShouldApplyViewsVisibility(out visibleViewsById))
-                    {
-                        accountBEDefinitionSettings.AccountViewDefinitions = new List<AccountViewDefinition>();
-
-                        foreach (var view in businessEntityDefinitionSettings.AccountViewDefinitions)
-                        {
-                            if (IsViewVisible(visibleViewsById, view))
-                                accountBEDefinitionSettings.AccountViewDefinitions.Add(view);
-                        }
-                    }
-                    else
-                    {
-                        accountBEDefinitionSettings.AccountViewDefinitions = businessEntityDefinitionSettings.AccountViewDefinitions;
-                    }
-                }
-
-                //Actions
-                Dictionary<Guid, VRRetailBEVisibilityAccountDefinitionAction> visibleActionsById;
-
-                if (businessEntityDefinitionSettings.ActionDefinitions != null)
-                {
-                    accountBEDefinitionSettings.ActionDefinitions = new List<AccountActionDefinition>();
-                    if (retailBEVisibilityManager.ShouldApplyActionsVisibility(out visibleActionsById))
-                    {
-                        foreach (var action in businessEntityDefinitionSettings.ActionDefinitions)
-                        {
-
-                            if (IsActionVisible(visibleActionsById, action))
-                                accountBEDefinitionSettings.ActionDefinitions.Add(action);
-                        }
-                    }
-                    else
-                        accountBEDefinitionSettings.ActionDefinitions = businessEntityDefinitionSettings.ActionDefinitions;
-                }
-
-                //Extra Fields
-                accountBEDefinitionSettings.AccountExtraFieldDefinitions = businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
-
-                //GridColumnsExportExcel
-                if (businessEntityDefinitionSettings.GridDefinition != null && businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions != null)
-                {
-                    accountBEDefinitionSettings.GridDefinition.ExportColumnDefinitions = businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
-                }
-                accountBEDefinitionSettings.UseRemoteSelector = businessEntityDefinitionSettings.UseRemoteSelector;
-                //Security
-                if (businessEntityDefinitionSettings.Security != null)
-                    accountBEDefinitionSettings.Security = businessEntityDefinitionSettings.Security;
-
-                return accountBEDefinitionSettings;
-            });
+            var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(accountBEDefinitionId);
+            businessEntityDefinition.ThrowIfNull("businessEntityDefinition", accountBEDefinitionId);
+            return businessEntityDefinition.Settings.CastWithValidate<AccountBEDefinitionSettings>("businessEntityDefinition.Settings", accountBEDefinitionId);
         }
 
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
