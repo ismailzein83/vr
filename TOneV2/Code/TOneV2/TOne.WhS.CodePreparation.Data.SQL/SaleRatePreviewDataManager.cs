@@ -86,7 +86,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 Rate = (decimal)reader["Rate"],
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                CurrencyId = (int)reader["CurrencyID"]
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyID")
             };
             return ratePreview;
         }
