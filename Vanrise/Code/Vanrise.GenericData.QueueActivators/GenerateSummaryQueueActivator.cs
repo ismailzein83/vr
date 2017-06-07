@@ -367,7 +367,6 @@ namespace Vanrise.GenericData.QueueActivators
         private static void InsertBatches(Action<LogEntryType, string> writeTrackingMessage, GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
             List<GenericSummaryRecordBatch> queuePreparedBatches, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation)
         {
-            writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Inserting Batches for Stage {0}", currentStageName));
             VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
 
             if (tempStorageInformation == null)
@@ -380,8 +379,6 @@ namespace Vanrise.GenericData.QueueActivators
             {
                 transformationManager.SaveSummaryBatchToDB(_existingSummaryBatches.Values);
             }
-
-            writeTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Inserting Batches for Stage {0}", currentStageName));
         }
 
         #endregion

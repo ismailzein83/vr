@@ -113,15 +113,10 @@ namespace Vanrise.Invoice.Business
                     throw new InvoiceGeneratorException(string.Format("Invoice {0} is Locked.", createInvoiceInput.InvoiceId));
                 }
             }
-            catch (Exception e)
+            catch (InvoiceGeneratorException e)
             {
-                if (e as InvoiceGeneratorException != null)
-                {
-                    updateOperationOutput.Message = e.Message;
-                    updateOperationOutput.ShowExactMessage = true;
-                }
-                else
-                    throw e;
+                updateOperationOutput.Message = e.Message;
+                updateOperationOutput.ShowExactMessage = true;
             }
             return updateOperationOutput;
         }
