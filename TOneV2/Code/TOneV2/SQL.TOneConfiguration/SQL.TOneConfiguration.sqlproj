@@ -683,10 +683,12 @@
     <None Include="Retail_Multinet.PostDeployment.sql" />
     <None Include="Mediation_WHS.Common.PostDeployment.sql" />
     <None Include="Mediation_WHS.Huawei.PostDeployment.sql" />
+    <None Include="Mediation_Mobile.Huawei.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
     <None Include="ClearVoice.PostDeployment.sql" />
     <None Include="VR_BEBridge.PostDeployment.sql" />
+    <None Include="Mediation_Mobile.Common.PostDeployment.sql" />
   </ItemGroup>
 </Project>
