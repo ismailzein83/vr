@@ -146,14 +146,18 @@
     <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\MultiNetCompanyExtendedInfoDefinitionTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\retail-multinet-accounttype-part-runtime-companyextendedinfo.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartCompanyExtendedInfoRuntimeTemplate.html" />
+    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGridActionFilter\retail-invoicetype-invoicefiltercondition-multinetpartner.js" />
+    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGridActionFilter\Templates\MultiNetPartnerCondition.html" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-multinet-account-invoice-selector.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-invoice-invoicetype-multinetsubscriberinvoicesettings.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\MultiNetnvoiceSettingsTemplate.html" />
     <Content Include="Retail_MultiNet\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Retail_MultiNet\Reports\CDRSubscriberInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Retail_MultiNet\Reports\CompanySubscriberInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Retail_MultiNet\Reports\BranchSubscriberInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.MultiNet.Entities\Retail.MultiNet.Entities.csproj">

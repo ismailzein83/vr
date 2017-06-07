@@ -8,10 +8,13 @@ namespace Retail.MultiNet.Entities
 {
     public class RDLCUsageSummaryInvoiceItemDetails
     {
+        public string SubItemIdentifier { get; set; }
         public string UsageDescription { get; set; }
         public int Quantity { get; set; }
         public int TotalDuration { get; set; }
         public Decimal NetAmount { get; set; }
+        public long AccountId { get; set; }
+
         public RDLCUsageSummaryInvoiceItemDetails()
         {
                 
