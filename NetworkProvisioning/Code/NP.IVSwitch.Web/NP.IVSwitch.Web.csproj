@@ -196,6 +196,7 @@
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CustomerRouteService.js" />
+    <Content Include="NP_IVSwitch\Services\SwitchDashboardService.js" />
     <Content Include="NP_IVSwitch\Services\SwitchMappingService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
     <Content Include="NP_IVSwitch\Services\FirewallService.js" />

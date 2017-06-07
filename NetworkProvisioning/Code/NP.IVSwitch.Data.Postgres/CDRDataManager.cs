@@ -37,7 +37,7 @@ namespace NP.IVSwitch.Data.Postgres
         {
             StringBuilder queryBuilder = new StringBuilder(@"
                                 SELECT user_id,src_ip,det_date,cli,dest_code,dest_name,route_id,route_ip,route_dest_code,route_dest_name,
-                                prg_date,con_date FROM cdrs_buffer WHERE 1=1 ");
+                                prg_date,con_date,case when con_date is not null then extract(epoch from now()-con_date) else 0 end FROM cdrs_buffer WHERE 1=1 ");
             if (endPointIds != null && endPointIds.Count() > 0)
             {
                 string ePIds = null;
@@ -79,7 +79,8 @@ namespace NP.IVSwitch.Data.Postgres
                 supplierCode = reader["route_dest_code"] as string,
                 supplierZone = reader["route_dest_name"] as string,
                 alertDate = GetReaderValue<DateTime>(reader, "prg_date"),
-                connectDate = GetReaderValue<DateTime>(reader, "con_date")
+                connectDate = GetReaderValue<DateTime>(reader, "con_date"),
+                duration = GetReaderValue<double>(reader, "case")
             };
 
             return liveCdrItem;

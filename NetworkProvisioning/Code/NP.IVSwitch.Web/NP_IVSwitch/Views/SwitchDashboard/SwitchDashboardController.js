@@ -2,8 +2,8 @@
 
     "use strict";
 
-    SwitchDashboardManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService','NP_IVSwitch_SwitchDashboardAPIService','LabelColorsEnum','VRTimerService'];
-    function SwitchDashboardManagementController($scope, UtilsService, vruiUtilsService, NP_IVSwitch_SwitchDashboardAPIService, LabelColorsEnum, VRTimerService) {
+    SwitchDashboardManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_SwitchDashboardAPIService', 'LabelColorsEnum', 'VRTimerService', 'NP_IVSwitch_SwitchDashboardService'];
+    function SwitchDashboardManagementController($scope, UtilsService, vruiUtilsService, NP_IVSwitch_SwitchDashboardAPIService, LabelColorsEnum, VRTimerService, NP_IVSwitch_SwitchDashboardService) {
 
        var customerChartAPI;
        var customerChartReadyDeferred = UtilsService.createPromiseDeferred();
@@ -75,7 +75,10 @@
                     return LabelColorsEnum.Processed.color;
                 }
             };
-          
+            $scope.scopeModel.viewLiveCdr = function (dataItem)
+            {
+                NP_IVSwitch_SwitchDashboardService.viewLiveCdrs(dataItem);
+            }
             $scope.scopeModel.lastDistributionChartReady = function (api) {
                 lastDistributionChartAPI = api;
                 lastDistributionChartReadyDeferred.resolve();
@@ -120,6 +123,7 @@
                         {
                             var customerResult = response.TopCustomersResult.CustomerResults[i];
                             $scope.scopeModel.topCustomers.push({
+                                CustomerId:customerResult.CustomerId,
                                 CustomerName: customerResult.CustomerName,
                                 PercConnected: customerResult.PercConnected,
                                 ACD: customerResult.ACD,
@@ -135,6 +139,7 @@
                         for (var i = 0; i < response.TopSuppliersResult.SupplierResults.length; i++) {
                             var supplierResult = response.TopSuppliersResult.SupplierResults[i];
                             $scope.scopeModel.topSuppliers.push({
+                                SupplierId:supplierResult.SupplierId,
                                 SupplierName: supplierResult.SupplierName,
                                 PercConnected: supplierResult.PercConnected,
                                 ACD: supplierResult.ACD,

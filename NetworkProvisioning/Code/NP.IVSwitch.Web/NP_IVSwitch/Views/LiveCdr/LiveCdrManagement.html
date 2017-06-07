@@ -3,7 +3,7 @@
         <vr-form name="formFilter">
             <div ng-hide="filterSectionCollapsed">
                 <vr-row removeline>
-                    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady" onselectionchanged="    onCustomerSelectionChanged"></vr-whs-be-customer-selector>
+                    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady" onselectionchanged="onCustomerSelectionChanged"></vr-whs-be-customer-selector>
                     <vr-columns colnum="2">
                         <np-ivswitch-endpoint-selector on-ready="onSelectorEndPointReady" normal-col-num="2"  ismultipleselection selectedvalues="selectedEndPoints" ></np-ivswitch-endpoint-selector>
                     </vr-columns>
@@ -20,6 +20,19 @@
                         <vr-textbox label="Route IP" value="routeIP"></vr-textbox>
                     </vr-columns>
                 </vr-row>
+                <!--<vr-row removeline>
+                    <vr-columns colnum="2">
+                        <vr-select label="Calls" datatextfield="description" datavaluefield="value" datasource="calls" hideremoveicon="true"
+                                   selectedvalues=" selectedcalls" onselectionchanged="" isrequired></vr-select>
+                    </vr-columns>
+                    <vr-columns width="normal">
+                        <vr-textbox label="Time" value="time"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns colnum="2">
+                        <vr-select label="Calls" datatextfield="description" datavaluefield="value" datasource="calls" hideremoveicon="true"
+                                   selectedvalues=" selectedcalls" onselectionchanged="" isrequired></vr-select>
+                    </vr-columns>
+                </vr-row>-->
             </div>
             <vr-row removeline>
                 <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">

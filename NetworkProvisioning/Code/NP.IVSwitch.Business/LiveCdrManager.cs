@@ -37,7 +37,8 @@ namespace NP.IVSwitch.Business
                  supplierCode=entity.supplierCode,
                  supplierZone=entity.supplierZone,   
                  alertDate=entity.alertDate,
-                 connectDate=   entity.connectDate
+                 connectDate=   entity.connectDate,
+                 duration=entity.duration
                 };
             }
 

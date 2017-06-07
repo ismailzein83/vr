@@ -2,9 +2,9 @@
 
     'use strict';
 
-    LiveCdrManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService'];
+    LiveCdrManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
 
-    function LiveCdrManagementController($scope, UtilsService,VRUIUtilsService) {
+    function LiveCdrManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService) {
 
         var gridAPI;
         var customerAccountDirectiveAPI;
@@ -15,8 +15,21 @@
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var routeSelectorAPI;
         var routeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+        var viewLiveCdrsPromiseDeferred = UtilsService.createPromiseDeferred();
+        var customerId;
+        var supplierId;
+        loadParameters();
         defineScope();
         load();
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+
+            if (parameters != undefined && parameters != null) {
+                customerId = (parameters.CustomerId != undefined) ? parameters.CustomerId : undefined;
+                supplierId = (parameters.SupplierId != undefined) ? parameters.SupplierId : undefined;
+                
+            }
+        }
         function defineScope() {
             $scope.search = function () {
                 var query = buildGridQuery();
@@ -25,7 +38,18 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid({});
+                if (customerId != undefined || supplierId != undefined) {
+                    viewLiveCdrsPromiseDeferred.promise.then(function () {
+                        
+                        var query = buildGridQuery();
+                        gridAPI.loadGrid(query);
+                    });
+                }
+                else
+                {
+                    gridAPI.loadGrid({});
+                }
+               
             };
             $scope.onCustomerAccountDirectiveReady = function (api) {
                 customerAccountDirectiveAPI = api;
@@ -43,12 +67,12 @@
                 routeSelectorAPI = api;
                 routeSelectorPromiseDeferred.resolve();
             };
-            $scope.onCustomerSelectionChanged = function (value) {
+            $scope.onCustomerSelectionChanged = function (value) {               
                 var selectedIds = customerAccountDirectiveAPI.getSelectedIds();
                 if (selectedIds != undefined) {
                     var customerIds = selectedIds;
                     var selectorPayload = {
-                        selectAll:true,
+                        selectAll: true,
                         filter: {
                             CustomerIds: customerIds
                         }
@@ -56,7 +80,13 @@
                     var setLoader = function (value) {
                         $scope.isEndPointSelectorLoading = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, endPointSelectorAPI, selectorPayload, setLoader, endPointSelectorPromiseDeferred);
+                    if (customerId != undefined) {
+                        VRUIUtilsService.callDirectiveLoad(endPointSelectorAPI, selectorPayload, viewLiveCdrsPromiseDeferred);
+                    }
+                    else {
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, endPointSelectorAPI, selectorPayload, setLoader, endPointSelectorPromiseDeferred);
+                    }
+                    
                 }
             };
             $scope.onSupplierSelectionChanged = function (value) {
@@ -72,7 +102,14 @@
                     var setLoader = function (value) {
                         $scope.isRouteSelectorLoading = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeSelectorAPI, selectorPayload, setLoader, routeSelectorPromiseDeferred);
+                    if (supplierId != undefined) {
+                        VRUIUtilsService.callDirectiveLoad(routeSelectorAPI, selectorPayload, viewLiveCdrsPromiseDeferred);
+                    }
+                    else
+                    {
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeSelectorAPI, selectorPayload, setLoader, routeSelectorPromiseDeferred);
+                    }
+
                 }
             };
         }
@@ -81,6 +118,7 @@
             UtilsService.waitMultipleAsyncOperations([loadCustomers, returnEndPointSelectorPromiseDeferred, loadSuppliers, returnRouteSelectorPromiseDeferred]).then(function () {
                 endPointSelectorPromiseDeferred = undefined;
                 routeSelectorPromiseDeferred = undefined;
+                
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -97,8 +135,13 @@
         }
         function loadCustomers() {
             var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-            customerAccountReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
+            customerAccountReadyPromiseDeferred.promise.then(function () {                
+                var payload={
+                    selectedIds:[]
+                    };
+                if (customerId != undefined)
+                    payload.selectedIds.push(customerId);
+                VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, payload, loadCustomerAccountPromiseDeferred);
             });
 
             return loadCustomerAccountPromiseDeferred.promise;
@@ -106,7 +149,12 @@
         function loadSuppliers() {
             var loadSupplierPromiseDeferred = UtilsService.createPromiseDeferred();
             supplierReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, undefined, loadSupplierPromiseDeferred);
+                var payload = {
+                    selectedIds: []
+                };
+                if (supplierId != undefined)
+                    payload.selectedIds.push(supplierId);
+                VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, payload, loadSupplierPromiseDeferred);
             });
 
             return loadSupplierPromiseDeferred.promise;

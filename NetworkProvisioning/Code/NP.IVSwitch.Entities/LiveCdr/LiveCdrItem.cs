@@ -20,5 +20,6 @@ namespace NP.IVSwitch.Entities
         public string supplierZone {get;set;}
         public DateTime alertDate { get; set; }
         public DateTime connectDate { get; set; }
+        public double duration { get; set; }
     }
 }
