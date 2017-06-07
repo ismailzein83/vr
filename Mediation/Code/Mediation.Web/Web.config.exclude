@@ -64,9 +64,10 @@
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="DataParserDBConnStringKey"                        value="ConfigurationDBConnString"/>
-    
-    <add key="Mediation_GenericRecord_DBConnStringKey"          value="ConfigurationDBConnString"/>
     <add key="Mediation_GenericConfig_DBConnStringKey"          value="ConfigurationDBConnString"/>
+    
+    <add key="Mediation_GenericRecord_DBConnStringKey"          value="Mediation_CDR_DBConnString"/>
+    
 
     <add key="BCPDonotDeleteFiles" value="false"/>
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
