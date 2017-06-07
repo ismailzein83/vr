@@ -175,17 +175,10 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
             var selectedId = selectorAPI.getSelectedIds();
 
             if (selectedId && selectedId != -1) {
-                zoneItem.NewRoutingProduct = {
-                    ZoneId: zoneItem.ZoneId,
-                    ZoneRoutingProductId: selectedId,
-                    BED: UtilsService.getDateFromDateTime(new Date()),
-                    EED: null,
-                    ApplyNewNormalRateBED: ctrl.followRateDate
-                };
-                //zoneItem.NewRoutingProductId = selectedId;
-                //zoneItem.NewRoutingProductBED = UtilsService.getDateFromDateTime(new Date());
-                //zoneItem.NewRoutingProductEED = null;
-                //zoneItem.FollowRateDate = ctrl.followRateDate;
+                zoneItem.NewRoutingProductId = selectedId;
+                zoneItem.NewRoutingProductBED = UtilsService.getDateFromDateTime(new Date());
+                zoneItem.NewRoutingProductEED = null;
+                zoneItem.FollowRateDate = ctrl.followRateDate;
             }
             else {
                 zoneItem.NewRoutingProductId = null;
@@ -196,15 +189,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
         }
         function setRoutingProductChange() {
             var selectedId = selectorAPI.getSelectedIds();
-
-            if (selectedId && selectedId == -1) {
-                zoneItem.ResetRoutingProduct = {
-                    ZoneId: zoneItem.ZoneId,
-                    ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-                    EED: UtilsService.getDateFromDateTime(new Date()),
-                    ApplyNewNormalRateBED: ctrl.followRateDate
-                };
-            }
+            zoneItem.RoutingProductChangeEED = (selectedId && selectedId == -1) ? UtilsService.getDateFromDateTime(new Date()) : null;
         }
     }
 }]);

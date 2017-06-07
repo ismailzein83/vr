@@ -12,7 +12,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             if ($attrs.ispreview != undefined) {
                 UtilsService.setContextReadOnly($scope);
-                ctrl.maxHeight = (window.innerHeight - 337) +'px'
+                ctrl.maxHeight = (window.innerHeight - 337) + 'px'
             }
 
             var ratePlanGrid = new RatePlanGrid($scope, ctrl, $attrs);
@@ -41,7 +41,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         function initializeController() {
 
-        	$scope.scopeModel = {};
+            $scope.scopeModel = {};
             $scope.zoneLetters = [];
             $scope.scopeModel.selectedZoneLetterIndex = 0;
             $scope.scopeModel.isPreview = (attrs.ispreview != undefined);
@@ -250,8 +250,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 promises.push(loadZoneItemsDeferred.promise);
 
                 loadZoneLettersPromise.then(function () {
-                    if ($scope.zoneLetters.length > 0)
-                    {
+                    if ($scope.zoneLetters.length > 0) {
                         $scope.showDirective = true;
                         gridQuery.context.onZoneLettersLoaded();
                         showBulkActionTabs(true);
@@ -420,7 +419,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             setServiceViewerLoad(zoneItem);
             setNormalRateIconProperties(zoneItem);
 
-           
+
             zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
 
             if (zoneItem.NewRate != null) {
@@ -610,7 +609,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneItem.serviceViewerAPI = api;
                     var serviceViewerPayload = { selectedIds: zoneItem.EffectiveServiceIds };
                     VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
-                };                
+                };
             }
             function setNormalRateIconProperties(dataItem) {
                 if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
@@ -711,26 +710,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             function applyRoutingProductChanges() {
-                zoneChanges.NewRoutingProduct = zoneItem.NewRoutingProduct;
-                zoneChanges.RoutingProductChange = zoneItem.ResetRoutingProduct;
-
-                //if (zoneItem.NewRoutingProductId != null) {
-                //    zoneItemChanges.NewRoutingProduct = {
-                //        ZoneId: zoneItemChanges.ZoneId,
-                //        ZoneRoutingProductId: zoneItem.NewRoutingProductId,
-                //        BED: zoneItem.NewRoutingProductBED,
-                //        EED: zoneItem.NewRoutingProductEED,
-                //        ApplyNewNormalRateBED: zoneItem.FollowRateDate
-                //    };
-                //}
-                //else if (zoneItem.RoutingProductChangeEED != null) {
-                //    zoneItemChanges.RoutingProductChange = {
-                //        ZoneId: zoneItem.ZoneId,
-                //        ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-                //        EED: zoneItem.RoutingProductChangeEED,
-                //        ApplyNewNormalRateBED: zoneItem.FollowRateDate
-                //    };
-                //}
+                if (zoneItem.NewRoutingProductId != null) {
+                    zoneItemChanges.NewRoutingProduct = {
+                        ZoneId: zoneItemChanges.ZoneId,
+                        ZoneRoutingProductId: zoneItem.NewRoutingProductId,
+                        BED: zoneItem.NewRoutingProductBED,
+                        EED: zoneItem.NewRoutingProductEED,
+                        ApplyNewNormalRateBED: zoneItem.FollowRateDate
+                    };
+                }
+                else if (zoneItem.RoutingProductChangeEED != null) {
+                    zoneItemChanges.RoutingProductChange = {
+                        ZoneId: zoneItem.ZoneId,
+                        ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
+                        EED: zoneItem.RoutingProductChangeEED,
+                        ApplyNewNormalRateBED: zoneItem.FollowRateDate
+                    };
+                }
             }
             function applyOtherRateChanges() {
                 if (zoneItem.NewRates != null) {
