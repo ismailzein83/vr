@@ -130,6 +130,10 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     if (sellingNumberPlanId == undefined)
                         return function () { };
 
+                    if (sellingDirectiveApi != undefined && sellingDirectiveApi.getSelectedIds() == undefined) {
+                        return function () { };
+                    }
+
                     if (filter == undefined)
                         filter = {};
 
