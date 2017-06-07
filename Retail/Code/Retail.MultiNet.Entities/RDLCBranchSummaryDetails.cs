@@ -17,6 +17,8 @@ namespace Retail.MultiNet.Entities
         public decimal CurrentCharges { get; set; }
         public decimal TotalCurrentCharges { get; set; }
         public long AccountId { get; set; }
+        public string BranchName { get; set; }
+
         public RDLCBranchSummaryDetails()
         {
 

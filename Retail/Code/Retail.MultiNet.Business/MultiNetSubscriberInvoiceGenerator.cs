@@ -89,8 +89,8 @@ namespace Retail.MultiNet.Business
                     var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.GeneratedToDate, branchAccount.TypeId);
                     branchesSummary.Add(branchSummary);
                 }
+              BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
             }
-            BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
             InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, currencyId, financialAccountData.Account);
 
             context.Invoice = new GeneratedInvoice
@@ -147,29 +147,27 @@ namespace Retail.MultiNet.Business
             branchSummary.CurrencyId = currencyId;
             branchSummary.AccountId = account.AccountId;
 
-            branchSummary.PayableByDueDate = branchSummary.TotalCurrentCharges;
-            branchSummary.LatePaymentCharges = GetLatePaymentCharges(account, branchSummary.TotalCurrentCharges, currencyId);
-            branchSummary.PayableAfterDueDate = branchSummary.TotalCurrentCharges + branchSummary.LatePaymentCharges;
             branchSummary.CurrencyId = currencyId;
-
+            branchSummary.BranchName = _accountBEManager.GetAccountName(account);
             return branchSummary;
         }
         private void BuildGeneratedBranchSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext,List<BranchSummary> branchesSummaries)
         {
-            if (multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets == null)
-                multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
-            GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
-            generatedSummaryItemSet.SetName = "BranchSummary";
-            generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
-            foreach (var item in branchesSummaries)
-            {
-                generatedSummaryItemSet.Items.Add(new GeneratedInvoiceItem
+            
+                if (multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets == null)
+                    multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
+                GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
+                generatedSummaryItemSet.SetName = "BranchSummary";
+                generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
+                foreach (var item in branchesSummaries)
                 {
-                    Details = item,
-                    Name = ""
-                });
-            }
-            multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
+                    generatedSummaryItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = item,
+                        Name = ""
+                    });
+                }
+                multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
         }
 
         private void BuildTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
@@ -227,7 +225,7 @@ namespace Retail.MultiNet.Business
 
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetRecord(accountId);
             GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
-            generatedSummaryItemSet.SetName = string.Format("Summary_{0}", accountId);
+            generatedSummaryItemSet.SetName = string.Format("BranchChargeableItem_{0}", accountId);
             generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
 
             foreach (var summaryItem in summaryItems)
@@ -243,7 +241,7 @@ namespace Retail.MultiNet.Business
         private void BuildGeneratedUsageSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier,long accountId)
         {
             GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
-            generatedSummaryItemSet.SetName = string.Format("UsageSummary_{0}",accountId);
+            generatedSummaryItemSet.SetName = string.Format("BranchUsageSummary_{0}",accountId);
             generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
             foreach (var item in usagesSummariesBySubItemIdentifier)
             {
@@ -570,10 +568,10 @@ namespace Retail.MultiNet.Business
             string subItemIdentifier = "";
             if(serviceTypeId.HasValue)
             {
-                subItemIdentifier = string.Format("CDROut_{0}_{1}", serviceTypeId, accountId);
+                subItemIdentifier = string.Format("BranchCDROut_{0}_{1}", serviceTypeId, accountId);
             }else
             {
-                subItemIdentifier = string.Format("CDRIN_{0}", accountId);
+                subItemIdentifier = string.Format("BranchCDRIN_{0}", accountId);
             }
             return subItemIdentifier;
         }
@@ -689,10 +687,8 @@ namespace Retail.MultiNet.Business
         public int Quantity { get; set; }
         public decimal CurrentCharges { get; set; }
         public decimal TotalCurrentCharges { get; set; }
-        public Decimal PayableByDueDate { get; set; }
-        public Decimal LatePaymentCharges { get; set; }
-        public Decimal PayableAfterDueDate { get; set; }
         public long AccountId { get; set; }
+        public string BranchName { get; set; }
 
     }
     public class BranchSummaryItem

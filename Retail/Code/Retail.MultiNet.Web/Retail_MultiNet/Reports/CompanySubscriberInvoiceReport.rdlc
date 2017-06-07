@@ -1941,7 +1941,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Usage Description</Value>
+                              <Value>Branch Name</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2032,7 +2032,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2074,14 +2073,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="UsageDescription1">
+                    <Textbox Name="BranchName">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!UsageDescription.Value</Value>
+                              <Value>=Fields!BranchName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2091,7 +2090,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>UsageDescription1</rd:DefaultName>
+                      <rd:DefaultName>BranchName</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -2147,7 +2146,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!NetAmount.Value,2)</Value>
+                              <Value>=Round(Fields!CurrentCharges.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2170,6 +2169,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2197,7 +2197,7 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>RDLCRetail</DataSetName>
+        <DataSetName>BranchSummaryDetails</DataSetName>
         <Top>4.37542in</Top>
         <Left>0.10865in</Left>
         <Height>0.75in</Height>
@@ -2626,6 +2626,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <Field Name="AccountId">
           <DataField>AccountId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="BranchName">
+          <DataField>BranchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
