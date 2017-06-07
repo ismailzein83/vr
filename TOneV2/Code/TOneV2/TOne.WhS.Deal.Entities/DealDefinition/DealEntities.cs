@@ -12,6 +12,14 @@ namespace TOne.WhS.Deal.Entities
         public int ZoneGroupNb { get; set; }
     }
 
+    public struct DealZoneGroupTierRate
+    {
+        public int DealId { get; set; }
+        public int ZoneGroupNb { get; set; }
+        public int TierNb { get; set; }
+        public int RateTierNb { get; set; }
+    }
+
     public struct AccountZoneGroup
     {
         public int AccountId { get; set; }

@@ -51,6 +51,7 @@
     <Compile Include="IDealDetailedProgressDataManager.cs" />
     <Compile Include="IDealProgressDataManager.cs" />
     <Compile Include="IDealDataManager.cs" />
+    <Compile Include="IDealReprocessInputDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
