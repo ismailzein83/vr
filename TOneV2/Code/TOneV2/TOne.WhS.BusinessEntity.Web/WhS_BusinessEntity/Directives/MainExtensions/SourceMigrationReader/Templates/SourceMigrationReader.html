@@ -14,14 +14,14 @@
         </vr-select>
     </vr-columns>
     <vr-columns colnum="6">
-        <vr-common-ratetype-selector on-ready="onOffPeakRateTypeSelectorReady" customvalidate="validateOffPeakAndWeekendRate()" customlabel="OffPeak Rate" isrequired></vr-common-ratetype-selector>
+        <vr-common-ratetype-selector on-ready="onOffPeakRateTypeSelectorReady" customvalidate="validateOffPeakRate()" customlabel="OffPeak Rate" isrequired="true"></vr-common-ratetype-selector>
     </vr-columns>
 
     <vr-columns colnum="6">
-        <vr-common-ratetype-selector on-ready="onWeekendRateTypeSelectorReady" customlabel="Weekend Rate" isrequired></vr-common-ratetype-selector>
+        <vr-common-ratetype-selector on-ready="onWeekendRateTypeSelectorReady" customlabel="Weekend Rate" isrequired="true" customvalidate="validateWeekendRate()"></vr-common-ratetype-selector>
     </vr-columns>
     <vr-columns colnum="6">
-        <vr-common-ratetype-selector on-ready="onHolidayRateTypeSelectorReady" customlabel="Holiday Rate" isrequired></vr-common-ratetype-selector>
+        <vr-common-ratetype-selector on-ready="onHolidayRateTypeSelectorReady" customlabel="Holiday Rate" isrequired="true" customvalidate="validateHolidayRate()"></vr-common-ratetype-selector>
     </vr-columns>
 
     <vr-columns colnum="3">

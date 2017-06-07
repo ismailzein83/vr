@@ -87,14 +87,52 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     holidayRateTypeSelectorReadyPrmoiseDeferred.resolve();
                 };
 
-                $scope.validateOffPeakAndWeekendRate = function () {
-                    if (weekendRateTypeSelectorAPI != undefined
-                            && offPeakRateTypeSelectorAPI != undefined
-                            && holidayRateTypeSelectorAPI != undefined
-                            && (weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()
-                                    || holidayRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()
-                                    || holidayRateTypeSelectorAPI.getSelectedIds() == weekendRateTypeSelectorAPI.getSelectedIds()))
-                        return "Rate Types must be different.";
+                $scope.validateOffPeakRate = function () {
+                    if (offPeakRateTypeSelectorAPI != undefined && offPeakRateTypeSelectorAPI.getSelectedIds() == undefined)
+                        return "Required Field";
+
+                    if (offPeakRateTypeSelectorAPI != undefined
+                         && weekendRateTypeSelectorAPI != undefined
+                         && (weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()))
+                        return "Rate Type must be different than Weekend Rate";
+
+                    if (offPeakRateTypeSelectorAPI != undefined
+                          && holidayRateTypeSelectorAPI != undefined
+                          && (offPeakRateTypeSelectorAPI.getSelectedIds() == holidayRateTypeSelectorAPI.getSelectedIds()))
+                        return "Rate Type must be different than Holiday Rate";
+                    
+                    return null;
+                };
+
+                $scope.validateWeekendRate = function () {
+                    if (weekendRateTypeSelectorAPI != undefined && weekendRateTypeSelectorAPI.getSelectedIds() == undefined)
+                        return "Required Field";
+                    if (offPeakRateTypeSelectorAPI != undefined
+                            && weekendRateTypeSelectorAPI != undefined
+                            && (weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()))
+                      return "Rate Type must be different than OffPeak Rate";
+
+                     if ( weekendRateTypeSelectorAPI != undefined
+                           && holidayRateTypeSelectorAPI != undefined
+                           && (weekendRateTypeSelectorAPI.getSelectedIds() == holidayRateTypeSelectorAPI.getSelectedIds()))
+                         return "Rate Type must be different than Holiday Rate";                  
+
+                    return null;
+                };
+
+                $scope.validateHolidayRate = function () {
+                    if (holidayRateTypeSelectorAPI != undefined && holidayRateTypeSelectorAPI.getSelectedIds() == undefined)
+                        return "Required Field";                 
+                    if (holidayRateTypeSelectorAPI != undefined
+                                          && weekendRateTypeSelectorAPI != undefined
+                                          && (holidayRateTypeSelectorAPI.getSelectedIds() == weekendRateTypeSelectorAPI.getSelectedIds()))
+                        return "Rate Type must be different than Weekend Rate";
+
+                    if (holidayRateTypeSelectorAPI != undefined
+                          && offPeakRateTypeSelectorAPI != undefined
+                          && (holidayRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()))
+                        return "Rate Type must be different than Offpeak Rate";
+
                     return null;
                 };
 
