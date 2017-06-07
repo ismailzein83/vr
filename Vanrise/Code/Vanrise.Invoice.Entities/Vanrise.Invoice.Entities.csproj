@@ -124,6 +124,7 @@
     <Compile Include="InvoiceType\RDLCReportParameterValue.cs" />
     <Compile Include="InvoiceType\ExtendedSettings\InvoicePartnerManager.cs" />
     <Compile Include="InvoiceType\InvoiceGridSettings\InvoiceUIGridColumn.cs" />
+    <Compile Include="Invoice\IInvoiceItemAdditionalFields.cs" />
     <Compile Include="Invoice\Invoice.cs" />
     <Compile Include="Invoice\InvoiceClientDetail.cs" />
     <Compile Include="Invoice\InvoiceDetail.cs" />

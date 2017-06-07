@@ -51,6 +51,7 @@
     <Compile Include="Context\InitialPeriodInfoContext.cs" />
     <Compile Include="Context\InvoiceAccountDataContext.cs" />
     <Compile Include="Context\InvoiceGenerationContext.cs" />
+    <Compile Include="Context\InvoiceItemAdditionalFieldsContext.cs" />
     <Compile Include="Context\InvoiceItemConcatenatedPartContext.cs" />
     <Compile Include="Context\InvoicePartnerFilterContext.cs" />
     <Compile Include="Context\InvoicePartnerSettingPartContext.cs" />
