@@ -161,8 +161,7 @@
             currentContext.showItemsFilter = function () {
                 return $scope.scopeModel.repeatedSubReport;
             };
-            currentContext.getDataSourcesInfo = function()
-            {
+            currentContext.getDataSourcesInfo = function () {
                 var dataSources = [];
                 var reportDataSources = subReportDataSourcesAPI.getData();
                 if (reportDataSources != undefined) {
@@ -172,7 +171,7 @@
                     }
                 }
                 return dataSources;
-            }
+            };
             return currentContext;
         }
        

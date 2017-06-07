@@ -145,11 +145,10 @@
                 }
             };
 
-            $scope.scopeModel.onItemSetNameStorageRuleReady = function(api)
-            {
+            $scope.scopeModel.onItemSetNameStorageRuleReady = function (api) {
                 itemSetNameStorageRuleAPI = api;
                 itemSetNameStorageRuleReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onInvoiceSettingDefinitionReady = function (api) {
                 invoiceSettingDefinitionDirectiveAPI = api;
