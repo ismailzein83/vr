@@ -435,7 +435,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     var zoneRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
                     if (zoneRate == null)
-                        throw new VRBusinessException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate", zoneName));
+                        throw new VRBusinessException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate. Country is sold to customer with id {1}", zoneName, context.CustomerInfo.CustomerId));
 
                     context.RateChangesOutArgument.Add(new SalePricelistRateChange
                     {

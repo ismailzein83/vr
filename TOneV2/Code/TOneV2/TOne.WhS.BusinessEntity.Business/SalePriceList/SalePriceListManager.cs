@@ -83,7 +83,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
-            VRFile file = PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType);
+
+            if (!customerPriceList.PriceListType.HasValue)
+                throw new VRBusinessException(string.Format("Customer Pricelist with id {0} has its type as null", customerPriceList.PriceListId));
+
+            VRFile file = PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType.Value);
             var notificationManager = new NotificationManager();
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
@@ -502,7 +506,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleEntityZoneRate zoneRate = futureLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             SaleRateManager saleRateManager = new SaleRateManager();
             if (zoneRate == null)
-                throw new DataIntegrityValidationException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate", zoneName));
+                throw new DataIntegrityValidationException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate. Country is sold to customer with id {1}", zoneName, customerId));
 
             return new SalePLRateNotification
             {
@@ -834,7 +838,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region  Private Members
 
-        private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType? salePriceListType)
+        private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType salePriceListType)
         {
             VRFile file = null;
 
@@ -869,7 +873,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ZoneChangesByCountryId allChangesByCountryId = customerChange.ZoneChangesByCountryId;// MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,salePriceListOutput.NotSentChangesByCustomerId);
 
-            List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, salePriceListType.Value, allChangesByCountryId,
+            List<SalePLZoneNotification> customerZoneNotifications = CreateSalePricelistNotifications(customerId, sellingProductId.Value, salePriceListType, allChangesByCountryId,
                 salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, salePriceListContext.EffectiveDate, salePriceList.ProcessInstanceId);
 
             if (customerZoneNotifications.Count > 0)
