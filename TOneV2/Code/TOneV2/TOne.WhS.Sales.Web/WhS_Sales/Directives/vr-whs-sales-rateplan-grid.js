@@ -711,23 +711,26 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             function applyRoutingProductChanges() {
-                if (zoneItem.NewRoutingProductId != null) {
-                    zoneItemChanges.NewRoutingProduct = {
-                        ZoneId: zoneItemChanges.ZoneId,
-                        ZoneRoutingProductId: zoneItem.NewRoutingProductId,
-                        BED: zoneItem.NewRoutingProductBED,
-                        EED: zoneItem.NewRoutingProductEED,
-                        ApplyNewNormalRateBED: zoneItem.FollowRateDate
-                    };
-                }
-                else if (zoneItem.RoutingProductChangeEED != null) {
-                    zoneItemChanges.RoutingProductChange = {
-                        ZoneId: zoneItem.ZoneId,
-                        ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-                        EED: zoneItem.RoutingProductChangeEED,
-                        ApplyNewNormalRateBED: zoneItem.FollowRateDate
-                    };
-                }
+                zoneChanges.NewRoutingProduct = zoneItem.NewRoutingProduct;
+                zoneChanges.RoutingProductChange = zoneItem.ResetRoutingProduct;
+
+                //if (zoneItem.NewRoutingProductId != null) {
+                //    zoneItemChanges.NewRoutingProduct = {
+                //        ZoneId: zoneItemChanges.ZoneId,
+                //        ZoneRoutingProductId: zoneItem.NewRoutingProductId,
+                //        BED: zoneItem.NewRoutingProductBED,
+                //        EED: zoneItem.NewRoutingProductEED,
+                //        ApplyNewNormalRateBED: zoneItem.FollowRateDate
+                //    };
+                //}
+                //else if (zoneItem.RoutingProductChangeEED != null) {
+                //    zoneItemChanges.RoutingProductChange = {
+                //        ZoneId: zoneItem.ZoneId,
+                //        ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
+                //        EED: zoneItem.RoutingProductChangeEED,
+                //        ApplyNewNormalRateBED: zoneItem.FollowRateDate
+                //    };
+                //}
             }
             function applyOtherRateChanges() {
                 if (zoneItem.NewRates != null) {

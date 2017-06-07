@@ -1,195 +1,210 @@
 ﻿"use strict";
 
 app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService", function (UtilsService, VRUIUtilsService) {
-	return {
-		restrict: "E",
-		scope: {
-			onReady: "="
-		},
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			var zoneRoutingProduct = new ZoneRoutingProduct(ctrl, $scope);
-			zoneRoutingProduct.initializeController();
-		},
-		controllerAs: "ctrl",
-		bindToController: true,
-		templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/ZoneRoutingProductTemplate.html"
-	};
+    return {
+        restrict: "E",
+        scope: {
+            onReady: "="
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var zoneRoutingProduct = new ZoneRoutingProduct(ctrl, $scope);
+            zoneRoutingProduct.initializeController();
+        },
+        controllerAs: "ctrl",
+        bindToController: true,
+        templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/ZoneRoutingProductTemplate.html"
+    };
 
-	function ZoneRoutingProduct(ctrl, $scope) {
-		this.initializeController = initializeController;
+    function ZoneRoutingProduct(ctrl, $scope) {
+        this.initializeController = initializeController;
 
-		var zoneItem;
+        var zoneItem;
 
-		var currentServiceViewerAPI;
-		var currentServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+        var currentServiceViewerAPI;
+        var currentServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var selectorAPI;
-		var selectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var selectorAPI;
+        var selectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var firstSelectionEventDeferred = UtilsService.createPromiseDeferred();
-		var rpSelectedDeferred;
+        var firstSelectionEventDeferred = UtilsService.createPromiseDeferred();
+        var rpSelectedDeferred;
 
-		var isLoaded;
+        var isLoaded;
 
-		function initializeController() {
-			ctrl.onCurrentServiceViewerReady = function (api) {
-				currentServiceViewerAPI = api;
-				currentServiceViewerReadyDeferred.resolve();
-			};
+        function initializeController() {
+            ctrl.onCurrentServiceViewerReady = function (api) {
+                currentServiceViewerAPI = api;
+                currentServiceViewerReadyDeferred.resolve();
+            };
 
-			ctrl.onSelectorReady = function (api) {
-				selectorAPI = api;
-				selectorReadyDeferred.resolve();
-			};
+            ctrl.onSelectorReady = function (api) {
+                selectorAPI = api;
+                selectorReadyDeferred.resolve();
+            };
 
-			ctrl.onSelectionChanged = function () {
+            ctrl.onSelectionChanged = function () {
 
-				if (firstSelectionEventDeferred != undefined) {
-					firstSelectionEventDeferred = undefined;
-					return;
-				}
+                if (firstSelectionEventDeferred != undefined) {
+                    firstSelectionEventDeferred = undefined;
+                    return;
+                }
 
-				if (rpSelectedDeferred != undefined) {
-					rpSelectedDeferred = undefined;
-					return;
-				}
+                if (rpSelectedDeferred != undefined) {
+                    rpSelectedDeferred = undefined;
+                    return;
+                }
 
-				zoneItem.IsDirty = true;
-				zoneItem.refreshZoneItem(zoneItem);
-			};
+                zoneItem.IsDirty = true;
+                zoneItem.refreshZoneItem(zoneItem);
+            };
 
-			ctrl.isSwitchVisible = function () {
+            ctrl.isSwitchVisible = function () {
 
-				if (!isLoaded) {
-					return false;
-				}
-					
-				if (zoneItem != undefined && zoneItem.NewRate != null && selectorAPI.getSelectedIds() != undefined) {
-					return true;
-				}
-				else {
-					ctrl.followRateDate = false;
-					return false;
-				}
-			};
+                if (!isLoaded) {
+                    return false;
+                }
 
-			ctrl.initializeSwitchValue = function () {
-				if (ctrl.followRateDate == undefined)
-					ctrl.followRateDate = true;
-			};
+                if (zoneItem != undefined && zoneItem.NewRate != null && selectorAPI.getSelectedIds() != undefined) {
+                    return true;
+                }
+                else {
+                    ctrl.followRateDate = false;
+                    return false;
+                }
+            };
 
-			UtilsService.waitMultiplePromises([currentServiceViewerReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
-				defineAPI();
-			});
-		}
+            ctrl.initializeSwitchValue = function () {
+                if (ctrl.followRateDate == undefined)
+                    ctrl.followRateDate = true;
+            };
 
-		function defineAPI() {
-			var api = {};
+            UtilsService.waitMultiplePromises([currentServiceViewerReadyDeferred.promise, selectorReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
 
-			api.load = function (payload) {
+        function defineAPI() {
+            var api = {};
 
-				isLoaded = false;
+            api.load = function (payload) {
 
-				var promises = [];
-				firstSelectionEventDeferred = UtilsService.createPromiseDeferred();
+                isLoaded = false;
 
-				var selectedRoutingProductId;
+                var promises = [];
+                firstSelectionEventDeferred = UtilsService.createPromiseDeferred();
 
-				if (payload != undefined) {
+                var selectedRoutingProductId;
 
-					zoneItem = payload.zoneItem;
+                if (payload != undefined) {
 
-					ctrl.isCountryEnded = zoneItem.IsCountryEnded;
-					ctrl.isZonePendingClosed = zoneItem.IsZonePendingClosed;
+                    zoneItem = payload.zoneItem;
 
-					ctrl.currentName = zoneItem.CurrentRoutingProductName;
-					if (zoneItem.IsCurrentRoutingProductEditable === false)
-						ctrl.currentName += ' (Inherited)';
+                    ctrl.isCountryEnded = zoneItem.IsCountryEnded;
+                    ctrl.isZonePendingClosed = zoneItem.IsZonePendingClosed;
 
-					if (zoneItem.NewRoutingProduct != null) {
-						selectedRoutingProductId = zoneItem.NewRoutingProduct.ZoneRoutingProductId;
-						rpSelectedDeferred = UtilsService.createPromiseDeferred();
-						ctrl.followRateDate = zoneItem.NewRoutingProduct.ApplyNewNormalRateBED;
-					}
-					else if (zoneItem.ResetRoutingProduct != null) {
-						selectedRoutingProductId = -1;
-						rpSelectedDeferred = UtilsService.createPromiseDeferred();
-						ctrl.followRateDate = zoneItem.ResetRoutingProduct.ApplyNewNormalRateBED;
-					}
-				}
+                    ctrl.currentName = zoneItem.CurrentRoutingProductName;
+                    if (zoneItem.IsCurrentRoutingProductEditable === false)
+                        ctrl.currentName += ' (Inherited)';
 
-				var loadCurrentServicesPromise = loadCurrentServices();
-				promises.push(loadCurrentServicesPromise);
+                    if (zoneItem.NewRoutingProduct != null) {
+                        selectedRoutingProductId = zoneItem.NewRoutingProduct.ZoneRoutingProductId;
+                        rpSelectedDeferred = UtilsService.createPromiseDeferred();
+                        ctrl.followRateDate = zoneItem.NewRoutingProduct.ApplyNewNormalRateBED;
+                    }
+                    else if (zoneItem.ResetRoutingProduct != null) {
+                        selectedRoutingProductId = -1;
+                        rpSelectedDeferred = UtilsService.createPromiseDeferred();
+                        ctrl.followRateDate = zoneItem.ResetRoutingProduct.ApplyNewNormalRateBED;
+                    }
+                }
 
-				var loadSelectorPromise = loadSelector(selectedRoutingProductId);
-				promises.push(loadSelectorPromise);
+                var loadCurrentServicesPromise = loadCurrentServices();
+                promises.push(loadCurrentServicesPromise);
 
-				return UtilsService.waitMultiplePromises(promises).finally(function () {
-					isLoaded = true;
-				});
-			};
+                var loadSelectorPromise = loadSelector(selectedRoutingProductId);
+                promises.push(loadSelectorPromise);
 
-			api.applyChanges = function () {
-				setNewRoutingProduct();
-				setRoutingProductChange();
-			};
+                return UtilsService.waitMultiplePromises(promises).finally(function () {
+                    isLoaded = true;
+                });
+            };
 
-			if (ctrl.onReady != null)
-				ctrl.onReady(api);
-		}
+            api.applyChanges = function () {
+                setNewRoutingProduct();
+                setRoutingProductChange();
+            };
 
-		function loadCurrentServices() {
-			var currentServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
 
-			var currentServiceViewerPayload = { selectedIds: zoneItem.CurrentServiceIds };
-			VRUIUtilsService.callDirectiveLoad(currentServiceViewerAPI, currentServiceViewerPayload, currentServiceViewerLoadDeferred);
+        function loadCurrentServices() {
+            var currentServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
 
-			return currentServiceViewerLoadDeferred.promise;
-		}
-		function loadSelector(selectedIds) {
+            var currentServiceViewerPayload = { selectedIds: zoneItem.CurrentServiceIds };
+            VRUIUtilsService.callDirectiveLoad(currentServiceViewerAPI, currentServiceViewerPayload, currentServiceViewerLoadDeferred);
 
-			var selectorLoadDeferred = UtilsService.createPromiseDeferred();
+            return currentServiceViewerLoadDeferred.promise;
+        }
+        function loadSelector(selectedIds) {
 
-			var selectorPayload = {
-				selectedIds: selectedIds
-			};
+            var selectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-			selectorPayload.filter = {
-				ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId,
-				AssignableToZoneId: zoneItem.ZoneId
-			};
+            var selectorPayload = {
+                selectedIds: selectedIds
+            };
 
-			if (zoneItem.IsCurrentRoutingProductEditable === true) {
-				selectorPayload.defaultItems = [{
-					RoutingProductId: -1,
-					Name: '(Reset To Default)'
-				}];
-			}
+            selectorPayload.filter = {
+                ExcludedRoutingProductId: zoneItem.CurrentRoutingProductId,
+                AssignableToZoneId: zoneItem.ZoneId
+            };
 
-			VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
-			return selectorLoadDeferred.promise;
-		}
+            if (zoneItem.IsCurrentRoutingProductEditable === true) {
+                selectorPayload.defaultItems = [{
+                    RoutingProductId: -1,
+                    Name: '(Reset To Default)'
+                }];
+            }
 
-		function setNewRoutingProduct() {
-			var selectedId = selectorAPI.getSelectedIds();
+            VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
+            return selectorLoadDeferred.promise;
+        }
 
-			if (selectedId && selectedId != -1) {
-				zoneItem.NewRoutingProductId = selectedId;
-				zoneItem.NewRoutingProductBED = UtilsService.getDateFromDateTime(new Date());
-				zoneItem.NewRoutingProductEED = null;
-				zoneItem.FollowRateDate = ctrl.followRateDate;
-			}
-			else {
-				zoneItem.NewRoutingProductId = null;
-				zoneItem.NewRoutingProductBED = null;
-				zoneItem.NewRoutingProductEED = null;
-				zoneItem.FollowRateDate = ctrl.followRateDate;
-			}
-		}
-		function setRoutingProductChange() {
-			var selectedId = selectorAPI.getSelectedIds();
-			zoneItem.RoutingProductChangeEED = (selectedId && selectedId == -1) ? UtilsService.getDateFromDateTime(new Date()) : null;
-		}
-	}
+        function setNewRoutingProduct() {
+            var selectedId = selectorAPI.getSelectedIds();
+
+            if (selectedId && selectedId != -1) {
+                zoneItem.NewRoutingProduct = {
+                    ZoneId: zoneItem.ZoneId,
+                    ZoneRoutingProductId: selectedId,
+                    BED: UtilsService.getDateFromDateTime(new Date()),
+                    EED: null,
+                    ApplyNewNormalRateBED: ctrl.followRateDate
+                };
+                //zoneItem.NewRoutingProductId = selectedId;
+                //zoneItem.NewRoutingProductBED = UtilsService.getDateFromDateTime(new Date());
+                //zoneItem.NewRoutingProductEED = null;
+                //zoneItem.FollowRateDate = ctrl.followRateDate;
+            }
+            else {
+                zoneItem.NewRoutingProductId = null;
+                zoneItem.NewRoutingProductBED = null;
+                zoneItem.NewRoutingProductEED = null;
+                zoneItem.FollowRateDate = ctrl.followRateDate;
+            }
+        }
+        function setRoutingProductChange() {
+            var selectedId = selectorAPI.getSelectedIds();
+
+            if (selectedId && selectedId == -1) {
+                zoneItem.ResetRoutingProduct = {
+                    ZoneId: zoneItem.ZoneId,
+                    ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
+                    EED: UtilsService.getDateFromDateTime(new Date()),
+                    ApplyNewNormalRateBED: ctrl.followRateDate
+                };
+            }
+        }
+    }
 }]);
