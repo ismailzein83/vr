@@ -628,6 +628,7 @@
     <None Include="Configuration.txt">
       <ApplicationScope>False</ApplicationScope>
     </None>
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_SetDraft.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

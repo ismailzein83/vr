@@ -8,7 +8,8 @@ DECLARE @ItemSetNamesTable TABLE (ItemSetName nvarchar(255))
 	INSERT INTO @ItemSetNamesTable (ItemSetName)
 	SELECT CONVERT(nvarchar(255), ParsedString) FROM [VR_Invoice].[ParseStringList](@ItemSetNames)
 	
- SELECT [ID],InvoiceID,ItemSetName,Name,Details
- FROM	[VR_Invoice].InvoiceItem with(nolock)
- WHERE	InvoiceID =@InvoiceId  AND  ItemSetName in (SELECT ItemSetName FROM @ItemSetNamesTable)
+ SELECT [ID],InvoiceID,invItem.ItemSetName,Name,Details
+ FROM	[VR_Invoice].InvoiceItem invItem with(nolock)
+ JOIN @ItemSetNamesTable setName ON invItem.ItemSetName like setName.ItemSetName
+ WHERE	InvoiceID =@InvoiceId
 End

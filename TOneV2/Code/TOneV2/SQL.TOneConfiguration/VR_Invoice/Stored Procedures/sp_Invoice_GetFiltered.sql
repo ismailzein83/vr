@@ -50,4 +50,5 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			(@ToDate is null OR vrIn.ToDate <= @ToDate)   AND 
 			(@IssueDate is null OR vrIn.IssueDate =@IssueDate ) And 
 			vrIn.IsDeleted != 1
+			AND IsDraft != 1
 END
