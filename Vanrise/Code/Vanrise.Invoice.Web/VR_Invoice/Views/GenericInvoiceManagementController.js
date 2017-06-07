@@ -34,12 +34,9 @@
                 accountStatusSelectorReadyDeferred.resolve();
             };
 
-            $scope.onAccountStatusSelectionChanged = function(value)
-            {
-                if(value != undefined)
-                {
-                    if(partnerSelectorAPI != undefined)
-                    {
+            $scope.onAccountStatusSelectionChanged = function (value) {
+                if (value != undefined) {
+                    if (partnerSelectorAPI != undefined) {
                         var setLoader = function (value) {
                             $scope.isLoadingDirective = value;
                         };
@@ -51,7 +48,7 @@
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerSelectorAPI, partnerSelectorPayload, setLoader, partnerSelectorReadyDeferred);
                     }
                 }
-            }
+            };
             var date = new Date();
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
