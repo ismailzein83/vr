@@ -77,6 +77,11 @@
         var currencyFieldAPI;
         var currencyFieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var itemSetNameStorageRuleAPI;
+        var itemSetNameStorageRuleReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+
         var dataRecordTypeEntity;
 
         defineScope();
@@ -139,6 +144,12 @@
                    
                 }
             };
+
+            $scope.scopeModel.onItemSetNameStorageRuleReady = function(api)
+            {
+                itemSetNameStorageRuleAPI = api;
+                itemSetNameStorageRuleReadyPromiseDeferred.resolve();
+            }
 
             $scope.scopeModel.onInvoiceSettingDefinitionReady = function (api) {
                 invoiceSettingDefinitionDirectiveAPI = api;
@@ -264,7 +275,8 @@
                         UseTimeZone: $scope.scopeModel.useTimeZone,
                         InvoiceAttachments: invoiceAttachmentsAPI.getData(),
                         AmountFieldName: amountFieldAPI.getSelectedIds(),
-                        CurrencyFieldName:currencyFieldAPI.getSelectedIds()
+                        CurrencyFieldName: currencyFieldAPI.getSelectedIds(),
+                        ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData()
                     }
                 };
                 return obj;
@@ -613,7 +625,19 @@
                   
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadInvoiceAttachmentsGrid,loadAmountFieldSelector,loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission,loadViewSettingsRequiredPermission,loadAddSettingsRequiredPermission,loadEditSettingsRequiredPermission,loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid])
+                function loadItemSetNameStorageRules() {
+                    var itemSetNameStorageRuleDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    itemSetNameStorageRuleReadyPromiseDeferred.promise.then(function () {
+                        var itemSetNameStorageRulesPayload = { context: getContext() };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
+                            itemSetNameStorageRulesPayload.itemSetNameStorageRules = invoiceTypeEntity.Settings.ItemSetNamesStorageRules;
+                        VRUIUtilsService.callDirectiveLoad(itemSetNameStorageRuleAPI, itemSetNameStorageRulesPayload, itemSetNameStorageRuleDeferredLoadPromiseDeferred);
+                    });
+                    return itemSetNameStorageRuleDeferredLoadPromiseDeferred.promise;
+                }
+
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

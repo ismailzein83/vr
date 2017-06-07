@@ -428,6 +428,12 @@ namespace Vanrise.Invoice.Business
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
             return InvoiceDetailMapper1(invoice, invoiceType);
         }
+        public Guid GetInvoiceTypeId(long invoiceId)
+        {
+            var invoice = GetInvoice(invoiceId);
+            invoice.ThrowIfNull("invoice", invoice);
+            return invoice.InvoiceTypeId;
+        }
         #endregion
 
         #region Mappers
@@ -583,7 +589,7 @@ namespace Vanrise.Invoice.Business
         {
             if (CheckInvoiceOverlaping(invoiceType.InvoiceTypeId, partnerId, fromDate, toDate, invoiceId))
             {
-                throw new InvoiceGeneratorException("Invoices must not overlapped.");
+                throw new InvoiceGeneratorException("Invoices must not overlap.");
             }
 
             InvoiceGenerationContext context = new InvoiceGenerationContext
@@ -620,8 +626,11 @@ namespace Vanrise.Invoice.Business
 
         private bool SaveInvoice(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoice, long? invoiceIdToDelete, out long invoiceId)
         {
+            var itemSetNames = invoiceItemSets.Select(x => x.SetName);
+            InvoiceItemManager invoiceItemManager = new Business.InvoiceItemManager();
+            var itemSetNameStorageDic = invoiceItemManager.GetItemSetNamesByStorageConnectionString(invoice.InvoiceTypeId, itemSetNames);
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, out invoiceId);
+            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, out invoiceId);
         }
         #endregion
     }

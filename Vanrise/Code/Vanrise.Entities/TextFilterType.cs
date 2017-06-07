@@ -9,6 +9,7 @@ namespace Vanrise.Entities
     public enum TextFilterType
     {
         StartsWith = 0,
-        Contains = 1
+        Contains = 1,
+        Equals = 2
     }
 }

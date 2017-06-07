@@ -19,11 +19,13 @@ namespace Vanrise.Invoice.MainExtensions
     }
     public class RDLCSubReport
     {
-        public InvoiceDataSource ParentSubreportDataSource { get; set; }
+        public string ParentDataSourceName { get; set; }
         public GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
         public string SubReportName { get; set; }
         public bool RepeatedSubReport { get; set; }
         public List<Entities.InvoiceDataSource> SubReportDataSources { get; set; }
+        public List<RDLCSubReport> SubReports { get; set; }
+
 
     }
     public class RDLCReportParameter

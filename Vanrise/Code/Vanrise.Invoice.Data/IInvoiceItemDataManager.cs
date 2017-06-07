@@ -10,7 +10,8 @@ namespace Vanrise.Invoice.Data
 {
     public interface IInvoiceItemDataManager:IDataManager
     {
-        IEnumerable<Entities.InvoiceItem> GetFilteredInvoiceItems(DataRetrievalInput<InvoiceItemQuery> input);
-        IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, List<string> itemSetNames);
+        string StorageConnectionStringKey { set; }
+        IEnumerable<Entities.InvoiceItem> GetFilteredInvoiceItems(long invoiceId, string itemSetNam);
+        IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, IEnumerable<string> itemSetNames, CompareOperator compareOperator);
     }
 }

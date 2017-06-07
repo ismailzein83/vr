@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,17 @@ namespace Vanrise.Invoice.Data.SQL
 
         }
 
-        #endregion
-        public IEnumerable<InvoiceItem> GetFilteredInvoiceItems(Vanrise.Entities.DataRetrievalInput<InvoiceItemQuery> input)
+        string _storageConnectionStringKey;
+        public string StorageConnectionStringKey
         {
-            return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetFiltered", InvoiceMapper, input.Query.InvoiceId, input.Query.ItemSetName);
+            set { this._storageConnectionStringKey = value; }
         }
-        public void SaveInvoiceItems(long invoiceId, List<GeneratedInvoiceItemSet> invoiceItemSets)
+        #endregion
+        public IEnumerable<InvoiceItem> GetFilteredInvoiceItems(long invoiceId, string itemSetName)
+        {
+            return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetFiltered", InvoiceMapper, invoiceId, itemSetName);
+        }
+        public void SaveInvoiceItems(long invoiceId, IEnumerable<GeneratedInvoiceItemSet> invoiceItemSets)
         {
 
             DataTable invoiceItemToSave = GetInvoiceItemTable();
@@ -50,13 +56,29 @@ namespace Vanrise.Invoice.Data.SQL
 
         }
 
-        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, List<string> itemSetNames)
+        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, IEnumerable<string> itemSetNames, CompareOperator compareOperator)
         {
+            string operatorString = "";
+            switch (compareOperator)
+            {
+                case CompareOperator.Contains:
+                  itemSetNames = itemSetNames.Select(x => string.Format("%{0}%", x));
+                    break;
+                case CompareOperator.EndWith:
+                    itemSetNames = itemSetNames.Select(x => string.Format("%{0}", x));
+                    break;
+                case CompareOperator.Equal:
+                    break;
+                case CompareOperator.StartWith:
+                    itemSetNames = itemSetNames.Select(x => string.Format("{0}%", x));
+                    break;
+            }
             string itemSetNamesString = null;
-            if (itemSetNames != null && itemSetNames.Count > 0)
+            if (itemSetNames != null && itemSetNames.Count() > 0)
             {
                 itemSetNamesString = string.Join(",", itemSetNames);
             }
+           
             return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetByItemSetNames", InvoiceMapper, invoiceId,itemSetNamesString);
         }
 
@@ -94,5 +116,20 @@ namespace Vanrise.Invoice.Data.SQL
         }
         #endregion
 
+        protected override string GetConnectionString()
+        {
+            if (!String.IsNullOrWhiteSpace(this._storageConnectionStringKey))
+            {
+                var connectionStringKey = ConfigurationManager.AppSettings[this._storageConnectionStringKey];
+                if (!string.IsNullOrEmpty(connectionStringKey))
+                {
+                    var connectionString = ConfigurationManager.ConnectionStrings[connectionStringKey];
+                    if (connectionString == null)
+                        throw new NullReferenceException(String.Format("connectionString '{0}'", connectionStringKey));
+                    return connectionString.ConnectionString;
+                }
+            }
+            return base.GetConnectionString();
+        }
     }
 }

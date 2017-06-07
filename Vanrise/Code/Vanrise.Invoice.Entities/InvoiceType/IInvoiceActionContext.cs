@@ -9,6 +9,6 @@ namespace Vanrise.Invoice.Entities
     public interface IInvoiceActionContext
     {
         Invoice GetInvoice { get; }
-        IEnumerable<InvoiceItem> GetInvoiceItems(List<string> itemSetNames);
+        IEnumerable<InvoiceItem> GetInvoiceItems(List<string> itemSetNames, CompareOperator CompareOperator);
     }
 }

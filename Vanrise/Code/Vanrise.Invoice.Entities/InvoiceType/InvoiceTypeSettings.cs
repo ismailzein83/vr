@@ -28,9 +28,30 @@ namespace Vanrise.Invoice.Entities
         public Guid? InvToAccBalanceRelationId { get; set; }
         public string AmountFieldName { get; set; }
         public string CurrencyFieldName { get; set; }
+        public List<ItemSetNameStorageRule> ItemSetNamesStorageRules { get; set; }
     }
 
-
+    public class ItemSetNameStorageRule
+    {
+        public Guid ItemSetNameStorageRuleId { get; set; }
+        public string Name { get; set; }
+        public ItemSetNameStorageRuleSettings Settings { get; set; }
+    }
+    public abstract class ItemSetNameStorageRuleSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract bool IsApplicable(IItemSetNameStorageRuleContext context);
+    }
+    public interface IItemSetNameStorageRuleContext
+    {
+        string ItemSetName { get; }
+        string StorageConnectionString { set; }
+    }
+    public class ItemSetNameStorageRuleContext : IItemSetNameStorageRuleContext
+    {
+        public string ItemSetName { get; set; }
+        public string StorageConnectionString { set; get; }
+    }
     public class InvoiceAttachment
     {
         public Guid InvoiceAttachmentId { get; set; }

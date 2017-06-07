@@ -48,6 +48,7 @@ app.directive('vrCommonTextfiltertypeSelector', ['VRCommon_TextFilterTypeEnum', 
 
             api.load = function (payload) {
                 selectorAPI.clearDataSource();
+                var promises = [];
 
                 var selectedIds;
 
@@ -60,6 +61,8 @@ app.directive('vrCommonTextfiltertypeSelector', ['VRCommon_TextFilterTypeEnum', 
                 if (selectedIds != undefined) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                 }
+                return UtilsService.waitMultiplePromises(promises);
+
             };
 
             api.getSelectedIds = function () {

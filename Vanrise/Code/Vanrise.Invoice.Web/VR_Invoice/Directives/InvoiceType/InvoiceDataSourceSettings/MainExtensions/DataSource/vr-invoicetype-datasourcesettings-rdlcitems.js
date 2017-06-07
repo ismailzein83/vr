@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNotificationService", "VRUIUtilsService",'VR_Invoice_ItemSetNameCompareOperatorEnum',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_ItemSetNameCompareOperatorEnum) {
 
         var directiveDefinitionObject = {
 
@@ -30,6 +30,8 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.listItems = [];
+                $scope.scopeModel.itemSetNamesCompareOperators = UtilsService.getArrayEnum(VR_Invoice_ItemSetNameCompareOperatorEnum);
+
                 ctrl.addItem = function () {
                     if (ctrl.itemsetName != undefined) {
                         ctrl.listItems.push(ctrl.itemsetName);
@@ -58,10 +60,14 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                 api.load = function (payload) {
                     ctrl.listItems.length = 0;
                     if (payload != undefined) {
-                        if (payload.dataSourceEntity && payload.dataSourceEntity.ItemSetNames != undefined) {
-                            for (var i = 0; i < payload.dataSourceEntity.ItemSetNames.length; i++) {
-                                var itemSetName = payload.dataSourceEntity.ItemSetNames[i];
-                                ctrl.listItems.push(itemSetName);
+                        if (payload.dataSourceEntity != undefined) {
+                            $scope.scopeModel.selectedItemSetNameCompareOperator = UtilsService.getItemByVal($scope.scopeModel.itemSetNamesCompareOperators, payload.dataSourceEntity.CompareOperator, "value");
+                            if (payload.dataSourceEntity.ItemSetNames != undefined)
+                            {
+                                for (var i = 0; i < payload.dataSourceEntity.ItemSetNames.length; i++) {
+                                    var itemSetName = payload.dataSourceEntity.ItemSetNames[i];
+                                    ctrl.listItems.push(itemSetName);
+                                }
                             }
                         }
                     }
@@ -73,7 +79,8 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
 
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.ItemsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
-                        ItemSetNames: ctrl.listItems
+                        ItemSetNames: ctrl.listItems,
+                        CompareOperator: $scope.scopeModel.selectedItemSetNameCompareOperator != undefined ? $scope.scopeModel.selectedItemSetNameCompareOperator.value : undefined,
                     };
                 };
 

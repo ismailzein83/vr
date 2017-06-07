@@ -77,6 +77,7 @@
     <Compile Include="BusinessManagers\IInvoiceSettingManager.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingsViewSettings.cs" />
     <Compile Include="InvoiceType\Configs\AutomaticInvoiceSettingsConfig.cs" />
+    <Compile Include="InvoiceType\Configs\ItemSetNameStorageRuleConfig.cs" />
     <Compile Include="InvoiceType\ConvertToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceType\EmailActionAttachment.cs" />
     <Compile Include="InvoiceType\IInvoiceActionContext.cs" />

@@ -16,7 +16,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                 var ctor = new SubReports($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "ctrlDataSources",
             bindToController: true,
             compile: function (element, attrs) {
 
@@ -64,13 +64,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
                         subReports = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            subReports.push({
-                                SubReportName: currentItem.Entity.SubReportName,
-                                SubReportDataSources: currentItem.Entity.SubReportDataSources,
-                                FilterGroup: currentItem.Entity.FilterGroup,
-                                RepeatedSubReport: currentItem.Entity.RepeatedSubReport,
-                                ParentSubreportDataSource: currentItem.Entity.ParentSubreportDataSource,
-                            });
+                            subReports.push(currentItem.Entity);
                         }
                     }
                     return subReports;
@@ -93,8 +87,10 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreportReportsettingsSubrep
             }
             function getContext()
             {
-                
-                return context;
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
             function defineMenuActions() {
                 var defaultMenuActions = [

@@ -64,6 +64,9 @@
                 invoiceActionId: invoiceActionId
             });
         }
+
+       
+        
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
@@ -78,7 +81,7 @@
             GetInvoiceGeneratorActions: GetInvoiceGeneratorActions,
             GetInvoicePartnerSelector: GetInvoicePartnerSelector,
             GetInvoiceAction: GetInvoiceAction,
-            GetInvoiceTypeExtendedSettings: GetInvoiceTypeExtendedSettings
+            GetInvoiceTypeExtendedSettings: GetInvoiceTypeExtendedSettings,
         });
     }
 

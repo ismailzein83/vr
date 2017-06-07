@@ -87,6 +87,7 @@
     <Compile Include="InvoiceDataSourceSettings\InvoiceDataSourceItems.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionResult.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionSettings.cs" />
+    <Compile Include="ItemSetNameStorageRule\DefaultItemSetNameStorageRule.cs" />
     <Compile Include="ItemsFilter\GenericItemsFilter.cs" />
     <Compile Include="RDLCReportParameterValue\CustomFieldRDLReportParameterValue.cs" />
     <Compile Include="RDLCReportParameterValue\FieldRDLReportParameterValue.cs" />

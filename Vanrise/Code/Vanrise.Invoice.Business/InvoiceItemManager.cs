@@ -8,7 +8,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceItemManager
@@ -38,10 +38,30 @@ namespace Vanrise.Invoice.Business
             }
             return null;
         }
-        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, List<string> itemSetNames)
+        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, List<string> itemSetNames, CompareOperator compareOperator)
         {
-            IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
-            return dataManager.GetInvoiceItemsByItemSetNames(invoiceId, itemSetNames);
+            List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
+            if (itemSetNames != null)
+            {
+                var invoiceTypeId = new InvoiceManager().GetInvoiceTypeId(invoiceId);
+                Dictionary<string, List<string>> itemSetNamesByStorageConnectionString = GetItemSetNamesByStorageConnectionString(invoiceTypeId, itemSetNames);
+                foreach (var item in itemSetNamesByStorageConnectionString)
+                {
+                    IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
+                    dataManager.StorageConnectionStringKey = item.Key;
+                    var result = dataManager.GetInvoiceItemsByItemSetNames(invoiceId, item.Value, compareOperator);
+                    invoiceItems.AddRange(result);
+                }
+                var remainingInvoiceItemSets = itemSetNames.FindAllRecords(x => !itemSetNamesByStorageConnectionString.Values.Any(y => y.Contains(x)));
+                if (remainingInvoiceItemSets != null)
+                {
+                    IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
+                    var result = dataManager.GetInvoiceItemsByItemSetNames(invoiceId, remainingInvoiceItemSets, compareOperator);
+                    invoiceItems.AddRange(result);
+
+                }
+            }
+            return invoiceItems;
         }
 
 
@@ -53,6 +73,25 @@ namespace Vanrise.Invoice.Business
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
             return BigDataManager.Instance.RetrieveData(input, new GroupingInvoiceItemRequestHandler());
+        }
+
+        public Dictionary<string, List<string>> GetItemSetNamesByStorageConnectionString(Guid invoiceTypeId, IEnumerable<string> itemSetNames)
+        {
+            Dictionary<string, List<string>> itemSetNamesByStorageConnectionString = new Dictionary<string, List<string>>();
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            foreach (var itemSetName in itemSetNames)
+            {
+                string storageConnectionString = invoiceTypeManager.GetItemSetNameStorageInfo(invoiceTypeId, itemSetName);
+                if (storageConnectionString != null)
+                {
+                    var storageItemSetNames = itemSetNamesByStorageConnectionString.GetOrCreateItem(storageConnectionString, () =>
+                    {
+                        return new List<string>();
+                    });
+                    storageItemSetNames.Add(itemSetName);
+                }
+            }
+            return itemSetNamesByStorageConnectionString;
         }
 
         #endregion
@@ -74,12 +113,15 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
                 var gridColumns = GetInvoiceSubSectionGridColumn(invoiceType, input.Query.UniqueSectionID);
+                var itemSetNameStorageConnectionString =  manager.GetItemSetNameStorageInfo(input.Query.InvoiceTypeId, input.Query.ItemSetName);
                 IInvoiceItemDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
+                _dataManager.StorageConnectionStringKey = itemSetNameStorageConnectionString;
                 if (input.Query.ItemSetNameParts != null && input.Query.ItemSetNameParts.Count > 0)
                 {
                     input.Query.ItemSetName = InvoiceItemManager.ExecuteItemSetNameParts(input.Query.ItemSetNameParts, input.Query.InvoiceItemDetails, input.Query.ItemSetName);
                 }
-                var results = _dataManager.GetFilteredInvoiceItems(input);
+         
+                var results = _dataManager.GetFilteredInvoiceItems(input.Query.InvoiceId,input.Query.ItemSetName);
                 List<Entities.InvoiceItemDetail> detailedResults = new List<InvoiceItemDetail>();
                 foreach (var item in results)
                 {

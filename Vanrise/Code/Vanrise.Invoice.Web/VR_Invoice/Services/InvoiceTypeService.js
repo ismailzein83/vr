@@ -257,6 +257,36 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService', 'VRCommon_Object
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+
+
+        function addItemSetNameStorageRule(onItemSetNameStorageRuleAdded, context) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onItemSetNameStorageRuleAdded = onItemSetNameStorageRuleAdded;
+            };
+
+            var parameters = {
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/ItemSetNameStorageRule/Templates/ItemSetNameStorageRuleEditor.html', parameters, modalSettings);
+        }
+
+        function editItemSetNameStorageRule(itemSetNameStorageRule, onItemSetNameStorageRuleUpdated, context) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onItemSetNameStorageRuleUpdated = onItemSetNameStorageRuleUpdated;
+            };
+
+            var parameters = {
+                itemSetNameStorageRule: itemSetNameStorageRule,
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/ItemSetNameStorageRule/Templates/ItemSetNameStorageRuleEditor.html', parameters, modalSettings);
+        }
         return ({
             addInvoiceType: addInvoiceType,
             editInvoiceType: editInvoiceType,
@@ -276,6 +306,8 @@ app.service('VR_Invoice_InvoiceTypeService', ['VRModalService', 'VRCommon_Object
             addInvoiceSettingPart: addInvoiceSettingPart,
             editInvoiceSettingPart: editInvoiceSettingPart,
             registerObjectTrackingDrillDownToInvoiceType: registerObjectTrackingDrillDownToInvoiceType,
-            getDrillDownDefinition: getDrillDownDefinition
+            getDrillDownDefinition: getDrillDownDefinition,
+            editItemSetNameStorageRule: editItemSetNameStorageRule,
+            addItemSetNameStorageRule: addItemSetNameStorageRule
         });
     }]);

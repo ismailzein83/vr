@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.MainExtensions
 
 
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
-            var invoiceItems = context.InvoiceActionContext.GetInvoiceItems(new List<String> { itemGrouping.ItemSetName});// 
+            var invoiceItems = context.InvoiceActionContext.GetInvoiceItems(new List<String> { itemGrouping.ItemSetName},CompareOperator.Equal);// 
             InvoiceItemGroupingManager invoiceItemGroupingManager = new Business.InvoiceItemGroupingManager();
            
             GroupingInvoiceItemQuery query = new GroupingInvoiceItemQuery

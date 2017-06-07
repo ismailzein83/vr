@@ -335,6 +335,8 @@ namespace Vanrise.Common
                     return target.StartsWith(match);
                 case TextFilterType.Contains:
                     return target.Contains(match);
+                case TextFilterType.Equals:
+                    return target.Equals(match);
             }
             throw new ArgumentException("textFilterType");
         }

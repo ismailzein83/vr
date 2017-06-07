@@ -191,6 +191,7 @@
     <Content Include="VR_Invoice\Constants\InvoiceDateEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceMonthlyTypeEnum.js" />
+    <Content Include="VR_Invoice\Constants\ItemSetNameCompareOperatorEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
     <Content Include="VR_Invoice\Directives\AccountStatus\vr-invoice-accountstatus-selector.js" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\Templates\AutomaticInvoiceProcessManualTemplate.html" />
@@ -311,6 +312,13 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-editor.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-row.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-section.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\ItemSetNameStorageRuleEditorController.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\MainExtensions\Templates\DefaultItemSetNameStorageRuleTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\MainExtensions\vr-invoicetype-itemsetnamestoragerulesettings-default.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\Templates\ItemSetNameStorageRuleEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\Templates\ItemSetNameStorageRulesManagement.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\vr-invoicetype-itemsetnamestoragerulesettings.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\vr-invoicetype-itemsetnamestoragerules-management.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\Templates\RDLCReportParameterManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\Templates\RDLCSubReportsManagement.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\vr-invoicetype-gridactionsettings-openrdlcreport-parameters.js" />

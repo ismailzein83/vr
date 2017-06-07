@@ -102,13 +102,25 @@ namespace Vanrise.Invoice.Business
                 return this._Invoice;
             }
         }
-        public IEnumerable<InvoiceItem> GetInvoiceItems(List<string> itemSetNames)
+        public IEnumerable<InvoiceItem> GetInvoiceItems(List<string> itemSetNames, CompareOperator compareOperator)
         {
             if (!this.IsLoaded)
                 InitializeInvoiceActionContext();
             
             List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
-            var generatedInvoiceItems = this.GeneratedInvoice.InvoiceItemSets.Where(x => itemSetNames.Contains(x.SetName));
+
+
+
+            var generatedInvoiceItems = this.GeneratedInvoice.InvoiceItemSets.Where(x =>{
+                switch(compareOperator)
+                {
+                    case CompareOperator.StartWith: return itemSetNames.Any(y => x.SetName.StartsWith(y)); 
+                    case CompareOperator.Contains: return itemSetNames.Any(y => x.SetName.Contains(y)); 
+                    case CompareOperator.EndWith: return itemSetNames.Any(y => x.SetName.EndsWith(y));
+                    case CompareOperator.Equal :  return itemSetNames.Any(y=>  x.SetName.Equals(y));
+                }
+                return false;
+            });
             foreach (var generatedInvoiceItem in generatedInvoiceItems)
             {
                 foreach (var item in generatedInvoiceItem.Items)

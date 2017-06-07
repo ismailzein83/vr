@@ -73,5 +73,10 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<AutomaticInvoiceSettingsConfig>(AutomaticInvoiceSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<ItemSetNameStorageRuleConfig> GetItemSetNameStorageRuleConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<ItemSetNameStorageRuleConfig>(ItemSetNameStorageRuleConfig.EXTENSION_TYPE);
+        }
     }
 }

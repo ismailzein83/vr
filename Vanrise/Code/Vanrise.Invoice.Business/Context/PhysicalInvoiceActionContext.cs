@@ -28,10 +28,10 @@ namespace Vanrise.Invoice.Business
                 return this._Invoice;
             }
         }
-        public IEnumerable<Entities.InvoiceItem> GetInvoiceItems(List<string> itemSetNames)
+        public IEnumerable<Entities.InvoiceItem> GetInvoiceItems(List<string> itemSetNames, CompareOperator compareOperator)
         {
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
-            return invoiceItemManager.GetInvoiceItemsByItemSetNames(this.InvoiceId, itemSetNames);
+            return invoiceItemManager.GetInvoiceItemsByItemSetNames(this.InvoiceId, itemSetNames, compareOperator);
         }
     }
 }

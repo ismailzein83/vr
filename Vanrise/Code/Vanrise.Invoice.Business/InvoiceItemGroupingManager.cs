@@ -20,8 +20,8 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId);
             var groupItem = invoiceType.Settings.ItemGroupings.FirstOrDefault(x => x.ItemGroupingId == query.ItemGroupingId);
-            IInvoiceItemDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
-            var results = _dataManager.GetInvoiceItemsByItemSetNames(query.InvoiceId, new List<string> { groupItem.ItemSetName });
+            InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
+            var results = invoiceItemManager.GetInvoiceItemsByItemSetNames(query.InvoiceId, new List<string> { groupItem.ItemSetName }, CompareOperator.Equal);
 
             return ApplyFinalGroupingAndFiltering(new GroupingInvoiceItemQueryContext(query), results, query.DimensionIds, query.MeasureIds, query.Filters, groupItem);
         }

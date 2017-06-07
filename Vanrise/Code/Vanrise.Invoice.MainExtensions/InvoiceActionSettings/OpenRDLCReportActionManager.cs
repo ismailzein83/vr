@@ -10,7 +10,8 @@ using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
+using System.Threading;
 namespace Vanrise.Invoice.MainExtensions
 {
     public class OpenRDLCReportActionManager
@@ -20,21 +21,21 @@ namespace Vanrise.Invoice.MainExtensions
         Entities.Invoice invoice;
         Entities.InvoiceType invoiceType;
         Dictionary<string, RepeatedReportDetails> repeatedReports;
+        RecordFilterManager _manager = new RecordFilterManager();
+        Dictionary<string, IEnumerable<dynamic>> mainItemsByDataSourceName;
+        Dictionary<string, IEnumerable<dynamic>> nonRepeatedReportItemsByDataSourceName;
+
         public void BuildRdlcReport(ReportViewer reportViewer, ReportInput reportInput)
         {
-          
                 repeatedReports = new Dictionary<string, RepeatedReportDetails>();
+                nonRepeatedReportItemsByDataSourceName = new Dictionary<string, IEnumerable<dynamic>>();
                 invoiceActionContext = reportInput.Context;
-
                 InvoiceManager invoiceManager = new InvoiceManager();
-
                 invoice = reportInput.Context.GetInvoice;
                 InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
                 invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
-
                 var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == reportInput.ActionId);
                 var gridAction = invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions.FirstOrDefault(x => x.InvoiceGridActionId == reportInput.ActionId);
-
                 InvoiceGridActionFilterConditionContext context = new InvoiceGridActionFilterConditionContext
                 {
                     Invoice = invoice,
@@ -52,7 +53,7 @@ namespace Vanrise.Invoice.MainExtensions
                     reportViewer.ProcessingMode = ProcessingMode.Local;
                     reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(openRDLCReportAction.ReportURL);
                     reportViewer.LocalReport.DisplayName = String.Format("Invoice");
-                    SetDataSources(reportViewer.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources, true, null);
+                    SetMainReportDataSources(reportViewer.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources);
                     invoiceReportParameters = GetParameters(reportViewer.LocalReport.GetParameters(), openRDLCReportAction.MainReportParameters);
                 }
                 reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
@@ -60,19 +61,26 @@ namespace Vanrise.Invoice.MainExtensions
         }
         void SubreportProcessingEventHandler(object sender, SubreportProcessingEventArgs e)
         {
-
-            RecordFilterManager manager = new RecordFilterManager();
+            Thread.Sleep(100);
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoice.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
-            if (openRDLCReportAction != null && openRDLCReportAction.SubReports != null && openRDLCReportAction.SubReports.Count > 0)
+            if (openRDLCReportAction != null)
             {
-                foreach (var subReport in openRDLCReportAction.SubReports)
+                LoadSubReport(context, e, openRDLCReportAction.SubReports,null,false);
+            }
+        }
+
+        private bool LoadSubReport(DataRecordFilterGenericFieldMatchContext context, SubreportProcessingEventArgs e, List<RDLCSubReport> subReports,RDLCSubReport parentReport, bool isParentRepeated)
+        {
+            if(openRDLCReportAction.SubReports != null && openRDLCReportAction.SubReports.Count > 0)
+            {
+                foreach (var subReport in subReports)
                 {
                     if (subReport.SubReportName == e.ReportPath)
                     {
 
                         bool loadDataSource = false;
                         RepeatedReportDetails repeatedReportDetails = null;
-                        if (subReport.SubReportDataSources != null && manager.IsFilterGroupMatch(subReport.FilterGroup, context))
+                        if (subReport.SubReportDataSources != null && _manager.IsFilterGroupMatch(subReport.FilterGroup, context))
                         {
                             loadDataSource = true;
                             if (subReport.RepeatedSubReport)
@@ -84,23 +92,40 @@ namespace Vanrise.Invoice.MainExtensions
                                     repeatedReportDetails = new RepeatedReportDetails
                                     {
                                         Index = 0,
-                                        ParentDataSourceItems = subReport.ParentSubreportDataSource.Settings.GetDataSourceItems(reportDataSourceContext),
                                         ItemsByDataSource = new Dictionary<string, IEnumerable<dynamic>>()
                                     };
+                                    if (parentReport == null)
+                                    {
+                                        repeatedReportDetails.ParentDataSourceItems = mainItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
+                                    }
+                                    else if (!isParentRepeated){
+                                        repeatedReportDetails.ParentDataSourceItems = nonRepeatedReportItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
+                                    }else
+                                    {
+                                        var parentReportDetails = repeatedReports.GetRecord(parentReport.SubReportName);
+                                        repeatedReportDetails.ParentDataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(subReport.ParentDataSourceName);
+                                    }
+
                                     repeatedReports.Add(subReport.SubReportName, repeatedReportDetails);
                                 }
                             }
                         }
-                        SetDataSources(e.DataSources, subReport.SubReportDataSources, loadDataSource, repeatedReportDetails);
-                        break;
+                        SetSubReportDataSources(e.DataSources, subReport.SubReportDataSources, loadDataSource, repeatedReportDetails);
+                        return true;
+                    }
+                    else
+                    {
+                        var result = LoadSubReport(context, e, subReport.SubReports, subReport, subReport.RepeatedSubReport);
+                      if (result)
+                          return true;
                     }
                 }
             }
+            return false;
         }
         private List<ReportParameter> GetParameters(ReportParameterInfoCollection reportParameters, List<RDLCReportParameter> parameters)
         {
             List<ReportParameter> invoiceReportParameters = new List<ReportParameter>();
-
             if (reportParameters != null)
             {
                 if (parameters != null && parameters.Count > 0)
@@ -132,13 +157,29 @@ namespace Vanrise.Invoice.MainExtensions
                         {
                             invoiceReportParameters.Add(new ReportParameter(par.Key, par.Value.Value, par.Value.IsVisible));
                         }
-                    };
+                    }
                 }
             }
-
             return invoiceReportParameters;
         }
-        private void SetDataSources(ReportDataSourceCollection reportDataSources, List<InvoiceDataSource> dataSources, bool loadDataSource, RepeatedReportDetails repeatedReportDetails)
+
+        private void SetMainReportDataSources(ReportDataSourceCollection reportDataSources, List<InvoiceDataSource> dataSources)
+        {
+            if (dataSources != null && dataSources.Count > 0)
+            {
+                mainItemsByDataSourceName = new Dictionary<string, IEnumerable<dynamic>>();
+                RDLCReportDataSourceSettingsContext context = new RDLCReportDataSourceSettingsContext();
+                context.InvoiceActionContext = invoiceActionContext;
+                foreach (var dataSource in dataSources)
+                {
+                    IEnumerable<dynamic> items =  dataSource.Settings.GetDataSourceItems(context);
+                    mainItemsByDataSourceName.Add(dataSource.DataSourceName, items);
+                    ReportDataSource ds = new ReportDataSource(dataSource.DataSourceName, items);
+                    reportDataSources.Add(ds);
+                }
+            }
+        }
+        private void SetSubReportDataSources(ReportDataSourceCollection reportDataSources, List<InvoiceDataSource> dataSources, bool loadDataSource, RepeatedReportDetails repeatedReportDetails)
         {
             if (dataSources != null && dataSources.Count > 0)
             {
@@ -169,6 +210,7 @@ namespace Vanrise.Invoice.MainExtensions
                         else
                         {
                             items = dataSource.Settings.GetDataSourceItems(context);
+                            nonRepeatedReportItemsByDataSourceName.Add(dataSource.DataSourceName, items);
                         }
                     }
                     ReportDataSource ds = new ReportDataSource(dataSource.DataSourceName, items);
@@ -177,6 +219,8 @@ namespace Vanrise.Invoice.MainExtensions
             }
         }
     }
+
+
     public class RepeatedReportDetails
     {
         public int Index { get; set; }

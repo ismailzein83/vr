@@ -45,6 +45,9 @@
         function GetAutomaticInvoiceActionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetAutomaticInvoiceActionSettingsConfigs"));
         }
+        function GetItemSetNameStorageRuleConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetItemSetNameStorageRuleConfigs"));
+        }
         return ({
             GetInvoiceActionSettingsConfigs: GetInvoiceActionSettingsConfigs,
             GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
@@ -57,7 +60,9 @@
             GetBillingPeriodTemplateConfigs: GetBillingPeriodTemplateConfigs,
             GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs,
             GetInvoiceSettingPartsConfigs: GetInvoiceSettingPartsConfigs,
-            GetAutomaticInvoiceActionSettingsConfigs: GetAutomaticInvoiceActionSettingsConfigs
+            GetAutomaticInvoiceActionSettingsConfigs: GetAutomaticInvoiceActionSettingsConfigs,
+            GetItemSetNameStorageRuleConfigs: GetItemSetNameStorageRuleConfigs
+
         });
     }
 

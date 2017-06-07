@@ -17,6 +17,9 @@
         var recordFilterAPI;
         var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var subReportsAPI;
+        var subReportsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -39,6 +42,10 @@
                 recordFilterAPI = api;
                 recordFilterReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onSubreportDirectiveReady = function (api) {
+                subReportsAPI = api;
+                subReportsReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onSubReportDataSourcesReady = function (api) {
                 subReportDataSourcesAPI = api;
                 subReportDataSourcesReadyPromiseDeferred.resolve();
@@ -57,7 +64,8 @@
                     SubReportDataSources: subReportDataSourcesAPI.getData(),
                     FilterGroup: filter != undefined ? filter.filterObj : undefined,
                     RepeatedSubReport: $scope.scopeModel.repeatedSubReport,
-                    ParentSubreportDataSource: $scope.scopeModel.repeatedSubReport ? context.getDataSource($scope.scopeModel.selectedDataSource.DataSourceName) : undefined
+                    ParentDataSourceName: $scope.scopeModel.repeatedSubReport ? $scope.scopeModel.selectedDataSource.DataSourceName : undefined,
+                    SubReports: subReportsAPI.getData()
                 };
             }
             function addSubReport() {
@@ -96,8 +104,9 @@
                     if (subReportEntity != undefined) {
                         $scope.scopeModel.subReportName = subReportEntity.SubReportName;
                         $scope.scopeModel.repeatedSubReport = subReportEntity.RepeatedSubReport;
-                        if (subReportEntity.ParentSubreportDataSource != undefined)
-                            $scope.scopeModel.selectedDataSource = UtilsService.getItemByVal($scope.scopeModel.datasources, subReportEntity.ParentSubreportDataSource.DataSourceName, "DataSourceName");
+
+                        if (subReportEntity.ParentDataSourceName != undefined)
+                            $scope.scopeModel.selectedDataSource = UtilsService.getItemByVal($scope.scopeModel.datasources, subReportEntity.ParentDataSourceName, "DataSourceName");
                     }
                 }
                 function loadSubReportDataSourcesDirective() {
@@ -121,8 +130,18 @@
                     });
                     return recordFilterLoadPromiseDeferred.promise;
                 }
-
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubReportDataSourcesDirective, loadRecordFilterDirective]).then(function () {
+                function loadSubReportsDirective() {
+                    var subReportsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    subReportsReadyPromiseDeferred.promise.then(function () {
+                        var subReportsPayload = { context: getContext() };
+                        if (subReportEntity != undefined) {
+                            subReportsPayload.subReports = subReportEntity.SubReports;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(subReportsAPI, subReportsPayload, subReportsLoadPromiseDeferred);
+                    });
+                    return subReportsLoadPromiseDeferred.promise;
+                }
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubReportDataSourcesDirective, loadRecordFilterDirective,loadSubReportsDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -135,13 +154,25 @@
 
         function getContext()
         {
-            var currentContext = context;
+            var currentContext = UtilsService.cloneObject(context);
           
             if (currentContext == undefined)
                 currentContext = {};
             currentContext.showItemsFilter = function () {
                 return $scope.scopeModel.repeatedSubReport;
             };
+            currentContext.getDataSourcesInfo = function()
+            {
+                var dataSources = [];
+                var reportDataSources = subReportDataSourcesAPI.getData();
+                if (reportDataSources != undefined) {
+                    for (var i = 0; i < reportDataSources.length; i++) {
+                        var reportDataSource = reportDataSources[i];
+                        dataSources.push({ DataSourceName: reportDataSource.DataSourceName })
+                    }
+                }
+                return dataSources;
+            }
             return currentContext;
         }
        

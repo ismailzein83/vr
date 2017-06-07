@@ -8,7 +8,7 @@ using System.Transactions;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Invoice.Data.SQL
 {
     public class InvoiceDataManager : BaseSQLDataManager, IInvoiceDataManager
@@ -112,38 +112,52 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, out long insertedInvoiceId)
+        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, out long insertedInvoiceId)
         {
-            var options = new TransactionOptions
+            object invoiceId;
+            int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId,
+                                                                                      invoiceEntity.UserId,
+                                                                                      invoiceEntity.InvoiceTypeId,
+                                                                                      invoiceEntity.PartnerId,
+                                                                                      invoiceEntity.SerialNumber,
+                                                                                      invoiceEntity.FromDate,
+                                                                                      invoiceEntity.ToDate,
+                                                                                      invoiceEntity.TimeZoneId,
+                                                                                      invoiceEntity.TimeZoneOffset,
+                                                                                      invoiceEntity.IssueDate,
+                                                                                      invoiceEntity.DueDate,
+                                                                                      Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
+                                                                                      invoiceEntity.Note,
+                                                                                      invoiceIdToDelete,
+                                                                                      invoiceEntity.SourceId, true);
+            insertedInvoiceId = Convert.ToInt64(invoiceId);
+            if (itemSetNameStorageDic != null && itemSetNameStorageDic.Count > 0)
             {
-                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-                Timeout = TransactionManager.DefaultTimeout
-            };
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                object invoiceId;
-                int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId,
-                                                                                       invoiceEntity.UserId,
-                                                                                       invoiceEntity.InvoiceTypeId,
-                                                                                       invoiceEntity.PartnerId,
-                                                                                       invoiceEntity.SerialNumber,
-                                                                                       invoiceEntity.FromDate,
-                                                                                       invoiceEntity.ToDate,
-                                                                                       invoiceEntity.TimeZoneId,
-                                                                                       invoiceEntity.TimeZoneOffset,
-                                                                                       invoiceEntity.IssueDate,
-                                                                                       invoiceEntity.DueDate,
-                                                                                       Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
-                                                                                       invoiceEntity.Note,
-                                                                                       invoiceIdToDelete,
-                                                                                       invoiceEntity.SourceId);
-                insertedInvoiceId = Convert.ToInt64(invoiceId);
-                InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                dataManager.SaveInvoiceItems((long)invoiceId, invoiceItemSets);
-                scope.Complete();
-                return (affectedRows > -1);
+                var remainingInvoiceItemSets = invoiceItemSets.FindAllRecords(x => !itemSetNameStorageDic.Values.Any(y=>y.Contains(x.SetName)));
+                if (remainingInvoiceItemSets != null)
+                {
+                    InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                    dataManager.SaveInvoiceItems(insertedInvoiceId, remainingInvoiceItemSets);
+                }
+                foreach (var item in itemSetNameStorageDic)
+                {
+                    InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                    dataManager.StorageConnectionStringKey = item.Key;
+                    var invoiceItemSetsToSave = invoiceItemSets.FindAllRecords(x => item.Value.Contains(x.SetName));
+                    dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSetsToSave);
+                }
             }
+            else
+            {
+                InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSets);
+            }
+            return SetDraft(insertedInvoiceId, false);
+        }
+        public bool SetDraft(long invoiceId, bool isDraft)
+        {
+            int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_SetDraft]", invoiceId, isDraft);
+            return (affectedRows > -1);
         }
         public void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady)
         {
@@ -159,6 +173,8 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
         }
+
+
         public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetLast", InvoiceMapper, invoiceTypeId, partnerId);
