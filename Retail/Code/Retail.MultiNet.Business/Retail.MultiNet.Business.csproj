@@ -81,6 +81,12 @@
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>

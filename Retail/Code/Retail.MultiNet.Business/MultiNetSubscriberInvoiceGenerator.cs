@@ -17,6 +17,7 @@ using Vanrise.GenericData.Pricing;
 using Vanrise.GenericData.Transformation;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
+using Vanrise.NumberingPlan.Business;
 namespace Retail.MultiNet.Business
 {
     public enum TrafficDirection { InComming = 1 , OutGoing = 2 }
@@ -148,7 +149,6 @@ namespace Retail.MultiNet.Business
             branchSummary.AccountId = account.AccountId;
 
             branchSummary.CurrencyId = currencyId;
-            branchSummary.BranchName = _accountBEManager.GetAccountName(account);
             return branchSummary;
         }
         private void BuildGeneratedBranchSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext,List<BranchSummary> branchesSummaries)
@@ -273,6 +273,7 @@ namespace Retail.MultiNet.Business
                         CalledNumber = billingCDR.CalledNumber,
                         CallingNumber = billingCDR.CallingNumber,
                         DurationInSeconds = billingCDR.DurationInSeconds,
+                        ZoneId = billingCDR.ZoneId
                     };
                     string identifierName = null;
                     switch (billingCDR.TrafficDirection)
@@ -298,7 +299,7 @@ namespace Retail.MultiNet.Business
         {
             if (multiNetInvoiceGeneratorContext.BillingCDRByBranch == null)
             {
-                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType","SubscriberAccountId" };
+                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType","SubscriberAccountId","Zone" };
                 var cdrData = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
                 {
                     Query = new DataRecordQuery()
@@ -357,6 +358,9 @@ namespace Retail.MultiNet.Business
 
                         DataRecordFieldValue serviceType;
                         dataRecordDetail.FieldValues.TryGetValue("ServiceType", out serviceType);
+                       
+                        DataRecordFieldValue zone;
+                        dataRecordDetail.FieldValues.TryGetValue("Zone", out zone);
 
                         BillingCDR billingCDR = new BillingCDR
                         {
@@ -366,6 +370,7 @@ namespace Retail.MultiNet.Business
                             SaleAmount = Convert.ToDecimal(saleAmount.Value ?? 0.0),
                             DurationInSeconds = Convert.ToDecimal(durationInSeconds.Value ?? 0.0),
                             TrafficDirection = (TrafficDirection)trafficDirection.Value,
+                            ZoneId = zone!= null && zone.Value != null? Convert.ToInt64(zone.Value):default(long?),
                         };
                         Guid serviceTypeId;
                         if (Guid.TryParse(serviceType.Value.ToString(), out serviceTypeId))
@@ -674,10 +679,11 @@ namespace Retail.MultiNet.Business
             public String CalledNumber { get; set; }
             public String CallingNumber { get; set; }
             public Decimal DurationInSeconds { get; set; }
+            public long? ZoneId { get; set; }
         }
     }
 
-    public class BranchSummary
+    public class BranchSummary : IInvoiceItemAdditionalFields
     {
         public decimal WHTax { get; set; }
         public decimal WHTaxAmount { get; set; }
@@ -689,6 +695,16 @@ namespace Retail.MultiNet.Business
         public decimal TotalCurrentCharges { get; set; }
         public long AccountId { get; set; }
         public string BranchName { get; set; }
+
+
+        public void FillAdditionalFields(IInvoiceItemAdditionalFieldsContext context)
+        {
+            AccountBEManager accountBEManager = new AccountBEManager();
+            context.InvoiceType.ThrowIfNull("context.InvoiceType");
+            context.InvoiceType.Settings.ThrowIfNull("context.InvoiceType.Settings");
+            MultiNetSubscriberInvoiceSettings multiNetSubscriberInvoiceSettings = context.InvoiceType.Settings.ExtendedSettings.CastWithValidate<MultiNetSubscriberInvoiceSettings>("context.InvoiceType.Settings.ExtendedSettings");
+            this.BranchName = accountBEManager.GetAccountName(multiNetSubscriberInvoiceSettings.AccountBEDefinitionId, this.AccountId);
+        }
 
     }
     public class BranchSummaryItem
@@ -708,7 +724,7 @@ namespace Retail.MultiNet.Business
         public int TotalDuration { get; set; }
         public Decimal NetAmount { get; set; }
     }
-    public class MultiNetCDR
+    public class MultiNetCDR : IInvoiceItemAdditionalFields
     {
         public string SubItemIdentifier { get; set; }
         public DateTime AttemptDateTime { get; set; }
@@ -716,5 +732,19 @@ namespace Retail.MultiNet.Business
         public string CallingNumber { get; set; }
         public string CalledNumber { get; set; }
         public decimal SaleAmount { get; set; }
+        public long? ZoneId { get; set; }
+        public string ZoneName { get; set; }
+
+        public void FillAdditionalFields(IInvoiceItemAdditionalFieldsContext context)
+        {
+            if(this.ZoneId.HasValue)
+            {
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                this.ZoneName = saleZoneManager.GetSaleZoneName(this.ZoneId.Value);
+            }
+          
+        }
     }
+
+
 }
