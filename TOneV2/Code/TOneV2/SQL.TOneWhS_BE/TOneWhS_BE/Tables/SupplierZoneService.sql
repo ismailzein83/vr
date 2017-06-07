@@ -24,7 +24,14 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_SupplierZoneService_timestamp]
     ON [TOneWhS_BE].[SupplierZoneService]([timestamp] DESC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SupplierZoneService_ZoneID]
+    ON [TOneWhS_BE].[SupplierZoneService]([ZoneID] ASC);
 

@@ -5,8 +5,11 @@
     [Rate]              DECIMAL (20, 8) NOT NULL,
     [BED]               DATETIME        NOT NULL,
     [EED]               DATETIME        NULL,
-    [ZoneName]          NVARCHAR (255)  NOT NULL
+    [ZoneName]          NVARCHAR (255)  NOT NULL,
+    [CurrencyID]        INT             NULL
 );
+
+
 
 
 

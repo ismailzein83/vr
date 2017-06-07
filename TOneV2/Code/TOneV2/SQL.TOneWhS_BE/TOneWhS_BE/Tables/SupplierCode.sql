@@ -21,6 +21,8 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_SupplierCode_timestamp]
     ON [TOneWhS_BE].[SupplierCode]([timestamp] DESC);
@@ -29,4 +31,9 @@ CREATE NONCLUSTERED INDEX [IX_SupplierCode_timestamp]
 GO
 CREATE CLUSTERED INDEX [IX_SupplierCode_Code]
     ON [TOneWhS_BE].[SupplierCode]([Code] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SupplierCode_ZoneID]
+    ON [TOneWhS_BE].[SupplierCode]([ZoneID] ASC);
 

@@ -8,8 +8,11 @@
     [Change]           TINYINT         NOT NULL,
     [BED]              DATETIME        NOT NULL,
     [EED]              DATETIME        NULL,
-    [RoutingProductID] INT             NULL
+    [RoutingProductID] INT             NULL,
+    [CurrencyID]       INT             NULL
 );
+
+
 
 
 

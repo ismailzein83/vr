@@ -13,7 +13,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	select R.ZoneName , R.OwnerType , R.OwnerID , R.Rate , R.BED , R.EED
+	select R.ZoneName , R.OwnerType , R.OwnerID , R.Rate , R.BED , R.EED,R.CurrencyID
 	from TOneWhs_CP.SaleRate_Preview as R WITH(NOLOCK) 
 	Where (@ZoneName is null or R.ZoneName = @ZoneName) and R.ProcessInstanceID = @ProcessInstanceId
 			

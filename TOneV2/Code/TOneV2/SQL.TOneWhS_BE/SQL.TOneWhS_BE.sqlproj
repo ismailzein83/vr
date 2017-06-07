@@ -479,5 +479,8 @@
     <Build Include="TOneWhS_BE\User Defined Types\SupplierZoneServiceClose.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_Delete.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByMultipleOwners.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SyncWithImportedData_SubProcedure.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierPriceList_SyncWithImportedData_SubProcedure.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_SyncWithImportedData_SubProcedure.sql" />
   </ItemGroup>
 </Project>
