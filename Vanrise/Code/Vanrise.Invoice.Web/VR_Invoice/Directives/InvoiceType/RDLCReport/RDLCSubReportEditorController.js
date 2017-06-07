@@ -155,14 +155,13 @@
         function getContext()
         {
             var currentContext = UtilsService.cloneObject(context);
-          
             if (currentContext == undefined)
                 currentContext = {};
             currentContext.showItemsFilter = function () {
                 return $scope.scopeModel.repeatedSubReport;
             };
             currentContext.getDataSourcesInfo = function () {
-                var dataSources = [];
+                var dataSources = context.getDataSourcesInfo();
                 var reportDataSources = subReportDataSourcesAPI.getData();
                 if (reportDataSources != undefined) {
                     for (var i = 0; i < reportDataSources.length; i++) {
@@ -170,6 +169,7 @@
                         dataSources.push({ DataSourceName: reportDataSource.DataSourceName })
                     }
                 }
+
                 return dataSources;
             };
             return currentContext;

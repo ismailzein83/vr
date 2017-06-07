@@ -94,18 +94,18 @@ namespace Vanrise.Invoice.MainExtensions
                                         Index = 0,
                                         ItemsByDataSource = new Dictionary<string, IEnumerable<dynamic>>()
                                     };
-                                    if (parentReport == null)
+                                    IEnumerable<dynamic> parentDataSourceItems = mainItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
+
+                                    if (parentDataSourceItems == null)
                                     {
-                                        repeatedReportDetails.ParentDataSourceItems = mainItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
+                                        parentDataSourceItems = nonRepeatedReportItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
                                     }
-                                    else if (!isParentRepeated){
-                                        repeatedReportDetails.ParentDataSourceItems = nonRepeatedReportItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
-                                    }else
+                                    if (parentDataSourceItems == null)
                                     {
                                         var parentReportDetails = repeatedReports.GetRecord(parentReport.SubReportName);
-                                        repeatedReportDetails.ParentDataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(subReport.ParentDataSourceName);
+                                        parentDataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(subReport.ParentDataSourceName);
                                     }
-
+                                    repeatedReportDetails.ParentDataSourceItems = parentDataSourceItems;
                                     repeatedReports.Add(subReport.SubReportName, repeatedReportDetails);
                                 }
                             }
