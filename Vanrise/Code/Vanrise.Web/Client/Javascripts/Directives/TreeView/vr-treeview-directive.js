@@ -195,7 +195,9 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 }
                 treeData.plugins = plugins;
                 treeData.check_callback = true;
-                treeElement.jstree(treeData);
+                treeElement.jstree(treeData).on('hover_node.jstree', function (e, data) {                  
+                    $("#" + data.node.id).attr('title', data.node.text);
+                });
                 treeElement.bind("move_node.jstree", function (e, data) {
 
                     var jsonTree = treeElement.jstree(true).get_json('#', {});
