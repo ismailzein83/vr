@@ -27,30 +27,11 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tax
             if (ToAmount.HasValue)
                 convertedToAmount = currencyExchangeManager.ConvertValueToCurrency(ToAmount.Value, context.AmountCurrencyId, context.RuleCurrencyId, effectiveOn);
 
-            if (convertedFromAmount.HasValue && convertedFromAmount.HasValue)
-            {
-                if (context.Amount >= convertedFromAmount && context.Amount < convertedToAmount)
-                {
-                    CalculateAmount(context);
-                }
-            }
-            else if (convertedFromAmount.HasValue)
-            {
-                if (context.Amount >= convertedFromAmount.Value)
-                {
-                    CalculateAmount(context);
-                }
-            }
-            else if (convertedToAmount.HasValue)
-            {
-                if (context.Amount < convertedToAmount.Value)
-                {
-                    CalculateAmount(context);
-                }
-            }else
-            {
-              CalculateAmount(context);
-            }
+            if (convertedFromAmount.HasValue && context.Amount < convertedFromAmount.Value)
+                return;
+            if (convertedToAmount.HasValue && context.Amount >= convertedToAmount.Value)
+                return;
+            CalculateAmount(context);
         }
         private void CalculateAmount(IPricingRuleTaxActionContext context)
         {

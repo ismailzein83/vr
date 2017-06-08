@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Business
     public class InvoiceGenerationContext : IInvoiceGenerationContext
     {
         public string PartnerId { get; set; }
+        public DateTime IssueDate { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public dynamic CustomSectionPayload { get; set; }

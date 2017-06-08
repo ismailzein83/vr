@@ -25,6 +25,7 @@ namespace Vanrise.Invoice.Entities
     {
         Guid InvoiceTypeId { get; }
         string PartnerId { get; }
+        DateTime IssueDate { get; }
         DateTime FromDate { get; }
         DateTime ToDate { get; }
         DateTime GeneratedToDate { get; }

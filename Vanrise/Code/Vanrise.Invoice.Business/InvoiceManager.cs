@@ -599,6 +599,7 @@ namespace Vanrise.Invoice.Business
                 CustomSectionPayload = customSectionPayload,
                 FromDate = fromDate,
                 PartnerId = partnerId,
+                IssueDate = issueDate,
                 ToDate = toDate,
                 GeneratedToDate = toDate,
                 InvoiceTypeId = invoiceType.InvoiceTypeId,
