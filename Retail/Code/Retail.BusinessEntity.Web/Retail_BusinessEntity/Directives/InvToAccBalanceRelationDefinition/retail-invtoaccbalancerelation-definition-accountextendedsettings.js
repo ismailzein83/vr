@@ -55,7 +55,7 @@ app.directive("retailInvtoaccbalancerelationDefinitionAccountextendedsettings", 
                     }
                     var promises = [];
                     function loadBusinessEntityDefinitionSelector() {
-                        var payload = {
+                        var businessEntityDefinitionPayload = {
                             filter: {
                                 Filters: [{
                                     $type: "Retail.BusinessEntity.Business.AccountBEDefinitionFilter, Retail.BusinessEntity.Business"
@@ -63,9 +63,9 @@ app.directive("retailInvtoaccbalancerelationDefinitionAccountextendedsettings", 
                             },
                             selectedIds: extendedSettingsEntity != undefined ? extendedSettingsEntity.AccountBEDefinitionId : undefined
                         };
-                        return businessEntityDefinitionSelectorAPI.load(payload);
+                        return businessEntityDefinitionSelectorAPI.load(businessEntityDefinitionPayload);
                     }
-
+                    promises.push(loadBusinessEntityDefinitionSelector());
                     return UtilsService.waitMultiplePromises(promises);
                 };
 

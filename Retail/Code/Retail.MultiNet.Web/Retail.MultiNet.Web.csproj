@@ -107,6 +107,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
