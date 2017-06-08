@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NP.IVSwitch.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace NP.IVSwitch.Data
     {
         bool InsertHelperUser(int accountId, string logAlias);
 
-        IEnumerable<Entities.LiveCdrItem> GetFilteredLiveCdrs(List<int> endPointIds,List<int> routeIds,string sourceIP,string routeIP);
+        IEnumerable<Entities.LiveCdrItem> GetFilteredLiveCdrs(List<int> endPointIds, List<int> routeIds, string sourceIP, string routeIP, CallsMode callsMode, TimeUnit timeUnit, double time);
     }
 }

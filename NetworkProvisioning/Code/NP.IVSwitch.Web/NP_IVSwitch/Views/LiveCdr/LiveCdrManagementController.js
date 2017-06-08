@@ -2,9 +2,9 @@
 
     'use strict';
 
-    LiveCdrManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
+    LiveCdrManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'NP_IVSwitch_TimeUnitEnum', 'NP_IVSwitch_CallsEnum', 'NP_IVSwitch_SortingEnum'];
 
-    function LiveCdrManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService) {
+    function LiveCdrManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, NP_IVSwitch_TimeUnitEnum, NP_IVSwitch_CallsEnum, NP_IVSwitch_SortingEnum) {
 
         var gridAPI;
         var customerAccountDirectiveAPI;
@@ -44,10 +44,15 @@
                         var query = buildGridQuery();
                         gridAPI.loadGrid(query);
                     });
+                    
                 }
                 else
                 {
-                    gridAPI.loadGrid({});
+                    var filter = {
+                        query: {},
+                        sorting:0 
+                    }
+                    gridAPI.loadGrid(filter);
                 }
                
             };
@@ -115,7 +120,7 @@
         }
         function load() {
             $scope.isLoadingFilter = true;
-            UtilsService.waitMultipleAsyncOperations([loadCustomers, returnEndPointSelectorPromiseDeferred, loadSuppliers, returnRouteSelectorPromiseDeferred]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCustomers, returnEndPointSelectorPromiseDeferred, loadSuppliers, returnRouteSelectorPromiseDeferred]).then(function () {
                 endPointSelectorPromiseDeferred = undefined;
                 routeSelectorPromiseDeferred = undefined;
                 
@@ -125,13 +130,27 @@
                 $scope.isLoadingFilter = false;
             });
         }
+
+        function loadStaticData() {
+            $scope.unitTime = UtilsService.getArrayEnum(NP_IVSwitch_TimeUnitEnum);
+            $scope.calls = UtilsService.getArrayEnum(NP_IVSwitch_CallsEnum);
+            $scope.sortingCalls = UtilsService.getArrayEnum(NP_IVSwitch_SortingEnum);
+        }
+
         function buildGridQuery() {
-            return {
-                EndPointIds: endPointSelectorAPI.getSelectedIds(),
-                RouteIds: routeSelectorAPI.getSelectedIds(),
-                SourceIP: $scope.sourceIP,
-                RouteIP: $scope.routeIP
+            var filter = {
+                query: {
+                    EndPointIds: endPointSelectorAPI.getSelectedIds(),
+                    RouteIds: routeSelectorAPI.getSelectedIds(),
+                    SourceIP: $scope.sourceIP,
+                    RouteIP: $scope.routeIP,
+                    CallsMode: ($scope.selectedcalls != undefined) ? $scope.selectedcalls.value : 0,
+                    TimeUnit: ($scope.selectedUnitTime != undefined) ? $scope.selectedUnitTime.value : 0,
+                    Time: ($scope.time != undefined) ? $scope.time : 0
+                },
+                sorting: ($scope.selectedsortingCalls != undefined) ? $scope.selectedsortingCalls.value : 0
             };
+            return filter;
         }
         function loadCustomers() {
             var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();

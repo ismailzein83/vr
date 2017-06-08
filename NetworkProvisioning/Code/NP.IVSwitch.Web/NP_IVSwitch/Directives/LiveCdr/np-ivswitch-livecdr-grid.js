@@ -39,7 +39,10 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, NP_IVSwitch_Liv
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
+                        $scope.sortingCalls = (query.sorting == 1) ? 'DESC' :'ASC';
+                            return gridAPI.retrieveData(query.query);
+
+                            
                     };
 
                     return directiveAPI;

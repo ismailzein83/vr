@@ -33,7 +33,7 @@ namespace NP.IVSwitch.Data.Postgres
             return recordsEffected > 0;
         }
 
-        public IEnumerable<Entities.LiveCdrItem> GetFilteredLiveCdrs(List<int> endPointIds, List<int> routeIds, string sourceIP, string routeIP)
+        public IEnumerable<Entities.LiveCdrItem> GetFilteredLiveCdrs(List<int> endPointIds, List<int> routeIds, string sourceIP, string routeIP, CallsMode callsMode, TimeUnit timeUnit, double time)
         {
             StringBuilder queryBuilder = new StringBuilder(@"
                                 SELECT user_id,src_ip,det_date,cli,dest_code,dest_name,route_id,route_ip,route_dest_code,route_dest_name,
@@ -57,6 +57,25 @@ namespace NP.IVSwitch.Data.Postgres
             if (routeIP != null)
             {
                 queryBuilder.Append(string.Format(" AND route_ip like '%{0}%' ", routeIP));
+            }
+            if (callsMode != CallsMode.None && timeUnit != TimeUnit.None && time != 0)
+            {
+                double compareTime=0;
+                if (timeUnit == TimeUnit.Minutes)
+                {
+                    compareTime = time * 60;
+                }
+                else {
+                    compareTime = time;
+                }
+                if (callsMode == CallsMode.OlderThem)
+                {
+                    queryBuilder.Append(string.Format(" AND det_date < (timestamp 'now' - interval '{0} seconds')", compareTime));
+                }
+                else
+                {
+                    queryBuilder.Append(string.Format(" AND det_date >= (timestamp 'now' - interval '{0} seconds')", compareTime));
+                }
             }
             return GetItemsText(queryBuilder.ToString(), LiveCdrMapper, (cmd) =>
             {

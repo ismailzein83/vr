@@ -153,11 +153,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="NP_IVSwitch\Constant\CallsEnum.js" />
     <Content Include="NP_IVSwitch\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EndPointEnum.js" />
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
     <Content Include="NP_IVSwitch\Constant\RtpModeEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\SortingEnum.js" />
     <Content Include="NP_IVSwitch\Constant\StateEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\TimeUnitEnum.js" />
     <Content Include="NP_IVSwitch\Constant\TransportModeEnum.js" />
     <Content Include="NP_IVSwitch\Directives\CodecProfile\np-ivswitch-codecprofile-selector.js" />
     <Content Include="NP_IVSwitch\Directives\CustomerRoute\np-ivswitch-routeoption-grid.js" />
