@@ -6,9 +6,8 @@
     [MSClassmark]                     VARCHAR (100) NULL,
     [ServiceCenter]                   VARCHAR (100) NULL,
     [RecordingEntity]                 VARCHAR (100) NULL,
-    [Location]                        VARCHAR (100) NULL,
     [MessageReference]                VARCHAR (100) NULL,
-    [OriginationTime]                 DATETIME      NULL,
+    [MessageTime]                     DATETIME      NULL,
     [SMSResult]                       INT           NULL,
     [RecordExtensions]                VARCHAR (100) NULL,
     [DestinationNumber]               VARCHAR (100) NULL,
@@ -53,7 +52,10 @@
     [CallOrigin]                      INT           NULL,
     [SMSDataCodingSchema]             INT           NULL,
     [SMSUserDataLength]               INT           NULL,
-    [DeliveryTime]                    DATETIME      NULL,
     [Origination]                     VARCHAR (100) NULL,
-    [MTSMSBlackListFlag]              BIT           NULL);
+    [MTSMSBlackListFlag]              BIT           NULL,
+    [SAC]                             VARCHAR (100) NULL,
+    [LocationAreaCode]                VARCHAR (100) NULL);
+
+
 

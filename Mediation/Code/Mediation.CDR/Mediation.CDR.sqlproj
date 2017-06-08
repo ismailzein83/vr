@@ -108,5 +108,7 @@
     <Build Include="Mediation_Centrex\Tables\CookedCDR.sql" />
     <Build Include="Mediation_Centrex\User Defined Types\CookedCDRType.sql" />
     <Build Include="Security\Mediation_Centrex.sql" />
+    <Build Include="Mobile_EDR\Tables\MobileCDR_Full.sql" />
+    <Build Include="Mobile_EDR\User Defined Types\MobileCDR_FullType.sql" />
   </ItemGroup>
 </Project>
