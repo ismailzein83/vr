@@ -80,6 +80,7 @@
             $scope.accountNumber= bankDetailEntity.AccountNumber;
             $scope.swiftCode= bankDetailEntity.SwiftCode;
             $scope.sortCode = bankDetailEntity.SortCode;
+            $scope.channelName = bankDetailEntity.ChannelName;
 
         }
 
@@ -106,7 +107,8 @@
                 Address: $scope.address,
                 AccountNumber: $scope.accountNumber,
                 SwiftCode:$scope.swiftCode,
-                SortCode : $scope.sortCode,
+                SortCode: $scope.sortCode,
+                ChannelName: $scope.channelName
             };
             return obj;
         }

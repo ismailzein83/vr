@@ -46,7 +46,8 @@ namespace Vanrise.Invoice.MainExtensions
                             Bank = bankDetail.Bank,
                             IBAN = bankDetail.IBAN,
                             CurrencyId = bankDetail.CurrencyId,
-                            CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId)
+                            CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId),
+                            ChannelName = bankDetail.ChannelName
                         });
                     }
                 }
