@@ -14,5 +14,5 @@ BEGIN
 	SELECT	Count(*) as CountNb
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	PartnerId = @PartnerId AND InvoiceTypeId = @InvoiceTypeId AND
-	(ToDate >= @FromDate AND  @ToDate>=FromDate) AND IsDeleted != 1 AND (@InvoiceId IS NULL OR ID != @InvoiceId)
+	(ToDate >= @FromDate AND  @ToDate>=FromDate) AND ISNULL(IsDeleted,0) = 0 AND ISNULL(IsDraft, 0) = 0  AND (@InvoiceId IS NULL OR ID != @InvoiceId)
 END

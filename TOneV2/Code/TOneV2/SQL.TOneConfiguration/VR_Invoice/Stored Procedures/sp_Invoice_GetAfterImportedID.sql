@@ -29,6 +29,6 @@ BEGIN
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	(InvoiceTypeId = @InvoiceTypeId) 
 			AND (@LastImportedId is Null or ID > @LastImportedId)
-			AND IsDeleted = 0
+			AND ISNULL(IsDeleted,0) = 0 AND ISNULL(IsDraft, 0) = 0
 			order by id asc
 END

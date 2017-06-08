@@ -14,14 +14,23 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_TryAddAndGet]
 AS
 BEGIN
 
-	Declare @ID bigint;
+	declare @ID bigint;
+	declare @IsOverridden bit; set @IsOverridden = null;
+	declare @OverriddenAmount decimal(20, 6); set @OverriddenAmount = null;
+	
+	if exists (select top 1 null from VR_AccountBalance.AccountUsageOverride where AccountTypeID = @AccountTypeID and AccountID = @AccountID and TransactionTypeID = @TransactionTypeID and PeriodStart <= @PeriodStart and PeriodEnd >= @PeriodEnd)
+	begin
+		set @IsOverridden = 1;
+		set @OverriddenAmount = 0;
+	end
 
-	Select @ID = ID from [VR_AccountBalance].AccountUsage WHERE AccountID = @AccountID AND AccountTypeID = @AccountTypeID AND TransactionTypeID = @TransactionTypeID  AND  PeriodStart =@PeriodStart
-	IF(@ID IS NULL)
-	BEGIN
-		INSERT INTO [VR_AccountBalance].AccountUsage (AccountTypeID,TransactionTypeID,AccountID ,CurrencyId, PeriodStart, PeriodEnd, UsageBalance)
-		VALUES (@AccountTypeID,@TransactionTypeID, @AccountID,@CurrencyId, @PeriodStart, @PeriodEnd, @UsageBalance)	
-		Set @ID = SCOPE_IDENTITY()
-	END
-	SELECT @ID as ID, @AccountID as AccountID,@TransactionTypeID as TransactionTypeID
+	select @ID = ID from [VR_AccountBalance].AccountUsage where AccountID = @AccountID and AccountTypeID = @AccountTypeID and TransactionTypeID = @TransactionTypeID and PeriodStart = @PeriodStart
+	if (@ID is null)
+	begin
+		insert into [VR_AccountBalance].AccountUsage (AccountTypeID, TransactionTypeID, AccountID, CurrencyId, PeriodStart, PeriodEnd, UsageBalance, IsOverridden, OverriddenAmount)
+		values (@AccountTypeID, @TransactionTypeID, @AccountID, @CurrencyId, @PeriodStart, @PeriodEnd, @UsageBalance, @IsOverridden, @OverriddenAmount)
+		set @ID = scope_identity();
+	end
+
+	select @ID as ID, @AccountID as AccountID, @TransactionTypeID as TransactionTypeID, @IsOverridden as IsOverridden
 END

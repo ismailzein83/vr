@@ -12,5 +12,7 @@ AS
 BEGIN
 	SELECT	Count(*) as [Counter]
 	FROM	VR_Invoice.Invoice with(nolock)
-	where	InvoiceTypeID = @InvoiceTypeId AND  (@PartnerId is null  or PartnerId = @PartnerId) AND (@FromDate is null or IssueDate >= @FromDate ) AND (@ToDate is null or IssueDate <= @ToDate )
+	where	InvoiceTypeID = @InvoiceTypeId 
+	AND ISNULL(IsDeleted,0) = 0 AND ISNULL(IsDraft, 0) = 0
+	AND  (@PartnerId is null  or PartnerId = @PartnerId) AND (@FromDate is null or IssueDate >= @FromDate ) AND (@ToDate is null or IssueDate <= @ToDate )
 END

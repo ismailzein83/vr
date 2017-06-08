@@ -9,7 +9,7 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetByAccount]
 
 AS
 BEGIN
-		SELECT ID, AccountTypeID,TransactionTypeID, AccountID,CurrencyId,PeriodStart,PeriodEnd,UsageBalance
+		SELECT ID, AccountTypeID,TransactionTypeID, AccountID,CurrencyId,PeriodStart,PeriodEnd,UsageBalance, IsOverridden, OverriddenAmount, CorrectionProcessID
 	FROM VR_AccountBalance.AccountUsage with(nolock)
 	where AccountTypeID = @AccountTypeID 
 		  AND AccountId= @AccountId

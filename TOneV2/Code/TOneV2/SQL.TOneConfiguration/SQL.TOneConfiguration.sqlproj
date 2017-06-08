@@ -523,7 +523,6 @@
     <Build Include="VR_AccountBalance\Tables\BalanceClosingPeriod.sql" />
     <Build Include="VR_AccountBalance\Functions\ParseStringList.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetForSynchronizerProcess.sql" />
-    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetBalanceNotUpdated.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetFiltered.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_Insert.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_GetByQueueType.sql" />
@@ -629,6 +628,18 @@
       <ApplicationScope>False</ApplicationScope>
     </None>
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_SetDraft.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLastInvoices.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_SetAsSubtractedFromBalance.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetTransactionsToProcess.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsageOverride_Insert.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsageOverride_Delete.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_RollbackOverridenByAccountUsageIds.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_OverrideByAccountUsageIds.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetOverridenByDeletedTransactionIds.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByTransactionAccountUsageQueries.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\TransactionAccountUsageQueryTable.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\AccountUsageOverrideTable.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByPeriod.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

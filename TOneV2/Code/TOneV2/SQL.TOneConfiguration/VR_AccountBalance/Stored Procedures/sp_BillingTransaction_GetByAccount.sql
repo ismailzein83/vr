@@ -9,7 +9,7 @@ CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_GetByAccount]
 
 AS
 BEGIN
-	SELECT	[ID],AccountID,AccountTypeID, TransactionTypeID,Amount,CurrencyId,TransactionTime,Notes,Reference,IsBalanceUpdated,ClosingPeriodId, SourceID
+	SELECT	[ID],AccountID,AccountTypeID, TransactionTypeID,Amount,CurrencyId,TransactionTime,Notes,Reference,IsBalanceUpdated,ClosingPeriodId, SourceID, Settings, IsDeleted, IsSubtractedFromBalance
 	FROM VR_AccountBalance.BillingTransaction with(nolock)
 	where AccountTypeID = @AccountTypeID 
 		  AND AccountId= @AccountId

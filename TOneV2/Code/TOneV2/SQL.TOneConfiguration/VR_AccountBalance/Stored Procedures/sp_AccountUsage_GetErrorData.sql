@@ -15,7 +15,10 @@ Select au.AccountID,
 	   au.PeriodEnd,
 	   au.PeriodStart,
 	   au.TransactionTypeID,
-	   au.UsageBalance
+	   au.UsageBalance,
+	   au.IsOverridden,
+	   au.OverriddenAmount,
+	   au.CorrectionProcessID
 FROM [VR_AccountBalance].AccountUsage au
 	WHERE AccountTypeID = @AccountTypeID AND 
 	      TransactionTypeID = @TransactionTypeId AND 

@@ -10,6 +10,6 @@ AS
 BEGIN
 	SELECT top(1)	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,TimeZoneId,TimeZoneOffset, SourceId
 	FROM	VR_Invoice.Invoice with(nolock)
-	where	InvoiceTypeID = @InvoiceTypeId  AND  PartnerID = @PartnerId  AND IsDraft != 1
+	where	InvoiceTypeID = @InvoiceTypeId  AND  PartnerID = @PartnerId  AND ISNULL(IsDeleted,0) = 0 AND ISNULL(IsDraft, 0) = 0
 	Order by CreatedTime desc
 END

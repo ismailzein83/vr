@@ -22,7 +22,10 @@ BEGIN
 			au.PeriodEnd,
 			au.PeriodStart,
 			au.TransactionTypeID,
-			au.UsageBalance
+			au.UsageBalance,
+			au.IsOverridden,
+			au.OverriddenAmount,
+			au.CorrectionProcessID
 FROM	VR_AccountBalance.AccountUsage au WITH(NOLOCK) 
 WHERE	AccountID in (SELECT AccountId FROM @AccountIdsTable)
 AND AccountTypeID = @AccountTypeID AND PeriodStart = @DatePeriod AND TransactionTypeId= @TransactionTypeId
