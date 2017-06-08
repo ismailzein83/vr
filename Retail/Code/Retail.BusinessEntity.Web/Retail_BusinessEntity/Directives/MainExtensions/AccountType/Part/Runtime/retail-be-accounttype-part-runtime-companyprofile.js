@@ -243,7 +243,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
 
 
 
-            if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.CountryId != undefined) {
+            if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.CountryId != undefined) {
                 var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadCitiesPromiseDeferred.promise);
