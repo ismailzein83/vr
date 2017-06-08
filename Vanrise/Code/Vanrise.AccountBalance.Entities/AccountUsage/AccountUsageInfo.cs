@@ -11,5 +11,6 @@ namespace Vanrise.AccountBalance.Entities
         public long AccountUsageId { get; set; }
         public String AccountId { get; set; }
         public Guid TransactionTypeId { get; set; }
+        public bool IsOverridden { get; set; }
     }
 }

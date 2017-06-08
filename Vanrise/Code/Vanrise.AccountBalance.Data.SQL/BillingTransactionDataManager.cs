@@ -55,7 +55,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                        });
             return null;
         }
-       
+
         DataTable GetBillingTransactionsByTimeTable()
         {
             DataTable dt = new DataTable(BillingTransactionByTime_TABLENAME);
@@ -93,16 +93,22 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds, transactionTypeIds, query.AccountTypeId, query.FromTime, query.ToTime);
         }
-        public bool UpdateBillingTransactionBalanceStatus(List<long> billingTransactionIds)
+        public bool UpdateBillingTransactionBalanceStatus(IEnumerable<long> billingTransactionIds)
         {
             string billingTransactionIDs = null;
             if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
                 billingTransactionIDs = string.Join<long>(",", billingTransactionIds);
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_SetBalanceUpdated]", billingTransactionIDs) > 0);
         }
+        public bool SetBillingTransactionsAsSubtractedFromBalance(IEnumerable<long> billingTransactionIds)
+        {
+            string billingTransactionIdsAsString = (billingTransactionIds != null) ? string.Join(",", billingTransactionIds) : null;
+            int affectedRows = ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_SetAsSubtractedFromBalance]", billingTransactionIdsAsString);
+            return affectedRows > 0;
+        }
         public void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady)
         {
-            ExecuteReaderSP("[VR_AccountBalance].[sp_BillingTransaction_GetBalanceNotUpdated]",
+            ExecuteReaderSP("[VR_AccountBalance].[sp_BillingTransaction_GetTransactionsToProcess]",
                 (reader) =>
                 {
                     while (reader.Read())
@@ -114,28 +120,34 @@ namespace Vanrise.AccountBalance.Data.SQL
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
             object billingTransactionID;
-            int affectedRecords = ExecuteNonQuerySP("[VR_AccountBalance].sp_BillingTransaction_Insert",
-                                                        out billingTransactionID,
-                                                        billingTransaction.AccountId,
-                                                        billingTransaction.AccountTypeId,
-                                                        billingTransaction.Amount,
-                                                        billingTransaction.CurrencyId,
-                                                        billingTransaction.TransactionTypeId,
-                                                        billingTransaction.TransactionTime,
-                                                        billingTransaction.Notes,
-                                                        billingTransaction.Reference,
-                                                        billingTransaction.SourceId);
+
+            int affectedRecords = ExecuteNonQuerySP
+            (
+                "[VR_AccountBalance].sp_BillingTransaction_Insert",
+                out billingTransactionID,
+                billingTransaction.AccountId,
+                billingTransaction.AccountTypeId,
+                billingTransaction.Amount,
+                billingTransaction.CurrencyId,
+                billingTransaction.TransactionTypeId,
+                billingTransaction.TransactionTime,
+                billingTransaction.Notes,
+                billingTransaction.Reference,
+                billingTransaction.SourceId,
+                (billingTransaction.Settings != null) ? Vanrise.Common.Serializer.Serialize(billingTransaction.Settings) : null
+            );
 
             if (affectedRecords > 0)
             {
                 billingTransactionId = (int)billingTransactionID;
                 return true;
             }
+
             billingTransactionId = -1;
             return false;
         }
-       
-        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, string accountId )
+
+        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, string accountId)
         {
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetByAccount]", BillingTransactionMapper, accountTypeId, accountId);
         }
@@ -152,6 +164,8 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         private BillingTransaction BillingTransactionMapper(IDataReader reader)
         {
+            string settingsAsString = reader["Settings"] as string;
+
             return new BillingTransaction
             {
                 AccountBillingTransactionId = (long)reader["ID"],
@@ -164,10 +178,13 @@ namespace Vanrise.AccountBalance.Data.SQL
                 TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
                 Reference = reader["Reference"] as string,
                 IsBalanceUpdated = GetReaderValue<bool>(reader, "IsBalanceUpdated"),
-                SourceId = reader["SourceId"] as string
+                SourceId = reader["SourceId"] as string,
+                Settings = (settingsAsString != null) ? Vanrise.Common.Serializer.Deserialize<BillingTransactionSettings>(settingsAsString) : null,
+                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
+                IsSubtractedFromBalance = GetReaderValue<bool>(reader, "IsSubtractedFromBalance")
             };
         }
-        
+
         private BillingTransactionMetaData BillingTransactionMetaDataMapper(IDataReader reader)
         {
             return new BillingTransactionMetaData
@@ -180,13 +197,5 @@ namespace Vanrise.AccountBalance.Data.SQL
             };
         }
         #endregion
-
-
-
-
-
-
-
-     
     }
 }

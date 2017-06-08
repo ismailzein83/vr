@@ -16,10 +16,10 @@ namespace Vanrise.AccountBalance.Data.SQL
 {
     public class LiveBalanceDataManager : BaseSQLDataManager, ILiveBalanceDataManager
     {
-        #region ctor/Local Variables
+        #region Fields / Constructors
 
-        const string LiveBalance_TABLENAME = "LiveBalance";
-        
+        private const string LiveBalance_TABLENAME = "LiveBalance";
+
         public LiveBalanceDataManager()
             : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
@@ -135,16 +135,18 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                UpdateLiveBalancetoUpdate(liveBalnacesToUpdate);
-                AccountUsageDataManager accountUsageDataManager = new SQL.AccountUsageDataManager();
-                accountUsageDataManager.UpdateAccountUsageFromBalanceUsageQueue(accountsUsageToUpdate, correctionProcessId);
-                BalanceUsageQueueDataManager dataManager = new BalanceUsageQueueDataManager();
-                dataManager.DeleteBalanceUsageQueue(balanceUsageQueueId);
+                if (liveBalnacesToUpdate != null && liveBalnacesToUpdate.Count() > 0)
+                    UpdateLiveBalances(liveBalnacesToUpdate);
+
+                if (accountsUsageToUpdate != null && accountsUsageToUpdate.Count() > 0)
+                    new AccountUsageDataManager().UpdateAccountUsageFromBalanceUsageQueue(accountsUsageToUpdate, correctionProcessId);
+
+                new BalanceUsageQueueDataManager().DeleteBalanceUsageQueue(balanceUsageQueueId);
                 scope.Complete();
             }
             return true;
         }
-        public bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds)
+        public bool UpdateLiveBalancesFromBillingTransactions(IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate, IEnumerable<long> billingTransactionIds, IEnumerable<long> accountUsageIdsToOverride, IEnumerable<AccountUsageOverride> accountUsageOverrides, IEnumerable<long> overridenAccountUsageIdsToRollback, IEnumerable<long> deletedTransactionIds)
         {
             var options = new TransactionOptions
             {
@@ -154,11 +156,28 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                UpdateLiveBalancetoUpdate(liveBalnacesToUpdate);
-                BillingTransactionDataManager dataManager = new BillingTransactionDataManager();
-                dataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
+                var accountUsageDataManager = new AccountUsageDataManager();
+                if (accountUsageIdsToOverride != null && accountUsageIdsToOverride.Count() > 0)
+                    accountUsageDataManager.OverrideAccountUsagesByAccountUsageIds(accountUsageIdsToOverride);
+                if (overridenAccountUsageIdsToRollback != null && overridenAccountUsageIdsToRollback.Count() > 0)
+                    accountUsageDataManager.RollbackOverridenAccountUsagesByAccountUsageIds(overridenAccountUsageIdsToRollback);
+
+                var accountUsageOverrideDataManager = new AccountUsageOverrideDataManager();
+                if (accountUsageOverrides != null && accountUsageOverrides.Count() > 0)
+                    accountUsageOverrideDataManager.Insert(accountUsageOverrides);
+                if (deletedTransactionIds != null && deletedTransactionIds.Count() > 0)
+                    accountUsageOverrideDataManager.Delete(deletedTransactionIds);
+
+                var billingTransactionDataManager = new BillingTransactionDataManager();
+                if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
+                    billingTransactionDataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
+                if (deletedTransactionIds != null && deletedTransactionIds.Count() > 0)
+                    billingTransactionDataManager.SetBillingTransactionsAsSubtractedFromBalance(deletedTransactionIds);
+
+                UpdateLiveBalances(liveBalancesToUpdate);
                 scope.Complete();
             }
+
             return true;
         }
         public bool CheckIfAccountHasTransactions(Guid accountTypeId, string accountId)
@@ -198,7 +217,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 AlertRuleID = GetReaderValue<int>(reader, "AlertRuleID"),
-               
+
             };
         }
         private LiveBalanceAccountInfo LiveBalanceAccountInfoMapper(IDataReader reader)
@@ -215,10 +234,10 @@ namespace Vanrise.AccountBalance.Data.SQL
 
         #region Private Methods
 
-        private bool UpdateLiveBalancetoUpdate(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate)
+        private bool UpdateLiveBalances(IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate)
         {
             DataTable liveBalanceToUpdate = GetLiveBalanceTable();
-            foreach (var item in liveBalnacesToUpdate)
+            foreach (var item in liveBalancesToUpdate)
             {
                 DataRow dr = liveBalanceToUpdate.NewRow();
                 FillLiveBalanceTableRow(dr, item);
@@ -303,11 +322,11 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             StringBuilder whereBuilder = new StringBuilder(@"lb.AccountTypeID = @AccountTypeID");
 
-            if (query.AccountsIds!=null && query.AccountsIds.Count() > 0)
+            if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
                 whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<String>(",", query.AccountsIds.Select(x => string.Format("'{0}'", x)))));
 
             if (query.Sign != null)
-                whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign , query.Balance));
+                whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign, query.Balance));
 
             StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID 
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb

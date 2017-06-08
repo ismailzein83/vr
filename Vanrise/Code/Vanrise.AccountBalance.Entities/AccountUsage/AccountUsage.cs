@@ -16,5 +16,8 @@ namespace Vanrise.AccountBalance.Entities
         public DateTime PeriodEnd { get; set; }
         public decimal UsageBalance { get; set; }
         public int CurrencyId { get; set; }
+        public bool IsOverriden { get; set; }
+        public decimal? OverridenAmount { get; set; }
+        public Guid? CorrectionProcessId { get; set; }
     }
 }

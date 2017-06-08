@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AccountBalanceDataManagerFactory.cs" />
     <Compile Include="IAccountUsageDataManager.cs" />
+    <Compile Include="IAccountUsageOverrideDataManager.cs" />
     <Compile Include="IBalanceHistoryDataManager.cs" />
     <Compile Include="IBalanceUsageQueueDataManager.cs" />
     <Compile Include="IBillingTransactionDataManager.cs" />

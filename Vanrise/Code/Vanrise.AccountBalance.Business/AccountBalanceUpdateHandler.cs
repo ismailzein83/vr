@@ -8,6 +8,7 @@ using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+
 namespace Vanrise.AccountBalance.Business
 {
     public class AccountBalanceUpdateHandler
@@ -17,7 +18,7 @@ namespace Vanrise.AccountBalance.Business
         static ConcurrentDictionary<Guid, AccountBalanceUpdateHandler> _handlersByAccountTypeId = new ConcurrentDictionary<Guid, AccountBalanceUpdateHandler>();
 
         Dictionary<String, LiveBalanceAccountInfo> AccountsInfo;
-        static Dictionary<DateTime, Dictionary<AccountTransaction, AccountUsageInfo>> AccountsUsageByPeriod;
+        Dictionary<DateTime, Dictionary<AccountTransaction, AccountUsageInfo>> AccountsUsageByPeriod;
         CurrencyExchangeRateManager currencyExchangeRateManager;
         AccountManager manager;
         ILiveBalanceDataManager liveBalanceDataManager;
@@ -26,9 +27,11 @@ namespace Vanrise.AccountBalance.Business
         AccountUsagePeriodSettings _accountUsagePeriodSettings;
         BillingTransactionTypeManager billingTransactionTypeManager;
         AccountUsageManager accountUsageManager;
+
         #endregion
 
-        #region ctor
+        #region Constructors
+
         private AccountBalanceUpdateHandler(Guid accountTypeId)
         {
             currencyExchangeRateManager = new CurrencyExchangeRateManager();
@@ -56,112 +59,144 @@ namespace Vanrise.AccountBalance.Business
         {
             AccountBalanceUpdateHandler handler;
             var cachePerdiodDate = DateTime.Today.AddDays(-usageCacheDays);
-            DeleteItemsFromDictionaryBeforePeriod(cachePerdiodDate);
             if (!_handlersByAccountTypeId.TryGetValue(accountTypeId, out handler))
             {
                 handler = new AccountBalanceUpdateHandler(accountTypeId);
                 _handlersByAccountTypeId.TryAdd(accountTypeId, handler);
             }
+            else
+            {
+                if (handler.AccountsUsageByPeriod.Count > 0)
+                    handler.AccountsUsageByPeriod.Clear(); //to keep Usage IsOverridden synchronized with database
+            }
             return handler;
         }
-        private static void DeleteItemsFromDictionaryBeforePeriod(DateTime period)
-        { 
-            if (AccountsUsageByPeriod != null)
+       
+        public void AddAndUpdateLiveBalanceFromBillingTransction(List<BillingTransaction> billingTransactions)
+        {
+            var balancesToUpdateByAccountId = new Dictionary<string, LiveBalanceToUpdate>();
+            var transactionIds = new List<long>();
+
+            var usageOverridesToAdd = new List<AccountUsageOverride>();
+            IEnumerable<long> usageIdsToOverride = new List<long>();
+
+            var deletedTransactionIds = new List<long>();
+            IEnumerable<long> overridenUsageIdsToRollback = new List<long>();
+
+            foreach (BillingTransaction transaction in billingTransactions)
             {
-                var listOfKeys = AccountsUsageByPeriod.Keys.ToList();
-                foreach (var key in listOfKeys)
+                LiveBalanceAccountInfo accountBalanceInfo = GetLiveBalanceInfo(transaction.AccountId);
+
+                LiveBalanceToUpdate balanceToUpdate = balancesToUpdateByAccountId.GetOrCreateItem(accountBalanceInfo.AccountId, () => new LiveBalanceToUpdate()
                 {
-                    if (key < period)
-                    {
-                        AccountsUsageByPeriod.Remove(key);
-                    }
+                    LiveBalanceId = accountBalanceInfo.LiveBalanceId
+                });
+
+                BillingTransactionType transactionType = billingTransactionTypeManager.GetBillingTransactionType(transaction.TransactionTypeId);
+                transactionType.ThrowIfNull("transactionType", transaction.TransactionTypeId);
+
+                decimal convertedTransactionAmount = currencyExchangeRateManager.ConvertValueToCurrency(transaction.Amount, transaction.CurrencyId, accountBalanceInfo.CurrencyId, transaction.TransactionTime);
+
+                if (!transactionType.IsCredit)
+                    convertedTransactionAmount = -convertedTransactionAmount;
+
+                if (transaction.IsDeleted)
+                {
+                    deletedTransactionIds.Add(transaction.AccountBillingTransactionId);
+                    balanceToUpdate.Value -= convertedTransactionAmount;
+                }
+                else
+                {
+                    if (transaction.Settings != null && transaction.Settings.UsageOverrides != null && transaction.Settings.UsageOverrides.Count > 0)
+                        AddUsageOverrides(usageOverridesToAdd, transaction);
+
+                    balanceToUpdate.Value += convertedTransactionAmount;
+                    transactionIds.Add(transaction.AccountBillingTransactionId);
                 }
             }
-        }
-        public void AddAndUpdateLiveBalanceFromBillingTransction(List<BillingTransaction> billingTransactions)
-        {           
-            Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();
-            List<long> billingTransactionIds = new List<long>();
-            foreach (var billingTransaction in billingTransactions)
-            {
-                var liveBalanceInfo = GetLiveBalanceInfo(billingTransaction.AccountId);
-                var transactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
-                decimal value = billingTransaction.Amount;
-                if (!transactionType.IsCredit)
-                    value = -value;
-                GroupLiveBalanceToUpdateById(liveBalnacesToUpdate, billingTransaction.TransactionTime, billingTransaction.CurrencyId, value, liveBalanceInfo);
-                billingTransactionIds.Add(billingTransaction.AccountBillingTransactionId);
-            }
-            if (liveBalnacesToUpdate.Count > 0)
-            {
-                UpdateLiveBalanceFromBillingTransaction(liveBalnacesToUpdate.Values, billingTransactionIds);
-            }
+
+            if (usageOverridesToAdd.Count > 0)
+                ProcessUsageOverridingTransactions(usageOverridesToAdd, balancesToUpdateByAccountId, out usageIdsToOverride);
+
+            if (deletedTransactionIds.Count > 0)
+                ProcessDeletedTransactions(deletedTransactionIds, balancesToUpdateByAccountId, out overridenUsageIdsToRollback);
+
+            if (balancesToUpdateByAccountId.Count > 0)
+                UpdateLiveBalancesFromBillingTransactions(balancesToUpdateByAccountId.Values, transactionIds, usageIdsToOverride, usageOverridesToAdd, overridenUsageIdsToRollback, deletedTransactionIds);
+
+            if (AccountsUsageByPeriod.Count > 0)
+                AccountsUsageByPeriod.Clear();//to keep Usage IsOverridden synchronized with database
         }
         public void AddAndUpdateLiveBalanceFromBalanceUsageQueue(long balanceUsageQueueId, Guid transactionTypeId, IEnumerable<UpdateUsageBalanceItem> usageBalanceUpdates)
         {
-            Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();
-            Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate = new Dictionary<long, AccountUsageToUpdate>();
-            var transactionType = billingTransactionTypeManager.GetBillingTransactionType(transactionTypeId);
+            var balancesToUpdate = new Dictionary<long, LiveBalanceToUpdate>();
+            var accountUsagesToUpdate = new Dictionary<long, AccountUsageToUpdate>();
 
-            foreach (var usageBalanceUpdate in usageBalanceUpdates)
+            BillingTransactionType transactionType = billingTransactionTypeManager.GetBillingTransactionType(transactionTypeId);
+
+            foreach (UpdateUsageBalanceItem usageBalanceUpdate in usageBalanceUpdates)
             {
-                var liveBalanceInfo = GetLiveBalanceInfo(usageBalanceUpdate.AccountId);
-                decimal value = usageBalanceUpdate.Value;
-                if (!transactionType.IsCredit)
-                    value = -value;
-                GroupLiveBalanceToUpdateById(liveBalnacesToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, value, liveBalanceInfo);
-                AccountUsagePeriodEvaluationContext context = new AccountUsagePeriodEvaluationContext
-                {
-                    UsageTime = usageBalanceUpdate.EffectiveOn
-                };
+                LiveBalanceAccountInfo accountLiveBalanceInfo = GetLiveBalanceInfo(usageBalanceUpdate.AccountId);
+
+                var context = new AccountUsagePeriodEvaluationContext { UsageTime = usageBalanceUpdate.EffectiveOn };
                 _accountUsagePeriodSettings.EvaluatePeriod(context);
-                var accountUsageInfo = GetAccountUsageInfo(transactionTypeId,usageBalanceUpdate.AccountId, context.PeriodStart, context.PeriodEnd, liveBalanceInfo.CurrencyId);
-                GroupAccountUsageToUpdateById(accountsUsageToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, liveBalanceInfo.CurrencyId, usageBalanceUpdate.Value, accountUsageInfo);
+                AccountUsageInfo accountUsageInfo = GetAccountUsageInfo(transactionTypeId, usageBalanceUpdate.AccountId, context.PeriodStart, context.PeriodEnd, accountLiveBalanceInfo.CurrencyId);
+
+                GroupAccountUsageToUpdateById(accountUsagesToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, accountLiveBalanceInfo.CurrencyId, usageBalanceUpdate.Value, accountUsageInfo);
+
+                if (!accountUsageInfo.IsOverridden)
+                {
+                    decimal liveBalanceValue = usageBalanceUpdate.Value;
+                    if (!transactionType.IsCredit)
+                        liveBalanceValue = -liveBalanceValue;
+                    GroupLiveBalanceToUpdateById(balancesToUpdate, usageBalanceUpdate.EffectiveOn, usageBalanceUpdate.CurrencyId, liveBalanceValue, accountLiveBalanceInfo);
+                }
             }
-            if (liveBalnacesToUpdate.Count > 0 || accountsUsageToUpdate.Count>0)
-            {
-                UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalnacesToUpdate.Values, accountsUsageToUpdate.Values,null);
-            }
+
+            if (balancesToUpdate.Count > 0 || accountUsagesToUpdate.Count > 0)
+                UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, balancesToUpdate.Values, accountUsagesToUpdate.Values, null);
         }
         public void CorrectBalanceFromBalanceUsageQueue(long balanceUsageQueueId, Guid transactionTypeId, IEnumerable<CorrectUsageBalanceItem> correctUsageBalanceItems, DateTime periodDate, Guid correctionProcessId, bool isLastBatch)
         {
-            var transactionType = new BillingTransactionTypeManager().GetBillingTransactionType(transactionTypeId);
-          
+            BillingTransactionType transactionType = new BillingTransactionTypeManager().GetBillingTransactionType(transactionTypeId);
+
             if (correctUsageBalanceItems != null)
             {
-                List<AccountUsageToUpdate> accountUsageToUpdates = new List<AccountUsageToUpdate>();
-                List<LiveBalanceToUpdate> liveBalanceToUpdates = new List<LiveBalanceToUpdate>();
-                var accountIds = correctUsageBalanceItems.Select(x => x.AccountId).ToList();
-                var accountUsages = GetAccountUsageForSpecificPeriodByAccountIds(_accountTypeId, transactionTypeId, periodDate, accountIds);
-                foreach (var correctUsageBalanceItem in correctUsageBalanceItems)
+                var accountUsagesToUpdate = new List<AccountUsageToUpdate>();
+                var liveBalancesToUpdate = new List<LiveBalanceToUpdate>();
+
+                List<string> accountIds = correctUsageBalanceItems.MapRecords(x => x.AccountId).ToList();
+                IEnumerable<AccountUsage> accountUsages = GetAccountUsageForSpecificPeriodByAccountIds(_accountTypeId, transactionTypeId, periodDate, accountIds);
+
+                foreach (CorrectUsageBalanceItem correctUsageBalanceItem in correctUsageBalanceItems)
                 {
-                    var accountUsage = accountUsages.FirstOrDefault(x => x.AccountId == correctUsageBalanceItem.AccountId);
-                    CorrectLiveBalanceAndAccountUsage(liveBalanceToUpdates, accountUsageToUpdates, correctUsageBalanceItem.AccountId, transactionType, correctUsageBalanceItem.Value, correctUsageBalanceItem.CurrencyId, accountUsage, periodDate);
+                    AccountUsage accountUsage = accountUsages.FirstOrDefault(x => x.AccountId == correctUsageBalanceItem.AccountId);
+                    CorrectLiveBalanceAndAccountUsage(liveBalancesToUpdate, accountUsagesToUpdate, correctUsageBalanceItem.AccountId, transactionType, correctUsageBalanceItem.Value, correctUsageBalanceItem.CurrencyId, accountUsage, periodDate);
                 }
-                if (liveBalanceToUpdates.Count > 0 || accountUsageToUpdates.Count > 0)
-                {
-                    UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalanceToUpdates, accountUsageToUpdates, correctionProcessId);
-                }
+
+                if (liveBalancesToUpdate.Count > 0 || accountUsagesToUpdate.Count > 0)
+                    UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalancesToUpdate, accountUsagesToUpdate, correctionProcessId);
             }
+
             if (isLastBatch)
             {
-                 var accountsUsageError = GetAccountUsageErrorData(transactionTypeId, correctionProcessId, periodDate);
-                 if (accountsUsageError != null)
-                 {
-                     List<AccountUsageToUpdate> accountUsageToUpdates = new List<AccountUsageToUpdate>();
-                     List<LiveBalanceToUpdate> liveBalanceToUpdates = new List<LiveBalanceToUpdate>();
-                     foreach (var item in accountsUsageError)
-                     {
-                         CorrectLiveBalanceAndAccountUsage(liveBalanceToUpdates, accountUsageToUpdates, item.AccountId, transactionType, 0, item.CurrencyId, item, periodDate);
-                     }
-                     // if (liveBalanceToUpdates.Count > 0 || accountUsageToUpdates.Count > 0)
-                     // {
-                            UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalanceToUpdates, accountUsageToUpdates, correctionProcessId);
-                     // }
-                 }
-                
+                List<AccountUsage> faultyAccountUsages = GetAccountUsageErrorData(transactionTypeId, correctionProcessId, periodDate);
+
+                if (faultyAccountUsages != null && faultyAccountUsages.Count > 0)
+                {
+                    var accountUsagesToUpdate = new List<AccountUsageToUpdate>();
+                    var liveBalancesToUpdate = new List<LiveBalanceToUpdate>();
+
+                    foreach (AccountUsage faultyAccountUsage in faultyAccountUsages)
+                    {
+                        CorrectLiveBalanceAndAccountUsage(liveBalancesToUpdate, accountUsagesToUpdate, faultyAccountUsage.AccountId, transactionType, 0, faultyAccountUsage.CurrencyId, faultyAccountUsage, periodDate);
+                    }
+
+                    UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalancesToUpdate, accountUsagesToUpdate, correctionProcessId);
+                }
             }
         }
+
         #endregion
 
         #region Private Methods
@@ -193,17 +228,17 @@ namespace Vanrise.AccountBalance.Business
             return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0);
 
         }
-        private void GroupLiveBalanceToUpdateById(Dictionary<long, LiveBalanceToUpdate> liveBalnacesToUpdate, DateTime effectiveOn, int currencyId, decimal value, LiveBalanceAccountInfo liveBalanceInfo)
+        private void GroupLiveBalanceToUpdateById(Dictionary<long, LiveBalanceToUpdate> liveBalancesToUpdate, DateTime effectiveOn, int currencyId, decimal value, LiveBalanceAccountInfo liveBalanceInfo)
         {
-            LiveBalanceToUpdate liveBalanceToUpdate = liveBalnacesToUpdate.GetOrCreateItem(liveBalanceInfo.LiveBalanceId, () => new LiveBalanceToUpdate
+            LiveBalanceToUpdate liveBalanceToUpdate = liveBalancesToUpdate.GetOrCreateItem(liveBalanceInfo.LiveBalanceId, () => new LiveBalanceToUpdate
             {
                 LiveBalanceId = liveBalanceInfo.LiveBalanceId
             });
-            liveBalanceToUpdate.Value += currencyId != liveBalanceInfo.CurrencyId ? currencyExchangeRateManager.ConvertValueToCurrency(value, currencyId, liveBalanceInfo.CurrencyId, effectiveOn) : value;
+            liveBalanceToUpdate.Value += currencyExchangeRateManager.ConvertValueToCurrency(value, currencyId, liveBalanceInfo.CurrencyId, effectiveOn);
         }
-        private bool UpdateLiveBalanceFromBillingTransaction(IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, List<long> billingTransactionIds)
+        private bool UpdateLiveBalancesFromBillingTransactions(IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate, IEnumerable<long> billingTransactionIds, IEnumerable<long> accountUsageIdsToOverride, IEnumerable<AccountUsageOverride> usageOverridesToAdd, IEnumerable<long> overridenUsageIdsToRollback, IEnumerable<long> deletedTransactionIds)
         {
-            return liveBalanceDataManager.UpdateLiveBalanceFromBillingTransaction(liveBalnacesToUpdate, billingTransactionIds);
+            return liveBalanceDataManager.UpdateLiveBalancesFromBillingTransactions(liveBalancesToUpdate, billingTransactionIds, accountUsageIdsToOverride, usageOverridesToAdd, overridenUsageIdsToRollback, deletedTransactionIds);
         }
         #endregion
 
@@ -223,10 +258,10 @@ namespace Vanrise.AccountBalance.Business
             var accountsUsageByPeriod = AccountsUsageByPeriod.GetOrCreateItem(periodStart, () =>
             {
                 IEnumerable<AccountUsageInfo> accountsUsageInfo = accountUsageDataManager.GetAccountsUsageInfoByPeriod(_accountTypeId, periodStart, transactionTypeId);
-                return accountsUsageInfo.ToDictionary(x => new AccountTransaction { AccountId = x.AccountId ,TransactionTypeId = x.TransactionTypeId }, x => x);
+                return accountsUsageInfo.ToDictionary(x => new AccountTransaction { AccountId = x.AccountId, TransactionTypeId = x.TransactionTypeId }, x => x);
             });
 
-            return accountsUsageByPeriod.GetOrCreateItem(new AccountTransaction { AccountId =accountId ,TransactionTypeId = transactionTypeId}, () =>
+            return accountsUsageByPeriod.GetOrCreateItem(new AccountTransaction { AccountId = accountId, TransactionTypeId = transactionTypeId }, () =>
             {
                 return AddAccountUsageInfo(transactionTypeId, accountId, periodStart, periodEnd, currencyId);
             });
@@ -241,7 +276,6 @@ namespace Vanrise.AccountBalance.Business
         }
         private void GroupAccountUsageToUpdateById(Dictionary<long, AccountUsageToUpdate> accountsUsageToUpdate, DateTime effectiveOn, int usageCurrencyId, int liveBalanceCurrencyId, decimal value, AccountUsageInfo accountUsageInfo)
         {
-
             AccountUsageToUpdate accountUsageToUpdate = accountsUsageToUpdate.GetOrCreateItem(accountUsageInfo.AccountUsageId, () => new AccountUsageToUpdate
             {
                 AccountUsageId = accountUsageInfo.AccountUsageId
@@ -265,36 +299,125 @@ namespace Vanrise.AccountBalance.Business
         {
             return liveBalanceDataManager.UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalnacesToUpdate, accountsUsageToUpdate, correctionProcessId);
         }
-        private void CorrectLiveBalanceAndAccountUsage(List<LiveBalanceToUpdate> liveBalanceToUpdates, List<AccountUsageToUpdate> accountUsageToUpdates, String accountId, BillingTransactionType transactionType, decimal value, int currencyId, AccountUsage accountUsage, DateTime periodDate)
+        private void CorrectLiveBalanceAndAccountUsage(List<LiveBalanceToUpdate> liveBalancesToUpdate, List<AccountUsageToUpdate> accountUsagesToUpdate, String accountId, BillingTransactionType transactionType, decimal correctValue, int currencyId, AccountUsage accountUsage, DateTime periodDate)
         {
-            var accountInfo = GetLiveBalanceInfo(accountId);
-            var amount = ConvertValueToCurrency(value, currencyId, accountInfo.CurrencyId, periodDate);
-            decimal differenceAmount = amount;
+            LiveBalanceAccountInfo accountLiveBalanceInfo = GetLiveBalanceInfo(accountId);
+
+            decimal convertedCorrectValue = ConvertValueToCurrency(correctValue, currencyId, accountLiveBalanceInfo.CurrencyId, periodDate);
+            decimal amountDifference = convertedCorrectValue;
+
+            bool isAccountUsageOverriden = false;
+
             if (accountUsage != null)
             {
-                differenceAmount = amount - accountUsage.UsageBalance;
-                AddAccountUsageToUpdate(accountUsageToUpdates, accountUsage.AccountUsageId, differenceAmount);
+                amountDifference = convertedCorrectValue - accountUsage.UsageBalance;
+
+                isAccountUsageOverriden = accountUsage.IsOverriden;
+                AddAccountUsageToUpdate(accountUsagesToUpdate, accountUsage.AccountUsageId, amountDifference);
             }
             else
             {
-                AccountUsagePeriodEvaluationContext context = new AccountUsagePeriodEvaluationContext
-                {
-                    UsageTime = periodDate
-                };
+                var context = new AccountUsagePeriodEvaluationContext { UsageTime = periodDate };
                 _accountUsagePeriodSettings.EvaluatePeriod(context);
-                var accountUsageInfo = AddAccountUsageInfo(transactionType.BillingTransactionTypeId, accountId, context.PeriodStart, context.PeriodEnd, accountInfo.CurrencyId);
-                AddAccountUsageToUpdate(accountUsageToUpdates, accountUsageInfo.AccountUsageId, differenceAmount);
+
+                AccountUsageInfo accountUsageInfo = AddAccountUsageInfo(transactionType.BillingTransactionTypeId, accountId, context.PeriodStart, context.PeriodEnd, accountLiveBalanceInfo.CurrencyId);
+
+                isAccountUsageOverriden = accountUsageInfo.IsOverridden;
+                AddAccountUsageToUpdate(accountUsagesToUpdate, accountUsageInfo.AccountUsageId, amountDifference);
             }
-            liveBalanceToUpdates.Add(new LiveBalanceToUpdate
+
+            if (!isAccountUsageOverriden)
             {
-                LiveBalanceId = accountInfo.LiveBalanceId,
-                Value = transactionType != null && transactionType.IsCredit ? differenceAmount : -differenceAmount
-            });
+                liveBalancesToUpdate.Add(new LiveBalanceToUpdate
+                {
+                    LiveBalanceId = accountLiveBalanceInfo.LiveBalanceId,
+                    Value = (transactionType != null && transactionType.IsCredit) ? amountDifference : -amountDifference
+                });
+            }
         }
-    
+
         #endregion
-       
+
+        #region Process Billing Transactions
+
+        private void AddUsageOverrides(List<AccountUsageOverride> usageOverridesToAdd, BillingTransaction transaction)
+        {
+            foreach (BillingTransactionUsageOverride usageOverride in transaction.Settings.UsageOverrides)
+            {
+                var accountUsageOverride = new AccountUsageOverride()
+                {
+                    AccountTypeId = transaction.AccountTypeId,
+                    AccountId = transaction.AccountId,
+                    TransactionTypeId = usageOverride.TransactionTypeId,
+                    PeriodStart = usageOverride.FromDate,
+                    PeriodEnd = usageOverride.ToDate,
+                    OverriddenByTransactionId = transaction.AccountBillingTransactionId
+                };
+                usageOverridesToAdd.Add(accountUsageOverride);
+            }
+        }
+
+        private void ProcessUsageOverridingTransactions(IEnumerable<AccountUsageOverride> usageOverridesToAdd, Dictionary<string, LiveBalanceToUpdate> balancesToUpdateById, out IEnumerable<long> usageIdsToOverride)
+        {
+            IEnumerable<TransactionAccountUsageQuery> usageQueries = usageOverridesToAdd.MapRecords(x => new TransactionAccountUsageQuery()
+            {
+                TransactionId = x.OverriddenByTransactionId,
+                TransactionTypeId = x.TransactionTypeId,
+                AccountId = x.AccountId,
+                AccountTypeId = x.AccountTypeId,
+                PeriodStart = x.PeriodStart,
+                PeriodEnd = x.PeriodEnd
+            });
+
+            IEnumerable<AccountUsage> allUsagesToOverride = accountUsageManager.GetAccountUsagesByTransactionAccountUsageQueries(usageQueries);
+            var usageIdsToOverrideValue = new List<long>();
+
+            foreach (AccountUsage usageToOverride in allUsagesToOverride)
+            {
+                LiveBalanceAccountInfo accountBalanceInfo = AccountsInfo.GetRecord(usageToOverride.AccountId);
+                LiveBalanceToUpdate balanceToUpdate = balancesToUpdateById.GetRecord(usageToOverride.AccountId);
+
+                BillingTransactionType transactionType = billingTransactionTypeManager.GetBillingTransactionType(usageToOverride.TransactionTypeId);
+                decimal convertedUsageBalance = currencyExchangeRateManager.ConvertValueToCurrency(usageToOverride.UsageBalance, usageToOverride.CurrencyId, accountBalanceInfo.CurrencyId, usageToOverride.PeriodStart);
+
+                if (transactionType.IsCredit)
+                    balanceToUpdate.Value -= convertedUsageBalance;
+                else
+                    balanceToUpdate.Value += convertedUsageBalance;
+
+                usageIdsToOverrideValue.Add(usageToOverride.AccountUsageId);
+            }
+
+            usageIdsToOverride = usageIdsToOverrideValue;
+        }
+
+        private void ProcessDeletedTransactions(IEnumerable<long> deletedTransactionIds, Dictionary<string, LiveBalanceToUpdate> balancesToUpdateByAccountId, out IEnumerable<long> overridenUsageIdsToRollback)
+        {
+            IEnumerable<AccountUsage> allOverridenUsagesToRollback = new AccountUsageManager().GetOverridenAccountUsagesByDeletedTransactionIds(deletedTransactionIds);
+            var overridenUsageIdsToRollbackValue = new List<long>();
+
+            foreach (AccountUsage overridenUsageToRollback in allOverridenUsagesToRollback)
+            {
+                LiveBalanceAccountInfo accountBalanceInfo = AccountsInfo.GetRecord(overridenUsageToRollback.AccountId);
+                LiveBalanceToUpdate balanceToUpdate = balancesToUpdateByAccountId.GetRecord(overridenUsageToRollback.AccountId);
+
+                BillingTransactionType transactionType = billingTransactionTypeManager.GetBillingTransactionType(overridenUsageToRollback.TransactionTypeId);
+                decimal convertedUsageBalance = currencyExchangeRateManager.ConvertValueToCurrency(overridenUsageToRollback.UsageBalance, overridenUsageToRollback.CurrencyId, accountBalanceInfo.CurrencyId, overridenUsageToRollback.PeriodStart);
+
+                if (transactionType.IsCredit)
+                    balanceToUpdate.Value += convertedUsageBalance;
+                else
+                    balanceToUpdate.Value -= convertedUsageBalance;
+
+                overridenUsageIdsToRollbackValue.Add(overridenUsageToRollback.AccountUsageId);
+            }
+
+            overridenUsageIdsToRollback = overridenUsageIdsToRollbackValue;
+        }
+
+        #endregion
     }
+
     public struct AccountTransaction
     {
         public String AccountId { get; set; }

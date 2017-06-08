@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountBalance.Entities
 {
-    public class AccountUsageOverride
+    public class TransactionAccountUsageQuery
     {
-        public long AccountUsageOverrideId { get; set; }
+        public long TransactionId { get; set; }
+
+        public Guid TransactionTypeId { get; set; }
 
         public Guid AccountTypeId { get; set; }
 
         public string AccountId { get; set; }
 
-        public Guid TransactionTypeId { get; set; }
-
         public DateTime PeriodStart { get; set; }
 
         public DateTime PeriodEnd { get; set; }
-
-        public long OverriddenByTransactionId { get; set; }
     }
 }

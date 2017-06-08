@@ -59,6 +59,7 @@
     <Compile Include="AccountUsage\AccountUsagePeriodSettings.cs" />
     <Compile Include="AccountUsage\AccountUsagePeriodSettingsConfig.cs" />
     <Compile Include="AccountUsage\AccountUsageToUpdate.cs" />
+    <Compile Include="AccountUsage\TransactionAccountUsageQuery.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Account\AccountType.cs" />
     <Compile Include="Account\AccountTypeExtendedSettingsConfig.cs" />

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Vanrise.AccountBalance.Entities
 {
     public enum BillingTransactionStatus { }
+
     public class BillingTransaction
     {
         public long AccountBillingTransactionId { get; set; }
@@ -19,9 +20,9 @@ namespace Vanrise.AccountBalance.Entities
         public string Notes { get; set; }
         public string Reference { get; set; }
         public bool IsBalanceUpdated { get; set; }
-
         public BillingTransactionSettings Settings { get; set; }
-
+        public bool IsDeleted { get; set; }
+        public bool IsSubtractedFromBalance { get; set; }
         public string SourceId { get; set; }
     }
 
