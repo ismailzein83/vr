@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dean.Edwards;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,6 +38,11 @@ namespace Vanrise.HelperTools
         private void bcpCommand_Click(object sender, EventArgs e)
         {
             OpenForm(new TraceBCPCommand());
+        }
+
+        private void CompressJS_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Packer());
         }
     }
 }
