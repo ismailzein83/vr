@@ -370,6 +370,8 @@
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountDefinitionSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountSearchTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\InvToAccBalanceRelationDefinition\retail-invtoaccbalancerelation-definition-accountextendedsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\InvToAccBalanceRelationDefinition\Templates\AccountInvToAccBalanceDefinitionExtendedSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.InvToAccBalanceRelation.Entities;
 using Vanrise.Common;
-namespace Retail.InvToAccBalanceRelation.Business
+namespace Retail.BusinessEntity.Business
 {
     public class AccountInvToAccBalanceRelationDefinitionExtendedSettings : InvToAccBalanceRelationDefinitionExtendedSettings
     {

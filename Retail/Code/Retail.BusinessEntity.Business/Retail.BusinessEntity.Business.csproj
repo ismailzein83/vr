@@ -113,6 +113,12 @@
     <Reference Include="Vanrise.Invoice.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.InvToAccBalanceRelation.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
@@ -154,6 +160,7 @@
     <Compile Include="FinancialAccount\DefaultFinancialAccountLocator.cs" />
     <Compile Include="FinancialAccount\FinancialAccountLocatorContext.cs" />
     <Compile Include="FinancialAccount\FinancialAccountManager.cs" />
+    <Compile Include="InvToAccBalanceRelation\AccountInvToAccBalanceRelationDefinitionExtendedSettings.cs" />
     <Compile Include="ProductFamilyAddOrEditFilter.cs" />
     <Compile Include="ProductDefinitionAddOrEditFilter.cs" />
     <Compile Include="PackageDefinitionAddOrEditFilter.cs" />

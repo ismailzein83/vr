@@ -157,15 +157,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.Data.SQL", "Ret
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.MultiNet.MainExtensions", "Retail.MultiNet.MainExtensions\Retail.MultiNet.MainExtensions.csproj", "{DDEBCA68-714F-4334-9B05-55476145DEC8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.InvToAccBalanceRelation", "Retail.InvToAccBalanceRelation", "{5D0D5749-DEEC-46A0-8DAB-AB3E8AC73E0A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.InvToAccBalanceRelation.Business", "Retail.InvToAccBalanceRelation.Business\Retail.InvToAccBalanceRelation.Business.csproj", "{5F2CB7A2-C2E1-482C-B2E9-2A233739EBFD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.InvToAccBalanceRelation.Web", "Retail.InvToAccBalanceRelation.Web\Retail.InvToAccBalanceRelation.Web.csproj", "{64ED24E9-A056-494A-9B9F-AF2E8A5CFDCE}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 64
+		SccNumberOfProjects = 62
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -413,14 +407,6 @@ Global
 		SccProjectTopLevelParentUniqueName61 = Retail.sln
 		SccProjectName61 = Retail.MultiNet.MainExtensions
 		SccLocalPath61 = Retail.MultiNet.MainExtensions
-		SccProjectUniqueName62 = Retail.InvToAccBalanceRelation.Business\\Retail.InvToAccBalanceRelation.Business.csproj
-		SccProjectTopLevelParentUniqueName62 = Retail.sln
-		SccProjectName62 = Retail.InvToAccBalanceRelation.Business
-		SccLocalPath62 = Retail.InvToAccBalanceRelation.Business
-		SccProjectUniqueName63 = Retail.InvToAccBalanceRelation.Web\\Retail.InvToAccBalanceRelation.Web.csproj
-		SccProjectTopLevelParentUniqueName63 = Retail.sln
-		SccProjectName63 = Retail.InvToAccBalanceRelation.Web
-		SccLocalPath63 = Retail.InvToAccBalanceRelation.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -679,14 +665,6 @@ Global
 		{DDEBCA68-714F-4334-9B05-55476145DEC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDEBCA68-714F-4334-9B05-55476145DEC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDEBCA68-714F-4334-9B05-55476145DEC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F2CB7A2-C2E1-482C-B2E9-2A233739EBFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F2CB7A2-C2E1-482C-B2E9-2A233739EBFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F2CB7A2-C2E1-482C-B2E9-2A233739EBFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F2CB7A2-C2E1-482C-B2E9-2A233739EBFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64ED24E9-A056-494A-9B9F-AF2E8A5CFDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64ED24E9-A056-494A-9B9F-AF2E8A5CFDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64ED24E9-A056-494A-9B9F-AF2E8A5CFDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64ED24E9-A056-494A-9B9F-AF2E8A5CFDCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -704,7 +682,6 @@ Global
 		{B308930C-7B05-4773-8AA9-67A1653A4F21} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
 		{2A6F5C05-5413-4A7D-A37E-652BFBBB985D} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
 		{4AC48669-4437-4FB2-AB3C-4AA1FE40375E} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
-		{5D0D5749-DEEC-46A0-8DAB-AB3E8AC73E0A} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
 		{C62C8B57-C645-4B1B-B202-6FB09BF2DAA3} = {5335E72B-803E-4323-895F-4293DB0E9211}
 		{BAC71345-402F-46AC-8FEC-1401F493305E} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{0D1FB122-0323-4CFE-9F8A-D73281C544DE} = {DBCF7D23-8951-4886-9024-282788E5D24F}
@@ -765,7 +742,5 @@ Global
 		{004EFC23-3577-4D54-B935-901CA21C4A4F} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{2E3D5DC7-5E87-4196-BF49-168F5470A319} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{CE3DB7E6-A8AF-4AB6-A83E-05E95CD6DE58} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
-		{5F2CB7A2-C2E1-482C-B2E9-2A233739EBFD} = {5D0D5749-DEEC-46A0-8DAB-AB3E8AC73E0A}
-		{64ED24E9-A056-494A-9B9F-AF2E8A5CFDCE} = {5D0D5749-DEEC-46A0-8DAB-AB3E8AC73E0A}
 	EndGlobalSection
 EndGlobal
