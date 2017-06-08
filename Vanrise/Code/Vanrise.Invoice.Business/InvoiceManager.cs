@@ -428,6 +428,13 @@ namespace Vanrise.Invoice.Business
             var invoice = GetInvoice(invoiceId);
             invoice.ThrowIfNull("invoice", invoice);
             return invoice.InvoiceTypeId;
+        
+        }
+
+        public IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, long invoiceId, int lastInvoices)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetLasInvoices(invoiceTypeId, partnerId, invoiceId,lastInvoices);
         }
         #endregion
 
