@@ -1960,6 +1960,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                             <Parameter Name="WHTax">
                               <Value>=Fields!WHTax.Value</Value>
                             </Parameter>
+                            <Parameter Name="BranchName">
+                              <Value>=Fields!BranchName.Value</Value>
+                            </Parameter>
                           </Parameters>
                           <Top>0.01041in</Top>
                           <Height>0.3125in</Height>
@@ -2276,7 +2279,6 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>

@@ -363,7 +363,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchChargeableItemDetails</DataSetName>
-        <Top>0.31943in</Top>
+        <Top>0.56943in</Top>
         <Left>0.14159in</Left>
         <Height>0.75in</Height>
         <Width>7.83489in</Width>
@@ -383,7 +383,7 @@
             <Value>=Parameters!AccountNumber.Value</Value>
           </Parameter>
         </Parameters>
-        <Top>2.24999in</Top>
+        <Top>2.49999in</Top>
         <Left>0.14159in</Left>
         <Height>0.39584in</Height>
         <Width>7.83489in</Width>
@@ -714,7 +714,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchChargeableItemDetails</DataSetName>
-        <Top>1.14583in</Top>
+        <Top>1.39583in</Top>
         <Left>0.14642in</Left>
         <Height>1in</Height>
         <Width>7.83989in</Width>
@@ -725,6 +725,36 @@
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox1">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!BranchName.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>0.25917in</Top>
+        <Left>0.14642in</Left>
+        <Height>0.25in</Height>
+        <Width>7.83006in</Width>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>6.45137in</Height>
     <Style />
@@ -829,6 +859,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="WHTax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="BranchName">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
