@@ -38,7 +38,8 @@ namespace Vanrise.Invoice.MainExtensions
                     {
                         Amount = amount,
                         CurrencyName = currencyManager.GetCurrencySymbol(currencyId),
-                        SerialNumber = invoice.SerialNumber
+                        CreatedTime = invoice.CreatedTime,
+                        SerialNumber = invoice.SerialNumber,
                     });
                 }
             }

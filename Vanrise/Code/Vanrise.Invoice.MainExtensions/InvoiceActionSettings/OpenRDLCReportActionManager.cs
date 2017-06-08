@@ -88,24 +88,15 @@ namespace Vanrise.Invoice.MainExtensions
                                 if (!repeatedReports.TryGetValue(subReport.SubReportName, out repeatedReportDetails))
                                 {
                                     RDLCReportDataSourceSettingsContext reportDataSourceContext = new RDLCReportDataSourceSettingsContext();
+                                    reportDataSourceContext.DataSourceItemsFunc = GetDataSourceItems;
                                     reportDataSourceContext.InvoiceActionContext = invoiceActionContext;
                                     repeatedReportDetails = new RepeatedReportDetails
                                     {
                                         Index = 0,
                                         ItemsByDataSource = new Dictionary<string, IEnumerable<dynamic>>()
                                     };
-                                    IEnumerable<dynamic> parentDataSourceItems = mainItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
-
-                                    if (parentDataSourceItems == null)
-                                    {
-                                        parentDataSourceItems = nonRepeatedReportItemsByDataSourceName.GetRecord(subReport.ParentDataSourceName);
-                                    }
-                                    if (parentDataSourceItems == null)
-                                    {
-                                        var parentReportDetails = repeatedReports.GetRecord(parentReport.SubReportName);
-                                        parentDataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(subReport.ParentDataSourceName);
-                                    }
-                                    repeatedReportDetails.ParentDataSourceItems = parentDataSourceItems;
+                                    var subReportName = parentReport != null ? parentReport.SubReportName : null;
+                                    repeatedReportDetails.ParentDataSourceItems = GetDataSourceItems(subReport.ParentDataSourceName, subReportName);
                                     repeatedReports.Add(subReport.SubReportName, repeatedReportDetails);
                                 }
                             }
@@ -169,6 +160,7 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 mainItemsByDataSourceName = new Dictionary<string, IEnumerable<dynamic>>();
                 RDLCReportDataSourceSettingsContext context = new RDLCReportDataSourceSettingsContext();
+                context.DataSourceItemsFunc = GetDataSourceItems;
                 context.InvoiceActionContext = invoiceActionContext;
                 foreach (var dataSource in dataSources)
                 {
@@ -185,6 +177,7 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 RDLCReportDataSourceSettingsContext context = new RDLCReportDataSourceSettingsContext();
                 context.InvoiceActionContext = invoiceActionContext;
+                context.DataSourceItemsFunc = GetDataSourceItems;
                 foreach (var dataSource in dataSources)
                 {
                     IEnumerable<dynamic> items = new List<dynamic>();
@@ -217,6 +210,28 @@ namespace Vanrise.Invoice.MainExtensions
                     reportDataSources.Add(ds);
                 }
             }
+        }
+        private IEnumerable<dynamic> GetDataSourceItems(string dataSourceName, string reportName)
+        {
+            IEnumerable<dynamic> dataSourceItems;
+            if(reportName != null)
+            {
+                var parentReportDetails = repeatedReports.GetRecord(reportName);
+                dataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(dataSourceName);
+            }else
+            {
+                dataSourceItems = GetDataSourceItems(dataSourceName);
+            }
+            return dataSourceItems;
+        }
+        private IEnumerable<dynamic> GetDataSourceItems(string dataSourceName)
+        {
+            IEnumerable<dynamic> dataSourceItems = mainItemsByDataSourceName.GetRecord(dataSourceName);
+            if (dataSourceItems == null)
+            {
+                dataSourceItems = nonRepeatedReportItemsByDataSourceName.GetRecord(dataSourceName);
+            }
+            return dataSourceItems;
         }
     }
 

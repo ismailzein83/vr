@@ -12,6 +12,8 @@ namespace Vanrise.Invoice.Entities
         public string CurrencyName { get; set; }
         public decimal  Amount { get; set; }
         public string SerialNumber { get; set; }
+        public DateTime CreatedTime { get; set; }
+
         public IEnumerable<InvoiceDataSourceItem> GetInvoiceDataSourceItemRDLCSchema()
         {
             return null;

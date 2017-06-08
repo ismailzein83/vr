@@ -9,6 +9,15 @@ namespace Vanrise.Invoice.Business.Context
 {
     public class RDLCReportDataSourceSettingsContext : IInvoiceDataSourceSettingsContext
     {
+        public Func<string,string, IEnumerable<dynamic>> DataSourceItemsFunc { get; set; }
         public IInvoiceActionContext InvoiceActionContext { get; set; }
+        public IEnumerable<dynamic> GetDataSourceItems(string dataSourceName,string reportName)
+        {
+            return DataSourceItemsFunc(dataSourceName, reportName);
+        }
+
+
+
+      
     }
 }

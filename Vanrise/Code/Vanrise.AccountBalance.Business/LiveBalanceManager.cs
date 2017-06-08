@@ -7,6 +7,7 @@ using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -63,6 +64,11 @@ namespace Vanrise.AccountBalance.Business
                 Entity = accountBalance,
             };
          
+        }
+
+        public bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
+        {
+            return false;
         }
 
         #region Private Classes

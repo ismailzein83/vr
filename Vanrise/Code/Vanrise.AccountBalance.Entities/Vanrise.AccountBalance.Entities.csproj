@@ -80,6 +80,7 @@
     <Compile Include="BillingTransactionType\IBillingTransactionTypeFilter.cs" />
     <Compile Include="BillingTransactionType\ManualAddEnabledBillingTransactionTypeFilter.cs" />
     <Compile Include="BillingTransaction\BillingTransactionByTime.cs" />
+    <Compile Include="BillingTransaction\BillingTransactionItem.cs" />
     <Compile Include="BillingTransaction\BillingTransactionViewSettings.cs" />
     <Compile Include="BillingTransaction\BillingTransactionBatch.cs" />
     <Compile Include="BillingTransaction\BillingTransactionDetail.cs" />

@@ -106,6 +106,11 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
         }
+        public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes,List<string> accountIds,List<Guid> transactionTypeIds,DateTime fromDate,DateTime? toDate)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetBillingTransactions(accountTypes, accountIds, transactionTypeIds, fromDate, toDate);
+        }
 
         #region Private Classes
 

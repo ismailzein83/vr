@@ -13,6 +13,8 @@ namespace Vanrise.Invoice.Entities
     }
     public interface IInvoiceDataSourceSettingsContext
     {
+        IEnumerable<dynamic> GetDataSourceItems(string dataSourceName, string reportName);
+
         IInvoiceActionContext InvoiceActionContext { get;}
     }
 }

@@ -66,6 +66,7 @@
     <Compile Include="BalanceRuleDefinitionSettings.cs" />
     <Compile Include="BillingTransaction\BillingTransactionSynchronizer.cs" />
     <Compile Include="Filters\IVRNotificationTypeFilter\AccountBalanceNotificationTypeFilter.cs" />
+    <Compile Include="InvoiceDataSourceSettings\BillingTransactionDataSourceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueActivators\UpdateAccountBalancesQueueActivator.cs" />
   </ItemGroup>
@@ -137,6 +138,14 @@
     <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
       <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
       <Name>Vanrise.Invoice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.InvToAccBalanceRelation.Business\Vanrise.InvToAccBalanceRelation.Business.csproj">
+      <Project>{fd744119-7b12-4e47-916d-b503995458b8}</Project>
+      <Name>Vanrise.InvToAccBalanceRelation.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.InvToAccBalanceRelation.Entities\Vanrise.InvToAccBalanceRelation.Entities.csproj">
+      <Project>{40e7f748-caef-4dab-a955-e2b62cb5db79}</Project>
+      <Name>Vanrise.InvToAccBalanceRelation.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
       <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>

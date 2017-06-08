@@ -10,5 +10,6 @@ namespace Vanrise.Invoice.Entities
     {
         Invoice GetInvoice { get; }
         IEnumerable<InvoiceItem> GetInvoiceItems(List<string> itemSetNames, CompareOperator CompareOperator);
+
     }
 }

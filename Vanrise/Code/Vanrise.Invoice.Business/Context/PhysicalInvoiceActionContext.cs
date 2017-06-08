@@ -9,6 +9,7 @@ namespace Vanrise.Invoice.Business
 {
     public class PhysicalInvoiceActionContext : IInvoiceActionContext
     {
+        public Func<string, IEnumerable<dynamic>> DataSourceITemsFunction;
         public long InvoiceId { get; set; }
         private bool IsLoaded { get; set; }
         public void InitializeInvoiceActionContext()

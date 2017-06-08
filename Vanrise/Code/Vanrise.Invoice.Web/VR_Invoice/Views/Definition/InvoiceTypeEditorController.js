@@ -80,6 +80,8 @@
         var itemSetNameStorageRuleAPI;
         var itemSetNameStorageRuleReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var relationDefinitionSelectorAPI;
+        var relationDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         var dataRecordTypeEntity;
@@ -101,6 +103,10 @@
             $scope.scopeModel.onInvoiceAttachmentsReady = function (api) {
                 invoiceAttachmentsAPI = api;
                 invoiceAttachmentsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.relationDefinitionSelectorReady = function (api) {
+                relationDefinitionSelectorAPI = api;
+                relationDefinitionSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onAmountFieldSelectorReady = function (api) {
                 amountFieldAPI = api;
@@ -275,7 +281,8 @@
                         InvoiceAttachments: invoiceAttachmentsAPI.getData(),
                         AmountFieldName: amountFieldAPI.getSelectedIds(),
                         CurrencyFieldName: currencyFieldAPI.getSelectedIds(),
-                        ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData()
+                        ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
+                        InvToAccBalanceRelationId:relationDefinitionSelectorAPI.getSelectedIds()
                     }
                 };
                 return obj;
@@ -597,6 +604,17 @@
                     return invoiceAttachmentsDeferredLoadPromiseDeferred.promise;
                 }
 
+                function loadRelationDefinitionSelector() {
+                    var relationDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    relationDefinitionSelectorReadyDeferred.promise.then(function () {
+                        var relationDefinitionSelectorPayload;
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
+                            relationDefinitionSelectorPayload = { selectedIds: invoiceTypeEntity.Settings.InvToAccBalanceRelationId };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(relationDefinitionSelectorAPI, relationDefinitionSelectorPayload, relationDefinitionSelectorLoadDeferred);
+                    });
+                    return relationDefinitionSelectorLoadDeferred.promises;
+                }
 
                 function loadCurrencyFieldSelector() {
                     if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined &&  invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined) {
@@ -636,7 +654,7 @@
                 }
 
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
