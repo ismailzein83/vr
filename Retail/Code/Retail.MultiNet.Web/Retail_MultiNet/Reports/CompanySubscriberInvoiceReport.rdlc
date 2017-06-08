@@ -1708,7 +1708,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.25521in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1781,18 +1781,18 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.67188in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Bank">
+                    <Textbox Name="ChannelName">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Bank.Value</Value>
+                              <Value>=Fields!ChannelName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1802,7 +1802,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Bank</rd:DefaultName>
+                      <rd:DefaultName>ChannelName</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1824,7 +1824,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AccountNumber.Value</Value>
+                              <Value>=Fields!Bank.Value + System.Environment.NewLine + "Account Title:" + Fields!AccountHolder.Value + System.Environment.NewLine +"Account No:" + Fields!AccountNumber.Value +  System.Environment.NewLine +"Address: "+Fields!Address.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1870,7 +1870,7 @@
         <DataSetName>BankDetails</DataSetName>
         <Top>7.29625in</Top>
         <Left>0.10865in</Left>
-        <Height>0.5in</Height>
+        <Height>0.92708in</Height>
         <Width>7.83488in</Width>
         <ZIndex>7</ZIndex>
         <Style>
@@ -1900,7 +1900,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>8.04387in</Top>
+        <Top>8.29387in</Top>
         <Left>0.10363in</Left>
         <Height>0.68752in</Height>
         <Width>7.83989in</Width>
@@ -2003,7 +2003,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <PageBreak>
           <BreakLocation>StartAndEnd</BreakLocation>
         </PageBreak>
-        <Top>8.79042in</Top>
+        <Top>9.04042in</Top>
         <Left>0.12875in</Left>
         <Height>0.32291in</Height>
         <Width>7.8198in</Width>
@@ -2387,7 +2387,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>9.26958in</Height>
+    <Height>9.49875in</Height>
     <Style />
   </Body>
   <Width>8.04959in</Width>
@@ -2568,6 +2568,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         </Field>
         <Field Name="SortCode">
           <DataField>SortCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ChannelName">
+          <DataField>ChannelName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
