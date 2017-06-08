@@ -180,9 +180,9 @@ namespace Vanrise.Invoice.Data.SQL
             return GetItemSP("VR_Invoice.sp_Invoice_GetLast", InvoiceMapper, invoiceTypeId, partnerId);
         }
 
-        public IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, long invoiceId, int lastInvoices)
+        public IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices)
         {
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetLastInvoices", InvoiceMapper, invoiceTypeId, partnerId,invoiceId, lastInvoices);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetLastInvoices", InvoiceMapper, invoiceTypeId, partnerId, beforeDate, lastInvoices);
         }
 
         #endregion

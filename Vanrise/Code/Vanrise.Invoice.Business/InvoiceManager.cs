@@ -431,10 +431,10 @@ namespace Vanrise.Invoice.Business
         
         }
 
-        public IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, long invoiceId, int lastInvoices)
+        public IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetLasInvoices(invoiceTypeId, partnerId, invoiceId,lastInvoices);
+            return dataManager.GetLasInvoices(invoiceTypeId, partnerId, beforeDate, lastInvoices);
         }
         #endregion
 

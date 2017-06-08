@@ -21,7 +21,8 @@ namespace Vanrise.Invoice.MainExtensions
             var currentInvoice = context.InvoiceActionContext.GetInvoice;
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(currentInvoice.InvoiceTypeId);
             var invoiceManager = new InvoiceManager();
-            var invoices =  invoiceManager.GetLasInvoices(currentInvoice.InvoiceTypeId, currentInvoice.PartnerId,currentInvoice.InvoiceId, this.LastInvoices);
+            DateTime? datetime = currentInvoice.CreatedTime == DateTime.MinValue ? default(DateTime?) : currentInvoice.CreatedTime;
+            var invoices = invoiceManager.GetLasInvoices(currentInvoice.InvoiceTypeId, currentInvoice.PartnerId, datetime, this.LastInvoices);
             List<InvoiceDataSourceItem> invoiceDataSourceItems = new List<InvoiceDataSourceItem>();
             if(invoices != null)
             {
@@ -36,7 +37,8 @@ namespace Vanrise.Invoice.MainExtensions
                     invoiceDataSourceItems.Add(new InvoiceDataSourceItem
                     {
                         Amount = amount,
-                        CurrencyName = currencyManager.GetCurrencySymbol(currencyId)
+                        CurrencyName = currencyManager.GetCurrencySymbol(currencyId),
+                        SerialNumber = invoice.SerialNumber
                     });
                 }
             }
