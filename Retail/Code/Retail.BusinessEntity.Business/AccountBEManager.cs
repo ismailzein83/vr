@@ -536,6 +536,18 @@ namespace Retail.BusinessEntity.Business
         public bool UpdateAccountExtendedSetting<T>(Guid accountBEDefinitionId, long accountId, T extendedSettings) where T : BaseAccountExtendedSettings
         {
             Account account = GetAccount(accountBEDefinitionId, accountId);
+            SetExtendedSettings<T>(extendedSettings, account);
+            IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+            if (dataManager.UpdateExtendedSettings(accountId, account.ExtendedSettings))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
+                return true;
+            }
+            return false;
+        }
+
+        public void SetExtendedSettings<T>(T extendedSettings, Account account) where T : BaseAccountExtendedSettings
+        {
             if (account.ExtendedSettings == null)
                 account.ExtendedSettings = new Dictionary<string, BaseAccountExtendedSettings>();
             string extendedSettingName = typeof(T).FullName;
@@ -554,13 +566,6 @@ namespace Retail.BusinessEntity.Business
             {
                 account.ExtendedSettings.Add(extendedSettingName, extendedSettings);
             }
-            IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            if (dataManager.UpdateExtendedSettings(accountId, account.ExtendedSettings))
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
-                return true;
-            }
-            return false;
         }
         public T GetExtendedSettings<T>(Guid accountBEDefinitionId, long accountId) where T : BaseAccountExtendedSettings
         {

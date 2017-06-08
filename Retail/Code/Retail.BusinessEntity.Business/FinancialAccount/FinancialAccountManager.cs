@@ -69,9 +69,7 @@ namespace Retail.BusinessEntity.Business
             if (CheckFinancialAccountOverlaping(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, financialAccountToInsert.FinancialAccount, out  message))
             {
                 var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId);
-                accountBEFinancialAccountsSettings.LastTakenSequenceNumber++;
-                financialAccountToInsert.FinancialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
-                accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToInsert.FinancialAccount);
+                AddFinancialAccountToExtSettings(financialAccountToInsert.FinancialAccount, accountBEFinancialAccountsSettings);
 
                 if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, accountBEFinancialAccountsSettings))
                 {
@@ -87,6 +85,20 @@ namespace Retail.BusinessEntity.Business
                 insertOperationOutput.Message = message;
             }
             return insertOperationOutput;
+        }
+        
+        public AccountBEFinancialAccountsSettings CreateAccountFinancialAccountExtSettings()
+        {
+            var accountBEFinancialAccountsSettings = new AccountBEFinancialAccountsSettings();
+            accountBEFinancialAccountsSettings.FinancialAccounts = new List<FinancialAccount>();
+            return accountBEFinancialAccountsSettings;
+        }
+
+        public void AddFinancialAccountToExtSettings(FinancialAccount financialAccount, AccountBEFinancialAccountsSettings accountBEFinancialAccountsSettings)
+        {
+            accountBEFinancialAccountsSettings.LastTakenSequenceNumber++;
+            financialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
+            accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccount);
         }
         
         public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
@@ -283,9 +295,9 @@ namespace Retail.BusinessEntity.Business
         {
             var accountBEFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountBEDefinitionId, accountId);
             if (accountBEFinancialAccountsSettings == null)
-                accountBEFinancialAccountsSettings = new AccountBEFinancialAccountsSettings();
-            if (accountBEFinancialAccountsSettings.FinancialAccounts == null)
-                accountBEFinancialAccountsSettings.FinancialAccounts = new List<FinancialAccount>();
+            {
+                accountBEFinancialAccountsSettings = CreateAccountFinancialAccountExtSettings();
+            }
             return accountBEFinancialAccountsSettings;
         }
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccounts(Guid accountDefinitionId)

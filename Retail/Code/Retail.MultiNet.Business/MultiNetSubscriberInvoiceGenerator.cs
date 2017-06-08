@@ -75,6 +75,7 @@ namespace Retail.MultiNet.Business
             //}
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
             MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext = new MultiNetInvoiceGeneratorContext();
+            multiNetInvoiceGeneratorContext.IssueDate = context.IssueDate;
             multiNetInvoiceGeneratorContext.FinancialAccount = financialAccountData.Account;
             List<BranchSummary> branchesSummary = new List<BranchSummary>();
             if (financialAccountData.Account.TypeId == this._branchTypeId)
@@ -92,7 +93,7 @@ namespace Retail.MultiNet.Business
                 }
               BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
             }
-            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, currencyId, financialAccountData.Account);
+            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account);
 
             context.Invoice = new GeneratedInvoice
             {
@@ -107,6 +108,7 @@ namespace Retail.MultiNet.Business
 
             BuildTrafficData(multiNetInvoiceGeneratorContext, account, currencyId, fromDate, toDate, branchTypeId);
             AddRecurringChargeToBranchSummary(multiNetInvoiceGeneratorContext.SummaryItemsByBranch, account, currencyId, fromDate, toDate);
+            BuildGeneratedBranchItemSummaryItemSet(multiNetInvoiceGeneratorContext, account.AccountId);
             return BuildBranchSummary(multiNetInvoiceGeneratorContext, account, currencyId);
 
         }
@@ -114,41 +116,32 @@ namespace Retail.MultiNet.Business
         {
             BranchSummary branchSummary = new BranchSummary();
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetRecord(account.AccountId);
-            decimal whAmount = 0;
             decimal saleAmount = 0;
-            decimal totalSaleAmount = 0;
+            decimal whAmount = 0;
             foreach (var summaryItem in summaryItems)
             {
                 branchSummary.Quantity += summaryItem.Quantity;
                 branchSummary.CurrentCharges += summaryItem.NetAmount;
                 if (this._salesTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
-                {
                     saleAmount += summaryItem.NetAmount;
-                }
-                totalSaleAmount += summaryItem.NetAmount;
                 if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
-                {
                     whAmount += summaryItem.NetAmount;
-                }
             }
+            decimal whAmountSaleTaxPercentage = 0;
+            whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
+
             decimal saleTaxPercentage = 0;
-            branchSummary.SalesTaxAmount = GetSaleTaxAmount(account, saleAmount, currencyId, out saleTaxPercentage);
+            branchSummary.SalesTaxAmount = GetSaleTaxAmount(account, saleAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out saleTaxPercentage);
             branchSummary.SalesTax = saleTaxPercentage;
 
-            decimal whSaleTaxPercentage = 0;
-            decimal whAmountWithTaxes = whAmount + GetSaleTaxAmount(account, whAmount, currencyId, out whSaleTaxPercentage);
-
-            decimal totalSaleTaxPercentage = 0;
-            branchSummary.TotalCurrentCharges = totalSaleAmount + GetSaleTaxAmount(account, totalSaleAmount, currencyId, out totalSaleTaxPercentage);
-
             decimal whTaxPercentage = 0;
-            branchSummary.WHTaxAmount = GetWHTaxAmount(account, whAmountWithTaxes, currencyId, out whTaxPercentage);
+            branchSummary.WHTaxAmount = GetWHTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whTaxPercentage);
             branchSummary.WHTax = whTaxPercentage;
 
+            branchSummary.TotalCurrentCharges = branchSummary.CurrentCharges + branchSummary.WHTaxAmount + branchSummary.SalesTaxAmount;
+           
             branchSummary.CurrencyId = currencyId;
             branchSummary.AccountId = account.AccountId;
-
-            branchSummary.CurrencyId = currencyId;
             return branchSummary;
         }
         private void BuildGeneratedBranchSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext,List<BranchSummary> branchesSummaries)
@@ -208,10 +201,8 @@ namespace Retail.MultiNet.Business
                 multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long,List<BranchSummaryItem>>();
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
             summaryItems.Add(callAggregationSummary);
-            summaryItems.Add(outgoingCallsSummary);
-            BuildGeneratedBranchItemSummaryItemSet(multiNetInvoiceGeneratorContext, account.AccountId);
+            summaryItems.Add(outgoingCallsSummary);            
             BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
-
             LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, fromDate, toDate, branchTypeId);
 
         }
@@ -459,11 +450,14 @@ namespace Retail.MultiNet.Business
                             {
                                 foreach (var output in evaluateRecurringCharge)
                                 {
-                                    BranchSummaryItem branchSummary = new BranchSummaryItem();
-                                    branchSummary.ChargeableEntityId = output.ChargeableEntityId;
-                                    branchSummary.UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(output.ChargeableEntityId);
-                                    branchSummary.Quantity = 1;
-                                    branchSummary.NetAmount = output.Amount;
+                                    BranchSummaryItem branchSummary = new BranchSummaryItem()
+                                    {
+                                        AccountId = account.AccountId,
+                                        ChargeableEntityId = output.ChargeableEntityId,
+                                        UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(output.ChargeableEntityId),
+                                        Quantity = 1,
+                                        NetAmount = output.Amount
+                                    };
                                     billingSummaryItems.Add(branchSummary);
                                 }
                             }
@@ -583,12 +577,12 @@ namespace Retail.MultiNet.Business
         #endregion
 
         #region Build Generated Invoice Details
-        private Decimal GetSaleTaxAmount(Account account, decimal amount, int currencyId, out decimal percentage)
+        private Decimal GetSaleTaxAmount(Account account, decimal amount, int currencyId, DateTime issueDate, out decimal percentage)
         {
             GenericRuleTarget ruleTarget = new GenericRuleTarget
             {
                 Objects = new Dictionary<string, dynamic> { { "Account", account } },
-                EffectiveOn = DateTime.Now
+                EffectiveOn = issueDate
             };
             TaxRuleContext taxRuleContext = new TaxRuleContext
             {
@@ -600,26 +594,31 @@ namespace Retail.MultiNet.Business
             percentage = taxRuleContext.Percentage;
             return taxRuleContext.TaxAmount;
         }
-        private Decimal GetLatePaymentCharges(Account account, decimal amount, int currencyId)
+        private Decimal GetLatePaymentCharges(Account account, decimal amount, int currencyId, DateTime issueDate)
         {
             GenericRuleTarget ruleTarget = new GenericRuleTarget
             {
                 Objects = new Dictionary<string, dynamic> { { "Account", account } },
-                EffectiveOn = DateTime.Now
+                EffectiveOn = issueDate
             };
             var matchRule = _mappingRuleManager.GetMatchRule(this._latePaymentRuleDefinitionId, ruleTarget);
-            if (matchRule == null)
-                throw new InvoiceGeneratorException("Connot find late payment rule");
-            var percentage = Convert.ToDecimal(matchRule.Settings.Value ?? 0.0);
+            if (matchRule != null)
+            {
+                var percentage = Convert.ToDecimal(matchRule.Settings.Value ?? 0.0);
 
-            return percentage > 0 ? (percentage * amount) / 100 : 0;
+                return percentage > 0 ? (percentage * amount) / 100 : 0;
+            }
+            else
+            {
+                return 0;
+            }
         }
-        private Decimal GetWHTaxAmount(Account account, decimal amount, int currencyId, out decimal percentage)
+        private Decimal GetWHTaxAmount(Account account, decimal amount, int currencyId, DateTime issueDate, out decimal percentage)
         {
             GenericRuleTarget ruleTarget = new GenericRuleTarget
             {
                 Objects = new Dictionary<string, dynamic> { { "Account", account } },
-                EffectiveOn = DateTime.Now
+                EffectiveOn = issueDate
             };
             TaxRuleContext taxRuleContext = new TaxRuleContext
             {
@@ -631,7 +630,7 @@ namespace Retail.MultiNet.Business
             percentage = taxRuleContext.Percentage;
             return taxRuleContext.TaxAmount;
         }
-        private InvoiceDetails BuildGeneratedInvoiceDetails(List<BranchSummary> branchesSummary, DateTime fromDate, DateTime toDate, int currencyId, Account account)
+        private InvoiceDetails BuildGeneratedInvoiceDetails(List<BranchSummary> branchesSummary, DateTime fromDate, DateTime toDate, DateTime issueDate, int currencyId, Account account)
         {
             InvoiceDetails retailSubscriberInvoiceDetails = null;
             if (branchesSummary != null)
@@ -644,7 +643,7 @@ namespace Retail.MultiNet.Business
                     retailSubscriberInvoiceDetails.TotalCurrentCharges += branchSummary.TotalCurrentCharges;
                 }
                 retailSubscriberInvoiceDetails.PayableByDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges;
-                retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId);
+                retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId, issueDate);
                 retailSubscriberInvoiceDetails.PayableAfterDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges + retailSubscriberInvoiceDetails.LatePaymentCharges;
                 retailSubscriberInvoiceDetails.CurrencyId = currencyId;
             }
@@ -660,6 +659,8 @@ namespace Retail.MultiNet.Business
             public Dictionary<long, List<BillingCDR>> BillingCDRByBranch { get; set; }
             public Dictionary<long, List<BranchSummaryItem>> SummaryItemsByBranch { get; set; }
             public List<GeneratedInvoiceItemSet> GeneratedInvoiceItemSets { get; set; }
+
+            public DateTime IssueDate { get; set; }
         }
         private class BillingSummary
         {

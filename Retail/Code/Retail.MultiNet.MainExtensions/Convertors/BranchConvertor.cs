@@ -16,6 +16,8 @@ namespace Retail.MultiNet.MainExtensions.Convertors
 {
     public class BranchConvertor : TargetBEConvertor
     {
+        static AccountBEManager s_accountBEManager = new AccountBEManager();
+
         public Guid AccountBEDefinitionId { get; set; }
         public Guid AccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
@@ -23,7 +25,19 @@ namespace Retail.MultiNet.MainExtensions.Convertors
         public Guid BranchInfoPartDefinitionId { get; set; }
         public string BrachIdColumnName { get; set; }
         public string CompanyIdColumnName { get; set; }
+        
         public Guid FinancialPartDefinitionId { get; set; }
+
+        public Guid FinancialAccountDefinitionId { get; set; }
+
+        public int CreditClassId { get; set; }
+
+        public BranchConvertor()
+        {
+            this.FinancialAccountDefinitionId = new Guid("f7bf25bd-1f11-404e-94ac-fd41817f8607");
+            this.CreditClassId = 1;
+        }
+
         public override void Initialize(ITargetBEConvertorInitializeContext context)
         {
             Dictionary<int, Guid> statuses = new Dictionary<int, Guid>();
@@ -80,6 +94,7 @@ namespace Retail.MultiNet.MainExtensions.Convertors
                         };
 
                         FillBranchInfo(accountData, row);
+                        CreateFinancialAccount(accountData.Account, row);
                         maultiNetAccounts.Add(sourceId, accountData);
                     }
                     catch (Exception ex)
@@ -90,6 +105,25 @@ namespace Retail.MultiNet.MainExtensions.Convertors
                 }
             }
             context.TargetBEs = maultiNetAccounts.Values.ToList();
+        }
+        static FinancialAccountManager s_financialAccountManager = new FinancialAccountManager();
+        private void CreateFinancialAccount(Account account, DataRow row)
+        {
+            if (row["AC_ACTIVATIONDATE"] != DBNull.Value)
+            {
+                DateTime bed = (DateTime)row["AC_ACTIVATIONDATE"];
+                FinancialAccount financialAccount = new FinancialAccount
+                {
+                    FinancialAccountDefinitionId = this.FinancialAccountDefinitionId,
+                    ExtendedSettings = new Retail.BusinessEntity.MainExtensions.FinancialAccount.PostpaidFinancialAccount { CreditClassId = this.CreditClassId },
+                    BED = bed
+                };
+                AccountBEFinancialAccountsSettings accountFinancialAccountExtSettings = s_accountBEManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(account);
+                if(accountFinancialAccountExtSettings == null)
+                    accountFinancialAccountExtSettings = s_financialAccountManager.CreateAccountFinancialAccountExtSettings();
+                s_financialAccountManager.AddFinancialAccountToExtSettings(financialAccount, accountFinancialAccountExtSettings);
+                s_accountBEManager.SetExtendedSettings(accountFinancialAccountExtSettings, account);
+            }
         }
 
         public override void MergeTargetBEs(ITargetBEConvertorMergeTargetBEsContext context)

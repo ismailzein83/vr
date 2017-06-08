@@ -27,8 +27,6 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
         public override List<RecurringChargeEvaluatorOutput> Evaluate(IRecurringChargeEvaluatorContext context)
         {
             context.ThrowIfNull("context");
-            if (!context.PackageAssignmentEnd.HasValue)
-                throw new ArgumentNullException("context.PackageAssignmentEnd");
             PeriodicRecurringChargeEvaluatorDefinitionSettings periodicChargeDefinition = context.EvaluatorDefinitionSettings.CastWithValidate<PeriodicRecurringChargeEvaluatorDefinitionSettings>("periodicChargeDefinition");
             int daysToCharge = CalculateNbOfDaysToCharge(context);
             int pricePeriodDays;

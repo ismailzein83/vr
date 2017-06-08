@@ -190,6 +190,7 @@ namespace Retail.BusinessEntity.Business
                 AccountBEDefinitionId = this.AccountBEDefinitionId,
                 Name = account.Name,
                 Settings = account.Settings,
+                ExtendedSettings = account.ExtendedSettings,
                 SourceId = account.SourceId,
                 StatusId = account.StatusId,
                 TypeId = account.TypeId,

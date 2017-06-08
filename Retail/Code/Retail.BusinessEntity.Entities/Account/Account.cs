@@ -47,6 +47,8 @@ namespace Retail.BusinessEntity.Entities
         public Guid StatusId { get; set; }
 
         public long? ParentAccountId { get; set; }
+
+        public Dictionary<string, BaseAccountExtendedSettings> ExtendedSettings { get; set; }
     }
 
     public class AccountToEdit : BaseAccount
