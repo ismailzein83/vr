@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public enum CodeCompareIndicator { None = 0, Highlight = 1 };
-
-    public enum CodeCompareAction { New = 0, Delete = 1 };
-
-    public class CodeCompareItem
+  public  class CodeCompareItemDetail
     {
         public string Code { get; set; }
 
@@ -31,15 +27,5 @@ namespace TOne.WhS.Sales.Entities
         public CodeCompareIndicator AbsenceInSuppliersIndicator { get; set; }
 
         public CodeCompareAction? Action { get; set; }
-
-    }
-
-    public class CodeCompareSupplierItem
-    {
-        public string SupplierZone { get; set; }
-
-        public string SupplierCode { get; set; }
-
-        public CodeCompareIndicator SupplierCodeIndicator { get; set; }
     }
 }

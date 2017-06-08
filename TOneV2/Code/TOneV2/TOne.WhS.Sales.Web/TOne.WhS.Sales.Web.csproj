@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CodeCompareController.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
     <Compile Include="Controllers\RatePlanPreviewController.cs" />
     <Compile Include="Controllers\SellingRuleController.cs" />
@@ -171,6 +172,8 @@
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionZoneFilterSelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-zonefilter-selective.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-type-selective.js" />
+    <Content Include="WhS_Sales\Directives\CodeCompare\Templates\CodeCompareGrid.html" />
+    <Content Include="WhS_Sales\Directives\CodeCompare\vr-whs-sales-codecompare-grid.js" />
     <Content Include="WhS_Sales\Directives\Country\Templates\SoldCountryGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Country\vr-whs-sales-soldcountry-grid.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\Templates\RateBulkActionTypeTemplate.html" />
@@ -242,10 +245,12 @@
     <Content Include="WhS_Sales\Directives\vr-whs-sales-rateplan-grid.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-routepercentagecostcalculation.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-routingproduct-zone.js" />
+    <Content Include="WhS_Sales\Services\APIServices\CodeCompareAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SellingRuleAPIService.js" />
     <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />
+    <Content Include="WhS_Sales\Services\CodeCompareService.js" />
     <Content Include="WhS_Sales\Services\RatePlanUtilsService.js" />
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />
@@ -289,6 +294,7 @@
   <ItemGroup>
     <Content Include="WhS_Sales\Templates\Import Rate Plan Template.xlsx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

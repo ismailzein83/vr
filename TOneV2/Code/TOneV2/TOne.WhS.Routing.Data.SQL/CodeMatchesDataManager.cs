@@ -13,8 +13,8 @@ namespace TOne.WhS.Routing.Data.SQL
 	public class CodeMatchesDataManager : RoutingDataManager, ICodeMatchesDataManager
 	{
 		private readonly string[] codeMatchColumns = { "CodePrefix", "Code", "Content" };
-		private readonly string[] codeSaleZoneMatchColumns = { "Code", "SellingNumberPlanID", "SaleZoneID" };
-		private readonly string[] codeSupplierZoneMatchColumns = { "Code", "SupplierID", "SupplierZoneID" };
+		private readonly string[] codeSaleZoneMatchColumns = { "Code", "SellingNumberPlanID", "SaleZoneID","CodeMatch" };
+        private readonly string[] codeSupplierZoneMatchColumns = { "Code", "SupplierID", "SupplierZoneID", "CodeMatch" };
 
 		public bool ShouldApplyCodeZoneMatch { get; set; }
 
@@ -103,12 +103,12 @@ namespace TOne.WhS.Routing.Data.SQL
 				if (record.SaleCodeMatches != null)
 				{
 					foreach (SaleCodeMatch saleCodeMatch in record.SaleCodeMatches)
-						codeMatchBulkInsert.CodeSaleZoneMatchStream.WriteRecord("{0}^{1}^{2}", record.Code, saleCodeMatch.SellingNumberPlanId, saleCodeMatch.SaleZoneId);
+                        codeMatchBulkInsert.CodeSaleZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, saleCodeMatch.SellingNumberPlanId, saleCodeMatch.SaleZoneId, saleCodeMatch.SaleCode);
 				}
 				if (record.SupplierCodeMatches != null)
 				{
 					foreach (SupplierCodeMatchWithRate supplierCodeMatch in record.SupplierCodeMatches)
-						codeMatchBulkInsert.CodeSupplierZoneMatchStream.WriteRecord("{0}^{1}^{2}", record.Code, supplierCodeMatch.CodeMatch.SupplierId, supplierCodeMatch.CodeMatch.SupplierZoneId);
+                        codeMatchBulkInsert.CodeSupplierZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatch.CodeMatch.SupplierId, supplierCodeMatch.CodeMatch.SupplierZoneId, supplierCodeMatch.CodeMatch.SupplierCode);
 				}
 			}
 		}

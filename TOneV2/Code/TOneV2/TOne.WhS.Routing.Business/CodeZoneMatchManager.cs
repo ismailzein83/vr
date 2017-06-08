@@ -11,6 +11,7 @@ namespace TOne.WhS.Routing.Business
 	public class CodeZoneMatchManager
 	{
 		#region Public Methods
+       
 
 		public IEnumerable<CodeSaleZoneMatch> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds)
 		{
@@ -35,7 +36,23 @@ namespace TOne.WhS.Routing.Business
 			ICodeZoneMatchDataManager dataManager = GetDataManager();
 			return dataManager.GetOtherSupplierZonesMatchedToSupplierZones(supplierId, supplierZoneIds, otherSupplierIds);
 		}
-		
+
+        public IEnumerable<CodeSaleZoneMatch> GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId,string codeStartWith)
+        { 
+            if(sellingNumberPlanId==null)
+                throw new NullReferenceException("sellingNumberPlanId");
+            ICodeZoneMatchDataManager dataManager = GetDataManager();
+            return dataManager.GetSaleZoneMatchBySellingNumberPlanId(sellingNumberPlanId, codeStartWith);
+        }
+
+        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith)
+        {
+            if (supplierIds == null)
+                throw new NullReferenceException("supplierIds");
+            ICodeZoneMatchDataManager dataManager = GetDataManager();
+            return dataManager.GetSupplierZoneMatchBysupplierIds(supplierIds, codeStartWith);
+        }
+
 		#endregion
 
 		#region Private Methods

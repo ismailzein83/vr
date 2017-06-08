@@ -12,11 +12,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
 	public class CodeZoneMatchDataManager : BaseTOneDataManager, ICodeZoneMatchDataManager
 	{
-		#region Fields
-
-		public RoutingDatabase RPRouteDatabase { get; set; }
-
-		#endregion
+		
 
 		#region Constructors
 
@@ -27,6 +23,12 @@ namespace TOne.WhS.Routing.Data.SQL
 		}
 
 		#endregion
+
+        #region Fields
+
+        public RoutingDatabase RPRouteDatabase { get; set; }
+
+        #endregion
 
 		public IEnumerable<CodeSaleZoneMatch> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds)
 		{
@@ -41,6 +43,55 @@ namespace TOne.WhS.Routing.Data.SQL
 			});
 		}
 
+        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith)
+        {
+            return base.GetItemsText<CodeSupplierZoneMatch>(query_GetCodeSupplierZoneMatchBySupplierIds, CodeSupplierZoneMatchMapper, (cmd) =>
+            {
+                var codeStartWithParameter = new SqlParameter()
+                {
+                    ParameterName = "@CodeStartWith",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    IsNullable = true,
+                    Value = DBNull.Value
+                };
+                if (codeStartWith != null)
+                    codeStartWithParameter.Value = codeStartWith;
+                cmd.Parameters.Add(codeStartWithParameter);
+        
+                var supplierIdsParameter = new SqlParameter()
+                {
+                    ParameterName = "@SupplierIds",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    Value = DBNull.Value
+                };
+                if (supplierIds != null)
+                    supplierIdsParameter.Value = string.Join(",", supplierIds);
+                cmd.Parameters.Add(supplierIdsParameter);
+            });
+        }
+       public IEnumerable<CodeSaleZoneMatch> GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId, string codeStartWith)
+        {
+            return base.GetItemsText<CodeSaleZoneMatch>(query_GetSaleZoneMatchBySellingNumberPlanId, CodeSaleZoneMatchMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter()
+                {
+                    ParameterName = "@SellingNumberPlanId",
+                    SqlDbType = System.Data.SqlDbType.Int,
+                    Value = sellingNumberPlanId
+                });
+
+                var codeStartWithParameter = new SqlParameter()
+                {
+                    ParameterName = "@CodeStartWith",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    IsNullable = true,
+                    Value = DBNull.Value
+                };
+                if (codeStartWith != null)
+                    codeStartWithParameter.Value = codeStartWith;
+                cmd.Parameters.Add(codeStartWithParameter);
+            });
+        }
 		public IEnumerable<CodeSupplierZoneMatch> GetSupplierZonesMatchedToSaleZones(IEnumerable<long> saleZoneIds, IEnumerable<int> supplierIds)
 		{
 			return base.GetItemsText<CodeSupplierZoneMatch>(query_GetSupplierZonesMatchedToSaleZones, CodeSupplierZoneMatchMapper, (cmd) =>
@@ -125,6 +176,26 @@ namespace TOne.WhS.Routing.Data.SQL
 			where Code in (select Code from CodeCTE)
 		";
 
+
+        private const string query_GetSaleZoneMatchBySellingNumberPlanId =
+        @"
+			select Code,SellingNumberPlanID,SaleZoneID,CodeMatch
+			from dbo.CodeSaleZoneMatch
+			where SellingNumberPlanID = @SellingNumberPlanId 
+                And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
+		";
+
+        private const string query_GetCodeSupplierZoneMatchBySupplierIds =
+        @"
+			declare @SupplierIdsTable table (SupplierId bigint not null)
+			insert into @SupplierIdsTable (SupplierId)
+			select ParsedString from dbo.ParseStringList(@SupplierIds);
+		
+			select Code,SupplierID,SupplierZoneID,CodeMatch
+			from dbo.CodeSupplierZoneMatch
+			where SupplierID in (select SupplierId from @SupplierIdsTable)
+                And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
+		";
 		private const string query_GetSupplierZonesMatchedToSaleZones =
 		@"
 			declare @SaleZoneIdTable table (SaleZoneId bigint not null)
@@ -175,7 +246,8 @@ namespace TOne.WhS.Routing.Data.SQL
 			{
 				Code = reader["Code"] as string,
 				SellingNumberPlanId = (int)reader["SellingNumberPlanId"],
-				SaleZoneId = (long)reader["SaleZoneId"]
+				SaleZoneId = (long)reader["SaleZoneId"],
+                CodeMatch = reader["CodeMatch"] as string
 			};
 		}
 
@@ -185,10 +257,48 @@ namespace TOne.WhS.Routing.Data.SQL
 			{
 				Code = reader["Code"] as string,
 				SupplierId = (int)reader["SupplierId"],
-				SupplierZoneId = (long)reader["SupplierZoneId"]
+				SupplierZoneId = (long)reader["SupplierZoneId"],
+                CodeMatch = reader["CodeMatch"] as string
 			};
 		}
 
 		#endregion
-	}
+
+        //RoutingDatabase ICodeZoneMatchDataManager.RPRouteDatabase
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //    set
+        //    {
+        //       throw new NotImplementedException();
+        //    }
+        //}
+
+        //IEnumerable<CodeSaleZoneMatch> ICodeZoneMatchDataManager.GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IEnumerable<CodeSupplierZoneMatch> ICodeZoneMatchDataManager.GetSupplierZonesMatchedToSaleZones(IEnumerable<long> saleZoneIds, IEnumerable<int> supplierIds)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IEnumerable<CodeSupplierZoneMatch> ICodeZoneMatchDataManager.GetOtherSupplierZonesMatchedToSupplierZones(int supplierId, IEnumerable<long> supplierZoneIds, IEnumerable<int> otherSupplierIds)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IEnumerable<CodeSupplierZoneMatch> ICodeZoneMatchDataManager.GetSupplierZoneMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IEnumerable<CodeSaleZoneMatch> ICodeZoneMatchDataManager.GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId, string codeStartWith)
+        //{
+        //    throw new NotImplementedException();
+        //}
+    }
 }

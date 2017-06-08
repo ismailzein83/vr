@@ -235,7 +235,8 @@ namespace TOne.WhS.Routing.Data.SQL
         private const string query_CodeSaleZoneMatchTable = @"CREATE TABLE [dbo].[CodeSaleZoneMatch](
 																[Code] [varchar](20) NOT NULL,
 																[SellingNumberPlanID] [int] NOT NULL,
-																[SaleZoneID] [bigint] NOT NULL
+																[SaleZoneID] [bigint] NOT NULL,
+                                                                [CodeMatch] [varchar](20) NOT NULL
 															) ON [PRIMARY]
 															CREATE CLUSTERED INDEX [IX_CodeSaleZoneMatch_Code] ON [dbo].[CodeSaleZoneMatch]
 															(
@@ -245,7 +246,8 @@ namespace TOne.WhS.Routing.Data.SQL
         private const string query_CodeSupplierZoneMatchTable = @"CREATE TABLE [dbo].[CodeSupplierZoneMatch](
 																	[Code] [varchar](20) NOT NULL,
 																	[SupplierID] [int] NOT NULL,
-																	[SupplierZoneID] [bigint] NOT NULL
+																	[SupplierZoneID] [bigint] NOT NULL,
+                                                                    [CodeMatch] [varchar](20) NOT NULL
 																) ON [PRIMARY]
 																CREATE CLUSTERED INDEX [IX_CodeSupplierZoneMatch_Code] ON [dbo].[CodeSupplierZoneMatch]
 																(

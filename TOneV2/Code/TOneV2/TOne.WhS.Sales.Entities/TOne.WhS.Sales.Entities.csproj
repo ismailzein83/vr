@@ -71,6 +71,8 @@
     <Compile Include="BulkActions\Enums.cs" />
     <Compile Include="BulkActions\GetZoneItemsInput.cs" />
     <Compile Include="CodeComparison\CodeCompareItem.cs" />
+    <Compile Include="CodeComparison\CodeCompareItemDetail.cs" />
+    <Compile Include="CodeComparison\CodeCompareQuery.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidationInput.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidationResult.cs" />
     <Compile Include="ImportRatePlan\InvalidImportedRow.cs" />
