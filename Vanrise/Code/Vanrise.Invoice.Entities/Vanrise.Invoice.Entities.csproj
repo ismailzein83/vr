@@ -90,6 +90,7 @@
     <Compile Include="InvoiceType\InvoiceDataSource.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridFilterConditionConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceGridActionSettingsConfig.cs" />
+    <Compile Include="InvoiceType\InvoiceDataSourceItem.cs" />
     <Compile Include="InvoiceType\InvoiceFieldInfo.cs" />
     <Compile Include="InvoiceType\InvoiceFileConverter.cs" />
     <Compile Include="InvoiceType\EffectivePartnerInvoiceSetting.cs" />
