@@ -21,10 +21,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>0.08506in</Top>
-        <Left>0.1489in</Left>
+        <Top>0.24177in</Top>
+        <Left>0.10418in</Left>
         <Height>0.19792in</Height>
-        <Width>5.56292in</Width>
+        <Width>5.43792in</Width>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -56,10 +56,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>0.33853in</Top>
-        <Left>0.1489in</Left>
+        <Top>0.49524in</Top>
+        <Left>0.10418in</Left>
         <Height>0.18752in</Height>
-        <Width>5.56292in</Width>
+        <Width>5.43792in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -91,10 +91,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>0.6163in</Top>
-        <Left>0.1489in</Left>
+        <Top>0.77301in</Top>
+        <Left>0.10418in</Left>
         <Height>0.18752in</Height>
-        <Width>5.56292in</Width>
+        <Width>5.43792in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -126,10 +126,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>0.87326in</Top>
-        <Left>0.14891in</Left>
+        <Top>1.02997in</Top>
+        <Left>0.10419in</Left>
         <Height>0.18752in</Height>
-        <Width>5.56291in</Width>
+        <Width>5.43791in</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -145,19 +145,19 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.13542in</Width>
+              <Width>1.1125in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.88488in</Width>
+              <Width>2.86196in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.16876in</Width>
+              <Width>1.14584in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.48958in</Width>
+              <Width>1.46666in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>0.97708in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -763,10 +763,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>UsageSummaryDetails</DataSetName>
-        <Top>1.21006in</Top>
-        <Left>0.12693in</Left>
+        <Top>2.07513in</Top>
+        <Left>0.10418in</Left>
         <Height>1in</Height>
-        <Width>7.67864in</Width>
+        <Width>7.56404in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -774,85 +774,39 @@
           </Border>
         </Style>
       </Tablix>
-      <Tablix Name="Tablix1">
-        <TablixBody>
-          <TablixColumns>
-            <TablixColumn>
-              <Width>7.43906in</Width>
-            </TablixColumn>
-          </TablixColumns>
-          <TablixRows>
-            <TablixRow>
-              <Height>2.22917in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Rectangle Name="Rectangle1">
-                      <ReportItems>
-                        <Subreport Name="CDRSubscriberInvoiceItemsReportName">
-                          <ReportName>CDRSubscriberInvoiceItemsReport</ReportName>
-                          <Parameters>
-                            <Parameter Name="UsageDescription">
-                              <Value>=Fields!UsageDescription.Value</Value>
-                            </Parameter>
-                            <Parameter Name="SubItemIdentifier">
-                              <Value>=Fields!SubItemIdentifier.Value</Value>
-                            </Parameter>
-                          </Parameters>
-                          <Top>0.15625in</Top>
-                          <Left>0.1739in</Left>
-                          <Height>1.89584in</Height>
-                          <Width>7.07766in</Width>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                          </Style>
-                        </Subreport>
-                      </ReportItems>
-                      <KeepTogether>true</KeepTogether>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                      </Style>
-                    </Rectangle>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-          </TablixRows>
-        </TablixBody>
-        <TablixColumnHierarchy>
-          <TablixMembers>
-            <TablixMember />
-          </TablixMembers>
-        </TablixColumnHierarchy>
-        <TablixRowHierarchy>
-          <TablixMembers>
-            <TablixMember>
-              <Group Name="Details" />
-            </TablixMember>
-          </TablixMembers>
-        </TablixRowHierarchy>
-        <DataSetName>UsageSummaryDetails</DataSetName>
-        <Top>2.69667in</Top>
-        <Left>0.12693in</Left>
-        <Height>2.22917in</Height>
-        <Width>7.43906in</Width>
+      <Subreport Name="CDRSubscriberInvoiceItemsReportName">
+        <ReportName>CDRSubscriberInvoiceItemsReport</ReportName>
+        <Parameters>
+          <Parameter Name="UsageDescription">
+            <Value>=Fields!UsageDescription.Value</Value>
+          </Parameter>
+          <Parameter Name="SubItemIdentifier">
+            <Value>=Fields!SubItemIdentifier.Value</Value>
+          </Parameter>
+        </Parameters>
+        <Top>4.02256in</Top>
+        <Left>0.10419in</Left>
+        <Height>0.40626in</Height>
+        <Width>7.56403in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
+          <PaddingLeft>10pt</PaddingLeft>
+          <PaddingRight>10pt</PaddingRight>
+          <PaddingTop>100pt</PaddingTop>
+          <PaddingBottom>100pt</PaddingBottom>
         </Style>
-      </Tablix>
+      </Subreport>
     </ReportItems>
-    <Height>6.45137in</Height>
+    <Height>6.63887in</Height>
     <Style />
   </Body>
-  <Width>7.80557in</Width>
+  <Width>7.85256in</Width>
   <Page>
+    <PageHeight>11.69in</PageHeight>
+    <PageWidth>8.27in</PageWidth>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>
     <TopMargin>1in</TopMargin>

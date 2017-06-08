@@ -159,6 +159,9 @@
     <EmbeddedResource Include="Retail_MultiNet\Reports\SubscriberInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Retail_MultiNet\Reports\CompanySubscriberInvoiceReport.rdlc" />
     <EmbeddedResource Include="Retail_MultiNet\Reports\BranchSubscriberInvoiceReport.rdlc" />
+    <EmbeddedResource Include="Retail_MultiNet\Reports\test.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.MultiNet.Entities\Retail.MultiNet.Entities.csproj">
