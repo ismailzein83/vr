@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301879
+  -->
+<configuration>
+  <connectionStrings>
+    <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://192.168.110.185:1214/msmdpump.dll; Initial Catalog = ToneDebTest01_BI_Latest; User Id = vanrise\olap.access; Password = 0l@p@cce$$" />
+  </connectionStrings>
+  <appSettings>
+    <add key="BICubeName" value="Tone Dev Test01 BI" />
+    <add key="BIDBConnStringKey"                                value="ConfigurationDBConnString"/>
+    
+    <add key="Web_ExtendedModulesNames" value="BI"/>    <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
+  </appSettings>
+</configuration>
