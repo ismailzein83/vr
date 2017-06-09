@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.DataParser.Entities
 {
@@ -17,8 +18,15 @@ namespace Vanrise.DataParser.Entities
 
         public override void SetFieldValue(string fieldName, object value)
         {
-            if (!this.FieldValues.ContainsKey(fieldName))
-                this.FieldValues.Add(fieldName, value);
+            this.FieldValues.GetOrCreateItem(fieldName);
+            this.FieldValues[fieldName] = value;
+        }
+
+        public override object GetFieldValue(string fieldName)
+        {
+            Object value;
+            FieldValues.TryGetValue(fieldName, out value);
+            return value;
         }
     }
 }

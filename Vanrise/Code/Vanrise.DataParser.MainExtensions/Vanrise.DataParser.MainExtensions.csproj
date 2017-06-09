@@ -52,6 +52,7 @@
     <Compile Include="HexTLV2\FieldParsers\StringParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\BCDNumberParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\TBCDNumberParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\TimeParser.cs" />
     <Compile Include="HexTLV2\RecordParsers\CreateRecordRecordParser.cs" />
     <Compile Include="HexTLV2\RecordParsers\ExecuteTemplateRecordParser.cs" />
     <Compile Include="HexTLV2\RecordParsers\SplitByTagRecordParser.cs" />

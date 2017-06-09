@@ -16,24 +16,35 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
         public bool WithOffset { get; set; }
         public override void Execute(IHexTLVFieldParserContext context)
         {
-            DateTime value = default(DateTime);
+            Object recordValue = context.Record.GetFieldValue(FieldName);
+            DateTime value = recordValue == null ? default(DateTime) : (DateTime)recordValue;
 
+            bool dateParsed = false;
             switch (DateTimeParsingType)
             {
                 case DateTimeParsingType.Date:
+                    dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2}",
+                                         ParserHelper.GetHexFromByte(context.FieldValue[2]),
+                                         ParserHelper.GetHexFromByte(context.FieldValue[1]),
+                                         ParserHelper.GetHexFromByte(context.FieldValue[0])),
+                            "dd/MM/yy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
+
                     break;
                 case DateTimeParsingType.Time:
+                    TimeSpan timeSpan = new TimeSpan(ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[0]))
+                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[1]))
+                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[2])));
+                    value = new DateTime(value.Year, value.Month, value.Day, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
                     break;
                 case DateTimeParsingType.DateTime:
-
-                    bool dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2} {3}:{4}:{5}",
-                                                            ParserHelper.GetHexFromByte(context.FieldValue[2]),
-                                                            ParserHelper.GetHexFromByte(context.FieldValue[1]),
-                                                            ParserHelper.GetHexFromByte(context.FieldValue[0]),
-                                                            ParserHelper.GetHexFromByte(context.FieldValue[3]),
-                                                            ParserHelper.GetHexFromByte(context.FieldValue[4]),
-                                                            ParserHelper.GetHexFromByte(context.FieldValue[5])),
-                                               "dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
+                    dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2} {3}:{4}:{5}",
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[2]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[1]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[0]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[3]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[4]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[5])),
+                                              "dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
 
                     if (dateParsed && WithOffset)
                     {
@@ -44,6 +55,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 
                     break;
             }
+
             context.Record.SetFieldValue(this.FieldName, value);
         }
     }

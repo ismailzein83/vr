@@ -9,5 +9,7 @@ namespace Vanrise.DataParser.Entities
     public abstract class ParsedRecord
     {
         public abstract void SetFieldValue(string fieldName, Object value);
+        public abstract Object GetFieldValue(string fieldName);
+
     }
 }
