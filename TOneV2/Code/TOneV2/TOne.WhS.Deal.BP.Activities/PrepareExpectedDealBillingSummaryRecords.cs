@@ -51,17 +51,17 @@ namespace TOne.WhS.Deal.BP.Activities
                     DealProgressData dealProgressData;
                     if (!dealProgressDataByZoneGroup.TryGetValue(dealZoneGroup, out dealProgressData)) //1st Tier
                     {
-                        DealZoneGroupTier firstDealZoneGroupTier = GetDealZoneGroupTier(inputArgument.IsSale, baseDealBillingSummary.DealId, baseDealBillingSummary.DealZoneGroupNb, 0);
-                        if (firstDealZoneGroupTier == null)
+                        DealZoneGroupTierDetails firstDealZoneGroupTierDetails = GetDealZoneGroupTierDetails(inputArgument.IsSale, baseDealBillingSummary.DealId, baseDealBillingSummary.DealZoneGroupNb, 0);
+                        if (firstDealZoneGroupTierDetails == null)
                             throw new Exception("At least one Tier should be defined by each dealZoneGroup"); //ToDo: DataIntegrity
 
                         dealProgressData = dealProgressDataByZoneGroup.GetOrCreateItem(dealZoneGroup);
                         dealProgressData.DealID = dealZoneGroup.DealId;
                         dealProgressData.ZoneGroupNb = dealZoneGroup.ZoneGroupNb;
                         dealProgressData.IsSale = inputArgument.IsSale;
-                        dealProgressData.CurrentTierNb = firstDealZoneGroupTier.TierNumber;
+                        dealProgressData.CurrentTierNb = firstDealZoneGroupTierDetails.TierNumber;
                         dealProgressData.ReachedDurationInSeconds = 0;
-                        dealProgressData.TargetDurationInSeconds = firstDealZoneGroupTier.VolumeInSeconds.HasValue ? firstDealZoneGroupTier.VolumeInSeconds.Value : decimal.MaxValue;
+                        dealProgressData.TargetDurationInSeconds = firstDealZoneGroupTierDetails.VolumeInSeconds.HasValue ? firstDealZoneGroupTierDetails.VolumeInSeconds.Value : decimal.MaxValue;
 
                         BuildExpectedDealBillingSummaryRecords(inputArgument.IsSale, baseDealBillingSummary, dealProgressData, expectedDealBillingSummaryRecordDict);
                     }
@@ -100,7 +100,7 @@ namespace TOne.WhS.Deal.BP.Activities
             foreach (var dealZoneGroupDataItem in dealZoneGroupData)
             {
                 decimal tierReachedDurationInSec;
-                DealZoneGroupTier dealZoneGroupTier = GetUpToVolumeDealZoneGroupTier(isSale, dealZoneGroupDataItem.DealID, dealZoneGroupDataItem.ZoneGroupNb,
+                DealZoneGroupTierDetails dealZoneGroupTierDetails = GetUpToVolumeDealZoneGroupTierDetails(isSale, dealZoneGroupDataItem.DealID, dealZoneGroupDataItem.ZoneGroupNb,
                         dealZoneGroupDataItem.TotalReachedDurationInSeconds, out tierReachedDurationInSec);
 
                 DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealZoneGroupDataItem.DealID, ZoneGroupNb = dealZoneGroupDataItem.ZoneGroupNb };
@@ -109,9 +109,9 @@ namespace TOne.WhS.Deal.BP.Activities
                     DealID = dealZoneGroupDataItem.DealID,
                     ZoneGroupNb = dealZoneGroupDataItem.ZoneGroupNb,
                     IsSale = dealZoneGroupDataItem.IsSale,
-                    CurrentTierNb = dealZoneGroupTier.TierNumber,
+                    CurrentTierNb = dealZoneGroupTierDetails.TierNumber,
                     ReachedDurationInSeconds = tierReachedDurationInSec,
-                    TargetDurationInSeconds = dealZoneGroupTier.VolumeInSeconds
+                    TargetDurationInSeconds = dealZoneGroupTierDetails.VolumeInSeconds
                 };
 
                 dealProgressDataByZoneGroup.Add(dealZoneGroup, dealProgressData);
@@ -120,20 +120,20 @@ namespace TOne.WhS.Deal.BP.Activities
             return dealProgressDataByZoneGroup;
         }
 
-        private DealZoneGroupTier GetUpToVolumeDealZoneGroupTier(bool isSale, int dealID, int zoneGroupNb, decimal totalZoneGroupDurationInSeconds, out decimal reachedDurationInSec)
+        private DealZoneGroupTierDetails GetUpToVolumeDealZoneGroupTierDetails(bool isSale, int dealID, int zoneGroupNb, decimal totalZoneGroupDurationInSeconds, out decimal reachedDurationInSec)
         {
             if (isSale)
-                return new DealDefinitionManager().GetUpToVolumeDealSaleZoneGroupTier(dealID, zoneGroupNb, totalZoneGroupDurationInSeconds, out reachedDurationInSec);
+                return new DealDefinitionManager().GetUpToVolumeDealSaleZoneGroupTierDetails(dealID, zoneGroupNb, totalZoneGroupDurationInSeconds, out reachedDurationInSec);
             else
-                return new DealDefinitionManager().GetUpToVolumeDealSupplierZoneGroupTier(dealID, zoneGroupNb, totalZoneGroupDurationInSeconds, out reachedDurationInSec);
+                return new DealDefinitionManager().GetUpToVolumeDealSupplierZoneGroupTierDetails(dealID, zoneGroupNb, totalZoneGroupDurationInSeconds, out reachedDurationInSec);
         }
 
-        private DealZoneGroupTier GetDealZoneGroupTier(bool isSale, int dealId, int zoneGroupNb, int tierNb)
+        private DealZoneGroupTierDetails GetDealZoneGroupTierDetails(bool isSale, int dealId, int zoneGroupNb, int tierNb)
         {
             if (isSale)
-                return new DealDefinitionManager().GetSaleDealZoneGroupTier(dealId, zoneGroupNb, tierNb);
+                return new DealDefinitionManager().GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
             else
-                return new DealDefinitionManager().GetSupplierDealZoneGroupTier(dealId, zoneGroupNb, tierNb);
+                return new DealDefinitionManager().GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
         }
 
         private void BuildExpectedDealBillingSummaryRecords(bool isSale, BaseDealBillingSummary baseDealBillingSummary, DealProgressData dealProgressData,
@@ -184,14 +184,14 @@ namespace TOne.WhS.Deal.BP.Activities
                     remainingDurationInSec -= remainingTierDurationInSec;
 
                     //Editing DealProgressData memoryTable
-                    DealZoneGroupTier nextDealZoneGroupTier = GetDealZoneGroupTier(isSale, baseDealBillingSummary.DealId, baseDealBillingSummary.DealZoneGroupNb, dealProgressData.CurrentTierNb + 1);
-                    if (nextDealZoneGroupTier == null)
+                    DealZoneGroupTierDetails nextDealZoneGroupTierDetails = GetDealZoneGroupTierDetails(isSale, baseDealBillingSummary.DealId, baseDealBillingSummary.DealZoneGroupNb, dealProgressData.CurrentTierNb + 1);
+                    if (nextDealZoneGroupTierDetails == null)
                     {
                         dealProgressData.ReachedDurationInSeconds = dealProgressData.TargetDurationInSeconds.Value;
                         break;
                     }
-                    dealProgressData.CurrentTierNb = nextDealZoneGroupTier.TierNumber;
-                    dealProgressData.TargetDurationInSeconds = nextDealZoneGroupTier.VolumeInSeconds;
+                    dealProgressData.CurrentTierNb = nextDealZoneGroupTierDetails.TierNumber;
+                    dealProgressData.TargetDurationInSeconds = nextDealZoneGroupTierDetails.VolumeInSeconds;
                     dealProgressData.ReachedDurationInSeconds = 0;
                 }
             }

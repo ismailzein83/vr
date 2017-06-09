@@ -12,6 +12,13 @@ namespace TOne.WhS.Deal.Entities
         public int ZoneGroupNb { get; set; }
     }
 
+    public class DealZoneGroupTier
+    {
+        public int DealId { get; set; }
+        public int ZoneGroupNb { get; set; }
+        public int TierNumber { get; set; }
+    }
+
     public struct DealZoneGroupTierRate
     {
         public int DealId { get; set; }
@@ -26,7 +33,7 @@ namespace TOne.WhS.Deal.Entities
         public long ZoneId { get; set; }
     }
 
-    public class DealZoneGroupTier
+    public class DealZoneGroupTierDetails
     {
         public int TierNumber { get; set; }
         public decimal? VolumeInSeconds { get; set; }

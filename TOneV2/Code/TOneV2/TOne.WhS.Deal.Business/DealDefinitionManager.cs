@@ -82,7 +82,7 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        public DealZoneGroupTier GetSaleDealZoneGroupTier(int dealId, int zoneGroupNb, int tierNb)
+        public DealZoneGroupTierDetails GetSaleDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb)
         {
             DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
 
@@ -90,22 +90,22 @@ namespace TOne.WhS.Deal.Business
             if (dealZoneGroupTier == null)
                 return null;
 
-            return BuildDealZoneGroupTier(dealZoneGroupTier);
+            return BuildDealZoneGroupTierDetails(dealZoneGroupTier);
         }
 
-        public DealZoneGroupTier GetUpToVolumeDealSaleZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
+        public DealZoneGroupTierDetails GetUpToVolumeDealSaleZoneGroupTierDetails(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
         {
             DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
             dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
 
             decimal remainingDurationInSec = totalReachedDurationInSec;
-            DealZoneGroupTier dealZoneGroupTier = null;
+            DealZoneGroupTierDetails dealZoneGroupTierDetails = null;
 
             foreach (var dealSaleZoneGroupTier in dealSaleZoneGroup.Tiers)
             {
                 if (!dealSaleZoneGroupTier.VolumeInSeconds.HasValue)
                 {
-                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSaleZoneGroupTier);
+                    dealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSaleZoneGroupTier);
                     break;
                 }
 
@@ -113,13 +113,13 @@ namespace TOne.WhS.Deal.Business
 
                 if (remainingDurationInSec < 0)
                 {
-                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSaleZoneGroupTier);
+                    dealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSaleZoneGroupTier);
                     break;
                 }
             }
 
             tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
-            return dealZoneGroupTier;
+            return dealZoneGroupTierDetails;
         }
 
         public void FillOrigSupplierValues(dynamic record)
@@ -163,7 +163,7 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        public DealZoneGroupTier GetSupplierDealZoneGroupTier(int dealId, int zoneGroupNb, int tierNb)
+        public DealZoneGroupTierDetails GetSupplierDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb)
         {
             DealSupplierZoneGroup dealSupplierZoneGroup = GetDealSupplierZoneGroup(dealId, zoneGroupNb);
 
@@ -171,22 +171,22 @@ namespace TOne.WhS.Deal.Business
             if (dealZoneGroupTier == null)
                 return null;
 
-            return BuildDealZoneGroupTier(dealZoneGroupTier);
+            return BuildDealZoneGroupTierDetails(dealZoneGroupTier);
         }
 
-        public DealZoneGroupTier GetUpToVolumeDealSupplierZoneGroupTier(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
+        public DealZoneGroupTierDetails GetUpToVolumeDealSupplierZoneGroupTierDetails(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
         {
             DealSupplierZoneGroup dealSupplierZoneGroup = GetDealSupplierZoneGroup(dealId, zoneGroupNb);
             dealSupplierZoneGroup.Tiers.ThrowIfNull("dealSupplierZoneGroup.Tiers");
 
             decimal remainingDurationInSec = totalReachedDurationInSec;
-            DealZoneGroupTier dealZoneGroupTier = null;
+            DealZoneGroupTierDetails dealZoneGroupTierDetails = null;
 
             foreach (var dealSupplierZoneGroupTier in dealSupplierZoneGroup.Tiers)
             {
                 if (!dealSupplierZoneGroupTier.VolumeInSeconds.HasValue)
                 {
-                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSupplierZoneGroupTier);
+                    dealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSupplierZoneGroupTier);
                     break;
                 }
 
@@ -194,13 +194,13 @@ namespace TOne.WhS.Deal.Business
 
                 if (remainingDurationInSec < 0)
                 {
-                    dealZoneGroupTier = BuildDealZoneGroupTier(dealSupplierZoneGroupTier);
+                    dealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSupplierZoneGroupTier);
                     break;
                 }
             }
 
             tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
-            return dealZoneGroupTier;
+            return dealZoneGroupTierDetails;
         }
 
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
@@ -354,9 +354,9 @@ namespace TOne.WhS.Deal.Business
             return exceptionalRates;
         }
 
-        DealZoneGroupTier BuildDealZoneGroupTier(DealSaleZoneGroupTier dealSaleZoneGroupTier)
+        DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSaleZoneGroupTier dealSaleZoneGroupTier)
         {
-            return new DealZoneGroupTier()
+            return new DealZoneGroupTierDetails()
             {
                 TierNumber = dealSaleZoneGroupTier.TierNumber,
                 VolumeInSeconds = dealSaleZoneGroupTier.VolumeInSeconds,
@@ -365,9 +365,9 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
-        DealZoneGroupTier BuildDealZoneGroupTier(DealSupplierZoneGroupTier dealSupplierZoneGroupTier)
+        DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSupplierZoneGroupTier dealSupplierZoneGroupTier)
         {
-            return new DealZoneGroupTier()
+            return new DealZoneGroupTierDetails()
             {
                 TierNumber = dealSupplierZoneGroupTier.TierNumber,
                 VolumeInSeconds = dealSupplierZoneGroupTier.VolumeInSeconds,

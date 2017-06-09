@@ -101,11 +101,11 @@ namespace TOne.WhS.Deal.Business
 
 
 
-                DealZoneGroupTier dealZoneGroupTier = GetDealZoneGroupTier(isSale, currentDealZoneGroupTierRate.DealId, currentDealZoneGroupTierRate.ZoneGroupNb, currentTierNumber);
-                if (dealZoneGroupTier == null)
+                DealZoneGroupTierDetails dealZoneGroupTierDetails = GetDealZoneGroupTierDetails(isSale, currentDealZoneGroupTierRate.DealId, currentDealZoneGroupTierRate.ZoneGroupNb, currentTierNumber);
+                if (dealZoneGroupTierDetails == null)
                     throw new VRBusinessException(string.Format("TierNb '{0}' for Deal '{1}', ZoneGroupNb '{2}' and IsSale '{3}' doesn't exist", currentTierNumber, currentDealZoneGroupTierRate.DealId, currentDealZoneGroupTierRate.ZoneGroupNb, isSale));
 
-                decimal? targetDurationInSeconds = dealZoneGroupTier.VolumeInSeconds;
+                decimal? targetDurationInSeconds = dealZoneGroupTierDetails.VolumeInSeconds;
 
                 DealZoneGroupTierData tempDealZoneGroupTierData;
                 decimal reachedDurationInSeconds = dealZoneGroupTierDataDict.TryGetValue(currentDealZoneGroupTierRate, out tempDealZoneGroupTierData) ? tempDealZoneGroupTierData.TotalReachedDurationInSeconds : 0;
@@ -166,12 +166,12 @@ namespace TOne.WhS.Deal.Business
             return tierDealBillingSummaryDict;
         }
 
-        private DealZoneGroupTier GetDealZoneGroupTier(Boolean isSale, int dealId, int zoneGroupNb, int currentTierNumber)
+        private DealZoneGroupTierDetails GetDealZoneGroupTierDetails(Boolean isSale, int dealId, int zoneGroupNb, int currentTierNumber)
         {
             if (isSale)
-                return new DealDefinitionManager().GetSaleDealZoneGroupTier(dealId, zoneGroupNb, currentTierNumber);
+                return new DealDefinitionManager().GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, currentTierNumber);
             else
-                return new DealDefinitionManager().GetSupplierDealZoneGroupTier(dealId, zoneGroupNb, currentTierNumber);
+                return new DealDefinitionManager().GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, currentTierNumber);
         }
 
         private Dictionary<DealZoneGroup, DealProgress> GetDealProgressByZoneGroup(bool isSale, Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> currentDealBillingSummaryRecords)
