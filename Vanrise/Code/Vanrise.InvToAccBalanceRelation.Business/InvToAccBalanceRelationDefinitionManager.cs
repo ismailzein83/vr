@@ -7,6 +7,7 @@ using Vanrise.InvToAccBalanceRelation.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.AccountBalance.Business;
+using Vanrise.Invoice.Business;
 
 namespace Vanrise.InvToAccBalanceRelation.Business
 {
@@ -78,7 +79,11 @@ namespace Vanrise.InvToAccBalanceRelation.Business
         }
         private Guid GetRelationIdByInvoiceTypeID(Guid invoiceTypeId)
         {
-            throw new NotImplementedException();
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var relationId = invoiceTypeManager.GetInvToAccBalanceRelationId(invoiceTypeId);
+            if (!relationId.HasValue)
+                  throw new NullReferenceException("relationId");
+            return relationId.Value;
         }
         #endregion
 

@@ -38,6 +38,13 @@ namespace Vanrise.Invoice.Business
                 return invoiceType.Name;
             return null;
         }
+        public Guid? GetInvToAccBalanceRelationId(Guid invoiceTypeId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
+            return invoiceType.Settings.InvToAccBalanceRelationId;
+        }
         public InvoiceTypeRuntime GetInvoiceTypeRuntime(Guid invoiceTypeId)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
