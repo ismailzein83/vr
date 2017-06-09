@@ -75,6 +75,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                 };
 
                 $scope.scopeModel.onAccountSelectionChanged = function (value) {
+                  
                     var selectedIds = accountSelectorAPI.getSelectedIds();
                     if (selectedIds != undefined) {
                         var accountIds = [selectedIds];
@@ -97,6 +98,8 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, financialAccountSelectorAPI, selectorPayload, setLoader, financialAccountSelectorPromiseDeferred);
                     }
+                    if (ctrl.onselectionchanged != undefined)
+                        ctrl.onselectionchanged(value);
                 };
 
                 UtilsService.waitMultiplePromises([accountSelectorPromiseDeferred.promise, financialAccountSelectorPromiseDeferred.promise]).then(function () {

@@ -41,7 +41,7 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
-            return '<retail-be-account-financialaccount-selector on-ready="scopeModel.onFinancialAccountSelectorReady" ' + multipleselection + ' isrequired="ctrl.isrequired" normal-col-num = "{{ctrl.normalColNum}}"> </retail-be-account-financialaccount-selector>';
+            return '<retail-be-account-financialaccount-selector on-ready="scopeModel.onFinancialAccountSelectorReady" ' + multipleselection + ' onselectionchanged="scopeModel.onAccountSelected" isrequired="ctrl.isrequired" normal-col-num = "{{ctrl.normalColNum}}"> </retail-be-account-financialaccount-selector>';
         }
 
         function InvoiceAccountSelectorCtor(ctrl, $scope, attrs) {
@@ -56,7 +56,7 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
             var status;
             var effectiveDate;
             var isEffectiveInFuture;
-
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -64,18 +64,42 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                     financialAccountSelectorAPI = api;
                     financialAccountSelectorPromiseDeferred.resolve();
                 };
-
+                $scope.scopeModel.onAccountSelected = function (selectedAccount) {
+                    if (financialAccountSelectorAPI != undefined)
+                    {
+                        var selectedIds = financialAccountSelectorAPI.getSelectedIds();
+                        if (selectedIds != undefined) {
+                            reloadContextFunctions(selectedIds);
+                        }
+                    }
+                   
+                };
                 UtilsService.waitMultiplePromises([financialAccountSelectorPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
+            function reloadContextFunctions(selectedIds) {
+                if (context != undefined) {
+                    if (context.onAccountSelected != undefined) {
+                        context.onAccountSelected(selectedIds);
+                    }
 
+                    //if (context.setTimeZone != undefined) {
+                    //    var timeZoneId = selectedAccount != undefined ? selectedAccount.TimeZoneId : undefined;
+                    //    context.setTimeZone(timeZoneId);
+                    //}
+                    if (context.reloadBillingPeriod != undefined) {
+                        context.reloadBillingPeriod();
+                    }
+                }
+            }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {
+                        context = payload.context;
                         if (payload.extendedSettings != undefined)
                         {
                             accountBEDefinitionId = payload.extendedSettings.AccountBEDefinitionId;

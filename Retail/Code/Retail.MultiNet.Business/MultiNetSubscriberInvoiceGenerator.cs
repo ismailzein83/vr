@@ -49,7 +49,7 @@ namespace Retail.MultiNet.Business
         FinancialAccountManager _financialAccountManager = new FinancialAccountManager();
         GeneralSettingsManager _generalSettingsManager = new GeneralSettingsManager();
         DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
-     
+        CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
         public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId,Guid branchTypeId,Guid companyTypeId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
@@ -93,7 +93,7 @@ namespace Retail.MultiNet.Business
                 }
               BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
             }
-            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account);
+            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account, multiNetInvoiceGeneratorContext.FinancialAccount.TypeId);
 
             context.Invoice = new GeneratedInvoice
             {
@@ -203,7 +203,7 @@ namespace Retail.MultiNet.Business
             summaryItems.Add(callAggregationSummary);
             summaryItems.Add(outgoingCallsSummary);            
             BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
-            LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, fromDate, toDate, branchTypeId);
+            LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId,currencyId, fromDate, toDate, branchTypeId);
 
         }
     
@@ -246,7 +246,7 @@ namespace Retail.MultiNet.Business
                 multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
         }
-        private void LoadAndBuildUsageCDRs(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long accountId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
+        private void LoadAndBuildUsageCDRs(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long accountId,int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
         {
 
             LoadAndStructureCDRData(multiNetInvoiceGeneratorContext, accountId, fromDate, toDate, branchTypeId);
@@ -260,12 +260,14 @@ namespace Retail.MultiNet.Business
                     MultiNetCDR multiNetCDR = new MultiNetCDR
                     {
                         AttemptDateTime = billingCDR.AttemptDateTime,
-                        SaleAmount = billingCDR.SaleAmount,
                         CalledNumber = billingCDR.CalledNumber,
                         CallingNumber = billingCDR.CallingNumber,
                         DurationInSeconds = billingCDR.DurationInSeconds,
-                        ZoneId = billingCDR.ZoneId
+                        ZoneId = billingCDR.ZoneId,
+                        SaleCurrencyId= billingCDR.SaleCurrencyId
                     };
+                    multiNetCDR.SaleAmount = multiNetCDR.SaleCurrencyId != currencyId ? _currencyExchangeRateManager.ConvertValueToCurrency(billingCDR.SaleAmount, multiNetCDR.SaleCurrencyId, currencyId, multiNetCDR.AttemptDateTime) : billingCDR.SaleAmount;
+
                     string identifierName = null;
                     switch (billingCDR.TrafficDirection)
                     {
@@ -290,7 +292,7 @@ namespace Retail.MultiNet.Business
         {
             if (multiNetInvoiceGeneratorContext.BillingCDRByBranch == null)
             {
-                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType","SubscriberAccountId","Zone" };
+                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType", "SubscriberAccountId", "Zone", "SaleCurrencyId" };
                 var cdrData = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
                 {
                     Query = new DataRecordQuery()
@@ -353,6 +355,9 @@ namespace Retail.MultiNet.Business
                         DataRecordFieldValue zone;
                         dataRecordDetail.FieldValues.TryGetValue("Zone", out zone);
 
+                        DataRecordFieldValue saleCurrencyId;
+                        dataRecordDetail.FieldValues.TryGetValue("SaleCurrencyId", out saleCurrencyId);
+
                         BillingCDR billingCDR = new BillingCDR
                         {
                             AttemptDateTime = Convert.ToDateTime(attemptDateTime.Value),
@@ -362,6 +367,7 @@ namespace Retail.MultiNet.Business
                             DurationInSeconds = Convert.ToDecimal(durationInSeconds.Value ?? 0.0),
                             TrafficDirection = (TrafficDirection)trafficDirection.Value,
                             ZoneId = zone!= null && zone.Value != null? Convert.ToInt64(zone.Value):default(long?),
+                            SaleCurrencyId = Convert.ToInt32(saleCurrencyId.Value),
                         };
                         Guid serviceTypeId;
                         if (Guid.TryParse(serviceType.Value.ToString(), out serviceTypeId))
@@ -630,7 +636,7 @@ namespace Retail.MultiNet.Business
             percentage = taxRuleContext.Percentage;
             return taxRuleContext.TaxAmount;
         }
-        private InvoiceDetails BuildGeneratedInvoiceDetails(List<BranchSummary> branchesSummary, DateTime fromDate, DateTime toDate, DateTime issueDate, int currencyId, Account account)
+        private InvoiceDetails BuildGeneratedInvoiceDetails(List<BranchSummary> branchesSummary, DateTime fromDate, DateTime toDate, DateTime issueDate, int currencyId, Account account,Guid financialAccountTypeId)
         {
             InvoiceDetails retailSubscriberInvoiceDetails = null;
             if (branchesSummary != null)
@@ -646,6 +652,7 @@ namespace Retail.MultiNet.Business
                 retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId, issueDate);
                 retailSubscriberInvoiceDetails.PayableAfterDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges + retailSubscriberInvoiceDetails.LatePaymentCharges;
                 retailSubscriberInvoiceDetails.CurrencyId = currencyId;
+                retailSubscriberInvoiceDetails.AccountTypeId = financialAccountTypeId; 
             }
             return retailSubscriberInvoiceDetails;
         }
@@ -681,6 +688,7 @@ namespace Retail.MultiNet.Business
             public String CallingNumber { get; set; }
             public Decimal DurationInSeconds { get; set; }
             public long? ZoneId { get; set; }
+           public int SaleCurrencyId { get; set; }
         }
     }
 
@@ -735,6 +743,8 @@ namespace Retail.MultiNet.Business
         public decimal SaleAmount { get; set; }
         public long? ZoneId { get; set; }
         public string ZoneName { get; set; }
+        public int SaleCurrencyId { get; set; }
+        public string SaleCurrencyName { get; set; }
 
         public void FillAdditionalFields(IInvoiceItemAdditionalFieldsContext context)
         {
@@ -743,6 +753,8 @@ namespace Retail.MultiNet.Business
                 SaleZoneManager saleZoneManager = new SaleZoneManager();
                 this.ZoneName = saleZoneManager.GetSaleZoneName(this.ZoneId.Value);
             }
+            CurrencyManager currencyManager = new CurrencyManager();
+            this.SaleCurrencyName = currencyManager.GetCurrencySymbol(this.SaleCurrencyId);
           
         }
     }

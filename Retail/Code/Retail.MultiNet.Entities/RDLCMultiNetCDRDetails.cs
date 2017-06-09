@@ -15,6 +15,7 @@ namespace Retail.MultiNet.Entities
         public string CalledNumber { get; set; }
         public decimal SaleAmount { get; set; }
         public string ZoneName { get; set; }
+        public string SaleCurrencyName { get; set; }
 
         public RDLCMultiNetCDRDetails()
         {

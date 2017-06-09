@@ -149,6 +149,8 @@
     <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\MultiNetCompanyExtendedInfoDefinitionTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\retail-multinet-accounttype-part-runtime-companyextendedinfo.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartCompanyExtendedInfoRuntimeTemplate.html" />
+    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGeneratorFilterCondition\retail-multinet-invoicegeneratorfiltercondition-accounttype.js" />
+    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGeneratorFilterCondition\Templates\AccountTypeConditionTemplate.html" />
     <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGridActionFilter\retail-invoicetype-invoicefiltercondition-multinetpartner.js" />
     <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGridActionFilter\Templates\MultiNetPartnerCondition.html" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-multinet-account-invoice-selector.js" />
