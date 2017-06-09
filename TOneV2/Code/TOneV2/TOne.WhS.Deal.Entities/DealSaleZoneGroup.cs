@@ -35,7 +35,7 @@ namespace TOne.WhS.Deal.Entities
 
         public int? RetroActiveFromTierNumber { get; set; }
 
-        public int? Volume { get; set; }
+        public int? VolumeInSeconds { get; set; }
 
         public Decimal Rate { get; set; }
 

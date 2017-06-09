@@ -103,13 +103,13 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealSaleZoneGroupTier in dealSaleZoneGroup.Tiers)
             {
-                if (!dealSaleZoneGroupTier.Volume.HasValue)
+                if (!dealSaleZoneGroupTier.VolumeInSeconds.HasValue)
                 {
                     dealZoneGroupTier = BuildDealZoneGroupTier(dealSaleZoneGroupTier);
                     break;
                 }
 
-                remainingDurationInSec -= dealSaleZoneGroupTier.Volume.Value;
+                remainingDurationInSec -= dealSaleZoneGroupTier.VolumeInSeconds.Value;
 
                 if (remainingDurationInSec < 0)
                 {
@@ -184,13 +184,13 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealSupplierZoneGroupTier in dealSupplierZoneGroup.Tiers)
             {
-                if (!dealSupplierZoneGroupTier.Volume.HasValue)
+                if (!dealSupplierZoneGroupTier.VolumeInSeconds.HasValue)
                 {
                     dealZoneGroupTier = BuildDealZoneGroupTier(dealSupplierZoneGroupTier);
                     break;
                 }
 
-                remainingDurationInSec -= dealSupplierZoneGroupTier.Volume.Value;
+                remainingDurationInSec -= dealSupplierZoneGroupTier.VolumeInSeconds.Value;
 
                 if (remainingDurationInSec < 0)
                 {
@@ -359,7 +359,7 @@ namespace TOne.WhS.Deal.Business
             return new DealZoneGroupTier()
             {
                 TierNumber = dealSaleZoneGroupTier.TierNumber,
-                Volume = dealSaleZoneGroupTier.Volume,
+                VolumeInSeconds = dealSaleZoneGroupTier.VolumeInSeconds,
                 Rate = dealSaleZoneGroupTier.Rate,
                 ExceptionRates = BuildSaleExceptionRates(dealSaleZoneGroupTier.ExceptionRates)
             };
@@ -370,7 +370,7 @@ namespace TOne.WhS.Deal.Business
             return new DealZoneGroupTier()
             {
                 TierNumber = dealSupplierZoneGroupTier.TierNumber,
-                Volume = dealSupplierZoneGroupTier.Volume,
+                VolumeInSeconds = dealSupplierZoneGroupTier.VolumeInSeconds,
                 Rate = dealSupplierZoneGroupTier.Rate,
                 ExceptionRates = BuildSupplierExceptionRates(dealSupplierZoneGroupTier.ExceptionRates)
             };
