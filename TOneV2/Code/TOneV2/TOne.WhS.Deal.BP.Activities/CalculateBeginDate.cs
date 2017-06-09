@@ -1,18 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
     public sealed class CalculateBeginDate : CodeActivity
     {
-        public OutArgument<DateTime> BeginDate { get; set; }
+        public InArgument<DealEvaluatorProcessState> DealEvaluatorProcessState { get; set; }
+
+        public OutArgument<DateTime?> BeginDate { get; set; }
+
 
         protected override void Execute(CodeActivityContext context)
         {
-            this.BeginDate.Set(context, DateTime.Now);
+            DealEvaluatorProcessState dealEvaluatorProcessState = this.DealEvaluatorProcessState.Get(context);
+            byte[] lastTimestamp = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.MaxTimestamp : null;
+
+            DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
+            DateTime? beginDate = dealDetailedProgressManager.GetDealEvaluatorBeginDate(lastTimestamp);
+
+            this.BeginDate.Set(context, beginDate);
         }
     }
 }

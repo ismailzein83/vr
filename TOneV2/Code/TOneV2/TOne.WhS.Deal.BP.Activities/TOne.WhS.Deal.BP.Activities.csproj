@@ -62,7 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculateBeginDate.cs" />
-    <Compile Include="LoadBillingSummaryRecords.cs" />
+    <Compile Include="CompareCurrentToExpectedDealRecords.cs" />
+    <Compile Include="LoadDealBillingSummaryRecords.cs" />
+    <Compile Include="PrepareExpectedDealBillingSummaryRecords.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateProgressTables.cs" />
   </ItemGroup>

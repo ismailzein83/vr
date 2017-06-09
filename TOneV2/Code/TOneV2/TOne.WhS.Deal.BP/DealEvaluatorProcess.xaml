@@ -1,28 +1,182 @@
-﻿<Activity x:Class="TOne.WhS.Deal.BP.DealEvaluatorProcess" 
-          xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" 
-          mc:Ignorable="sap2010"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
-          xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
-          xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"   
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"> 
-    <TextExpression.NamespacesForImplementation>
-        <sco:Collection x:TypeArguments="x:String">
-            <x:String>System</x:String>
-            <x:String>System.Collections.Generic</x:String>
-            <x:String>System.Data</x:String>
-            <x:String>System.Linq</x:String>
-            <x:String>System.Text</x:String>
-        </sco:Collection>
-    </TextExpression.NamespacesForImplementation>
-    <TextExpression.ReferencesForImplementation>
-        <sco:Collection x:TypeArguments="AssemblyReference">
-            <AssemblyReference>mscorlib</AssemblyReference>
-            <AssemblyReference>System</AssemblyReference>
-            <AssemblyReference>System.Core</AssemblyReference>
-            <AssemblyReference>System.Data</AssemblyReference>
-            <AssemblyReference>System.ServiceModel</AssemblyReference>
-            <AssemblyReference>System.Xml</AssemblyReference>
-        </sco:Collection>
-    </TextExpression.ReferencesForImplementation>
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Deal.BP.DealEvaluatorProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Deal.BP.DealEvaluatorProcess_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.WhS.Deal.BP.SubProcesses"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twdba="clr-namespace:TOne.WhS.Deal.BP.Arguments;assembly=TOne.WhS.Deal.BP.Arguments"
+ xmlns:twdba1="clr-namespace:TOne.WhS.Deal.BP.Activities;assembly=TOne.WhS.Deal.BP.Activities"
+ xmlns:twde="clr-namespace:TOne.WhS.Deal.Entities;assembly=TOne.WhS.Deal.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.Deal.Entities</x:String>
+      <x:String>TOne.WhS.Deal.BP.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="twde:DealEvaluatorProcessState" Name="dealEvaluatorProcessState" />
+      <Variable x:TypeArguments="twdba:DealEvaluatorSubProcessOutput" Name="sale_DealEvaluatorSubProcessOutput" />
+      <Variable x:TypeArguments="twdba:DealEvaluatorSubProcessOutput" Name="cost_DealEvaluatorSubProcessOutput" />
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="beginDate" />
+    </Sequence.Variables>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Deal Evaluator Process.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
+    <vbw:GetDefinitionObjectState x:TypeArguments="twde:DealEvaluatorProcessState" sap2010:WorkflowViewState.IdRef="GetDefinitionObjectState`1_1">
+      <vbw:GetDefinitionObjectState.ObjectKey>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">null</mca:CSharpValue>
+        </InArgument>
+      </vbw:GetDefinitionObjectState.ObjectKey>
+      <vbw:GetDefinitionObjectState.Result>
+        <OutArgument x:TypeArguments="twde:DealEvaluatorProcessState">
+          <mca:CSharpReference x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpReference>
+        </OutArgument>
+      </vbw:GetDefinitionObjectState.Result>
+    </vbw:GetDefinitionObjectState>
+    <twdba1:CalculateBeginDate sap2010:WorkflowViewState.IdRef="CalculateBeginDate_1">
+      <twdba1:CalculateBeginDate.BeginDate>
+        <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">beginDate</mca:CSharpReference>
+        </OutArgument>
+      </twdba1:CalculateBeginDate.BeginDate>
+      <twdba1:CalculateBeginDate.DealEvaluatorProcessState>
+        <InArgument x:TypeArguments="twde:DealEvaluatorProcessState">
+          <mca:CSharpValue x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpValue>
+        </InArgument>
+      </twdba1:CalculateBeginDate.DealEvaluatorProcessState>
+    </twdba1:CalculateBeginDate>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">beginDate.HasValue</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+            <Parallel.Variables>
+              <Variable x:TypeArguments="x:String" Name="variable1" />
+            </Parallel.Variables>
+            <local:DealEvaluatorSubProcess sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_1" isSale="True">
+              <local:DealEvaluatorSubProcess.Output>
+                <InArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
+                  <mca:CSharpValue x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">sale_DealEvaluatorSubProcessOutput</mca:CSharpValue>
+                </InArgument>
+              </local:DealEvaluatorSubProcess.Output>
+              <local:DealEvaluatorSubProcess.beginDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate.Value</mca:CSharpValue>
+                </InArgument>
+              </local:DealEvaluatorSubProcess.beginDate>
+            </local:DealEvaluatorSubProcess>
+            <local:DealEvaluatorSubProcess sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_2" isSale="False">
+              <local:DealEvaluatorSubProcess.Output>
+                <InArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
+                  <mca:CSharpValue x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">cost_DealEvaluatorSubProcessOutput</mca:CSharpValue>
+                </InArgument>
+              </local:DealEvaluatorSubProcess.Output>
+              <local:DealEvaluatorSubProcess.beginDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate.Value</mca:CSharpValue>
+                </InArgument>
+              </local:DealEvaluatorSubProcess.beginDate>
+            </local:DealEvaluatorSubProcess>
+          </Parallel>
+          <vbw:SaveDefinitionObjectState sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
+            <vbw:SaveDefinitionObjectState.ObjectKey>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">null</mca:CSharpValue>
+              </InArgument>
+            </vbw:SaveDefinitionObjectState.ObjectKey>
+            <vbw:SaveDefinitionObjectState.ObjectValue>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">dealEvaluatorProcessState</mca:CSharpValue>
+              </InArgument>
+            </vbw:SaveDefinitionObjectState.ObjectValue>
+          </vbw:SaveDefinitionObjectState>
+        </Sequence>
+      </If.Then>
+    </If>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finish Deal Evaluator Process.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbBw3A5kBDgIBAT4FRCACAU5FBVAkAgFDUQVcIQIBOF0FkAEKAgEJkQEFlwEgAgECQQtBhQECAVA+YD6CAQIBT00LTYABAgFJSAtITQIBRFQLVGgCAT5ZC1l4AgE5YAtgXAIBCmQJjgEUAgEPlAELlAGFAQIBBJEBYJEBgAECAQNlC4EBFgIBG4IBC40BKwIBEGkNdC0CASp1DYABLQIBHIoBEYoBaAIBFoUBEYUBUwIBEWwTbI4BAgEyaW9pdQIBMXETcWICASt4E3iOAQIBJHVvdXYCASN9E31iAgEd</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="701,22" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="701,22" />
+      <sap2010:ViewStateData Id="CalculateBeginDate_1" sap:VirtualizedContainerService.HintSize="701,22" />
+      <sap2010:ViewStateData Id="DealEvaluatorSubProcess_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="DealEvaluatorSubProcess_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="576,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="701,422" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="701,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="723,794">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="763,874" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

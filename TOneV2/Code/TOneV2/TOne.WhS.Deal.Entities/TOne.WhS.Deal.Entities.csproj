@@ -49,6 +49,7 @@
     <Compile Include="DealDefinition\DealDefinitionFilter.cs" />
     <Compile Include="DealDefinition\DealDefinitionInfo.cs" />
     <Compile Include="DealDefinition\DealEntities.cs" />
+    <Compile Include="DealEvaluatorProcessState.cs" />
     <Compile Include="DealProgress\DealDetailedProgress.cs" />
     <Compile Include="DealProgress\DealProgress.cs" />
     <Compile Include="DealReprocessInput\DealReprocessInput.cs" />

@@ -23,7 +23,7 @@ namespace TOne.WhS.Deal.Data.SQL
 
         public void UpdateDealProgresses(List<DealProgress> dealProgresses)
         {
-            DataTable dtDealProgress = BuildDealZoneGroupTable(dealProgresses);
+            DataTable dtDealProgress = BuildDealProgressTable(dealProgresses);
             ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Update]", (cmd) => 
             {
                 var dtPrm = new SqlParameter("@DealProgresses", SqlDbType.Structured);
@@ -34,7 +34,7 @@ namespace TOne.WhS.Deal.Data.SQL
 
         public void InsertDealProgresses(List<DealProgress> dealProgresses)
         {
-            DataTable dtDealProgress = BuildDealZoneGroupTable(dealProgresses);
+            DataTable dtDealProgress = BuildDealProgressTable(dealProgresses);
             ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Insert]", (cmd) =>
             {
                 var dtPrm = new SqlParameter("@DealProgresses", SqlDbType.Structured);
@@ -59,7 +59,7 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region Private Methods
 
-        DataTable BuildDealZoneGroupTable(List<DealProgress> dealProgresses)
+        DataTable BuildDealProgressTable(List<DealProgress> dealProgresses)
         {
             DataTable dtDealProgress = GetDealProgressTable();
             dtDealProgress.BeginLoadData();

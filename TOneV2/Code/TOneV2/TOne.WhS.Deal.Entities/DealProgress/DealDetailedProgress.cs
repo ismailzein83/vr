@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.Entities
 
         public DateTime ToTime { get; set; }
 
-        public decimal? ReachedDurationInSeconds { get; set; }
+        public decimal ReachedDurationInSeconds { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }

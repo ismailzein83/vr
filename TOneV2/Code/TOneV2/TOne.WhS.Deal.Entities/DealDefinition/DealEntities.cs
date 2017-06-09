@@ -42,6 +42,19 @@ namespace TOne.WhS.Deal.Entities
 
         public bool IsSale { get; set; }
 
-        public decimal? TotalZoneGroupDurationInSeconds { get; set; }
+        public decimal TotalReachedDurationInSeconds { get; set; }
     }
-} 
+
+    public class DealZoneGroupTierData
+    {
+        public int DealID { get; set; }
+
+        public int ZoneGroupNb { get; set; }
+
+        public int TierNb { get; set; }
+
+        public bool IsSale { get; set; }
+
+        public decimal TotalReachedDurationInSeconds { get; set; }
+    }
+}

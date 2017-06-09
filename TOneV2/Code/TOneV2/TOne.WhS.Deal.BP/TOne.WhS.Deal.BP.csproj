@@ -47,12 +47,53 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="DealEvaluatorProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Deal.BP.Activities\TOne.WhS.Deal.BP.Activities.csproj">
+      <Project>{BE229D5A-E599-420B-A57E-164031B36F1D}</Project>
+      <Name>TOne.WhS.Deal.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.BP.Arguments\TOne.WhS.Deal.BP.Arguments.csproj">
+      <Project>{0703b9f8-154e-470d-9507-c4dc47dcab44}</Project>
+      <Name>TOne.WhS.Deal.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">
+      <Project>{fcc59d3d-6e58-4558-bc27-8c6a01223cb7}</Project>
+      <Name>TOne.WhS.Deal.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
+      <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
+      <Name>TOne.WhS.Deal.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="SubProcesses\DealEvaluatorSubProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
