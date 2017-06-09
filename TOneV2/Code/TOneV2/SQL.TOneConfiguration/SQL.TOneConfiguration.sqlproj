@@ -695,6 +695,7 @@
     <None Include="Mediation_WHS.Common.PostDeployment.sql" />
     <None Include="Mediation_WHS.Huawei.PostDeployment.sql" />
     <None Include="Mediation_Mobile.Huawei.PostDeployment.sql" />
+    <None Include="BI.StandAloneApplication.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

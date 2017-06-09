@@ -20,6 +20,12 @@ TOneV1Transition.PostDeployment.sql
 WhS_AccountBalance.PostDeployment.sql
 TOne.PostDeployment.sql
 
+BI
+BI.PostDeployemnt.sql
+
+BIStandAloneApplication
+BI.StandAloneApplication.PostDeployment.sql
+
 CloudXPoint
 CloudXPoint.PostDeployment.sql
 
