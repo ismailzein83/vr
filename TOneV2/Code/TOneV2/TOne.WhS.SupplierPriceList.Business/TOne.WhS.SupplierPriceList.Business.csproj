@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
@@ -103,6 +106,7 @@
     <Compile Include="PriceListZoneServiceManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
     <Compile Include="ProcessCountryZonesServicesContext.cs" />
+    <Compile Include="SupplierPriceListProcessBPSettings.cs" />
     <Compile Include="SupplierZonesServicesPreviewManager.cs" />
     <Compile Include="SupplierOtherRatesPreviewManager.cs" />
     <Compile Include="SupplierPriceListTemplateManager.cs" />
@@ -125,6 +129,10 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Arguments\TOne.WhS.SupplierPriceList.BP.Arguments.csproj">
+      <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data\TOne.WhS.SupplierPriceList.Data.csproj">
       <Project>{81edf44d-73a3-4abf-8085-f9a69917b986}</Project>
       <Name>TOne.WhS.SupplierPriceList.Data</Name>
@@ -134,7 +142,9 @@
       <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
