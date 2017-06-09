@@ -14,9 +14,12 @@ namespace Mediation.Runtime.DataParser
     {
         public void ReadFile()
         {
-            DateTimeOffset do1 = new DateTimeOffset(2017, 05, 22, 5, 0, 0, new TimeSpan(-5, 0, 0));
-            var newDate = do1.ToLocalTime().DateTime;
-            ParseHuaweiNamibia();
+
+            string settings = GetHuaweiIraqParserSettings();
+            settings = GetHuaweiIraqParserSettings_GPRS();
+            //DateTimeOffset do1 = new DateTimeOffset(2017, 05, 22, 5, 0, 0, new TimeSpan(-5, 0, 0));
+            //var newDate = do1.ToLocalTime().DateTime;
+            //ParseHuaweiNamibia();
 
             //ParseEricsson();
         }
@@ -1069,7 +1072,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Huawei Iraq
 
-        private string GetHuaweiParserSettings()
+        private string GetHuaweiIraqParserSettings()
         {
             HexTLVParserType hexParser = new HexTLVParserType
             {
@@ -1092,7 +1095,6 @@ namespace Mediation.Runtime.DataParser
 
             return Serializer.Serialize(parserType.Settings);
         }
-
         private Dictionary<string, HexTLVRecordParser> Get_30_SubRecordsParsersByTag_Iraq()
         {
             Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
@@ -1120,7 +1122,6 @@ namespace Mediation.Runtime.DataParser
             });
             return subParser;
         }
-
         private Dictionary<Guid, HexTLVRecordParser> GetTemplates_Huawei_Iraq()
         {
             Dictionary<Guid, HexTLVRecordParser> templates = new Dictionary<Guid, HexTLVRecordParser>();
@@ -1134,7 +1135,6 @@ namespace Mediation.Runtime.DataParser
 
             return templates;
         }
-
         private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
@@ -1154,6 +1154,8 @@ namespace Mediation.Runtime.DataParser
                 }
 
             });
+
+
             parsers.Add("A1", new HexTLVRecordParser
             {
                 Settings = new CreateRecordRecordParser
@@ -1183,6 +1185,7 @@ namespace Mediation.Runtime.DataParser
                     }
                 }
             });
+
 
             parsers.Add("A4", new HexTLVRecordParser
             {
@@ -1229,9 +1232,40 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("A6", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A6_FieldParsers_Huawei_Iraq()
+                    },
+                    RecordType = "SMS",
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                    }
+                }
+
+            });
+
+            parsers.Add("A7", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A7_FieldParsers_Huawei_Iraq()
+                    },
+                    RecordType = "SMS",
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                    }
+                }
+
+            });
+
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A0_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -1291,17 +1325,19 @@ namespace Mediation.Runtime.DataParser
                         {
                             {"80", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "SAC"
+                                          FieldName = "SAC",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             },
                             {"81", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "LocationAreaCode"
+                                          FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             }
@@ -1370,15 +1406,35 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("97", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "SetupTime",
-                    WithOffset = false,
+                    FieldName = "ConnectDateTime",
+                    WithOffset = true,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
             });
+
+            parsers.Add("98", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "DisconnectDateTime",
+                    WithOffset = true,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            //parsers.Add("97", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+            //    {
+            //        FieldName = "SetupTime",
+            //        WithOffset = true,
+            //        DateTimeParsingType = DateTimeParsingType.DateTime
+            //    }
+            //});
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
@@ -1462,7 +1518,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A1_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -1522,17 +1577,19 @@ namespace Mediation.Runtime.DataParser
                         {
                             {"80", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "SAC"
+                                          FieldName = "SAC",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             },
                             {"81", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "LocationAreaCode"
+                                          FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             }
@@ -1570,9 +1627,10 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F8111", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
                 {
-                    FieldName = "ChargeAreaCode"
+                    FieldName = "ChargeAreaCode",
+                    RemoveHexa = true
                 }
             });
 
@@ -1592,15 +1650,36 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814B", new HexTLVFieldParser
+
+            parsers.Add("94", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "SetupTime",
-                    WithOffset = false,
+                    FieldName = "ConnectDateTime",
+                    WithOffset = true,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
             });
+
+            parsers.Add("95", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "DisconnectDateTime",
+                    WithOffset = true,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            //parsers.Add("9F814B", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+            //    {
+            //        FieldName = "SetupTime",
+            //        WithOffset = false,
+            //        DateTimeParsingType = DateTimeParsingType.DateTime
+            //    }
+            //});
 
             parsers.Add("9F8150", new HexTLVFieldParser
             {
@@ -1674,7 +1753,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A3_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -1766,15 +1844,35 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("87", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "SetupTime",
-                    WithOffset = false,
+                    FieldName = "ConnectDateTime",
+                    WithOffset = true,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
             });
+
+            parsers.Add("88", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "DisconnectDateTime",
+                    WithOffset = true,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            //parsers.Add("9F8149", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+            //    {
+            //        FieldName = "SetupTime",
+            //        WithOffset = false,
+            //        DateTimeParsingType = DateTimeParsingType.DateTime
+            //    }
+            //});
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
@@ -1840,7 +1938,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A4_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -1932,15 +2029,35 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("87", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "SetupTime",
-                    WithOffset = false,
+                    FieldName = "ConnectDateTime",
+                    WithOffset = true,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
             });
+
+            parsers.Add("88", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "DisconnectDateTime",
+                    WithOffset = true,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            //parsers.Add("9F8149", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+            //    {
+            //        FieldName = "SetupTime",
+            //        WithOffset = false,
+            //        DateTimeParsingType = DateTimeParsingType.DateTime
+            //    }
+            //});
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
@@ -2005,7 +2122,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A5_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -2081,16 +2197,35 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("88", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "SetupTime",
-                    WithOffset = false,
+                    FieldName = "ConnectDateTime",
+                    WithOffset = true,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
             });
+
+            parsers.Add("89", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "DisconnectDateTime",
+                    WithOffset = true,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            //parsers.Add("9F8149", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+            //    {
+            //        FieldName = "SetupTime",
+            //        WithOffset = false,
+            //        DateTimeParsingType = DateTimeParsingType.DateTime
+            //    }
+            //});
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
@@ -2154,7 +2289,6 @@ namespace Mediation.Runtime.DataParser
             });
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A6_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -2261,9 +2395,10 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F813C", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                 {
-                    FieldName = "GlobalAreaID"
+                    FieldName = "GlobalAreaID",
+                    NumberType = NumberType.Int
                 }
             });
 
@@ -2296,7 +2431,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "OriginationTime",
+                    FieldName = "MessageTime",
                     WithOffset = false,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
@@ -2339,7 +2474,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A7_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -2390,17 +2524,19 @@ namespace Mediation.Runtime.DataParser
                         {
                             {"80", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "SAC"
+                                          FieldName = "SAC",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             },
                             {"81", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "LocationAreaCode"
+                                          FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             }
@@ -2446,9 +2582,10 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F813C", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                 {
-                    FieldName = "GlobalAreaID"
+                    FieldName = "GlobalAreaID",
+                    NumberType = NumberType.Int
                 }
             });
 
@@ -2474,7 +2611,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "DeliveryTime",
+                    FieldName = "MessageTime",
                     WithOffset = false,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
@@ -2531,7 +2668,6 @@ namespace Mediation.Runtime.DataParser
             });
             return parsers;
         }
-
         private Dictionary<string, HexTLVFieldParser> Get_A100_FieldParsers_Huawei_Iraq()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
@@ -2672,15 +2808,35 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("97", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
                 {
-                    FieldName = "SetupTime",
-                    WithOffset = false,
+                    FieldName = "ConnectDateTime",
+                    WithOffset = true,
                     DateTimeParsingType = DateTimeParsingType.DateTime
                 }
             });
+
+            parsers.Add("98", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "DisconnectDateTime",
+                    WithOffset = true,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            //parsers.Add("9F8149", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+            //    {
+            //        FieldName = "SetupTime",
+            //        WithOffset = false,
+            //        DateTimeParsingType = DateTimeParsingType.DateTime
+            //    }
+            //});
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
@@ -2767,6 +2923,566 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "OriginalCalledNumber",
                     RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }        
+        private string GetHuaweiIraqParserSettings_GPRS()
+        {
+            HexTLVParserType hexParser = new HexTLVParserType
+            {
+                RecordParser = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = GetTemplateParsers_Huawei_Iraq_GPRS()
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                Name = "Huawei Iraq GPRS Parser",
+                ParserTypeId = new Guid("16B6AF8D-6A15-46A1-9C19-CCFAC1EBBDDE"),
+                Settings = new ParserTypeSettings
+                {
+                    ExtendedSettings = hexParser
+                }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei_Iraq_GPRS()
+        {
+            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+
+            parsers.Add("B4", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_B4_FieldParsers_Huawei_Iraq()
+                    },
+                    RecordType = "GPRS",
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                    }
+                }
+
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, HexTLVFieldParser> Get_B4_FieldParsers_Huawei_Iraq()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("80", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "RecordType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("81", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BoolFieldParser
+                {
+                    FieldName = "NetworkInitiation"
+                }
+            });
+
+            parsers.Add("83", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "ServedIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "ServedIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("A5", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"80", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "SGSN_Address"                                          
+                                     }                            
+                                }
+                            },
+                            {"82", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "SGSN_Address"                                          
+                                     }                            
+                                }
+                            },
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "SGSN_Address"                                          
+                                     }                            
+                                }
+                            },
+                            {"83", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "SGSN_Address"                                          
+                                     }                            
+                                }
+                            }
+
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                {
+                    FieldName = "MSNetworkCapability",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "RoutingArea",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("88", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "LocationAreaCode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("89", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "CellIdentifier",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8A", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "CellIdentifier",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("AB", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"80", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "GGSN_Address"                                          
+                                     }                            
+                                }
+                            },
+                            {"82", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "GGSN_Address"                                          
+                                     }                            
+                                }
+                            },
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "GGSN_Address"                                          
+                                     }                            
+                                }
+                            },
+                            {"83", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.IPv4Parser
+                                     {
+                                          FieldName = "GGSN_Address"                                          
+                                     }                            
+                                }
+                            }
+
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("8C", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                {
+                    FieldName = "AccessPointNameNI"
+                }
+            });
+
+            parsers.Add("8D", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                {
+                    FieldName = "PDPType"
+                }
+            });
+
+            parsers.Add("90", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                {
+                    FieldName = "RecordOpeningTime",
+                    WithOffset = false,
+                    DateTimeParsingType = DateTimeParsingType.DateTime
+                }
+            });
+
+            parsers.Add("91", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "Duration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("92", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BoolFieldParser
+                {
+                    FieldName = "SGSN_Change"
+                }
+            });
+
+            parsers.Add("93", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "CauseForRecClosing",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("B4", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"84", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                                     {
+                                          FieldName = "Diagnostics",
+                                          NumberType = NumberType.Int
+                                     }                            
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("95", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("96", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                {
+                    FieldName = "NodeID"
+                }
+            });
+
+            parsers.Add("98", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "LocalSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("99", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "APNSelectionMode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+
+            parsers.Add("9A", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                {
+                    FieldName = "AccessPointNameOI"
+                }
+            });
+
+            parsers.Add("9B", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "ServedMSISDN",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9C", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "ChargingCharacteristics",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9D", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "SystemType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F1F", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "RNC_UnsentDownlinkVolume",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F20", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                {
+                    FieldName = "ChSelectionMode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F21", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BoolFieldParser
+                {
+                    FieldName = "DynamicAddressFlag"
+                }
+            });
+
+            parsers.Add("AF", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"30", new HexTLVFieldParser
+                                {
+                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.SequenceFieldParser
+                                        {
+                                            FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                                            {
+                                                FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                                                {
+                                                    {"81", new HexTLVFieldParser
+                                                        {
+                                                             Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                                                             {
+                                                                  FieldName = "QosRequested"
+                                                             }                            
+                                                        }
+                                                    },
+                                                    {"82", new HexTLVFieldParser
+                                                        {
+                                                             Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                                                             {
+                                                                  FieldName = "QosNegotiated"
+                                                             }                            
+                                                        }
+                                                    },
+                                                     {"83", new HexTLVFieldParser
+                                                        {
+                                                             Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                                                             {
+                                                                  FieldName = "DataVolumeGPRSUplink",
+                                                                  NumberType = NumberType.Int
+                                                             }                            
+                                                        }
+                                                    },
+                                                    {"84", new HexTLVFieldParser
+                                                        {
+                                                             Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                                                             {
+                                                                  FieldName = "DataVolumeGPRSDownlink",
+                                                                  NumberType = NumberType.Int
+                                                             }                            
+                                                        }
+                                                    },
+                                                    {"85", new HexTLVFieldParser
+                                                        {
+                                                             Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                                                             {
+                                                                  FieldName = "ChangeCondition",
+                                                                  NumberType = NumberType.Int
+                                                             }                            
+                                                        }
+                                                    },
+                                                    {"86", new HexTLVFieldParser
+                                                        {
+                                                             Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.DateTimeParser
+                                                             {
+                                                                  FieldName = "ChangeTime",
+                                                                  DateTimeParsingType = DateTimeParsingType.DateTime,
+                                                                  WithOffset = true
+                                                             }                            
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }                           
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("BE", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                                     {
+                                          FieldName = "SCFAddress"
+                                     }                            
+                                }
+                            },
+                            {"82", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                                     {
+                                          FieldName = "ServiceKey"
+                                     }                            
+                                }
+                            },
+                            {"83", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                                     {
+                                          FieldName = "DefaultTransactionHandling",
+                                          NumberType = NumberType.Int
+                                     }                            
+                                }
+                            },
+                            {"84", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     {
+                                          FieldName = "CamelAccessPointNameNI"
+                                     }                            
+                                }
+                            },
+                            {"85", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     {
+                                          FieldName = "CamelAccessPointNameOI"
+                                     }                            
+                                }
+                            },
+                            {"86", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                                     {
+                                          FieldName = "NumberOfDPEncountered",
+                                          NumberType = NumberType.Int
+                                     }                            
+                                }
+                            },
+                            {"87", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     {
+                                          FieldName = "LevelOfCamelService"
+                                     }                            
+                                }
+                            },
+                            {"88", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
+                                     {
+                                          FieldName = "FreeFormatData"
+                                     }                            
+                                }
+                            },
+                            {"89", new HexTLVFieldParser
+                                {
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BoolFieldParser
+                                     {
+                                          FieldName = "FFDAppendIndicator"
+                                     }                            
+                                }
+                            }
+
+                        }
+                    }
                 }
             });
 
