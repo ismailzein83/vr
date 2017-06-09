@@ -36,6 +36,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                                 UniqueSectionID: subSection.InvoiceSubSectionId,
                                 InvoiceTypeId: invoiceTypeId,
                                 SectionID: subSection.InvoiceSubSectionId,
+                                CompareOperator: subSection.Settings.CompareOperator
                             },
                             invoiceTypeId: invoiceTypeId,
                             settings: subSection.Settings,

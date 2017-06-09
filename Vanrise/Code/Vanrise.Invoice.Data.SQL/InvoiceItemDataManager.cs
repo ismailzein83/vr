@@ -27,8 +27,22 @@ namespace Vanrise.Invoice.Data.SQL
             set { this._storageConnectionStringKey = value; }
         }
         #endregion
-        public IEnumerable<InvoiceItem> GetFilteredInvoiceItems(long invoiceId, string itemSetName)
+        public IEnumerable<InvoiceItem> GetFilteredInvoiceItems(long invoiceId, string itemSetName, CompareOperator compareOperator)
         {
+            switch (compareOperator)
+            {
+                case CompareOperator.Contains:
+                    itemSetName = string.Format("%{0}%", itemSetName);
+                    break;
+                case CompareOperator.EndWith:
+                    itemSetName = string.Format("%{0}", itemSetName);
+                    break;
+                case CompareOperator.Equal:
+                    break;
+                case CompareOperator.StartWith:
+                    itemSetName = string.Format("{0}%", itemSetName);
+                    break;
+            }
             return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetFiltered", InvoiceMapper, invoiceId, itemSetName);
         }
         public void SaveInvoiceItems(long invoiceId, IEnumerable<GeneratedInvoiceItemSet> invoiceItemSets)
@@ -58,7 +72,6 @@ namespace Vanrise.Invoice.Data.SQL
 
         public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, IEnumerable<string> itemSetNames, CompareOperator compareOperator)
         {
-            string operatorString = "";
             switch (compareOperator)
             {
                 case CompareOperator.Contains:

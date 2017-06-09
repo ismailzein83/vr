@@ -123,9 +123,10 @@ namespace Vanrise.Invoice.Business
                 if (input.Query.ItemSetNameParts != null && input.Query.ItemSetNameParts.Count > 0)
                 {
                     input.Query.ItemSetName = InvoiceItemManager.ExecuteItemSetNameParts(input.Query.ItemSetNameParts, input.Query.InvoiceItemDetails, input.Query.ItemSetName);
+                    input.Query.CompareOperator = CompareOperator.Equal;
                 }
 
-                var results = _dataManager.GetFilteredInvoiceItems(input.Query.InvoiceId, input.Query.ItemSetName);
+                var results = _dataManager.GetFilteredInvoiceItems(input.Query.InvoiceId, input.Query.ItemSetName, input.Query.CompareOperator);
 
                 InvoiceItemManager.FillAdditionalInvoiceItems(results, invoiceType);
 

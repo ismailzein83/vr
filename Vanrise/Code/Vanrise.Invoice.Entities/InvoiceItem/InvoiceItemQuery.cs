@@ -13,6 +13,7 @@ namespace Vanrise.Invoice.Entities
         public string ItemSetName { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public Guid UniqueSectionID { get; set; }
+        public CompareOperator CompareOperator { get; set; }
        // public List<InvoiceSubSectionGridColumn> GridColumns { get; set; }
         public List<InvoiceItemConcatenatedPart> ItemSetNameParts { get; set; }
     }

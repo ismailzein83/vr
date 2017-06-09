@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_Invoice_ItemSetNameCompareOperatorEnum",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_ItemSetNameCompareOperatorEnum) {
 
         var directiveDefinitionObject = {
 
@@ -41,6 +41,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
                     subSectionGridColumnsAPI = api;
                     subSectionGridColumnsReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.itemSetNamesCompareOperators = UtilsService.getArrayEnum(VR_Invoice_ItemSetNameCompareOperatorEnum);
 
                 $scope.scopeModel.onInvoiceItemSubSectionGridColumnsReady = function (api) {
                     invoiceItemSubSectionGridColumnsAPI = api;
@@ -58,7 +59,11 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
                         invoiceSubSectionSettingsEntity = payload.invoiceSubSectionSettingsEntity;
                         context = payload.context;
                         if (invoiceSubSectionSettingsEntity != undefined)
+                        {
                             $scope.scopeModel.itemSetName = invoiceSubSectionSettingsEntity.ItemSetName;
+                            $scope.scopeModel.selectedItemSetNameCompareOperator = UtilsService.getItemByVal($scope.scopeModel.itemSetNamesCompareOperators, invoiceSubSectionSettingsEntity.CompareOperator, "value");
+                        }
+                           
                     }
                     var promises = [];
                     var subSectionGridColumnsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -82,6 +87,7 @@ app.directive("vrInvoicetypeInvoiceuisubsectionsettingsInvoiceitem", ["UtilsServ
                     return {
                         $type: "Vanrise.Invoice.Business.InvoiceItemSubSection ,Vanrise.Invoice.Business",
                         ItemSetName: $scope.scopeModel.itemSetName,
+                        CompareOperator: $scope.scopeModel.selectedItemSetNameCompareOperator != undefined ? $scope.scopeModel.selectedItemSetNameCompareOperator.value : undefined,
                         GridColumns: subSectionGridColumnsAPI.getData(),
                         SubSections: invoiceItemSubSectionGridColumnsAPI.getData()
                     };
