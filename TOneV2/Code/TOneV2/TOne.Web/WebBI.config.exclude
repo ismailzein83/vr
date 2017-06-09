@@ -27,7 +27,7 @@
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=BIV2_Transaction;User ID=sa;Password= " />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=BIV2_Logging;User ID=sa;Password= " />
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=BIV2_Configuration;User ID=sa;Password= "/>
-    <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://localhost:1214/msmdpump.dll; Initial Catalog = TOne_BI; User Id = vanrise\olap.access; Password = 0l@p@cce$$" />
+    <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://localhost:1214/msmdpump.dll; Initial Catalog = ToneDebTest01_BI_Latest; User Id = vanrise\olap.access; Password = 0l@p@cce$$" />
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
