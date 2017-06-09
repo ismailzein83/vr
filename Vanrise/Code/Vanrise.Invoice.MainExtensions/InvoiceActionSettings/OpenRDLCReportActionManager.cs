@@ -214,13 +214,11 @@ namespace Vanrise.Invoice.MainExtensions
         private IEnumerable<dynamic> GetDataSourceItems(string dataSourceName, string reportName)
         {
             IEnumerable<dynamic> dataSourceItems;
-            if(reportName != null)
+            dataSourceItems = GetDataSourceItems(dataSourceName);
+            if (dataSourceItems == null)
             {
                 var parentReportDetails = repeatedReports.GetRecord(reportName);
                 dataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(dataSourceName);
-            }else
-            {
-                dataSourceItems = GetDataSourceItems(dataSourceName);
             }
             return dataSourceItems;
         }

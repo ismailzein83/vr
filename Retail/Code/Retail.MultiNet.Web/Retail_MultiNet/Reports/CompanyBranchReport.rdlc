@@ -6,16 +6,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.375in</Width>
+              <Width>1.31789in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.67655in</Width>
+              <Width>3.61944in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.68959in</Width>
+              <Width>1.63248in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09375in</Width>
+              <Width>1.03664in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -363,10 +363,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchChargeableItemDetails</DataSetName>
-        <Top>0.56943in</Top>
-        <Left>0.14159in</Left>
+        <Top>0.9861in</Top>
+        <Left>0.05581in</Left>
         <Height>0.75in</Height>
-        <Width>7.83489in</Width>
+        <Width>7.60646in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -382,11 +382,14 @@
           <Parameter Name="AccountNumber">
             <Value>=Parameters!AccountNumber.Value</Value>
           </Parameter>
+          <Parameter Name="BranchName">
+            <Value>=Parameters!BranchName.Value</Value>
+          </Parameter>
         </Parameters>
-        <Top>2.49999in</Top>
-        <Left>0.14159in</Left>
+        <Top>2.91666in</Top>
+        <Left>0.05581in</Left>
         <Height>0.39584in</Height>
-        <Width>7.83489in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -398,10 +401,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.74234in</Width>
+              <Width>6.62562in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09755in</Width>
+              <Width>0.98083in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -714,10 +717,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchChargeableItemDetails</DataSetName>
-        <Top>1.39583in</Top>
-        <Left>0.14642in</Left>
+        <Top>1.8125in</Top>
+        <Left>0.05581in</Left>
         <Height>1in</Height>
-        <Width>7.83989in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -740,10 +743,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>0.25917in</Top>
-        <Left>0.14642in</Left>
+        <Top>0.42584in</Top>
+        <Left>0.05581in</Left>
         <Height>0.25in</Height>
-        <Width>7.83006in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -755,16 +758,53 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="Textbox2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Subscriber Information</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>0.10639in</Top>
+        <Left>0.05581in</Left>
+        <Height>0.25in</Height>
+        <Width>7.60646in</Width>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <BackgroundColor>#e2eaf5</BackgroundColor>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>6.45137in</Height>
+    <Height>8.71356cm</Height>
     <Style />
   </Body>
-  <Width>8.13273in</Width>
+  <Width>19.54588cm</Width>
   <Page>
-    <LeftMargin>1in</LeftMargin>
-    <RightMargin>1in</RightMargin>
-    <TopMargin>1in</TopMargin>
-    <BottomMargin>1in</BottomMargin>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
+    <LeftMargin>0cm</LeftMargin>
+    <RightMargin>0cm</RightMargin>
+    <TopMargin>0cm</TopMargin>
+    <BottomMargin>0cm</BottomMargin>
+    <ColumnSpacing>1.27cm</ColumnSpacing>
     <Style />
   </Page>
   <AutoRefresh>0</AutoRefresh>
@@ -871,6 +911,6 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>dc619518-ffb3-4372-9909-9da3464a9bed</rd:ReportID>
 </Report>

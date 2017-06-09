@@ -6,10 +6,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.74234in</Width>
+              <Width>6.56981in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09755in</Width>
+              <Width>1.03664in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -322,10 +322,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>6.10181in</Top>
-        <Left>0.10865in</Left>
+        <Top>5.60181in</Top>
+        <Left>0.23292in</Left>
         <Height>1in</Height>
-        <Width>7.83989in</Width>
+        <Width>7.60645in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -355,9 +355,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.12396in</Top>
-        <Left>0.12875in</Left>
+        <Left>0.23292in</Left>
         <Height>0.375in</Height>
-        <Width>7.81479in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border />
@@ -387,13 +387,13 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>1.95175in</Top>
-        <Left>0.10363in</Left>
+        <Left>0.23292in</Left>
         <Height>1in</Height>
         <Width>3.39625in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
-            <Style>Solid</Style>
+            <Style>None</Style>
           </Border>
           <BackgroundColor>#e2eaf5</BackgroundColor>
           <PaddingLeft>2pt</PaddingLeft>
@@ -643,7 +643,7 @@
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
         <Top>1.95175in</Top>
-        <Left>4.80812in</Left>
+        <Left>4.70395in</Left>
         <Height>0.75in</Height>
         <Width>3.13542in</Width>
         <ZIndex>3</ZIndex>
@@ -657,10 +657,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.23334in</Width>
+              <Width>1.34271in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.31979in</Width>
+              <Width>2.30417in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1033,9 +1033,9 @@
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
         <Top>0.63231in</Top>
-        <Left>2.39542in</Left>
+        <Left>3.69249in</Left>
         <Height>1.25in</Height>
-        <Width>5.55313in</Width>
+        <Width>3.64688in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -1047,16 +1047,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.375in</Width>
+              <Width>1.31789in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.67655in</Width>
+              <Width>3.61944in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.68959in</Width>
+              <Width>1.63248in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09375in</Width>
+              <Width>1.03664in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1262,7 +1262,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Quantity</rd:DefaultName>
@@ -1404,10 +1406,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchSummaryDetails</DataSetName>
-        <Top>5.25042in</Top>
-        <Left>0.10865in</Left>
+        <Top>4.75042in</Top>
+        <Left>0.23292in</Left>
         <Height>0.75in</Height>
-        <Width>7.83489in</Width>
+        <Width>7.60645in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -1419,10 +1421,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.12463in</Width>
+              <Width>2.01042in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.71025in</Width>
+              <Width>5.59604in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1587,10 +1589,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.29625in</Top>
-        <Left>0.10865in</Left>
+        <Top>6.67125in</Top>
+        <Left>0.23292in</Left>
         <Height>0.92709in</Height>
-        <Width>7.83488in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1619,10 +1621,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>8.29387in</Top>
-        <Left>0.10363in</Left>
+        <Top>7.66887in</Top>
+        <Left>0.23292in</Left>
         <Height>0.68752in</Height>
-        <Width>7.83989in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -1638,7 +1640,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.8198in</Width>
+              <Width>7.60646in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1653,31 +1655,31 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                           <ReportName>CompanyBranchReport</ReportName>
                           <Parameters>
                             <Parameter Name="SubscriberName">
-                              <Value>=Fields!AccountId.Value</Value>
+                              <Value>=Fields!BranchName.Value</Value>
                             </Parameter>
                             <Parameter Name="AccountNumber">
-                              <Value>=Parameters!AccountName.Value</Value>
+                              <Value>=Fields!BranchName.Value</Value>
                             </Parameter>
                             <Parameter Name="Email">
                               <Value>=Parameters!Address.Value</Value>
                             </Parameter>
                             <Parameter Name="SalesTaxAmount">
-                              <Value>=Fields!SalesTaxAmount.Value</Value>
+                              <Value>=Round(Fields!SalesTaxAmount.Value,2)</Value>
                             </Parameter>
                             <Parameter Name="WHTaxAmount">
-                              <Value>=Fields!WHTaxAmount.Value</Value>
+                              <Value>=Round(Fields!WHTaxAmount.Value,2)</Value>
                             </Parameter>
                             <Parameter Name="CurrentCharges">
-                              <Value>=Fields!CurrentCharges.Value</Value>
+                              <Value>=Round(Fields!CurrentCharges.Value,2)</Value>
                             </Parameter>
                             <Parameter Name="TotalCurrentCharges">
-                              <Value>=Fields!TotalCurrentCharges.Value</Value>
+                              <Value>=Round(Fields!TotalCurrentCharges.Value,2)</Value>
                             </Parameter>
                             <Parameter Name="SalesTax">
-                              <Value>=Fields!SalesTax.Value</Value>
+                              <Value>=Round(Fields!SalesTax.Value,2)</Value>
                             </Parameter>
                             <Parameter Name="WHTax">
-                              <Value>=Fields!WHTax.Value</Value>
+                              <Value>=Round(Fields!WHTax.Value,2)</Value>
                             </Parameter>
                             <Parameter Name="BranchName">
                               <Value>=Fields!BranchName.Value</Value>
@@ -1685,7 +1687,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                           </Parameters>
                           <Top>0.01041in</Top>
                           <Height>0.3125in</Height>
-                          <Width>7.81477in</Width>
+                          <Width>7.60645in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1693,7 +1695,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                           </Style>
                         </Subreport>
                       </ReportItems>
-                      <KeepTogether>true</KeepTogether>
+                      <PageBreak>
+                        <BreakLocation>Start</BreakLocation>
+                      </PageBreak>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1722,10 +1726,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <PageBreak>
           <BreakLocation>StartAndEnd</BreakLocation>
         </PageBreak>
-        <Top>9.04042in</Top>
-        <Left>0.12875in</Left>
+        <Top>8.41542in</Top>
+        <Left>0.23292in</Left>
         <Height>0.32291in</Height>
-        <Width>7.8198in</Width>
+        <Width>7.60646in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -1737,16 +1741,16 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.375in</Width>
+              <Width>1.31789in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.67655in</Width>
+              <Width>3.61944in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.68959in</Width>
+              <Width>1.63248in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.09375in</Width>
+              <Width>1.03664in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1952,7 +1956,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Quantity</rd:DefaultName>
@@ -2009,7 +2015,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Amount.Value</Value>
+                              <Value>=Round(Fields!Amount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2094,10 +2100,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>LastInvoices</DataSetName>
-        <Top>4.31959in</Top>
-        <Left>0.11366in</Left>
+        <Top>3.94459in</Top>
+        <Left>0.23292in</Left>
         <Height>0.75in</Height>
-        <Width>7.83489in</Width>
+        <Width>7.60645in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -2109,16 +2115,16 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.375in</Width>
+              <Width>1.31915in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.68697in</Width>
+              <Width>2.63112in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.29376in</Width>
+              <Width>2.23791in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.47414in</Width>
+              <Width>1.41829in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2324,7 +2330,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Quantity</rd:DefaultName>
@@ -2415,7 +2423,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Amount.Value</Value>
+                              <Value>=Round(Fields!Amount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2466,10 +2474,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>PaymentDetails</DataSetName>
-        <Top>3.40292in</Top>
-        <Left>0.11366in</Left>
+        <Top>3.15292in</Top>
+        <Left>0.23292in</Left>
         <Height>0.75in</Height>
-        <Width>7.82986in</Width>
+        <Width>7.60647in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
@@ -2477,14 +2485,30 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Border>
         </Style>
       </Tablix>
+      <Image Name="CompanyLogo">
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
+        <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
+        <Top>1.60607cm</Top>
+        <Left>0.59162cm</Left>
+        <Height>2.16958cm</Height>
+        <Width>5.73333cm</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
     </ReportItems>
-    <Height>9.49875in</Height>
+    <Height>23.83579cm</Height>
     <Style />
   </Body>
-  <Width>8.06567in</Width>
+  <Width>20.4868cm</Width>
   <Page>
     <PageFooter>
-      <Height>0.01042in</Height>
+      <Height>0.02647cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <Style>
@@ -2493,10 +2517,15 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         </Border>
       </Style>
     </PageFooter>
-    <PageHeight>11.69in</PageHeight>
-    <PageWidth>8.27in</PageWidth>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
     <InteractiveHeight>11in</InteractiveHeight>
     <InteractiveWidth>8.27in</InteractiveWidth>
+    <LeftMargin>0cm</LeftMargin>
+    <RightMargin>0cm</RightMargin>
+    <TopMargin>0cm</TopMargin>
+    <BottomMargin>0cm</BottomMargin>
+    <ColumnSpacing>1.27cm</ColumnSpacing>
     <Style />
   </Page>
   <AutoRefresh>0</AutoRefresh>
@@ -2886,6 +2915,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+    <ReportParameter Name="Image">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="ID1111201655117PM">
@@ -3002,6 +3037,6 @@ gg==</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>cbe75953-ed41-4894-ad02-6cdafe2f9ede</rd:ReportID>
 </Report>
