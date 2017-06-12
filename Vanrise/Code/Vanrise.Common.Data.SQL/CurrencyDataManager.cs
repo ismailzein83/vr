@@ -30,7 +30,7 @@ namespace Vanrise.Common.Data.SQL
         {
             object currencyId;
 
-            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Insert", out currencyId, currency.Name, currency.Symbol);
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Insert", out currencyId, currency.Name, currency.Symbol, currency.SourceId);
             insertedId = (int)currencyId;
             return (recordsEffected > 0);
         }
