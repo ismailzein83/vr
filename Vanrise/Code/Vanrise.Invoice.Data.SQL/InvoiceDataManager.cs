@@ -134,7 +134,6 @@ namespace Vanrise.Invoice.Data.SQL
                 invoiceEntity.DueDate,
                 Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
                 invoiceEntity.Note,
-                invoiceIdToDelete,
                 invoiceEntity.SourceId,
                 true
             );
@@ -171,8 +170,16 @@ namespace Vanrise.Invoice.Data.SQL
 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
             {
+                var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
+
                 if (billingTransactions != null && billingTransactions.Count() > 0)
-                    InsertBillingTransactions(billingTransactions, insertedInvoiceId);
+                    InsertBillingTransactions(billingTransactions, insertedInvoiceId, transactionDataManager);
+
+                if (invoiceIdToDelete.HasValue)
+                {
+                    DeleteInvoice(invoiceIdToDelete.Value);
+                    transactionDataManager.SetBillingTransactionsAsDeleted(invoiceIdToDelete.Value);
+                }
 
                 SetDraft(insertedInvoiceId, false);
                 transactionScope.Complete();
@@ -184,6 +191,11 @@ namespace Vanrise.Invoice.Data.SQL
         {
             int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_SetDraft]", invoiceId, isDraft);
             return (affectedRows > -1);
+        }
+        public bool DeleteInvoice(long deletedInvoiceId)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_Delete", deletedInvoiceId);
+            return affectedRows > 0;
         }
         public void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady)
         {
@@ -229,9 +241,8 @@ namespace Vanrise.Invoice.Data.SQL
             return dt;
         }
 
-        private bool InsertBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, long invoiceId)
+        private bool InsertBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, long invoiceId, Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager billingTransactionDataManager)
         {
-            var billingTransactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
             IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions);
 
             long transactionId;

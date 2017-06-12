@@ -108,6 +108,11 @@ namespace Vanrise.AccountBalance.Data.SQL
             int affectedRows = ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_SetAsSubtractedFromBalance]", billingTransactionIdsAsString);
             return affectedRows > 0;
         }
+        public bool SetBillingTransactionsAsDeleted(long deletedInvoiceId)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_AccountBalance.sp_BillingTransaction_SetAsDeletedByInvoiceID", deletedInvoiceId);
+            return affectedRows > 0;
+        }
         public void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_BillingTransaction_GetTransactionsToProcess]",
