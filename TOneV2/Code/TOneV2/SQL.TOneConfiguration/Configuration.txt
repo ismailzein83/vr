@@ -47,6 +47,7 @@ Retail_Zajil.PostDeployment.sql
 Retail_Zajil_Overridden.PostDeployment.sql
 
 Retail_Multinet
+Retail_Multinet.PostDeployment.sql
 Retail_Multinet_Overridden.PostDeployment.sql
 
 CarrierPortal
