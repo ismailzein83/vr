@@ -34,44 +34,47 @@ namespace Vanrise.AccountBalance.MainExtensions
                     invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                     if(!invoiceType.Settings.InvToAccBalanceRelationId.HasValue)
                         new NullReferenceException("invoiceType.Settings.InvToAccBalanceRelationId");
-                    InvToAccBalanceRelationDefinitionManager invToAccBalanceRelationDefinitionManager = new InvToAccBalanceRelationDefinitionManager();
-                    var relationExtendedSettings = invToAccBalanceRelationDefinitionManager.GetRelationExtendedSettings(invoiceType.Settings.InvToAccBalanceRelationId.Value);
-                    InvToAccBalanceRelGetInvoiceBalanceAccountsContext invToAccBalanceRelGetInvoiceBalanceAccountsContext = new InvToAccBalanceRelGetInvoiceBalanceAccountsContext{
-                        PartnerId = invoice.PartnerId
-                    };
-                    var invoiceBalanceAccounts = relationExtendedSettings.GetInvoiceBalanceAccounts(invToAccBalanceRelGetInvoiceBalanceAccountsContext);
-                   
-                    var invoiceDataSourceItems = context.GetDataSourceItems(this.DataSourceName, null);
-                    invoiceDataSourceItems.CastWithValidate<IEnumerable<InvoiceDataSourceItem>>("invoiceDataSourceItems");
-                    var minDateTime = invoiceDataSourceItems.Min(x => x.CreatedTime);
-                    List<Guid> accountTypeIds = new List<Guid>();
-                    List<string> accountIds = new List<string>();
-                    foreach(var invoiceBalanceAccount in invoiceBalanceAccounts)
-                    {
-                        accountTypeIds.Add(invoiceBalanceAccount.AccountTypeId);
-                        accountIds.Add(invoiceBalanceAccount.AccountId);
-                    }
                     BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
-                    var billingTransactions = billingTransactionManager.GetBillingTransactions(accountTypeIds, accountIds, this.TransactionTypesIds, minDateTime, invoice.IssueDate);
-                    if (billingTransactions != null)
+                    List<BillingTransactionItem> billingTransactionItems = new List<BillingTransactionItem>();
+                    var invoiceDataSourceItems = context.GetDataSourceItems(this.DataSourceName, null);
+                    if (invoiceDataSourceItems != null && invoiceDataSourceItems.Count() > 0)
                     {
-                        List<BillingTransactionItem> billingTransactionItems = new List<BillingTransactionItem>();
-                        CurrencyManager currencyManager = new CurrencyManager();
-                        BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
-                        foreach(var billingTransaction in billingTransactions)
+                        InvToAccBalanceRelationDefinitionManager invToAccBalanceRelationDefinitionManager = new InvToAccBalanceRelationDefinitionManager();
+                        var relationExtendedSettings = invToAccBalanceRelationDefinitionManager.GetRelationExtendedSettings(invoiceType.Settings.InvToAccBalanceRelationId.Value);
+                        InvToAccBalanceRelGetInvoiceBalanceAccountsContext invToAccBalanceRelGetInvoiceBalanceAccountsContext = new InvToAccBalanceRelGetInvoiceBalanceAccountsContext
                         {
-                            billingTransactionItems.Add(new BillingTransactionItem
-                            {
-                                Amount = billingTransaction.Amount,
-                                Notes = billingTransaction.Notes,
-                                TransactionTime = billingTransaction.TransactionTime,
-                                CurrencySymbol = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId),
-                                TransactionTypeName = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
-                            });
+                            PartnerId = invoice.PartnerId
+                        };
+                        var invoiceBalanceAccounts = relationExtendedSettings.GetInvoiceBalanceAccounts(invToAccBalanceRelGetInvoiceBalanceAccountsContext);
+                        invoiceDataSourceItems.CastWithValidate<IEnumerable<InvoiceDataSourceItem>>("invoiceDataSourceItems");
+                        DateTime minDateTime = invoiceDataSourceItems.Min(x => x.CreatedTime);
+                        List<Guid> accountTypeIds = new List<Guid>();
+                        List<string> accountIds = new List<string>();
+                        foreach (var invoiceBalanceAccount in invoiceBalanceAccounts)
+                        {
+                            accountTypeIds.Add(invoiceBalanceAccount.AccountTypeId);
+                            accountIds.Add(invoiceBalanceAccount.AccountId);
                         }
-                        return billingTransactionItems;
+                        var billingTransactions = billingTransactionManager.GetBillingTransactions(accountTypeIds, accountIds, this.TransactionTypesIds, minDateTime, invoice.IssueDate);
+                        if (billingTransactions != null)
+                        {
+                            CurrencyManager currencyManager = new CurrencyManager();
+                            BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
+                            foreach (var billingTransaction in billingTransactions)
+                            {
+                                billingTransactionItems.Add(new BillingTransactionItem
+                                {
+                                    Amount = billingTransaction.Amount,
+                                    Notes = billingTransaction.Notes,
+                                    TransactionTime = billingTransaction.TransactionTime,
+                                    CurrencySymbol = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId),
+                                    TransactionTypeName = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
+                                });
+                            }
+                           
+                        }
                     }
-                    break;
+                    return billingTransactionItems;
             }
             return null;
         }
