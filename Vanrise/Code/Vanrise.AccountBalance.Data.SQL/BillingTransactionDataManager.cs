@@ -181,22 +181,6 @@ namespace Vanrise.AccountBalance.Data.SQL
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetForSynchronizerProcess]", BillingTransactionMapper, transactionTypeIds, accountTypeId);
         }
 
-        public bool Insert(long invoiceId, IEnumerable<BillingTransaction> billingTransactions)
-        {
-            bool areAllInsertionsSuccessful = true;
-
-            foreach (BillingTransaction billingTransaction in billingTransactions)
-            {
-                billingTransaction.CreatedByInvoiceId = invoiceId;
-                long billingTransactionId;
-
-                if (!Insert(billingTransaction, out billingTransactionId))
-                    areAllInsertionsSuccessful = false;
-            }
-
-            return areAllInsertionsSuccessful;
-        }
-
         #endregion
 
         #region Mappers
