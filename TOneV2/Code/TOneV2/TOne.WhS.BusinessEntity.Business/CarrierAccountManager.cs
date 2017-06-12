@@ -255,7 +255,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (carr.AccountType == CarrierAccountType.Supplier || carr.SellingNumberPlanId.Value != sellingNumberPlanId)
                     return false;
 
-                if (onlyActive && carr.CarrierAccountSettings != null && carr.CarrierAccountSettings.ActivationStatus != ActivationStatus.Active)
+                if (onlyActive && carr.CarrierAccountSettings != null && carr.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
                     return false;
 
                 return true;

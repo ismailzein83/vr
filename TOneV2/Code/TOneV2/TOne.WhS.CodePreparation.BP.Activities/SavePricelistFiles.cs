@@ -75,7 +75,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             var customersToSavePricelistsFor = new List<CarrierAccountInfo>();
             var carrierAccountManager = new CarrierAccountManager();
-            var customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId).ToDictionary(c => c.CarrierAccountId, c => c);
+            var customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId, true).ToDictionary(c => c.CarrierAccountId, c => c);
 
             foreach (var customer in customerPriceListChanges)
             {
