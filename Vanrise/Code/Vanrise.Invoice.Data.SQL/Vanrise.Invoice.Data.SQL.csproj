@@ -43,6 +43,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountBalance.Data">
+      <HintPath>..\Output\Vanrise.AccountBalance.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data.SQL">
+      <HintPath>..\Output\Vanrise.AccountBalance.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities">
+      <HintPath>..\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingPeriodInfoDataManager.cs" />

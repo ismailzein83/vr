@@ -16,7 +16,7 @@ namespace Vanrise.Invoice.Entities
         public abstract void GetInitialPeriodInfo(IInitialPeriodInfoContext context);
         public abstract IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context);
     }
-   
+
     public abstract class InvoiceGenerator
     {
         public abstract void GenerateInvoice(IInvoiceGenerationContext context);
@@ -33,6 +33,7 @@ namespace Vanrise.Invoice.Entities
         int GetDuePeriod();
         GeneratedInvoice Invoice { set; }
         string ErrorMessage { set; }
+        IEnumerable<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
     }
     public interface IInvoiceTypeExtendedSettingsInfoContext
     {
@@ -51,5 +52,5 @@ namespace Vanrise.Invoice.Entities
         Guid InvoiceTypeId { get; }
         PartnerRetrievalType PartnerRetrievalType { get; }
     }
-     public enum PartnerRetrievalType { GetAll = 1 , GetInactive = 2 ,GetActive = 3 }
+    public enum PartnerRetrievalType { GetAll = 1, GetInactive = 2, GetActive = 3 }
 }

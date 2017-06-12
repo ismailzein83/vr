@@ -5,22 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
-using Vanrise.Common;
+
 namespace Vanrise.Invoice.Data.SQL
 {
     public class InvoiceDataManager : BaseSQLDataManager, IInvoiceDataManager
     {
+        #region Fields / Constructors
 
-        #region ctor
         const string PartnerInvoiceType_TABLENAME = "PartnerInvoiceTypeTable";
         public InvoiceDataManager()
             : base(GetConnectionStringName("InvoiceDBConnStringKey", "InvoiceDBConnString"))
         {
 
         }
+
         #endregion
 
         #region Public Methods
@@ -65,7 +67,7 @@ namespace Vanrise.Invoice.Data.SQL
             if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count() > 0)
                 partnerIds = string.Join<string>(",", input.Query.PartnerIds);
 
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate,input.Query.IsEffectiveInFuture,input.Query.Status);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status);
         }
         public IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
         {
@@ -112,28 +114,36 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, out long insertedInvoiceId)
+        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out long insertedInvoiceId)
         {
             object invoiceId;
-            int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_Save]", out invoiceId,
-                                                                                      invoiceEntity.UserId,
-                                                                                      invoiceEntity.InvoiceTypeId,
-                                                                                      invoiceEntity.PartnerId,
-                                                                                      invoiceEntity.SerialNumber,
-                                                                                      invoiceEntity.FromDate,
-                                                                                      invoiceEntity.ToDate,
-                                                                                      invoiceEntity.TimeZoneId,
-                                                                                      invoiceEntity.TimeZoneOffset,
-                                                                                      invoiceEntity.IssueDate,
-                                                                                      invoiceEntity.DueDate,
-                                                                                      Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
-                                                                                      invoiceEntity.Note,
-                                                                                      invoiceIdToDelete,
-                                                                                      invoiceEntity.SourceId, true);
+
+            int affectedRows = ExecuteNonQuerySP
+            (
+                "[VR_Invoice].[sp_Invoice_Save]",
+                out invoiceId,
+                invoiceEntity.UserId,
+                invoiceEntity.InvoiceTypeId,
+                invoiceEntity.PartnerId,
+                invoiceEntity.SerialNumber,
+                invoiceEntity.FromDate,
+                invoiceEntity.ToDate,
+                invoiceEntity.TimeZoneId,
+                invoiceEntity.TimeZoneOffset,
+                invoiceEntity.IssueDate,
+                invoiceEntity.DueDate,
+                Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
+                invoiceEntity.Note,
+                invoiceIdToDelete,
+                invoiceEntity.SourceId,
+                true
+            );
+
             insertedInvoiceId = Convert.ToInt64(invoiceId);
+
             if (itemSetNameStorageDic != null && itemSetNameStorageDic.Count > 0)
             {
-                var remainingInvoiceItemSets = invoiceItemSets.FindAllRecords(x => !itemSetNameStorageDic.Values.Any(y=>y.Contains(x.SetName)));
+                var remainingInvoiceItemSets = invoiceItemSets.FindAllRecords(x => !itemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
                 if (remainingInvoiceItemSets != null)
                 {
                     InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
@@ -152,7 +162,23 @@ namespace Vanrise.Invoice.Data.SQL
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSets);
             }
-            return SetDraft(insertedInvoiceId, false);
+
+            var transactionOptions = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+            {
+                if (billingTransactions != null && billingTransactions.Count() > 0)
+                    InsertBillingTransactions(billingTransactions, insertedInvoiceId);
+
+                SetDraft(insertedInvoiceId, false);
+                transactionScope.Complete();
+            }
+
+            return true;
         }
         public bool SetDraft(long invoiceId, bool isDraft)
         {
@@ -188,11 +214,13 @@ namespace Vanrise.Invoice.Data.SQL
         #endregion
 
         #region Private Methods
+
         private void FillPartnerInvoiceTypeRow(DataRow dr, Guid invoiceTypeId, string partnerId)
         {
             dr["InvoiceTypeId"] = invoiceTypeId;
             dr["PartnerId"] = partnerId;
         }
+
         private DataTable GetPartnerInvoiceTypeTable()
         {
             DataTable dt = new DataTable(PartnerInvoiceType_TABLENAME);
@@ -200,6 +228,65 @@ namespace Vanrise.Invoice.Data.SQL
             dt.Columns.Add("PartnerId", typeof(string));
             return dt;
         }
+
+        private bool InsertBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, long invoiceId)
+        {
+            var billingTransactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
+            IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions);
+
+            long transactionId;
+            bool areAllInsertionsSuccessful = true;
+
+            foreach (Vanrise.AccountBalance.Entities.BillingTransaction mappedTransaction in mappedTransactions)
+            {
+                bool isInsertionSuccessful = billingTransactionDataManager.Insert(mappedTransaction, invoiceId, out transactionId);
+                if (!isInsertionSuccessful)
+                    areAllInsertionsSuccessful = false;
+            }
+
+            return areAllInsertionsSuccessful;
+        }
+
+        private IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> MapGeneratedInvoiceBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions)
+        {
+            return billingTransactions.MapRecords(x =>
+            {
+                var billingTransaction = new AccountBalance.Entities.BillingTransaction()
+                {
+                    AccountTypeId = x.AccountTypeId,
+                    AccountId = x.AccountId,
+                    TransactionTypeId = x.TransactionTypeId,
+                    Amount = x.Amount,
+                    CurrencyId = x.CurrencyId,
+                    TransactionTime = x.TransactionTime,
+                    Notes = x.Notes,
+                    Reference = x.Reference
+                };
+
+                if (x.Settings != null)
+                {
+                    billingTransaction.Settings = new AccountBalance.Entities.BillingTransactionSettings();
+
+                    if (x.Settings.UsageOverrides != null)
+                    {
+                        billingTransaction.Settings.UsageOverrides = new List<AccountBalance.Entities.BillingTransactionUsageOverride>();
+
+                        foreach (GeneratedInvoiceBillingTransactionUsageOverride usageOverride in x.Settings.UsageOverrides)
+                        {
+                            billingTransaction.Settings.UsageOverrides.Add(new AccountBalance.Entities.BillingTransactionUsageOverride()
+                            {
+                                TransactionTypeId = usageOverride.TransactionTypeId,
+                                FromDate = usageOverride.FromDate,
+                                ToDate = usageOverride.ToDate
+                            });
+                        }
+                    }
+                }
+
+                return billingTransaction;
+            });
+        }
+
         #endregion
 
         #region Mappers
@@ -228,9 +315,5 @@ namespace Vanrise.Invoice.Data.SQL
             return invoice;
         }
         #endregion
-
-
-
-       
     }
 }

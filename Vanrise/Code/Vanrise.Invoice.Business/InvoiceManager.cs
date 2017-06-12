@@ -89,12 +89,14 @@ namespace Vanrise.Invoice.Business
                     PartnerManager partnerManager = new PartnerManager();
                     var duePeriod = partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
 
-                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod);
+                    IEnumerable<GeneratedInvoiceBillingTransaction> billingTarnsactions;
+                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, out billingTarnsactions);
+
                     Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.TimeZoneId, offset, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
                     invoice.Note = currentInvocie.Note;
 
-                    if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, out insertedInvoiceId))
+                    if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, billingTarnsactions, out insertedInvoiceId))
                     {
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                         var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType);
@@ -157,7 +159,8 @@ namespace Vanrise.Invoice.Business
                 var duePeriod = partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
 
 
-                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod);
+                IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions;
+                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, out billingTransactions);
 
 
                 if (generatedInvoice.InvoiceDetails == null)
@@ -183,7 +186,7 @@ namespace Vanrise.Invoice.Business
 
                 invoice.SerialNumber = serialNumber;
 
-                if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, null, out insertedInvoiceId))
+                if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, null, billingTransactions, out insertedInvoiceId))
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType);
@@ -428,7 +431,7 @@ namespace Vanrise.Invoice.Business
             var invoice = GetInvoice(invoiceId);
             invoice.ThrowIfNull("invoice", invoice);
             return invoice.InvoiceTypeId;
-        
+
         }
 
         public IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices)
@@ -491,7 +494,7 @@ namespace Vanrise.Invoice.Business
             {
                 foreach (var field in dataRecordType.Fields)
                 {
-                    if(item.Field == InvoiceField.CustomField && item.CustomFieldName == field.Name)
+                    if (item.Field == InvoiceField.CustomField && item.CustomFieldName == field.Name)
                     {
                         var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
                         //Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
@@ -504,10 +507,10 @@ namespace Vanrise.Invoice.Business
                             Value = fieldValue
                         });
                     }
-                   
+
                 }
             }
-          
+
         }
         private static InvoiceDetail InvoiceDetailMapper2(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
         {
@@ -587,14 +590,12 @@ namespace Vanrise.Invoice.Business
             invoice.DueDate = issueDate.AddDays(duePeriod);
             return invoice;
         }
-        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod)
+        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions)
         {
             if (CheckInvoiceOverlaping(invoiceType.InvoiceTypeId, partnerId, fromDate, toDate, invoiceId))
-            {
                 throw new InvoiceGeneratorException("Invoices must not overlap.");
-            }
 
-            InvoiceGenerationContext context = new InvoiceGenerationContext
+            var context = new InvoiceGenerationContext
             {
                 CustomSectionPayload = customSectionPayload,
                 FromDate = fromDate,
@@ -605,10 +606,12 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = invoiceType.InvoiceTypeId,
                 DuePeriod = duePeriod
             };
-            var generator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
-            generator.GenerateInvoice(context);
-            return context.Invoice;
 
+            InvoiceGenerator generator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
+            generator.GenerateInvoice(context);
+
+            billingTransactions = context.BillingTransactions;
+            return context.Invoice;
         }
 
 
@@ -627,13 +630,13 @@ namespace Vanrise.Invoice.Business
             return dataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId, fromDate, toDate, invoiceId);
         }
 
-        private bool SaveInvoice(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoice, long? invoiceIdToDelete, out long invoiceId)
+        private bool SaveInvoice(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoice, long? invoiceIdToDelete, IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out long invoiceId)
         {
-            var itemSetNames = invoiceItemSets.Select(x => x.SetName);
-            InvoiceItemManager invoiceItemManager = new Business.InvoiceItemManager();
-            var itemSetNameStorageDic = invoiceItemManager.GetItemSetNamesByStorageConnectionString(invoice.InvoiceTypeId, itemSetNames);
-            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, out invoiceId);
+            IEnumerable<string> itemSetNames = invoiceItemSets.MapRecords(x => x.SetName);
+            Dictionary<string, List<string>> itemSetNameStorageDic = new InvoiceItemManager().GetItemSetNamesByStorageConnectionString(invoice.InvoiceTypeId, itemSetNames);
+
+            var dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, billingTransactions, out invoiceId);
         }
         #endregion
     }
