@@ -385,6 +385,9 @@
           <Parameter Name="BranchName">
             <Value>=Parameters!BranchName.Value</Value>
           </Parameter>
+          <Parameter Name="Email">
+            <Value>=Parameters!Email.Value</Value>
+          </Parameter>
         </Parameters>
         <Top>3.23611in</Top>
         <Left>0.05581in</Left>

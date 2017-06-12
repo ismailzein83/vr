@@ -8,7 +8,8 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common.Business;
 using Retail.BusinessEntity.Entities;
-
+using Retail.BusinessEntity.MainExtensions.AccountParts;
+using Vanrise.Common;
 namespace Retail.MultiNet.Business
 {
     public enum RDLCParameter
@@ -23,7 +24,9 @@ namespace Retail.MultiNet.Business
         Address = 7,
         Phone = 8,
         Fax = 9,
-        CompanyName = 10
+        CompanyName = 10,
+        Email = 11
+
     }
 
     public class MultiNetSubscriberPartnerSettings : InvoicePartnerManager
@@ -78,21 +81,30 @@ namespace Retail.MultiNet.Business
 
                     IAccountProfile accountProfile;
                     accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile);
+                    var companyProfile = accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", financialAccountData.Account.AccountId);
 
-                    if (accountProfile != null)
+                    if (companyProfile != null)
                     {
 
-                        if (accountProfile.Address != null)
+                        if (companyProfile.Address != null)
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, accountProfile.Address, true);
-                        if (accountProfile.PhoneNumbers != null)
+                        if (companyProfile.PhoneNumbers != null)
                         {
-                            string phoneNumbers = string.Join(",", accountProfile.PhoneNumbers);
+                            string phoneNumbers = string.Join(",", companyProfile.PhoneNumbers);
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, phoneNumbers, true);
                         }
                         if (accountProfile.Faxes != null)
                         {
                             string faxes = string.Join(",", accountProfile.Faxes);
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, faxes, true);
+                        }
+                        if (companyProfile.Contacts != null)
+                        {
+                            AccountCompanyContact accountCompanyContact;
+                            if (companyProfile.Contacts.TryGetValue("Main", out accountCompanyContact))
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, accountCompanyContact.Email, true);
+                            }
                         }
                     }
                     if (companySetting != null)

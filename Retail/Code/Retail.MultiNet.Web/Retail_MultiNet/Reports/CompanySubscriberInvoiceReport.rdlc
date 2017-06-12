@@ -1661,7 +1661,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                               <Value>=Fields!BranchName.Value</Value>
                             </Parameter>
                             <Parameter Name="Email">
-                              <Value>=Parameters!Address.Value</Value>
+                              <Value>=Parameters!Email.Value</Value>
                             </Parameter>
                             <Parameter Name="SalesTaxAmount">
                               <Value>=Round(Fields!SalesTaxAmount.Value,2)</Value>
@@ -2916,6 +2916,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Image">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Email">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
