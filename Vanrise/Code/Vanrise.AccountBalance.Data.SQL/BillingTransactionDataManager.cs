@@ -12,13 +12,15 @@ namespace Vanrise.AccountBalance.Data.SQL
 {
     public class BillingTransactionDataManager : BaseSQLDataManager, IBillingTransactionDataManager
     {
-        #region ctor/Local Variables
+        #region Fields / Constructors
+
         const string BillingTransactionByTime_TABLENAME = "BillingTransactionByTime";
 
         public BillingTransactionDataManager()
             : base(GetConnectionStringName("VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString"))
         {
         }
+
         #endregion
 
         #region Public Methods
@@ -119,6 +121,11 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
+            return Insert(billingTransaction, null, out billingTransactionId);
+        }
+
+        public bool Insert(BillingTransaction billingTransaction, long? invoiceId, out long billingTransactionId)
+        {
             object billingTransactionID;
 
             int affectedRecords = ExecuteNonQuerySP
@@ -134,7 +141,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 billingTransaction.Notes,
                 billingTransaction.Reference,
                 billingTransaction.SourceId,
-                (billingTransaction.Settings != null) ? Vanrise.Common.Serializer.Serialize(billingTransaction.Settings) : null
+                (billingTransaction.Settings != null) ? Vanrise.Common.Serializer.Serialize(billingTransaction.Settings) : null,
+                invoiceId
             );
 
             if (affectedRecords > 0)
@@ -155,7 +163,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             string transactionTypeIDs = null;
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
                 transactionTypeIDs = string.Join<Guid>(",", transactionTypeIds);
-         
+
             string accountTypeIDs = null;
             if (accountTypeIds != null && accountTypeIds.Count() > 0)
                 accountTypeIDs = string.Join<Guid>(",", accountTypeIds);
@@ -172,6 +180,23 @@ namespace Vanrise.AccountBalance.Data.SQL
                 transactionTypeIds = string.Join<Guid>(",", billingTransactionTypeIds);
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetForSynchronizerProcess]", BillingTransactionMapper, transactionTypeIds, accountTypeId);
         }
+
+        public bool Insert(long invoiceId, IEnumerable<BillingTransaction> billingTransactions)
+        {
+            bool areAllInsertionsSuccessful = true;
+
+            foreach (BillingTransaction billingTransaction in billingTransactions)
+            {
+                billingTransaction.CreatedByInvoiceId = invoiceId;
+                long billingTransactionId;
+
+                if (!Insert(billingTransaction, out billingTransactionId))
+                    areAllInsertionsSuccessful = false;
+            }
+
+            return areAllInsertionsSuccessful;
+        }
+
         #endregion
 
         #region Mappers
@@ -203,12 +228,12 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return new BillingTransactionMetaData
         {
-                AccountId = reader["AccountID"] as string,
-                Amount = GetReaderValue<Decimal>(reader, "Amount"),
-                CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
-                TransactionTime = GetReaderValue<DateTime>(reader, "TransactionTime"),
-                TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
-            };
+            AccountId = reader["AccountID"] as string,
+            Amount = GetReaderValue<Decimal>(reader, "Amount"),
+            CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
+            TransactionTime = GetReaderValue<DateTime>(reader, "TransactionTime"),
+            TransactionTypeId = GetReaderValue<Guid>(reader, "TransactionTypeID"),
+        };
         }
         #endregion
     }
