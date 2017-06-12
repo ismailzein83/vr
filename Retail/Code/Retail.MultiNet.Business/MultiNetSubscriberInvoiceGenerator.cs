@@ -132,7 +132,7 @@ namespace Retail.MultiNet.Business
             BranchSummary branchSummary = null;
 
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetRecord(account.AccountId);
-            if(summaryItems != null)
+            if (summaryItems != null && summaryItems.Count > 0)
             {
                 branchSummary = new BranchSummary();
                 decimal saleAmount = 0;
@@ -237,7 +237,7 @@ namespace Retail.MultiNet.Business
                 multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
 
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetRecord(accountId);
-            if (summaryItems != null)
+            if (summaryItems != null && summaryItems.Count > 0)
             {
                 GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
                 generatedSummaryItemSet.SetName = string.Format("BranchChargeableItem_{0}", accountId);
