@@ -1,4 +1,4 @@
-﻿create PROCEDURE [VR_AccountBalance].sp_BillingTransaction_GetByPeriod
+﻿CREATE PROCEDURE [VR_AccountBalance].sp_BillingTransaction_GetByPeriod
 	@AccountTypeIds varchar(max) = NULL,
 	@AccountsIds varchar(max) = NULL,
 	@TransactionTypeIds varchar(max),
@@ -25,7 +25,7 @@ BEGIN
 		select Convert(uniqueidentifier, ParsedString) from [VR_AccountBalance].[ParseStringList](@AccountTypeIds)
 
 
-		SELECT	bt.AccountID,bt.TransactionTypeID,bt.CurrencyId,bt.Amount,bt.TransactionTime
+		SELECT		bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
 		
         WHERE	(@AccountsIds  IS NULL or bt.AccountID IN (select AccountID from @AccountsIdsTable))
