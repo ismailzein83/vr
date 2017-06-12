@@ -103,19 +103,11 @@ namespace Vanrise.DataParser.Business
         {
             _OnRecordParsed = onRecordParsed;
             _parsedRecords = new Dictionary<string, List<FldDictParsedRecord>>();
-        }        
+        }
         public IDataParserInput Input
         {
             get;
             set;
-        }
-        public ParsedRecord CreateRecord(string recordType)
-        {
-            FldDictParsedRecord parsedRecord = new FldDictParsedRecord
-            {
-                RecordName = recordType
-            };
-            return parsedRecord;
         }
         public void OnRecordParsed(ParsedRecord parsedRecord)
         {
@@ -124,6 +116,17 @@ namespace Vanrise.DataParser.Business
             _parsedRecords.GetOrCreateItem(fldParsedRecord.RecordName, () => new List<FldDictParsedRecord>()).Add(fldParsedRecord);
 
             _OnRecordParsed(parsedRecord);
+        }
+
+
+        public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
+        {
+            FldDictParsedRecord parsedRecord = new FldDictParsedRecord
+            {
+                RecordName = recordType,
+                TempFieldNames = tempFieldNames
+            };
+            return parsedRecord;
         }
     }
 }

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeFieldsParser.cs" />
     <Compile Include="HexTLV2\HexTLVFieldParser.cs" />
     <Compile Include="HexTLV2\HexTLVFieldParserCollection.cs" />
     <Compile Include="HexTLV2\HexTLVRecordParser.cs" />

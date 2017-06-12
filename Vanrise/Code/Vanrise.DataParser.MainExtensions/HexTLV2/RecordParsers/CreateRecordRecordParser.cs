@@ -17,14 +17,25 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
         public HexTLVFieldParserCollection FieldParsers { get; set; }
 
         public List<ParsedRecordFieldConstantValue> FieldConstantValues { get; set; }
-
+        public List<CompositeFieldsParser> CompositeFieldsParsers { get; set; }
+        public HashSet<string> TempFieldsNames { get; set; }
         public override void Execute(IHexTLVRecordParserContext context)
         {
-            ParsedRecord parsedRecord = context.CreateRecord(this.RecordType);
+            ParsedRecord parsedRecord = context.CreateRecord(this.RecordType, this.TempFieldsNames);
 
             if (this.FieldParsers != null)
                 HexTLVHelper.ExecuteFieldParsers(this.FieldParsers, parsedRecord, context.RecordStream);
 
+            if (this.CompositeFieldsParsers != null)
+            {
+                foreach (var compositeFieldsParser in this.CompositeFieldsParsers)
+                {
+                    compositeFieldsParser.Execute(new CompositeFieldsParserContext
+                    {
+                        Record = parsedRecord
+                    });
+                }
+            }
             if (this.FieldConstantValues != null)
             {
                 foreach (var fldConstantValue in this.FieldConstantValues)
@@ -33,6 +44,15 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
                 }
             }
             context.OnRecordParsed(parsedRecord);
+        }
+    }
+
+    public class CompositeFieldsParserContext : ICompositeFieldsParserContext
+    {
+        public ParsedRecord Record
+        {
+            get;
+            set;
         }
     }
 }

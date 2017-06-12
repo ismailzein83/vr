@@ -92,11 +92,6 @@ namespace Vanrise.DataParser.Business
                 get { return _recordStream; }
             }
 
-            public ParsedRecord CreateRecord(string recordType)
-            {
-                return _parentContext.CreateRecord(recordType);
-            }
-
             public void OnRecordParsed(ParsedRecord parsedRecord)
             {
                 _parentContext.OnRecordParsed(parsedRecord);
@@ -106,6 +101,12 @@ namespace Vanrise.DataParser.Business
             public HexTLVRecordParser GetParserTemplate(Guid templateId)
             {
                 return _parentContext.GetParserTemplate(templateId);
+            }
+
+
+            public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
+            {
+                return _parentContext.CreateRecord(recordType, tempFieldNames);
             }
         }
 

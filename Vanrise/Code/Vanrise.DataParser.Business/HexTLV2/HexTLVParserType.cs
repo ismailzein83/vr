@@ -27,7 +27,7 @@ namespace Vanrise.DataParser.Business
         }
 
         #region Private Classes
-        
+
         private class HexTLVRecordParserContext : IHexTLVRecordParserContext
         {
             Stream _recordStream;
@@ -48,10 +48,6 @@ namespace Vanrise.DataParser.Business
                 get { return _recordStream; }
             }
 
-            public ParsedRecord CreateRecord(string recordType)
-            {
-                return _parserTypeContext.CreateRecord(recordType);
-            }
 
             public void OnRecordParsed(ParsedRecord parsedRecord)
             {
@@ -66,8 +62,14 @@ namespace Vanrise.DataParser.Business
                 recordParser.ThrowIfNull("recordParser", templateId);
                 return recordParser;
             }
+
+
+            public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
+            {
+                return _parserTypeContext.CreateRecord(recordType, tempFieldNames);
+            }
         }
-        
+
         #endregion
     }
 }

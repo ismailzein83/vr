@@ -23,7 +23,7 @@ namespace Vanrise.DataParser.Entities
     {
         Stream RecordStream { get; }
 
-        ParsedRecord CreateRecord(string recordType);
+        ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames);
 
         void OnRecordParsed(ParsedRecord parsedRecord);
 

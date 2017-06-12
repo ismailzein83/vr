@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeFieldParsers\DateTimeCompositeParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\BoolFieldParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\DateTimeParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\HexaParser.cs" />
