@@ -81,7 +81,9 @@ namespace Retail.MultiNet.Business
             if (financialAccountData.Account.TypeId == this._branchTypeId)
             {
                var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.GeneratedToDate, _branchTypeId);
-               branchesSummary.Add(branchSummary);
+               if (branchSummary != null)
+                   branchesSummary.Add(branchSummary);
+                branchesSummary.Add(branchSummary);
             }
             else if (financialAccountData.Account.TypeId == this._companyTypeId)
             {
@@ -89,17 +91,27 @@ namespace Retail.MultiNet.Business
                 foreach(var branchAccount in childAccounts)
                 {
                     var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.GeneratedToDate, branchAccount.TypeId);
-                    branchesSummary.Add(branchSummary);
+                    if (branchSummary != null)
+                     branchesSummary.Add(branchSummary);
                 }
-              BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
+                if (branchesSummary .Count > 0)
+                {
+                    BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
+                }
             }
-            InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account, multiNetInvoiceGeneratorContext.FinancialAccount.TypeId);
-
-            context.Invoice = new GeneratedInvoice
+            if(branchesSummary.Count > 0)
             {
-                InvoiceDetails = retailSubscriberInvoiceDetails,
-                InvoiceItemSets = multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets,
-            };
+                InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account, multiNetInvoiceGeneratorContext.FinancialAccount.TypeId);
+               
+                context.Invoice = new GeneratedInvoice
+                {
+                    InvoiceDetails = retailSubscriberInvoiceDetails,
+                    InvoiceItemSets = multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets,
+                };
+            }else
+            {
+                throw new InvoiceGeneratorException("No data available between the selected period.");
+            }
         }
 
         #region Build Branch Summary
@@ -107,42 +119,51 @@ namespace Retail.MultiNet.Business
         {
 
             BuildTrafficData(multiNetInvoiceGeneratorContext, account, currencyId, fromDate, toDate, branchTypeId);
-            AddRecurringChargeToBranchSummary(multiNetInvoiceGeneratorContext.SummaryItemsByBranch, account, currencyId, fromDate, toDate);
-            BuildGeneratedBranchItemSummaryItemSet(multiNetInvoiceGeneratorContext, account.AccountId);
-            return BuildBranchSummary(multiNetInvoiceGeneratorContext, account, currencyId);
-
+            AddRecurringChargeToBranchSummary(multiNetInvoiceGeneratorContext, account, currencyId, fromDate, toDate);
+            if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch != null && multiNetInvoiceGeneratorContext.SummaryItemsByBranch.Count > 0)
+            {
+                BuildGeneratedBranchItemSummaryItemSet(multiNetInvoiceGeneratorContext, account.AccountId);
+                return BuildBranchSummary(multiNetInvoiceGeneratorContext, account, currencyId);
+            }
+            return null;
         }
         private  BranchSummary  BuildBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account,int currencyId )
         {
-            BranchSummary branchSummary = new BranchSummary();
+            BranchSummary branchSummary = null;
+
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetRecord(account.AccountId);
-            decimal saleAmount = 0;
-            decimal whAmount = 0;
-            foreach (var summaryItem in summaryItems)
+            if(summaryItems != null)
             {
-                branchSummary.Quantity += summaryItem.Quantity;
-                branchSummary.CurrentCharges += summaryItem.NetAmount;
-                if (this._salesTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
-                    saleAmount += summaryItem.NetAmount;
-                if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
-                    whAmount += summaryItem.NetAmount;
+                branchSummary = new BranchSummary();
+                decimal saleAmount = 0;
+                decimal whAmount = 0;
+                foreach (var summaryItem in summaryItems)
+                {
+                    branchSummary.Quantity += summaryItem.Quantity;
+                    branchSummary.CurrentCharges += summaryItem.NetAmount;
+                    if (this._salesTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
+                        saleAmount += summaryItem.NetAmount;
+                    if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
+                        whAmount += summaryItem.NetAmount;
+                }
+                decimal whAmountSaleTaxPercentage = 0;
+                whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
+
+                decimal saleTaxPercentage = 0;
+                branchSummary.SalesTaxAmount = GetSaleTaxAmount(account, saleAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out saleTaxPercentage);
+                branchSummary.SalesTax = saleTaxPercentage;
+
+                decimal whTaxPercentage = 0;
+                branchSummary.WHTaxAmount = GetWHTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whTaxPercentage);
+                branchSummary.WHTax = whTaxPercentage;
+
+                branchSummary.TotalCurrentCharges = branchSummary.CurrentCharges + branchSummary.WHTaxAmount + branchSummary.SalesTaxAmount;
+
+                branchSummary.CurrencyId = currencyId;
+                branchSummary.AccountId = account.AccountId;
             }
-            decimal whAmountSaleTaxPercentage = 0;
-            whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
-
-            decimal saleTaxPercentage = 0;
-            branchSummary.SalesTaxAmount = GetSaleTaxAmount(account, saleAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out saleTaxPercentage);
-            branchSummary.SalesTax = saleTaxPercentage;
-
-            decimal whTaxPercentage = 0;
-            branchSummary.WHTaxAmount = GetWHTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whTaxPercentage);
-            branchSummary.WHTax = whTaxPercentage;
-
-            branchSummary.TotalCurrentCharges = branchSummary.CurrentCharges + branchSummary.WHTaxAmount + branchSummary.SalesTaxAmount;
-           
-            branchSummary.CurrencyId = currencyId;
-            branchSummary.AccountId = account.AccountId;
             return branchSummary;
+
         }
         private void BuildGeneratedBranchSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext,List<BranchSummary> branchesSummaries)
         {
@@ -166,45 +187,46 @@ namespace Retail.MultiNet.Business
         private void BuildTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
         {
             LoadTrafficData(multiNetInvoiceGeneratorContext, account.AccountId, fromDate, toDate, currencyId, branchTypeId);
-
-            BranchSummaryItem callAggregationSummary = new BranchSummaryItem {
-                AccountId = account.AccountId
-            };
-            BranchSummaryItem outgoingCallsSummary = new BranchSummaryItem
-            {
-                AccountId = account.AccountId
-            };
-            Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier = new Dictionary<string, UsageSummary>();
             var billingSummaries = multiNetInvoiceGeneratorContext.BillingSummariesByBranch.GetOrCreateItem(account.AccountId);
-            foreach (var billingSummary in billingSummaries)
+            if (billingSummaries != null && billingSummaries.Count > 0)
             {
-                string usageDescription = null;
-                string subItemIdentifier = null;
-                switch (billingSummary.TrafficDirection)
+                Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier = new Dictionary<string, UsageSummary>();
+                BranchSummaryItem callAggregationSummary = new BranchSummaryItem
                 {
-                    case TrafficDirection.InComming:
-                        ModifySummaryItem(callAggregationSummary, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, this._inComingChargeableEntity);
-                        subItemIdentifier = GetSubItemIdentifier(account.AccountId,null);
-                        usageDescription = _genericLKUPManager.GetGenericLKUPItemName(this._inComingChargeableEntity);
-                        AddUsageSummary(usagesSummariesBySubItemIdentifier, account.AccountId,subItemIdentifier, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, usageDescription);
-                        break;
-                    case TrafficDirection.OutGoing:
-                        ModifySummaryItem(outgoingCallsSummary, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, this._outGoingChargeableEntity);
-                        subItemIdentifier = GetSubItemIdentifier(account.AccountId, billingSummary.ServiceTypeId);
-                        usageDescription = _serviceTypeManager.GetServiceTypeName(billingSummary.ServiceTypeId);
-                        AddUsageSummary(usagesSummariesBySubItemIdentifier,account.AccountId, subItemIdentifier, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, usageDescription);
-                        break;
+                    AccountId = account.AccountId
+                };
+                BranchSummaryItem outgoingCallsSummary = new BranchSummaryItem
+                {
+                    AccountId = account.AccountId
+                };
+                foreach (var billingSummary in billingSummaries)
+                {
+                    string usageDescription = null;
+                    string subItemIdentifier = null;
+                    switch (billingSummary.TrafficDirection)
+                    {
+                        case TrafficDirection.InComming:
+                            ModifySummaryItem(callAggregationSummary, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, this._inComingChargeableEntity);
+                            subItemIdentifier = GetSubItemIdentifier(account.AccountId, null);
+                            usageDescription = _genericLKUPManager.GetGenericLKUPItemName(this._inComingChargeableEntity);
+                            AddUsageSummary(usagesSummariesBySubItemIdentifier, account.AccountId, subItemIdentifier, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, usageDescription);
+                            break;
+                        case TrafficDirection.OutGoing:
+                            ModifySummaryItem(outgoingCallsSummary, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, this._outGoingChargeableEntity);
+                            subItemIdentifier = GetSubItemIdentifier(account.AccountId, billingSummary.ServiceTypeId);
+                            usageDescription = _serviceTypeManager.GetServiceTypeName(billingSummary.ServiceTypeId);
+                            AddUsageSummary(usagesSummariesBySubItemIdentifier, account.AccountId, subItemIdentifier, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, usageDescription);
+                            break;
+                    }
                 }
+                if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
+                    multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
+                var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
+                summaryItems.Add(callAggregationSummary);
+                summaryItems.Add(outgoingCallsSummary);
+                BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
+                LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, currencyId, fromDate, toDate, branchTypeId);
             }
-
-            if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
-                multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long,List<BranchSummaryItem>>();
-            var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
-            summaryItems.Add(callAggregationSummary);
-            summaryItems.Add(outgoingCallsSummary);            
-            BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
-            LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId,currencyId, fromDate, toDate, branchTypeId);
-
         }
     
         #region  Build Traffic Data
@@ -215,19 +237,22 @@ namespace Retail.MultiNet.Business
                 multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
 
             var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetRecord(accountId);
-            GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
-            generatedSummaryItemSet.SetName = string.Format("BranchChargeableItem_{0}", accountId);
-            generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
-
-            foreach (var summaryItem in summaryItems)
+            if (summaryItems != null)
             {
-                generatedSummaryItemSet.Items.Add(new GeneratedInvoiceItem
+                GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
+                generatedSummaryItemSet.SetName = string.Format("BranchChargeableItem_{0}", accountId);
+                generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
+
+                foreach (var summaryItem in summaryItems)
                 {
-                    Details = summaryItem,
-                    Name = ""
-                });
+                    generatedSummaryItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = summaryItem,
+                        Name = ""
+                    });
+                }
+                multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
             }
-            multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
         }
         private void BuildGeneratedUsageSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier,long accountId)
         {
@@ -254,36 +279,38 @@ namespace Retail.MultiNet.Business
             {
                 var cdrsBySubItemIdentifier = new Dictionary<string, List<MultiNetCDR>>();
                 var billingCDRs = multiNetInvoiceGeneratorContext.BillingCDRByBranch.GetRecord(accountId);
-                foreach (var billingCDR in billingCDRs)
+                if (billingCDRs != null && billingCDRs.Count > 0)
                 {
-
-                    MultiNetCDR multiNetCDR = new MultiNetCDR
+                    foreach (var billingCDR in billingCDRs)
                     {
-                        AttemptDateTime = billingCDR.AttemptDateTime,
-                        CalledNumber = billingCDR.CalledNumber,
-                        CallingNumber = billingCDR.CallingNumber,
-                        DurationInSeconds = billingCDR.DurationInSeconds,
-                        ZoneId = billingCDR.ZoneId,
-                        SaleCurrencyId= billingCDR.SaleCurrencyId
-                    };
-                    multiNetCDR.SaleAmount = multiNetCDR.SaleCurrencyId != currencyId ? _currencyExchangeRateManager.ConvertValueToCurrency(billingCDR.SaleAmount, multiNetCDR.SaleCurrencyId, currencyId, multiNetCDR.AttemptDateTime) : billingCDR.SaleAmount;
 
-                    string identifierName = null;
-                    switch (billingCDR.TrafficDirection)
-                    {
-                        case TrafficDirection.InComming:
-                            identifierName = GetSubItemIdentifier(accountId, null);
-                            break;
-                        case TrafficDirection.OutGoing:
-                            identifierName = GetSubItemIdentifier(accountId, billingCDR.ServiceTypeId); 
-                            break;
+                        MultiNetCDR multiNetCDR = new MultiNetCDR
+                        {
+                            AttemptDateTime = billingCDR.AttemptDateTime,
+                            CalledNumber = billingCDR.CalledNumber,
+                            CallingNumber = billingCDR.CallingNumber,
+                            DurationInSeconds = billingCDR.DurationInSeconds,
+                            ZoneId = billingCDR.ZoneId,
+                            SaleCurrencyId = billingCDR.SaleCurrencyId
+                        };
+                        multiNetCDR.SaleAmount = multiNetCDR.SaleCurrencyId != currencyId ? _currencyExchangeRateManager.ConvertValueToCurrency(billingCDR.SaleAmount, multiNetCDR.SaleCurrencyId, currencyId, multiNetCDR.AttemptDateTime) : billingCDR.SaleAmount;
+
+                        string identifierName = null;
+                        switch (billingCDR.TrafficDirection)
+                        {
+                            case TrafficDirection.InComming:
+                                identifierName = GetSubItemIdentifier(accountId, null);
+                                break;
+                            case TrafficDirection.OutGoing:
+                                identifierName = GetSubItemIdentifier(accountId, billingCDR.ServiceTypeId);
+                                break;
+                        }
+                        multiNetCDR.SubItemIdentifier = identifierName;
+                        List<MultiNetCDR> cdrs = cdrsBySubItemIdentifier.GetOrCreateItem(identifierName);
+                        cdrs.Add(multiNetCDR);
                     }
-                    multiNetCDR.SubItemIdentifier = identifierName;
-                    List<MultiNetCDR> cdrs = cdrsBySubItemIdentifier.GetOrCreateItem(identifierName);
-                    cdrs.Add(multiNetCDR);
+                    BuildGeneratedUsageCDRsItemSet(multiNetInvoiceGeneratorContext, cdrsBySubItemIdentifier);
                 }
-                BuildGeneratedUsageCDRsItemSet(multiNetInvoiceGeneratorContext, cdrsBySubItemIdentifier);
-
             }
         }
 
@@ -432,13 +459,17 @@ namespace Retail.MultiNet.Business
 
         #endregion
        
-        private void AddRecurringChargeToBranchSummary(Dictionary<long,List<BranchSummaryItem>> branchSummaryItemSet, Account account, int currencyId, DateTime fromDate, DateTime toDate)
+        private void AddRecurringChargeToBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate)
         {
+           
             var accountPackages = _accountPackageManager.GetAccountPackagesByAccountId(account.AccountId);
             List<int> accountPackagesIds = new List<int>();
-            if (accountPackages != null)
+            if (accountPackages != null && accountPackages.Count > 0)
             {
-                var billingSummaryItems = branchSummaryItemSet.GetOrCreateItem(account.AccountId);
+                if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
+                    multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
+
+                var billingSummaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
                 RecurringChargeManager recurringChargeManager = new RecurringChargeManager();
                 PackageDefinitionManager packageDefinitionManager = new PackageDefinitionManager();
                 foreach (var accountPackage in accountPackages)
