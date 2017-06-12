@@ -35,6 +35,15 @@
             }
             return normalPrecision;
         }
+        function getLongPrecision() {
+            var longPrecision;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "LongPrecision", "Name");
+                if (param != null)
+                    longPrecision = param.Value;
+            }
+            return longPrecision;
+        }
         function getUIParameterValue(name) {
             var val;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -48,6 +57,7 @@
             loadUISettings: loadUISettings,
             getDefaultPageURl: getDefaultPageURl,
             getNormalPrecision: getNormalPrecision,
+            getLongPrecision: getLongPrecision,
             getUIParameterValue: getUIParameterValue,
             isUISettingsHasValue: isUISettingsHasValue
         });

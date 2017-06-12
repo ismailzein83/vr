@@ -48,7 +48,7 @@
                                        widthfactor="7"
                                        disablesorting="true">
                         <div style="text-align: right">
-                            <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
+                            <vr-label isvalue="true">{{dataItem.CurrentRate | number: viewScope.longPrecision }}</vr-label>
                             <span ng-if="dataItem.FutureNormalRate != null"
                                   style="cursor: pointer; text-decoration: underline"
                                   ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
