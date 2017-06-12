@@ -122,13 +122,24 @@ namespace Vanrise.Invoice.Business
                 }
                 return false;
             });
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(this.InvoiceTypeId);
+            InvoiceItemAdditionalFieldsContext context = new InvoiceItemAdditionalFieldsContext
+            {
+                InvoiceType = invoiceType
+            };
+
             foreach (var generatedInvoiceItem in generatedInvoiceItems)
             {
+              
                 foreach (var item in generatedInvoiceItem.Items)
                 {
+                    var invoiceItemWithAdditionalFields = item.Details as IInvoiceItemAdditionalFields;
+                    if (invoiceItemWithAdditionalFields != null)
+                        invoiceItemWithAdditionalFields.FillAdditionalFields(context);
                     invoiceItems.Add(new InvoiceItem
                     {
-                        Details = item.Details,
+                        Details = invoiceItemWithAdditionalFields,
                         ItemSetName = generatedInvoiceItem.SetName,
                         Name = item.Name,
                     });
