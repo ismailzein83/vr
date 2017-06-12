@@ -67,7 +67,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
 
-            MaximumRate = new BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
+            MaximumRate = new BusinessEntity.Business.ConfigManager().GetPurchaseAreaMaximumRate();
         }
         public int PriceListCurrencyId
         {
