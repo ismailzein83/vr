@@ -363,10 +363,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchChargeableItemDetails</DataSetName>
-        <Top>0.9861in</Top>
+        <Top>1.30555in</Top>
         <Left>0.05581in</Left>
         <Height>0.75in</Height>
-        <Width>7.60646in</Width>
+        <Width>7.60645in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -386,7 +386,7 @@
             <Value>=Parameters!BranchName.Value</Value>
           </Parameter>
         </Parameters>
-        <Top>2.91666in</Top>
+        <Top>3.23611in</Top>
         <Left>0.05581in</Left>
         <Height>0.39584in</Height>
         <Width>7.60646in</Width>
@@ -717,10 +717,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BranchChargeableItemDetails</DataSetName>
-        <Top>1.8125in</Top>
+        <Top>2.13195in</Top>
         <Left>0.05581in</Left>
         <Height>1in</Height>
-        <Width>7.60646in</Width>
+        <Width>7.60645in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -743,7 +743,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>0.42584in</Top>
+        <Top>0.74529in</Top>
         <Left>0.05581in</Left>
         <Height>0.25in</Height>
         <Width>7.60646in</Width>
@@ -776,7 +776,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>0.10639in</Top>
+        <Top>0.42584in</Top>
         <Left>0.05581in</Left>
         <Height>0.25in</Height>
         <Width>7.60646in</Width>
@@ -792,11 +792,41 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="Textbox6">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value />
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox6</rd:DefaultName>
+        <Top>0.14649cm</Top>
+        <Left>0.14176cm</Left>
+        <Height>0.75875cm</Height>
+        <Width>19.32038cm</Width>
+        <ZIndex>5</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>8.71356cm</Height>
+    <Height>9.56023cm</Height>
     <Style />
   </Body>
-  <Width>19.54588cm</Width>
+  <Width>19.67817cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
