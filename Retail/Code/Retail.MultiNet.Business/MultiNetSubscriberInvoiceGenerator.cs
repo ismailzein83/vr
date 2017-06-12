@@ -69,10 +69,10 @@ namespace Retail.MultiNet.Business
         {
 
             var financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-            //if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
-            //{
-            //    throw new InvoiceGeneratorException("From date and To date should be within the effective date of financial account.");
-            //}
+            if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
+            {
+                throw new InvoiceGeneratorException("From date and To date should be within the effective date of financial account.");
+            }
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
             MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext = new MultiNetInvoiceGeneratorContext();
             multiNetInvoiceGeneratorContext.IssueDate = context.IssueDate;
