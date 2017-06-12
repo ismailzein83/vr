@@ -12,20 +12,31 @@ namespace Vanrise.DataParser.Entities
         public FldDictParsedRecord()
         {
             this.FieldValues = new Dictionary<string, object>();
+            this.TempFieldValues = new Dictionary<string, object>();
         }
         public string RecordName { get; set; }
         public Dictionary<string, Object> FieldValues { get; set; }
 
+        public HashSet<string> TempFieldNames { get; set; }
+
+        public Dictionary<string, Object> TempFieldValues { get; set; }
+
         public override void SetFieldValue(string fieldName, object value)
         {
-            this.FieldValues.GetOrCreateItem(fieldName);
-            this.FieldValues[fieldName] = value;
+            Dictionary<string, Object> fieldValues = this.TempFieldNames != null && this.TempFieldNames.Contains(fieldName) ? this.TempFieldValues : this.FieldValues;
+
+            if (fieldValues.ContainsKey(fieldName))
+                fieldValues[fieldName] = value;
+            else
+                fieldValues.Add(fieldName, value);
         }
 
         public override object GetFieldValue(string fieldName)
         {
+            Dictionary<string, Object> fieldValues = this.TempFieldNames != null && this.TempFieldNames.Contains(fieldName) ? this.TempFieldValues : this.FieldValues;
+            
             Object value;
-            FieldValues.TryGetValue(fieldName, out value);
+            fieldValues.TryGetValue(fieldName, out value);
             return value;
         }
     }
