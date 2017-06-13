@@ -66,16 +66,18 @@ namespace TOne.WhS.Deal.Business
             return _dataManager.GetDealEvaluatorBeginDate(lastTimestamp);
         }
 
-        public List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate)
+        public List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroup> dealZoneGroups)
         {
-            return _dataManager.GetDealZoneGroupDataBeforeDate(isSale, beforeDate);
+            if (dealZoneGroups == null || dealZoneGroups.Count > 0)
+                return null;
+            return _dataManager.GetDealZoneGroupDataBeforeDate(isSale, beforeDate, dealZoneGroups);
         }
 
-        public List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTierRate> dealZoneGroupTierData)
+        public List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTier> dealZoneGroupTiers)
         {
-            if (dealZoneGroupTierData == null || dealZoneGroupTierData.Count > 0)
+            if (dealZoneGroupTiers == null || dealZoneGroupTiers.Count > 0)
                 return null;
-            return _dataManager.GetDealZoneGroupTierDataBeforeDate(isSale, beforeDate, dealZoneGroupTierData);
+            return _dataManager.GetDealZoneGroupTierDataBeforeDate(isSale, beforeDate, dealZoneGroupTiers);
         }
 
         #endregion

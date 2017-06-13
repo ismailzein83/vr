@@ -21,8 +21,8 @@ namespace TOne.WhS.Deal.Data
 
         DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp);
 
-        List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate);
+        List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroup> dealZoneGroups);
 
-        List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTierRate> dealZoneGroupTierRates);
+        List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTier> dealZoneGroupTiers);
     }
 }

@@ -72,14 +72,28 @@ namespace TOne.WhS.Deal.Data.SQL
             return (DateTime?)ExecuteScalarSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealEvaluatorBeginDate]", lastTimestamp);
         }
 
-        public List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate)
+        public List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroup> dealZoneGroups)
         {
-            return GetItemsSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealZoneGroupDataBeforeDate]", DealZoneGroupDataMapper, beforeDate, isSale);
+            DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
+            return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealZoneGroupDataBeforeDate]", DealZoneGroupDataMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@BeforeDate", SqlDbType.DateTime);
+                dtPrm.Value = beforeDate;
+                cmd.Parameters.Add(dtPrm);
+
+                dtPrm = new SqlParameter("@IsSale", SqlDbType.Bit);
+                dtPrm.Value = isSale;
+                cmd.Parameters.Add(dtPrm);
+
+                dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
+                dtPrm.Value = dtDealZoneGroup;
+                cmd.Parameters.Add(dtPrm);
+            });
         }
 
-        public List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTierRate> dealZoneGroupTierRates)
+        public List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTier> dealZoneGroupTiers)
         {
-            DataTable dtDealZoneGroupTier = BuildDealZoneGroupTierTable(dealZoneGroupTierRates);
+            DataTable dtDealZoneGroupTier = BuildDealZoneGroupTierTable(dealZoneGroupTiers);
             return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealZoneGroupTierDataBeforeDate]", DealZoneGroupTierDataMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@BeforeDate", SqlDbType.DateTime);
@@ -158,16 +172,16 @@ namespace TOne.WhS.Deal.Data.SQL
             return dtDealZoneGroup;
         }
 
-        DataTable BuildDealZoneGroupTierTable(List<DealZoneGroupTierRate> dealZoneGroupTierRates)
+        DataTable BuildDealZoneGroupTierTable(List<DealZoneGroupTier> dealZoneGroupTiers)
         {
             DataTable dtDealZoneGroupTier = GetDealZoneGroupTierTable();
             dtDealZoneGroupTier.BeginLoadData();
-            foreach (var dealZoneGroupTierRate in dealZoneGroupTierRates)
+            foreach (var dealZoneGroupTier in dealZoneGroupTiers)
             {
                 DataRow dr = dtDealZoneGroupTier.NewRow();
-                dr["DealId"] = dealZoneGroupTierRate.DealId;
-                dr["ZoneGroupNb"] = dealZoneGroupTierRate.ZoneGroupNb;
-                dr["TierNb"] = dealZoneGroupTierRate.TierNb;
+                dr["DealId"] = dealZoneGroupTier.DealId;
+                dr["ZoneGroupNb"] = dealZoneGroupTier.ZoneGroupNb;
+                dr["TierNb"] = dealZoneGroupTier.TierNb;
                 dtDealZoneGroupTier.Rows.Add(dr);
             }
             dtDealZoneGroupTier.EndLoadData();
