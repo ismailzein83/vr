@@ -219,7 +219,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 RoutingProductId = GetReaderValue<int>(reader, "RoutingProductID"),
-                CurrencyId = GetReaderValue<int>(reader, "CurrencyID")
+                CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
+                ZoneId = GetReaderValue<long?>(reader, "ZoneID")
             };
         }
         SalePricelistRPChange SalePricelistRPChangeMapper(IDataReader reader)

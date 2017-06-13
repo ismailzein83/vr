@@ -231,7 +231,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 if (!zoneToClose.EED.HasValue)
                     throw new Exception(string.Format("Closing zone {0} without EED", zoneToClose.ZoneName));
 
-                ExistingZone existingZoneAtCloureTime = null;
+                ExistingZone existingZoneAtClosureTime = null;
                 DateTime closureDate = zoneToClose.EED.Value;
 
                 foreach (var existingZone in zoneToClose.ExistingZones)
@@ -240,15 +240,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     //This way no existing zones will be considered as effective at closure time. Comparing with Original EED that should be null will get us results.
                     if (existingZone.BED <= closureDate && existingZone.OriginalEED.VRGreaterThan(closureDate))
                     {
-                        existingZoneAtCloureTime = existingZone;
+                        existingZoneAtClosureTime = existingZone;
                         break;
                     }
                 }
 
-                if (existingZoneAtCloureTime == null)
+                if (existingZoneAtClosureTime == null)
                     throw new DataIntegrityValidationException(string.Format("Could not find existing zone at closure time for Zone {0}", zoneToClose.ZoneName));
 
-                var closedRate = lastRateNoCacheLocator.GetCustomerZoneRate(customerId, sellingProductId, existingZoneAtCloureTime.ZoneId);
+                var closedRate = lastRateNoCacheLocator.GetCustomerZoneRate(customerId, sellingProductId, existingZoneAtClosureTime.ZoneId);
                 if (closedRate == null)
                     throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneToClose.ZoneName));
 
@@ -256,6 +256,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     CountryId = countryId,
                     ZoneName = zoneToClose.ZoneName,
+                    ZoneId = existingZoneAtClosureTime.ZoneId,
                     Rate = closedRate.Rate.Rate,
                     ChangeType = RateChangeType.Deleted,
                     BED = closedRate.Rate.BED, //TODO: The same gap in Rate Plan when it is a selling product rate the BED is not correclt the same as the one on customer side
