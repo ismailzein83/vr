@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculateBeginDate.cs" />
+    <Compile Include="CheckRetroActiveBeforeDate.cs" />
     <Compile Include="CompareCurrentToExpectedDealRecords.cs" />
     <Compile Include="LoadDealBillingSummaryRecords.cs" />
     <Compile Include="PrepareExpectedDealBillingSummaryRecords.cs" />

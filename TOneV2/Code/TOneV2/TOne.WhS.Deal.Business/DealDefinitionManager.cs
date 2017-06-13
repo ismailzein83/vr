@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Business
             Func<DealDefinition, bool> filterExpression = (dealDefinition) =>
             {
                 if (filter == null)
-                    return true; 
+                    return true;
 
                 if (filter.IncludedDealDefinitionIds != null && !filter.IncludedDealDefinitionIds.Contains(dealDefinition.DealId))
                     return false;
@@ -50,7 +50,7 @@ namespace TOne.WhS.Deal.Business
             record.OrigSaleExtraChargeValue = record.SaleExtraChargeValue;
             record.OrigSaleDurationInSeconds = record.SaleDurationInSeconds;
             record.OrigSaleCurrencyId = record.SaleCurrencyId;
-            
+
             DealSaleZoneGroup dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
             if (dealSaleZoneGroup != null)
             {
@@ -121,6 +121,20 @@ namespace TOne.WhS.Deal.Business
 
             tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
             return dealZoneGroupTierDetails;
+        }
+
+        public int GetSaleRateTierNb(int dealId, int zoneGroupNb, int tierNb, int maxTierNb)
+        {
+            while (maxTierNb > tierNb)
+            {
+                DealZoneGroupTierDetails dealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, maxTierNb);
+                if (dealZoneGroupTierDetails != null && dealZoneGroupTierDetails.RetroActiveFromTierNumber.HasValue && dealZoneGroupTierDetails.RetroActiveFromTierNumber.Value <= tierNb)
+                    return dealZoneGroupTierDetails.TierNumber;
+
+                maxTierNb--;
+            }
+
+            return tierNb;
         }
 
         public void FillOrigSupplierValues(dynamic record)
@@ -203,6 +217,20 @@ namespace TOne.WhS.Deal.Business
 
             tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
             return dealZoneGroupTierDetails;
+        }
+
+        public int GetSupplierRateTierNb(int dealId, int zoneGroupNb, int tierNb, int maxTierNb)
+        {
+            while (maxTierNb > tierNb)
+            {
+                DealZoneGroupTierDetails dealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, maxTierNb);
+                if (dealZoneGroupTierDetails != null && dealZoneGroupTierDetails.RetroActiveFromTierNumber.HasValue && dealZoneGroupTierDetails.RetroActiveFromTierNumber.Value <= tierNb)
+                    return dealZoneGroupTierDetails.TierNumber;
+
+                maxTierNb--;
+            }
+
+            return tierNb;
         }
 
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()

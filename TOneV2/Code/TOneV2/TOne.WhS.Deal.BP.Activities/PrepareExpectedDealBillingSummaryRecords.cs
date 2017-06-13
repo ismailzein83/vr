@@ -37,8 +37,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override PrepareExpectedDealBillingSummaryRecordsOutput DoWorkWithResult(PrepareExpectedDealBillingSummaryRecordsInput inputArgument, AsyncActivityHandle handle)
         {
-            var expectedDealBillingSummaryRecordDict = new Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>>();
-            var expectedDealBillingSummaryRecordByZoneGroupTier = new Dictionary<DealZoneGroupTier, List<DealBillingSummary>>();
+            var expectedDealBillingSummaryRecordDict = new Dictionary<DealZoneGroupTier, List<DealBillingSummary>>();
 
             List<DealZoneGroup> existingDealZoneGroups = inputArgument.ExpectedBaseDealBillingSummaryRecords.Select(itm => new DealZoneGroup() { DealId = itm.Key.DealId, ZoneGroupNb = itm.Key.ZoneGroupNb }).ToList();
             List<DealZoneGroupData> dealZoneGroupData = new DealDetailedProgressManager().GetDealZoneGroupDataBeforeDate(inputArgument.IsSale, inputArgument.BeginDate, existingDealZoneGroups);
@@ -66,18 +65,18 @@ namespace TOne.WhS.Deal.BP.Activities
                         dealProgressData.ReachedDurationInSeconds = 0;
                         dealProgressData.TargetDurationInSeconds = firstDealZoneGroupTierDetails.VolumeInSeconds;
 
-                        BuildExpectedDealBillingSummaryRecords(inputArgument.IsSale, baseDealBillingSummary, dealProgressData, expectedDealBillingSummaryRecordByZoneGroupTier);
+                        BuildExpectedDealBillingSummaryRecords(inputArgument.IsSale, baseDealBillingSummary, dealProgressData, expectedDealBillingSummaryRecordDict);
                     }
                     else
                     {
-                        BuildExpectedDealBillingSummaryRecords(inputArgument.IsSale, baseDealBillingSummary, dealProgressData, expectedDealBillingSummaryRecordByZoneGroupTier);
+                        BuildExpectedDealBillingSummaryRecords(inputArgument.IsSale, baseDealBillingSummary, dealProgressData, expectedDealBillingSummaryRecordDict);
                     }
                 }
             }
 
             return new PrepareExpectedDealBillingSummaryRecordsOutput()
             {
-                ExpectedDealBillingSummaryRecords = expectedDealBillingSummaryRecordDict
+                ExpectedDealBillingSummaryRecords = BuildExpectedDealBillingSummaryRecordDict(expectedDealBillingSummaryRecordDict)
             };
         }
 
@@ -95,6 +94,8 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             this.ExpectedDealBillingSummaryRecords.Set(context, result.ExpectedDealBillingSummaryRecords);
         }
+
+        #region Private Methods
 
         private Dictionary<DealZoneGroup, DealProgressData> BuildDealProgressDataDict(bool isSale, List<DealZoneGroupData> dealZoneGroupData)
         {
@@ -140,7 +141,7 @@ namespace TOne.WhS.Deal.BP.Activities
         }
 
         private void BuildExpectedDealBillingSummaryRecords(bool isSale, BaseDealBillingSummary baseDealBillingSummary, DealProgressData dealProgressData,
-            Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordByZoneGroupTier)
+            Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordDict)
         {
             decimal remainingDurationInSec = baseDealBillingSummary.DurationInSeconds;
 
@@ -164,7 +165,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         DurationInSeconds = remainingDurationInSec,
                         IsSale = isSale
                     };
-                    AddToExpectedDealBillingSummaryRecordDict(dealBillingSummary, expectedDealBillingSummaryRecordByZoneGroupTier);
+                    AddToExpectedDealBillingSummaryRecordDict(dealBillingSummary, expectedDealBillingSummaryRecordDict);
 
                     //Editing DealProgressData memoryTable
                     dealProgressData.ReachedDurationInSeconds += remainingDurationInSec;
@@ -182,7 +183,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         DurationInSeconds = remainingTierDurationInSec,
                         IsSale = isSale
                     };
-                    AddToExpectedDealBillingSummaryRecordDict(dealBillingSummary, expectedDealBillingSummaryRecordByZoneGroupTier);
+                    AddToExpectedDealBillingSummaryRecordDict(dealBillingSummary, expectedDealBillingSummaryRecordDict);
 
                     remainingDurationInSec -= remainingTierDurationInSec;
 
@@ -195,7 +196,7 @@ namespace TOne.WhS.Deal.BP.Activities
                     }
                     else
                     {
-                        CheckNextTierRetroActive(baseDealBillingSummary, nextDealZoneGroupTierDetails, expectedDealBillingSummaryRecordByZoneGroupTier);
+                        CheckNextTierRetroActive(baseDealBillingSummary, nextDealZoneGroupTierDetails, expectedDealBillingSummaryRecordDict);
 
                         dealProgressData.CurrentTierNb = nextDealZoneGroupTierDetails.TierNumber;
                         dealProgressData.TargetDurationInSeconds = nextDealZoneGroupTierDetails.VolumeInSeconds;
@@ -205,7 +206,8 @@ namespace TOne.WhS.Deal.BP.Activities
             }
         }
 
-        private static void CheckNextTierRetroActive(BaseDealBillingSummary baseDealBillingSummary, DealZoneGroupTierDetails nextDealZoneGroupTierDetails, Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordByZoneGroupTier)
+        private static void CheckNextTierRetroActive(BaseDealBillingSummary baseDealBillingSummary, DealZoneGroupTierDetails nextDealZoneGroupTierDetails, 
+            Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordByZoneGroupTier)
         {
             if (nextDealZoneGroupTierDetails.RetroActiveFromTierNumber.HasValue)
             {
@@ -254,40 +256,55 @@ namespace TOne.WhS.Deal.BP.Activities
                 dealBillingSummaries.Add(dealBillingSummary);
             }
         }
-         
+
         private Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> BuildExpectedDealBillingSummaryRecordDict(Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordByZoneGroupTier)
         {
-            var expectedDealBillingSummaryRecordDict = new Dictionary<DealZoneGroupTierRate,Dictionary<DateTime,DealBillingSummary>>();
+            if (expectedDealBillingSummaryRecordByZoneGroupTier == null || expectedDealBillingSummaryRecordByZoneGroupTier.Count == 0)
+                return null;
 
-            //for(var itm in )
+            var expectedDealBillingSummaryRecordDict = new Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>>();
+
+            foreach (var kvp_dealBillingSummaryRecord in expectedDealBillingSummaryRecordByZoneGroupTier)
+            {
+                DealZoneGroupTier dealZoneGroupTier = kvp_dealBillingSummaryRecord.Key;
+
+                foreach (var dealBillingSummaryRecord in kvp_dealBillingSummaryRecord.Value)
+                {
+                    DealZoneGroupTierRate dealZoneGroupTierRate = new DealZoneGroupTierRate()
+                    {
+                        DealId = dealZoneGroupTier.DealId,
+                        ZoneGroupNb = dealZoneGroupTier.ZoneGroupNb,
+                        TierNb = dealBillingSummaryRecord.DealTierNb,
+                        RateTierNb = dealBillingSummaryRecord.DealRateTierNb,
+                    };
+
+                    Dictionary<DateTime, DealBillingSummary> dealBillingSummaryByBatchStart = expectedDealBillingSummaryRecordDict.GetOrCreateItem(dealZoneGroupTierRate);
+                    dealBillingSummaryByBatchStart.Add(dealBillingSummaryRecord.BatchStart, dealBillingSummaryRecord);
+                }
+            }
 
             return expectedDealBillingSummaryRecordDict;
-
-            //DealZoneGroupTierRate dealZoneGroupTierRate = new DealZoneGroupTierRate()
-            //{
-            //    DealId = dealBillingSummary.DealId,
-            //    ZoneGroupNb = dealBillingSummary.DealZoneGroupNb,
-            //    TierNb = dealBillingSummary.DealTierNb,
-            //    RateTierNb = dealBillingSummary.DealRateTierNb
-            //};
-
-            //Dictionary<DateTime, DealBillingSummary> dealBillingSummaryByBatchStart = expectedDealBillingSummaryRecordDict.GetOrCreateItem(dealZoneGroupTierRate);
-            //dealBillingSummaryByBatchStart.Add(dealBillingSummary.BatchStart, dealBillingSummary);
         }
-    }
 
-    public class DealProgressData
-    {
-        public int DealID { get; set; }
+        #endregion
 
-        public int ZoneGroupNb { get; set; }
+        #region Private Classes
 
-        public bool IsSale { get; set; }
+        private class DealProgressData
+        {
+            public int DealID { get; set; }
 
-        public int CurrentTierNb { get; set; }
+            public int ZoneGroupNb { get; set; }
 
-        public decimal ReachedDurationInSeconds { get; set; }
+            public bool IsSale { get; set; }
 
-        public decimal? TargetDurationInSeconds { get; set; }
+            public int CurrentTierNb { get; set; }
+
+            public decimal ReachedDurationInSeconds { get; set; }
+
+            public decimal? TargetDurationInSeconds { get; set; }
+        }
+
+        #endregion 
     }
 }

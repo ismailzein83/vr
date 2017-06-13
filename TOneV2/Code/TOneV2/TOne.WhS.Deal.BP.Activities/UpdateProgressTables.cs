@@ -37,7 +37,7 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             dealDetailedProgressManager.UpdateDealDetailedProgressTable(inputArgument.IsSale, inputArgument.BeginDate, inputArgument.CurrentDealBillingSummaryRecords);
-             
+
             DealProgressManager dealProgressManager = new DealProgressManager();
             HashSet<DealZoneGroup> existingDealZoneGroups = inputArgument.CurrentDealBillingSummaryRecords.Keys.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }).ToHashSet();
             Dictionary<DealZoneGroup, DealProgress> dealProgressByZoneGroup = dealProgressManager.GetDealProgresses(existingDealZoneGroups, inputArgument.IsSale);

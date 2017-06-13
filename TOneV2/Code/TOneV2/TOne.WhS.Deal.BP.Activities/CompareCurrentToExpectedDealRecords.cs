@@ -59,10 +59,10 @@ namespace TOne.WhS.Deal.BP.Activities
                 }
             }
 
-            dealReprocessInputManager.InsertDealReprocessInputs(itemsToAdd);
-
             if (itemsToAdd.Count == 0)
                 return null;
+
+            dealReprocessInputManager.InsertDealReprocessInputs(itemsToAdd);
 
             return new CompareCurrentToExpectedDealRecordsOutput()
             {
