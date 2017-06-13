@@ -1,0 +1,28 @@
+﻿<vr-section header="Company Definition">
+    <vr-columns width="1/3row" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
+                                                          onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
+                                                          selectedvalues="scopeModel.selectedAccountDefinition"
+                                                          customlabel="Account Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                    normal-col-num="4"
+                                    customlabel="Account Type"
+                                    isrequired="true" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+    </retail-be-accounttype-selector>
+    <vr-common-statusdefinition-selector on-ready="scopeModel.onInitialStatusDefinitionSelectorReady"
+                                         customlabel="Initial Status"
+                                         normal-col-num="4"
+                                         isrequired="true">
+    </vr-common-statusdefinition-selector>
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onFinancialDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Financial Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.columnName" label="Company ID Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>

@@ -18,7 +18,7 @@ namespace Retail.MultiNet.MainExtensions.Convertors
         public Guid AccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
         public Guid UserProfilePartDefinitionId { get; set; }
-        public string BrachIdColumnName { get; set; }
+        public string BranchIdColumnName { get; set; }
         public string SubscriberIdColumnName { get; set; }
 
         public override void Initialize(ITargetBEConvertorInitializeContext context)
@@ -30,12 +30,12 @@ namespace Retail.MultiNet.MainExtensions.Convertors
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             Dictionary<Int64, ITargetBE> maultiNetAccounts = new Dictionary<Int64, ITargetBE>();
             var accounts = context.InitializationData as Dictionary<string, Account>;
-            sourceBatch.Data.DefaultView.Sort = BrachIdColumnName;
+            sourceBatch.Data.DefaultView.Sort = BranchIdColumnName;
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 ITargetBE targetMultiNetAccount;
                 var sourceId = (Int64)row[SubscriberIdColumnName];
-                var parentId = (Int64)row[BrachIdColumnName];
+                var parentId = (Int64)row[BranchIdColumnName];
                 string accountName = row["SUB_SUBSCRIBERNAME"] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
