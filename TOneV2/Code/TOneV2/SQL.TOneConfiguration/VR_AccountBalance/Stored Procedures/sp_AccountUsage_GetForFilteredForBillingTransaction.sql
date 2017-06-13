@@ -32,7 +32,8 @@ BEGIN
 			au.OverriddenAmount,
 			au.CorrectionProcessID
 FROM	VR_AccountBalance.AccountUsage au WITH(NOLOCK) 
-WHERE	(@AccountIds  IS NULL OR AccountID in (SELECT AccountId FROM @AccountIdsTable))
+WHERE	isnull(au.IsOverridden, 0) = 0
+		and (@AccountIds  IS NULL OR AccountID in (SELECT AccountId FROM @AccountIdsTable))
 		AND (@TransactionTypeIds  IS NULL OR TransactionTypeID in (SELECT TransactionTypeId FROM @TransactionTypeIdsTable))
 		AND AccountTypeID = @AccountTypeID 
 		AND PeriodStart >= @FromTime

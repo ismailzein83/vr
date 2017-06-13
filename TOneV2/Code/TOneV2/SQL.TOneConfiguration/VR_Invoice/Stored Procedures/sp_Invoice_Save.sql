@@ -11,19 +11,11 @@
 	@DueDate datetime,
 	@Details nvarchar(MAX),
 	@Notes nvarchar(MAX),
-	@InvoiceIdToDelete bigint = Null,
 	@SourceID nvarchar(255),
 	@IsDraft bit,
 	@ID bigint out
 AS
 BEGIN
-	
-	If(@InvoiceIdToDelete IS NOT Null)
-	BEGIN
-		Update VR_Invoice.Invoice Set IsDeleted = 1
-		Where ID =@InvoiceIdToDelete;
-  	END
-
 	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,TimeZoneId,TimeZoneOffset,IssueDate,DueDate,Details,Notes, SourceId,IsDraft)
 	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@TimeZoneId,@TimeZoneOffset,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft)
 	SET @ID = @@Identity

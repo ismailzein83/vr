@@ -13,4 +13,5 @@ BEGIN
 	FROM VR_AccountBalance.AccountUsage with(nolock)
 	where AccountTypeID = @AccountTypeID 
 		  AND AccountId= @AccountId
+		  and isnull(IsOverridden, 0) = 0
 END

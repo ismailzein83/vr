@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [VR_AccountBalance].sp_BillingTransaction_GetByPeriod
+﻿CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_GetByPeriod]
 	@AccountTypeIds varchar(max) = NULL,
 	@AccountsIds varchar(max) = NULL,
 	@TransactionTypeIds varchar(max),
@@ -28,7 +28,8 @@ BEGIN
 		SELECT		bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
 		
-        WHERE	(@AccountsIds  IS NULL or bt.AccountID IN (select AccountID from @AccountsIdsTable))
+        WHERE	isnull(bt.IsDeleted, 0) = 0
+				and (@AccountsIds  IS NULL or bt.AccountID IN (select AccountID from @AccountsIdsTable))
 			    AND (@TransactionTypeIds  IS NULL OR bt.TransactionTypeID IN (select TransactionTypeID from @TransactionTypeIdsTable))
 				AND (@AccountTypeIds  IS NULL OR bt.AccountTypeID IN (select AccountTypeID from @AccountTypeIdsTable))
 				AND (ISNULL(bt.IsDeleted,0)=0)

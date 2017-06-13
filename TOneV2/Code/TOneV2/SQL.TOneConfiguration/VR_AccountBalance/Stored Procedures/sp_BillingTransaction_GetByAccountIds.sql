@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [VR_AccountBalance].sp_BillingTransaction_GetByAccountIds
+﻿CREATE PROCEDURE [VR_AccountBalance].[sp_BillingTransaction_GetByAccountIds]
 	@AccountTypeID uniqueidentifier,
 	@AccountsIds varchar(max) = NULL,
 	@TransactionTypeIds varchar(max)
@@ -21,8 +21,8 @@ BEGIN
 		SELECT	bt.AccountID,bt.TransactionTypeID,bt.CurrencyId,bt.Amount,bt.TransactionTime
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
 		
-        WHERE	
-				(@AccountsIds  IS NULL or bt.AccountID IN (select AccountID from @AccountsIdsTable))
+        WHERE	isnull(IsDeleted, 0) = 0
+				and (@AccountsIds  IS NULL or bt.AccountID IN (select AccountID from @AccountsIdsTable))
 			    AND (@TransactionTypeIds  IS NULL OR bt.TransactionTypeID IN (select TransactionTypeID from @TransactionTypeIdsTable))
 				AND (ISNULL(bt.IsDeleted,0)=0)
 				AND bt.AccountTypeID = @AccountTypeID

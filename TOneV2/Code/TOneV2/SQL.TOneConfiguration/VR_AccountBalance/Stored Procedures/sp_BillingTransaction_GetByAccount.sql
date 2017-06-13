@@ -11,6 +11,8 @@ AS
 BEGIN
 	SELECT	[ID],AccountID,AccountTypeID, TransactionTypeID,Amount,CurrencyId,TransactionTime,Notes,Reference,IsBalanceUpdated,ClosingPeriodId, SourceID, Settings, IsDeleted, IsSubtractedFromBalance
 	FROM VR_AccountBalance.BillingTransaction with(nolock)
-	where AccountTypeID = @AccountTypeID 
-		  AND AccountId= @AccountId
+	where isnull(IsDeleted, 0) = 0
+		and AccountTypeID = @AccountTypeID 
+		AND AccountId= @AccountId
+		  
 END

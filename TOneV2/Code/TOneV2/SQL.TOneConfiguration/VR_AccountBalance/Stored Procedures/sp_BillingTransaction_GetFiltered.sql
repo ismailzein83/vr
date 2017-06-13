@@ -23,7 +23,8 @@ BEGIN
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
 		
         WHERE	
-				 (@AccountsIds  is null or bt.AccountID in (select AccountID from @AccountsIdsTable))
+				 isnull(bt.IsDeleted, 0) = 0
+				 and (@AccountsIds  is null or bt.AccountID in (select AccountID from @AccountsIdsTable))
 				 and  (@TransactionTypeIds  is null or bt.TransactionTypeID in (select TransactionTypeID from @TransactionTypeIdsTable))
 				 and (bt.TransactionTime >= @FromTime)
 				 and (@ToTime is null or bt.TransactionTime <= @ToTime)

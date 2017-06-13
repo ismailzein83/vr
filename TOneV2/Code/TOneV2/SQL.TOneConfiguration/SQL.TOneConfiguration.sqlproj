@@ -640,6 +640,8 @@
     <Build Include="VR_AccountBalance\User Defined Types\TransactionAccountUsageQueryTable.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\AccountUsageOverrideTable.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByPeriod.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Delete.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_SetAsDeletedByInvoiceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
