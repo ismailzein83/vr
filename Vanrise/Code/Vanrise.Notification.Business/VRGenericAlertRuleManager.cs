@@ -18,8 +18,15 @@ namespace Vanrise.Notification.Business
         public VRAlertRule GetMatchRule(Guid ruleTypeId, GenericRuleTarget target)
         {
             var cachedPreparedData = GetCachedPreparedData(ruleTypeId);
-            AlertRuleAsGeneric matchGenericRule = GenericRuleManager<GenericRule>.GetMatchRule<AlertRuleAsGeneric>(cachedPreparedData.RuleTree, cachedPreparedData.CriteriaEvaluationInfos, target);
-            return matchGenericRule != null ? matchGenericRule.OriginalAlertRule : null;
+            if (cachedPreparedData != null)
+            {
+                AlertRuleAsGeneric matchGenericRule = GenericRuleManager<GenericRule>.GetMatchRule<AlertRuleAsGeneric>(cachedPreparedData.RuleTree, cachedPreparedData.CriteriaEvaluationInfos, target);
+                return matchGenericRule != null ? matchGenericRule.OriginalAlertRule : null;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         #endregion
@@ -49,13 +56,20 @@ namespace Vanrise.Notification.Business
                     throw new NullReferenceException(String.Format("criteriaDefinition. ruleTypeId '{0}'", ruleTypeId));
                 var objects = ruleTypeSettingsAsGeneric.Objects;
                 List<VRAlertRule> alertRules = ruleManager.GetActiveRules(ruleTypeId);
-                var ruleTree = GenericRuleManager<GenericRule>.BuildRuleTree<AlertRuleAsGeneric>(criteriaDefinition, alertRules.Select(r => new AlertRuleAsGeneric { OriginalAlertRule = r }));
-                var criteriaEvaluationInfos = GenericRuleManager<GenericRule>.BuildCriteriaEvaluationInfos(criteriaDefinition, objects);
-                return new CachedPreparedData
+                if (alertRules != null)
                 {
-                    RuleTree = ruleTree,
-                    CriteriaEvaluationInfos = criteriaEvaluationInfos
-                };
+                    var ruleTree = GenericRuleManager<GenericRule>.BuildRuleTree<AlertRuleAsGeneric>(criteriaDefinition, alertRules.Select(r => new AlertRuleAsGeneric { OriginalAlertRule = r }));
+                    var criteriaEvaluationInfos = GenericRuleManager<GenericRule>.BuildCriteriaEvaluationInfos(criteriaDefinition, objects);
+                    return new CachedPreparedData
+                    {
+                        RuleTree = ruleTree,
+                        CriteriaEvaluationInfos = criteriaEvaluationInfos
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             });
         }
 
