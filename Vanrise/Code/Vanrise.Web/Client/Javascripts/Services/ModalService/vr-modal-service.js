@@ -10,7 +10,7 @@
         function showModal(viewUrl, parameters, settings) {
             var deferred = $q.defer();
             var modalScope = $rootScope.$new();
-            $rootScope.$broadcast("hidegridmenu");
+            $rootScope.$broadcast("hide-all-menu");
             var modalUrl = viewUrl;
             var backdrop = "static";
             var modalInstance;

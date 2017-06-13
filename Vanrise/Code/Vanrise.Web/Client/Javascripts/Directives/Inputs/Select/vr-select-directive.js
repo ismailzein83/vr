@@ -505,7 +505,7 @@
                     };
                 };
                 function hideAllOtherDropDown(currentId) {
-                   $rootScope.$broadcast("hidegridmenu");                  
+                   $rootScope.$broadcast("hide-all-menu");                  
                     var dropdowns = $('.dropdown-menu');                   
                     var len = dropdowns.length;
                     var i;
@@ -581,6 +581,9 @@
                 $(window).on('scroll', fixDropdownPosition);
                 $(window).on('resize', fixDropdownPosition);               
                 $scope.$on('start-drag', function (event, args) {
+                    fixDropdownPosition();
+                });
+                $scope.$on('hide-all-select', function (event, args) {
                     fixDropdownPosition();
                 });
                 function fixDropdownPosition() {

@@ -68,6 +68,18 @@
                         $scope.$on("$destroy", function () {
                             valueWatch();
                         });
+                        $scope.$on("$destroy", function () {
+                            $(window).unbind('scroll', fixMultipleTextDropdownPosition);
+                            $(window).unbind('resize', fixMultipleTextDropdownPosition);
+                            $(window).off("resize.Viewport");
+                            valueWatch();
+
+                        });
+                        $element.on('$destroy', function () {
+                            $('#' + ctrl.id).parents('div').unbind('scroll', fixMultipleTextDropdownPosition);
+                        });
+
+                       
                         var ctrl = $scope.ctrl;
 
                         if (ctrl.value == undefined)
@@ -208,17 +220,13 @@
                                     $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                             });
 
-                            $('#' + ctrl.id).on('hide.bs.dropdown', function () {
-
-                               
+                            $('#' + ctrl.id).on('hide.bs.dropdown', function () {                               
                                 $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-
                             });
                         }, 100);
                         setTimeout(function () {
 
                             $('#' + ctrl.id).on('click', '.dropdown-toggle', function () {
-
                                 var self = $(this);
                                 var selfHeight = $(this).parent().height();
                                 var selfOffset = $(self).offset();
@@ -232,32 +240,34 @@
                                     top = basetop - (heigth + (selfHeight * 2.7));
                                 else
                                     top = selfOffset.top - $(window).scrollTop() + selfHeight;
-
+                                $scope.$root.$broadcast("hideallselect");
                                 $(dropDown).css({ position: 'fixed', top: top, left: baseleft, width: self.width() });
                             });
 
                             $('#' + ctrl.id).parents('div').scroll(function () {
-                                fixDropdownPosition();
+                                fixMultipleTextDropdownPosition();
                             });
                             $(window).scroll(function () {
-                                fixDropdownPosition();
+                                fixMultipleTextDropdownPosition();
                             });
                             $(window).resize(function () {
-                                fixDropdownPosition();
+                                fixMultipleTextDropdownPosition();
                             });
 
-                            //  }
-
                         }, 1);
-                        var fixDropdownPosition = function () {
+
+                        $scope.$on('start-drag', function (event, args) {
+                            fixMultipleTextDropdownPosition();
+                        });
+
+                        $scope.$on('hide-all-menu', function (event, args) {
+                            fixMultipleTextDropdownPosition();
+                        });
+
+                        var fixMultipleTextDropdownPosition = function () {
                             $('.vr-multiple').find('.dropdown-menu').hide();
                             $('#' + ctrl.id).removeClass("open");
-
                         };
-                        $scope.$on('start-drag', function (event, args) {
-                            fixDropdownPosition();
-                        });
-                       
 
                     },
                   

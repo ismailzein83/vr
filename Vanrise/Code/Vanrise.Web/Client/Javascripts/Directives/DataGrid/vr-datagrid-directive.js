@@ -54,7 +54,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.showgmenu = false;
 
-                $scope.$on('hidegridmenu', function (event, args) {
+                $scope.$on("hide-all-menu", function (event, args) {
                     ctrl.showgmenu = false;
                     $('.vr-grid-menu').removeClass("open-grid-menu");
                     $(document).unbind('click', bindClickOutSideGridMenu);
