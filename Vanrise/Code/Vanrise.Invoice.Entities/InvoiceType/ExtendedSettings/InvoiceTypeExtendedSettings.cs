@@ -33,7 +33,7 @@ namespace Vanrise.Invoice.Entities
         int GetDuePeriod();
         GeneratedInvoice Invoice { set; }
         string ErrorMessage { set; }
-        IEnumerable<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
+        List<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
     }
     public interface IInvoiceTypeExtendedSettingsInfoContext
     {

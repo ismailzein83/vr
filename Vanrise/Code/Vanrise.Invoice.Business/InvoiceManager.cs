@@ -636,8 +636,53 @@ namespace Vanrise.Invoice.Business
             Dictionary<string, List<string>> itemSetNameStorageDic = new InvoiceItemManager().GetItemSetNamesByStorageConnectionString(invoice.InvoiceTypeId, itemSetNames);
 
             var dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, billingTransactions, out invoiceId);
+            IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions, invoice.SerialNumber, invoice.FromDate, invoice.ToDate, invoice.IssueDate);
+            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, mappedTransactions, out invoiceId);
         }
+
+        private IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> MapGeneratedInvoiceBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, string serialNumber, DateTime fromDate, DateTime toDate, DateTime issueDate)
+        {
+            string transactionNotes = string.Format("Billing Period: {0} - {1}", fromDate.ToShortDateString(), toDate.ToShortDateString());
+            DateTime usageOverrideToDate = toDate.Date.AddDays(1);
+
+            return billingTransactions.MapRecords(x =>
+            {
+                var billingTransaction = new AccountBalance.Entities.BillingTransaction()
+                {
+                    AccountTypeId = x.AccountTypeId,
+                    AccountId = x.AccountId,
+                    TransactionTypeId = x.TransactionTypeId,
+                    Amount = x.Amount,
+                    CurrencyId = x.CurrencyId,
+                    TransactionTime = issueDate,
+                    Reference = serialNumber,
+                    Notes = transactionNotes
+                };
+
+                if (x.Settings != null)
+                {
+                    billingTransaction.Settings = new AccountBalance.Entities.BillingTransactionSettings();
+
+                    if (x.Settings.UsageOverrides != null)
+                    {
+                        billingTransaction.Settings.UsageOverrides = new List<AccountBalance.Entities.BillingTransactionUsageOverride>();
+
+                        foreach (GeneratedInvoiceBillingTransactionUsageOverride usageOverride in x.Settings.UsageOverrides)
+                        {
+                            billingTransaction.Settings.UsageOverrides.Add(new AccountBalance.Entities.BillingTransactionUsageOverride()
+                            {
+                                TransactionTypeId = usageOverride.TransactionTypeId,
+                                FromDate = fromDate,
+                                ToDate = usageOverrideToDate
+                            });
+                        }
+                    }
+                }
+
+                return billingTransaction;
+            });
+        }
+
         #endregion
     }
 }

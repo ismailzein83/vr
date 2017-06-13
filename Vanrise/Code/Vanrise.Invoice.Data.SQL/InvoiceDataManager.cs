@@ -114,7 +114,7 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out long insertedInvoiceId)
+        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, out long insertedInvoiceId)
         {
             object invoiceId;
 
@@ -241,61 +241,19 @@ namespace Vanrise.Invoice.Data.SQL
             return dt;
         }
 
-        private bool InsertBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, long invoiceId, Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager billingTransactionDataManager)
+        private bool InsertBillingTransactions(IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, long invoiceId, Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager billingTransactionDataManager)
         {
-            IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions);
-
             long transactionId;
             bool areAllInsertionsSuccessful = true;
 
-            foreach (Vanrise.AccountBalance.Entities.BillingTransaction mappedTransaction in mappedTransactions)
+            foreach (Vanrise.AccountBalance.Entities.BillingTransaction billingTransaction in billingTransactions)
             {
-                bool isInsertionSuccessful = billingTransactionDataManager.Insert(mappedTransaction, invoiceId, out transactionId);
+                bool isInsertionSuccessful = billingTransactionDataManager.Insert(billingTransaction, invoiceId, out transactionId);
                 if (!isInsertionSuccessful)
                     areAllInsertionsSuccessful = false;
             }
 
             return areAllInsertionsSuccessful;
-        }
-
-        private IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> MapGeneratedInvoiceBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions)
-        {
-            return billingTransactions.MapRecords(x =>
-            {
-                var billingTransaction = new AccountBalance.Entities.BillingTransaction()
-                {
-                    AccountTypeId = x.AccountTypeId,
-                    AccountId = x.AccountId,
-                    TransactionTypeId = x.TransactionTypeId,
-                    Amount = x.Amount,
-                    CurrencyId = x.CurrencyId,
-                    TransactionTime = x.TransactionTime,
-                    Notes = x.Notes,
-                    Reference = x.Reference
-                };
-
-                if (x.Settings != null)
-                {
-                    billingTransaction.Settings = new AccountBalance.Entities.BillingTransactionSettings();
-
-                    if (x.Settings.UsageOverrides != null)
-                    {
-                        billingTransaction.Settings.UsageOverrides = new List<AccountBalance.Entities.BillingTransactionUsageOverride>();
-
-                        foreach (GeneratedInvoiceBillingTransactionUsageOverride usageOverride in x.Settings.UsageOverrides)
-                        {
-                            billingTransaction.Settings.UsageOverrides.Add(new AccountBalance.Entities.BillingTransactionUsageOverride()
-                            {
-                                TransactionTypeId = usageOverride.TransactionTypeId,
-                                FromDate = usageOverride.FromDate,
-                                ToDate = usageOverride.ToDate
-                            });
-                        }
-                    }
-                }
-
-                return billingTransaction;
-            });
         }
 
         #endregion

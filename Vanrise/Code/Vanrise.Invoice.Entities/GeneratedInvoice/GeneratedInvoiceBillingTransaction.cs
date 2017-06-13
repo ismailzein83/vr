@@ -13,9 +13,6 @@ namespace Vanrise.Invoice.Entities
         public Guid TransactionTypeId { get; set; }
         public Decimal Amount { get; set; }
         public int CurrencyId { get; set; }
-        public DateTime TransactionTime { get; set; }
-        public string Notes { get; set; }
-        public string Reference { get; set; }
         public GeneratedInvoiceBillingTransactionSettings Settings { get; set; }
     }
 
@@ -27,9 +24,5 @@ namespace Vanrise.Invoice.Entities
     public class GeneratedInvoiceBillingTransactionUsageOverride
     {
         public Guid TransactionTypeId { get; set; }
-
-        public DateTime FromDate { get; set; }
-
-        public DateTime ToDate { get; set; }
     }
 }

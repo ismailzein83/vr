@@ -19,7 +19,7 @@ namespace Vanrise.Invoice.Business
         public DateTime GeneratedToDate { get; set; }
         public int DuePeriod { get; set; }
         public string ErrorMessage { get; set; }
-        public IEnumerable<GeneratedInvoiceBillingTransaction> BillingTransactions { get; set; }
+        public List<GeneratedInvoiceBillingTransaction> BillingTransactions { get; set; }
         public int GetDuePeriod()
         {
             return DuePeriod;
