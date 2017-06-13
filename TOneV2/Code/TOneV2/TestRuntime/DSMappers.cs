@@ -67,18 +67,20 @@ namespace TestRuntime
 
             }
 
-            long startingId;
-            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
-            long currentCDRId = startingId;
-
-            foreach (var cdr in cdrs)
-            {
-                cdr.Id = currentCDRId;
-                currentCDRId++;
-            }
+            
 
             if (cdrs.Count > 0)
             {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var cdr in cdrs)
+                {
+                    cdr.Id = currentCDRId;
+                    currentCDRId++;
+                }
+
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
                 mappedBatches.Add("Distribute Raw CDRs Stage", batch);
             }
