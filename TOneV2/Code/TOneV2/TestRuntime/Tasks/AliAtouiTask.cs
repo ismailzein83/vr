@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -21,8 +20,8 @@ namespace TOne.WhS.Runtime.Tasks
         public void Execute()
         {
             #region Runtime
-            ExecuteRuntime executeRuntime = new ExecuteRuntime();
-            executeRuntime.Runtime_Main();
+            //ExecuteRuntime executeRuntime = new ExecuteRuntime();
+            //executeRuntime.Runtime_Main();
             #endregion
 
             #region PrepareCodePrefixesTask
@@ -35,7 +34,13 @@ namespace TOne.WhS.Runtime.Tasks
             //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
             //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
             #endregion
-        }
+
+            //byte[] lastTimestamp = AliAtouiTask.StringToByteArray("00000000000055F5");
+            //DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
+            //DealEvaluatorProcessState first_dealEvaluatorProcessState = dealDetailedProgressManager.GetDealEvaluatorProcessState(null);
+            //DealEvaluatorProcessState second_dealEvaluatorProcessState = dealDetailedProgressManager.GetDealEvaluatorProcessState(lastTimestamp);
+            //DealEvaluatorProcessState third_dealEvaluatorProcessState = dealDetailedProgressManager.GetDealEvaluatorProcessState(second_dealEvaluatorProcessState.MaxTimestamp);
+        } 
         #endregion
 
         #region Private Methods
@@ -45,6 +50,14 @@ namespace TOne.WhS.Runtime.Tasks
                 Console.WriteLine(item.CodePrefix + "   " + item.Count);
 
             Console.WriteLine("\n");
+        }
+
+        static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray(); 
         }
         #endregion
     }

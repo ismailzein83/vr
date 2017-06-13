@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Business
             Func<DealDefinition, bool> filterExpression = (dealDefinition) =>
             {
                 if (filter == null)
-                    return true;
+                    return true; 
 
                 if (filter.IncludedDealDefinitionIds != null && !filter.IncludedDealDefinitionIds.Contains(dealDefinition.DealId))
                     return false;

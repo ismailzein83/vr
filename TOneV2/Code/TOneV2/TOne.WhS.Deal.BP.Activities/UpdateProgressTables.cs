@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Activities;
-using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.Business;
-using Vanrise.BusinessProcess;
+using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
+using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -17,7 +18,12 @@ namespace TOne.WhS.Deal.BP.Activities
         public Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
     }
 
-    public sealed class UpdateProgressTables : BaseAsyncActivity<UpdateProgressTablesInput>
+    public class UpdateProgressTablesOutput
+    {
+        public Dictionary<DealZoneGroup, DealProgress> DealProgressesBeforeUpdate  { get; set; } 
+    }
+
+    public sealed class UpdateProgressTables : BaseAsyncActivity<UpdateProgressTablesInput, UpdateProgressTablesOutput>
     {
         public InArgument<DateTime> BeginDate { get; set; }
 
@@ -25,13 +31,22 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public InArgument<Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
-        protected override void DoWork(UpdateProgressTablesInput inputArgument, AsyncActivityHandle handle)
+        public OutArgument<Dictionary<DealZoneGroup, DealProgress>> DealProgressesBeforeUpdate { get; set; } 
+
+        protected override UpdateProgressTablesOutput DoWorkWithResult(UpdateProgressTablesInput inputArgument, AsyncActivityHandle handle)
         {
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             dealDetailedProgressManager.UpdateDealDetailedProgressTable(inputArgument.IsSale, inputArgument.BeginDate, inputArgument.CurrentDealBillingSummaryRecords);
              
             DealProgressManager dealProgressManager = new DealProgressManager();
-            dealProgressManager.UpdateDealProgressTable(inputArgument.IsSale, inputArgument.BeginDate, inputArgument.CurrentDealBillingSummaryRecords);
+            HashSet<DealZoneGroup> existingDealZoneGroups = inputArgument.CurrentDealBillingSummaryRecords.Keys.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }).ToHashSet();
+            Dictionary<DealZoneGroup, DealProgress> dealProgressByZoneGroup = dealProgressManager.GetDealProgresses(existingDealZoneGroups, inputArgument.IsSale);
+            dealProgressManager.UpdateDealProgressTable(inputArgument.IsSale, inputArgument.BeginDate, dealProgressByZoneGroup, inputArgument.CurrentDealBillingSummaryRecords);
+
+            return new UpdateProgressTablesOutput()
+            {
+                DealProgressesBeforeUpdate = dealProgressByZoneGroup
+            };
         }
 
         protected override UpdateProgressTablesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -42,6 +57,11 @@ namespace TOne.WhS.Deal.BP.Activities
                 IsSale = this.IsSale.Get(context),
                 CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context),
             };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, UpdateProgressTablesOutput result)
+        {
+            this.DealProgressesBeforeUpdate.Set(context, result.DealProgressesBeforeUpdate);
         }
     }
 }

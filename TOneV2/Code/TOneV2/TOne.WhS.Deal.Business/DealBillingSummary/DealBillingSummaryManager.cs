@@ -132,7 +132,6 @@ namespace TOne.WhS.Deal.Business
             {
                 expectedDealBillingSummaryRecordsByBatchStart = new Dictionary<DateTime, BaseDealBillingSummary>();
                 expectedDealBillingSummaryRecordsByBatchStart.Add(baseDealBillingSummary.BatchStart, baseDealBillingSummary);
-
                 expectedDealBillingSummaryRecords.Add(dealZoneGroup, expectedDealBillingSummaryRecordsByBatchStart);
             }
             else

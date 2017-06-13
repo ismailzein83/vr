@@ -36,34 +36,27 @@ namespace TOne.WhS.Deal.Entities
     public class DealZoneGroupTierDetails
     {
         public int TierNumber { get; set; }
-        public int? RetroActiveFromTierNumber { get; set; }
         public decimal? VolumeInSeconds { get; set; }
         public decimal Rate { get; set; }
         public int CurrencyId { get; set; }
+        public int? RetroActiveFromTierNumber { get; set; }
         public Dictionary<long, decimal> ExceptionRates { get; set; }
     }
 
     public class DealZoneGroupData
     {
         public int DealID { get; set; }
-
         public int ZoneGroupNb { get; set; }
-
         public bool IsSale { get; set; }
-
         public decimal TotalReachedDurationInSeconds { get; set; }
     }
 
     public class DealZoneGroupTierData
     {
         public int DealID { get; set; }
-
         public int ZoneGroupNb { get; set; }
-
         public int TierNb { get; set; }
-
         public bool IsSale { get; set; }
-
         public decimal TotalReachedDurationInSeconds { get; set; }
     }
 }

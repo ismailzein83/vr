@@ -11,9 +11,9 @@ namespace TOne.WhS.Deal.Business
 
         public int DealZoneGroupNb { get; set; }
 
-        public decimal DurationInSeconds { get; set; }
-
         public bool IsSale { get; set; }
+
+        public decimal DurationInSeconds { get; set; }
     }
 
     public class DealBillingSummary : BaseDealBillingSummary

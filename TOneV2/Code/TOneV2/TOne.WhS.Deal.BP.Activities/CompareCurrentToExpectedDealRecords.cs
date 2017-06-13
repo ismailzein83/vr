@@ -32,7 +32,7 @@ namespace TOne.WhS.Deal.BP.Activities
         protected override CompareCurrentToExpectedDealRecordsOutput DoWorkWithResult(CompareCurrentToExpectedDealRecordsInput inputArgument, AsyncActivityHandle handle)
         {
             DealReprocessInputManager dealReprocessInputManager = new DealReprocessInputManager();
-            List<DealReprocessInput> dealReprocessInputToAdd = new List<DealReprocessInput>();
+            List<DealReprocessInput> itemsToAdd = new List<DealReprocessInput>();
 
             Dictionary<DateTime, DealBillingSummary> dealBillingSummaryByBatchStart;
             DealBillingSummary dealBillingSummary;
@@ -44,7 +44,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
                 if (!inputArgument.CurrentDealBillingSummaryRecords.TryGetValue(dealZoneGroupTierRate, out dealBillingSummaryByBatchStart))
                 {
-                    dealReprocessInputToAdd.AddRange(expectedDealBillingSummaryByBatchStart.Values.Select(itm => dealReprocessInputManager.BuildDealReprocessInput(itm)));
+                    itemsToAdd.AddRange(expectedDealBillingSummaryByBatchStart.Values.Select(itm => dealReprocessInputManager.BuildDealReprocessInput(itm)));
                 }
                 else
                 {
@@ -54,19 +54,19 @@ namespace TOne.WhS.Deal.BP.Activities
                         DealBillingSummary expectedDealBillingSummary = dealBillingSummaryRecordByBatchStart.Value;
 
                         if (!dealBillingSummaryByBatchStart.TryGetValue(batchStart, out dealBillingSummary) || !expectedDealBillingSummary.IsEqual(dealBillingSummary))
-                            dealReprocessInputToAdd.Add(dealReprocessInputManager.BuildDealReprocessInput(expectedDealBillingSummary));
+                            itemsToAdd.Add(dealReprocessInputManager.BuildDealReprocessInput(expectedDealBillingSummary));
                     }
                 }
             }
 
-            dealReprocessInputManager.InsertDealReprocessInputs(dealReprocessInputToAdd);
+            dealReprocessInputManager.InsertDealReprocessInputs(itemsToAdd);
 
-            if (dealReprocessInputToAdd.Count == 0)
+            if (itemsToAdd.Count == 0)
                 return null;
 
             return new CompareCurrentToExpectedDealRecordsOutput()
             {
-                DaysToReprocess = new HashSet<DateTime>(dealReprocessInputToAdd.Select(itm => itm.FromTime.Date))
+                DaysToReprocess = new HashSet<DateTime>(itemsToAdd.Select(itm => itm.FromTime.Date))
             };
         }
 

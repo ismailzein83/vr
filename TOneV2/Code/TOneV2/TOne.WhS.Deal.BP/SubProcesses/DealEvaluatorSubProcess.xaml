@@ -33,13 +33,28 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -48,6 +63,7 @@
       <Variable x:TypeArguments="scg:Dictionary(twde:DealZoneGroup, scg:Dictionary(s:DateTime, twdb:BaseDealBillingSummary))" Name="expectedBaseDealBillingSummaryRecords" />
       <Variable x:TypeArguments="scg:Dictionary(twde:DealZoneGroupTierRate, scg:Dictionary(s:DateTime, twdb:DealBillingSummary))" Name="expectedDealBillingSummaryRecords" />
       <Variable x:TypeArguments="scg1:HashSet(s:DateTime)" Name="daysToReprocess" />
+      <Variable x:TypeArguments="scg:Dictionary(twde:DealZoneGroup, twde:DealProgress)" Name="dealProgressesBeforeUpdate" />
     </Sequence.Variables>
     <twdba1:LoadDealBillingSummaryRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadDealBillingSummaryRecords_1">
       <twdba1:LoadDealBillingSummaryRecords.BeginDate>
@@ -82,6 +98,11 @@
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(twde:DealZoneGroupTierRate, scg:Dictionary(s:DateTime, twdb:DealBillingSummary))">currentDealBillingSummaryRecords</mca:CSharpValue>
         </InArgument>
       </twdba1:UpdateProgressTables.CurrentDealBillingSummaryRecords>
+      <twdba1:UpdateProgressTables.DealProgressesBeforeUpdate>
+        <OutArgument x:TypeArguments="scg:Dictionary(twde:DealZoneGroup, twde:DealProgress)">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(twde:DealZoneGroup, twde:DealProgress)">dealProgressesBeforeUpdate</mca:CSharpReference>
+        </OutArgument>
+      </twdba1:UpdateProgressTables.DealProgressesBeforeUpdate>
       <twdba1:UpdateProgressTables.IsSale>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
@@ -148,7 +169,7 @@
         </Assign>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXERlYWxFdmFsdWF0b3JTdWJQcm9jZXNzLnhhbWwYLQOYAQ4CAQE0BUksAgFvSgVaIwIBVlsFcDcCATVxBYEBMgIBHIIBBZYBCgIBAkYLRlADAYgBPAs8yAEDAYABQQtByQECAXg3CzdUAgFwVwtXUAIBZ1ILUsABAgFfTQtNVAIBV20LbVACAU5jC2PBAQIBRl4LXlQCAT5oC2jJAQIBNnkLeXACAS10C3TAAQIBJX4LfsEBAgEdhQELhQFhAgEDiQEJlAESAgELkQEPkQGwAQIBFIwBD4wBdgIBDA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXERlYWxFdmFsdWF0b3JTdWJQcm9jZXNzLnhhbWwZPAOtAQ4CAQFEBVksAwGFAVoFbyMCAWBwBYUBNwIBO4YBBZYBMgIBH5cBBasBCgIBAlYLVlADAaEBTAtMyAEDAZgBUQtRyQEDAY8BRwtHVAMBhgFsC2xQAgF8YgtiwAECAXNdC11UAgFqZwtnmAECAWGCAQuCAVACAVd4C3jBAQIBTnMLc1QCAUV9C33JAQIBPI4BC44BcAIBMokBC4kBwAECASmTAQuTAcEBAgEgmgELmgFhAgEDngEJqQESAgEMpgEPpgGwAQIBFqEBD6EBdgIBDQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
