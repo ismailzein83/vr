@@ -112,7 +112,8 @@ namespace TOne.WhS.Deal.Entities
                     VolumeInSeconds = volCommitmentDealItemTier.UpToVolume.HasValue ? (volCommitmentDealItemTier.UpToVolume.Value * 60) - previousVolumeAssigned : (int?)null,
                     TierNumber = tierNumber,
                     Rate = volCommitmentDealItemTier.DefaultRate,
-                    ExceptionRates = BuildSaleExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates)
+                    ExceptionRates = BuildSaleExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates),
+                    CurrencyId = CurrencyId
                 };
                 dealSaleZoneGroupTiers.Add(dealSaleZoneGroupTier);
                 tierNumber++;
@@ -180,7 +181,8 @@ namespace TOne.WhS.Deal.Entities
                     VolumeInSeconds = volCommitmentDealItemTier.UpToVolume.HasValue ? (volCommitmentDealItemTier.UpToVolume.Value * 60) - previousVolumeAssigned : (int?)null,
                     TierNumber = tierNumber,
                     Rate = volCommitmentDealItemTier.DefaultRate,
-                    ExceptionRates = BuildSupplierExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates)
+                    ExceptionRates = BuildSupplierExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates),
+                    CurrencyId = CurrencyId
                 };
                 dealSupplierZoneGroupTiers.Add(dealSupplierZoneGroupTier);
                 tierNumber++;

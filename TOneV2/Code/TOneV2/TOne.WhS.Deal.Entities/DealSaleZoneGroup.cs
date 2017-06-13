@@ -42,6 +42,8 @@ namespace TOne.WhS.Deal.Entities
         //public DealSaleZoneRateEvaluator DefaultRateEvaluator { get; set; }
 
         public List<DealSaleZoneGroupTierZoneRate> ExceptionRates { get; set; }
+
+        public int CurrencyId { get; set; }
     }
 
     public class DealSaleZoneGroupTierZoneRate

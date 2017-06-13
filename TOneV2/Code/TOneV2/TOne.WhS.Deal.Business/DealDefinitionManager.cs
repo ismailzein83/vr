@@ -49,7 +49,8 @@ namespace TOne.WhS.Deal.Business
             record.OrigSaleExtraChargeRateValue = record.SaleExtraChargeRateValue;
             record.OrigSaleExtraChargeValue = record.SaleExtraChargeValue;
             record.OrigSaleDurationInSeconds = record.SaleDurationInSeconds;
-
+            record.OrigSaleCurrencyId = record.SaleCurrencyId;
+            
             DealSaleZoneGroup dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
             if (dealSaleZoneGroup != null)
             {
@@ -130,6 +131,7 @@ namespace TOne.WhS.Deal.Business
             record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
             record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
             record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
+            record.OrigCostCurrencyId = record.CostCurrencyId;
 
             DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
             if (dealSupplierZoneGroup != null)
@@ -361,7 +363,9 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = dealSaleZoneGroupTier.TierNumber,
                 VolumeInSeconds = dealSaleZoneGroupTier.VolumeInSeconds,
                 Rate = dealSaleZoneGroupTier.Rate,
-                ExceptionRates = BuildSaleExceptionRates(dealSaleZoneGroupTier.ExceptionRates)
+                ExceptionRates = BuildSaleExceptionRates(dealSaleZoneGroupTier.ExceptionRates),
+                CurrencyId = dealSaleZoneGroupTier.CurrencyId,
+                RetroActiveFromTierNumber = dealSaleZoneGroupTier.RetroActiveFromTierNumber
             };
         }
 
@@ -372,7 +376,9 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = dealSupplierZoneGroupTier.TierNumber,
                 VolumeInSeconds = dealSupplierZoneGroupTier.VolumeInSeconds,
                 Rate = dealSupplierZoneGroupTier.Rate,
-                ExceptionRates = BuildSupplierExceptionRates(dealSupplierZoneGroupTier.ExceptionRates)
+                ExceptionRates = BuildSupplierExceptionRates(dealSupplierZoneGroupTier.ExceptionRates),
+                CurrencyId = dealSupplierZoneGroupTier.CurrencyId,
+                RetroActiveFromTierNumber = dealSupplierZoneGroupTier.RetroActiveFromTierNumber
             };
         }
 

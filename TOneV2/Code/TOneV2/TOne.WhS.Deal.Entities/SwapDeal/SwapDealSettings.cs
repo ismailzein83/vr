@@ -104,7 +104,8 @@ namespace TOne.WhS.Deal.Entities
                 Rate = swapDealInbound.Rate,
                 RetroActiveFromTierNumber = null,
                 TierNumber = 0,
-                VolumeInSeconds = swapDealInbound.Volume * 60
+                VolumeInSeconds = swapDealInbound.Volume * 60,
+                CurrencyId = CurrencyId
             };
             return new List<DealSaleZoneGroupTier>() { dealSaleZoneGroupTier }.OrderBy(itm => itm.TierNumber);
         }
@@ -154,7 +155,8 @@ namespace TOne.WhS.Deal.Entities
                 Rate = swapDealOutbound.Rate,
                 RetroActiveFromTierNumber = null,
                 TierNumber = 0,
-                VolumeInSeconds = swapDealOutbound.Volume * 60
+                VolumeInSeconds = swapDealOutbound.Volume * 60,
+                CurrencyId = CurrencyId
             };
             return new List<DealSupplierZoneGroupTier>() { dealSupplierZoneGroupTier }.OrderBy(itm => itm.TierNumber);
         }

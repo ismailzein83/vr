@@ -41,6 +41,8 @@ namespace TOne.WhS.Deal.Entities
         public Decimal Rate { get; set; }
 
         public List<DealSupplierZoneGroupTierZoneRate> ExceptionRates { get; set; }
+
+        public int CurrencyId { get; set; }
     }
 
     public class DealSupplierZoneGroupTierZoneRate
