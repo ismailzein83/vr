@@ -66,6 +66,10 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         {
             context.IsValid = true;
         }
+        public override bool CanAssignPackage(IPackageSettingsCanAssignPackageContext context)
+        {
+            return AccountAssignmentPackageFilter.IsPackageAvailableInAccountProduct(context.AccountDefinitionId, context.AccountId, context.Package.PackageId);
+        }
     }
 
     public class ServiceTypeUsageChargingPolicySettings

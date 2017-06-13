@@ -24,8 +24,8 @@ namespace Retail.BusinessEntity.Business.Extensions
             VRBalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as VRBalanceAlertEventPayload;
             balanceAlertEventPayload.ThrowIfNull("balanceAlertEventPayload", "");
 
-            Guid accountDefinitionId = base.GetAccountBEDefinitionId(balanceAlertEventPayload);
-            long accountId = base.GetAccountId(balanceAlertEventPayload);
+            Guid accountDefinitionId;
+            long accountId = base.GetAccountId(balanceAlertEventPayload, out accountDefinitionId);
             BaseProcessInputArgument bpInputArg;
             if (s_accountActionManager.TryConvertActionToBPArg(accountDefinitionId, accountId, this.ActionExecutor, out bpInputArg))
             {
@@ -41,8 +41,8 @@ namespace Retail.BusinessEntity.Business.Extensions
             VRBalanceAlertEventPayload balanceAlertEventPayload = context.EventPayload as VRBalanceAlertEventPayload;
             balanceAlertEventPayload.ThrowIfNull("balanceAlertEventPayload", "");
 
-            Guid accountDefinitionId = base.GetAccountBEDefinitionId(balanceAlertEventPayload);
-            long accountId = base.GetAccountId(balanceAlertEventPayload);
+            Guid accountDefinitionId;
+            long accountId = base.GetAccountId(balanceAlertEventPayload, out accountDefinitionId);
             s_accountActionManager.Execute(accountDefinitionId, accountId, this.ActionExecutor);
         }
     }

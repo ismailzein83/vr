@@ -8,10 +8,8 @@ using Vanrise.Notification.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class FinancialAccountBalanceSetting : AccountTypeExtendedSettings
+    public class FinancialAccountBalanceSetting : SubscriberAccountBalanceSetting
     {
-        public Guid AccountBEDefinitionId { get; set; }
-
         public override Guid ConfigId
         {
             get { return new Guid("6A33AFF5-C8D0-41BA-906D-3F9CBB8A7D3E"); }

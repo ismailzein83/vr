@@ -16,5 +16,7 @@ namespace Retail.BusinessEntity.Entities
         public bool IsInherited { get; set; }
 
         public Decimal? CreditLimit { get; set; }
+
+        public int? CreditLimitCurrencyId { get; set; }
     }
 }

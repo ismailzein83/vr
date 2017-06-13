@@ -36,13 +36,13 @@
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Related to processing batches from queues and saving them to database such as Main - Invalid - Failed tables. nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="1">
+      <runtimeServiceGroup name="group4" nbOfRuntimeInstances="3">
         <runtimeServices>
           <runtimeService name="Queue Activation Service" type="Vanrise.Queueing.QueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
         </runtimeServices>
       </runtimeServiceGroup>
       <!-- Related to saving batches as queues in database at end stages such as Billingstats and traffic stats. nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group5" nbOfRuntimeInstances="1">
+      <runtimeServiceGroup name="group5" nbOfRuntimeInstances="3">
         <runtimeServices>
           <runtimeService name="Summary Queue Activation Service" type="Vanrise.Queueing.SummaryQueueActivationRuntimeService, Vanrise.Queueing" interval="00:00:00.100"></runtimeService>
         </runtimeServices>

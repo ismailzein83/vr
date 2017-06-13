@@ -324,12 +324,19 @@ namespace Retail.BusinessEntity.Business
         }
         private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account)
         {
-            return new FinancialAccountData
+            var financialAccountData = new FinancialAccountData
             {
                 FinancialAccountId = GetFinancialAccountId(account.AccountId, financialAccount.SequenceNumber),
                 FinancialAccount = financialAccount,
                 Account = account
             };
+            financialAccount.ExtendedSettings.ThrowIfNull("financialAccount.ExtendedSettings", financialAccountData.FinancialAccountId);
+            var fillExtraDataContext = new FinancialAccountFillExtraDataContext
+            {
+                FinancialAccountData = financialAccountData
+            };
+            financialAccount.ExtendedSettings.FillExtraData(fillExtraDataContext);
+            return financialAccountData;
         }
         private Dictionary<string, FinancialAccountData> GetCachedFinancialAccountDataByFinancialAccountId(Guid accountDefinitionId)
         {
@@ -394,6 +401,7 @@ namespace Retail.BusinessEntity.Business
                                 Account = itm.Account,
                                 FinancialAccountId = itm.FinancialAccountId,
                                 CreditLimit = itm.CreditLimit,
+                                CreditLimitCurrencyId = itm.CreditLimitCurrencyId,
                                 IsInherited = true
                             }).ToList());
                     }
@@ -467,6 +475,20 @@ namespace Retail.BusinessEntity.Business
             }
             return false;
         }
+        #endregion
+
+        #region Private Classes
+
+        public class FinancialAccountFillExtraDataContext : IFinancialAccountFillExtraDataContext
+        {
+            public FinancialAccountData FinancialAccountData
+            {
+                get;
+                set;
+            }
+        }
+
+
         #endregion
     }
 }

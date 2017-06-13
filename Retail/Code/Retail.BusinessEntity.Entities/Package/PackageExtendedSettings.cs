@@ -25,11 +25,25 @@ namespace Retail.BusinessEntity.Entities
 
         }
         public abstract void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context);
+
+        public virtual bool CanAssignPackage(IPackageSettingsCanAssignPackageContext context)
+        {
+            return true;
+        }
     }
 
     public abstract class PackageExtendedSettingsEditorRuntime
     {
 
+    }
+
+    public interface IPackageSettingsCanAssignPackageContext
+    {
+        Package Package { get; }
+
+        Guid AccountDefinitionId { get; }
+
+        long AccountId { get; }
     }
 
     public interface IPackageSettingAssignementStartedContext

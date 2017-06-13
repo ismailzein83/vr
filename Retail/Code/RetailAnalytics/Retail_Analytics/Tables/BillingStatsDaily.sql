@@ -17,8 +17,11 @@
     [TotalSaleDuration]      DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
     [NumberOfCDRs]           INT              NULL,
+    [SubscriberAccountId]    BIGINT           NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

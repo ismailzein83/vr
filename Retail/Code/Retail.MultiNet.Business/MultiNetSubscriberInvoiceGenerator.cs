@@ -219,11 +219,20 @@ namespace Retail.MultiNet.Business
                             break;
                     }
                 }
+                int normalPrecisionValue = _generalSettingsManager.GetNormalPrecisionValue();
+                foreach(var usageSummary in usagesSummariesBySubItemIdentifier.Values)
+                {
+                    usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration, normalPrecisionValue);
+                    usageSummary.NetAmount = Decimal.Round(usageSummary.NetAmount, normalPrecisionValue);
+                }
                 if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
                     multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
                 var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
+                
                 summaryItems.Add(callAggregationSummary);
+                callAggregationSummary.NetAmount = Decimal.Round(callAggregationSummary.NetAmount, normalPrecisionValue);
                 summaryItems.Add(outgoingCallsSummary);
+                outgoingCallsSummary.NetAmount = decimal.Round(outgoingCallsSummary.NetAmount, normalPrecisionValue);
                 BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
                 LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, currencyId, fromDate, toDate, branchTypeId);
             }
@@ -281,6 +290,7 @@ namespace Retail.MultiNet.Business
                 var billingCDRs = multiNetInvoiceGeneratorContext.BillingCDRByBranch.GetRecord(accountId);
                 if (billingCDRs != null && billingCDRs.Count > 0)
                 {
+                    int normalPrecisionValue = _generalSettingsManager.GetNormalPrecisionValue();
                     foreach (var billingCDR in billingCDRs)
                     {
 
@@ -289,12 +299,13 @@ namespace Retail.MultiNet.Business
                             AttemptDateTime = billingCDR.AttemptDateTime,
                             CalledNumber = billingCDR.CalledNumber,
                             CallingNumber = billingCDR.CallingNumber,
-                            DurationInSeconds = billingCDR.DurationInSeconds,
+                            DurationInSeconds = Decimal.Round(billingCDR.DurationInSeconds / 60, normalPrecisionValue),
                             ZoneId = billingCDR.ZoneId,
+                            OperatorName = billingCDR.OperatorName,
                             SaleCurrencyId = billingCDR.SaleCurrencyId
                         };
                         multiNetCDR.SaleAmount = multiNetCDR.SaleCurrencyId != currencyId ? _currencyExchangeRateManager.ConvertValueToCurrency(billingCDR.SaleAmount, multiNetCDR.SaleCurrencyId, currencyId, multiNetCDR.AttemptDateTime) : billingCDR.SaleAmount;
-
+                        multiNetCDR.SaleAmount = Decimal.Round(multiNetCDR.SaleAmount, normalPrecisionValue);
                         string identifierName = null;
                         switch (billingCDR.TrafficDirection)
                         {
@@ -319,7 +330,7 @@ namespace Retail.MultiNet.Business
         {
             if (multiNetInvoiceGeneratorContext.BillingCDRByBranch == null)
             {
-                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType", "SubscriberAccountId", "Zone", "SaleCurrencyId" };
+                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType", "SubscriberAccountId", "Zone", "InterconnectOperator", "SaleCurrencyId" };
                 var cdrData = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
                 {
                     Query = new DataRecordQuery()
@@ -382,6 +393,9 @@ namespace Retail.MultiNet.Business
                         DataRecordFieldValue zone;
                         dataRecordDetail.FieldValues.TryGetValue("Zone", out zone);
 
+                        DataRecordFieldValue interconnectOperator;
+                        dataRecordDetail.FieldValues.TryGetValue("InterconnectOperator", out interconnectOperator);
+
                         DataRecordFieldValue saleCurrencyId;
                         dataRecordDetail.FieldValues.TryGetValue("SaleCurrencyId", out saleCurrencyId);
 
@@ -393,7 +407,8 @@ namespace Retail.MultiNet.Business
                             SaleAmount = Convert.ToDecimal(saleAmount.Value ?? 0.0),
                             DurationInSeconds = Convert.ToDecimal(durationInSeconds.Value ?? 0.0),
                             TrafficDirection = (TrafficDirection)trafficDirection.Value,
-                            ZoneId = zone!= null && zone.Value != null? Convert.ToInt64(zone.Value):default(long?),
+                            ZoneId = zone != null && zone.Value != null ? Convert.ToInt64(zone.Value) : default(long?),
+                            OperatorName = interconnectOperator != null ?  interconnectOperator.Description : null,
                             SaleCurrencyId = Convert.ToInt32(saleCurrencyId.Value),
                         };
                         Guid serviceTypeId;
@@ -429,7 +444,7 @@ namespace Retail.MultiNet.Business
 
         #endregion
 
-        private void ModifySummaryItem(BranchSummaryItem summary, int countCDRs, decimal netAmount, int totalDuration, Guid chargeableEntityId)
+        private void ModifySummaryItem(BranchSummaryItem summary, int countCDRs, decimal netAmount, Decimal totalDuration, Guid chargeableEntityId)
         {
             summary.Quantity += countCDRs;
             summary.NetAmount += netAmount;
@@ -437,9 +452,8 @@ namespace Retail.MultiNet.Business
             if (summary.UsageDescription == null)
                 summary.UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(chargeableEntityId);
         }
-        private void AddUsageSummary(Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier,long accountId, string subItemIdentifier, int countCDRs, decimal netAmount, int totalDuration, string usageDescription)
+        private void AddUsageSummary(Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier,long accountId, string subItemIdentifier, int countCDRs, decimal netAmount, Decimal totalDuration, string usageDescription)
         {
-
             UsageSummary usageSummary = usagesSummariesBySubItemIdentifier.GetOrCreateItem(subItemIdentifier, () =>
             {
                 return new UsageSummary
@@ -564,15 +578,15 @@ namespace Retail.MultiNet.Business
                         {
                             MeasureValue amountMeasure = GetMeasureValue(analyticRecord, "Amount");
                             MeasureValue countCDRsMeasure = GetMeasureValue(analyticRecord, "CountCDRs");
-                            MeasureValue totalDurationMeasure = GetMeasureValue(analyticRecord, "CountCDRs");
+                            MeasureValue totalDurationMeasure = GetMeasureValue(analyticRecord, "TotalDuration");
                             decimal amount = Convert.ToDecimal(amountMeasure.Value ?? 0.0);
                             int countCDRs = Convert.ToInt32(countCDRsMeasure.Value);
-                            int totalDuration = Convert.ToInt32(amountMeasure.Value);
+                            Decimal totalDuration = Convert.ToDecimal(totalDurationMeasure.Value);
                             BillingSummary billingSummary = new BillingSummary
                             {
                                 Amount = Convert.ToDecimal(amountMeasure.Value ?? 0.0),
                                 CountCDRs = Convert.ToInt32(countCDRsMeasure.Value),
-                                TotalDuration = Convert.ToInt32(amountMeasure.Value),
+                                TotalDuration = totalDuration,
                                 TrafficDirection = (TrafficDirection)trafficDirection.Value,
                             };
                             Guid serviceTypeId;
@@ -704,7 +718,7 @@ namespace Retail.MultiNet.Business
         {
             public Decimal Amount { get; set; }
             public int CountCDRs { get; set; }
-            public int TotalDuration { get; set; }
+            public Decimal TotalDuration { get; set; }
             public TrafficDirection TrafficDirection { get; set; }
             public Guid ServiceTypeId { get; set; }
 
@@ -719,6 +733,7 @@ namespace Retail.MultiNet.Business
             public String CallingNumber { get; set; }
             public Decimal DurationInSeconds { get; set; }
             public long? ZoneId { get; set; }
+            public string OperatorName { get; set; }
            public int SaleCurrencyId { get; set; }
         }
     }
@@ -736,14 +751,13 @@ namespace Retail.MultiNet.Business
         public long AccountId { get; set; }
         public string BranchName { get; set; }
 
-
+        static AccountBEManager s_accountBEManager = new AccountBEManager();
         public void FillAdditionalFields(IInvoiceItemAdditionalFieldsContext context)
         {
-            AccountBEManager accountBEManager = new AccountBEManager();
             context.InvoiceType.ThrowIfNull("context.InvoiceType");
             context.InvoiceType.Settings.ThrowIfNull("context.InvoiceType.Settings");
             MultiNetSubscriberInvoiceSettings multiNetSubscriberInvoiceSettings = context.InvoiceType.Settings.ExtendedSettings.CastWithValidate<MultiNetSubscriberInvoiceSettings>("context.InvoiceType.Settings.ExtendedSettings");
-            this.BranchName = accountBEManager.GetAccountName(multiNetSubscriberInvoiceSettings.AccountBEDefinitionId, this.AccountId);
+            this.BranchName = s_accountBEManager.GetAccountName(multiNetSubscriberInvoiceSettings.AccountBEDefinitionId, this.AccountId);
         }
 
     }
@@ -761,7 +775,7 @@ namespace Retail.MultiNet.Business
         public string SubItemIdentifier { get; set; }
         public string UsageDescription { get; set; }
         public int Quantity { get; set; }
-        public int TotalDuration { get; set; }
+        public Decimal TotalDuration { get; set; }
         public Decimal NetAmount { get; set; }
     }
     public class MultiNetCDR : IInvoiceItemAdditionalFields
@@ -773,19 +787,25 @@ namespace Retail.MultiNet.Business
         public string CalledNumber { get; set; }
         public decimal SaleAmount { get; set; }
         public long? ZoneId { get; set; }
+        public string OperatorName { get; set; }
         public string ZoneName { get; set; }
         public int SaleCurrencyId { get; set; }
         public string SaleCurrencyName { get; set; }
 
+        static SaleZoneManager s_saleZoneManager = new SaleZoneManager();
+        static CurrencyManager s_currencyManager = new CurrencyManager();
         public void FillAdditionalFields(IInvoiceItemAdditionalFieldsContext context)
         {
-            if(this.ZoneId.HasValue)
+            if (this.OperatorName != null)
             {
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                this.ZoneName = saleZoneManager.GetSaleZoneName(this.ZoneId.Value);
+                this.ZoneName = this.OperatorName;
             }
-            CurrencyManager currencyManager = new CurrencyManager();
-            this.SaleCurrencyName = currencyManager.GetCurrencySymbol(this.SaleCurrencyId);
+            else if (this.ZoneId.HasValue)
+            {
+                this.ZoneName = s_saleZoneManager.GetSaleZoneName(this.ZoneId.Value);
+            }
+           
+            this.SaleCurrencyName = s_currencyManager.GetCurrencySymbol(this.SaleCurrencyId);
           
         }
     }

@@ -78,6 +78,11 @@
     <Folder Include="Retail_EDR\Views\" />
     <Folder Include="Retail_CDR\Functions\" />
     <Folder Include="Retail_CDR\Stored Procedures\" />
+    <Folder Include="VR_Invoice\" />
+    <Folder Include="VR_Invoice\Tables\" />
+    <Folder Include="VR_Invoice\Functions\" />
+    <Folder Include="VR_Invoice\Stored Procedures\" />
+    <Folder Include="VR_Invoice\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -127,5 +132,12 @@
     <Build Include="Retail_CDR\Functions\ParseStringList.sql" />
     <Build Include="Retail_CDR\Stored Procedures\sp_ProcessedCDRCost_GetByCDPNs.sql" />
     <Build Include="Retail_CDR\User Defined Types\ReceivedCostCDRType.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceItem.sql" />
+    <Build Include="VR_Invoice\Functions\ParseStringList.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_Save.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_GetByItemSetNames.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_GetFiltered.sql" />
+    <Build Include="VR_Invoice\User Defined Types\InvoiceItemType.sql" />
+    <Build Include="Security\VR_Invoice.sql" />
   </ItemGroup>
 </Project>

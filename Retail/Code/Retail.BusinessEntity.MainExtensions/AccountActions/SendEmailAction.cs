@@ -26,7 +26,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
             User user = userManager.GetUserbyId(context.UserID);
             user.ThrowIfNull("user", context.UserID);
 
-            Account account = GetAccount(eventPayload);
+            Guid accountDefinitionId;
+            Account account = GetAccount(eventPayload, out accountDefinitionId);
             account.ThrowIfNull("account", eventPayload.EntityId);
 
             objects.Add("User", user);

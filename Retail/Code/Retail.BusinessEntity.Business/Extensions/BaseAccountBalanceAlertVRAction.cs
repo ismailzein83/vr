@@ -19,19 +19,39 @@ namespace Retail.BusinessEntity.Business
             return s_vRAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(balanceAlertEventPayload.AlertRuleTypeId);
         }
 
-        protected long GetAccountId(VRBalanceAlertEventPayload balanceAlertEventPayload)
+        protected long GetAccountId(VRBalanceAlertEventPayload balanceAlertEventPayload, out Guid accountBEDefinitionId)
+        {
+            accountBEDefinitionId = GetAccountBEDefinitionId(balanceAlertEventPayload);
+            var financialAccountData = s_financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, balanceAlertEventPayload.EntityId);
+            if (financialAccountData != null)
+                return financialAccountData.Account.AccountId;
+            else
+                return ParseAccountId(balanceAlertEventPayload.EntityId);
+        }
+
+        private long ParseAccountId(string balanceAccountId)
         {
             long accountId;
-            if (!long.TryParse(balanceAlertEventPayload.EntityId, out accountId))
-                throw new Exception(String.Format("balanceAlertEventPayload.EntityId. Cannot parse '{0}' to long", balanceAlertEventPayload.EntityId));
+            if (!long.TryParse(balanceAccountId, out accountId))
+                throw new Exception(String.Format("balanceAccountId. Cannot parse '{0}' to long", balanceAccountId));
             return accountId;
         }
 
-        protected Account GetAccount(VRBalanceAlertEventPayload balanceAlertEventPayload)
+        static FinancialAccountManager s_financialAccountManager = new FinancialAccountManager();
+
+        protected Account GetAccount(VRBalanceAlertEventPayload balanceAlertEventPayload, out Guid accountBEDefinitionId)
         {
-            Guid accountBEDefinitionId = GetAccountBEDefinitionId(balanceAlertEventPayload);
-            long accountId = GetAccountId(balanceAlertEventPayload);
-            return s_accountBEManager.GetAccount(accountBEDefinitionId, accountId);
+            accountBEDefinitionId = GetAccountBEDefinitionId(balanceAlertEventPayload);
+            var financialAccountData = s_financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, balanceAlertEventPayload.EntityId);
+            if (financialAccountData != null)
+            {
+                return financialAccountData.Account;
+            }
+            else
+            {
+                long accountId = ParseAccountId(balanceAlertEventPayload.EntityId);
+                return s_accountBEManager.GetAccount(accountBEDefinitionId, accountId);
+            }
         }
     }
 }

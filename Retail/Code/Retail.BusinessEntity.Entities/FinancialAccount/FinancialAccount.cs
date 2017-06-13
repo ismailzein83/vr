@@ -23,5 +23,11 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class FinancialAccountExtendedSettings
     {
+        public abstract void FillExtraData(IFinancialAccountFillExtraDataContext context);
+    }
+
+    public interface IFinancialAccountFillExtraDataContext
+    {
+        FinancialAccountData FinancialAccountData { get; }
     }
 }
