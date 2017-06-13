@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
@@ -16,45 +17,52 @@ using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Pricing;
 using Vanrise.GenericData.Transformation;
 using Vanrise.Invoice.Entities;
-using Vanrise.Common;
 using Vanrise.NumberingPlan.Business;
+
 namespace Retail.MultiNet.Business
 {
-    public enum TrafficDirection { InComming = 1 , OutGoing = 2 }
+    public enum TrafficDirection { InComming = 1, OutGoing = 2 }
+
     public class MultiNetSubscriberInvoiceGenerator : InvoiceGenerator
     {
-        Guid _acountBEDefinitionId;
-        List<Guid> _salesTaxChargeableEntities { get; set; }
-        List<Guid> _wHTaxChargeableEntities { get; set; }
-        Guid _inComingChargeableEntity { get; set; }
-        Guid _outGoingChargeableEntity { get; set; }
-        Guid _salesTaxRuleDefinitionId { get; set; }
-        Guid _wHTaxRuleDefinitionId { get; set; }
-        Guid _latePaymentRuleDefinitionId { get; set; }
-        Guid _mainDataRecordStorageId { get; set; }
+        #region Fields
 
-        Guid _branchTypeId { get; set; }
-        Guid _companyTypeId { get; set; }
+        private Guid _acountBEDefinitionId;
+        private List<Guid> _salesTaxChargeableEntities;
+        private List<Guid> _wHTaxChargeableEntities;
+        private Guid _inComingChargeableEntity;
+        private Guid _outGoingChargeableEntity;
+        private Guid _salesTaxRuleDefinitionId;
+        private Guid _wHTaxRuleDefinitionId;
+        private Guid _latePaymentRuleDefinitionId;
+        private Guid _mainDataRecordStorageId;
 
+        private Guid _branchTypeId;
+        private Guid _companyTypeId;
 
-        TaxRuleManager _taxRuleManager = new TaxRuleManager();
-        MappingRuleManager _mappingRuleManager = new MappingRuleManager();
-        GenericLKUPManager _genericLKUPManager = new GenericLKUPManager();
-        ServiceTypeManager _serviceTypeManager = new ServiceTypeManager();
-        AccountBEManager _accountBEManager = new AccountBEManager();
-        PackageManager _packageManager = new PackageManager();
-        AccountPackageManager _accountPackageManager = new AccountPackageManager(); 
-        PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
-        AnalyticManager _analyticManager = new AnalyticManager();
-        FinancialAccountManager _financialAccountManager = new FinancialAccountManager();
-        GeneralSettingsManager _generalSettingsManager = new GeneralSettingsManager();
-        DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
-        CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
-        public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId,Guid branchTypeId,Guid companyTypeId)
+        private TaxRuleManager _taxRuleManager = new TaxRuleManager();
+        private MappingRuleManager _mappingRuleManager = new MappingRuleManager();
+        private GenericLKUPManager _genericLKUPManager = new GenericLKUPManager();
+        private ServiceTypeManager _serviceTypeManager = new ServiceTypeManager();
+        private AccountBEManager _accountBEManager = new AccountBEManager();
+        private PackageManager _packageManager = new PackageManager();
+        private AccountPackageManager _accountPackageManager = new AccountPackageManager();
+        private PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
+        private AnalyticManager _analyticManager = new AnalyticManager();
+        private FinancialAccountManager _financialAccountManager = new FinancialAccountManager();
+        private GeneralSettingsManager _generalSettingsManager = new GeneralSettingsManager();
+        private DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
+        private CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+
+        #endregion
+
+        #region Constructors
+
+        public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId, Guid branchTypeId, Guid companyTypeId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
             this._salesTaxChargeableEntities = salesTaxChargeableEntities;
-            this._wHTaxChargeableEntities = wHTaxChargeableEntities ;
+            this._wHTaxChargeableEntities = wHTaxChargeableEntities;
             this._inComingChargeableEntity = inComingChargeableEntity;
             this._outGoingChargeableEntity = outGoingChargeableEntity;
             this._salesTaxRuleDefinitionId = salesTaxRuleDefinitionId;
@@ -65,56 +73,106 @@ namespace Retail.MultiNet.Business
             this._companyTypeId = companyTypeId;
         }
 
+        #endregion
+
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
+            FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
 
-            var financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
             if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
-            {
                 throw new InvoiceGeneratorException("From date and To date should be within the effective date of financial account.");
-            }
+
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-            MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext = new MultiNetInvoiceGeneratorContext();
-            multiNetInvoiceGeneratorContext.IssueDate = context.IssueDate;
-            multiNetInvoiceGeneratorContext.FinancialAccount = financialAccountData.Account;
-            List<BranchSummary> branchesSummary = new List<BranchSummary>();
+
+            var multiNetInvoiceGeneratorContext = new MultiNetInvoiceGeneratorContext()
+            {
+                IssueDate = context.IssueDate,
+                FinancialAccount = financialAccountData.Account
+            };
+
+            var branchSummaries = new List<BranchSummary>();
+
             if (financialAccountData.Account.TypeId == this._branchTypeId)
             {
-               var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.GeneratedToDate, _branchTypeId);
-               if (branchSummary != null)
-                   branchesSummary.Add(branchSummary);
-                branchesSummary.Add(branchSummary);
+                var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.GeneratedToDate, _branchTypeId);
+                if (branchSummary != null)
+                    branchSummaries.Add(branchSummary);
             }
             else if (financialAccountData.Account.TypeId == this._companyTypeId)
             {
-                var childAccounts = _accountBEManager.GetChildAccounts(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false);
-                foreach(var branchAccount in childAccounts)
+                List<Account> childAccounts = _accountBEManager.GetChildAccounts(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false);
+                foreach (Account branchAccount in childAccounts)
                 {
                     var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.GeneratedToDate, branchAccount.TypeId);
                     if (branchSummary != null)
-                     branchesSummary.Add(branchSummary);
+                        branchSummaries.Add(branchSummary);
                 }
-                if (branchesSummary .Count > 0)
-                {
-                    BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchesSummary);
-                }
+                if (branchSummaries.Count > 0)
+                    BuildGeneratedBranchSummaryItemSet(multiNetInvoiceGeneratorContext, branchSummaries);
             }
-            if(branchesSummary.Count > 0)
+
+            if (branchSummaries.Count > 0)
             {
-                InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchesSummary, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account, multiNetInvoiceGeneratorContext.FinancialAccount.TypeId);
-               
+                InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchSummaries, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account, multiNetInvoiceGeneratorContext.FinancialAccount.TypeId);
+
                 context.Invoice = new GeneratedInvoice
                 {
                     InvoiceDetails = retailSubscriberInvoiceDetails,
                     InvoiceItemSets = multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets,
                 };
-            }else
-            {
-                throw new InvoiceGeneratorException("No data available between the selected period.");
+
+                SetInvoiceBillingTransactions(context, retailSubscriberInvoiceDetails);
             }
+            else
+                throw new InvoiceGeneratorException("No data available between the selected period.");
+        }
+
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, InvoiceDetails invoiceDetails)
+        {
+            Vanrise.Invoice.Entities.InvoiceType invoiceType = new Vanrise.Invoice.Business.InvoiceTypeManager().GetInvoiceType(context.InvoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", context.InvoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings", context.InvoiceTypeId);
+            MultiNetSubscriberInvoiceSettings invoiceSettings = invoiceType.Settings.ExtendedSettings.CastWithValidate<MultiNetSubscriberInvoiceSettings>("invoiceType.Settings.ExtendedSettings");
+
+            Guid accountTypeId = GetBillingTransactionAccountTypeId(context.InvoiceTypeId, context.PartnerId, context.IssueDate);
+
+            var billingTransaction = new GeneratedInvoiceBillingTransaction()
+            {
+                AccountTypeId = accountTypeId,
+                AccountId = context.PartnerId,
+                TransactionTypeId = invoiceSettings.InvoiceTransactionTypeId,
+                Amount = invoiceDetails.TotalCurrentCharges,
+                CurrencyId = invoiceDetails.CurrencyId
+            };
+
+            billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
+            billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
+
+            foreach (Guid usageTransactionTypeId in invoiceSettings.UsageTransactionTypeIds)
+            {
+                billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                {
+                    TransactionTypeId = usageTransactionTypeId
+                });
+            }
+
+            context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
+        }
+
+        private Guid GetBillingTransactionAccountTypeId(Guid invoiceTypeId, string accountId, DateTime effectiveOn)
+        {
+            var relationManager = new Vanrise.InvToAccBalanceRelation.Business.InvToAccBalanceRelationDefinitionManager();
+            List<Vanrise.InvToAccBalanceRelation.Entities.BalanceAccountInfo> invoiceBalanceAccounts = relationManager.GetInvoiceBalanceAccounts(invoiceTypeId, accountId, effectiveOn);
+
+            invoiceBalanceAccounts.ThrowIfNull("invoiceBalanceAccounts", accountId);
+            if (invoiceBalanceAccounts.Count == 0)
+                throw new Vanrise.Entities.DataIntegrityValidationException("invoiceBalanceAccounts.Count == 0");
+
+            return invoiceBalanceAccounts.FirstOrDefault().AccountTypeId;
         }
 
         #region Build Branch Summary
+
         private BranchSummary BuildBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
         {
 
@@ -127,7 +185,7 @@ namespace Retail.MultiNet.Business
             }
             return null;
         }
-        private  BranchSummary  BuildBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account,int currencyId )
+        private BranchSummary BuildBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId)
         {
             BranchSummary branchSummary = null;
 
@@ -165,23 +223,23 @@ namespace Retail.MultiNet.Business
             return branchSummary;
 
         }
-        private void BuildGeneratedBranchSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext,List<BranchSummary> branchesSummaries)
+        private void BuildGeneratedBranchSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, List<BranchSummary> branchesSummaries)
         {
-            
-                if (multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets == null)
-                    multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
-                GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
-                generatedSummaryItemSet.SetName = "BranchSummary";
-                generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
-                foreach (var item in branchesSummaries)
+
+            if (multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets == null)
+                multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
+            GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
+            generatedSummaryItemSet.SetName = "BranchSummary";
+            generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
+            foreach (var item in branchesSummaries)
+            {
+                generatedSummaryItemSet.Items.Add(new GeneratedInvoiceItem
                 {
-                    generatedSummaryItemSet.Items.Add(new GeneratedInvoiceItem
-                    {
-                        Details = item,
-                        Name = ""
-                    });
-                }
-                multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
+                    Details = item,
+                    Name = ""
+                });
+            }
+            multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
         }
 
         private void BuildTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
@@ -220,7 +278,7 @@ namespace Retail.MultiNet.Business
                     }
                 }
                 int normalPrecisionValue = _generalSettingsManager.GetNormalPrecisionValue();
-                foreach(var usageSummary in usagesSummariesBySubItemIdentifier.Values)
+                foreach (var usageSummary in usagesSummariesBySubItemIdentifier.Values)
                 {
                     usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration, normalPrecisionValue);
                     usageSummary.NetAmount = Decimal.Round(usageSummary.NetAmount, normalPrecisionValue);
@@ -228,7 +286,7 @@ namespace Retail.MultiNet.Business
                 if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
                     multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
                 var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
-                
+
                 summaryItems.Add(callAggregationSummary);
                 callAggregationSummary.NetAmount = Decimal.Round(callAggregationSummary.NetAmount, normalPrecisionValue);
                 summaryItems.Add(outgoingCallsSummary);
@@ -237,7 +295,7 @@ namespace Retail.MultiNet.Business
                 LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, currencyId, fromDate, toDate, branchTypeId);
             }
         }
-    
+
         #region  Build Traffic Data
 
         private void BuildGeneratedBranchItemSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long accountId)
@@ -263,10 +321,10 @@ namespace Retail.MultiNet.Business
                 multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
             }
         }
-        private void BuildGeneratedUsageSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier,long accountId)
+        private void BuildGeneratedUsageSummaryItemSet(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier, long accountId)
         {
             GeneratedInvoiceItemSet generatedSummaryItemSet = new GeneratedInvoiceItemSet();
-            generatedSummaryItemSet.SetName = string.Format("BranchUsageSummary_{0}",accountId);
+            generatedSummaryItemSet.SetName = string.Format("BranchUsageSummary_{0}", accountId);
             generatedSummaryItemSet.Items = new List<GeneratedInvoiceItem>();
             foreach (var item in usagesSummariesBySubItemIdentifier)
             {
@@ -280,7 +338,7 @@ namespace Retail.MultiNet.Business
                 multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
         }
-        private void LoadAndBuildUsageCDRs(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long accountId,int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
+        private void LoadAndBuildUsageCDRs(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long accountId, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId)
         {
 
             LoadAndStructureCDRData(multiNetInvoiceGeneratorContext, accountId, fromDate, toDate, branchTypeId);
@@ -389,7 +447,7 @@ namespace Retail.MultiNet.Business
 
                         DataRecordFieldValue serviceType;
                         dataRecordDetail.FieldValues.TryGetValue("ServiceType", out serviceType);
-                       
+
                         DataRecordFieldValue zone;
                         dataRecordDetail.FieldValues.TryGetValue("Zone", out zone);
 
@@ -408,7 +466,7 @@ namespace Retail.MultiNet.Business
                             DurationInSeconds = Convert.ToDecimal(durationInSeconds.Value ?? 0.0),
                             TrafficDirection = (TrafficDirection)trafficDirection.Value,
                             ZoneId = zone != null && zone.Value != null ? Convert.ToInt64(zone.Value) : default(long?),
-                            OperatorName = interconnectOperator != null ?  interconnectOperator.Description : null,
+                            OperatorName = interconnectOperator != null ? interconnectOperator.Description : null,
                             SaleCurrencyId = Convert.ToInt32(saleCurrencyId.Value),
                         };
                         Guid serviceTypeId;
@@ -452,7 +510,7 @@ namespace Retail.MultiNet.Business
             if (summary.UsageDescription == null)
                 summary.UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(chargeableEntityId);
         }
-        private void AddUsageSummary(Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier,long accountId, string subItemIdentifier, int countCDRs, decimal netAmount, Decimal totalDuration, string usageDescription)
+        private void AddUsageSummary(Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier, long accountId, string subItemIdentifier, int countCDRs, decimal netAmount, Decimal totalDuration, string usageDescription)
         {
             UsageSummary usageSummary = usagesSummariesBySubItemIdentifier.GetOrCreateItem(subItemIdentifier, () =>
             {
@@ -472,10 +530,10 @@ namespace Retail.MultiNet.Business
 
 
         #endregion
-       
+
         private void AddRecurringChargeToBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate)
         {
-           
+
             var accountPackages = _accountPackageManager.GetAccountPackagesByAccountId(account.AccountId);
             List<int> accountPackagesIds = new List<int>();
             if (accountPackages != null && accountPackages.Count > 0)
@@ -520,7 +578,7 @@ namespace Retail.MultiNet.Business
         }
         private void LoadTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long branchAccountId, DateTime fromDate, DateTime toDate, int currencyId, Guid branchTypeId)
         {
-            if(multiNetInvoiceGeneratorContext.BillingSummariesByBranch == null)
+            if (multiNetInvoiceGeneratorContext.BillingSummariesByBranch == null)
             {
                 List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDuration" };
                 List<string> listDimensions = new List<string> { "TrafficDirection", "ServiceType" };
@@ -567,13 +625,14 @@ namespace Retail.MultiNet.Business
                         {
                             branch = analyticRecord.DimensionValues.ElementAtOrDefault(2);
                             branchId = Convert.ToInt64(branch.Value);
-                        }else
+                        }
+                        else
                         {
                             branchId = branchAccountId;
                         }
 
                         List<BillingSummary> billingSummaries = multiNetInvoiceGeneratorContext.BillingSummariesByBranch.GetOrCreateItem(branchId);
-                       
+
                         if (trafficDirection.Value != null && serviceTypeIdDim.Value != null)
                         {
                             MeasureValue amountMeasure = GetMeasureValue(analyticRecord, "Amount");
@@ -599,7 +658,7 @@ namespace Retail.MultiNet.Business
                     }
                 }
             }
-          
+
         }
 
         #region Load Traffic Data
@@ -612,22 +671,24 @@ namespace Retail.MultiNet.Business
 
         #endregion
 
-
-        private string GetSubItemIdentifier(long accountId,Guid? serviceTypeId)
+        private string GetSubItemIdentifier(long accountId, Guid? serviceTypeId)
         {
             string subItemIdentifier = "";
-            if(serviceTypeId.HasValue)
+            if (serviceTypeId.HasValue)
             {
                 subItemIdentifier = string.Format("BranchCDROut_{0}_{1}", serviceTypeId, accountId);
-            }else
+            }
+            else
             {
                 subItemIdentifier = string.Format("BranchCDRIN_{0}", accountId);
             }
             return subItemIdentifier;
         }
+
         #endregion
 
         #region Build Generated Invoice Details
+
         private Decimal GetSaleTaxAmount(Account account, decimal amount, int currencyId, DateTime issueDate, out decimal percentage)
         {
             GenericRuleTarget ruleTarget = new GenericRuleTarget
@@ -681,7 +742,7 @@ namespace Retail.MultiNet.Business
             percentage = taxRuleContext.Percentage;
             return taxRuleContext.TaxAmount;
         }
-        private InvoiceDetails BuildGeneratedInvoiceDetails(List<BranchSummary> branchesSummary, DateTime fromDate, DateTime toDate, DateTime issueDate, int currencyId, Account account,Guid financialAccountTypeId)
+        private InvoiceDetails BuildGeneratedInvoiceDetails(List<BranchSummary> branchesSummary, DateTime fromDate, DateTime toDate, DateTime issueDate, int currencyId, Account account, Guid financialAccountTypeId)
         {
             InvoiceDetails retailSubscriberInvoiceDetails = null;
             if (branchesSummary != null)
@@ -697,12 +758,14 @@ namespace Retail.MultiNet.Business
                 retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId, issueDate);
                 retailSubscriberInvoiceDetails.PayableAfterDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges + retailSubscriberInvoiceDetails.LatePaymentCharges;
                 retailSubscriberInvoiceDetails.CurrencyId = currencyId;
-                retailSubscriberInvoiceDetails.AccountTypeId = financialAccountTypeId; 
+                retailSubscriberInvoiceDetails.AccountTypeId = financialAccountTypeId;
             }
             return retailSubscriberInvoiceDetails;
         }
 
         #endregion
+
+        #region Private Classes
 
         private class MultiNetInvoiceGeneratorContext
         {
@@ -714,6 +777,7 @@ namespace Retail.MultiNet.Business
 
             public DateTime IssueDate { get; set; }
         }
+
         private class BillingSummary
         {
             public Decimal Amount { get; set; }
@@ -723,6 +787,7 @@ namespace Retail.MultiNet.Business
             public Guid ServiceTypeId { get; set; }
 
         }
+
         private class BillingCDR
         {
             public TrafficDirection TrafficDirection { get; set; }
@@ -734,9 +799,13 @@ namespace Retail.MultiNet.Business
             public Decimal DurationInSeconds { get; set; }
             public long? ZoneId { get; set; }
             public string OperatorName { get; set; }
-           public int SaleCurrencyId { get; set; }
+            public int SaleCurrencyId { get; set; }
         }
+
+        #endregion
     }
+
+    #region Public Classes
 
     public class BranchSummary : IInvoiceItemAdditionalFields
     {
@@ -761,6 +830,7 @@ namespace Retail.MultiNet.Business
         }
 
     }
+
     public class BranchSummaryItem
     {
         public long AccountId { get; set; }
@@ -769,6 +839,7 @@ namespace Retail.MultiNet.Business
         public Decimal NetAmount { get; set; }
         public Guid ChargeableEntityId { get; set; }
     }
+
     public class UsageSummary
     {
         public long AccountId { get; set; }
@@ -778,6 +849,7 @@ namespace Retail.MultiNet.Business
         public Decimal TotalDuration { get; set; }
         public Decimal NetAmount { get; set; }
     }
+
     public class MultiNetCDR : IInvoiceItemAdditionalFields
     {
         public string SubItemIdentifier { get; set; }
@@ -804,11 +876,11 @@ namespace Retail.MultiNet.Business
             {
                 this.ZoneName = s_saleZoneManager.GetSaleZoneName(this.ZoneId.Value);
             }
-           
+
             this.SaleCurrencyName = s_currencyManager.GetCurrencySymbol(this.SaleCurrencyId);
-          
+
         }
     }
 
-
+    #endregion
 }
