@@ -94,6 +94,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
             var availableSaleZones = [];
 
+            var payloadSellingNumberPlanId;
+
             function initializeController() {
 
                 saleZoneSelectorCtrl.selectedvalues;
@@ -126,14 +128,13 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                 };
 
 
-                saleZoneSelectorCtrl.search = function (nameFilter) {
+                saleZoneSelectorCtrl.search = function (nameFilter) {                
                     if (sellingNumberPlanId == undefined)
                         return function () { };
 
-                    if (sellingDirectiveApi != undefined && sellingDirectiveApi.getSelectedIds() == undefined) {
-                        return function () { };
+                    if (sellingDirectiveApi != undefined && sellingDirectiveApi.getSelectedIds() == undefined && payloadSellingNumberPlanId==undefined) {
+                          return function () {  };
                     }
-
                     if (filter == undefined)
                         filter = {};
 
@@ -173,8 +174,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                     selectorApi.clearDataSource();
 
-                    var selectedIds;
-                    var payloadSellingNumberPlanId;
+                    var selectedIds;                  
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
