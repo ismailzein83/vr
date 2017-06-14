@@ -26,8 +26,6 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public InArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
-        public OutArgument<Dictionary<DealZoneGroup, DealProgress>> DealProgressesBeforeUpdate { get; set; }
-
         protected override void DoWork(UpdateProgressTablesInput inputArgument, AsyncActivityHandle handle)
         {
             UpdateDealProgressTables(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.IsSale);
@@ -42,6 +40,8 @@ namespace TOne.WhS.Deal.BP.Activities
                 CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context),
             };
         }
+
+        #region Private Methods
 
         private void UpdateDealProgressTables(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, bool isSale)
         {
@@ -91,9 +91,7 @@ namespace TOne.WhS.Deal.BP.Activities
                     {
                         dealDetailedProgressesToKeep.Add(tempDealDetailedProgress.DealDetailedProgressID);
                         if (!AreEqual(dealBillingSummary, tempDealDetailedProgress))
-                        {
                             dealDetailedProgressesToUpdate.Add(BuildDealDetailedProgress(tempDealDetailedProgress.DealDetailedProgressID, dealBillingSummary));
-                        }
                     }
                     else
                     {
@@ -105,9 +103,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 {
                     DealProgress dealProgress = BuildDealProgress(tempDealProgress.DealProgressID, dealZoneGroup, maxTierNumber, tierReachedDurationInSeconds, isSale);
                     if (!dealProgress.IsEqual(tempDealProgress))
-                    {
                         dealProgressesToUpdate.Add(dealProgress);
-                    }
                 }
                 else
                 {
@@ -126,23 +122,17 @@ namespace TOne.WhS.Deal.BP.Activities
             dealProgressManager.UpdateDealProgresses(dealProgressesToUpdate);
         }
 
-        private DealProgress BuildDealProgress(long? dealProgressId, DealZoneGroup dealZoneGroup, int tierNb, decimal reachedDurationInSeconds, bool isSale)
+        private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary)
         {
-            DealZoneGroupTierDetails dealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetails(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, tierNb, isSale);
-            DealProgress dealProgress = new DealProgress()
+            return new DealDetailedZoneGroupTier()
             {
-                DealID = dealZoneGroup.DealId,
-                ZoneGroupNb = dealZoneGroup.ZoneGroupNb,
-                IsSale = isSale,
-                CurrentTierNb = tierNb,
-                ReachedDurationInSeconds = reachedDurationInSeconds,
-                TargetDurationInSeconds = dealZoneGroupTierDetails != null ? dealZoneGroupTierDetails.VolumeInSeconds : null
+                DealID = dealBillingSummary.DealId,
+                ZoneGroupNb = dealBillingSummary.DealZoneGroupNb,
+                FromTime = dealBillingSummary.BatchStart,
+                RateTierNb = dealBillingSummary.DealRateTierNb,
+                TierNb = dealBillingSummary.DealTierNb,
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(30)
             };
-
-            if (dealProgressId.HasValue)
-                dealProgress.DealProgressID = dealProgressId.Value;
-
-            return dealProgress;
         }
 
         private DealDetailedProgress BuildDealDetailedProgress(long? dealDetailedProgressID, DealBillingSummary dealBillingSummary)
@@ -164,17 +154,23 @@ namespace TOne.WhS.Deal.BP.Activities
             return dealDetailedProgress;
         }
 
-        private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary)
+        private DealProgress BuildDealProgress(long? dealProgressId, DealZoneGroup dealZoneGroup, int tierNb, decimal reachedDurationInSeconds, bool isSale)
         {
-            return new DealDetailedZoneGroupTier()
+            DealZoneGroupTierDetails dealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetails(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, tierNb, isSale);
+            DealProgress dealProgress = new DealProgress()
             {
-                DealID = dealBillingSummary.DealId,
-                ZoneGroupNb = dealBillingSummary.DealZoneGroupNb,
-                FromTime = dealBillingSummary.BatchStart,
-                RateTierNb = dealBillingSummary.DealRateTierNb,
-                TierNb = dealBillingSummary.DealTierNb,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(30)
+                DealID = dealZoneGroup.DealId,
+                ZoneGroupNb = dealZoneGroup.ZoneGroupNb,
+                IsSale = isSale,
+                CurrentTierNb = tierNb,
+                ReachedDurationInSeconds = reachedDurationInSeconds,
+                TargetDurationInSeconds = dealZoneGroupTierDetails != null ? dealZoneGroupTierDetails.VolumeInSeconds : null
             };
+
+            if (dealProgressId.HasValue)
+                dealProgress.DealProgressID = dealProgressId.Value;
+
+            return dealProgress;
         }
 
         private bool AreEqual(DealBillingSummary dealBillingSummary, DealDetailedProgress dealDetailedProgress)
@@ -205,5 +201,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
             return true;
         }
+
+        #endregion
     }
 }
