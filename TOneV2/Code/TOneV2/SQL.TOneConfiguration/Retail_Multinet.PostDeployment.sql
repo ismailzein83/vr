@@ -60,6 +60,9 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
+('8C9735AE-A047-4DD7-93B7-2C7C65A14CF2','VR_BEBridge_BEConvertor_MultiNet_Subscriber','MultiNet Subscriber Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-subscriber-convertor-editor"}'),
+('6C4B84E4-87E7-4632-8A61-7EA646A05E6D','VR_BEBridge_BEConvertor_MultiNet_Company','MultiNet Company Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-company-convertor-editor"}'),
+('A4B7CE4D-5E33-43D6-A5CC-F2ACE7FD5963','VR_BEBridge_BEConvertor_MultiNet_Branch','MultiNet Branch Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-branche-convertor-editor"}'),
 ('f82d421e-443e-418c-8cc6-e10597a46442','MultiNet Branch Extended Info', 'MultiNet Branch Extended Info',	'Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-multinet-accounttype-part-definition-branchextendedinfo", "RuntimeEditor":"retail-multinet-accounttype-part-runtime-branchextendedinfo"}'),
 ('daf99c84-8dc3-4c77-99cd-c0d631693d70','MultiNet Company Extended Info','MultiNet Company Extended Info',	'Retail_BE_AccountPartDefinition','{"DefinitionEditor":"retail-multinet-accounttype-part-definition-companyextendedinfo", "RuntimeEditor":"retail-multinet-accounttype-part-runtime-companyextendedinfo"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
