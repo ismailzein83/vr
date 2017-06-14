@@ -33,15 +33,16 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override CheckRetroActiveBeforeDateOutput DoWorkWithResult(CheckRetroActiveBeforeDateInput inputArgument, AsyncActivityHandle handle)
         {
-            List<DealReprocessInput> itemsToAdd = new List<DealReprocessInput>();
+            throw new NotImplementedException();
+            //List<DealReprocessInput> itemsToAdd = new List<DealReprocessInput>();
 
-            HashSet<DealZoneGroup> existingDealZoneGroups = inputArgument.DealProgressesBeforeUpdate.Keys.ToHashSet();
-            Dictionary<DealZoneGroup, DealProgress> dealProgressAfterUpdate = new DealProgressManager().GetDealProgresses(existingDealZoneGroups, inputArgument.IsSale);
+            //HashSet<DealZoneGroup> existingDealZoneGroups = inputArgument.DealProgressesBeforeUpdate.Keys.ToHashSet();
+            //Dictionary<DealZoneGroup, DealProgress> dealProgressAfterUpdate = new DealProgressManager().GetDealProgresses(existingDealZoneGroups, inputArgument.IsSale);
 
-            return new CheckRetroActiveBeforeDateOutput()
-            {
-                DaysToReprocess = new HashSet<DateTime>(itemsToAdd.Select(itm => itm.FromTime.Date))
-            };
+            //return new CheckRetroActiveBeforeDateOutput()
+            //{
+            //    DaysToReprocess = new HashSet<DateTime>(itemsToAdd.Select(itm => itm.FromTime.Date))
+            //};
         }
 
         protected override CheckRetroActiveBeforeDateInput GetInputArgument(AsyncCodeActivityContext context)

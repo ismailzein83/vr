@@ -31,43 +31,44 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override CompareCurrentToExpectedDealRecordsOutput DoWorkWithResult(CompareCurrentToExpectedDealRecordsInput inputArgument, AsyncActivityHandle handle)
         {
-            DealReprocessInputManager dealReprocessInputManager = new DealReprocessInputManager();
-            List<DealReprocessInput> itemsToAdd = new List<DealReprocessInput>();
+            throw new NotImplementedException();
+            //DealReprocessInputManager dealReprocessInputManager = new DealReprocessInputManager();
+            //List<DealReprocessInput> itemsToAdd = new List<DealReprocessInput>();
 
-            Dictionary<DateTime, DealBillingSummary> dealBillingSummaryByBatchStart;
-            DealBillingSummary dealBillingSummary;
+            //Dictionary<DateTime, DealBillingSummary> dealBillingSummaryByBatchStart;
+            //DealBillingSummary dealBillingSummary;
 
-            foreach (var kvp_expectedDealBillingSummaryRecord in inputArgument.ExpectedDealBillingSummaryRecords)
-            {
-                DealZoneGroupTierRate dealZoneGroupTierRate = kvp_expectedDealBillingSummaryRecord.Key;
-                Dictionary<DateTime, DealBillingSummary> expectedDealBillingSummaryByBatchStart = kvp_expectedDealBillingSummaryRecord.Value;
+            //foreach (var kvp_expectedDealBillingSummaryRecord in inputArgument.ExpectedDealBillingSummaryRecords)
+            //{
+            //    DealZoneGroupTierRate dealZoneGroupTierRate = kvp_expectedDealBillingSummaryRecord.Key;
+            //    Dictionary<DateTime, DealBillingSummary> expectedDealBillingSummaryByBatchStart = kvp_expectedDealBillingSummaryRecord.Value;
 
-                if (!inputArgument.CurrentDealBillingSummaryRecords.TryGetValue(dealZoneGroupTierRate, out dealBillingSummaryByBatchStart))
-                {
-                    itemsToAdd.AddRange(expectedDealBillingSummaryByBatchStart.Values.Select(itm => dealReprocessInputManager.BuildDealReprocessInput(itm)));
-                }
-                else
-                {
-                    foreach (var dealBillingSummaryRecordByBatchStart in expectedDealBillingSummaryByBatchStart)
-                    {
-                        DateTime batchStart = dealBillingSummaryRecordByBatchStart.Key;
-                        DealBillingSummary expectedDealBillingSummary = dealBillingSummaryRecordByBatchStart.Value;
+            //    if (!inputArgument.CurrentDealBillingSummaryRecords.TryGetValue(dealZoneGroupTierRate, out dealBillingSummaryByBatchStart))
+            //    {
+            //        itemsToAdd.AddRange(expectedDealBillingSummaryByBatchStart.Values.Select(itm => dealReprocessInputManager.BuildDealReprocessInput(itm)));
+            //    }
+            //    else
+            //    {
+            //        foreach (var dealBillingSummaryRecordByBatchStart in expectedDealBillingSummaryByBatchStart)
+            //        {
+            //            DateTime batchStart = dealBillingSummaryRecordByBatchStart.Key;
+            //            DealBillingSummary expectedDealBillingSummary = dealBillingSummaryRecordByBatchStart.Value;
 
-                        if (!dealBillingSummaryByBatchStart.TryGetValue(batchStart, out dealBillingSummary) || !expectedDealBillingSummary.IsEqual(dealBillingSummary))
-                            itemsToAdd.Add(dealReprocessInputManager.BuildDealReprocessInput(expectedDealBillingSummary));
-                    }
-                }
-            }
+            //            if (!dealBillingSummaryByBatchStart.TryGetValue(batchStart, out dealBillingSummary) || !expectedDealBillingSummary.IsEqual(dealBillingSummary))
+            //                itemsToAdd.Add(dealReprocessInputManager.BuildDealReprocessInput(expectedDealBillingSummary));
+            //        }
+            //    }
+            //}
 
-            if (itemsToAdd.Count == 0)
-                return null;
+            //if (itemsToAdd.Count == 0)
+            //    return null;
 
-            dealReprocessInputManager.InsertDealReprocessInputs(itemsToAdd);
+            //dealReprocessInputManager.InsertDealReprocessInputs(itemsToAdd);
 
-            return new CompareCurrentToExpectedDealRecordsOutput()
-            {
-                DaysToReprocess = new HashSet<DateTime>(itemsToAdd.Select(itm => itm.FromTime.Date))
-            };
+            //return new CompareCurrentToExpectedDealRecordsOutput()
+            //{
+            //    DaysToReprocess = new HashSet<DateTime>(itemsToAdd.Select(itm => itm.FromTime.Date))
+            //};
         }
 
         protected override CompareCurrentToExpectedDealRecordsInput GetInputArgument(AsyncCodeActivityContext context)

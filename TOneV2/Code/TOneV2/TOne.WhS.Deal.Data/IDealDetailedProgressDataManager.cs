@@ -9,7 +9,7 @@ namespace TOne.WhS.Deal.Data
 {
     public interface IDealDetailedProgressDataManager : IDataManager
     {
-        List<DealDetailedProgress> GetDealDetailedProgresses(List<DealZoneGroup> dealZoneGroups);
+        List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale);
 
         List<DealDetailedProgress> GetDealDetailedProgresses(bool isSale, DateTime beginDate);
 

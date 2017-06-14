@@ -16,9 +16,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
     public class LoadDealBillingSummaryRecordsOutput
     {
-        public Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
-
-        public Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>> ExpectedBaseDealBillingSummaryRecords { get; set; }
+        public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
     }
 
     public sealed class LoadDealBillingSummaryRecords : BaseAsyncActivity<LoadDealBillingSummaryRecordsInput, LoadDealBillingSummaryRecordsOutput>
@@ -27,23 +25,13 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public InArgument<Boolean> IsSale { get; set; }
 
-        public OutArgument<Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
-
-        public OutArgument<Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>>> ExpectedBaseDealBillingSummaryRecords { get; set; }
-
+        public OutArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
         protected override LoadDealBillingSummaryRecordsOutput DoWorkWithResult(LoadDealBillingSummaryRecordsInput inputArgument, AsyncActivityHandle handle)
         {
-            Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> currentDealBillingSummaryRecords;
-            Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>> expectedBaseDealBillingSummaryRecords;
-
-            DealBillingSummaryManager dealBillingSummaryManager = new DealBillingSummaryManager();
-            dealBillingSummaryManager.LoadDealBillingSummaryRecords(inputArgument.BeginDate, inputArgument.IsSale, out currentDealBillingSummaryRecords, out expectedBaseDealBillingSummaryRecords);
-
             return new LoadDealBillingSummaryRecordsOutput()
             {
-                CurrentDealBillingSummaryRecords = currentDealBillingSummaryRecords,
-                ExpectedBaseDealBillingSummaryRecords = expectedBaseDealBillingSummaryRecords
+                CurrentDealBillingSummaryRecords = new DealBillingSummaryManager().LoadDealBillingSummaryRecords(inputArgument.BeginDate, inputArgument.IsSale),
             };
         }
 
@@ -59,7 +47,6 @@ namespace TOne.WhS.Deal.BP.Activities
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadDealBillingSummaryRecordsOutput result)
         {
             this.CurrentDealBillingSummaryRecords.Set(context, result.CurrentDealBillingSummaryRecords);
-            this.ExpectedBaseDealBillingSummaryRecords.Set(context, result.ExpectedBaseDealBillingSummaryRecords);
         }
     }
 }

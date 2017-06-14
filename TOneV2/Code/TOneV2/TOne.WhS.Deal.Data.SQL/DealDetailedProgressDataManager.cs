@@ -24,11 +24,12 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region Public Methods
 
-        public List<DealDetailedProgress> GetDealDetailedProgresses(List<DealZoneGroup> dealZoneGroups)
+        public List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
         {
             DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
             return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDealZoneGroups]", DealDetailedProgressMapper, (cmd) =>
             {
+                cmd.Parameters.Add(new SqlParameter("@IsSale", isSale));
                 var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
                 dtPrm.Value = dtDealZoneGroup;
                 cmd.Parameters.Add(dtPrm);
@@ -150,7 +151,7 @@ namespace TOne.WhS.Deal.Data.SQL
             return dtDealProgress;
         }
 
-        DataTable BuildDealZoneGroupTable(List<DealZoneGroup> dealZoneGroups)
+        DataTable BuildDealZoneGroupTable(IEnumerable<DealZoneGroup> dealZoneGroups)
         {
             DataTable dtDealZoneGroup = GetDealZoneGroupTable();
             dtDealZoneGroup.BeginLoadData();

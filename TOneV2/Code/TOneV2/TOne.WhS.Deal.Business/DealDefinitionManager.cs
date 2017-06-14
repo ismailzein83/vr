@@ -83,6 +83,14 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
+        public DealZoneGroupTierDetails GetDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb, bool isSale)
+        {
+            if (isSale)
+                return GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
+            else
+                return GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
+        }
+
         public DealZoneGroupTierDetails GetSaleDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb)
         {
             DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);

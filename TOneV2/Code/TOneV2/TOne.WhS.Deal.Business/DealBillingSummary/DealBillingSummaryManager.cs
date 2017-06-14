@@ -13,11 +13,9 @@ namespace TOne.WhS.Deal.Business
     {
         #region Public Methods
 
-        public void LoadDealBillingSummaryRecords(DateTime beginDate, bool isSale, out Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> currentDealBillingSummaryRecords,
-             out Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>> expectedBaseDealBillingSummaryRecords)
+        public Dictionary<DealZoneGroup, List<DealBillingSummary>> LoadDealBillingSummaryRecords(DateTime beginDate, bool isSale)
         {
-            currentDealBillingSummaryRecords = null;
-            expectedBaseDealBillingSummaryRecords = null;
+            Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords = null;
 
             Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale == true ? "Sale" : "Cost");
 
@@ -26,8 +24,7 @@ namespace TOne.WhS.Deal.Business
             var result = new AnalyticManager().GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null && result.Data != null && result.Data.Count() > 0)
             {
-                currentDealBillingSummaryRecords = new Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>>();
-                expectedBaseDealBillingSummaryRecords = new Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>>();
+                currentDealBillingSummaryRecords = new Dictionary<DealZoneGroup, List<DealBillingSummary>>();
 
                 foreach (var analyticRecord in result.Data)
                 {
@@ -41,15 +38,14 @@ namespace TOne.WhS.Deal.Business
                     int dealTierNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealTierNb]).Value;
                     int dealRateTierNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealRateTierNb]).Value;
 
-                    DealZoneGroupTierRate dealZoneGroupTierRate = new DealZoneGroupTierRate() { DealId = dealId, ZoneGroupNb = dealZoneGroupNb, TierNb = dealTierNb, RateTierNb = dealRateTierNb };
+                    DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealId, ZoneGroupNb = dealZoneGroupNb };
                     DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchStart, dealId, dealZoneGroupNb, dealDurationInSeconds, dealTierNb, dealRateTierNb);
-                    BuildCurrentDealBillingSummaryRecord(currentDealBillingSummaryRecords, dealZoneGroupTierRate, dealBillingSummary);
 
-                    DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = origDealId, ZoneGroupNb = origDealZoneGroupNb };
-                    BaseDealBillingSummary baseDealBillingSummary = BuildBaseDealBillingSummary(isSale, batchStart, origDealId, origDealZoneGroupNb, durationInSeconds);
-                    BuildExpectedDealBillingSummaryRecord(expectedBaseDealBillingSummaryRecords, dealZoneGroup, baseDealBillingSummary);
+                    List<DealBillingSummary> dealBillingSummaryList = currentDealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
+                    dealBillingSummaryList.Add(dealBillingSummary);
                 }
             }
+            return currentDealBillingSummaryRecords;
         }
 
         #endregion
@@ -93,54 +89,6 @@ namespace TOne.WhS.Deal.Business
                 DealRateTierNb = dealRateTierNb,
                 IsSale = isSale
             };
-        }
-
-        private BaseDealBillingSummary BuildBaseDealBillingSummary(bool isSale, DateTime batchStart, int origDealId, int origDealZoneGroupNb, decimal durationInSeconds)
-        {
-            return new BaseDealBillingSummary()
-            {
-                BatchStart = batchStart,
-                DealId = origDealId,
-                DealZoneGroupNb = origDealZoneGroupNb,
-                DurationInSeconds = durationInSeconds,
-                IsSale = isSale
-            };
-        }
-
-        private void BuildCurrentDealBillingSummaryRecord(Dictionary<DealZoneGroupTierRate, Dictionary<DateTime, DealBillingSummary>> currentDealBillingSummaryRecords, DealZoneGroupTierRate dealZoneGroupTierRate, DealBillingSummary dealBillingSummary)
-        {
-            Dictionary<DateTime, DealBillingSummary> currentDealBillingSummaryRecordsByBatchStart;
-
-            if (!currentDealBillingSummaryRecords.TryGetValue(dealZoneGroupTierRate, out currentDealBillingSummaryRecordsByBatchStart))
-            {
-                currentDealBillingSummaryRecordsByBatchStart = new Dictionary<DateTime, DealBillingSummary>();
-                currentDealBillingSummaryRecordsByBatchStart.Add(dealBillingSummary.BatchStart, dealBillingSummary);
-                currentDealBillingSummaryRecords.Add(dealZoneGroupTierRate, currentDealBillingSummaryRecordsByBatchStart);
-            }
-            else
-            {
-                currentDealBillingSummaryRecordsByBatchStart.Add(dealBillingSummary.BatchStart, dealBillingSummary);
-            }
-        }
-
-        private void BuildExpectedDealBillingSummaryRecord(Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>> expectedDealBillingSummaryRecords, DealZoneGroup dealZoneGroup, BaseDealBillingSummary baseDealBillingSummary)
-        {
-            Dictionary<DateTime, BaseDealBillingSummary> expectedDealBillingSummaryRecordsByBatchStart;
-            BaseDealBillingSummary tempBaseDealBillingSummary;
-
-            if (!expectedDealBillingSummaryRecords.TryGetValue(dealZoneGroup, out expectedDealBillingSummaryRecordsByBatchStart))
-            {
-                expectedDealBillingSummaryRecordsByBatchStart = new Dictionary<DateTime, BaseDealBillingSummary>();
-                expectedDealBillingSummaryRecordsByBatchStart.Add(baseDealBillingSummary.BatchStart, baseDealBillingSummary);
-                expectedDealBillingSummaryRecords.Add(dealZoneGroup, expectedDealBillingSummaryRecordsByBatchStart);
-            }
-            else
-            {
-                if (!expectedDealBillingSummaryRecordsByBatchStart.TryGetValue(baseDealBillingSummary.BatchStart, out tempBaseDealBillingSummary))
-                    expectedDealBillingSummaryRecordsByBatchStart.Add(baseDealBillingSummary.BatchStart, baseDealBillingSummary);
-                else
-                    tempBaseDealBillingSummary.DurationInSeconds += baseDealBillingSummary.DurationInSeconds;
-            }
         }
 
         private enum PropertyName { HalfHour, OrigDeal, OrigDealZoneGroupNb, DurationInSec, Deal, DealZoneGroupNb, DealTierNb, DealRateTierNb, DealDurationInSec }
