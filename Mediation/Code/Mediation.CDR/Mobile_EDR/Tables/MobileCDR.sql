@@ -33,8 +33,11 @@
     [Latitude]                   VARCHAR (50)  NULL,
     [CallingLocationInformation] VARCHAR (50)  NULL,
     [CalledLocationInformation]  VARCHAR (50)  NULL,
+    [SwitchID]                   INT           NULL,
     CONSTRAINT [PK_MobileCDR_1] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

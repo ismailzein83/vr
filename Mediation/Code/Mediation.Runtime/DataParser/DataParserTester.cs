@@ -986,6 +986,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 5
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "MobileCDR",
@@ -1008,6 +1013,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 0
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "MobileCDR",
@@ -1030,6 +1040,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 101
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "MobileCDR",
@@ -1052,6 +1067,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 100
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "MobileCDR",
@@ -1074,6 +1094,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 1
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "MobileCDR",
@@ -1096,6 +1121,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 6
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "SMS"
@@ -1116,6 +1146,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "RecordType",
                              Value = 7
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "SwitchId",
+                             Value = 2
                             }
                     },
                     RecordType = "SMS"

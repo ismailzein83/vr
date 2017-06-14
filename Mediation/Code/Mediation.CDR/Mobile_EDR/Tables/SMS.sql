@@ -57,8 +57,11 @@
     [MTSMSBlackListFlag]              BIT           NULL,
     [SAC]                             VARCHAR (100) NULL,
     [LocationAreaCode]                VARCHAR (100) NULL,
+    [SwitchID]                        INT           NULL,
     CONSTRAINT [PK_SMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

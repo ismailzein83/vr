@@ -55,7 +55,10 @@
     [Origination]                     VARCHAR (100) NULL,
     [MTSMSBlackListFlag]              BIT           NULL,
     [SAC]                             VARCHAR (100) NULL,
-    [LocationAreaCode]                VARCHAR (100) NULL);
+    [LocationAreaCode]                VARCHAR (100) NULL,
+    [SwitchID]                        INT           NULL);
+
+
 
 
 
