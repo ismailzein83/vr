@@ -5,8 +5,10 @@ using Vanrise.Common;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 using Vanrise.DataParser.Entities.HexTLV;
+using Vanrise.DataParser.MainExtensions.CompositeFieldParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers;
+using Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers;
 
 namespace Mediation.Runtime.DataParser
 {
@@ -17,6 +19,7 @@ namespace Mediation.Runtime.DataParser
 
             string settings = GetHuaweiIraqParserSettings();
             settings = GetHuaweiIraqParserSettings_GPRS();
+            settings = GetEricssonIraqParserSettings();
             //DateTimeOffset do1 = new DateTimeOffset(2017, 05, 22, 5, 0, 0, new TimeSpan(-5, 0, 0));
             //var newDate = do1.ToLocalTime().DateTime;
             //ParseHuaweiNamibia();
@@ -890,13 +893,9 @@ namespace Mediation.Runtime.DataParser
         #endregion
 
         #region Ericsson
-        private void ParseEricsson()
-        {
-            var fileStream = new FileStream(@"c:\BGMSS2.TTFILE00.2017031916025933", FileMode.Open, FileAccess.Read);
-            ReadData_Ericsson(fileStream);
-        }
 
-        public void ReadData_Ericsson(FileStream stream)
+
+        public string GetEricssonIraqParserSettings()
         {
             HexTLVParserType hexParser = new HexTLVParserType
             {
@@ -907,20 +906,16 @@ namespace Mediation.Runtime.DataParser
                 RecordParserTemplates = GetTemplates()
             };
 
-
-            Action<ParsedRecord> onRecordParsed = (parsedRecord) =>
+            ParserType parserType = new ParserType
             {
-
-            };
-            ParserTypeExecuteContext parserTypeExecuteContext = new ParserTypeExecuteContext(onRecordParsed)
-            {
-                Input = new StreamDataParserInput
+                ParserTypeId = new Guid("BA810002-0B4D-4563-9A0D-EE228D69A1A6"),
+                Settings = new ParserTypeSettings
                 {
-                    Stream = stream
+                    ExtendedSettings = hexParser
                 }
             };
 
-            hexParser.Execute(parserTypeExecuteContext);
+            return Serializer.Serialize(parserType.Settings);
         }
 
         private Dictionary<Guid, HexTLVRecordParser> GetTemplates()
@@ -945,7 +940,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new SplitByTagRecordParser
                 {
-                    SubRecordsParsersByTag = Get_A0_CreateRecordsParsersByTag()
+                    SubRecordsParsersByTag = Get_Template_CreateRecordsParsersByTag()
                 }
             });
             return parsers;
@@ -983,88 +978,809 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new HexTLVFieldParserCollection
                     {
-                        FieldParsersByTag = GetFieldParsers()
+                        FieldParsersByTag = Get_A0_Transit_FieldParsers()
                     },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>(),
-                    RecordType = "Transit"
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> 
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 5
+                            }
+                    },
+                    RecordType = "MobileCDR",
+                    TempFieldsNames = GetTempFieldsName(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers()
                 }
             });
+
+            subParser.Add("A1", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A1_MSOriginating_FieldParsers()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 0
+                            }
+                    },
+                    RecordType = "MobileCDR",
+                    TempFieldsNames = GetTempFieldsName(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers()
+                }
+            });
+
+            subParser.Add("A2", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A2_Roaming_FieldParsers()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 101
+                            }
+                    },
+                    RecordType = "MobileCDR",
+                    TempFieldsNames = GetTempFieldsName(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers()
+                }
+            });
+
+            subParser.Add("A3", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A3_CallForwarding_FieldParsers()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 100
+                            }
+                    },
+                    RecordType = "MobileCDR",
+                    TempFieldsNames = GetTempFieldsName(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers()
+                }
+            });
+
+            subParser.Add("A4", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A4_MSTerminating_FieldParsers()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 1
+                            }
+                    },
+                    RecordType = "MobileCDR",
+                    TempFieldsNames = GetTempFieldsName(),
+                    CompositeFieldsParsers = GetCompositeFieldParsers()
+                }
+            });
+
+            subParser.Add("A5", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_A5_MSOriginatingSMS_FieldParsers()
+                    },
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 6
+                            }
+                    },
+                    RecordType = "SMS"
+                }
+            });
+
             subParser.Add("A7", new HexTLVRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
                     FieldParsers = new HexTLVFieldParserCollection
                     {
-                        FieldParsersByTag = Get_A7_FieldParsers()
+                        FieldParsersByTag = Get_A7_MSTerminatingSMS_FieldParsers()
                     },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>(),
-                    RecordType = "MSTerminatingSMSinMSC"
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    { 
+                        new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordType",
+                             Value = 7
+                            }
+                    },
+                    RecordType = "SMS"
                 }
             });
-
             return subParser;
         }
 
-        private Dictionary<string, HexTLVRecordParser> Get_A0_CreateRecordsParsersByTag()
+        private HashSet<string> GetTempFieldsName()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
-
-            subParser.Add("A0", new HexTLVRecordParser
-            {
-                Settings = new CreateRecordRecordParser
-                {
-                    FieldParsers = new HexTLVFieldParserCollection
-                    {
-                        FieldParsersByTag = GetFieldParsers()
-                    },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>(),
-                    RecordType = "Transit"
-                }
-            });
-            subParser.Add("A7", new HexTLVRecordParser
-            {
-                Settings = new CreateRecordRecordParser
-                {
-                    FieldParsers = new HexTLVFieldParserCollection
-                    {
-                        FieldParsersByTag = Get_A7_FieldParsers()
-                    },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>(),
-                    RecordType = "MSTerminatingSMSinMSC"
-                }
-            });
-
-            return subParser;
+            return new HashSet<string> { "Date", "StartTime", "StopTime" };
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A7_FieldParsers()
+        private List<CompositeFieldsParser> GetCompositeFieldParsers()
+        {
+            return new List<CompositeFieldsParser> 
+                    { 
+                        new DateTimeCompositeParser{DateFieldName = "Date",TimeFieldName = "StartTime",FieldName = "ConnectDateTime"},
+                        new DateTimeCompositeParser{DateFieldName = "Date",TimeFieldName = "StopTime",FieldName = "DisconnectDateTime"}
+                    };
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A0_Transit_FieldParsers()
         {
             Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("88", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "Date",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+
+            parsers.Add("89", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StartTime"
+                }
+            });
+
+            parsers.Add("8A", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StopTime"
+                }
+            });
+
+            parsers.Add("8B", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9D", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F50", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F54", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A1_MSOriginating_FieldParsers()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("89", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "Date",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+            parsers.Add("8A", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StartTime"
+                }
+            });
+
+            parsers.Add("8B", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StopTime"
+                }
+            });
+
+            parsers.Add("8C", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+
+            parsers.Add("9F7E", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F8102", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9B", new HexTLVFieldParser
+            {
+                Settings = new CallLocationInformationParser
+                {
+                    FieldName = "CallingLocationInformation"
+                }
+            });
+
+            parsers.Add("9C", new HexTLVFieldParser
+            {
+                Settings = new CallLocationInformationParser
+                {
+                    FieldName = "CalledLocationInformation"
+                }
+            });
+
+            parsers.Add("99", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "LocationNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A2_Roaming_FieldParsers()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("89", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "Date",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+            parsers.Add("8A", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StartTime"
+                }
+            });
+
+            parsers.Add("8B", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StopTime"
+                }
+            });
+            parsers.Add("8C", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9C", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F3A", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F3D", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A3_CallForwarding_FieldParsers()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("8D", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "Date",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+
+            parsers.Add("8E", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StartTime"
+                }
+            });
+
+            parsers.Add("8F", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StopTime"
+                }
+            });
+            parsers.Add("90", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F53", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F56", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9C", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "LocationNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A4_MSTerminating_FieldParsers()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("8A", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "Date",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+
+            parsers.Add("8B", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StartTime"
+                }
+            });
+
+            parsers.Add("8C", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "StopTime"
+                }
+            });
+
+            parsers.Add("8D", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+
+            parsers.Add("9F70", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F72", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledChargeAreaCode",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F24", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9B", new HexTLVFieldParser
+            {
+                Settings = new CallLocationInformationParser
+                {
+                    FieldName = "CallingLocationInformation"
+                }
+            });
+
+            parsers.Add("9C", new HexTLVFieldParser
+            {
+                Settings = new CallLocationInformationParser
+                {
+                    FieldName = "CalledLocationInformation"
+                }
+            });
+
+            parsers.Add("99", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "LocationNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A5_MSOriginatingSMS_FieldParsers()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("87", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+
+            parsers.Add("88", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Time,
+                    WithOffset = false
+                }
+            });
+
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "ServedIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    RemoveHexa = true
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_A7_MSTerminatingSMS_FieldParsers()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Date,
+                    WithOffset = false
+                }
+            });
+
+            parsers.Add("87", new HexTLVFieldParser
+            {
+                Settings = new DateTimeParser
+                {
+                    FieldName = "MessageTime",
+                    DateTimeParsingType = DateTimeParsingType.Time,
+                    WithOffset = false
+                }
+            });
+
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "CalledIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+                {
+                    FieldName = "ServedIMEI",
+                    RemoveHexa = true
+                }
+            });
 
             parsers.Add("83", new HexTLVFieldParser
             {
                 Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
-                    FieldName = "CalledPartyNumber",
-                    AIsZero = false,
+                    FieldName = "CalledNumber",
                     RemoveHexa = true
                 }
             });
-            return parsers;
-        }
 
-        private Dictionary<string, HexTLVFieldParser> GetFieldParsers()
-        {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
-
-            parsers.Add("83", new HexTLVFieldParser
-            {
-                Settings = new BoolFieldParser
-                {
-                    FieldName = "Bool"
-                }
-            });
-
+            //parsers.Add("9F53", new HexTLVFieldParser
+            //{
+            //    Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
+            //    {
+            //        FieldName = "CallingChargeAreaCode",
+            //        RemoveHexa = true
+            //    }
+            //});
             return parsers;
         }
 
@@ -2927,7 +3643,7 @@ namespace Mediation.Runtime.DataParser
             });
 
             return parsers;
-        }        
+        }
         private string GetHuaweiIraqParserSettings_GPRS()
         {
             HexTLVParserType hexParser = new HexTLVParserType
@@ -3503,14 +4219,6 @@ namespace Mediation.Runtime.DataParser
             _OnRecordParsed = onRecordParsed;
         }
 
-        public ParsedRecord CreateRecord(string recordType)
-        {
-            FldDictParsedRecord parsedRecord = new FldDictParsedRecord
-            {
-
-            };
-            return parsedRecord;
-        }
 
         public IDataParserInput Input
         {
@@ -3521,6 +4229,15 @@ namespace Mediation.Runtime.DataParser
         public void OnRecordParsed(ParsedRecord parsedRecord)
         {
             _OnRecordParsed(parsedRecord);
+        }
+
+        public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
+        {
+            FldDictParsedRecord parsedRecord = new FldDictParsedRecord
+            {
+
+            };
+            return parsedRecord;
         }
     }
 
