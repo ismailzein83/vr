@@ -23,9 +23,9 @@ namespace Vanrise.Rules.Pricing
 
         Decimal? TotalAmount { set; }
 
-        Decimal ExtraChargeRate { get; }
+        Decimal? ExtraChargeRate { get; }
 
-        Decimal ExtraChargeValue { set; }
+        Decimal? ExtraChargeValue { set; }
 
         int? DestinationCurrencyId { get; }
 

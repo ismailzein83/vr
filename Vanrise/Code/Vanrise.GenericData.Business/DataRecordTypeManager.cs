@@ -14,9 +14,11 @@ namespace Vanrise.GenericData.Business
 {
     public interface IDataRecordFiller
     {
-        void FillDataRecordTypeFromDictionary(Dictionary<string, dynamic> source);
         void SetFieldValue(string fieldName, dynamic fieldValue);
         dynamic GetFieldValue(string fieldName);
+        void FillDataRecordTypeFromDictionary(Dictionary<string, dynamic> source);
+        Dictionary<string, dynamic> GetDictionaryFromDataRecordType();
+        dynamic CloneRecord(Guid dataRecordTypeId);
     }
 
     public class DataRecordTypeManager : IDataRecordTypeManager
@@ -395,6 +397,14 @@ namespace Vanrise.GenericData.Business
 
                             return results;
                         }
+                    
+                        public dynamic CloneRecord(Guid dataRecordTypeId)
+                        {
+                            Vanrise.GenericData.Business.DataRecordTypeManager dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+                            dynamic record = Activator.CreateInstance(dataRecordTypeManager.GetDataRecordRuntimeType(dataRecordTypeId));
+                            #CLONERECORDMEMBERS#
+                            return record;
+                        }
                     }
                 }
                 ");
@@ -405,13 +415,17 @@ namespace Vanrise.GenericData.Business
             StringBuilder setFieldValueBuilder = new StringBuilder();
             StringBuilder getFieldValueBuilder = new StringBuilder();
 
+            StringBuilder cloneRecordMembersBuilder = new StringBuilder();
+
             List<string> fieldNames = new List<string>();
             foreach (var field in dataRecordType.Fields)
             {
-                globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", CSharpCompiler.TypeToString(field.Type.GetRuntimeType()), field.Name);
+                string fieldRuntimTypeAsString = CSharpCompiler.TypeToString(field.Type.GetRuntimeType());
+                globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", fieldRuntimTypeAsString, field.Name);
                 propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
-                setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); break;", field.Name, field.Type.GetNonNullableRuntimeType());
+                setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, field.Type.GetNonNullableRuntimeType(), fieldRuntimTypeAsString);
                 getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
+                cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
                 fieldNames.Add(field.Name);
             }
 
@@ -422,6 +436,7 @@ namespace Vanrise.GenericData.Business
 
             classDefinitionBuilder.Replace("#SETFIELDMEMBERS#", setFieldValueBuilder.ToString());
             classDefinitionBuilder.Replace("#GETFIELDMEMBERS#", getFieldValueBuilder.ToString());
+            classDefinitionBuilder.Replace("#CLONERECORDMEMBERS#", cloneRecordMembersBuilder.ToString());
 
             classDefinitionBuilder.Replace("#FIELDNAMES#", fieldNamesAsString);
 

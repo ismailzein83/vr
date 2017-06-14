@@ -24,9 +24,9 @@ namespace Vanrise.GenericData.Pricing
 
         public IVRRule Rule { get; set; }
 
-        public Decimal ExtraChargeRate { get; set; }
+        public Decimal? ExtraChargeRate { get; set; }
 
-        public Decimal ExtraChargeValue { get; set; }
+        public Decimal? ExtraChargeValue { get; set; }
 
         public int? DestinationCurrencyId { get; set; }
 
