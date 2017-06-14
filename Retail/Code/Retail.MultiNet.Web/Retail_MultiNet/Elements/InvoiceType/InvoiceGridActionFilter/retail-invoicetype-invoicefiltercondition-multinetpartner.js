@@ -35,11 +35,10 @@ app.directive("retailInvoicetypeInvoicefilterconditionMultinetpartner", ["UtilsS
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onAccountConditionDirectiveReady = function(api)
-                {
+                $scope.scopeModel.onAccountConditionDirectiveReady = function (api) {
                     accountConditionAPI = api;
                     accountConditionReadyDeferred.resolve();
-                }
+                };
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     businessEntityDefinitionSelectorAPI = api;
                     businessEntityDefinitionSelectorReadyDeferred.resolve();
