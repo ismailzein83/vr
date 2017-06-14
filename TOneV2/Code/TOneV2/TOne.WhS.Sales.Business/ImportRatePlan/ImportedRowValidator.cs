@@ -258,7 +258,7 @@ namespace TOne.WhS.Sales.Business
             DateTime effectiveDateAsDateTime;
             if (!DateTime.TryParse(effectiveDate, out effectiveDateAsDateTime))
             {
-                context.ErrorMessage = "Effective date is an invalid date";
+                context.ErrorMessage = "Effective date is an invalid date (correct date format: MM/dd/yyyy)";
                 return false;
             }
 
