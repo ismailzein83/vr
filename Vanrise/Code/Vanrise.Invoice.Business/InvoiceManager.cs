@@ -636,7 +636,11 @@ namespace Vanrise.Invoice.Business
             Dictionary<string, List<string>> itemSetNameStorageDic = new InvoiceItemManager().GetItemSetNamesByStorageConnectionString(invoice.InvoiceTypeId, itemSetNames);
 
             var dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions, invoice.SerialNumber, invoice.FromDate, invoice.ToDate, invoice.IssueDate);
+
+            IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> mappedTransactions = null;
+            if (billingTransactions != null)
+                mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions, invoice.SerialNumber, invoice.FromDate, invoice.ToDate, invoice.IssueDate);
+
             return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, mappedTransactions, out invoiceId);
         }
 
