@@ -248,7 +248,7 @@ app.directive('retailMultinetBrancheConvertorEditor', ['UtilsService', 'VRUIUtil
                 api.getData = function () {
                     var data = {
                         $type: "Retail.MultiNet.MainExtensions.Convertors.BranchConvertor, Retail.MultiNet.MainExtensions",
-                        Name: "MultiNet Branche Convertor",
+                        Name: "MultiNet Branch Convertor",
                         AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
                         InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
                         AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),

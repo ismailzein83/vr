@@ -15,6 +15,13 @@ namespace Retail.MultiNet.MainExtensions.Convertors
 {
     public class CompanyConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "MultiNet Company Convertor";
+            }
+        }
         public Guid AccountBEDefinitionId { get; set; }
         public Guid AccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }

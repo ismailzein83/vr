@@ -35,12 +35,24 @@ namespace Retail.Zajil.MainExtensions.Convertors
 
         public override void Initialize(ITargetBEConvertorInitializeContext context)
         {
-            context.InitializationData = new AccountBEManager().GetAccounts(this.AccountBEDefinitionId)
-                .Where(v => v.Value.Settings != null 
-                    && v.Value.Settings.Parts[ZajilCompanyExtendedInfoId] != null 
-                    && (v.Value.Settings.Parts[ZajilCompanyExtendedInfoId].Settings as ZajilCompanyExtendedInfo) != null 
-                    && !string.IsNullOrEmpty((v.Value.Settings.Parts[ZajilCompanyExtendedInfoId].Settings as ZajilCompanyExtendedInfo).GPVoiceCustomerNo))
-                .ToDictionary(kvp => (kvp.Value.Settings.Parts[ZajilCompanyExtendedInfoId].Settings as ZajilCompanyExtendedInfo).GPVoiceCustomerNo, kvp => kvp.Value);
+            Dictionary<string, Account> initializationData = new Dictionary<string, Account>();
+            var accounts = new AccountBEManager().GetAccounts(this.AccountBEDefinitionId);
+
+            foreach (var account in accounts.Values)
+            {
+                if (account.Settings != null)
+                {
+                    AccountPart accountPart = null;
+                    if (account.Settings.Parts.TryGetValue(ZajilCompanyExtendedInfoId, out accountPart))
+                    {
+                        ZajilCompanyExtendedInfo zajilCompanyExtendedInfo = accountPart.Settings as ZajilCompanyExtendedInfo;
+                        string gpVoiceCustomerNo = zajilCompanyExtendedInfo.GPVoiceCustomerNo;
+                        if (!string.IsNullOrEmpty(gpVoiceCustomerNo))
+                            initializationData.GetOrCreateItem(gpVoiceCustomerNo, () => account);
+                    }
+                }
+            }
+            context.InitializationData = initializationData;
         }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {

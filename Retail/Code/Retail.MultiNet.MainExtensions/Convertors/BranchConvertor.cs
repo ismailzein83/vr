@@ -16,6 +16,13 @@ namespace Retail.MultiNet.MainExtensions.Convertors
 {
     public class BranchConvertor : TargetBEConvertor
     {
+        public override string Name
+        {
+            get
+            {
+                return "MultiNet Branch Convertor";
+            }
+        }
         static AccountBEManager s_accountBEManager = new AccountBEManager();
 
         public Guid AccountBEDefinitionId { get; set; }
@@ -23,7 +30,7 @@ namespace Retail.MultiNet.MainExtensions.Convertors
         public Guid InitialStatusId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
         public Guid BranchInfoPartDefinitionId { get; set; }
-        public string BrachIdColumnName { get; set; }
+        public string BranchIdColumnName { get; set; }
         public string CompanyIdColumnName { get; set; }
         
         public Guid FinancialPartDefinitionId { get; set; }
@@ -59,11 +66,11 @@ namespace Retail.MultiNet.MainExtensions.Convertors
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             Dictionary<Int64, ITargetBE> maultiNetAccounts = new Dictionary<Int64, ITargetBE>();
             var accountsInitializationData = context.InitializationData as AccountsInitializationData;
-            sourceBatch.Data.DefaultView.Sort = BrachIdColumnName;
+            sourceBatch.Data.DefaultView.Sort = BranchIdColumnName;
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 ITargetBE targetMultiNetAccount;
-                var sourceId = (Int64)row[BrachIdColumnName];
+                var sourceId = (Int64)row[BranchIdColumnName];
                 var parentId = (Int64)row[CompanyIdColumnName];
                 string accountName = row["AC_ACCTHOLDERNAME"] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
