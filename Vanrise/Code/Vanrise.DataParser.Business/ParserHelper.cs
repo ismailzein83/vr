@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Vanrise.Common;
 using Vanrise.DataParser.Entities;
 
@@ -92,6 +93,44 @@ namespace Vanrise.DataParser.Business
             return hex.Replace("-", "");
         }
 
+        public static string GetBCDNumber(byte[] data, bool removeHexa, bool aIsZero)
+        {
+            StringBuilder number = new StringBuilder();
+            foreach (var byteItem in data)
+            {
+                byte[] nibbles = ParserHelper.SplitByteToNibble(byteItem);
+                for (int i = 0; i < nibbles.Length; i++)
+                {
+                    int val = (int)nibbles[i];
+                    number.Append(GetNumberValue(val, removeHexa, aIsZero));
+                }
+            }
+            return number.ToString();
+        }
+
+        public static string GetTBCDNumber(byte[] data, bool removeHexa, bool aIsZero)
+        {
+            StringBuilder number = new StringBuilder();
+            foreach (var byteItem in data)
+            {
+                byte[] nibbles = ParserHelper.SplitByteToNibble(byteItem);
+                for (int i = nibbles.Length - 1; i >= 0; i--)
+                {
+                    int val = (int)nibbles[i];
+                    number.Append(GetNumberValue(val, removeHexa, aIsZero));
+                }
+            }
+            return number.ToString();
+        }
+
+        static string GetNumberValue(int val, bool removeHexa, bool aIsZero)
+        {
+            if (aIsZero && val == 10)
+                return "0";
+            else if (aIsZero && (val > 10 || val == 0) || (removeHexa && val > 9))
+                return "";
+            return val.ToString();
+        }
     }
     public class ParserTypeExecuteContext : IParserTypeExecuteContext
     {

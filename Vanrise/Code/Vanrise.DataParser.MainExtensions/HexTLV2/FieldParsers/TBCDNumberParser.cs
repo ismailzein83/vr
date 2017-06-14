@@ -5,7 +5,7 @@ using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 {
-    public class BCDNumberParser : HexTLVFieldParserSettings
+    public class TBCDNumberParser : HexTLVFieldParserSettings
     {
         public override Guid ConfigId
         {
@@ -16,26 +16,8 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
         public bool RemoveHexa { get; set; }
         public override void Execute(IHexTLVFieldParserContext context)
         {
-            StringBuilder number = new StringBuilder();
-            foreach (var byteItem in context.FieldValue)
-            {
-                byte[] nibbles = ParserHelper.SplitByteToNibble(byteItem);
-                for (int i = 0; i < nibbles.Length; i++)
-                {
-                    int val = (int)nibbles[i];
-                    number.Append(GetNumberValue(val));
-                }
-            }
-            context.Record.SetFieldValue(this.FieldName, number.ToString());
+            context.Record.SetFieldValue(this.FieldName, ParserHelper.GetTBCDNumber(context.FieldValue, this.RemoveHexa, this.AIsZero));
         }
 
-        string GetNumberValue(int val)
-        {
-            if (AIsZero && val == 10)
-                return "0";
-            else if (AIsZero && (val > 10 || val == 0) || (RemoveHexa && val > 9))
-                return "";
-            return val.ToString();
-        }
     }
 }

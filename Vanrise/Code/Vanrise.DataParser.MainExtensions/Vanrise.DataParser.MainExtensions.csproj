@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="CompositeFieldParsers\DateTimeCompositeParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\BoolFieldParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\CallLocationInformationParser.cs" />
+    <Compile Include="HexTLV2\FieldParsers\CoordinatesParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\DateTimeParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\HexaParser.cs" />
     <Compile Include="HexTLV2\FieldParsers\NumberFieldParser.cs" />
