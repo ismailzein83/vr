@@ -75,7 +75,7 @@
                             valueWatch();
 
                         });
-                        $element.on('$destroy', function () {
+                        iElem.on('$destroy', function () {
                             $('#' + ctrl.id).parents('div').unbind('scroll', fixMultipleTextDropdownPosition);
                         });
 
@@ -227,6 +227,7 @@
                         setTimeout(function () {
 
                             $('#' + ctrl.id).on('click', '.dropdown-toggle', function () {
+                                $scope.$root.$broadcast("hide-all-select");
                                 var self = $(this);
                                 var selfHeight = $(this).parent().height();
                                 var selfOffset = $(self).offset();
