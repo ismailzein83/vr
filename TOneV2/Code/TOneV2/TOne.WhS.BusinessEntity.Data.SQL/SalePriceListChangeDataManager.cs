@@ -25,6 +25,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             "ZoneName","ZoneID","RoutingProductId","RecentRoutingProductId","BED","EED","PriceListId","CountryId","ProcessInstanceID"
         };
+        private readonly string[] _salePriceListSnapshot =
+        {
+            "PriceListID","SnapShotDetail"
+        };
         public SalePriceListChangeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -53,6 +57,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             if (countryIds != null && countryIds.Count > 0)
                 strcountryIds = string.Join(",", countryIds);
             return GetItemsSP("TOneWhS_BE.sp_SalePricelistRPChange_GetFiltered", SalePricelistRPChangeMapper, pricelistId, strcountryIds);
+        }
+        public SalePriceListSnapShot GetSalePriceListSnapShot(int priceListId)
+        {
+            return GetItemSP("TOneWhS_BE.sp_SalePricelistSnapShot", SalePricelistSnapShotMapper, priceListId);
         }
         public List<SalePricelistCodeChange> GetNotSentCodechanges(IEnumerable<int> customerIds)
         {
@@ -104,6 +112,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 WriteRecordToStream(routingProductChange, dbApplyStream, processInstanceId);
             Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelistRPChange_New", _salePricelistRPChangeColumns);
             ApplyChangesToDataBase(preparedSalePriceLists);
+        }
+
+        public void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
+        {
+            if (salePriceListSaleCodeSnapshots == null || !salePriceListSaleCodeSnapshots.Any())
+                return;
+
+            object dbApplyStrem = InitialiazeStreamForDBApply();
+            foreach (var salePriceListSaleCodeSnapshot in salePriceListSaleCodeSnapshots)
+                WriteRecordToStream(salePriceListSaleCodeSnapshot, dbApplyStrem);
+            object preparedSnapshot = FinishDBApplyStream(dbApplyStrem, "TOneWhS_BE.SalePriceListSnapShot", _salePriceListSnapshot);
+            ApplyChangesToDataBase(preparedSnapshot);
         }
         #endregion
         #region Bulk Insert
@@ -164,6 +184,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     GetDateTimeForBCP(record.EED),
                     record.RoutingProductId,
                     record.CurrencyId);
+        }
+        private void WriteRecordToStream(SalePriceListSnapShot record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            if (streamForBulkInsert != null)
+                streamForBulkInsert.WriteRecord("{0}^{1}",
+                    record.PriceListId,
+                    Vanrise.Common.Serializer.Serialize(record.SnapShotDetail));
         }
         private object FinishDBApplyStream(object dbApplyStream, string tableName, string[] columnNames)
         {
@@ -236,6 +264,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CountryId = GetReaderValue<int>(reader, "CountryId")
             };
             return salePricelistRpChange;
+        }
+
+        SalePriceListSnapShot SalePricelistSnapShotMapper(IDataReader reader)
+        {
+            return new SalePriceListSnapShot
+            {
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                SnapShotDetail = Vanrise.Common.Serializer.Deserialize<SnapShotDetail>(reader["SnapShotDetail"] as string)
+            };
         }
 
         #endregion

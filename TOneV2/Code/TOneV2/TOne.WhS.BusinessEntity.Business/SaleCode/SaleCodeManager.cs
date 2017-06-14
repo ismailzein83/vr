@@ -33,6 +33,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByCodeGroups(codeGroupsIds);
         }
 
+        public List<SaleCode> GetSaleCodesByCodeId(IEnumerable<long> codeIds)
+        {
+            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+            return dataManager.GetSaleCodesByCodeId(codeIds);
+        }
         public string GetCode(SaleCode saleCode)
         {
             if (saleCode == null)
@@ -57,7 +62,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodes(effectiveOn);
         }
-        
+
         public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn, long? processInstanceId)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();

@@ -31,6 +31,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistRPChangeDetailMapper));
         }
 
+        public List<SaleCode> GetSalePriceListSaleCodeSnapShot(int pricelistId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            var saleCodesSnapshot = dataManager.GetSalePriceListSnapShot(pricelistId);
+
+            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            return saleCodeManager.GetSaleCodesByCodeId(saleCodesSnapshot.SnapShotDetail.CodeIds);
+        }
+
         public string GetOwnerName(int priceListId)
         {
             string ownerName = string.Empty;
@@ -43,6 +52,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 ownerName = carrierAccountManager.GetCarrierAccountName(ownerId);
             }
             return ownerName;
+        }
+
+        public void BulkInsertSalePriceListSaleCodeSnapshot(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
+        {
+            var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            dataManager.SaveSalePriceListSnapshotToDb(salePriceListSaleCodeSnapshots);
+
         }
         public void SaveSalePriceListCustomerChanges(List<CustomerPriceListChange> customerPriceListChanges, long processInstanceId)
         {

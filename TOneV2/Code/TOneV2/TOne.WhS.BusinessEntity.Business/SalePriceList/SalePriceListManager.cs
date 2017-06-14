@@ -34,12 +34,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Any())
             {
+                IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, context.EffectiveDate, context.ProcessInstanceId);
+                if (saleCodes == null || !saleCodes.Any())
+                    return;
+
                 SalePriceListInputContext inputcontext = new SalePriceListInputContext
                 {
                     EffectiveDate = context.EffectiveDate,
                     SellingNumberPlanId = context.SellingNumberPlanId,
                     CustomerChanges = context.CustomerPriceListChanges,
-                    ProcessInstanceId = context.ProcessInstanceId
+                    ProcessInstanceId = context.ProcessInstanceId,
+                    SaleCodes = saleCodes
                 };
                 SalePriceListOutputContext outputContext = PrepareSalePriceListContext(inputcontext);
 
@@ -53,8 +58,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     int? sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customerId, DateTime.Now, false);
                     if (!sellingProductId.HasValue)
                         throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customerId));
-
-                    //customerChange.IsCustomerAtoZ = customer.CustomerSettings.IsAToZ;
 
                     var customerPriceListType = _carrierAccountManager.GetPriceListType(customerId);
                     SalePriceListType pricelistType = GetSalePriceListType(customerPriceListType, context.ChangeType);
@@ -75,6 +78,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                 }
                 BulkInsertCustomerChanges(context.CustomerPriceListChanges.ToList(), context.ProcessInstanceId);
+                BulkInsertSalePriceListSnapshot(saleCodes.Select(item => item.SaleCodeId).ToList(), context.CustomerPriceListChanges.Select(item => item.PriceListId));
             }
             var priceListsToSave = customerPriceListsByCustomerId.Values.Concat(sellingProductPriceList);
             BulkInsertPriceList(priceListsToSave.ToList());
@@ -247,13 +251,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private SalePriceListOutputContext PrepareSalePriceListContext(SalePriceListInputContext context)
         {
-            IEnumerable<SaleCode> saleCodes = new SaleCodeManager().GetSaleCodesEffectiveAfter(context.SellingNumberPlanId, context.EffectiveDate, context.ProcessInstanceId);
-            if (saleCodes == null || !saleCodes.Any())
-                return null;
-
             var customerChanges = StructureCustomerPriceListChanges(context.CustomerChanges);
 
-            IEnumerable<ExistingSaleCodeEntity> existingSaleCodeEntities = saleCodes.MapRecords(ExistingSaleCodeEntityMapper);
+            IEnumerable<ExistingSaleCodeEntity> existingSaleCodeEntities = context.SaleCodes.MapRecords(ExistingSaleCodeEntityMapper);
             Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(existingSaleCodeEntities);
             Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry = StructureZoneWrappersByCountry(existingSaleCodesByZoneName);
 
@@ -271,7 +271,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 CustomerChanges = customerChanges,
                 ZoneWrappersByCountry = zoneWrappersByCountry
             };
-
         }
 
         private IEnumerable<RoutingCustomerInfoDetails> GetDataByCustomer(IEnumerable<int> customerIds, DateTime effectiveOn)
@@ -647,6 +646,19 @@ namespace TOne.WhS.BusinessEntity.Business
             dataManager.SavePriceListsToDb(salePriceLists);
         }
 
+        private void BulkInsertSalePriceListSnapshot(List<long> saleCodeIds, IEnumerable<int> priceListIds)
+        {
+            var salePriceListSaleCodeSnapshots = priceListIds.Select(priceListId => new SalePriceListSnapShot
+            {
+                PriceListId = priceListId,
+                SnapShotDetail = new SnapShotDetail
+                {
+                    CodeIds = saleCodeIds
+                }
+            });
+            SalePriceListChangeManager salePriceListChangeManager = new SalePriceListChangeManager();
+            salePriceListChangeManager.BulkInsertSalePriceListSaleCodeSnapshot(salePriceListSaleCodeSnapshots);
+        }
         #endregion
 
         #region Structuring Methods
@@ -849,14 +861,16 @@ namespace TOne.WhS.BusinessEntity.Business
             var customerPriceListChange = salePriceListChangeManager.GetCustomerChangesByPriceListId(salePriceList.PriceListId);
             customerPriceListChange.CustomerId = salePriceList.OwnerId;
 
+            var saleCodeSnapshot = salePriceListChangeManager.GetSalePriceListSaleCodeSnapShot(salePriceList.PriceListId);
+
             SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
             {
                 CustomerChanges = new List<CustomerPriceListChange> { customerPriceListChange },
                 EffectiveDate = salePriceList.CreatedTime.Date,
                 SellingNumberPlanId = sellingNumberPlanId,
-                ProcessInstanceId = salePriceList.ProcessInstanceId
+                ProcessInstanceId = salePriceList.ProcessInstanceId,
+                SaleCodes = saleCodeSnapshot
             };
-
             SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
 
             CustomerSalePriceListInfo customerInfo = salePriceListOutput.CustomerChanges.First();
@@ -1031,6 +1045,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public DateTime EffectiveDate { get; set; }
             public int SellingNumberPlanId { get; set; }
             public long ProcessInstanceId { get; set; }
+            public IEnumerable<SaleCode> SaleCodes { get; set; }
         }
         private class SalePriceListOutputContext
         {

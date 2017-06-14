@@ -53,6 +53,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodeGroupIds", SaleCodeMapper, codegroupslist);
         }
 
+        public List<SaleCode> GetSaleCodesByCodeId(IEnumerable<long> codeIds)
+        {
+            string codeslist = null;
+            if (codeIds != null && codeIds.Any())
+                codeslist = string.Join(",", codeIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetCodeIds", SaleCodeMapper, codeslist);
+        }
 
         public List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate)
         {
