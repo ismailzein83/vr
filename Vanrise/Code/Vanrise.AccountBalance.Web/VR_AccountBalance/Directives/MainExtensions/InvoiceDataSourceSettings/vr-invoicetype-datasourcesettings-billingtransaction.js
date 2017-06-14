@@ -32,11 +32,10 @@ app.directive("vrInvoicetypeDatasourcesettingsBillingtransaction", ["UtilsServic
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onTransactionTypeSelectorReady = function(api)
-                {
+                $scope.scopeModel.onTransactionTypeSelectorReady = function (api) {
                     transactionTypeSelectorAPI = api;
                     transactionTypeSelectorReadyDeferred.resolve();
-                }
+                };
                 UtilsService.waitMultiplePromises([transactionTypeSelectorReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
