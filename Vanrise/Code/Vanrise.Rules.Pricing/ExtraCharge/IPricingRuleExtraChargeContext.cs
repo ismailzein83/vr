@@ -12,7 +12,7 @@ namespace Vanrise.Rules.Pricing
 
         Decimal Rate { get; set; }
 
-        Decimal? ExtraChargeRate { set; }
+        Decimal ExtraChargeRate { set; }
 
         int? DestinationCurrencyId { get; }
 

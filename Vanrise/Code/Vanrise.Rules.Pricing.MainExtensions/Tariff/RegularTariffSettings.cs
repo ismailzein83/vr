@@ -62,7 +62,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
                 convertedCallFee = CallFee;
             }
 
-            decimal? extraChargeValue = null;
+            decimal extraChargeValue = 0;
             decimal totalAmount = 0;
 
             Decimal? accountedDuration = context.DurationInSeconds;
@@ -89,9 +89,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             {
                 decimal normalisedDuration = accountedDuration.Value / PricingUnit;
                 totalAmount += normalisedDuration * context.Rate;
-
-                if (context.ExtraChargeRate.HasValue)
-                    extraChargeValue = normalisedDuration * context.ExtraChargeRate.Value;
+                extraChargeValue = normalisedDuration * context.ExtraChargeRate;
             }
 
             context.EffectiveRate = 60 * context.Rate / PricingUnit;
@@ -100,9 +98,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             totalAmount += convertedCallFee;
 
             context.TotalAmount = decimal.Round(totalAmount, 8);
-            
-            if (extraChargeValue.HasValue)
-                context.ExtraChargeValue = decimal.Round(extraChargeValue.Value, 8);
+            context.ExtraChargeValue = decimal.Round(extraChargeValue, 8);
         }
 
         public override string GetDescription()
