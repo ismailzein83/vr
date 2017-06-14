@@ -143,6 +143,10 @@ app.directive('retailMultinetBrancheConvertorEditor', ['UtilsService', 'VRUIUtil
                         statusDefinitionId = payload.InitialStatusId;
                         accountBEDefinitionId = payload.AccountBEDefinitionId;
 
+                        $scope.scopeModel.branchColumnName = payload.BranchIdColumnName;
+                        $scope.scopeModel.companyColumnName = payload.CompanyIdColumnName;
+
+
                        
 
                         accountTypeSelectorPayload = {
@@ -251,8 +255,8 @@ app.directive('retailMultinetBrancheConvertorEditor', ['UtilsService', 'VRUIUtil
                         CompanyProfilePartDefinitionId: companyProfileDefinitionSelectorAPI.getSelectedIds(),
                         FinancialPartDefinitionId: financialDefinitionSelectorAPI.getSelectedIds(),
                         BranchInfoPartDefinitionId: branchInfoDefinitionSelectorAPI.getSelectedIds(),
-                        BrachIdColumnName: undefined,
-                        CompanyIdColumnName:undefined
+                        BranchIdColumnName: $scope.scopeModel.branchColumnName,
+                        CompanyIdColumnName: $scope.scopeModel.companyColumnName
                     };
                     return data;
                 };

@@ -122,9 +122,9 @@ app.directive('retailMultinetSubscriberConvertorEditor', ['UtilsService', 'VRUIU
                         statusDefinitionId = payload.InitialStatusId;
                         accountBEDefinitionId = payload.AccountBEDefinitionId;
 
-                        $scope.scopeModel.columnName = payload.AccountIdColumnName;
+                        $scope.scopeModel.branchColumnName = payload.BranchIdColumnName;
+                        $scope.scopeModel.subscriberColumnName = payload.SubscriberIdColumnName;
 
-                      
                         accountTypeSelectorPayload = {
                             filter: {
                                 AccountBEDefinitionId: accountBEDefinitionId
