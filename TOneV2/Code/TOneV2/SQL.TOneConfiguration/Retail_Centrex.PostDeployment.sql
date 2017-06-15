@@ -203,7 +203,7 @@ when not matched by target then
 END
 
 --[genericdata].[DataRecordFieldChoice]-------------------------------------------------------------
-BEGIN
+----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
@@ -222,8 +222,6 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
-----------------------------------------------------------------------------------------------------
-END
 
 
 --[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
