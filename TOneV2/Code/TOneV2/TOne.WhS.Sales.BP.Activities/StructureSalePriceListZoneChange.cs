@@ -566,8 +566,8 @@ namespace TOne.WhS.Sales.BP.Activities
                     CurrencyId = saleRateManager.GetCurrencyId(newRate.Rate)
                 };
                 salePriceListRateChange.ChangeType = salePriceListRateChange.Rate > salePriceListRateChange.RecentRate
-                    ? RateChangeType.Decrease
-                    : RateChangeType.Increase;
+                    ? RateChangeType.Increase
+                    : RateChangeType.Decrease;
                 context.RateChangesOutArgument.Add(salePriceListRateChange);
             }
 
