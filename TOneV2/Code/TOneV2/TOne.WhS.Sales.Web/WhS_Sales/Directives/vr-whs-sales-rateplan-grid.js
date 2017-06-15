@@ -410,7 +410,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             return UtilsService.waitMultiplePromises(promises);
         }
         function extendZoneItem(zoneItem) {
-            zoneItem.IsDirty = false;
+            zoneItem.IsDirty = isRatePlanZoneDirty();
             zoneItem.OwnerType = gridQuery.OwnerType;
             zoneItem.isSellingProductZone = (zoneItem.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
             zoneItem.showRateChangeType = true;
@@ -560,6 +560,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 return WhS_Sales_RatePlanUtilsService.validateNewRateDates(zoneItem);
             };
 
+            function isRatePlanZoneDirty() {
+                return ((zoneItem.NewRates != undefined && zoneItem.NewRates.length > 0) || (zoneItem.ClosedRates != undefined && zoneItem.ClosedRates.length > 0) || zoneItem.NewRoutingProduct != null || zoneItem.ResetRoutingProduct != null);
+            }
             function validateTimeRange(date1, date2) {
                 return VRValidationService.validateTimeRange(date1, date2);
             }
@@ -711,23 +714,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             function applyRoutingProductChanges() {
-                if (zoneItem.NewRoutingProductId != null) {
-                    zoneItemChanges.NewRoutingProduct = {
-                        ZoneId: zoneItemChanges.ZoneId,
-                        ZoneRoutingProductId: zoneItem.NewRoutingProductId,
-                        BED: zoneItem.NewRoutingProductBED,
-                        EED: zoneItem.NewRoutingProductEED,
-                        ApplyNewNormalRateBED: zoneItem.FollowRateDate
-                    };
-                }
-                else if (zoneItem.RoutingProductChangeEED != null) {
-                    zoneItemChanges.RoutingProductChange = {
-                        ZoneId: zoneItem.ZoneId,
-                        ZoneRoutingProductId: zoneItem.CurrentRoutingProductId,
-                        EED: zoneItem.RoutingProductChangeEED,
-                        ApplyNewNormalRateBED: zoneItem.FollowRateDate
-                    };
-                }
+                zoneItemChanges.NewRoutingProduct = zoneItem.NewRoutingProduct;
+                zoneItemChanges.RoutingProductChange = zoneItem.ResetRoutingProduct;
             }
             function applyOtherRateChanges() {
                 if (zoneItem.NewRates != null) {
