@@ -61,7 +61,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return new AccountPackage()
             {
                 AccountPackageId = (int)reader["ID"],
-                AccountId = (int)reader["AccountID"],
+                AccountId = (long)reader["AccountID"],
                 PackageId = (int)reader["PackageID"],
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED")
