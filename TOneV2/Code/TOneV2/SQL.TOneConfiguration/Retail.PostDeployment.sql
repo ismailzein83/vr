@@ -118,7 +118,13 @@ as (select * from (values
 ('7B651637-EEE9-4804-91E4-51ECC82D8DD0','ChargeableEntity','Chargeable Entity','VRCommon_GenericLKUPDefinition'																	,'{"DefinitionEditor":"retail-be-chargeableentitydefinitionsettings"}'),
 
 ('52525041-7A8B-4AE1-9599-A3F34A87CB38','Retail Account Balance','Retail Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'							,'{"Editor":"retail-be-accountbalancenotificationtype-settings"}'),
-('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}')
+('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}'),
+('D879B75A-7F13-4543-8EDE-961327CB3E33','Inv To Acc Relation','Inv To Acc Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"retail-invtoaccbalancerelation-definition-accountextendedsettings"}'),
+('B78610BA-4CA2-4E60-8143-73CEF6E99D14','Retail_BE_PackageExtendedSettingsConfig_PricingPackageSettings','Pricing Package','Retail_BE_PackageExtendedSettingsConfig','{"Editor":"retail-be-pricingpackagesettings-management"}'),
+('6A33AFF5-C8D0-41BA-906D-3F9CBB8A7D3E','Financial Account Balance','Financial Account Balance','VR_AccountBalance_AccountTypeExtendedSettingsConfig','{"Editor":"retail-be-extendedsettings-financialaccountbalance"}'),
+('3ED8A0C3-99E7-486A-A560-5789BA1DEAEE','Financial Account Definition','Financial Account Definition','VR_Common_VRComponentType','{"Editor":"retail-be-financialaccountdefinition-settings"}'),
+('1F7F8131-E49E-4A1D-802A-0432BA92EBAB','PeriodicRecurringCharge','Periodic Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-periodic"}'),
+('2C11E2C0-D54B-41DF-95FA-1FBCFD5C93B0','OneTimeRecurringCharge','One Time Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-onetime"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
