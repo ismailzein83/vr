@@ -47,6 +47,10 @@
     <Reference Include="Vanrise.Analytic.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BEBridge.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -63,6 +67,10 @@
     </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
@@ -104,6 +112,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convertors\BranchConvertor.cs" />
+    <Compile Include="Convertors\CompanyConvertor.cs" />
+    <Compile Include="Convertors\SubscriberConvertor.cs" />
+    <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfo.cs" />
+    <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfoDefinition.cs" />
+    <Compile Include="ExtendedInfo\MultiNetCompanyExtendedInfo.cs" />
+    <Compile Include="ExtendedInfo\MultiNetCompanyExtendedInfoDefinition.cs" />
     <Compile Include="InvoiceAccountStatusChangedHandler.cs" />
     <Compile Include="InvoiceGeneratorActionAccountTypeCondition.cs" />
     <Compile Include="MultiNetPartnerCondition.cs" />
@@ -130,6 +145,7 @@
       <Name>Retail.MultiNet.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -36,7 +36,7 @@ app.directive('retailMultinetAccounttypePartDefinitionCompanyextendedinfo', [fun
 
             api.getData = function () {
                 return {
-                    $type: 'Retail.MultiNet.MainExtensions.MultiNetCompanyExtendedInfoDefinition, Retail.MultiNet.MainExtensions'
+                    $type: 'Retail.MultiNet.Business.MultiNetCompanyExtendedInfoDefinition, Retail.MultiNet.Business'
                 };
             };
 

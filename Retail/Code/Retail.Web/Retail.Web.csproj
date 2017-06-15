@@ -743,10 +743,6 @@
       <Project>{73608c81-84ad-480a-a988-74244ee9c8f8}</Project>
       <Name>Retail.MultiNet.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Retail.MultiNet.MainExtensions\Retail.MultiNet.MainExtensions.csproj">
-      <Project>{ddebca68-714f-4334-9b05-55476145dec8}</Project>
-      <Name>Retail.MultiNet.MainExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Retail.MultiNet.Web\Retail.MultiNet.Web.csproj">
       <Project>{ce5f6fa1-bd80-4690-b728-496a0e7a0fc9}</Project>
       <Name>Retail.MultiNet.Web</Name>

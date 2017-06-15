@@ -35,7 +35,7 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
             };
             api.getData = function () {
                 return {
-                    $type: 'Retail.MultiNet.MainExtensions.MultiNetBranchExtendedInfo, Retail.MultiNet.MainExtensions',
+                    $type: 'Retail.MultiNet.Business.MultiNetBranchExtendedInfo, Retail.MultiNet.Business',
                     BranchCode: $scope.scopeModel.branchCode,
                     ContractReferenceNumber: $scope.scopeModel.contractReferenceNumber
                 }

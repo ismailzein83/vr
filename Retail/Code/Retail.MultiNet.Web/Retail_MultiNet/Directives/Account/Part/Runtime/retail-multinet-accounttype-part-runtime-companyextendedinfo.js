@@ -91,7 +91,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
             };
             api.getData = function () {
                 return {
-                    $type: 'Retail.MultiNet.MainExtensions.MultiNetCompanyExtendedInfo, Retail.MultiNet.MainExtensions',
+                    $type: 'Retail.MultiNet.Business.MultiNetCompanyExtendedInfo, Retail.MultiNet.Business',
                     CNIC: $scope.scopeModel.cNIC,
                     NTN: $scope.scopeModel.nTN,
                     PassportNumber: $scope.scopeModel.passportNumber,
