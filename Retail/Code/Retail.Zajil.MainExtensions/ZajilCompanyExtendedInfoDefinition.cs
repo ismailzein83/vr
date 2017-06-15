@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Retail.Zajil.MainExtensions
 {
@@ -65,6 +66,12 @@ namespace Retail.Zajil.MainExtensions
                     }
 
                 };
+        }
+
+        public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
+        {
+            ZajilCompanyExtendedInfo part = context.AccountPartSettings.CastWithValidate<ZajilCompanyExtendedInfo>("context.AccountPartSettings");
+            return true;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Retail.MultiNet.MainExtensions
 {
@@ -28,6 +29,12 @@ namespace Retail.MultiNet.MainExtensions
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
                     }                   
                 };
+        }
+
+        public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
+        {
+            MultiNetBranchExtendedInfo part = context.AccountPartSettings.CastWithValidate<MultiNetBranchExtendedInfo>("context.AccountPartSettings");
+            return true;
         }
     }
 }

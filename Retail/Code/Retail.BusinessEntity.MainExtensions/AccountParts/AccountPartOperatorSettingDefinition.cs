@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountParts
 {
@@ -22,6 +23,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType()
                     }
                 };
+        }
+
+        public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
+        {
+            AccountPartOperatorSetting part = context.AccountPartSettings.CastWithValidate<AccountPartOperatorSetting>("context.AccountPartSettings");
+            return true;
         }
     }
 }

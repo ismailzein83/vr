@@ -68,6 +68,12 @@ namespace Retail.MultiNet.MainExtensions
                 };
         }
 
+        public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
+        {
+            MultiNetCompanyExtendedInfo part = context.AccountPartSettings.CastWithValidate<MultiNetCompanyExtendedInfo>("context.AccountPartSettings");
+            return true;
+        }
+
         private List<Choice> GetChoicesFrlomEnum<T>() where T : struct
         {
             List<Choice> choices = new List<Choice>();

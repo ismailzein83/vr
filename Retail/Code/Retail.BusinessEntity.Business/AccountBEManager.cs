@@ -22,6 +22,8 @@ namespace Retail.BusinessEntity.Business
 
         static AccountBEDefinitionManager _accountBEDefinitionManager;
         static AccountTypeManager s_accountTypeManager = new AccountTypeManager();
+        static Vanrise.Common.Business.StatusDefinitionManager s_statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
+        static AccountPartDefinitionManager s_partDefinitionManager = new AccountPartDefinitionManager();
         public AccountBEManager()
         {
             _accountBEDefinitionManager = new AccountBEDefinitionManager();
@@ -669,8 +671,6 @@ namespace Retail.BusinessEntity.Business
         }
         internal bool TryAddAccount(AccountToInsert accountToInsert, out long accountId, bool donotValidateParent, out Account account)
         {
-            ValidateAccountToAdd(accountToInsert, donotValidateParent);
-
             if (accountToInsert.StatusId == Guid.Empty)
             {
                 var accountTypeManager = new AccountTypeManager();
@@ -682,6 +682,8 @@ namespace Retail.BusinessEntity.Business
 
                 accountToInsert.StatusId = accountType.Settings.InitialStatusId;
             }
+
+            ValidateAccountToAdd(accountToInsert, donotValidateParent);            
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
 
@@ -866,6 +868,23 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        private class AccountPartDefinitionIsPartValidContext : IAccountPartDefinitionIsPartValidContext
+        {
+            public AccountPartSettings AccountPartSettings
+            {
+                get;
+                set;
+            }
+
+
+            public string ErrorMessage
+            {
+                get;
+                set;
+            }
+        }
+
+
         #endregion
 
         #region Get Account Editor Runtime
@@ -910,7 +929,7 @@ namespace Retail.BusinessEntity.Business
 
         private void ValidateAccountToAdd(AccountToInsert accountToInsert, bool donotValidateParent)
         {
-            ValidateAccount(accountToInsert.AccountBEDefinitionId, accountToInsert.TypeId, accountToInsert.AccountId, accountToInsert.Name, accountToInsert.ParentAccountId, donotValidateParent);
+            ValidateAccount(accountToInsert, accountToInsert.AccountBEDefinitionId, accountToInsert.StatusId, accountToInsert.ParentAccountId, donotValidateParent);
         }
 
         private void ValidateAccountToEdit(AccountToEdit accountToEdit)
@@ -920,19 +939,59 @@ namespace Retail.BusinessEntity.Business
             if (accountEntity == null)
                 throw new DataIntegrityValidationException(String.Format("Account '{0}' does not exist", accountToEdit.AccountId));
 
-            ValidateAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.TypeId, accountToEdit.AccountId, accountToEdit.Name, null, false);
+            ValidateAccount(accountToEdit, accountToEdit.AccountBEDefinitionId, null, null, false);
 
         }
 
-        private void ValidateAccount(Guid accountBEDefinitionId, Guid accountTypeId, long accountId, string name, long? parentAccountId, bool donotValidateParent)
+        private void ValidateAccount(BaseAccount account, Guid accountBEDefinitionId, Guid? statusDefinitionId, long? parentAccountId, bool donotValidateParent)
         {
-            var accountType = new AccountTypeManager().GetAccountType(accountTypeId);
-            if (accountType.AccountBEDefinitionId != accountBEDefinitionId)
-                throw new DataIntegrityValidationException(string.Format("accountType.AccountBEDefinitionId '{0}' is different than passed accountBEDefinitionId '{1}'",
-                    accountType.AccountBEDefinitionId, accountBEDefinitionId));
+            if (String.IsNullOrWhiteSpace(account.Name))
+                throw new MissingArgumentValidationException("account.Name");
 
-            if (String.IsNullOrWhiteSpace(name))
-                throw new MissingArgumentValidationException("Account.Name");
+            if (statusDefinitionId.HasValue)
+            {
+                var statusDefinition = s_statusDefinitionManager.GetStatusDefinition(statusDefinitionId.Value);
+                statusDefinition.ThrowIfNull("statusDefinition", statusDefinitionId.Value);
+            }
+
+            var accountType = new AccountTypeManager().GetAccountType(account.TypeId);
+            accountType.ThrowIfNull("accountType", account.TypeId);
+            if (accountType.AccountBEDefinitionId != accountBEDefinitionId)
+                throw new DataIntegrityValidationException(string.Format("accountType.AccountBEDefinitionId '{0}' is different than passed accountBEDefinitionId '{1}'", accountType.AccountBEDefinitionId, accountBEDefinitionId));
+            
+            if(account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.Count > 0)
+            {
+                accountType.Settings.ThrowIfNull("accountType.Settings", accountType.AccountTypeId);
+                accountType.Settings.PartDefinitionSettings.ThrowIfNull("accountType.Settings.PartDefinitionSettings", accountType.AccountTypeId);
+                foreach (var partEntry in account.Settings.Parts)
+                {
+                    Guid partDefinitionId = partEntry.Key;
+                    AccountPart part = partEntry.Value;
+                    part.ThrowIfNull("part", partDefinitionId);
+                    part.Settings.ThrowIfNull("part.Settings", partDefinitionId);
+                    if (!accountType.Settings.PartDefinitionSettings.Any(itm => itm.PartDefinitionId == partDefinitionId))
+                        throw new Exception(String.Format("Part Definition Id '{0}' is not available in AccountType", partDefinitionId));
+                    var partDefinition = s_partDefinitionManager.GetAccountPartDefinition(partDefinitionId);
+                    partDefinition.ThrowIfNull("partDefinition", partDefinitionId);
+                    partDefinition.Settings.ThrowIfNull("partDefinition.Settings", partDefinitionId);
+                    var isPartValidContext = new AccountPartDefinitionIsPartValidContext { AccountPartSettings = part.Settings };
+                    if (!partDefinition.Settings.IsPartValid(isPartValidContext))
+                        throw new Exception(String.Format("Part '{0}' error: {1}", partDefinition.Name, isPartValidContext.ErrorMessage));
+                }
+            }
+            if (accountType.Settings != null && accountType.Settings.PartDefinitionSettings != null && accountType.Settings.PartDefinitionSettings.Count > 0)
+            {
+                account.Settings.ThrowIfNull("account.Settings");
+                account.Settings.Parts.ThrowIfNull("account.Settings.Parts");
+                foreach(var accountTypePart in accountType.Settings.PartDefinitionSettings)
+                {
+                    if(accountTypePart.RequiredSettings == AccountPartRequiredOptions.Required)
+                    {
+                        if (!account.Settings.Parts.ContainsKey(accountTypePart.PartDefinitionId))
+                            throw new Exception(String.Format("Part '{0}' is not supplied", accountTypePart.PartDefinitionId));
+                    }
+                }
+            }
 
             if (!donotValidateParent && parentAccountId.HasValue)
             {

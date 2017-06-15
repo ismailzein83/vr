@@ -15,11 +15,11 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
         public string Title { get; set; }
         public AccountPartDefinitionSettings Settings { get; set; }
-
     }
+
     public class AccountPartDefinition : BaseAccountPartDefinition
     {
-       
+
     }
     public class AccountPartDefinitionToEdit : BaseAccountPartDefinition
     {
@@ -29,11 +29,20 @@ namespace Retail.BusinessEntity.Entities
 
     public abstract class AccountPartDefinitionSettings
     {
-        public abstract Guid ConfigId { get;}
+        public abstract Guid ConfigId { get; }
 
         public virtual List<GenericFieldDefinition> GetFieldDefinitions()
         {
             return null;
         }
+
+        public abstract bool IsPartValid(IAccountPartDefinitionIsPartValidContext context);
+    }
+
+    public interface IAccountPartDefinitionIsPartValidContext
+    {
+        AccountPartSettings AccountPartSettings { get; }
+
+        string ErrorMessage { set; }
     }
 }
