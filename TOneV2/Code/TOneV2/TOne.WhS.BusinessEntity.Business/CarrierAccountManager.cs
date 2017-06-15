@@ -255,7 +255,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (carr.AccountType == CarrierAccountType.Supplier || carr.SellingNumberPlanId.Value != sellingNumberPlanId)
                     return false;
 
-                if (onlyActive && carr.CarrierAccountSettings != null && carr.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                if (onlyActive && !IsCarrierAccountActive(carr))
                     return false;
 
                 return true;
@@ -393,7 +393,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (CarrierAccount carrierAccount in carrierAccountsById.Values)
             {
-                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount.CarrierAccountId) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
+                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
                     carrierAccountIds.Add(carrierAccount.CarrierAccountId);
             }
 
@@ -406,7 +406,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (CarrierAccount carrierAccount in carrierAccountsById.Values)
             {
-                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount.CarrierAccountId) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
+                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
                     carrierAccounts.Add(CarrierAccountInfoMapper(carrierAccount));
             }
 
@@ -536,11 +536,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool IsCarrierAccountActive(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
-            if (carrierAccount == null)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Carrier Account '{0}' was not found", carrierAccountId));
-            if (carrierAccount.CarrierAccountSettings == null)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of Carrier Account '{0}' were not found", carrierAccountId));
-            return (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active);
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccount.CarrierAccountId);
+            return IsCarrierAccountActive(carrierAccount);
+        }
+
+        public bool IsCarrierAccountActive(CarrierAccount carrierAccount)
+        {
+           carrierAccount.CarrierAccountSettings.ThrowIfNull("carrierAccount.CarrierAccountSettings", carrierAccount.CarrierAccountId);
+            return (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive);
         }
         public int? GetCarrierProfileId(int carrierAccountId)
         {

@@ -35,10 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
                   if (input.Query.SellingProductsIds != null && !input.Query.SellingProductsIds.Contains(prod.SellingProductId))
                       return false;
 
-                  if (!ShouldSelectCustomerSellingProduct(prod.CustomerId))
-                      return false;
-
-                  return true;
+                  return ShouldSelectCustomerSellingProduct(prod.CustomerId);
               };
 
             var resultProcessingHandler = new ResultProcessingHandler<CustomerSellingProductDetail>()
@@ -50,15 +47,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private bool ShouldSelectCustomerSellingProduct(int customerId)
         {
-            CarrierAccount carrierAccount = _carrierAccountManager.GetCarrierAccount(customerId);
-
-            if (carrierAccount.CarrierAccountSettings == null)
-                return false;
-
-            if (carrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
-                return false;
-
-            return true;
+            return _carrierAccountManager.IsCarrierAccountActive(customerId);
         }
 
         public IEnumerable<int> GetCustomerIdsAssignedToSellingProduct(int sellingProductId, DateTime effectiveOn)
@@ -334,7 +323,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (CarrierAccount carrierAccount in allCustomers)
                     {
-                        if (carrierAccountManager.IsCarrierAccountActive(carrierAccount.CarrierAccountId) && carrierAccount.SellingProductId.HasValue)
+                        if (carrierAccountManager.IsCarrierAccountActive(carrierAccount) && carrierAccount.SellingProductId.HasValue)
                         {
                             entitiesByCustomerId.Add(carrierAccount.CarrierAccountId, new List<ProcessedCustomerSellingProduct>()
                             {
