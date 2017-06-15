@@ -175,8 +175,10 @@
     <Content Include="VR_Notification\Directives\VRAlertRuleType\Templates\VRAlertRuleTypeGridTemplate.html" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-selector.js" />
     <Content Include="VR_Notification\Directives\VRAlertRuleType\vr-notification-alertruletype-grid.js" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\Templates\OverriddenAlertRuleTypeDefinition.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleGridTemplate.html" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRBalanceAlertRule\Templates\VRBalanceAlertRuleSettingsTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-overriddenconfiguration-alertruletype.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-grid.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRBalanceAlertRule\vr-notification-vrbalancealertrule-settings.js" />
     <Content Include="VR_Notification\Directives\VRBalanceAlertRule\ProcessInput\Normal\Templates\BalanceAlertThresholdProcessManualTemplate.html" />
