@@ -225,6 +225,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToProcess> zonesToClose, SaleEntityZoneRateLocator lastRateNoCacheLocator, int countryId, int customerId, int sellingProductId)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
+            SaleRateManager saleRateManager = new SaleRateManager();
+            if (!zonesToClose.Any()) return rateChanges;
+
+            var zoneIdsWithRateBED = new Dictionary<long, DateTime>();
+
 
             foreach (var zoneToClose in zonesToClose)
             {
@@ -261,13 +266,29 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ChangeType = RateChangeType.Deleted,
                     BED = closedRate.Rate.BED, //TODO: The same gap in Rate Plan when it is a selling product rate the BED is not correclt the same as the one on customer side
                     EED = zoneToClose.EED,
-                    CurrencyId = closedRate.Rate.CurrencyId
+                    CurrencyId = saleRateManager.GetCurrencyId(closedRate.Rate)
                 });
+                zoneIdsWithRateBED.Add(existingZoneAtClosureTime.ZoneId, closedRate.Rate.BED);
             }
-
+            //assing routing product id
+            SetRoutingProductIdOnRateChange(customerId, sellingProductId, rateChanges, zoneIdsWithRateBED);
             return rateChanges;
         }
+        private void SetRoutingProductIdOnRateChange(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, Dictionary<long, DateTime> zoneIdsWithRateBED)
+        {
+            SaleEntityZoneRoutingProductLocator routingProductLocatorByRateBED = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWithRateBED));
 
+            foreach (var rateChange in rateChanges)
+            {
+                var saleEntityZoneRoutingProduct = routingProductLocatorByRateBED.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);
+                if (saleEntityZoneRoutingProduct != null)
+                    rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
+                else
+                {
+                    throw new Exception(string.Format("No routing product assigned for customer {0}", customerId));
+                }
+            }
+        }
         private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId)
         {
             List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
