@@ -193,7 +193,7 @@ app.directive('retailMultinetCompanyConvertorEditor', ['UtilsService', 'VRUIUtil
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.MultiNet.MainExtensions.Convertors.CompanyConvertor, Retail.MultiNet.MainExtensions",
+                        $type: "Retail.MultiNet.Business.Convertors.CompanyConvertor, Retail.MultiNet.Business",
                         Name: "MultiNet Company Convertor",
                         AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
                         InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
