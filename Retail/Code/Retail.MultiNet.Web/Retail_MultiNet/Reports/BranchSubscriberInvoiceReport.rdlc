@@ -14,7 +14,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -41,7 +41,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -75,7 +77,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -87,7 +91,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -114,7 +118,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -148,7 +154,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -160,7 +168,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -187,7 +195,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -221,7 +231,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -233,7 +245,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -260,7 +272,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -294,7 +308,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -306,7 +322,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -333,7 +349,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -367,7 +385,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -379,7 +399,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -406,7 +426,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -440,7 +462,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -452,7 +476,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -479,7 +503,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -513,7 +539,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -544,10 +572,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>5.60181in</Top>
+        <Top>5.04417in</Top>
         <Left>0.22834in</Left>
-        <Height>1.75in</Height>
-        <Width>7.60646in</Width>
+        <Height>1.4in</Height>
+        <Width>7.60647in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -616,6 +644,7 @@
         <Style>
           <Border>
             <Style>None</Style>
+            <Width>0.5pt</Width>
           </Border>
           <BackgroundColor>#e2eaf5</BackgroundColor>
           <PaddingLeft>2pt</PaddingLeft>
@@ -636,7 +665,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -662,8 +691,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -695,7 +726,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -707,7 +740,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -733,8 +766,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -766,7 +801,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -778,7 +815,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -804,8 +841,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -837,7 +876,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -866,7 +907,7 @@
         <DataSetName>RDLCRetail</DataSetName>
         <Top>1.95175in</Top>
         <Left>4.69939in</Left>
-        <Height>0.75in</Height>
+        <Height>0.6in</Height>
         <Width>3.13542in</Width>
         <ZIndex>3</ZIndex>
         <Style>
@@ -913,7 +954,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -945,7 +988,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -983,7 +1028,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1015,7 +1062,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1053,7 +1102,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1085,7 +1136,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1123,7 +1176,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1155,7 +1210,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1193,7 +1250,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1225,7 +1284,9 @@
                       <Style>
                         <Border>
                           <Style>None</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1283,7 +1344,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1309,7 +1370,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1325,7 +1388,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1351,8 +1414,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1385,8 +1450,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1419,8 +1486,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1453,8 +1522,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1466,7 +1537,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1491,7 +1562,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1523,7 +1596,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1557,7 +1632,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1591,7 +1668,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1626,9 +1705,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>4.75042in</Top>
+        <Top>4.41639in</Top>
         <Left>0.22834in</Left>
-        <Height>0.75in</Height>
+        <Height>0.6in</Height>
         <Width>7.60645in</Width>
         <ZIndex>5</ZIndex>
         <Style>
@@ -1647,10 +1726,10 @@
             <Value>=Parameters!Email.Value</Value>
           </Parameter>
         </Parameters>
-        <Top>9.52306in</Top>
+        <Top>9.02306in</Top>
         <Left>0.21833in</Left>
         <Height>0.4375in</Height>
-        <Width>7.81477in</Width>
+        <Width>7.61648in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1678,21 +1757,21 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.31915in</Width>
+              <Width>1.31664in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.63112in</Width>
+              <Width>2.62861in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.23791in</Width>
+              <Width>2.2354in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.41829in</Width>
+              <Width>1.41578in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1718,7 +1797,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1734,7 +1815,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1760,8 +1841,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1794,8 +1877,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1828,8 +1913,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1862,8 +1949,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1875,7 +1964,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1902,7 +1991,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1934,7 +2025,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1968,7 +2061,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2002,7 +2097,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2039,8 +2136,8 @@
         <DataSetName>PaymentDetails</DataSetName>
         <Top>3.0775in</Top>
         <Left>0.22834in</Left>
-        <Height>0.75in</Height>
-        <Width>7.60647in</Width>
+        <Height>0.6in</Height>
+        <Width>7.59644in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -2060,7 +2157,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25521in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2086,8 +2183,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2120,8 +2219,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2158,6 +2259,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2190,6 +2292,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2220,10 +2323,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.53062in</Top>
-        <Left>0.22835in</Left>
-        <Height>0.92709in</Height>
-        <Width>7.60646in</Width>
+        <Top>6.78062in</Top>
+        <Left>0.22834in</Left>
+        <Height>0.87188in</Height>
+        <Width>7.60647in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -2235,21 +2338,21 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.31789in</Width>
+              <Width>1.31539in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.61944in</Width>
+              <Width>3.61694in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.63248in</Width>
+              <Width>1.62998in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.03664in</Width>
+              <Width>1.03414in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2275,7 +2378,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2291,7 +2396,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2317,8 +2422,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2351,8 +2458,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2385,8 +2494,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2419,8 +2530,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2432,7 +2545,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -2459,7 +2572,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2491,7 +2606,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2525,7 +2642,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2559,7 +2678,9 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -2594,10 +2715,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>LastInvoices</DataSetName>
-        <Top>3.93098in</Top>
-        <Left>0.21833in</Left>
-        <Height>0.75in</Height>
-        <Width>7.60645in</Width>
+        <Top>3.74694in</Top>
+        <Left>0.22834in</Left>
+        <Height>0.6in</Height>
+        <Width>7.59644in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
@@ -2626,7 +2747,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>8.62958in</Top>
+        <Top>8.12958in</Top>
         <Left>0.21833in</Left>
         <Height>0.68752in</Height>
         <Width>7.60646in</Width>
@@ -2634,6 +2755,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <Style>
           <Border>
             <Style>None</Style>
+            <Width>0.5pt</Width>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -2648,7 +2770,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
   <Width>20.40407cm</Width>
   <Page>
     <PageFooter>
-      <Height>1.5cm</Height>
+      <Height>0.91792cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2660,11 +2782,15 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
               <TextRuns>
                 <TextRun>
                   <Value>Page No. </Value>
-                  <Style />
+                  <Style>
+                    <FontSize>7pt</FontSize>
+                  </Style>
                 </TextRun>
                 <TextRun>
                   <Value>=Globals!PageNumber</Value>
-                  <Style />
+                  <Style>
+                    <FontSize>7pt</FontSize>
+                  </Style>
                 </TextRun>
               </TextRuns>
               <Style>
@@ -2673,7 +2799,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>PageNumber</rd:DefaultName>
-          <Top>0.46743cm</Top>
+          <Top>0.14993cm</Top>
           <Left>15.954cm</Left>
           <Height>0.6cm</Height>
           <Width>4.45007cm</Width>

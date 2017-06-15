@@ -6,33 +6,33 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.34213in</Width>
+              <Width>0.30046in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79675in</Width>
+              <Width>0.75508in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73425in</Width>
+              <Width>0.91133in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.15462in</Width>
+              <Width>1.35254in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.0817in</Width>
+              <Width>1.38378in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.49467in</Width>
+              <Width>1.25509in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73796in</Width>
+              <Width>0.80046in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.0977in</Width>
+              <Width>0.8477in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.38205in</Height>
+              <Height>0.24663in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -58,6 +58,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <TopBorder>
                           <Style>None</Style>
@@ -87,7 +88,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.19455in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -101,7 +102,7 @@
                               <Value>="Branch Name: " + Parameters!BranchName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>6pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -113,6 +114,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -133,7 +135,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.17708in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -145,7 +147,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Parameters!UsageDescription.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontSize>6pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -155,6 +159,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -175,7 +180,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.1875in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -189,7 +194,7 @@
                               <Value>#</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -203,6 +208,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -225,7 +231,7 @@
                               <Value>Date</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -239,8 +245,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -261,7 +269,7 @@
                               <Value>Time</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -275,8 +283,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -297,7 +307,7 @@
                               <Value>Calling Number</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -311,8 +321,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -333,7 +345,7 @@
                               <Value>Called Number</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -347,8 +359,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -369,7 +383,7 @@
                               <Value>Destination</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -383,8 +397,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -405,7 +421,7 @@
                               <Value>Duration </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -419,8 +435,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -441,7 +459,7 @@
                               <Value>Sale Amount</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -455,8 +473,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -468,7 +488,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.06387in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -482,7 +502,7 @@
                               <Value>=RowNumber(Nothing)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -495,11 +515,12 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -513,25 +534,29 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!AttemptDateTime.Value,DateFormat.ShortDate)</Value>
+                              <Value>=CDate(Fields!AttemptDateTime.Value).ToString("yyyy-mm-dd")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox29</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -545,25 +570,29 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!AttemptDateTime.Value,DateFormat.LongTime)</Value>
+                              <Value>=CDate(Fields!AttemptDateTime.Value).ToString("HH:mm:ss")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>6pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox31</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -580,7 +609,7 @@
                               <Value>=Fields!CallingNumber.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -591,11 +620,13 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -612,7 +643,7 @@
                               <Value>=Fields!CalledNumber.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -623,11 +654,13 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -644,7 +677,7 @@
                               <Value>=Fields!ZoneName.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -655,11 +688,13 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -673,25 +708,29 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!DurationInSeconds.Value</Value>
+                              <Value>=Format(DateAdd("s", Fields!DurationInSeconds.Value, "00:00:00"), "HH:mm:ss")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>DurationInSeconds</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -708,22 +747,25 @@
                               <Value>=Fields!SaleAmount.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>SaleAmount</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
+                        <PaddingLeft>0.5pt</PaddingLeft>
+                        <PaddingRight>0.5pt</PaddingRight>
+                        <PaddingTop>0.5pt</PaddingTop>
+                        <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -731,7 +773,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.17708in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -745,7 +787,7 @@
                               <Value>Page Total</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>6pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -758,6 +800,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -782,10 +825,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!DurationInSeconds.Value)</Value>
+                              <Value>=Format(DateAdd("s", Sum(Fields!DurationInSeconds.Value), "00:00:00"), "HH:mm:ss")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>6pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -798,6 +841,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -805,6 +849,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -819,7 +864,7 @@
                               <Value>=Sum(Fields!SaleAmount.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>6pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -832,6 +877,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -896,9 +942,8 @@
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
         <DataSetName>MultiNetCDRs</DataSetName>
-        <Top>0.37971in</Top>
-        <Height>1.61827in</Height>
-        <Width>7.43978in</Width>
+        <Height>1.04671in</Height>
+        <Width>7.60644in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -906,10 +951,10 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>8.34717cm</Height>
+    <Height>3.02905cm</Height>
     <Style />
   </Body>
-  <Width>19.39974cm</Width>
+  <Width>19.32041cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>

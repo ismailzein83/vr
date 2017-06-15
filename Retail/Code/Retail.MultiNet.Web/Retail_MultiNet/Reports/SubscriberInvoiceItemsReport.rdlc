@@ -23,11 +23,12 @@
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.41542in</Top>
         <Left>0.00002in</Left>
-        <Height>0.19792in</Height>
+        <Height>0.2in</Height>
         <Width>7.60646in</Width>
         <Style>
           <Border>
             <Style>Solid</Style>
+            <Width>0.5pt</Width>
           </Border>
           <BackgroundColor>#e2eaf5</BackgroundColor>
           <PaddingLeft>2pt</PaddingLeft>
@@ -58,12 +59,13 @@
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.6897in</Top>
         <Left>0.00002in</Left>
-        <Height>0.18752in</Height>
+        <Height>0.2in</Height>
         <Width>7.60646in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
+            <Width>0.5pt</Width>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -93,12 +95,13 @@
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.94666in</Top>
         <Left>0.00002in</Left>
-        <Height>0.18752in</Height>
+        <Height>0.2in</Height>
         <Width>7.60645in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
+            <Width>0.5pt</Width>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -127,7 +130,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -153,6 +156,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -190,6 +194,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -202,7 +207,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -230,8 +235,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -266,8 +273,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -302,8 +311,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -338,8 +349,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -374,8 +387,10 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -387,7 +402,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -412,6 +427,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -444,6 +460,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -478,6 +495,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -496,7 +514,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!TotalDuration.Value</Value>
+                              <Value>=Format(DateAdd("s", Fields!TotalDuration.Value, "00:00:00"), "HH:mm:ss")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -512,6 +530,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -546,6 +565,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -558,7 +578,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.25in</Height>
+              <Height>0.2in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -585,6 +605,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -621,6 +642,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -639,7 +661,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!TotalDuration.Value)</Value>
+                              <Value>=Format(DateAdd("s", Sum(Fields!TotalDuration.Value), "00:00:00"), "HH:mm:ss")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -655,6 +677,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -689,6 +712,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
+                          <Width>0.5pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -728,14 +752,15 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>UsageSummaryDetails</DataSetName>
-        <Top>1.44667in</Top>
+        <Top>1.32167in</Top>
         <Left>0.00002in</Left>
-        <Height>1in</Height>
+        <Height>0.8in</Height>
         <Width>7.60644in</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
+            <Width>0.5pt</Width>
           </Border>
         </Style>
       </Tablix>
@@ -804,7 +829,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>UsageSummaryDetails</DataSetName>
-        <Top>2.52703in</Top>
+        <Top>2.40203in</Top>
         <Left>0.00002in</Left>
         <Height>0.59475in</Height>
         <Width>7.60646in</Width>
