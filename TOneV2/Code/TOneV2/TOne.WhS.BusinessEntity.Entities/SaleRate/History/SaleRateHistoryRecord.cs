@@ -34,6 +34,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SaleRateHistoryRecord Entity { get; set; }
 
         public string ConvertedToCurrencySymbol { get; set; }
+        public string CurrencySymbol { get; set; }
 
         public string SellingProductName { get; set; }
     }

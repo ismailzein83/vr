@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -27,12 +28,14 @@ namespace TOne.WhS.BusinessEntity.Business
             private SaleRateManager _saleRateManager;
             private Vanrise.Common.Business.CurrencyExchangeRateManager _currencyExchangeRateManager;
             private SellingProductManager _sellingProductManager;
+            private CurrencyManager _currencyManager;
 
             public SaleRateHistoryRequestHandler()
             {
                 _saleRateManager = new SaleRateManager();
                 _currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
                 _sellingProductManager = new SellingProductManager();
+                _currencyManager = new CurrencyManager();
             }
 
             #endregion
@@ -59,9 +62,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override SaleRateHistoryRecordDetail EntityDetailMapper(SaleRateHistoryRecord entity)
             {
-                return new SaleRateHistoryRecordDetail()
+                return new SaleRateHistoryRecordDetail
                 {
                     Entity = entity,
+                    CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId),
                     ConvertedToCurrencySymbol = CurrencySymbol,
                     SellingProductName = (entity.SellingProductId.HasValue) ? _sellingProductManager.GetSellingProductName(entity.SellingProductId.Value) : null
                 };
