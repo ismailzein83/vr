@@ -200,12 +200,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\AliAtouiTask.cs" />
     <Compile Include="Tasks\ScheduleTestCallsTask.cs" />
     <Compile Include="Tasks\HadiTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config.exclude" />
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">

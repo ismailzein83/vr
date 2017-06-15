@@ -9,7 +9,7 @@ using Vanrise.Common;
 
 namespace QM.CLITester.iTestIntegration
 {
-    public class ITestZoneManager 
+    public class ITestZoneManager
     {
         public Dictionary<string, ITestZone> GetAllZones()
         {
@@ -73,9 +73,14 @@ namespace QM.CLITester.iTestIntegration
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(breakoutResponse);
 
+            XmlNode zoneXMLNode = xml.SelectSingleNode("/NDB_List");
+            if (zoneXMLNode == null)
+                throw new Exception(breakoutResponse);
+
             Dictionary<string, ITestZone> zones = new Dictionary<string, ITestZone>();
             XmlNodeList xnList = xml.SelectNodes("/NDB_List/Breakout");
             if (xnList != null)
+            {
                 foreach (XmlNode xn in xnList)
                 {
                     ITestZone zone = new ITestZone
@@ -89,6 +94,8 @@ namespace QM.CLITester.iTestIntegration
                     if (!zones.ContainsKey(zone.ZoneId))
                         zones.Add(zone.ZoneId, zone);
                 }
+            }
+
             return zones;
         }
         #endregion
