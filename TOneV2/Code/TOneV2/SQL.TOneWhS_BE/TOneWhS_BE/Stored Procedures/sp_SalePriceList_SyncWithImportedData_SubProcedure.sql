@@ -1,7 +1,7 @@
 ﻿-- =============================================
 -- Description:	Adding try catch will rollback.
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData_SubProcedure]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData_SubProcedure]
 	@ProcessInstanceID Bigint,
 	@SellingNumberPlanId int
 AS
@@ -35,8 +35,8 @@ Begin Try
 	select [BatchID],[PricelistID],[CountryID],[CustomerID]
 	from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc where spcc.[BatchID]= @ProcessInstanceID
 
-	INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID])
-	select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.[BED],sprc.[EED],sprc.RoutingProductID,sprc.CurrencyID
+	INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID)
+	select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.[BED],sprc.[EED],sprc.RoutingProductID,sprc.CurrencyID,sprc.ZoneID
 	from [TOneWhS_BE].[SalePricelistRateChange_New] sprc
 	where sprc.ProcessInstanceID = @ProcessInstanceID
 
