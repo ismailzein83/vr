@@ -275,7 +275,9 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     }
 
     $scope.goToHomePage = function () {
-        window.location.href = "/";
+        if (window.location.href == UISettingsService.getDefaultPageURl())
+            return;
+         window.location.href = "/";
     };
     function setSelectedMenuFromURL() {
         if (currentURL == undefined || allMenuItems.length == 0)
