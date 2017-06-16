@@ -135,6 +135,7 @@
     <Compile Include="Preview\NewCustomerCountryPreviewManager.cs" />
     <Compile Include="PriceListManager\Context\ProcessCustomerCountriesContext.cs" />
     <Compile Include="PriceListManager\PriceListCustomerCountryManager.cs" />
+    <Compile Include="RatePlanProcessBPSettings.cs" />
     <Compile Include="Reader\RatePlanServiceReadWithCache.cs" />
     <Compile Include="Preview\DefaultServicePreviewManager.cs" />
     <Compile Include="Preview\SaleZoneServicePreviewManager.cs" />
