@@ -24,5 +24,7 @@ namespace Vanrise.BusinessProcess.Data
         long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId);
 
         void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate);
+
+        bool HasRunningInstances(Guid definitionId, string EntityId, IEnumerable<BPInstanceStatus> statuses);
     }
 }

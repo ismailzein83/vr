@@ -59,7 +59,11 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.GetBPInstance(bpInstanceId);
         }
-
+        public bool HasRunningInstances(Guid definitionId, string entityId)
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.HasRunningInstances(definitionId, entityId, BPInstanceStatusAttribute.GetNonClosedStatuses());
+        }
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             if (createProcessInput == null)

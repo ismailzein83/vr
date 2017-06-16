@@ -1,8 +1,8 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService'];
-    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService) {
+    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService'];
+    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService) {
         function getStatusColor(status) {
 
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
@@ -44,11 +44,40 @@
 
             VRModalService.showModal('/Client/Modules/BusinessProcess/Views/NewInstanceEditor/NewInstanceEditor.html', parameters, modalSettings);
         }
+        function displayRunningInstancesIfExist(definitionId, entityId, runningInstanceEditorSettings)
+        {
+            var displayRunningInstancePromiseDeferred = UtilsService.createPromiseDeferred();
+            BusinessProcess_BPInstanceAPIService.HasRunningInstances(definitionId, entityId).then(
+                function (response) {
+                    var result = { hasRunningProcesses: false };
+                    if (response == true) {
+                        var parameters = {
+                            EntityId: entityId,
+                            context: {
+                                onClose: function () {
+                                    BusinessProcess_BPInstanceAPIService.HasRunningInstances(definitionId, entityId).then(
+                                        function (response) {
+                                            result.hasRunningProcesses = response;
+                                            displayRunningInstancePromiseDeferred.resolve(result);
+                                        });
+                                }
+                            },
+                            runningInstanceEditorSettings: runningInstanceEditorSettings
+                        };
+                        VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPInstance/BPInstanceRunningProcesses.html', parameters, null);
+                    }
+                    else {
+                        displayRunningInstancePromiseDeferred.resolve(result);
+                    }
 
+                });
+            return displayRunningInstancePromiseDeferred.promise;
+        }
         return ({
             getStatusColor: getStatusColor,
             openProcessTracking: openProcessTracking,
-            startNewInstance: startNewInstance
+            startNewInstance: startNewInstance,
+            displayRunningInstancesIfExist: displayRunningInstancesIfExist
         });
     }
     appControllers.service('BusinessProcess_BPInstanceService', BusinessProcess_BPInstanceService);

@@ -101,7 +101,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
-
+        public bool HasRunningInstances(Guid definitionId, string entityId, IEnumerable<BPInstanceStatus> acceptableBPStatuses)
+        {
+            bool hasRunningProcesses = Convert.ToBoolean(ExecuteScalarSP("[bp].[sp_BPInstance_HasRunningInstance]", definitionId, entityId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm))));
+            return hasRunningProcesses;
+        }
         public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId,
             object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId)
         {

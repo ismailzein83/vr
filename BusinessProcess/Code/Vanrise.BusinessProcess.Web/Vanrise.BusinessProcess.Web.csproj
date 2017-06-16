@@ -175,6 +175,7 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
+    <Content Include="BusinessProcess\Constants\SPLDefinitionEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-warning-item-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\Templates\EmptyTemplate.html" />
@@ -234,6 +235,8 @@
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistory.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistoryController.js" />
+    <Content Include="BusinessProcess\Views\BPInstance\BPInstanceRunningProcesses.html" />
+    <Content Include="BusinessProcess\Views\BPInstance\BPInstanceRunningProcessesController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPTaskMonitor.html" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -57,7 +58,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             return manager.CreateNewProcess(createProcessInput);
         }
-       
-
+        [HttpGet]
+        [Route("HasRunningInstances")]
+        public bool HasRunningInstances(Guid definitionId, string entityId)
+        {
+            BPInstanceManager manager = new BPInstanceManager();
+            return manager.HasRunningInstances(definitionId, entityId);
+        }
     }
 }
