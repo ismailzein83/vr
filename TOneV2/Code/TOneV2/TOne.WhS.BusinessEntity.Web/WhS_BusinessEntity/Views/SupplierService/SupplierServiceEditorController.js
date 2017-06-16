@@ -38,6 +38,10 @@
             $scope.scopeModel.onServiceItemDeSelected = function () {
                 $scope.scopeModel.isSaveButtonDisabled = false;
             };
+            $scope.scopeModel.bedChangedValue = function ()
+            {
+                $scope.scopeModel.isSaveButtonDisabled = false;
+            };
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
                 zoneServiceConfigSelectorReadyDeferred.resolve();
@@ -155,7 +159,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                supplierServiceEntity = undefined;
+             
                 $scope.isLoading = false;
             });
         }
