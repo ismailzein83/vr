@@ -16,6 +16,8 @@ namespace TOne.WhS.Deal.BP.Activities
         public Boolean IsSale { get; set; }
 
         public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
+
+        public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
     }
 
     public sealed class UpdateProgressTables : BaseAsyncActivity<UpdateProgressTablesInput>
@@ -26,9 +28,11 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public InArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
+        public InArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
+
         protected override void DoWork(UpdateProgressTablesInput inputArgument, AsyncActivityHandle handle)
         {
-            UpdateDealProgressTables(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.IsSale);
+            UpdateDealProgressTables(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.AffectedDealZoneGroups, inputArgument.IsSale, inputArgument.BeginDate);
         }
 
         protected override UpdateProgressTablesInput GetInputArgument(AsyncCodeActivityContext context)
@@ -38,20 +42,19 @@ namespace TOne.WhS.Deal.BP.Activities
                 BeginDate = this.BeginDate.Get(context),
                 IsSale = this.IsSale.Get(context),
                 CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context),
+                AffectedDealZoneGroups = this.AffectedDealZoneGroups.Get(context)
             };
         }
 
         #region Private Methods
 
-        private void UpdateDealProgressTables(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, bool isSale)
+        private void UpdateDealProgressTables(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, HashSet<DealZoneGroup> affectedDealZoneGroups, bool isSale, DateTime beginDate)
         {
             if (currentDealBillingSummaryRecords == null)
                 return;
 
-            HashSet<DealZoneGroup> affectedDealZoneGroups = currentDealBillingSummaryRecords.Keys.ToHashSet();
-
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
-            var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(affectedDealZoneGroups, isSale);
+            var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(affectedDealZoneGroups, isSale, beginDate);
 
             DealProgressManager dealProgressManager = new DealProgressManager();
             var dealProgresses = dealProgressManager.GetDealProgresses(affectedDealZoneGroups, isSale);
@@ -75,27 +78,31 @@ namespace TOne.WhS.Deal.BP.Activities
 
                 foreach (var dealBillingSummary in currentDealBillingSummaryRecord.Value)
                 {
-                    if (dealBillingSummary.DealTierNb > maxTierNumber)
-                    {
-                        maxTierNumber = dealBillingSummary.DealTierNb;
-                        tierReachedDurationInSeconds = dealBillingSummary.DurationInSeconds;
-                    }
-                    else if (dealBillingSummary.DealTierNb == maxTierNumber)
-                    {
-                        tierReachedDurationInSeconds += dealBillingSummary.DurationInSeconds;
-                    }
-
                     DealDetailedZoneGroupTier currentDealDetailedZoneGroupTier = BuildDealDetailedZoneGroupTier(dealBillingSummary);
 
                     if (dealDetailedProgresses != null && dealDetailedProgresses.TryGetValue(currentDealDetailedZoneGroupTier, out tempDealDetailedProgress))
                     {
                         dealDetailedProgressesToKeep.Add(tempDealDetailedProgress.DealDetailedProgressID);
-                        if (!AreEqual(dealBillingSummary, tempDealDetailedProgress))
+                        if (!dealDetailedProgressManager.AreEqual(tempDealDetailedProgress, dealBillingSummary))
                             dealDetailedProgressesToUpdate.Add(BuildDealDetailedProgress(tempDealDetailedProgress.DealDetailedProgressID, dealBillingSummary));
                     }
                     else
                     {
                         dealDetailedProgressesToAdd.Add(BuildDealDetailedProgress(null, dealBillingSummary));
+                    }
+
+                    //Used for DealProgress
+                    if (dealBillingSummary.DealTierNb.HasValue)
+                    {
+                        if (dealBillingSummary.DealTierNb.Value > maxTierNumber)
+                        {
+                            maxTierNumber = dealBillingSummary.DealTierNb.Value;
+                            tierReachedDurationInSeconds = dealBillingSummary.DurationInSeconds;
+                        }
+                        else if (dealBillingSummary.DealTierNb.Value == maxTierNumber)
+                        {
+                            tierReachedDurationInSeconds += dealBillingSummary.DurationInSeconds;
+                        }
                     }
                 }
 
@@ -171,35 +178,6 @@ namespace TOne.WhS.Deal.BP.Activities
                 dealProgress.DealProgressID = dealProgressId.Value;
 
             return dealProgress;
-        }
-
-        private bool AreEqual(DealBillingSummary dealBillingSummary, DealDetailedProgress dealDetailedProgress)
-        {
-            if (dealBillingSummary == null || dealDetailedProgress == null)
-                return false;
-
-            if (dealDetailedProgress.FromTime != dealBillingSummary.BatchStart)
-                return false;
-
-            if (dealDetailedProgress.ToTime != dealBillingSummary.BatchStart.AddMinutes(30))
-                return false;
-
-            if (dealDetailedProgress.DealID != dealBillingSummary.DealId)
-                return false;
-
-            if (dealDetailedProgress.ZoneGroupNb != dealBillingSummary.DealZoneGroupNb)
-                return false;
-
-            if (dealDetailedProgress.ReachedDurationInSeconds != dealBillingSummary.DurationInSeconds)
-                return false;
-
-            if (dealDetailedProgress.TierNb != dealBillingSummary.DealTierNb)
-                return false;
-
-            if (dealDetailedProgress.RateTierNb != dealBillingSummary.DealRateTierNb)
-                return false;
-
-            return true;
         }
 
         #endregion

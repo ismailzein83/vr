@@ -34,8 +34,17 @@ namespace TOne.WhS.Deal.Data.SQL
                 dr["DealID"] = dealReprocessInput.DealID;
                 dr["ZoneGroupNb"] = dealReprocessInput.ZoneGroupNb;
                 dr["IsSale"] = dealReprocessInput.IsSale;
-                dr["TierNb"] = dealReprocessInput.TierNb;
-                dr["RateTierNb"] = dealReprocessInput.RateTierNb;
+
+                if (dealReprocessInput.TierNb.HasValue)
+                    dr["TierNb"] = dealReprocessInput.TierNb.Value;
+                else
+                    dr["TierNb"] = DBNull.Value;
+
+                if (dealReprocessInput.RateTierNb.HasValue)
+                    dr["RateTierNb"] = dealReprocessInput.RateTierNb.Value;
+                else
+                    dr["RateTierNb"] = DBNull.Value;
+
                 dr["FromTime"] = dealReprocessInput.FromTime;
                 dr["ToTime"] = dealReprocessInput.ToTime;
                 dr["UpToDurationInSec"] = dealReprocessInput.UpToDurationInSec;

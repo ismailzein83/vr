@@ -15,7 +15,8 @@ namespace TOne.WhS.Deal.Business
 
         public Dictionary<DealZoneGroup, List<DealBillingSummary>> LoadDealBillingSummaryRecords(DateTime beginDate, bool isSale)
         {
-            Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords = null;
+            Dictionary<DealZoneGroup, List<DealBillingSummary>> dealBillingSummaryRecords = null;
+            Dictionary<BatchDealZoneGroup, DealDurations> batchDealZoneGroupDict = null;
 
             Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale == true ? "Sale" : "Cost");
 
@@ -24,7 +25,8 @@ namespace TOne.WhS.Deal.Business
             var result = new AnalyticManager().GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
             if (result != null && result.Data != null && result.Data.Count() > 0)
             {
-                currentDealBillingSummaryRecords = new Dictionary<DealZoneGroup, List<DealBillingSummary>>();
+                dealBillingSummaryRecords = new Dictionary<DealZoneGroup, List<DealBillingSummary>>();
+                batchDealZoneGroupDict = new Dictionary<BatchDealZoneGroup, DealDurations>();
 
                 foreach (var analyticRecord in result.Data)
                 {
@@ -32,20 +34,44 @@ namespace TOne.WhS.Deal.Business
                     int origDealId = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.OrigDeal]).Value;
                     int origDealZoneGroupNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.OrigDealZoneGroupNb]).Value;
                     decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DurationInSec]).Value;
-                    int dealId = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.Deal]).Value;
-                    int dealZoneGroupNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealZoneGroupNb]).Value;
-                    decimal dealDurationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
-                    int dealTierNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealTierNb]).Value;
-                    int dealRateTierNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealRateTierNb]).Value;
 
-                    DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealId, ZoneGroupNb = dealZoneGroupNb };
-                    DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchStart, dealId, dealZoneGroupNb, dealDurationInSeconds, dealTierNb, dealRateTierNb);
+                    int? dealId = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.Deal]).Value;
+                    int? dealZoneGroupNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealZoneGroupNb]).Value;
+                    decimal? dealDurationInSeconds = (decimal?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
+                    int? dealTierNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealTierNb]).Value;
+                    int? dealRateTierNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealRateTierNb]).Value;
 
-                    List<DealBillingSummary> dealBillingSummaryList = currentDealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
-                    dealBillingSummaryList.Add(dealBillingSummary);
+                    BatchDealZoneGroup batchDealZoneGroup = new BatchDealZoneGroup() { DealId = origDealId, DealZoneGroupNb = origDealZoneGroupNb, BatchStart = batchStart };
+                    DealDurations dealDurations = batchDealZoneGroupDict.GetOrCreateItem(batchDealZoneGroup, () => { return new DealDurations() { DealDurationInSeconds = 0, DurationInSeconds = 0 }; });
+                    dealDurations.DurationInSeconds += durationInSeconds;
+                    dealDurations.DealDurationInSeconds += dealDurationInSeconds.HasValue ? dealDurationInSeconds.Value : 0;
+
+                    if (dealId.HasValue)
+                    {
+                        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealId.Value, ZoneGroupNb = dealZoneGroupNb.Value };
+                        DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchStart, dealId.Value, dealZoneGroupNb.Value, dealDurationInSeconds.Value, dealTierNb, dealRateTierNb);
+
+                        List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
+                        dealBillingSummaryList.Add(dealBillingSummary);
+                    }
+                }
+
+                foreach (var batchDealZoneGroupItem in batchDealZoneGroupDict)
+                {
+                    decimal outDealDurationInSeconds = batchDealZoneGroupItem.Value.DurationInSeconds - batchDealZoneGroupItem.Value.DealDurationInSeconds;
+                    if (outDealDurationInSeconds > 0)
+                    {
+                        BatchDealZoneGroup currentBatchDealZoneGroup = batchDealZoneGroupItem.Key;
+                        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = currentBatchDealZoneGroup.DealId, ZoneGroupNb = currentBatchDealZoneGroup.DealZoneGroupNb };
+                        DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, currentBatchDealZoneGroup.BatchStart, currentBatchDealZoneGroup.DealId, currentBatchDealZoneGroup.DealZoneGroupNb, outDealDurationInSeconds, null, null);
+
+                        List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
+                        dealBillingSummaryList.Add(dealBillingSummary);
+                    }
                 }
             }
-            return currentDealBillingSummaryRecords;
+
+            return dealBillingSummaryRecords;
         }
 
         #endregion
@@ -61,7 +87,7 @@ namespace TOne.WhS.Deal.Business
                     TableId = 8,
                     DimensionFields = new List<string> { propertyNames[PropertyName.HalfHour], propertyNames[PropertyName.OrigDeal], propertyNames[PropertyName.OrigDealZoneGroupNb], propertyNames[PropertyName.Deal], 
                                                          propertyNames[PropertyName.DealZoneGroupNb], propertyNames[PropertyName.DealTierNb], propertyNames[PropertyName.DealRateTierNb] },
-                    MeasureFields = new List<string>() { propertyNames[PropertyName.DurationInSec], propertyNames[PropertyName.DurationInSec] },
+                    MeasureFields = new List<string>() { propertyNames[PropertyName.DurationInSec], propertyNames[PropertyName.DealDurationInSec] },
                     FromTime = beginDate,
                     FilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
                     {
@@ -77,21 +103,19 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
-        private DealBillingSummary BuildDealBillingSummary(bool isSale, DateTime batchStart, int dealId, int dealZoneGroupNb, decimal dealDurationInSeconds, int dealTierNb, int dealRateTierNb)
+        private DealBillingSummary BuildDealBillingSummary(bool isSale, DateTime batchStart, int dealId, int dealZoneGroupNb, decimal DurationInSeconds, int? dealTierNb, int? dealRateTierNb)
         {
             return new DealBillingSummary()
             {
                 BatchStart = batchStart,
                 DealId = dealId,
                 DealZoneGroupNb = dealZoneGroupNb,
-                DurationInSeconds = dealDurationInSeconds,
+                DurationInSeconds = DurationInSeconds,
                 DealTierNb = dealTierNb,
                 DealRateTierNb = dealRateTierNb,
                 IsSale = isSale
             };
         }
-
-        private enum PropertyName { HalfHour, OrigDeal, OrigDealZoneGroupNb, DurationInSec, Deal, DealZoneGroupNb, DealTierNb, DealRateTierNb, DealDurationInSec }
 
         private Dictionary<PropertyName, string> BuildPropertyNames(string prefixPropName)
         {
@@ -108,6 +132,28 @@ namespace TOne.WhS.Deal.Business
             propertyNames.Add(PropertyName.DealDurationInSec, string.Format("{0}DealDurationInSec", prefixPropName));
 
             return propertyNames;
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private enum PropertyName { HalfHour, OrigDeal, OrigDealZoneGroupNb, DurationInSec, Deal, DealZoneGroupNb, DealTierNb, DealRateTierNb, DealDurationInSec }
+
+        private struct BatchDealZoneGroup
+        {
+            public DateTime BatchStart { get; set; }
+
+            public int DealId { get; set; }
+
+            public int DealZoneGroupNb { get; set; }
+        }
+
+        private class DealDurations
+        {
+            public decimal DurationInSeconds { get; set; }
+
+            public decimal DealDurationInSeconds { get; set; }
         }
 
         #endregion

@@ -16,9 +16,9 @@ namespace TOne.WhS.Deal.Entities
 
         public bool IsSale { get; set; }
 
-        public int TierNb { get; set; }
+        public int? TierNb { get; set; }
 
-        public int RateTierNb { get; set; }
+        public int? RateTierNb { get; set; }
 
         public DateTime FromTime { get; set; }
 

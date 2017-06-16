@@ -24,12 +24,13 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region Public Methods
 
-        public List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
+        public List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate)
         {
             DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
             return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDealZoneGroups]", DealDetailedProgressMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@IsSale", isSale));
+                cmd.Parameters.Add(new SqlParameter("@BeginDate", beginDate));
                 var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
                 dtPrm.Value = dtDealZoneGroup;
                 cmd.Parameters.Add(dtPrm);
@@ -126,8 +127,17 @@ namespace TOne.WhS.Deal.Data.SQL
                 dr["DealID"] = dealDetailedProgress.DealID;
                 dr["ZoneGroupNb"] = dealDetailedProgress.ZoneGroupNb;
                 dr["IsSale"] = dealDetailedProgress.IsSale;
-                dr["TierNb"] = dealDetailedProgress.TierNb;
-                dr["RateTierNb"] = dealDetailedProgress.RateTierNb;
+
+                if (dealDetailedProgress.TierNb.HasValue)
+                    dr["TierNb"] = dealDetailedProgress.TierNb.Value;
+                else
+                    dr["TierNb"] = DBNull.Value;
+
+                if (dealDetailedProgress.RateTierNb.HasValue)
+                    dr["RateTierNb"] = dealDetailedProgress.RateTierNb.Value;
+                else
+                    dr["RateTierNb"] = DBNull.Value;
+
                 dr["ReachedDurationInSec"] = dealDetailedProgress.ReachedDurationInSeconds;
                 dr["FromTime"] = dealDetailedProgress.FromTime;
                 dr["ToTime"] = dealDetailedProgress.ToTime;
@@ -182,7 +192,12 @@ namespace TOne.WhS.Deal.Data.SQL
                 DataRow dr = dtDealZoneGroupTier.NewRow();
                 dr["DealId"] = dealZoneGroupTier.DealId;
                 dr["ZoneGroupNb"] = dealZoneGroupTier.ZoneGroupNb;
-                dr["TierNb"] = dealZoneGroupTier.TierNb;
+
+                if (dealZoneGroupTier.TierNb.HasValue)
+                    dr["TierNb"] = dealZoneGroupTier.TierNb.Value;
+                else
+                    dr["TierNb"] = DBNull.Value;
+
                 dtDealZoneGroupTier.Rows.Add(dr);
             }
             dtDealZoneGroupTier.EndLoadData();
@@ -206,7 +221,7 @@ namespace TOne.WhS.Deal.Data.SQL
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress
             {
                 DealDetailedProgressID = (long)reader["ID"],
-                DealID = (int)reader["ID"],
+                DealID = (int)reader["DealID"],
                 ZoneGroupNb = (int)reader["ZoneGroupNb"],
                 IsSale = (bool)reader["IsSale"],
                 TierNb = (int)reader["TierNb"],

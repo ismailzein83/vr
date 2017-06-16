@@ -18,9 +18,9 @@ namespace TOne.WhS.Deal.Business
 
     public class DealBillingSummary : BaseDealBillingSummary
     {
-        public int DealTierNb { get; set; }
+        public int? DealTierNb { get; set; }
 
-        public int DealRateTierNb { get; set; }
+        public int? DealRateTierNb { get; set; }
 
         public bool IsEqual(DealBillingSummary dealBillingSummary)
         {

@@ -19,17 +19,16 @@ namespace TOne.WhS.Deal.Business
         public DealDetailedProgressManager()
         {
             _dataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
-
         }
 
         #endregion
 
         #region Public Methods
 
-        public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
+        public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate = null)
         {
             IDealDetailedProgressDataManager dealDetailedProgressDataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
-            List<DealDetailedProgress> dealDetailedProgressList = dealDetailedProgressDataManager.GetDealDetailedProgresses(dealZoneGroups, isSale);
+            List<DealDetailedProgress> dealDetailedProgressList = dealDetailedProgressDataManager.GetDealDetailedProgresses(dealZoneGroups, isSale, beginDate);
             if (dealDetailedProgressList == null || dealDetailedProgressList.Count == 0)
                 return null;
 
@@ -41,8 +40,7 @@ namespace TOne.WhS.Deal.Business
                 RateTierNb = itm.RateTierNb,
                 FromTime = itm.FromTime,
                 ToTime = itm.ToTime
-            }
-            , itm => itm);
+            }, itm => itm);
         }
 
         public void InsertDealDetailedProgresses(IEnumerable<DealDetailedProgress> dealDetailedProgresses)
@@ -73,6 +71,35 @@ namespace TOne.WhS.Deal.Business
             if (dealZoneGroupTiers == null || dealZoneGroupTiers.Count > 0)
                 return null;
             return _dataManager.GetDealZoneGroupTierDataBeforeDate(isSale, beforeDate, dealZoneGroupTiers);
+        }
+
+        public bool AreEqual(DealDetailedProgress dealDetailedProgress, DealBillingSummary dealBillingSummary)
+        {
+            if (dealBillingSummary == null || dealDetailedProgress == null)
+                return false;
+
+            if (dealDetailedProgress.FromTime != dealBillingSummary.BatchStart)
+                return false;
+
+            if (dealDetailedProgress.ToTime != dealBillingSummary.BatchStart.AddMinutes(30))
+                return false;
+
+            if (dealDetailedProgress.DealID != dealBillingSummary.DealId)
+                return false;
+
+            if (dealDetailedProgress.ZoneGroupNb != dealBillingSummary.DealZoneGroupNb)
+                return false;
+
+            if (dealDetailedProgress.ReachedDurationInSeconds != dealBillingSummary.DurationInSeconds)
+                return false;
+
+            if (dealDetailedProgress.TierNb != dealBillingSummary.DealTierNb)
+                return false;
+
+            if (dealDetailedProgress.RateTierNb != dealBillingSummary.DealRateTierNb)
+                return false;
+
+            return true;
         }
 
         #endregion
