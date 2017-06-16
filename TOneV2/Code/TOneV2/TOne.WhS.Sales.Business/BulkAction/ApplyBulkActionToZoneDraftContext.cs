@@ -19,10 +19,13 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<CostCalculationMethod> _costCalculationMethods;
 
-        public ApplyBulkActionToZoneDraftContext(Func<IEnumerable<ZoneItem>> buildZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
+        private Func<decimal, decimal> _getRoundedRate;
+
+        public ApplyBulkActionToZoneDraftContext(Func<IEnumerable<ZoneItem>> buildZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<decimal, decimal> getRoundedRate)
         {
             this._buildZoneItems = buildZoneItems;
             this._costCalculationMethods = costCalculationMethods;
+            _getRoundedRate = getRoundedRate;
         }
 
         #endregion
@@ -62,6 +65,11 @@ namespace TOne.WhS.Sales.Business
                 }
             }
             return null;
+        }
+
+        public decimal GetRoundedRate(decimal rate)
+        {
+            return _getRoundedRate(rate);
         }
 
         #region Private Methods

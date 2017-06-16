@@ -108,6 +108,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -131,6 +135,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeCompareController.cs" />
+    <Compile Include="Controllers\RatePlanConfigController.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
     <Compile Include="Controllers\RatePlanPreviewController.cs" />
     <Compile Include="Controllers\SellingRuleController.cs" />
@@ -247,6 +252,7 @@
     <Content Include="WhS_Sales\Directives\vr-whs-sales-routingproduct-zone.js" />
     <Content Include="WhS_Sales\Services\APIServices\CodeCompareAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
+    <Content Include="WhS_Sales\Services\APIServices\RatePlanConfigAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SellingRuleAPIService.js" />
     <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />

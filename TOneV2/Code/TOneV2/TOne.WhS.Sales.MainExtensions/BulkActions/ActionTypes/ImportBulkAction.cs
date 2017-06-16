@@ -94,12 +94,12 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
             IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
-            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates);
+            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate);
         }
 
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
-            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates);
+            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
         }
 
         public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
@@ -111,7 +111,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #region Private Methods
 
-        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates)
+        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate)
         {
             ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
             ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
@@ -131,7 +131,7 @@ namespace TOne.WhS.Sales.MainExtensions
             {
                 ZoneId = zoneId,
                 RateTypeId = null,
-                Rate = Convert.ToDecimal(importedRow.Rate),
+                Rate = getRoundedRate(Convert.ToDecimal(importedRow.Rate)),
                 BED = Convert.ToDateTime(importedRow.EffectiveDate)
             };
 

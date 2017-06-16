@@ -126,7 +126,10 @@ namespace TOne.WhS.Sales.Business
             var effectiveOn = DateTime.Now.Date;
 
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
-            var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, rateLocator);
+
+            int longPrecision = -1;
+            var rateManager = new ZoneRateManager(input.Filter.OwnerType, input.Filter.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, longPrecision, rateLocator);
+
             var rpManager = new ZoneRPManager(input.Filter.OwnerType, input.Filter.OwnerId, effectiveOn, draft, null);
 
             var baseRatesByZone = new BaseRatesByZone();
@@ -269,8 +272,10 @@ namespace TOne.WhS.Sales.Business
             int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, effectiveOn, false);
             Changes draft = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
 
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
-            ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, rateLocator);
+            ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, longPrecision, rateLocator);
             rateSetter.SetZoneRate(zoneItem);
 
             if (sellingProductId == null)
@@ -525,8 +530,10 @@ namespace TOne.WhS.Sales.Business
             if (!sellingProductId.HasValue)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SellingProduct of {0} '{1}' was not found", input.OwnerType.ToString(), input.OwnerId));
 
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
-            var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, input.EffectiveOn, draft, input.CurrencyId, rateLocator);
+            var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, input.EffectiveOn, draft, input.CurrencyId, longPrecision, rateLocator);
 
             var zoneRPLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(input.EffectiveOn));
             var routingProductManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft, zoneRPLocator);
@@ -684,7 +691,14 @@ namespace TOne.WhS.Sales.Business
 
                 return BuildZoneItems(filteredSaleZones, input.OwnerType, input.OwnerId, input.CurrencyId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, input.CostCalculationMethods, null, draft, input.EffectiveOn, zoneRPLocator);
             };
-            var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods)
+
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            Func<decimal, decimal> getRoundedRate = (rate) =>
+            {
+                return decimal.Round(rate, longPrecision);
+            };
+
+            var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods, getRoundedRate)
             {
                 OwnerType = input.OwnerType
             };
@@ -834,8 +848,10 @@ namespace TOne.WhS.Sales.Business
             if (sellingProductId == null)
                 throw new Exception("Selling product does not exist");
 
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
-            var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId, rateLocator);
+            var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId, longPrecision, rateLocator);
             var rpManager = new ZoneRPManager(ownerType, ownerId, effectiveOn, draft, zoneRPLocator);
             ZoneRouteOptionManager routeOptionManager;
 
@@ -877,6 +893,11 @@ namespace TOne.WhS.Sales.Business
                 return zoneRPLocator.GetSellingProductZoneRoutingProduct(sellingProductId.Value, zoneId);
             };
 
+            Func<decimal, decimal> getRoundedRate = (rate) =>
+            {
+                return decimal.Round(rate, longPrecision);
+            };
+
             foreach (SaleZone saleZone in saleZones)
             {
                 var zoneItem = new ZoneItem()
@@ -892,7 +913,7 @@ namespace TOne.WhS.Sales.Business
 
                 if (bulkAction != null)
                 {
-                    var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, costCalculationMethods, getSellingProductZoneRoutingProduct)
+                    var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, costCalculationMethods, getSellingProductZoneRoutingProduct, getRoundedRate)
                     {
                         OwnerType = ownerType,
                         ZoneItem = zoneItem,

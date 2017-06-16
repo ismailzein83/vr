@@ -34,6 +34,7 @@ namespace TOne.WhS.Sales.Business
             _systemCurrencyId = systemCurrency.CurrencyId;
 
             MaximumRate = new BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
+            LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
         }
 
         #endregion
@@ -74,6 +75,7 @@ namespace TOne.WhS.Sales.Business
             }
         }
         public decimal MaximumRate { get; set; }
+        public int LongPrecision { get; set; }
 
         #endregion
 
@@ -101,13 +103,12 @@ namespace TOne.WhS.Sales.Business
             }
             return convertedRate;
         }
-
         public int GetRateToChangeCurrencyId(RateToChange rateToChange)
         {
             return _priceListCurrencyId;
         }
-        #endregion
 
+        #endregion
     }
 
     public interface IRatePlanContext
@@ -128,6 +129,8 @@ namespace TOne.WhS.Sales.Business
         bool ProcessHasChanges { get; }
         decimal MaximumRate { get; }
         Dictionary<int, decimal> MaximumRateConvertedByCurrency { get; }
+        int LongPrecision { get; }
+
         #endregion
 
         #region Methods

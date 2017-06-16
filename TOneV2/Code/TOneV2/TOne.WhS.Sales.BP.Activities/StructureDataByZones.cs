@@ -100,7 +100,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     dataByZone.NormalRateToChange = rateToChange;
 
                 if (dataByZone.ZoneRateGroup == null)
-                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToChange.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
+                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToChange.ZoneId, DateTime.Now, currencyId, ratePlanContext.LongPrecision, ratePlanManager, currencyExchangeManager, saleRateManager);
 
                 if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
                 {
@@ -124,7 +124,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     dataByZone.NormalRateToClose = rateToClose;
 
                 if (dataByZone.ZoneRateGroup == null)
-                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToClose.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
+                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, rateToClose.ZoneId, DateTime.Now, currencyId, ratePlanContext.LongPrecision, ratePlanManager, currencyExchangeManager, saleRateManager);
 
                 if (ownerType == SalePriceListOwnerType.Customer && !dataByZone.SoldOn.HasValue)
                 {
@@ -143,7 +143,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     AddEmptyDataByZone(dataByZoneName, routingProductToAdd.ZoneName, routingProductToAdd.ZoneId, endedCountryIds, out dataByZone, saleZoneManager);
 
                 if (dataByZone.ZoneRateGroup == null)
-                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, routingProductToAdd.ZoneId, DateTime.Now, currencyId, ratePlanManager, currencyExchangeManager, saleRateManager);
+                    dataByZone.ZoneRateGroup = GetZoneRateGroup(ownerType, ownerId, routingProductToAdd.ZoneId, DateTime.Now, currencyId, ratePlanContext.LongPrecision, ratePlanManager, currencyExchangeManager, saleRateManager);
 
                 dataByZone.SaleZoneRoutingProductToAdd = routingProductToAdd;
             }
@@ -243,7 +243,7 @@ namespace TOne.WhS.Sales.BP.Activities
             return ratePlanCustomerCountry;
         }
 
-        private ZoneRateGroup GetZoneRateGroup(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn, int targetCurrencyId, RatePlanManager ratePlanManager, CurrencyExchangeRateManager currencyExchangeRateManager, SaleRateManager saleRateManager)
+        private ZoneRateGroup GetZoneRateGroup(SalePriceListOwnerType ownerType, int ownerId, long zoneId, DateTime effectiveOn, int targetCurrencyId, int longPrecision, RatePlanManager ratePlanManager, CurrencyExchangeRateManager exchangeRateManager, SaleRateManager saleRateManager)
         {
             ZoneRateGroup zoneRateGroup = null;
             SaleEntityZoneRate currentRate = ratePlanManager.GetRate(ownerType, ownerId, zoneId, effectiveOn);
@@ -254,8 +254,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     zoneRateGroup.NormalRate = new ZoneRate();
 
-                    decimal convertedNormalRate =
-                        currencyExchangeRateManager.ConvertValueToCurrency(currentRate.Rate.Rate, saleRateManager.GetCurrencyId(currentRate.Rate), targetCurrencyId, effectiveOn);
+                    decimal convertedNormalRate = UtilitiesManager.ConvertToCurrencyAndRound(currentRate.Rate.Rate, saleRateManager.GetCurrencyId(currentRate.Rate), targetCurrencyId, effectiveOn, longPrecision, exchangeRateManager);
 
                     zoneRateGroup.NormalRate.Source = currentRate.Source;
                     zoneRateGroup.NormalRate.Rate = convertedNormalRate;
@@ -274,8 +273,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             SalePriceListOwnerType otherRateSource;
                             currentRate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
 
-                            decimal convertedOtherRate =
-                                currencyExchangeRateManager.ConvertValueToCurrency(kvp.Value.Rate, saleRateManager.GetCurrencyId(kvp.Value), targetCurrencyId, effectiveOn);
+                            decimal convertedOtherRate = UtilitiesManager.ConvertToCurrencyAndRound(kvp.Value.Rate, saleRateManager.GetCurrencyId(kvp.Value), targetCurrencyId, effectiveOn, longPrecision, exchangeRateManager);
 
                             otherRate.Source = otherRateSource;
                             otherRate.RateTypeId = kvp.Key;

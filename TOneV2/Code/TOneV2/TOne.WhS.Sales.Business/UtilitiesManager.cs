@@ -12,6 +12,8 @@ namespace TOne.WhS.Sales.Business
 {
     public class UtilitiesManager
     {
+        #region Public Methods
+
         public static DateTime? GetMaxDate(IEnumerable<DateTime?> dates)
         {
             int count;
@@ -201,6 +203,8 @@ namespace TOne.WhS.Sales.Business
             return closedCountryIds;
         }
 
+        #endregion
+
         #region Private Methods
         private static DateTime? GetFirstDate(IEnumerable<DateTime?> dates, out int count)
         {
@@ -213,6 +217,18 @@ namespace TOne.WhS.Sales.Business
 
             return dates.ElementAt(0);
         }
+        #endregion
+
+        #region New Methods
+
+        public static decimal ConvertToCurrencyAndRound(decimal value, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
+        {
+            if (fromCurrencyId == toCurrencyId)
+                return value;
+            decimal convertedValue = exchangeRateManager.ConvertValueToCurrency(value, fromCurrencyId, toCurrencyId, exchangeRateDate);
+            return decimal.Round(convertedValue, decimalPrecision);
+        }
+
         #endregion
     }
 

@@ -167,6 +167,7 @@ namespace TOne.WhS.Sales.Business
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product", customerId));
 
             Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(customerId, effectiveOn, true);
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
 
             if (allZones != null)
             {
@@ -193,7 +194,7 @@ namespace TOne.WhS.Sales.Business
                         {
                             RateTypeId = null,
                             ZoneId = zone.SaleZoneId,
-                            Rate = GetConvertedAndRoundedRate(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), newCurrencyId, effectiveOn, currencyExchangeRateManager),
+                            Rate = ConvertToCurrencyAndRound(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), newCurrencyId, effectiveOn, longPrecision, currencyExchangeRateManager),
                             CurrencyId = newCurrencyId,
                             BED = newRateBED,
                             EED = null
@@ -207,7 +208,7 @@ namespace TOne.WhS.Sales.Business
                                 {
                                     RateTypeId = otherRate.RateTypeId,
                                     ZoneId = zone.SaleZoneId,
-                                    Rate = GetConvertedAndRoundedRate(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), newCurrencyId, effectiveOn, currencyExchangeRateManager),
+                                    Rate = ConvertToCurrencyAndRound(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), newCurrencyId, effectiveOn, longPrecision, currencyExchangeRateManager),
                                     CurrencyId = newCurrencyId,
                                     BED = newRateBED,
                                     EED = null
@@ -235,10 +236,9 @@ namespace TOne.WhS.Sales.Business
             SaveDraft(SalePriceListOwnerType.Customer, customerId, draft);
         }
 
-        private decimal GetConvertedAndRoundedRate(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime effectiveOn, Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager)
+        private decimal ConvertToCurrencyAndRound(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
         {
-            decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(rate, fromCurrencyId, toCurrencyId, effectiveOn);
-            return decimal.Round(convertedRate, 4);
+            return UtilitiesManager.ConvertToCurrencyAndRound(rate, fromCurrencyId, toCurrencyId, exchangeRateDate, decimalPrecision, exchangeRateManager);
         }
     }
 

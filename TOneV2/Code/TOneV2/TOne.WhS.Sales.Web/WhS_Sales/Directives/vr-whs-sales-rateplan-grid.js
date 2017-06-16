@@ -239,6 +239,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     ownerName = query.OwnerName;
                     setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
                     setDayOffsets(query.Settings);
+                    $scope.scopeModel.longPrecision = query.longPrecision;
                 }
 
                 var promises = [];

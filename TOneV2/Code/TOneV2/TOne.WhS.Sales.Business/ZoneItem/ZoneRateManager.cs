@@ -24,10 +24,11 @@ namespace TOne.WhS.Sales.Business
         private IEnumerable<DraftRateToClose> _closedRates;
 
         private int _targetCurrencyId;
+        private int _longPrecision;
 
         private SaleEntityZoneRateLocator _rateLocator;
         private SaleEntityZoneRateLocator _futureRateLocator;
-        private CurrencyExchangeRateManager _currencyExchangeRateManager;
+        private CurrencyExchangeRateManager _exchangeRateManager;
         private SaleRateManager _saleRateManager;
 
         private Guid _rateTypeRuleDefinitionId;
@@ -38,7 +39,7 @@ namespace TOne.WhS.Sales.Business
 
         #region Public Methods
 
-        public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId, SaleEntityZoneRateLocator rateLocator)
+        public ZoneRateManager(SalePriceListOwnerType ownerType, int ownerId, int? sellingProductId, DateTime effectiveOn, Changes changes, int targetCurrencyId, int longPrecision, SaleEntityZoneRateLocator rateLocator)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
@@ -52,10 +53,11 @@ namespace TOne.WhS.Sales.Business
             }
 
             _targetCurrencyId = targetCurrencyId;
+            _longPrecision = longPrecision;
 
             _rateLocator = rateLocator;
             _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
-            _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            _exchangeRateManager = new CurrencyExchangeRateManager();
             _saleRateManager = new SaleRateManager();
 
             _rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
@@ -74,7 +76,7 @@ namespace TOne.WhS.Sales.Business
                 if (rate.Rate != null)
                 {
                     zoneItem.CurrentRateId = rate.Rate.SaleRateId;
-                    zoneItem.CurrentRate = GetConvertedRate(rate.Rate);
+                    zoneItem.CurrentRate = ConvertToCurrencyAndRound(rate.Rate);
                     zoneItem.CurrentRateCurrencyId = _saleRateManager.GetCurrencyId(rate.Rate);
                     zoneItem.CurrentRateBED = rate.Rate.BED;
                     zoneItem.CurrentRateEED = rate.Rate.EED;
@@ -92,7 +94,7 @@ namespace TOne.WhS.Sales.Business
                         zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
                         {
                             RateTypeId = kvp.Key,
-                            Rate = GetConvertedRate(kvp.Value),
+                            Rate = ConvertToCurrencyAndRound(kvp.Value),
                             CurrencyId = _saleRateManager.GetCurrencyId(kvp.Value),
                             IsRateEditable = otherRateSource == _ownerType,
                             BED = kvp.Value.BED,
@@ -131,7 +133,7 @@ namespace TOne.WhS.Sales.Business
                     zoneItem.FutureNormalRate = new FutureRate()
                     {
                         RateTypeId = futureRate.Rate.RateTypeId,
-                        Rate = GetConvertedRate(futureRate.Rate),
+                        Rate = ConvertToCurrencyAndRound(futureRate.Rate),
                         IsRateEditable = futureRate.Source == _ownerType,
                         BED = futureRate.Rate.BED,
                         EED = futureRate.Rate.EED
@@ -151,7 +153,7 @@ namespace TOne.WhS.Sales.Business
                             zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
                             {
                                 RateTypeId = kvp.Value.RateTypeId,
-                                Rate = GetConvertedRate(kvp.Value),
+                                Rate = ConvertToCurrencyAndRound(kvp.Value),
                                 IsRateEditable = fututreOtherRateSource == _ownerType,
                                 BED = kvp.Value.BED,
                                 EED = kvp.Value.EED
@@ -232,9 +234,9 @@ namespace TOne.WhS.Sales.Business
             return target;
         }
 
-        private decimal GetConvertedRate(SaleRate saleRate)
+        private decimal ConvertToCurrencyAndRound(SaleRate saleRate)
         {
-            return _currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn);
+            return UtilitiesManager.ConvertToCurrencyAndRound(saleRate.Rate, _saleRateManager.GetCurrencyId(saleRate), _targetCurrencyId, _effectiveOn, _longPrecision, _exchangeRateManager);
         }
 
         #endregion

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -40,24 +41,25 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SaleRate> saleRates = ExistingSaleRates.Get(context);
             Dictionary<long, ExistingZone> existingZonesById = ExistingZonesById.Get(context);
 
-            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+
+            var exchangeRateManager = new CurrencyExchangeRateManager();
             var saleRateManager = new SaleRateManager();
 
-            var existingRates = saleRates.MapRecords(saleRate => ExistingRateMapper(saleRate, existingZonesById, currencyExchangeRateManager, saleRateManager, currencyId, DateTime.Now));
+            var existingRates = saleRates.MapRecords(saleRate => ExistingRateMapper(saleRate, existingZonesById, saleRateManager, currencyId, DateTime.Now, ratePlanContext.LongPrecision, exchangeRateManager));
             this.ExistingRates.Set(context, existingRates);
         }
 
         #region Private Methods
 
-        private ExistingRate ExistingRateMapper(SaleRate saleRate, Dictionary<long, ExistingZone> existingZonesById, CurrencyExchangeRateManager currencyExchangeRateManager, SaleRateManager saleRateManager, int currencyId, DateTime effectiveOn)
+        private ExistingRate ExistingRateMapper(SaleRate saleRate, Dictionary<long, ExistingZone> existingZonesById, SaleRateManager saleRateManager, int currencyId, DateTime effectiveOn, int longPrecision, CurrencyExchangeRateManager exchangeRateManager)
         {
             ExistingZone existingZone;
 
             if (!existingZonesById.TryGetValue(saleRate.ZoneId, out existingZone))
                 throw new NullReferenceException(String.Format("A rate exists for a missing or not effective zone (Id: {0})", saleRate.ZoneId));
 
-            decimal convertedRate =
-                currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate, saleRateManager.GetCurrencyId(saleRate), currencyId, effectiveOn);
+            decimal convertedRate = UtilitiesManager.ConvertToCurrencyAndRound(saleRate.Rate, saleRateManager.GetCurrencyId(saleRate), currencyId, effectiveOn, longPrecision, exchangeRateManager);
 
             var existingRate = new ExistingRate()
             {
@@ -65,8 +67,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 RateEntity = saleRate,
                 ParentZone = existingZone
             };
-			existingZone.ExistingRates.Add(existingRate);
-			return existingRate;
+            existingZone.ExistingRates.Add(existingRate);
+            return existingRate;
         }
 
         #endregion

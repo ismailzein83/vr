@@ -101,6 +101,7 @@
                             <vr-textbox type="number"
                                         value="dataItem.NewRate"
                                         customvalidate="dataItem.validateNewRate()"
+                                        decimalprecision="{{viewScope.scopeModel.longPrecision}}"
                                         onvaluechanged="viewScope.onNewRateChanged(dataItem)"
                                         onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
                                         tonextinput>

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'BPInstanceStatusEnum', "UtilsService", "VRUIUtilsService", "VRNotificationService"];
+    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", 'WhS_Sales_RatePlanConfigAPIService', "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'BPInstanceStatusEnum', "UtilsService", "VRUIUtilsService", "VRNotificationService"];
 
-    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, BPInstanceStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_RatePlanConfigAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, BPInstanceStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         var ownerTypeSelectorAPI;
         var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -25,6 +25,7 @@
         var systemCurrencyId;
         var draftCurrencyId;
         var defaultCustomerCurrencyId;
+        var longPrecision;
 
         var countrySelectorAPI;
         var countrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -178,7 +179,7 @@
                 if (selectedId == draftCurrencyId)
                     return;
 
-                VRNotificationService.showConfirmation('Changing the currency will reset all new rates. Are you sure you want to proceed?').then(function (isConfirmed) {
+                VRNotificationService.showConfirmation('Changing the currency will reset all new rates. Are you sure that you want to proceed?').then(function (isConfirmed) {
                     if (isConfirmed) {
                         var promises = [];
 
@@ -188,12 +189,23 @@
                         var defineNewRatesConvertedToCurrencyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(defineNewRatesConvertedToCurrencyDeferred.promise);
 
+                        var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(doesOwnerDraftExistDeferred.promise);
+
                         saveChangesPromise.then(function () {
                             WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(getOwnerId(), selectedId, UtilsService.getDateFromDateTime(new Date())).then(function () {
                                 draftCurrencyId = selectedId;
                                 defineNewRatesConvertedToCurrencyDeferred.resolve();
                             }).catch(function (error) {
                                 defineNewRatesConvertedToCurrencyDeferred.reject(error);
+                            });
+                        });
+
+                        defineNewRatesConvertedToCurrencyDeferred.promise.then(function () {
+                            doesOwnerDraftExist().then(function () {
+                                doesOwnerDraftExistDeferred.resolve();
+                            }).catch(function (error) {
+                                doesOwnerDraftExistDeferred.reject(error);
                             });
                         });
 
@@ -539,7 +551,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, loadSaleAreaSettingsData, getSystemCurrencyId, loadCountrySelector, loadTextFilter]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, loadSaleAreaSettingsData, getSystemCurrencyId, getLongPrecisionValue, loadCountrySelector, loadTextFilter]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterSection = false;
@@ -612,6 +624,11 @@
         function getSystemCurrencyId() {
             return VRCommon_CurrencyAPIService.GetSystemCurrencyId().then(function (response) {
                 systemCurrencyId = response;
+            });
+        }
+        function getLongPrecisionValue() {
+            return WhS_Sales_RatePlanConfigAPIService.GetGeneralSettingsLongPrecisionValue().then(function (response) {
+                longPrecision = response;
             });
         }
         function loadCountrySelector() {
@@ -690,7 +707,8 @@
                 EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
                 OwnerName: getOwnerName(),
                 Settings: ratePlanSettingsData,
-                SaleAreaSettings: saleAreaSettingsData
+                SaleAreaSettings: saleAreaSettingsData,
+                longPrecision: longPrecision
             };
 
             if (shouldSetFilter === true) {
@@ -935,7 +953,7 @@
                         var processTrackingContext = {
                             onClose: function (bpInstanceClosureContext) {
                                 if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
-                                    
+
                                     resetRatePlan();
 
                                     $scope.isLoading = true;

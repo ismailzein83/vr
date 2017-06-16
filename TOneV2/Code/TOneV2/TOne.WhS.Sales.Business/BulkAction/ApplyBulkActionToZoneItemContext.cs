@@ -21,11 +21,14 @@ namespace TOne.WhS.Sales.Business
 
         private Func<long, SaleEntityZoneRoutingProduct> _getSellingProductZoneRoutingProduct;
 
-        public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<long, SaleEntityZoneRoutingProduct> getSellingProductZoneRoutingProduct)
+        private Func<decimal, decimal> _getRoundedRate;
+
+        public ApplyBulkActionToZoneItemContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<long, SaleEntityZoneRoutingProduct> getSellingProductZoneRoutingProduct, Func<decimal, decimal> getRoundedRate)
         {
             _getContextZoneItems = getContextZoneItems;
             _costCalculationMethods = costCalculationMethods;
             _getSellingProductZoneRoutingProduct = getSellingProductZoneRoutingProduct;
+            _getRoundedRate = getRoundedRate;
         }
 
         #endregion
@@ -50,6 +53,11 @@ namespace TOne.WhS.Sales.Business
         public SaleEntityZoneRoutingProduct GetSellingProductZoneRoutingProduct(long zoneId)
         {
             return _getSellingProductZoneRoutingProduct(zoneId);
+        }
+
+        public decimal GetRoundedRate(decimal rate)
+        {
+            return _getRoundedRate(rate);
         }
     }
 }
