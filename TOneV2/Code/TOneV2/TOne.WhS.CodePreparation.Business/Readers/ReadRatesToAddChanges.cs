@@ -41,7 +41,7 @@ namespace TOne.WhS.CodePreparation.Business
             SaleRatePriceList saleRatePriceList;
             foreach (var rateToAdd in allRates)
             {
-                if(rateToAdd.PriceListToAdd == null)
+                if (rateToAdd.PriceListToAdd == null)
                     throw new Exception(string.Format("Rate To Add on zone {0} without Pricelist assigned", rateToAdd.ZoneName));
 
                 VRDictionary<int, SaleRatesByZone> saleRatesByOwner =
@@ -68,7 +68,7 @@ namespace TOne.WhS.CodePreparation.Business
                 SaleRateId = rateId,
                 ZoneId = zoneId,
                 Rate = rateToAdd.Rate,
-                CurrencyId = rateToAdd.PriceListToAdd.CurrencyId,
+                CurrencyId = rateToAdd.CurrencyId,
                 BED = effectiveDate,
                 RateChange = RateChangeType.New
             };
