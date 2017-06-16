@@ -23,6 +23,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
 
         public SupplierPriceListType SupplierPriceListType { get; set; }
 
+        public override string EntityId { 
+            get{
+                return SupplierAccountId.ToString();
+        }
+        }
         public override string GetTitle()
         {
             ICarrierAccountManager carrierAccountManager = BEManagerFactory.GetManager<ICarrierAccountManager>();

@@ -16,6 +16,7 @@
         function ValidateSupplierPriceList(input) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "ValidateSupplierPriceList"), input);
         }
+
         function HasDownloadSupplierPriceListTemplatePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SupPL_ModuleConfig.moduleName, controllerName, ['DownloadSupplierPriceListTemplate']));
         }

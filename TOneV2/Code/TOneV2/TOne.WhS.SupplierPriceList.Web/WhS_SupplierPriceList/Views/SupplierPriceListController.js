@@ -1,19 +1,17 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateAPIService', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'WhS_SupPL_SupplierPriceListTypeEnum'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, WhS_SupPL_SupplierPriceListTypeEnum) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_SupPL_SupplierPriceListTemplateAPIService', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'WhS_SupPL_SupplierPriceListTypeEnum', 'WhS_BP_SPLDefinitionEnum'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_SupPL_SupplierPriceListAPIService, WhS_SupPL_SupplierPriceListTemplateAPIService, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, WhS_SupPL_SupplierPriceListTypeEnum, WhS_BP_SPLDefinitionEnum) {
 
             var inputWorkBookApi;
             var supplierPriceListConfigurationAPI;
-            var supplierPriceListConfigurationReadyPromiseDeferred;
 
             var carrierAccountDirectiveAPI;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var currencyDirectiveAPI;
             var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var priceListTemplateEntity;
 
             defineScope();
@@ -55,47 +53,23 @@
                 };
 
                 $scope.scopeModel.carrierAccountSelectItem = function (dataItem) {
+                    $scope.scopeModel.isLoading = true;
                     var selectedCarrierAccountId = dataItem.CarrierAccountId;
-                    if (selectedCarrierAccountId != undefined) {
-                        $scope.scopeModel.showMapping = false;
-                        $scope.scopeModel.isLoadingCurrencySelector = true;
-                        $scope.scopeModel.inPutFile = undefined;
-                        WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(selectedCarrierAccountId).then(function (currencyId) {
-                            currencyDirectiveAPI.selectedCurrency(currencyId);
-                            $scope.scopeModel.isLoadingCurrencySelector = false;
-                            
-                        });
-
-                        getPriceListTemplate(selectedCarrierAccountId).then(function (response) {
-
-                        	supplierPriceListConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                        	$scope.scopeModel.showMapping = true;
-
-                        	supplierPriceListConfigurationReadyPromiseDeferred.promise.then(function () {
-
-                        		priceListTemplateEntity = response;
-                        		supplierPriceListConfigurationReadyPromiseDeferred = undefined;
-
-                        		var payload = {
-                        			context: buildContext(),
-                        			configDetails: response != undefined && response.ConfigDetails != undefined ? response.ConfigDetails : undefined
-                        		};
-                        		var setLoader = function (value) {
-                        			$scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
-                        		};
-                        		VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierPriceListConfigurationAPI, payload, setLoader, supplierPriceListConfigurationReadyPromiseDeferred);
-                        	});
-                        });
-                    }
+                    hasRunningProcessesForSupplier(selectedCarrierAccountId).then(function (response) {
+                        buildPricelistTemplate(selectedCarrierAccountId);
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                       
+                    });
                 };
 
                 $scope.scopeModel.onReadyWoorkBook = function (api) {
                     inputWorkBookApi = api;
                 };
-
+             
                 $scope.scopeModel.onSupplierPriceListConfigurationSelectiveReady = function (api) {
-                	supplierPriceListConfigurationAPI = api;
-                	supplierPriceListConfigurationReadyPromiseDeferred.resolve();
+                    supplierPriceListConfigurationAPI = api;
                 };
 
                 $scope.scopeModel.saveSupplierPriceListConfiguration = function () {
@@ -123,7 +97,7 @@
                             }
                         }).catch(function (error) {
                             promiseDeffered.reject(error);
-                        });;
+                        });
                     } else {
                         return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
                             if (response != undefined && response.UpdatedObject != undefined) {
@@ -153,29 +127,22 @@
 
             function startImportSupplierPriceList(supplierPriceListTemplateId) {
                 var promiseDeffered = UtilsService.createPromiseDeferred();
-
-                var inputArguments = {
-                    $type: "TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput, TOne.WhS.SupplierPriceList.BP.Arguments",
-                    SupplierPriceListType: $scope.scopeModel.selectedPriceListType.value,
-                    SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
-                    CurrencyId: currencyDirectiveAPI.getSelectedIds(),
-                    FileId: $scope.scopeModel.inPutFile.fileId,
-                    PriceListDate: $scope.scopeModel.priceListDate,
-                    SupplierPriceListTemplateId: supplierPriceListTemplateId
-                };
-                var input = {
-                    InputArguments: inputArguments
-                };
-                BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
-                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-                        var context = {
-                            onClose: function () {
-                            }
-                        };
-                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
-                    }
-                    promiseDeffered.resolve();
+                hasRunningProcessesForSupplier(carrierAccountDirectiveAPI.getSelectedIds()).then(function (response) {
+                        if (!response.hasRunningProcesses) {
+                            createNewProcess(supplierPriceListTemplateId).then(function () {
+                                promiseDeffered.resolve();
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            });
+                        }
+                        else {
+                            VRNotificationService.showWarning("Cannot start process because another instance is still running");
+                            promiseDeffered.resolve();
+                        }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
                 });
+
                 return promiseDeffered.promise;
             }
 
@@ -217,7 +184,83 @@
                 return loadCurrencySelectorPromiseDeferred.promise;
 
             }
+            function buildPricelistTemplate(selectedCarrierAccountId)
+            {
+                console.log(selectedCarrierAccountId);
+                if (selectedCarrierAccountId != undefined) {
+                    $scope.scopeModel.showMapping = false;
+                    $scope.scopeModel.isLoadingCurrencySelector = true;
+                    $scope.scopeModel.inPutFile = undefined;
+                    WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrencyId(selectedCarrierAccountId).then(function (currencyId) {
+                        currencyDirectiveAPI.selectedCurrency(currencyId);
+                        $scope.scopeModel.isLoadingCurrencySelector = false;
 
+                    });
+
+                    getPriceListTemplate(selectedCarrierAccountId).then(function (response) {
+                        $scope.scopeModel.showMapping = true;
+                        priceListTemplateEntity = response;
+                        var payload = {
+                            context: buildContext(),
+                            configDetails: response != undefined && response.ConfigDetails != undefined ? response.ConfigDetails : undefined
+                        };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingSupplierPriceListTemplate = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierPriceListConfigurationAPI, payload, setLoader);
+                    });
+                }
+            }
+            function hasRunningProcessesForSupplier(carrierAccountId)
+            {
+               var hasRunningProcessesPromiseDeferred = UtilsService.createPromiseDeferred();
+                WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(carrierAccountId).then(function (carrierAccountName) {
+                    var runningInstanceEditorSettings = {
+                        message: "Importing pricelist for supplier '" + carrierAccountName + "' is still pending"
+                    };
+                   BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_SPLDefinitionEnum.BPDefinitionId.value, carrierAccountId, runningInstanceEditorSettings).then(function (response) {
+                      hasRunningProcessesPromiseDeferred.resolve(response);
+                  });
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+               return hasRunningProcessesPromiseDeferred.promise;
+            }
+            function createNewProcess(supplierPriceListTemplateId)
+            {
+                var promiseDeffered = UtilsService.createPromiseDeferred();
+
+                var inputArguments = {
+                    $type: "TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput, TOne.WhS.SupplierPriceList.BP.Arguments",
+                    SupplierPriceListType: $scope.scopeModel.selectedPriceListType.value,
+                    SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
+                    CurrencyId: currencyDirectiveAPI.getSelectedIds(),
+                    FileId: $scope.scopeModel.inPutFile.fileId,
+                    PriceListDate: $scope.scopeModel.priceListDate,
+                    SupplierPriceListTemplateId: supplierPriceListTemplateId
+                };
+                var input = {
+                    InputArguments: inputArguments
+                };
+                BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                        var context = {
+                            onClose: function () {
+                            }
+                        };
+
+                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
+
+                    }
+                    promiseDeffered.resolve();
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+
+                return promiseDeffered.promise;
+            }
             function getPriceListTemplate(selectedCarrierAccountId) {
                 return WhS_SupPL_SupplierPriceListTemplateAPIService.GetSupplierPriceListTemplateBySupplierId(selectedCarrierAccountId);
             }

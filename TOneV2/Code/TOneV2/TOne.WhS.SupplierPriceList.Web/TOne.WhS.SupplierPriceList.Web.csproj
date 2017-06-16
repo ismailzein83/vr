@@ -160,6 +160,7 @@
     <Content Include="WhS_SupplierPriceList\Constant\PreviewChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\SPLDefintionEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SupplierPriceListType.js" />
     <Content Include="WhS_SupplierPriceList\Constant\ZoneServicesChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\ZoneChangeTypeEnum.js" />

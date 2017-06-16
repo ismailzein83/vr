@@ -20,7 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                {
                    if (startedBPInstanceInputArg.SupplierAccountId == inputArg.SupplierAccountId)
                    {
-                       context.Reason = "Another process is running for the same account type";
+                       context.Reason = "Another process is running for the same supplier";
                        return false;
                    }
                }
