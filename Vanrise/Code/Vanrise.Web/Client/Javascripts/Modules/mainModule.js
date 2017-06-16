@@ -2,8 +2,8 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope','$rootScope','VR_Sec_MenuAPIService','SecurityService','BaseAPIService','VR_Sec_PermissionAPIService','notify','$cookies','$timeout','MenuItemTypeEnum','UtilsService','VRModalService','VRNavigationService','UISettingsService',
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify,  $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService) {
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location',
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location) {
     Waves.displayEffect();
 
     $rootScope.$on("$destroy", function () {
@@ -29,7 +29,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             SecurityService.setLoginURL(loginURL);
             BaseAPIService.setLoginURL(loginURL);
         }
-    };
+    };   
     $rootScope.setVersionNumber = function (version) {
         $rootScope.version = version;
     };
@@ -208,9 +208,11 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         $('.time-section').addClass('in');
     };
     var allMenuItems = [];
-    if (!UISettingsService.isUISettingsHasValue()) {
-        UISettingsService.loadUISettings();
-    }
+    (function () {
+        if (!UISettingsService.isUISettingsHasValue()) {
+            UISettingsService.loadUISettings();
+        }
+    })();
     VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
 
         angular.forEach(response, function (value, key, itm) {
@@ -241,6 +243,15 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     var selectedMenuItem;
     var currentURL;
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        if (returnToDefaultPage(next)) {
+            if (!UISettingsService.isUISettingsHasValue()) {
+                UISettingsService.loadUISettings().then(function () {
+                    redirectToDefaultIfExist();
+                });
+            }
+            else
+                redirectToDefaultIfExist();
+        }        
         $('.vr-menu-item').removeClass('vr-menu-item-selected');
         $(window).off("resize.Viewport");
     });
@@ -249,7 +260,23 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         currentURL = decodedURL.substring(decodedURL.indexOf('#'), decodedURL.length);
         setSelectedMenuFromURL();
     });
+    function returnToDefaultPage(url) {
+        var pathArray = location.href.split("/");
+        var protocol = pathArray[0];
+        var host = pathArray[2];
+        var defaultUrl = protocol + "//" + host + '/#/default'  ;
+        return defaultUrl == url;
+    }
 
+    function redirectToDefaultIfExist() {
+        if (UISettingsService.getDefaultPageURl() != undefined) {
+            window.location.href = UISettingsService.getDefaultPageURl();
+        }
+    }
+
+    $scope.goToHomePage = function () {
+        window.location.href = "/";
+    };
     function setSelectedMenuFromURL() {
         if (currentURL == undefined || allMenuItems.length == 0)
             return;

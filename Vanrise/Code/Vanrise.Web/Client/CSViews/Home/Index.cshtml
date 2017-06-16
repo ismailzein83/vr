@@ -23,7 +23,7 @@
         <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
             <div class="container">
                 <div class="navbar-header">
-                    <img src="/Images/logoonheader.png" class="minilogo" />
+                    <img src="/Images/logoonheader.png" class="minilogo hand-cursor" ng-click="goToHomePage()" title="Home" />
                     <div class="vr-logout-span">
 
                         <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
@@ -31,8 +31,6 @@
                                 <img src="Client/Images/member.png" class="vr-user-icon" />
                                 <label class="vr-user-label">{{userDisplayName}}</label>
                                 <label class="vr-user-separator">|</label>
-
-
                             </div>
                             <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
                                 <li role="presentation">
