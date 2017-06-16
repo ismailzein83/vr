@@ -22,7 +22,7 @@
     [OriginatingRNCorBSCId]           VARCHAR (100) NULL,
     [OriginatingMSCId]                VARCHAR (100) NULL,
     [CalledIMSI]                      VARCHAR (100) NULL,
-    [GlobalAreaID]                    INT           NULL,
+    [GlobalAreaID]                    VARCHAR (100) NULL,
     [SubscriberCategory]              VARCHAR (100) NULL,
     [FirstMCC_MNC]                    VARCHAR (100) NULL,
     [SMSUserDataType]                 VARCHAR (100) NULL,
@@ -57,6 +57,8 @@
     [SAC]                             VARCHAR (100) NULL,
     [LocationAreaCode]                VARCHAR (100) NULL,
     [SwitchID]                        INT           NULL);
+
+
 
 
 

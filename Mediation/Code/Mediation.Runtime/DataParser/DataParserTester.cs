@@ -2050,7 +2050,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CallingNumber",
                     RemoveHexa = true
@@ -2059,7 +2059,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("85", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledNumber",
                     RemoveHexa = true
@@ -2074,7 +2074,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"81", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
@@ -2083,7 +2083,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"80", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
@@ -2126,7 +2126,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F810E", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "OriginalCalledNumber",
                     RemoveHexa = true
@@ -2302,7 +2302,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CallingNumber",
                     RemoveHexa = true
@@ -2311,7 +2311,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledNumber",
                     RemoveHexa = true
@@ -2326,7 +2326,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"81", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
@@ -2335,7 +2335,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"80", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
@@ -2495,7 +2495,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("83", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "ServedMSISDN",
                     RemoveHexa = true
@@ -2528,7 +2528,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CallingNumber",
                     RemoveHexa = true
@@ -2537,7 +2537,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("85", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledNumber",
                     RemoveHexa = true
@@ -2680,7 +2680,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F816F", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "ServedIMSI",
                     RemoveHexa = true
@@ -2713,7 +2713,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CallingNumber",
                     RemoveHexa = true
@@ -2722,7 +2722,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("85", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledNumber",
                     RemoveHexa = true
@@ -2864,7 +2864,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F815B", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledIMSI",
                     RemoveHexa = true
@@ -2888,7 +2888,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CallingNumber",
                     RemoveHexa = true
@@ -2897,7 +2897,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("85", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledNumber",
                     RemoveHexa = true
@@ -2933,7 +2933,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F810E", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "OriginalCalledNumber",
                     RemoveHexa = true
@@ -3032,7 +3032,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F827A", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "InputCalledNumber",
                     RemoveHexa = true
@@ -3073,7 +3073,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("83", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "ServedMSISDN",
                     RemoveHexa = true
@@ -3088,19 +3088,21 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"81", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "SAC"
+                                          FieldName = "SAC",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"80", new HexTLVFieldParser
                                 {
-                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
+                                     Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
-                                          FieldName = "LocationAreaCode"
+                                          FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             }
@@ -3146,10 +3148,9 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F813C", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
                 {
-                    FieldName = "GlobalAreaID",
-                    NumberType = NumberType.Int
+                    FieldName = "GlobalAreaID"
                 }
             });
 
@@ -3190,7 +3191,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("8C", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "DestinationNumber",
                     RemoveHexa = true
@@ -3258,7 +3259,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "ServedMSISDN",
                     RemoveHexa = true
@@ -3273,7 +3274,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"81", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
@@ -3282,7 +3283,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"80", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
                                      {
@@ -3333,10 +3334,9 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F813C", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.NumberFieldParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.HexaParser
                 {
-                    FieldName = "GlobalAreaID",
-                    NumberType = NumberType.Int
+                    FieldName = "GlobalAreaID"
                 }
             });
 
@@ -3386,7 +3386,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F8149", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "Origination",
                     RemoveHexa = true
@@ -3452,7 +3452,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CallingNumber",
                     RemoveHexa = true
@@ -3461,7 +3461,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("85", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "CalledNumber",
                     RemoveHexa = true
@@ -3478,7 +3478,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"81", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
                                      {
@@ -3486,7 +3486,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"80", new HexTLVFieldParser
                                 {
                                      Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.StringParser
                                      {
@@ -3652,7 +3652,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F827A", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "InputCalledNumber",
                     RemoveHexa = true
@@ -3661,7 +3661,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("83", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "ServedMSISDN",
                     RemoveHexa = true
@@ -3670,7 +3670,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F810E", new HexTLVFieldParser
             {
-                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.BCDNumberParser
+                Settings = new Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers.TBCDNumberParser
                 {
                     FieldName = "OriginalCalledNumber",
                     RemoveHexa = true
