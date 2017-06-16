@@ -100,6 +100,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         protected override ProcessCountryZonesServicesOutput DoWorkWithResult(ProcessCountryZonesServicesInput inputArgument, AsyncActivityHandle handle)
         {
+            PriceListZoneServiceManager manager = new PriceListZoneServiceManager();
+            manager.ProcessRetroActiveZoneServices(inputArgument.SupplierId, inputArgument.MinimumDate);
+
             IEnumerable<ExistingZone> existingZones = null;
 
             if (inputArgument.ExistingZonesByZoneId != null)
@@ -123,7 +126,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 MinimumDate = inputArgument.MinimumDate
             };
 
-            PriceListZoneServiceManager manager = new PriceListZoneServiceManager();
+            
             manager.ProcessCountryZonesServices(processCountryZonesServicesContext, inputArgument.ImportedServiceTypeIds, inputArgument.SupplierId);
 
             if ((processCountryZonesServicesContext.NewZonesServices != null && processCountryZonesServicesContext.NewZonesServices.Count() > 0)

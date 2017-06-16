@@ -13,8 +13,14 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class PriceListZoneServiceManager
     {
-        #region ProcessRetroActive
-        private void ProcessRetroActiveZoneServices(int supplierId, DateTime minimumBED)
+        public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context, IEnumerable<int> importedServiceTypeIds, int supplierId)
+        {
+            ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones, supplierId);
+            context.NewZonesServices = context.ImportedZones.FindAllRecords(item => item.ImportedZoneServiceGroup != null).SelectMany(itm => itm.ImportedZoneServiceGroup.NewZoneServices);
+            context.ChangedZonesServices = context.ExistingZones.SelectMany(item => item.ExistingZonesServices.Where(itm => itm.ChangedZoneService != null).Select(x => x.ChangedZoneService));
+        }
+
+        public void ProcessRetroActiveZoneServices(int supplierId, DateTime minimumBED)
         {
             SupplierZoneServiceManager supplierZoneServiceManager = new SupplierZoneServiceManager();
 
@@ -38,6 +44,15 @@ namespace TOne.WhS.SupplierPriceList.Business
             };
             supplierZoneServiceManager.InsertSupplierDefaultService(effectiveSupplierDefaultService);
         }
+        
+        private void ProcessCountryZonesServices(IEnumerable<ImportedZone> importedZones, IEnumerable<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones,
+            IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<NotImportedZone> notImportedZones, int supplierId)
+        {
+            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
+            ExistingZonesServicesByZoneName existingZonesServicesByZoneName = StructureExistingZonesServicesByZoneName(existingZonesServices);
+            ProcessImportedData(importedZones, newAndExistingZones, existingZonesByName, existingZonesServicesByZoneName, pricelistDate, supplierId);
+            ProcessNotImportedData(existingZones, notImportedZones, existingZonesServicesByZoneName);
+        }
 
         private SupplierDefaultService GetEffectiveSupplierDefaultService(IEnumerable<SupplierDefaultService> supplierDefaultServices, DateTime effectiveDate)
         {
@@ -49,29 +64,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
             return null;
-        }
-
-        #endregion
-
-        public void ProcessCountryZonesServices(IProcessCountryZonesServicesContext context, IEnumerable<int> importedServiceTypeIds, int supplierId)
-        {
-            if (context.ImportedZones != null)
-            {
-                ProcessRetroActiveZoneServices(supplierId, context.MinimumDate);
-            }
-
-            ProcessCountryZonesServices(context.ImportedZones, context.ExistingZonesServices, context.NewAndExistingZones, context.ExistingZones, context.PriceListDate, context.NotImportedZones, supplierId);
-            context.NewZonesServices = context.ImportedZones.FindAllRecords(item => item.ImportedZoneServiceGroup != null).SelectMany(itm => itm.ImportedZoneServiceGroup.NewZoneServices);
-            context.ChangedZonesServices = context.ExistingZones.SelectMany(item => item.ExistingZonesServices.Where(itm => itm.ChangedZoneService != null).Select(x => x.ChangedZoneService));
-        }
-
-        private void ProcessCountryZonesServices(IEnumerable<ImportedZone> importedZones, IEnumerable<ExistingZoneService> existingZonesServices, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones, DateTime pricelistDate, IEnumerable<NotImportedZone> notImportedZones, int supplierId)
-        {
-            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
-            ExistingZonesServicesByZoneName existingZonesServicesByZoneName = StructureExistingZonesServicesByZoneName(existingZonesServices);
-            ProcessImportedData(importedZones, newAndExistingZones, existingZonesByName, existingZonesServicesByZoneName, pricelistDate, supplierId);
-            ProcessNotImportedData(existingZones, notImportedZones, existingZonesServicesByZoneName);
         }
 
         #region Processing Imported Data Methods
