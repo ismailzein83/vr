@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
+using Vanrise.Common;
+using System.IO;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 {
@@ -20,7 +23,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 
         public override void Execute(IHexTLVRecordParserContext context)
         {
-            throw new NotImplementedException();
+            HexTLVHelper.ReadRecordFromStream(context.RecordStream, LengthNbOfBytes, (recordValue) =>
+            {
+                HexTLVHelper.ExecuteRecordParser(RecordParser, new MemoryStream(recordValue.Value), context);
+            });
         }
     }
 }

@@ -69,6 +69,7 @@
     <Compile Include="ParserType\ParserTypeDetail.cs" />
     <Compile Include="ParserType\ParserTypeExtendedSettingsConfig.cs" />
     <Compile Include="ParserType\ParserTypeQuery.cs" />
+    <Compile Include="PositionedFieldParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

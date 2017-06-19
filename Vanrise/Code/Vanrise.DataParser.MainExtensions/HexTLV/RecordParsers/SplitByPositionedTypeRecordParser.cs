@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
@@ -22,7 +24,17 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 
         public override void Execute(IHexTLVRecordParserContext context)
         {
-            throw new NotImplementedException();
+            HexTLVHelper.ReadRecordTypeFromStream(context.RecordStream, RecordTypePosition, RecordTypeLength, (recordType) =>
+            {
+                HexTLVRecordParser subRecordsParser = null;
+                if (this.SubRecordsParsersByRecordType != null)
+                    this.SubRecordsParsersByRecordType.TryGetValue(recordType.Type, out subRecordsParser);
+
+                if (subRecordsParser != null)
+                    HexTLVHelper.ExecuteRecordParser(subRecordsParser, new MemoryStream(recordType.Value), context);
+            });
+
+
         }
     }
 }

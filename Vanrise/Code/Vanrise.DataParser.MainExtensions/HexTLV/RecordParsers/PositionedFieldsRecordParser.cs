@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
@@ -16,8 +17,8 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 
         public string RecordType { get; set; }
 
-        public List<PositionedFieldParser> FieldParsers { get; set; }  
-        
+        public List<PositionedFieldParser> FieldParsers { get; set; }
+
         public List<ParsedRecordFieldConstantValue> FieldConstantValues { get; set; }
 
         public List<CompositeFieldsParser> CompositeFieldsParsers { get; set; }
@@ -26,16 +27,29 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 
         public override void Execute(IHexTLVRecordParserContext context)
         {
-            throw new NotImplementedException();
+            ParsedRecord parsedRecord = context.CreateRecord(this.RecordType, this.TempFieldsNames);
+
+            if (this.FieldParsers != null)
+                HexTLVHelper.ExecutePositionedFieldParsers(this.FieldParsers, parsedRecord, context.RecordStream);
+
+            if (this.CompositeFieldsParsers != null)
+            {
+                foreach (var compositeFieldsParser in this.CompositeFieldsParsers)
+                {
+                    compositeFieldsParser.Execute(new CompositeFieldsParserContext
+                    {
+                        Record = parsedRecord
+                    });
+                }
+            }
+            if (this.FieldConstantValues != null)
+            {
+                foreach (var fldConstantValue in this.FieldConstantValues)
+                {
+                    parsedRecord.SetFieldValue(fldConstantValue.FieldName, fldConstantValue.Value);
+                }
+            }
+            context.OnRecordParsed(parsedRecord);
         }
-    }
-
-    public class PositionedFieldParser
-    {
-        public int Position { get; set; }
-
-        public int Length { get; set; }
-
-        public HexTLVFieldParser FieldParser { get; set; }
     }
 }
