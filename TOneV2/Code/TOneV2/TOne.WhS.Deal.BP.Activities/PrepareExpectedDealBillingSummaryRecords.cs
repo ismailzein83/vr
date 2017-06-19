@@ -39,7 +39,6 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(inputArgument.AffectedDealZoneGroups, inputArgument.IsSale);
-
             Dictionary<DealZoneGroup, Dictionary<DateTime, BaseDealBillingSummary>> expectedBaseDealBillingSummaryRecords = BuildExpectedBaseDealBillingSummaryDict(dealDetailedProgresses);
 
             var dealProgressDataByZoneGroup = new Dictionary<DealZoneGroup, DealProgressData>();
@@ -186,6 +185,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         remainingDurationInSec -= remainingTierDurationInSec;
                     }
 
+                    //Editing DealProgressData memoryTable
                     DealZoneGroupTierDetails nextDealZoneGroupTierDetails = GetDealZoneGroupTierDetails(isSale, baseDealBillingSummary.DealId, baseDealBillingSummary.DealZoneGroupNb, dealProgressData.CurrentTierNb + 1);
                     if (nextDealZoneGroupTierDetails == null)
                     {

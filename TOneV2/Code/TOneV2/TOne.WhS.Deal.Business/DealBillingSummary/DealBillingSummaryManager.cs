@@ -34,7 +34,6 @@ namespace TOne.WhS.Deal.Business
                     int origDealId = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.OrigDeal]).Value;
                     int origDealZoneGroupNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.OrigDealZoneGroupNb]).Value;
                     decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DurationInSec]).Value;
-
                     int? dealId = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.Deal]).Value;
                     int? dealZoneGroupNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealZoneGroupNb]).Value;
                     decimal? dealDurationInSeconds = (decimal?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
@@ -61,9 +60,9 @@ namespace TOne.WhS.Deal.Business
                     decimal outDealDurationInSeconds = batchDealZoneGroupItem.Value.DurationInSeconds - batchDealZoneGroupItem.Value.DealDurationInSeconds;
                     if (outDealDurationInSeconds > 0)
                     {
-                        BatchDealZoneGroup currentBatchDealZoneGroup = batchDealZoneGroupItem.Key;
-                        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = currentBatchDealZoneGroup.DealId, ZoneGroupNb = currentBatchDealZoneGroup.DealZoneGroupNb };
-                        DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, currentBatchDealZoneGroup.BatchStart, currentBatchDealZoneGroup.DealId, currentBatchDealZoneGroup.DealZoneGroupNb, outDealDurationInSeconds, null, null);
+                        BatchDealZoneGroup batchDealZoneGroup = batchDealZoneGroupItem.Key;
+                        DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = batchDealZoneGroup.DealId, ZoneGroupNb = batchDealZoneGroup.DealZoneGroupNb };
+                        DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, batchDealZoneGroup.BatchStart, batchDealZoneGroup.DealId, batchDealZoneGroup.DealZoneGroupNb, outDealDurationInSeconds, null, null);
 
                         List<DealBillingSummary> dealBillingSummaryList = dealBillingSummaryRecords.GetOrCreateItem(dealZoneGroup);
                         dealBillingSummaryList.Add(dealBillingSummary);

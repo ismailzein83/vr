@@ -15,9 +15,9 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public Boolean IsSale { get; set; }
 
-        public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
-
         public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
+
+        public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
     }
 
     public sealed class UpdateProgressTables : BaseAsyncActivity<UpdateProgressTablesInput>
@@ -26,9 +26,9 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public InArgument<Boolean> IsSale { get; set; }
 
-        public InArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
-
         public InArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
+
+        public InArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
         protected override void DoWork(UpdateProgressTablesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -56,25 +56,15 @@ namespace TOne.WhS.Deal.BP.Activities
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(affectedDealZoneGroups, isSale, beginDate);
 
-            DealProgressManager dealProgressManager = new DealProgressManager();
-            var dealProgresses = dealProgressManager.GetDealProgresses(affectedDealZoneGroups, isSale);
-
             List<DealDetailedProgress> dealDetailedProgressesToAdd = new List<DealDetailedProgress>();
             List<DealDetailedProgress> dealDetailedProgressesToUpdate = new List<DealDetailedProgress>();
             HashSet<long> dealDetailedProgressesToKeep = new HashSet<long>();
 
-            List<DealProgress> dealProgressesToAdd = new List<DealProgress>();
-            List<DealProgress> dealProgressesToUpdate = new List<DealProgress>();
-
             DealDetailedProgress tempDealDetailedProgress;
-            DealProgress tempDealProgress;
 
             foreach (var currentDealBillingSummaryRecord in currentDealBillingSummaryRecords)
             {
                 DealZoneGroup dealZoneGroup = currentDealBillingSummaryRecord.Key;
-
-                int maxTierNumber = 0;
-                decimal tierReachedDurationInSeconds = 0;
 
                 foreach (var dealBillingSummary in currentDealBillingSummaryRecord.Value)
                 {
@@ -90,32 +80,6 @@ namespace TOne.WhS.Deal.BP.Activities
                     {
                         dealDetailedProgressesToAdd.Add(BuildDealDetailedProgress(null, dealBillingSummary));
                     }
-
-                    //Used for DealProgress
-                    if (dealBillingSummary.DealTierNb.HasValue)
-                    {
-                        if (dealBillingSummary.DealTierNb.Value > maxTierNumber)
-                        {
-                            maxTierNumber = dealBillingSummary.DealTierNb.Value;
-                            tierReachedDurationInSeconds = dealBillingSummary.DurationInSeconds;
-                        }
-                        else if (dealBillingSummary.DealTierNb.Value == maxTierNumber)
-                        {
-                            tierReachedDurationInSeconds += dealBillingSummary.DurationInSeconds;
-                        }
-                    }
-                }
-
-                if (dealProgresses != null && dealProgresses.TryGetValue(dealZoneGroup, out tempDealProgress))
-                {
-                    DealProgress dealProgress = BuildDealProgress(tempDealProgress.DealProgressID, dealZoneGroup, maxTierNumber, tierReachedDurationInSeconds, isSale);
-                    if (!dealProgress.IsEqual(tempDealProgress))
-                        dealProgressesToUpdate.Add(dealProgress);
-                }
-                else
-                {
-                    DealProgress dealProgress = BuildDealProgress(null, dealZoneGroup, maxTierNumber, tierReachedDurationInSeconds, isSale);
-                    dealProgressesToAdd.Add(dealProgress);
                 }
             }
 
@@ -124,9 +88,6 @@ namespace TOne.WhS.Deal.BP.Activities
             dealDetailedProgressManager.InsertDealDetailedProgresses(dealDetailedProgressesToAdd);
             dealDetailedProgressManager.UpdateDealDetailedProgresses(dealDetailedProgressesToUpdate);
             dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete);
-
-            dealProgressManager.InsertDealProgresses(dealProgressesToAdd);
-            dealProgressManager.UpdateDealProgresses(dealProgressesToUpdate);
         }
 
         private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary)
@@ -163,7 +124,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
         private DealProgress BuildDealProgress(long? dealProgressId, DealZoneGroup dealZoneGroup, int tierNb, decimal reachedDurationInSeconds, bool isSale)
         {
-            DealZoneGroupTierDetails dealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetails(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, tierNb, isSale);
+            DealZoneGroupTierDetails dealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetails(isSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, tierNb);
             DealProgress dealProgress = new DealProgress()
             {
                 DealID = dealZoneGroup.DealId,

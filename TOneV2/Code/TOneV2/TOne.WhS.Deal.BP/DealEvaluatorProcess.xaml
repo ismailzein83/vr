@@ -39,15 +39,15 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
-      <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP.Activities</AssemblyReference>
-      <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
     </sco:Collection>
@@ -102,24 +102,14 @@
             <Parallel.Variables>
               <Variable x:TypeArguments="x:String" Name="variable1" />
             </Parallel.Variables>
-            <local:DealEvaluatorSubProcess sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_1" isSale="True">
-              <local:DealEvaluatorSubProcess.Output>
-                <InArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
-                  <mca:CSharpValue x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">sale_DealEvaluatorSubProcessOutput</mca:CSharpValue>
-                </InArgument>
-              </local:DealEvaluatorSubProcess.Output>
+            <local:DealEvaluatorSubProcess Output="{x:Null}" sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_1" isSale="True">
               <local:DealEvaluatorSubProcess.beginDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate.Value</mca:CSharpValue>
                 </InArgument>
               </local:DealEvaluatorSubProcess.beginDate>
             </local:DealEvaluatorSubProcess>
-            <local:DealEvaluatorSubProcess sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_2" isSale="False">
-              <local:DealEvaluatorSubProcess.Output>
-                <InArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
-                  <mca:CSharpValue x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">cost_DealEvaluatorSubProcessOutput</mca:CSharpValue>
-                </InArgument>
-              </local:DealEvaluatorSubProcess.Output>
+            <local:DealEvaluatorSubProcess Output="{x:Null}" sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_2" isSale="False">
               <local:DealEvaluatorSubProcess.beginDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate.Value</mca:CSharpValue>
@@ -149,7 +139,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbBw3A5kBDgIBAT4FRCACAU5FBVAkAgFDUQVcIQIBOF0FkAEKAgEJkQEFlwEgAgECQQtBhQECAVA+YD6CAQIBT00LTYABAgFJSAtITQIBRFQLVGgCAT5ZC1l4AgE5YAtgXAIBCmQJjgEUAgEPlAELlAGFAQIBBJEBYJEBgAECAQNlC4EBFgIBG4IBC40BKwIBEGkNdC0CASp1DYABLQIBHIoBEYoBaAIBFoUBEYUBUwIBEWwTbI4BAgEyaW9pdQIBMXETcWICASt4E3iOAQIBJHVvdXYCASN9E31iAgEd</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbBo3A48BDgIBAT4FRCACAUJFBVAkAgE3UQVcIQIBLF0FhgEKAgEJhwEFjQEgAgECQQtBhQECAUQ+YD6CAQIBQ00LTYABAgE9SAtITQIBOFQLVGgCATJZC1l4AgEtYAtgXAIBCmQJhAEUAgEPigELigGFAQIBBIcBYIcBgAECAQNlC3cWAgEbeAuDASsCARBpDW8tAgEkcA12LQIBHIABEYABaAIBFnsRe1MCARFpgQFphwECAStsE2xiAgElcIEBcIgBAgEjcxNzYgIBHQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
