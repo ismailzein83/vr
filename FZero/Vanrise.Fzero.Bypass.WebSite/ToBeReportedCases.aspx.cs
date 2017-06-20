@@ -325,26 +325,22 @@ public partial class ToBeReportedCases : BasePage
                 ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(report.ReportID, (mobileOperator.User.GMT - SysParameter.Global_GMT)));
                 rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
+                string profileName = ClientVariables.GetProfileName(ddlSearchClient.SelectedValue.ToInt());
 
-                string profile_name = "FMS_Profile";
                 if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.ST)//-- Syrian Telecom
                 {
-                    profile_name = "FMS_Syria_Profile";
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptToSyrianOperator.rdlc";
                 }
                 else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.Zain)//-- Zain
                 {
-                    profile_name = "FMS_Profile";
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptToZainOperator.rdlc";
                 }
                 else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.ITPC)//-- ITPC
                 {
-                    profile_name = "FMS_Profile";
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
                 }
                 else
                 {
-                    profile_name = "FMS_Profile";
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptDefaultToOperator.rdlc";
                 }
 
@@ -357,16 +353,20 @@ public partial class ToBeReportedCases : BasePage
                 parameters[2] = new ReportParameter("HideSignature", "true");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
-                string filenameExcel = ExportReportToExcel(report.ReportID + ".xls");
-                
+                string filenameExcel = ClientVariables.ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
 
 
+                parameters[2] = new ReportParameter("HideSignature", "true");
+                rvToOperator.LocalReport.SetParameters(parameters);
+                rvToOperator.LocalReport.Refresh();
+                string filenameCSV = ClientVariables.ExportReportToCSV(report.ReportID + ".csv", rvToOperator);
+         
 
 
                 parameters[2] = new ReportParameter("HideSignature", "false");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
-                string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf");
+                string filenamePDF = ClientVariables.ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
 
 
 
@@ -375,16 +375,16 @@ public partial class ToBeReportedCases : BasePage
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
                         if (mobileOperator.AutoReportSecurity)
-                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                         else
-                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                     }
                     else
                     {
                         if (mobileOperator.AutoReportSecurity)
-                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                         else
-                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
 
                     }
 
@@ -394,18 +394,36 @@ public partial class ToBeReportedCases : BasePage
                     if (ddlSearchClient.SelectedValue.ToInt() == 3)
                     {
                         if (mobileOperator.AutoReportSecurity)
-                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
-                        else 
-                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                        else
+                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                     }
                     else
                     {
                         if (mobileOperator.AutoReportSecurity)
-                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
-                        else 
-                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profile_name);
+                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                        else
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameExcel, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                     }
                 }
+                else if (ddlReportFormat.SelectedValue == "CSV")
+                {
+                    if (ddlSearchClient.SelectedValue.ToInt() == 3)
+                    {
+                        if (mobileOperator.AutoReportSecurity)
+                            EmailManager.SendReporttoMobileSyrianOperatorNoBlock(ListIds.Count, filenameCSV + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                        else
+                            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameCSV + ";" + filenamePDF, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                    }
+                    else
+                    {
+                        if (mobileOperator.AutoReportSecurity)
+                            EmailManager.SendReporttoMobileOperatorNoBlock(ListIds.Count, filenameCSV, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                        else
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameCSV, mobileOperator.User.EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                    }
+                }
+
 
 
 
@@ -456,7 +474,7 @@ public partial class ToBeReportedCases : BasePage
                     parametersSec[2] = new ReportParameter("HideSignature", "false");
                     rvToSecurity.LocalReport.SetParameters(parametersSec);
                     rvToSecurity.LocalReport.Refresh();
-                    string filenamePDFSec = ExportReportToPDFSec(reportSecurity.ReportID + ".pdf");
+                    string filenamePDFSec = ClientVariables.ExportReportToPDF(reportSecurity.ReportID + ".pdf", rvToOperator);
 
                     EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDFSec, mobileOperator.AutoReportSecurityEmail, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + reportSecurity.ReportID,
                         ConfigurationManager.AppSettings["EmailCCNatSec"], reportSecurity.ReportID, "FMS_Profile");
@@ -475,7 +493,7 @@ public partial class ToBeReportedCases : BasePage
                         }
                     }
 
-                    EmailManager.SendAutoBlockReport(mobileOperator.AutoBlockEmail, ListCLIs, report.ReportID, profile_name);
+                    EmailManager.SendAutoBlockReport(mobileOperator.AutoBlockEmail, ListCLIs, report.ReportID, profileName);
                 }
 
 
@@ -496,68 +514,6 @@ public partial class ToBeReportedCases : BasePage
 
     }
 
-    private string ExportReportToPDF(string reportName)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToOperator.LocalReport.Render(
-           "PDF", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
-    }
-
-    private string ExportReportToPDFSec(string reportName)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToSecurity.LocalReport.Render(
-           "PDF", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
-    }
-
-    private string ExportReportToExcel(string reportName)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToOperator.LocalReport.Render(
-           "Excel", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
-    }
 
     protected void gvGeneratedCalls_ItemDataBound(object sender, Telerik.Web.UI.GridItemEventArgs e)
     {

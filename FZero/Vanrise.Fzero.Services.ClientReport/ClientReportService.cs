@@ -273,21 +273,31 @@ namespace Vanrise.Fzero.Services.ClientReport
                 rvToOperator.LocalReport.Refresh();
                 rvToOperatorExcel.LocalReport.SetParameters(parameters);
                 rvToOperatorExcel.LocalReport.Refresh();
-                
-                string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
-                string filenameExcelZain = ExportReportToExcel(report.ReportID + ".xls", rvToOperatorExcel);
+
+                string filenameExcel = ClientVariables.ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
+                string filenameExcelZain = ClientVariables.ExportReportToExcel(report.ReportID + ".xls", rvToOperatorExcel);
 
                 parameters[2] = new ReportParameter("HideSignature", "false");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
-                string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+                string filenamePDF = ClientVariables.ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+
+
+                string profileName = ClientVariables.GetProfileName(ClientID);
 
                 if (ClientID == (int)Enums.Clients.ST) //-- Syrian Telecom
                 {
-                    ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
+                    ClientVariables.ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
                     EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF,
                         EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
-                        CCs, report.ReportID, "FMS_Syria_Profile");
+                        CCs, report.ReportID, profileName);
+                }
+                else if (ClientID == (int)Enums.Clients.Madar)
+                {
+                    string filenameCSV = ClientVariables.ExportReportToCSV(report.ReportID + ".csv", rvToOperator);
+                    EmailManager.SendReporttoMobileOperator(ListIds.Count, filenameCSV,
+                       EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
+                       CCs, report.ReportID, profileName);
                 }
                 else
                 {
@@ -297,7 +307,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                     {
                         EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
                             ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
-                            report.ReportID, "FMS_Profile");
+                            report.ReportID, profileName);
                     }
                     else
                     {
@@ -308,22 +318,18 @@ namespace Vanrise.Fzero.Services.ClientReport
                                 EmailManager.SendReporttoMobileOperator(ListIds.Count,
                                     filenameExcelZain + ";" + filenamePDF, EmailAddress,
                                     ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
-                                    CCs, report.ReportID, "FMS_Profile");
+                                    CCs, report.ReportID, profileName);
 
                             }
                             else
                             {
-                                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
-                                    ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID,
-                                    CCs, report.ReportID, "FMS_Profile");
+                                EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
 
                             }
                         }
                         else
                         {
-                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress,
-                                ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
-                                report.ReportID, "FMS_Profile");
+                            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                         }
                     }
                 }
@@ -417,7 +423,7 @@ namespace Vanrise.Fzero.Services.ClientReport
                     rvToOperatorNatSec.LocalReport.SetParameters(parameters);
                     rvToOperatorNatSec.LocalReport.Refresh();
 
-                    string filenamePDFNatSec = ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
+                    string filenamePDFNatSec = ClientVariables.ExportReportToPDF(report.ReportID + ".pdf", rvToOperatorNatSec);
 
                     SendEmailNationalSecurity(report.ReportID, ListIds.Count, filenamePDFNatSec, emailNatSec);
                 }
@@ -439,50 +445,7 @@ namespace Vanrise.Fzero.Services.ClientReport
 
         #endregion
 
-        #region ExportReportsPDFExcel
-        private string ExportReportToPDF(string reportName, ReportViewer rvToOperator)
-        {
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType;
-            string encoding;
-            string filenameExtension;
-            byte[] bytes = rvToOperator.LocalReport.Render(
-               "PDF", null, out mimeType, out encoding, out filenameExtension,
-                out streamids, out warnings);
-
-            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-            using (var fs = new FileStream(filename, FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Close();
-            }
-
-            return filename;
-        }
-
-        private string ExportReportToExcel(string reportName, ReportViewer rvToOperator)
-        {
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType;
-            string encoding;
-            string filenameExtension;
-            byte[] bytes = rvToOperator.LocalReport.Render(
-               "Excel", null, out mimeType, out encoding, out filenameExtension,
-                out streamids, out warnings);
-
-            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-            using (var fs = new FileStream(filename, FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Close();
-            }
-
-            return filename;
-        }
-
-        #endregion
+      
 
         #region Logging
         private void ErrorLog(string message)

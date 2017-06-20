@@ -130,14 +130,21 @@ namespace Vanrise.Fzero.Services.WeeklyReport
             string CCs = EmailCC.GetClientEmailCCs(ClientID);
             //string CCs = "walid.emailbox@gmail.com";
 
+            string profileName = ClientVariables.GetProfileName(ClientID);
+            string reportName = ClientVariables.GetReportName(ClientID, DifferenceInGMT);
 
             if (ClientID == 3)
             {
-                EmailManager.SendSyrianWeeklyReport(ExportReportToExcel(System.DateTime.Now.AddHours(DifferenceInGMT).Ticks.ToString() + ".xls", rptWeeklyReport), EmailAddress, CCs, "FMS_Syria_Profile");
+                EmailManager.SendSyrianWeeklyReport(ExportReportToExcel(reportName, rptWeeklyReport), EmailAddress, CCs, profileName);
+            }
+            else if (ClientID == (int)Enums.Clients.Madar)
+            {
+                string filenameCSV = ClientVariables.ExportReportToCSV(reportName, rptWeeklyReport);
+                EmailManager.SendWeeklyReport(filenameCSV, EmailAddress,CCs, profileName);
             }
             else
             {
-                EmailManager.SendWeeklyReport(ExportReportToPDF(System.DateTime.Now.AddHours(DifferenceInGMT).Ticks.ToString() + ".pdf", rptWeeklyReport), EmailAddress, CCs, "FMS_Profile");
+                EmailManager.SendWeeklyReport(ClientVariables.ExportReportToPDF(reportName, rptWeeklyReport), EmailAddress, CCs, profileName);
             }
 
 
@@ -157,27 +164,6 @@ namespace Vanrise.Fzero.Services.WeeklyReport
             string filenameExtension;
             byte[] bytes = rvToOperator.LocalReport.Render(
                "Excel", null, out mimeType, out encoding, out filenameExtension,
-                out streamids, out warnings);
-
-            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-            using (var fs = new FileStream(filename, FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Close();
-            }
-
-            return filename;
-        }
-
-        private string ExportReportToPDF(string reportName, ReportViewer rptDSWeeklyReport)
-        {
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType;
-            string encoding;
-            string filenameExtension;
-            byte[] bytes = rptDSWeeklyReport.LocalReport.Render(
-               "PDF", null, out mimeType, out encoding, out filenameExtension,
                 out streamids, out warnings);
 
             string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);

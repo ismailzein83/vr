@@ -124,15 +124,22 @@ namespace Vanrise.Fzero.Services.DailyReport
             rptDailyReport.LocalReport.Refresh();
 
             string CCs = EmailCC.GetClientEmailCCs(ClientID);
+            string profileName = ClientVariables.GetProfileName(ClientID);
+            string reportName = ClientVariables.GetReportName(ClientID, DifferenceInGMT);
 
 
             if (ClientID == 3)
             {
-                EmailManager.SendSyrianDailyReport(ExportReportToExcel(System.DateTime.Now.AddHours(DifferenceInGMT).Ticks.ToString() + ".xls", rptDailyReport), EmailAddress, CCs, "FMS_Syria_Profile");
+                EmailManager.SendSyrianDailyReport(ClientVariables.ExportReportToExcel(reportName, rptDailyReport), EmailAddress, CCs, profileName);
+            }
+            else if (ClientID == (int)Enums.Clients.Madar)
+            {
+                string filenameCSV = ClientVariables.ExportReportToCSV(reportName, rptDailyReport);
+                EmailManager.SendDailyReport(filenameCSV, EmailAddress, CCs,  profileName);
             }
             else
             {
-                EmailManager.SendDailyReport(ExportReportToPDF(System.DateTime.Now.AddHours(DifferenceInGMT).Ticks.ToString() + ".pdf", rptDailyReport), EmailAddress, CCs, "FMS_Profile");
+                EmailManager.SendDailyReport(ClientVariables.ExportReportToPDF(reportName, rptDailyReport), EmailAddress, CCs, profileName);
             }
 
 
@@ -143,48 +150,7 @@ namespace Vanrise.Fzero.Services.DailyReport
 
         }
 
-        private string ExportReportToExcel(string reportName, ReportViewer rvToOperator)
-        {
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType;
-            string encoding;
-            string filenameExtension;
-            byte[] bytes = rvToOperator.LocalReport.Render(
-               "Excel", null, out mimeType, out encoding, out filenameExtension,
-                out streamids, out warnings);
-
-            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-            using (var fs = new FileStream(filename, FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Close();
-            }
-
-            return filename;
-        }
-
-        private string ExportReportToPDF(string reportName, ReportViewer rptDSDailyReport)
-        {
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType;
-            string encoding;
-            string filenameExtension;
-            byte[] bytes = rptDSDailyReport.LocalReport.Render(
-               "PDF", null, out mimeType, out encoding, out filenameExtension,
-                out streamids, out warnings);
-
-            string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-            using (var fs = new FileStream(filename, FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Close();
-            }
-
-            return filename;
-        }
-
+       
         private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e)
         {
 

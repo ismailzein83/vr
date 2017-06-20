@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ToBeReportedCases.aspx.cs" Inherits="ToBeReportedCases" %>
 
-<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <%@ Register Src="Controls/wucGeneratedCallInformation.ascx" TagName="wucGeneratedCallInformation" TagPrefix="uc1" %>
@@ -200,6 +200,7 @@
                                                             <Items>
                                                                 <telerik:RadComboBoxItem runat="server" Text="PDF" Value="PDF" />
                                                                 <telerik:RadComboBoxItem runat="server" Text="Excel" Value="Excel" />
+                                                                <telerik:RadComboBoxItem runat="server" Text="CSV" Value="CSV" />
                                                             </Items>
                                                         </telerik:RadComboBox>
 

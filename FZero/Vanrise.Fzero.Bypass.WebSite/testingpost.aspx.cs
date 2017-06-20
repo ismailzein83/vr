@@ -102,7 +102,10 @@ public partial class testingpost : BasePage
         {
             reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
         }
-
+        else
+        {
+            reportPath = Path.Combine(exeFolder, @"Reports\rptToOperator.rdlc");
+        }
 
 
 
@@ -128,81 +131,42 @@ public partial class testingpost : BasePage
         parameters[2] = new ReportParameter("HideSignature", "true");
         rvToOperator.LocalReport.SetParameters(parameters);
         rvToOperator.LocalReport.Refresh();
-        string filenameExcel = ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
+        string filenameExcel = ClientVariables.ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
 
 
+
+        parameters[2] = new ReportParameter("HideSignature", "true");
+        rvToOperator.LocalReport.SetParameters(parameters);
+        rvToOperator.LocalReport.Refresh();
+        string filenameCSV = ClientVariables.ExportReportToCSV(report.ReportID + ".csv", rvToOperator);
 
 
 
         parameters[2] = new ReportParameter("HideSignature", "false");
         rvToOperator.LocalReport.SetParameters(parameters);
         rvToOperator.LocalReport.Refresh();
-        string filenamePDF = ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
-
-
-
-
-
-
+        string filenamePDF = ClientVariables.ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
 
 
 
         string CCs = EmailCC.GetEmailCCs(MobileOperatorID, ClientID);
 
+        string profileName = ClientVariables.GetProfileName(ClientID);
 
         if (ClientID == 3)
         {
-            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Syria_Profile");
+            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameExcel + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
 
+        }
+        else if (ClientID == (int)Enums.Clients.Madar)
+        {
+            EmailManager.SendReporttoMobileSyrianOperator(ListIds.Count, filenameCSV, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
         }
         else
         {
-            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, "FMS_Profile");
-
+            EmailManager.SendReporttoMobileOperator(ListIds.Count, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
         }
 
-    }
-
-    private string ExportReportToPDF(string reportName, ReportViewer rvToOperator)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToOperator.LocalReport.Render(
-           "PDF", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
-    }
-
-    private string ExportReportToExcel(string reportName, ReportViewer rvToOperator)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToOperator.LocalReport.Render(
-           "Excel", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
     }
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -249,7 +213,7 @@ public partial class testingpost : BasePage
                         {
                             GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
 
-                            SendReport(listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
+                            SendReport(listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, 7, (i.User.GMT - SysParameter.Global_GMT));
                         }
 
 

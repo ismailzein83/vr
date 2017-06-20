@@ -78,66 +78,29 @@ public partial class testingReports : BasePage
         {
             rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
         }
-
+        else
+        {
+            rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
+        }
 
 
         parameters[2] = new ReportParameter("HideSignature", "true");
         rvToOperator.LocalReport.SetParameters(parameters);
         rvToOperator.LocalReport.Refresh();
-        ExportReportToExcel(ReportID + ".xls");
+        ClientVariables.ExportReportToExcel(ReportID + ".xls", rvToOperator);
 
-
-
+        parameters[2] = new ReportParameter("HideSignature", "true");
+        rvToOperator.LocalReport.SetParameters(parameters);
+        rvToOperator.LocalReport.Refresh();
+        ClientVariables.ExportReportToCSV(ReportID + ".csv", rvToOperator);
 
 
         parameters[2] = new ReportParameter("HideSignature", "false");
         rvToOperator.LocalReport.SetParameters(parameters);
         rvToOperator.LocalReport.Refresh();
-        ExportReportToPDF(ReportID + ".pdf");
+        ClientVariables.ExportReportToPDF(ReportID + ".pdf", rvToOperator);
 
 
-    }
-
-    private string ExportReportToPDF(string reportName)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToOperator.LocalReport.Render(
-           "PDF", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
-    }
-
-    private string ExportReportToExcel(string reportName)
-    {
-        Warning[] warnings;
-        string[] streamids;
-        string mimeType;
-        string encoding;
-        string filenameExtension;
-        byte[] bytes = rvToOperator.LocalReport.Render(
-           "Excel", null, out mimeType, out encoding, out filenameExtension,
-            out streamids, out warnings);
-
-        string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
-        using (var fs = new FileStream(filename, FileMode.Create))
-        {
-            fs.Write(bytes, 0, bytes.Length);
-            fs.Close();
-        }
-
-        return filename;
     }
 
     #endregion
