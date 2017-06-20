@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.Data.SQL
         public void UpdateDealProgresses(List<DealProgress> dealProgresses)
         {
             DataTable dtDealProgress = BuildDealProgressTable(dealProgresses);
-            ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Update]", (cmd) => 
+            ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Update]", (cmd) =>
             {
                 var dtPrm = new SqlParameter("@DealProgresses", SqlDbType.Structured);
                 dtPrm.Value = dtDealProgress;
@@ -71,8 +71,17 @@ namespace TOne.WhS.Deal.Data.SQL
                 dr["ZoneGroupNb"] = dealProgress.ZoneGroupNb;
                 dr["IsSale"] = dealProgress.IsSale;
                 dr["CurrentTierNb"] = dealProgress.CurrentTierNb;
-                dr["ReachedDurationInSec"] = dealProgress.ReachedDurationInSeconds.HasValue ? dealProgress.ReachedDurationInSeconds.Value : default(decimal?);
-                dr["TargetDurationInSec"] = dealProgress.TargetDurationInSeconds.HasValue ? dealProgress.TargetDurationInSeconds.Value : default(decimal?);
+
+                if (dealProgress.ReachedDurationInSeconds.HasValue)
+                    dr["ReachedDurationInSec"] = dealProgress.ReachedDurationInSeconds.Value;
+                else
+                    dr["ReachedDurationInSec"] = DBNull.Value;
+
+                if (dealProgress.TargetDurationInSeconds.HasValue)
+                    dr["TargetDurationInSec"] = dealProgress.TargetDurationInSeconds.Value;
+                else
+                    dr["TargetDurationInSec"] = DBNull.Value;
+
                 dtDealProgress.Rows.Add(dr);
             }
             dtDealProgress.EndLoadData();

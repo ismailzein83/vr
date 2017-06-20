@@ -30,7 +30,14 @@ namespace TOne.WhS.Deal.Data.SQL
             return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDealZoneGroups]", DealDetailedProgressMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@IsSale", isSale));
-                cmd.Parameters.Add(new SqlParameter("@BeginDate", beginDate));
+
+                SqlParameter beginDateParameter = new SqlParameter() { ParameterName = "@BeginDate" };
+                if (beginDate.HasValue)
+                    beginDateParameter.Value = beginDate.Value;
+                else
+                    beginDateParameter.Value = DBNull.Value;
+                cmd.Parameters.Add(beginDateParameter);
+
                 var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
                 dtPrm.Value = dtDealZoneGroup;
                 cmd.Parameters.Add(dtPrm);
@@ -224,8 +231,8 @@ namespace TOne.WhS.Deal.Data.SQL
                 DealID = (int)reader["DealID"],
                 ZoneGroupNb = (int)reader["ZoneGroupNb"],
                 IsSale = (bool)reader["IsSale"],
-                TierNb = (int)reader["TierNb"],
-                RateTierNb = (int)reader["RateTierNb"],
+                TierNb = GetReaderValue<int?>(reader, "TierNb"),
+                RateTierNb = GetReaderValue<int?>(reader, "RateTierNb"),
                 FromTime = (DateTime)reader["FromTime"],
                 ToTime = (DateTime)reader["ToTime"],
                 ReachedDurationInSeconds = (decimal)reader["ReachedDurationInSec"],
