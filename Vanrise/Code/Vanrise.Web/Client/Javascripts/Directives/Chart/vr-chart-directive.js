@@ -883,7 +883,40 @@ jQuery.extend(jQuery.easing,
         return jQuery.easing.easeOutBounce(x, t * 2 - d, 0, c, d) * .5 + c * .5 + b;
     }
 });
+(function (H) {
+    H.wrap(H.Chart.prototype, 'print', function (proceed) {
+        var chart = this,
+            container = chart.container,
+            origDisplay = [],
+            win = window,
+            origParent = container.parentNode,
+            body = document.body,
+            childNodes = body.childNodes;
 
+        if (chart.isPrinting) { // block the button while in printing mode
+            return;
+        }
+
+        chart.isPrinting = true;
+
+
+        // print
+        win.focus(); // #1510
+        win.print();
+
+        // allow the browser to prepare before reverting
+        setTimeout(function () {
+
+            // put the chart back in
+            origParent.appendChild(container);
+
+
+            chart.isPrinting = false;
+
+        }, 1000);
+
+    });
+})(Highcharts);
 /*
  *
  * TERMS OF USE - EASING EQUATIONS
