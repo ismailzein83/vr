@@ -156,7 +156,8 @@ namespace Retail.MultiNet.Business.Convertors
                 Settings = new AccountPartCompanyProfile
                 {
                     Contacts = GetContactsList(row),
-                    CityId = city != null ? city.CityId : 0
+                    CityId = city != null ? city.CityId : (int?)null,
+                    CountryId = city != null ? city.CountryId : (int?)null
                 }
             });
 

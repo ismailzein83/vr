@@ -41,10 +41,15 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         {
             AccountPartFinancial part = context.AccountPartSettings.CastWithValidate<AccountPartFinancial>("context.AccountPartSettings");
             if (s_currencyManager.GetCurrency(part.CurrencyId) == null)
+            {
                 context.ErrorMessage = String.Format("Currency '{0}' not found", part.CurrencyId);
-
+                return false;
+            }
             if (s_productManager.GetProduct(part.ProductId) == null)
+            {
                 context.ErrorMessage = String.Format("Product '{0}' not found", part.ProductId);
+                return false;
+            }
             return true;
         }
     }

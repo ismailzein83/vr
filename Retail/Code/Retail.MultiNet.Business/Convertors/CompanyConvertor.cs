@@ -88,7 +88,7 @@ namespace Retail.MultiNet.Business.Convertors
 
         void FillCompanyExtendedInfo(SourceAccountData accountData, DataRow row)
         {
-            accountData.Account.Settings.Parts.Add(new Guid("DAF99C84-8DC3-4C77-99CD-C0D631693D70"), new AccountPart
+            accountData.Account.Settings.Parts.Add(new Guid("ee7fee18-ebfc-4f85-955b-95ea98519abb"), new AccountPart
             {
                 Settings = new MultiNetCompanyExtendedInfo
                 {
@@ -108,7 +108,8 @@ namespace Retail.MultiNet.Business.Convertors
                 {
                     Contacts = GetContactsList(row),
                     Website = row["CUS_WEB"] as string,
-                    CityId = city != null ? city.CityId : 0
+                    CityId = city != null ? city.CityId : (int?)null,
+                    CountryId = city != null ? city.CountryId : (int?)null
                 }
             });
             FillFinancialInfo(accountData, row);

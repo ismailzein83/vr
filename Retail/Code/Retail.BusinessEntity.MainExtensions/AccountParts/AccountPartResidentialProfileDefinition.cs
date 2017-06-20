@@ -33,10 +33,30 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         {
             AccountPartResidentialProfile part = context.AccountPartSettings.CastWithValidate<AccountPartResidentialProfile>("context.AccountPartSettings");
             if (part.CountryId.HasValue && s_countryManager.GetCountry(part.CountryId.Value) == null)
+            {
                 context.ErrorMessage = String.Format("Country '{0}' not found", part.CountryId.Value);
+                return false;
+            }
 
-            if (part.CityId.HasValue && s_cityManager.GetCity(part.CityId.Value) == null)
-                context.ErrorMessage = String.Format("City '{0}' not found", part.CityId.Value);
+            if (part.CityId.HasValue)
+            {
+                var city = s_cityManager.GetCity(part.CityId.Value);
+                if (city == null)
+                {
+                    context.ErrorMessage = String.Format("City '{0}' not found", part.CityId.Value);
+                    return false;
+                }
+                if (!part.CountryId.HasValue)
+                {
+                    context.ErrorMessage = String.Format("City is '{0}' and country Id is not specified", part.CityId.Value);
+                    return false;
+                }
+                if (city.CountryId != part.CountryId.Value)
+                {
+                    context.ErrorMessage = String.Format("City '{0}' doesn't belong to country '{1}'", part.CityId.Value, part.CountryId.Value);
+                    return false;
+                }
+            }
             return true;
         }
 
