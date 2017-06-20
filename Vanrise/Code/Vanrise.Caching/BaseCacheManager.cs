@@ -92,6 +92,18 @@ namespace Vanrise.Caching
         {
             _expirationUpdateHandle = updateHandle;
         }
+
+        Object _globalExpirationUpdateHandle;
+
+        protected override object GetGlobalExpirationUpdateHandle(object parameter)
+        {
+            return _globalExpirationUpdateHandle;
+        }
+
+        protected override void UpdateGlobalExpirationUpdateHandle(object parameter, object updateHandle)
+        {
+            _globalExpirationUpdateHandle = updateHandle;
+        }
     }
 
     //public abstract class BaseTenantCacheManager : BaseCacheManager<int>

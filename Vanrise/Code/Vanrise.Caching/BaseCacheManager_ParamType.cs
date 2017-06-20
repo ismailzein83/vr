@@ -213,6 +213,7 @@ namespace Vanrise.Caching
             public ParamType Parameter { get; set; }
         }
         ConcurrentDictionary<ParamType, Object> _updateHandlesByParameter = new ConcurrentDictionary<ParamType, Object>();
+        ConcurrentDictionary<ParamType, Object> _globalUpdateHandlesByParameter = new ConcurrentDictionary<ParamType, Object>();
         protected virtual bool ShouldSetCacheExpired(ParamType parameter)
         {
             if (this.UseCentralizedCacheRefresher)
@@ -240,11 +241,23 @@ namespace Vanrise.Caching
             _updateHandlesByParameter.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
         }
 
+        protected virtual Object GetGlobalExpirationUpdateHandle(ParamType parameter)
+        {
+            Object updateHandle;
+            _globalUpdateHandlesByParameter.TryGetValue(parameter, out updateHandle);
+            return updateHandle;
+        }
+
+        protected virtual void UpdateGlobalExpirationUpdateHandle(ParamType parameter, Object updateHandle)
+        {
+            _globalUpdateHandlesByParameter.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
+        }
+
         #endregion
 
         #region Private Methods
 
-
+        
 
         private void CheckCacheDictionaryExpiration(ParamType parameter, CacheStore cacheDictionaryInfo)
         {            
@@ -254,16 +267,25 @@ namespace Vanrise.Caching
             {
                 if ((VRClock.Now - cacheDictionaryInfo.LastExpirationCheckTime).TotalSeconds <= 4)
                     return;
+                bool isGlobalExpirationTriggered = IsGlobalExpirationTriggered(parameter);
                 bool isExpired;
                 //if (!RuntimeCacheFactory.GetCacheExpirationChecker().TryCheckExpirationFromRuntimeService(this.GetType(), parameter, out isExpired))
                     isExpired = ShouldSetCacheExpired(parameter);
-                if (isExpired)
-                {
-                    ClearLocalCacheDictionary(parameter);
-                }
+                    if (isExpired || isGlobalExpirationTriggered)
+                    {
+                        ClearLocalCacheDictionary(parameter);
+                    }
 
                 cacheDictionaryInfo.LastExpirationCheckTime = VRClock.Now;
             }
+        }
+
+        private bool IsGlobalExpirationTriggered(ParamType parameter)
+        {
+            Object updateHandle = GetGlobalExpirationUpdateHandle(parameter);
+            bool isCacheExpired = s_cacheRefreshManager.ShouldRefreshCacheManager(CacheManagerFactory.GLOBAL_CACHEREFRESHHANDLE_CACHETYPENAME, ref updateHandle);
+            UpdateGlobalExpirationUpdateHandle(parameter, updateHandle);
+            return isCacheExpired;
         }
 
         private void ClearLocalCacheDictionary(ParamType parameter)

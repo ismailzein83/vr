@@ -9,6 +9,7 @@ namespace Vanrise.Caching
 {
     public static class CacheManagerFactory
     {
+        public const string GLOBAL_CACHEREFRESHHANDLE_CACHETYPENAME = "Global_AllCacheManager";
         internal static VRDictionary<Type, ICacheManager> s_defaultCacheManagers = new VRDictionary<Type, ICacheManager>(true);
 
         public static T GetCacheManager<T>(Guid? cacheManagerId = null) where T : class, ICacheManager
