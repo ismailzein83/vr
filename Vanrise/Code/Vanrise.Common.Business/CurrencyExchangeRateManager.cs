@@ -47,7 +47,7 @@ namespace Vanrise.Common.Business
                     fromExchangeRate = GetEffectiveExchangeRate(fromCurrencyId, effectiveOn);
 
                 if (fromExchangeRate == null)
-                    throw new NullReferenceException(string.Format("fromExchangeRate: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
+                    throw new NullReferenceException(string.Format("No exchange rate for currency Id:{0} at date: {1}", fromCurrencyId, effectiveOn.ToString()));
 
 
                 if (toCurrencyId == new ConfigManager().GetSystemCurrencyId())
@@ -56,10 +56,10 @@ namespace Vanrise.Common.Business
                     toExchangeRate = GetEffectiveExchangeRate(toCurrencyId, effectiveOn);
 
                 if (toExchangeRate == null)
-                    throw new NullReferenceException(string.Format("toExchangeRate: currency Id:{0}, Effective On: {1}", toCurrencyId, effectiveOn.ToString()));
+                    throw new NullReferenceException(string.Format("No exchange rate for currency Id:{0} at date: {1}", toCurrencyId, effectiveOn.ToString()));
 
                 if (fromExchangeRate.Rate == 0)
-                    throw new ArgumentException(string.Format("fromExchangeRate is 0: currency Id:{0}, Effective On: {1}", fromCurrencyId, effectiveOn.ToString()));
+                    throw new ArgumentException(string.Format("Exchange rate is 0 for currency Id:{0} at date: {1}", fromCurrencyId, effectiveOn.ToString()));
 
                 return value * toExchangeRate.Rate / fromExchangeRate.Rate;
             }
