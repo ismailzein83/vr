@@ -280,7 +280,7 @@ namespace Retail.MultiNet.Business
                 int normalPrecisionValue = _generalSettingsManager.GetNormalPrecisionValue();
                 foreach (var usageSummary in usagesSummariesBySubItemIdentifier.Values)
                 {
-                    usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration, normalPrecisionValue);
+                    usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration * 60, normalPrecisionValue);
                     usageSummary.NetAmount = Decimal.Round(usageSummary.NetAmount, normalPrecisionValue);
                 }
                 if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
@@ -357,7 +357,7 @@ namespace Retail.MultiNet.Business
                             AttemptDateTime = billingCDR.AttemptDateTime,
                             CalledNumber = billingCDR.CalledNumber,
                             CallingNumber = billingCDR.CallingNumber,
-                            DurationInSeconds = Decimal.Round(billingCDR.DurationInSeconds / 60, normalPrecisionValue),
+                            DurationInSeconds = Decimal.Round(billingCDR.DurationInSeconds, normalPrecisionValue),
                             ZoneId = billingCDR.ZoneId,
                             OperatorName = billingCDR.OperatorName,
                             SaleCurrencyId = billingCDR.SaleCurrencyId
