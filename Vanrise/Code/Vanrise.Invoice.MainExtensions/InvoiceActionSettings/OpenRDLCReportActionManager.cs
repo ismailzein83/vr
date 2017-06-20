@@ -24,6 +24,8 @@ namespace Vanrise.Invoice.MainExtensions
         RecordFilterManager _manager = new RecordFilterManager();
         Dictionary<string, IEnumerable<dynamic>> mainItemsByDataSourceName;
         Dictionary<string, IEnumerable<dynamic>> nonRepeatedReportItemsByDataSourceName;
+        Dictionary<string, IEnumerable<dynamic>> _currentItemsByDataSourceName = new Dictionary<string,IEnumerable<dynamic>>();
+
 
         public void BuildRdlcReport(ReportViewer reportViewer, ReportInput reportInput)
         {
@@ -61,7 +63,7 @@ namespace Vanrise.Invoice.MainExtensions
         }
         void SubreportProcessingEventHandler(object sender, SubreportProcessingEventArgs e)
         {
-            Thread.Sleep(100);
+            //Thread.Sleep(100);
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoice.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
             if (openRDLCReportAction != null)
             {
@@ -93,12 +95,14 @@ namespace Vanrise.Invoice.MainExtensions
                                     repeatedReportDetails = new RepeatedReportDetails
                                     {
                                         Index = 0,
+                                        ParentDataSourceName = subReport.ParentDataSourceName,
                                         ItemsByDataSource = new Dictionary<string, IEnumerable<dynamic>>()
                                     };
-                                    var subReportName = parentReport != null ? parentReport.SubReportName : null;
-                                    repeatedReportDetails.ParentDataSourceItems = GetDataSourceItems(subReport.ParentDataSourceName, subReportName);
+                                  
                                     repeatedReports.Add(subReport.SubReportName, repeatedReportDetails);
                                 }
+                                var subReportName = parentReport != null ? parentReport.SubReportName : null;
+                                repeatedReportDetails.ParentDataSourceItems = GetDataSourceItems(subReport.ParentDataSourceName, subReportName);
                             }
                         }
                         SetSubReportDataSources(e.DataSources, subReport.SubReportDataSources, loadDataSource, repeatedReportDetails);
@@ -168,7 +172,21 @@ namespace Vanrise.Invoice.MainExtensions
                     mainItemsByDataSourceName.Add(dataSource.DataSourceName, items);
                     ReportDataSource ds = new ReportDataSource(dataSource.DataSourceName, items);
                     reportDataSources.Add(ds);
+                    SetCurrentDataSourceItems(dataSource.DataSourceName, items);
                 }
+            }
+        }
+
+        private void SetCurrentDataSourceItems(string datasourceName, IEnumerable<dynamic> items)
+        {
+            if (_currentItemsByDataSourceName.ContainsKey(datasourceName))
+                _currentItemsByDataSourceName[datasourceName] = items;
+            else
+                _currentItemsByDataSourceName.Add(datasourceName, items);
+            foreach(var repeatedReport in repeatedReports.Values)
+            {
+                if (repeatedReport.ParentDataSourceName == datasourceName)
+                    repeatedReport.Index = 0;
             }
         }
         private void SetSubReportDataSources(ReportDataSourceCollection reportDataSources, List<InvoiceDataSource> dataSources, bool loadDataSource, RepeatedReportDetails repeatedReportDetails)
@@ -206,6 +224,7 @@ namespace Vanrise.Invoice.MainExtensions
                             nonRepeatedReportItemsByDataSourceName.Add(dataSource.DataSourceName, items);
                         }
                     }
+                    SetCurrentDataSourceItems(dataSource.DataSourceName, items);
                     ReportDataSource ds = new ReportDataSource(dataSource.DataSourceName, items);
                     reportDataSources.Add(ds);
                 }
@@ -214,21 +233,8 @@ namespace Vanrise.Invoice.MainExtensions
         private IEnumerable<dynamic> GetDataSourceItems(string dataSourceName, string reportName)
         {
             IEnumerable<dynamic> dataSourceItems;
-            dataSourceItems = GetDataSourceItems(dataSourceName);
-            if (dataSourceItems == null)
-            {
-                var parentReportDetails = repeatedReports.GetRecord(reportName);
-                dataSourceItems = parentReportDetails.ItemsByDataSource.GetRecord(dataSourceName);
-            }
-            return dataSourceItems;
-        }
-        private IEnumerable<dynamic> GetDataSourceItems(string dataSourceName)
-        {
-            IEnumerable<dynamic> dataSourceItems = mainItemsByDataSourceName.GetRecord(dataSourceName);
-            if (dataSourceItems == null)
-            {
-                dataSourceItems = nonRepeatedReportItemsByDataSourceName.GetRecord(dataSourceName);
-            }
+            if (!_currentItemsByDataSourceName.TryGetValue(dataSourceName, out dataSourceItems))
+                throw new Exception(String.Format("Data Source '{0}' is not available in _currentItemsByDataSourceName", dataSourceName));
             return dataSourceItems;
         }
     }
@@ -239,6 +245,8 @@ namespace Vanrise.Invoice.MainExtensions
         public int Index { get; set; }
         public IEnumerable<dynamic> ParentDataSourceItems { get; set; }
         public Dictionary<string, IEnumerable<dynamic>> ItemsByDataSource { get; set; }
+
+        public string ParentDataSourceName { get; set; }
     }
     public class ReportInput
     {
