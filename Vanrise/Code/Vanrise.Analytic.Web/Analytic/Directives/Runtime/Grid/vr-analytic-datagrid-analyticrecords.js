@@ -49,6 +49,13 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var fromTime;
             var toTime;
             var gridWidths;
+
+            $scope.isExpandable = function (dataItem) {
+                if (dataItem.drillDownExtensionObject != undefined && dataItem.drillDownExtensionObject.drillDownDirectiveTabs != undefined && dataItem.drillDownExtensionObject.drillDownDirectiveTabs.length > 0)
+                    return true;
+                return false;
+            };
+
             function initializeController() {
 
                 gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
