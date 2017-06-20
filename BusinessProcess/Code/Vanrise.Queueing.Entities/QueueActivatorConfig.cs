@@ -15,5 +15,7 @@ namespace Vanrise.Queueing.Entities
         public string Title { get; set; }
 
         public string Editor { get; set; }
+
+        //public string ReprocessEditor { get; set; }
     }
 }
