@@ -61,6 +61,7 @@
                     var selectedIds;
 
                     if (payload != undefined) {
+
                         invoiceTypeId = payload.invoiceTypeId;
                         partnerInvoiceFilters = payload.partnerInvoiceFilters;
                         selectedIds = payload.selectedIds;
@@ -95,7 +96,7 @@
                                 loadDirectivePromise.reject(error);
                             });
                         });
-                        promises.push(loadDirectivePromise);
+                        promises.push(loadDirectivePromise.promise);
                     }
 
                     function getInvoiceTypeSelector(invoiceTypeId) {
