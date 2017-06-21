@@ -10,6 +10,7 @@ using Vanrise.Common.Business;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using Vanrise.Common;
+using Retail.MultiNet.Entities;
 namespace Retail.MultiNet.Business
 {
     public enum RDLCParameter
@@ -25,17 +26,20 @@ namespace Retail.MultiNet.Business
         Phone = 8,
         Fax = 9,
         CompanyName = 10,
-        Email = 11
+        Email = 11,
+        NTN = 12,
+        AccountType = 13
 
     }
 
     public class MultiNetSubscriberPartnerSettings : InvoicePartnerManager
     {
         Guid _acountBEDefinitionId;
-
-        public MultiNetSubscriberPartnerSettings(Guid acountBEDefinitionId)
+        Guid _companyTypeId;
+        public MultiNetSubscriberPartnerSettings(Guid acountBEDefinitionId,Guid companyTypeId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
+            this._companyTypeId = companyTypeId;
         }
 
         public override string PartnerFilterSelector
@@ -83,6 +87,24 @@ namespace Retail.MultiNet.Business
                     accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile);
                     var companyProfile = accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", financialAccountData.Account.AccountId);
 
+                    var companyAccount = accountBEManager.GetSelfOrParentAccountOfType(this._acountBEDefinitionId, financialAccountData.Account.AccountId, _companyTypeId);
+                    companyAccount.ThrowIfNull("companyAccount");
+                    companyAccount.Settings.ThrowIfNull("companyAccount.Settings");
+                     companyAccount.Settings.Parts.ThrowIfNull(" companyAccount.Settings.Parts");
+                    foreach(var accountPart in companyAccount.Settings.Parts)
+                    {
+                        var multiNetCompanyExtendedInfo = accountPart.Value.Settings as MultiNetCompanyExtendedInfo;
+                        if(multiNetCompanyExtendedInfo != null)
+                        {
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.NTN, multiNetCompanyExtendedInfo.NTN, true);
+                            if(multiNetCompanyExtendedInfo.AccountType.HasValue)
+                            {
+                                var accountType = Utilities.GetEnumDescription<MultiNetAccountType>(multiNetCompanyExtendedInfo.AccountType.Value);
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
+                            }
+                        }
+                    }
+                  
                     if (companyProfile != null)
                     {
 

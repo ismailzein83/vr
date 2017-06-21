@@ -67,7 +67,7 @@ namespace Retail.MultiNet.Business
         }
         public override InvoicePartnerManager GetPartnerManager()
         {
-            return new MultiNetSubscriberPartnerSettings(this.AccountBEDefinitionId);
+            return new MultiNetSubscriberPartnerSettings(this.AccountBEDefinitionId, this.CompanyTypeId);
         }
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
