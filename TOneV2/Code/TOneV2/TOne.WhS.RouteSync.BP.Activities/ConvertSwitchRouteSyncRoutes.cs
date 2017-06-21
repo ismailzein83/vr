@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Activities;
 using TOne.WhS.RouteSync.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
+using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.BP.Activities
 {
@@ -51,6 +49,11 @@ namespace TOne.WhS.RouteSync.BP.Activities
             int totalBatchesConverted = 0;
             long totalRoutesConverted = 0;
             var switchInProcess = inputArgument.SwitchInProcess;
+
+            inputArgument.SwitchInProcess.ThrowIfNull("inputArgument.SwitchInProcess");
+            inputArgument.SwitchInProcess.RouteQueue.ThrowIfNull("inputArgument.SwitchInProcess.RouteQueue");
+            switchInProcess.Switch.ThrowIfNull("switchInProcess.Switch");
+            switchInProcess.Switch.RouteSynchronizer.ThrowIfNull("switchInProcess.Switch.RouteSynchronizer");
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

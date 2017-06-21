@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Business;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.RouteSync.BP.Activities
 {
@@ -44,7 +45,10 @@ namespace TOne.WhS.RouteSync.BP.Activities
                 switchesInProcess.Add(new SwitchInProcess
                     {
                         Switch = switchInfo,
-                        InitializationData = initializationData
+                        InitializationData = initializationData,
+                        ConvertedRouteQueue = new MemoryQueue<ConvertedRouteBatch>(),
+                        PreparedRoutesForApplyQueue = new MemoryQueue<Object>(),
+                        RouteQueue = new MemoryQueue<RouteBatch>()
                     });
             }
             this.SwitchesInProcess.Set(context, switchesInProcess);
