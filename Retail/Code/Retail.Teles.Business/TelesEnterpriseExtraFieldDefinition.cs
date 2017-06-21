@@ -18,6 +18,7 @@ namespace Retail.Teles.Business
         {
             List<AccountGenericField> accountGenericFields = new List<AccountGenericField>();
             accountGenericFields.Add(new TelesEnterpriseGenericField(this.EnterpriseBEDefinitionId));
+            accountGenericFields.Add(new IsAccountProvisioned());
             return accountGenericFields;
         }
     }
