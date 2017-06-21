@@ -44,6 +44,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DealDefinition\DealDefinitionFilter.cs" />
@@ -55,6 +58,7 @@
     <Compile Include="DealReprocessInput\DealReprocessInput.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
+    <Compile Include="Settings\DealTechnicalSettingData.cs" />
     <Compile Include="Settings\SwapDealTechnicalSettingData.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateOutboundRateInput.cs" />
