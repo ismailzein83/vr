@@ -89,6 +89,7 @@
     <Compile Include="TelesEnterpriseBEDefinitionSettings.cs" />
     <Compile Include="TelesEnterpriseExtraFieldDefinition.cs" />
     <Compile Include="TelesEnterpriseFilterContext.cs" />
+    <Compile Include="IsAccountProvisioned.cs" />
     <Compile Include="TelesEnterpriseGenericField.cs" />
     <Compile Include="TelesEnterpriseManager.cs" />
     <Compile Include="TelesRestConnection.cs" />
