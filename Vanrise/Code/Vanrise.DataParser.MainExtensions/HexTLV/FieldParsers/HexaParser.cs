@@ -16,10 +16,11 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 
         public string FieldName { get; set; }
         public bool TrimZeros { get; set; }
+        public bool Reverse { get; set; }
         public override void Execute(IHexTLVFieldParserContext context)
         {
-            string value = BitConverter.ToString(context.FieldValue).Replace("-", string.Empty);
-
+            byte[] data = Reverse ? context.FieldValue.Reverse().ToArray() : context.FieldValue;
+            string value = BitConverter.ToString(data).Replace("-", string.Empty);
             if (TrimZeros)
                 value = value.TrimStart(new char[] { '0' });
 

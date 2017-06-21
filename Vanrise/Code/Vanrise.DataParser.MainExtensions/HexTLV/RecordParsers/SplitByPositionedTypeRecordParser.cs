@@ -24,17 +24,21 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 
         public override void Execute(IHexTLVRecordParserContext context)
         {
-            HexTLVHelper.ReadRecordTypeFromStream(context.RecordStream, RecordTypePosition, RecordTypeLength, (recordType) =>
-            {
-                HexTLVRecordParser subRecordsParser = null;
-                if (this.SubRecordsParsersByRecordType != null)
-                    this.SubRecordsParsersByRecordType.TryGetValue(recordType.Type, out subRecordsParser);
+            byte[] typeData = new byte[RecordTypeLength];
+            byte[] data = ((MemoryStream)context.RecordStream).ToArray();
 
-                if (subRecordsParser != null)
-                    HexTLVHelper.ExecuteRecordParser(subRecordsParser, new MemoryStream(recordType.Value), context);
-            });
+            Array.Copy(data, RecordTypePosition, typeData, 0, RecordTypeLength);
 
+            string recordType = ParserHelper.GetInt(typeData, 0, RecordTypeLength).ToString();
 
+            context.RecordStream.Seek(0, SeekOrigin.Begin);
+
+            HexTLVRecordParser subRecordsParser = null;
+            if (this.SubRecordsParsersByRecordType != null)
+                this.SubRecordsParsersByRecordType.TryGetValue(recordType, out subRecordsParser);
+
+            if (subRecordsParser != null)
+                HexTLVHelper.ExecuteRecordParser(subRecordsParser, context.RecordStream, context);
         }
     }
 }

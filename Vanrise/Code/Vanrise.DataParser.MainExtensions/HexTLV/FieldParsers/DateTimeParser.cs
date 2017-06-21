@@ -14,6 +14,16 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
         public string FieldName { get; set; }
         public DateTimeParsingType DateTimeParsingType { get; set; }
         public bool WithOffset { get; set; }
+        public int DayIndex { get; set; }
+        public int MonthIndex { get; set; }
+        public int YearIndex { get; set; }
+        public int SecondsIndex { get; set; }
+        public int MinutesIndex { get; set; }
+        public int HoursIndex { get; set; }
+        public int HoursTimeShiftIndex { get; set; }
+        public int MinutesTimeShiftIndex { get; set; }
+        public int TimeShiftIndicatorIndex { get; set; }
+
         public override void Execute(IHexTLVFieldParserContext context)
         {
             Object recordValue = context.Record.GetFieldValue(FieldName);
@@ -24,32 +34,32 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
             {
                 case DateTimeParsingType.Date:
                     dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2}",
-                                         ParserHelper.GetHexFromByte(context.FieldValue[2]),
-                                         ParserHelper.GetHexFromByte(context.FieldValue[1]),
-                                         ParserHelper.GetHexFromByte(context.FieldValue[0])),
+                                         ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]),
+                                         ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]),
+                                         ParserHelper.GetHexFromByte(context.FieldValue[YearIndex])),
                             "dd/MM/yy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
 
                     break;
                 case DateTimeParsingType.Time:
-                    TimeSpan timeSpan = new TimeSpan(ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[0]))
-                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[1]))
-                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[2])));
+                    TimeSpan timeSpan = new TimeSpan(ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]))
+                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]))
+                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex])));
                     value = new DateTime(value.Year, value.Month, value.Day, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
                     break;
                 case DateTimeParsingType.DateTime:
                     dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2} {3}:{4}:{5}",
-                                                           ParserHelper.GetHexFromByte(context.FieldValue[2]),
-                                                           ParserHelper.GetHexFromByte(context.FieldValue[1]),
-                                                           ParserHelper.GetHexFromByte(context.FieldValue[0]),
-                                                           ParserHelper.GetHexFromByte(context.FieldValue[3]),
-                                                           ParserHelper.GetHexFromByte(context.FieldValue[4]),
-                                                           ParserHelper.GetHexFromByte(context.FieldValue[5])),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[YearIndex]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]),
+                                                           ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex])),
                                               "dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
 
                     if (dateParsed && WithOffset)
                     {
-                        int offset = (int)context.FieldValue[6] == 43 ? 1 : -1;
-                        DateTimeOffset offsetDateTime = new DateTimeOffset(value, new TimeSpan(context.FieldValue[7] * offset, context.FieldValue[8] * offset, 0));
+                        int offset = (int)context.FieldValue[TimeShiftIndicatorIndex] == 43 ? 1 : -1;
+                        DateTimeOffset offsetDateTime = new DateTimeOffset(value, new TimeSpan(context.FieldValue[HoursTimeShiftIndex] * offset, context.FieldValue[MinutesTimeShiftIndex] * offset, 0));
                         value = offsetDateTime.ToLocalTime().DateTime;
                     }
 

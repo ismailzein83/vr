@@ -18,12 +18,11 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
         }
 
         public int LengthNbOfBytes { get; set; }
-
+        public bool ReverseLengthBytes { get; set; }
         public HexTLVRecordParser RecordParser { get; set; }
-
         public override void Execute(IHexTLVRecordParserContext context)
         {
-            HexTLVHelper.ReadRecordFromStream(context.RecordStream, LengthNbOfBytes, (recordValue) =>
+            HexTLVHelper.ReadRecordFromStream(context.RecordStream, LengthNbOfBytes, ReverseLengthBytes, (recordValue) =>
             {
                 HexTLVHelper.ExecuteRecordParser(RecordParser, new MemoryStream(recordValue.Value), context);
             });

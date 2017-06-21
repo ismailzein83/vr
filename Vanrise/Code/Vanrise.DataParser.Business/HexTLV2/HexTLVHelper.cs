@@ -11,50 +11,56 @@ namespace Vanrise.DataParser.Business
 {
     public static class HexTLVHelper
     {
-        public static void ReadRecordFromStream(Stream stream, int lengthNbOfBytes, Action<RecordValue> onRecordValueRead)
+        public static void ReadRecordFromStream(Stream stream, int lengthNbOfBytes, bool reverseLengthBytes, Action<RecordValue> onRecordValueRead)
         {
+
             int position = 0;
+            byte[] bytes = null;
+            int recordLength = 0;
+            byte[] recordData = null;
             while (position < stream.Length)
             {
-                byte[] bytes = new byte[lengthNbOfBytes];
-                stream.Read(bytes, 0, lengthNbOfBytes);
-                position += lengthNbOfBytes;
-                int recordLength = ParserHelper.GetInt(bytes, 0, lengthNbOfBytes);
-
-                position += recordLength;
-                byte[] recordData = new byte[recordLength];
-                stream.Read(recordData, 0, recordLength);
-
-                RecordValue recordValue = new RecordValue
+                try
                 {
-                    Length = recordLength,
-                    Value = recordData
-                };
-                onRecordValueRead(recordValue);
+
+                    bytes = new byte[lengthNbOfBytes];
+                    stream.Read(bytes, 0, lengthNbOfBytes);
+                    bytes = reverseLengthBytes ? bytes.Reverse().ToArray() : bytes;
+                    position += lengthNbOfBytes;
+                    recordLength = ParserHelper.GetInt(bytes, 0, lengthNbOfBytes);
+
+                    position += recordLength;
+                    recordData = new byte[recordLength - lengthNbOfBytes];
+                    stream.Read(recordData, 0, recordLength - lengthNbOfBytes);
+
+                    RecordValue recordValue = new RecordValue
+                    {
+                        Length = recordLength,
+                        Value = Combine(bytes, recordData)
+                    };
+                    onRecordValueRead(recordValue);
+                }
+                catch (Exception ex)
+                {
+
+                    // throw ex;
+                }
+
             }
+
         }
-        public static void ReadRecordTypeFromStream(Stream stream, int typePosition, int lengthNbOfBytes, Action<RecordType> onRecordTypeRead)
+        public static void ReadRecordFieldFromStream(byte[] data, int position, int length, Action<RecordValue> onRecordFieldValue)
         {
-            int position = 0;
-            while (position < stream.Length)
+            byte[] bytes = new byte[length];
+
+            Array.Copy(data, position, bytes, 0, length);
+            RecordValue recordType = new RecordValue
             {
-                byte[] bytes = new byte[lengthNbOfBytes];
-                stream.Read(bytes, typePosition, lengthNbOfBytes);
-                position += lengthNbOfBytes;
-                int recordTypeValue = ParserHelper.GetInt(bytes, 0, lengthNbOfBytes);
+                Length = length,
+                Value = bytes
+            };
+            onRecordFieldValue(recordType);
 
-                int recordLength = (int)stream.Length - lengthNbOfBytes;
-                byte[] recordData = new byte[recordLength];
-                position += recordLength;
-                stream.Read(recordData, 0, recordLength);
-
-                RecordType recordType = new RecordType
-                {
-                    Type = recordTypeValue.ToString(),
-                    Value = recordData
-                };
-                onRecordTypeRead(recordType);
-            }
         }
         public static void ReadTagsFromStream(Stream stream, Action<HexTLVTagValue> onTagValueRead)
         {
@@ -117,10 +123,10 @@ namespace Vanrise.DataParser.Business
         public static void ExecutePositionedFieldParsers(List<PositionedFieldParser> positionedFieldParsers, ParsedRecord parsedRecord, Stream recordStream)
         {
             positionedFieldParsers.ThrowIfNull("positionedFieldParsers");
-
+            byte[] data = ((MemoryStream)recordStream).ToArray();
             foreach (var positionedFieldParser in positionedFieldParsers)
             {
-                ReadRecordTypeFromStream(recordStream, positionedFieldParser.Position, positionedFieldParser.Length,
+                ReadRecordFieldFromStream(data, positionedFieldParser.Position, positionedFieldParser.Length,
                       (recordType) =>
                       {
                           var fieldParserContext = new HexTLVFieldParserContext { Record = parsedRecord, FieldValue = recordType.Value };
@@ -130,7 +136,13 @@ namespace Vanrise.DataParser.Business
         }
 
         #region Private Classes
-
+        public static byte[] Combine(byte[] first, byte[] second)
+        {
+            byte[] ret = new byte[first.Length + second.Length];
+            Buffer.BlockCopy(first, 0, ret, 0, first.Length);
+            Buffer.BlockCopy(second, 0, ret, first.Length, second.Length);
+            return ret;
+        }
         private class SubRecordHexTLVRecordParserContext : IHexTLVRecordParserContext
         {
             Stream _recordStream;
@@ -191,9 +203,4 @@ namespace Vanrise.DataParser.Business
         public byte[] Value { get; set; }
     }
 
-    public class RecordType
-    {
-        public string Type { get; set; }
-        public byte[] Value { get; set; }
-    }
 }
