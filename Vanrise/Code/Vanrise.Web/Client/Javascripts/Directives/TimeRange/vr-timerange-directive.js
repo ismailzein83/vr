@@ -60,6 +60,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
     }
 
     function timeRangeCtor(ctrl, $scope, $attrs) {
+        var customize = {
+            value: -1,
+            description: "Customize"
+        };
         var periodDirectiveAPI;
         var periodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var date;
@@ -93,10 +97,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 }
             };
 
-            var customize = {
-                value: -1,
-                description: "Customize"
-            };
+           
 
             $scope.scopeModel.onBlurChanged = function () {
                 if (ctrl.period != undefined && ctrl.period.value != -1) {
@@ -129,15 +130,20 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
                 periodSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 periodReadyPromiseDeferred.promise.then(function () {
+                   
                     var payloadPeriod = {
                         selectedIds: (payload && payload.period != undefined) ? payload.period : (ctrl.period != undefined ? ctrl.period.value : undefined)
                     };
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
+
+                    if (payload.period == -1) {
+                        ctrl.period = customize;
+                    }
                 });
                 var loadTimeRangeSelectorPromise = UtilsService.createPromiseDeferred();
                 UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
                    if (ctrl.period != undefined || (payload && payload.period != undefined)) {
-                       if (ctrl.period != undefined) {
+                       if (ctrl.period != undefined && ctrl.period.value!=-1) {
                            date = periodDirectiveAPI.getData().getInterval();
                            setDateData(date.from, date.to);
                        }

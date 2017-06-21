@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum','VR_Analytic_AnalyticItemActionService','DataRetrievalResultTypeEnum',
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum', 'VR_Analytic_AnalyticItemActionService', 'DataRetrievalResultTypeEnum',
     function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum, VR_Analytic_AnalyticItemActionService, DataRetrievalResultTypeEnum) {
 
         var directiveDefinitionObject = {
@@ -123,8 +123,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
                             setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; UtilsService.safeApply($scope); });
-                            if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value)
-                            {
+                            if (dataRetrievalInput.DataRetrievalResultType == DataRetrievalResultTypeEnum.Normal.value) {
                                 if (response && response.Data) {
                                     if (ctrl.drillDownDimensions.length > 0) {
                                         for (var i = 0; i < response.Data.length; i++) {
@@ -192,8 +191,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function loadGrid(payLoad) {
                     var itemActions;
                     var parentDimensions;
-                    if (payLoad.Settings != undefined && payLoad.Settings.ItemActions != undefined)
-                    {
+                    if (payLoad.Settings != undefined && payLoad.Settings.ItemActions != undefined) {
                         itemActions = payLoad.Settings.ItemActions;
                         parentDimensions = payLoad.SelectedGroupingDimensions;
                     }
@@ -209,7 +207,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         selectedDimensions = payLoad.GroupingDimensions;
 
 
-                    BuildMenuAction(payLoad.FromTime, payLoad.ToTime, payLoad.FilterGroup, itemActions, parentDimensions, payLoad.DimensionFilters, selectedDimensions);
+                    BuildMenuAction(payLoad.FromTime, payLoad.ToTime, payLoad.FilterGroup, itemActions, parentDimensions, payLoad.DimensionFilters, selectedDimensions, payLoad.Period);
 
 
                     ctrl.groupingDimensions = [];
@@ -225,7 +223,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     addGridAttributesForMeasures(ctrl.measures);
 
-                     
+
 
 
                     var drillDownDefinitions = [];
@@ -358,8 +356,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     for (var i = 0; i < ctrl.dimensions.length; i++) {
                         var dimension = ctrl.dimensions[i];
                         var gridWidth;
-                        if (dimension.ColumnSettings!=null)
-                             gridWidth = UtilsService.getItemByVal(gridWidths, dimension.ColumnSettings.Width, "value");
+                        if (dimension.ColumnSettings != null)
+                            gridWidth = UtilsService.getItemByVal(gridWidths, dimension.ColumnSettings.Width, "value");
                         if (gridWidth != undefined)
                             dimension.Widthfactor = gridWidth.widthFactor;
 
@@ -623,8 +621,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     return context;
                 }
 
-                function BuildMenuAction(fromTime, toTime, filterGroup, itemActions, parentDimensions, dimensionFilters, selectedDimensions) {
-
+                function BuildMenuAction(fromTime, toTime, filterGroup, itemActions, parentDimensions, dimensionFilters, selectedDimensions, period) {
 
                     $scope.gridMenuActions.length = 0;
                     if (itemActions != undefined) {
@@ -633,6 +630,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             var settings = {
                                 FromDate: fromTime,
                                 ToDate: toTime,
+                                Period: period,
                                 FilterGroup: filterGroup,
                                 TableId: tableId,
                             };
@@ -647,8 +645,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     }
                 }
 
-                function getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions)
-                {
+                function getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions) {
                     var dimensionValues = [];
 
                     for (var i = 0; i < selectedDimensions.length; i++) {
@@ -663,15 +660,14 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     for (var i = 0; i < parentDimensions.length; i++) {
                         var parentDimension = parentDimensions[i];
                         var dimensionFilter = UtilsService.getItemByVal(dimensionFilters, parentDimension.DimensionName, "Dimension");
-                        if (dimensionFilter != undefined && UtilsService.getItemByVal(dimensionValues, parentDimension.DimensionName, "Dimension") == undefined)
-                        {
-                     
+                        if (dimensionFilter != undefined && UtilsService.getItemByVal(dimensionValues, parentDimension.DimensionName, "Dimension") == undefined) {
+
                             dimensionValues.push({
                                 Dimension: parentDimension.DimensionName,
                                 FilterValues: dimensionFilter.FilterValues
                             });
                         }
-                       
+
                     }
                     return dimensionValues;
                 }

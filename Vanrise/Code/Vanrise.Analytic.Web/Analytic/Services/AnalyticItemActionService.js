@@ -60,7 +60,7 @@
                     FromDate: settings.FromDate,
                     ToDate: settings.ToDate,
                     TableId: settings.TableId,
-                   
+                    Period: settings.Period                   
                 },
                 autoSearch: true
             };

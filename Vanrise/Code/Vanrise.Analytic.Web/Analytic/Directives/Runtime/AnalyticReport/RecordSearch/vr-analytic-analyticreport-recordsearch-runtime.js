@@ -207,7 +207,7 @@
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
-                        period: PeriodEnum.Today.value,
+                        period: itemActionSettings!=undefined && itemActionSettings.Period != undefined ? itemActionSettings.Period : PeriodEnum.Today.value,
                         fromDate: itemActionSettings != undefined ? itemActionSettings.FromDate : undefined,
                         toDate: itemActionSettings != undefined ? itemActionSettings.ToDate : undefined
                     };

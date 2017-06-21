@@ -359,7 +359,8 @@
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: $scope.scopeModel.fromdate,
                     FilterGroup: buildFilterGroupObj(filterObj, widgetPayload.RecordFilter),
-                    ToTime: $scope.scopeModel.todate
+                    ToTime: $scope.scopeModel.todate,
+                    Period: $scope.selectedPeriod.value
                 };
                 return query;
             };
