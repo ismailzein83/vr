@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Retail_MultiNet\Directives\DID\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,6 +146,7 @@
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartBranchExtendedInfoRuntimeTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\Branche\retail-multinet-branche-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\Branche\Templates\BrancheConvertorEditor.html" />
+    <Content Include="Retail_MultiNet\Directives\DID\retail-multinet-did-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\Subscriber\retail-multinet-subscriber-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\Subscriber\Templates\SubscriberConvertorEditor.html" />
     <Content Include="Retail_MultiNet\Directives\Company\retail-multinet-company-convertor-editor.js" />

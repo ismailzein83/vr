@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="Convertors\BranchConvertor.cs" />
     <Compile Include="Convertors\CompanyConvertor.cs" />
+    <Compile Include="Convertors\DIDConvertor.cs" />
     <Compile Include="Convertors\SubscriberConvertor.cs" />
     <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfo.cs" />
     <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfoDefinition.cs" />
