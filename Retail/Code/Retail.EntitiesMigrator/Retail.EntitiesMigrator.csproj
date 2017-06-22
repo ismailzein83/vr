@@ -36,6 +36,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,6 +78,50 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Pricing">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Logging.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.NumberingPlan.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.NumberingPlan.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -85,16 +143,36 @@
     <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Helper.cs" />
+    <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrators\IncomingRatesMigrator.cs" />
+    <Compile Include="Migrators\InternationalRatesMigrator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -116,6 +194,120 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
+      <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
+      <Name>Retail.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Data.SQL\Retail.BusinessEntity.Data.SQL.csproj">
+      <Project>{25ab3f26-cc70-476e-888a-2a85377612d6}</Project>
+      <Name>Retail.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj">
+      <Project>{45bee1a0-30fd-405d-b476-c3b2d0b2a21f}</Project>
+      <Name>Retail.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Extensions.TelesSwitch\Retail.BusinessEntity.Extensions.TelesSwitch.csproj">
+      <Project>{960f1314-605c-453b-a8b0-2416b345d5f1}</Project>
+      <Name>Retail.BusinessEntity.Extensions.TelesSwitch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainActionBPs.Entities\Retail.BusinessEntity.MainActionBPs.Entities.csproj">
+      <Project>{b6e5274a-9455-41e7-a07d-e78731dc1767}</Project>
+      <Name>Retail.BusinessEntity.MainActionBPs.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainActionBPs\Retail.BusinessEntity.MainActionBPs.csproj">
+      <Project>{0814dd36-fd4d-406e-861b-0155cc5ebaef}</Project>
+      <Name>Retail.BusinessEntity.MainActionBPs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
+      <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
+      <Name>Retail.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.RingoExtensions\Retail.Ringo.MainExtensions.csproj">
+      <Project>{79ee241b-c553-470e-a091-03fbbccd971f}</Project>
+      <Name>Retail.Ringo.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
+      <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
+      <Name>Retail.Data.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.MainExtensions\Retail.Data.MainExtensions.csproj">
+      <Project>{750f4fde-cada-485c-906b-841673df0300}</Project>
+      <Name>Retail.Data.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.EntitiesMigrator.Data.SQL\Retail.EntitiesMigrator.Data.SQL.csproj">
+      <Project>{de76c0d2-bb12-4983-a84a-aebe2bd0a95d}</Project>
+      <Name>Retail.EntitiesMigrator.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.EntitiesMigrator.Data\Retail.EntitiesMigrator.Data.csproj">
+      <Project>{bf208a32-3d24-4071-8518-377fac72fe24}</Project>
+      <Name>Retail.EntitiesMigrator.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.EntitiesMigrator.Entities\Retail.EntitiesMigrator.Entities.csproj">
+      <Project>{df527972-96ba-4cb7-8770-ac7b96356f2d}</Project>
+      <Name>Retail.EntitiesMigrator.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.MultiNet.Business\Retail.MultiNet.Business.csproj">
+      <Project>{b72910b9-b085-4a14-8bb7-816d0a28a6b9}</Project>
+      <Name>Retail.MultiNet.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.MultiNet.Entities\Retail.MultiNet.Entities.csproj">
+      <Project>{73608c81-84ad-480a-a988-74244ee9c8f8}</Project>
+      <Name>Retail.MultiNet.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Business\Retail.Ringo.Business.csproj">
+      <Project>{c6098267-9bb4-4f28-8a80-70132fb0bc82}</Project>
+      <Name>Retail.Ringo.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.Entities\Retail.Ringo.Entities.csproj">
+      <Project>{9b58744d-1e39-499a-860f-264d658abe40}</Project>
+      <Name>Retail.Ringo.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.SMS.Entities\Retail.SMS.Entities.csproj">
+      <Project>{95c33c91-e6f0-4d60-937b-61bd35564a6c}</Project>
+      <Name>Retail.SMS.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.SMS.MainExtensions\Retail.SMS.MainExtensions.csproj">
+      <Project>{d18ff35b-6367-4cf2-b257-a8b777f23c16}</Project>
+      <Name>Retail.SMS.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Business\Retail.Teles.Business.csproj">
+      <Project>{96171ed5-87c9-42c6-b052-38d788c63192}</Project>
+      <Name>Retail.Teles.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Entities\Retail.Teles.Entities.csproj">
+      <Project>{e7df81ab-c163-4dfb-b50b-5dff1b9f0aec}</Project>
+      <Name>Retail.Teles.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Business\Retail.Voice.Business.csproj">
+      <Project>{95ae4730-ee1b-4a0b-a785-baf36f130714}</Project>
+      <Name>Retail.Voice.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.Entities\Retail.Voice.Entities.csproj">
+      <Project>{d1f8761c-baf9-4302-902a-a9ea86cc8ed6}</Project>
+      <Name>Retail.Voice.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Voice.MainExtensions\Retail.Voice.MainExtensions.csproj">
+      <Project>{59eff472-b705-4ac1-b04c-c23ed4c82020}</Project>
+      <Name>Retail.Voice.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Business\Retail.Zajil.Business.csproj">
+      <Project>{5725b506-d34a-481c-b630-3d0ae3aa410b}</Project>
+      <Name>Retail.Zajil.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.Entities\Retail.Zajil.Entities.csproj">
+      <Project>{cb49d2bd-4f30-4841-92ca-c98a1b9128df}</Project>
+      <Name>Retail.Zajil.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Zajil.MainExtensions\Retail.Zajil.MainExtensions.csproj">
+      <Project>{edbaa879-19f5-43da-9205-998e5529ffca}</Project>
+      <Name>Retail.Zajil.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

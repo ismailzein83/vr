@@ -157,9 +157,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Cost.Data.SQL", "Ret
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.EntitiesMigrator", "Retail.EntitiesMigrator\Retail.EntitiesMigrator.csproj", "{A0B6692B-09D3-497D-A398-908D88EABB1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.EntitiesMigrator.Data", "Retail.EntitiesMigrator.Data\Retail.EntitiesMigrator.Data.csproj", "{BF208A32-3D24-4071-8518-377FAC72FE24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.EntitiesMigrator.Data.SQL", "Retail.EntitiesMigrator.Data.SQL\Retail.EntitiesMigrator.Data.SQL.csproj", "{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.EntitiesMigrator.Entities", "Retail.EntitiesMigrator.Entities\Retail.EntitiesMigrator.Entities.csproj", "{DF527972-96BA-4CB7-8770-AC7B96356F2D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 62
+		SccNumberOfProjects = 65
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -407,6 +413,18 @@ Global
 		SccProjectTopLevelParentUniqueName61 = Retail.sln
 		SccProjectName61 = Retail.EntitiesMigrator
 		SccLocalPath61 = Retail.EntitiesMigrator
+		SccProjectUniqueName62 = Retail.EntitiesMigrator.Data\\Retail.EntitiesMigrator.Data.csproj
+		SccProjectTopLevelParentUniqueName62 = Retail.sln
+		SccProjectName62 = Retail.EntitiesMigrator.Data
+		SccLocalPath62 = Retail.EntitiesMigrator.Data
+		SccProjectUniqueName63 = Retail.EntitiesMigrator.Data.SQL\\Retail.EntitiesMigrator.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName63 = Retail.sln
+		SccProjectName63 = Retail.EntitiesMigrator.Data.SQL
+		SccLocalPath63 = Retail.EntitiesMigrator.Data.SQL
+		SccProjectUniqueName64 = Retail.EntitiesMigrator.Entities\\Retail.EntitiesMigrator.Entities.csproj
+		SccProjectTopLevelParentUniqueName64 = Retail.sln
+		SccProjectName64 = Retail.EntitiesMigrator.Entities
+		SccLocalPath64 = Retail.EntitiesMigrator.Entities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -665,6 +683,18 @@ Global
 		{A0B6692B-09D3-497D-A398-908D88EABB1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0B6692B-09D3-497D-A398-908D88EABB1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0B6692B-09D3-497D-A398-908D88EABB1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF208A32-3D24-4071-8518-377FAC72FE24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF208A32-3D24-4071-8518-377FAC72FE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF208A32-3D24-4071-8518-377FAC72FE24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF208A32-3D24-4071-8518-377FAC72FE24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -742,5 +772,8 @@ Global
 		{2E3D5DC7-5E87-4196-BF49-168F5470A319} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{CE3DB7E6-A8AF-4AB6-A83E-05E95CD6DE58} = {4AC48669-4437-4FB2-AB3C-4AA1FE40375E}
 		{A0B6692B-09D3-497D-A398-908D88EABB1D} = {5335E72B-803E-4323-895F-4293DB0E9211}
+		{BF208A32-3D24-4071-8518-377FAC72FE24} = {5335E72B-803E-4323-895F-4293DB0E9211}
+		{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D} = {5335E72B-803E-4323-895F-4293DB0E9211}
+		{DF527972-96BA-4CB7-8770-AC7B96356F2D} = {5335E72B-803E-4323-895F-4293DB0E9211}
 	EndGlobalSection
 EndGlobal
