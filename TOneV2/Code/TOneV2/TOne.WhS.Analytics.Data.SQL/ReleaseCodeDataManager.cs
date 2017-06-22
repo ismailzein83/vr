@@ -61,7 +61,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                         releaseCode.FailedAttempt = releaseCode.Attempt - (int)reader["SuccessfulAttempts"];
                         releaseCode.FirstAttempt = GetReaderValue<DateTime?>(reader, "FirstAttempt");
                         releaseCode.LastAttempt = GetReaderValue<DateTime?>(reader, "LastAttempt");
-                        releaseCode.Percentage = decimal.Round(((decimal)GetReaderValue<int>(reader, "Attempt") * 100 / totalCount), 2);
+                        releaseCode.Percentage = GetReaderValue<int>(reader, "Attempt") * 100 / (decimal)totalCount ;
                         if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
                         {
                             if (query.Filter.Dimession.Contains(ReleaseCodeDimension.Supplier))
