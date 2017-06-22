@@ -10,6 +10,7 @@ using AnalyticRecord = Vanrise.Analytic.Entities.AnalyticRecord;
 using DimensionFilter = Vanrise.Analytic.Entities.DimensionFilter;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
@@ -18,6 +19,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+            RateTypeManager rateTypeManager = new RateTypeManager();
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
 
@@ -27,9 +29,16 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listDimensions.Add("SaleZone");
 
             if (parameters.IsCost)
+            {
                 listDimensions.Add("CostRateType");
+                listDimensions.Add("CostRate");
+            }
             else
+            {
                 listDimensions.Add("SaleRateType");
+                listDimensions.Add("SaleRate");
+            }
+                
 
             if (parameters.IsCost)
             {
@@ -38,6 +47,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     listDimensions.Add("Supplier");
                     if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
                 }
+                
             }
             else
             {
@@ -51,18 +61,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     listDimensions.Add("Customer");
                     if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile");
                 }
+                
             }
 
             if (parameters.IsCost)
             {
-                listMeasures.Add("CostRate");
                 listMeasures.Add("CostDuration");
                 listMeasures.Add("CostNetNotNULL");
                 listMeasures.Add("CostExtraCharges");
             }
             else
             {
-                listMeasures.Add("SaleRate");
                 listMeasures.Add("SaleDuration");
                 listMeasures.Add("SaleNetNotNULL");
                 listMeasures.Add("SaleExtraCharges");
@@ -118,9 +127,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     var rateTypeValue = analyticRecord.DimensionValues[1];
                     if (rateTypeValue != null)
-                        if (rateTypeValue.Value != null)
+                        if (rateTypeValue.Value != null){
                             summaryByZone.RateType = (int)rateTypeValue.Value;
-                    summaryByZone.RateTypeFormatted = ((RateTypeEnum)summaryByZone.RateType).ToString();
+                            summaryByZone.RateTypeFormatted = rateTypeManager.GetRateTypeName(summaryByZone.RateType);
+                        }                           
+                        else
+                            summaryByZone.RateTypeFormatted = "Normal";
+
+                    var rateValue = analyticRecord.DimensionValues[2];
+                    if (rateValue != null)
+                    {
+                        summaryByZone.Rate = (rateValue == null) ? (decimal)0.0 : Convert.ToDecimal(rateValue.Value ?? 0.0);
+                        summaryByZone.RateFormatted = ReportHelpers.FormatNumberDigitRate(summaryByZone.Rate);
+                    }
 
                     if (parameters.IsCost && parameters.GroupBySupplier)
                     {
@@ -138,14 +157,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     summaryByZone.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
                     summaryByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationNet);
 
-                    MeasureValue rate;
-                    if (parameters.IsCost)
-                        analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
-                    else
-                        analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
-                    summaryByZone.Rate = (rate == null) ? (decimal)0.0 : Convert.ToDecimal(rate.Value ?? 0.0);
-                    summaryByZone.RateFormatted = ReportHelpers.FormatNumberDigitRate(summaryByZone.Rate);
-
+                    
                     MeasureValue durationInMinutes;
                     if (parameters.IsCost)
                         analyticRecord.MeasureValues.TryGetValue("CostDuration", out durationInMinutes);
@@ -179,7 +191,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             parameters.NormalNet = listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.Normal.ToString()).Sum(x => x.Net).Value;
 
-            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.OffPeak.ToString()).Sum(x => x.Net).Value, 0);
+            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == -2).Sum(x => x.Net).Value, 0);
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 
