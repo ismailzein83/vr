@@ -186,7 +186,6 @@
             }
             function buildPricelistTemplate(selectedCarrierAccountId)
             {
-                console.log(selectedCarrierAccountId);
                 if (selectedCarrierAccountId != undefined) {
                     $scope.scopeModel.showMapping = false;
                     $scope.scopeModel.isLoadingCurrencySelector = true;
@@ -213,12 +212,14 @@
             }
             function hasRunningProcessesForSupplier(carrierAccountId)
             {
+                var entityIds = [];
+                entityIds.push(carrierAccountId);
                var hasRunningProcessesPromiseDeferred = UtilsService.createPromiseDeferred();
                 WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(carrierAccountId).then(function (carrierAccountName) {
                     var runningInstanceEditorSettings = {
                         message: "Importing pricelist for supplier '" + carrierAccountName + "' is still pending"
                     };
-                   BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_SPLDefinitionEnum.BPDefinitionId.value, carrierAccountId, runningInstanceEditorSettings).then(function (response) {
+                    BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_SPLDefinitionEnum.BPDefinitionId.value, entityIds, runningInstanceEditorSettings).then(function (response) {
                       hasRunningProcessesPromiseDeferred.resolve(response);
                   });
                 }).catch(function (error) {

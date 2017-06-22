@@ -18,6 +18,13 @@ namespace TOne.WhS.Sales.BP.Arguments
 
         public DateTime EffectiveDate { get; set; }
 
+        public override string EntityId
+        {
+            get
+            {
+                return String.Format("{0}_{1}",(int) OwnerType, OwnerId);
+            }
+        }
         public override string GetTitle()
         {
             string ownerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription(this.OwnerType);

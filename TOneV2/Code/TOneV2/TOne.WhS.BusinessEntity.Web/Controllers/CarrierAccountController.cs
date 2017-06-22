@@ -50,7 +50,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             var manager = new CarrierAccountManager();
             return manager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId);
         }
+        [HttpGet]
 
+        [Route("GetSellingProductId")]
+        public int GetSellingProductId(int carrierAccountId)
+        {
+            var manager = new CarrierAccountManager();
+            return manager.GetSellingProductId(carrierAccountId);
+        }
 
         [HttpGet]
         [Route("GetCarrierAccountInfo")]
@@ -107,6 +114,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccountName(carrierAccountId);
         }
-        
+        [HttpGet]
+        [Route("GetCarrierAccountIdsAssignedToSellingProduct")]
+        public IEnumerable<int> GetCarrierAccountIdsAssignedToSellingProduct(int sellingProductId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetCarrierAccountIdsAssignedToSellingProduct(sellingProductId);
+        }
     }
 }

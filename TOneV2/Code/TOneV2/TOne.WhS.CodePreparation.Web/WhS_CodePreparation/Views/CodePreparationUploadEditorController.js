@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePrepartionUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService'];
+    CodePrepartionUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_CP_NumberingPlanDefinitionEnum', 'WhS_CP_CodePrepService'];
 
-    function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService) {
+    function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, WhS_CP_CodePrepService) {
         var fileID;
         var sellingNumberPlanId;
 
@@ -30,27 +30,19 @@
             $scope.isUploadingComplete = false;
 
             $scope.upload = function () {
-                var inputArguments = {
-                    $type: "TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput, TOne.WhS.CodePreparation.BP.Arguments",
-                    SellingNumberPlanId: sellingNumberPlanId,
-                    FileId: $scope.zoneList.fileId,
-                    EffectiveDate: $scope.effectiveDate,
-                    HasHeader: $scope.hasHeader,
-                    IsFromExcel: true
-                };
-                var input = {
-                    InputArguments: inputArguments
-                };
-
-                return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
-                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-                        $scope.modalContext.closeModal();
-                        var context = {
-                            onClose: $scope.onCodePreparationUpdated
-                        }
+                $scope.isLoading = true;
+                WhS_CP_CodePrepService.hasRunningProcessesForSellingNumberPlan(sellingNumberPlanId).then(function (response) {
+                    $scope.isLoading = false;
+                    if (!response.hasRunningProcesses) {
+                        WhS_CP_CodePrepService.createNewProcess(sellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate, $scope.hasHeader, true, $scope.onCodePreparationUpdated).then(function () { $scope.modalContext.closeModal(); }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
                     }
-                    return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
+                    else {
+                        VRNotificationService.showWarning("Cannot start process because another instance is still running");
+                    }
                 });
+                
             };
 
             $scope.downloadTemplate = function () {
@@ -60,7 +52,7 @@
             };
 
         }
-
+     
         function load() {
             $scope.isLoading = true;
             loadAllControls();

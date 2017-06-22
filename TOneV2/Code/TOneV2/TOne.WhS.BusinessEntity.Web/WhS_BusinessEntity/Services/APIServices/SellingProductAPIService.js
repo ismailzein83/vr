@@ -40,6 +40,13 @@
                 sellingProductHistoryId: sellingProductHistoryId
             });
         }
+        function GetSellingProductName(sellingProductId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSellingProductName'), {
+                sellingProductId: sellingProductId
+            });
+        }
+        
         return ({
             GetFilteredSellingProducts: GetFilteredSellingProducts,
             AddSellingProduct: AddSellingProduct,
@@ -48,7 +55,8 @@
             GetSellingProductsInfo: GetSellingProductsInfo,
             HasUpdateSellingProductPermission: HasUpdateSellingProductPermission,
             HasAddSellingProductPermission: HasAddSellingProductPermission,
-            GetSellingProductHistoryDetailbyHistoryId: GetSellingProductHistoryDetailbyHistoryId
+            GetSellingProductHistoryDetailbyHistoryId: GetSellingProductHistoryDetailbyHistoryId,
+            GetSellingProductName: GetSellingProductName
         });
     }
 

@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_CodePreparation\Constant\CodeChangeTypeEnum.js" />
+    <Content Include="WhS_CodePreparation\Constant\NumberingPlanDefinitionEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\PreviewChangeTypeEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\PreviewGroupedBy.js" />
     <Content Include="WhS_CodePreparation\Constant\ValidationOutput.js" />

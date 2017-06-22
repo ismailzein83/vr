@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePreparationManagementController.$inject = ['$scope', 'WhS_CP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService'];
+    CodePreparationManagementController.$inject = ['$scope', 'WhS_CP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_CP_NumberingPlanDefinitionEnum', 'BusinessProcess_BPInstanceService'];
 
-    function CodePreparationManagementController($scope, WhS_CP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService) {
+    function CodePreparationManagementController($scope, WhS_CP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, BusinessProcess_BPInstanceService) {
 
         //#region Global Variables
 
@@ -100,7 +100,19 @@
             };
 
             $scope.onSellingNumberPlanSelectorChanged = function () {
-                onSellingNumberPlanSelectorChanged();
+               
+                var selectedSellingNumberingPlan = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                if (selectedSellingNumberingPlan != undefined)
+                {
+                    $scope.isLoading = true;
+                    WhS_CP_CodePrepService.hasRunningProcessesForSellingNumberPlan(selectedSellingNumberingPlan).then(function (response) {
+                        $scope.isLoading = false;
+                        onSellingNumberPlanSelectorChanged();
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    })
+                }
+                
             };
 
 

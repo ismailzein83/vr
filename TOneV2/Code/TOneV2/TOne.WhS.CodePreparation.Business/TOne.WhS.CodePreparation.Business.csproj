@@ -44,6 +44,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
@@ -90,6 +93,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\InvalidStatusCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeInDifferentZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\SameCodeInSameZoneCondition.cs" />
+    <Compile Include="CodePreperationProcessBPSettings.cs" />
     <Compile Include="FixedZoneRateLocator.cs" />
     <Compile Include="MobileZoneRateLocator.cs" />
     <Compile Include="NewZoneRateLocator.cs" />
@@ -127,6 +131,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.BP.Arguments\TOne.WhS.CodePreparation.BP.Arguments.csproj">
+      <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
+      <Name>TOne.WhS.CodePreparation.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Data\TOne.WhS.CodePreparation.Data.csproj">
       <Project>{0065e0fc-083f-4723-ae27-172964e14f72}</Project>

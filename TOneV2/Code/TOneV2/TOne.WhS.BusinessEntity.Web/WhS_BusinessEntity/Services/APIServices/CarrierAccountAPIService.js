@@ -15,13 +15,22 @@
                 carrierAccountId: carrierAccountId
             });
         }
-
+        function GetCarrierAccountIdsAssignedToSellingProduct(sellingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccountIdsAssignedToSellingProduct"), {
+                sellingProductId: sellingProductId
+            });
+        }
         function GetCustomersBySellingNumberPlanId(sellingNumberPlanId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomersBySellingNumberPlanId"), {
                 sellingNumberPlanId: sellingNumberPlanId
             });
         }
 
+        function GetSellingProductId(carrierAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSellingProductId"), {
+                carrierAccountId: carrierAccountId
+            });
+        }
         
         function GetCarrierAccount(carrierAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccount"), {
@@ -84,14 +93,16 @@
             GetCarrierAccount: GetCarrierAccount,
             GetCarrierAccountName:GetCarrierAccountName,
             GetCarrierAccountCurrencyId: GetCarrierAccountCurrencyId,
-            GetCustomersBySellingNumberPlanId : GetCustomersBySellingNumberPlanId,
+            GetCustomersBySellingNumberPlanId: GetCustomersBySellingNumberPlanId,
+            GetSellingProductId:GetSellingProductId,
             AddCarrierAccount: AddCarrierAccount,
             UpdateCarrierAccount: UpdateCarrierAccount,
             GetSuppliersWithZonesGroupsTemplates: GetSuppliersWithZonesGroupsTemplates,
             HasUpdateCarrierAccountPermission: HasUpdateCarrierAccountPermission,
             HasAddCarrierAccountPermission: HasAddCarrierAccountPermission,
             HasViewCarrierAccountPermission: HasViewCarrierAccountPermission,
-            GetCarrierAccountHistoryDetailbyHistoryId: GetCarrierAccountHistoryDetailbyHistoryId
+            GetCarrierAccountHistoryDetailbyHistoryId: GetCarrierAccountHistoryDetailbyHistoryId,
+            GetCarrierAccountIdsAssignedToSellingProduct: GetCarrierAccountIdsAssignedToSellingProduct
         });
     }
 

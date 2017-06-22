@@ -381,10 +381,19 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierAccount.CustomerSettings.RoutingStatus = routingStatus;
             return TryUpdateCarrierAccount(ConvertCarrierAccountToEdit(carrierAccount), withTracking);
         }
-        public int? GetSellingProductId(int carrierAccountId)
+        public int GetSellingProductId(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
-            return (carrierAccount != null) ? carrierAccount.SellingProductId : null;
+            if (carrierAccount == null)
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} is not found", carrierAccountId));
+
+            if(!IsCustomer(carrierAccount.AccountType))
+                throw new InvalidOperationException(string.Format("Getting selling product id only works with carrier accounts of type customer. Carrier Account Id {0}", carrierAccountId));
+
+            if (!carrierAccount.SellingProductId.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to any selling product", carrierAccountId));
+
+            return carrierAccount.SellingProductId.Value;
         }
         public IEnumerable<int> GetCarrierAccountIdsAssignedToSellingProduct(int sellingProductId)
         {

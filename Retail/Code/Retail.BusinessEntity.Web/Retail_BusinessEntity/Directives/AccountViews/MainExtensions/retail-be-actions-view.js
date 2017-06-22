@@ -62,10 +62,12 @@
             }
 
             function buildGridPayload(loadPayload) {
-
+                var entityIds = [];
+                var entityId = 'Retail_BE_' + accountBEDefinitionId + '_' + parentAccountId;
+                entityIds.push(entityId);
                 var actionGridPayload = {
                     accountBEDefinitionId: accountBEDefinitionId,
-                    EntityId: 'Retail_BE_' + accountBEDefinitionId + '_' + parentAccountId
+                    EntityIds: entityIds
                 };
                 return actionGridPayload;
             }
