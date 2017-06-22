@@ -49,6 +49,9 @@ namespace Retail.EntitiesMigrator
             List<RuleDefinitionDetails> ruleDefinitions = GetIncomingRuleDefinitions((int)numOnNetChargingPolicy.Value, (int)numOffNetChargingPolicy.Value, (int)numMobileChargingPolicy.Value, (int)numInternationalChargingPolicy.Value);
             IncomingRatesMigrator migrator = new IncomingRatesMigrator(ruleDefinitions);
             migrator.MigrateIncomingRates(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"), new Guid("5ff96aee-cdf0-4415-a643-6b275f47e791"));
+
+            OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator((int)numOnNetChargingPolicy.Value);
+            onNetMigrator.Execute(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"));
         }
 
         Dictionary<string, SaleZone> GetZones()
@@ -101,28 +104,10 @@ namespace Retail.EntitiesMigrator
 
         }
 
-        private List<RuleDefinitionDetails> GetInternationalRuleDefinitions(int internationalPolicy)
-        {
-            List<RuleDefinitionDetails> ruleDefinitionDetails = new List<RuleDefinitionDetails>();
-
-            ruleDefinitionDetails.Add(new RuleDefinitionDetails
-            {
-                Name = "International",
-                RateDefinitionId = new Guid("d9cd209f-346b-4460-99da-68e8ad37bbc1"),
-                TariffDefinitionId = new Guid("ecfbb042-9b68-4c84-9ab9-1e01b50b92ac"),
-                IsInternational = true,
-                ServiceTypeId = Helper.InternationalServiceTypeId,
-                ChargingPolicyId = internationalPolicy
-            });
-
-            return ruleDefinitionDetails;
-
-        }
-
+       
         private void btnImportIntlRates_Click(object sender, EventArgs e)
         {
-            var ruleDefinitionDetails = GetInternationalRuleDefinitions((int)numInternationalChargingPolicy.Value);
-            InternationalRatesMigrator migrator = new InternationalRatesMigrator(GetZones(), ruleDefinitionDetails);
+            InternationalRatesMigrator migrator = new InternationalRatesMigrator(GetZones(), (int)numInternationalChargingPolicy.Value);
             migrator.MigrateInternationalRates();
         }
 

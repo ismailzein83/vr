@@ -19,11 +19,11 @@ namespace Retail.EntitiesMigrator.Migrators
     public class InternationalRatesMigrator
     {
         Dictionary<string, SaleZone> _Zones;
-        List<RuleDefinitionDetails> _RuleDefinitions;
-        public InternationalRatesMigrator(Dictionary<string, SaleZone> zones, List<RuleDefinitionDetails> ruleDefinitions)
+        int _IntlChargingPolicy;
+        public InternationalRatesMigrator(Dictionary<string, SaleZone> zones, int chargingPolicy)
         {
+            _IntlChargingPolicy = chargingPolicy;
             _Zones = zones;
-            _RuleDefinitions = ruleDefinitions;
         }
 
         public void MigrateInternationalRates()
@@ -35,16 +35,15 @@ namespace Retail.EntitiesMigrator.Migrators
             List<GenericRule> rateRules = new List<GenericRule>();
             foreach (InternationalRate internationalRate in internationalRates)
             {
-                foreach (RuleDefinitionDetails ruleDefinitionDetails in _RuleDefinitions)
+
+                SaleZone saleZone;
+                if (_Zones.TryGetValue(internationalRate.ZoneName, out saleZone))
                 {
-                    SaleZone saleZone;
-                    if (_Zones.TryGetValue(internationalRate.ZoneName, out saleZone))
-                    {
-                        rateRules.Add(GetGenereicRule(RuleType.Rate, saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.ActivationDate, ruleDefinitionDetails));
-                        if (internationalRate.InternationalRateDetail.FractionUnit != 60)
-                            tariffRules.Add(GetGenereicRule(RuleType.Tariff, saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.ActivationDate, ruleDefinitionDetails));
-                    }
+                    rateRules.Add(GetGenereicRule(RuleType.Rate, saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.ActivationDate, Helper.IntlRuleDefinition));
+                    if (internationalRate.InternationalRateDetail.FractionUnit != 60)
+                        tariffRules.Add(GetGenereicRule(RuleType.Tariff, saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.ActivationDate, Helper.IntlRuleDefinition));
                 }
+
 
             }
             Helper.SaveTariffRules(tariffRules);
@@ -80,7 +79,7 @@ namespace Retail.EntitiesMigrator.Migrators
                     NormalRate = rateDetails.Rate
                 },
                 DefinitionId = ruleDefinitionDetails.RateDefinitionId,
-                Description = "Migrated Rate Rule",
+                Description = "Migrated International Rate Rule",
                 BeginEffectiveTime = bed
 
             };
@@ -102,7 +101,7 @@ namespace Retail.EntitiesMigrator.Migrators
                     PricingUnit = 60
                 },
                 DefinitionId = ruleDefinitionDetails.TariffDefinitionId,
-                Description = "Migrated Tariff Rule",
+                Description = "Migrated International Tariff Rule",
                 BeginEffectiveTime = bed
 
             };
@@ -115,7 +114,7 @@ namespace Retail.EntitiesMigrator.Migrators
 
             Helper.AddDirectionField(result, TrafficDirection.OutGoing);
             Helper.AddServiceTypeField(result, ruleDefinitionDetails.ServiceTypeId);
-            Helper.AddChargingPolicyField(result, ruleDefinitionDetails.ChargingPolicyId);
+            Helper.AddChargingPolicyField(result, _IntlChargingPolicy);
             Helper.AddZoneField(result, zoneIds);
 
             return result;

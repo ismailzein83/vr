@@ -51,6 +51,7 @@
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -169,6 +170,7 @@
     <Compile Include="Migrators\IncomingRatesMigrator.cs" />
     <Compile Include="Migrators\InternationalRatesMigrator.cs" />
     <Compile Include="Migrators\OffNetRatesMigrator.cs" />
+    <Compile Include="Migrators\OnNetRatesMigrator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Main.resx">

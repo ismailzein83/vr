@@ -90,7 +90,7 @@ namespace Retail.EntitiesMigrator.Migrators
                     NormalRate = rateDetails.Rate
                 },
                 DefinitionId = ruleDefinitionDetails.RateDefinitionId,
-                Description = "Migrated Rate Rule",
+                Description = "Migrated Incoming Rate Rule",
                 BeginEffectiveTime = bed
 
             };
@@ -112,7 +112,7 @@ namespace Retail.EntitiesMigrator.Migrators
                     PricingUnit = 60
                 },
                 DefinitionId = ruleDefinitionDetails.TariffDefinitionId,
-                Description = "Migrated Tariff Rule",
+                Description = "Migrated Incoming Tariff Rule",
                 BeginEffectiveTime = bed
 
             };

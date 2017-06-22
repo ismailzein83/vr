@@ -11,6 +11,14 @@ namespace Retail.EntitiesMigrator.Data.SQL
 {
     public class InternationalRateDataManager : BaseSQLDataManager, IInternationalRateDataManager
     {
+         #region Constructor
+        public InternationalRateDataManager()
+            : base(GetConnectionStringName("RatesDBConnStringKey", "RatesDBConnString"))
+        {
+
+        }
+
+        #endregion
         public IEnumerable<InternationalRate> GetInternationalRates()
         {
             return GetItemsText(query_getInetrnationalRates, InternationalRateMapper, null);

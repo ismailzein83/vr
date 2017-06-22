@@ -46,10 +46,10 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cboCurrency = new System.Windows.Forms.ComboBox();
             this.cboSNP = new System.Windows.Forms.ComboBox();
+            this.btnImpOffNetRates = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.bsSNP = new System.Windows.Forms.BindingSource(this.components);
             this.bsCurrency = new System.Windows.Forms.BindingSource(this.components);
-            this.btnImpOffNetRates = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInternationalChargingPolicy)).BeginInit();
@@ -311,10 +311,6 @@
             this.cboSNP.TabIndex = 3;
             this.cboSNP.SelectedIndexChanged += new System.EventHandler(this.cboSNP_SelectedIndexChanged);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // btnImpOffNetRates
             // 
             this.btnImpOffNetRates.Location = new System.Drawing.Point(378, 137);
@@ -324,6 +320,10 @@
             this.btnImpOffNetRates.Text = "Import OffNet Rates";
             this.btnImpOffNetRates.UseVisualStyleBackColor = true;
             this.btnImpOffNetRates.Click += new System.EventHandler(this.btnImpOffNetRates_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Main
             // 
