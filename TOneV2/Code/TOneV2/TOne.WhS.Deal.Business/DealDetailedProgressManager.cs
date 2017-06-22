@@ -66,13 +66,6 @@ namespace TOne.WhS.Deal.Business
             return _dataManager.GetDealEvaluatorBeginDate(lastTimestamp);
         }
 
-        public List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTier> dealZoneGroupTiers)
-        {
-            if (dealZoneGroupTiers == null || dealZoneGroupTiers.Count > 0)
-                return null;
-            return _dataManager.GetDealZoneGroupTierDataBeforeDate(isSale, beforeDate, dealZoneGroupTiers);
-        }
-
         public bool AreEqual(DealDetailedProgress dealDetailedProgress, DealBillingSummary dealBillingSummary)
         {
             if (dealBillingSummary == null || dealDetailedProgress == null)

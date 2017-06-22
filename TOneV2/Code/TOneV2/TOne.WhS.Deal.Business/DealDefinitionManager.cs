@@ -338,7 +338,7 @@ namespace TOne.WhS.Deal.Business
 
         #region Mappers
 
-        DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition)
+        private DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition)
         {
             return new DealDefinitionInfo()
             {

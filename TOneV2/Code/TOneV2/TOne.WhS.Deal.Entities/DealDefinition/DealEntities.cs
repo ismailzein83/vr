@@ -19,14 +19,6 @@ namespace TOne.WhS.Deal.Entities
         public int? TierNb { get; set; }
     }
 
-    public struct DealZoneGroupTierRate
-    {
-        public int DealId { get; set; }
-        public int ZoneGroupNb { get; set; }
-        public int TierNb { get; set; }
-        public int RateTierNb { get; set; }
-    }
-
     public struct AccountZoneGroup
     {
         public int AccountId { get; set; }
@@ -56,23 +48,6 @@ namespace TOne.WhS.Deal.Entities
         public int CurrencyId { get; set; }
         public int? RetroActiveFromTierNumber { get; set; }
         public Dictionary<long, decimal> ExceptionRates { get; set; }
-    }
-
-    public class DealZoneGroupData
-    {
-        public int DealID { get; set; }
-        public int ZoneGroupNb { get; set; }
-        public bool IsSale { get; set; }
-        public decimal TotalReachedDurationInSeconds { get; set; }
-    }
-
-    public class DealZoneGroupTierData
-    {
-        public int DealID { get; set; }
-        public int ZoneGroupNb { get; set; }
-        public int TierNb { get; set; }
-        public bool IsSale { get; set; }
-        public decimal TotalReachedDurationInSeconds { get; set; }
     }
 
     public class DealProgressData

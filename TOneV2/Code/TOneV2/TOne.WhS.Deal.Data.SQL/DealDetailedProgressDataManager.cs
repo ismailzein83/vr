@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Data.SQL;
 
@@ -44,11 +41,6 @@ namespace TOne.WhS.Deal.Data.SQL
             });
         }
 
-        public List<DealDetailedProgress> GetDealDetailedProgresses(bool isSale, DateTime beginDate)
-        {
-            return GetItemsSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetAfterDate]", DealDetailedProgressMapper, isSale, beginDate);
-        }
-
         public void InsertDealDetailedProgresses(List<DealDetailedProgress> dealDetailedProgresses)
         {
             DataTable dtDealDetailedProgress = BuildDealDetailedProgressTable(dealDetailedProgresses);
@@ -79,44 +71,6 @@ namespace TOne.WhS.Deal.Data.SQL
         public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp)
         {
             return (DateTime?)ExecuteScalarSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealEvaluatorBeginDate]", lastTimestamp);
-        }
-
-        public List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroup> dealZoneGroups)
-        {
-            DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
-            return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealZoneGroupDataBeforeDate]", DealZoneGroupDataMapper, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@BeforeDate", SqlDbType.DateTime);
-                dtPrm.Value = beforeDate;
-                cmd.Parameters.Add(dtPrm);
-
-                dtPrm = new SqlParameter("@IsSale", SqlDbType.Bit);
-                dtPrm.Value = isSale;
-                cmd.Parameters.Add(dtPrm);
-
-                dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
-                dtPrm.Value = dtDealZoneGroup;
-                cmd.Parameters.Add(dtPrm);
-            });
-        }
-
-        public List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTier> dealZoneGroupTiers)
-        {
-            DataTable dtDealZoneGroupTier = BuildDealZoneGroupTierTable(dealZoneGroupTiers);
-            return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealZoneGroupTierDataBeforeDate]", DealZoneGroupTierDataMapper, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@BeforeDate", SqlDbType.DateTime);
-                dtPrm.Value = beforeDate;
-                cmd.Parameters.Add(dtPrm);
-
-                dtPrm = new SqlParameter("@IsSale", SqlDbType.Bit);
-                dtPrm.Value = isSale;
-                cmd.Parameters.Add(dtPrm);
-
-                dtPrm = new SqlParameter("@DealZoneGroupTiers", SqlDbType.Structured);
-                dtPrm.Value = dtDealZoneGroupTier;
-                cmd.Parameters.Add(dtPrm);
-            });
         }
 
         public Byte[] GetMaxTimestamp()
@@ -159,6 +113,7 @@ namespace TOne.WhS.Deal.Data.SQL
             dtDealDetailedProgress.EndLoadData();
             return dtDealDetailedProgress;
         }
+
         DataTable GetDealDetailedProgressTable()
         {
             DataTable dtDealProgress = new DataTable();
@@ -188,40 +143,12 @@ namespace TOne.WhS.Deal.Data.SQL
             dtDealZoneGroup.EndLoadData();
             return dtDealZoneGroup;
         }
+
         DataTable GetDealZoneGroupTable()
         {
             DataTable dtDealZoneGroup = new DataTable();
             dtDealZoneGroup.Columns.Add("DealId", typeof(Int32));
             dtDealZoneGroup.Columns.Add("ZoneGroupNb", typeof(Int32));
-            return dtDealZoneGroup;
-        }
-
-        DataTable BuildDealZoneGroupTierTable(List<DealZoneGroupTier> dealZoneGroupTiers)
-        {
-            DataTable dtDealZoneGroupTier = GetDealZoneGroupTierTable();
-            dtDealZoneGroupTier.BeginLoadData();
-            foreach (var dealZoneGroupTier in dealZoneGroupTiers)
-            {
-                DataRow dr = dtDealZoneGroupTier.NewRow();
-                dr["DealId"] = dealZoneGroupTier.DealId;
-                dr["ZoneGroupNb"] = dealZoneGroupTier.ZoneGroupNb;
-
-                if (dealZoneGroupTier.TierNb.HasValue)
-                    dr["TierNb"] = dealZoneGroupTier.TierNb.Value;
-                else
-                    dr["TierNb"] = DBNull.Value;
-
-                dtDealZoneGroupTier.Rows.Add(dr);
-            }
-            dtDealZoneGroupTier.EndLoadData();
-            return dtDealZoneGroupTier;
-        }
-        DataTable GetDealZoneGroupTierTable()
-        {
-            DataTable dtDealZoneGroup = new DataTable();
-            dtDealZoneGroup.Columns.Add("DealId", typeof(Int32));
-            dtDealZoneGroup.Columns.Add("ZoneGroupNb", typeof(Int32));
-            dtDealZoneGroup.Columns.Add("TierNb", typeof(Int32));
             return dtDealZoneGroup;
         }
 
@@ -245,31 +172,6 @@ namespace TOne.WhS.Deal.Data.SQL
                 CreatedTime = (DateTime)reader["CreatedTime"]
             };
             return dealDetailedProgress;
-        }
-
-        private DealZoneGroupData DealZoneGroupDataMapper(IDataReader reader)
-        {
-            DealZoneGroupData dealZoneGroupData = new DealZoneGroupData
-            {
-                DealID = (int)reader["DealID"],
-                ZoneGroupNb = (int)reader["ZoneGroupNb"],
-                IsSale = (bool)reader["IsSale"],
-                TotalReachedDurationInSeconds = (decimal)reader["TotalReachedDurationInSec"]
-            };
-            return dealZoneGroupData;
-        }
-
-        private DealZoneGroupTierData DealZoneGroupTierDataMapper(IDataReader reader)
-        {
-            DealZoneGroupTierData dealZoneGroupTierData = new DealZoneGroupTierData
-            {
-                DealID = (int)reader["DealID"],
-                ZoneGroupNb = (int)reader["ZoneGroupNb"],
-                TierNb = (int)reader["TierNb"],
-                IsSale = (bool)reader["IsSale"],
-                TotalReachedDurationInSeconds = (decimal)reader["TotalReachedDurationInSec"]
-            };
-            return dealZoneGroupTierData;
         }
 
         #endregion

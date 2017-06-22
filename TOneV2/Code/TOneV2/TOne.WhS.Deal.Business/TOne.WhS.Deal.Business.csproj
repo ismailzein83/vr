@@ -76,7 +76,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SwapDealAnalysisInboundRateCalcMethodContext.cs" />
     <Compile Include="Context\SwapDealAnalysisOutboundRateCalcMethodContext.cs" />
-    <Compile Include="DealReprocessInputManager.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="VolCommitmentDealManager.cs" />
