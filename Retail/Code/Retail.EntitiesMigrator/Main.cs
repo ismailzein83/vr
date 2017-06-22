@@ -126,5 +126,25 @@ namespace Retail.EntitiesMigrator
             OffNetRatesMigrator migrator = new OffNetRatesMigrator();
             migrator.Execute();
         }
+
+        private void numMobileChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.MobileRuleDefinition.ChargingPolicyId = (int)numMobileChargingPolicy.Value;
+        }
+
+        private void numOffNetChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.OffNetRuleDefinition.ChargingPolicyId = (int)numOffNetChargingPolicy.Value;
+        }
+
+        private void numOnNetChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.OnNetRuleDefinition.ChargingPolicyId = (int)numOnNetChargingPolicy.Value;
+        }
+
+        private void numInternationalChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value;
+        }
     }
 }

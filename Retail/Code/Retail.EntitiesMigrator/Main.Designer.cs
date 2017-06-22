@@ -138,6 +138,7 @@
             0,
             0,
             0});
+            this.numInternationalChargingPolicy.ValueChanged += new System.EventHandler(this.numInternationalChargingPolicy_ValueChanged);
             // 
             // numOnNetChargingPolicy
             // 
@@ -161,6 +162,7 @@
             0,
             0,
             0});
+            this.numOnNetChargingPolicy.ValueChanged += new System.EventHandler(this.numOnNetChargingPolicy_ValueChanged);
             // 
             // numOffNetChargingPolicy
             // 
@@ -184,6 +186,7 @@
             0,
             0,
             0});
+            this.numOffNetChargingPolicy.ValueChanged += new System.EventHandler(this.numOffNetChargingPolicy_ValueChanged);
             // 
             // label1
             // 
@@ -243,6 +246,7 @@
             0,
             0,
             0});
+            this.numMobileChargingPolicy.ValueChanged += new System.EventHandler(this.numMobileChargingPolicy_ValueChanged);
             // 
             // btnImportOutGoingRates
             // 

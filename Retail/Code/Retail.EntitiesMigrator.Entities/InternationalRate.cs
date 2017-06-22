@@ -13,4 +13,13 @@ namespace Retail.EntitiesMigrator.Entities
         public long SubscriberId { get; set; }
         public DateTime ActivationDate { get; set; }
     }
+
+    public class OffNetRate
+    {
+        public string SourceBranchId { get; set; }
+
+        public string OperatorName { get; set; }
+
+        public RateDetails RateDetail { get; set; }
+    }
 }
