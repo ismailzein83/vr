@@ -24,11 +24,8 @@
                 id: id
             });
         }
-        function HasRunningInstances(definitionId, entityId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "HasRunningInstances"), {
-                definitionId:definitionId,
-                entityId: entityId
-            });
+        function HasRunningInstances(hasRunningInstancesInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "HasRunningInstances"), hasRunningInstancesInput);
         }
         function CreateNewProcess(createProcessInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "CreateNewProcess"), createProcessInput);

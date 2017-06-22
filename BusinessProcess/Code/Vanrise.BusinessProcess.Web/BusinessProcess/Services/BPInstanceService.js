@@ -44,18 +44,22 @@
 
             VRModalService.showModal('/Client/Modules/BusinessProcess/Views/NewInstanceEditor/NewInstanceEditor.html', parameters, modalSettings);
         }
-        function displayRunningInstancesIfExist(definitionId, entityId, runningInstanceEditorSettings)
+        function displayRunningInstancesIfExist(definitionId, entityIds, runningInstanceEditorSettings)
         {
             var displayRunningInstancePromiseDeferred = UtilsService.createPromiseDeferred();
-            BusinessProcess_BPInstanceAPIService.HasRunningInstances(definitionId, entityId).then(
+            var hasRunningInstancesInput = {
+                definitionId: definitionId,
+                entityIds: entityIds
+            }
+            BusinessProcess_BPInstanceAPIService.HasRunningInstances(hasRunningInstancesInput).then(
                 function (response) {
                     var result = { hasRunningProcesses: false };
                     if (response == true) {
                         var parameters = {
-                            EntityId: entityId,
+                            EntityIds: entityIds,
                             context: {
                                 onClose: function () {
-                                    BusinessProcess_BPInstanceAPIService.HasRunningInstances(definitionId, entityId).then(
+                                    BusinessProcess_BPInstanceAPIService.HasRunningInstances(hasRunningInstancesInput).then(
                                         function (response) {
                                             result.hasRunningProcesses = response;
                                             displayRunningInstancePromiseDeferred.resolve(result);

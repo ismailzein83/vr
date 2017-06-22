@@ -20,7 +20,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             BPInstanceManager manager = new BPInstanceManager();
             byte[] maxTimeStamp = input.LastUpdateHandle;
-            return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows, input.DefinitionsId, input.ParentId, input.EntityId);
+            return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows, input.DefinitionsId, input.ParentId, input.EntityIds);
         }
 
         [HttpPost]
@@ -58,12 +58,19 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             return manager.CreateNewProcess(createProcessInput);
         }
-        [HttpGet]
+        [HttpPost]
         [Route("HasRunningInstances")]
-        public bool HasRunningInstances(Guid definitionId, string entityId)
+        public bool HasRunningInstances(HasRunningInstancesInput hasRunningInstancesInput)
         {
             BPInstanceManager manager = new BPInstanceManager();
-            return manager.HasRunningInstances(definitionId, entityId);
+            return manager.HasRunningInstances(hasRunningInstancesInput.definitionId, hasRunningInstancesInput.entityIds);
         }
+
+        
+    }
+    public class HasRunningInstancesInput
+    {
+        public Guid definitionId { get; set; }
+        public List<string> entityIds { get; set; }
     }
 }

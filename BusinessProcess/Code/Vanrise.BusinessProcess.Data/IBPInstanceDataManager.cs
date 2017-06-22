@@ -7,7 +7,7 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPInstanceDataManager : IDataManager
     {
-        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, string entityId, List<int> grantedPermissionSetIds);
+        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds);
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input, List<int> grantedPermissionSetIds);
         List<BPInstance> GetAllBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds);
 
@@ -25,6 +25,6 @@ namespace Vanrise.BusinessProcess.Data
 
         void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate);
 
-        bool HasRunningInstances(Guid definitionId, string EntityId, IEnumerable<BPInstanceStatus> statuses);
+        bool HasRunningInstances(Guid definitionId, List<string> entityIds , IEnumerable<BPInstanceStatus> statuses);
     }
 }

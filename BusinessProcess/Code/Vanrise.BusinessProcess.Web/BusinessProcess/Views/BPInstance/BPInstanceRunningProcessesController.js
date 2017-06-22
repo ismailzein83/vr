@@ -7,7 +7,7 @@
     function BusinessProcess_BP_InstanceRunningProcessController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRNotificationService, VRNavigationService) {
         var gridAPI;
         var context;
-        var entityId;
+        var entityIds;
         var runningInstanceEditorSettings;
         loadParameters();
         defineScope();
@@ -16,7 +16,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters !== undefined && parameters !== null) {
                 context = parameters.context;
-                entityId = parameters.EntityId;
+                entityIds = parameters.EntityIds;
                 runningInstanceEditorSettings = parameters.runningInstanceEditorSettings;
             }
         }
@@ -25,7 +25,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var query = {
-                    EntityId: entityId
+                    EntityIds: entityIds
                 };
                 gridAPI.loadGrid(query);
             };

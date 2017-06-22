@@ -9,6 +9,6 @@ namespace Vanrise.BusinessProcess.Entities
         public int NbOfRows { get; set; }
         public List<Guid> DefinitionsId { get; set; }
         public int ParentId { get; set; }
-        public string EntityId { get; set; }
+        public List<string> EntityIds { get; set; }
     }
 }

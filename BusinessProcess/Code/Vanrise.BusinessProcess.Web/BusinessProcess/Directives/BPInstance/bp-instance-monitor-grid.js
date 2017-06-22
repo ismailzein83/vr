@@ -72,7 +72,7 @@ app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstan
                     input.NbOfRows = undefined;
                     input.DefinitionsId = query.DefinitionsId;
                     input.ParentId = query.BPInstanceID;
-                    input.EntityId = query.EntityId;
+                    input.EntityIds = query.EntityIds;
 
                     $scope.bpInstances.length = 0;
                     isGettingDataFirstTime = true;

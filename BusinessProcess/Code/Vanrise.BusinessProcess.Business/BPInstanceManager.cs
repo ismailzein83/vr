@@ -28,7 +28,7 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceDetails;
         }
 
-        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, string entityId)
+        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds)
         {
             BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
 
@@ -37,7 +37,7 @@ namespace Vanrise.BusinessProcess.Business
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
-            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityId, grantedPermissionSetIds);
+            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -59,10 +59,10 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.GetBPInstance(bpInstanceId);
         }
-        public bool HasRunningInstances(Guid definitionId, string entityId)
+        public bool HasRunningInstances(Guid definitionId, List<string> entityIds)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.HasRunningInstances(definitionId, entityId, BPInstanceStatusAttribute.GetNonClosedStatuses());
+            return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
         }
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
