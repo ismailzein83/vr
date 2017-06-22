@@ -155,6 +155,20 @@
                     VRNotificationService.showWarning('Same Source Title Exists');
                 }
             };
+
+            $scope.validateDataRecordStorageSelector = function () {
+                var _selectedDataRecordStorages = $scope.selectedDataRecordStorages;
+                if (_selectedDataRecordStorages == undefined)
+                    return null;
+
+                for (var index = 0; index < _selectedDataRecordStorages.length; index++) {
+                    var currentItem = _selectedDataRecordStorages[index];
+                    if (currentItem.IsRemoteRecordStorage && _selectedDataRecordStorages.length > 1) 
+                        return "Remote Data Storage should be uniquely selected";
+                }
+
+                return null;
+            };
         }
         function validateData() {
             if (!existingSources || existingSources.length == 0) {

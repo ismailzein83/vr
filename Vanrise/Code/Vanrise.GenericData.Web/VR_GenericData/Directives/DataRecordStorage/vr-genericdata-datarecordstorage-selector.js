@@ -16,7 +16,7 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 customlabel: "@",
-                usevalidator: "@"
+                customvalidate: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -57,19 +57,6 @@
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
-                };
-
-                ctrl.validate = function () {
-                    if (attrs.usevalidator == undefined || ctrl.selectedvalues == undefined)
-                        return null;
-
-                    for (var index = 0; index < ctrl.selectedvalues.length; index++) {
-                        var currentItem = ctrl.selectedvalues[index];
-                        if (currentItem.IsRemoteRecordStorage && ctrl.selectedvalues.length > 1) {
-                            return "Remote Data Storage should be uniquely selected";
-                        }
-                    }
-                    return null;
                 };
             }
             function getDirectiveAPI() {
@@ -146,8 +133,15 @@
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
+            var validatorStartTag = "";
+            var validatorEndTag = "";
+            if (attrs.customvalidate != undefined) {
+                validatorStartTag = '<vr-validator validate="ctrl.customvalidate()">';
+                validatorEndTag = '</vr-validator>';
+            }
+
             return '<div>'
-                         + '<vr-validator validate="ctrl.validate()">'
+                         + validatorStartTag
                              + '<vr-select on-ready="ctrl.onSelectorReady"'
                                  + ' datasource="ctrl.datasource"'
                                  + ' selectedvalues="ctrl.selectedvalues"'
@@ -163,7 +157,7 @@
                                  + ' ' + lableplace
                                  + ' entityName="' + label + '"'
                              + '</vr-select>'
-                         + '</vr-validator>'
+                         + validatorEndTag
                  + '</div>';
         }
     }
