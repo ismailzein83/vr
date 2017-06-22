@@ -109,7 +109,8 @@ namespace Retail.EntitiesMigrator.Migrators
                 {
                     CurrencyId = Helper.CurrencyId,
                     FractionUnit = rateDetails.FractionUnit,
-                    PricingUnit = 60
+                    PricingUnit = 60,
+                    FirstPeriodRateType = FirstPeriodRateType.EffectiveRate
                 },
                 DefinitionId = ruleDefinitionDetails.TariffDefinitionId,
                 Description = "Migrated Incoming Tariff Rule",

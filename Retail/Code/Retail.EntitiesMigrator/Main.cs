@@ -50,8 +50,6 @@ namespace Retail.EntitiesMigrator
             IncomingRatesMigrator migrator = new IncomingRatesMigrator(ruleDefinitions);
             migrator.MigrateIncomingRates(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"), new Guid("5ff96aee-cdf0-4415-a643-6b275f47e791"));
 
-            OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator((int)numOnNetChargingPolicy.Value);
-            onNetMigrator.Execute(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"));
         }
 
         Dictionary<string, SaleZone> GetZones()
@@ -104,7 +102,7 @@ namespace Retail.EntitiesMigrator
 
         }
 
-       
+
         private void btnImportIntlRates_Click(object sender, EventArgs e)
         {
             InternationalRatesMigrator migrator = new InternationalRatesMigrator(GetZones(), (int)numInternationalChargingPolicy.Value);
@@ -145,6 +143,18 @@ namespace Retail.EntitiesMigrator
         private void numInternationalChargingPolicy_ValueChanged(object sender, EventArgs e)
         {
             Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value;
+        }
+
+        private void btnImportOnNet_Click(object sender, EventArgs e)
+        {
+            OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator();
+            onNetMigrator.Execute(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"));
+        }
+
+        private void btnMobileRates_Click(object sender, EventArgs e)
+        {
+            MobileRatesMigrator migrator = new MobileRatesMigrator();
+            migrator.Execute(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"));
         }
     }
 }

@@ -17,19 +17,19 @@ using Vanrise.Rules.Pricing.MainExtensions.Tariff;
 
 namespace Retail.EntitiesMigrator.Migrators
 {
-    public class OnNetRatesMigrator
+    public class MobileRatesMigrator
     {
-        public OnNetRatesMigrator()
-        {
 
+        public MobileRatesMigrator()
+        {
         }
         public void Execute(Guid accountBEDefinitionId)
         {
             IEnumerable<InternationalRate> internationalRates = GetRates();
             List<GenericRule> tariffRules = new List<GenericRule>();
             List<GenericRule> rateRules = new List<GenericRule>();
-            var defaultRateRule = Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
-            var defaultTariffRule = Helper.CreateTariffRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
+            var defaultRateRule = Helper.CreateRateValueRule(Helper.MobileRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
+            var defaultTariffRule = Helper.CreateTariffRule(Helper.MobileRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
             tariffRules.Add(defaultTariffRule);
             rateRules.Add(defaultRateRule);
             foreach (InternationalRate internationalRate in internationalRates)
@@ -84,15 +84,15 @@ namespace Retail.EntitiesMigrator.Migrators
         }
         private RateValueRule GetRateValueRuleDetails(long accountId, RateDetails rateDetails)
         {
-            return Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetCriteriaFieldsValues(accountId), rateDetails);
+            return Helper.CreateRateValueRule(Helper.MobileRuleDefinition, GetCriteriaFieldsValues(accountId), rateDetails);
         }
         private TariffRule GetTariffRuleDetails(long accountId, RateDetails rateDetails)
         {
-            return Helper.CreateTariffRule(Helper.OnNetRuleDefinition, GetCriteriaFieldsValues(accountId), rateDetails);
+            return Helper.CreateTariffRule(Helper.MobileRuleDefinition, GetCriteriaFieldsValues(accountId), rateDetails);
         }
         private Dictionary<string, GenericRuleCriteriaFieldValues> GetDefaultCriteriaFieldValues()
         {
-            Dictionary<string, GenericRuleCriteriaFieldValues> result = Helper.BuildCriteriaFieldsValues(Helper.OnNetRuleDefinition.ServiceTypeId, Helper.OnNetRuleDefinition.ChargingPolicyId, MultiNet.Business.TrafficDirection.OutGoing);
+            Dictionary<string, GenericRuleCriteriaFieldValues> result = Helper.BuildCriteriaFieldsValues(Helper.MobileRuleDefinition.ServiceTypeId, Helper.MobileRuleDefinition.ChargingPolicyId, MultiNet.Business.TrafficDirection.OutGoing);
             return result;
         }
         private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(long accountId)
@@ -114,9 +114,9 @@ namespace Retail.EntitiesMigrator.Migrators
 
         const string query_GetONNet = @"
 SELECT distinct [AC_ACCOUNTNO]
-     
+      
       ,[DR_RATECONF]
-  FROM [vw_Multinet_OnNet_Rates]
+  FROM [vw_Multinet_Mobile_Rates]
 ";
 
     }
