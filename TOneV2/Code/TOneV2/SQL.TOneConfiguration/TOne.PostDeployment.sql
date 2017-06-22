@@ -245,13 +245,13 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('7EEDFB12-C71A-4EE0-AC97-0B553B4A0ED1','Carriers',null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,5,0),
-('9A21CD8B-67FA-4DCD-8852-616A99E42C82','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,4,0),
 
 ('D66F9910-48EC-4FFD-8A09-C7960A6EE434','Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',35,0),
 ('8F443685-3AC6-4C48-9298-017D74221EAF','Entities',null,'D66F9910-48EC-4FFD-8A09-C7960A6EE434',null,2,0),
 
 ('80E0E78C-F7DA-481C-B8D3-1FF61188263B','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',40,0),
-('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,2,0),
+('9C3816A9-EABF-423B-9364-EEBADAD22EB5','Configuration',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,5,0),
+('1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','Entities',null,'80E0E78C-F7DA-481C-B8D3-1FF61188263B',null,10,0),
 
 ('AA3D81AD-8F6A-442F-82C6-6AAE37AACA10','Management','Management',null,'/images/menu-icons/Management.png',45,0),
 
@@ -320,8 +320,9 @@ as (select * from (values
 
 ('AB3952E4-AC37-471E-80D6-7DB6ED3DCC07','Import Supplier Pricelist','Import Supplier Pricelist','#/view/WhS_SupplierPriceList/Views/SupplierPriceList','D66F9910-48EC-4FFD-8A09-C7960A6EE434','WhS_SupPL/SupplierPriceListTemplate/GetSupplierPriceListTemplateBySupplierId',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 
-('EDB49F55-E9E7-4779-9C77-44E89571A792','Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement'				,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
-('2FB24531-D8A8-4F8D-AE1D-1AA4236EF82A','Selling Products','Selling Products','#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement'								,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SellingProduct/GetFilteredSellingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+('EDB49F55-E9E7-4779-9C77-44E89571A792','Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement'				,'9C3816A9-EABF-423B-9364-EEBADAD22EB5','WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
+('2FB24531-D8A8-4F8D-AE1D-1AA4236EF82A','Selling Products','Selling Products','#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement'								,'9C3816A9-EABF-423B-9364-EEBADAD22EB5','WhS_BE/SellingProduct/GetFilteredSellingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+
 ('4DC9F2F1-2D59-4402-899F-AFD8C6EB113A','Codes','Sale Codes','#/view/WhS_BusinessEntity/Views/SaleCode/SaleCodeManagement'															,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleCode/GetFilteredSaleCodes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('4BDF2F4E-4CFB-487F-84F4-B5B7E74B8DC5','Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement'															,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleZone/GetFilteredSaleZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
 ('BC2A5FF3-3C15-42C8-BA07-DC5ABA9D735E','Rates','Sale Rates','#/view/WhS_BusinessEntity/Views/SaleRate/SaleRateManagement'															,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleRate/GetFilteredSaleRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
