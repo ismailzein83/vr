@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
-
+using Vanrise.Common;
 namespace Retail.Teles.Business
 {
     public class RevertUsersRGsRuntimeSettings : AccountProvisioner
@@ -23,19 +23,24 @@ namespace Retail.Teles.Business
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
             ChangeUsersRGsAccountState changeUsersRGsAccountState = null;
             long accountId = context.AccountId;
+            List<dynamic> changedUsers = null;
+            ChURGsActionCh oldChURGsActionCh = null;
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
             if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
             {
                 changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+                changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState,null, out oldChURGsActionCh);
+
             }
             else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
             {
+                SiteAccountMappingInfo siteAccountMappingInfo = accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
+                siteAccountMappingInfo.ThrowIfNull("siteAccountMappingInfo");
                 var companyAccount = accountBEManager.GetSelfOrParentAccountOfType(context.AccountBEDefinitionId, context.AccountId, definitionSettings.CompanyTypeId);
                 accountId = companyAccount.AccountId;
                 changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, companyAccount.AccountId);
+                changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState,siteAccountMappingInfo.TelesSiteId, out oldChURGsActionCh);
             }
-            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
-            ChURGsActionCh oldChURGsActionCh;
-            var changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState, out oldChURGsActionCh);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
 
             RevertBlockedUsers(context,definitionSettings.VRConnectionId, changedUsers);
@@ -72,7 +77,7 @@ namespace Retail.Teles.Business
                 }
             }
         }
-        List<dynamic> GetChangedUsers(IAccountProvisioningContext context, string actionType, Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState, out ChURGsActionCh oldChURGsActionCh)
+        List<dynamic> GetChangedUsers(IAccountProvisioningContext context, string actionType, Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState,dynamic siteId, out ChURGsActionCh oldChURGsActionCh)
         {
             List<dynamic> changedUsers = null;
             oldChURGsActionCh = null;
@@ -87,6 +92,10 @@ namespace Retail.Teles.Business
                         changedUsers = new List<dynamic>();
                         foreach (var changesByUser in chURGsActionCh.ChangesByUser)
                         {
+
+                            if (siteId != null && siteId != changesByUser.Value.SiteId)
+                                continue;
+                           
                             var user = GetUser(vrConnectionId, changesByUser.Key);
                             if (user != null)
                             {

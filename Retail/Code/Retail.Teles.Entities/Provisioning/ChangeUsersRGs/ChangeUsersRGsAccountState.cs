@@ -21,5 +21,6 @@ namespace Retail.Teles.Entities
     {
         public dynamic OriginalRGId { get; set; }
         public dynamic ChangedRGId { get; set; }
+        public dynamic SiteId { get; set; }
     }
 }

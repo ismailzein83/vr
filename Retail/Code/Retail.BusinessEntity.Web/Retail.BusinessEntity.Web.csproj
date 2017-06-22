@@ -212,6 +212,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FinancialAccountEffectiveEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\LogicalOperatorEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\PeriodicRecurringChargePeriodTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\TagetTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\TrafficDirectionEnum.js" />
@@ -226,9 +227,13 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\retail-be-accountbalancenotificationtype-searcheditor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSearchEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationTypeSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\AccountConditionItemEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-conditiongroup.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-filtergroup.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-financialaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\retail-be-accountcondition-subaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\AccountConditionItemEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\ConditionGroupAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FilterGroupAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\FinancialAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\SubAccountConditionTemplate.html" />
@@ -658,6 +663,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountActionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountBEDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountBEService.js" />
+    <Content Include="Retail_BusinessEntity\Services\AccountConditionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />

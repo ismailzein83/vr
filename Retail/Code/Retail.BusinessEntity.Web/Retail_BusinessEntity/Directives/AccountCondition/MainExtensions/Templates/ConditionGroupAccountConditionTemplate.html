@@ -1,0 +1,20 @@
+﻿
+<vr-columns width="1/2row">
+    <vr-select datasource="scopeModel.logicalOperators"
+                selectedvalues="scopeModel.selectedLogicalOperator"
+                datavaluefield="value"
+                datatextfield="description"
+                isrequired="true"
+                label="Operator">
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/2row" withemptyline>
+    <vr-button type="Add" data-onclick="ctrl.addAccountCondition" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow" >
+
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeAccountCondition" hidegridmenu>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>
