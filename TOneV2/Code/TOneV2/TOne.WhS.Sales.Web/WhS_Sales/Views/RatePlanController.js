@@ -48,9 +48,9 @@
         load();
 
         function defineScope() {
-            /* These vars are reversed with every onOwnerTypeChanged. Therefore, the selling product selector will show when the event first occurs */
-            $scope.showSellingProductSelector = false;
-            $scope.showCarrierAccountSelector = true;
+            /* These vars are reversed with every onOwnerTypeChanged. Therefore, the customer selector will show when the event first occurs */
+            $scope.showSellingProductSelector = true;
+            $scope.showCarrierAccountSelector = false;
             /* ***** */
 
             $scope.onOwnerTypeSelectorReady = function (api) {
@@ -180,15 +180,15 @@
                 currencySelectorReadyDeferred.resolve();
             };
 
-            $scope.onCurrencyChanged = function () {
+            $scope.onCurrencyChanged = function (selectedCurrency) {
+
                 if (draftCurrencyId == undefined)
                     return;
 
-                var selectedId = currencySelectorAPI.getSelectedIds();
-                if (selectedId == undefined)
+                if (selectedCurrency == undefined)
                     return;
 
-                if (selectedId == draftCurrencyId)
+                if (selectedCurrency.CurrencyId == draftCurrencyId)
                     return;
 
                 VRNotificationService.showConfirmation('Changing the currency will reset all new rates. Are you sure that you want to proceed?').then(function (isConfirmed) {
@@ -205,8 +205,8 @@
                         promises.push(doesOwnerDraftExistDeferred.promise);
 
                         saveChangesPromise.then(function () {
-                            WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(getOwnerId(), selectedId, UtilsService.getDateFromDateTime(new Date())).then(function () {
-                                draftCurrencyId = selectedId;
+                            WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(getOwnerId(), selectedCurrency.CurrencyId, UtilsService.getDateFromDateTime(new Date())).then(function () {
+                                draftCurrencyId = selectedCurrency.CurrencyId;
                                 defineNewRatesConvertedToCurrencyDeferred.resolve();
                             }).catch(function (error) {
                                 defineNewRatesConvertedToCurrencyDeferred.reject(error);
@@ -478,6 +478,7 @@
 
                             countryChanges = undefined;
                             $scope.showCancelButton = false;
+                            currencySelectorAPI.selectedCurrency(defaultCustomerCurrencyId);
 
                             if (isRoutingInfoDefined())
                                 loadRatePlan();
@@ -576,7 +577,7 @@
             promises.push(ownerTypeSelectorLoadDeferred.promise);
 
             ownerTypeSelectorReadyDeferred.promise.then(function () {
-                var ownerTypeSelectorPayload = { selectedIds: WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value };
+                var ownerTypeSelectorPayload = { selectedIds: WhS_BE_SalePriceListOwnerTypeEnum.Customer.value };
                 VRUIUtilsService.callDirectiveLoad(ownerTypeSelectorAPI, ownerTypeSelectorPayload, ownerTypeSelectorLoadDeferred);
             });
 
@@ -948,7 +949,7 @@
             promises.push(applyOfferDeferred.promise);
 
             getEntityIdsPromise.then(function (entityIds) {
-                
+
                 hasRunningProcessesForCustomerOrSellingProduct(entityIds, ownerId, ownerTypeValue).then(function (response) {
 
                     hasRunningProcessesDeferred.resolve();
