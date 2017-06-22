@@ -135,5 +135,11 @@ namespace Retail.EntitiesMigrator
         {
             Helper.NumberPlanId = (int)cboSNP.SelectedValue;
         }
+
+        private void btnImpOffNetRates_Click(object sender, EventArgs e)
+        {
+            OffNetRatesMigrator migrator = new OffNetRatesMigrator();
+            migrator.Execute();
+        }
     }
 }

@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="IncomingRatesDataManager.cs" />
     <Compile Include="InternationalRateDataManager.cs" />
+    <Compile Include="OffNetRatesDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

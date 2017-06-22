@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="Migrators\IncomingRatesMigrator.cs" />
     <Compile Include="Migrators\InternationalRatesMigrator.cs" />
+    <Compile Include="Migrators\OffNetRatesMigrator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Main.resx">

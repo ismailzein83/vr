@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnImportIntlRates = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.numInternationalChargingPolicy = new System.Windows.Forms.NumericUpDown();
             this.numOnNetChargingPolicy = new System.Windows.Forms.NumericUpDown();
@@ -40,15 +41,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numMobileChargingPolicy = new System.Windows.Forms.NumericUpDown();
             this.btnImportOutGoingRates = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnImportIntlRates = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cboCurrency = new System.Windows.Forms.ComboBox();
             this.cboSNP = new System.Windows.Forms.ComboBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.bsSNP = new System.Windows.Forms.BindingSource(this.components);
             this.bsCurrency = new System.Windows.Forms.BindingSource(this.components);
+            this.btnImpOffNetRates = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInternationalChargingPolicy)).BeginInit();
@@ -69,6 +70,7 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnImportOutGoingRates, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnImpOffNetRates, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -79,6 +81,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 44.25612F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(750, 531);
             this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // btnImportIntlRates
+            // 
+            this.btnImportIntlRates.Location = new System.Drawing.Point(3, 298);
+            this.btnImportIntlRates.Name = "btnImportIntlRates";
+            this.btnImportIntlRates.Size = new System.Drawing.Size(369, 61);
+            this.btnImportIntlRates.TabIndex = 4;
+            this.btnImportIntlRates.Text = "Import International Rates";
+            this.btnImportIntlRates.UseVisualStyleBackColor = true;
+            this.btnImportIntlRates.Click += new System.EventHandler(this.btnImportIntlRates_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -242,20 +254,6 @@
             this.btnImportOutGoingRates.UseVisualStyleBackColor = true;
             this.btnImportOutGoingRates.Click += new System.EventHandler(this.btnImportOutGoingRates_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // btnImportIntlRates
-            // 
-            this.btnImportIntlRates.Location = new System.Drawing.Point(3, 298);
-            this.btnImportIntlRates.Name = "btnImportIntlRates";
-            this.btnImportIntlRates.Size = new System.Drawing.Size(369, 61);
-            this.btnImportIntlRates.TabIndex = 4;
-            this.btnImportIntlRates.Text = "Import International Rates";
-            this.btnImportIntlRates.UseVisualStyleBackColor = true;
-            this.btnImportIntlRates.Click += new System.EventHandler(this.btnImportIntlRates_Click);
-            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 2;
@@ -313,6 +311,20 @@
             this.cboSNP.TabIndex = 3;
             this.cboSNP.SelectedIndexChanged += new System.EventHandler(this.cboSNP_SelectedIndexChanged);
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // btnImpOffNetRates
+            // 
+            this.btnImpOffNetRates.Location = new System.Drawing.Point(378, 137);
+            this.btnImpOffNetRates.Name = "btnImpOffNetRates";
+            this.btnImpOffNetRates.Size = new System.Drawing.Size(366, 61);
+            this.btnImpOffNetRates.TabIndex = 6;
+            this.btnImpOffNetRates.Text = "Import OffNet Rates";
+            this.btnImpOffNetRates.UseVisualStyleBackColor = true;
+            this.btnImpOffNetRates.Click += new System.EventHandler(this.btnImpOffNetRates_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,6 +371,7 @@
         private System.Windows.Forms.ComboBox cboSNP;
         private System.Windows.Forms.BindingSource bsSNP;
         private System.Windows.Forms.BindingSource bsCurrency;
+        private System.Windows.Forms.Button btnImpOffNetRates;
     }
 }
 
