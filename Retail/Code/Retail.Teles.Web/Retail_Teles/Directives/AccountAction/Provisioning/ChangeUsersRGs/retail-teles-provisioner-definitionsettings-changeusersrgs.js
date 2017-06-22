@@ -30,6 +30,12 @@
             var existingRoutingGroupConditionAPI;
             var existingRoutingGroupConditionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var companyTypeAPI;
+            var companyTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var siteTypeAPI;
+            var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
             var conectionTypeAPI;
             var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,6 +50,15 @@
                     conectionTypeReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onCompanyAccountTypeSelectorReady = function (api) {
+                    companyTypeAPI = api;
+                    companyTypeReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onSiteAccountTypeSelectorReady = function (api) {
+                    siteTypeAPI = api;
+                    siteTypeReadyDeferred.resolve();
+                };
                 $scope.scopeModel.onNewRoutingGroupConditionReady = function (api) {
                     newRoutingGroupConditionAPI = api;
                     newRoutingGroupConditionReadyDeferred.resolve();
@@ -120,6 +135,37 @@
                         });
                         return conectionTypeLoadDeferred.promise
                     }
+
+                    promises.push(loadCompanyTypes());
+
+                    function loadCompanyTypes() {
+                        var companyTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        companyTypeReadyDeferred.promise.then(function () {
+                            var companyTypePayload;
+                            if (provisionerDefinitionSettings != undefined) {
+                                companyTypePayload = { selectedIds: provisionerDefinitionSettings.CompanyTypeId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(companyTypeAPI, companyTypePayload, companyTypeLoadDeferred);
+                        });
+                        return companyTypeLoadDeferred.promise
+                    }
+
+                    promises.push(loadSiteTypes());
+
+                    function loadSiteTypes() {
+                        var siteTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        siteTypeReadyDeferred.promise.then(function () {
+                            var siteTypePayload;
+                            if (provisionerDefinitionSettings != undefined) {
+                                siteTypePayload = { selectedIds: provisionerDefinitionSettings.SiteTypeId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(siteTypeAPI, siteTypePayload, siteTypeLoadDeferred);
+                        });
+                        return siteTypeLoadDeferred.promise
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -139,7 +185,9 @@
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
                         NewRGNoMatchHandling: $scope.scopeModel.selectedNewRGNoMatchHandling.value,
                         NewRGMultiMatchHandling:$scope.scopeModel.selectedNewRGMultiMatchHandling.value,
-                        ExistingRGNoMatchHandling: $scope.scopeModel.selectedExistingRGNoMatchHandling.value
+                        ExistingRGNoMatchHandling: $scope.scopeModel.selectedExistingRGNoMatchHandling.value,
+                        CompanyTypeId: companyTypeAPI.getSelectedIds(),
+                        SiteTypeId :siteTypeAPI.getSelectedIds()
                     };
                     return data;
                 }

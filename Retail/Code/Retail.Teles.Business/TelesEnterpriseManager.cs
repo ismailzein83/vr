@@ -52,7 +52,6 @@ namespace Retail.Teles.Business
             cachedEnterprises.TryGetValue(enterpriseId, out enterpriseInfo);
             return enterpriseInfo;
         }
-
         public long CreateEnterprise(Guid vrConnectionId, string centrexFeatSet, Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Enterprise request)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
@@ -62,16 +61,6 @@ namespace Retail.Teles.Business
             var enterpriseId = response.Headers.Location.Segments.Last();
             enterpriseId.ThrowIfNull("enterpriseId", enterpriseId);
             return Convert.ToInt64(enterpriseId);
-        }
-        public long CreateSite(Guid vrConnectionId, dynamic enterpriseId, string centrexFeatSet, Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Site request)
-        {
-            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-            var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", enterpriseId, centrexFeatSet);
-            VRWebAPIResponse<string> response = telesRestConnection.Post<Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.Site, string>(actionPath, request, true);
-            response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
-            var siteId = response.Headers.Location.Segments.Last();
-            siteId.ThrowIfNull("siteId", siteId);
-            return Convert.ToInt64(siteId);
         }
         public long CreateScreenedNumber(Guid vrConnectionId, dynamic siteId, Retail.Teles.Business.Provisioning.ProvisionAccountRuntimeSettings.ScreenedNumber request)
         {
@@ -98,28 +87,12 @@ namespace Retail.Teles.Business
                 return string.Format("{0} (Name unavailable)", enterpriseId);
             }
         }
-        public IEnumerable<dynamic> GetSites(Guid vrConnectionId, dynamic telesEnterpriseId)
-        {
-            var actionPath = string.Format("/domain/{0}/sub", telesEnterpriseId);
-            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-
-            List<dynamic> sites = telesRestConnection.Get<List<dynamic>>(actionPath);
-            return sites;
-        }
         public IEnumerable<dynamic> GetUsers(Guid vrConnectionId, dynamic siteId)
         {
             var actionPath = string.Format("/domain/{0}/user", siteId);
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
             List<dynamic> sites = telesRestConnection.Get<List<dynamic>>(actionPath);
             return sites;
-        }
-        public Dictionary<dynamic, dynamic> GetSiteRoutingGroups(Guid vrConnectionId, dynamic siteId)
-        {
-            var actionPath = string.Format("/domain/{0}/routGroup", siteId);
-            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-
-            List<dynamic> routingGroups = telesRestConnection.Get<List<dynamic>>(actionPath);
-            return routingGroups.ToDictionary(x => (dynamic)x.id, x => x);
         }
         public dynamic UpdateUser(Guid vrConnectionId, dynamic user)
         {
@@ -135,6 +108,7 @@ namespace Retail.Teles.Business
 
             return telesRestConnection.Get<dynamic>(actionPath);
         }
+
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
@@ -169,14 +143,6 @@ namespace Retail.Teles.Business
             }
             return result;
 
-        }
-        public bool TryMapSiteToAccount(Guid accountBEDefinitionId, long accountId, dynamic telesSiteId, ProvisionStatus? status = null)
-        {
-
-            SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesSiteId = telesSiteId, Status = status };
-
-            return _accountBEManager.UpdateAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId,
-                siteAccountMappingInfo);
         }
         public Dictionary<dynamic, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
@@ -219,7 +185,13 @@ namespace Retail.Teles.Business
                 return enterprisesByAccounts;
             });
         }
-     
+        public dynamic GetParentAccountEnterpriseId(Guid accountBEDefinitionId, long accountId)
+        {
+            var parentAccount = _accountBEManager.GetParentAccount(accountBEDefinitionId, accountId);
+            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentAccount);
+            enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo", accountId);
+            return enterpriseAccountMappingInfo.TelesEnterpriseId;
+        }
         public bool DoesUserHaveExecutePermission(Guid accountBEDefinitionId)
         {
             var accountDefinitionActions = new AccountBEDefinitionManager().GetAccountActionDefinitions(accountBEDefinitionId);

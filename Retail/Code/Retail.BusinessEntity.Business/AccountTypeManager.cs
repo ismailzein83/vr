@@ -26,7 +26,12 @@ namespace Retail.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedAccountTypes.ToBigResult(input, filterExpression, AccountTypeDetailMapper));
         }
-
+        public Guid GetAccountBEDefinitionId(Guid accountTypeId)
+        {
+            var accountType = GetAccountType(accountTypeId);
+            accountType.ThrowIfNull("accountType", accountTypeId);
+            return accountType.AccountBEDefinitionId;
+        }
         public AccountType GetAccountType(Guid accountTypeId)
         {
             return this.GetCachedAccountTypesWithHidden().GetRecord(accountTypeId);

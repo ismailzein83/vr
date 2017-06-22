@@ -19,7 +19,8 @@ namespace Retail.Teles.Business
             get { return new Guid("7ACEF5E4-0392-445F-97A9-C7251A66DFFC"); }
         }
         public Guid VRConnectionId { get; set; }
-
+        public Guid CompanyTypeId { get; set; }
+        public Guid SiteTypeId { get; set; }
         public bool SaveChangesToAccountState { get; set; }
 
         /// <summary>

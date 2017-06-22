@@ -285,9 +285,8 @@ namespace Retail.BusinessEntity.Business
 
             if (gridColumnDefinition.SubAccountsAvailabilityCondition != null)
             {
-                AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
-                context.Account = new AccountBEManager().GetAccount(accountBEDefinitionId, parentAccountId.Value);
-                return gridColumnDefinition.SubAccountsAvailabilityCondition.Evaluate(context);
+                AccountBEManager accountBEManager = new Business.AccountBEManager();
+                return accountBEManager.EvaluateAccountCondition(accountBEDefinitionId, parentAccountId.Value, gridColumnDefinition.SubAccountsAvailabilityCondition);
             }
 
             return true;
@@ -320,7 +319,10 @@ namespace Retail.BusinessEntity.Business
         private bool IsViewAvailable(AccountViewDefinition accountViewDefinition, Account account)
         {
             if (accountViewDefinition.AvailabilityCondition != null)
-                return accountViewDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
+            {
+                AccountBEManager accountBEManager = new AccountBEManager();
+                return accountBEManager.EvaluateAccountCondition(account, accountViewDefinition.AvailabilityCondition);
+            }
             return true;
         }
 
@@ -333,7 +335,10 @@ namespace Retail.BusinessEntity.Business
         private bool IsActionAvailable(AccountActionDefinition accountActionDefinition, Account account)
         {
             if (accountActionDefinition.AvailabilityCondition != null)
-                return accountActionDefinition.AvailabilityCondition.Evaluate(new AccountConditionEvaluationContext() { Account = account });
+            {
+                AccountBEManager accountBEManager = new AccountBEManager();
+                return accountBEManager.EvaluateAccountCondition(account, accountActionDefinition.AvailabilityCondition);
+            }
             return true;
         }
 

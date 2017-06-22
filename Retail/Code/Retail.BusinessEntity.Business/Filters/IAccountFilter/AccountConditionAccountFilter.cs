@@ -15,11 +15,7 @@ namespace Retail.BusinessEntity.Business
         {
             if (context.Account != null && this.AccountCondition != null)
             {
-                AccountConditionEvaluationContext accountConditionEvaluationContext = new AccountConditionEvaluationContext
-                    {
-                        Account = context.Account
-                    };
-               return !this.AccountCondition.Evaluate(accountConditionEvaluationContext);
+                return !new AccountBEManager().EvaluateAccountCondition(context.Account, this.AccountCondition);
             }
             return false;
         }

@@ -30,5 +30,12 @@ namespace Retail.Teles.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.MapEnterpriseToAccount(input);
         }
+        [HttpGet]
+        [Route("GetParentAccountEnterpriseId")]
+        public long GetParentAccountEnterpriseId(Guid accountBEDefinitionId, long accountId)
+        {
+            return _manager.GetParentAccountEnterpriseId(accountBEDefinitionId, accountId);
+        }
+      
     }
 }

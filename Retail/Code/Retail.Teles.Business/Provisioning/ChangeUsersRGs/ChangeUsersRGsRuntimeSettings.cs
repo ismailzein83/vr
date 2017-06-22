@@ -16,40 +16,73 @@ namespace Retail.Teles.Business
     {
         TelesEnterpriseManager telesEnterpriseManager = new TelesEnterpriseManager();
         AccountBEManager accountBEManager = new AccountBEManager();
+        TelesSiteManager telesSiteManager = new TelesSiteManager();
+
         public override void Execute(IAccountProvisioningContext context)
         {
-            var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
+           var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
 
-            var enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
-
-            if (enterpriseAccountMappingInfo != null)
+            var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            long accountId = context.AccountId;
+            ChangeUsersRGsAccountState changeUsersRGsAccountState = null;
+            if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
             {
-                var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
-                if (changeUsersRGsAccountState == null)
-                    changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
-                if (changeUsersRGsAccountState.ChangesByActionType == null)
-                    changeUsersRGsAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
-
-                ChURGsActionCh chURGsActionCh;
-                ChURGsActionCh newChURGsActionCh = new ChURGsActionCh();
-                if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
+                changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+            }
+            else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
+            {
+                var companyAccount = accountBEManager.GetSelfOrParentAccountOfType(context.AccountBEDefinitionId, context.AccountId, definitionSettings.CompanyTypeId);
+                accountId = companyAccount.AccountId;
+                changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, companyAccount.AccountId);
+            }
+            
+            if (changeUsersRGsAccountState == null)
+                changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
+            if (changeUsersRGsAccountState.ChangesByActionType == null)
+                changeUsersRGsAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
+            ChURGsActionCh chURGsActionCh;
+            ChURGsActionCh newChURGsActionCh = new ChURGsActionCh();
+            if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
+            {
+                chURGsActionCh = new ChURGsActionCh();
+                changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, chURGsActionCh);
+            }
+          
+            
+            
+            if(account.TypeId == definitionSettings.CompanyTypeId) // Process if company
+            {
+                var enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
+                if (enterpriseAccountMappingInfo != null)
                 {
-                    chURGsActionCh = new ChURGsActionCh();
-                    changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, chURGsActionCh);
-                }
-
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading all sites for enterpriseId {0}.", enterpriseAccountMappingInfo.TelesEnterpriseId));
-                var sites = GetSites(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("All sites for enterpriseId {0} loaded.", enterpriseAccountMappingInfo.TelesEnterpriseId));
-                if (sites != null)
-                {
-                    var usersToBlock = GetUsersToBlockForeachSite(context, definitionSettings, sites, chURGsActionCh, newChURGsActionCh);
-                    UpdateBlockedUsers(definitionSettings, usersToBlock);
-                    
-                    if (chURGsActionCh != null && chURGsActionCh.ChangesByUser != null && chURGsActionCh.ChangesByUser.Count != 0)
-                        UpdateBlockedUsersState(context, changeUsersRGsAccountState, newChURGsActionCh);
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading all sites for enterpriseId {0}.", enterpriseAccountMappingInfo.TelesEnterpriseId));
+                    var sites = GetSites(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("All sites for enterpriseId {0} loaded.", enterpriseAccountMappingInfo.TelesEnterpriseId));
+                    if (sites != null)
+                    {
+                        var usersToBlock = GetUsersToBlockForeachSite(context, definitionSettings, sites, chURGsActionCh, newChURGsActionCh);
+                        UpdateBlockedUsers(definitionSettings, usersToBlock);
+                    }
                 }
             }
+            else if (account.TypeId == definitionSettings.SiteTypeId) // Process if site
+            {
+                var siteAccountMappingInfo = new AccountBEManager().GetExtendedSettings<SiteAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
+                if (siteAccountMappingInfo != null)
+                {
+                    var siteName = telesSiteManager.GetSiteName(definitionSettings.VRConnectionId, siteAccountMappingInfo.TelesSiteId);
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing site {0}.", siteName));
+                    List<dynamic> usersToBlock = new List<dynamic>();
+                    Dictionary<dynamic, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, siteAccountMappingInfo.TelesSiteId);
+                    GetUsersToBlock(context, definitionSettings, usersToBlock, siteRoutingGroups, siteAccountMappingInfo.TelesSiteId, chURGsActionCh, newChURGsActionCh);
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing site {0}.", siteName));
+                    UpdateBlockedUsers(definitionSettings, usersToBlock);
+
+                }
+               
+            }
+            if (chURGsActionCh != null && chURGsActionCh.ChangesByUser != null && chURGsActionCh.ChangesByUser.Count != 0)
+                UpdateBlockedUsersState(context, accountId, changeUsersRGsAccountState, newChURGsActionCh);
         }
         List<dynamic> GetUsersToBlockForeachSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, ChURGsActionCh chURGsActionCh, ChURGsActionCh newChURGsActionCh)
         {
@@ -189,11 +222,11 @@ namespace Retail.Teles.Business
                 }
             }
         }
-        void UpdateBlockedUsersState(IAccountProvisioningContext context, ChangeUsersRGsAccountState changeUsersRGsAccountState,ChURGsActionCh newChURGsActionCh)
+        void UpdateBlockedUsersState(IAccountProvisioningContext context,long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState,ChURGsActionCh newChURGsActionCh)
         {
             if (changeUsersRGsAccountState != null)
             {
-                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState))
+                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId, changeUsersRGsAccountState))
                 {
                     context.TrackActionExecuted(null, newChURGsActionCh);
                 };
@@ -202,7 +235,7 @@ namespace Retail.Teles.Business
         }
         IEnumerable<dynamic> GetSites(Guid vrConnectionId, dynamic telesEnterpriseId)
         {
-            return telesEnterpriseManager.GetSites(vrConnectionId, telesEnterpriseId);
+            return telesSiteManager.GetSites(vrConnectionId, telesEnterpriseId);
         }
         IEnumerable<dynamic> GetUsers(Guid vrConnectionId, dynamic siteId)
         {
@@ -210,7 +243,7 @@ namespace Retail.Teles.Business
         }
         Dictionary<dynamic, dynamic> GetSiteRoutingGroups(Guid vrConnectionId, dynamic siteId)
         {
-            return  telesEnterpriseManager.GetSiteRoutingGroups(vrConnectionId, siteId);
+            return telesSiteManager.GetSiteRoutingGroups(vrConnectionId, siteId);
         }
         void UpdateUser(Guid vrConnectionId, dynamic user)
         {

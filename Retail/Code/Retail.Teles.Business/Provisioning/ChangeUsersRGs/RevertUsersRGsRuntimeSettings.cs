@@ -20,33 +20,42 @@ namespace Retail.Teles.Business
             if (definitionSettings == null)
                 throw new NullReferenceException("definitionSettings");
 
-            var accountExtendedSettings = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
-
+            var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            ChangeUsersRGsAccountState changeUsersRGsAccountState = null;
+            long accountId = context.AccountId;
+            if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
+            {
+                changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+            }
+            else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
+            {
+                var companyAccount = accountBEManager.GetSelfOrParentAccountOfType(context.AccountBEDefinitionId, context.AccountId, definitionSettings.CompanyTypeId);
+                accountId = companyAccount.AccountId;
+                changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, companyAccount.AccountId);
+            }
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
-
-            var changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
             ChURGsActionCh oldChURGsActionCh;
             var changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState, out oldChURGsActionCh);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
 
             RevertBlockedUsers(context,definitionSettings.VRConnectionId, changedUsers);
-            RevertBlockedUsersState(context, changeUsersRGsAccountState, oldChURGsActionCh);
+            RevertBlockedUsersState(context,accountId, changeUsersRGsAccountState, oldChURGsActionCh);
            
         }
 
-        void RevertBlockedUsersState(IAccountProvisioningContext context, ChangeUsersRGsAccountState changeUsersRGsAccountState, ChURGsActionCh oldChURGsActionCh)
+        void RevertBlockedUsersState(IAccountProvisioningContext context,long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState, ChURGsActionCh oldChURGsActionCh)
         {
-            var currentUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+            var currentUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
 
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null && changeUsersRGsAccountState.ChangesByActionType.Count == 0)
             {
-                if (accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId))
+                if (accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId))
                 {
                     context.TrackActionExecuted(null, oldChURGsActionCh);
                 };
             }else
             {
-                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, changeUsersRGsAccountState))
+                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId, changeUsersRGsAccountState))
                 {
                     context.TrackActionExecuted(null, oldChURGsActionCh);
                 };

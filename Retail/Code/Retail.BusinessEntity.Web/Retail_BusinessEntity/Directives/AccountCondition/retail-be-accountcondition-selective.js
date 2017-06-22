@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountConditionSelectiveDirective.$inject = ['Retail_BE_AccountConditionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    AccountConditionSelectiveDirective.$inject = ['Retail_BE_AccountConditionAPIService', 'UtilsService', 'VRUIUtilsService','Retail_BE_TargetTypsEnum'];
 
-    function AccountConditionSelectiveDirective(Retail_BE_AccountConditionAPIService, UtilsService, VRUIUtilsService) {
+    function AccountConditionSelectiveDirective(Retail_BE_AccountConditionAPIService, UtilsService, VRUIUtilsService, Retail_BE_TargetTypsEnum) {
         return {
             restrict: "E",
             scope: {
@@ -37,6 +37,7 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
+                $scope.scopeModel.targetTypes = UtilsService.getArrayEnum(Retail_BE_TargetTypsEnum);;
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -72,6 +73,8 @@
                     promises.push(getAccountConditionTemplateConfigsPromise);
 
                     if (accountCondition != undefined) {
+                        $scope.scopeModel.selectedTargetType = UtilsService.getItemByVal($scope.scopeModel.targetTypes, accountCondition.TargetType, 'value');
+
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -118,6 +121,7 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                            data.TargetType = $scope.scopeModel.selectedTargetType.value;
                         }
                     }
                     return data;

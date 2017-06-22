@@ -14,6 +14,8 @@ namespace Retail.Teles.Business.Provisioning
     public class ProvisionAccountRuntimeSettings : AccountProvisioner
     {
         TelesEnterpriseManager _telesEnterpriseManager = new TelesEnterpriseManager();
+        TelesSiteManager _telesSiteManager = new TelesSiteManager();
+
         AccountBEManager _accountBEManager = new AccountBEManager();
         DIDManager _didManager = new DIDManager();
         public string EnterpriseName { get; set; }
@@ -71,12 +73,12 @@ namespace Retail.Teles.Business.Provisioning
                         registrarEnabled = true,
                         ringBackUri = "ringback",
                     };
-                    dynamic siteId = _telesEnterpriseManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
-                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Started);
+                    dynamic siteId = _telesSiteManager.CreateSite(definitionSettings.VRConnectionId, enterpriseId, Settings.CentrexFeatSet, newsite);
+                    _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Started);
                     _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, site.AccountId, "Provision", string.Format("Teles site {0}", site.Name), null);
                     context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
                     CreateScreendedNumbers(context, definitionSettings, site.AccountId, siteId);
-                    _telesEnterpriseManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
+                    _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
                 }
 
             }

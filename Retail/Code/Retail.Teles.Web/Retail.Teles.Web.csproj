@@ -134,6 +134,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\TelesEnterpriseController.cs" />
     <Compile Include="Controllers\TelesRoutingGroupController.cs" />
+    <Compile Include="Controllers\TelesSiteController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -160,8 +161,12 @@
     <Content Include="Retail_Teles\Constant\NewRGMultiMatchHandlingEnum.js" />
     <Content Include="Retail_Teles\Constant\NewRGNoMatchHandlingEnum.js" />
     <Content Include="Retail_Teles\Constant\RoutingGroupFilterOperatorEnum.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesSiteEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesAccountEditorController.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelessite.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesSiteEditor.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesSiteActionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountActionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesAccountEditor.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\retail-teles-provisioner-definitionsettings-revertusersrgs.js" />
@@ -189,9 +194,11 @@
     <Content Include="Retail_Teles\Directives\TelesEnterprises\MainExtensions\retail-teles-accountextrafield-enterprise.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\MainExtensions\Templates\EnterpriseAccountExtraFieldTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprisebedefinition-editor.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-sites-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprises-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\TelesEnterpriseBEDefinitionEditorTemplate.html" />
     <Content Include="Retail_Teles\ModuleInitialization.js" />
+    <Content Include="Retail_Teles\Services\APIServices\SiteAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\EnterpriseAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\TelesRoutingGroupAPIService.js" />
     <Content Include="Retail_Teles\Services\TelesAccountActionService.js" />

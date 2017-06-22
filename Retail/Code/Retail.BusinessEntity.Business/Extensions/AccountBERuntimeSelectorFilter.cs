@@ -20,9 +20,7 @@ namespace Retail.BusinessEntity.Business
             long accountId;
             if (!long.TryParse(context.BusinessEntityId.ToString(), out accountId))
                 return false;
-
-            var accountConditionEvaluationContext = new AccountConditionEvaluationContext(context.BusinessEntityDefinitionId, accountId);
-            return AccountCondition.Evaluate(accountConditionEvaluationContext);
+            return new AccountBEManager().EvaluateAccountCondition(context.BusinessEntityDefinitionId, accountId, AccountCondition);
         }
     }
 }

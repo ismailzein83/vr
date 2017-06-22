@@ -246,16 +246,52 @@ namespace Retail.BusinessEntity.Business
         {
             if (accountCondition == null)
                 return true;
-            AccountConditionEvaluationContext context = new AccountConditionEvaluationContext();
-            context.Account = account;
+            AccountConditionEvaluationContext context = PrepareAccountConditionEvaluationContext(account, accountCondition);
             return accountCondition.Evaluate(context);
         }
         public bool EvaluateAccountCondition(Guid accountBEDefinitionId, long accountId, AccountCondition accountCondition)
         {
             if (accountCondition == null)
                 return true;
-            AccountConditionEvaluationContext context = new AccountConditionEvaluationContext(accountBEDefinitionId, accountId);
+            AccountConditionEvaluationContext context = PrepareAccountConditionEvaluationContext(accountBEDefinitionId, accountId, accountCondition);
             return accountCondition.Evaluate(context);
+        }
+        private AccountConditionEvaluationContext PrepareAccountConditionEvaluationContext(Account account, AccountCondition accountCondition)
+        {
+            switch (accountCondition.TargetType)
+            {
+                case TargetType.Parent:
+                    var parentAccount = GetParentAccount(account);
+                    return new AccountConditionEvaluationContext { Account = parentAccount };
+                case TargetType.Self: 
+                    return new AccountConditionEvaluationContext { Account = account };
+            }
+            return null;
+        }
+        private AccountConditionEvaluationContext PrepareAccountConditionEvaluationContext(Guid accountBEDefinitionId, long accountId, AccountCondition accountCondition)
+        {
+            switch (accountCondition.TargetType)
+            {
+                case TargetType.Parent:
+                    var parentAccount = GetParentAccount(accountBEDefinitionId, accountId);
+                    return new AccountConditionEvaluationContext { Account = parentAccount };
+                case TargetType.Self: return new AccountConditionEvaluationContext(accountBEDefinitionId, accountId);
+            }
+            return null;
+        }
+        public Account GetParentAccount(Account account)
+        {
+            if (!account.ParentAccountId.HasValue)
+                return null;
+            var accountBEDefinitionId = new AccountTypeManager().GetAccountBEDefinitionId(account.TypeId);
+            return GetAccount(accountBEDefinitionId, account.ParentAccountId.Value);
+        }
+        public Account GetParentAccount(Guid accountBEDefinitionId, long accountId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            if (!account.ParentAccountId.HasValue)
+                return null;
+            return GetAccount(accountBEDefinitionId, account.ParentAccountId.Value);
         }
         public bool HasAccountPayment(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountPayment accountPayment)
         {

@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBEActionTypes\MappingTelesSiteActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
     <Compile Include="EnterpriseBEDefinitionFilter.cs" />
     <Compile Include="EnterpriseNotMappedToAccountFilter.cs" />
@@ -86,14 +87,17 @@
     <Compile Include="ProvisioningAccount\ProvisionAccountRuntimeSettings.cs" />
     <Compile Include="Provisioning\RoutingGroupConditionContext.cs" />
     <Compile Include="RoutingGroupCondition\RoutingGroupFilter.cs" />
+    <Compile Include="SitesNotMappedToAccountFilter.cs" />
     <Compile Include="TelesEnterpriseBEDefinitionSettings.cs" />
     <Compile Include="TelesEnterpriseExtraFieldDefinition.cs" />
     <Compile Include="TelesEnterpriseFilterContext.cs" />
     <Compile Include="IsAccountProvisioned.cs" />
     <Compile Include="TelesEnterpriseGenericField.cs" />
     <Compile Include="TelesEnterpriseManager.cs" />
+    <Compile Include="TelesEnterpriseSiteFilterContext.cs" />
     <Compile Include="TelesRestConnection.cs" />
     <Compile Include="TelesRoutingGroupManager.cs" />
+    <Compile Include="TelesSiteManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">

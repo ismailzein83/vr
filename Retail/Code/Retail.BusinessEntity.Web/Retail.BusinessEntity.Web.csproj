@@ -213,6 +213,7 @@
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FinancialAccountEffectiveEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\PeriodicRecurringChargePeriodTypeEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\TagetTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\TrafficDirectionEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ChargeTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\ConnectionTypeEnum.js" />

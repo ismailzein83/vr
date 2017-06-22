@@ -3,9 +3,20 @@
     <vr-columns width="1/3row">
         <vr-switch value="scopeModel.saveChangesToAccountState" label="Save Changes To Account State"></vr-switch>
     </vr-columns>
+   
     <vr-columns width="1/3row" ng-if="scopeModel.saveChangesToAccountState">
         <vr-textbox value="scopeModel.actionType" label="Action Type" isrequired="true"></vr-textbox>
     </vr-columns>
+    <retail-be-accounttype-selector on-ready="scopeModel.onCompanyAccountTypeSelectorReady"
+                                    normal-col-num="6"
+                                    customlabel="Company Account Type"
+                                    isrequired="true">
+    </retail-be-accounttype-selector>
+    <retail-be-accounttype-selector on-ready="scopeModel.onSiteAccountTypeSelectorReady"
+                                    customlabel="Site Account Type"
+                                    normal-col-num="6"
+                                    isrequired="true">
+    </retail-be-accounttype-selector>
 </vr-row>
 <vr-row>
     <vr-section title="Existing Routing Group Condition">
