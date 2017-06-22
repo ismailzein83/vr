@@ -767,47 +767,60 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         #region IReprocessStageActivator
         public void CommitChanges(Vanrise.Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
         {
-            throw new NotImplementedException();
         }
 
         public void DropStorage(Vanrise.Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
         {
-            throw new NotImplementedException();
         }
 
         public void ExecuteStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
-            throw new NotImplementedException();
+            decimal durationInSeconds;
+            context.DoWhilePreviousRunning(() =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = context.InputQueue.TryDequeue((reprocessBatch) =>
+                    {
+                        GenericDataRecordBatch genericDataRecordBatch = reprocessBatch as GenericDataRecordBatch;
+                        if (genericDataRecordBatch == null)
+                            throw new Exception(String.Format("reprocessBatch should be of type 'Reprocess.Entities.GenericDataRecordBatch'. and not of type '{0}'", reprocessBatch.GetType()));
+
+
+                    });
+                } while (!context.ShouldStop() && hasItem);
+
+            });
         }
 
         public void FinalizeStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorFinalizingContext context)
         {
-            throw new NotImplementedException();
         }
 
         public List<string> GetOutputStages(List<string> stageNames)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Vanrise.Queueing.BaseQueue<Vanrise.Reprocess.Entities.IReprocessBatch> GetQueue()
         {
-            throw new NotImplementedException();
+            return new Vanrise.Queueing.MemoryQueue<Vanrise.Reprocess.Entities.IReprocessBatch>();
         }
 
         public List<Vanrise.Reprocess.Entities.BatchRecord> GetStageBatchRecords(Vanrise.Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public int? GetStorageRowCount(Vanrise.Reprocess.Entities.IReprocessStageActivatorGetStorageRowCountContext context)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public object InitializeStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
         {
-            throw new NotImplementedException();
+            return null;
         }
         #endregion
 
