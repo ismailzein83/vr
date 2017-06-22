@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Caching;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
-using Vanrise.Common;
-using Vanrise.GenericData.Entities;
-using Vanrise.Common.Business;
 
 namespace Vanrise.Integration.Business
 {
@@ -458,8 +455,5 @@ namespace Vanrise.Integration.Business
         }
 
         #endregion
-
-
-
     }
 }
