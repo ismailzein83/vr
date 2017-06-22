@@ -32,6 +32,9 @@ CloudXPoint.PostDeployment.sql
 CloudXPoint_INSOFT
 INSOFT.PostDeployment.sql
 
+TOneDefaultData
+TOne.DefaultData.PostDeployment.sql
+
 Retail
 VR_NumberingPlan.PostDeployment.sql
 VR_BEBridge.PostDeployment.sql
