@@ -133,16 +133,13 @@
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-            var validatorStartTag = "";
-            var validatorEndTag = "";
+            var customvalidate = '';
             if (attrs.customvalidate != undefined) {
-                validatorStartTag = '<vr-validator validate="ctrl.customvalidate()">';
-                validatorEndTag = '</vr-validator>';
+                customvalidate=' customvalidate="ctrl.customvalidate()"';
             }
 
             return '<div>'
-                         + validatorStartTag
-                             + '<vr-select on-ready="ctrl.onSelectorReady"'
+                        + '<vr-select on-ready="ctrl.onSelectorReady"'
                                  + ' datasource="ctrl.datasource"'
                                  + ' selectedvalues="ctrl.selectedvalues"'
                                  + ' onselectionchanged="ctrl.onselectionchanged"'
@@ -151,13 +148,13 @@
                                  + ' ondeselectitem="ctrl.ondeselectitem"'
                                  + ' datavaluefield="DataRecordStorageId"'
                                  + ' datatextfield="Name"'
+                                 + ' ' + customvalidate
                                  + ' ' + multipleselection
                                  + ' ' + hideselectedvaluessection
                                  + ' isrequired="ctrl.isrequired"'
                                  + ' ' + lableplace
                                  + ' entityName="' + label + '"'
-                             + '</vr-select>'
-                         + validatorEndTag
+                        + '</vr-select>'
                  + '</div>';
         }
     }
