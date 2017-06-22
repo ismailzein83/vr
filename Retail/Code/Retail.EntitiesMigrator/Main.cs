@@ -42,6 +42,11 @@ namespace Retail.EntitiesMigrator
 
             Helper.NumberPlanId = (int)cboSNP.SelectedValue;
             Helper.CurrencyId = (int)cboCurrency.SelectedValue;
+
+            Helper.MobileRuleDefinition.ChargingPolicyId = (int)numMobileChargingPolicy.Value;
+            Helper.OffNetRuleDefinition.ChargingPolicyId = (int)numOffNetChargingPolicy.Value;
+            Helper.OnNetRuleDefinition.ChargingPolicyId = (int)numOnNetChargingPolicy.Value;
+            Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value; Helper.CurrencyId = (int)cboCurrency.SelectedValue;
         }
 
         private void btnImportOutGoingRates_Click(object sender, EventArgs e)

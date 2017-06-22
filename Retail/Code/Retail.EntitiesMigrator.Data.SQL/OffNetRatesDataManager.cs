@@ -25,7 +25,7 @@ namespace Retail.EntitiesMigrator.Data.SQL
             {
                 return new OffNetRate
                 {
-                    SourceBranchId = reader["AC_ACCOUNTNO"] as string,
+                    SourceBranchId = reader["AC_ACCOUNTNO"].ToString(),
                     OperatorName = reader["DES_DESTINATIONNAME"] as string,
                     RateDetail = DataHelper.ParseRateDetails(reader["DR_RATECONF"] as string)
                 };
