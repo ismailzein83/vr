@@ -12,6 +12,12 @@ using Vanrise.Rules.Entities;
 using Retail.EntitiesMigrator.Entities;
 using Vanrise.Rules.Pricing.MainExtensions.RateValue;
 using Vanrise.Rules.Pricing.MainExtensions.Tariff;
+using System.Configuration;
+using Retail.EntitiesMigrator.Migrators;
+using Vanrise.Common;
+using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.MainExtensions.PackageTypes;
+using Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators;
 
 namespace Retail.EntitiesMigrator
 {
@@ -20,6 +26,13 @@ namespace Retail.EntitiesMigrator
     {
         public static int NumberPlanId = 1;
         public static int CurrencyId = 1;
+
+        public static int PricingUnit = 60;
+
+        public static string RatesConnectionString = ConfigurationManager.ConnectionStrings["RatesDBConnString"].ConnectionString;
+
+        public static Guid OTC_Package_DefinitionId = new Guid("3140a293-691d-4f24-b3e6-3ed7508278ab");
+        public static Guid LineRent_Package_DefinitionId = new Guid("30f0886c-93fd-4a8c-931f-dbe3a4f19e1e");
 
         public static Guid InternationalServiceTypeId = new Guid("dc1e29af-a172-4539-88ab-24210d7b0fea");
         public static Guid MobileServiceTypeId = new Guid("e99f5894-9175-421a-b0b9-e0c8d6efa126");
@@ -188,7 +201,8 @@ namespace Retail.EntitiesMigrator
                 {
                     CurrencyId = Helper.CurrencyId,
                     FractionUnit = rateDetails.FractionUnit,
-                    PricingUnit = 60
+                    PricingUnit = Helper.PricingUnit,
+                    FirstPeriodRateType = FirstPeriodRateType.EffectiveRate
                 },
                 DefinitionId = ruleDefinitionDetails.TariffDefinitionId,
                 Description = "Migrated Tariff Rule",
@@ -211,6 +225,76 @@ namespace Retail.EntitiesMigrator
 
                 Values = new List<object> { value }
             });
+        }
+        public static string GetPackageName(MonthlyCharge MonthlyCharge)
+        {
+            return string.Format("{0} {1}", Utilities.GetEnumDescription<MonthlyChargeType>(MonthlyCharge.Type), MonthlyCharge.Price);
+        }
+
+        internal static Package CreatePackage(MonthlyCharge monthlyCharge, string name)
+        {
+            switch (monthlyCharge.Type)
+            {
+                case MonthlyChargeType.OTC:
+                    return new Package
+                    {
+                        Name = name,
+                        Settings = new PackageSettings
+                        {
+                            ExtendedSettings = new RecurChargePackageSettings
+                            {
+                                Evaluator = new OneTimeRecurringChargeEvaluator
+                                {
+                                    CurrencyId = Helper.CurrencyId,
+                                    Price = monthlyCharge.Price
+                                }
+                            },
+                            PackageDefinitionId = OTC_Package_DefinitionId
+                        }
+                    };
+                case MonthlyChargeType.LineRent:
+                    return new Package
+                    {
+                        Name = name,
+                        Settings = new PackageSettings
+                        {
+                            ExtendedSettings = new RecurChargePackageSettings
+                            {
+                                Evaluator = new PeriodicRecurringChargeEvaluator
+                                {
+                                    CurrencyId = Helper.CurrencyId,
+                                    Price = monthlyCharge.Price,
+                                    PeriodType = PeriodicRecurringChargePeriodType.Monthly
+                                }
+                            },
+                            PackageDefinitionId = LineRent_Package_DefinitionId
+                        }
+                    };
+            }
+
+            return null;
+        }
+
+        internal static AccountPackageToAdd GetAccountPackageToAdd(MonthlyCharge monthlyCharge, long accountId, int packageId)
+        {
+            AccountPackageToAdd accountPackageToAdd = new AccountPackageToAdd
+            {
+                AccountBEDefinitionId = AccountBEDefinitionId,
+                AccountId = accountId,
+                PackageId = packageId,
+                BED = monthlyCharge.ActivationDate
+            };
+            switch (monthlyCharge.Type)
+            {
+                case MonthlyChargeType.OTC:
+                    accountPackageToAdd.EED = accountPackageToAdd.BED.AddMonths(1);
+                    break;
+                case MonthlyChargeType.LineRent:
+                    accountPackageToAdd.EED = null;
+                    break;
+            }
+
+            return accountPackageToAdd;
         }
     }
 }

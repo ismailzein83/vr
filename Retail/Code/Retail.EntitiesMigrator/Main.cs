@@ -52,8 +52,8 @@ namespace Retail.EntitiesMigrator
         private void btnImportOutGoingRates_Click(object sender, EventArgs e)
         {
             List<RuleDefinitionDetails> ruleDefinitions = GetIncomingRuleDefinitions((int)numOnNetChargingPolicy.Value, (int)numOffNetChargingPolicy.Value, (int)numMobileChargingPolicy.Value, (int)numInternationalChargingPolicy.Value);
-            IncomingRatesMigrator migrator = new IncomingRatesMigrator(ruleDefinitions);
-            migrator.MigrateIncomingRates(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"), new Guid("5ff96aee-cdf0-4415-a643-6b275f47e791"));
+            IncomingRatesMigrator migrator = new IncomingRatesMigrator();
+            migrator.Ececute();
 
         }
 
@@ -153,13 +153,24 @@ namespace Retail.EntitiesMigrator
         private void btnImportOnNet_Click(object sender, EventArgs e)
         {
             OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator();
-            onNetMigrator.Execute(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"));
+            onNetMigrator.Execute();
         }
 
         private void btnMobileRates_Click(object sender, EventArgs e)
         {
             MobileRatesMigrator migrator = new MobileRatesMigrator();
-            migrator.Execute(new Guid("9a427357-cf55-4f33-99f7-745206dee7cd"));
+            migrator.Execute();
+        }
+
+        private void btnImportMonthlyCharges_Click(object sender, EventArgs e)
+        {
+            MonthlyChargesMigrator migrator = new MonthlyChargesMigrator();
+            migrator.Execute();
+        }
+
+        private void numPricingUnit_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.PricingUnit = (int)numPricingUnit.Value;
         }
     }
 }

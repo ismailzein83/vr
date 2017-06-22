@@ -21,14 +21,7 @@ namespace Retail.EntitiesMigrator.Migrators
 {
     public class IncomingRatesMigrator
     {
-        public List<RuleDefinitionDetails> RuleDefinitionDetails { get; set; }
-
-        public IncomingRatesMigrator(List<RuleDefinitionDetails> ruleDefinitions)
-        {
-            RuleDefinitionDetails = ruleDefinitions;
-        }
-
-        public void MigrateIncomingRates(Guid accountBEDefinitionId, Guid accountTypeId)
+        public void Ececute()
         {
             IIncomingRatesDataManager dataManager = EntitiesMigratorDataManagerFactory.GetDataManager<IIncomingRatesDataManager>();
             IEnumerable<IncomingRate> incomingRates = dataManager.GetIncomingRates();
@@ -38,22 +31,31 @@ namespace Retail.EntitiesMigrator.Migrators
             foreach (IncomingRate incomingRate in incomingRates)
             {
                 AccountBEManager accountManager = new AccountBEManager();
-                Account account = accountManager.GetAccountBySourceId(accountBEDefinitionId, incomingRate.SubscriberId.ToString());
+                Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, incomingRate.SubscriberId.ToString());
                 if (account != null)
                 {
-                    Account parentAccount = accountManager.GetSelfOrParentAccountOfType(accountBEDefinitionId, account.AccountId, accountTypeId);
+                    Account parentAccount = accountManager.GetSelfOrParentAccountOfType(Helper.AccountBEDefinitionId, account.AccountId, Helper.BranchAccountTypeId);
                     if (parentAccount != null)
                     {
-                        foreach (RuleDefinitionDetails ruleDefinitionDetails in RuleDefinitionDetails)
-                        {
-                            if (!ruleDefinitionDetails.IsInternational)
-                            {
-                                rateRules.Add(GetGenereicRule(RuleType.Rate, parentAccount.AccountId, incomingRate.LocalRate, incomingRate.ActivationDate, ruleDefinitionDetails, true));
-                                tariffRules.Add(GetGenereicRule(RuleType.Tariff, parentAccount.AccountId, incomingRate.LocalRate, incomingRate.ActivationDate, ruleDefinitionDetails, true));
-                            }
-                            rateRules.Add(GetGenereicRule(RuleType.Rate, parentAccount.AccountId, incomingRate.InternationalRate, incomingRate.ActivationDate, ruleDefinitionDetails, false));
-                            tariffRules.Add(GetGenereicRule(RuleType.Tariff, parentAccount.AccountId, incomingRate.InternationalRate, incomingRate.ActivationDate, ruleDefinitionDetails, false));
-                        }
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.OnNetRuleDefinition, true));
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.OffNetRuleDefinition, true));
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.MobileRuleDefinition, true));
+
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.OnNetRuleDefinition));
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.OffNetRuleDefinition));
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.MobileRuleDefinition));
+                        rateRules.Add(GetRateValueRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.IntlRuleDefinition));
+
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.OnNetRuleDefinition, true));
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.OffNetRuleDefinition, true));
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.MobileRuleDefinition, true));
+
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.OnNetRuleDefinition));
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.OffNetRuleDefinition));
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.MobileRuleDefinition));
+                        tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.IntlRuleDefinition));
+
+
                     }
                 }
             }
@@ -62,78 +64,40 @@ namespace Retail.EntitiesMigrator.Migrators
 
         }
 
-        private GenericRule GetGenereicRule(RuleType ruleType, long accountId, RateDetails rateDetails, DateTime bed, Entities.RuleDefinitionDetails ruleDefinitionDetails, bool isNational)
+        private RateValueRule GetRateValueRuleDetails(long accountId, RateDetails rateDetails, RuleDefinitionDetails ruleDefinitionDetails, bool isNational = false)
         {
-            switch (ruleType)
-            {
-                case RuleType.Rate:
-                    return GetRateValueRuleDetails(accountId, rateDetails, ruleDefinitionDetails, bed, isNational);
-
-                case RuleType.Tariff:
-                    return GetTariffRuleDetails(accountId, rateDetails, ruleDefinitionDetails, bed, isNational);
-
-            }
-            return null;
+            return Helper.CreateRateValueRule(ruleDefinitionDetails, isNational
+                                                                        ? GetNationalCriteriaFieldsValues(ruleDefinitionDetails, accountId)
+                                                                        : GetCriteriaFieldsValues(ruleDefinitionDetails, accountId), rateDetails);
         }
-
-        private RateValueRule GetRateValueRuleDetails(long accountId, RateDetails rateDetails, RuleDefinitionDetails ruleDefinitionDetails, DateTime bed, bool isNational)
+        private TariffRule GetTariffRuleDetails(long accountId, RateDetails rateDetails, RuleDefinitionDetails ruleDefinitionDetails, bool isNational = false)
         {
-            RateValueRule ruleDetails = new RateValueRule
-            {
-                Criteria = new GenericRuleCriteria
-                {
-                    FieldsValues = GetCriteriaFieldsValues(accountId, isNational, ruleDefinitionDetails)
-                },
-                Settings = new FixedRateValueSettings
-                {
-                    CurrencyId = Helper.CurrencyId,
-                    NormalRate = rateDetails.Rate
-                },
-                DefinitionId = ruleDefinitionDetails.RateDefinitionId,
-                Description = "Migrated Incoming Rate Rule",
-                BeginEffectiveTime = bed
-
-            };
-            return ruleDetails;
+            return Helper.CreateTariffRule(ruleDefinitionDetails, isNational
+                                                                        ? GetNationalCriteriaFieldsValues(ruleDefinitionDetails, accountId)
+                                                                        : GetCriteriaFieldsValues(ruleDefinitionDetails, accountId), rateDetails);
         }
-
-        private TariffRule GetTariffRuleDetails(long accountId, RateDetails rateDetails, RuleDefinitionDetails ruleDefinitionDetails, DateTime bed, bool isNational)
+        private Dictionary<string, GenericRuleCriteriaFieldValues> GetDefaultCriteriaFieldValues(RuleDefinitionDetails ruleDefinitionDetails)
         {
-            TariffRule ruleDetails = new TariffRule
-            {
-                Criteria = new GenericRuleCriteria
-                {
-                    FieldsValues = GetCriteriaFieldsValues(accountId, isNational, ruleDefinitionDetails)
-                },
-                Settings = new RegularTariffSettings
-                {
-                    CurrencyId = Helper.CurrencyId,
-                    FractionUnit = rateDetails.FractionUnit,
-                    PricingUnit = 60,
-                    FirstPeriodRateType = FirstPeriodRateType.EffectiveRate
-                },
-                DefinitionId = ruleDefinitionDetails.TariffDefinitionId,
-                Description = "Migrated Incoming Tariff Rule",
-                BeginEffectiveTime = bed
-
-            };
-            return ruleDetails;
+            Dictionary<string, GenericRuleCriteriaFieldValues> result = Helper.BuildCriteriaFieldsValues(ruleDefinitionDetails.ServiceTypeId, ruleDefinitionDetails.ChargingPolicyId, MultiNet.Business.TrafficDirection.InComming);
+            return result;
         }
-
-        private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(long accountId, bool isNational, RuleDefinitionDetails ruleDefinitionDetails)
+        private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(RuleDefinitionDetails ruleDefinitionDetails, long accountId)
         {
-            Dictionary<string, GenericRuleCriteriaFieldValues> result = new Dictionary<string, GenericRuleCriteriaFieldValues>();
-
+            Dictionary<string, GenericRuleCriteriaFieldValues> result = GetDefaultCriteriaFieldValues(ruleDefinitionDetails);
             Helper.AddAccountField(result, new List<object> { accountId });
-            Helper.AddDirectionField(result, TrafficDirection.InComming);
-            Helper.AddServiceTypeField(result, ruleDefinitionDetails.ServiceTypeId);
-            Helper.AddChargingPolicyField(result, ruleDefinitionDetails.ChargingPolicyId);
-            if (isNational)
-            {
-                Helper.AddIsSameZoneField(result, 1);
-            }
 
             return result;
         }
+
+        private Dictionary<string, GenericRuleCriteriaFieldValues> GetNationalCriteriaFieldsValues(RuleDefinitionDetails ruleDefinitionDetails, long accountId)
+        {
+            Dictionary<string, GenericRuleCriteriaFieldValues> result = GetCriteriaFieldsValues(ruleDefinitionDetails, accountId);
+            Helper.AddIsSameZoneField(result, 1);
+
+            return result;
+        }
+
+
+
     }
 }

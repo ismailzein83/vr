@@ -23,7 +23,7 @@ namespace Retail.EntitiesMigrator.Migrators
         public MobileRatesMigrator()
         {
         }
-        public void Execute(Guid accountBEDefinitionId)
+        public void Execute()
         {
             IEnumerable<InternationalRate> internationalRates = GetRates();
             List<GenericRule> tariffRules = new List<GenericRule>();
@@ -36,7 +36,7 @@ namespace Retail.EntitiesMigrator.Migrators
             {
 
                 AccountBEManager accountManager = new AccountBEManager();
-                Account account = accountManager.GetAccountBySourceId(accountBEDefinitionId, internationalRate.SubscriberId.ToString());
+                Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, internationalRate.SubscriberId.ToString());
                 if (account != null)
                 {
                     rateRules.Add(GetRateValueRuleDetails(account.AccountId, internationalRate.InternationalRateDetail));
