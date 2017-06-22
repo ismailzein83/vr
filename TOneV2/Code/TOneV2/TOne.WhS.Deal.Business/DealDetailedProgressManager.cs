@@ -34,7 +34,7 @@ namespace TOne.WhS.Deal.Business
 
             return dealDetailedProgressList.ToDictionary(itm => new DealDetailedZoneGroupTier()
             {
-                DealID = itm.DealID,
+                DealId = itm.DealId,
                 ZoneGroupNb = itm.ZoneGroupNb,
                 TierNb = itm.TierNb,
                 RateTierNb = itm.RateTierNb,
@@ -77,19 +77,19 @@ namespace TOne.WhS.Deal.Business
             if (dealDetailedProgress.ToTime != dealBillingSummary.BatchStart.AddMinutes(30))
                 return false;
 
-            if (dealDetailedProgress.DealID != dealBillingSummary.DealId)
+            if (dealDetailedProgress.DealId != dealBillingSummary.DealId)
                 return false;
 
-            if (dealDetailedProgress.ZoneGroupNb != dealBillingSummary.DealZoneGroupNb)
+            if (dealDetailedProgress.ZoneGroupNb != dealBillingSummary.ZoneGroupNb)
                 return false;
 
             if (dealDetailedProgress.ReachedDurationInSeconds != dealBillingSummary.DurationInSeconds)
                 return false;
 
-            if (dealDetailedProgress.TierNb != dealBillingSummary.DealTierNb)
+            if (dealDetailedProgress.TierNb != dealBillingSummary.TierNb)
                 return false;
 
-            if (dealDetailedProgress.RateTierNb != dealBillingSummary.DealRateTierNb)
+            if (dealDetailedProgress.RateTierNb != dealBillingSummary.RateTierNb)
                 return false;
 
             return true;

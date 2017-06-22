@@ -19,7 +19,7 @@ namespace TOne.WhS.Deal.Business
             if (dealProgressList == null || dealProgressList.Count == 0)
                 return null;
 
-            return dealProgressList.ToDictionary(itm => new DealZoneGroup() { DealId = itm.DealID, ZoneGroupNb = itm.ZoneGroupNb }, itm => itm);
+            return dealProgressList.ToDictionary(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }, itm => itm);
         }
 
         public void InsertDealProgresses(IEnumerable<DealProgress> dealProgresses)

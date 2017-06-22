@@ -55,7 +55,6 @@
     <Compile Include="DealEvaluatorProcessState.cs" />
     <Compile Include="DealProgress\DealDetailedProgress.cs" />
     <Compile Include="DealProgress\DealProgress.cs" />
-    <Compile Include="DealReprocessInput\DealReprocessInput.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />

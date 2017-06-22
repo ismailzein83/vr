@@ -300,12 +300,12 @@ namespace TOne.WhS.Deal.Business
         {
             return new DealZoneGroupTierDetails()
             {
-                TierNumber = dealSaleZoneGroupTier.TierNumber,
+                TierNb = dealSaleZoneGroupTier.TierNumber,
                 VolumeInSeconds = dealSaleZoneGroupTier.VolumeInSeconds,
                 Rate = dealSaleZoneGroupTier.Rate,
                 ExceptionRates = BuildSaleExceptionRates(dealSaleZoneGroupTier.ExceptionRates),
                 CurrencyId = dealSaleZoneGroupTier.CurrencyId,
-                RetroActiveFromTierNumber = dealSaleZoneGroupTier.RetroActiveFromTierNumber
+                RetroActiveFromTierNb = dealSaleZoneGroupTier.RetroActiveFromTierNumber
             };
         }
 
@@ -313,12 +313,12 @@ namespace TOne.WhS.Deal.Business
         {
             return new DealZoneGroupTierDetails()
             {
-                TierNumber = dealSupplierZoneGroupTier.TierNumber,
+                TierNb = dealSupplierZoneGroupTier.TierNumber,
                 VolumeInSeconds = dealSupplierZoneGroupTier.VolumeInSeconds,
                 Rate = dealSupplierZoneGroupTier.Rate,
                 ExceptionRates = BuildSupplierExceptionRates(dealSupplierZoneGroupTier.ExceptionRates),
                 CurrencyId = dealSupplierZoneGroupTier.CurrencyId,
-                RetroActiveFromTierNumber = dealSupplierZoneGroupTier.RetroActiveFromTierNumber
+                RetroActiveFromTierNb = dealSupplierZoneGroupTier.RetroActiveFromTierNumber
             };
         }
 

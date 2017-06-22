@@ -6,11 +6,11 @@ namespace TOne.WhS.Deal.Business
     public class DealBillingSummary
     {
         public int DealId { get; set; }
-        public int DealZoneGroupNb { get; set; }
+        public int ZoneGroupNb { get; set; }
         public bool IsSale { get; set; }
         public DateTime BatchStart { get; set; }
-        public int? DealTierNb { get; set; }
-        public int? DealRateTierNb { get; set; }
+        public int? TierNb { get; set; }
+        public int? RateTierNb { get; set; }
         public decimal DurationInSeconds { get; set; }
 
         public bool IsEqual(DealBillingSummary dealBillingSummary)
@@ -21,7 +21,7 @@ namespace TOne.WhS.Deal.Business
             if (dealBillingSummary.DealId != DealId)
                 return false;
 
-            if (dealBillingSummary.DealZoneGroupNb != DealZoneGroupNb)
+            if (dealBillingSummary.ZoneGroupNb != ZoneGroupNb)
                 return false;
 
             if (dealBillingSummary.DurationInSeconds != DurationInSeconds)
@@ -30,10 +30,10 @@ namespace TOne.WhS.Deal.Business
             if (dealBillingSummary.IsSale != IsSale)
                 return false;
 
-            if (dealBillingSummary.DealTierNb != DealTierNb)
+            if (dealBillingSummary.TierNb != TierNb)
                 return false;
 
-            if (dealBillingSummary.DealRateTierNb != DealRateTierNb)
+            if (dealBillingSummary.RateTierNb != RateTierNb)
                 return false;
 
             return true;

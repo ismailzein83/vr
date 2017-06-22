@@ -108,10 +108,10 @@ namespace TOne.WhS.Deal.Business
             {
                 BatchStart = batchStart,
                 DealId = dealId,
-                DealZoneGroupNb = dealZoneGroupNb,
+                ZoneGroupNb = dealZoneGroupNb,
                 DurationInSeconds = DurationInSeconds,
-                DealTierNb = dealTierNb,
-                DealRateTierNb = dealRateTierNb,
+                TierNb = dealTierNb,
+                RateTierNb = dealRateTierNb,
                 IsSale = isSale
             };
         }

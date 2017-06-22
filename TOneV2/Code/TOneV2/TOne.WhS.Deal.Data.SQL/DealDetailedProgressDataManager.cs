@@ -90,8 +90,8 @@ namespace TOne.WhS.Deal.Data.SQL
             foreach (var dealDetailedProgress in dealDetailedProgresses)
             {
                 DataRow dr = dtDealDetailedProgress.NewRow();
-                dr["DealDetailedProgressID"] = dealDetailedProgress.DealDetailedProgressID;
-                dr["DealID"] = dealDetailedProgress.DealID;
+                dr["DealDetailedProgressId"] = dealDetailedProgress.DealDetailedProgressId;
+                dr["DealId"] = dealDetailedProgress.DealId;
                 dr["ZoneGroupNb"] = dealDetailedProgress.ZoneGroupNb;
                 dr["IsSale"] = dealDetailedProgress.IsSale;
 
@@ -117,8 +117,8 @@ namespace TOne.WhS.Deal.Data.SQL
         DataTable GetDealDetailedProgressTable()
         {
             DataTable dtDealProgress = new DataTable();
-            dtDealProgress.Columns.Add("DealDetailedProgressID", typeof(Int64));
-            dtDealProgress.Columns.Add("DealID", typeof(Int32));
+            dtDealProgress.Columns.Add("DealDetailedProgressId", typeof(Int64));
+            dtDealProgress.Columns.Add("DealId", typeof(Int32));
             dtDealProgress.Columns.Add("ZoneGroupNb", typeof(Int32));
             dtDealProgress.Columns.Add("IsSale", typeof(bool));
             dtDealProgress.Columns.Add("TierNb", typeof(int));
@@ -160,8 +160,8 @@ namespace TOne.WhS.Deal.Data.SQL
         {
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress
             {
-                DealDetailedProgressID = (long)reader["ID"],
-                DealID = (int)reader["DealID"],
+                DealDetailedProgressId = (long)reader["ID"],
+                DealId = (int)reader["DealId"],
                 ZoneGroupNb = (int)reader["ZoneGroupNb"],
                 IsSale = (bool)reader["IsSale"],
                 TierNb = GetReaderValue<int?>(reader, "TierNb"),

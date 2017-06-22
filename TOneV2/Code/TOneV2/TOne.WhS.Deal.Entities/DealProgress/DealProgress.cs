@@ -4,9 +4,9 @@ namespace TOne.WhS.Deal.Entities
 {
     public class DealProgress
     {
-        public long DealProgressID { get; set; }
+        public long DealProgressId { get; set; }
 
-        public int DealID { get; set; }
+        public int DealId { get; set; }
 
         public int ZoneGroupNb { get; set; }
 
@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.Entities
 
         public bool IsEqual(DealProgress dealProgress)
         {
-            if (DealID != dealProgress.DealID)
+            if (DealId != dealProgress.DealId)
                 return false;
 
             if (ZoneGroupNb != dealProgress.ZoneGroupNb)

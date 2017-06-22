@@ -8,9 +8,9 @@ namespace TOne.WhS.Deal.Entities
 {
     public class DealDetailedProgress
     {
-        public long DealDetailedProgressID { get; set; }
+        public long DealDetailedProgressId { get; set; }
 
-        public int DealID { get; set; }
+        public int DealId { get; set; }
 
         public int ZoneGroupNb { get; set; }
 

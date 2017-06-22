@@ -65,7 +65,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         dealProgressData.DealId = dealZoneGroup.DealId;
                         dealProgressData.ZoneGroupNb = dealZoneGroup.ZoneGroupNb;
                         dealProgressData.IsSale = inputArgument.IsSale;
-                        dealProgressData.CurrentTierNb = firstDealZoneGroupTierDetails.TierNumber;
+                        dealProgressData.CurrentTierNb = firstDealZoneGroupTierDetails.TierNb;
                         dealProgressData.ReachedDurationInSeconds = 0;
                         dealProgressData.TargetDurationInSeconds = firstDealZoneGroupTierDetails.VolumeInSeconds;
                         dealProgressDataByZoneGroup.Add(dealZoneGroup, dealProgressData);
@@ -111,7 +111,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 DealDetailedZoneGroupTier dealDetailedZoneGroupTier = kvp_dealDetailedProgress.Key;
                 DealDetailedProgress dealDetailedProgress = kvp_dealDetailedProgress.Value;
 
-                DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealDetailedZoneGroupTier.DealID, ZoneGroupNb = dealDetailedZoneGroupTier.ZoneGroupNb };
+                DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealDetailedZoneGroupTier.DealId, ZoneGroupNb = dealDetailedZoneGroupTier.ZoneGroupNb };
                 tempDealTrafficByBatchStart = expectedDealTrafficRecords.GetOrCreateItem(dealZoneGroup, () => { return new Dictionary<DateTime, decimal>(); });
                 tempDurationInSeconds = tempDealTrafficByBatchStart.GetOrCreateItem(dealDetailedProgress.FromTime, () => { return 0; });
                 tempDurationInSeconds += dealDetailedProgress.ReachedDurationInSeconds;
@@ -156,7 +156,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 {
                     CheckNextTierRetroActive(dealZoneGroup, nextDealZoneGroupTierDetails, expectedDealBillingSummaryByZoneGroupTier);
 
-                    dealProgressData.CurrentTierNb = nextDealZoneGroupTierDetails.TierNumber;
+                    dealProgressData.CurrentTierNb = nextDealZoneGroupTierDetails.TierNb;
                     dealProgressData.TargetDurationInSeconds = nextDealZoneGroupTierDetails.VolumeInSeconds;
                     dealProgressData.ReachedDurationInSeconds = 0;
                     BuildExpectedDealBillingSummaryDict(isSale, dealZoneGroup, batchStart, remainingDurationInSec, dealProgressData, expectedDealBillingSummaryByZoneGroupTier);
@@ -170,9 +170,9 @@ namespace TOne.WhS.Deal.BP.Activities
             {
                 BatchStart = batchStart,
                 DealId = dealZoneGroup.DealId,
-                DealZoneGroupNb = dealZoneGroup.ZoneGroupNb,
-                DealTierNb = tierNb,
-                DealRateTierNb = rateTierNb,
+                ZoneGroupNb = dealZoneGroup.ZoneGroupNb,
+                TierNb = tierNb,
+                RateTierNb = rateTierNb,
                 DurationInSeconds = remainingDurationInSec,
                 IsSale = isSale
             };
@@ -184,8 +184,8 @@ namespace TOne.WhS.Deal.BP.Activities
             DealZoneGroupTier dealZoneGroupTier = new DealZoneGroupTier()
             {
                 DealId = dealBillingSummary.DealId,
-                ZoneGroupNb = dealBillingSummary.DealZoneGroupNb,
-                TierNb = dealBillingSummary.DealTierNb
+                ZoneGroupNb = dealBillingSummary.ZoneGroupNb,
+                TierNb = dealBillingSummary.TierNb
             };
 
             List<DealBillingSummary> dealBillingSummaries = expectedDealBillingSummaryByZoneGroupTier.GetOrCreateItem(dealZoneGroupTier);
@@ -195,10 +195,10 @@ namespace TOne.WhS.Deal.BP.Activities
         private void CheckNextTierRetroActive(DealZoneGroup dealZoneGroup, DealZoneGroupTierDetails nextDealZoneGroupTierDetails,
             Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordByZoneGroupTier)
         {
-            if (nextDealZoneGroupTierDetails.RetroActiveFromTierNumber.HasValue)
+            if (nextDealZoneGroupTierDetails.RetroActiveFromTierNb.HasValue)
             {
-                int fromTierNumber = nextDealZoneGroupTierDetails.RetroActiveFromTierNumber.Value;
-                int toTierNumber = nextDealZoneGroupTierDetails.TierNumber - 1;
+                int fromTierNumber = nextDealZoneGroupTierDetails.RetroActiveFromTierNb.Value;
+                int toTierNumber = nextDealZoneGroupTierDetails.TierNb - 1;
 
                 while (toTierNumber >= fromTierNumber)
                 {
@@ -213,7 +213,7 @@ namespace TOne.WhS.Deal.BP.Activities
                     if (expectedDealBillingSummaryRecordByZoneGroupTier.TryGetValue(dealZoneGroupTier, out dealBillingSummaries))
                     {
                         foreach (var itm in dealBillingSummaries)
-                            itm.DealRateTierNb = nextDealZoneGroupTierDetails.TierNumber;
+                            itm.RateTierNb = nextDealZoneGroupTierDetails.TierNb;
                     }
 
                     fromTierNumber++;
@@ -231,10 +231,10 @@ namespace TOne.WhS.Deal.BP.Activities
                 {
                     DealDetailedZoneGroupTier dealDetailedZoneGroupTier = new DealDetailedZoneGroupTier()
                     {
-                        DealID = dealBillingSummaryRecord.DealId,
-                        ZoneGroupNb = dealBillingSummaryRecord.DealZoneGroupNb,
-                        TierNb = dealBillingSummaryRecord.DealTierNb,
-                        RateTierNb = dealBillingSummaryRecord.DealRateTierNb,
+                        DealId = dealBillingSummaryRecord.DealId,
+                        ZoneGroupNb = dealBillingSummaryRecord.ZoneGroupNb,
+                        TierNb = dealBillingSummaryRecord.TierNb,
+                        RateTierNb = dealBillingSummaryRecord.RateTierNb,
                         FromTime = dealBillingSummaryRecord.BatchStart,
                         ToTime = dealBillingSummaryRecord.BatchStart.AddMinutes(30),
                     };
