@@ -28,6 +28,7 @@ namespace Retail.EntitiesMigrator
 
         public static Guid AccountBEDefinitionId = new Guid("9a427357-cf55-4f33-99f7-745206dee7cd");
         public static Guid OperatorBEDefinitionId = new Guid("A5C1852B-2C92-4D66-B959-E3F49304338A");
+        public static Guid BranchAccountTypeId = new Guid("5FF96AEE-CDF0-4415-A643-6B275F47E791");
 
         public static DateTime DefaultRuleBED = DateTime.Parse("2000-01-01");
 
