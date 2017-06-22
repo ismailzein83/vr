@@ -18,7 +18,7 @@ namespace Vanrise.Reprocess.Entities
 
     public class ReprocessDefinitionSettings
     {
-        public Guid SourceRecordStorageId { get; set; }
+        public List<Guid> SourceRecordStorageIds { get; set; }
 
         public Guid ExecutionFlowDefinitionId { get; set; }
 

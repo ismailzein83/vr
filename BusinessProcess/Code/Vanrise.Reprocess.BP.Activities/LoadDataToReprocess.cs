@@ -11,7 +11,7 @@ namespace Vanrise.Reprocess.BP.Activities
 
     public class LoadDataToReprocessInput
     {
-        public Guid RecordStorageId { get; set; }
+        public List<Guid> RecordStorageIds { get; set; }
 
         public DateTime FromTime { get; set; }
 
@@ -32,7 +32,7 @@ namespace Vanrise.Reprocess.BP.Activities
     public sealed class LoadDataToReprocess : BaseAsyncActivity<LoadDataToReprocessInput, LoadDataToReprocessOutput>
     {
         [RequiredArgument]
-        public InArgument<Guid> RecordStorageId { get; set; }
+        public InArgument<List<Guid>> RecordStorageIds { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> FromTime { get; set; }
@@ -53,7 +53,7 @@ namespace Vanrise.Reprocess.BP.Activities
         {
             return new LoadDataToReprocessInput
             {
-                RecordStorageId = this.RecordStorageId.Get(context),
+                RecordStorageIds = this.RecordStorageIds.Get(context),
                 FromTime = this.FromTime.Get(context),
                 ToTime = this.ToTime.Get(context),
                 StageManager = this.StageManager.Get(context),
@@ -71,20 +71,23 @@ namespace Vanrise.Reprocess.BP.Activities
             DataRecordStorageManager manager = new DataRecordStorageManager();
             GenericDataRecordBatch batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
 
-            manager.GetDataRecords(inputArgument.RecordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
+            foreach (var recordStorageId in inputArgument.RecordStorageIds)
             {
-                output.EventCount++;
-
-                batch.Records.Add(itm);
-                if (batch.Records.Count >= 10000)
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
                 {
-                    foreach (string stageName in inputArgument.OutputStageNames)
+                    output.EventCount++;
+
+                    batch.Records.Add(itm);
+                    if (batch.Records.Count >= 10000)
                     {
-                        inputArgument.StageManager.EnqueueBatch(stageName, batch);
+                        foreach (string stageName in inputArgument.OutputStageNames)
+                        {
+                            inputArgument.StageManager.EnqueueBatch(stageName, batch);
+                        }
+                        batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
                     }
-                    batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
-                }
-            }));
+                }));
+            }
 
             if (batch.Records.Count > 0)
             {

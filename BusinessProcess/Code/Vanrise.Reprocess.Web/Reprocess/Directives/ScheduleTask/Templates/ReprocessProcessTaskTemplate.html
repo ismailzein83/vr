@@ -16,10 +16,7 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns colnum="4">
-        <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
-                   datasource="chunkTimes" selectedvalues="selectedChunkTime"></vr-select>
-    </vr-columns>
+    <reprocess-chunktime-selector on-ready="onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></reprocess-chunktime-selector>
 
     <vr-columns colnum="4">
         <vr-switch value="useTempStorage" label="Use Temporary Storage"></vr-switch>

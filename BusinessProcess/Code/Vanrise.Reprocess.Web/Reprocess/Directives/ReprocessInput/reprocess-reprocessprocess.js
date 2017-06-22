@@ -26,27 +26,55 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
         };
 
         function DirectiveConstructor($scope, ctrl) {
-
             this.initializeController = initializeController;
 
-            function initializeController() {
-                defineAPI();
-            }
             var reprocessDefinitionSelectorAPI;
             var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.onReprocessDefinitionSelectorReady = function (api) {
-                reprocessDefinitionSelectorAPI = api;
-                reprocessDefinitionSelectorReadyDeferred.resolve();
-            };
+            var chunkTimeSelectorAPI;
+            var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.validateTimeRange = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            };
+            function initializeController() {
+
+                $scope.onReprocessDefinitionSelectorReady = function (api) {
+                    reprocessDefinitionSelectorAPI = api;
+                    reprocessDefinitionSelectorReadyDeferred.resolve();
+                };
+
+                $scope.onChunkTimeSelectorReady = function (api) {
+                    chunkTimeSelectorAPI = api;
+                    chunkTimeSelectorReadyDeferred.resolve();
+                };
+
+                $scope.validateTimeRange = function () {
+                    return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+                };
+
+                defineAPI();
+            }
 
             function defineAPI() {
 
                 var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+
+                    var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, undefined, reprocessDefinitionSelectorLoadDeferred);
+                    });
+                    promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
+
+                    var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    chunkTimeSelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, undefined, chunkTimeSelectorLoadDeferred);
+                    });
+                    promises.push(chunkTimeSelectorLoadDeferred.promise);
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
                 api.getData = function () {
                     return {
                         InputArguments: {
@@ -54,26 +82,12 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                             ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
                             FromTime: $scope.fromDate,
                             ToTime: new Date($scope.toDate.setDate($scope.toDate.getDate() + 1)),
-                            ChunkTime: $scope.selectedChunkTime.value,
+                            ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
                             UseTempStorage: $scope.useTempStorage
                         }
                     };
                 };
 
-                api.load = function (payload) {
-                    $scope.chunkTimes = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
-
-                    var promises = [];
-
-                    var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, undefined, reprocessDefinitionSelectorLoadDeferred);
-                    });
-
-                    promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
-
-                    return UtilsService.waitMultiplePromises(promises);
-                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

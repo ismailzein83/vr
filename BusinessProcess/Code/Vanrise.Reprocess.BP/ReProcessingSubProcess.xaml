@@ -123,11 +123,11 @@
               <mca:CSharpValue x:TypeArguments="scg:List(x:String)">reprocessDefinition.Settings.InitiationStageNames</mca:CSharpValue>
             </InArgument>
           </vrba1:LoadDataToReprocess.OutputStageNames>
-          <vrba1:LoadDataToReprocess.RecordStorageId>
-            <InArgument x:TypeArguments="s:Guid">
-              <mca:CSharpValue x:TypeArguments="s:Guid">reprocessDefinition.Settings.SourceRecordStorageId</mca:CSharpValue>
+          <vrba1:LoadDataToReprocess.RecordStorageIds>
+            <InArgument x:TypeArguments="scg:List(s:Guid)">
+              <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">reprocessDefinition.Settings.SourceRecordStorageIds</mca:CSharpValue>
             </InArgument>
-          </vrba1:LoadDataToReprocess.RecordStorageId>
+          </vrba1:LoadDataToReprocess.RecordStorageIds>
           <vrba1:LoadDataToReprocess.StageManager>
             <InArgument x:TypeArguments="vrba1:StageManager">
               <mca:CSharpValue x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpValue>
@@ -209,11 +209,6 @@
                   <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
                 </InArgument>
               </vrba1:ExecuteStage.To>
-              <!--<vrba1:ExecuteStage.UseTempStorage>
-                <InArgument x:TypeArguments="x:Boolean">
-                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.UseTempStorage</mca:CSharpValue>
-                </InArgument>
-              </vrba1:ExecuteStage.UseTempStorage>-->
             </vrba1:ExecuteStage>
             <vrba1:EvaluateStagesStatus sap2010:WorkflowViewState.IdRef="EvaluateStagesStatus_2">
               <vrba1:EvaluateStagesStatus.LoadDataToReprocessStatus>
@@ -231,7 +226,7 @@
         </ActivityAction>
       </ParallelForEach>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJ0AD6wEOAgEBRQVQDgMBqQFRBVwkAwGeAV0FaA4DAZMBaQXpARACAQJNC02EAQMBrwFIC0hwAwGqAVkLWWIDAaQBVAtUcwMBnwFlC2V4AwGZAWALYGcDAZQBbQefARICAVqgAQfoARkCAQNuCZIBJQIBaJMBCZ4BJgIBW6MBDaMBjAECAVSqAQvmARYCAQSAAQ+AAX0DAY0BcQ9xZQMBhwF7D3uIAQMBgQGKAQ+KAXwCAXt2D3ZdAgF1hQEPhQFjAgFvjwEPjwFbAgFplgEPlgF0AgFimwEPmwFjAgFcqwEN2QEiAgEU2gEN5QEqAgEFswETswGMAQIBTdEBE9EBXwIBRrgBE7gBcwIBP70BE70BYgIBOK4BE64BYQIBMdYBE9YBZgIBKscBE8cBggECASPMARPMAXMCARzCARPCAWcCARXdARPdAXgCAQ3iARPiAWcCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sJkAD5gEOAgEBRQVQDgMBogFRBVwkAwGXAV0FaA4DAYwBaQXkARACAQJNC02EAQMBqAFIC0hwAwGjAVkLWWIDAZ0BVAtUcwMBmAFlC2V4AwGSAWALYGcDAY0BbQefARICAVOgAQfjARkCAQNuCZIBJQIBYZMBCZ4BJgIBVKMBDaMBjAECAU2qAQvhARYCAQRxD3FlAwGGAXsPe4gBAwGAAYABD4ABiAECAXqKAQ+KAXwCAXR2D3ZdAgFuhQEPhQFjAgFojwEPjwFbAgFilgEPlgF0AgFbmwEPmwFjAgFVqwEN1AEiAgEU1QEN4AEqAgEFswETswGMAQIBRtEBE9EBXwIBP7gBE7gBcwIBOL0BE70BYgIBMa4BE64BYQIBKscBE8cBggECASPMARPMAXMCARzCARPCAWcCARXYARPYAXgCAQ3dARPdAWcCAQY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -99,6 +99,22 @@
                 $scope.modalContext.closeModal()
             };
 
+            $scope.scopeModel.validateDataRecordStorageSelector = function () {
+
+                var recordTypeIds = UtilsService.getPropValuesFromArray($scope.scopeModel.selectedRecordStorage, "DataRecordTypeId");
+                if (recordTypeIds == undefined || recordTypeIds.length <= 1)
+                    return null;
+
+                var firstDataRecordTypeId = recordTypeIds[0];
+                for (var index = 1; index < recordTypeIds.length; index++) {
+                    var currentDataRecordTypeId = recordTypeIds[index];
+                    if (firstDataRecordTypeId != currentDataRecordTypeId)
+                        return "All Record Storages should be of the same Record Type";
+                }
+
+                return null;
+            }
+
             function loadStagesSelector() {
                 var payload = {
                     executionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds()
@@ -172,7 +188,6 @@
             }
         }
 
-
         function getReprocessDefinition() {
             return Reprocess_ReprocessDefinitionAPIService.GetReprocessDefinition(reprocessDefinitionId).then(function (response) {
                 reprocessDefinitionEntity = response;
@@ -215,7 +230,7 @@
                     var dataRecordStorageSelectorPayload;
                     if (isEditMode) {
                         dataRecordStorageSelectorPayload = {
-                            selectedIds: reprocessDefinitionEntity.Settings.SourceRecordStorageId
+                            selectedIds: reprocessDefinitionEntity.Settings.SourceRecordStorageIds
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
@@ -259,8 +274,8 @@
                                 onExecutionFlowDefinitionSelectionChangedDeferred = undefined;
                                 onDataRecordStorageSelectionChangedDeferred = undefined;
                                 stageSelectorReadyDeferred = undefined;
-                                var executionFlowStageSelectorPayload;
-                                executionFlowStageSelectorPayload = {
+
+                                var executionFlowStageSelectorPayload = {
                                     executionFlowDefinitionId: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId,
                                     filter: {
                                         Filters: [buildStageRecordTypeFilter()],
@@ -310,16 +325,18 @@
 
         function buildStageRecordTypeFilter() {
 
+            var recordTypeIds = UtilsService.getPropValuesFromArray($scope.scopeModel.selectedRecordStorage, "DataRecordTypeId");
+
             return {
                 '$type': 'Vanrise.GenericData.QueueActivators.RecordTypeStageFilter, Vanrise.GenericData.QueueActivators',
-                RecordTypeId: $scope.scopeModel.selectedRecordStorage.DataRecordTypeId
+                RecordTypeId: recordTypeIds != undefined ? recordTypeIds[0] : undefined
             };
         };
 
         function buildReprocessDefinitionObjFromScope() {
 
             var settings = {
-                SourceRecordStorageId: dataRecordStorageAPI.getSelectedIds(),
+                SourceRecordStorageIds: dataRecordStorageAPI.getSelectedIds(),
                 ExecutionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds(),
                 InitiationStageNames: executionFlowStageAPI.getSelectedIds(),
                 StageNames: stageAPI.getSelectedIds(),

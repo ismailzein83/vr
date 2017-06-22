@@ -31,11 +31,19 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
             var reprocessDefinitionSelectorAPI;
             var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var chunkTimeSelectorAPI;
+            var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
 
                 $scope.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
                     reprocessDefinitionSelectorReadyDeferred.resolve();
+                };
+
+                $scope.onChunkTimeSelectorReady = function (api) {
+                    chunkTimeSelectorAPI = api;
+                    chunkTimeSelectorReadyDeferred.resolve();
                 };
 
                 $scope.isValid = function () {
@@ -56,7 +64,6 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-                    $scope.chunkTimes = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
 
                     if (payload != undefined) {
                         if (payload.rawExpressions != undefined) {
@@ -65,7 +72,6 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                         }
 
                         if (payload.data != undefined) {
-                            $scope.selectedChunkTime = UtilsService.getEnum(ReprocessChunkTimeEnum, "value", payload.data.ChunkTime);
                             $scope.useTempStorage = payload.data.UseTempStorage;
                         }
                     }
@@ -77,12 +83,25 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                     reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
                         var reprocessPayload;
                         if (payload != undefined && payload.data != undefined) {
-                            reprocessPayload = { selectedIds: payload.data.ReprocessDefinitionId };
+                            reprocessPayload = {
+                                selectedIds: payload.data.ReprocessDefinitionId
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, reprocessPayload, reprocessDefinitionSelectorLoadDeferred);
                     });
-
                     promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
+
+                    var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    chunkTimeSelectorReadyDeferred.promise.then(function () {
+                        var chunkTimeSelectorPayload;
+                        if (payload != undefined && payload.data != undefined) {
+                            chunkTimeSelectorPayload = {
+                                selectedIds: payload.data.ChunkTime
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
+                    });
+                    promises.push(chunkTimeSelectorLoadDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -92,10 +111,11 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                 };
 
                 api.getData = function () {
+
                     return {
                         $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
                         ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
-                        ChunkTime: $scope.selectedChunkTime.value,
+                        ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
                         UseTempStorage: $scope.useTempStorage
                     };
                 };
