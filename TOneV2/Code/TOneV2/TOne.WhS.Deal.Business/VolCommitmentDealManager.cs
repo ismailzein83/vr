@@ -11,7 +11,7 @@ namespace TOne.WhS.Deal.Business
 {
     public class VolCommitmentDealManager : BaseDealManager
     {
-        #region Public Methods      
+        #region Public Methods
         
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
         {
@@ -48,6 +48,8 @@ namespace TOne.WhS.Deal.Business
             detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
             detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
             detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
+            detail.CurrencySymbole = new CurrencyManager().GetCurrencySymbol(settings.CurrencyId);
+
             return detail;
         }
 

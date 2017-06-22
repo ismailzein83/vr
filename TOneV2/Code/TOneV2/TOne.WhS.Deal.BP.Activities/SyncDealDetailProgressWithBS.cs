@@ -9,46 +9,50 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
-    public class UpdateProgressTablesInput
+    public class SyncDealDetailProgressWithBSInput
     {
-        public DateTime BeginDate { get; set; }
-
         public Boolean IsSale { get; set; }
+
+        public DateTime BeginDate { get; set; }
 
         public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
 
         public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
     }
 
-    public sealed class UpdateProgressTables : BaseAsyncActivity<UpdateProgressTablesInput>
+    public sealed class SyncDealDetailProgressWithBS : BaseAsyncActivity<SyncDealDetailProgressWithBSInput>
     {
-        public InArgument<DateTime> BeginDate { get; set; }
-
+        [RequiredArgument]
         public InArgument<Boolean> IsSale { get; set; }
 
+        [RequiredArgument]
+        public InArgument<DateTime> BeginDate { get; set; }
+
+        [RequiredArgument]
         public InArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
 
+        [RequiredArgument]
         public InArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
-        protected override void DoWork(UpdateProgressTablesInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(SyncDealDetailProgressWithBSInput inputArgument, AsyncActivityHandle handle)
         {
-            UpdateDealProgressTables(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.AffectedDealZoneGroups, inputArgument.IsSale, inputArgument.BeginDate);
+            SyncDealDetailProgressWithBillingStats(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.AffectedDealZoneGroups, inputArgument.IsSale, inputArgument.BeginDate);
         }
 
-        protected override UpdateProgressTablesInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override SyncDealDetailProgressWithBSInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new UpdateProgressTablesInput
+            return new SyncDealDetailProgressWithBSInput
             {
-                BeginDate = this.BeginDate.Get(context),
                 IsSale = this.IsSale.Get(context),
-                CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context),
-                AffectedDealZoneGroups = this.AffectedDealZoneGroups.Get(context)
+                BeginDate = this.BeginDate.Get(context),
+                AffectedDealZoneGroups = this.AffectedDealZoneGroups.Get(context),
+                CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context)
             };
         }
 
         #region Private Methods
 
-        private void UpdateDealProgressTables(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, HashSet<DealZoneGroup> affectedDealZoneGroups, bool isSale, DateTime beginDate)
+        private void SyncDealDetailProgressWithBillingStats(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, HashSet<DealZoneGroup> affectedDealZoneGroups, bool isSale, DateTime beginDate)
         {
             if (currentDealBillingSummaryRecords == null)
                 return;
@@ -120,25 +124,6 @@ namespace TOne.WhS.Deal.BP.Activities
                 dealDetailedProgress.DealDetailedProgressID = dealDetailedProgressID.Value;
 
             return dealDetailedProgress;
-        }
-
-        private DealProgress BuildDealProgress(long? dealProgressId, DealZoneGroup dealZoneGroup, int tierNb, decimal reachedDurationInSeconds, bool isSale)
-        {
-            DealZoneGroupTierDetails dealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetails(isSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, tierNb);
-            DealProgress dealProgress = new DealProgress()
-            {
-                DealID = dealZoneGroup.DealId,
-                ZoneGroupNb = dealZoneGroup.ZoneGroupNb,
-                IsSale = isSale,
-                CurrentTierNb = tierNb,
-                ReachedDurationInSeconds = reachedDurationInSeconds,
-                TargetDurationInSeconds = dealZoneGroupTierDetails != null ? dealZoneGroupTierDetails.VolumeInSeconds : null
-            };
-
-            if (dealProgressId.HasValue)
-                dealProgress.DealProgressID = dealProgressId.Value;
-
-            return dealProgress;
         }
 
         #endregion

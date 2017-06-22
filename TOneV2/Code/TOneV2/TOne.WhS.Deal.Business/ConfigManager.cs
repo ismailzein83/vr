@@ -15,6 +15,15 @@ namespace TOne.WhS.Deal.Business
             return swapDealTechnicalSettingData.SwapDealBuyRouteRuleDefinitionId;
         }
 
+        public DealTechnicalSettingData GetDealTechnicalSettingData()
+        {
+            SettingManager settingManager = new SettingManager();
+            DealTechnicalSettingData dealTechnicalSettingData = settingManager.GetSetting<DealTechnicalSettingData>(Constants.DealTechnicalSettings);
+            dealTechnicalSettingData.ThrowIfNull("dealTechnicalSettingData");
+
+            return dealTechnicalSettingData;
+        }
+
         #endregion
 
         #region private methods

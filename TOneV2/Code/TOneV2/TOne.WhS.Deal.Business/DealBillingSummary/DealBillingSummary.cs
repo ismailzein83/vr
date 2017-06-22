@@ -3,24 +3,15 @@ using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
-    public class BaseDealBillingSummary
+    public class DealBillingSummary
     {
-        public DateTime BatchStart { get; set; }
-
         public int DealId { get; set; }
-
         public int DealZoneGroupNb { get; set; }
-
         public bool IsSale { get; set; }
-
-        public decimal DurationInSeconds { get; set; }
-    }
-
-    public class DealBillingSummary : BaseDealBillingSummary
-    {
+        public DateTime BatchStart { get; set; }
         public int? DealTierNb { get; set; }
-
         public int? DealRateTierNb { get; set; }
+        public decimal DurationInSeconds { get; set; }
 
         public bool IsEqual(DealBillingSummary dealBillingSummary)
         {

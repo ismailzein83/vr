@@ -24,5 +24,7 @@ namespace TOne.WhS.Deal.Data
         List<DealZoneGroupData> GetDealZoneGroupDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroup> dealZoneGroups);
 
         List<DealZoneGroupTierData> GetDealZoneGroupTierDataBeforeDate(bool isSale, DateTime beforeDate, List<DealZoneGroupTier> dealZoneGroupTiers);
+
+        Byte[] GetMaxTimestamp();
     }
 }

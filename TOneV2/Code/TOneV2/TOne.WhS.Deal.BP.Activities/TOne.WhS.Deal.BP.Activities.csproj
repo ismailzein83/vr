@@ -62,12 +62,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculateBeginDate.cs" />
-    <Compile Include="CheckRetroActiveBeforeDate.cs" />
-    <Compile Include="CompareCurrentToExpectedDealRecords.cs" />
+    <Compile Include="ApplyExpectedDealTrafficRecordsToDB.cs" />
+    <Compile Include="GetDealTechnicalSettingData.cs" />
+    <Compile Include="LoadDealDetailedProgresses.cs" />
     <Compile Include="LoadDealBillingSummaryRecords.cs" />
-    <Compile Include="PrepareExpectedDealBillingSummaryRecords.cs" />
+    <Compile Include="LoadDealProgresses.cs" />
+    <Compile Include="PrepareExpectedDealTrafficRecords.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpdateProgressTables.cs" />
+    <Compile Include="SyncDealDetailProgressWithBS.cs" />
+    <Compile Include="BuildDealEvaluatorProcessState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">

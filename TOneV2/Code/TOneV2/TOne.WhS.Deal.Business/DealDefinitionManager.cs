@@ -61,10 +61,22 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
-        public DealSaleZoneGroup GetDealSaleZoneGroup(int dealId, int zoneGroupNb)
+        public void FillOrigSupplierValues(dynamic record)
         {
-            var cachedDealSaleZoneGroups = GetCachedDealSaleZoneGroups();
-            return cachedDealSaleZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
+            record.OrigCostRateId = record.CostRateId;
+            record.OrigCostRateValue = record.CostRateValue;
+            record.OrigCostNet = record.CostNet;
+            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
+            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
+            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
+            record.OrigCostCurrencyId = record.CostCurrencyId;
+
+            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
+            if (dealSupplierZoneGroup != null)
+            {
+                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
+                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
+            }
         }
 
         public DealSaleZoneGroup GetAccountSaleZoneGroup(int? customerId, long? saleZoneId, DateTime effectiveDate)
@@ -85,111 +97,6 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        public DealZoneGroupTierDetails GetSaleDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb)
-        {
-            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
-
-            DealSaleZoneGroupTier dealZoneGroupTier = dealSaleZoneGroup.Tiers.Where(itm => itm.TierNumber == tierNb).FirstOrDefault();
-            if (dealZoneGroupTier == null)
-                return null;
-
-            return BuildDealZoneGroupTierDetails(dealZoneGroupTier);
-        }
-
-        //public DealZoneGroupTierDetails GetUpToVolumeDealSaleZoneGroupTierDetails(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
-        //{
-        //    DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
-        //    dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
-
-        //    decimal remainingDurationInSec = totalReachedDurationInSec;
-        //    DealZoneGroupTierDetails dealZoneGroupTierDetails = null;
-
-        //    foreach (var dealSaleZoneGroupTier in dealSaleZoneGroup.Tiers)
-        //    {
-        //        if (!dealSaleZoneGroupTier.VolumeInSeconds.HasValue)
-        //        {
-        //            dealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSaleZoneGroupTier);
-        //            break;
-        //        }
-
-        //        remainingDurationInSec -= dealSaleZoneGroupTier.VolumeInSeconds.Value;
-
-        //        if (remainingDurationInSec < 0)
-        //        {
-        //            dealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSaleZoneGroupTier);
-        //            break;
-        //        }
-        //    }
-
-        //    tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
-        //    return dealZoneGroupTierDetails;
-        //}
-
-        public DealZoneGroupTierDetails GetUpToVolumeDealSaleZoneGroupTierDetails(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
-        {
-            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
-            dealSaleZoneGroup.Tiers.ThrowIfNull("dealSaleZoneGroup.Tiers");
-            if(dealSaleZoneGroup.Tiers.Count() == 0)
-                throw new VRBusinessException("dealSaleZoneGroup.Tiers should at least contains one Tier");
-
-            decimal remainingDurationInSec = totalReachedDurationInSec;
-            DealZoneGroupTierDetails lastDealZoneGroupTierDetails = null;
-
-            foreach (var dealSaleZoneGroupTier in dealSaleZoneGroup.Tiers)
-            {
-                lastDealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSaleZoneGroupTier);
-                remainingDurationInSec -= dealSaleZoneGroupTier.VolumeInSeconds.Value;
-
-                if (remainingDurationInSec < 0)
-                    break;
-            }
-             
-            if (remainingDurationInSec < 0)
-                tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
-            else
-                tierReachedDurationInSec = lastDealZoneGroupTierDetails.VolumeInSeconds.Value;
-
-            return lastDealZoneGroupTierDetails;
-        }
-
-        public int GetSaleRateTierNb(int dealId, int zoneGroupNb, int tierNb, int maxTierNb)
-        {
-            while (maxTierNb > tierNb)
-            {
-                DealZoneGroupTierDetails dealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, maxTierNb);
-                if (dealZoneGroupTierDetails != null && dealZoneGroupTierDetails.RetroActiveFromTierNumber.HasValue && dealZoneGroupTierDetails.RetroActiveFromTierNumber.Value <= tierNb)
-                    return dealZoneGroupTierDetails.TierNumber;
-
-                maxTierNb--;
-            }
-
-            return tierNb;
-        }
-
-        public void FillOrigSupplierValues(dynamic record)
-        {
-            record.OrigCostRateId = record.CostRateId;
-            record.OrigCostRateValue = record.CostRateValue;
-            record.OrigCostNet = record.CostNet;
-            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
-            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
-            record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
-            record.OrigCostCurrencyId = record.CostCurrencyId;
-
-            DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
-            if (dealSupplierZoneGroup != null)
-            {
-                record.OrigCostDealId = dealSupplierZoneGroup.DealId;
-                record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
-            }
-        }
-
-        public DealSupplierZoneGroup GetDealSupplierZoneGroup(int dealId, int zoneGroupNb)
-        {
-            var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroups();
-            return cachedDealSupplierZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
-        }
-
         public DealSupplierZoneGroup GetAccountSupplierZoneGroup(int? supplierId, long? supplierZoneId, DateTime effectiveDate)
         {
             if (!supplierId.HasValue || !supplierZoneId.HasValue)
@@ -208,6 +115,25 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
+        public DealZoneGroupTierDetails GetDealZoneGroupTierDetails(bool isSale, int dealId, int zoneGroupNb, int tierNb)
+        {
+            if (isSale)
+                return GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
+            else
+                return GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
+        }
+
+        public DealZoneGroupTierDetails GetSaleDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb)
+        {
+            DealSaleZoneGroup dealSaleZoneGroup = GetDealSaleZoneGroup(dealId, zoneGroupNb);
+
+            DealSaleZoneGroupTier dealZoneGroupTier = dealSaleZoneGroup.Tiers.Where(itm => itm.TierNumber == tierNb).FirstOrDefault();
+            if (dealZoneGroupTier == null)
+                return null;
+
+            return BuildDealZoneGroupTierDetails(dealZoneGroupTier);
+        }
+
         public DealZoneGroupTierDetails GetSupplierDealZoneGroupTierDetails(int dealId, int zoneGroupNb, int tierNb)
         {
             DealSupplierZoneGroup dealSupplierZoneGroup = GetDealSupplierZoneGroup(dealId, zoneGroupNb);
@@ -219,66 +145,9 @@ namespace TOne.WhS.Deal.Business
             return BuildDealZoneGroupTierDetails(dealZoneGroupTier);
         }
 
-        public DealZoneGroupTierDetails GetUpToVolumeDealSupplierZoneGroupTierDetails(int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
-        {
-            DealSupplierZoneGroup dealSupplierZoneGroup = GetDealSupplierZoneGroup(dealId, zoneGroupNb);
-            dealSupplierZoneGroup.Tiers.ThrowIfNull("dealSupplierZoneGroup.Tiers");
-            if (dealSupplierZoneGroup.Tiers.Count() == 0)
-                throw new VRBusinessException("dealSupplierZoneGroup.Tiers should at least contains one Tier");
-
-            decimal remainingDurationInSec = totalReachedDurationInSec;
-            DealZoneGroupTierDetails lastDealZoneGroupTierDetails = null;
-
-            foreach (var dealSaleZoneGroupTier in dealSupplierZoneGroup.Tiers)
-            {
-                lastDealZoneGroupTierDetails = BuildDealZoneGroupTierDetails(dealSaleZoneGroupTier);
-                remainingDurationInSec -= dealSaleZoneGroupTier.VolumeInSeconds.Value;
-
-                if (remainingDurationInSec < 0)
-                    break;
-            }
-
-            if (remainingDurationInSec < 0)
-                tierReachedDurationInSec = Math.Abs(remainingDurationInSec);
-            else
-                tierReachedDurationInSec = lastDealZoneGroupTierDetails.VolumeInSeconds.Value;
-
-            return lastDealZoneGroupTierDetails;
-        }
-
-        public int GetSupplierRateTierNb(int dealId, int zoneGroupNb, int tierNb, int maxTierNb)
-        {
-            while (maxTierNb > tierNb)
-            {
-                DealZoneGroupTierDetails dealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, maxTierNb);
-                if (dealZoneGroupTierDetails != null && dealZoneGroupTierDetails.RetroActiveFromTierNumber.HasValue && dealZoneGroupTierDetails.RetroActiveFromTierNumber.Value <= tierNb)
-                    return dealZoneGroupTierDetails.TierNumber;
-
-                maxTierNb--;
-            }
-
-            return tierNb;
-        }
-
         public override BaseDealManager.BaseDealLoggableEntity GetLoggableEntity()
         {
             throw new NotImplementedException();
-        }
-
-        public DealZoneGroupTierDetails GetDealZoneGroupTierDetails(bool isSale, int dealId, int zoneGroupNb, int tierNb)
-        {
-            if (isSale)
-                return GetSaleDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
-            else
-                return GetSupplierDealZoneGroupTierDetails(dealId, zoneGroupNb, tierNb);
-        }
-
-        public DealZoneGroupTierDetails GetUpToVolumeDealZoneGroupTierDetails(bool isSale, int dealId, int zoneGroupNb, decimal totalReachedDurationInSec, out decimal tierReachedDurationInSec)
-        {
-            if (isSale)
-                return GetUpToVolumeDealSaleZoneGroupTierDetails(dealId, zoneGroupNb, totalReachedDurationInSec, out tierReachedDurationInSec);
-            else
-                return GetUpToVolumeDealSupplierZoneGroupTierDetails(dealId, zoneGroupNb, totalReachedDurationInSec, out tierReachedDurationInSec);
         }
 
         #endregion
@@ -451,6 +320,18 @@ namespace TOne.WhS.Deal.Business
                 CurrencyId = dealSupplierZoneGroupTier.CurrencyId,
                 RetroActiveFromTierNumber = dealSupplierZoneGroupTier.RetroActiveFromTierNumber
             };
+        }
+
+        DealSaleZoneGroup GetDealSaleZoneGroup(int dealId, int zoneGroupNb)
+        {
+            var cachedDealSaleZoneGroups = GetCachedDealSaleZoneGroups();
+            return cachedDealSaleZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
+        }
+
+        DealSupplierZoneGroup GetDealSupplierZoneGroup(int dealId, int zoneGroupNb)
+        {
+            var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroups();
+            return cachedDealSupplierZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
         }
 
         #endregion

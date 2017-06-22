@@ -10,26 +10,30 @@ namespace TOne.WhS.Deal.BP.Activities
 {
     public class LoadDealBillingSummaryRecordsInput
     {
-        public DateTime BeginDate { get; set; }
-
         public Boolean IsSale { get; set; }
+
+        public DateTime BeginDate { get; set; }
     }
 
     public class LoadDealBillingSummaryRecordsOutput
     {
-        public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
-
         public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
+
+        public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
     }
 
     public sealed class LoadDealBillingSummaryRecords : BaseAsyncActivity<LoadDealBillingSummaryRecordsInput, LoadDealBillingSummaryRecordsOutput>
     {
+        [RequiredArgument]
         public InArgument<Boolean> IsSale { get; set; }
 
+        [RequiredArgument]
         public InArgument<DateTime> BeginDate { get; set; }
 
+        [RequiredArgument]
         public OutArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
 
+        [RequiredArgument]
         public OutArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
         protected override LoadDealBillingSummaryRecordsOutput DoWorkWithResult(LoadDealBillingSummaryRecordsInput inputArgument, AsyncActivityHandle handle)
@@ -42,22 +46,22 @@ namespace TOne.WhS.Deal.BP.Activities
             {
                 AffectedDealZoneGroups = affectedDealZoneGroups,
                 CurrentDealBillingSummaryRecords = currentDealBillingSummaryRecords
-            }; 
+            };
         }
 
         protected override LoadDealBillingSummaryRecordsInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new LoadDealBillingSummaryRecordsInput
             {
-                BeginDate = this.BeginDate.Get(context),
                 IsSale = this.IsSale.Get(context),
+                BeginDate = this.BeginDate.Get(context)
             };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadDealBillingSummaryRecordsOutput result)
         {
-            this.CurrentDealBillingSummaryRecords.Set(context, result.CurrentDealBillingSummaryRecords);
             this.AffectedDealZoneGroups.Set(context, result.AffectedDealZoneGroups);
+            this.CurrentDealBillingSummaryRecords.Set(context, result.CurrentDealBillingSummaryRecords);
         }
     }
 }

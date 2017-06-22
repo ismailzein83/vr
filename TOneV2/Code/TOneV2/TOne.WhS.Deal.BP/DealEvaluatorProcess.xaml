@@ -7,11 +7,14 @@
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
- xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Core"
+ xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twdba="clr-namespace:TOne.WhS.Deal.BP.Arguments;assembly=TOne.WhS.Deal.BP.Arguments"
  xmlns:twdba1="clr-namespace:TOne.WhS.Deal.BP.Activities;assembly=TOne.WhS.Deal.BP.Activities"
  xmlns:twde="clr-namespace:TOne.WhS.Deal.Entities;assembly=TOne.WhS.Deal.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -24,6 +27,7 @@
       <x:String>System.Text</x:String>
       <x:String>TOne.WhS.Deal.Entities</x:String>
       <x:String>TOne.WhS.Deal.BP.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -48,6 +52,9 @@
       <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
     </sco:Collection>
@@ -58,6 +65,9 @@
       <Variable x:TypeArguments="twdba:DealEvaluatorSubProcessOutput" Name="sale_DealEvaluatorSubProcessOutput" />
       <Variable x:TypeArguments="twdba:DealEvaluatorSubProcessOutput" Name="cost_DealEvaluatorSubProcessOutput" />
       <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="beginDate" />
+      <Variable x:TypeArguments="scg:HashSet(s:DateTime)" Name="daysToReprocess" />
+      <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="dealEvaluatorReprocessingCompletedEvent" />
+      <Variable x:TypeArguments="twde:DealTechnicalSettingData" Name="dealTechnicalSettingData" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Deal Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -102,14 +112,24 @@
             <Parallel.Variables>
               <Variable x:TypeArguments="x:String" Name="variable1" />
             </Parallel.Variables>
-            <local:DealEvaluatorSubProcess Output="{x:Null}" sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_1" isSale="True">
+            <local:DealEvaluatorSubProcess DisplayName="Sale_DealEvaluatorSubProcess" sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_1" isSale="True">
+              <local:DealEvaluatorSubProcess.Output>
+                <OutArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
+                  <mca:CSharpReference x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">sale_DealEvaluatorSubProcessOutput</mca:CSharpReference>
+                </OutArgument>
+              </local:DealEvaluatorSubProcess.Output>
               <local:DealEvaluatorSubProcess.beginDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate.Value</mca:CSharpValue>
                 </InArgument>
               </local:DealEvaluatorSubProcess.beginDate>
             </local:DealEvaluatorSubProcess>
-            <local:DealEvaluatorSubProcess Output="{x:Null}" sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_2" isSale="False">
+            <local:DealEvaluatorSubProcess DisplayName="Cost_DealEvaluatorSubProcess" sap2010:WorkflowViewState.IdRef="DealEvaluatorSubProcess_2" isSale="False">
+              <local:DealEvaluatorSubProcess.Output>
+                <OutArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
+                  <mca:CSharpReference x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">cost_DealEvaluatorSubProcessOutput</mca:CSharpReference>
+                </OutArgument>
+              </local:DealEvaluatorSubProcess.Output>
               <local:DealEvaluatorSubProcess.beginDate>
                 <InArgument x:TypeArguments="s:DateTime">
                   <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate.Value</mca:CSharpValue>
@@ -117,6 +137,122 @@
               </local:DealEvaluatorSubProcess.beginDate>
             </local:DealEvaluatorSubProcess>
           </Parallel>
+          <If sap2010:WorkflowViewState.IdRef="If_4">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">sale_DealEvaluatorSubProcessOutput != null &amp;&amp; sale_DealEvaluatorSubProcessOutput.DaysToReprocess!=null</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="scg:HashSet(s:DateTime)">
+                    <mca:CSharpReference x:TypeArguments="scg:HashSet(s:DateTime)">daysToReprocess</mca:CSharpReference>
+                  </OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="scg:HashSet(s:DateTime)">
+                    <mca:CSharpValue x:TypeArguments="scg:HashSet(s:DateTime)">sale_DealEvaluatorSubProcessOutput.DaysToReprocess</mca:CSharpValue>
+                  </InArgument>
+                </Assign.Value>
+              </Assign>
+            </If.Then>
+          </If>
+          <If sap2010:WorkflowViewState.IdRef="If_5">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">cost_DealEvaluatorSubProcessOutput != null &amp;&amp; cost_DealEvaluatorSubProcessOutput.DaysToReprocess!=null</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="scg:HashSet(s:DateTime)">
+                    <mca:CSharpReference x:TypeArguments="scg:HashSet(s:DateTime)">daysToReprocess</mca:CSharpReference>
+                  </OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="scg:HashSet(s:DateTime)">
+                    <mca:CSharpValue x:TypeArguments="scg:HashSet(s:DateTime)">new HashSet&lt;DateTime&gt;(daysToReprocess.Union(cost_DealEvaluatorSubProcessOutput.DaysToReprocess))</mca:CSharpValue>
+                  </InArgument>
+                </Assign.Value>
+              </Assign>
+            </If.Then>
+          </If>
+          <If sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">daysToReprocess != null &amp;&amp; daysToReprocess.Count &gt; 0</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+                <twdba1:GetDealTechnicalSettingData sap2010:WorkflowViewState.IdRef="GetDealTechnicalSettingData_1">
+                  <twdba1:GetDealTechnicalSettingData.DealTechnicalSettingData>
+                    <OutArgument x:TypeArguments="twde:DealTechnicalSettingData">
+                      <mca:CSharpReference x:TypeArguments="twde:DealTechnicalSettingData">dealTechnicalSettingData</mca:CSharpReference>
+                    </OutArgument>
+                  </twdba1:GetDealTechnicalSettingData.DealTechnicalSettingData>
+                </twdba1:GetDealTechnicalSettingData>
+                <ForEach x:TypeArguments="s:DateTime" DisplayName="ForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+                  <ForEach.Values>
+                    <InArgument x:TypeArguments="scg1:IEnumerable(s:DateTime)">
+                      <mca:CSharpValue x:TypeArguments="scg1:IEnumerable(s:DateTime)">daysToReprocess</mca:CSharpValue>
+                    </InArgument>
+                  </ForEach.Values>
+                  <ActivityAction x:TypeArguments="s:DateTime">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="s:DateTime" Name="item" />
+                    </ActivityAction.Argument>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                      <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+                        <vbw:RunProcess.Input>
+                          <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                            <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput() 
+            {
+                ReprocessDefinitionId = dealTechnicalSettingData.ReprocessDefinitionId,
+                FromTime = item,
+                ToTime = item.AddDays(1),
+                ChunkTime = dealTechnicalSettingData.ChunkTime,
+                UseTempStorage = true
+            }</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:RunProcess.Input>
+                        <vbw:RunProcess.ProcessCompletedEventPayload>
+                          <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                            <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">dealEvaluatorReprocessingCompletedEvent</mca:CSharpReference>
+                          </OutArgument>
+                        </vbw:RunProcess.ProcessCompletedEventPayload>
+                      </vbw:RunProcess>
+                      <If sap2010:WorkflowViewState.IdRef="If_3">
+                        <If.Condition>
+                          <InArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpValue x:TypeArguments="x:Boolean">dealEvaluatorReprocessingCompletedEvent.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                          </InArgument>
+                        </If.Condition>
+                        <If.Then>
+                          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                            <TerminateWorkflow.Reason>
+                              <InArgument x:TypeArguments="x:String">
+                                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Deal Evaluator Reprocessing has failed for DateTime Range '{0}'-'{1}'", item, item.AddDays(1))</mca:CSharpValue>
+                              </InArgument>
+                            </TerminateWorkflow.Reason>
+                          </TerminateWorkflow>
+                        </If.Then>
+                      </If>
+                    </Sequence>
+                  </ActivityAction>
+                </ForEach>
+              </Sequence>
+            </If.Then>
+          </If>
+          <twdba1:BuildDealEvaluatorProcessState sap2010:WorkflowViewState.IdRef="BuildDealEvaluatorProcessState_1">
+            <twdba1:BuildDealEvaluatorProcessState.DealEvaluatorProcessState>
+              <OutArgument x:TypeArguments="twde:DealEvaluatorProcessState">
+                <mca:CSharpReference x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpReference>
+              </OutArgument>
+            </twdba1:BuildDealEvaluatorProcessState.DealEvaluatorProcessState>
+          </twdba1:BuildDealEvaluatorProcessState>
           <vbw:SaveDefinitionObjectState sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
             <vbw:SaveDefinitionObjectState.ObjectKey>
               <InArgument x:TypeArguments="x:String">
@@ -139,34 +275,59 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbBo3A48BDgIBAT4FRCACAUJFBVAkAgE3UQVcIQIBLF0FhgEKAgEJhwEFjQEgAgECQQtBhQECAUQ+YD6CAQIBQ00LTYABAgE9SAtITQIBOFQLVGgCATJZC1l4AgEtYAtgXAIBCmQJhAEUAgEPigELigGFAQIBBIcBYIcBgAECAQNlC3cWAgEbeAuDASsCARBpDW8tAgEkcA12LQIBHIABEYABaAIBFnsRe1MCARFpgQFphwECAStsE2xiAgElcIEBcIgBAgEjcxNzYgIBHQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbDg+A5cCDgIBAUgFTiADAfQBTwVaJAMB4wFbBWYhAwHSAWcFjgIKAgEMjwIFlQIgAgECSwtLhQEDAfYBSGBIggEDAfUBVwtXgAEDAewBUgtSTQMB5AFeC15oAwHbAWMLY3gDAdMBagtqXAIBDW4JjAIUAgEVkgILkgKFAQIBBI8CYI8CgAECAQNvC4sBFgMBqQGMAQugARADAY8BoQELtQEQAgF1tgEL+AEQAgEw+QEL/wExAgEngAILiwIrAgEWcw1+LQMBvgF/DYoBLQMBqgGPARGPAb4BAwGQAZMBD54BGAMBmAGkARGkAb4BAgF2qAEPswEYAgF+uQERuQGPAQIBMb0BD/YBGgIBOfwBEfwBhgECASiIAhGIAmgCAR+DAhGDAlMCARd2E3aWAQMByQFzmgFzoAEDAcgBexN7YgMBvwGCAROCAZYBAwG1AX+aAX+hAQMBtAGHAROHAWIDAasBmwEVmwGUAQMBoQGWARWWAXkDAZkBsAEVsAHIAQMBhwGrARWrAXkCAX++ARHEATYCAWzFARH1ARsCATrBARfBAYoBAgFtyAEXyAF4AgFkzwEV8wEgAgE70AEX4gEoAgFQ4wEX8gEcAgE80wEd2gEgAgFb3wEd3wGhAQIBUtABwwHQAckBAgFR5gEd5gHQAQIBPeoBG/ABLwIBRu0BIe0BzAECAUc=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="701,22" />
-      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="701,22" />
-      <sap2010:ViewStateData Id="CalculateBeginDate_1" sap:VirtualizedContainerService.HintSize="701,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="810,22" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="810,22" />
+      <sap2010:ViewStateData Id="CalculateBeginDate_1" sap:VirtualizedContainerService.HintSize="810,22" />
       <sap2010:ViewStateData Id="DealEvaluatorSubProcess_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="DealEvaluatorSubProcess_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="663,86" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="663,212" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="663,212" />
+      <sap2010:ViewStateData Id="GetDealTechnicalSettingData_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="486,396">
         <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
+          </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="701,422" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="701,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="723,794">
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="516,546" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="538,732">
         <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
+          </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="763,874" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="663,882" />
+      <sap2010:ViewStateData Id="BuildDealEvaluatorProcessState_1" sap:VirtualizedContainerService.HintSize="663,22" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="663,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="685,1760">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg1:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="810,1910" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="810,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="832,2282">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg1:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="872,2362" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

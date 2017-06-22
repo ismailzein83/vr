@@ -11,5 +11,7 @@ namespace TOne.WhS.Deal.Business
 		public const string SwapDealSettings = "WhS_Deal_SwapDealSettings";
 
         public const string SwapDealTechnicalSettings = "WhS_Deal_SwapDealTechnicalSettings";
+
+        public const string DealTechnicalSettings = "WhS_Deal_DealTechnicalSettings";
 	}
 }

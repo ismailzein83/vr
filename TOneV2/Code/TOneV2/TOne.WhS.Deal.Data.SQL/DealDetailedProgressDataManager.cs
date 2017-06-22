@@ -119,6 +119,12 @@ namespace TOne.WhS.Deal.Data.SQL
             });
         }
 
+        public Byte[] GetMaxTimestamp()
+        {
+            string query = String.Format("SELECT MAX(timestamp) FROM [TOneWhS_Deal].[DealDetailedProgress] WITH(NOLOCK)");
+            return (Byte[])ExecuteScalarText(query, null);
+        }
+
         #endregion
 
         #region Private Methods

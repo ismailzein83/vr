@@ -12,7 +12,8 @@ namespace TOne.WhS.Deal.Entities
 
         public string CarrierAccountName { get; set; }
 
-
         public bool IsEffective { get; set; }
+
+        public string CurrencySymbole { get; set; }
     }
 }

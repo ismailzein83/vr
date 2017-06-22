@@ -58,14 +58,17 @@
       <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:HashSet(twde:DealZoneGroup)" Name="affectedDealZoneGroups" />
       <Variable x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, scg1:List(twdb:DealBillingSummary))" Name="currentDealBillingSummaryRecords" />
       <Variable x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twdb:DealBillingSummary)" Name="expectedDealBillingSummaryRecords" />
       <Variable x:TypeArguments="scg:HashSet(s:DateTime)" Name="daysToReprocess" />
+      <Variable x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)" Name="dealDetailedProgresses" />
+      <Variable x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)" Name="dealProgresses" />
+      <Variable x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgressData)" Name="expectedDealProgressData" />
     </Sequence.Variables>
-    <twdba1:LoadDealBillingSummaryRecords Status="{x:Null}">
+    <twdba1:LoadDealBillingSummaryRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadDealBillingSummaryRecords_1">
       <twdba1:LoadDealBillingSummaryRecords.AffectedDealZoneGroups>
         <OutArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
           <mca:CSharpReference x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpReference>
@@ -86,85 +89,126 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
         </InArgument>
       </twdba1:LoadDealBillingSummaryRecords.IsSale>
-      <sap2010:WorkflowViewState.IdRef>LoadDealBillingSummaryRecords_1</sap2010:WorkflowViewState.IdRef>
     </twdba1:LoadDealBillingSummaryRecords>
-    <twdba1:UpdateProgressTables Status="{x:Null}">
-      <twdba1:UpdateProgressTables.AffectedDealZoneGroups>
+    <twdba1:SyncDealDetailProgressWithBS Status="{x:Null}">
+      <twdba1:SyncDealDetailProgressWithBS.AffectedDealZoneGroups>
         <InArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
           <mca:CSharpValue x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpValue>
         </InArgument>
-      </twdba1:UpdateProgressTables.AffectedDealZoneGroups>
-      <twdba1:UpdateProgressTables.BeginDate>
+      </twdba1:SyncDealDetailProgressWithBS.AffectedDealZoneGroups>
+      <twdba1:SyncDealDetailProgressWithBS.BeginDate>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate</mca:CSharpValue>
         </InArgument>
-      </twdba1:UpdateProgressTables.BeginDate>
-      <twdba1:UpdateProgressTables.CurrentDealBillingSummaryRecords>
+      </twdba1:SyncDealDetailProgressWithBS.BeginDate>
+      <twdba1:SyncDealDetailProgressWithBS.CurrentDealBillingSummaryRecords>
         <InArgument x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, scg1:List(twdb:DealBillingSummary))">
           <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, scg1:List(twdb:DealBillingSummary))">currentDealBillingSummaryRecords</mca:CSharpValue>
         </InArgument>
-      </twdba1:UpdateProgressTables.CurrentDealBillingSummaryRecords>
-      <twdba1:UpdateProgressTables.IsSale>
+      </twdba1:SyncDealDetailProgressWithBS.CurrentDealBillingSummaryRecords>
+      <twdba1:SyncDealDetailProgressWithBS.IsSale>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
         </InArgument>
-      </twdba1:UpdateProgressTables.IsSale>
-      <sap2010:WorkflowViewState.IdRef>UpdateProgressTables_1</sap2010:WorkflowViewState.IdRef>
-    </twdba1:UpdateProgressTables>
-    <twdba1:PrepareExpectedDealBillingSummaryRecords Status="{x:Null}">
-      <twdba1:PrepareExpectedDealBillingSummaryRecords.AffectedDealZoneGroups>
+      </twdba1:SyncDealDetailProgressWithBS.IsSale>
+      <sap2010:WorkflowViewState.IdRef>SyncDealDetailProgressWithBS_1</sap2010:WorkflowViewState.IdRef>
+    </twdba1:SyncDealDetailProgressWithBS>
+    <twdba1:LoadDealProgresses Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadDealProgresses_1">
+      <twdba1:LoadDealProgresses.AffectedDealZoneGroups>
         <InArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
           <mca:CSharpValue x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpValue>
         </InArgument>
-      </twdba1:PrepareExpectedDealBillingSummaryRecords.AffectedDealZoneGroups>
-      <twdba1:PrepareExpectedDealBillingSummaryRecords.BeginDate>
-        <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate</mca:CSharpValue>
+      </twdba1:LoadDealProgresses.AffectedDealZoneGroups>
+      <twdba1:LoadDealProgresses.DealProgresses>
+        <OutArgument x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">
+          <mca:CSharpReference x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">dealProgresses</mca:CSharpReference>
+        </OutArgument>
+      </twdba1:LoadDealProgresses.DealProgresses>
+      <twdba1:LoadDealProgresses.IsSale>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
         </InArgument>
-      </twdba1:PrepareExpectedDealBillingSummaryRecords.BeginDate>
-      <twdba1:PrepareExpectedDealBillingSummaryRecords.ExpectedDealBillingSummaryRecords>
+      </twdba1:LoadDealProgresses.IsSale>
+    </twdba1:LoadDealProgresses>
+    <twdba1:LoadDealDetailedProgresses Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadDealDetailedProgresses_1">
+      <twdba1:LoadDealDetailedProgresses.AffectedDealZoneGroups>
+        <InArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
+          <mca:CSharpValue x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpValue>
+        </InArgument>
+      </twdba1:LoadDealDetailedProgresses.AffectedDealZoneGroups>
+      <twdba1:LoadDealDetailedProgresses.DealDetailedProgresses>
+        <OutArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">
+          <mca:CSharpReference x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">dealDetailedProgresses</mca:CSharpReference>
+        </OutArgument>
+      </twdba1:LoadDealDetailedProgresses.DealDetailedProgresses>
+      <twdba1:LoadDealDetailedProgresses.IsSale>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
+        </InArgument>
+      </twdba1:LoadDealDetailedProgresses.IsSale>
+    </twdba1:LoadDealDetailedProgresses>
+    <twdba1:PrepareExpectedDealTrafficRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareExpectedDealTrafficRecords_1">
+      <twdba1:PrepareExpectedDealTrafficRecords.DealDetailedProgresses>
+        <InArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">Vanrise.Common.Utilities.CloneObject(dealDetailedProgresses)</mca:CSharpValue>
+        </InArgument>
+      </twdba1:PrepareExpectedDealTrafficRecords.DealDetailedProgresses>
+      <twdba1:PrepareExpectedDealTrafficRecords.ExpectedDealBillingSummaryRecords>
         <OutArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twdb:DealBillingSummary)">
           <mca:CSharpReference x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twdb:DealBillingSummary)">expectedDealBillingSummaryRecords</mca:CSharpReference>
         </OutArgument>
-      </twdba1:PrepareExpectedDealBillingSummaryRecords.ExpectedDealBillingSummaryRecords>
-      <twdba1:PrepareExpectedDealBillingSummaryRecords.IsSale>
+      </twdba1:PrepareExpectedDealTrafficRecords.ExpectedDealBillingSummaryRecords>
+      <twdba1:PrepareExpectedDealTrafficRecords.ExpectedDealProgressData>
+        <OutArgument x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgressData)">
+          <mca:CSharpReference x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgressData)">expectedDealProgressData</mca:CSharpReference>
+        </OutArgument>
+      </twdba1:PrepareExpectedDealTrafficRecords.ExpectedDealProgressData>
+      <twdba1:PrepareExpectedDealTrafficRecords.IsSale>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
         </InArgument>
-      </twdba1:PrepareExpectedDealBillingSummaryRecords.IsSale>
-      <sap2010:WorkflowViewState.IdRef>PrepareExpectedDealBillingSummaryRecords_1</sap2010:WorkflowViewState.IdRef>
-    </twdba1:PrepareExpectedDealBillingSummaryRecords>
-    <twdba1:CompareCurrentToExpectedDealRecords Status="{x:Null}">
-      <twdba1:CompareCurrentToExpectedDealRecords.AffectedDealZoneGroups>
-        <InArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
-          <mca:CSharpValue x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpValue>
-        </InArgument>
-      </twdba1:CompareCurrentToExpectedDealRecords.AffectedDealZoneGroups>
-      <twdba1:CompareCurrentToExpectedDealRecords.DaysToReprocess>
+      </twdba1:PrepareExpectedDealTrafficRecords.IsSale>
+    </twdba1:PrepareExpectedDealTrafficRecords>
+    <twdba1:ApplyExpectedDealTrafficRecordsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyExpectedDealTrafficRecordsToDB_1">
+      <twdba1:ApplyExpectedDealTrafficRecordsToDB.DaysToReprocess>
         <OutArgument x:TypeArguments="scg:HashSet(s:DateTime)">
           <mca:CSharpReference x:TypeArguments="scg:HashSet(s:DateTime)">daysToReprocess</mca:CSharpReference>
         </OutArgument>
-      </twdba1:CompareCurrentToExpectedDealRecords.DaysToReprocess>
-      <twdba1:CompareCurrentToExpectedDealRecords.ExpectedDealBillingSummaryRecords>
+      </twdba1:ApplyExpectedDealTrafficRecordsToDB.DaysToReprocess>
+      <twdba1:ApplyExpectedDealTrafficRecordsToDB.DealDetailedProgresses>
+        <InArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">Vanrise.Common.Utilities.CloneObject(dealDetailedProgresses)</mca:CSharpValue>
+        </InArgument>
+      </twdba1:ApplyExpectedDealTrafficRecordsToDB.DealDetailedProgresses>
+      <twdba1:ApplyExpectedDealTrafficRecordsToDB.DealProgresses>
+        <InArgument x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">Vanrise.Common.Utilities.CloneObject(dealProgresses)</mca:CSharpValue>
+        </InArgument>
+      </twdba1:ApplyExpectedDealTrafficRecordsToDB.DealProgresses>
+      <twdba1:ApplyExpectedDealTrafficRecordsToDB.ExpectedDealBillingSummaryRecords>
         <InArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twdb:DealBillingSummary)">
           <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twdb:DealBillingSummary)">expectedDealBillingSummaryRecords</mca:CSharpValue>
         </InArgument>
-      </twdba1:CompareCurrentToExpectedDealRecords.ExpectedDealBillingSummaryRecords>
-      <twdba1:CompareCurrentToExpectedDealRecords.IsSale>
+      </twdba1:ApplyExpectedDealTrafficRecordsToDB.ExpectedDealBillingSummaryRecords>
+      <twdba1:ApplyExpectedDealTrafficRecordsToDB.ExpectedDealProgressData>
+        <InArgument x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgressData)">
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgressData)">expectedDealProgressData</mca:CSharpValue>
+        </InArgument>
+      </twdba1:ApplyExpectedDealTrafficRecordsToDB.ExpectedDealProgressData>
+      <twdba1:ApplyExpectedDealTrafficRecordsToDB.IsSale>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
         </InArgument>
-      </twdba1:CompareCurrentToExpectedDealRecords.IsSale>
-      <sap2010:WorkflowViewState.IdRef>CompareCurrentToExpectedDealRecords_1</sap2010:WorkflowViewState.IdRef>
-    </twdba1:CompareCurrentToExpectedDealRecords>
-    <If>
+      </twdba1:ApplyExpectedDealTrafficRecordsToDB.IsSale>
+    </twdba1:ApplyExpectedDealTrafficRecordsToDB>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">daysToReprocess != null</mca:CSharpValue>
         </InArgument>
       </If.Condition>
       <If.Then>
-        <Assign>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
           <Assign.To>
             <OutArgument x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">
               <mca:CSharpReference x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">Output</mca:CSharpReference>
@@ -175,30 +219,29 @@
               <mca:CSharpValue x:TypeArguments="twdba:DealEvaluatorSubProcessOutput">new DealEvaluatorSubProcessOutput() { DaysToReprocess = daysToReprocess}</mca:CSharpValue>
             </InArgument>
           </Assign.Value>
-          <sap2010:WorkflowViewState.IdRef>Assign_1</sap2010:WorkflowViewState.IdRef>
         </Assign>
       </If.Then>
-      <sap2010:WorkflowViewState.IdRef>If_1</sap2010:WorkflowViewState.IdRef>
     </If>
-    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXERlYWxFdmFsdWF0b3JTdWJQcm9jZXNzLnhhbWwaPQO5AQ4CAQFEBVosAgF/WwVxIwIBXnIFiAE3AgE9iQEFnwEyAgEcoAEFtgEKAgECVgtWUAMBmAFRC1GwAQMBkAFMC0xUAwGIAUcLR34DAYABbQttUAIBd2gLaKgBAgFvYwtjVAIBZ14LXnYCAV+EAQuEAVACAVZ6C3pUAgFOdQt1dgIBRn8Lf7IBAgE+mwELmwFQAgE1kQELkQFvAgEtjAELjAF2AgEllgELlgGqAQIBHaMBC6MBYQIBA6cBCbMBEgIBC68BD68BsAECARSqAQ+qAXYCAQw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXERlYWxFdmFsdWF0b3JTdWJQcm9jZXNzLnhhbWwkPQPiAQ4CAQFHBVwsAwGGAl0FcysDAdkBdAWEASEDAbcBhQEFlQEpAwGVAZYBBasBMAIBaKwBBcsBMgIBJcwBBeABCgIBAlkLWVADAagCVAtUsAEDAZ0CTwtPVAMBkgJKC0p+AwGHAm8Lb1ADAfsBagtqqAEDAfABZQtlVAMB5QFgC2B2AwHaAYEBC4EBUAMBzgF8C3yNAQMBwwF3C3d2AwG4AZIBC5IBUAMBrAGIAQuIAXYDAaEBjQELjQGpAQMBlgGoAQuoAVADAYoBowELowGbAQIBf5kBC5kBxwECAXSeAQueAbIBAgFpyAELyAFQAgFdrwELrwFvAgFSwwELwwGTAQIBR7kBC7kBqwECATy0AQu0AccBAgExvgELvgGqAQIBJs8BC88BYQIBA9MBCd4BEgIBDtsBD9sBsAECARrWAQ/WAXYCAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LoadDealBillingSummaryRecords_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="UpdateProgressTables_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="PrepareExpectedDealBillingSummaryRecords_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="CompareCurrentToExpectedDealRecords_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="SyncDealDetailProgressWithBS_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="LoadDealProgresses_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="LoadDealDetailedProgresses_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="PrepareExpectedDealTrafficRecords_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="ApplyExpectedDealTrafficRecordsToDB_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,212" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,584">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,708">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.SubProcesses.DealEvaluatorSubProcess_1" sap:VirtualizedContainerService.HintSize="526,664" />
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.SubProcesses.DealEvaluatorSubProcess_1" sap:VirtualizedContainerService.HintSize="526,788" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -7,8 +7,10 @@ namespace TOne.WhS.Deal.BP.Activities
 {
     public sealed class CalculateBeginDate : CodeActivity
     {
+        [RequiredArgument]
         public InArgument<DealEvaluatorProcessState> DealEvaluatorProcessState { get; set; }
 
+        [RequiredArgument]
         public OutArgument<DateTime?> BeginDate { get; set; }
 
 

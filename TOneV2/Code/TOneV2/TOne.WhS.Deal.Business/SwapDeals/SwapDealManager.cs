@@ -89,6 +89,7 @@ namespace TOne.WhS.Deal.Business
 
             SwapDealSettings settings = deal.Settings as SwapDealSettings;
             int carrierAccountId = settings.CarrierAccountId;
+
             detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
             detail.TypeDescription = Utilities.GetEnumAttribute<DealType, DescriptionAttribute>(settings.DealType).Description;
             detail.ContractDescription = Utilities.GetEnumAttribute<DealContract, DescriptionAttribute>(settings.DealContract).Description;
@@ -97,6 +98,7 @@ namespace TOne.WhS.Deal.Business
             detail.BuyingVolume = settings.Outbounds.Sum(x => x.Volume);
             detail.SellingAmount = settings.Inbounds.Sum(x => x.Volume * x.Rate);
             detail.SellingVolume = settings.Inbounds.Sum(x => x.Volume);
+            detail.CurrencySymbole = new CurrencyManager().GetCurrencySymbol(settings.CurrencyId);
 
             return detail;
         }
@@ -112,7 +114,6 @@ namespace TOne.WhS.Deal.Business
         }
 
         #endregion
-
 
         #region Private Classes
 

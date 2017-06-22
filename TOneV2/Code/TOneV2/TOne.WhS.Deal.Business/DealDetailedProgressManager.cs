@@ -102,6 +102,11 @@ namespace TOne.WhS.Deal.Business
             return true;
         }
 
+        public Byte[] GetMaxTimestamp()
+        {
+            return _dataManager.GetMaxTimestamp();
+        }
+
         #endregion
     }
 }
