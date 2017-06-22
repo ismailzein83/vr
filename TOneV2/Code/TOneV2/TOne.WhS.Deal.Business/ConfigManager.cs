@@ -24,6 +24,12 @@ namespace TOne.WhS.Deal.Business
             return dealTechnicalSettingData;
         }
 
+        public int GetDealTechnicalSettingIntervalOffset()
+        {
+            DealTechnicalSettingData dealTechnicalSettingData = GetDealTechnicalSettingData();
+            return dealTechnicalSettingData.IntervalOffset;
+        }
+
         #endregion
 
         #region private methods

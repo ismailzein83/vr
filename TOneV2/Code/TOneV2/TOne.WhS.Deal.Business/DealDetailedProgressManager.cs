@@ -15,10 +15,12 @@ namespace TOne.WhS.Deal.Business
         #region Properties/Ctor
 
         IDealDetailedProgressDataManager _dataManager;
+        int _dealTechnicalSettingIntervalOffset;
 
         public DealDetailedProgressManager()
         {
             _dataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
+            _dealTechnicalSettingIntervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
         }
 
         #endregion
@@ -74,7 +76,7 @@ namespace TOne.WhS.Deal.Business
             if (dealDetailedProgress.FromTime != dealBillingSummary.BatchStart)
                 return false;
 
-            if (dealDetailedProgress.ToTime != dealBillingSummary.BatchStart.AddMinutes(30))
+            if (dealDetailedProgress.ToTime != dealBillingSummary.BatchStart.AddMinutes(_dealTechnicalSettingIntervalOffset))
                 return false;
 
             if (dealDetailedProgress.DealId != dealBillingSummary.DealId)

@@ -13,5 +13,7 @@ namespace TOne.WhS.Deal.Entities
         public Guid ReprocessDefinitionId { get; set; }
 
         public ReprocessChunkTimeEnum ChunkTime { get; set; }
+
+        public int IntervalOffset { get; set; }  
     }
 }

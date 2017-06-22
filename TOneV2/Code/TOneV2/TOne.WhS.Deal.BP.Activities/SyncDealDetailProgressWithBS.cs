@@ -57,6 +57,8 @@ namespace TOne.WhS.Deal.BP.Activities
             if (currentDealBillingSummaryRecords == null)
                 return;
 
+            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
+
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(affectedDealZoneGroups, isSale, beginDate);
 
@@ -72,17 +74,17 @@ namespace TOne.WhS.Deal.BP.Activities
 
                 foreach (var dealBillingSummary in currentDealBillingSummaryRecord.Value)
                 {
-                    DealDetailedZoneGroupTier currentDealDetailedZoneGroupTier = BuildDealDetailedZoneGroupTier(dealBillingSummary);
+                    DealDetailedZoneGroupTier currentDealDetailedZoneGroupTier = BuildDealDetailedZoneGroupTier(dealBillingSummary, intervalOffset);
 
                     if (dealDetailedProgresses != null && dealDetailedProgresses.TryGetValue(currentDealDetailedZoneGroupTier, out tempDealDetailedProgress))
                     {
                         dealDetailedProgressesToKeep.Add(tempDealDetailedProgress.DealDetailedProgressId);
                         if (!dealDetailedProgressManager.AreEqual(tempDealDetailedProgress, dealBillingSummary))
-                            dealDetailedProgressesToUpdate.Add(BuildDealDetailedProgress(tempDealDetailedProgress.DealDetailedProgressId, dealBillingSummary));
+                            dealDetailedProgressesToUpdate.Add(BuildDealDetailedProgress(dealBillingSummary, tempDealDetailedProgress.DealDetailedProgressId, intervalOffset));
                     }
                     else
                     {
-                        dealDetailedProgressesToAdd.Add(BuildDealDetailedProgress(null, dealBillingSummary));
+                        dealDetailedProgressesToAdd.Add(BuildDealDetailedProgress(dealBillingSummary, null, intervalOffset));
                     }
                 }
             }
@@ -94,7 +96,7 @@ namespace TOne.WhS.Deal.BP.Activities
             dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete);
         }
 
-        private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary)
+        private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary, int intervalOffset)
         {
             return new DealDetailedZoneGroupTier()
             {
@@ -103,11 +105,11 @@ namespace TOne.WhS.Deal.BP.Activities
                 FromTime = dealBillingSummary.BatchStart,
                 RateTierNb = dealBillingSummary.RateTierNb,
                 TierNb = dealBillingSummary.TierNb,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(30)
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset)
             };
         }
 
-        private DealDetailedProgress BuildDealDetailedProgress(long? dealDetailedProgressID, DealBillingSummary dealBillingSummary)
+        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID, int intervalOffset)
         {
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress()
             {
@@ -117,7 +119,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 TierNb = dealBillingSummary.TierNb,
                 RateTierNb = dealBillingSummary.RateTierNb,
                 FromTime = dealBillingSummary.BatchStart,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(30)
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset)
             };
 
             if (dealDetailedProgressID.HasValue)

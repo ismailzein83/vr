@@ -50,6 +50,8 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override ApplyExpectedDealTrafficRecordsToDBOutput DoWorkWithResult(ApplyExpectedDealTrafficRecordsToDBInput inputArgument, AsyncActivityHandle handle)
         {
+            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
+
             List<DealDetailedProgress> dealDetailedProgressToAdd = new List<DealDetailedProgress>();
             List<DealDetailedProgress> dealDetailedProgressToUpdate = new List<DealDetailedProgress>();
             HashSet<long> dealDetailedProgressesToKeep = new HashSet<long>();
@@ -69,13 +71,13 @@ namespace TOne.WhS.Deal.BP.Activities
 
                 if (!dealDetailedProgresses.TryGetValue(dealDetailedZoneGroupTier, out currentDealDetailedProgresses))
                 {
-                    dealDetailedProgressToAdd.Add(BuildDealDetailedProgress(expectedDealBillingSummary, null));
+                    dealDetailedProgressToAdd.Add(BuildDealDetailedProgress(expectedDealBillingSummary, null, intervalOffset));
                 }
                 else
                 {
                     dealDetailedProgressesToKeep.Add(currentDealDetailedProgresses.DealDetailedProgressId);
                     if (!dealDetailedProgressManager.AreEqual(currentDealDetailedProgresses, expectedDealBillingSummary))
-                        dealDetailedProgressToUpdate.Add(BuildDealDetailedProgress(expectedDealBillingSummary, currentDealDetailedProgresses.DealDetailedProgressId));
+                        dealDetailedProgressToUpdate.Add(BuildDealDetailedProgress(expectedDealBillingSummary, currentDealDetailedProgresses.DealDetailedProgressId, intervalOffset));
                 }
             }
 
@@ -150,7 +152,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
         #region Private Methods
 
-        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID)
+        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID, int intervalOffset)
         {
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress()
             {
@@ -158,9 +160,9 @@ namespace TOne.WhS.Deal.BP.Activities
                 ZoneGroupNb = dealBillingSummary.ZoneGroupNb,
                 IsSale = dealBillingSummary.IsSale,
                 TierNb = dealBillingSummary.TierNb,
-                RateTierNb = dealBillingSummary.RateTierNb,
+                RateTierNb = dealBillingSummary.RateTierNb, 
                 FromTime = dealBillingSummary.BatchStart,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(30),
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset),
                 ReachedDurationInSeconds = dealBillingSummary.DurationInSeconds
             };
 
