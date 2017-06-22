@@ -136,7 +136,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     };
                     VRUIUtilsService.callDirectiveLoad(periodDirectiveAPI, payloadPeriod, loadPeriodPromiseDeferred);
 
-                    if (payload.period == -1) {
+                    if (payload && payload.period == -1) {
                         ctrl.period = customize;
                     }
                 });
