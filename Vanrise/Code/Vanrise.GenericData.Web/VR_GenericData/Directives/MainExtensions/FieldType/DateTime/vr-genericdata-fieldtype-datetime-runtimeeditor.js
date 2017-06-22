@@ -97,7 +97,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                         }
                     }
                     else {
-                        if (fieldValue instanceof Date)
+                        if ($scope.scopeModel.fieldType.type != "time")
                             $scope.scopeModel.value = fieldValue;
                         else {
                             $scope.scopeModel.value = convertTimeToDate(fieldValue);
