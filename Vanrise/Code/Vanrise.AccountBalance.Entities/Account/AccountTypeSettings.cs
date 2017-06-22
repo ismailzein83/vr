@@ -26,11 +26,12 @@ namespace Vanrise.AccountBalance.Entities
         public TimeSpan TimeOffset { get; set; }
         public Guid? InvToAccBalanceRelationId { get; set; }
         public IEnumerable<Guid> AllowedBillingTransactionTypeIds { get; set; }
+        public bool ShouldGroupUsagesByTransactionType { get; set; }
     }
     public abstract class AccountTypeExtendedSettings
     {
-        public abstract Guid ConfigId { get;}
-        public abstract string AccountSelector { get;}
+        public abstract Guid ConfigId { get; }
+        public abstract string AccountSelector { get; }
         public virtual VRActionTargetType GetActionTargetType()
         {
             return null;
@@ -97,7 +98,7 @@ namespace Vanrise.AccountBalance.Entities
     }
     public interface IAccountBalanceFieldSourceGetFieldValueContext
     {
-        Object PreparedData { get;}
+        Object PreparedData { get; }
         Entities.AccountBalance AccountBalance { get; set; }
         string FieldName { get; }
     }

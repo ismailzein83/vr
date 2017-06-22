@@ -211,7 +211,7 @@ namespace Vanrise.AccountBalance.Business
                             var gridAttribute = matchField.FieldType.GetGridColumnAttribute(null);
                             gridAttribute.Field = matchField.Name;
                             gridAttribute.Tag = matchField.Name;
-                            gridAttribute.HeaderText = column.UseEmptyHeader? "": column.Title;
+                            gridAttribute.HeaderText = column.UseEmptyHeader ? "" : column.Title;
                             gridAttribute.GridColCSSClassValue = column.GridColCSSValue;
                             //if (column.GridColumnSettings != null)
                             //{
@@ -233,6 +233,14 @@ namespace Vanrise.AccountBalance.Business
             AccountTypeSettings accountTypeSettings = GetAccountTypeSettings(accountTypeId);
             return (accountTypeSettings != null) ? accountTypeSettings.AllowedBillingTransactionTypeIds : null;
         }
+
+        public bool ShouldGroupUsagesByTransactionType(Guid accountTypeId)
+        {
+            AccountTypeSettings accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.ShouldGroupUsagesByTransactionType;
+        }
+
         #endregion
 
         #region Private Methods

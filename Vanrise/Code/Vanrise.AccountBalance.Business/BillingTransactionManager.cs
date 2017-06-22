@@ -13,7 +13,6 @@ namespace Vanrise.AccountBalance.Business
 {
     public class BillingTransactionManager
     {
-         
         public Vanrise.Entities.IDataRetrievalResult<BillingTransactionDetail> GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new BillingTransactionRequestHandler());
@@ -31,7 +30,7 @@ namespace Vanrise.AccountBalance.Business
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 billingTransaction.AccountBillingTransactionId = billingTransactionId;
-                insertOperationOutput.InsertedObject = BillingTransactionDetailMapper(billingTransaction, BillingTransactionSource.BillingTransaction);
+                insertOperationOutput.InsertedObject = BillingTransactionDetailMapper(billingTransaction, BillingTransactionSource.Transaction);
             }
             else
             {
@@ -51,6 +50,9 @@ namespace Vanrise.AccountBalance.Business
             BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
             AccountManager accountManager = new AccountManager();
             bool isCredit = billingTransactionTypeManager.IsCredit(billingTransaction.TransactionTypeId);
+
+            string displayId = (billingTransactionSource == BillingTransactionSource.GroupedUsage) ? string.Format("BillingTransaction_{0}", billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)) : string.Format("{0}_{1}", Utilities.GetEnumDescription(billingTransactionSource), billingTransaction.AccountBillingTransactionId);
+
             return new BillingTransactionDetail
             {
                 Entity = billingTransaction,
@@ -60,7 +62,7 @@ namespace Vanrise.AccountBalance.Business
                 Credit = isCredit ? (double?)billingTransaction.Amount : null,
                 Debit = !isCredit ? (double?)billingTransaction.Amount : null,
                 BillingTransactionSource = billingTransactionSource,
-                DisplayId = string.Format("{0}_{1}", Utilities.GetEnumDescription(billingTransactionSource), billingTransaction.AccountBillingTransactionId)
+                DisplayId = displayId
             };
         }
         public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
@@ -79,34 +81,73 @@ namespace Vanrise.AccountBalance.Business
             {
                 AccountTypeId = accountUsage.AccountTypeId,
                 AccountId = accountUsage.AccountId,
-                AccountBillingTransactionId = accountUsage.AccountUsageId ,
+                AccountBillingTransactionId = accountUsage.AccountUsageId,
                 Amount = accountUsage.UsageBalance,
-                CurrencyId =accountUsage.CurrencyId ,
+                CurrencyId = accountUsage.CurrencyId,
                 TransactionTime = accountUsage.PeriodEnd <= DateTime.Now ? accountUsage.PeriodEnd : DateTime.Now,
                 TransactionTypeId = accountUsage.TransactionTypeId,
                 Notes = string.Format("Usage From {0:yyyy-MM-dd HH:mm} to {1:yyyy-MM-dd HH:mm}", accountUsage.PeriodStart, accountUsage.PeriodEnd),
                 IsBalanceUpdated = true,
             };
         }
-        public IEnumerable<BillingTransaction> ConvertAccountUsagesToBillingTransactions(IEnumerable<AccountUsage> accountUsages)
+        public IEnumerable<BillingTransaction> ConvertAccountUsagesToBillingTransactions(IEnumerable<AccountUsage> accountUsages, bool shouldGroupUsagesByTransactionTypes)
         {
-            List<BillingTransaction> billingTransactions = new List<BillingTransaction>();
-            if (accountUsages != null)
-            {
-                foreach (var accountUsage in accountUsages)
-                {
-                    billingTransactions.Add(ConvertAccountUsageToBillingTransaction(accountUsage));
-                }
-            }
-            return billingTransactions;
-        }
+            if (accountUsages == null || accountUsages.Count() == 0)
+                return null;
 
+            if (shouldGroupUsagesByTransactionTypes)
+            {
+                var transactions = new Dictionary<string, Dictionary<Guid, BillingTransaction>>();
+
+                var transactionTypeManager = new BillingTransactionTypeManager();
+                var rateExchangeManager = new CurrencyExchangeRateManager();
+
+                foreach (AccountUsage accountUsage in accountUsages)
+                {
+                    Dictionary<Guid, BillingTransaction> accountTransactions = transactions.GetOrCreateItem(accountUsage.AccountId, () =>
+                    {
+                        return new Dictionary<Guid, BillingTransaction>();
+                    });
+
+                    BillingTransaction matchedTransaction = accountTransactions.GetOrCreateItem(accountUsage.TransactionTypeId, () =>
+                    {
+                        BillingTransactionType transactionType = transactionTypeManager.GetBillingTransactionType(accountUsage.TransactionTypeId);
+                        transactionType.ThrowIfNull("transactionType", accountUsage.TransactionTypeId);
+
+                        return new BillingTransaction()
+                        {
+                            AccountBillingTransactionId = 0,
+                            TransactionTypeId = accountUsage.TransactionTypeId,
+                            AccountTypeId = accountUsage.AccountTypeId,
+                            AccountId = accountUsage.AccountId,
+                            Amount = 0,
+                            CurrencyId = accountUsage.CurrencyId,
+                            TransactionTime = DateTime.Now,
+                            Notes = string.Format("Live {0}", transactionType.Name),
+                            IsBalanceUpdated = true
+                        };
+                    });
+
+                    decimal convertedAmount = rateExchangeManager.ConvertValueToCurrency(accountUsage.UsageBalance, accountUsage.CurrencyId, matchedTransaction.CurrencyId, accountUsage.PeriodEnd);
+                    matchedTransaction.Amount += convertedAmount;
+                }
+
+                return transactions.SelectMany(x => x.Value.Values);
+            }
+            else
+            {
+                var transactions = new List<BillingTransaction>();
+                foreach (AccountUsage accountUsage in accountUsages)
+                    transactions.Add(ConvertAccountUsageToBillingTransaction(accountUsage));
+                return transactions;
+            }
+        }
         public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
         }
-        public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes,List<string> accountIds,List<Guid> transactionTypeIds,DateTime fromDate,DateTime? toDate)
+        public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactions(accountTypes, accountIds, transactionTypeIds, fromDate, toDate);
@@ -128,13 +169,15 @@ namespace Vanrise.AccountBalance.Business
                 IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
                 var billingTransactions = dataManager.GetFilteredBillingTransactions(input.Query);
                 if (billingTransactions != null)
-                    rslt.AddRange(billingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = BillingTransactionSource.BillingTransaction }));
+                    rslt.AddRange(billingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = BillingTransactionSource.Transaction }));
                 AccountUsageManager accountUsageManager = new AccountUsageManager();
                 var accountUsages = accountUsageManager.GetAccountUsageForBillingTransactions(input.Query.AccountTypeId, input.Query.TransactionTypeIds, input.Query.AccountsIds, input.Query.FromTime, input.Query.ToTime);
-                if (accountUsages != null)
-                {                   
-                    var usagesAsBillingTransactions = s_billingTransactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages);
-                    rslt.AddRange(usagesAsBillingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = BillingTransactionSource.AccountUsage }));
+                if (accountUsages != null && accountUsages.Count() > 0)
+                {
+                    bool shouldGroupUsagesByTransactionType = new AccountTypeManager().ShouldGroupUsagesByTransactionType(input.Query.AccountTypeId);
+                    var usagesAsBillingTransactions = s_billingTransactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages, shouldGroupUsagesByTransactionType);
+                    BillingTransactionSource transactionSource = (shouldGroupUsagesByTransactionType) ? BillingTransactionSource.GroupedUsage : BillingTransactionSource.Usage;
+                    rslt.AddRange(usagesAsBillingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = transactionSource }));
                 }
                 return rslt;
             }
@@ -172,8 +215,8 @@ namespace Vanrise.AccountBalance.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime, Width = 25});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime, Width = 25 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Transaction Type", Width = 22 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Debit" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Credit" });

@@ -19,25 +19,31 @@ namespace Vanrise.AccountBalance.Business
         }
 
         #region Private Classes
+
         private class AccountStatmentRequestHandler : BigDataRequestHandler<AccountStatementQuery, AccountStatementItem, AccountStatementItem>
         {
-            public override AccountStatementItem EntityDetailMapper(AccountStatementItem entity)
-            {
-                return entity;
-            }
-            decimal _currenctBalance;
+            #region Fields
+
             string _currencyName;
+            decimal _currentBalance;
+
             decimal _totalDebit = 0;
             decimal _totalCredit = 0;
+
+            #endregion
+
             public override IEnumerable<AccountStatementItem> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<AccountStatementQuery> input)
             {
-                AccountManager accountManager = new AccountManager();
-                var accountInfo = accountManager.GetAccountInfo(input.Query.AccountTypeId, input.Query.AccountId);
-                int currencyId = accountInfo.CurrencyId;
-                CurrencyManager currencyManager = new CurrencyManager();
-                _currencyName = currencyManager.GetCurrencySymbol(currencyId);
-                 return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, currencyId);
+                AccountInfo accountInfo = new AccountManager().GetAccountInfo(input.Query.AccountTypeId, input.Query.AccountId);
+
+                int accountCurrencyId = accountInfo.CurrencyId;
+                _currencyName = new CurrencyManager().GetCurrencySymbol(accountCurrencyId);
+
+                bool shouldGroupUsagesByTransactionType = new AccountTypeManager().ShouldGroupUsagesByTransactionType(input.Query.AccountTypeId);
+
+                return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, accountCurrencyId, shouldGroupUsagesByTransactionType);
             }
+
             protected override BigResult<AccountStatementItem> AllRecordsToBigResult(DataRetrievalInput<AccountStatementQuery> input, IEnumerable<AccountStatementItem> allRecords)
             {
                 var query = input.Query;
@@ -45,99 +51,23 @@ namespace Vanrise.AccountBalance.Business
                 var analyticBigResult = new AccountStatementResult()
                 {
                     ResultKey = input.ResultKey,
-                    Data =  allRecords.VRGetPage(input),
+                    Data = allRecords.VRGetPage(input),
                     TotalCount = allRecords.Count(),
-                    CurrentBalance = Math.Round(Math.Abs(_currenctBalance), normalPression),
-                    BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(_currenctBalance),
+                    CurrentBalance = Math.Round(Math.Abs(_currentBalance), normalPression),
+                    BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(_currentBalance),
                     Currency = _currencyName,
                     TotalCredit = Math.Round(_totalCredit, normalPression),
-                    TotalDebit = Math.Round(_totalDebit,normalPression),
-                    
+                    TotalDebit = Math.Round(_totalDebit, normalPression),
+
                 };
                 return analyticBigResult;
             }
-            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int currencyId)
+
+            public override AccountStatementItem EntityDetailMapper(AccountStatementItem entity)
             {
-                
-                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
-
-                BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
-                var billingTransactions = billingTransactionManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
-                AccountUsageManager accountUsageManager = new AccountUsageManager();
-                var accountUsages = accountUsageManager.GetAccountUsagesByAccount(accountTypeId, accountId);
-                var convertedBillingTransactions = billingTransactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages);
-
-                List<BillingTransaction> allBillingTransactions = new List<BillingTransaction>();
-                allBillingTransactions.AddRange(billingTransactions);
-                allBillingTransactions.AddRange(convertedBillingTransactions);
-
-
-                var orderedBillingTransactions = allBillingTransactions.OrderBy(x => x.TransactionTime);
-                List<AccountStatementItem> accountStatementItems = new List<AccountStatementItem>();
-                decimal previousBalance = 0;
-                decimal balance = 0;
-                foreach (var billingTransaction in orderedBillingTransactions)
-                {
-                    var transactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
-                    var convertedAmount = billingTransaction.CurrencyId != currencyId ? currencyExchangeRateManager.ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, currencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
-                    if (transactionType.IsCredit)
-                    {
-                        _currenctBalance += convertedAmount;
-                    }
-                    else
-                    {
-                        _currenctBalance -= convertedAmount;
-                    }
-                    if (billingTransaction.TransactionTime < fromDate)
-                    {
-                        if (transactionType.IsCredit)
-                        {
-                            previousBalance += convertedAmount;
-                            balance += convertedAmount;
-                        }
-                        else
-                        {
-                            previousBalance -= convertedAmount;
-                            balance -= convertedAmount;
-                        }
-                    }else
-                    {
-                        var billingTransactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
-                        var amount = billingTransaction.CurrencyId != currencyId ? currencyExchangeRateManager.ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, currencyId, billingTransaction.TransactionTime) : billingTransaction.Amount;
-                        AccountStatementItem accountStatementItem = new AccountStatementItem
-                        {
-                            TransactionTime = billingTransaction.TransactionTime,
-                            Description = billingTransaction.Notes,
-                            TransactionType = billingTransactionType.Name,
-                        };
-                        if (billingTransactionType.IsCredit)
-                        {
-                            balance += amount;
-                            accountStatementItem.Credit = amount;
-                            _totalCredit += amount;
-                        }
-                        else
-                        {
-                            balance -= amount;
-                            accountStatementItem.Debit = amount;
-                            _totalDebit += amount;
-                        }
-                        accountStatementItem.Balance = Math.Abs(balance);
-                        accountStatementItem.BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(balance);
-                        accountStatementItems.Add(accountStatementItem);
-                    }
-                   
-                }
-                accountStatementItems.Insert(0,new AccountStatementItem
-                {
-                    Balance = Math.Abs(previousBalance) ,
-                    Description = "Balance brought forward",
-                    BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(previousBalance)
-                });
-                return accountStatementItems;
-
+                return entity;
             }
+
             protected override ResultProcessingHandler<AccountStatementItem> GetResultProcessingHandler(DataRetrievalInput<AccountStatementQuery> input, BigResult<AccountStatementItem> bigResult)
             {
                 return new ResultProcessingHandler<AccountStatementItem>
@@ -145,8 +75,94 @@ namespace Vanrise.AccountBalance.Business
                     ExportExcelHandler = new AccountStatementExcelExportHandler(input.Query)
                 };
             }
+
+            #region Private Methods
+
+            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int accountCurrencyId, bool shouldGroupUsagesByTransactionType)
+            {
+                var transactionManager = new BillingTransactionManager();
+                IEnumerable<BillingTransaction> transactions = transactionManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
+
+                IEnumerable<AccountUsage> accountUsages = new AccountUsageManager().GetAccountUsagesByAccount(accountTypeId, accountId);
+                IEnumerable<BillingTransaction> convertedTransactions = transactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages, shouldGroupUsagesByTransactionType);
+
+                var allTransactions = new List<BillingTransaction>();
+                if (transactions != null)
+                    allTransactions.AddRange(transactions);
+                if (convertedTransactions != null)
+                    allTransactions.AddRange(convertedTransactions);
+
+                var accountStatementItems = new List<AccountStatementItem>();
+                IEnumerable<BillingTransaction> orderedTransactions = allTransactions.OrderBy(x => x.TransactionTime);
+
+                var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                var transactionTypeManager = new BillingTransactionTypeManager();
+
+                decimal previousBalance = 0;
+                decimal balance = 0;
+
+                foreach (BillingTransaction transaction in orderedTransactions)
+                {
+                    BillingTransactionType transactionType = transactionTypeManager.GetBillingTransactionType(transaction.TransactionTypeId);
+                    decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(transaction.Amount, transaction.CurrencyId, accountCurrencyId, transaction.TransactionTime);
+
+                    if (transactionType.IsCredit)
+                    {
+                        balance += convertedAmount;
+                        _currentBalance += convertedAmount;
+                    }
+                    else
+                    {
+                        balance -= convertedAmount;
+                        _currentBalance -= convertedAmount;
+                    }
+
+                    if (transaction.TransactionTime < fromDate)
+                    {
+                        if (transactionType.IsCredit)
+                            previousBalance += convertedAmount;
+                        else
+                            previousBalance -= convertedAmount;
+                    }
+                    else
+                    {
+                        var accountStatementItem = new AccountStatementItem
+                        {
+                            TransactionType = transactionType.Name,
+                            TransactionTime = transaction.TransactionTime,
+                            Description = transaction.Notes
+                        };
+
+                        if (transactionType.IsCredit)
+                        {
+                            accountStatementItem.Credit = convertedAmount;
+                            _totalCredit += convertedAmount;
+                        }
+                        else
+                        {
+                            accountStatementItem.Debit = convertedAmount;
+                            _totalDebit += convertedAmount;
+                        }
+
+                        accountStatementItem.Balance = Math.Abs(balance);
+                        accountStatementItem.BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(balance);
+                        accountStatementItems.Add(accountStatementItem);
+                    }
+                }
+
+                accountStatementItems.Insert(0, new AccountStatementItem
+                {
+                    Balance = Math.Abs(previousBalance),
+                    Description = "Balance brought forward",
+                    BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(previousBalance)
+                });
+
+                return accountStatementItems;
+            }
+
+            #endregion
         }
-        
+
         private class AccountStatementExcelExportHandler : ExcelExportHandler<AccountStatementItem>
         {
             AccountStatementQuery _query;
@@ -223,7 +239,7 @@ namespace Vanrise.AccountBalance.Business
                 context.MainSheet = sheet;
             }
         }
-        #endregion
 
+        #endregion
     }
 }

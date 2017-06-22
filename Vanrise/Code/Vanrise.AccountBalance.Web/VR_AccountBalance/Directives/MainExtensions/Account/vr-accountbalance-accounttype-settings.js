@@ -96,6 +96,7 @@ function (UtilsService, VRUIUtilsService, VR_AccountBalance_AccountTypeAPIServic
                     accountTypeEntity = payload.componentType;
                     if (accountTypeEntity != undefined && accountTypeEntity.Settings != undefined) {
                         $scope.scopeModel.timeOffset = accountTypeEntity.Settings.TimeOffset;
+                        $scope.scopeModel.shouldGroupUsagesByTransactionType = accountTypeEntity.Settings.ShouldGroupUsagesByTransactionType;
                     }
 
                 }
@@ -239,7 +240,8 @@ function (UtilsService, VRUIUtilsService, VR_AccountBalance_AccountTypeAPIServic
                     AddRequiredPermission: addPermissionAPI.getData(),
                 },
                 InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
-                AllowedBillingTransactionTypeIds: billingTransactionTypeSelectorAPI.getSelectedIds()
+                AllowedBillingTransactionTypeIds: billingTransactionTypeSelectorAPI.getSelectedIds(),
+                ShouldGroupUsagesByTransactionType: $scope.scopeModel.shouldGroupUsagesByTransactionType
             };
         }
         function getBalancePeriodSettings() {

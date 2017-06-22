@@ -17,9 +17,10 @@
                                             isrequired="true"
                                             normal-col-num="6">
             </vr-accountusage-periodsettings>
+            <vr-columns width="1/2row">
+                <vr-switch label="Group Usages by Transaction Type" value="scopeModel.shouldGroupUsagesByTransactionType"></vr-switch>
+            </vr-columns>
         </vr-row>
-       
-
     </vr-tab>
     <vr-tab header="'Relation Type'">
         <vr-invtoaccbalancerelation-definition-selector on-ready="scopeModel.relationDefinitionSelectorReady" normal-col-num="6"></vr-invtoaccbalancerelation-definition-selector>
