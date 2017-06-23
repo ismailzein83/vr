@@ -50,7 +50,7 @@
             var hasRunningInstancesInput = {
                 definitionId: definitionId,
                 entityIds: entityIds
-            }
+            };
             BusinessProcess_BPInstanceAPIService.HasRunningInstances(hasRunningInstancesInput).then(
                 function (response) {
                     var result = { hasRunningProcesses: false };

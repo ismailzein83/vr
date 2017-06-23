@@ -113,7 +113,7 @@
                 }
 
                 return null;
-            }
+            };
 
             function loadStagesSelector() {
                 var payload = {
