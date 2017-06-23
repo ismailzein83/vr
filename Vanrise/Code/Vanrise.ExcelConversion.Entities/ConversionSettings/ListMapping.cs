@@ -20,6 +20,8 @@ namespace Vanrise.ExcelConversion.Entities
         public List<FieldMapping> FieldMappings { get; set; }
 
         public MappingFilter Filter { get; set; }
+
+        public string DateTimeFormat { get; set; }
     }
 
     public class MappingFilter

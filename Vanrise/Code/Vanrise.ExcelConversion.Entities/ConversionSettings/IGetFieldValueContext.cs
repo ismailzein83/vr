@@ -13,5 +13,7 @@ namespace Vanrise.ExcelConversion.Entities
         Aspose.Cells.Worksheet Sheet { get; }
 
         Aspose.Cells.Row Row { get; }
+
+        Dictionary<string, Object> FieldValueByFieldName { get; }
     }
 }

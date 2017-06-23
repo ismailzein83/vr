@@ -14,5 +14,7 @@ namespace Vanrise.ExcelConversion.Business
         public Aspose.Cells.Worksheet Sheet { get; set; }
 
         public Aspose.Cells.Row Row { get; set; }
+
+        public Dictionary<string, object> FieldValueByFieldName { get; set; }
     }
 }

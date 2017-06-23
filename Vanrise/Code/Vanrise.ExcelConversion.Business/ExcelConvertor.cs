@@ -53,7 +53,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, null, null,isCommaDecimalSeparator)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, null, null,isCommaDecimalSeparator, null)
                     };
                     convertedExcel.Fields.Add(fld);
                 }
@@ -119,7 +119,7 @@ namespace Vanrise.ExcelConversion.Business
                         object fieldValue = null;
                         if(!fieldValueByFieldName.TryGetValue(field.FieldName,out fieldValue))
                         {
-                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, conversionSettings, workSheet, row, isCommaDecimalSeparator));
+                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, conversionSettings, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName));
                         }
                     }
                     context.fieldValueByFieldName = fieldValueByFieldName;
@@ -135,7 +135,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row,isCommaDecimalSeparator)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row,isCommaDecimalSeparator, null)
                     };
                     convertedRecord.Fields.Add(fld);
                 }
@@ -145,13 +145,14 @@ namespace Vanrise.ExcelConversion.Business
             convertedExcel.Lists.Add(lst);
         }
 
-        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, ExcelConversionSettings conversionSettings, Worksheet workSheet, Row row, bool isCommaDecimalSeparator)
+        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, ExcelConversionSettings conversionSettings, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName)
         {
             GetFieldValueContext getFieldValueContext = new GetFieldValueContext
             {
                 Workbook = workbook,
                 Sheet = workSheet,
-                Row = row
+                Row = row, 
+                FieldValueByFieldName = fieldValueByFieldName
             };
             Object fldValue = fldMapping.GetFieldValue(getFieldValueContext);
             if (fldValue == null)
