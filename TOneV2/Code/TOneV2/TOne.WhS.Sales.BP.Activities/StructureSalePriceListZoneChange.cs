@@ -481,6 +481,9 @@ namespace TOne.WhS.Sales.BP.Activities
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             var currencyExchangeRateManager = new CurrencyExchangeRateManager();
             var saleRateManager = new SaleRateManager();
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+
+
             #region Processing Rate To Change Increase and Decrease
 
             foreach (var rateToChange in context.StructuredRateActions.RatesToChange)
@@ -524,15 +527,18 @@ namespace TOne.WhS.Sales.BP.Activities
                     ZoneId = rateToAdd.ZoneId,
                     ZoneName = rateToAdd.ZoneName,
                     Rate = rateToAdd.NormalRate,
-                    RecentRate = currencyExchangeRateManager.ConvertValueToCurrency(recentRate.Rate.Rate,
-                            saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now),
+                    RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate, saleRateManager.GetCurrencyId(recentRate.Rate)
+                    , context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager),
                     BED = rateToAdd.BED,
                     EED = null,
                     CurrencyId = context.CurrencyId
                 };
-                salePricelistRateChange.ChangeType = salePricelistRateChange.RecentRate.Value > rateToAdd.NormalRate
-                    ? RateChangeType.Decrease
-                    : RateChangeType.Increase;
+
+                if (rateToAdd.NormalRate > salePricelistRateChange.RecentRate.Value)
+                    salePricelistRateChange.ChangeType = RateChangeType.Increase;
+                else if (rateToAdd.NormalRate < salePricelistRateChange.RecentRate.Value)
+                    salePricelistRateChange.ChangeType = RateChangeType.Decrease;
+
                 context.RateChangesOutArgument.Add(salePricelistRateChange);
             }
 
@@ -557,17 +563,22 @@ namespace TOne.WhS.Sales.BP.Activities
                     CountryId = countryId.Value,
                     ZoneId = rateToClose.ZoneId,
                     ZoneName = rateToClose.ZoneName,
-                    Rate = currencyExchangeRateManager.ConvertValueToCurrency(newRate.Rate.Rate,
-                        saleRateManager.GetCurrencyId(newRate.Rate), context.CurrencyId, DateTime.Now),
-                    RecentRate = currencyExchangeRateManager.ConvertValueToCurrency(recentRate.Rate.Rate,
-                        saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now),
+                    Rate = UtilitiesManager.ConvertToCurrencyAndRound(newRate.Rate.Rate,
+                            saleRateManager.GetCurrencyId(newRate.Rate)
+                            , context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager),
+                    RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate,
+                        saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now, longPrecision,
+                        currencyExchangeRateManager),
                     BED = rateToClose.CloseEffectiveDate,
                     EED = null,
                     CurrencyId = saleRateManager.GetCurrencyId(newRate.Rate)
                 };
-                salePriceListRateChange.ChangeType = salePriceListRateChange.Rate > salePriceListRateChange.RecentRate
-                    ? RateChangeType.Increase
-                    : RateChangeType.Decrease;
+
+                if (salePriceListRateChange.Rate > salePriceListRateChange.RecentRate)
+                    salePriceListRateChange.ChangeType = RateChangeType.Increase;
+                else if (salePriceListRateChange.Rate > salePriceListRateChange.RecentRate)
+                    salePriceListRateChange.ChangeType = RateChangeType.Decrease;
+
                 context.RateChangesOutArgument.Add(salePriceListRateChange);
             }
 
