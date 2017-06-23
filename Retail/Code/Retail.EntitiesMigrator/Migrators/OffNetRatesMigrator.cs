@@ -46,6 +46,7 @@ namespace Retail.EntitiesMigrator.Migrators
                     ratesByBranchId.GetOrCreateItem(branch.AccountId).Add(rate);
                 }
             }
+
             foreach (var branchRates in ratesByBranchId)
             {
                 long branchId = branchRates.Key;
@@ -61,16 +62,46 @@ namespace Retail.EntitiesMigrator.Migrators
                 Decimal mostUsedRate = rateCounts.OrderByDescending(itm => itm.Value).First().Key;
                 var defaultAccountRateRule = GetRateValueRuleDetails(null, branchRates.Key, new RateDetails { Rate = mostUsedRate });
                 rateRules.Add(defaultAccountRateRule);
+                Dictionary<Decimal, HashSet<long>> operatorIdsByRate = new Dictionary<decimal, HashSet<long>>();
+                Dictionary<int, HashSet<long>> operatorIdsByFractionUnit = new Dictionary<int, HashSet<long>>();
+                bool anyOperatorHasDefaultFractionUnit = false;
                 foreach (var rate in branchRates.Value)
                 {
                     Account oper;
                     if (operatorsByName.TryGetValue(rate.OperatorName, out oper))
                     {
                         if (rate.RateDetail.Rate != mostUsedRate)
-                            rateRules.Add(GetRateValueRuleDetails(oper.AccountId, branchId, rate.RateDetail));
+                            operatorIdsByRate.GetOrCreateItem(rate.RateDetail.Rate).Add(oper.AccountId);
 
                         if (rate.RateDetail.FractionUnit != 60)
-                            tariffRules.Add(GetTariffRuleDetails(oper.AccountId, branchId, rate.RateDetail));
+                            operatorIdsByFractionUnit.GetOrCreateItem(rate.RateDetail.FractionUnit).Add(oper.AccountId);
+                        else
+                            anyOperatorHasDefaultFractionUnit = true;
+                    }
+                }
+                if (operatorIdsByRate.Count > 0)
+                {
+                    foreach (var entry in operatorIdsByRate)
+                    {
+                        Decimal rate = entry.Key;
+                        List<long> operatorIds = entry.Value.ToList();
+                        rateRules.Add(GetRateValueRuleDetails(operatorIds, branchId, new RateDetails { Rate = rate }));
+                    }
+                }
+                if (operatorIdsByFractionUnit.Count > 0)
+                {
+                    if (operatorIdsByFractionUnit.Count == 1 && !anyOperatorHasDefaultFractionUnit)
+                    {
+                        tariffRules.Add(GetTariffRuleDetails(null, branchId, new RateDetails { FractionUnit = operatorIdsByFractionUnit.First().Key }));
+                    }
+                    else
+                    {
+                        foreach (var entry in operatorIdsByFractionUnit)
+                        {
+                            int fractionUnit = entry.Key;
+                            List<long> operatorIds = entry.Value.ToList();
+                            tariffRules.Add(GetTariffRuleDetails(operatorIds, branchId, new RateDetails { FractionUnit = fractionUnit }));
+                        }
                     }
                 }
             }
@@ -78,21 +109,21 @@ namespace Retail.EntitiesMigrator.Migrators
             Helper.SaveRateValueRules(rateRules);
         }
 
-        private RateValueRule GetRateValueRuleDetails(long? operatorId, long? branchId, RateDetails rateDetails)
+        private RateValueRule GetRateValueRuleDetails(List<long> operatorIds, long? branchId, RateDetails rateDetails)
         {
-            return Helper.CreateRateValueRule(Helper.OffNetRuleDefinition, GetCriteriaFieldsValues(operatorId, branchId), rateDetails);
+            return Helper.CreateRateValueRule(Helper.OffNetRuleDefinition, GetCriteriaFieldsValues(operatorIds, branchId), rateDetails);
         }
 
-        private TariffRule GetTariffRuleDetails(long? operatorId, long? branchId, RateDetails rateDetails)
+        private TariffRule GetTariffRuleDetails(List<long> operatorIds, long? branchId, RateDetails rateDetails)
         {
-            return Helper.CreateTariffRule(Helper.OffNetRuleDefinition, GetCriteriaFieldsValues(operatorId, branchId), rateDetails);
+            return Helper.CreateTariffRule(Helper.OffNetRuleDefinition, GetCriteriaFieldsValues(operatorIds, branchId), rateDetails);
         }
 
-        private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(long? operatorId, long? branchId)
+        private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(List<long> operatorIds, long? branchId)
         {
             Dictionary<string, GenericRuleCriteriaFieldValues> result = GetDefaultCriteriaFieldValues();
-            if (operatorId.HasValue)
-                Helper.AddOperatorField(result, operatorId.Value);
+            if (operatorIds != null)
+                Helper.AddOperatorField(result, operatorIds);
             if (branchId.HasValue)
                 Helper.AddAccountField(result, new List<object> { branchId.Value });
 

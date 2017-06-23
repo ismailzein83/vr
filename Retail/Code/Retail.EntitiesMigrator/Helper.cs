@@ -154,11 +154,11 @@ namespace Retail.EntitiesMigrator
             });
         }
 
-        public static void AddOperatorField(Dictionary<string, GenericRuleCriteriaFieldValues> criteriaFields, long operatorId)
+        public static void AddOperatorField(Dictionary<string, GenericRuleCriteriaFieldValues> criteriaFields, List<long> operatorIds)
         {
             criteriaFields.Add("Operator", new StaticValues
             {
-                Values = new List<Object> { operatorId }
+                Values = operatorIds.Select(itm => itm as Object).ToList()
             });
         }
 

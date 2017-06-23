@@ -35,17 +35,18 @@ namespace Retail.EntitiesMigrator.Migrators
             List<GenericRule> tariffRules = new List<GenericRule>();
             List<GenericRule> rateRules = new List<GenericRule>();
 
-            var defaultRateRule = Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
-            var defaultTariffRule = Helper.CreateTariffRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
+            //var defaultRateRule = Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
+            var defaultTariffRule = Helper.CreateTariffRule(Helper.IntlRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
             tariffRules.Add(defaultTariffRule);
-            rateRules.Add(defaultRateRule);
-
+            //rateRules.Add(defaultRateRule);
+            HashSet<long> addedZones = new HashSet<long>();
             foreach (InternationalRate internationalRate in internationalRates)
             {
 
                 SaleZone saleZone;
-                if (_Zones.TryGetValue(internationalRate.ZoneName, out saleZone))
+                if (_Zones.TryGetValue(internationalRate.ZoneName, out saleZone) && !addedZones.Contains(saleZone.SaleZoneId))
                 {
+                    addedZones.Add(saleZone.SaleZoneId);
                     rateRules.Add(GetRateValueRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
                     if (internationalRate.InternationalRateDetail.FractionUnit != 60)
                         tariffRules.Add(GetTariffRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
@@ -60,7 +61,7 @@ namespace Retail.EntitiesMigrator.Migrators
 
         private RateValueRule GetRateValueRuleDetails(long zoneId, RateDetails rateDetails)
         {
-            return Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetCriteriaFieldsValues(zoneId), rateDetails);
+            return Helper.CreateRateValueRule(Helper.IntlRuleDefinition, GetCriteriaFieldsValues(zoneId), rateDetails);
         }
         private TariffRule GetTariffRuleDetails(long zoneId, RateDetails rateDetails)
         {
@@ -69,7 +70,7 @@ namespace Retail.EntitiesMigrator.Migrators
         private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(long zoneId)
         {
             Dictionary<string, GenericRuleCriteriaFieldValues> result = GetDefaultCriteriaFieldValues();
-            Helper.AddAccountField(result, new List<object> { zoneId });
+            Helper.AddZoneField(result, new List<object> { zoneId });
 
             return result;
         }

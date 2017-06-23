@@ -32,13 +32,15 @@ namespace Retail.EntitiesMigrator.Migrators
             var defaultTariffRule = Helper.CreateTariffRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
             tariffRules.Add(defaultTariffRule);
             rateRules.Add(defaultRateRule);
+            HashSet<long> addedAccounts = new HashSet<long>();
             foreach (InternationalRate internationalRate in internationalRates)
             {
 
                 AccountBEManager accountManager = new AccountBEManager();
                 Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, internationalRate.SubscriberId.ToString());
-                if (account != null)
+                if (account != null && !addedAccounts.Contains(account.AccountId))
                 {
+                    addedAccounts.Add(account.AccountId);
                     rateRules.Add(GetRateValueRuleDetails(account.AccountId, internationalRate.InternationalRateDetail));
                     if (internationalRate.InternationalRateDetail.FractionUnit != 60)
                         tariffRules.Add(GetTariffRuleDetails(account.AccountId, internationalRate.InternationalRateDetail));

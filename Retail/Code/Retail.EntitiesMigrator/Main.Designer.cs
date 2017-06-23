@@ -145,7 +145,7 @@
             this.numInternationalChargingPolicy.Size = new System.Drawing.Size(179, 20);
             this.numInternationalChargingPolicy.TabIndex = 7;
             this.numInternationalChargingPolicy.Value = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
             0});
@@ -169,7 +169,7 @@
             this.numOnNetChargingPolicy.Size = new System.Drawing.Size(179, 20);
             this.numOnNetChargingPolicy.TabIndex = 6;
             this.numOnNetChargingPolicy.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -193,7 +193,7 @@
             this.numOffNetChargingPolicy.Size = new System.Drawing.Size(179, 20);
             this.numOffNetChargingPolicy.TabIndex = 5;
             this.numOffNetChargingPolicy.Value = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
@@ -253,7 +253,7 @@
             this.numMobileChargingPolicy.Size = new System.Drawing.Size(179, 20);
             this.numMobileChargingPolicy.TabIndex = 4;
             this.numMobileChargingPolicy.Value = new decimal(new int[] {
-            1,
+            4,
             0,
             0,
             0});

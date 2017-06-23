@@ -76,16 +76,24 @@ namespace Retail.EntitiesMigrator.Migrators
                 SqlCommand command = conn.CreateCommand();
                 command.CommandText = query_GetMonthlyCharge;
                 command.CommandType = System.Data.CommandType.Text;
-
+                List<long> addedLineRentBranchIds = new List<long>();
+                List<long> addedOTCBranchIds = new List<long>();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
+                    long branchId = (long)reader["AC_ACCOUNTNO"];
                     long LineRent = (long)reader["LINERENT"];
                     long OTC = (long)reader["OTC"];
-                    if (LineRent > 0)
+                    if (LineRent > 0 && !addedLineRentBranchIds.Contains(branchId))
+                    {
                         result.Add(GetMonthlyCharge(LineRent, reader, MonthlyChargeType.LineRent));
-                    if (OTC > 0)
+                        addedLineRentBranchIds.Add(branchId);
+                    }
+                    if (OTC > 0 && !addedOTCBranchIds.Contains(branchId))
+                    {
                         result.Add(GetMonthlyCharge(OTC, reader, MonthlyChargeType.OTC));
+                        addedOTCBranchIds.Add(branchId);
+                    }
                 }
                 reader.Close();
                 conn.Close();

@@ -28,17 +28,19 @@ namespace Retail.EntitiesMigrator.Migrators
             IEnumerable<InternationalRate> internationalRates = GetRates();
             List<GenericRule> tariffRules = new List<GenericRule>();
             List<GenericRule> rateRules = new List<GenericRule>();
-            var defaultRateRule = Helper.CreateRateValueRule(Helper.MobileRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
+            //var defaultRateRule = Helper.CreateRateValueRule(Helper.MobileRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
             var defaultTariffRule = Helper.CreateTariffRule(Helper.MobileRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
             tariffRules.Add(defaultTariffRule);
-            rateRules.Add(defaultRateRule);
+            //rateRules.Add(defaultRateRule);
+            HashSet<long> addedAccounts = new HashSet<long>();
             foreach (InternationalRate internationalRate in internationalRates)
             {
 
                 AccountBEManager accountManager = new AccountBEManager();
                 Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, internationalRate.SubscriberId.ToString());
-                if (account != null)
+                if (account != null && !addedAccounts.Contains(account.AccountId))
                 {
+                    addedAccounts.Add(account.AccountId);
                     rateRules.Add(GetRateValueRuleDetails(account.AccountId, internationalRate.InternationalRateDetail));
                     if (internationalRate.InternationalRateDetail.FractionUnit != 60)
                         tariffRules.Add(GetTariffRuleDetails(account.AccountId, internationalRate.InternationalRateDetail));

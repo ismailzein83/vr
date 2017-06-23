@@ -11,8 +11,12 @@
     [ExtendedSettings]    NVARCHAR (MAX)   NULL,
     [CreatedTime]         DATETIME         NULL,
     [timestamp]           ROWVERSION       NULL,
-    CONSTRAINT [PK_Account] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_Account] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [FK_Account_Account] FOREIGN KEY ([ParentID]) REFERENCES [Retail].[Account] ([ID]),
+    CONSTRAINT [FK_Account_AccountType] FOREIGN KEY ([TypeID]) REFERENCES [Retail_BE].[AccountType] ([ID])
 );
+
+
 
 
 
