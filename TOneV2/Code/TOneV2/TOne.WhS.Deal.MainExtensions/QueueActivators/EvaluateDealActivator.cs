@@ -790,13 +790,13 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> previousSaleDealDetailedProgressesDict;
             Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> costDealDetailedProgressesDict;
             Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> previousCostDealDetailedProgressesDict;
-            BuildDealDetailedProgressDict(saleDealDetailedProgresses, out saleDealDetailedProgressesDict, out previousSaleDealDetailedProgressesDict);
-            BuildDealDetailedProgressDict(costDealDetailedProgresses, out costDealDetailedProgressesDict, out previousCostDealDetailedProgressesDict);
+            BuildDealDetailedProgressDict(context.From, saleDealDetailedProgresses, out saleDealDetailedProgressesDict, out previousSaleDealDetailedProgressesDict);
+            BuildDealDetailedProgressDict(context.From, costDealDetailedProgresses, out costDealDetailedProgressesDict, out previousCostDealDetailedProgressesDict);
 
             Dictionary<PropertyName, string> salePropertyNames = BuildPropertyNames("Sale", "Sale");
             Dictionary<PropertyName, string> costPropertyNames = BuildPropertyNames("Cost", "Supplier");
 
-            QueueExecutionFlowStage queueExecutionFlowStage = context.QueueExecutionFlowStage;
+            QueueExecutionFlowStage queueExecutionFlowStage = null;// context.QueueExecutionFlowStage;
             var queueItemType = queueExecutionFlowStage.QueueItemType as DataRecordBatchQueueItemType;
             if (queueItemType == null)
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
@@ -968,7 +968,26 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             }
             else
             {
-
+                SortedList<DealDetailedProgress, decimal> perviousDealDetailedProgressList = previousDealDetailedProgresses.GetRecord(batchStart);
+                if (perviousDealDetailedProgressList != null && perviousDealDetailedProgressList.Count > 0)
+                {
+                    var previousDealDetailedProgressItem = perviousDealDetailedProgressList.Last();
+                    DealDetailedProgress previousDealDetailedProgress = previousDealDetailedProgressItem.Key;
+                    if (previousDealDetailedProgress.TierNb.HasValue)
+                    {
+                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(previousDealDetailedProgress.TierNb.Value);
+                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, previousDealDetailedProgress.TierNb.Value);
+                        CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealZoneGroup.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
+                        SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
+                    }
+                }
+                else
+                {
+                    DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(0);
+                    SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, currentDealZoneGroupTierDetails.TierNb);
+                    CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealZoneGroup.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
+                    SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
+                }
             }
         }
 
@@ -986,31 +1005,31 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             }
         }
 
-        private void BuildDealDetailedProgressDict(Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses,
-            out Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> dealDetailedProgressesDict,
+        private void BuildDealDetailedProgressDict(DateTime firstBatchStart, Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses,
+            out Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> currentDealDetailedProgressesDict,
             out Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> previousDealDetailedProgressesDict)
         {
-            dealDetailedProgressesDict = null;
+            currentDealDetailedProgressesDict = null;
             previousDealDetailedProgressesDict = null;
 
-            //if (dealDetailedProgresses == null)
-            //    return;
+            if (dealDetailedProgresses == null)
+                return;
 
-            //dealDetailedProgressesDict = new Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>>();
-            //previousDealDetailedProgressesDict = new Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>>();
+            currentDealDetailedProgressesDict = new Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>>();
+            previousDealDetailedProgressesDict = new Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>>();
 
-            //foreach (var dealDetailedProgressItem in dealDetailedProgresses)
-            //{
-            //    DealDetailedZoneGroupTier dealDetailedZoneGroupTier = dealDetailedProgressItem.Key;
-            //    DealDetailedProgress dealDetailedProgress = dealDetailedProgressItem.Value;
-            //    DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealDetailedZoneGroupTier.DealId, ZoneGroupNb = dealDetailedZoneGroupTier.ZoneGroupNb };
+            Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>>> tempDict;
+            foreach (var dealDetailedProgressItem in dealDetailedProgresses)
+            {
+                DealDetailedZoneGroupTier dealDetailedZoneGroupTier = dealDetailedProgressItem.Key;
+                DealDetailedProgress dealDetailedProgress = dealDetailedProgressItem.Value;
+                DealZoneGroup dealZoneGroup = new DealZoneGroup() { DealId = dealDetailedZoneGroupTier.DealId, ZoneGroupNb = dealDetailedZoneGroupTier.ZoneGroupNb };
 
-            //    Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>> dealDetailedZoneGroupTierByDate = result.GetOrCreateItem(dealZoneGroup);
-            //    SortedList<DealDetailedProgress, decimal> dealDetailedProgressList = dealDetailedZoneGroupTierByDate.GetOrCreateItem(dealDetailedZoneGroupTier.FromTime, () => { return new SortedList<DealDetailedProgress, decimal>(new DealDetailedProgressComparer()); });
-            //    dealDetailedProgressList.Add(dealDetailedProgress, 0);
-            //}
-
-
+                tempDict = dealDetailedZoneGroupTier.FromTime >= firstBatchStart ? currentDealDetailedProgressesDict : previousDealDetailedProgressesDict;
+                Dictionary<DateTime, SortedList<DealDetailedProgress, decimal>> dealDetailedZoneGroupTierByDate = tempDict.GetOrCreateItem(dealZoneGroup);
+                SortedList<DealDetailedProgress, decimal> dealDetailedProgressList = dealDetailedZoneGroupTierByDate.GetOrCreateItem(dealDetailedZoneGroupTier.FromTime, () => { return new SortedList<DealDetailedProgress, decimal>(new DealDetailedProgressComparer()); });
+                dealDetailedProgressList.Add(dealDetailedProgress, 0);
+            }
         }
 
         private List<string> BuildValidOutputStage(List<string> currentStages, List<string> outputStagesToCheck)
