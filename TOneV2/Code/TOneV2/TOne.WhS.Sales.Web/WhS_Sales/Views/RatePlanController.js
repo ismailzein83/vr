@@ -538,6 +538,7 @@
                     numberOfOptions: $scope.numberOfOptions,
                     costCalculationMethods: getCostCalculationMethods(),
                     currencyId: getCurrencyId(),
+                    longPrecision: longPrecision,
                     onBulkActionAppliedToDraft: onBulkActionAppliedToDraft
                 };
 

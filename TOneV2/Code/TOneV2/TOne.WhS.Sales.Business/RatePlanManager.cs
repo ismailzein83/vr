@@ -569,9 +569,14 @@ namespace TOne.WhS.Sales.Business
                 return contextZoneItemsByZoneId;
             };
 
+            Func<decimal, decimal> getRoundedRate = (rate) =>
+            {
+                return decimal.Round(rate, longPrecision);
+            };
+
             foreach (SaleZone applicableSaleZone in applicableSaleZones)
             {
-                var validationContext = new ZoneValidationContext(getContextZoneItems, input.CostCalculationMethods)
+                var validationContext = new ZoneValidationContext(getContextZoneItems, input.CostCalculationMethods, getRoundedRate)
                 {
                     ZoneId = applicableSaleZone.SaleZoneId,
                     ValidationResult = validationResult

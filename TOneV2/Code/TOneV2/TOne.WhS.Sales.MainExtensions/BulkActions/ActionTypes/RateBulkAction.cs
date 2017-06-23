@@ -63,31 +63,33 @@ namespace TOne.WhS.Sales.MainExtensions
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             var validationResultType = RateBulkActionValidationResultType.Valid;
-            List<InvalidZoneRate> targetInvlaidRates = null;
+            List<InvalidZoneRate> targetInvalidRates = null;
+
+            decimal? roundedCalculatedRate = null;
 
             if (!rateCalculationContext.Rate.HasValue)
             {
                 validationResultType = RateBulkActionValidationResultType.DoesNotExist;
-                targetInvlaidRates = validationResult.EmptyRates;
+                targetInvalidRates = validationResult.EmptyRates;
             }
             else
             {
-                decimal roundedCalculatedRate = GetRoundedRate(rateCalculationContext.Rate.Value);
+                roundedCalculatedRate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
 
                 if (roundedCalculatedRate == 0)
                 {
                     validationResultType = RateBulkActionValidationResultType.Zero;
-                    targetInvlaidRates = validationResult.ZeroRates;
+                    targetInvalidRates = validationResult.ZeroRates;
                 }
                 else if (roundedCalculatedRate < 0)
                 {
                     validationResultType = RateBulkActionValidationResultType.Negative;
-                    targetInvlaidRates = validationResult.NegativeRates;
+                    targetInvalidRates = validationResult.NegativeRates;
                 }
-                else if (contextZoneItem.CurrentRate.HasValue && GetRoundedRate(contextZoneItem.CurrentRate.Value) == roundedCalculatedRate)
+                else if (contextZoneItem.CurrentRate.HasValue && context.GetRoundedRate(contextZoneItem.CurrentRate.Value) == roundedCalculatedRate)
                 {
                     validationResultType = RateBulkActionValidationResultType.EqualsCurrentNormalRate;
-                    targetInvlaidRates = validationResult.DuplicateRates;
+                    targetInvalidRates = validationResult.DuplicateRates;
                 }
             }
 
@@ -96,10 +98,10 @@ namespace TOne.WhS.Sales.MainExtensions
                 validationResult.InvalidDataExists = true;
                 validationResult.ExcludedZoneIds.Add(context.ZoneId);
 
-                targetInvlaidRates.Add(new InvalidZoneRate()
+                targetInvalidRates.Add(new InvalidZoneRate()
                 {
                     ZoneName = contextZoneItem.ZoneName,
-                    CalculatedRate = rateCalculationContext.Rate,
+                    CalculatedRate = roundedCalculatedRate,
                     ValidationResultType = validationResultType
                 });
             }
@@ -163,7 +165,7 @@ namespace TOne.WhS.Sales.MainExtensions
             var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = zoneItem };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
-            newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
+            newNormalRate.Rate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
             newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId);
 
             newRates.Add(newNormalRate);
@@ -191,7 +193,7 @@ namespace TOne.WhS.Sales.MainExtensions
             var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = zoneItem };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
-            newNormalRate.Rate = GetRoundedRate(rateCalculationContext.Rate.Value);
+            newNormalRate.Rate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
             newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId);
 
             newRates.Add(newNormalRate);
@@ -206,11 +208,6 @@ namespace TOne.WhS.Sales.MainExtensions
         #endregion
 
         #region Private Methods
-
-        private decimal GetRoundedRate(decimal rate)
-        {
-            return decimal.Round(rate, 4);
-        }
 
         private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId)
         {

@@ -1,13 +1,13 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsService', function (WhS_Sales_BulkActionUtilsService) {
+app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsService', 'UtilsService', function (WhS_Sales_BulkActionUtilsService, UtilsService) {
 
     return {
         restrict: "E",
         scope: {
             onReady: "=",
             normalColNum: '@',
-        	isrequired: '='
+            isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -20,40 +20,44 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
     };
 
     function FixedRateCalculation(ctrl, $scope) {
-        
-    	this.initializeController = initializeController;
 
-    	var bulkActionContext;
+        this.initializeController = initializeController;
+
+        var bulkActionContext;
 
         function initializeController() {
 
-        	ctrl.validate = function () {
-        	    if (ctrl.fixedRate == undefined)
-        	        return null;
-        	    var fixedRateAsNumber = Number(ctrl.fixedRate);
-        	    if (isNaN(fixedRateAsNumber))
-        	        return 'Value is an invalid number';
-        	    if (fixedRateAsNumber <= 0)
-        	        return 'Value must be greater than zero';
-        	    return null;
-        	};
+            ctrl.validate = function () {
+                if (ctrl.fixedRate == undefined)
+                    return null;
+                var fixedRateAsNumber = Number(ctrl.fixedRate);
+                if (isNaN(fixedRateAsNumber))
+                    return 'Value is an invalid number';
+                if (fixedRateAsNumber <= 0)
+                    return 'Value must be greater than zero';
+                return null;
+            };
 
-        	defineAPI();
+            defineAPI();
         }
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
 
-            	var rateCalculationMethod;
+                var rateCalculationMethod;
 
                 if (payload != undefined) {
-                	rateCalculationMethod = payload.rateCalculationMethod;
-                	bulkActionContext = payload.bulkActionContext;
+                    rateCalculationMethod = payload.rateCalculationMethod;
+                    bulkActionContext = payload.bulkActionContext;
+                }
+
+                if (bulkActionContext != undefined) {
+                    ctrl.longPrecision = bulkActionContext.longPrecision;
                 }
 
                 if (rateCalculationMethod != undefined) {
-                	ctrl.fixedRate = rateCalculationMethod.FixedRate;
+                    ctrl.fixedRate = rateCalculationMethod.FixedRate;
                 }
             };
 
@@ -65,7 +69,7 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
             };
 
             api.getDescription = function () {
-                return ctrl.fixedRate;
+                return UtilsService.round(ctrl.fixedRate, bulkActionContext.longPrecision);
             };
 
             if (ctrl.onReady != null)

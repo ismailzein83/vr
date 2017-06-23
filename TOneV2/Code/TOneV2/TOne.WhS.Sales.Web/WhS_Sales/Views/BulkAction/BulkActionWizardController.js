@@ -13,6 +13,7 @@
         var policyConfigId;
         var numberOfOptions;
         var currencyId;
+        var longPrecision;
 
         var bulkActionContext;
 
@@ -49,6 +50,7 @@
                 policyConfigId = parameters.policyConfigId;
                 numberOfOptions = parameters.numberOfOptions;
                 currencyId = parameters.currencyId;
+                longPrecision = parameters.longPrecision;
             }
         }
         function defineScope() {
@@ -321,6 +323,7 @@
             bulkActionContext.ownerType = ownerType;
             bulkActionContext.ownerId = ownerId;
             bulkActionContext.ownerSellingNumberPlanId = ownerSellingNumberPlanId;
+            bulkActionContext.longPrecision = longPrecision;
             if (gridQuery != undefined)
                 bulkActionContext.costCalculationMethods = gridQuery.CostCalculationMethods;
             bulkActionContext.getSelectedBulkAction = function () {

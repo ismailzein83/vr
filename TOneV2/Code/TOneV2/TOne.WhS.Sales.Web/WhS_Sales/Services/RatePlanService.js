@@ -131,7 +131,8 @@
                 routingDatabaseId: input.routingDatabaseId,
                 policyConfigId: input.policyConfigId,
                 numberOfOptions: input.numberOfOptions,
-                currencyId: input.currencyId
+                currencyId: input.currencyId,
+                longPrecision: input.longPrecision
             };
 
             var modalSettings = {};

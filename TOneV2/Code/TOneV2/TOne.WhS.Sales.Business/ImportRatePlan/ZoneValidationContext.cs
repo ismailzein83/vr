@@ -14,10 +14,13 @@ namespace TOne.WhS.Sales.Business
 
         private IEnumerable<CostCalculationMethod> _costCalculationMethods;
 
-        public ZoneValidationContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods)
+        private Func<decimal, decimal> _getRoundedRate;
+
+        public ZoneValidationContext(Func<Dictionary<long, ZoneItem>> getContextZoneItems, IEnumerable<CostCalculationMethod> costCalculationMethods, Func<decimal, decimal> getRoundedRate)
         {
             _getContextZoneItems = getContextZoneItems;
             _costCalculationMethods = costCalculationMethods;
+            _getRoundedRate = getRoundedRate;
         }
 
         public long ZoneId { get; set; }
@@ -34,5 +37,10 @@ namespace TOne.WhS.Sales.Business
         }
 
         public BulkActionValidationResult ValidationResult { get; set; }
+
+        public decimal GetRoundedRate(decimal rate)
+        {
+            return _getRoundedRate(rate);
+        }
     }
 }

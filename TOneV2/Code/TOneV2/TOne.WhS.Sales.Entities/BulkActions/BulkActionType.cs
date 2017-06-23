@@ -58,6 +58,8 @@ namespace TOne.WhS.Sales.Entities
         int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 
         BulkActionValidationResult ValidationResult { get; set; }
+
+        decimal GetRoundedRate(decimal rate);
     }
 
     public interface IActionApplicableToZoneContext
