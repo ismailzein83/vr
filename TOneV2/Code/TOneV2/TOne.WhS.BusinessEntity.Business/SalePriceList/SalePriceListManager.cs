@@ -122,7 +122,7 @@ namespace TOne.WhS.BusinessEntity.Business
             VRMailManager vrMailManager = new VRMailManager();
             return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
         }
-        public VRFile DownloadSalePriceList(long salePriceListId, SalePriceListType salePriceListType)
+        public VRFile GenerateSalePriceListFile(long salePriceListId, SalePriceListType salePriceListType)
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
@@ -421,7 +421,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             //Add all missing sold countries to notification from exiting data
             var customerCountryManager = new CustomerCountryManager();
-            var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveDate, processInstanceId);
+            var soldCountries = customerCountryManager.GetNotClosedCustomerCountries(customerId);
 
             if (soldCountries == null)
                 return salePlZoneNotifications;
