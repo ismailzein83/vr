@@ -8,20 +8,32 @@ namespace Vanrise.Integration.Entities
 {
     public class DataSource
     {
+        public const string BUSINESSENTITY_DEFINITION_NAME = "VR_Integration_DataSource";
+        public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("E522907C-AEBD-48B6-82F4-FE55238942F2");
+
         public Guid DataSourceId { get; set; }
+
         public string Name { get; set; }
+
         public Guid AdapterTypeId { get; set; }
+
         public BaseAdapterState AdapterState { get; set; }
+
         public Guid TaskId { get; set; }
+
         public bool IsEnabled { get; set; }
+
         public DataSourceSettings Settings { get; set; }
     }
 
     public class DataSourceSettings
     {
         public BaseAdapterArgument AdapterArgument { get; set; }
+
         public DataSourceMappingSettings MappingSettings { get; set; }
+
         public string MapperCustomCode { get; set; }
+
         public Guid ExecutionFlowId { get; set; }
     }
 
