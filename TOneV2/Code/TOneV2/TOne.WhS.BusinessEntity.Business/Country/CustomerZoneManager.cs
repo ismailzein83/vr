@@ -211,7 +211,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 return false;
             return customerCountries.Any(x => x.CountryId == countryId && (x.IsEffective(effectiveOn) || x.IsEffective(null, true)));
         }
-
+        public IEnumerable<CustomerCountry2> GetNotClosedCustomerCountries(int customerId)
+        {
+            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
+            return customerCountries != null ? customerCountries.FindAllRecords(x => x.EED == null) : null;
+        }
         public IEnumerable<CustomerCountry2> GetCustomerCountriesEffectiveAfter(int customerId, DateTime date)
         {
             IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
