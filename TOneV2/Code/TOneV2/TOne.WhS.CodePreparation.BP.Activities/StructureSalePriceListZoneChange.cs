@@ -141,7 +141,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 int customerId = customer.CarrierAccountId;
 
-                IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveDate);
+                IEnumerable<CustomerCountry2> soldCountries = customerCountryManager.GetNotClosedCustomerCountries(customerId);
                 if (soldCountries == null)
                     continue;
 
@@ -155,7 +155,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange { CustomerId = customerId };
 
                 SaleEntityZoneRoutingProductLocator routingProductLocator = new SaleEntityZoneRoutingProductLocator(
-                        new SaleEntityRoutingProductReadAllNoCache(new List<int> { customerId }, DateTime.Now, false));
+                        new SaleEntityRoutingProductReadAllNoCache(new List<int> { customerId }, effectiveDate, false));
 
                 var defaultRoutingProduct = routingProductLocator.GetCustomerDefaultRoutingProduct(customerId, sellingProductId);
 
@@ -169,8 +169,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                     changesForThisCustomer.RoutingProductChanges.AddRange(GetRPChangesFromNewRateChange(newRateChanges, defaultRoutingProduct));
                     changesForThisCustomer.RateChanges.AddRange(newRateChanges);
-                    changesForThisCustomer.RateChanges.AddRange(
-                        this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, lastRateNoCacheLocator, countryAction.CountryId, customerId, sellingProductId));
+
+                    IEnumerable<SalePricelistRateChange> zonesToCloseRateChanges = this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, lastRateNoCacheLocator,
+                            countryAction.CountryId, customerId, sellingProductId);
+                    changesForThisCustomer.RateChanges.AddRange(zonesToCloseRateChanges);
+                    changesForThisCustomer.RoutingProductChanges.AddRange(GetRPChangesFromZonesToClose(customerId, sellingProductId, zonesToCloseRateChanges, routingProductLocator));
 
                     changesForThisCustomer.CodeChanges.AddRange(this.GetCodeChangesFromCodeToAdd(countryAction.CodesToAdd, countryAction.CountryId));
                     changesForThisCustomer.CodeChanges.AddRange(this.GetCodeChangesFromCodeToMove(countryAction.CodesToMove, countryAction.CountryId));
@@ -216,10 +219,29 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     CountryId = rateChange.CountryId,
                     ZoneName = rateChange.ZoneName,
-                    BED = defaultRoutingProduct.BED,
+                    BED = rateChange.BED,
                     EED = defaultRoutingProduct.EED,
                     RoutingProductId = defaultRoutingProduct.RoutingProductId
                 }).ToList();
+            return routingProductchanges;
+        }
+
+        private List<SalePricelistRPChange> GetRPChangesFromZonesToClose(int customerId, int sellingProductId, IEnumerable<SalePricelistRateChange> zonesToCloseRateChanges, SaleEntityZoneRoutingProductLocator routingProductLocator)
+        {
+            List<SalePricelistRPChange> routingProductchanges = new List<SalePricelistRPChange>();
+            foreach (var zoneToCloseRateChange in zonesToCloseRateChanges)
+            {
+                var routingPRoduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId,
+                    zoneToCloseRateChange.ZoneId.Value);
+                routingProductchanges.Add(new SalePricelistRPChange
+                {
+                    CountryId = zoneToCloseRateChange.CountryId,
+                    ZoneName = zoneToCloseRateChange.ZoneName,
+                    BED = routingPRoduct.BED,//TODO the BED should be the assigned date of routing product on this zone
+                    EED = zoneToCloseRateChange.EED,
+                    RoutingProductId = routingPRoduct.RoutingProductId
+                });
+            }
             return routingProductchanges;
         }
         private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToProcess> zonesToClose, SaleEntityZoneRateLocator lastRateNoCacheLocator, int countryId, int customerId, int sellingProductId)
