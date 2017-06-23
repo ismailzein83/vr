@@ -87,7 +87,21 @@ namespace TOne.WhS.Sales.Business
         {
             var datesByCountry = new Dictionary<int, DateTime>();
 
-            IEnumerable<CustomerCountry2> customerCountries = new CustomerCountryManager().GetCustomerCountries(customerId, effectiveOn, false);
+            var customerCountryManager = new CustomerCountryManager();
+            IEnumerable<CustomerCountry2> customerCountries;
+
+            if (isEffectiveInFuture)
+            {
+                if (!effectiveOn.HasValue)
+                    throw new ArgumentException("Cannot find effective and future countries without an effective date");
+
+                customerCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn.Value);
+            }
+            else
+            {
+                customerCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, false);
+            }
+
             if (customerCountries != null)
             {
                 foreach (CustomerCountry2 customerCountry in customerCountries)

@@ -272,7 +272,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
                     $type: 'TOne.WhS.Sales.Business.CountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
                     CustomerId: bulkActionContext.ownerId,
                     EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-                    IsEffectiveInFuture: false
+                    IsEffectiveInFuture: true
                 };
                 countrySelectorFilters.push(countrySoldToCustomerFilter);
             }
@@ -353,7 +353,7 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['WhS_BE_SalePriceListOw
                     $type: 'TOne.WhS.Sales.Business.SaleZoneCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
                     CustomerId: ownerId,
                     EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
-                    IsEffectiveInFuture: false
+                    IsEffectiveInFuture: true
                 };
                 saleZoneSelectorFilters.push(countrySoldToCustomerFilter);
             }
