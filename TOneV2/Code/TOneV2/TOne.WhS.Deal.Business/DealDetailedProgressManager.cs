@@ -27,10 +27,10 @@ namespace TOne.WhS.Deal.Business
 
         #region Public Methods
 
-        public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate = null)
+        public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate = null, DateTime? endDate = null)
         {
             IDealDetailedProgressDataManager dealDetailedProgressDataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
-            List<DealDetailedProgress> dealDetailedProgressList = dealDetailedProgressDataManager.GetDealDetailedProgresses(dealZoneGroups, isSale, beginDate);
+            List<DealDetailedProgress> dealDetailedProgressList = dealDetailedProgressDataManager.GetDealDetailedProgresses(dealZoneGroups, isSale, beginDate, endDate);
             if (dealDetailedProgressList == null || dealDetailedProgressList.Count == 0)
                 return null;
 
@@ -44,6 +44,25 @@ namespace TOne.WhS.Deal.Business
                 ToTime = itm.ToTime
             }, itm => itm);
         }
+
+        public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgressesByDate(bool isSale, DateTime? beginDate, DateTime? endDate)
+        {
+            IDealDetailedProgressDataManager dealDetailedProgressDataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
+            List<DealDetailedProgress> dealDetailedProgressList = dealDetailedProgressDataManager.GetDealDetailedProgressesByDate(isSale, beginDate, endDate);
+            if (dealDetailedProgressList == null || dealDetailedProgressList.Count == 0)
+                return null;
+
+            return dealDetailedProgressList.ToDictionary(itm => new DealDetailedZoneGroupTier()
+            {
+                DealId = itm.DealId,
+                ZoneGroupNb = itm.ZoneGroupNb,
+                TierNb = itm.TierNb,
+                RateTierNb = itm.RateTierNb,
+                FromTime = itm.FromTime,
+                ToTime = itm.ToTime
+            }, itm => itm);
+        }
+
 
         public void InsertDealDetailedProgresses(IEnumerable<DealDetailedProgress> dealDetailedProgresses)
         {

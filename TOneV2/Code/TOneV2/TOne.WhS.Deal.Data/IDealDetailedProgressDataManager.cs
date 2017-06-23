@@ -6,7 +6,9 @@ namespace TOne.WhS.Deal.Data
 {
     public interface IDealDetailedProgressDataManager : IDataManager
     {
-        List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate);
+        List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate, DateTime? endDate);
+
+        List<DealDetailedProgress> GetDealDetailedProgressesByDate(bool isSale, DateTime? beginDate, DateTime? endDate);
 
         void InsertDealDetailedProgresses(List<DealDetailedProgress> dealDetailedProgresses);
 

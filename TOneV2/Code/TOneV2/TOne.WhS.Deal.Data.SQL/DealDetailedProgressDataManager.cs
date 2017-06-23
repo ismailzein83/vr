@@ -21,7 +21,7 @@ namespace TOne.WhS.Deal.Data.SQL
 
         #region Public Methods
 
-        public List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate)
+        public List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate, DateTime? endDate)
         {
             DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
             return GetItemsSPCmd("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDealZoneGroups]", DealDetailedProgressMapper, (cmd) =>
@@ -35,10 +35,22 @@ namespace TOne.WhS.Deal.Data.SQL
                     beginDateParameter.Value = DBNull.Value;
                 cmd.Parameters.Add(beginDateParameter);
 
+                SqlParameter endDateParameter = new SqlParameter() { ParameterName = "@EndDate" };
+                if (endDate.HasValue)
+                    endDateParameter.Value = endDate.Value;
+                else
+                    endDateParameter.Value = DBNull.Value;
+                cmd.Parameters.Add(endDateParameter);
+
                 var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
                 dtPrm.Value = dtDealZoneGroup;
                 cmd.Parameters.Add(dtPrm);
             });
+        }
+
+        public List<DealDetailedProgress> GetDealDetailedProgressesByDate(bool isSale, DateTime? beginDate, DateTime? endDate)
+        {
+            return GetItemsSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDate]", DealDetailedProgressMapper, isSale, beginDate, endDate);
         }
 
         public void InsertDealDetailedProgresses(List<DealDetailedProgress> dealDetailedProgresses)
