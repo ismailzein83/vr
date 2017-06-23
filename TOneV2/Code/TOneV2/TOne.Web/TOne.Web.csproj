@@ -482,6 +482,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing.BP.Activities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.BP.Activities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
