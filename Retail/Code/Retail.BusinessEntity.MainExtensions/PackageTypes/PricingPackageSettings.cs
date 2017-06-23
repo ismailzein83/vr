@@ -10,6 +10,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
     public class PricingPackageSettings : PackageExtendedSettings, IPackageFixedChargingPolicy, IPackageUsageChargingPolicy
     {
+        static PackageManager s_packageManager = new PackageManager();
         public int? FixedChargingPolicyId { get; set; }
 
         public Dictionary<Guid, ServiceTypeUsageChargingPolicySettings> ServiceTypeUsageChargingPolicies { get; set; }
@@ -68,7 +69,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         }
         public override bool CanAssignPackage(IPackageSettingsCanAssignPackageContext context)
         {
-            return AccountAssignmentPackageFilter.IsPackageAvailableInAccountProduct(context.AccountDefinitionId, context.AccountId, context.Package.PackageId);
+            return s_packageManager.IsPackageAvailableInAccountProduct(context.AccountDefinitionId, context.AccountId, context.Package.PackageId);
         }
     }
 

@@ -17,6 +17,7 @@ namespace Retail.BusinessEntity.Business
     {
         #region ctor/Local Variables
         static PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
+        static AccountBEManager s_accountBEManager = new AccountBEManager();
 
         #endregion
 
@@ -71,6 +72,14 @@ namespace Retail.BusinessEntity.Business
         public string GetPackageName(int packageId)
         {
             Package package = GetPackage(packageId);
+            if (package != null)
+                return GetPackageName(package);
+            else
+                return null;
+        }
+
+        public string GetPackageName(Package package)
+        {
             return package != null ? package.Name : null;
         }
         public List<Package> GetPackagesByIds(IEnumerable<int> packagesIds)
@@ -204,6 +213,21 @@ namespace Retail.BusinessEntity.Business
             if (package.Settings.Services == null)
                 throw new NullReferenceException("package.Settings.Services");
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, package.Settings.Services.ToBigResult(input, null, PackageServiceDetailMapper));
+        }
+
+        public bool IsPackageAvailableInAccountProduct(Guid accountBEDefinitionId, long accountId, int packageId)
+        {
+            IAccountPayment accountPayment;
+
+            s_accountBEManager.HasAccountPayment(accountBEDefinitionId, accountId, true, out accountPayment);
+            if (accountPayment == null)
+                throw new NullReferenceException(string.Format("accountPayment for accountId {0}", accountId));
+            IEnumerable<int> packageIds = new ProductManager().GetProductPackageIds(accountPayment.ProductId);
+
+            if (packageIds == null || !packageIds.Contains(packageId))
+                return false;
+
+            return true;
         }
 
         #endregion

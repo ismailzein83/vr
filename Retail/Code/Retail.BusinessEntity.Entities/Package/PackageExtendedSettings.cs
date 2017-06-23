@@ -78,16 +78,4 @@ namespace Retail.BusinessEntity.Entities
         bool IsValid { set; }
         string ErrorMessage { set; }
     }
-     public class PackageSettingAssignementValidateContext : IPackageSettingAssignementValidateContext
-     {
-         public long AccountId { set; get; }
-
-         public Account Account { set; get; }
-
-         public DateTime BED { set; get; }
-
-         public DateTime? EED { set; get; }
-         public bool IsValid { set; get; }
-         public string ErrorMessage { set; get; }
-     }
 }

@@ -74,8 +74,8 @@ namespace Retail.EntitiesMigrator.Migrators
                     }
                 }
             }
-            //Helper.SaveTariffRules(tariffRules);
-            //Helper.SaveRateValueRules(rateRules);
+            Helper.SaveTariffRules(tariffRules);
+            Helper.SaveRateValueRules(rateRules);
         }
 
         private RateValueRule GetRateValueRuleDetails(long? operatorId, long? branchId, RateDetails rateDetails)
