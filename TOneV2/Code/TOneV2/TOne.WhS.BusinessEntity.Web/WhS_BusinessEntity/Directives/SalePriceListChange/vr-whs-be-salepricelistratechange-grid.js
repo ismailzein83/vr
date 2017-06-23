@@ -93,6 +93,11 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
                     dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.NotChanged.description;
                     dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.NotChanged.iconType;
                     break;
+                case whSBeRateChangeTypeEnum.Deleted.value:
+                    dataItem.RateChangeTypeIcon = whSBeRateChangeTypeEnum.Deleted.iconUrl;
+                    dataItem.RateChangeTypeIconTooltip = whSBeRateChangeTypeEnum.Deleted.description;
+                    dataItem.RateChangeTypeIconType = whSBeRateChangeTypeEnum.Deleted.iconType;
+                    break;
             }
         }
     }
