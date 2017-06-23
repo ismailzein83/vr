@@ -47,9 +47,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TOne.WhS.Sales.BP.Arguments">
-      <HintPath>..\TOne.WhS.Sales.BP.Arguments\bin\Debug\TOne.WhS.Sales.BP.Arguments.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Analytic.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
     </Reference>
@@ -206,6 +203,10 @@
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
       <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
       <Name>TOne.WhS.Routing.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP.Arguments\TOne.WhS.Sales.BP.Arguments.csproj">
+      <Project>{26331fab-47a3-40dd-975d-9a0a5022584f}</Project>
+      <Name>TOne.WhS.Sales.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Data\TOne.WhS.Sales.Data.csproj">
       <Project>{49d742c7-dbc2-4ff5-9197-0c504076a2fe}</Project>
