@@ -116,11 +116,13 @@ namespace Retail.EntitiesMigrator
 
         private void cboCurrency_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Helper.CurrencyId = (int)cboCurrency.SelectedValue;
+            if (cboCurrency.SelectedValue != null)
+                Helper.CurrencyId = (int)cboCurrency.SelectedValue;
         }
 
         private void cboSNP_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cboSNP.SelectedValue != null)
             Helper.NumberPlanId = (int)cboSNP.SelectedValue;
         }
 

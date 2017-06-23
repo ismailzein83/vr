@@ -31,17 +31,24 @@ namespace Retail.EntitiesMigrator.Migrators
             IInternationalRateDataManager dataManager = EntitiesMigratorDataManagerFactory.GetDataManager<IInternationalRateDataManager>();
             IEnumerable<InternationalRate> internationalRates = dataManager.GetInternationalRates();
 
+
             List<GenericRule> tariffRules = new List<GenericRule>();
             List<GenericRule> rateRules = new List<GenericRule>();
+
+            var defaultRateRule = Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
+            var defaultTariffRule = Helper.CreateTariffRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
+            tariffRules.Add(defaultTariffRule);
+            rateRules.Add(defaultRateRule);
+
             foreach (InternationalRate internationalRate in internationalRates)
             {
 
                 SaleZone saleZone;
                 if (_Zones.TryGetValue(internationalRate.ZoneName, out saleZone))
                 {
-                    rateRules.Add(GetGenereicRule(RuleType.Rate, saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.ActivationDate, Helper.IntlRuleDefinition));
+                    rateRules.Add(GetRateValueRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
                     if (internationalRate.InternationalRateDetail.FractionUnit != 60)
-                        tariffRules.Add(GetGenereicRule(RuleType.Tariff, saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.ActivationDate, Helper.IntlRuleDefinition));
+                        tariffRules.Add(GetTariffRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
                 }
 
 
@@ -51,75 +58,26 @@ namespace Retail.EntitiesMigrator.Migrators
 
         }
 
-        private GenericRule GetGenereicRule(RuleType ruleType, long zoneId, RateDetails rateDetails, DateTime bed, Entities.RuleDefinitionDetails ruleDefinitionDetails)
+        private RateValueRule GetRateValueRuleDetails(long zoneId, RateDetails rateDetails)
         {
-            switch (ruleType)
-            {
-                case RuleType.Rate:
-                    return GetRateValueRuleDetails(zoneId, rateDetails, ruleDefinitionDetails, bed);
-
-                case RuleType.Tariff:
-                    return GetTariffRuleDetails(zoneId, rateDetails, ruleDefinitionDetails, bed);
-
-            }
-            return null;
+            return Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetCriteriaFieldsValues(zoneId), rateDetails);
         }
-
-        private RateValueRule GetRateValueRuleDetails(long zoneId, RateDetails rateDetails, RuleDefinitionDetails ruleDefinitionDetails, DateTime bed)
+        private TariffRule GetTariffRuleDetails(long zoneId, RateDetails rateDetails)
         {
-            RateValueRule ruleDetails = new RateValueRule
-            {
-                Criteria = new GenericRuleCriteria
-                {
-                    FieldsValues = GetCriteriaFieldsValues(ruleDefinitionDetails, new List<object> { zoneId })
-                },
-                Settings = new FixedRateValueSettings
-                {
-                    CurrencyId = Helper.CurrencyId,
-                    NormalRate = rateDetails.Rate
-                },
-                DefinitionId = ruleDefinitionDetails.RateDefinitionId,
-                Description = "Migrated International Rate Rule",
-                BeginEffectiveTime = bed
-
-            };
-            return ruleDetails;
+            return Helper.CreateTariffRule(Helper.IntlRuleDefinition, GetCriteriaFieldsValues(zoneId), rateDetails);
         }
-
-        private TariffRule GetTariffRuleDetails(long zoneId, RateDetails rateDetails, RuleDefinitionDetails ruleDefinitionDetails, DateTime bed)
+        private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(long zoneId)
         {
-            TariffRule ruleDetails = new TariffRule
-            {
-                Criteria = new GenericRuleCriteria
-                {
-                    FieldsValues = GetCriteriaFieldsValues(ruleDefinitionDetails, new List<object> { zoneId })
-                },
-                Settings = new RegularTariffSettings
-                {
-                    CurrencyId = Helper.CurrencyId,
-                    FractionUnit = rateDetails.FractionUnit,
-                    PricingUnit = 60,
-                    FirstPeriodRateType = FirstPeriodRateType.EffectiveRate
-                },
-                DefinitionId = ruleDefinitionDetails.TariffDefinitionId,
-                Description = "Migrated International Tariff Rule",
-                BeginEffectiveTime = bed
-
-            };
-            return ruleDetails;
-        }
-
-        private Dictionary<string, GenericRuleCriteriaFieldValues> GetCriteriaFieldsValues(RuleDefinitionDetails ruleDefinitionDetails, List<object> zoneIds)
-        {
-            Dictionary<string, GenericRuleCriteriaFieldValues> result = new Dictionary<string, GenericRuleCriteriaFieldValues>();
-
-            Helper.AddDirectionField(result, TrafficDirection.OutGoing);
-            Helper.AddServiceTypeField(result, ruleDefinitionDetails.ServiceTypeId);
-            Helper.AddChargingPolicyField(result, _IntlChargingPolicy);
-            Helper.AddZoneField(result, zoneIds);
+            Dictionary<string, GenericRuleCriteriaFieldValues> result = GetDefaultCriteriaFieldValues();
+            Helper.AddAccountField(result, new List<object> { zoneId });
 
             return result;
         }
 
+        private Dictionary<string, GenericRuleCriteriaFieldValues> GetDefaultCriteriaFieldValues()
+        {
+            Dictionary<string, GenericRuleCriteriaFieldValues> result = Helper.BuildCriteriaFieldsValues(Helper.IntlRuleDefinition.ServiceTypeId, Helper.IntlRuleDefinition.ChargingPolicyId, MultiNet.Business.TrafficDirection.OutGoing);
+            return result;
+        }
     }
 }

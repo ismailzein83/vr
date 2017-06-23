@@ -11,7 +11,7 @@ namespace Retail.EntitiesMigrator.Data.SQL
 {
     public class InternationalRateDataManager : BaseSQLDataManager, IInternationalRateDataManager
     {
-         #region Constructor
+        #region Constructor
         public InternationalRateDataManager()
             : base(GetConnectionStringName("RatesDBConnStringKey", "RatesDBConnString"))
         {
@@ -28,19 +28,9 @@ namespace Retail.EntitiesMigrator.Data.SQL
         {
             return new InternationalRate
             {
-                InternationalRateDetail = ParseRateDetails(reader["DR_RATECONF"] as string),
+                InternationalRateDetail = DataHelper.ParseRateDetails(reader["DR_RATECONF"] as string),
                 ZoneName = reader["DES_DESTINATIONNAME"] as string,
                 ActivationDate = new DateTime(2010, 01, 01)
-            };
-        }
-
-        private RateDetails ParseRateDetails(string rateString)
-        {
-            string[] rateStringDetails = rateString.Split('*');
-            return new RateDetails
-            {
-                FractionUnit = int.Parse(rateStringDetails[1]),
-                Rate = decimal.Parse(rateStringDetails[2])
             };
         }
 

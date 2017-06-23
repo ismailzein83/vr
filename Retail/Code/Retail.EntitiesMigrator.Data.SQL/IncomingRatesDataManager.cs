@@ -28,20 +28,10 @@ namespace Retail.EntitiesMigrator.Data.SQL
             return new IncomingRate
             {
                 SubscriberId = (long)reader["SUB_SUBSCRIBERID"],
-                LocalRate = ParseRateDetails(reader["SSICR_LOCALRATES"] as string),
-                InternationalRate = ParseRateDetails(reader["SSICR_NWDRATES"] as string),
+                LocalRate = DataHelper.ParseRateDetails(reader["SSICR_LOCALRATES"] as string),
+                InternationalRate = DataHelper.ParseRateDetails(reader["SSICR_NWDRATES"] as string),
                 ActivationDate = GetReaderValue<DateTime>(reader, "SSICR_ACTIVATIONDATE")
 
-            };
-        }
-
-        private RateDetails ParseRateDetails(string rateString)
-        {
-            string[] rateStringDetails = rateString.Split('*');
-            return new RateDetails
-            {
-                FractionUnit = int.Parse(rateStringDetails[1]),
-                Rate = decimal.Parse(rateStringDetails[2])
             };
         }
 
