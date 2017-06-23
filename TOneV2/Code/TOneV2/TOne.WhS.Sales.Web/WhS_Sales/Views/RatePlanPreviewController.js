@@ -81,10 +81,10 @@
 				changedCountryGridReadyDeferred.resolve();
 			};
 
-			$scope.scopeModel.save = function () {
+			$scope.scopeModel.continueTask = function () {
 				return executeTask(true);
 			};
-			$scope.scopeModel.close = function () {
+			$scope.scopeModel.stopTask = function () {
 				return executeTask(false);
 			};
 		}
