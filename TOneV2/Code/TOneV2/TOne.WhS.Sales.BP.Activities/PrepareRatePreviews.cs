@@ -70,24 +70,20 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (DataByZone zoneData in dataByZone)
             {
-                bool mustAddNormalRatePreview;
-                RatePreview normalRatePreview = GetNormalRatePreview(ownerType, zoneData, out mustAddNormalRatePreview);
-
-                if (mustAddNormalRatePreview || (normalRatePreview != null && CanAddRatePreview(normalRatePreview)))
+                RatePreview normalRatePreview = GetNormalRatePreview(ownerType, zoneData);
+                if (normalRatePreview != null)
                     ratePreviews.Add(normalRatePreview);
 
                 foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                 {
                     var otherRatePreview = GetPreviewFromRateToChange(otherRateToChange, zoneData.ZoneRateGroup, ownerType);
-                    if (CanAddRatePreview(otherRatePreview))
-                        ratePreviews.Add(otherRatePreview);
+                    ratePreviews.Add(otherRatePreview);
                 }
 
                 foreach (RateToClose otherRateToClose in zoneData.OtherRatesToClose)
                 {
                     var otherRatePreview = GetPreviewFromRateToClose(otherRateToClose, zoneData.ZoneRateGroup, ownerType);
-                    if (CanAddRatePreview(otherRatePreview))
-                        ratePreviews.Add(otherRatePreview);
+                    ratePreviews.Add(otherRatePreview);
                 }
             }
 
@@ -104,7 +100,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private RatePreview GetNormalRatePreview(SalePriceListOwnerType ownerType, DataByZone zoneData, out bool mustAddNormalRatePreview)
+        private RatePreview GetNormalRatePreview(SalePriceListOwnerType ownerType, DataByZone zoneData)
         {
             RatePreview normalRatePreview = null;
 
@@ -116,18 +112,14 @@ namespace TOne.WhS.Sales.BP.Activities
 
             else if (zoneData.OtherRatesToChange.Count > 0 || zoneData.OtherRatesToClose.Count > 0)
             {
-                mustAddNormalRatePreview = true;
-
                 normalRatePreview = new RatePreview()
                 {
                     ZoneName = zoneData.ZoneName,
                     ChangeType = RateChangeType.NotChanged
                 };
-
                 SetCurrentNormalRateProperties(normalRatePreview, zoneData.ZoneRateGroup, ownerType);
             }
 
-            mustAddNormalRatePreview = false;
             return normalRatePreview;
         }
 
@@ -184,11 +176,6 @@ namespace TOne.WhS.Sales.BP.Activities
                     otherRatePreview.IsCurrentRateInherited = otherRate.Source != ownerType;
                 }
             }
-        }
-
-        private bool CanAddRatePreview(RatePreview ratePreview)
-        {
-            return !(ratePreview.CurrentRate.HasValue && ratePreview.NewRate.HasValue && ratePreview.CurrentRate.Value == ratePreview.NewRate.Value);
         }
 
         #endregion
