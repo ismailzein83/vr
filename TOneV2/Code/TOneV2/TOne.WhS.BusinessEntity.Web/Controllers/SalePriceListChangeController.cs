@@ -56,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object DownloadSalePriceList(long salepriceListId, SalePriceListType salePriceListType)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            VRFile file = salePriceListManager.DownloadSalePriceList(salepriceListId, salePriceListType);
+            VRFile file = salePriceListManager.GenerateSalePriceListFile(salepriceListId, salePriceListType);
             return GetExcelResponse(file.Content, file.Name);
         }
         [HttpGet]
@@ -74,7 +74,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(long salepriceListId, SalePriceListType salePriceListType)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            VRFile file = salePriceListManager.DownloadSalePriceList(salepriceListId, salePriceListType);
+            VRFile file = salePriceListManager.GenerateSalePriceListFile(salepriceListId, salePriceListType);
             VRFileManager fileManager = new VRFileManager();
             long fileId = fileManager.AddFile(file);
             var evaluatedObject = salePriceListManager.EvaluateEmail(salepriceListId);
