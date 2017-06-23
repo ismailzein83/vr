@@ -512,7 +512,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Rate = zoneRate.Rate.Rate,
                 BED = zoneRate.Rate.BED,
                 EED = zoneRate.Rate.EED,
-                RateChangeType = zoneRate.Rate.RateChange,
+                RateChangeType = RateChangeType.NotChanged,
                 CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
             };
         }
