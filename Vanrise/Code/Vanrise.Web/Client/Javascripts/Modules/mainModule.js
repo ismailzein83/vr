@@ -264,7 +264,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         var pathArray = location.href.split("/");
         var protocol = pathArray[0];
         var host = pathArray[2];
-        var defaultUrl = protocol + "//" + host + '/#/default'  ;
+        var defaultUrl = protocol + "//" + host + "/#/default"  ;
         return defaultUrl == url;
     }
 
