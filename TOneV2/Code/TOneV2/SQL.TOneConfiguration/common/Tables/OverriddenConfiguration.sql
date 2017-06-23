@@ -5,6 +5,9 @@
     [Settings]    NVARCHAR (MAX)   NOT NULL,
     [timestamp]   ROWVERSION       NULL,
     [CreatedTime] DATETIME         CONSTRAINT [DF_OverriddenConfiguration_CreatedTime] DEFAULT (getdate()) NULL,
-    CONSTRAINT [PK_OverriddenConfiguration] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_OverriddenConfiguration] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [FK_OverriddenConfiguration_OverriddenConfigurationGroup] FOREIGN KEY ([GroupId]) REFERENCES [common].[OverriddenConfigurationGroup] ([ID])
 );
+
+
 
