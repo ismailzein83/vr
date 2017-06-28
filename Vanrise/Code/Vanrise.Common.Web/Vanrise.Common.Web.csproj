@@ -471,6 +471,8 @@
     <Content Include="Common\Services\VRObjectVariableService.js" />
     <Content Include="Common\Views\ActionAudit\ActionAuditManagement.html" />
     <Content Include="Common\Views\ActionAudit\ActionAuditManagementController.js" />
+    <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditor.html" />
+    <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditorController.js" />
     <Content Include="Common\Views\Region\RegionEditor.html" />
     <Content Include="Common\Views\Region\RegionEditorController.js" />
     <Content Include="Common\Views\Region\RegionManagement.html" />
