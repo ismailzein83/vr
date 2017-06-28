@@ -58,8 +58,12 @@
     [SAC]                             VARCHAR (100) NULL,
     [LocationAreaCode]                VARCHAR (100) NULL,
     [SwitchID]                        INT           NULL,
+    [CallingNumber]                   VARCHAR (50)  NULL,
+    [CalledNumber]                    VARCHAR (50)  NULL,
     CONSTRAINT [PK_SMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

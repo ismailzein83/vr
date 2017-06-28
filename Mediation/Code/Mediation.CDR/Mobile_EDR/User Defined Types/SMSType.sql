@@ -56,7 +56,11 @@
     [MTSMSBlackListFlag]              BIT           NULL,
     [SAC]                             VARCHAR (100) NULL,
     [LocationAreaCode]                VARCHAR (100) NULL,
-    [SwitchID]                        INT           NULL);
+    [SwitchID]                        INT           NULL,
+    [CallingNumber]                   VARCHAR (50)  NULL,
+    [CalledNumber]                    VARCHAR (50)  NULL);
+
+
 
 
 
