@@ -41,6 +41,7 @@
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activities" />
@@ -49,6 +50,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>

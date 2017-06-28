@@ -46,10 +46,13 @@
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
@@ -90,7 +93,7 @@
         </InArgument>
       </twdba1:LoadDealBillingSummaryRecords.IsSale>
     </twdba1:LoadDealBillingSummaryRecords>
-    <twdba1:SyncDealDetailProgressWithBS Status="{x:Null}">
+    <twdba1:SyncDealDetailProgressWithBS Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SyncDealDetailProgressWithBS_1">
       <twdba1:SyncDealDetailProgressWithBS.AffectedDealZoneGroups>
         <InArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
           <mca:CSharpValue x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpValue>
@@ -111,7 +114,6 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">isSale</mca:CSharpValue>
         </InArgument>
       </twdba1:SyncDealDetailProgressWithBS.IsSale>
-      <sap2010:WorkflowViewState.IdRef>SyncDealDetailProgressWithBS_1</sap2010:WorkflowViewState.IdRef>
     </twdba1:SyncDealDetailProgressWithBS>
     <twdba1:LoadDealProgresses Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadDealProgresses_1">
       <twdba1:LoadDealProgresses.AffectedDealZoneGroups>
@@ -150,7 +152,7 @@
     <twdba1:PrepareExpectedDealTrafficRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareExpectedDealTrafficRecords_1">
       <twdba1:PrepareExpectedDealTrafficRecords.DealDetailedProgresses>
         <InArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">
-          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">Vanrise.Common.Utilities.CloneObject(dealDetailedProgresses)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">dealDetailedProgresses</mca:CSharpValue>
         </InArgument>
       </twdba1:PrepareExpectedDealTrafficRecords.DealDetailedProgresses>
       <twdba1:PrepareExpectedDealTrafficRecords.ExpectedDealBillingSummaryRecords>
@@ -177,12 +179,12 @@
       </twdba1:ApplyExpectedDealTrafficRecordsToDB.DaysToReprocess>
       <twdba1:ApplyExpectedDealTrafficRecordsToDB.DealDetailedProgresses>
         <InArgument x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">
-          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">Vanrise.Common.Utilities.CloneObject(dealDetailedProgresses)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealDetailedZoneGroupTier, twde:DealDetailedProgress)">dealDetailedProgresses</mca:CSharpValue>
         </InArgument>
       </twdba1:ApplyExpectedDealTrafficRecordsToDB.DealDetailedProgresses>
       <twdba1:ApplyExpectedDealTrafficRecordsToDB.DealProgresses>
         <InArgument x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">
-          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">Vanrise.Common.Utilities.CloneObject(dealProgresses)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg1:Dictionary(twde:DealZoneGroup, twde:DealProgress)">dealProgresses</mca:CSharpValue>
         </InArgument>
       </twdba1:ApplyExpectedDealTrafficRecordsToDB.DealProgresses>
       <twdba1:ApplyExpectedDealTrafficRecordsToDB.ExpectedDealBillingSummaryRecords>
@@ -222,7 +224,7 @@
         </Assign>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXERlYWxFdmFsdWF0b3JTdWJQcm9jZXNzLnhhbWwkPQPiAQ4CAQFHBVwsAwGGAl0FcysDAdkBdAWEASEDAbcBhQEFlQEpAwGVAZYBBasBMAIBaKwBBcsBMgIBJcwBBeABCgIBAlkLWVADAagCVAtUsAEDAZ0CTwtPVAMBkgJKC0p+AwGHAm8Lb1ADAfsBagtqqAEDAfABZQtlVAMB5QFgC2B2AwHaAYEBC4EBUAMBzgF8C3yNAQMBwwF3C3d2AwG4AZIBC5IBUAMBrAGIAQuIAXYDAaEBjQELjQGpAQMBlgGoAQuoAVADAYoBowELowGbAQIBf5kBC5kBxwECAXSeAQueAbIBAgFpyAELyAFQAgFdrwELrwFvAgFSwwELwwGTAQIBR7kBC7kBqwECATy0AQu0AccBAgExvgELvgGqAQIBJs8BC88BYQIBA9MBCd4BEgIBDtsBD9sBsAECARrWAQ/WAXYCAQ8=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXERlYWxFdmFsdWF0b3JTdWJQcm9jZXNzLnhhbWwkQAPkAQ4CAQFKBV8sAwGGAmAFdSsDAdkBdgWGASEDAbcBhwEFlwEpAwGVAZgBBa0BMAIBaK4BBc0BMgIBJc4BBeIBCgIBAlwLXFADAagCVwtXsAEDAZ0CUgtSVAMBkgJNC01+AwGHAnILclADAfsBbQttqAEDAfABaAtoVAMB5QFjC2N2AwHaAYMBC4MBUAMBzgF+C36NAQMBwwF5C3l2AwG4AZQBC5QBUAMBrAGKAQuKAXYDAaEBjwELjwGpAQMBlgGqAQuqAVADAYoBpQELpQGbAQIBf5sBC5sBoQECAXSgAQugAbIBAgFpygELygFQAgFdsQELsQFvAgFSxQELxQGTAQIBR7sBC7sBhQECATy2AQu2AaEBAgExwAELwAGqAQIBJtEBC9EBYQIBA9UBCeABEgIBDt0BD90BsAECARrYAQ/YAXYCAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

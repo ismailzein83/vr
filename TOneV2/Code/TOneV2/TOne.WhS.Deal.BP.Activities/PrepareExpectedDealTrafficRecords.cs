@@ -75,6 +75,9 @@ namespace TOne.WhS.Deal.BP.Activities
                 }
             }
 
+            string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Prepare Expected {0} Deal Traffic Records is done", isSaleAsString), null);
+
             return new PrepareExpectedDealTrafficRecordsOutput()
             {
                 ExpectedDealBillingSummaryRecords = BuildExpectedDealBillingSummaryRecordDict(expectedDealBillingSummaryByZoneGroupTier),
@@ -93,7 +96,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, PrepareExpectedDealTrafficRecordsOutput result)
         {
-            this.ExpectedDealProgressData.Set(context, result.ExpectedDealBillingSummaryRecords);
+            this.ExpectedDealProgressData.Set(context, result.ExpectedDealProgressData);
             this.ExpectedDealBillingSummaryRecords.Set(context, result.ExpectedDealBillingSummaryRecords);
         }
 

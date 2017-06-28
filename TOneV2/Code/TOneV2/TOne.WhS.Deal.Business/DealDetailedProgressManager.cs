@@ -89,7 +89,7 @@ namespace TOne.WhS.Deal.Business
 
         public bool AreEqual(DealDetailedProgress dealDetailedProgress, DealBillingSummary dealBillingSummary)
         {
-            if (dealBillingSummary == null || dealDetailedProgress == null)
+            if (dealDetailedProgress == null || dealBillingSummary == null)
                 return false;
 
             if (dealDetailedProgress.FromTime != dealBillingSummary.BatchStart)

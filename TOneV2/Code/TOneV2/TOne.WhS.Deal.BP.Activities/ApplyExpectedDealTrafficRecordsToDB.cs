@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -52,14 +53,15 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
 
+            DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             List<DealDetailedProgress> dealDetailedProgressToAdd = new List<DealDetailedProgress>();
             List<DealDetailedProgress> dealDetailedProgressToUpdate = new List<DealDetailedProgress>();
             HashSet<long> dealDetailedProgressesToKeep = new HashSet<long>();
 
+            DealProgressManager dealProgressManager = new DealProgressManager();
             List<DealProgress> dealProgressesToAdd = new List<DealProgress>();
             List<DealProgress> dealProgressesToUpdate = new List<DealProgress>();
 
-            DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses = inputArgument.DealDetailedProgresses;
 
             DealDetailedProgress currentDealDetailedProgresses;
@@ -103,34 +105,55 @@ namespace TOne.WhS.Deal.BP.Activities
                     dealProgressesToAdd.Add(expectedDealProgress);
                 }
             }
+            bool shouldUpdateDealTrafficRecords = false;
+            if (dealProgressesToAdd.Count > 0)
+            {
+                shouldUpdateDealTrafficRecords = true;
+                dealProgressManager.InsertDealProgresses(dealProgressesToAdd);
+            }
 
-            if (dealDetailedProgressToAdd.Count == 0 && dealDetailedProgressToUpdate.Count == 0 && (dealDetailedProgressesToDelete == null || dealDetailedProgressesToDelete.Count() == 0))
-                return null;
+            if (dealProgressesToUpdate.Count > 0)
+            {
+                shouldUpdateDealTrafficRecords = true;
+                dealProgressManager.UpdateDealProgresses(dealProgressesToUpdate);
+            }
+
+            ApplyExpectedDealTrafficRecordsToDBOutput output = null;
 
             List<DateTime> daysToReprocess = new List<DateTime>();
 
             if (dealDetailedProgressToAdd.Count > 0)
             {
+                shouldUpdateDealTrafficRecords = true;
                 dealDetailedProgressManager.InsertDealDetailedProgresses(dealDetailedProgressToAdd);
                 daysToReprocess.AddRange(dealDetailedProgressToAdd.Select(itm => itm.FromTime.Date));
             }
 
             if (dealDetailedProgressToUpdate.Count > 0)
             {
+                shouldUpdateDealTrafficRecords = true;
                 dealDetailedProgressManager.UpdateDealDetailedProgresses(dealDetailedProgressToUpdate);
                 daysToReprocess.AddRange(dealDetailedProgressToUpdate.Select(itm => itm.FromTime.Date));
             }
 
             if (dealDetailedProgressesToDelete != null && dealDetailedProgressesToDelete.Count() > 0)
             {
+                shouldUpdateDealTrafficRecords = true;
                 dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete.Select(itm => itm.DealDetailedProgressId).ToList());
                 daysToReprocess.AddRange(dealDetailedProgressesToDelete.Select(itm => itm.FromTime.Date));
             }
 
-            return new ApplyExpectedDealTrafficRecordsToDBOutput()
-            {
-                DaysToReprocess = daysToReprocess.Count > 0 ? new HashSet<DateTime>(daysToReprocess) : null
-            };
+            if (daysToReprocess.Count > 0)
+                output = new ApplyExpectedDealTrafficRecordsToDBOutput() { DaysToReprocess = new HashSet<DateTime>(daysToReprocess) };
+
+            string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
+
+            if (shouldUpdateDealTrafficRecords)
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Apply Expected {0} Deal Traffic Records To DataBase is done", isSaleAsString), null);
+            else
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("{0} Deal Traffic Records is already synchronized", isSaleAsString), null);
+
+            return output;
         }
 
         protected override ApplyExpectedDealTrafficRecordsToDBInput GetInputArgument(AsyncCodeActivityContext context)
@@ -147,7 +170,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyExpectedDealTrafficRecordsToDBOutput result)
         {
-            this.DaysToReprocess.Set(context, result.DaysToReprocess);
+            this.DaysToReprocess.Set(context, result != null ? result.DaysToReprocess : null);
         }
 
         #region Private Methods
@@ -160,7 +183,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 ZoneGroupNb = dealBillingSummary.ZoneGroupNb,
                 IsSale = dealBillingSummary.IsSale,
                 TierNb = dealBillingSummary.TierNb,
-                RateTierNb = dealBillingSummary.RateTierNb, 
+                RateTierNb = dealBillingSummary.RateTierNb,
                 FromTime = dealBillingSummary.BatchStart,
                 ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset),
                 ReachedDurationInSeconds = dealBillingSummary.DurationInSeconds

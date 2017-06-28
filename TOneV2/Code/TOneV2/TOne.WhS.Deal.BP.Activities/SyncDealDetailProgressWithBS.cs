@@ -6,6 +6,7 @@ using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -37,6 +38,9 @@ namespace TOne.WhS.Deal.BP.Activities
         protected override void DoWork(SyncDealDetailProgressWithBSInput inputArgument, AsyncActivityHandle handle)
         {
             SyncDealDetailProgressWithBillingStats(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.AffectedDealZoneGroups, inputArgument.IsSale, inputArgument.BeginDate);
+
+            string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Synchronizing {0} Deal Detail Progress Table With BillingStats Table is done", isSaleAsString), null);
         }
 
         protected override SyncDealDetailProgressWithBSInput GetInputArgument(AsyncCodeActivityContext context)
@@ -113,13 +117,14 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress()
             {
+                IsSale = dealBillingSummary.IsSale,
                 DealId = dealBillingSummary.DealId,
                 ZoneGroupNb = dealBillingSummary.ZoneGroupNb,
-                IsSale = dealBillingSummary.IsSale,
                 TierNb = dealBillingSummary.TierNb,
                 RateTierNb = dealBillingSummary.RateTierNb,
                 FromTime = dealBillingSummary.BatchStart,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset)
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset),
+                ReachedDurationInSeconds = dealBillingSummary.DurationInSeconds
             };
 
             if (dealDetailedProgressID.HasValue)

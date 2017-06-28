@@ -2,6 +2,8 @@
 using System.Activities;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
+using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -23,6 +25,8 @@ namespace TOne.WhS.Deal.BP.Activities
             DateTime? beginDate = dealDetailedProgressManager.GetDealEvaluatorBeginDate(lastTimestamp);
 
             this.BeginDate.Set(context, beginDate);
+
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Calculate Begin Date is done", null);
         }
     }
 }

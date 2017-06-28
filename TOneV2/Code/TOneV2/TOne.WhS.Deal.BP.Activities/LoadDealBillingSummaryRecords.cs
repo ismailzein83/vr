@@ -5,6 +5,7 @@ using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -41,6 +42,9 @@ namespace TOne.WhS.Deal.BP.Activities
             DealBillingSummaryManager dealBillingSummaryManager = new DealBillingSummaryManager();
             Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords = dealBillingSummaryManager.LoadDealBillingSummaryRecords(inputArgument.BeginDate, inputArgument.IsSale);
             HashSet<DealZoneGroup> affectedDealZoneGroups = currentDealBillingSummaryRecords.Keys.ToHashSet();
+
+            string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Load {0} Biling Stats Records From {1} is done", isSaleAsString, inputArgument.BeginDate.ToString("yyyy-MM-dd HH:mm:ss")), null);
 
             return new LoadDealBillingSummaryRecordsOutput()
             {

@@ -82,7 +82,13 @@ namespace TOne.WhS.Deal.Data.SQL
 
         public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp)
         {
-            return (DateTime?)ExecuteScalarSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealEvaluatorBeginDate]", lastTimestamp);
+            object beginDateAsObj = ExecuteScalarSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealEvaluatorBeginDate]", lastTimestamp);
+            
+            DateTime? beginDate = null;
+            if (beginDateAsObj != DBNull.Value)
+                beginDate = (DateTime)beginDateAsObj;
+
+            return beginDate;
         }
 
         public Byte[] GetMaxTimestamp()

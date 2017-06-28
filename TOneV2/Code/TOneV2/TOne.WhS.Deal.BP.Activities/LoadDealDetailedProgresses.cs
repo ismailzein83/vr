@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -34,6 +35,9 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(inputArgument.AffectedDealZoneGroups, inputArgument.IsSale);
+
+            string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Load {0} Deal Detailed Progress Table is done", isSaleAsString), null);
 
             return new LoadDealDetailedProgressesOutput()
             {

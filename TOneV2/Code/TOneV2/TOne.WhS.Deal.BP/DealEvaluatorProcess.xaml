@@ -200,6 +200,18 @@
                     </OutArgument>
                   </twdba1:GetDealTechnicalSettingData.DealTechnicalSettingData>
                 </twdba1:GetDealTechnicalSettingData>
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
+                  <vbw:WriteTrackingMessage.Message>
+                    <InArgument x:TypeArguments="x:String">
+                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("There is {0} day To Reprocess", daysToReprocess.Count)</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Message>
+                  <vbw:WriteTrackingMessage.Severity>
+                    <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Severity>
+                </vbw:WriteTrackingMessage>
                 <ForEach x:TypeArguments="s:DateTime" DisplayName="ForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
                   <ForEach.Values>
                     <InArgument x:TypeArguments="scg1:IEnumerable(s:DateTime)">
@@ -211,18 +223,6 @@
                       <DelegateInArgument x:TypeArguments="s:DateTime" Name="item" />
                     </ActivityAction.Argument>
                     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
-                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
-                        <vbw:WriteTrackingMessage.Message>
-                          <InArgument x:TypeArguments="x:String">
-                            <mca:CSharpValue x:TypeArguments="x:String">string.Format("There is {0} day To Reprocess", daysToReprocess.Count)</mca:CSharpValue>
-                          </InArgument>
-                        </vbw:WriteTrackingMessage.Message>
-                        <vbw:WriteTrackingMessage.Severity>
-                          <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-                            <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-                          </InArgument>
-                        </vbw:WriteTrackingMessage.Severity>
-                      </vbw:WriteTrackingMessage>
                       <If Condition="False" sap2010:WorkflowViewState.IdRef="If_6">
                         <If.Then>
                           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
@@ -328,7 +328,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbEZDA8wCDgIBAUwzTDYCAQJOBVQgAwHyAlUFYCQDAd0CYQVsIQMByAJtBcMCCgIBD8QCBcoCIAIBA1ELUYUBAwH0Ak5gToIBAwHzAl0LXYABAwHoAlgLWE0DAd4CZAtkaAMB0wJpC2l4AwHJAnALcFwCARB0CcECFAIBGscCC8cChQECAQXEAmDEAoABAgEEdQuRARYDAZcCkgELpgEQAwH3AacBC7sBEAMB1wG8AQutAhACATuuAgu0AjMCATC1AgvAAisCARt5DYQBLQMBsAKFAQ2QAS0DAZgClQERlQG+AQMB+AGZAQ+kARgDAYICqgERqgG+AQMB2AGuAQ+5ARgDAeIBvwERvwGPAQIBPMMBD6sCGgIBRrECEbEChgECATG9AhG9AmgCASa4AhG4AlMCARx8E3yWAQMBvQJ5mgF5oAEDAbwCgQETgQFiAwGxAogBE4gBlgEDAaUChQGaAYUBoQEDAaQCjQETjQFiAwGZAqEBFaEBlAEDAY0CnAEVnAF5AwGDArYBFbYByAEDAe0BsQEVsQF5AwHjAcQBEcoBNgMBzAHLARGqAhsCAUfHARfHAYoBAwHNAc4BF84BeAMBwgHVARWoAiACAUjWARfhATIDAasB4gEXpwIcAgFJ3gEd3gGXAQMBtwHZAR3ZAaABAwGsAeIBJeIBLAIBSuQBG6UCJgIBS+UBHfcBLgMBkwH4AR2kAiICAUzoASPvASADAaAB9AEj9AGnAQMBlQHlAckB5QHPAQMBlAH7ASP7AdYBAgFN/wEhhQI1AwGHAYgCIaICLAIBWIICJ4IC0gEDAYgBiQIjlAIsAgFwlQIjoQI+AgFZkQIpkQKCAQIBfIwCKYwChgECAXGeAimeAqMBAgFlmAIpmQKwAQIBWg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbEZDA8wCDgIBAUwzTDYCAQJOBVQgAwHwAlUFYCQDAdsCYQVsIQMBxgJtBcMCCgIBD8QCBcoCIAIBA1ELUYUBAwHyAk5gToIBAwHxAl0LXYABAwHmAlgLWE0DAdwCZAtkaAMB0QJpC2l4AwHHAnALcFwCARB0CcECFAIBGscCC8cChQECAQXEAmDEAoABAgEEdQuRARYDAZUCkgELpgEQAwH1AacBC7sBEAMB1QG8AQutAhACATuuAgu0AjMCATC1AgvAAisCARt5DYQBLQMBrgKFAQ2QAS0DAZYClQERlQG+AQMB9gGZAQ+kARgDAYACqgERqgG+AQMB1gGuAQ+5ARgDAeABvwERvwGPAQIBPMMBD6sCGgIBRrECEbEChgECATG9AhG9AmgCASa4AhG4AlMCARx8E3yWAQMBuwJ5mgF5oAEDAboCgQETgQFiAwGvAogBE4gBlgEDAaMChQGaAYUBoQEDAaICjQETjQFiAwGXAqEBFaEBlAEDAYsCnAEVnAF5AwGBArYBFbYByAEDAesBsQEVsQF5AwHhAcQBEcoBNgMBygHLARHWASwDAbUB1wERqgIbAgFHxwEXxwGKAQMBywHTARfTAZEBAwHAAc4BF84BmgEDAbYB2gEX2gF4AwGrAeEBFagCIAIBSOIBF6cCHAIBSeIBJeIBLAIBSuQBG6UCJgIBS+UBHfcBLgMBkwH4AR2kAiICAUzoASPvASADAaAB9AEj9AGnAQMBlQHlAckB5QHPAQMBlAH7ASP7AdYBAgFN/wEhhQI1AwGHAYgCIaICLAIBWIICJ4IC0gEDAYgBiQIjlAIsAgFwlQIjoQI+AgFZkQIpkQKCAQIBfIwCKYwChgECAXGeAimeAqMBAgFlmAIpmQKwAQIBWg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -343,7 +343,7 @@
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="835,212" />
       <sap2010:ViewStateData Id="GetDealTechnicalSettingData_1" sap:VirtualizedContainerService.HintSize="688,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="636,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -364,14 +364,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="636,734" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="658,920">
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="658,858">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="688,1070" />
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="688,1008" />
       <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="710,1256">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">

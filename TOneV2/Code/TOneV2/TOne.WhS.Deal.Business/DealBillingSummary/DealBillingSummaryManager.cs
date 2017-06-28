@@ -19,6 +19,7 @@ namespace TOne.WhS.Deal.Business
             Dictionary<BatchDealZoneGroup, DealDurations> batchDealZoneGroupDict = null;
 
             Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale == true ? "Sale" : "Cost");
+            Dictionary<PropertyName, int> dimensionFieldsDict = BuildDimensionFieldsDict(isSale == true ? "Sale" : "Cost");
 
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = BuildAnalyticQuery(beginDate, propertyNames);
 
@@ -30,15 +31,15 @@ namespace TOne.WhS.Deal.Business
 
                 foreach (var analyticRecord in result.Data)
                 {
-                    DateTime batchStart = (DateTime)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.HalfHour]).Value;
-                    int origDealId = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.OrigDeal]).Value;
-                    int origDealZoneGroupNb = (int)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.OrigDealZoneGroupNb]).Value;
+                    DateTime batchStart = (DateTime)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.HalfHour]].Value;
+                    int origDealId = (int)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.OrigDeal]].Value;
+                    int origDealZoneGroupNb = (int)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.OrigDealZoneGroupNb]].Value;
+                    int? dealId = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.Deal]].Value;
+                    int? dealZoneGroupNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealZoneGroupNb]].Value;
+                    int? dealTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealTierNb]].Value;
+                    int? dealRateTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealRateTierNb]].Value;
                     decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DurationInSec]).Value;
-                    int? dealId = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.Deal]).Value;
-                    int? dealZoneGroupNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealZoneGroupNb]).Value;
                     decimal? dealDurationInSeconds = (decimal?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
-                    int? dealTierNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealTierNb]).Value;
-                    int? dealRateTierNb = (int?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealRateTierNb]).Value;
 
                     BatchDealZoneGroup batchDealZoneGroup = new BatchDealZoneGroup() { DealId = origDealId, DealZoneGroupNb = origDealZoneGroupNb, BatchStart = batchStart };
                     DealDurations dealDurations = batchDealZoneGroupDict.GetOrCreateItem(batchDealZoneGroup, () => { return new DealDurations() { DealDurationInSeconds = 0, DurationInSeconds = 0 }; });
@@ -87,6 +88,7 @@ namespace TOne.WhS.Deal.Business
                     DimensionFields = new List<string> { propertyNames[PropertyName.HalfHour], propertyNames[PropertyName.OrigDeal], propertyNames[PropertyName.OrigDealZoneGroupNb], propertyNames[PropertyName.Deal], 
                                                          propertyNames[PropertyName.DealZoneGroupNb], propertyNames[PropertyName.DealTierNb], propertyNames[PropertyName.DealRateTierNb] },
                     MeasureFields = new List<string>() { propertyNames[PropertyName.DurationInSec], propertyNames[PropertyName.DealDurationInSec] },
+                    
                     FromTime = beginDate,
                     FilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
                     {
@@ -98,7 +100,8 @@ namespace TOne.WhS.Deal.Business
                             }
                         }
                     }
-                }
+                },
+                SortByColumnName = "DimensionValues[0].Name"
             };
         }
 
@@ -129,6 +132,21 @@ namespace TOne.WhS.Deal.Business
             propertyNames.Add(PropertyName.DealTierNb, string.Format("{0}DealTierNb", prefixPropName));
             propertyNames.Add(PropertyName.DealRateTierNb, string.Format("{0}DealRateTierNb", prefixPropName));
             propertyNames.Add(PropertyName.DealDurationInSec, string.Format("{0}DealDurationInSec", prefixPropName));
+
+            return propertyNames;
+        }
+
+        private Dictionary<PropertyName, int> BuildDimensionFieldsDict(string prefixPropName)
+        {
+            Dictionary<PropertyName, int> propertyNames = new Dictionary<PropertyName, int>();
+
+            propertyNames.Add(PropertyName.HalfHour, 0);
+            propertyNames.Add(PropertyName.OrigDeal, 1);
+            propertyNames.Add(PropertyName.OrigDealZoneGroupNb, 2);
+            propertyNames.Add(PropertyName.Deal, 3);
+            propertyNames.Add(PropertyName.DealZoneGroupNb, 4);
+            propertyNames.Add(PropertyName.DealTierNb, 5);
+            propertyNames.Add(PropertyName.DealRateTierNb, 6);
 
             return propertyNames;
         }
