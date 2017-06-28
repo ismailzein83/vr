@@ -157,22 +157,22 @@ namespace Vanrise.AccountBalance.Data.SQL
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
                 var accountUsageDataManager = new AccountUsageDataManager();
-                if (accountUsageIdsToOverride != null && accountUsageIdsToOverride.Count() > 0)
-                    accountUsageDataManager.OverrideAccountUsagesByAccountUsageIds(accountUsageIdsToOverride);
                 if (overridenAccountUsageIdsToRollback != null && overridenAccountUsageIdsToRollback.Count() > 0)
                     accountUsageDataManager.RollbackOverridenAccountUsagesByAccountUsageIds(overridenAccountUsageIdsToRollback);
+                if (accountUsageIdsToOverride != null && accountUsageIdsToOverride.Count() > 0)
+                    accountUsageDataManager.OverrideAccountUsagesByAccountUsageIds(accountUsageIdsToOverride);
 
                 var accountUsageOverrideDataManager = new AccountUsageOverrideDataManager();
-                if (accountUsageOverrides != null && accountUsageOverrides.Count() > 0)
-                    accountUsageOverrideDataManager.Insert(accountUsageOverrides);
                 if (deletedTransactionIds != null && deletedTransactionIds.Count() > 0)
                     accountUsageOverrideDataManager.Delete(deletedTransactionIds);
+                if (accountUsageOverrides != null && accountUsageOverrides.Count() > 0)
+                    accountUsageOverrideDataManager.Insert(accountUsageOverrides);
 
                 var billingTransactionDataManager = new BillingTransactionDataManager();
-                if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
-                    billingTransactionDataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
                 if (deletedTransactionIds != null && deletedTransactionIds.Count() > 0)
                     billingTransactionDataManager.SetBillingTransactionsAsSubtractedFromBalance(deletedTransactionIds);
+                if (billingTransactionIds != null && billingTransactionIds.Count() > 0)
+                    billingTransactionDataManager.UpdateBillingTransactionBalanceStatus(billingTransactionIds);
 
                 UpdateLiveBalances(liveBalancesToUpdate);
                 scope.Complete();
