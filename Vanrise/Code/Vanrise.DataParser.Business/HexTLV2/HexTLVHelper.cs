@@ -135,6 +135,29 @@ namespace Vanrise.DataParser.Business
             }
         }
 
+        public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead)
+        {
+            int position = 0;
+
+            while (position < stream.Length)
+            {
+                byte[] bytes = null;
+                bytes = new byte[blockSize];
+                stream.Read(bytes, 0, blockSize);
+
+                position += blockSize;
+
+                RecordValue recordValue = new RecordValue
+                {
+                    Length = blockSize,
+                    Value = bytes
+                };
+                onBlockRead(recordValue);
+            }
+
+        }
+
+
         #region Private Classes
         public static byte[] Combine(byte[] first, byte[] second)
         {

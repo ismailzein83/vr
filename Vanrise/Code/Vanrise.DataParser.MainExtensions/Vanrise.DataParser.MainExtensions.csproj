@@ -59,6 +59,7 @@
     <Compile Include="HexTLV\RecordParsers\CreateRecordRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\ExecuteTemplateRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\PositionedFieldsRecordParser.cs" />
+    <Compile Include="HexTLV\RecordParsers\SplitByBlockRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\SplitByOffSetRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\SplitByPositionedTypeRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\SplitByTagRecordParser.cs" />
