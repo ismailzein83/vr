@@ -217,8 +217,8 @@ namespace TestRuntime
 
             DBSyncTaskActionArgument taskActionArgument = new DBSyncTaskActionArgument
             {
-                //ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=no@cce$$dev;",
-                ConnectionString = "Server=192.168.110.185;Database=MVTSPRO;User ID=development;Password=dev!123;",
+                ConnectionString = "Server=192.168.110.195;Database=MMOKDAD;User ID=sa;Password=no@cce$$dev;",
+                //ConnectionString = "Server=192.168.110.185;Database=MVTSPRO;User ID=development;Password=dev!123;",
                 DefaultSellingNumberPlanId = 1,
                 SellingProductId = 1,
                 HolidayRateTypeId = -1,
