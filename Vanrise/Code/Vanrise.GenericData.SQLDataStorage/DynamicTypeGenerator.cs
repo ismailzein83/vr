@@ -61,7 +61,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                   
                         public void WriteRecordToStream(dynamic record, Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert)
                         {
-                            streamForBulkInsert.WriteRecord(""#RECORDFORMAT#"" #COLUMNSVALUES#);
+                            #COLUMNSVALUES#
+                            streamForBulkInsert.WriteRecord(valuesBuilder.ToString());
                         }
 
                         public void FillDataRecordFromReader(dynamic dataRecord, IDataReader reader)
@@ -76,15 +77,17 @@ namespace Vanrise.GenericData.SQLDataStorage
                     }
                 }");
 
-                    StringBuilder recordFormatBuilder = new StringBuilder();
-                    StringBuilder columnsValuesBuider = new StringBuilder();
+                    //StringBuilder recordFormatBuilder = new StringBuilder();
+                    StringBuilder columnsValuesBuilder = new StringBuilder("System.Text.StringBuilder valuesBuilder = new System.Text.StringBuilder();");
                     StringBuilder columnNamesBuilder = new StringBuilder();
                     int columnIndex = 0;
+                    object[] data = new object[1];
+
                     foreach (var columnSettings in dataRecordStorageSettings.Columns)
                     {
                         if (columnIndex > 0)
-                            recordFormatBuilder.Append("^");
-                        recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");
+                            columnsValuesBuilder.AppendLine("valuesBuilder.Append(\"^\");");
+                        //recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");
                         string sqlDataType = columnSettings.SQLDataType.ToLower();
                         if (sqlDataType.Contains("decimal"))
                         {
@@ -98,14 +101,14 @@ namespace Vanrise.GenericData.SQLDataStorage
                                     int.TryParse(precisionPart, out precision);
                                 }
                             }
-                            columnsValuesBuider.Append(String.Format(", record.{0} != null ? Math.Round(record.{0}, {1}) : \"\"", columnSettings.ValueExpression, precision));
+                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? Decimal.Round(record.{0}, {1}) : String.Empty);", columnSettings.ValueExpression, precision));
                         }
                         else if (sqlDataType == "bit")
-                            columnsValuesBuider.Append(String.Format(", record.{0} != null ? (record.{0} == true ? \"1\" : \"0\") : \"\"", columnSettings.ValueExpression));
+                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} == true ? \"1\" : \"0\" : String.Empty);", columnSettings.ValueExpression));
                         else if (sqlDataType == "datetime")
-                            columnsValuesBuider.Append(String.Format(", (record.{0} != null && record.{0} != default(DateTime)) ? Vanrise.Data.BaseDataManager.GetDateTimeForBCP(record.{0}) : \"\"", columnSettings.ValueExpression));
+                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null && record.{0} != default(DateTime) ? Vanrise.Data.BaseDataManager.GetDateTimeForBCP(record.{0}) : String.Empty);", columnSettings.ValueExpression));
                         else
-                            columnsValuesBuider.Append(String.Format(", record.{0} != null ? record.{0} : \"\"", columnSettings.ValueExpression));
+                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} : String.Empty);", columnSettings.ValueExpression));
                         columnIndex++;
                         if (columnNamesBuilder.Length > 0)
                             columnNamesBuilder.Append(", ");
@@ -115,18 +118,18 @@ namespace Vanrise.GenericData.SQLDataStorage
                     if (dataRecordStorageSettings.IncludeQueueItemId)
                     {
                         if (columnIndex > 0)
-                            recordFormatBuilder.Append("^");
-                        recordFormatBuilder.Append("{" + dataRecordStorageSettings.Columns.Count.ToString() + "}");
+                            columnsValuesBuilder.AppendLine("valuesBuilder.Append(\"^\");");
+                        //recordFormatBuilder.Append("{" + dataRecordStorageSettings.Columns.Count.ToString() + "}");
 
                         if (columnNamesBuilder.Length > 0)
                             columnNamesBuilder.Append(", ");
                         columnNamesBuilder.AppendFormat("\"QueueItemId\"");
 
-                        columnsValuesBuider.Append(", record.QueueItemId != null && record.QueueItemId != default(long)  ? record.QueueItemId : \"\"");
+                        columnsValuesBuilder.AppendLine("valuesBuilder.Append(record.QueueItemId != null && record.QueueItemId != default(long) ? record.QueueItemId : String.Empty);");
                     }
 
-                    classDefinitionBuilder.Replace("#RECORDFORMAT#", recordFormatBuilder.ToString());
-                    classDefinitionBuilder.Replace("#COLUMNSVALUES#", columnsValuesBuider.ToString());
+                    //classDefinitionBuilder.Replace("#RECORDFORMAT#", recordFormatBuilder.ToString());
+                    classDefinitionBuilder.Replace("#COLUMNSVALUES#", columnsValuesBuilder.ToString());
                     classDefinitionBuilder.Replace("#COLUMNNAMES#", columnNamesBuilder.ToString());
                     classDefinitionBuilder.Replace("#COLUMNNAMESCOMMADELIMITED#", String.Join(",", dataRecordStorageSettings.Columns.Select(itm => itm.ColumnName)));
                     classDefinitionBuilder.Replace("#FillDataRecordFromReaderImplementation#", BuildFillDataRecordFromReaderImpl(dataRecordStorageSettings, recordType));
