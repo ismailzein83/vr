@@ -43,6 +43,10 @@ namespace TOne.WhS.Deal.Business
             return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
 
+        /// <summary>
+        /// used in data transformation
+        /// </summary>
+        /// <param name="record"></param>
         public void FillOrigSaleValues(dynamic record)
         {
             record.OrigSaleRateId = record.SaleRateId;
@@ -61,6 +65,10 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
+        /// <summary>
+        /// used in data transformation
+        /// </summary>
+        /// <param name="record"></param>
         public void FillOrigSupplierValues(dynamic record)
         {
             record.OrigCostRateId = record.CostRateId;
