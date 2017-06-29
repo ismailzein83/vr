@@ -90,6 +90,7 @@
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceGenerator.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceSettings.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberPartnerSettings.cs" />
+    <Compile Include="SiteConvertor.cs" />
     <Compile Include="ZajilCompanyExtendedInfo.cs" />
     <Compile Include="ZajilCompanyExtendedInfoDefinition.cs" />
     <Compile Include="AccountPartOrderDetail.cs" />

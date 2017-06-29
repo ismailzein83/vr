@@ -21,14 +21,13 @@ namespace Retail.Zajil.MainExtensions
         {
             get
             {
-                return "Zajil Account Convertor";
+                return "Zajil Company Convertor";
             }
         }
 
         Currency _mainCurrency;
         public Guid AccountBEDefinitionId { get; set; }
         public Guid AccountTypeId { get; set; }
-        public Guid SiteAccountTypeId { get; set; }
         public Guid InitialStatusId { get; set; }
         public Guid FinancialPartDefinitionId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
@@ -68,16 +67,6 @@ namespace Retail.Zajil.MainExtensions
                     accountData.Account.TypeId = this.AccountTypeId;
                     FillAccountSettings(accountData, row);
                     accountData.Account.StatusId = this.InitialStatusId;
-                    accountData.ChildrenAccounts = new List<SourceAccountData>()
-                {
-                    new SourceAccountData{
-                     Account = new Account{
-                      TypeId = this.SiteAccountTypeId,
-                       Name = "Site 1",
-                        StatusId = this.InitialStatusId
-                     }
-                    }
-                };
                     zajilAccounts.Add(sourceId, accountData);
                 }
                 catch (Exception ex)
@@ -104,14 +93,10 @@ namespace Retail.Zajil.MainExtensions
             context.FinalBE = finalBe;
         }
 
-        void UpdateOrderPart(SourceAccountData finalBe, SourceAccountData newBe)
-        {
-            AccountPartOrderDetail newAccountPartOrderDetail = newBe.Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail;
-            finalBe.Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings = newAccountPartOrderDetail;
-        }
         #endregion
 
         #region Private Methods
+
         void FillAccountSettings(SourceAccountData accountData, DataRow row)
         {
             accountData.Account.Settings = new AccountSettings
@@ -161,7 +146,6 @@ namespace Retail.Zajil.MainExtensions
                 }
             });
         }
-
         void FillCompanyExtendedInfo(SourceAccountData accountData, DataRow row)
         {
 
@@ -212,7 +196,6 @@ namespace Retail.Zajil.MainExtensions
         {
             return row[columnName] == DBNull.Value ? 0 : decimal.Parse(row[columnName].ToString());
         }
-
         double GetDoubleValue(DataRow row, string columnName)
         {
             return row[columnName] == DBNull.Value ? 0 : double.Parse(row[columnName].ToString());
@@ -225,7 +208,6 @@ namespace Retail.Zajil.MainExtensions
         {
             return row[columnName] == DBNull.Value ? null  : (DateTime?)DateTime.Parse(row[columnName].ToString());
         }
-
         Dictionary<string, AccountCompanyContact> GetContactsList(DataRow row)
         {
             Dictionary<string, AccountCompanyContact> contacts = new Dictionary<string, AccountCompanyContact>();
@@ -246,6 +228,11 @@ namespace Retail.Zajil.MainExtensions
             });
 
             return contacts;
+        }
+        void UpdateOrderPart(SourceAccountData finalBe, SourceAccountData newBe)
+        {
+            AccountPartOrderDetail newAccountPartOrderDetail = newBe.Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings as AccountPartOrderDetail;
+            finalBe.Account.Settings.Parts[this.OrderDetailsPartDefinitionId].Settings = newAccountPartOrderDetail;
         }
 
         #endregion

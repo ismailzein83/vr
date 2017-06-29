@@ -126,6 +126,8 @@
     <Content Include="Retail_Zajil\Directives\MainExtensions\InvoiceGPInfo\Templates\InvoiceGPInfoTemplate.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Payment\retail-zajil-payment-convertor-editor.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\Payment\Templates\PaymentConvertorEditor.html" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Site\retail-zajil-site-convertor-editor.js" />
+    <Content Include="Retail_Zajil\Directives\MainExtensions\Site\Templates\SiteConvertorEditor.html" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\ZajilInvoiceSettings\retail-invoice-invoicetype-zajilsubscriberinvoicesettings.js" />
     <Content Include="Retail_Zajil\Directives\MainExtensions\ZajilInvoiceSettings\Templates\ZajilnvoiceSettingsTemplate.html" />
     <Content Include="Retail_Zajil\Reports\Reporting.aspx" />
