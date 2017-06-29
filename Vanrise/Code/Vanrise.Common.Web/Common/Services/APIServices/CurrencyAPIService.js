@@ -2,9 +2,9 @@
 
     "use strict";
 
-    currencyAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    currencyAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
-    function currencyAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig)
+    function currencyAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService)
     {
         var controllerName = 'Currency';
 
@@ -38,7 +38,13 @@
         function UpdateCurrency(currencyObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UpdateCurrency"), currencyObject);
         }
-
+        function HasAddCurrencyPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCurrency']));
+        }
+               
+        function HasEditCurrencyPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateCurrency']));
+        }
         return ({
             GetFilteredCurrencies: GetFilteredCurrencies,
             GetAllCurrencies: GetAllCurrencies,
@@ -46,7 +52,9 @@
             GetSystemCurrency: GetSystemCurrency,
             GetSystemCurrencyId: GetSystemCurrencyId,
             AddCurrency: AddCurrency,
-            UpdateCurrency: UpdateCurrency
+            UpdateCurrency: UpdateCurrency,
+            HasAddCurrencyPermission: HasAddCurrencyPermission,
+            HasEditCurrencyPermission: HasEditCurrencyPermission
         });
     }
 

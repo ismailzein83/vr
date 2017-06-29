@@ -2,9 +2,9 @@
 
     "use strict";
 
-    currencyManagementController.$inject = ['$scope', 'VRCommon_CurrencyService'];
+    currencyManagementController.$inject = ['$scope', 'VRCommon_CurrencyService', 'VRCommon_CurrencyAPIService'];
 
-    function currencyManagementController($scope, VRCommon_CurrencyService) {
+    function currencyManagementController($scope, VRCommon_CurrencyService, VRCommon_CurrencyAPIService) {
         var gridAPI;
 
         defineScope();
@@ -21,6 +21,9 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.loadGrid(filter)
+            };
+            $scope.hasAddCurrencyPermission =  function(){
+                return VRCommon_CurrencyAPIService.HasAddCurrencyPermission();
             };
             $scope.addNewCurrency = addNewCurrency;
         }

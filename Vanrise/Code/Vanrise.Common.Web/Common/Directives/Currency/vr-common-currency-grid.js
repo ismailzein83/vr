@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-app.directive("vrCommonCurrencyGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyAPIService","VRCommon_CurrencyService","VRCommon_CurrencyExchangeRateService", 'VRUIUtilsService',
+app.directive("vrCommonCurrencyGrid", ["UtilsService", "VRNotificationService", "VRCommon_CurrencyAPIService", "VRCommon_CurrencyService","VRCommon_CurrencyExchangeRateService", 'VRUIUtilsService',
 function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCommon_CurrencyService, VRCommon_CurrencyExchangeRateService, VRUIUtilsService) {
-  
+
     var directiveDefinitionObject = {
 
         restrict: "E",
@@ -10,7 +10,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
             onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
-           
+
             var ctrl = this;
             var currencyGrid = new CurrencyGrid($scope, ctrl, $attrs);
             currencyGrid.initializeController();
@@ -30,18 +30,18 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
         var gridDrillDownTabsObj;
 
         function initializeController() {
-           
+
             $scope.currencies = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
                 var drillDownDefinitions = VRCommon_CurrencyService.getDrillDownDefinition();
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-                
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
 
@@ -69,16 +69,18 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
                     });
             };
             defineMenuActions();
-        }                
+        }
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-               clicked: editCurrency
-            }
-            ];
+                clicked: editCurrency,
+                haspermission: hasEditCurrencyPermission
+            }];
         }
-
+        function hasEditCurrencyPermission() {
+            return VRCommon_CurrencyAPIService.HasEditCurrencyPermission();
+        }
         function editCurrency(currencyObj) {
             var onCurrencyUpdated = function (currencyObj) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(currencyObj);
@@ -86,7 +88,7 @@ function (UtilsService, VRNotificationService, VRCommon_CurrencyAPIService, VRCo
             };
             VRCommon_CurrencyService.editCurrency(currencyObj.Entity.CurrencyId, onCurrencyUpdated);
         }
-        
+
         this.initializeController = initializeController;
     }
 

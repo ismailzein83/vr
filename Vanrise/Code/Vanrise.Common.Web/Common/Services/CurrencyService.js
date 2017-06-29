@@ -30,6 +30,22 @@ app.service('VRCommon_CurrencyService', ['UtilsService', 'VRModalService', 'VRNo
             VRModalService.showModal('/Client/Modules/Common/Views/Currency/CurrencyEditor.html', parameters, settings);
         }
 
+        function viewCurrency(currencyId, onCurrencyUpdated) {
+            var settings = {
+
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+
+            var parameters = {
+                CurrencyId: currencyId
+            };
+
+            VRModalService.showModal('/Client/Modules/Common/Views/Currency/CurrencyEditor.html', parameters, settings);
+        }
+
         function getEntityUniqueName() {
             return "VR_Common_Currency";
         }
@@ -67,7 +83,8 @@ app.service('VRCommon_CurrencyService', ['UtilsService', 'VRModalService', 'VRNo
             editCurrency: editCurrency,
             addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToCurrency: registerObjectTrackingDrillDownToCurrency
+            registerObjectTrackingDrillDownToCurrency: registerObjectTrackingDrillDownToCurrency,
+            viewCurrency: viewCurrency
         });
 
     }]);
