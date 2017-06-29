@@ -48,6 +48,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 };
                 ctrl.addCompanySetting = function () {
                     var onCompanySettingAdded = function (companySetting) {
+                        if (ctrl.datasource.length == 0) companySetting.IsDefault = true;
                         ctrl.datasource.push({ Entity: companySetting });
                     };
 
@@ -56,6 +57,12 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 ctrl.removeCompanySetting = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
+                    if (ctrl.datasource.length == 1) {
+                        var companySetting = ctrl.datasource[0].Entity;
+                        companySetting.IsDefault = true;
+                        ctrl.datasource[0] = { Entity: companySetting };
+                    }
+
                 };
                 defineMenuActions();
                 defineAPI();
