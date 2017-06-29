@@ -71,6 +71,10 @@
       <Project>{a5ee3349-b642-4cc7-b575-7c338821d63d}</Project>
       <Name>Vanrise.BusinessProcess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Queueing.Entities\Vanrise.Queueing.Entities.csproj">
+      <Project>{a511dce7-1fa4-46dc-b04e-01c4ccdd7f1c}</Project>
+      <Name>Vanrise.Queueing.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Queueing\Vanrise.Queueing.csproj">
       <Project>{28eb3790-0e19-43ab-8ecb-6137eb0e588a}</Project>
       <Name>Vanrise.Queueing</Name>

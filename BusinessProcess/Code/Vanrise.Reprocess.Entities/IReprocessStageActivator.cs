@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Reprocess.Entities
 {
@@ -60,6 +61,8 @@ namespace Vanrise.Reprocess.Entities
         long ProcessInstanceId { get; }
 
         object InitializationStageOutput { get; }
+
+        QueueExecutionFlowStage QueueExecutionFlowStage { get; }
     }
 
     public interface IReprocessStageActivatorFinalizingContext

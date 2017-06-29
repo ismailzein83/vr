@@ -87,6 +87,14 @@
       <Project>{a5ee3349-b642-4cc7-b575-7c338821d63d}</Project>
       <Name>Vanrise.BusinessProcess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Queueing.BP.Activities\Vanrise.Queueing.BP.Activities.csproj">
+      <Project>{be578171-1030-4486-a7e5-14de0d13f98d}</Project>
+      <Name>Vanrise.Queueing.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Queueing.Entities\Vanrise.Queueing.Entities.csproj">
+      <Project>{a511dce7-1fa4-46dc-b04e-01c4ccdd7f1c}</Project>
+      <Name>Vanrise.Queueing.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Reprocess.BP.Activities\Vanrise.Reprocess.BP.Activities.csproj">
       <Project>{fc373f90-5c77-40bf-aa74-6f28c2420a96}</Project>
       <Name>Vanrise.Reprocess.BP.Activities</Name>

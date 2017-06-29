@@ -19,25 +19,39 @@ namespace Vanrise.Queueing
             queueItemDataManager.GetPendingQueueItems(maxNbOfPendingItemsToLoad, (pendingQueueItemInfo) =>
             {
                 if (holdRequests == null || holdRequests.Count() == 0)
-                    pendingQueueItemInfos.Add(pendingQueueItemInfo);
+                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems);
 
                 IEnumerable<HoldRequest> filteredHoldRequests = holdRequests.FindAllRecords(itm => itm.QueuesToHold.Contains(pendingQueueItemInfo.QueueId));
                 if (filteredHoldRequests == null || filteredHoldRequests.Count() == 0)
-                    pendingQueueItemInfos.Add(pendingQueueItemInfo);
+                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems);
 
+                bool isOverlapped = false;
                 foreach (HoldRequest holdRequest in filteredHoldRequests)
+                {
                     if (holdRequest.IsOverlappedWith(pendingQueueItemInfo))
+                    {
+                        isOverlapped = true;
                         break;
+                    }
+                }
 
-                if (pendingQueueItemInfos.Count == maxNbOfPendingItems)
-                    return true;
-                else
-                    return false;
+                if (!isOverlapped)
+                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems);
+
+                return false;
             });
 
             return pendingQueueItemInfos.Count > 0 ? pendingQueueItemInfos : null;
         }
 
+        private bool AddQueueItemWithCountValidation(List<PendingQueueItemInfo> pendingQueueItemInfos, PendingQueueItemInfo pendingQueueItemInfo, int maxNbOfPendingItems)
+        {
+            pendingQueueItemInfos.Add(pendingQueueItemInfo);
+            if (pendingQueueItemInfos.Count == maxNbOfPendingItems)
+                return true;
+            else
+                return false;
+        }
 
         public List<SummaryBatch> GetSummaryBatches(IOrderedEnumerable<HoldRequest> holdRequests)
         {
@@ -51,7 +65,7 @@ namespace Vanrise.Queueing
             foreach (SummaryBatch summaryBatch in summaryBatches)
             {
                 bool mustBeAdded = true;
-                
+
                 foreach (HoldRequest holdRequest in holdRequests)
                 {
                     if (holdRequest.QueuesToHold.Contains(summaryBatch.QueueId) && holdRequest.IsOverlappedWith(summaryBatch))
