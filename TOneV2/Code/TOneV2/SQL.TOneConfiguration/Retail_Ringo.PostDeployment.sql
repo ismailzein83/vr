@@ -139,9 +139,9 @@ as (select * from (values
 merge	[VR_BEBridge].[BEReceiveDefinition] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
@@ -664,10 +664,6 @@ DECLARE @PortalAccountID int = (SELECT ID from [sec].[User] WHERE Email = 'ringo
 
 ----Below Commented script is related to DataSource Tables----------------------------------------------
 ----Uncomment to Update DataSources---------------------------------------------------------------------
-----Please note that the below script will override all changes done from your side---------------------
-
-
-/*
 --[runtime].[ScheduleTask]------------------------------------------------------------------------------
 BEGIN
 set nocount on;
@@ -687,9 +683,9 @@ as (select * from (values
 merge	[runtime].[ScheduleTask] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]
 when not matched by target then
 	insert([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
 	values(s.[Id],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);
@@ -715,15 +711,18 @@ as (select * from (values
 merge	[integration].[DataSource] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
 	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 END
 
+----Please note that the below script will override all changes done from your side---------------------
+
+/*
 
 declare @TariffRuleTypeIdTable as table
 (ID int)
