@@ -331,6 +331,7 @@
                 }
 
                 function onViewHandler(obj) {
+                    hideAllOtherDropDown();
                     var onViewHandler = $scope.$parent.$eval($attrs.onviewclicked);
                     onViewHandler(obj);
                 }
