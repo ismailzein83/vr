@@ -81,6 +81,18 @@ namespace Retail.EntitiesMigrator
                 ServiceTypeId = Helper.InternationalServiceTypeId
             };
 
+        public static string GetCompanySourceId(string sourceId)
+        {
+            return string.Format("Company_{0}", sourceId);
+        }
+        public static string GetBranchSourceId(string sourceId)
+        {
+            return string.Format("Branch_{0}", sourceId);
+        }
+        public static string GetUserSourceId(string sourceId)
+        {
+            return string.Format("User_{0}", sourceId);
+        }
         public static Dictionary<string, GenericRuleCriteriaFieldValues> BuildCriteriaFieldsValues(Guid serviceTypeId, int chargingPolicyId, TrafficDirection trafficDirection)
         {
             Dictionary<string, GenericRuleCriteriaFieldValues> result = new Dictionary<string, GenericRuleCriteriaFieldValues>();

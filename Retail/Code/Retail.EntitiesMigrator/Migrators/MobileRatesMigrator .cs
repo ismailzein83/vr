@@ -37,7 +37,7 @@ namespace Retail.EntitiesMigrator.Migrators
             {
 
                 AccountBEManager accountManager = new AccountBEManager();
-                Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, internationalRate.SubscriberId.ToString());
+                Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, Helper.GetUserSourceId(internationalRate.SubscriberId.ToString()));
                 if (account != null && !addedAccounts.Contains(account.AccountId))
                 {
                     addedAccounts.Add(account.AccountId);

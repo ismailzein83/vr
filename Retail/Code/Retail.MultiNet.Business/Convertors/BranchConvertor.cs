@@ -32,7 +32,7 @@ namespace Retail.MultiNet.Business.Convertors
         public Guid BranchInfoPartDefinitionId { get; set; }
         public string BranchIdColumnName { get; set; }
         public string CompanyIdColumnName { get; set; }
-        
+
         public Guid FinancialPartDefinitionId { get; set; }
 
         public Guid FinancialAccountDefinitionId { get; set; }
@@ -71,7 +71,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 ITargetBE targetMultiNetAccount;
                 var sourceId = (Int64)row[BranchIdColumnName];
-                var parentId = (Int64)row[CompanyIdColumnName];
+                var parentId = string.Format("Company_{0}", (Int64)row[CompanyIdColumnName]);
                 string accountName = row["AC_ACCTHOLDERNAME"] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
@@ -83,14 +83,14 @@ namespace Retail.MultiNet.Business.Convertors
                         };
 
                         Account parentAccount;
-                        if (accountsInitializationData.Accounts.TryGetValue(parentId.ToString(), out parentAccount))
+                        if (accountsInitializationData.Accounts.TryGetValue(parentId, out parentAccount))
                         {
                             accountData.Account.ParentAccountId = parentAccount.AccountId;
                         }
                         int state = (int)row["AS_ACCTSTATEID"];
                         accountData.Account.Name = accountName;
                         accountData.Account.CreatedTime = row["SU_INSERTDATE"] != DBNull.Value ? (DateTime)row["SU_INSERTDATE"] : default(DateTime);
-                        accountData.Account.SourceId = sourceId.ToString();
+                        accountData.Account.SourceId = string.Format("Branch_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         Guid statusId = accountsInitializationData.Statuses.GetOrCreateItem(state, () => this.InitialStatusId);
                         accountData.Account.StatusId = statusId;
@@ -126,7 +126,7 @@ namespace Retail.MultiNet.Business.Convertors
                     BED = bed
                 };
                 AccountBEFinancialAccountsSettings accountFinancialAccountExtSettings = s_accountBEManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(account);
-                if(accountFinancialAccountExtSettings == null)
+                if (accountFinancialAccountExtSettings == null)
                     accountFinancialAccountExtSettings = s_financialAccountManager.CreateAccountFinancialAccountExtSettings();
                 s_financialAccountManager.AddFinancialAccountToExtSettings(financialAccount, accountFinancialAccountExtSettings);
                 s_accountBEManager.SetExtendedSettings(accountFinancialAccountExtSettings, account);

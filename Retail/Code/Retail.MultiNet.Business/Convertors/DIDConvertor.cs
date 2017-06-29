@@ -39,7 +39,7 @@ namespace Retail.MultiNet.Business.Convertors
                     long sourceAccountId = row[this.SourceAccountIdColumn] != DBNull.Value ? (long)row[this.SourceAccountIdColumn] : 0;
                     if (sourceAccountId > 0)
                     {
-                        Account account = accountManager.GetAccountBySourceId(AccountBEDefinitionId, sourceAccountId.ToString());
+                        Account account = accountManager.GetAccountBySourceId(AccountBEDefinitionId, string.Format("User_{0}", sourceAccountId));
                         account.ThrowIfNull("account: sourceId", sourceAccountId);
                         accountId = account.AccountId;
                     }

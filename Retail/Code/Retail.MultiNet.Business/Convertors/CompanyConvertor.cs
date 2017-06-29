@@ -51,7 +51,7 @@ namespace Retail.MultiNet.Business.Convertors
 
                         accountData.Account.Name = accountName;
                         accountData.Account.CreatedTime = row["SU_INSERTDATE"] != DBNull.Value ? (DateTime)row["SU_INSERTDATE"] : default(DateTime);
-                        accountData.Account.SourceId = sourceId.ToString();
+                        accountData.Account.SourceId = string.Format("Company_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         accountData.Account.StatusId = this.InitialStatusId;
 

@@ -42,7 +42,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 ITargetBE targetMultiNetAccount;
                 var sourceId = (Int64)row[SubscriberIdColumnName];
-                var parentId = (Int64)row[BranchIdColumnName];
+                var parentId = string.Format("Branch_{0}", (Int64)row[BranchIdColumnName]);
                 string accountName = row["SUB_SUBSCRIBERNAME"] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
@@ -54,14 +54,14 @@ namespace Retail.MultiNet.Business.Convertors
                         };
 
                         Account parentAccount;
-                        if (accounts.TryGetValue(parentId.ToString(), out parentAccount))
+                        if (accounts.TryGetValue(parentId, out parentAccount))
                         {
                             accountData.Account.ParentAccountId = parentAccount.AccountId;
                         }
 
                         accountData.Account.Name = accountName;
                         accountData.Account.CreatedTime = row["SU_INSERTDATE"] != DBNull.Value ? (DateTime)row["SU_INSERTDATE"] : default(DateTime);
-                        accountData.Account.SourceId = sourceId.ToString();
+                        accountData.Account.SourceId = string.Format("User_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         accountData.Account.StatusId = this.InitialStatusId;
 

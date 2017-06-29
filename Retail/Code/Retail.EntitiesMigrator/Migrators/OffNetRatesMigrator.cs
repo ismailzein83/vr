@@ -41,7 +41,7 @@ namespace Retail.EntitiesMigrator.Migrators
             foreach (var rate in offnetRates)
             {
                 Account branch;
-                if (branchesBySourceId.TryGetValue(rate.SourceBranchId, out branch))
+                if (branchesBySourceId.TryGetValue(Helper.GetBranchSourceId(rate.SourceBranchId), out branch))
                 {
                     ratesByBranchId.GetOrCreateItem(branch.AccountId).Add(rate);
                 }

@@ -34,7 +34,7 @@ namespace Retail.EntitiesMigrator.Migrators
             foreach (MonthlyCharge monthlyCharge in monthlyCharges)
             {
                 Account branchAccount;
-                if (branches.TryGetValue(monthlyCharge.BranchId.ToString(), out branchAccount))
+                if (branches.TryGetValue(Helper.GetBranchSourceId(monthlyCharge.BranchId.ToString()), out branchAccount))
                 {
                     Package package = packages[Helper.GetPackageName(monthlyCharge)];
                     AccountPackageManager manager = new AccountPackageManager();

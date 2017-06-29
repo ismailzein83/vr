@@ -41,7 +41,7 @@ namespace Retail.EntitiesMigrator.Migrators
             foreach (IncomingRate incomingRate in incomingRates)
             {
                 AccountBEManager accountManager = new AccountBEManager();
-                Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, incomingRate.SubscriberId.ToString());
+                Account account = accountManager.GetAccountBySourceId(Helper.AccountBEDefinitionId, Helper.GetUserSourceId(incomingRate.SubscriberId.ToString()));
                 if (account != null)
                 {
                     Account parentAccount = accountManager.GetSelfOrParentAccountOfType(Helper.AccountBEDefinitionId, account.AccountId, Helper.BranchAccountTypeId);
@@ -61,7 +61,7 @@ namespace Retail.EntitiesMigrator.Migrators
                             tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.OnNetRuleDefinition, true));
                             tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.OffNetRuleDefinition, true));
                             tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.LocalRate, Helper.MobileRuleDefinition, true));
-                        } 
+                        }
                         if (incomingRate.InternationalRate.FractionUnit != 60)
                         {
                             tariffRules.Add(GetTariffRuleDetails(parentAccount.AccountId, incomingRate.InternationalRate, Helper.OnNetRuleDefinition));
