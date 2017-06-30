@@ -27,7 +27,6 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
         function defineAPI() {
             var api = {};
             api.load = function (payload) {
-                console.log(payload);
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.branchCode = payload.partSettings.BranchCode;
                     $scope.scopeModel.contractReferenceNumber = payload.partSettings.ContractReferenceNumber;

@@ -68,7 +68,6 @@ app.directive('retailRingoAgentrequestnumberGrid', ['Retail_Ringo_AgentNumberReq
 
             function viewNumbersRequest(numberRequest) {
                 var onNumberRequestAdded = function (processedRequestNumber) {
-                    console.log(processedRequestNumber);
                     var itemDetails = {
                         Entity: processedRequestNumber,
                         StatusDescription: processedRequestNumber.StatusDescription,

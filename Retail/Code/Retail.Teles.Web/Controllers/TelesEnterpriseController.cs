@@ -32,7 +32,7 @@ namespace Retail.Teles.Web.Controllers
         }
         [HttpGet]
         [Route("GetParentAccountEnterpriseId")]
-        public long GetParentAccountEnterpriseId(Guid accountBEDefinitionId, long accountId)
+        public string GetParentAccountEnterpriseId(Guid accountBEDefinitionId, long accountId)
         {
             return _manager.GetParentAccountEnterpriseId(accountBEDefinitionId, accountId);
         }

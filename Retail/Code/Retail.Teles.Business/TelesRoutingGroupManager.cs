@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
-
+using Vanrise.Common;
+using Retail.BusinessEntity.Business;
 namespace Retail.Teles.Business
 {
     public class TelesRoutingGroupManager

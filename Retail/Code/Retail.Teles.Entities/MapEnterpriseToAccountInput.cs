@@ -8,7 +8,7 @@ namespace Retail.Teles.Entities
 {
     public class MapEnterpriseToAccountInput
     {
-        public dynamic TelesEnterpriseId { get; set; }
+        public string TelesEnterpriseId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
         public long AccountId { get; set; }
     }

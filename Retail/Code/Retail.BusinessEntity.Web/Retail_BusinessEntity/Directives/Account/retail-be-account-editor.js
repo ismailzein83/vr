@@ -84,7 +84,6 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                 api.load = function (payload) {
 
                     if (payload != undefined) {
-                        console.log(payload);
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountId = payload.accountId;
                         parentAccountId = payload.parentAccountId;

@@ -1,0 +1,24 @@
+﻿<vr-columns colnum="3">
+    <vr-select datasource="scopeModel.conditionTypes"
+               selectedvalues="scopeModel.selectedConditionType"
+               datavaluefield="value"
+               datatextfield="description"
+               isrequired="true"
+               label="Condition Type">
+    </vr-select>
+</vr-columns>
+<vr-columns colnum="3">
+    <vr-textbox value="scopeModel.actionType"
+                label="Action Type">
+    </vr-textbox>
+</vr-columns>
+<retail-be-accounttype-selector on-ready="scopeModel.onCompanyAccountTypeSelectorReady"
+                                normal-col-num="3"
+                                customlabel="Company Account Type"
+                                isrequired="true">
+</retail-be-accounttype-selector>
+<retail-be-accounttype-selector on-ready="scopeModel.onSiteAccountTypeSelectorReady"
+                                customlabel="Site Account Type"
+                                normal-col-num="3"
+                                isrequired="true">
+</retail-be-accounttype-selector>

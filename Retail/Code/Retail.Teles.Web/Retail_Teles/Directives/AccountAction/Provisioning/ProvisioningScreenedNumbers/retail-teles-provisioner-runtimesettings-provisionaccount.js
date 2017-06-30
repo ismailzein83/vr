@@ -65,7 +65,7 @@
 
                     function loadProvisionAccountSettings() {
 
-                        var provisionAccountSettingsPayload = {};
+                        var provisionAccountSettingsPayload = { showEnterpriseSettings: true };
                         if (provisionerDefinitionSettings != undefined)
                             provisionAccountSettingsPayload.provisionAccountSettings = provisionerDefinitionSettings.Settings;
                         if (provisionerRuntimeSettings != undefined) {

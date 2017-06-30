@@ -1,0 +1,8 @@
+﻿<vr-row>
+    <vr-common-connection-selector on-ready="scopeModel.onConectionTypeReady" normal-col-num="4" isrequired="true"></vr-common-connection-selector>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.countryCode" label="Country Code" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<retail-teles-provisioner-provisionaccount-settings on-ready="scopeModel.onProvisionSiteSettingsReady"></retail-teles-provisioner-provisionaccount-settings>
+

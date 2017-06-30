@@ -10,7 +10,7 @@ namespace Retail.Teles.Business
     public class SitesNotMappedToAccountFilter : ITelesEnterpriseSiteFilter
     {
         public dynamic EditedEnterpriseSiteId { get; set; }
-        public int EnterpriseId { get; set; }
+        public string EnterpriseId { get; set; }
         public bool IsExcluded(ITelesEnterpriseSiteFilterContext context)
         {
             TelesSiteManager telesSiteManager = new TelesSiteManager();

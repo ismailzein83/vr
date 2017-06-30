@@ -17,7 +17,7 @@ namespace Retail.Teles.Web.Controllers
 
         [HttpGet]
         [Route("GetEnterpriseSitesInfo")]
-        public IEnumerable<TelesEnterpriseSiteInfo> GetEnterpriseSitesInfo(Guid vrConnectionId, long enterpriseId, string serializedFilter = null)
+        public IEnumerable<TelesEnterpriseSiteInfo> GetEnterpriseSitesInfo(Guid vrConnectionId, string enterpriseId, string serializedFilter = null)
         {
             TelesEnterpriseSiteFilter filter = Vanrise.Common.Serializer.Deserialize<TelesEnterpriseSiteFilter>(serializedFilter);
             return _manager.GetEnterpriseSitesInfo(vrConnectionId, enterpriseId, filter);

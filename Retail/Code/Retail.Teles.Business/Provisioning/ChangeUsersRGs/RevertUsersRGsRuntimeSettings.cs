@@ -21,33 +21,36 @@ namespace Retail.Teles.Business
                 throw new NullReferenceException("definitionSettings");
 
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
-            ChangeUsersRGsAccountState changeUsersRGsAccountState = null;
-            long accountId = context.AccountId;
-            List<dynamic> changedUsers = null;
-            ChURGsActionCh oldChURGsActionCh = null;
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
             if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
             {
-                changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
-                changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState,null, out oldChURGsActionCh);
-
+                var accountChilds = accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, context.AccountId, false);
+                foreach(var child in accountChilds)
+                {
+                    RevertSiteUsers(context, definitionSettings, child.AccountId);
+                }
+                RevertSiteUsers(context, definitionSettings, context.AccountId);
             }
             else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
             {
-                SiteAccountMappingInfo siteAccountMappingInfo = accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
-                siteAccountMappingInfo.ThrowIfNull("siteAccountMappingInfo");
-                var companyAccount = accountBEManager.GetSelfOrParentAccountOfType(context.AccountBEDefinitionId, context.AccountId, definitionSettings.CompanyTypeId);
-                accountId = companyAccount.AccountId;
-                changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, companyAccount.AccountId);
-                changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState,siteAccountMappingInfo.TelesSiteId, out oldChURGsActionCh);
+                //SiteAccountMappingInfo siteAccountMappingInfo = accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
+                //siteAccountMappingInfo.ThrowIfNull("siteAccountMappingInfo");
+                RevertSiteUsers(context, definitionSettings, context.AccountId);
             }
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
-
-            RevertBlockedUsers(context,definitionSettings.VRConnectionId, changedUsers);
-            RevertBlockedUsersState(context,accountId, changeUsersRGsAccountState, oldChURGsActionCh);
-           
         }
-
+        void RevertSiteUsers(IAccountProvisioningContext context, RevertUsersRGsDefinitionSettings definitionSettings,long accountId)
+        {
+            ChangeUsersRGsAccountState changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
+            if(changeUsersRGsAccountState != null)
+            {
+                ChURGsActionCh oldChURGsActionCh = null;
+                var changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState, out oldChURGsActionCh);
+                RevertBlockedUsers(context, definitionSettings.VRConnectionId, changedUsers);
+                RevertBlockedUsersState(context, accountId, changeUsersRGsAccountState, oldChURGsActionCh);
+            }
+       
+        }
         void RevertBlockedUsersState(IAccountProvisioningContext context,long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState, ChURGsActionCh oldChURGsActionCh)
         {
             var currentUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
@@ -77,7 +80,7 @@ namespace Retail.Teles.Business
                 }
             }
         }
-        List<dynamic> GetChangedUsers(IAccountProvisioningContext context, string actionType, Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState,dynamic siteId, out ChURGsActionCh oldChURGsActionCh)
+        List<dynamic> GetChangedUsers(IAccountProvisioningContext context, string actionType, Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState, out ChURGsActionCh oldChURGsActionCh)
         {
             List<dynamic> changedUsers = null;
             oldChURGsActionCh = null;
@@ -87,15 +90,12 @@ namespace Retail.Teles.Business
               
                 if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
                 {
+                    chURGsActionCh.Status = ChURGsActionChStatus.Active;
                     if (chURGsActionCh.ChangesByUser != null)
                     {
                         changedUsers = new List<dynamic>();
                         foreach (var changesByUser in chURGsActionCh.ChangesByUser)
                         {
-
-                            if (siteId != null && siteId != changesByUser.Value.SiteId)
-                                continue;
-                           
                             var user = GetUser(vrConnectionId, changesByUser.Key);
                             if (user != null)
                             {
@@ -119,7 +119,7 @@ namespace Retail.Teles.Business
             return changedUsers;
         }
 
-        dynamic GetUser(Guid vrConnectionId, dynamic userId)
+        dynamic GetUser(Guid vrConnectionId, string userId)
         {
             return telesEnterpriseManager.GetUser(vrConnectionId, userId);
         }

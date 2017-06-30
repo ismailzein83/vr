@@ -54,7 +54,9 @@
                     if (payload != undefined) {
                         mainPayload = payload;
                         provisionAccountSettings = payload.provisionAccountSettings;
+                        $scope.scopeModel.showEnterpriseSettings = payload.showEnterpriseSettings;
                         if (provisionAccountSettings != undefined) {
+                           
                             if (provisionAccountSettings.EnterpriseAccountSetting != undefined)
                             {
                                 $scope.scopeModel.enterpriseMaxCalls = provisionAccountSettings.EnterpriseAccountSetting.EnterpriseMaxCalls;
@@ -96,15 +98,6 @@
                 function getData() {
                     var data = {
                         CentrexFeatSet: $scope.scopeModel.centrexFeatSet,
-                        EnterpriseAccountSetting:{
-                            EnterpriseMaxCalls: $scope.scopeModel.enterpriseMaxCalls,
-                            EnterpriseMaxCallsPerUser: $scope.scopeModel.enterpriseMaxCallsPerUser,
-                            EnterpriseMaxRegistrations: $scope.scopeModel.enterpriseMaxRegistrations,
-                            EnterpriseMaxRegsPerUser: $scope.scopeModel.enterpriseMaxRegsPerUser,
-                            EnterpriseMaxSubsPerUser: $scope.scopeModel.enterpriseMaxSubsPerUser,
-                            EnterpriseMaxBusinessTrunkCalls: $scope.scopeModel.enterpriseMaxBusinessTrunkCalls,
-                            EnterpriseMaxUsers: $scope.scopeModel.enterpriseMaxUsers,
-                        },
                         SiteAccountSetting:{
                             SiteMaxCalls: $scope.scopeModel.siteMaxCalls,
                             SiteMaxCallsPerUser: $scope.scopeModel.siteMaxCallsPerUser,
@@ -115,6 +108,18 @@
                             SiteMaxUsers: $scope.scopeModel.siteMaxUsers,
                         }
                     };
+                    if ($scope.scopeModel.showEnterpriseSettings)
+                    {
+                        data.EnterpriseAccountSetting = {
+                            EnterpriseMaxCalls: $scope.scopeModel.enterpriseMaxCalls,
+                            EnterpriseMaxCallsPerUser: $scope.scopeModel.enterpriseMaxCallsPerUser,
+                            EnterpriseMaxRegistrations: $scope.scopeModel.enterpriseMaxRegistrations,
+                            EnterpriseMaxRegsPerUser: $scope.scopeModel.enterpriseMaxRegsPerUser,
+                            EnterpriseMaxSubsPerUser: $scope.scopeModel.enterpriseMaxSubsPerUser,
+                            EnterpriseMaxBusinessTrunkCalls: $scope.scopeModel.enterpriseMaxBusinessTrunkCalls,
+                            EnterpriseMaxUsers: $scope.scopeModel.enterpriseMaxUsers,
+                        };
+                    }
                     return data;
                 }
             }

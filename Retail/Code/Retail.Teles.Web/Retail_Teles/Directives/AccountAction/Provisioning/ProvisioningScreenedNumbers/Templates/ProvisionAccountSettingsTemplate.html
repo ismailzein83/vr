@@ -5,7 +5,7 @@
 </vr-row>
 <vr-row>
     <vr-tabs>
-        <vr-tab header="'Enterprise Settings'">
+        <vr-tab header="'Enterprise Settings'" ng-if="scopeModel.showEnterpriseSettings">
             <vr-columns width="1/3row">
                 <vr-textbox value="scopeModel.enterpriseMaxCalls" label="Max Calls" isrequired="true" type="number"></vr-textbox>
             </vr-columns>

@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ProvisioningScreenedNumbers/Templates/ProvisionAccountDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_Teles/Directives/AccountAction/Provisioning/ProvisioningScreenedNumbers/Templates/ProvisionSiteDefinitionSettingsTemplate.html"
 
         };
         function ProvisionerDefinitionsettings($scope, ctrl, $attrs) {
@@ -27,8 +27,8 @@
             var connectionTypeAPI;
             var connectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var provisionAccountSettingsAPI;
-            var provisionAccountSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+            var provisionSiteSettingsAPI;
+            var provisionSiteSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -38,12 +38,12 @@
                     connectionTypeReadyDeferred.resolve();
                 };
             
-                $scope.scopeModel.onProvisionAccountSettingsReady = function (api) {
-                    provisionAccountSettingsAPI = api;
-                    provisionAccountSettingsReadyDeferred.resolve();
+                $scope.scopeModel.onProvisionSiteSettingsReady = function (api) {
+                    provisionSiteSettingsAPI = api;
+                    provisionSiteSettingsReadyDeferred.resolve();
                 };
 
-                UtilsService.waitMultiplePromises([provisionAccountSettingsReadyDeferred.promise, connectionTypeReadyDeferred.promise]).then(function(){
+                UtilsService.waitMultiplePromises([provisionSiteSettingsReadyDeferred.promise, connectionTypeReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
 
@@ -74,14 +74,14 @@
                         return connectionTypeAPI.load(connectionTypePayload);
                     }
 
-                    promises.push(loadProvisionAccountSettings());
+                    promises.push(loadProvisionSiteSettings());
 
-                    function loadProvisionAccountSettings() {
-                        var provisionAccountSettingsPayload;
+                    function loadProvisionSiteSettings() {
+                        var provisionSiteSettingsPayload;
                         if (provisionerDefinitionSettings != undefined) {
-                            provisionAccountSettingsPayload = { provisionAccountSettings: provisionerDefinitionSettings.Settings, showEnterpriseSettings: true };
+                            provisionSiteSettingsPayload = { provisionAccountSettings: provisionerDefinitionSettings.Settings, showEnterpriseSettings: false };
                         }
-                        return provisionAccountSettingsAPI.load(provisionAccountSettingsPayload);
+                        return provisionSiteSettingsAPI.load(provisionSiteSettingsPayload);
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -95,9 +95,9 @@
 
                 function getData() {
                     var data = {
-                        $type: "Retail.Teles.Business.Provisioning.ProvisionAccountDefinitionSettings,Retail.Teles.Business",
+                        $type: "Retail.Teles.Business.Provisioning.ProvisionSiteDefinitionSettings,Retail.Teles.Business",
                         VRConnectionId: connectionTypeAPI.getSelectedIds(),
-                        Settings:provisionAccountSettingsAPI.getData(),
+                        Settings: provisionSiteSettingsAPI.getData(),
                         CountryCode: $scope.scopeModel.countryCode,
                     };
                     return data;
@@ -106,6 +106,6 @@
         }
     }
 
-    app.directive('retailTelesProvisionerDefinitionsettingsProvisionaccount', ProvisionerDefinitionsettingsDirective);
+    app.directive('retailTelesProvisionerDefinitionsettingsProvisionsite', ProvisionerDefinitionsettingsDirective);
 
 })(app);

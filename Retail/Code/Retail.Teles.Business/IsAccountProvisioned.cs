@@ -41,7 +41,7 @@ namespace Retail.Teles.Business
             {
                 return true;
             }
-            return null;
+            return false;
         }
     }
 }

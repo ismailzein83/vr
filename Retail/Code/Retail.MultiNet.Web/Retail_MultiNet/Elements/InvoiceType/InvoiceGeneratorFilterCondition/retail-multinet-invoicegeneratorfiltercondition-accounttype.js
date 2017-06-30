@@ -49,7 +49,6 @@ app.directive("retailMultinetInvoicegeneratorfilterconditionAccounttype", ["Util
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var invoiceFilterConditionEntity;
                     if (payload != undefined) {
                         invoiceFilterConditionEntity = payload.invoiceFilterConditionEntity;
