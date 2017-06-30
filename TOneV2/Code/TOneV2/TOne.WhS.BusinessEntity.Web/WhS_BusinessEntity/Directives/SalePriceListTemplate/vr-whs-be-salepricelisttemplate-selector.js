@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemplateAPIService', 'UtilsService', 'VRUIUtilsService', function (WhS_BE_SalePriceListTemplateAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemplateAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SalePriceListTemplateService', function (WhS_BE_SalePriceListTemplateAPIService, UtilsService, VRUIUtilsService, WhS_BE_SalePriceListTemplateService) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -24,6 +24,22 @@ app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemp
 				ctrl.selectedvalues = [];
 
 			ctrl.datasource = [];
+
+			$scope.addNewSalePriceListTemplate = function () {
+			    var onSalePriceListTemplateAdded = function (obj) {
+			        ctrl.datasource.push(obj.Entity);
+			        if ($attrs.ismultipleselection != undefined)
+			            ctrl.selectedvalues.push(obj.Entity);
+			        else
+			            ctrl.selectedvalues = obj.Entity;
+			    };
+			    WhS_BE_SalePriceListTemplateService.addSalePriceListTemplate(onSalePriceListTemplateAdded);
+			};
+			ctrl.haspermission = function () {
+			    return WhS_BE_SalePriceListTemplateAPIService.HasAddSalePriceListTemplatePermission();
+			};
+
+
 			var salePriceListTemplateSelector = new SalePriceListTemplateSelector(ctrl, $scope, $attrs);
 			salePriceListTemplateSelector.initializeController();
 
@@ -100,8 +116,13 @@ app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemp
 
 		var hideselectedvaluessection = "";
 		if (attrs.hideselectedvaluessection != undefined)
-			hideselectedvaluessection = ' hideselectedvaluessection="true"';
+		    hideselectedvaluessection = ' hideselectedvaluessection="true"';
 
-		return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" label="' + label + '" entityName="' + label + '" selectedvalues="ctrl.selectedvalues" datavaluefield="SalePriceListTemplateId" datatextfield="Name"' + multipleselection + ' onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' + required + hideremoveicon + hideselectedvaluessection + '></vr-select></vr-columns>';
+		var addCliked = '';
+		if (attrs.showaddbutton != undefined)
+		    addCliked = 'onaddclicked="addNewSalePriceListTemplate"';
+
+
+		return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" label="' + label + '" entityName="' + label + '" selectedvalues="ctrl.selectedvalues" datavaluefield="SalePriceListTemplateId" datatextfield="Name"' + multipleselection + ' ' + addCliked + ' onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" haspermission="ctrl.haspermission" ondeselectitem="ctrl.ondeselectitem"' + required + hideremoveicon + hideselectedvaluessection + '></vr-select></vr-columns>';
 	}
 }]);
