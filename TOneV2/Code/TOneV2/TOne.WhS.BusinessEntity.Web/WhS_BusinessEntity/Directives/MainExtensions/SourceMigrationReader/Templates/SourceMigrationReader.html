@@ -3,11 +3,11 @@
         <vr-switch value="useTempTables" label="Use Temporary Tables"></vr-switch>
     </vr-columns>
 
-    <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="onSellingNumberPlanDirectiveReady" onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired="true">
+    <vr-whs-be-sellingnumberplan-selector showaddbutton normal-col-num="6" on-ready="onSellingNumberPlanDirectiveReady" onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired="true">
     </vr-whs-be-sellingnumberplan-selector>
 
     <span vr-loader="ctrl.isLoadingSellingProduct">
-        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" normal-col-num="6" isrequired="true"></vr-whs-be-sellingproduct-selector>
+        <vr-whs-be-sellingproduct-selector showaddbutton on-ready="onSellingProductsDirectiveReady" normal-col-num="6" isrequired="true"></vr-whs-be-sellingproduct-selector>
     </span>
     <vr-columns colnum="6">
         <vr-select isrequired="true" datatextfield="description" datavaluefield="value" label="Migration Tables" datasource="migrationTables" selectedvalues="migrationTablesSelectedValues" ismultipleselection>

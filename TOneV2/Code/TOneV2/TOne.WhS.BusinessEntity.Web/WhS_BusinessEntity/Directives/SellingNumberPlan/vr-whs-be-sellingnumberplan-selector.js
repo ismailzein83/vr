@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SellingNumberPlanService',
+    function (WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService, WhS_BE_SellingNumberPlanService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,6 +25,19 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 ctrl.datasource = [];
 
+                $scope.addNewSellingNumberPlan = function () {
+                    var onSellingNumberPlanAdded = function (sellingNumberPlanObj) {
+                        ctrl.datasource.push(sellingNumberPlanObj.Entity);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(sellingNumberPlanObj.Entity);
+                        else
+                            ctrl.selectedvalues = sellingNumberPlanObj.Entity;
+                    };
+                    WhS_BE_SellingNumberPlanService.addSellingNumberPlan(onSellingNumberPlanAdded);
+                };
+                ctrl.haspermission = function () {
+                    return WhS_BE_SellingNumberPlanAPIService.HasAddSellingNumberPlanPermission();
+                };
                 var ctor = new sellingNumberPlanCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
@@ -54,10 +67,14 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 multipleselection = "ismultipleselection";
             }
 
+            var addCliked = '';
+            if (attrs.showaddbutton != undefined)
+                addCliked = 'onaddclicked="addNewSellingNumberPlan"';
+
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-               + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId"  on-ready="ctrl.onSelectorReady"' 
-               + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + '<vr-select ' + multipleselection +  ' ' + addCliked + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId"  on-ready="ctrl.onSelectorReady"'
+               + ' label="' + label +'"  datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
                + '</vr-columns>';
         }
 

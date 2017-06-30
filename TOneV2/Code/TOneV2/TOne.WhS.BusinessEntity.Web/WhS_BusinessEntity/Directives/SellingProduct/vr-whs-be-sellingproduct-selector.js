@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeSellingproductSelector', ['WhS_BE_SellingProductAPIService', 'UtilsService','$compile','VRUIUtilsService',
-function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrWhsBeSellingproductSelector', ['WhS_BE_SellingProductAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', 'WhS_BE_SellingProductService',
+function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsService, WhS_BE_SellingProductService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -22,6 +22,21 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
+
+                $scope.addNewSellingProduct = function () {
+                    var onSellingProductAdded = function (sellingProductObj) {
+                        ctrl.datasource.push(sellingProductObj.Entity);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(sellingProductObj.Entity);
+                        else
+                            ctrl.selectedvalues = sellingProductObj.Entity;
+                    };
+                    WhS_BE_SellingProductService.addSellingProduct(onSellingProductAdded);
+                };
+                ctrl.haspermission = function () {
+                    return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
+                };
+
                 var ctor = new sellingProductCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
                
@@ -54,10 +69,13 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 hideremoveicon = "hideremoveicon";
             }
 
-           
+            var addCliked = '';
+            if (attrs.showaddbutton != undefined)
+                addCliked = 'onaddclicked="addNewSellingProduct"';
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="SellingProductId" '
-            + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"></vr-select>'
+                + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' ' + addCliked + ' datatextfield="Name" datavaluefield="SellingProductId" '
+            + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" haspermission="ctrl.haspermission"></vr-select>'
                 + '</vr-columns>';
         }
 
