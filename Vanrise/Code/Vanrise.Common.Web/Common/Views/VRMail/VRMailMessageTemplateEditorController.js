@@ -11,7 +11,7 @@
         var mailMessageTemplateId;
         var mailMessageTemplateEntity;
         var mailMessageTypeId;
-
+        var fixedMailMessageTypeId;
         var mailMessageTypeSelectorAPI;
         var mailMessageTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
         var onMailMessageTypeSelectionChangedDeferred;
@@ -30,14 +30,18 @@
 
             if (parameters != undefined && parameters != null) {
                 mailMessageTemplateId = parameters.mailMessageTemplateId;
+                fixedMailMessageTypeId = parameters.mailMessageTypeId;
+
             }
 
             isEditMode = (mailMessageTemplateId != undefined);
+
         }
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.objects = [];
             $scope.scopeModel.menuActions = [];
+            $scope.scopeModel.disabledMailMessageType = fixedMailMessageTypeId != undefined;
 
             $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
                 mailMessageTypeSelectorAPI = api;
@@ -127,6 +131,11 @@
                     if (isEditMode) {
                         mailMessageTypeSelectorPayload = {
                             selectedIds: mailMessageTemplateEntity.VRMailMessageTypeId
+                        };
+                    }
+                    if (fixedMailMessageTypeId != undefined) {
+                        mailMessageTypeSelectorPayload = {
+                            selectedIds: fixedMailMessageTypeId
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(mailMessageTypeSelectorAPI, mailMessageTypeSelectorPayload, mailMessageTypeSelectorLoadDeferred);
@@ -242,12 +251,12 @@
                 VRMailMessageTypeId: mailMessageTypeSelectorAPI.getSelectedIds(),
                 Settings: {
                     Variables: $scope.scopeModel.objects,
-                    To: { ExpressionString: $scope.scopeModel.to } ,
+                    To: { ExpressionString: $scope.scopeModel.to },
                     CC: { ExpressionString: $scope.scopeModel.cc },
                     Subject: { ExpressionString: $scope.scopeModel.subject },
                     Body: { ExpressionString: $scope.scopeModel.body }
-                }       
-            };          
+                }
+            };
         }
     }
 

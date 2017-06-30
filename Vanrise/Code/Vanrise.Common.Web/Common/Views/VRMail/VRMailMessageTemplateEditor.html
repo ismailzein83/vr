@@ -10,8 +10,10 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-common-mailmessagetype-selector on-ready="scopeModel.onMailMessageTypeSelectorReady" onselectionchanged="scopeModel.onMailMessageTypeSelectionChanged"
-                                                                isrequired="true"></vr-common-mailmessagetype-selector>
+                            <span vr-disabled="scopeModel.disabledMailMessageType">
+                                <vr-common-mailmessagetype-selector on-ready="scopeModel.onMailMessageTypeSelectorReady" onselectionchanged="scopeModel.onMailMessageTypeSelectionChanged"
+                                                                    isrequired="true"></vr-common-mailmessagetype-selector>
+                            </span>                            
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

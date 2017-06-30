@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTemplateAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTemplateAPIService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRMailMessageTemplateService',
 
-    function (VRCommon_VRMailMessageTemplateAPIService, UtilsService, VRUIUtilsService) {
+    function (VRCommon_VRMailMessageTemplateAPIService, UtilsService, VRUIUtilsService, VRCommon_VRMailMessageTemplateService) {
         return {
             restrict: 'E',
             scope: {
@@ -27,6 +27,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
+
                 var mailMessageTemplateSelector = new MailMessageTemplateSelector(ctrl, $scope, $attrs);
                 mailMessageTemplateSelector.initializeController();
 
@@ -42,6 +43,22 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
 
             this.initializeController = initializeController;
 
+            var filter;
+            $scope.addNewMailMessageTemplate = function () {
+                var mailMessageTypeId = filter != undefined && filter.VRMailMessageTypeId ? filter.VRMailMessageTypeId : undefined;
+                var onMailMessageTemplateAdded = function (mailMessageObj) {
+                    ctrl.datasource.push(mailMessageObj.Entity);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(mailMessageObj.Entity);
+                    else
+                        ctrl.selectedvalues = mailMessageObj.Entity;
+                };
+                VRCommon_VRMailMessageTemplateService.addMailMessageTemplate(onMailMessageTemplateAdded, mailMessageTypeId);
+            };
+            ctrl.haspermission = function () {
+                return VRCommon_VRMailMessageTemplateAPIService.HasAddMailMessageTemplatePermission();
+            };
+
             var selectorAPI;
             var selectFirstItem;
             function initializeController() {
@@ -56,7 +73,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                 api.load = function (payload) {
 
                     var selectedIds;
-                    var filter;
+                    
 
                     if (payload != undefined) {
                         selectFirstItem = payload.selectFirstItem;
@@ -104,9 +121,13 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
-            return '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" label="' + label +
+            var addCliked = '';
+            if (attrs.showaddbutton != undefined)
+                addCliked = 'onaddclicked="addNewMailMessageTemplate"';
+
+            return '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate" haspermission="ctrl.haspermission">' +
                    '</vr-select>';
         }
 

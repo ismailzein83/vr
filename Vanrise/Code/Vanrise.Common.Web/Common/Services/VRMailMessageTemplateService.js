@@ -8,13 +8,18 @@
     function VRMailMessageTemplateService(VRModalService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
 
-        function addMailMessageTemplate(onMailMessageTemplateAdded) {
+        function addMailMessageTemplate(onMailMessageTemplateAdded, mailMessageTypeId) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onMailMessageTemplateAdded = onMailMessageTemplateAdded
             };
-            VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRMailMessageTemplateEditor.html', null, settings);
+
+            var parameters = {
+                mailMessageTypeId: mailMessageTypeId,
+            };
+
+            VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRMailMessageTemplateEditor.html', parameters, settings);
         };
 
         function editMailMessageTemplate(mailMessageTemplateId, onMailMessageTemplateUpdated) {
