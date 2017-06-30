@@ -151,7 +151,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -230,7 +229,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -438,9 +436,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Day.Value</Value>
+                                  <Value>=CDate(Fields!Day.Value).ToString("MMM dd yyyy")</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
+                                    <Format>MMM dd, yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -450,6 +449,9 @@
                           <rd:DefaultName>Day</rd:DefaultName>
                           <ZIndex>4</ZIndex>
                           <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
                             <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2, "Gainsboro", "White")</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -622,7 +624,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -831,6 +832,11 @@
                       <Group Name="table1_Details_Group">
                         <DataElementName>Detail</DataElementName>
                       </Group>
+                      <SortExpressions>
+                        <SortExpression>
+                          <Value>=CDate(Fields!Day.Value)</Value>
+                        </SortExpression>
+                      </SortExpressions>
                       <TablixMembers>
                         <TablixMember />
                       </TablixMembers>
