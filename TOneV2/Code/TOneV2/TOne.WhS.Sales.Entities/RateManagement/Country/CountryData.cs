@@ -4,9 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Sales.Entities.RateManagement.Country
+namespace TOne.WhS.Sales.Entities
 {
-    class CountryData
+    public class CountryData : Vanrise.BusinessProcess.Entities.IRuleTarget
     {
+        public int CountryId { get; set; }
+
+        public DateTime CountryBED { get; set; }
+
+        public Dictionary<long, DataByZone> ZoneDataByZoneId { get; set; }
+
+        public object Key
+        {
+            get { return CountryId; }
+        }
+
+        public string TargetType
+        {
+            get { return "CountryData"; }
+        }
     }
 }

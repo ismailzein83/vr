@@ -809,7 +809,8 @@ namespace TOne.WhS.Sales.Business
                     ExistingZone = saleZonesByName.GetRecord(zoneName),
                     ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
                     CountryBEDsByCountry = countryBEDsByCountry,
-                    ClosedCountryIds = closedCountryIds
+                    ClosedCountryIds = closedCountryIds,
+                    DateTimeFormat = input.DateTimeFormat
                 };
 
                 if (validator.IsImportedRowValid(context))

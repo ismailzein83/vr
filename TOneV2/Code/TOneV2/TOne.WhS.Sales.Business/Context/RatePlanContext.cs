@@ -49,6 +49,7 @@ namespace TOne.WhS.Sales.Business
         public DateTime EffectiveDate { get; set; }
         public SaleEntityZoneRateLocator RateLocator { get; set; }
         public SaleEntityZoneRateLocator FutureRateLocator { get; set; }
+        public SaleEntityZoneRateLocator ActionRateLocator { get; set; }
         public DateTime RetroactiveDate
         {
             get
@@ -122,6 +123,7 @@ namespace TOne.WhS.Sales.Business
         DateTime EffectiveDate { get; }
         SaleEntityZoneRateLocator RateLocator { get; }
         SaleEntityZoneRateLocator FutureRateLocator { get; }
+        SaleEntityZoneRateLocator ActionRateLocator { get; }
         DateTime RetroactiveDate { get; }
         EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; }
         IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; }

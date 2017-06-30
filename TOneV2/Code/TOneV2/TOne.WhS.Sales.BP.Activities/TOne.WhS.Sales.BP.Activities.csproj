@@ -90,6 +90,7 @@
     <Compile Include="DeleteRatePlanDraft.cs" />
     <Compile Include="GetExistingCustomerCountries.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
+    <Compile Include="SetContextActionRateLocator.cs" />
     <Compile Include="PrepareCustomerCountryPreviews.cs" />
     <Compile Include="PrepareCustomersWithPriceList.cs" />
     <Compile Include="PrepareExistingCustomerCountries.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="SetContextExistingZonesByCountry.cs" />
     <Compile Include="SetContextIntersectedSellingProductZoneRatesByZone.cs" />
     <Compile Include="SetRatePlanContext.cs" />
+    <Compile Include="StructureDataByCountry.cs" />
     <Compile Include="StructureDefaultData.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />
     <Compile Include="PrepareDefaultServicePreview.cs" />
