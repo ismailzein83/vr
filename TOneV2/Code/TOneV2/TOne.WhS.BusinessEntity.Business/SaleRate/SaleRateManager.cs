@@ -520,6 +520,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Change Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Inherited" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
@@ -534,6 +536,8 @@ namespace TOne.WhS.BusinessEntity.Business
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange)});
+                            row.Cells.Add(new ExportExcelCell() { Value = record.IsRateInherited });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
