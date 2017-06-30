@@ -7,6 +7,7 @@
     function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
         var sellingProductId;
+        var fixedSellingNumberPlanId;
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var sellingProductEntity;
@@ -20,6 +21,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 sellingProductId = parameters.SellingProductId;
+                fixedSellingNumberPlanId = parameters.sellingNumberPlanId;
                 context = parameters.context;
             }
             isEditMode = (sellingProductId != undefined);
@@ -39,6 +41,7 @@
 
             $scope.scopeModal = {};
             $scope.scopeModal.isEditMode = isEditMode;
+            $scope.scopeModal.fixedSellingNumberPlanID = fixedSellingNumberPlanId!=undefined;
             $scope.scopeModal.saveSellingProduct = function () {
                 if (isEditMode) {
                     return updateSellingProduct();
@@ -128,7 +131,8 @@
                     var directivePayload = {
                         selectedIds: sellingProductEntity != undefined ? sellingProductEntity.SellingNumberPlanId : undefined
                     };
-
+                    if (fixedSellingNumberPlanId != undefined)
+                        directivePayload.selectedIds = fixedSellingNumberPlanId;
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
                 });
             return sellingNumberPlanLoadPromiseDeferred.promise;

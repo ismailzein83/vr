@@ -61,8 +61,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     if (dbTable.defaultMigrate)
                         migrationTablesBasetable.push(dbTable);
                 });
-                $scope.migrationTables = UtilsService.cloneObject(migrationTablesBasetable,true);
-                $scope.migrationTablesSelectedValues = UtilsService.cloneObject(migrationTablesBasetable,true);
+                $scope.migrationTables = UtilsService.cloneObject(migrationTablesBasetable, true);
+                $scope.migrationTablesSelectedValues = UtilsService.cloneObject(migrationTablesBasetable, true);
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
                     sellingNumberPlanReadyPromiseDeferred.resolve();
@@ -100,7 +100,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                           && holidayRateTypeSelectorAPI != undefined
                           && (offPeakRateTypeSelectorAPI.getSelectedIds() == holidayRateTypeSelectorAPI.getSelectedIds()))
                         return "Rate Type must be different than Holiday Rate";
-                    
+
                     return null;
                 };
 
@@ -110,19 +110,19 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     if (offPeakRateTypeSelectorAPI != undefined
                             && weekendRateTypeSelectorAPI != undefined
                             && (weekendRateTypeSelectorAPI.getSelectedIds() == offPeakRateTypeSelectorAPI.getSelectedIds()))
-                      return "Rate Type must be different than OffPeak Rate";
+                        return "Rate Type must be different than OffPeak Rate";
 
-                     if ( weekendRateTypeSelectorAPI != undefined
-                           && holidayRateTypeSelectorAPI != undefined
-                           && (weekendRateTypeSelectorAPI.getSelectedIds() == holidayRateTypeSelectorAPI.getSelectedIds()))
-                         return "Rate Type must be different than Holiday Rate";                  
+                    if (weekendRateTypeSelectorAPI != undefined
+                          && holidayRateTypeSelectorAPI != undefined
+                          && (weekendRateTypeSelectorAPI.getSelectedIds() == holidayRateTypeSelectorAPI.getSelectedIds()))
+                        return "Rate Type must be different than Holiday Rate";
 
                     return null;
                 };
 
                 $scope.validateHolidayRate = function () {
                     if (holidayRateTypeSelectorAPI != undefined && holidayRateTypeSelectorAPI.getSelectedIds() == undefined)
-                        return "Required Field";                 
+                        return "Required Field";
                     if (holidayRateTypeSelectorAPI != undefined
                                           && weekendRateTypeSelectorAPI != undefined
                                           && (holidayRateTypeSelectorAPI.getSelectedIds() == weekendRateTypeSelectorAPI.getSelectedIds()))
@@ -150,10 +150,11 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         sellingProductId = undefined;
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductDirectiveAPI, sellingProductPayload, setLoader);
                     }
-                    else if (sellingProductDirectiveAPI != undefined)
+                    else if (sellingProductDirectiveAPI != undefined) {
                         sellingProductDirectiveAPI.clearDataSource();
-                };
-
+                        sellingProductDirectiveAPI.resetFilter();
+                    }
+                };               
                 $scope.onSelectParameterDefinition = function (item) {
                     var gridItem = {
                         DisplayName: item.DisplayName,

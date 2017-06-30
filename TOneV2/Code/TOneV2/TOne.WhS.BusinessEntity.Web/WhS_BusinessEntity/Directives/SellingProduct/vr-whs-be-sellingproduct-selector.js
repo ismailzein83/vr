@@ -23,20 +23,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
 
                 ctrl.datasource = [];
 
-                $scope.addNewSellingProduct = function () {
-                    var onSellingProductAdded = function (sellingProductObj) {
-                        ctrl.datasource.push(sellingProductObj.Entity);
-                        if ($attrs.ismultipleselection != undefined)
-                            ctrl.selectedvalues.push(sellingProductObj.Entity);
-                        else
-                            ctrl.selectedvalues = sellingProductObj.Entity;
-                    };
-                    WhS_BE_SellingProductService.addSellingProduct(onSellingProductAdded);
-                };
-                ctrl.haspermission = function () {
-                    return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
-                };
-
+              
                 var ctor = new sellingProductCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
                
@@ -82,6 +69,21 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
         function sellingProductCtor(ctrl, $scope, $attrs) {
 
             var selectorApi;
+            var filter;
+            $scope.addNewSellingProduct = function () {
+                var sellingNumberPlanId = filter != undefined && filter.SellingNumberPlanId ? filter.SellingNumberPlanId : undefined;
+                var onSellingProductAdded = function (sellingProductObj) {
+                    ctrl.datasource.push(sellingProductObj.Entity);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(sellingProductObj.Entity);
+                    else
+                        ctrl.selectedvalues = sellingProductObj.Entity;
+                };
+                WhS_BE_SellingProductService.addSellingProduct(onSellingProductAdded, sellingNumberPlanId);
+            };
+            ctrl.haspermission = function () {
+                return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
+            };
 
             function initializeController() {
 
@@ -101,11 +103,12 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                     selectorApi.clearDataSource();
 
                     var selectedIds;
-                    var filter;
+                    
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                     }
+                    
 
                     var serializedFilter = {};
                     if (filter != undefined)
@@ -125,6 +128,10 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                 api.clearDataSource = function () {
                     selectorApi.clearDataSource();
                 };
+
+                api.resetFilter = function () {
+                    filter = undefined;
+                };                
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

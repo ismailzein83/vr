@@ -7,7 +7,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <span vr-disabled="scopeModal.isEditMode">
+                        <span vr-disabled="scopeModal.isEditMode || scopeModal.fixedSellingNumberPlanID">
                             <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlansDirectiveReady" isrequired="true">
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>

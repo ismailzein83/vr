@@ -12,14 +12,16 @@
             registerHistoryViewAction: registerHistoryViewAction
         });
 
-        function addSellingProduct(onSellingProductAdded) {
+        function addSellingProduct(onSellingProductAdded, sellingNumberPlanId) {
             var settings = {};
-
+            var parameters = {
+                sellingNumberPlanId: sellingNumberPlanId
+            };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onSellingProductAdded = onSellingProductAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, settings);
         }
 
         function editSellingProduct(sellingProductObj, onSellingProductUpdated) {
