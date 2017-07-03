@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.ExcelConversion.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -53,7 +54,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, null, null,isCommaDecimalSeparator, null)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings.DateTimeFormat, null, null,isCommaDecimalSeparator, null)
                     };
                     convertedExcel.Fields.Add(fld);
                 }
@@ -92,6 +93,8 @@ namespace Vanrise.ExcelConversion.Business
 
         private void BuildExceRecord(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, ListMapping listMapping, Workbook workbook, Worksheet workSheet, int lastRowIndex, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator, Dictionary<string, DataRecordFieldType> fieldTypeByFieldName)
         {
+            string dateTimeFormat;
+            dateTimeFormat = (listMapping.DateTimeFormat != null) ? listMapping.DateTimeFormat :conversionSettings.DateTimeFormat;
             ConvertedExcelList lst = new ConvertedExcelList
             {
                 ListName = listMapping.ListName,
@@ -119,7 +122,7 @@ namespace Vanrise.ExcelConversion.Business
                         object fieldValue = null;
                         if(!fieldValueByFieldName.TryGetValue(field.FieldName,out fieldValue))
                         {
-                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, conversionSettings, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName));
+                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName));
                         }
                     }
                     context.fieldValueByFieldName = fieldValueByFieldName;
@@ -135,7 +138,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row,isCommaDecimalSeparator, null)
+                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, null)
                     };
                     convertedRecord.Fields.Add(fld);
                 }
@@ -145,7 +148,7 @@ namespace Vanrise.ExcelConversion.Business
             convertedExcel.Lists.Add(lst);
         }
 
-        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, ExcelConversionSettings conversionSettings, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName)
+        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, string dateTimeFormat, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName)
         {
             GetFieldValueContext getFieldValueContext = new GetFieldValueContext
             {
@@ -164,13 +167,13 @@ namespace Vanrise.ExcelConversion.Business
                 else
                 {
                     DateTime result;
-                    if (DateTime.TryParseExact(fldValue.ToString(), conversionSettings.DateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
+                    if (DateTime.TryParseExact(fldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
                     {
                         return result;
                     }
                     else
                     {
-                        throw new Exception(string.Format("{0} is mapped to an invalid field.", fldMapping.FieldName));
+                        throw new VRBusinessException(string.Format("{0} is mapped to an invalid field.", fldMapping.FieldName));
                     }
                 }
             }
@@ -190,7 +193,7 @@ namespace Vanrise.ExcelConversion.Business
                         return result;
                     }else
                     {
-                        throw new Exception(string.Format("{0} is mapped to an invalid field.",fldMapping.FieldName));
+                        throw new VRBusinessException(string.Format("{0} is mapped to an invalid field.",fldMapping.FieldName));
                     }
                 }
             }

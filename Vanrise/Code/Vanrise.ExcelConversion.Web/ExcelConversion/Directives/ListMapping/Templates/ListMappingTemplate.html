@@ -21,11 +21,11 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Condition'">
+    <vr-tab header="'Row Fields'">
         <vr-row>
             <vr-columns width="1/3row">
                 <vr-button type="Add" data-onclick="listMappingCtrl.addField" standalone></vr-button>
-            </vr-columns>  
+            </vr-columns>
             <vr-columns width="fullrow">
                 <vr-datagrid datasource="listMappingCtrl.filterFieldsMappings" norowhighlightonclick="true"
                              on-ready="onGridReady" hidegridmenu ondeleterow="    listMappingCtrl.removeFilter" maxheight="250px">
@@ -48,13 +48,18 @@
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
-            <vr-columns width="fullrow">
-                    <vr-section title="Filter">
-                        <vr-genericdata-recordfilter on-ready="listMappingCtrl.onRecordFilterReady" customvalidate="listMappingCtrl.isFilterFilled" validateedit="listMappingCtrl.addFilterValidate"></vr-genericdata-recordfilter>
-                    </vr-section>
-            </vr-columns>  
         </vr-row>
     </vr-tab>
-</vr-tabs>
+        <vr-tab header="'Row Filter'">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-genericdata-recordfilter on-ready="listMappingCtrl.onRecordFilterReady" customvalidate="listMappingCtrl.isFilterFilled" validateedit="listMappingCtrl.addFilterValidate"></vr-genericdata-recordfilter>
+                </vr-columns>
+            </vr-row>
+        </vr-tab>
+    </vr-tabs>
+<vr-row ng-if="showDateFormat">
+    <vr-timeformat label="{{scopeModel.labelName}}" value="scopeModel.dateTimeFormat" normal-col-num="6" isrequired="scopeModel.checkUsesOfEffectiveDate()"></vr-timeformat>
+</vr-row>
 
 

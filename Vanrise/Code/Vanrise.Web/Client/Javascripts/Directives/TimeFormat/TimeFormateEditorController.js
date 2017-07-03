@@ -184,10 +184,11 @@
             }];
             $scope.showTimeParts = false;
             $scope.onTimeFormatSelectionChanged = function () {
-                if ($scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value)
-                    $scope.showTimeParts = true;
-                else
-                    $scope.showTimeParts = false;
+                    if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value)
+                        $scope.showTimeParts = true;
+                    else
+                        $scope.showTimeParts = false;
+              
             };
 
             $scope.onTimeSelectionChanged = function () {
@@ -219,10 +220,10 @@
             };
 
             $scope.isFormatValueRequired = function () {
-                if ($scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value && $scope.timeFormatValue == undefined)
-                    return true;
-                else
-                    return false;
+                    if ($scope.selectedTimeFormatTemplate != undefined && $scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value && $scope.timeFormatValue == undefined)
+                        return true;
+                    else
+                        return false;
             };
         }
 

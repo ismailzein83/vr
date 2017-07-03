@@ -2,7 +2,7 @@
 
     'use strict';
 
-    excelconversionListmapping.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_MappingFieldTypeEnum', 'VR_GenericData_DataRecordTypeService','VR_GenericData_RecordFilterService'];
+    excelconversionListmapping.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_MappingFieldTypeEnum', 'VR_GenericData_DataRecordTypeService', 'VR_GenericData_RecordFilterService'];
 
     function excelconversionListmapping(UtilsService, VRUIUtilsService, VR_GenericData_MappingFieldTypeEnum, VR_GenericData_DataRecordTypeService, VR_GenericData_RecordFilterService) {
         return {
@@ -31,6 +31,7 @@
             var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.scopeModel = {};
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
                     if (context != undefined) {
@@ -135,14 +136,13 @@
                     dataItem.selectedDataTypes = UtilsService.getItemByVal(ctrl.dataTypes, payloadEntity.FieldType.ConfigId, "value.ConfigId");
                 }
                 dataItem.normalColNum = ctrl.normalColNum;
-
                 dataItem.onFieldMappingReady = function (api) {
                     dataItem.fieldMappingAPI = api;
                     dataItem.readyPromiseDeferred.resolve();
                 };
                 dataItem.readyPromiseDeferred.promise
               .then(function () {
-                  
+
                   VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
               });
                 ctrl.filterFieldsMappings.push(dataItem);
@@ -159,27 +159,26 @@
                         listMappingData = payload.listMappingData;
                         ctrl.lastRowIndex = undefined;
                         ctrl.firstRowIndex = undefined;
-                        if (listMappingData != undefined)
-                        {
-                           
-                            if (listMappingData.FirstRowIndex !=undefined)
-                            {
+                        $scope.scopeModel.labelName = payload.listName + " Date Time Format";
+                        $scope.showDateFormat = payload.showDateFormat;
+                        $scope.scopeModel.dateTimeFormat = (payload.listMappingData!=undefined)?payload.listMappingData.DateTimeFormat:undefined;
+                        if (listMappingData != undefined) {
+
+                            if (listMappingData.FirstRowIndex != undefined) {
                                 ctrl.firstRowIndex = {
                                     row: listMappingData.FirstRowIndex,
                                     col: listMappingData.FirstRowIndex,
                                     sheet: listMappingData.SheetIndex
                                 };
                             }
-                            if (listMappingData.LastRowIndex != undefined)
-                            {
+                            if (listMappingData.LastRowIndex != undefined) {
                                 ctrl.lastRowIndex = {
                                     row: listMappingData.LastRowIndex,
                                     col: listMappingData.LastRowIndex,
                                     sheet: listMappingData.SheetIndex
                                 };
                             }
-                            if(listMappingData.Filter != undefined && listMappingData.Filter.Fields != undefined)
-                            {
+                            if (listMappingData.Filter != undefined && listMappingData.Filter.Fields != undefined) {
                                 for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
                                     var filterItem = {
                                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -201,7 +200,7 @@
                             addAPIExtension(ctrl.fieldMappings[i]);
                         }
 
-                      
+
 
                     }
                     promises.push(loadRecordFilterDirective());
@@ -209,8 +208,7 @@
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
                         recordFilterReadyPromiseDeferred.promise.then(function () {
                             var directivePayload = { context: getRecordFilterContext() };
-                            if (listMappingData !=undefined && listMappingData.Filter != undefined)
-                            {
+                            if (listMappingData != undefined && listMappingData.Filter != undefined) {
                                 directivePayload.FilterGroup = listMappingData.Filter.FilterGroup;
                                 directivePayload.ConditionExpression = listMappingData.Filter.ConditionExpression;
 
@@ -226,7 +224,6 @@
                         };
 
                         dataItem.normalColNum = ctrl.normalColNum;
-
                         dataItem.onFieldMappingReady = function (api) {
                             dataItem.fieldMappingAPI = api;
                             dataItem.readyPromiseDeferred.resolve();
@@ -237,7 +234,7 @@
                               var fieldMapping = UtilsService.getItemByVal(listMappingData.FieldMappings, dataItem.FieldName, "FieldName");
                               if (fieldMapping != undefined) {
                                   payload.fieldMapping = fieldMapping;
-                                 
+
                               }
 
                           }
@@ -275,8 +272,7 @@
 
                     }
                     var filter;
-                    if (ctrl.filterFieldsMappings.length > 0)
-                    {
+                    if (ctrl.filterFieldsMappings.length > 0) {
                         filter = {
                             Fields: []
                         };
@@ -287,13 +283,12 @@
 
                             filter.FilterGroup = filterObj.filterObj;
                         }
-                        
-                        for(var i=0;i<ctrl.filterFieldsMappings.length;i++)
-                        {
+
+                        for (var i = 0; i < ctrl.filterFieldsMappings.length; i++) {
                             var filterFieldsMapping = ctrl.filterFieldsMappings[i];
                             filter.Fields.push({
                                 FieldName: filterFieldsMapping.FieldName,
-                                FieldMapping: filterFieldsMapping.fieldMappingAPI !=undefined? filterFieldsMapping.fieldMappingAPI.getData():undefined,
+                                FieldMapping: filterFieldsMapping.fieldMappingAPI != undefined ? filterFieldsMapping.fieldMappingAPI.getData() : undefined,
                                 FieldType: filterFieldsMapping.selectedDataTypes != undefined ? filterFieldsMapping.selectedDataTypes.value : undefined,
                             });
                         }
@@ -305,11 +300,12 @@
                         FirstRowIndex: ctrl.firstRowIndex != undefined ? ctrl.firstRowIndex.row : undefined,
                         LastRowIndex: ctrl.lastRowIndex != undefined ? ctrl.lastRowIndex.row : undefined,
                         FieldMappings: fieldMappings,
-                        Filter: filter
+                        Filter: filter,
+                        DateTimeFormat: ($scope.scopeModel.dateTimeFormat != undefined) ? $scope.scopeModel.dateTimeFormat : undefined
                     };
                     return data;
                 }
-                
+
             }
             function getContext() {
 
@@ -329,8 +325,7 @@
                 }
             }
 
-            function getRecordFilterContext()
-            {
+            function getRecordFilterContext() {
                 var context =
                     {
                         getFields: function () {

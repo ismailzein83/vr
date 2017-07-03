@@ -295,7 +295,7 @@
                             var payload = {
                                 context: getContext(),
                                 fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
-                                listName: "RateList"
+                                listName: "RateList",
                             };
                             if (configDetails != undefined && configDetails.NormalRateListMapping) {
                                 payload.listMappingData = configDetails.NormalRateListMapping;
@@ -312,7 +312,8 @@
                             var payload = {
                                 context: getContext(),
                                 fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "CodeGroup", FieldTitle: "Code Group", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
-                                listName: "CodeList"
+                                listName: "CodeList",
+                                showDateFormat: true
                             };
                             if (configDetails != undefined && configDetails.CodeListMapping) {
                                 payload.listMappingData = configDetails.CodeListMapping;
