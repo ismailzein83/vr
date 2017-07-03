@@ -62,8 +62,11 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, regionDirectiveApi, payload, setLoader, countrySelectedPromiseDeferred);
                 }
-                else if (regionDirectiveApi != undefined)
+                else if (regionDirectiveApi != undefined) {
                     regionDirectiveApi.clearDataSource();
+                    regionDirectiveApi.clearFilter();
+                }
+                    
             };
             $scope.saveCity = function () {
                 if (editMode)

@@ -37,7 +37,7 @@ app.service('VRCommon_RegionService', ['VRModalService', 'VRNotificationService'
 
             VRModalService.showModal('/Client/Modules/Common/Views/Region/RegionEditor.html', parameters, settings);
         }
-        function addRegion(onRegionAdded , countryId) {
+        function addRegion(onRegionAdded , countryId,disableCountry) {
             var settings = {
             };
 
@@ -46,8 +46,11 @@ app.service('VRCommon_RegionService', ['VRModalService', 'VRNotificationService'
             };
             var parameters = {};
             if (countryId != undefined) {
-                parameters.CountryId = countryId; 
+                parameters.CountryId = countryId;
+             
             }
+            if (disableCountry != undefined)
+                parameters.disableCountry = disableCountry;
 
             VRModalService.showModal('/Client/Modules/Common/Views/Region/RegionEditor.html', parameters, settings);
         }

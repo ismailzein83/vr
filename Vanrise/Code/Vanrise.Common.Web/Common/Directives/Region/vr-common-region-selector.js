@@ -22,20 +22,7 @@ app.directive('vrCommonRegionSelector', ['VRCommon_RegionAPIService', 'VRCommon_
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            $scope.addNewRegion = function () {
-                var onRegionAdded = function (regionObj) {
-                    ctrl.datasource.push(regionObj.Entity);
-                    if ($attrs.ismultipleselection != undefined)
-                        ctrl.selectedvalues.push(regionObj.Entity);
-                    else
-                        ctrl.selectedvalues = regionObj.Entity;
-                };
-                VRCommon_RegionService.addRegion(onRegionAdded);
-            };
-
-            ctrl.haspermission = function () {
-                return VRCommon_RegionAPIService.HasAddRegionPermission();
-            };
+          
 
             var ctor = new regionCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
@@ -70,9 +57,24 @@ app.directive('vrCommonRegionSelector', ['VRCommon_RegionAPIService', 'VRCommon_
     }
 
     function regionCtor(ctrl, $scope, attrs) {
-
+        var filter;
         var selectorAPI;
 
+        $scope.addNewRegion = function () {
+            var countryId = filter != undefined && filter.CountryId != undefined ? filter.CountryId : undefined;
+            var onRegionAdded = function (regionObj) {
+                ctrl.datasource.push(regionObj.Entity);
+                if (attrs.ismultipleselection != undefined && countryId!=undefined)
+                    ctrl.selectedvalues.push(regionObj.Entity);
+                else if (countryId != undefined)
+                    ctrl.selectedvalues = regionObj.Entity;
+            };
+            VRCommon_RegionService.addRegion(onRegionAdded, countryId, countryId!=undefined);
+        };
+
+        ctrl.haspermission = function () {
+            return VRCommon_RegionAPIService.HasAddRegionPermission();
+        };
         function initializeController() {
 
             $scope.scopeModel = {};
@@ -91,7 +93,7 @@ app.directive('vrCommonRegionSelector', ['VRCommon_RegionAPIService', 'VRCommon_
 
                 selectorAPI.clearDataSource();
                 var selectedIds;
-                var filter;
+                
 
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
@@ -106,6 +108,9 @@ app.directive('vrCommonRegionSelector', ['VRCommon_RegionAPIService', 'VRCommon_
 
             api.clearDataSource = function () {
                 selectorAPI.clearDataSource();
+            };
+            api.clearFilter = function () {
+                filter = undefined;
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
