@@ -9,13 +9,21 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
 {
     public class TimestampDateTimeCompositeParser : CompositeFieldsParser
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("51D08426-F968-4A8C-B52B-90FF55E8630E"); }
+        }
         public string FieldName { get; set; }
         public string DateTimeFieldName { get; set; }
         public DateTime DateTimeShift { get; set; }
         public override void Execute(ICompositeFieldsParserContext context)
         {
+            TimeSpan timeSpan = new TimeSpan();
             DateTime dateTimeField = (DateTime)context.Record.GetFieldValue(DateTimeFieldName);
-            TimeSpan timeSpan = dateTimeField - DateTimeShift;
+            if (dateTimeField != DateTime.MinValue)
+            {
+                timeSpan = dateTimeField - DateTimeShift;
+            }
             context.Record.SetFieldValue(FieldName, timeSpan.TotalSeconds);
         }
     }

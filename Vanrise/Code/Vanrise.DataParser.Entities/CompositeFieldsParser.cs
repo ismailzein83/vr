@@ -8,6 +8,7 @@ namespace Vanrise.DataParser.Entities
 {
     public abstract class CompositeFieldsParser
     {
+        public abstract Guid ConfigId { get; }
         public abstract void Execute(ICompositeFieldsParserContext context);
     }
 

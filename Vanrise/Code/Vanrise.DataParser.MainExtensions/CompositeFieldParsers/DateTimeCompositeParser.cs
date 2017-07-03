@@ -9,6 +9,10 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
 {
     public class DateTimeCompositeParser : CompositeFieldsParser
     {
+        public override Guid ConfigId
+        {
+            get { return new Guid("068FFEDC-9779-4BCA-AE67-D8A2ACE540D4"); }
+        }
         public string FieldName { get; set; }
         public string DateFieldName { get; set; }
         public string TimeFieldName { get; set; }
