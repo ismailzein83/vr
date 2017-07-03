@@ -54,7 +54,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             SetData(normalRatesToClose, zoneIds, actionDatesByZoneId, out minimumDate);
 
-            var reader = new SaleRateReadRPChanges(new List<SaleRate>(), routingCustomerInfo, zoneIds, minimumDate, actionDatesByZoneId);
+            var reader = new SaleRateReadRPChanges(existingSaleRates, routingCustomerInfo, zoneIds, minimumDate, actionDatesByZoneId);
             ratePlanContext.ActionRateLocator = new SaleEntityZoneRateLocator(reader);
         }
 
