@@ -34,14 +34,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("No zones were found for country '{0}'", countryData.CountryId));
 
             string countryName = new CountryManager().GetCountryName(countryData.CountryId);
-            string errorMessage = string.Format("The normal rates of the zones of country '{0}' must all have the same currency", countryName);
 
             var newNormalRatesByZoneId = new Dictionary<long, RateToChange>();
             var closedNormalRatesByZoneId = new Dictionary<long, RateToClose>();
 
-            if (!AreAllActionsEffectiveOnSameDate(countryData.ZoneDataByZoneId.Values, newNormalRatesByZoneId, closedNormalRatesByZoneId))
+            if (!AreAllActionsDefinedOnSameDate(countryData.ZoneDataByZoneId.Values, newNormalRatesByZoneId, closedNormalRatesByZoneId))
             {
-                context.Message = errorMessage;
+                context.Message = string.Format("The new and closed rates of country '{0}' must be defined on the same date", countryName);
                 return false;
             }
 
@@ -64,7 +63,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                     if (closedNormalRate != null)
                     {
-                        SaleEntityZoneRate spZoneRate = ratePlanContext.ActionRateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, countryZone.ZoneId);
+                        SaleEntityZoneRate spZoneRate = ratePlanContext.ActionRateLocator.GetSellingProductZoneRate(sellingProductId, countryZone.ZoneId);
                         if (spZoneRate == null || spZoneRate.Rate == null)
                             throw new DataIntegrityValidationException(string.Format("No rate was found for zone '{0}' of selling product '{1}' on '{2}'", countryZone.ZoneId, sellingProductId, UtilitiesManager.GetDateTimeAsString(closedNormalRate.CloseEffectiveDate)));
                         zoneRateCurrencyId = saleRateManager.GetCurrencyId(spZoneRate.Rate);
@@ -79,7 +78,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                     if (zoneRateCurrencyId != ratePlanContext.CurrencyId)
                     {
-                        context.Message = errorMessage;
+                        context.Message = string.Format("The normal rates of the zones of country '{0}' must all have the same currency", countryName);
                         return false;
                     }
                 }
@@ -94,7 +93,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         #region Private Methods
 
-        private bool AreAllActionsEffectiveOnSameDate(IEnumerable<DataByZone> dataByZone, Dictionary<long, RateToChange> newNormalRatesByZoneId, Dictionary<long, RateToClose> closedNormalRatesByZoneId)
+        private bool AreAllActionsDefinedOnSameDate(IEnumerable<DataByZone> dataByZone, Dictionary<long, RateToChange> newNormalRatesByZoneId, Dictionary<long, RateToClose> closedNormalRatesByZoneId)
         {
             DateTime? actionDate = null;
 
