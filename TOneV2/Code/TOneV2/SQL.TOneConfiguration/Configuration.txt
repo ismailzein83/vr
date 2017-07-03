@@ -13,6 +13,7 @@ VR_Rules.PostDeployment.sql
 Invoice.PostDeployment.sql
 VR_AccountBalance.PostDeployment.sql
 VR_Notification.PostDeployment.sql
+User_Guides.PostDeployment.sql
 
 TOne
 Deals.PostDeployment.sql
