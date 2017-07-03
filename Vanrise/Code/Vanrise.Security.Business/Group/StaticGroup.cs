@@ -17,12 +17,23 @@ namespace Vanrise.Security.Business
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            if(this.MemberIds != null)
+            if (this.MemberIds != null)
             {
                 return this.MemberIds.Contains(context.UserId);
             }
 
             return false;
+        }
+
+        public override bool TryAddUser(ITryAddUserGroupSettingsContext context)
+        {
+            if (this.MemberIds == null)
+                this.MemberIds = new List<int>();
+
+            if (!this.MemberIds.Contains(context.UserId))
+                this.MemberIds.Add(context.UserId);
+
+            return true;
         }
     }
 }

@@ -69,6 +69,13 @@ namespace Vanrise.Security.Web.Controllers
 
             return _manager.GetGroupTemplate();
         }
+
+        [HttpPost]
+        [Route("AssignUserToGroup")]
+        public Vanrise.Entities.UpdateOperationOutput<UserGroupDetail> AssignUserToGroup(UserGroup userGroup)
+        {
+            return _manager.AssignUserToGroup(userGroup);
+        }
     }
 
     public class GroupEditorInput : Group

@@ -153,6 +153,31 @@ namespace Vanrise.Security.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<GroupSettingsConfig>(GroupSettingsConfig.EXTENSION_TYPE);
         }
+
+        public UpdateOperationOutput<UserGroupDetail> AssignUserToGroup(UserGroup userGroup)
+        {
+            userGroup.ThrowIfNull("userGroup");
+            var cachedGroups = this.GetCachedGroups();
+            Group group = cachedGroups.GetRecord(userGroup.GroupId);
+            group.ThrowIfNull("group", userGroup.GroupId);
+            bool addUserToGroupResult = group.Settings.TryAddUser(new TryAddUserGroupSettingsContext() { UserId = userGroup.UserId });
+
+            UpdateOperationOutput<UserGroupDetail> updateOperationOutput = new UpdateOperationOutput<UserGroupDetail>();
+            
+            if (addUserToGroupResult)
+            {
+                UpdateGroup(group);
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = new UserGroupDetail() { GroupId = userGroup.GroupId, UserId = userGroup.UserId };
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.Message = string.Format("User Id {0} cannot be assigned to the Group Id {1}", userGroup.UserId, userGroup.GroupId);
+                updateOperationOutput.ShowExactMessage = true;
+            }
+            return updateOperationOutput;
+        }
         #endregion
         
         #region Private Methods

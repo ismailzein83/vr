@@ -11,5 +11,10 @@ namespace Vanrise.Security.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract bool IsMember(IGroupSettingsContext context);
+
+        public virtual bool TryAddUser(ITryAddUserGroupSettingsContext context)
+        {
+            return false;
+        }
     }
 }

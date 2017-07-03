@@ -12,4 +12,11 @@ namespace Vanrise.Security.Entities
 
         public int GroupId { get; set; }
     }
+
+    public class UserGroupDetail
+    {
+        public int UserId { get; set; }
+
+        public int GroupId { get; set; }
+    }
 }

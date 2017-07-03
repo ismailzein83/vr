@@ -66,6 +66,7 @@
     <Compile Include="CloudServiceProxy.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Group\TryAddUserGroupSettingsContext.cs" />
     <Compile Include="Group\GroupSettingsContext.cs" />
     <Compile Include="Group\StaticGroup.cs" />
     <Compile Include="HashingUtility.cs" />
