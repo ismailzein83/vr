@@ -104,12 +104,8 @@
             });
         }
 
-        function DefineNewRatesConvertedToCurrency(customerId, newCurrencyId, effectiveOn) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DefineNewRatesConvertedToCurrency"), {
-                customerId: customerId,
-                newCurrencyId: newCurrencyId,
-                effectiveOn: effectiveOn
-            });
+        function DefineNewRatesConvertedToCurrency(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "DefineNewRatesConvertedToCurrency"), input);
         }
 
         function GetCustomerDefaultInheritedService(input) {

@@ -205,7 +205,13 @@
                         promises.push(doesOwnerDraftExistDeferred.promise);
 
                         saveChangesPromise.then(function () {
-                            WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(getOwnerId(), selectedCurrency.CurrencyId, UtilsService.getDateFromDateTime(new Date())).then(function () {
+                            var defineNewRatesInput = {
+                                CustomerId: getOwnerId(),
+                                NewCurrencyId: selectedCurrency.CurrencyId,
+                                EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                                NewCountryIds: null
+                            };
+                            WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(defineNewRatesInput).then(function () {
                                 draftCurrencyId = selectedCurrency.CurrencyId;
                                 defineNewRatesConvertedToCurrencyDeferred.resolve();
                             }).catch(function (error) {
@@ -272,14 +278,54 @@
                 var onCountryChangesUpdated = function (updatedCountryChanges) {
                     countryChanges = updatedCountryChanges;
 
-                    saveDraft(false).then(function () {
+                    var promises = [];
+
+                    var saveDraftPromise = saveDraft(false);
+                    promises.push(saveDraftPromise);
+
+                    var defineNewRatesDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(defineNewRatesDeferred.promise);
+
+                    var customerCurrencyId = currencySelectorAPI.getSelectedIds();
+
+                    if (customerCurrencyId !== systemCurrencyId && countryChanges != null && countryChanges.NewCountries != undefined && countryChanges.NewCountries.length > 0) {
+                        saveDraftPromise.then(function () {
+
+                            var defineNewRatesInput = {
+                                CustomerId: getOwnerId(),
+                                NewCurrencyId: customerCurrencyId,
+                                EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+                            };
+
+                            defineNewRatesInput.NewCountryIds = [];
+
+                            for (var i = 0; i < countryChanges.NewCountries.length; i++)
+                                defineNewRatesInput.NewCountryIds.push(countryChanges.NewCountries[i].CountryId);
+
+                            WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(defineNewRatesInput).then(function () {
+                                defineNewRatesDeferred.resolve()
+                            }).catch(function (error) {
+                                defineNewRatesDeferred.reject($scope, error);
+                            });
+                        });
+                    }
+                    else {
+                        defineNewRatesDeferred.resolve();
+                    }
+
+                    UtilsService.waitMultiplePromises(promises).then(function () {
                         if (isRoutingInfoDefined())
                             loadRatePlan();
-                    }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
                     });
                 };
-                WhS_Sales_RatePlanService.sellNewCountries(customerId, countryChanges, saleAreaSettingsData, ratePlanSettingsData, onCountryChangesUpdated);
+                var sellNewCountriesInput = {
+                    customerId: customerId,
+                    countryChanges: countryChanges,
+                    saleAreaSettings: saleAreaSettingsData,
+                    ratePlanSettings: ratePlanSettingsData,
+                    onCountryChangesUpdated: onCountryChangesUpdated
+                };
+                WhS_Sales_RatePlanService.sellNewCountries(sellNewCountriesInput);
             };
             $scope.editSettings = function () {
                 var onSettingsUpdated = function (updatedSettings) {

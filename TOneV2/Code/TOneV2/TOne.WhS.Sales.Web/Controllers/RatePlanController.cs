@@ -194,11 +194,11 @@ namespace TOne.WhS.Sales.Web.Controllers
             return manager.GetDraftCurrencyId(ownerType, ownerId);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("DefineNewRatesConvertedToCurrency")]
-        public void DefineNewRatesConvertedToCurrency(int customerId, int newCurrencyId, DateTime effectiveOn)
+        public void DefineNewRatesConvertedToCurrency(DefineNewRatesConvertedToCurrencyInput input)
         {
-            new RatePlanDraftManager().DefineNewRatesConvertedToCurrency(customerId, newCurrencyId, effectiveOn);
+            new RatePlanDraftManager().DefineNewRatesConvertedToCurrency(input);
         }
 
         [HttpPost]

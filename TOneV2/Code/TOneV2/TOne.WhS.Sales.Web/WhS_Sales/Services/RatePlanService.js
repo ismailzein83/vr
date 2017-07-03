@@ -18,18 +18,18 @@
             addCountries: addCountries
         };
 
-        function sellNewCountries(customerId, countryChanges, saleAreaSettings, ratePlanSettings, onCountryChangesUpdated) {
+        function sellNewCountries(input) {
 
             var parameters = {
-                customerId: customerId,
-                countryChanges: countryChanges,
-                saleAreaSettings: saleAreaSettings,
-                ratePlanSettings: ratePlanSettings
+                customerId: input.customerId,
+                countryChanges: input.countryChanges,
+                saleAreaSettings: input.saleAreaSettings,
+                ratePlanSettings: input.ratePlanSettings
             };
 
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onCountryChangesUpdated = onCountryChangesUpdated;
+                modalScope.onCountryChangesUpdated = input.onCountryChangesUpdated;
             };
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);

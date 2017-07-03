@@ -134,19 +134,19 @@ namespace TOne.WhS.Sales.Business
             return null;
         }
 
-        public void DefineNewRatesConvertedToCurrency(int customerId, int newCurrencyId, DateTime effectiveOn)
+        public void DefineNewRatesConvertedToCurrency(DefineNewRatesConvertedToCurrencyInput input)
         {
             var ratePlanManager = new RatePlanManager();
 
-            Changes draft = GetDraft(SalePriceListOwnerType.Customer, customerId);
-            IEnumerable<SaleZone> allZones = ratePlanManager.GetSaleZones(SalePriceListOwnerType.Customer, customerId, effectiveOn, true);
+            Changes draft = GetDraft(SalePriceListOwnerType.Customer, input.CustomerId);
+            IEnumerable<SaleZone> allZones = ratePlanManager.GetSaleZones(SalePriceListOwnerType.Customer, input.CustomerId, input.EffectiveOn, true);
 
             var updatedZoneDrafts = new List<ZoneChanges>();
             var zoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
 
             if (draft != null)
             {
-                draft.CurrencyId = newCurrencyId;
+                draft.CurrencyId = input.NewCurrencyId;
 
                 if (draft.ZoneChanges != null)
                     zoneDraftsByZoneId = draft.ZoneChanges.ToDictionary(x => x.ZoneId);
@@ -154,26 +154,29 @@ namespace TOne.WhS.Sales.Business
             else
             {
                 draft = new Changes();
-                draft.CurrencyId = newCurrencyId;
+                draft.CurrencyId = input.NewCurrencyId;
                 draft.ZoneChanges = new List<ZoneChanges>();
             }
 
             var saleRateManager = new SaleRateManager();
-            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
             var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
-            int? sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+            int? sellingProductId = new CarrierAccountManager().GetSellingProductId(input.CustomerId);
             if (!sellingProductId.HasValue)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product", customerId));
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product", input.CustomerId));
 
-            Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(customerId, effectiveOn, true);
+            Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(input.CustomerId, input.EffectiveOn, true);
             int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
 
             if (allZones != null)
             {
                 foreach (SaleZone zone in allZones)
                 {
-                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId.Value, zone.SaleZoneId);
+                    if (input.NewCountryIds != null && input.NewCountryIds.Count() > 0 && !input.NewCountryIds.Contains(zone.CountryId))
+                        continue;
+
+                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(input.CustomerId, sellingProductId.Value, zone.SaleZoneId);
 
                     if (zoneRate != null && zoneRate.Rate != null)
                     {
@@ -194,8 +197,8 @@ namespace TOne.WhS.Sales.Business
                         {
                             RateTypeId = null,
                             ZoneId = zone.SaleZoneId,
-                            Rate = ConvertToCurrencyAndRound(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), newCurrencyId, effectiveOn, longPrecision, currencyExchangeRateManager),
-                            CurrencyId = newCurrencyId,
+                            Rate = ConvertToCurrencyAndRound(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), input.NewCurrencyId, input.EffectiveOn, longPrecision, currencyExchangeRateManager),
+                            CurrencyId = input.NewCurrencyId,
                             BED = newRateBED,
                             EED = null
                         });
@@ -208,8 +211,8 @@ namespace TOne.WhS.Sales.Business
                                 {
                                     RateTypeId = otherRate.RateTypeId,
                                     ZoneId = zone.SaleZoneId,
-                                    Rate = ConvertToCurrencyAndRound(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), newCurrencyId, effectiveOn, longPrecision, currencyExchangeRateManager),
-                                    CurrencyId = newCurrencyId,
+                                    Rate = ConvertToCurrencyAndRound(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), input.NewCurrencyId, input.EffectiveOn, longPrecision, currencyExchangeRateManager),
+                                    CurrencyId = input.NewCurrencyId,
                                     BED = newRateBED,
                                     EED = null
                                 });
@@ -233,7 +236,7 @@ namespace TOne.WhS.Sales.Business
             }
 
             draft.ZoneChanges = updatedZoneDrafts;
-            SaveDraft(SalePriceListOwnerType.Customer, customerId, draft);
+            SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, draft);
         }
 
         private decimal ConvertToCurrencyAndRound(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
