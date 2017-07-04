@@ -117,6 +117,13 @@ namespace Vanrise.Common.Business
                 VRActionLogger.Current.TrackAndLogObjectAdded(CurrencyLoggableEntity.Instance, currency);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);
+                var allCurrencies = GetCachedCurrencies();
+
+                if (allCurrencies.Count == 1)
+                {
+                    UpdateSystemCurrency(currencyId);
+                }
+                    
             }
             else
             {
@@ -250,6 +257,27 @@ namespace Vanrise.Common.Business
                 currencDetail.IsMain = true;
 
             return currencDetail;
+        }
+
+        private void UpdateSystemCurrency(int currencyId)
+        {
+            SettingManager settingManager = new SettingManager();
+            var currencySettingsData = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
+            SettingToEdit systemCurrency =  new SettingToEdit()
+            {
+                Name = "System Currency",                
+                SettingId = new Guid("1c833b2d-8c97-4cdd-a1c1-c1b4d9d299de")
+            };
+            if (currencySettingsData == null)
+            {
+                systemCurrency.Data = new CurrencySettingData() { CurrencyId = currencyId };
+            }
+            else
+            {
+                currencySettingsData.CurrencyId = currencyId;
+                systemCurrency.Data = currencySettingsData;
+            }               
+            settingManager.UpdateSetting(systemCurrency);
         }
         #endregion
 

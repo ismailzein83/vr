@@ -11,9 +11,9 @@
             viewBankDetail: viewBankDetail
         };
 
-        function addBankDetail(onBankDetailsAdded) {
+        function addBankDetail(onBankDetailsAdded, isSingleInsert) {
             var modalParameters = {
-
+                isSingleInsert: isSingleInsert
             };
             var modalSettings = {};
 

@@ -85,6 +85,30 @@ namespace Vanrise.Common.Business
         }
 
 
+        public Vanrise.Entities.InsertOperationOutput<BankDetail> AddBank(BankDetail BankDetail)
+        {
+            Vanrise.Entities.InsertOperationOutput<BankDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BankDetail>();
+            SettingManager settingManager = new SettingManager();
+            BankDetailsSettings bankDetailsSettings = settingManager.GetSetting<BankDetailsSettings>(BankDetailsSettings.SETTING_TYPE);
+
+            SettingToEdit bankSettingsToEdit = new SettingToEdit(){
+                Name = "Bank Details",
+                SettingId = new Guid("1cb20f2c-a835-4320-aec7-e034c5a756e9")
+            };
+            if (bankDetailsSettings == null)
+                bankDetailsSettings = new BankDetailsSettings();
+            if (bankDetailsSettings.BankDetails == null)
+                bankDetailsSettings.BankDetails =  new List<BankDetail>();
+
+            bankDetailsSettings.BankDetails.Add(BankDetail);
+            bankSettingsToEdit.Data = bankDetailsSettings;
+            settingManager.UpdateSetting(bankSettingsToEdit);
+
+            insertOperationOutput.InsertedObject = BankDetail;
+            insertOperationOutput.Result = InsertOperationResult.Succeeded;
+            return insertOperationOutput;
+        }
+
         public IEnumerable<CompanySettingsInfo> GetCompanySettingsInfo()
         {
             IEnumerable<CompanySetting> companySettings = GetCompanySetting();

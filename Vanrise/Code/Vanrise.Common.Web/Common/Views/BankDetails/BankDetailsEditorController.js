@@ -2,12 +2,13 @@
 
     "use strict";
 
-    bankDetailsEditorController.$inject = ['$scope', 'VRCommon_CityAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    bankDetailsEditorController.$inject = ['$scope', 'VRCommon_CityAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_BankDetailAPIService'];
 
-    function bankDetailsEditorController($scope, VRCommon_CityAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function bankDetailsEditorController($scope, VRCommon_CityAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_BankDetailAPIService) {
 
         var isEditMode;
         var bankDetailEntity;
+        var isSingleInsert;
 
         var currencyDirectiveApi;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -20,6 +21,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 bankDetailEntity = parameters.bankDetailEntity;
+                isSingleInsert = parameters.isSingleInsert;
+
             }
             isEditMode = (bankDetailEntity != undefined);
         }
@@ -73,12 +76,12 @@
                 return;
             $scope.bankDetailId = bankDetailEntity.BankDetailId;
             $scope.bank = bankDetailEntity.Bank;
-            $scope.accountCode= bankDetailEntity.AccountCode;
-            $scope.accountHolder= bankDetailEntity.AccountHolder;
-            $scope.iban= bankDetailEntity.IBAN;
-            $scope.address= bankDetailEntity.Address;
-            $scope.accountNumber= bankDetailEntity.AccountNumber;
-            $scope.swiftCode= bankDetailEntity.SwiftCode;
+            $scope.accountCode = bankDetailEntity.AccountCode;
+            $scope.accountHolder = bankDetailEntity.AccountHolder;
+            $scope.iban = bankDetailEntity.IBAN;
+            $scope.address = bankDetailEntity.Address;
+            $scope.accountNumber = bankDetailEntity.AccountNumber;
+            $scope.swiftCode = bankDetailEntity.SwiftCode;
             $scope.sortCode = bankDetailEntity.SortCode;
             $scope.channelName = bankDetailEntity.ChannelName;
 
@@ -99,14 +102,14 @@
 
         function buildBankDetailsObjFromScope() {
             var obj = {
-                Bank:$scope.bank,
+                Bank: $scope.bank,
                 CurrencyId: currencyDirectiveApi.getSelectedIds(),
                 AccountCode: $scope.accountCode,
                 AccountHolder: $scope.accountHolder,
                 IBAN: $scope.iban,
                 Address: $scope.address,
                 AccountNumber: $scope.accountNumber,
-                SwiftCode:$scope.swiftCode,
+                SwiftCode: $scope.swiftCode,
                 SortCode: $scope.sortCode,
                 ChannelName: $scope.channelName
             };
@@ -116,12 +119,29 @@
         function insertBankDetails() {
             var bankDetailsObject = buildBankDetailsObjFromScope();
             bankDetailsObject.BankDetailId = UtilsService.guid();
-            if ($scope.onBankDetailsAdded != undefined)
-                $scope.onBankDetailsAdded(bankDetailsObject);
-            $scope.modalContext.closeModal();
+            if (isSingleInsert == true) {
+                return VRCommon_BankDetailAPIService.AddBank(bankDetailsObject)
+                   .then(function (response) {
+                       if (VRNotificationService.notifyOnItemAdded("Bank", response, "Bank")) {
+                           if ($scope.onBankDetailsAdded != undefined)
+                               $scope.onBankDetailsAdded(bankDetailsObject);
+                           $scope.modalContext.closeModal();
+                       }
+                   }).catch(function (error) {
+                       VRNotificationService.notifyException(error, $scope);
+                   }).finally(function () {
+                       $scope.isLoading = false;
+                   });
+            }
+            else {
+                if ($scope.onBankDetailsAdded != undefined)
+                    $scope.onBankDetailsAdded(bankDetailsObject);
+                $scope.modalContext.closeModal();
+            }
+
         }
         function updateBankDetails() {
-            var bankDetailsObject = buildBankDetailsObjFromScope(); 
+            var bankDetailsObject = buildBankDetailsObjFromScope();
             bankDetailsObject.BankDetailId = $scope.bankDetailId;
             if ($scope.onBankDetailsUpdated != undefined)
                 $scope.onBankDetailsUpdated(bankDetailsObject);

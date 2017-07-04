@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonBankDetailSelector', ['VRCommon_BankDetailAPIService', 'UtilsService', 'VRUIUtilsService',
-function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonBankDetailSelector', ['VRCommon_BankDetailAPIService', 'UtilsService', 'VRUIUtilsService','VRCommon_BankDetailService',
+function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService,VRCommon_BankDetailService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -23,6 +23,19 @@ function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService) {
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
+
+
+            $scope.addNewBank = function () {
+                var onBankAdded = function (bankObj) {
+                    ctrl.datasource.push(bankObj);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(bankObj);
+                    else
+                        ctrl.selectedvalues = bankObj;
+                };
+                VRCommon_BankDetailService.addBankDetail(onBankAdded, true);
+            };
+
             var ctor = new bankDetailCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
@@ -55,8 +68,12 @@ function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService) {
         if (attrs.isrequired != undefined)
             required = "isrequired";
 
+        var addCliked = '';
+        if (attrs.showaddbutton != undefined)
+            addCliked = 'onaddclicked="addNewBank"';
+
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Bank" datavaluefield="BankDetailId" '
+            + '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Bank" datavaluefield="BankDetailId" '
         + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</vr-columns>';
     }

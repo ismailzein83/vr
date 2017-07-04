@@ -52,7 +52,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         ctrl.datasource.push({ Entity: companySetting });
                     };
 
-                    VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource);
+                    VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource.length==0);
                 };
                 ctrl.removeCompanySetting = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);

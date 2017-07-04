@@ -7,6 +7,7 @@
     function companySettingsEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
+        var setDefault;
         var companySettingEntity;
 
         var bankDirectiveApi;
@@ -21,6 +22,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 companySettingEntity = parameters.companySettingEntity;
+                setDefault = parameters.setDefault;
             }
             isEditMode = (companySettingEntity != undefined);
         }
@@ -88,14 +90,17 @@
 
         function loadStaticData() {
 
-            if (companySettingEntity == undefined)
+            if (companySettingEntity == undefined) {
+                $scope.scopeModel.isDefault = setDefault == true;
                 return;
+            }
+               
             $scope.scopeModel.companyName = companySettingEntity.CompanyName;
             $scope.scopeModel.profileName = companySettingEntity.ProfileName;
             $scope.scopeModel.registrationNumber = companySettingEntity.RegistrationNumber;
             $scope.scopeModel.registrationAddress = companySettingEntity.RegistrationAddress;
             $scope.scopeModel.vatId = companySettingEntity.VatId;
-            $scope.scopeModel.isDefault = companySettingEntity.IsDefault;
+            $scope.scopeModel.isDefault = companySettingEntity.IsDefault || setDefault;
             if (companySettingEntity.CompanyLogo > 0)
                 $scope.scopeModel.companyLogo = {
                     fileId: companySettingEntity.CompanyLogo

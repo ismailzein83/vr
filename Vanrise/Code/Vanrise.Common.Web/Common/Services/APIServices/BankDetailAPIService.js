@@ -12,8 +12,13 @@
             });
         }
 
+        function AddBank(bankObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "AddBank"), bankObject);
+        }
+        
         return ({
-            GetBankDetailsInfo: GetBankDetailsInfo
+            GetBankDetailsInfo: GetBankDetailsInfo,
+            AddBank: AddBank
         });
     }
 

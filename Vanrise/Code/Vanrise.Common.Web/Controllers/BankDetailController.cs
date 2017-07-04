@@ -21,5 +21,12 @@ namespace Vanrise.Common.Web.Controllers
             return manager.GetBankDetailsInfo();
         }
 
+        [HttpPost]
+        [Route("AddBank")]
+        public Vanrise.Entities.InsertOperationOutput<BankDetail> AddBank(BankDetail bank)
+        {
+            ConfigManager manager = new ConfigManager();
+            return manager.AddBank(bank);
+        }
     }
 }
