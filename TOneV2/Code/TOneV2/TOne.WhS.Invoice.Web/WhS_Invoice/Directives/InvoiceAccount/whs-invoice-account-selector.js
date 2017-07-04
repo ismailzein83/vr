@@ -130,7 +130,7 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
             api.load = function (payload) {
                 carrierTypeSelectorAPI.clearDataSource();
                 accountSelectorAPI.clearDataSource();
-                
+                $scope.scopeModel.selectedCarrierType = undefined;
                 var extendedSettings;
                 if (payload != undefined) {
                     invoiceTypeId = payload.invoiceTypeId;
@@ -155,6 +155,7 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
                     selectedIds: VRUIUtilsService.getIdSelectedIds('InvoiceAccountId', $attrs, ctrl)
                 };
             };
+           
 
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
