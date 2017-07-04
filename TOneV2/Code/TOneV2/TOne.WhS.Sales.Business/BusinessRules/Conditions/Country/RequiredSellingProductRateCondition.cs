@@ -42,8 +42,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             foreach (ExistingZone countryZone in countryZones)
             {
                 List<SaleRate> spZoneRates = spZoneRatesByZone.GetRecord(countryZone.ZoneId);
+                DateTime effectiveOn = Utilities.Max(countryToAdd.BED, countryZone.BED);
 
-                if (spZoneRates == null || spZoneRates.Count == 0 || !spZoneRates.Any(spZoneRate => spZoneRate.IsEffective(countryToAdd.BED)))
+                if (spZoneRates == null || spZoneRates.Count == 0 || !spZoneRates.Any(spZoneRate => spZoneRate.IsEffective(effectiveOn)))
                 {
                     context.Message = errorMessage;
                     return false;
