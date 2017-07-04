@@ -60,8 +60,7 @@
 
             for (var i = 0; i < dataItem.RuleDefinitions.length; i++) {
                 var ruleDefinition = dataItem.RuleDefinitions[i];
-                addDrillDownTab(ruleDefinition);
-                addMenuAction(ruleDefinition, i);
+                addDrillDownTab(ruleDefinition);               
             }
             addDrillDownHistoryTab();
             setDrillDownTabs();
@@ -94,14 +93,14 @@
                 var drillDownTab = {};
 
                 drillDownTab.title = ruleDefinition.Title;
-                drillDownTab.directive = 'vr-genericdata-genericrule-grid';
+                drillDownTab.directive = 'vr-genericdata-genericrule-management';
 
                 drillDownTab.loadDirective = function (directiveAPI, dataItem) {
                     dataItem['ruleGrid' + ruleDefinition.RuleDefinitionId + 'API'] = directiveAPI;
-                    return directiveAPI.loadGrid(buildRuleGridQuery(ruleDefinition));
+                    return directiveAPI.loadDirective(buildRuleManagementPayload(ruleDefinition));
                 };
 
-                function buildRuleGridQuery() {
+                function buildRuleManagementPayload() {
                     var ruleGridQuery = {};
 
                     ruleGridQuery.RuleDefinitionId = ruleDefinition.RuleDefinitionId;
@@ -110,7 +109,7 @@
                     for (var key in criteriaFieldValues)
                         ruleGridQuery.CriteriaFieldValues[key] = buildBusinessEntityFieldTypeFilter(criteriaFieldValues[key]);
 
-                    ruleGridQuery.accessibility = buildAccessibilityObj();
+                    
                     ruleGridQuery.criteriaFieldsToHide = ['ServiceType', 'ChargingPolicy', 'Package'];
 
                     function buildBusinessEntityFieldTypeFilter(filterValue) {
@@ -130,31 +129,6 @@
                 drillDownManager.setDrillDownExtensionObject(dataItem);
             }
            
-            function addMenuAction(ruleDefinition, ruleDefinitionIndex)
-            {
-                var menuAction = {};
-                menuAction.name = 'New ' + ruleDefinition.Title;
-                menuAction.clicked = function (dataItem) {
-                    dataItem.drillDownExtensionObject.drillDownDirectiveTabs[ruleDefinitionIndex].setTabSelected(dataItem);
-
-                    var onGenericRuleAdded = function (addedGenericRule) {
-                        dataItem['ruleGrid' + ruleDefinition.RuleDefinitionId + 'API'].onGenericRuleAdded(addedGenericRule);
-                    };
-
-                    var preDefinedData = {};
-                    preDefinedData.criteriaFieldsValues = {};
-                    for (var key in criteriaFieldValues)
-                        preDefinedData.criteriaFieldsValues[key] = { Values: [criteriaFieldValues[key]] };
-
-                    var accessibility = buildAccessibilityObj();
-
-                    VR_GenericData_GenericRule.addGenericRule(ruleDefinition.RuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility);
-                };
-                menuAction.haspermission = function () {
-                    return VR_GenericData_GenericRuleAPIService.DoesUserHaveAddAccess(ruleDefinition.RuleDefinitionId);
-                };
-                menuActions.push(menuAction);
-            }
             function setMenuActions() {
                 dataItem.menuActions = [];
                 for (var i = 0; i < menuActions.length; i++) {
@@ -162,16 +136,6 @@
                 }
             }
 
-            function buildAccessibilityObj() {
-                return {
-                    criteriaAccessibility: {
-                        'ServiceType': { notAccessible: true },
-                        'ChargingPolicy': { notAccessible: true },
-                        'Package': { notAccessible: true }
-                    },
-                    settingNotAccessible: false
-                };
-            }
         }
       
         return {
