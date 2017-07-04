@@ -90,8 +90,8 @@ namespace NP.IVSwitch.Business
             int hostPartLength = hostpartLength;
             int netPartLength = 32 - hostPartLength;
 
-            if (netPartLength < 2)
-                throw new ArgumentException("Number of hosts is to large for IPv4");
+            //if (netPartLength < 2)
+            //    throw new ArgumentException("Number of hosts is to large for IPv4");
 
             Byte[] binaryMask = new byte[4];
 
