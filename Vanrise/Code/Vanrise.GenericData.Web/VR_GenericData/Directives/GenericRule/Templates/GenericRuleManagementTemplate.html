@@ -1,0 +1,26 @@
+﻿<div ng-hide="filterSectionCollapsed">
+    <vr-row removeline>
+        <vr-columns width="normal" ng-show="scopeModel.ruleDefinition">
+            <vr-datetimepicker label="Effective Date" value="scopeModel.effectiveDate" type="longDateTime"></vr-datetimepicker>
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
+        </vr-columns>
+        <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="scopeModel.onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+        <span ng-repeat="filter in scopeModel.filters">
+            <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+        </span>
+        <!--<span ng-show="advancedSelected">
+            <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+        </span>-->
+        <vr-columns colnum="1" withemptyline haschildcolumns>
+            <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked"></vr-button>
+            <vr-button type="Add" standalone data-onclick="scopeModel.addGenericRule" ng-show="scopeModel.hasAddRulePermission"></vr-button>
+        </vr-columns>
+    </vr-row>
+</div>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-genericdata-genericrule-grid on-ready="scopeModel.onGridReady"></vr-genericdata-genericrule-grid>
+    </vr-columns>
+</vr-row>
