@@ -49,8 +49,11 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
                     {
                         if (context.ZoneItem.RPRouteDetail != null && context.ZoneItem.RPRouteDetail.RouteOptionsDetails != null)
                         {
-                            RPRouteOptionDetail rpRouteOption = context.ZoneItem.RPRouteDetail.RouteOptionsDetails.ElementAt(RPRouteOptionNumber - 1);
-                            rate = rpRouteOption.ConvertedSupplierRate;
+                            if (RPRouteOptionNumber <= context.ZoneItem.RPRouteDetail.RouteOptionsDetails.Count())
+                            {
+                                RPRouteOptionDetail rpRouteOption = context.ZoneItem.RPRouteDetail.RouteOptionsDetails.ElementAt(RPRouteOptionNumber - 1);
+                                rate = rpRouteOption.ConvertedSupplierRate;
+                            }
                         }
                         break;
                     }
