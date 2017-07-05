@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Integration.Entities;
+using Vanrise.Common;
 
 namespace Retail.Teles.Business
 {
@@ -21,12 +22,13 @@ namespace Retail.Teles.Business
         {
             var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            account.ThrowIfNull("account", context.AccountId);
             if(account.TypeId == definitionSettings.CompanyTypeId) // Process if company
             {
-                var enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
+                var enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(account);
                 if (enterpriseAccountMappingInfo != null)
                 {
-                    ChangeUsersRGsAccountState changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId);
+                    ChangeUsersRGsAccountState changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(account);
                     if (changeUsersRGsAccountState == null)
                         changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
                     if (changeUsersRGsAccountState.ChangesByActionType == null)

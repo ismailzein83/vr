@@ -47,10 +47,12 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                     var promises = [];
 
                     var accountBEDefinitionId;
+                    var accountId;
                     var partSettings;
 
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
+                        accountId = payload.accountId;
                         partSettings = payload.partSettings;
                     }
 
@@ -69,7 +71,8 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                             filter: {
                                 Filters: [{
                                     $type: "Retail.BusinessEntity.Business.AccountDefinitionProductFilter, Retail.BusinessEntity.Business",
-                                    AccountBEDefinitionId: accountBEDefinitionId
+                                    AccountBEDefinitionId: accountBEDefinitionId,
+                                    AccountId: accountId
                                 }]
                             }
                         };

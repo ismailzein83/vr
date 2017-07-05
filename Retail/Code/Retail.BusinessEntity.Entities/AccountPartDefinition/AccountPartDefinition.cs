@@ -43,6 +43,8 @@ namespace Retail.BusinessEntity.Entities
     {
         AccountPartSettings AccountPartSettings { get; }
 
+        AccountPartSettings ExistingAccountPartSettings { get; }
+
         string ErrorMessage { set; }
     }
 }

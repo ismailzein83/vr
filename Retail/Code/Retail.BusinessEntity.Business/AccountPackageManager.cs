@@ -114,7 +114,7 @@ namespace Retail.BusinessEntity.Business
                 if (withInheritence)
                 {
                     var account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
-                    account.ThrowIfNull("account", accountBEDefinitionId);
+                    account.ThrowIfNull("account", accountId);
 
                     if (account.ParentAccountId.HasValue)
                         LoadAccountPackagesByPriority(accountBEDefinitionId, account.ParentAccountId.Value, effectiveTime, withInheritence, OnPackageLoaded);

@@ -912,6 +912,11 @@ namespace Retail.BusinessEntity.Business
                 set;
             }
 
+            public AccountPartSettings ExistingAccountPartSettings
+            {
+                get;
+                set;
+            }
 
             public string ErrorMessage
             {
@@ -965,7 +970,7 @@ namespace Retail.BusinessEntity.Business
 
         private void ValidateAccountToAdd(AccountToInsert accountToInsert, bool donotValidateParent)
         {
-            ValidateAccount(accountToInsert, accountToInsert.AccountBEDefinitionId, accountToInsert.StatusId, accountToInsert.ParentAccountId, donotValidateParent);
+            ValidateAccount(accountToInsert, accountToInsert.AccountBEDefinitionId, accountToInsert.StatusId, accountToInsert.ParentAccountId, donotValidateParent, null);
         }
 
         private void ValidateAccountToEdit(AccountToEdit accountToEdit)
@@ -975,11 +980,11 @@ namespace Retail.BusinessEntity.Business
             if (accountEntity == null)
                 throw new DataIntegrityValidationException(String.Format("Account '{0}' does not exist", accountToEdit.AccountId));
 
-            ValidateAccount(accountToEdit, accountToEdit.AccountBEDefinitionId, null, null, false);
+            ValidateAccount(accountToEdit, accountToEdit.AccountBEDefinitionId, null, null, false, accountEntity);
 
         }
 
-        private void ValidateAccount(BaseAccount account, Guid accountBEDefinitionId, Guid? statusDefinitionId, long? parentAccountId, bool donotValidateParent)
+        private void ValidateAccount(BaseAccount account, Guid accountBEDefinitionId, Guid? statusDefinitionId, long? parentAccountId, bool donotValidateParent, Account existingAccount)
         {
             if (String.IsNullOrWhiteSpace(account.Name))
                 throw new MissingArgumentValidationException("account.Name");
@@ -1010,7 +1015,16 @@ namespace Retail.BusinessEntity.Business
                     var partDefinition = s_partDefinitionManager.GetAccountPartDefinition(partDefinitionId);
                     partDefinition.ThrowIfNull("partDefinition", partDefinitionId);
                     partDefinition.Settings.ThrowIfNull("partDefinition.Settings", partDefinitionId);
-                    var isPartValidContext = new AccountPartDefinitionIsPartValidContext { AccountPartSettings = part.Settings };
+
+                    AccountPart existingAccountPart = null;
+                    if (existingAccount != null && existingAccount.Settings != null && existingAccount.Settings.Parts != null)
+                        existingAccount.Settings.Parts.TryGetValue(partDefinitionId, out existingAccountPart);
+
+                    var isPartValidContext = new AccountPartDefinitionIsPartValidContext
+                    {
+                        AccountPartSettings = part.Settings,
+                        ExistingAccountPartSettings = existingAccountPart != null ? existingAccountPart.Settings : null
+                    };
                     if (!partDefinition.Settings.IsPartValid(isPartValidContext))
                         throw new Exception(String.Format("Part '{0}' error: {1}", partDefinition.Name, isPartValidContext.ErrorMessage));
                 }

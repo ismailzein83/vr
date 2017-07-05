@@ -53,7 +53,7 @@ namespace Retail.Zajil.MainExtensions
                     Account parentAccount;
                     if (accountsBySourceId.TryGetValue(parentId, out parentAccount))
                     {
-                        string name = string.Format("{0}_{1}", "Site", so);
+                        string name = string.Format("Site {0}", so);
                         SourceAccountData accountData = new SourceAccountData
                         {
                             Account = new Account
@@ -63,7 +63,7 @@ namespace Retail.Zajil.MainExtensions
                                 StatusId = this.InitialStatusId,
                                 ParentAccountId = parentAccount.AccountId,
                                 Settings = new AccountSettings(),
-                                SourceId = string.Format("{0}_{1}", name, parentId)
+                                SourceId = string.Format("Site_{0}_{1}", parentId, so)
                             }
                         };
 
@@ -73,7 +73,7 @@ namespace Retail.Zajil.MainExtensions
                     }
                     else
                     {
-                        context.WriteBusinessTrackingMsg(LogEntryType.Warning, "Site Account was not created for Source Account Id {0}, Account does not exist", parentId);
+                        context.WriteBusinessTrackingMsg(LogEntryType.Warning, "Site Account was not created for Source Company Id {0}, Company does not exist", parentId);
                     }
 
                 }

@@ -341,25 +341,7 @@ namespace Retail.BusinessEntity.Business
             return beParentChildRelationDefinition;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private Dictionary<string, DID> GetCachedDIDsGroupByNumber()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupByNumber",
-               () =>
-               {
-                   Dictionary<string, DID> result = new Dictionary<string, DID>();
-
-                   var dids = GetCachedDIDs();
-                   foreach (var did in dids)
-                       ManipulateDIDs(did.Value, (number, handle) => { result.Add(number, did.Value); });
-                   return result;
-               });
-        }
-
-        private void ManipulateDIDs(DID did, Action<string, DIDNumberHandle> onNumberLoaded)
+        public void ManipulateDIDs(DID did, Action<string, DIDNumberHandle> onNumberLoaded)
         {
             DIDNumberType didNumberType = GetDIDNumberType(did);
             switch (didNumberType)
@@ -392,6 +374,31 @@ namespace Retail.BusinessEntity.Business
                     break;
                 default: throw new Exception("Invalid Type for DID.");
             }
+        }
+
+        public List<string> GetAllDIDNumbers(DID did)
+        {
+            List<string> numbers = new List<string>();
+            ManipulateDIDs(did, (number, handler) => numbers.Add(number));
+            return numbers;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<string, DID> GetCachedDIDsGroupByNumber()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDIDsGroupByNumber",
+               () =>
+               {
+                   Dictionary<string, DID> result = new Dictionary<string, DID>();
+
+                   var dids = GetCachedDIDs();
+                   foreach (var did in dids)
+                       ManipulateDIDs(did.Value, (number, handle) => { result.Add(number, did.Value); });
+                   return result;
+               });
         }
 
         private bool CheckIfFilterIsMatch(DID did, List<IDIDFilter> filters)
@@ -506,11 +513,6 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        private class DIDNumberHandle
-        {
-            public bool Stop { get; set; }
-        }
-
         #endregion
 
         #region  Mappers
@@ -585,5 +587,10 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+    }
+
+    public class DIDNumberHandle
+    {
+        public bool Stop { get; set; }
     }
 }

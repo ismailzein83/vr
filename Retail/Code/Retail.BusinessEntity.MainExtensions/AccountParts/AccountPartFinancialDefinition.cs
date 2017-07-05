@@ -50,6 +50,18 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 context.ErrorMessage = String.Format("Product '{0}' not found", part.ProductId);
                 return false;
             }
+            if(context.ExistingAccountPartSettings != null)
+            {
+                AccountPartFinancial existingFinancialPart = context.ExistingAccountPartSettings.CastWithValidate<AccountPartFinancial>("context.AccountPartSettings");
+                if(part.ProductId != existingFinancialPart.ProductId)
+                {
+                    if(s_productManager.GetProductFamilyId(part.ProductId) != s_productManager.GetProductFamilyId(existingFinancialPart.ProductId))
+                    {
+                        context.ErrorMessage = String.Format("The new assigned Product should belong to same Product family", part.ProductId);
+                        return false;
+                    }
+                }
+            }
             return true;
         }
     }

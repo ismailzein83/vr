@@ -145,7 +145,7 @@ namespace Retail.Teles.Business
         }
         public Dictionary<string, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsByEnterprises_{0}", accountBEDefinitionId), accountBEDefinitionId, () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject("GetCachedAccountsByEnterprises", accountBEDefinitionId, () =>
             {
                 var accountBEManager = new AccountBEManager();
                 var cashedAccounts = accountBEManager.GetAccounts(accountBEDefinitionId);

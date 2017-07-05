@@ -117,9 +117,16 @@ namespace Retail.Teles.Business
                 return null;
             return site.name;
         }
+
+        private struct GetCachedAccountsBySitesCacheName
+        {
+            public string EnterpriseId { get; set; }
+        }
         public Dictionary<string, long> GetCachedAccountsBySites(Guid accountBEDefinitionId, string enterpriseId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(string.Format("GetCachedAccountsBySites_{0}", accountBEDefinitionId), accountBEDefinitionId, () =>
+            var cacheName = new GetCachedAccountsBySitesCacheName { EnterpriseId = enterpriseId };
+            //cache name should be based on all arguments
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject(cacheName, accountBEDefinitionId, () =>
             {
                 var accountBEManager = new AccountBEManager();
                 TelesEnterpriseManager telesEnterpriseManager = new Business.TelesEnterpriseManager();
@@ -127,18 +134,21 @@ namespace Retail.Teles.Business
                 var accountEnterprises = telesEnterpriseManager.GetCachedAccountsByEnterprises(accountBEDefinitionId);
                 if(accountEnterprises != null)
                 {
-                   long accountId = -1;
-                   if(accountEnterprises.TryGetValue(enterpriseId, out accountId))
+                   long enterpriseAccountId;
+                   if (accountEnterprises.TryGetValue(enterpriseId, out enterpriseAccountId))
                    {
-                       var cashedAccounts = accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId,false);
-                       foreach (var item in cashedAccounts)
+                       var cashedAccounts = accountBEManager.GetChildAccounts(accountBEDefinitionId, enterpriseAccountId, false);
+                       if (cashedAccounts != null)
                        {
-                           var siteAccountMappingInfo = accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(item);
-                           if (siteAccountMappingInfo != null)
+                           foreach (var item in cashedAccounts)
                            {
-                               if (accountsBySite == null)
-                                   accountsBySite = new Dictionary<string, long>();
-                               accountsBySite.Add(siteAccountMappingInfo.TelesSiteId, item.AccountId);
+                               var siteAccountMappingInfo = accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(item);
+                               if (siteAccountMappingInfo != null)
+                               {
+                                   if (accountsBySite == null)
+                                       accountsBySite = new Dictionary<string, long>();
+                                   accountsBySite.Add(siteAccountMappingInfo.TelesSiteId, item.AccountId);
+                               }
                            }
                        }
                    }

@@ -183,6 +183,12 @@ namespace Retail.BusinessEntity.Business
 
             return ProductFamily.Settings.Packages.Values.Select(itm => itm.PackageId);
         }
+        
+        public int? GetProductFamilyId(int productId)
+        {
+            var product = GetProduct(productId);
+            return product != null && product.Settings != null ? product.Settings.ProductFamilyId : (int?)null;
+        }
 
         #endregion
 
