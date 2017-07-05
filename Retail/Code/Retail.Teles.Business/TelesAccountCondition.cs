@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 namespace Retail.Teles.Business
 {
-    public enum ConditionType { CanChangeMapping = 0, AlowBlockInternational = 1,AllowUnBlockInternational=2 }
+    public enum ConditionType { CanChangeMapping = 0, AllowChangeUserRGs = 1, AllowRevertUserRGs = 2, AllowEnterpriseMap = 3, AllowSiteMap = 4 }
     public class TelesAccountCondition : AccountCondition
     {
         public override Guid ConfigId { get { return new Guid("2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C"); } }
@@ -30,7 +30,7 @@ namespace Retail.Teles.Business
                     {
                         if (IsEnterpriseNotMappedOrProvisioned(context.Account))
                             return false;
-                        if (IsInternationalCallsBlocked(context.Account))
+                        if (IsChangedUserRGs(context.Account))
                             return false;
 
                         var accountBEDefinitionId = _accountTypeManager.GetAccountBEDefinitionId(context.Account.TypeId);
@@ -39,7 +39,7 @@ namespace Retail.Teles.Business
                         {
                             if (IsSiteMapped(account))
                                 return false;
-                            if (IsInternationalCallsBlocked(account))
+                            if (IsChangedUserRGs(account))
                                 return false;
                         }
                         return true;
@@ -48,32 +48,47 @@ namespace Retail.Teles.Business
                     {
                         if (IsSiteNotMappedOrProvisioned(context.Account))
                             return false;
-                        return !IsInternationalCallsBlocked(context.Account);
+                        return !IsChangedUserRGs(context.Account);
                     }
                     return false;
-                case Business.ConditionType.AlowBlockInternational:
+                case Business.ConditionType.AllowChangeUserRGs:
                     if (context.Account.TypeId == this.CompanyTypeId)
                     {
                         if (!IsEnterpriseMapped(context.Account))
                             return false;
-                        return !IsInternationalCallsBlocked(context.Account);
+                        return !IsChangedUserRGs(context.Account);
                     }
                     else if (context.Account.TypeId == this.SiteTypeId)
                     {
                         if (!IsSiteMapped(context.Account))
                             return false;
 
-                        return !IsInternationalCallsBlocked(context.Account);
+                        return !IsChangedUserRGs(context.Account);
                     }
                     return false;
-                case Business.ConditionType.AllowUnBlockInternational:
+                case Business.ConditionType.AllowRevertUserRGs:
                      if (context.Account.TypeId == this.CompanyTypeId)
                     {
-                        return IsInternationalCallsBlocked(context.Account);
+                        return IsChangedUserRGs(context.Account);
                     }
                     else if (context.Account.TypeId == this.SiteTypeId)
                     {
-                        return IsInternationalCallsBlocked(context.Account);
+                        return IsChangedUserRGs(context.Account);
+                    }
+                    return false;
+                case Business.ConditionType.AllowEnterpriseMap:
+                    if (context.Account.TypeId == this.CompanyTypeId)
+                    {
+                        return !IsEnterpriseMapped(context.Account);
+                    }
+                    return false;
+                case Business.ConditionType.AllowSiteMap:
+                    if (context.Account.TypeId == this.SiteTypeId)
+                    {
+                        var parentAccount = _accountBEManager.GetParentAccount(context.Account);
+                        if (!IsEnterpriseMapped(parentAccount))
+                            return false;
+                        return !IsSiteMapped(context.Account);
                     }
                     return false;
                 default:
@@ -100,7 +115,7 @@ namespace Retail.Teles.Business
             var siteAccountMappingInfo = _accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
             return siteAccountMappingInfo != null;
         }
-        private bool IsInternationalCallsBlocked(Account account)
+        private bool IsChangedUserRGs(Account account)
         {
             this.ActionType.ThrowIfNull("ActionType");
             var changeUsersRGsAccountState = _accountBEManager.GetExtendedSettings<ChangeUsersRGsAccountState>(account);
