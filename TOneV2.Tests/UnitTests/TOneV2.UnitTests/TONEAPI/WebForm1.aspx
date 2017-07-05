@@ -117,7 +117,7 @@
                 <td class="auto-style2" colspan="2">Start All Application GUI Testing</td>
                 <td class="auto-style3">
         <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Start All GUI" style="background-color: #00CC00;" BorderStyle="Groove" Height="37px" Width="147px" />
-        <asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Unit Test" Width="144px" Visible="False" />
+        <asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Unit Test" Width="144px" />
         <asp:TextBox ID="TextBox7" runat="server" Width="102px" Visible="False"></asp:TextBox>
                 </td>
             </tr>
