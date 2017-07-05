@@ -30,6 +30,12 @@
             var provisionAccountSettingsAPI;
             var provisionAccountSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var companyTypeAPI;
+            var companyTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var siteTypeAPI;
+            var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                
@@ -42,8 +48,16 @@
                     provisionAccountSettingsAPI = api;
                     provisionAccountSettingsReadyDeferred.resolve();
                 };
+                $scope.scopeModel.onCompanyAccountTypeSelectorReady = function (api) {
+                    companyTypeAPI = api;
+                    companyTypeReadyDeferred.resolve();
+                };
 
-                UtilsService.waitMultiplePromises([provisionAccountSettingsReadyDeferred.promise, connectionTypeReadyDeferred.promise]).then(function(){
+                $scope.scopeModel.onSiteAccountTypeSelectorReady = function (api) {
+                    siteTypeAPI = api;
+                    siteTypeReadyDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([provisionAccountSettingsReadyDeferred.promise, connectionTypeReadyDeferred.promise, companyTypeReadyDeferred.promise, siteTypeReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
 
@@ -83,6 +97,25 @@
                         }
                         return provisionAccountSettingsAPI.load(provisionAccountSettingsPayload);
                     }
+                    promises.push(loadCompanyTypes());
+
+                    function loadCompanyTypes() {
+                        var companyTypePayload;
+                        if (provisionerDefinitionSettings != undefined) {
+                            companyTypePayload = { selectedIds: provisionerDefinitionSettings.CompanyTypeId };
+                        }
+                        return companyTypeAPI.load(companyTypePayload);
+                    }
+
+                    promises.push(loadSiteTypes());
+
+                    function loadSiteTypes() {
+                        var siteTypePayload;
+                        if (provisionerDefinitionSettings != undefined) {
+                            siteTypePayload = { selectedIds: provisionerDefinitionSettings.SiteTypeId };
+                        }
+                        return siteTypeAPI.load(siteTypePayload);
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -99,6 +132,8 @@
                         VRConnectionId: connectionTypeAPI.getSelectedIds(),
                         Settings:provisionAccountSettingsAPI.getData(),
                         CountryCode: $scope.scopeModel.countryCode,
+                        CompanyTypeId: companyTypeAPI.getSelectedIds(),
+                        SiteTypeId: siteTypeAPI.getSelectedIds(),
                     };
                     return data;
                 }

@@ -21,15 +21,24 @@ namespace Retail.Teles.Business
                 throw new NullReferenceException("definitionSettings");
 
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+
+            if (!TelesAccountCondition.AllowRevertUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.ActionType))
+            {
+                throw new Exception("Not Allow to Revert User Routing Groups");
+            }
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
             if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
             {
                 var accountChilds = accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, context.AccountId, false);
-                foreach(var child in accountChilds)
+                if (accountChilds != null)
                 {
-                    RevertSiteUsers(context, definitionSettings, child.AccountId);
+                    foreach (var child in accountChilds)
+                    {
+                        RevertSiteUsers(context, definitionSettings, child.AccountId);
+                    }
                 }
                 RevertSiteUsers(context, definitionSettings, context.AccountId);
+
             }
             else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
             {

@@ -11,5 +11,6 @@ namespace Retail.Teles.Entities
         public string TelesEnterpriseId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
         public long AccountId { get; set; }
+        public Guid ActionDefinitionId { get; set; }
     }
 }

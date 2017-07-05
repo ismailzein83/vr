@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MappingTelesSiteEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_Teles_SiteAPIService', 'Retail_BE_AccountBEDefinitionAPIService','Retail_Teles_EnterpriseAPIService'];
+    MappingTelesSiteEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_Teles_SiteAPIService', 'Retail_BE_AccountBEDefinitionAPIService','Retail_Teles_EnterpriseAPIService','InsertOperationResultEnum'];
 
-    function MappingTelesSiteEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_SiteAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_Teles_EnterpriseAPIService) {
+    function MappingTelesSiteEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_SiteAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_Teles_EnterpriseAPIService, InsertOperationResultEnum) {
         var isEditMode;
 
         var accountId;
@@ -106,16 +106,21 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
             return Retail_Teles_SiteAPIService.MapSiteToAccount(buildMapSiteToAccountObjFromScope()).then(function (response) {
-                if (response)
-                {
-                    VRNotificationService.showSuccess("Site mapped successfully");
-                    if ($scope.onMappingAccount != undefined) {
-                        $scope.onMappingAccount(response.UpdatedObject);
+                if (response) {
+                    switch (response.Result) {
+                        case InsertOperationResultEnum.Succeeded.value:
+                            VRNotificationService.showSuccess("Site mapped successfully");
+                            if ($scope.onMappingAccount != undefined) {
+                                $scope.onMappingAccount(response.UpdatedObject);
+                            }
+                            $scope.modalContext.closeModal();
+                            break;
+                        case InsertOperationResultEnum.Failed.value:
+                            VRNotificationService.showError("Failed to map site.");
+                            break;
+                        case InsertOperationResultEnum.SameExists.value:
+                            VRNotificationService.showWarning("Same site mapped.");
                     }
-                    $scope.modalContext.closeModal();
-                } else
-                {
-                    VRNotificationService.showSuccess("Failed to map account");
 
                 }
             }).catch(function (error) {
@@ -129,7 +134,8 @@
             return {
                 TelesSiteId: sitesDirectiveAPI.getSelectedIds(),
                 AccountBEDefinitionId: accountBEDefinitionId,
-                AccountId: accountId
+                AccountId: accountId,
+                ActionDefinitionId: actionDefinitionId
             };
         }
     }

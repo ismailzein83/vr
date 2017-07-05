@@ -20,8 +20,14 @@ namespace Retail.Teles.Business
         TelesSiteManager telesSiteManager = new TelesSiteManager();
         public override void Execute(IAccountProvisioningContext context)
         {
+            
             var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
+           
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            if (!TelesAccountCondition.AllowChangeUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.ActionType))
+            {
+                throw new Exception("Not Allow to Change User Routing Groups");
+            }
             account.ThrowIfNull("account", context.AccountId);
             if(account.TypeId == definitionSettings.CompanyTypeId) // Process if company
             {

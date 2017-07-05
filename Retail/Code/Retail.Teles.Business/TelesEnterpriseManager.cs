@@ -63,7 +63,7 @@ namespace Retail.Teles.Business
             enterpriseId.ThrowIfNull("enterpriseId", enterpriseId);
             return Convert.ToString(enterpriseId);
         }
-       
+     
         public string GetEnterpriseName(Guid vrConnectionId, string enterpriseId)
         {
             var cachedEnterprises = GetCachedEnterprises(vrConnectionId, true);
@@ -108,20 +108,24 @@ namespace Retail.Teles.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            bool result = TryMapEnterpriseToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesEnterpriseId);
-            if (result)
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                _accountBEManager.TrackAndLogObjectCustomAction(input.AccountBEDefinitionId, input.AccountId, "Map To Teles Enterprise", null,null);
-                updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
-            }
-            else
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            }
 
+            if (IsMapEnterpriseToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
+            {
+                bool result = TryMapEnterpriseToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesEnterpriseId);
+                if (result)
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    _accountBEManager.TrackAndLogObjectCustomAction(input.AccountBEDefinitionId, input.AccountId, "Map To Teles Enterprise", null, null);
+                    updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(input.AccountBEDefinitionId, input.AccountId);
+                }
+                else
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
+
+            }
             return updateOperationOutput;
-
+     
         }
         public bool TryMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId, string telesEnterpriseId, ProvisionStatus? status = null)
         {
@@ -133,7 +137,7 @@ namespace Retail.Teles.Business
             //{
             //    _accountBEManager.DeleteAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, account.AccountId);
             //}
-
+          
             var result = _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
             if (result)
@@ -142,6 +146,23 @@ namespace Retail.Teles.Business
             }
             return result;
 
+        }
+
+        public bool IsMapEnterpriseToAccountValid(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
+        {
+
+            var accountDefinitionAction = new AccountBEDefinitionManager().GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
+            if (accountDefinitionAction != null)
+            {
+                var settings = accountDefinitionAction.ActionDefinitionSettings as MappingTelesAccountActionSettings;
+                if (settings != null)
+                {   
+                    var account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
+                    return _accountBEManager.EvaluateAccountCondition(account, accountDefinitionAction.AvailabilityCondition);
+                }
+
+            }
+            return false;
         }
         public Dictionary<string, long> GetCachedAccountsByEnterprises(Guid accountBEDefinitionId)
         {
@@ -187,6 +208,7 @@ namespace Retail.Teles.Business
         public string GetParentAccountEnterpriseId(Guid accountBEDefinitionId, long accountId)
         {
             var parentAccount = _accountBEManager.GetParentAccount(accountBEDefinitionId, accountId);
+            parentAccount.ThrowIfNull("parentAccount", accountId);
             EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentAccount);
             enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo", accountId);
             return enterpriseAccountMappingInfo.TelesEnterpriseId;

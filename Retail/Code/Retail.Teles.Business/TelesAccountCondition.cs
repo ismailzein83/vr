@@ -18,115 +18,137 @@ namespace Retail.Teles.Business
         public Guid SiteTypeId { get; set; }
         public string ActionType { get; set; }
 
-        AccountBEManager _accountBEManager = new AccountBEManager();
-        AccountTypeManager _accountTypeManager = new AccountTypeManager();
+        static AccountBEManager _accountBEManager = new AccountBEManager();
+        static AccountTypeManager _accountTypeManager = new AccountTypeManager();
 
         public override bool Evaluate(IAccountConditionEvaluationContext context)
         {
             switch(this.ConditionType)
             {
                 case Business.ConditionType.CanChangeMapping:
-                    if(context.Account.TypeId == this.CompanyTypeId)
-                    {
-                        if (IsEnterpriseNotMappedOrProvisioned(context.Account))
-                            return false;
-                        if (IsChangedUserRGs(context.Account))
-                            return false;
-
-                        var accountBEDefinitionId = _accountTypeManager.GetAccountBEDefinitionId(context.Account.TypeId);
-                        var accountChilds = _accountBEManager.GetChildAccounts(accountBEDefinitionId, context.Account.AccountId, false);
-                        foreach(var account in accountChilds)
-                        {
-                            if (IsSiteMapped(account))
-                                return false;
-                            if (IsChangedUserRGs(account))
-                                return false;
-                        }
-                        return true;
-                    }
-                    else if (context.Account.TypeId == this.SiteTypeId)
-                    {
-                        if (IsSiteNotMappedOrProvisioned(context.Account))
-                            return false;
-                        return !IsChangedUserRGs(context.Account);
-                    }
-                    return false;
+                    return AllowChangeMapping(context.Account, this.CompanyTypeId, this.SiteTypeId, this.ActionType);
                 case Business.ConditionType.AllowChangeUserRGs:
-                    if (context.Account.TypeId == this.CompanyTypeId)
-                    {
-                        if (!IsEnterpriseMapped(context.Account))
-                            return false;
-                        return !IsChangedUserRGs(context.Account);
-                    }
-                    else if (context.Account.TypeId == this.SiteTypeId)
-                    {
-                        if (!IsSiteMapped(context.Account))
-                            return false;
-
-                        return !IsChangedUserRGs(context.Account);
-                    }
-                    return false;
+                    return AllowChangeUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId, this.ActionType);
                 case Business.ConditionType.AllowRevertUserRGs:
-                     if (context.Account.TypeId == this.CompanyTypeId)
-                    {
-                        return IsChangedUserRGs(context.Account);
-                    }
-                    else if (context.Account.TypeId == this.SiteTypeId)
-                    {
-                        return IsChangedUserRGs(context.Account);
-                    }
-                    return false;
+                    return AllowRevertUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId,this.ActionType);
                 case Business.ConditionType.AllowEnterpriseMap:
-                    if (context.Account.TypeId == this.CompanyTypeId)
-                    {
-                        return !IsEnterpriseMapped(context.Account);
-                    }
-                    return false;
+                    return AllowEnterpriseMap(context.Account, this.CompanyTypeId, this.SiteTypeId);
                 case Business.ConditionType.AllowSiteMap:
-                    if (context.Account.TypeId == this.SiteTypeId)
-                    {
-                        var parentAccount = _accountBEManager.GetParentAccount(context.Account);
-                        if (!IsEnterpriseMapped(parentAccount))
-                            return false;
-                        return !IsSiteMapped(context.Account);
-                    }
-                    return false;
+                    return AllowSiteMap(context.Account, this.CompanyTypeId, this.SiteTypeId);
                 default:
                     return false;
             }
         }
-        private bool IsEnterpriseNotMappedOrProvisioned(Account account)
+        private static bool IsEnterpriseNotMappedOrProvisioned(Account account)
         {
             var enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(account);
             return enterpriseAccountMappingInfo == null || enterpriseAccountMappingInfo.Status.HasValue;
         }
-        private bool IsSiteNotMappedOrProvisioned(Account account)
+        private static bool IsSiteNotMappedOrProvisioned(Account account)
         {
             var siteAccountMappingInfo = _accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
             return siteAccountMappingInfo == null || siteAccountMappingInfo.Status.HasValue;
         }
-        private bool IsEnterpriseMapped(Account account)
+        private static bool IsEnterpriseMapped(Account account)
         {
             var enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(account);
             return enterpriseAccountMappingInfo != null;
         }
-        private bool IsSiteMapped(Account account)
+        private static bool IsSiteMapped(Account account)
         {
             var siteAccountMappingInfo = _accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
             return siteAccountMappingInfo != null;
         }
-        private bool IsChangedUserRGs(Account account)
+        private static bool IsChangedUserRGs(Account account, string actionType)
         {
-            this.ActionType.ThrowIfNull("ActionType");
+            actionType.ThrowIfNull("ActionType");
             var changeUsersRGsAccountState = _accountBEManager.GetExtendedSettings<ChangeUsersRGsAccountState>(account);
             if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null)
             {
                 ChURGsActionCh chURGsActionCh;
-                if(changeUsersRGsAccountState.ChangesByActionType.TryGetValue(this.ActionType,out chURGsActionCh))
+                if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
                 {
                     if (chURGsActionCh.Status == ChURGsActionChStatus.Blocked)
                         return true;
                 }
+            }
+            return false;
+        }
+
+        public static bool AllowChangeMapping(Account account, Guid companyTypeId, Guid siteTypeId, string actionType)
+        {
+            if (account.TypeId == companyTypeId)
+            {
+                if (IsEnterpriseNotMappedOrProvisioned(account))
+                    return false;
+                if (IsChangedUserRGs(account, actionType))
+                    return false;
+
+                var accountBEDefinitionId = _accountTypeManager.GetAccountBEDefinitionId(account.TypeId);
+                var childAccounts = _accountBEManager.GetChildAccounts(accountBEDefinitionId, account.AccountId, false);
+                foreach (var childAccount in childAccounts)
+                {
+                    if (IsSiteMapped(childAccount))
+                        return false;
+                    if (IsChangedUserRGs(childAccount, actionType))
+                        return false;
+                }
+                return true;
+            }
+            else if (account.TypeId == siteTypeId)
+            {
+                if (IsSiteNotMappedOrProvisioned(account))
+                    return false;
+                return !IsChangedUserRGs(account, actionType);
+            }
+            return false;
+        }
+        public static bool AllowChangeUserRGs(Account account, Guid companyTypeId, Guid siteTypeId, string actionType)
+        {
+            if (account.TypeId == companyTypeId)
+            {
+                if (!IsEnterpriseMapped(account))
+                    return false;
+                return !IsChangedUserRGs(account, actionType);
+            }
+            else if (account.TypeId == siteTypeId)
+            {
+                if (!IsSiteMapped(account))
+                    return false;
+
+                return !IsChangedUserRGs(account, actionType);
+            }
+            return false;
+        }
+        public static bool AllowRevertUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,string actionType)
+        {
+            if (account.TypeId == companyTypeId)
+            {
+                return IsChangedUserRGs(account, actionType);
+            }
+            else if (account.TypeId == siteTypeId)
+            {
+                return IsChangedUserRGs(account, actionType);
+            }
+            return false;
+        }
+        public static bool AllowEnterpriseMap(Account account, Guid companyTypeId, Guid siteTypeId)
+        {
+            if (account.TypeId == companyTypeId)
+            {
+                return !IsEnterpriseMapped(account);
+            }
+            return false;
+        }
+        public static bool AllowSiteMap(Account account, Guid companyTypeId, Guid siteTypeId)
+        {
+            if (account.TypeId == siteTypeId)
+            {
+                var parentAccount = _accountBEManager.GetParentAccount(account);
+                parentAccount.ThrowIfNull("account", account.ParentAccountId);
+                if (!IsEnterpriseMapped(parentAccount))
+                    return false;
+                return !IsSiteMapped(account);
             }
             return false;
         }

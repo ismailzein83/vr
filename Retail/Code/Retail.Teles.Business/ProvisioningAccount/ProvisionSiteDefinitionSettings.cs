@@ -14,6 +14,8 @@ namespace Retail.Teles.Business.Provisioning
             get { return new Guid("91D8FBF2-A22E-46CB-A004-4966B5C1A87C"); }
         }
         public Guid VRConnectionId { get; set; }
+        public Guid CompanyTypeId { get; set; }
+        public Guid SiteTypeId { get; set; }
         public string CountryCode { get; set; }
         public ProvisionSiteSetting Settings { get; set; }
 

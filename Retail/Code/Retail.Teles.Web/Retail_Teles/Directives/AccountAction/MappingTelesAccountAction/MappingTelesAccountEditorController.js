@@ -2,9 +2,9 @@
 
     "use strict";
 
-    MappingTelesAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','Retail_Teles_EnterpriseAPIService','Retail_BE_AccountBEDefinitionAPIService'];
+    MappingTelesAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_Teles_EnterpriseAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'InsertOperationResultEnum'];
 
-    function MappingTelesAccountEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_EnterpriseAPIService, Retail_BE_AccountBEDefinitionAPIService) {
+    function MappingTelesAccountEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_EnterpriseAPIService, Retail_BE_AccountBEDefinitionAPIService, InsertOperationResultEnum) {
         var isEditMode;
 
         var accountId;
@@ -101,14 +101,20 @@
             return Retail_Teles_EnterpriseAPIService.MapEnterpriseToAccount(buildMapEnterpriseToAccountObjFromScope()).then(function (response) {
                 if (response)
                 {
-                    VRNotificationService.showSuccess("Account mapped successfully");
-                    if ($scope.onMappingAccount != undefined) {
-                        $scope.onMappingAccount(response.UpdatedObject);
+                    switch (response.Result) {
+                        case InsertOperationResultEnum.Succeeded.value:
+                            VRNotificationService.showSuccess("Account mapped successfully");
+                            if ($scope.onMappingAccount != undefined) {
+                                $scope.onMappingAccount(response.UpdatedObject);
+                            }
+                            $scope.modalContext.closeModal();
+                            break;
+                        case InsertOperationResultEnum.Failed.value:
+                            VRNotificationService.showError("Failed to map enterprise.");
+                            break;
+                        case InsertOperationResultEnum.SameExists.value:
+                            VRNotificationService.showWarning("Same Account mapped.");
                     }
-                    $scope.modalContext.closeModal();
-                } else
-                {
-                    VRNotificationService.showSuccess("Failed to map account");
 
                 }
             }).catch(function (error) {
@@ -122,7 +128,8 @@
             return {
                 TelesEnterpriseId: enterprisesDirectiveAPI.getSelectedIds(),
                 AccountBEDefinitionId: accountBEDefinitionId,
-                AccountId: accountId
+                AccountId: accountId,
+                ActionDefinitionId: actionDefinitionId,
             };
         }
     }

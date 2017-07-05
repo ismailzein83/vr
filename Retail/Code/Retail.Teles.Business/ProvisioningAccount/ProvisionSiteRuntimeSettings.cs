@@ -24,7 +24,14 @@ namespace Retail.Teles.Business.Provisioning
                 throw new NullReferenceException("definitionSettings");
 
             Account account = _accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            account.ThrowIfNull("account", context.AccountId);
+            if (!TelesAccountCondition.AllowEnterpriseMap(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId))
+            {
+                throw new Exception("Not Allow to Provision Site");
+            }
             var parentAccount = _accountBEManager.GetParentAccount(account);
+            parentAccount.ThrowIfNull("account", account.ParentAccountId);
+
             EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentAccount);
             if(enterpriseAccountMappingInfo != null)
             {

@@ -23,7 +23,12 @@ namespace Retail.Teles.Business.Provisioning
             var definitionSettings = context.DefinitionSettings as ProvisionAccountDefinitionSettings;
             if (definitionSettings == null)
                 throw new NullReferenceException("definitionSettings");
-          Account account = _accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+           Account account = _accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+           account.ThrowIfNull("account", context.AccountId);
+           if (!TelesAccountCondition.AllowEnterpriseMap(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId))
+           {
+               throw new Exception("Not Allow to Provision Enterprise");
+           }
            CreateEnterprise(context, definitionSettings, context.AccountBEDefinitionId, account);
         }
         private void CreateEnterprise(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, Guid accountBEDefinitionId, Account account)
