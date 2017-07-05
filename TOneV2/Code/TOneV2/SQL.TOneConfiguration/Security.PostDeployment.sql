@@ -106,6 +106,7 @@ as (select * from (values
 ('VR_Sec/Group/GetGroup','VR_Sec_Group: View'),
 ('VR_Sec/Group/AddGroup','VR_Sec_Group: Add'),
 ('VR_Sec/Group/UpdateGroup','VR_Sec_Group: Edit'),
+('VR_Sec/Group/AssignUserToGroup','VR_Sec_Group: Edit'),
 
 ('VR_Sec/View/AddView','VR_Sec_View: Add'),
 ('VR_Sec/View/UpdateView','VR_Sec_View: Edit'),
