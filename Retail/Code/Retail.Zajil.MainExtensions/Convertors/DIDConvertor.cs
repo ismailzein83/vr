@@ -19,6 +19,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
         public string DIDColumn { get; set; }
         public string InternationalColumn { get; set; }
         public string DIDSoColumn { get; set; }
+        public string NumberOfChannelsColumn { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
 
         public override string Name
@@ -62,7 +63,8 @@ namespace Retail.Zajil.MainExtensions.Convertors
                             {
                                 IsInternational = isInternational,
                                 Numbers = new List<string>() { did.ToString() },
-                                DIDSo = didSO
+                                DIDSo = didSO,
+                                NumberOfChannels = row[NumberOfChannelsColumn] == DBNull.Value ? 0 : (int)row[NumberOfChannelsColumn]
                             }
                         },
                         AccountId = accountId,

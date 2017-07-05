@@ -17,38 +17,61 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
     };
 
     function AccountTypeOrderDetailsRuntime($scope, ctrl, $attrs) {
+
+        var orderdetails = [];
+
+        this.initializeController = initializeController;
+
+        ctrl.orderdetails = [];
+
+        ctrl.loadMoreOrderDetails = function () {
+
+            loadMoreGridData(ctrl.orderdetails, orderdetails);
+        }
+
         ctrl.addOrderDetails = function () {
             var onOrderDetailAdded = function (orderDetailItem) {
-                ctrl.orderdetails.push(orderDetailItem);
+                orderdetails.push(orderDetailItem);
+                ctrl.orderdetails.push({
+                    Entity: orderDetailItem
+                });
             };
             Retail_Zajil_OrderDetailService.addOrderDetail(onOrderDetailAdded);
         };
 
         ctrl.removeOrderDetail = function (dataItem) {
-            var index = ctrl.orderdetails.indexOf(dataItem);
+            var index = orderdetails.indexOf(dataItem.Entity);
+            orderdetails.splice(index, 1);
             ctrl.orderdetails.splice(index, 1);
         };
 
         ctrl.editOrderDetailItem = function (dataItem) {
             var onOrderDetailUpdated = function (updatedOrderDetail) {
-                var index = ctrl.orderdetails.indexOf(dataItem);
-                ctrl.orderdetails[index] = updatedOrderDetail;
+                var index = orderdetails.indexOf(dataItem.Entity);
+                orderdetails[index] = updatedOrderDetail;
+                ctrl.orderdetails[index] = {
+                    Entity: updatedOrderDetail
+                };
             };
-            Retail_Zajil_OrderDetailService.editOrderDetail(onOrderDetailUpdated, dataItem);
+            Retail_Zajil_OrderDetailService.editOrderDetail(onOrderDetailUpdated, dataItem.Entity);
         };
 
-        this.initializeController = initializeController;
+
 
         function initializeController() {
             defineAPI();
         }
         function defineAPI() {
-            ctrl.orderdetails = [];
+            //ctrl.orderdetails = [];
             var api = {};
             var partSettings;
             api.load = function (payload) {
                 if (payload != undefined && payload.partSettings != undefined) {
-                    ctrl.orderdetails = payload.partSettings.OrderDetailItems;
+                    orderdetails = payload.partSettings.OrderDetailItems;
+                    if (orderdetails != undefined && orderdetails.length > 0) {
+                        //gridReadyPromises.push(emptyRateGridReadyDeferred.promise);
+                        loadMoreGridData(ctrl.orderdetails, orderdetails);
+                    }
                 }
 
             };
@@ -61,14 +84,13 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }     
+        }
 
         function buildOrderDetailItemsList() {
             var tab = [];
-            if (ctrl.orderdetails != undefined)
-            {
-                for (var i = 0; i < ctrl.orderdetails.length; i++) {
-                    var orderDetail = ctrl.orderdetails[i];
+            if (orderdetails != undefined) {
+                for (var i = 0; i < orderdetails.length; i++) {
+                    var orderDetail = orderdetails[i];
                     tab.push({
                         OrderId: orderDetail.OrderId,
                         Charges: orderDetail.Charges,
@@ -95,6 +117,19 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
                 }
             }
             return tab;
+        }
+
+        function loadMoreGridData(gridArray, sourceArray) {
+            if (sourceArray == undefined)
+                return;
+            var pageSize = 10 + gridArray.length;
+            if (gridArray.length < sourceArray.length) {
+                for (var i = gridArray.length; i < sourceArray.length && i < pageSize; i++) {
+                    gridArray.push({
+                        Entity: sourceArray[i]
+                    });
+                }
+            }
         }
     }
 }]);

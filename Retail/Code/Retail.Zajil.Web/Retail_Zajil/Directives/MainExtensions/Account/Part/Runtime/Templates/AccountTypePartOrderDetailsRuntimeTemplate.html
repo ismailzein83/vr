@@ -4,14 +4,20 @@
             <vr-button type="Add" data-onclick="ctrl.addOrderDetails" standalone></vr-button>
         </vr-columns>
         <vr-columns width="fullrow">
-            <vr-datagrid datasource="ctrl.orderdetails"  ondeleterow="ctrl.removeOrderDetail" norowhighlightonclick="true" hidegridmenu>
-                <vr-datagridcolumn headertext="'Service Order Id'" field="'OrderId'" isclickable="true" onclicked="ctrl.editOrderDetailItem"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Parent SO'" field="'ParentSo'" type="'Number'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Child SO'" field="'ChildSo'" ></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Sales Agent'" field="'SalesAgent'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Type'" field="'Type'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Confirm Date'" field="'ConfirmDate'" type="'Date'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Close Date'" field="'CloseDate'" type="'Date'"></vr-datagridcolumn>
+            <vr-datagrid datasource="ctrl.orderdetails"
+                         ondeleterow="ctrl.removeOrderDetail"
+                         norowhighlightonclick="true"
+                         loadmoredata="ctrl.loadMoreOrderDetails"
+                         pagingtype="'PagingOnScroll'"
+                         maxheight="200px"
+                         hidegridmenu>
+                <vr-datagridcolumn headertext="'Service Order Id'" field="'Entity.OrderId'" isclickable="true" onclicked="ctrl.editOrderDetailItem"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Parent SO'" field="'Entity.ParentSo'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Child SO'" field="'Entity.ChildSo'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Sales Agent'" field="'Entity.SalesAgent'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Type'" field="'Entity.Type'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Confirm Date'" field="'Entity.ConfirmDate'" type="'Date'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Close Date'" field="'Entity.CloseDate'" type="'Date'"></vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>
     </vr-row>

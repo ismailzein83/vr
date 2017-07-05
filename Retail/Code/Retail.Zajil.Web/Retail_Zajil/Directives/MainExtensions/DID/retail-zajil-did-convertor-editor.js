@@ -51,6 +51,7 @@ app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsServic
                         $scope.scopeModel.internationalColumn = payload.InternationalColumn;
                         $scope.scopeModel.didColumn = payload.DIDColumn;
                         $scope.scopeModel.didSoColumn = payload.DIDSoColumn;
+                        $scope.scopeModel.NbOfChannelsColumn = payload.NumberOfChannelsColumn;
 
                     }
 
@@ -91,8 +92,9 @@ app.directive('retailZajilDidConvertorEditor', ['UtilsService', 'VRUIUtilsServic
                         SourceIdColumn: $scope.scopeModel.sourceIdColumn,
                         BEDColumn: $scope.scopeModel.bedColumn,
                         AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
-                        InternationalColumn: $scope.scopeModel.internationalColumn,                        
-                        DIDSoColumn : $scope.scopeModel.didSoColumn
+                        InternationalColumn: $scope.scopeModel.internationalColumn,
+                        DIDSoColumn: $scope.scopeModel.didSoColumn,
+                        NumberOfChannelsColumn: $scope.scopeModel.NbOfChannelsColumn
                     };
                     return data;
                 };
