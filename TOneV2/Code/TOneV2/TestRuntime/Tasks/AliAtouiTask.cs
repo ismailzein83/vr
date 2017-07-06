@@ -34,12 +34,6 @@ namespace TOne.WhS.Runtime.Tasks
             //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
             //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
             #endregion
-
-            //byte[] lastTimestamp = AliAtouiTask.StringToByteArray("00000000000055F5");
-            //DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
-            //DealEvaluatorProcessState first_dealEvaluatorProcessState = dealDetailedProgressManager.GetDealEvaluatorProcessState(null);
-            //DealEvaluatorProcessState second_dealEvaluatorProcessState = dealDetailedProgressManager.GetDealEvaluatorProcessState(lastTimestamp);
-            //DealEvaluatorProcessState third_dealEvaluatorProcessState = dealDetailedProgressManager.GetDealEvaluatorProcessState(second_dealEvaluatorProcessState.MaxTimestamp);
         } 
         #endregion
 
@@ -69,29 +63,29 @@ namespace TOne.WhS.Runtime.Tasks
         {
             var runtimeServices = new List<RuntimeService>();
 
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(schedulerService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
+
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
 
             QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(queueRegulatorService);
 
-            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(queueActivationService);
+            //SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(summaryQueueActivationService);
 
-            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(summaryQueueActivationService);
+            //QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(queueActivationService);
 
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(schedulerService);
+            //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(bigDataService);
 
-            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bigDataService);
-
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dsRuntimeService);
-
-            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bpRegulatorRuntimeService);
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dsRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
