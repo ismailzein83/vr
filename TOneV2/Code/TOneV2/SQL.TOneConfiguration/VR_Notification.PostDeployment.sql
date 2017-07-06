@@ -19,7 +19,8 @@ as (select * from (values
 ('FDD73530-067F-4160-AB71-7852303C785C','VR_Notification_NotificationComponentType_Settings','Notification Type','VR_Common_VRComponentType'								,'{"Editor":"vr-notification-vrnotification-componentsettings"}'),
 ('A196C40A-30B5-4297-B7B0-4344C41CE5A2','VR_Notification_NotificationDefinition','Notification','VR_Security_ViewTypeConfig'												,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-notification-notification-vieweditor"}'),
 ('d96f17c8-29d7-4c0c-88dc-9d5fbca2178f','VR_Notification_VRActionDefinition','Action Definition','VR_Common_VRComponentType'												,'{"Editor":"vr-notification-vractiondefinition-settings"}'),
-('0B44D3F3-AA62-4289-8EB3-D93269515036','Alert Level','Alert Level','VR_GenericData_BusinessEntityDefinitionSettingsConfig'													,'{"Editor":"vr-notification-alertleveldefinitionbe-editor"}')
+('0B44D3F3-AA62-4289-8EB3-D93269515036','Alert Level','Alert Level','VR_GenericData_BusinessEntityDefinitionSettingsConfig'													,'{"Editor":"vr-notification-alertleveldefinitionbe-editor"}'),
+('AA2AD3F2-ED37-4212-BE3E-2CC507BC1205','VrAlertRuleTypeOverriddenConfiguration','AlertRuleType Overridden Configuration','VRCommon_OverriddenConfiguration','{"Editor":"vr-notification-overriddenconfiguration-alertruletype"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

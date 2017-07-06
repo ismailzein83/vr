@@ -127,7 +127,11 @@ as (select * from (values
 ('2C11E2C0-D54B-41DF-95FA-1FBCFD5C93B0','OneTimeRecurringCharge','One Time Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-onetime"}'),
 ('006BA22A-439D-4BF5-B8C2-0254C2F6B40C','RetailBE_AccountView_FinancialAccount','Financial Account','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-be-accountviewdefinitionsettings-financialaccount"}'),
 ('FEE1242D-8664-4C64-B203-BAE3290DCF3F','ConditionGroup','Condition Group','Retail_BE_AccountConditionConfig','{"Editor":"retail-be-accountcondition-conditiongroup"}'),
-('0953E01C-8F4E-4C01-A714-FE55F62882A8','RetailBE_FinancialAccount_PostpaidFinancialAccount','Postpaid','Retail_BE_FinancialAccountDefinition','{"Editor":"retail-be-financialaccountdefinition-postpaid"}')
+('0953E01C-8F4E-4C01-A714-FE55F62882A8','RetailBE_FinancialAccount_PostpaidFinancialAccount','Postpaid','Retail_BE_FinancialAccountDefinition','{"Editor":"retail-be-financialaccountdefinition-postpaid"}'),
+('4F2A2B2F-CAA6-423A-A08F-39DE8587E3BA','Service Type','Service Type','VRCommon_OverriddenConfiguration','{"Editor":"retail-be-overriddenconfiguration-servicetype"}'),
+('22C9E36D-D328-4220-83E8-E45AD1B005D8','AccountType','Account Type','VRCommon_OverriddenConfiguration','{"Editor":"retail-be-overriddenconfiguration-accounttype"}'),
+('63E3987B-302B-42BA-8E61-A7762FA7BFD3','DefaultFinancialAccountLocator','Default Locator','Retail_BE_FinancialAccountLocator','{"Editor":"retail-be-accountbedefinition-financialaccountlocator-default"}'),
+('C01FA066-28C8-4225-9F59-39F5EECF86ED','AccountPartDefinitionOverriddenConfiguration','Account Part Definition','VRCommon_OverriddenConfiguration','{"Editor":"retail-overriddenconfiguration-accountpartdefinition"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
