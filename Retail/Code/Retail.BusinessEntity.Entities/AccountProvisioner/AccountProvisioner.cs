@@ -14,6 +14,8 @@ namespace Retail.BusinessEntity.Entities
     public interface IAccountProvisioningContext
     {
         AccountProvisionerDefinitionSettings DefinitionSettings { get; }
+         Guid ActionDefinitionId { get;  }
+         string ActionDefinitionName { get;  }
         long AccountId { get; }
         Guid AccountBEDefinitionId { get; }
         void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args);

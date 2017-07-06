@@ -8,6 +8,7 @@ using Vanrise.Entities;
 using Vanrise.BusinessProcess;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
+using Vanrise.Common;
 namespace Retail.BusinessEntity.MainActionBPs.Activities
 {
     public sealed class ExecuteAccountProvisioner : Vanrise.BusinessProcess.BaseCodeActivity
@@ -31,6 +32,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             var definitionSettings = this.AccountProvisionerDefinition.Get(context.ActivityContext);
             var accountId = this.AccountId.Get(context.ActivityContext);
             var accountActionDefinition = this.AccountActionDefinition.Get(context.ActivityContext);
+             accountActionDefinition.ThrowIfNull("accountActionDefinition");
             var accountBEDefinitionId = this.AccountBEDefinitionId.Get(context.ActivityContext);
             var provisioninigContext = new AccountProvisioningContext(this, context.ActivityContext, definitionSettings, accountId, accountBEDefinitionId, accountActionDefinition);
             actionProvisioner.Execute(provisioninigContext);
@@ -43,6 +45,7 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             public long _accountId { get; set; }
             public Guid _accountBEDefinitionId { get; set; }
             public AccountActionDefinition _accountActionDefinition { get; set; }
+
             public AccountProvisioningContext(ExecuteAccountProvisioner parentActivity, ActivityContext context, AccountProvisionerDefinitionSettings definitionSettings, long accountId, Guid accountBEDefinitionId, AccountActionDefinition accountActionDefinition)
             {
                 _parentActivity = parentActivity;
@@ -93,8 +96,9 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
                 };
                 new AccountBEManager().TrackAndLogObjectCustomAction(_accountBEDefinitionId, _accountId, _accountActionDefinition.Name, actionDescription, actionProvisionerTechnicalInformation);
             }
-            
-  
+
+            public Guid ActionDefinitionId { get { return this._accountActionDefinition.AccountActionDefinitionId; } }
+            public string ActionDefinitionName { get { return this._accountActionDefinition.Name; } }
         }
         public class ActionProvisionerTechnicalInformation
         {

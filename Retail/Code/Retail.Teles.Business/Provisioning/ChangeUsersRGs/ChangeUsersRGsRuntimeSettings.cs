@@ -20,9 +20,7 @@ namespace Retail.Teles.Business
         TelesSiteManager telesSiteManager = new TelesSiteManager();
         public override void Execute(IAccountProvisioningContext context)
         {
-            
             var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
-           
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
             if (!TelesAccountCondition.AllowChangeUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.ActionType))
             {
@@ -43,11 +41,11 @@ namespace Retail.Teles.Business
                     {
                         Dictionary<string, ChURGsUserCh> changesByUser = new Dictionary<string, ChURGsUserCh>();
 
-                        List<dynamic> usersToBlock = BlockUsersForeachSite(context, definitionSettings, sites, mappedSites, changesByUser);
-
-                        UpdateBlockedUsers(definitionSettings, usersToBlock);
+                        List<dynamic> usersToBeChangedByCompany;
+                        ChangeUsersRGForeachSite(context, definitionSettings, sites, mappedSites, changesByUser, out usersToBeChangedByCompany);
+                        UpdateChangedUsers(definitionSettings, usersToBeChangedByCompany);
                         if (changesByUser != null)
-                            UpdateBlockedUsersState(context,definitionSettings, context.AccountId,  changesByUser);
+                            UpdateChangedUsersState(context, definitionSettings, context.AccountId, changesByUser);
                     }
                 }
             }
@@ -59,19 +57,17 @@ namespace Retail.Teles.Business
                     var siteName = telesSiteManager.GetSiteName(definitionSettings.VRConnectionId, siteAccountMappingInfo.TelesSiteId);
                     context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing site {0}.", siteName));
                     Dictionary<string, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, siteAccountMappingInfo.TelesSiteId);
-                    BlockMappedSiteUsers(context, definitionSettings, siteRoutingGroups, siteAccountMappingInfo.TelesSiteId, context.AccountId);
+                    ChangeUsersRoutingGroupForMappedSite(context, definitionSettings, siteRoutingGroups, siteAccountMappingInfo.TelesSiteId, context.AccountId);
                     context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing site {0}.", siteName));
                 }
             }
         }
-        List<dynamic> BlockUsersForeachSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, Dictionary<string, long> mappedSites,  Dictionary<string, ChURGsUserCh> changesByUser)
+        void ChangeUsersRGForeachSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, Dictionary<string, long> mappedSites, Dictionary<string, ChURGsUserCh> changesByUser, out List<dynamic> usersToBeChangedByCompany)
         {
-            List<dynamic> usersToBlock = new List<dynamic>();
+            usersToBeChangedByCompany = new List<dynamic>();
             foreach (var site in sites)
             {
                 string siteId = site.id.ToString();
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing site {0}.", site.name));
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading routing groups for site {0}.", site.name));
                 Dictionary<string, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, siteId);
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Routing groups for site {0} loaded.", site.name));
                 if (siteRoutingGroups != null)
@@ -80,30 +76,28 @@ namespace Retail.Teles.Business
                     
                     if (mappedSites.TryGetValue(siteId, out accountId))
                     {
-                        BlockMappedSiteUsers(context, definitionSettings, siteRoutingGroups, siteId, accountId);
+                        ChangeUsersRoutingGroupForMappedSite(context, definitionSettings, siteRoutingGroups, siteId, accountId);
                     }else
                     {
-                        GetUsersToBlock(context, definitionSettings, usersToBlock, siteRoutingGroups, siteId, changesByUser);
+                        ChangeUsersRoutingGroup(context, definitionSettings, siteRoutingGroups, siteId, changesByUser, usersToBeChangedByCompany);
                     }
 
                 }
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing site {0}.", site.name));
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} processed successfully.", site.name));
             }
-            return usersToBlock;
         }
-        void BlockMappedSiteUsers(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, Dictionary<string, dynamic> siteRoutingGroups, string siteId, long accountId)
+        void ChangeUsersRoutingGroupForMappedSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, Dictionary<string, dynamic> siteRoutingGroups, string siteId, long accountId)
         {
-            List<dynamic> siteUsersToBlock = new List<dynamic>();
+            List<dynamic> usersToBeChangedByCompany = new List<dynamic>();
         
             Dictionary<string, ChURGsUserCh> changesByUser = new Dictionary<string, ChURGsUserCh>();
-            GetUsersToBlock(context, definitionSettings, siteUsersToBlock, siteRoutingGroups, siteId, changesByUser);
-            UpdateBlockedUsers(definitionSettings, siteUsersToBlock);
+            ChangeUsersRoutingGroup(context, definitionSettings, siteRoutingGroups, siteId, changesByUser, usersToBeChangedByCompany);
+            UpdateChangedUsers(definitionSettings, usersToBeChangedByCompany);
             if (changesByUser != null)
-                UpdateBlockedUsersState(context,definitionSettings, accountId, changesByUser);
+                UpdateChangedUsersState(context, definitionSettings, accountId, changesByUser);
         }
-        void GetUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, List<dynamic> usersToBlock, Dictionary<string, dynamic> siteRoutingGroups, string siteId,   Dictionary<string, ChURGsUserCh> changesByUser)
+        void ChangeUsersRoutingGroup(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, Dictionary<string, dynamic> siteRoutingGroups, string siteId, Dictionary<string, ChURGsUserCh> changesByUser, List<dynamic> usersToBeChangedByCompany)
         {
-
             List<string> existingRoutingGroups = null;
             string newRoutingGroup = null;
             foreach (dynamic siteRoutingGroup in siteRoutingGroups.Values)
@@ -149,14 +143,14 @@ namespace Retail.Teles.Business
             }
             if (definitionSettings.ExistingRoutingGroupCondition == null)
             {
-                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock,changesByUser, true);
+                ChangeUsersRoutingGroup(context, definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, changesByUser, true, usersToBeChangedByCompany);
             }else if (existingRoutingGroups == null)
             {
                 switch (definitionSettings.ExistingRGNoMatchHandling)
                 {
                     case ExistingRGNoMatchHandling.Skip: return;
                     case ExistingRGNoMatchHandling.UpdateAll:
-                        ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock,changesByUser, true);
+                        ChangeUsersRoutingGroup(context, definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, changesByUser, true, usersToBeChangedByCompany);
                         break;
                     case ExistingRGNoMatchHandling.Stop:
                         if (existingRoutingGroups == null)
@@ -166,15 +160,15 @@ namespace Retail.Teles.Business
             }
             else
             {
-                ProcessUsersToBlock(context,definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, usersToBlock,changesByUser, false);
+                ChangeUsersRoutingGroup(context, definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, changesByUser, false, usersToBeChangedByCompany);
             }
         }
-        void ProcessUsersToBlock(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, string siteId, List<string> existingRoutingGroups, string newRoutingGroup, List<dynamic> usersToBlock, Dictionary<string, ChURGsUserCh> changesByUser, bool updateAll)
+        void ChangeUsersRoutingGroup(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, string siteId, List<string> existingRoutingGroups, string newRoutingGroup, Dictionary<string, ChURGsUserCh> changesByUser, bool updateAll, List<dynamic> usersToBeChangedByCompany)
         {
             var users = GetUsers(definitionSettings.VRConnectionId, siteId);
             if(users != null)
             {
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing {0} users.", users.Count()));
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start processing {0} users.", users.Count()));
                 List<string> usersNames = new List<string>();
                 foreach (var user in users)
                 {
@@ -197,29 +191,30 @@ namespace Retail.Teles.Business
                             }
                         }
                         user.routingGroupId = newRoutingGroup;
-                        usersToBlock.Add(user);
+                        usersToBeChangedByCompany.Add(user);
                     }
                     if (usersNames.Count == 10)
                     {
-                        context.WriteTrackingMessage(LogEntryType.Information, string.Format("Users processed: {0}. ", String.Join<string>(",", usersNames)));
+                        WriteUsersProccessedTrackingMessage(context, usersNames);
                         usersNames = new List<string>();
                     }
                 }
+                WriteUsersProccessedTrackingMessage(context, usersNames);
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing {0} users.", users.Count()));
             }
             
         }
-        void UpdateBlockedUsers(ChangeUsersRGsDefinitionSettings definitionSettings,List<dynamic> usersToBlock)
+        void UpdateChangedUsers(ChangeUsersRGsDefinitionSettings definitionSettings,List<dynamic> changedUsersRoutingRG)
         {
-            if ( usersToBlock != null)
+            if (changedUsersRoutingRG != null)
             {
-                foreach (var userToBlock in usersToBlock)
+                foreach (var user in changedUsersRoutingRG)
                 {
-                    UpdateUser(definitionSettings.VRConnectionId, userToBlock);
+                    UpdateUser(definitionSettings.VRConnectionId, user);
                 }
             }
         }
-        void UpdateBlockedUsersState(IAccountProvisioningContext context,ChangeUsersRGsDefinitionSettings definitionSettings, long accountId,Dictionary<string, ChURGsUserCh> changesByUser)
+        void UpdateChangedUsersState(IAccountProvisioningContext context,ChangeUsersRGsDefinitionSettings definitionSettings, long accountId,Dictionary<string, ChURGsUserCh> changesByUser)
         {
             ChangeUsersRGsAccountState changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
             if (changeUsersRGsAccountState == null)
@@ -265,6 +260,14 @@ namespace Retail.Teles.Business
         void UpdateUser(Guid vrConnectionId, dynamic user)
         {
             telesEnterpriseManager.UpdateUser(vrConnectionId, user);
+        }
+
+        private void WriteUsersProccessedTrackingMessage(IAccountProvisioningContext context, List<string> usersNames)
+        {
+            if (usersNames.Count > 0)
+            {
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Users processed: {0}. ", String.Join<string>(",", usersNames)));
+            }
         }
     }
 }

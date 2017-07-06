@@ -138,14 +138,8 @@ namespace Retail.Teles.Business
             //    _accountBEManager.DeleteAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, account.AccountId);
             //}
           
-            var result = _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
+            return _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
-            if (result)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            }
-            return result;
-
         }
 
         public bool IsMapEnterpriseToAccountValid(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
@@ -223,6 +217,11 @@ namespace Retail.Teles.Business
                     return settings.DoesUserHaveExecutePermission();
             }
             return false;
+        }
+
+        public static void SetCacheExpired()
+        {
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
         #endregion
 

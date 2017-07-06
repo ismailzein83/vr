@@ -130,6 +130,10 @@ namespace Retail.Teles.Business
             SiteAccountMappingInfo siteAccountMappingInfo = new SiteAccountMappingInfo { TelesSiteId = telesSiteId, Status = status };
             return _accountBEManager.UpdateAccountExtendedSetting<SiteAccountMappingInfo>(accountBEDefinitionId, accountId, siteAccountMappingInfo);
         }
+        public static void SetCacheExpired()
+        {
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+        }
         public bool DoesUserHaveExecutePermission(Guid accountBEDefinitionId)
         {
             var accountDefinitionActions = new AccountBEDefinitionManager().GetAccountActionDefinitions(accountBEDefinitionId);
@@ -178,6 +182,7 @@ namespace Retail.Teles.Business
                                {
                                    if (accountsBySite == null)
                                        accountsBySite = new Dictionary<string, long>();
+                                 if (!accountsBySite.ContainsKey(siteAccountMappingInfo.TelesSiteId))
                                    accountsBySite.Add(siteAccountMappingInfo.TelesSiteId, item.AccountId);
                                }
                            }

@@ -21,44 +21,53 @@ namespace Retail.Teles.Business
                 throw new NullReferenceException("definitionSettings");
 
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
-
+            string accountName = accountBEManager.GetAccountName(account);
             if (!TelesAccountCondition.AllowRevertUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.ActionType))
             {
-                throw new Exception("Not Allow to Revert User Routing Groups");
+                throw new Exception(string.Format("Not Allow to {0} User Routing Groups", context.ActionDefinitionName));
             }
-            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Users to Revert."));
             if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
             {
+                context.WriteTrackingMessage(LogEntryType.Information, "Loading Sites to {0}.", context.ActionDefinitionName);
                 var accountChilds = accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, context.AccountId, false);
                 if (accountChilds != null)
                 {
                     foreach (var child in accountChilds)
                     {
-                        RevertSiteUsers(context, definitionSettings, child.AccountId);
+                        string childAccountName = accountBEManager.GetAccountName(child);
+                        context.WriteTrackingMessage(LogEntryType.Information, "Start {0} for Site: {1}.", context.ActionDefinitionName, childAccountName);
+                        RevertSiteUsers(context, definitionSettings, child, childAccountName);
+                        context.WriteTrackingMessage(LogEntryType.Information,"Finish {0} for Site: {1}.",context.ActionDefinitionName, childAccountName);
+
                     }
                 }
-                RevertSiteUsers(context, definitionSettings, context.AccountId);
+                RevertSiteUsers(context, definitionSettings, account, accountName);
 
             }
             else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
             {
-                RevertSiteUsers(context, definitionSettings, context.AccountId);
+                context.WriteTrackingMessage(LogEntryType.Information, "Start {0} for Site: {0}.", context.ActionDefinitionName, accountName);
+                RevertSiteUsers(context, definitionSettings, account, accountName);
+                context.WriteTrackingMessage(LogEntryType.Information, "Finish {0} for Site: {0}.", context.ActionDefinitionName, accountName);
             }
-            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Users Reverted Successfully."));
         }
-        void RevertSiteUsers(IAccountProvisioningContext context, RevertUsersRGsDefinitionSettings definitionSettings,long accountId)
+        void RevertSiteUsers(IAccountProvisioningContext context, RevertUsersRGsDefinitionSettings definitionSettings,Account account, string accountname)
         {
-            ChangeUsersRGsAccountState changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
+            ChangeUsersRGsAccountState changeUsersRGsAccountState = accountBEManager.GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, account.AccountId);
             if(changeUsersRGsAccountState != null)
             {
                 ChURGsActionCh oldChURGsActionCh = null;
                 var changedUsers = GetChangedUsers(context, definitionSettings.ActionType, definitionSettings.VRConnectionId, changeUsersRGsAccountState, out oldChURGsActionCh);
-                RevertBlockedUsers(context, definitionSettings.VRConnectionId, changedUsers);
-                RevertBlockedUsersState(context, accountId, changeUsersRGsAccountState, oldChURGsActionCh);
+                RevertUsers(context, definitionSettings.VRConnectionId, changedUsers);
+                RevertUsersState(context, account.AccountId, changeUsersRGsAccountState, oldChURGsActionCh);
+                if (changedUsers != null && changedUsers.Count > 0)
+                    context.WriteTrackingMessage(LogEntryType.Information, "Users {0} Successfully for Site: {1}.", context.ActionDefinitionName, accountname);
+                else
+                    context.WriteTrackingMessage(LogEntryType.Information, "Site: {0} has no Users to {1}.", accountname, context.ActionDefinitionName);
             }
        
         }
-        void RevertBlockedUsersState(IAccountProvisioningContext context,long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState, ChURGsActionCh oldChURGsActionCh)
+        void RevertUsersState(IAccountProvisioningContext context,long accountId, ChangeUsersRGsAccountState changeUsersRGsAccountState, ChURGsActionCh oldChURGsActionCh)
         {
             var currentUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
 
@@ -76,15 +85,23 @@ namespace Retail.Teles.Business
                 };
             }
         }
-        void RevertBlockedUsers(IAccountProvisioningContext context, Guid vrConnectionId, List<dynamic> changedUsers)
+        void RevertUsers(IAccountProvisioningContext context, Guid vrConnectionId, List<dynamic> changedUsers)
         {
             if (changedUsers != null)
             {
+                List<string> usersNames = new List<string>();
+
                 foreach (dynamic changedUser in changedUsers)
                 {
+                    usersNames.Add(changedUser.loginName);
                     UpdateUser(vrConnectionId, changedUser);
-                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} Unblocked.", changedUser.loginName));
+                    if (usersNames.Count == 10)
+                    {
+                        WriteUsersProccessedTrackingMessage(context, usersNames);
+                        usersNames = new List<string>();
+                    }
                 }
+                WriteUsersProccessedTrackingMessage(context, usersNames);
             }
         }
         List<dynamic> GetChangedUsers(IAccountProvisioningContext context, string actionType, Guid vrConnectionId, ChangeUsersRGsAccountState changeUsersRGsAccountState, out ChURGsActionCh oldChURGsActionCh)
@@ -133,5 +150,13 @@ namespace Retail.Teles.Business
         {
             telesEnterpriseManager.UpdateUser(vrConnectionId, user);
         }
+        private void WriteUsersProccessedTrackingMessage(IAccountProvisioningContext context, List<string> usersNames)
+        {
+            if (usersNames.Count > 0)
+            {
+                context.WriteTrackingMessage(LogEntryType.Information, string.Format("{0} for Users: {1}. ",context.ActionDefinitionName, String.Join<string>(",", usersNames)));
+            }
+        }
+
     }
 }

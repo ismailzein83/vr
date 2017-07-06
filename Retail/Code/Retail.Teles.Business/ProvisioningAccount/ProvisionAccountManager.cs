@@ -38,45 +38,44 @@ namespace Retail.Teles.Business
             };
             string siteId = _telesSiteManager.CreateSite(vrConnectionId, enterpriseId, centrexFeatSet, newsite);
             _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Started);
+            TelesSiteManager.SetCacheExpired();
             _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, site.AccountId, "Provision", string.Format("Teles site {0}", site.Name), null);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
             CreateScreendedNumbers(context, vrConnectionId, countryCode, site.AccountId, siteId);
             _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
+            TelesSiteManager.SetCacheExpired();
+
         }
 
         private void CreateScreendedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, long siteAccountId, string siteId)
         {
             var dids = _didManager.GetDIDsByParentId(siteAccountId.ToString(), DateTime.Now);
+
             if (dids != null)
             {
+                List<string> trackingNumbers = new List<string>();
                 foreach (var did in dids)
                 {
-                    DIDNumberType didNumberType = _didManager.GetDIDNumberType(did);
-                    switch (didNumberType)
+                    List<string> didNumbers = _didManager.GetAllDIDNumbers(did);
+                    if (didNumbers != null)
                     {
-                        case DIDNumberType.Number:
-                            foreach (string number in did.Settings.Numbers)
+                        foreach (string number in didNumbers)
+                        {
+                            trackingNumbers.Add(number);
+                            if (trackingNumbers.Count == 10)
                             {
-                                CreateScreenedNumber(context, vrConnectionId, countryCode, siteId, number);
-
+                                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Numbers Created: {0}", string.Join(",", trackingNumbers)));
+                                trackingNumbers = new List<string>();
                             }
-                            break;
-                        case DIDNumberType.Range:
-                            foreach (DIDRange range in did.Settings.Ranges)
-                            {
-                                long from = range.From.TryParseWithValidate<long>(long.TryParse);
-                                long to = range.To.TryParseWithValidate<long>(long.TryParse);
-                                for (var index = from; index <= to; index++)
-                                {
-                                    CreateScreenedNumber(context, vrConnectionId, countryCode, siteId, index.ToString());
-                                }
-                            }
-                            break;
-                        default: throw new Exception("Invalid Type for DID.");
+                            CreateScreenedNumber(context, vrConnectionId, countryCode, siteId, number);
+                        }
                     }
                 }
+                if (trackingNumbers.Count > 0 )
+                {
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Numbers Created: {0}", string.Join(",", trackingNumbers)));
+                }
             }
-
         }
 
         private void CreateScreenedNumber(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, string siteId, string number)
