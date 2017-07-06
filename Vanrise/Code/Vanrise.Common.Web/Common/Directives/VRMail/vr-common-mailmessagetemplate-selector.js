@@ -73,7 +73,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                 api.load = function (payload) {
 
                     var selectedIds;
-                    
+
 
                     if (payload != undefined) {
                         selectFirstItem = payload.selectFirstItem;
@@ -90,8 +90,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'VRMailMessageTemplateId', attrs, ctrl);
-                            }else if(selectFirstItem)
-                            {
+                            } else if (selectFirstItem) {
                                 var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].VRMailMessageTemplateId] : ctrl.datasource[0].VRMailMessageTemplateId;
                                 VRUIUtilsService.setSelectedValues(defaultValue, 'VRMailMessageTemplateId', attrs, ctrl);
                             }
@@ -112,21 +111,24 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Mail Message Template";
-
+            var label = 'label= "Mail Message Template"';
             if (attrs.ismultipleselection != undefined) {
-                label = "Mail Message Templates";
+                label = 'label= "Mail Message Templates"';
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
+                label = 'label= "'+attrs.customlabel+'"';
+
+            if (attrs.hidelabel != undefined) {
+                label = "";
+            }
 
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewMailMessageTemplate"';
 
-            return '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
+            return '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" ' + label +
+                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" ' +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate" haspermission="ctrl.haspermission">' +
                    '</vr-select>';
         }
