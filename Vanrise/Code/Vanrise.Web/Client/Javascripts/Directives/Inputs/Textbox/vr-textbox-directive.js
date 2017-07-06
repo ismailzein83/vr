@@ -173,7 +173,7 @@
                         }
                         (function () {
                             if (attrs.hint != undefined) {
-                                $(".validator-container").css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                                iElem.find("#validator-container").css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
                             }
                         })();
 
