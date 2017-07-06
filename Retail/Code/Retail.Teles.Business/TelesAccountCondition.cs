@@ -26,7 +26,7 @@ namespace Retail.Teles.Business
             switch(this.ConditionType)
             {
                 case Business.ConditionType.CanChangeMapping:
-                    return AllowChangeMapping(context.Account, this.CompanyTypeId, this.SiteTypeId, this.ActionType);
+                    return AllowChangeMapping(context.Account, this.CompanyTypeId, this.SiteTypeId);
                 case Business.ConditionType.AllowChangeUserRGs:
                     return AllowChangeUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId, this.ActionType);
                 case Business.ConditionType.AllowRevertUserRGs:
@@ -59,28 +59,40 @@ namespace Retail.Teles.Business
             var siteAccountMappingInfo = _accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
             return siteAccountMappingInfo != null;
         }
-        private static bool IsChangedUserRGs(Account account, string actionType)
+        private static bool IsChangedUserRGs(Account account, bool useActionType, string actionType)
         {
-            actionType.ThrowIfNull("ActionType");
             var changeUsersRGsAccountState = _accountBEManager.GetExtendedSettings<ChangeUsersRGsAccountState>(account);
-            if (changeUsersRGsAccountState != null && changeUsersRGsAccountState.ChangesByActionType != null)
+            if (changeUsersRGsAccountState != null)
             {
-                ChURGsActionCh chURGsActionCh;
-                if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
+                if (useActionType)
                 {
-                   return true;
+                    actionType.ThrowIfNull("ActionType");
+
+                    if (changeUsersRGsAccountState.ChangesByActionType != null)
+                    {
+                        ChURGsActionCh chURGsActionCh;
+                        if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
+                        {
+                            return true;
+                        }
+                    }
                 }
+                else
+                {
+                    return true;
+                }
+
             }
             return false;
         }
 
-        public static bool AllowChangeMapping(Account account, Guid companyTypeId, Guid siteTypeId, string actionType)
+        public static bool AllowChangeMapping(Account account, Guid companyTypeId, Guid siteTypeId)
         {
             if (account.TypeId == companyTypeId)
             {
                 if (IsEnterpriseNotMappedOrProvisioned(account))
                     return false;
-                if (IsChangedUserRGs(account, actionType))
+                if (IsChangedUserRGs(account, false, null))
                     return false;
 
                 var accountBEDefinitionId = _accountTypeManager.GetAccountBEDefinitionId(account.TypeId);
@@ -89,7 +101,7 @@ namespace Retail.Teles.Business
                 {
                     if (IsSiteMapped(childAccount))
                         return false;
-                    if (IsChangedUserRGs(childAccount, actionType))
+                    if (IsChangedUserRGs(childAccount, false, null))
                         return false;
                 }
                 return true;
@@ -98,7 +110,7 @@ namespace Retail.Teles.Business
             {
                 if (IsSiteNotMappedOrProvisioned(account))
                     return false;
-                return !IsChangedUserRGs(account, actionType);
+                return !IsChangedUserRGs(account, false, null);
             }
             return false;
         }
@@ -108,14 +120,14 @@ namespace Retail.Teles.Business
             {
                 if (!IsEnterpriseMapped(account))
                     return false;
-                return !IsChangedUserRGs(account, actionType);
+                return !IsChangedUserRGs(account, true,actionType);
             }
             else if (account.TypeId == siteTypeId)
             {
                 if (!IsSiteMapped(account))
                     return false;
 
-                return !IsChangedUserRGs(account, actionType);
+                return !IsChangedUserRGs(account,true, actionType);
             }
             return false;
         }
@@ -123,11 +135,11 @@ namespace Retail.Teles.Business
         {
             if (account.TypeId == companyTypeId)
             {
-                return IsChangedUserRGs(account, actionType);
+                return IsChangedUserRGs(account,true, actionType);
             }
             else if (account.TypeId == siteTypeId)
             {
-                return IsChangedUserRGs(account, actionType);
+                return IsChangedUserRGs(account,true, actionType);
             }
             return false;
         }
