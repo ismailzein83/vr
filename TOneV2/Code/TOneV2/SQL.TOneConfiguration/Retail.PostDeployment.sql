@@ -124,7 +124,11 @@ as (select * from (values
 ('6A33AFF5-C8D0-41BA-906D-3F9CBB8A7D3E','Financial Account Balance','Financial Account Balance','VR_AccountBalance_AccountTypeExtendedSettingsConfig','{"Editor":"retail-be-extendedsettings-financialaccountbalance"}'),
 ('3ED8A0C3-99E7-486A-A560-5789BA1DEAEE','Financial Account Definition','Financial Account Definition','VR_Common_VRComponentType','{"Editor":"retail-be-financialaccountdefinition-settings"}'),
 ('1F7F8131-E49E-4A1D-802A-0432BA92EBAB','PeriodicRecurringCharge','Periodic Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-periodic"}'),
-('2C11E2C0-D54B-41DF-95FA-1FBCFD5C93B0','OneTimeRecurringCharge','One Time Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-onetime"}')
+('2C11E2C0-D54B-41DF-95FA-1FBCFD5C93B0','OneTimeRecurringCharge','One Time Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-onetime"}'),
+('FD6ED9B7-F870-4C6D-A51E-36FD2219F64B'	,'Provisioning Company Screened Numbers'	,'Provisioning Company Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionaccount", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionaccount"}'),
+('91D8FBF2-A22E-46CB-A004-4966B5C1A87C'	,'Provisioning Site Screened Numbers'	,'Provisioning Site Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionsite", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionsite"}'),
+('638C3DCC-F05A-4FA5-83BB-5E24CB2DA9C8'	,' MappingTelesSite'	,'Mapping Teles Site',	'Retail_BE_AccountActionDefinitionConfig',	'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelessite"}'),
+('2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C'	,' TelesAccountCondition'	,'Teles Account Condition',	'Retail_BE_AccountConditionConfig',	'{"Editor":"retail-teles-accountcondition-telesaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
