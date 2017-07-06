@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Retail_CDR].[CDR] (
     [ID]                   BIGINT           NOT NULL,
-    [Call_Id]              VARCHAR (100)    NULL,
+    [Call_Id]              VARCHAR (200)    NULL,
     [DataSourceId]         UNIQUEIDENTIFIER NULL,
     [AttemptDateTime]      DATETIME         NULL,
     [ConnectDateTime]      DATETIME         NULL,
@@ -27,6 +27,8 @@
     [OriginatorExtension]  VARCHAR (20)     NULL,
     [TerminatorExtension]  VARCHAR (20)     NULL
 );
+
+
 
 
 

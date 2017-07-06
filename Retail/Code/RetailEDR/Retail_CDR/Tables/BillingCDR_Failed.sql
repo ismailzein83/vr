@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Retail_CDR].[BillingCDR_Failed] (
     [CDRID]                  BIGINT           NULL,
-    [IDonSwitch]             VARCHAR (100)    NULL,
+    [Call_Id]                VARCHAR (200)    NULL,
     [AttemptDateTime]        DATETIME         NULL,
     [ConnectDateTime]        DATETIME         NULL,
     [DisconnectDateTime]     DATETIME         NULL,
@@ -26,6 +26,8 @@
     [SaleExtraChargeRuleId]  INT              NULL,
     [Extension]              VARCHAR (20)     NULL
 );
+
+
 
 
 
