@@ -27,7 +27,7 @@ app.directive('retailZajilAccounttypePartRuntimeOrderdetails', ["UtilsService", 
         ctrl.loadMoreOrderDetails = function () {
 
             loadMoreGridData(ctrl.orderdetails, orderdetails);
-        }
+        };
 
         ctrl.addOrderDetails = function () {
             var onOrderDetailAdded = function (orderDetailItem) {
