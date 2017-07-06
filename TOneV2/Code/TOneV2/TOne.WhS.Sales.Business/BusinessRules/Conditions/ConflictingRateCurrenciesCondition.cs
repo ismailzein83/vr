@@ -29,7 +29,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (countryData.ZoneDataByZoneId == null || countryData.ZoneDataByZoneId.Count == 0)
                 return true;
 
-            IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryData.CountryId);
+            IEnumerable<ExistingZone> countryZones = ratePlanContext.EffectiveAndFutureExistingZonesByCountry.GetRecord(countryData.CountryId);
             if (countryZones == null || countryZones.Count() == 0)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("No zones were found for country '{0}'", countryData.CountryId));
 
@@ -70,7 +70,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     }
                     else
                     {
-                        SaleEntityZoneRate effectiveZoneRate = ratePlanContext.RateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, countryZone.ZoneId);
+                        SaleEntityZoneRate effectiveZoneRate = ratePlanContext.RateLocator.GetSellingProductZoneRate(sellingProductId, countryZone.ZoneId);
                         if (effectiveZoneRate == null || effectiveZoneRate.Rate == null)
                             throw new DataIntegrityValidationException(string.Format("No rate was found for zone '{0}' of selling product '{1}' on '{2}'", countryZone.ZoneId, sellingProductId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
                         zoneRateCurrencyId = saleRateManager.GetCurrencyId(effectiveZoneRate.Rate);

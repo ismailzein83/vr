@@ -67,7 +67,8 @@ namespace TOne.WhS.Sales.Business
         }
         public EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; set; }
         public IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; set; }
-        public Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; set; }
+        public Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; set; } // Should be removed; EffectiveAndFutureExistingZonesByCountry should be used instead
+        public Dictionary<int, List<ExistingZone>> EffectiveAndFutureExistingZonesByCountry { get; set; }
         public bool ProcessHasChanges
         {
             get
@@ -128,6 +129,7 @@ namespace TOne.WhS.Sales.Business
         EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; }
         IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; }
         Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; }
+        Dictionary<int, List<ExistingZone>> EffectiveAndFutureExistingZonesByCountry { get; }
         bool ProcessHasChanges { get; }
         decimal MaximumRate { get; }
         Dictionary<int, decimal> MaximumRateConvertedByCurrency { get; }

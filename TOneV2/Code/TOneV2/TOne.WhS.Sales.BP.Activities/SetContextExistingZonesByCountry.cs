@@ -23,7 +23,9 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<ExistingZone> existingZones = ExistingZones.Get(context);
 
             RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
+
             ratePlanContext.ExistingZonesByCountry = new Dictionary<int, List<ExistingZone>>();
+            ratePlanContext.EffectiveAndFutureExistingZonesByCountry = new Dictionary<int, List<ExistingZone>>();
 
             if (existingZones == null || existingZones.Count() == 0)
                 return;
@@ -39,6 +41,19 @@ namespace TOne.WhS.Sales.BP.Activities
                 }
 
                 countryZones.Add(existingZone);
+
+                if (existingZone.EED.HasValue && existingZone.EED.Value <= ratePlanContext.EffectiveDate)
+                    continue;
+
+                List<ExistingZone> effectiveAndFutureCountryZones;
+
+                if (!ratePlanContext.EffectiveAndFutureExistingZonesByCountry.TryGetValue(existingZone.CountryId, out effectiveAndFutureCountryZones))
+                {
+                    effectiveAndFutureCountryZones = new List<ExistingZone>();
+                    ratePlanContext.EffectiveAndFutureExistingZonesByCountry.Add(existingZone.CountryId, effectiveAndFutureCountryZones);
+                }
+
+                effectiveAndFutureCountryZones.Add(existingZone);
             }
         }
     }
