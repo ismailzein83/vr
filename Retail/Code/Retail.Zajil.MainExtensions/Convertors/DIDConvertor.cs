@@ -42,17 +42,19 @@ namespace Retail.Zajil.MainExtensions.Convertors
                 {
                     AccountBEManager accountManager = new AccountBEManager();
                     string sourceAccountId = row[this.SourceAccountIdColumn] as string;
+                    var didSO = row[DIDSoColumn] == DBNull.Value ? null : (int?)row[DIDSoColumn].ToString().TryParseWithValidate<int>(int.TryParse);
+
                     if (!string.IsNullOrEmpty(sourceAccountId))
                     {
+                        var siteAccountId = string.Format("Site_{0}_{1}", sourceAccountId, didSO);
                         Account account = accountManager.GetAccountBySourceId(AccountBEDefinitionId, sourceAccountId);
                         account.ThrowIfNull("account: sourceId", sourceAccountId);
-                        Account childAccount = accountManager.GetChildAccounts(AccountBEDefinitionId, account.AccountId, false).FirstOrDefault();
+                        Account childAccount = accountManager.GetAccountBySourceId(AccountBEDefinitionId, siteAccountId);
                         childAccount.ThrowIfNull("childAccount: ParentId", account.AccountId);
                         accountId = childAccount.AccountId;
                     }
 
                     var isInternational = row[InternationalColumn] == DBNull.Value ? false : row[InternationalColumn].ToString().TryParseWithValidate<bool>(bool.TryParse);
-                    var didSO = row[DIDSoColumn] == DBNull.Value ? null : (int?)row[DIDSoColumn].ToString().TryParseWithValidate<int>(int.TryParse);
                     var did = row[this.DIDColumn].ToString().TryParseWithValidate<double>(double.TryParse);
                     SourceDIDData didData = new SourceDIDData
                     {
