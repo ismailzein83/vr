@@ -28,8 +28,8 @@ app.constant('VR_GenericData_DateTimeRecordFilterOperatorEnum', {
 });
 
 app.constant('VR_GenericData_ListRecordFilterOperatorEnum', {
-    In: { value: 0, description: 'In' },
-    NotIn: { value: 1, description: 'Not In' }
+    In: { value: 0, description: 'Specific' },
+    NotIn: { value: 1, description: 'All Except' }
 });
 
 app.constant('VR_GenericData_RecordQueryLogicalOperatorEnum', {

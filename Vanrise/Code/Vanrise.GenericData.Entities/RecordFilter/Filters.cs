@@ -169,9 +169,9 @@ namespace Vanrise.GenericData.Entities
 
     public enum ListRecordFilterOperator
     {
-        [Description("IN")]
+        [Description("Specific")]
         In = 0,
-        [Description("NOT IN")]
+        [Description("All Except")]
         NotIn = 1
     }
     public abstract class ListRecordFilter<T> : RecordFilter
