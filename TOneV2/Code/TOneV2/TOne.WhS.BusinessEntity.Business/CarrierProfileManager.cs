@@ -131,23 +131,40 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierProfile.Settings.ActivationStatus;
         }
 
-        public void ReevaluateCarrierProfileActivationStatus(int carrierProfileId,CarrierProfileActivationStatus status)
+        public void ReevaluateCarrierProfileActivationStatus(int carrierProfileId)
         {
-            var carrierProfile = GetCarrierProfile(carrierProfileId);
-            if (carrierProfile.Settings.ActivationStatus != status)
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId, true, true);
+            if (profileCarrierAccounts != null)
             {
-                carrierProfile.Settings.ActivationStatus = status;
-                ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-                bool updateActionSucc = dataManager.Update(new CarrierProfileToEdit
+                CarrierProfileActivationStatus status = CarrierProfileActivationStatus.InActive;
+                foreach (var profileCarrierAccount in profileCarrierAccounts)
                 {
-                    CarrierProfileId = carrierProfile.CarrierProfileId,
-                    CreatedTime = carrierProfile.CreatedTime,
-                    Name = carrierProfile.Name,
-                    Settings = carrierProfile.Settings,
-                    SourceId = carrierProfile.SourceId
-                });
-                VREventManager vrEventManager = new VREventManager();
-                vrEventManager.ExecuteEventHandlersAsync(new CarrierProfileStatusChangedEventPayload { CarrierProfileId = carrierProfileId });
+                    switch (profileCarrierAccount.CarrierAccountSettings.ActivationStatus)
+                    {
+                        case ActivationStatus.Active:
+                            status = CarrierProfileActivationStatus.Active;
+                            break;
+                    }
+                    if (status == CarrierProfileActivationStatus.Active)
+                        break;
+                }
+                var carrierProfile = GetCarrierProfile(carrierProfileId);
+                if (carrierProfile.Settings.ActivationStatus != status)
+                {
+                    carrierProfile.Settings.ActivationStatus = status;
+                    ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+                    bool updateActionSucc = dataManager.Update(new CarrierProfileToEdit
+                    {
+                        CarrierProfileId = carrierProfile.CarrierProfileId,
+                        CreatedTime = carrierProfile.CreatedTime,
+                        Name = carrierProfile.Name,
+                        Settings = carrierProfile.Settings,
+                        SourceId = carrierProfile.SourceId
+                    });
+                    VREventManager vrEventManager = new VREventManager();
+                    vrEventManager.ExecuteEventHandlersAsync(new CarrierProfileStatusChangedEventPayload { CarrierProfileId = carrierProfileId });
+                }
             }
         }
         #endregion

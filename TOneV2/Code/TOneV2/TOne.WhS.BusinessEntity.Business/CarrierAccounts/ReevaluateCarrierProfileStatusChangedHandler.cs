@@ -22,23 +22,8 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
             eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierAccount = carrierAccountManager.GetCarrierAccount(eventPayload.CarrierAccountId);
-            var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierAccount.CarrierProfileId, true,true);
-            if(profileCarrierAccounts != null)
-            {   CarrierProfileActivationStatus status =  CarrierProfileActivationStatus.InActive;
-                foreach(var profileCarrierAccount in profileCarrierAccounts)
-                {
-                    switch(carrierAccount.CarrierAccountSettings.ActivationStatus)
-                    {
-                        case ActivationStatus.Active: 
-                            status = CarrierProfileActivationStatus.Active;  
-                            break;
-                    }
-                    if (status == CarrierProfileActivationStatus.Active)
-                        break;
-                }
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                carrierProfileManager.ReevaluateCarrierProfileActivationStatus(carrierAccount.CarrierProfileId, status);
-            }
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            carrierProfileManager.ReevaluateCarrierProfileActivationStatus(carrierAccount.CarrierProfileId);
         }
     }
 }
