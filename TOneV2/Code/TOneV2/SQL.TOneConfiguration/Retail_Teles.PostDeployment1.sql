@@ -25,7 +25,11 @@ as (select * from (values
 ('DFFBF1F9-EF68-43FA-BE34-AD181031CDDA','Teles Enterprise Extra Field','Teles Enterprise Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig'		,'{"Editor":"retail-teles-accountextrafield-enterprise"}'),
 ('E02E72EA-56BD-4F86-A404-F08BE3A2E619','Teles Enterprise Business Entity','Teles Enterprise BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"retail-teles-enterprisebedefinition-editor"}'),
 ('E440C268-19B9-4D43-820B-C407604C7EF3','InternationalCallsBlocked','International Calls Blocked','Retail_BE_AccountExtraFieldDefinitionConfig'			,'{"Editor":"retail-teles-accountextrafield-internationalcallsblocked"}'),
-('fd6ed9b7-f870-4c6d-a51e-36fd2219f64b', 'Provisioning Screened Numbers',	'Provisioning Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionaccount", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionaccount"}')
+('fd6ed9b7-f870-4c6d-a51e-36fd2219f64b', 'Provisioning Screened Numbers',	'Provisioning Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionaccount", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionaccount"}'),
+('FD6ED9B7-F870-4C6D-A51E-36FD2219F64B'	,'Provisioning Company Screened Numbers'	,'Provisioning Company Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionaccount", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionaccount"}'),
+('91D8FBF2-A22E-46CB-A004-4966B5C1A87C'	,'Provisioning Site Screened Numbers'	,'Provisioning Site Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionsite", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionsite"}'),
+('638C3DCC-F05A-4FA5-83BB-5E24CB2DA9C8'	,' MappingTelesSite'	,'Mapping Teles Site',	'Retail_BE_AccountActionDefinitionConfig',	'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelessite"}'),
+('2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C'	,' TelesAccountCondition'	,'Teles Account Condition',	'Retail_BE_AccountConditionConfig',	'{"Editor":"retail-teles-accountcondition-telesaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
