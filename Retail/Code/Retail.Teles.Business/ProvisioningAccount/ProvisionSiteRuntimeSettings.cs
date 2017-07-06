@@ -33,7 +33,7 @@ namespace Retail.Teles.Business.Provisioning
             parentAccount.ThrowIfNull("account", account.ParentAccountId);
 
             EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentAccount);
-            if(enterpriseAccountMappingInfo != null)
+            if (enterpriseAccountMappingInfo != null)
             {
                 var enterpriseName = _telesEnterpriseManager.GetEnterpriseName(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
                 _provisionAccountManager.CreateSiteWithScreenedNumbers(context, definitionSettings.VRConnectionId, definitionSettings.CountryCode, enterpriseAccountMappingInfo.TelesEnterpriseId, context.AccountBEDefinitionId, account, enterpriseName, Settings.SiteAccountSetting, Settings.CentrexFeatSet);

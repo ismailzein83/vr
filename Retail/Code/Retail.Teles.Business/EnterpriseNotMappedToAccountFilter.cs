@@ -9,7 +9,7 @@ namespace Retail.Teles.Business
 {
     public class EnterpriseNotMappedToAccountFilter : ITelesEnterpriseFilter
     {
-        public dynamic EditedEnterpriseId { get; set; }
+        public string EditedEnterpriseId { get; set; }
         public bool IsExcluded(ITelesEnterpriseFilterContext context)
         {
             TelesEnterpriseManager telesEnterpriseManager = new TelesEnterpriseManager();

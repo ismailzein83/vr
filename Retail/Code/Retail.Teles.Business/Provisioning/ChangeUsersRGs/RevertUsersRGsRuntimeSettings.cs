@@ -26,7 +26,7 @@ namespace Retail.Teles.Business
             {
                 throw new Exception("Not Allow to Revert User Routing Groups");
             }
-            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Blocked Users."));
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading Users to Revert."));
             if (account.TypeId == definitionSettings.CompanyTypeId)// load changeUsersRGsAccountState from company
             {
                 var accountChilds = accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, context.AccountId, false);
@@ -42,11 +42,9 @@ namespace Retail.Teles.Business
             }
             else if (account.TypeId == definitionSettings.SiteTypeId)// load changeUsersRGsAccountState from company
             {
-                //SiteAccountMappingInfo siteAccountMappingInfo = accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(account);
-                //siteAccountMappingInfo.ThrowIfNull("siteAccountMappingInfo");
                 RevertSiteUsers(context, definitionSettings, context.AccountId);
             }
-            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Blocked Users Loaded."));
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Users Reverted Successfully."));
         }
         void RevertSiteUsers(IAccountProvisioningContext context, RevertUsersRGsDefinitionSettings definitionSettings,long accountId)
         {
@@ -99,7 +97,6 @@ namespace Retail.Teles.Business
               
                 if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
                 {
-                    chURGsActionCh.Status = ChURGsActionChStatus.Active;
                     if (chURGsActionCh.ChangesByUser != null)
                     {
                         changedUsers = new List<dynamic>();

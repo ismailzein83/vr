@@ -47,10 +47,11 @@ namespace Retail.Teles.Business.Provisioning
             };
             var enterpriseId = _telesEnterpriseManager.CreateEnterprise(definitionSettings.VRConnectionId, Settings.CentrexFeatSet, enterprise);
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, account.AccountId, enterpriseId, ProvisionStatus.Started);
-            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, account.AccountId, "Provision", string.Format("Teles enterprise {0}", this.EnterpriseName), null);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Enterprise {0} created.", this.EnterpriseName));
             CreateSites(context, definitionSettings, enterpriseId, accountBEDefinitionId, account.AccountId);
             _telesEnterpriseManager.TryMapEnterpriseToAccount(accountBEDefinitionId, account.AccountId, enterpriseId, ProvisionStatus.Completed);
+           
+            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, account.AccountId, "Provision", string.Format("Teles enterprise {0}", this.EnterpriseName), null);
 
         }
         private void CreateSites(IAccountProvisioningContext context, ProvisionAccountDefinitionSettings definitionSettings, string enterpriseId, Guid accountBEDefinitionId, long accountId)

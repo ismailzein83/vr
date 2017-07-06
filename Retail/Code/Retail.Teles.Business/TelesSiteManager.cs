@@ -22,16 +22,28 @@ namespace Retail.Teles.Business
         {
             var cachedSites = GetEnterpriseSitesInfoByEnterpiseId(vrConnectionId, enterpriseId);
 
-            Func<TelesEnterpriseSiteInfo, bool> filterFunc = null;
-            if (filter != null)
-            {
-                filterFunc = (telesEnterpriseInfo) =>
+            Func<TelesEnterpriseSiteInfo, bool> filterFunc = (telesEnterpriseInfo) =>
                 {
+                    if (filter != null)
+                    {
+                        if (filter.Filters != null)
+                        {
+                            foreach (var item in filter.Filters)
+                            {
+                                TelesEnterpriseSiteFilterContext context = new TelesEnterpriseSiteFilterContext
+                                {
+                                    AccountBEDefinitionId = filter.AccountBEDefinitionId,
+                                    EnterpriseSiteId = telesEnterpriseInfo.TelesSiteId
+                                };
+                                if (item.IsExcluded(context))
+                                    return false;
+                            }
+                        }
+                    }
                     return true;
                 };
-                return cachedSites.FindAllRecords(filterFunc).OrderBy(x => x.Name);
-            }
-            return cachedSites.Values.OrderBy(x => x.Name);
+            return cachedSites.FindAllRecords(filterFunc).OrderBy(x => x.Name);
+
         }
         public string CreateScreenedNumber(Guid vrConnectionId, string siteId, ScreenedNumber request)
         {

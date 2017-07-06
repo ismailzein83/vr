@@ -68,8 +68,7 @@ namespace Retail.Teles.Business
                 ChURGsActionCh chURGsActionCh;
                 if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(actionType, out chURGsActionCh))
                 {
-                    if (chURGsActionCh.Status == ChURGsActionChStatus.Blocked)
-                        return true;
+                   return true;
                 }
             }
             return false;

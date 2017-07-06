@@ -16,7 +16,6 @@ namespace Retail.Teles.Entities
     public class ChURGsActionCh
     {
         public Dictionary<string, ChURGsUserCh> ChangesByUser { get; set; }
-        public ChURGsActionChStatus Status { get; set; }
     }
 
     public class ChURGsUserCh
