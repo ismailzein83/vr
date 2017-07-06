@@ -73,7 +73,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedAccount);
                     };
-                    console.log(account);
                     Retail_BE_AccountBEService.editAccount(accountBEDefinitionId, account.AccountId, account.ParentAccountId, account.SourceId, onAccountUpdated);
                 }
             };
