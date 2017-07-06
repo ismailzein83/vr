@@ -170,16 +170,16 @@ namespace Retail.Zajil.MainExtensions
             {
                 OrderId = (int)row["OrderId"],
                 Achievement = row["Achievement"] as string,
-                Charges = row["Charges"] as string,
+                Charges = row["Charges"] == DBNull.Value ? "0" : row["Charges"] as string,
                 ChargesYear1 = GetDoubleValue(row, "Charges_Year1"),
                 ChargesYear2 = GetDoubleValue(row, "Charges_Year2"),
                 ChargesYear3 = GetDoubleValue(row, "Charges_Year3"),
                 ContractDays = GetDoubleValue(row, "contract_days"),
                 ContractPeriod = GetDoubleValue(row, "ContractPeriod"),
                 ContractRemain = row["ContractRemain"] as string,
-                Discount = row["Discount"] as string,
+                Discount = row["Discount"] == DBNull.Value ? "0" : row["Discount"] as string,
                 Installation = GetDoubleValue(row, "Installation"),
-                Payment = row["Payment"] as string,
+                Payment = row["Payment"] == DBNull.Value ? "0" : row["Payment"] as string,
                 ThirdParty = GetDoubleValue(row, "ThirdParty"),
                 TotalContract = GetDoubleValue(row, "total_contract"),
                 ParentSo = GetDoubleValue(row, "ParentSO"),
@@ -206,7 +206,7 @@ namespace Retail.Zajil.MainExtensions
         }
         DateTime? GetDateValue(DataRow row, string columnName)
         {
-            return row[columnName] == DBNull.Value ? null  : (DateTime?)DateTime.Parse(row[columnName].ToString());
+            return row[columnName] == DBNull.Value ? null : (DateTime?)DateTime.Parse(row[columnName].ToString());
         }
         Dictionary<string, AccountCompanyContact> GetContactsList(DataRow row)
         {
