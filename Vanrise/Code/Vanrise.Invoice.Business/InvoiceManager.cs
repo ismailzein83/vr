@@ -158,6 +158,11 @@ namespace Vanrise.Invoice.Business
                 PartnerManager partnerManager = new PartnerManager();
                 var duePeriod = partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
 
+               var invoiceAccountData = partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
+               invoiceAccountData.ThrowIfNull("invoiceAccountData");
+              
+                if (fromDate < invoiceAccountData.BED || toDate > invoiceAccountData.EED)
+                   throw new InvoiceGeneratorException("From date and To date should be within the effective date of invoice account.");
 
                 IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions;
                 GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, out billingTransactions);
@@ -202,9 +207,6 @@ namespace Vanrise.Invoice.Business
                         NextPeriodStart = createInvoiceInput.ToDate.AddDays(1)
                     };
                     billingPeriodInfoManager.InsertOrUpdateBillingPeriodInfo(billingPeriodInfo);
-                    var invoiceAccountData = partnerManager.GetInvoiceAccountData(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId);
-                    if (invoiceAccountData == null)
-                        throw new NullReferenceException("invoiceAccountData");
                     long invoiceAccountId;
                     new InvoiceAccountManager().TryAddInvoiceAccount(new VRInvoiceAccount
                     {
