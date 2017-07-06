@@ -139,7 +139,7 @@ namespace Vanrise.Invoice.Business
                         invoiceItemWithAdditionalFields.FillAdditionalFields(context);
                     invoiceItems.Add(new InvoiceItem
                     {
-                        Details = invoiceItemWithAdditionalFields,
+                        Details = invoiceItemWithAdditionalFields != null ? invoiceItemWithAdditionalFields : item.Details,
                         ItemSetName = generatedInvoiceItem.SetName,
                         Name = item.Name,
                     });
