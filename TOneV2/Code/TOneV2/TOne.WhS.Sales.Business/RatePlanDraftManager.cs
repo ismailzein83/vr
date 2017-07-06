@@ -178,7 +178,7 @@ namespace TOne.WhS.Sales.Business
 
                     SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(input.CustomerId, sellingProductId.Value, zone.SaleZoneId);
 
-                    if (zoneRate != null && zoneRate.Rate != null)
+                    if (zoneRate != null && zoneRate.Rate != null && saleRateManager.GetCurrencyId(zoneRate.Rate) != input.NewCurrencyId)
                     {
                         ZoneChanges zoneDraft = zoneDraftsByZoneId.GetOrCreateItem(zone.SaleZoneId, () =>
                         {
