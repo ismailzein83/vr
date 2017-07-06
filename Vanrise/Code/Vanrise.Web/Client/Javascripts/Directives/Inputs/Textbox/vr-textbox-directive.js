@@ -171,13 +171,11 @@
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
-                        var getInputeStyle = function () {
-                            var div = element.find('div[validator-section]')[0];
+                        (function () {
                             if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                                $(".validator-container").css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
                             }
-                        };
-                        getInputeStyle();
+                        })();
 
                         ctrl.onKeyUp = function ($event) {
                             if (iAttrs.onenterpress != undefined) {
