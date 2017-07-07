@@ -23,7 +23,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 margin: '='
             },
             controller: function ($scope, $element, $attrs) {
-                $scope.$on("$destroy", function () {                   
+                $scope.$on("$destroy", function () {
                     $('.vr-grid-menu').parents('div').unbind('scroll', hideGridColumnsMenu);
                     $(window).unbind('scroll', hideGridColumnsMenu);
                     $(document).unbind('click', bindClickOutSideGridMenu);
@@ -780,10 +780,18 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                 };
 
-                gridApi.itemAdded = function (item) {
+                gridApi.itemAdded = function (item,callbackFunction) {
                     itemChanged(item, "Added");
+                    if (callbackFunction != undefined && typeof (callbackFunction) == 'function')
+                        callbackFunction();
                 };
 
+                gridApi.setDefaultViewIndex = function () {
+                    ctrl.selectedView = 0;
+                };
+                gridApi.setUpdatedViewIndex = function () {
+                    ctrl.selectedView = 1;
+                };
                 gridApi.itemUpdated = function (item) {
                     item.isUpdated = true;
                     itemChanged(item, "Updated");
@@ -874,7 +882,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         // to rigth padding in old data loading methode in bi
                         var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                         var mh = $(div).css('max-height');
-                        mh = mh &&  parseInt(mh.substring(0, mh.length - 1)) || 0;
+                        mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
                         if (ctrl.datasource.length * 25 < mh) {
                             $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
                             ctrl.headerStyle = {
@@ -1182,10 +1190,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         }
 
                         function invokeHasPermission(menuAction, dataItem) {
-                            if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
+                            if (menuAction.haspermission == undefined || menuAction.haspermission == null) {
+                                return;
+                            }
                             menuAction.disable = true;
                             UtilsService.convertToPromiseIfUndefined(menuAction.haspermission(dataItem)).then(function (isAllowed) {
-                                if (isAllowed) { menuAction.disable = false; }
+                                if (isAllowed) {
+                                    menuAction.disable = false;
+                                }
                             });
                         }
                     }
