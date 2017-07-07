@@ -1,3 +1,10 @@
 ﻿<vr-columns colnum="{{ctrl.normalColNum}}">
     <vr-switch value="scopeModel.enableAutomaticInvoice" label="Enable Automatic Invoice" onvaluechanged="scopeModel.onEnableAutomaticInvoiceChanged"></vr-switch>
 </vr-columns>
+<vr-columns colnum="12">
+    <vr-section ng-repeat="action in scopeModel.actions" title="{{action.title}}">
+        <vr-directivewrapper directive="action.runtimeEditor" on-ready="action.onDirectiveReady"></vr-directivewrapper>
+    </vr-section>
+</vr-columns>
+
+

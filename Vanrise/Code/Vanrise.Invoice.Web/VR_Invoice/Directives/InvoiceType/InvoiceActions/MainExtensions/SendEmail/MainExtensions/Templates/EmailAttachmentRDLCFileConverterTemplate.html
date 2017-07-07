@@ -4,4 +4,9 @@
                    label="InvoiceAction" datasource="scopeModel.rdlcInvoiceActions" selectedvalues="scopeModel.selectedInvoiceAction" isrequired="true">
         </vr-select>
     </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-select datatextfield="description" datavaluefield="value"
+                   label="Attachment Type" datasource="scopeModel.invoiceAttachmentTypes" selectedvalues="scopeModel.selectedAttachmentType" isrequired="true">
+        </vr-select>
+    </vr-columns>
 </vr-row>

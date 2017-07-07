@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomaticInvoiceActions\AutomaticSendEmailAction.cs" />
+    <Compile Include="AutomaticInvoiceActions\AutomaticSendEmailActionRuntimeSettings.cs" />
     <Compile Include="BillingPeriod\BiMonthlyBillingPeriod.cs" />
     <Compile Include="BillingPeriod\BiWeeklyBillingPeriod.cs" />
     <Compile Include="BillingPeriod\MonthlyBillingPeriod.cs" />

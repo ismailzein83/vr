@@ -27,7 +27,8 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
 
         function SendEmailAction($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var mailMessageTypeAPI;
+            var mailMessageTypeReadyDeferred = UtilsService.createPromiseDeferred();
             var gridAPI;
             var context;
             function initializeController() {
@@ -40,13 +41,44 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
 
                     VR_Invoice_InvoiceEmailActionService.addEmailAttachmentSet(onEmailAttachmentSetAdded, getContext());
                 };
+                $scope.onMailMessageTypeSelectorReady = function (api) {
+                    mailMessageTypeAPI = api;
+                    mailMessageTypeReadyDeferred.resolve();
+                };
+                $scope.isMailMessageTypeRequired = function () {
+                    if(ctrl.datasource.length > 0)
+                    {
+                        for(var i=0;i<ctrl.datasource.length;i++)
+                        {
+                            var item = ctrl.datasource[i];
+                            if (item.Entity.MailMessageTypeId != undefined)
+                                return false;
+                        }
+                    }
+                    return true;
 
+                };
+                ctrl.isValid = function()
+                {
+                    if (mailMessageTypeAPI.getSelectedIds() != undefined)
+                        return null;
+                    if (ctrl.datasource.length > 0) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var item = ctrl.datasource[i];
+                            if (item.Entity.MailMessageTypeId != undefined)
+                                return   null;
+                        }
+                    }
+                    return "Mail message type should be selected.";
+                }
                 ctrl.removeEmailAttachmentSet = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
                 defineMenuActions();
-                defineAPI();
+                UtilsService.waitMultiplePromises([mailMessageTypeReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
@@ -66,7 +98,16 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                     }
 
                     var promises = [];
-
+                    function loadMailMessageTypeSelector() {
+                        var mailMessageTypePayload;
+                        if (automaticInvoiceActionEntity != undefined) {
+                            mailMessageTypePayload = {
+                                selectedIds: automaticInvoiceActionEntity.MailMessageTypeId
+                            };
+                        }
+                        return mailMessageTypeAPI.load(mailMessageTypePayload);
+                    }
+                    promises.push(loadMailMessageTypeSelector());
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -81,7 +122,8 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                     }
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.AutoGenerateInvoiceActions.AutomaticSendEmailAction ,Vanrise.Invoice.MainExtensions",
-                        EmailActionAttachmentSets: emailAttachmentSets
+                        EmailActionAttachmentSets: emailAttachmentSets,
+                        MailMessageTypeId: mailMessageTypeAPI.getSelectedIds()
                     };
                 };
 
@@ -92,6 +134,12 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
+                currentContext.isMailMessageTypeSelected = function ()
+                {
+                    if (mailMessageTypeAPI.getSelectedIds() != undefined)
+                        return true;
+                    return false;
+                }
                 return currentContext;
             }
 

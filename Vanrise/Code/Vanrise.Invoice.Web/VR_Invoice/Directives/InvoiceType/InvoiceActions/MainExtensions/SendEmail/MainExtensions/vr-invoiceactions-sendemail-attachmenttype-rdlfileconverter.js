@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceactionsSendemailAttachmenttypeRdlfileconverter", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrInvoiceactionsSendemailAttachmenttypeRdlfileconverter", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_Invoice_InvoiceAttachmentTypeEnum",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_InvoiceAttachmentTypeEnum) {
 
         var directiveDefinitionObject = {
 
@@ -31,6 +31,8 @@ app.directive("vrInvoiceactionsSendemailAttachmenttypeRdlfileconverter", ["Utils
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.rdlcInvoiceActions = [];
+                $scope.scopeModel.invoiceAttachmentTypes = UtilsService.getArrayEnum(VR_Invoice_InvoiceAttachmentTypeEnum);
+                $scope.scopeModel.selectedAttachmentType = VR_Invoice_InvoiceAttachmentTypeEnum.PDF;
                 defineAPI();
             }
 
@@ -49,6 +51,8 @@ app.directive("vrInvoiceactionsSendemailAttachmenttypeRdlfileconverter", ["Utils
                             if(invoiceFileConverter != undefined)
                             {
                                 $scope.scopeModel.selectedInvoiceAction = UtilsService.getItemByVal($scope.scopeModel.rdlcInvoiceActions, invoiceFileConverter.InvoiceActionId, "InvoiceActionId");
+                                $scope.scopeModel.selectedAttachmentType = UtilsService.getItemByVal($scope.scopeModel.invoiceAttachmentTypes, invoiceFileConverter.AttachmentType, "value");
+
                             }
                         }
                     }
@@ -59,7 +63,8 @@ app.directive("vrInvoiceactionsSendemailAttachmenttypeRdlfileconverter", ["Utils
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.InvoiceRDLCFileConverter ,Vanrise.Invoice.MainExtensions",
-                        InvoiceActionId: $scope.scopeModel.selectedInvoiceAction.InvoiceActionId
+                        InvoiceActionId: $scope.scopeModel.selectedInvoiceAction.InvoiceActionId,
+                        AttachmentType: $scope.scopeModel.selectedAttachmentType.value
                     };
                 };
 

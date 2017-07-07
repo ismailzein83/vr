@@ -29,10 +29,12 @@ app.directive("vrInvoicetypeInvoiceattachments", ["UtilsService", "VRNotificatio
             this.initializeController = initializeController;
             var gridAPI;
             var context;
+        
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
                 $scope.infoType = "MainTemplate";
+              
                 ctrl.addAttachment = function () {
                     var onAttachmentAdded = function (attachment) {
                         ctrl.datasource.push({ Entity: attachment });
@@ -65,6 +67,8 @@ app.directive("vrInvoicetypeInvoiceattachments", ["UtilsService", "VRNotificatio
                     }
 
                     var promises = [];
+
+                 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 

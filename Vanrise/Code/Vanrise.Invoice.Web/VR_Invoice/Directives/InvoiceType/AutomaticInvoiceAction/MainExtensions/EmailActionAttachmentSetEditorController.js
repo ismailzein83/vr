@@ -6,15 +6,17 @@
 
     function emailAttachmentSetEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
-        var sendEmailAttachmentsAPI;
-        var sendEmailAttachmentsReadyDeferred = UtilsService.createPromiseDeferred();
         var emailAttachmentSetEntity;
         var isEditMode;
         var context;
         var invoiceFilterConditionAPI;
         var invoiceFilterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceAttachmentSelectorAPI;
+        var invoiceAttachmentSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var mailMessageTypeAPI;
+        var mailMessageTypeReadyDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         loadParameters();
         load();
@@ -29,14 +31,24 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.onSendEmailAttachmentsReady = function (api) {
-                sendEmailAttachmentsAPI = api;
-                sendEmailAttachmentsReadyDeferred.resolve();
-            };
             $scope.scopeModel.onInvoiceFilterConditionReady = function (api) {
                 invoiceFilterConditionAPI = api;
                 invoiceFilterConditionReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onInvoiceAttachmentSelectorReady = function (api) {
+                invoiceAttachmentSelectorAPI = api;
+                invoiceAttachmentSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
+                mailMessageTypeAPI = api;
+                mailMessageTypeReadyDeferred.resolve();
+            };
+            $scope.scopeModel.isMailMessageTypeRequired = function()
+            {
+                if (context != undefined && context.isMailMessageTypeSelected())
+                    return false;
+                return true;
+            }
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -71,20 +83,9 @@
 
             function setTitle() {
                 if (isEditMode && emailAttachmentSetEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(emailAttachmentSetEntity.Title, 'Email Attachment Set');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(emailAttachmentSetEntity.Name, 'Email Attachment Set');
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor('Email Attachment Set');
-            }
-            function loadEmailAttachmentSetTypeDirective() {
-                var sendEmailAttachmentsLoadDeferred = UtilsService.createPromiseDeferred();
-                sendEmailAttachmentsReadyDeferred.promise.then(function () {
-                    var sendEmailAttachmentsPayload = { context: getContext() };
-                    if (emailAttachmentSetEntity != undefined) {
-                        sendEmailAttachmentsPayload.emailAttachmentsEntity = emailAttachmentSetEntity.EmailAttachments;
-                    }
-                    VRUIUtilsService.callDirectiveLoad(sendEmailAttachmentsAPI, sendEmailAttachmentsPayload, sendEmailAttachmentsLoadDeferred);
-                });
-                return sendEmailAttachmentsLoadDeferred.promise;
             }
             function loadStaticData() {
                 if (emailAttachmentSetEntity != undefined) {
@@ -102,7 +103,29 @@
                 });
                 return invoiceFilterConditionLoadPromiseDeferred.promise;
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadEmailAttachmentSetTypeDirective, loadInvoiceFilterConditionDirective])
+            function loadInvoiceAttachmentSelectorDirective() {
+                var invoiceAttachmentSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                invoiceAttachmentSelectorReadyDeferred.promise.then(function () {
+                    var invoiceAttachmentSelectorPayload = { context: getContext() };
+                    if (emailAttachmentSetEntity != undefined) {
+                        invoiceAttachmentSelectorPayload.selectedIds = emailAttachmentSetEntity.AttachmentsIds;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(invoiceAttachmentSelectorAPI, invoiceAttachmentSelectorPayload, invoiceAttachmentSelectorLoadPromiseDeferred);
+                });
+                return invoiceAttachmentSelectorLoadPromiseDeferred.promise;
+            }
+            function loadMailMessageTypeSelector() {
+                var mailMessageTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                invoiceAttachmentSelectorReadyDeferred.promise.then(function () {
+                    var mailMessageTypeSelectorPayload = { context: getContext() };
+                    if (emailAttachmentSetEntity != undefined) {
+                        mailMessageTypeSelectorPayload.selectedIds = emailAttachmentSetEntity.MailMessageTypeId;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(mailMessageTypeAPI, mailMessageTypeSelectorPayload, mailMessageTypeSelectorLoadPromiseDeferred);
+                });
+                return mailMessageTypeSelectorLoadPromiseDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceFilterConditionDirective, loadInvoiceAttachmentSelectorDirective, loadMailMessageTypeSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -115,9 +138,9 @@
             var obj = {
                 EmailActionAttachmentSetId:emailAttachmentSetEntity!=undefined?emailAttachmentSetEntity.EmailActionAttachmentSetId:UtilsService.guid(),
                 Name: $scope.scopeModel.name,
-                EmailAttachments: sendEmailAttachmentsAPI.getData(),
-                FilterCondition: invoiceFilterConditionAPI.getData()
-
+                FilterCondition: invoiceFilterConditionAPI.getData(),
+                AttachmentsIds: invoiceAttachmentSelectorAPI.getSelectedIds(),
+                MailMessageTypeId: mailMessageTypeAPI.getSelectedIds()
             };
             return obj;
         }

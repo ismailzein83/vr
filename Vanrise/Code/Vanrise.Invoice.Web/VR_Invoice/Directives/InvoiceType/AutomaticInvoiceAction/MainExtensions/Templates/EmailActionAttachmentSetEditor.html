@@ -7,11 +7,16 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-common-mailmessagetype-selector on-ready="scopeModel.onMailMessageTypeSelectorReady" normal-col-num="6" isrequired="scopeModel.isMailMessageTypeRequired()"></vr-common-mailmessagetype-selector>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
-                    <vr-invoicetype-automaticinvoiceaction-sendemail-emailattachments on-ready="scopeModel.onSendEmailAttachmentsReady" normal-col-num="4" isrequired="true"></vr-invoicetype-automaticinvoiceaction-sendemail-emailattachments>
-                </vr-tab>
+                    <vr-row>
+                        <vr-invoicetype-invoiceattachments-selector on-ready="scopeModel.onInvoiceAttachmentSelectorReady" normal-col-num="6" ismultipleselection></vr-invoicetype-invoiceattachments-selector>
+                    </vr-row>
+                  </vr-tab>
                 <vr-tab header="'Condition'">
                     <vr-row>
                         <vr-columns width="1/3row">

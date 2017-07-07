@@ -9,7 +9,7 @@ using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Business.Extensions;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Invoice.MainExtensions
 {
     public class InvoiceEmailActionManager
@@ -27,11 +27,13 @@ namespace Vanrise.Invoice.MainExtensions
                 sendEmailAction = action.Settings as SendEmailAction;
             }
             List<VRMailAttachement> vrMailAttachments = new List<Vanrise.Entities.VRMailAttachement>();
-            if (sendEmailAction != null && sendEmailAction.EmailAttachments != null)
+            if (sendEmailAction != null && sendEmailAction.AttachmentsIds != null && sendEmailAction.AttachmentsIds.Count > 0)
             {
-
-                foreach (var attachement in sendEmailAction.EmailAttachments)
+                invoiceType.Settings.InvoiceAttachments.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
+                foreach (var attachementId in sendEmailAction.AttachmentsIds)
                 {
+                    var attachement = invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == attachementId);
+                    attachement.ThrowIfNull("attachement");
                     InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext
                     {
                         InvoiceId = input.InvoiceId

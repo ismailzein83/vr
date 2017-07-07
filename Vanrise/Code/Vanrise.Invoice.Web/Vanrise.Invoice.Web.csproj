@@ -187,6 +187,7 @@
     <Content Include="VR_Invoice\Constants\AggregateTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\CounterTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceAccountStatusEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoiceAttachmentTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDailyTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDateEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
@@ -242,8 +243,10 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\EmailActionAttachmentSetEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\AutomaticSendEmailActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\EmailActionAttachmentSetEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\EmailAttachmentsRuntimeTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\EmailAttachmentsTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-automaticinvoiceaction-sendemail-emailattachments.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-automaticinvoiceaction-sendemail-runtime.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-automaticinvoiceaction-sendemail.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\Templates\AutomaticInvoiceActionsGridTemplate.html" />
@@ -264,6 +267,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\InvoiceAttachmentEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\Templates\InvoiceAttachmentsTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\Templates\InvoiceAttachmentEditor.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\vr-invoicetype-invoiceattachments-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceAttachments\vr-invoicetype-invoiceattachments.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\LastInvoicesDataSourceSettings.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\MainExtensions\DataSource\Templates\ItemGroupingDataSourceSettings.html" />

@@ -85,5 +85,12 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetOverridableInvoiceSetting(invoiceSettingId);
         }
+
+        [HttpGet]
+        [Route("GetAutomaticInvoiceSettingPartRuntime")]
+        public AutomaticInvoiceSettingPartRuntime GetAutomaticInvoiceSettingPartRuntime(Guid invoiceTypeId)
+        {
+            return _manager.GetAutomaticInvoiceSettingPartRuntime(invoiceTypeId);
+        }
     }
 }

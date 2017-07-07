@@ -30,29 +30,26 @@ app.directive("vrInvoicetypeGridactionsettingsSendemail", ["UtilsService", "VRNo
             var mainTypeSelectorAPI;
             var mainTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var invoiceAttachmentSelectorAPI;
+            var invoiceAttachmentSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             var gridAPI;
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
-                ctrl.datasource = [];
                 $scope.infoType = "MainTemplate";
-                ctrl.addEmailAttachment = function () {
-                    var onEmailAttachmentAdded = function (emailAttachment) {
-                        ctrl.datasource.push({ Entity: emailAttachment });
-                    };
-
-                    VR_Invoice_InvoiceEmailActionService.addEmailAttachment(onEmailAttachmentAdded, getContext());
-                };
                 $scope.onMainTypeSelectorReady = function (api) {
                     mainTypeSelectorAPI = api;
                     mainTypeSelectorReadyDeferred.resolve();
                 };
-                ctrl.removeEmailAttachment = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
+                $scope.onInvoiceAttachmentSelectorReady = function (api) {
+                    invoiceAttachmentSelectorAPI = api;
+                    invoiceAttachmentSelectorReadyDeferred.resolve();
                 };
-                defineMenuActions();
-                defineAPI();
+                UtilsService.waitMultiplePromises([mainTypeSelectorReadyDeferred.promise, invoiceAttachmentSelectorReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
@@ -63,49 +60,39 @@ app.directive("vrInvoicetypeGridactionsettingsSendemail", ["UtilsService", "VRNo
                     if (payload != undefined) {
                         invoiceActionEntity = payload.invoiceActionEntity;
                         context = payload.context;
-                        if (invoiceActionEntity != undefined && invoiceActionEntity.EmailAttachments != undefined) {
-                            for (var i = 0; i < invoiceActionEntity.EmailAttachments.length; i++) {
-                                var emailAttachment = invoiceActionEntity.EmailAttachments[i];
-                                ctrl.datasource.push({ Entity: emailAttachment });
-                            }
-                        }
                         if (invoiceActionEntity != undefined)
                          $scope.infoType = invoiceActionEntity.InfoType;
                     }
                    
                     var promises = [];
                     function loadMainTypeSelectorDirective() {
-                        var mainTypeSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-                        mainTypeSelectorReadyDeferred.promise.then(function () {
-                            var mainTypeSelectorPayload;
-                            if (invoiceActionEntity != undefined)
-                            {
-                                mainTypeSelectorPayload = {
-                                    selectedIds: invoiceActionEntity.InvoiceMailTypeId
-                                };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(mainTypeSelectorAPI, mainTypeSelectorPayload, mainTypeSelectorPayloadLoadDeferred);
-                        });
-                        return mainTypeSelectorPayloadLoadDeferred.promise;
+                        var mainTypeSelectorPayload;
+                        if (invoiceActionEntity != undefined) {
+                            mainTypeSelectorPayload = {
+                                selectedIds: invoiceActionEntity.InvoiceMailTypeId
+                            };
+                        }
+                        return mainTypeSelectorAPI.load(mainTypeSelectorPayload);
                     }
                     promises.push(loadMainTypeSelectorDirective());
+
+                    function loadInvoiceAttachmentSelectorDirective() {
+                        var invoiceAttachmentSelectorPayload = { context: getContext() };
+                        if (invoiceActionEntity != undefined) {
+                            invoiceAttachmentSelectorPayload.selectedIds  = invoiceActionEntity.AttachmentsIds;
+                        }
+                        return invoiceAttachmentSelectorAPI.load(invoiceAttachmentSelectorPayload);
+                    }
+                    promises.push(loadInvoiceAttachmentSelectorDirective());
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    var emailAttachments;
-                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        emailAttachments = [];
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            var currentItem = ctrl.datasource[i];
-                            emailAttachments.push(currentItem.Entity);
-                        }
-                    }
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.SendEmailAction ,Vanrise.Invoice.MainExtensions",
-                        EmailAttachments: emailAttachments,
                         InfoType: $scope.infoType,
-                        InvoiceMailTypeId: mainTypeSelectorAPI.getSelectedIds()
+                        InvoiceMailTypeId: mainTypeSelectorAPI.getSelectedIds(),
+                        AttachmentsIds: invoiceAttachmentSelectorAPI.getSelectedIds(),
                     };
                 };
 
@@ -117,26 +104,6 @@ app.directive("vrInvoicetypeGridactionsettingsSendemail", ["UtilsService", "VRNo
                 if (currentContext == undefined)
                     currentContext = {};
                 return currentContext;
-            }
-
-            function defineMenuActions() {
-                var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editEmailAttachment,
-                }];
-
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
-
-            function editEmailAttachment(emailAttachmentObj) {
-                var onEmailAttachmentUpdated = function (emailAttachment) {
-                    var index = ctrl.datasource.indexOf(emailAttachmentObj);
-                    ctrl.datasource[index] = { Entity: emailAttachment };
-                };
-                VR_Invoice_InvoiceEmailActionService.editEmailAttachment(emailAttachmentObj.Entity, onEmailAttachmentUpdated, getContext());
             }
         }
 

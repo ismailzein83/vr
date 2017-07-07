@@ -772,6 +772,21 @@
                         }
                     }
                     return actionsInfo;
+                },
+                getInvoiceAttachmentsInfo:function()
+                {
+                    var invoiceAttchamentsInfo = [];
+                    var invoiceAttchaments = invoiceAttachmentsAPI.getData();
+                    if (invoiceAttchaments != undefined && invoiceAttchaments.length > 0) {
+                        for (var i = 0; i < invoiceAttchaments.length ; i++) {
+                            var invoiceAttchament = invoiceAttchaments[i];
+                            invoiceAttchamentsInfo.push({
+                                Title: invoiceAttchament.Title,
+                                InvoiceAttachmentId: invoiceAttchament.InvoiceAttachmentId
+                            });
+                        }
+                    }
+                    return invoiceAttchamentsInfo;
                 }
             };
             return context;

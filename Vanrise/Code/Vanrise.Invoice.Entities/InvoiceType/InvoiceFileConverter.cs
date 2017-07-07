@@ -29,4 +29,15 @@ namespace Vanrise.Invoice.Entities
             };
         }
     }
+    public class ExcelInvoiceFile : InvoiceFile
+    {
+        public override VRMailAttachement ConvertToAttachment()
+        {
+            return new VRMailAttachmentExcel
+            {
+                Content = this.Content,
+                Name = "Invoice.xlxs",
+            };
+        }
+    }
 }

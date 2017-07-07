@@ -51,6 +51,15 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+
+        function GetAutomaticInvoiceSettingPartRuntime(invoiceTypeId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetAutomaticInvoiceSettingPartRuntime"), {
+                invoiceTypeId: invoiceTypeId,
+            });
+        }
+        
+
         return ({
             GetInvoiceSetting: GetInvoiceSetting,
             GetFilteredInvoiceSettings: GetFilteredInvoiceSettings,
@@ -60,7 +69,8 @@
             HasUpdateInvoiceSettingPermission: HasUpdateInvoiceSettingPermission,
             GetInvoiceSettingsInfo: GetInvoiceSettingsInfo,
             SetInvoiceSettingDefault: SetInvoiceSettingDefault,
-            GetOverridableInvoiceSetting: GetOverridableInvoiceSetting
+            GetOverridableInvoiceSetting: GetOverridableInvoiceSetting,
+            GetAutomaticInvoiceSettingPartRuntime: GetAutomaticInvoiceSettingPartRuntime
         });
     }
 

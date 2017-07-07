@@ -16,6 +16,6 @@ namespace Vanrise.Invoice.MainExtensions
         }
         public Guid InvoiceMailTypeId { get; set; }
         public string InfoType { get; set; }
-        public List<EmailActionAttachment> EmailAttachments { get; set; }
+        public List<Guid> AttachmentsIds { get; set; }
     }
 }

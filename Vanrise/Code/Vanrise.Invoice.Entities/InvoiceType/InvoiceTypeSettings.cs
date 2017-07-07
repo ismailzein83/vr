@@ -83,6 +83,7 @@ namespace Vanrise.Invoice.Entities
     public abstract class AutomaticInvoiceActionSettings
     {
         public abstract Guid ConfigId { get; }
+        public abstract string RuntimeEditor { get;  }
         public abstract void Execute(IAutomaticInvoiceActionSettingsContext contex);
     }
     public interface IAutomaticInvoiceActionSettingsContext

@@ -218,6 +218,17 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceSettingPartUISections;
         }
+
+        public AutomaticInvoiceSettingPartRuntime GetAutomaticInvoiceSettingPartRuntime(Guid invoiceTypeId)
+        {
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            return new AutomaticInvoiceSettingPartRuntime
+            {
+                AutomaticInvoiceActions = invoiceType.Settings.AutomaticInvoiceActions,
+                InvoiceAttachments = invoiceType.Settings.InvoiceAttachments
+            };
+        }
         #endregion
 
         #region Private Classes
