@@ -156,13 +156,25 @@ namespace Vanrise.Security.Business
 
         public UpdateOperationOutput<UserGroupDetail> AssignUserToGroup(UserGroup userGroup)
         {
-            userGroup.ThrowIfNull("userGroup");
+            UpdateOperationOutput<UserGroupDetail> updateOperationOutput = new UpdateOperationOutput<UserGroupDetail>();
+
+            if (userGroup == null)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.Message = "No data receieved for user and group";
+                return updateOperationOutput;
+            }
+
             var cachedGroups = this.GetCachedGroups();
             Group group = cachedGroups.GetRecord(userGroup.GroupId);
-            group.ThrowIfNull("group", userGroup.GroupId);
-            bool addUserToGroupResult = group.Settings.TryAddUser(new TryAddUserGroupSettingsContext() { UserId = userGroup.UserId });
+            if (group == null)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.Message = string.Format("Group {0} doesn't exist", userGroup.GroupId);
+                return updateOperationOutput;
+            }
 
-            UpdateOperationOutput<UserGroupDetail> updateOperationOutput = new UpdateOperationOutput<UserGroupDetail>();
+            bool addUserToGroupResult = group.Settings.TryAddUser(new TryAddUserGroupSettingsContext() { UserId = userGroup.UserId });
 
             if (addUserToGroupResult)
             {
