@@ -682,7 +682,7 @@ add padding .left-addon input {
     position: absolute;
     padding: 5px 2px;
     font-size: 12px;
-    right: -2px;
+    left: -2px;
     top: 20px;
 }
 .vr-select-disabled-item{
