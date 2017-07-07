@@ -230,9 +230,10 @@
     <Content Include="WhS_BusinessEntity\Constant\ZoneRouteOptionsDisplayEnum.js" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarrierGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarrier-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridPanelTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\TestCutomerTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccount-gridpanel.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-pricelistextensionformat-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-routingstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccountall-selector.js" />

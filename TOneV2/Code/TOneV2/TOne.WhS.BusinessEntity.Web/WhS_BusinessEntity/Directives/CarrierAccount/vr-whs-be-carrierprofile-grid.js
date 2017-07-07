@@ -42,18 +42,15 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 function AddCarrierAccountDrillDown() {
                     var drillDownDefinition = {};
 
-                    drillDownDefinition.title = "Carrier Account";
-                    drillDownDefinition.directive = "vr-whs-be-carrieraccount-grid";
+                    drillDownDefinition.title = "Carrier Account"; 
+                    drillDownDefinition.directive = "vr-whs-be-carrieraccount-gridpanel";
 
                     drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
                         carrierProfileItem.carrierAccountGridAPI = directiveAPI;
-                        var payload = {
-                            query: {
-                                CarrierProfilesIds: [carrierProfileItem.Entity.CarrierProfileId]
-                            },
-                            hideProfileColumn: true
+                        var payload = {                           
+                            carrierProfileId: carrierProfileItem.Entity.CarrierProfileId
                         };
-                        return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
+                        return carrierProfileItem.carrierAccountGridAPI.loadPanel(payload);
                     };
                     finalDrillDownDefinitions.push(drillDownDefinition);
                 }
@@ -101,7 +98,13 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     };
                     directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);
-                        gridAPI.itemAdded(carrierProfileObject);
+                        var onItemAddedCallBackFunction = function () {
+                            gridAPI.setUpdatedViewIndex();
+                            gridAPI.expandRow(carrierProfileObject);
+                            addCarrierAccount(carrierProfileObject);
+                        };
+                        gridAPI.itemAdded(carrierProfileObject, onItemAddedCallBackFunction);
+
                     };
                     return directiveAPI;
                 }

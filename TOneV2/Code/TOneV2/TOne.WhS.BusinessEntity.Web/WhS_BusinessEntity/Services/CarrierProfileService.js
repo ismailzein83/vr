@@ -33,10 +33,8 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-
                 modalScope.onCarrierProfileAdded = onCarrierProfileAdded;
-            };
-
+            };            
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', null, settings);
         }
 
