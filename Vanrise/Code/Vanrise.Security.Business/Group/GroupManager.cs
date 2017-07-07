@@ -40,14 +40,14 @@ namespace Vanrise.Security.Business
                     return groups.MapRecords(GroupInfoMapper, group => !excludedGroupIds.Contains(group.GroupId));
                 }
             }
-            
+
             return groups.MapRecords(GroupInfoMapper);
         }
 
         public Group GetGroup(int groupId, bool isViewedFromUI)
         {
             var groups = GetCachedGroups();
-            var group=groups.GetRecord(groupId);
+            var group = groups.GetRecord(groupId);
             if (group != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(GroupLoggableEntity.Instance, group);
             return group;
@@ -61,8 +61,8 @@ namespace Vanrise.Security.Business
         }
         public Group GetGroup(int groupId)
         {
-          
-            return  GetGroup(groupId,false);
+
+            return GetGroup(groupId, false);
         }
         public string GetGroupName(int groupId)
         {
@@ -128,7 +128,7 @@ namespace Vanrise.Security.Business
 
             foreach (var group in allGroups)
             {
-                if (group.Settings != null && group.Settings.IsMember(new GroupSettingsContext() { UserId = userId}))
+                if (group.Settings != null && group.Settings.IsMember(new GroupSettingsContext() { UserId = userId }))
                     assignedGroups.Add(group.GroupId);
             }
 
@@ -141,7 +141,7 @@ namespace Vanrise.Security.Business
 
             foreach (var group in selectedGroups)
             {
-                if (group.Settings != null && group.Settings.IsMember(new GroupSettingsContext() { UserId = userId}))
+                if (group.Settings != null && group.Settings.IsMember(new GroupSettingsContext() { UserId = userId }))
                     return true;
             }
 
@@ -163,7 +163,7 @@ namespace Vanrise.Security.Business
             bool addUserToGroupResult = group.Settings.TryAddUser(new TryAddUserGroupSettingsContext() { UserId = userGroup.UserId });
 
             UpdateOperationOutput<UserGroupDetail> updateOperationOutput = new UpdateOperationOutput<UserGroupDetail>();
-            
+
             if (addUserToGroupResult)
             {
                 UpdateGroup(group);
@@ -178,8 +178,25 @@ namespace Vanrise.Security.Business
             }
             return updateOperationOutput;
         }
+
+        public List<int> GetAssignedUserGroups(int userId)
+        {
+            var cachedGroups = this.GetCachedGroups();
+            if (cachedGroups == null)
+                return null;
+
+            List<int> assignedUserGroups = new List<int>();
+            GroupSettingsContext context = new GroupSettingsContext() { UserId = userId };
+            foreach (var groupItem in cachedGroups)
+            {
+                Group group = groupItem.Value;
+                if (group.Settings != null && group.Settings.IsMember(context))
+                    assignedUserGroups.Add(groupItem.Key);
+            }
+            return assignedUserGroups.Count > 0 ? assignedUserGroups : null;
+        }
         #endregion
-        
+
         #region Private Methods
 
         Dictionary<int, Group> GetCachedGroups()
@@ -192,7 +209,7 @@ namespace Vanrise.Security.Business
                    return groups.ToDictionary(kvp => kvp.GroupId, kvp => kvp);
                });
         }
-        
+
         #endregion
 
         #region Private Classes

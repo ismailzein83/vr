@@ -619,10 +619,34 @@ namespace Vanrise.Security.Business
             }
             return string.Join<string>(",", names);
         }
+
+        public UserDTO GetUserDetailsByEmail(string email)
+        {
+            User user = GetUserbyEmail(email);
+            return GetUserDetails(user);
+        }
+
+        public UserDTO GetUserDetailsById(int userId)
+        {
+            User user = GetUserbyId(userId);
+            return GetUserDetails(user);
+        }
         #endregion
 
         #region Private Methods
+        private UserDTO GetUserDetails(User user)
+        {
+            if (user == null)
+                return null;
+            GroupManager groupManager = new GroupManager();
+            List<int> assignedGroupIds = groupManager.GetAssignedUserGroups(user.UserId);
 
+            return new UserDTO()
+            {
+                Entity = user,
+                AssignedGroupIds = assignedGroupIds
+            };
+        }
 
         private Dictionary<int, User> GetUsersByTenant(bool getRelatedTenantsUser = true, int? selectedTenantId = null)
         {
@@ -652,6 +676,7 @@ namespace Vanrise.Security.Business
             }
             return result;
         }
+
         private Dictionary<int, User> GetCachedUsers()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",

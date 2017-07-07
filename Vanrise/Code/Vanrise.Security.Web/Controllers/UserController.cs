@@ -132,6 +132,20 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.ForgotPassword(forgotPasswordInput.Email);
         }
+
+        [HttpGet]
+        [Route("GetUserDetailsByEmail")]
+        public UserDTO GetUserDetailsByEmail(string email)
+        {
+            return _manager.GetUserDetailsByEmail(email);
+        }
+
+        [HttpGet]
+        [Route("GetUserDetailsById")]
+        public UserDTO GetUserDetailsById(int userId)
+        {
+            return _manager.GetUserDetailsById(userId);
+        }
     }
 
     public class ForgotPasswordInput
