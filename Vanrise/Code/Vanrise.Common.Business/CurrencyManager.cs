@@ -116,14 +116,12 @@ namespace Vanrise.Common.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectAdded(CurrencyLoggableEntity.Instance, currency);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);
                 var allCurrencies = GetCachedCurrencies();
-
                 if (allCurrencies.Count == 1)
                 {
                     UpdateSystemCurrency(currencyId);
                 }
-                    
+                insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);                    
             }
             else
             {
