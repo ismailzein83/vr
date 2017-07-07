@@ -10,7 +10,7 @@ namespace Retail.Teles.Business
 {
     public class SitesNotMappedToAccountFilter : ITelesEnterpriseSiteFilter
     {
-        public string EditedEnterpriseSiteId { get; set; }
+        public string EditedSiteId { get; set; }
         public long AccountId { get; set; }
         public bool IsExcluded(ITelesEnterpriseSiteFilterContext context)
         {
@@ -23,7 +23,7 @@ namespace Retail.Teles.Business
             enterpriseAccountMappingInfo.ThrowIfNull("enterpriseAccountMappingInfo");
             TelesSiteManager telesSiteManager = new TelesSiteManager();
             var cachedAccountsBySites = telesSiteManager.GetCachedAccountsBySites(context.AccountBEDefinitionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
-            if (this.EditedEnterpriseSiteId != null && EditedEnterpriseSiteId == context.EnterpriseSiteId)
+            if (this.EditedSiteId != null && EditedSiteId == context.EnterpriseSiteId)
                 return false;
             if (cachedAccountsBySites != null && cachedAccountsBySites.ContainsKey(context.EnterpriseSiteId))
                 return true;
