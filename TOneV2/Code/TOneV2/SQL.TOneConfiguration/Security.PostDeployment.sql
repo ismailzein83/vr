@@ -100,6 +100,8 @@ as (select * from (values
 ('VR_Sec/Users/ResetPassword','VR_Sec_Users: Reset Password'),
 ('VR_Sec/Users/LoadLoggedInUserProfile',null),
 ('VR_Sec/Users/EditUserProfile',null),
+('VR_Sec/Users/GetUserDetailsByEmail','VR_Sec_Users: View'),
+('VR_Sec/Users/GetUserDetailsById','VR_Sec_Users: View'),
 
 ('VR_Sec/Group/GetFilteredGroups','VR_Sec_Group: View'),
 ('VR_Sec/Group/GetGroupInfo',null),
