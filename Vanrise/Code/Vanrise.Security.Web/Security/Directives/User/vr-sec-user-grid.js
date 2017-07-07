@@ -132,10 +132,10 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                 return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
             }
             function hasDisableSystemEntityPermissionsPermission() {
-                return VR_Sec_PermissionAPIService.HasDisablePermission();
+                return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
             }
             function hasEnableSystemEntityPermissionsPermission() {
-                return VR_Sec_PermissionAPIService.HasEnablePermission();
+                return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
             }
          
 
