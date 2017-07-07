@@ -97,13 +97,17 @@ namespace Retail.Teles.Business
 
                 var accountBEDefinitionId = _accountTypeManager.GetAccountBEDefinitionId(account.TypeId);
                 var childAccounts = _accountBEManager.GetChildAccounts(accountBEDefinitionId, account.AccountId, false);
-                foreach (var childAccount in childAccounts)
+                if (childAccounts != null)
                 {
-                    if (IsSiteMapped(childAccount))
-                        return false;
-                    if (IsChangedUserRGs(childAccount, false, null))
-                        return false;
+                    foreach (var childAccount in childAccounts)
+                    {
+                        if (IsSiteMapped(childAccount))
+                            return false;
+                        if (IsChangedUserRGs(childAccount, false, null))
+                            return false;
+                    }
                 }
+            
                 return true;
             }
             else if (account.TypeId == siteTypeId)
@@ -156,7 +160,7 @@ namespace Retail.Teles.Business
             if (account.TypeId == siteTypeId)
             {
                 var parentAccount = _accountBEManager.GetParentAccount(account);
-                parentAccount.ThrowIfNull("account", account.ParentAccountId);
+                parentAccount.ThrowIfNull("account", account.ParentAccountId.Value);
                 if (!IsEnterpriseMapped(parentAccount))
                     return false;
                 return !IsSiteMapped(account);

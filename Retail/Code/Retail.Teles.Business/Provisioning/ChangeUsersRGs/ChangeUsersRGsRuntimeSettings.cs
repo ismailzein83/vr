@@ -73,8 +73,8 @@ namespace Retail.Teles.Business
                 if (siteRoutingGroups != null)
                 {
                     long accountId = -1;
-                    
-                    if (mappedSites.TryGetValue(siteId, out accountId))
+
+                    if (mappedSites != null && mappedSites.TryGetValue(siteId, out accountId))
                     {
                         ChangeUsersRoutingGroupForMappedSite(context, definitionSettings, siteRoutingGroups, siteId, accountId);
                     }else
