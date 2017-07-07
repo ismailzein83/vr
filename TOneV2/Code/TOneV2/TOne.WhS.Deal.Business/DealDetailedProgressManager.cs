@@ -20,7 +20,7 @@ namespace TOne.WhS.Deal.Business
         public DealDetailedProgressManager()
         {
             _dataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
-            _dealTechnicalSettingIntervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
+            _dealTechnicalSettingIntervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
         }
 
         #endregion
@@ -29,6 +29,9 @@ namespace TOne.WhS.Deal.Business
 
         public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate = null, DateTime? endDate = null)
         {
+            if (dealZoneGroups == null)
+                return null;
+
             IDealDetailedProgressDataManager dealDetailedProgressDataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
             List<DealDetailedProgress> dealDetailedProgressList = dealDetailedProgressDataManager.GetDealDetailedProgresses(dealZoneGroups, isSale, beginDate, endDate);
             if (dealDetailedProgressList == null || dealDetailedProgressList.Count == 0)
@@ -80,6 +83,11 @@ namespace TOne.WhS.Deal.Business
         {
             if (dealDetailedProgressIds != null && dealDetailedProgressIds.Count > 0)
                 _dataManager.DeleteDealDetailedProgresses(dealDetailedProgressIds);
+        }
+
+        public void DeleteDealDetailedProgresses(bool isSale, DateTime? beginDate, DateTime? endDate)
+        {
+            _dataManager.DeleteDealDetailedProgresses(isSale, beginDate, endDate);
         }
 
         public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp)

@@ -40,6 +40,19 @@ namespace TOne.WhS.Deal.Entities
         public DateTime ToTime { get; set; }
     }
 
+    public struct DealDetailedZoneGroupTierWithoutRate
+    {
+        public int DealId { get; set; }
+
+        public int ZoneGroupNb { get; set; }
+
+        public int? TierNb { get; set; }
+
+        public DateTime FromTime { get; set; }
+
+        public DateTime ToTime { get; set; }
+    }
+
     public class DealZoneGroupTierDetails
     {
         public int TierNb { get; set; }

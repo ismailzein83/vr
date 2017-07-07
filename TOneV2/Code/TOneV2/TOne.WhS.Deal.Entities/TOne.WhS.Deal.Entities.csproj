@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealBillingSummary\DealBillingSummary.cs" />
     <Compile Include="DealDefinition\DealDefinitionFilter.cs" />
     <Compile Include="DealDefinition\DealDefinitionInfo.cs" />
     <Compile Include="DealDefinition\DealEntities.cs" />

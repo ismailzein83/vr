@@ -325,6 +325,7 @@
               </InArgument>
             </vbw:SaveDefinitionObjectState.ObjectValue>
           </vbw:SaveDefinitionObjectState>
+          <twdba1:FinalizeDealEvaluator sap2010:WorkflowViewState.IdRef="FinalizeDealEvaluator_1" />
         </Sequence>
       </If.Then>
     </If>
@@ -335,20 +336,20 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbEZDA9MCDgIBAUwzTDYCAQJOBVQgAwGEA1UFYCQDAe8CYQVsIQMB2gJtBcoCCgIBD8sCBdECIAIBA1ELUYUBAwGGA05gToIBAwGFA10LXYABAwH6AlgLWE0DAfACZAtkaAMB5QJpC2l4AwHbAnALcFwCARB0CcgCFAIBGs4CC84ChQECAQXLAmDLAoABAgEEdQuRARYDAakCkgELpgEQAwGJAqcBC7sBEAMB6QG8AQu0AhACATu1Agu7AjMCATC8AgvHAisCARt5DYQBLQMBwgKFAQ2QAS0DAaoClQERlQG+AQMBigKZAQ+kARgDAZQCqgERqgG+AQMB6gGuAQ+5ARgDAfQBvwERvwGPAQIBPMMBD7ICGgIBRrgCEbgChgECATHEAhHEAmgCASa/AhG/AlMCARx8E3yWAQMBzwJ5mgF5oAEDAc4CgQETgQFiAwHDAogBE4gBlgEDAbcChQGaAYUBoQEDAbYCjQETjQFiAwGrAqEBFaEBlAEDAZ8CnAEVnAF5AwGVArYBFbYByAEDAf8BsQEVsQF5AwH1AcQBEcoBNgMB3gHLARHWASwDAckB1wERsQIbAgFHxwEXxwGKAQMB3wHTARfTAZEBAwHUAc4BF84BmgEDAcoB2gEX2gF4AwG/AeEBFa8CIAIBSOIBF+4BMgMBqAHvAReBAigDAZABggIXrgIcAgFJ6wEd6wGXAQMBtAHlAR3mAXwDAakB8gEd+QEgAwGdAf4BHf4BoQEDAZIB7wHDAe8ByQEDAZEBhQIdhQLQAQIBSokCG48CLwMBhAGSAhusAiYCAVWMAiGMAswBAwGFAZMCHZ4CJgIBbZ8CHasCOAIBVpsCI5sCfAIBeZYCI5YCgAECAW6oAiOoAp0BAgFiogIjowKwAQIBVw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbEdDA9QCDgIBAUwzTDYCAQJOBVQgAwGFA1UFYCQDAfACYQVsIQMB2wJtBcsCCgIBD8wCBdICIAIBA1ELUYUBAwGHA05gToIBAwGGA10LXYABAwH7AlgLWE0DAfECZAtkaAMB5gJpC2l4AwHcAnALcFwCARB0CckCFAIBGs8CC88ChQECAQXMAmDMAoABAgEEdQuRARYDAaoCkgELpgEQAwGKAqcBC7sBEAMB6gG8AQu0AhACATy1Agu7AjMCATG8AgvHAisCARzIAgvIAmUCARt5DYQBLQMBwwKFAQ2QAS0DAasClQERlQG+AQMBiwKZAQ+kARgDAZUCqgERqgG+AQMB6wGuAQ+5ARgDAfUBvwERvwGPAQIBPcMBD7ICGgIBR7gCEbgChgECATLEAhHEAmgCASe/AhG/AlMCAR18E3yWAQMB0AJ5mgF5oAEDAc8CgQETgQFiAwHEAogBE4gBlgEDAbgChQGaAYUBoQEDAbcCjQETjQFiAwGsAqEBFaEBlAEDAaACnAEVnAF5AwGWArYBFbYByAEDAYACsQEVsQF5AwH2AcQBEcoBNgMB3wHLARHWASwDAcoB1wERsQIbAgFIxwEXxwGKAQMB4AHTARfTAZEBAwHVAc4BF84BmgEDAcsB2gEX2gF4AwHAAeEBFa8CIAIBSeIBF+4BMgMBqQHvAReBAigDAZEBggIXrgIcAgFK6wEd6wGXAQMBtQHlAR3mAXwDAaoB8gEd+QEgAwGeAf4BHf4BoQEDAZMB7wHDAe8ByQEDAZIBhQIdhQLQAQIBS4kCG48CLwMBhQGSAhusAiYCAVaMAiGMAswBAwGGAZMCHZ4CJgIBbp8CHasCOAIBV5sCI5sCfAIBepYCI5YCgAECAW+oAiOoAp0BAgFjogIjowKwAQIBWA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="857,22" />
-      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="857,22" />
-      <sap2010:ViewStateData Id="CalculateBeginDate_1" sap:VirtualizedContainerService.HintSize="857,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="835,22" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="835,22" />
+      <sap2010:ViewStateData Id="CalculateBeginDate_1" sap:VirtualizedContainerService.HintSize="835,22" />
       <sap2010:ViewStateData Id="DealEvaluatorSubProcess_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="DealEvaluatorSubProcess_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="710,86" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="688,86" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="710,212" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="688,212" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="710,212" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="688,212" />
       <sap2010:ViewStateData Id="GetDealTechnicalSettingData_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="489,22" />
@@ -379,26 +380,27 @@
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="710,1194" />
-      <sap2010:ViewStateData Id="BuildDealEvaluatorProcessState_1" sap:VirtualizedContainerService.HintSize="710,22" />
-      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="710,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="732,2072">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="688,1194" />
+      <sap2010:ViewStateData Id="BuildDealEvaluatorProcessState_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="FinalizeDealEvaluator_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="710,2134">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="857,2222" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="857,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="879,2594">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="835,2284" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="835,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="857,2656">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="919,2674" />
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="897,2736" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

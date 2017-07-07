@@ -5,18 +5,20 @@
     VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService'];
 
     function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService) {
-
+        $scope.scopeModel = {};
         var volumeCommitmentItemEntity;
         var context;
+        var zoneLoaded;
         var isEditMode;
 
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var countrySelectedPromiseDeferred;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var zoneDirectiveAPI;
-        var zoneLoaded;
-        $scope.scopeModel = {};
+
         loadParameters();
         defineScope();
         load();
@@ -33,6 +35,7 @@
         }
 
         function defineScope() {
+
             $scope.scopeModel.tiers = [];
             $scope.scopeModel.addTier = function () {
                 var onVolumeCommitmentItemTierAdded = function (volumeCommitmentItemTier) {
@@ -45,12 +48,23 @@
             $scope.scopeModel.isValid = function () {
                 if ($scope.scopeModel.tiers.length == 0)
                     return "You Should add at least one tier.";
+
                 if (!hasNotLastTierRecord() && $scope.scopeModel.tiers.length == 1)
                     return "invalide data first tier can not have unknown up to volume.";
+
                 if (hasNotLastTierRecord())
                     return "At least one record  should be marked as last tier.";
+
+                var tiersLength = $scope.scopeModel.tiers.length;
+                for (var x = 0; x < tiersLength; x++) {
+                    var currentTier = $scope.scopeModel.tiers[x];
+                    if (currentTier.RetroActiveFromTierNumber != undefined && currentTier.tierId <= currentTier.RetroActiveFromTierNumber)
+                        return "Retro Active Tier Number should be less than Tier Number ";
+                }
+
                 return null;
             };
+
             $scope.scopeModel.removeTier = function (dataItem) {
                 var index = $scope.scopeModel.tiers.indexOf(dataItem);
                 reorderAllTiersAfterRemove(index);
@@ -65,21 +79,25 @@
             $scope.scopeModel.disabelTierAdd = function () {
                 return !hasNotLastTierRecord();
             };
+
             $scope.scopeModel.onZoneSelectorReady = function (api) {
                 zoneDirectiveAPI = api;
                 zoneReadyPromiseDeferred.resolve();
             };
+
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             };
+
             $scope.scopeModel.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
                 if (country != undefined) {
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
+
                     if (payload != undefined) {
-                        if (payload.filter !=undefined)
+                        if (payload.filter != undefined)
                             payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
                         else
                             payload.filter = {
@@ -96,15 +114,15 @@
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateVolumeCommitmentItem() : addVolumeCommitmentItem();
             };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.tierGridMenuActions = [
-            {
+
+            $scope.scopeModel.tierGridMenuActions = [{
                 name: "Edit",
                 clicked: editVolumeCommitmentItemTier
             }];
-
         }
 
         function load() {
@@ -127,6 +145,7 @@
             currentContext.getSelectedZonesIds = function () {
                 return zoneDirectiveAPI.getSelectedIds();
             };
+
             currentContext.getZonesNames = function (ids) {
                 var names = [];
                 for (var i = 0; i < ids.length; i++) {
@@ -142,12 +161,8 @@
                 return countryDirectiveApi.getSelectedIds();
             };
 
-
-
             return currentContext;
         }
-
-
 
         function loadCountryZoneSection() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -167,21 +182,19 @@
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
 
-
-
             if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryId != undefined) {
                 var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadZonePromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([zoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
-                     var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
-                     VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
-                     loadZonePromiseDeferred.promise.then(function () {
-                         if (volumeCommitmentItemEntity != undefined)
-                             bulidTiersData(volumeCommitmentItemEntity.Tiers);
-                         zoneLoaded = true;
-                     });
+                    var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
+                    VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
+                    loadZonePromiseDeferred.promise.then(function () {
+                        if (volumeCommitmentItemEntity != undefined)
+                            bulidTiersData(volumeCommitmentItemEntity.Tiers);
+                        zoneLoaded = true;
+                    });
                     countrySelectedPromiseDeferred = undefined;
                 });
             }
@@ -208,26 +221,22 @@
                 tiers = [];
                 for (var i = 0; i < $scope.scopeModel.tiers.length; i++) {
                     var tier = $scope.scopeModel.tiers[i];
-                    tiers.push({
-                        DefaultRate: tier.DefaultRate,
-                        UpToVolume: tier.UpToVolume,
-                        RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
-                        ExceptionZoneRates: tier.ExceptionZoneRates
-                    });
+                    tiers.push({ DefaultRate: tier.DefaultRate, UpToVolume: tier.UpToVolume, RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber, ExceptionZoneRates: tier.ExceptionZoneRates });
                 }
             }
             return {
                 Name: $scope.scopeModel.name,
                 ZoneIds: zoneDirectiveAPI.getSelectedIds(),
-                CountryId:countryDirectiveApi.getSelectedIds(),
+                CountryId: countryDirectiveApi.getSelectedIds(),
                 Tiers: tiers
             };
         }
 
         function bulidTierObject(tier, index, hasException) {
+            var tierNb = index + 1;
             return {
-                tierId: index,
-                tierName: 'Tier ' + parseInt(index + 1),
+                tierId: tierNb,
+                tierName: 'Tier ' + parseInt(tierNb),
                 FromVol: index == 0 ? 0 : $scope.scopeModel.tiers[index - 1].UpToVolume,
                 UpToVolume: tier.UpToVolume,
                 DefaultRate: tier.DefaultRate,
@@ -245,7 +254,6 @@
                 if (tier.UpToVolume == null) return false;
             }
             return true;
-
         }
 
         function addVolumeCommitmentItem() {
@@ -269,9 +277,12 @@
             var onVolumeCommitmentItemTierUpdated = function (updatedItem) {
                 var index = $scope.scopeModel.tiers.indexOf(tierEntity);
                 $scope.scopeModel.tiers[index] = bulidTierObject(updatedItem, index);
+
                 var nextindex = index + 1;
-                if ($scope.scopeModel.tiers[nextindex] != undefined) {
-                    $scope.scopeModel.tiers[nextindex] = bulidTierObject($scope.scopeModel.tiers[nextindex], nextindex);
+                var nextItem = $scope.scopeModel.tiers[nextindex];
+
+                if (nextItem != undefined) {
+                    $scope.scopeModel.tiers[nextindex] = bulidTierObject(nextItem, nextindex);
                 }
             };
             WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTier(tierEntity, onVolumeCommitmentItemTierUpdated, $scope.scopeModel.tiers, getContext());
@@ -280,8 +291,10 @@
         function findExceptionZoneIds(exrates) {
             var newexrates = [];
             var allselectedzoneids = $scope.scopeModel.selectedZones;
+
             if (allselectedzoneids == undefined || allselectedzoneids.length == 0)
                 return newexrates;
+
             if (exrates) {
                 for (var i = 0 ; i < exrates.length; i++) {
                     if (exrates[i].ZoneIds.some(containesInZonesIds)) {
@@ -292,7 +305,6 @@
                     }
                 };
             }
-
             return newexrates;
         }
 
@@ -301,16 +313,17 @@
             for (var i = 0 ; i < tiers.length; i++) {
                 var tier = tiers[i];
                 var tierExceptions = findExceptionZoneIds(tier.ExceptionZoneRates);
-               
+
+                var tierNb = i + 1;
                 var obj = {
-                    tierId: i,
-                    tierName: 'Tier ' + parseInt(i + 1),
+                    tierId: tierNb,
+                    tierName: 'Tier ' + parseInt(tierNb),
                     FromVol: i == 0 ? 0 : tiers[i - 1].UpToVolume,
                     UpToVolume: tier.UpToVolume,
                     DefaultRate: tier.DefaultRate,
                     RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
-                    RetroActiveFromTier: (tier.RetroActiveFromTierNumber !=undefined) ? 'Tier ' + parseInt(tier.RetroActiveFromTierNumber + 1) : '',
-                    RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? tier.RetroActiveFromTierNumber > 0 ? tiers[tier.RetroActiveFromTierNumber - 1].UpToVolume :0 : 'N/A',
+                    RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? 'Tier ' + parseInt(tier.RetroActiveFromTierNumber) : '',
+                    RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(newTiersArray, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
                     ExceptionZoneRates: tierExceptions,
                     HasException: tierExceptions.length > 0
                 };
@@ -320,20 +333,21 @@
             $scope.scopeModel.tiers = newTiersArray;
         };
 
-
         function reorderAllTiersAfterRemove(index) {
             if (index + 1 == $scope.scopeModel.tiers.length) {
                 $scope.scopeModel.tiers.splice(index, 1);
                 return;
             }
+            var deletedTierNb = index + 1;
             var newTiersArray = [];
             for (var i = 0 ; i < $scope.scopeModel.tiers.length; i++) {
                 var tier = $scope.scopeModel.tiers[i];
                 if (i != index) {
+
                     var obj = {
                         UpToVolume: tier.UpToVolume,
                         DefaultRate: tier.DefaultRate,
-                        RetroActiveFromTierNumber: (tier.RetroActiveFromTierNumber != index) ?(tier.RetroActiveFromTierNumber > index ) ?  tier.RetroActiveFromTierNumber - 1  : tier.RetroActiveFromTierNumber  : undefined,
+                        RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber != undefined ? deletedTierNb >= tier.RetroActiveFromTierNumber ? tier.RetroActiveFromTierNumber : (tier.RetroActiveFromTierNumber - 1) : undefined,
                         ExceptionZoneRates: tier.ExceptionZoneRates,
                         HasException: tier.ExceptionZoneRates != undefined && tier.ExceptionZoneRates.length > 0
                     };
@@ -345,21 +359,22 @@
 
         function rebuildTiersArray(array) {
             for (var j = 0 ; j < array.length; j++) {
+                var tierNb = j + 1;
                 var tier = array[j];
-                tier.tierId = j;
-                tier.tierName = 'Tier ' + parseInt(j + 1);
+                tier.tierId = tierNb;
+                tier.tierName = 'Tier ' + parseInt(tierNb);
                 tier.FromVol = j == 0 ? 0 : array[j - 1].UpToVolume;
-                tier.RetroActiveFromTier= (tier.RetroActiveFromTierNumber != undefined ) ? 'Tier ' + parseInt(tier.RetroActiveFromTierNumber + 1) : '';
-                tier.RetroActiveVolume = (tier.RetroActiveFromTierNumber != undefined) ?  array[tier.RetroActiveFromTierNumber - 1].UpToVolume  : 'N/A';
+                tier.RetroActiveFromTier = (tier.RetroActiveFromTierNumber != undefined) ? 'Tier ' + parseInt(tier.RetroActiveFromTierNumber) : '';
+                tier.RetroActiveVolume = (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(array, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A';
             }
             $scope.scopeModel.tiers = array;
         };
-
 
         function containesInZonesIds(element, index, array) {
             return zoneDirectiveAPI.getSelectedIds().indexOf(element) > -1;
         };
     }
+
     app.controller('WhS_Deal_VolumeCommitmentItemEditorController', VolumeCommitmentItemEditorController);
 
 })(app);

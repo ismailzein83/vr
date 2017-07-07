@@ -14,6 +14,9 @@ namespace TOne.WhS.Deal.Business
 
         public Dictionary<DealZoneGroup, DealProgress> GetDealProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
         {
+            if (dealZoneGroups == null)
+                return null;
+
             IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
             List<DealProgress> dealProgressList = dealProgressDataManager.GetDealProgresses(dealZoneGroups, isSale);
             if (dealProgressList == null || dealProgressList.Count == 0)
@@ -40,6 +43,35 @@ namespace TOne.WhS.Deal.Business
             dealProgressDataManager.UpdateDealProgresses(dealProgresses.ToList());
         }
 
+        public void DeleteDealProgresses(IEnumerable<DealZoneGroup> dealZoneGroups, bool isSale)
+        {
+            if (dealZoneGroups == null || dealZoneGroups.Count() == 0)
+                return;
+
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            dealProgressDataManager.DeleteDealProgresses(dealZoneGroups.ToHashSet(), isSale);
+        }
+
+        public  IEnumerable<DealZoneGroup> GetAffectedDealZoneGroups(bool isSale)
+        {
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            return dealProgressDataManager.GetAffectedDealZoneGroups(isSale);
+        }
+
+        public void InsertAffectedDealZoneGroups(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
+        {
+            if (dealZoneGroups == null || dealZoneGroups.Count() == 0)
+                return;
+
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            dealProgressDataManager.InsertAffectedDealZoneGroups(dealZoneGroups, isSale);
+        }
+
+        public void DeleteAffectedDealZoneGroups()
+        {
+            IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
+            dealProgressDataManager.DeleteAffectedDealZoneGroups();
+        }
         #endregion
     }
 }

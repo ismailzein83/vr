@@ -83,7 +83,7 @@ namespace TOne.WhS.Deal.Data.SQL
         public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp)
         {
             object beginDateAsObj = ExecuteScalarSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealEvaluatorBeginDate]", lastTimestamp);
-            
+
             DateTime? beginDate = null;
             if (beginDateAsObj != DBNull.Value)
                 beginDate = (DateTime)beginDateAsObj;
@@ -96,7 +96,10 @@ namespace TOne.WhS.Deal.Data.SQL
             string query = String.Format("SELECT MAX(timestamp) FROM [TOneWhS_Deal].[DealDetailedProgress] WITH(NOLOCK)");
             return (Byte[])ExecuteScalarText(query, null);
         }
-
+        public void DeleteDealDetailedProgresses(bool isSale, DateTime? beginDate, DateTime? endDate)
+        {
+            ExecuteNonQuerySP("[TOneWhS_Deal].[sp_DealDetailedProgress_DeleteByDate]", beginDate, endDate, isSale);
+        }
         #endregion
 
         #region Private Methods

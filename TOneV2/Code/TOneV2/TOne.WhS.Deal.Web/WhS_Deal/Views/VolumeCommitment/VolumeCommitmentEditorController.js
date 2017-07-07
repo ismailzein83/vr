@@ -160,7 +160,7 @@
             $scope.scopeModel.description = volumeCommitmentEntity.Name;
             $scope.scopeModel.beginDate = volumeCommitmentEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EndDate;
-            $scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
+            //$scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         };
         function loadCarrierAccountDealItemsSection() {

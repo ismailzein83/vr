@@ -10,6 +10,7 @@ using TOne.WhS.Deal.Entities;
 using Vanrise.GenericData.Pricing;
 using Vanrise.Common.Business;
 using System.Collections;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 {
@@ -48,62 +49,66 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             DateTime minAttemptDateTime; DateTime maxAttemptDateTime;
             PrepareLists(batchRecords, out saleDealZoneGroups, out costDealZoneGroups, out mainCDRs, out partialPricedCDRs, out minAttemptDateTime, out maxAttemptDateTime);
 
-            if (saleDealZoneGroups.Count == 0 && costDealZoneGroups.Count == 0)
-                return;
-
-            Dictionary<DealZoneGroup, DealProgress> saleDealProgresses;
-            Dictionary<DealZoneGroup, DealProgress> costDealProgresses;
-            Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> saleDealDetailedProgresses;
-            Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> costDealDetailedProgresses;
-            LoadDealProgressItems(saleDealZoneGroups, costDealZoneGroups, minAttemptDateTime, maxAttemptDateTime, out saleDealProgresses, out costDealProgresses, out saleDealDetailedProgresses, out costDealDetailedProgresses);
-
-            Dictionary<PropertyName, string> salePropertyNames = BuildPropertyNames("Sale", "Sale");
-            Dictionary<PropertyName, string> costPropertyNames = BuildPropertyNames("Cost", "Supplier");
-
-            List<DealProgress> newSaleDealProgresses = new List<DealProgress>();
-            List<DealProgress> newCostDealProgresses = new List<DealProgress>();
-            List<DealProgress> existingSaleDealProgresses = saleDealProgresses.Values.ToList();
-            List<DealProgress> existingCostDealProgresses = costDealProgresses.Values.ToList();
-
-            List<DealDetailedProgress> newSaleDealDetailedProgresses = new List<DealDetailedProgress>();
-            List<DealDetailedProgress> newCostDealDetailedProgresses = new List<DealDetailedProgress>();
-            List<DealDetailedProgress> existingSaleDealDetailedProgresses = saleDealDetailedProgresses.Values.ToList();
-            List<DealDetailedProgress> existingCostDealDetailedProgresses = costDealDetailedProgresses.Values.ToList();
-
-            foreach (var record in batchRecords)
+            if (saleDealZoneGroups.Count > 0 || costDealZoneGroups.Count > 0)
             {
-                CDRPricingDataOutput firstSaleCDR = null;
-                CDRPricingDataOutput secondSaleCDR = null;
+                Dictionary<DealZoneGroup, DealProgress> saleDealProgresses;
+                Dictionary<DealZoneGroup, DealProgress> costDealProgresses;
+                Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> saleDealDetailedProgresses;
+                Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> costDealDetailedProgresses;
+                LoadDealProgressItems(saleDealZoneGroups, costDealZoneGroups, minAttemptDateTime, maxAttemptDateTime, out saleDealProgresses, out costDealProgresses, out saleDealDetailedProgresses, out costDealDetailedProgresses);
 
-                CDRPricingDataOutput firstCostCDR = null;
-                CDRPricingDataOutput secondCostCDR = null;
+                Dictionary<PropertyName, string> salePropertyNames = BuildPropertyNames("Sale", "Sale");
+                Dictionary<PropertyName, string> costPropertyNames = BuildPropertyNames("Cost", "Supplier");
 
-                int? saleOrigDealId = record.OrigSaleDealId;
-                int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
-                if (saleOrigDealId.HasValue && saleOrigZoneGroupNb.HasValue)
+                List<DealProgress> newSaleDealProgresses = new List<DealProgress>();
+                List<DealProgress> newCostDealProgresses = new List<DealProgress>();
+                List<DealProgress> existingSaleDealProgresses = saleDealProgresses.Values.ToList();
+                List<DealProgress> existingCostDealProgresses = costDealProgresses.Values.ToList();
+
+                List<DealDetailedProgress> newSaleDealDetailedProgresses = new List<DealDetailedProgress>();
+                List<DealDetailedProgress> newCostDealDetailedProgresses = new List<DealDetailedProgress>();
+                List<DealDetailedProgress> existingSaleDealDetailedProgresses = saleDealDetailedProgresses.Values.ToList();
+                List<DealDetailedProgress> existingCostDealDetailedProgresses = costDealDetailedProgresses.Values.ToList();
+
+                foreach (var record in batchRecords)
                 {
-                    DealZoneGroup saleDealZoneGroup = new DealZoneGroup() { DealId = saleOrigDealId.Value, ZoneGroupNb = saleOrigZoneGroupNb.Value };
-                    Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(saleDealZoneGroup);
-                    UpdateBillingCDRData(saleDealProgresses, newSaleDealProgresses, saleDealDetailedProgresses, newSaleDealDetailedProgresses, saleDealZoneGroup, record, true, salePropertyNames, getSaleDealZoneGroupTierDetails, out firstSaleCDR, out secondSaleCDR);
-                }
+                    CDRPricingDataOutput firstSaleCDR = null;
+                    CDRPricingDataOutput secondSaleCDR = null;
 
-                int? costOrigDealId = record.OrigCostDealId;
-                int? costOrigZoneGroupNb = record.OrigCostDealZoneGroupNb;
-                if (costOrigDealId.HasValue && costOrigZoneGroupNb.HasValue)
-                {
-                    DealZoneGroup costDealZoneGroup = new DealZoneGroup() { DealId = costOrigDealId.Value, ZoneGroupNb = costOrigZoneGroupNb.Value };
-                    Func<int, DealZoneGroupTierDetails> getSupplierDealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(costDealZoneGroup);
-                    UpdateBillingCDRData(costDealProgresses, newCostDealProgresses, costDealDetailedProgresses, newCostDealDetailedProgresses, costDealZoneGroup, record, false, costPropertyNames, getSupplierDealZoneGroupTierDetails, out firstCostCDR, out secondCostCDR);
+                    CDRPricingDataOutput firstCostCDR = null;
+                    CDRPricingDataOutput secondCostCDR = null;
+
+                    int? saleOrigDealId = record.OrigSaleDealId;
+                    int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
+                    if (saleOrigDealId.HasValue && saleOrigZoneGroupNb.HasValue)
+                    {
+                        DealZoneGroup saleDealZoneGroup = new DealZoneGroup() { DealId = saleOrigDealId.Value, ZoneGroupNb = saleOrigZoneGroupNb.Value };
+                        Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(saleDealZoneGroup);
+                        UpdateBillingCDRData(saleDealProgresses, newSaleDealProgresses, saleDealDetailedProgresses, newSaleDealDetailedProgresses, saleDealZoneGroup, record, true, salePropertyNames, getSaleDealZoneGroupTierDetails, out firstSaleCDR, out secondSaleCDR);
+                    }
+
+                    int? costOrigDealId = record.OrigCostDealId;
+                    int? costOrigZoneGroupNb = record.OrigCostDealZoneGroupNb;
+                    if (costOrigDealId.HasValue && costOrigZoneGroupNb.HasValue)
+                    {
+                        DealZoneGroup costDealZoneGroup = new DealZoneGroup() { DealId = costOrigDealId.Value, ZoneGroupNb = costOrigZoneGroupNb.Value };
+                        Func<int, DealZoneGroupTierDetails> getSupplierDealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(costDealZoneGroup);
+                        UpdateBillingCDRData(costDealProgresses, newCostDealProgresses, costDealDetailedProgresses, newCostDealDetailedProgresses, costDealZoneGroup, record, false, costPropertyNames, getSupplierDealZoneGroupTierDetails, out firstCostCDR, out secondCostCDR);
+                    }
+                    CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
                 }
-                CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
+                DealProgressManager dealProgressManager = new DealProgressManager();
+                dealProgressManager.UpdateDealProgresses(existingSaleDealProgresses.Union(existingCostDealProgresses));
+                dealProgressManager.InsertDealProgresses(newSaleDealProgresses.Union(newCostDealProgresses));
+
+                DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
+                dealDetailedProgressManager.UpdateDealDetailedProgresses(existingSaleDealDetailedProgresses.Union(existingCostDealDetailedProgresses));
+                dealDetailedProgressManager.InsertDealDetailedProgresses(newSaleDealDetailedProgresses.Union(newCostDealDetailedProgresses));
             }
-            DealProgressManager dealProgressManager = new DealProgressManager();
-            dealProgressManager.UpdateDealProgresses(existingSaleDealProgresses.Union(existingCostDealProgresses));
-            dealProgressManager.InsertDealProgresses(newSaleDealProgresses.Union(newCostDealProgresses));
-
-            DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
-            dealDetailedProgressManager.UpdateDealDetailedProgresses(existingSaleDealDetailedProgresses.Union(existingCostDealDetailedProgresses));
-            dealDetailedProgressManager.InsertDealDetailedProgresses(newSaleDealDetailedProgresses.Union(newCostDealDetailedProgresses));
+            else
+            {
+                billingRecords = mainCDRs.Union(partialPricedCDRs).ToList();
+            }
 
             DataRecordBatch mainTransformedBatch = DataRecordBatch.CreateBatchFromRecords(mainCDRs, queueItemType.BatchDescription, recordTypeId);
             DataRecordBatch partialPricedTransformedBatch = DataRecordBatch.CreateBatchFromRecords(partialPricedCDRs, queueItemType.BatchDescription, recordTypeId);
@@ -123,6 +128,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             minAttemptDateTime = DateTime.MaxValue;
             maxAttemptDateTime = DateTime.MinValue;
 
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
+
             foreach (var record in batchRecords)
             {
                 DateTime attemptDateTime = record.AttemptDateTime;
@@ -133,11 +140,23 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     minAttemptDateTime = attemptDateTime;
 
                 decimal? recordSaleRateId = record.SaleRateId;
+                decimal? recordSaleCurrencyId = record.SaleCurrencyId;
                 decimal? recordCostRateId = record.CostRateId;
-                if (recordSaleRateId.HasValue && recordCostRateId.HasValue)
+                decimal? recordCostCurrencyId = record.CostCurrencyId;
+
+                bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue;
+                bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
+
+                if (!saleValid && !costValid)
+                    throw new VRBusinessException(string.Format("Sale Part and Cost Part doesn't exist for CDR Id: {0}", record.CDRId));
+
+                if (saleValid && costValid)
                     mainCDRs.Add(record);
                 else
                     partialPricedCDRs.Add(record);
+
+                dealDefinitionManager.FillOrigSaleDealValues(record);
+                dealDefinitionManager.FillOrigCostDealValues(record);
 
                 int? saleOrigDealId = record.OrigSaleDealId;
                 int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
@@ -401,9 +420,13 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealRateTierNb], secondBillingCDRRecord.GetFieldValue(propertyNames[PropertyName.SecondaryDealRateTierNb]));
 
             if (secondaryTierNb.HasValue)
-                secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealDurInSec], secondBillingCDRRecord.GetFieldValue(propertyNames[PropertyName.SecondaryDealDurInSec]));
+                secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealDurInSec], dealDurationInSeconds);
             else
+            {
+                secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealId], null);
+                secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealZoneGroupNb], null);
                 secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealDurInSec], null);
+            }
 
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.SecondaryDealTierNb], null);
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.SecondaryDealRateTierNb], null);
@@ -412,7 +435,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.RateValue], rate);
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.Net], net);
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.PricedDurationInSeconds], pricedDurationInSeconds);
-            secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.DealDurInSec], dealDurationInSeconds);
 
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.CDRPartNb], cdrPartNb);
             secondBillingCDRRecord.SetFieldValue(propertyNames[PropertyName.CDRPartDurInSec], durationInSeconds);
@@ -511,6 +533,14 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             propertyNames.Add(PropertyName.ExtraChargeRateValue, string.Format("{0}ExtraChargeRateValue", prefixPropName));
             propertyNames.Add(PropertyName.ExtraChargeValue, string.Format("{0}ExtraChargeValue", prefixPropName));
 
+            propertyNames.Add(PropertyName.OrigRateId, string.Format("Orig{0}RateId", prefixPropName));
+            propertyNames.Add(PropertyName.OrigRateValue, string.Format("Orig{0}RateValue", prefixPropName));
+            propertyNames.Add(PropertyName.OrigNet, string.Format("Orig{0}Net", prefixPropName));
+            propertyNames.Add(PropertyName.OrigExtraChargeRateValue, string.Format("Orig{0}ExtraChargeRateValue", prefixPropName));
+            propertyNames.Add(PropertyName.OrigExtraChargeValue, string.Format("Orig{0}ExtraChargeValue", prefixPropName));
+            propertyNames.Add(PropertyName.OrigPricedDurationInSeconds, string.Format("Orig{0}DurationInSeconds", prefixPropName));
+            propertyNames.Add(PropertyName.OrigCurrencyId, string.Format("Orig{0}CurrencyId", prefixPropName));
+
             propertyNames.Add(PropertyName.Zone, string.Format("{0}ZoneId", secondaryPrefixPropName));
 
             return propertyNames;
@@ -531,7 +561,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 if (!dealProgress.TargetDurationInSeconds.HasValue || (dealProgress.TargetDurationInSeconds - reachedDuration) >= durationInSeconds)
                 {
                     dealProgress.ReachedDurationInSeconds = reachedDuration + durationInSeconds;
-                    SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealProgress.CurrentTierNb);
+                    SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealProgress.CurrentTierNb, dealProgress.CurrentTierNb);
                     DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealProgress.CurrentTierNb);
 
                     CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
@@ -550,7 +580,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     if (isOnMultipleTier)
                     {
                         previousDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealProgress.CurrentTierNb);
-                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, primaryTierDurationInSeconds, dealProgress.CurrentTierNb);
+                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, primaryTierDurationInSeconds, dealProgress.CurrentTierNb, dealProgress.CurrentTierNb);
                         AdjustDealDetailedProgress(dealDetailedProgresses, newDealDetailedProgresses, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, dealProgress.CurrentTierNb, primaryTierDurationInSeconds, record, propertyNames, isSale);
                     }
 
@@ -561,29 +591,33 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     {
                         dealProgress.CurrentTierNb = nextDealZoneGroupTier.TierNb;
                         dealProgress.TargetDurationInSeconds = nextDealZoneGroupTier.VolumeInSeconds;
-                        dealProgress.ReachedDurationInSeconds = secondaryTierDurationInSeconds;
+                        dealProgress.ReachedDurationInSeconds = 0;
 
                         if (isOnMultipleTier)
                         {
-                            SetSecondaryDealData(record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNb);
+                            dealProgress.ReachedDurationInSeconds = secondaryTierDurationInSeconds;
+                            SetSecondaryDealData(record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNb, nextDealZoneGroupTier.TierNb);
 
                             CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, primaryTierDurationInSeconds, primaryTierDurationInSeconds / durationInSeconds * 100, previousDealZoneGroupTierDetails, previousDealZoneGroupTierDetails.CurrencyId);
                             CDRPricingDataInput secondPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, secondaryTierDurationInSeconds, secondaryTierDurationInSeconds / durationInSeconds * 100, nextDealZoneGroupTier, nextDealZoneGroupTier.CurrencyId);
                             SetPricingData(record, propertyNames, firstPartInput, secondPartInput, out firstPartOutput, out secondPartOutput);
+                            AdjustDealDetailedProgress(dealDetailedProgresses, newDealDetailedProgresses, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, nextDealZoneGroupTier.TierNb, secondaryTierDurationInSeconds, record, propertyNames, isSale);
                         }
                         else
                         {
-                            SetPrimaryDealData(dealZoneGroup, record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNb);
-                            CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, secondaryTierDurationInSeconds, 100, nextDealZoneGroupTier, nextDealZoneGroupTier.CurrencyId);
-                            SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
+                            UpdateBillingCDRData(dealProgresses, newDealProgresses, dealDetailedProgresses, newDealDetailedProgresses, dealZoneGroup, record, isSale, propertyNames,
+                                getDealZoneGroupTierDetails, out firstPartOutput, out secondPartOutput);
+                            //SetPrimaryDealData(dealZoneGroup, record, propertyNames, secondaryTierDurationInSeconds, nextDealZoneGroupTier.TierNb, nextDealZoneGroupTier.TierNb);
+                            //CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, secondaryTierDurationInSeconds, 100, nextDealZoneGroupTier, nextDealZoneGroupTier.CurrencyId);
+                            //SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
                         }
-                        AdjustDealDetailedProgress(dealDetailedProgresses, newDealDetailedProgresses, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, nextDealZoneGroupTier.TierNb, secondaryTierDurationInSeconds, record, propertyNames, isSale);
+                        //AdjustDealDetailedProgress(dealDetailedProgresses, newDealDetailedProgresses, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, nextDealZoneGroupTier.TierNb, secondaryTierDurationInSeconds, record, propertyNames, isSale);
                     }
                     else // second part outside deal
                     {
                         if (isOnMultipleTier)
                         {
-                            SetSecondaryDealData(record, propertyNames, secondaryTierDurationInSeconds, null);
+                            SetSecondaryDealData(record, propertyNames, secondaryTierDurationInSeconds, null, null);
 
                             CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, primaryTierDurationInSeconds, primaryTierDurationInSeconds / durationInSeconds * 100, previousDealZoneGroupTierDetails, previousDealZoneGroupTierDetails.CurrencyId);
 
@@ -597,7 +631,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             }
             else
             {
-                DealZoneGroupTierDetails newDealZoneGroupTierDetails = getDealZoneGroupTierDetails(0);
+                DealZoneGroupTierDetails newDealZoneGroupTierDetails = getDealZoneGroupTierDetails(1);
                 //throw exception if newDealZoneGroupTierDetails not exist
 
                 dealProgress = new DealProgress()
@@ -612,7 +646,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 dealProgresses.Add(dealZoneGroup, dealProgress);
                 newDealProgresses.Add(dealProgress);
 
-                SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealProgress.CurrentTierNb);
+                SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealProgress.CurrentTierNb, dealProgress.CurrentTierNb);
                 CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealProgress.DealId, durationInSeconds, 100, newDealZoneGroupTierDetails, newDealZoneGroupTierDetails.CurrencyId);
                 SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
                 AdjustDealDetailedProgress(dealDetailedProgresses, newDealDetailedProgresses, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, newDealZoneGroupTierDetails.TierNb, durationInSeconds, record, propertyNames, isSale);
@@ -622,7 +656,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         private void AdjustDealDetailedProgress(Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses, List<DealDetailedProgress> newDealDetailedProgresses,
             int dealId, int zoneGroupNb, int? tierNb, decimal durationInSeconds, dynamic record, Dictionary<PropertyName, string> propertyNames, bool isSale)
         {
-            int intervalOffset = 30;
+            int intervalOffset = new TOne.WhS.Deal.Business.ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
             DateTime attemptDateTime = record.GetFieldValue(propertyNames[PropertyName.AttemptDateTime]);
             DateTime fromTime = new DateTime(attemptDateTime.Year, attemptDateTime.Month, attemptDateTime.Day, attemptDateTime.Hour, ((int)(attemptDateTime.Minute / intervalOffset)) * intervalOffset, 0);
             DateTime toTime = fromTime.AddMinutes(intervalOffset);
@@ -706,6 +740,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 decimal secondPartPercentage;
                 if (secondPartInput.DealId.HasValue)
                 {
+                    record.SetFieldValue(propertyNames[PropertyName.CurrencyId], firstPartInput.CurrencyId);
                     record.SetFieldValue(propertyNames[PropertyName.RateId], null);
                     record.SetFieldValue(propertyNames[PropertyName.ExtraChargeRateValue], null);
                     record.SetFieldValue(propertyNames[PropertyName.ExtraChargeValue], null);
@@ -780,22 +815,27 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             pricedDuration = context.EffectiveDurationInSeconds.HasValue ? context.EffectiveDurationInSeconds.Value : default(decimal);
         }
 
-        private void SetSecondaryDealData(dynamic record, Dictionary<PropertyName, string> propertyNames, decimal? secondaryTierDurationInSeconds, int? tierNumber)
+        private void SetSecondaryDealData(dynamic record, Dictionary<PropertyName, string> propertyNames, decimal? secondaryTierDurationInSeconds, int? tierNumber, int? rateTierNumber)
         {
             if (tierNumber.HasValue)
             {
-                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealTierNb], tierNumber);
-                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealRateTierNb], tierNumber);
+                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealTierNb], tierNumber.Value);
+                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealRateTierNb], rateTierNumber.Value);
+            }
+            else
+            {
+                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealTierNb], null);
+                record.SetFieldValue(propertyNames[PropertyName.SecondaryDealRateTierNb], null);
             }
             record.SetFieldValue(propertyNames[PropertyName.SecondaryDealDurInSec], secondaryTierDurationInSeconds);
         }
 
-        private void SetPrimaryDealData(DealZoneGroup dealZoneGroup, dynamic record, Dictionary<PropertyName, string> propertyNames, decimal durationInSeconds, int tierNumber)
+        private void SetPrimaryDealData(DealZoneGroup dealZoneGroup, dynamic record, Dictionary<PropertyName, string> propertyNames, decimal durationInSeconds, int tierNumber, int rateTierNumber)
         {
             record.SetFieldValue(propertyNames[PropertyName.DealId], dealZoneGroup.DealId);
             record.SetFieldValue(propertyNames[PropertyName.DealZoneGroupNb], dealZoneGroup.ZoneGroupNb);
             record.SetFieldValue(propertyNames[PropertyName.DealTierNb], tierNumber);
-            record.SetFieldValue(propertyNames[PropertyName.DealRateTierNb], tierNumber);
+            record.SetFieldValue(propertyNames[PropertyName.DealRateTierNb], rateTierNumber);
             record.SetFieldValue(propertyNames[PropertyName.DealDurInSec], durationInSeconds);
         }
 
@@ -816,6 +856,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> saleDealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(true, null, context.To);
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> costDealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(false, null, context.To);
 
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
 
             Dictionary<DealZoneGroup, Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>>> saleDealDetailedProgressesDict;
             Dictionary<DealZoneGroup, DealDetailedProgress> previousSaleDealDetailedProgressesDict;
@@ -854,9 +895,21 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                         foreach (var record in genericDataRecordBatch.Records)
                         {
+                            dealDefinitionManager.FillOrigSaleDealValues(record);
+                            dealDefinitionManager.FillOrigCostDealValues(record);
+
                             decimal? recordSaleRateId = record.OrigSaleRateId;
+                            decimal? recordSaleCurrencyId = record.OrigSaleCurrencyId;
                             decimal? recordCostRateId = record.OrigCostRateId;
-                            if (recordSaleRateId.HasValue && recordCostRateId.HasValue)
+                            decimal? recordCostCurrencyId = record.OrigCostCurrencyId;
+
+                            bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue;
+                            bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
+
+                            if (!saleValid && !costValid)
+                                throw new VRBusinessException(string.Format("Sale Part and Cost Part doesn't exist for CDR Id: {0}", record.CDRId));
+
+                            if (saleValid && costValid)
                                 mainCDRs.Add(record);
                             else
                                 partialPricedCDRs.Add(record);
@@ -867,7 +920,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                             CDRPricingDataOutput firstCostCDR = null;
                             CDRPricingDataOutput secondCostCDR = null;
 
-                            int intervalOffset = 30;
+                            int intervalOffset = new TOne.WhS.Deal.Business.ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
                             DateTime attemptDateTime = record.GetFieldValue(salePropertyNames[PropertyName.AttemptDateTime]);//same value for sale and cost
                             DateTime batchStart = new DateTime(attemptDateTime.Year, attemptDateTime.Month, attemptDateTime.Day, attemptDateTime.Hour, ((int)(attemptDateTime.Minute / intervalOffset)) * intervalOffset, 0);
 
@@ -879,6 +932,10 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                                 Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(saleDealZoneGroup);
                                 UpdateReprocessBillingCDRData(saleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), previousSaleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), record, true, salePropertyNames, batchStart, getSaleDealZoneGroupTierDetails, saleDealZoneGroup, out firstSaleCDR, out secondSaleCDR);
                             }
+                            else
+                            {
+                                FillDataFromOriginalValues(record, salePropertyNames);
+                            }
 
                             int? costOrigDealId = record.OrigCostDealId;
                             int? costOrigZoneGroupNb = record.OrigCostDealZoneGroupNb;
@@ -887,6 +944,10 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                                 DealZoneGroup costDealZoneGroup = new DealZoneGroup() { DealId = costOrigDealId.Value, ZoneGroupNb = costOrigZoneGroupNb.Value };
                                 Func<int, DealZoneGroupTierDetails> getSupplierDealZoneGroupTierDetails = GetSupplierDealZoneGroupTierDetails(costDealZoneGroup);
                                 UpdateReprocessBillingCDRData(costDealDetailedProgressesDict.GetRecord(costDealZoneGroup), previousCostDealDetailedProgressesDict.GetRecord(costDealZoneGroup), record, false, costPropertyNames, batchStart, getSupplierDealZoneGroupTierDetails, costDealZoneGroup, out firstCostCDR, out secondCostCDR);
+                            }
+                            else
+                            {
+                                FillDataFromOriginalValues(record, costPropertyNames);
                             }
                             CreateBillingStatsCDRRecords(billingRecords, record, salePropertyNames, firstSaleCDR, secondSaleCDR, costPropertyNames, firstCostCDR, secondCostCDR, recordTypeId);
                         }
@@ -928,6 +989,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         {
             public int DealId { get; set; }
             public int? TierNb { get; set; }
+            public int? RateTierNb { get; set; }
             public decimal ReachedDurationInSeconds { get; set; }
         }
 
@@ -950,20 +1012,19 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 DealDetailedData dealDetailedProgress = firstDealDetailedProgressItem.Key;
                 DealDuration dealDuration = firstDealDetailedProgressItem.Value;
 
-                if (dealDetailedProgressList.Count == 1 || (dealDetailedProgress.ReachedDurationInSeconds - dealDuration.AssignedDurationInSeconds) > durationInSeconds)
+                if (dealDetailedProgressList.Count == 1 || (dealDetailedProgress.ReachedDurationInSeconds - dealDuration.AssignedDurationInSeconds) >= durationInSeconds)
                 {
                     if (dealDetailedProgress.TierNb.HasValue)
                     {
-                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.TierNb.Value);
-                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealDetailedProgress.TierNb.Value);
-                        SetSecondaryDealData(record, propertyNames, null, null);
+                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.RateTierNb.Value);
+                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealDetailedProgress.TierNb.Value, dealDetailedProgress.RateTierNb.Value);
+                        SetSecondaryDealData(record, propertyNames, null, null, null);
                         CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealDetailedProgress.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
                         SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
                     }
                     else
                     {
                         FillDataFromOriginalValues(record, propertyNames);
-                        //TODO: fill orig values in CDR
                     }
 
                     dealDuration.AssignedDurationInSeconds += durationInSeconds;
@@ -975,8 +1036,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                     if (firstTierDurationInSeconds > 0)
                     {
-                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.TierNb.Value);
-                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, firstTierDurationInSeconds, dealDetailedProgress.TierNb.Value);
+                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.RateTierNb.Value);
+                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, firstTierDurationInSeconds, dealDetailedProgress.TierNb.Value, dealDetailedProgress.RateTierNb.Value);
                         firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealDetailedProgress.DealId, firstTierDurationInSeconds, firstTierDurationInSeconds / durationInSeconds * 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
                     }
 
@@ -992,13 +1053,13 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                         CDRPricingDataInput secondPartInput;
                         if (dealDetailedProgress.TierNb.HasValue)
                         {
-                            DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.TierNb.Value);
-                            SetSecondaryDealData(record, propertyNames, remainingTierDurationInSeconds, dealDetailedProgress.TierNb.Value);
+                            DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.RateTierNb.Value);
+                            SetSecondaryDealData(record, propertyNames, remainingTierDurationInSeconds, dealDetailedProgress.TierNb.Value, dealDetailedProgress.RateTierNb.Value);
                             secondPartInput = BuildCDRPricingDataInput(record, propertyNames, dealDetailedProgress.DealId, remainingTierDurationInSeconds, remainingTierDurationInSeconds / durationInSeconds * 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
                         }
                         else
                         {
-                            SetSecondaryDealData(record, propertyNames, remainingTierDurationInSeconds, null);
+                            SetSecondaryDealData(record, propertyNames, remainingTierDurationInSeconds, null, null);
                             int recordCurrencyId = record.GetFieldValue(propertyNames[PropertyName.CurrencyId]);
                             secondPartInput = BuildCDRPricingDataInput(record, propertyNames, dealDetailedProgress.DealId, remainingTierDurationInSeconds, remainingTierDurationInSeconds / durationInSeconds * 100, null, recordCurrencyId);
                         }
@@ -1009,17 +1070,20 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     {
                         if (dealDetailedProgress.TierNb.HasValue)
                         {
-                            DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.TierNb.Value);
-                            SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealDetailedProgress.TierNb.Value);
-                            SetSecondaryDealData(record, propertyNames, null, null);
-                            firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealDetailedProgress.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
-                            SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
+                            UpdateReprocessBillingCDRData(currentdealDetailedProgresses, previousDealDetailedProgress, record, isSale, propertyNames, batchStart, getDealZoneGroupTierDetails, 
+                                dealZoneGroup, out firstPartOutput, out secondPartOutput);
+                            //DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(dealDetailedProgress.RateTierNb.Value);
+                            //SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, dealDetailedProgress.TierNb.Value, dealDetailedProgress.RateTierNb.Value);
+                            //SetSecondaryDealData(record, propertyNames, null, null, null);
+                            //firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealDetailedProgress.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
+                            //SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
                         }
                         else
                         {
                             FillDataFromOriginalValues(record, propertyNames);
+                            dealDuration.AssignedDurationInSeconds += durationInSeconds;
                         }
-                        dealDuration.AssignedDurationInSeconds += durationInSeconds;
+                        //dealDuration.AssignedDurationInSeconds += durationInSeconds;
                     }
                 }
             }
@@ -1029,9 +1093,9 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 {
                     if (previousDealDetailedProgress.TierNb.HasValue)
                     {
-                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(previousDealDetailedProgress.TierNb.Value);
-                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, previousDealDetailedProgress.TierNb.Value);
-                        SetSecondaryDealData(record, propertyNames, null, null);
+                        DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(previousDealDetailedProgress.RateTierNb.Value);
+                        SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, previousDealDetailedProgress.TierNb.Value, previousDealDetailedProgress.RateTierNb.Value);
+                        SetSecondaryDealData(record, propertyNames, null, null, null);
                         CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealZoneGroup.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
                         SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
                     }
@@ -1042,11 +1106,11 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 }
                 else
                 {
-                    DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(0);
+                    DealZoneGroupTierDetails currentDealZoneGroupTierDetails = getDealZoneGroupTierDetails(1);
                     //throw exception if currentDealZoneGroupTierDetails not exist
 
-                    SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, currentDealZoneGroupTierDetails.TierNb);
-                    SetSecondaryDealData(record, propertyNames, null, null);
+                    SetPrimaryDealData(dealZoneGroup, record, propertyNames, durationInSeconds, currentDealZoneGroupTierDetails.TierNb, currentDealZoneGroupTierDetails.TierNb);
+                    SetSecondaryDealData(record, propertyNames, null, null, null);
                     CDRPricingDataInput firstPartInput = BuildCDRPricingDataInput(record, propertyNames, dealZoneGroup.DealId, durationInSeconds, 100, currentDealZoneGroupTierDetails, currentDealZoneGroupTierDetails.CurrencyId);
                     SetPricingData(record, propertyNames, firstPartInput, null, out firstPartOutput, out secondPartOutput);
                 }
@@ -1111,7 +1175,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 {
                     Dictionary<DateTime, SortedList<DealDetailedData, DealDuration>> dealDetailedZoneGroupTierByDate = currentDealDetailedProgressesDict.GetOrCreateItem(dealZoneGroup);
                     SortedList<DealDetailedData, DealDuration> dealDetailedProgressList = dealDetailedZoneGroupTierByDate.GetOrCreateItem(dealDetailedZoneGroupTier.FromTime, () => { return new SortedList<DealDetailedData, DealDuration>(new DealDetailedDataComparer()); });
-                    dealDetailedProgressList.Add(new DealDetailedData() { DealId = dealDetailedProgress.DealId, ReachedDurationInSeconds = dealDetailedProgress.ReachedDurationInSeconds, TierNb = dealDetailedProgress.TierNb }, new DealDuration() { AssignedDurationInSeconds = 0 });
+                    dealDetailedProgressList.Add(new DealDetailedData() { DealId = dealDetailedProgress.DealId, ReachedDurationInSeconds = dealDetailedProgress.ReachedDurationInSeconds, TierNb = dealDetailedProgress.TierNb, RateTierNb = dealDetailedProgress.RateTierNb }, new DealDuration() { AssignedDurationInSeconds = 0 });
                 }
                 else
                 {

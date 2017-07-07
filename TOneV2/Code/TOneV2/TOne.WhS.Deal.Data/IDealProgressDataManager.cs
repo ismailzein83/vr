@@ -10,5 +10,13 @@ namespace TOne.WhS.Deal.Data
         void UpdateDealProgresses(List<DealProgress> dealProgresses);
 
         void InsertDealProgresses(List<DealProgress> dealProgresses);
+
+        void DeleteDealProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale);
+
+        IEnumerable<DealZoneGroup> GetAffectedDealZoneGroups(bool isSale);
+
+        void InsertAffectedDealZoneGroups(HashSet<DealZoneGroup> dealZoneGroups, bool isSale);
+
+        void DeleteAffectedDealZoneGroups();
     }
 }

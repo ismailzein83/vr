@@ -16,12 +16,17 @@ namespace TOne.WhS.Deal.BP.Activities
 
         public DateTime BeginDate { get; set; }
 
-        public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
-
         public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
+
+        public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
     }
 
-    public sealed class SyncDealDetailProgressWithBS : BaseAsyncActivity<SyncDealDetailProgressWithBSInput>
+    public class SyncDealDetailProgressWithBSOutput
+    {
+        public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
+    }
+
+    public sealed class SyncDealDetailProgressWithBS : BaseAsyncActivity<SyncDealDetailProgressWithBSInput, SyncDealDetailProgressWithBSOutput>
     {
         [RequiredArgument]
         public InArgument<Boolean> IsSale { get; set; }
@@ -30,17 +35,31 @@ namespace TOne.WhS.Deal.BP.Activities
         public InArgument<DateTime> BeginDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
+        public InOutArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
-        protected override void DoWork(SyncDealDetailProgressWithBSInput inputArgument, AsyncActivityHandle handle)
+        protected override SyncDealDetailProgressWithBSOutput DoWorkWithResult(SyncDealDetailProgressWithBSInput inputArgument, AsyncActivityHandle handle)
         {
-            SyncDealDetailProgressWithBillingStats(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.AffectedDealZoneGroups, inputArgument.IsSale, inputArgument.BeginDate);
+            HashSet<DealZoneGroup> dealZoneGroups;
+            HashSet<DealZoneGroup> affectedDealZoneGroups;
+            SyncDealDetailProgressWithBillingStats(inputArgument.CurrentDealBillingSummaryRecords, inputArgument.IsSale, inputArgument.BeginDate, out affectedDealZoneGroups);
 
             string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Synchronizing {0} Deal Detail Progress Table With BillingStats Table is done", isSaleAsString), null);
+
+            if (inputArgument.AffectedDealZoneGroups == null)
+                dealZoneGroups = affectedDealZoneGroups;
+            else if (affectedDealZoneGroups == null)
+                dealZoneGroups = inputArgument.AffectedDealZoneGroups;
+            else
+                dealZoneGroups = inputArgument.AffectedDealZoneGroups.Union(affectedDealZoneGroups).ToHashSet();
+
+            return new SyncDealDetailProgressWithBSOutput()
+            {
+                AffectedDealZoneGroups = dealZoneGroups
+            };
         }
 
         protected override SyncDealDetailProgressWithBSInput GetInputArgument(AsyncCodeActivityContext context)
@@ -49,22 +68,45 @@ namespace TOne.WhS.Deal.BP.Activities
             {
                 IsSale = this.IsSale.Get(context),
                 BeginDate = this.BeginDate.Get(context),
-                AffectedDealZoneGroups = this.AffectedDealZoneGroups.Get(context),
-                CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context)
+                CurrentDealBillingSummaryRecords = this.CurrentDealBillingSummaryRecords.Get(context),
+                AffectedDealZoneGroups = this.AffectedDealZoneGroups.Get(context)
             };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, SyncDealDetailProgressWithBSOutput result)
+        {
+            context.SetValue(this.AffectedDealZoneGroups, result.AffectedDealZoneGroups);
         }
 
         #region Private Methods
 
-        private void SyncDealDetailProgressWithBillingStats(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, HashSet<DealZoneGroup> affectedDealZoneGroups, bool isSale, DateTime beginDate)
+        private void SyncDealDetailProgressWithBillingStats(Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords, bool isSale, DateTime beginDate, out HashSet<DealZoneGroup> affectedDealZoneGroups)
         {
-            if (currentDealBillingSummaryRecords == null)
-                return;
-
-            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
-
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
-            var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgresses(affectedDealZoneGroups, isSale, beginDate);
+            DealProgressManager dealProgressManager = new DealProgressManager();
+            if (currentDealBillingSummaryRecords == null)
+            {
+                Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgressesDictToDelete = dealDetailedProgressManager.GetDealDetailedProgressesByDate(isSale, beginDate, null);
+                if (dealDetailedProgressesDictToDelete != null)
+                {
+                    affectedDealZoneGroups = dealDetailedProgressesDictToDelete.Keys.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }).ToHashSet();
+                    dealProgressManager.InsertAffectedDealZoneGroups(affectedDealZoneGroups, isSale);
+                    dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesDictToDelete.Values.Select(itm => itm.DealDetailedProgressId).ToList());
+                }
+                else
+                {
+                    affectedDealZoneGroups = null;
+                }
+                return;
+            }
+
+            affectedDealZoneGroups = currentDealBillingSummaryRecords.Keys.ToHashSet();
+            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
+            var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(isSale, beginDate, null);
+
+            if (dealDetailedProgresses != null)
+                affectedDealZoneGroups.UnionWith(dealDetailedProgresses.Keys.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }));
+
 
             List<DealDetailedProgress> dealDetailedProgressesToAdd = new List<DealDetailedProgress>();
             List<DealDetailedProgress> dealDetailedProgressesToUpdate = new List<DealDetailedProgress>();
@@ -92,12 +134,13 @@ namespace TOne.WhS.Deal.BP.Activities
                     }
                 }
             }
-
-            List<long> dealDetailedProgressesToDelete = dealDetailedProgresses.FindAllRecords(itm => !dealDetailedProgressesToKeep.Contains(itm.DealDetailedProgressId)).Select(itm => itm.DealDetailedProgressId).ToList();
+            IEnumerable<DealDetailedProgress> dealDetailedProgressesToDelete = dealDetailedProgresses.FindAllRecords(itm => !dealDetailedProgressesToKeep.Contains(itm.DealDetailedProgressId));
+            if (dealDetailedProgressesToDelete != null && dealDetailedProgressesToDelete.Count() > 0)
+                dealProgressManager.InsertAffectedDealZoneGroups(dealDetailedProgressesToDelete.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }).ToHashSet(), isSale);
 
             dealDetailedProgressManager.InsertDealDetailedProgresses(dealDetailedProgressesToAdd);
             dealDetailedProgressManager.UpdateDealDetailedProgresses(dealDetailedProgressesToUpdate);
-            dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete);
+            dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete.Select(itm => itm.DealDetailedProgressId).ToList());
         }
 
         private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary, int intervalOffset)

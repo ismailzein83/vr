@@ -1,7 +1,7 @@
 ﻿using System;
 using TOne.WhS.Deal.Entities;
 
-namespace TOne.WhS.Deal.Business
+namespace TOne.WhS.Deal.Entities
 {
     public class DealBillingSummary
     {

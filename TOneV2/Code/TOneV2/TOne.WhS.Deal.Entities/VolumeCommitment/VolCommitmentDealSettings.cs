@@ -99,7 +99,7 @@ namespace TOne.WhS.Deal.Entities
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 throw new NullReferenceException("volCommitmentDealItemTiers");
 
-            int tierNumber = 0;
+            int tierNumber = 1;
             IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume.HasValue ? itm.UpToVolume.Value : Int32.MaxValue);
 
             List<DealSaleZoneGroupTier> dealSaleZoneGroupTiers = new List<DealSaleZoneGroupTier>();
@@ -168,7 +168,7 @@ namespace TOne.WhS.Deal.Entities
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 throw new NullReferenceException("volCommitmentDealItemTiers");
 
-            int tierNumber = 0;
+            int tierNumber = 1;
             IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume.HasValue ? itm.UpToVolume.Value : Int32.MaxValue);
 
             List<DealSupplierZoneGroupTier> dealSupplierZoneGroupTiers = new List<DealSupplierZoneGroupTier>();

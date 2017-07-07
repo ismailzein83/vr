@@ -19,5 +19,7 @@ namespace TOne.WhS.Deal.Data
         DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp);
 
         Byte[] GetMaxTimestamp();
+
+        void DeleteDealDetailedProgresses(bool isSale, DateTime? beginDate, DateTime? endDate);
     }
 }

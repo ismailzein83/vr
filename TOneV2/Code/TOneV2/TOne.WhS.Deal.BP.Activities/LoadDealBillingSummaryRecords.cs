@@ -18,8 +18,6 @@ namespace TOne.WhS.Deal.BP.Activities
 
     public class LoadDealBillingSummaryRecordsOutput
     {
-        public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
-
         public Dictionary<DealZoneGroup, List<DealBillingSummary>> CurrentDealBillingSummaryRecords { get; set; }
     }
 
@@ -41,14 +39,12 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             DealBillingSummaryManager dealBillingSummaryManager = new DealBillingSummaryManager();
             Dictionary<DealZoneGroup, List<DealBillingSummary>> currentDealBillingSummaryRecords = dealBillingSummaryManager.LoadDealBillingSummaryRecords(inputArgument.BeginDate, inputArgument.IsSale);
-            HashSet<DealZoneGroup> affectedDealZoneGroups = currentDealBillingSummaryRecords.Keys.ToHashSet();
 
             string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Load {0} Biling Stats Records From {1} is done", isSaleAsString, inputArgument.BeginDate.ToString("yyyy-MM-dd HH:mm:ss")), null);
 
             return new LoadDealBillingSummaryRecordsOutput()
             {
-                AffectedDealZoneGroups = affectedDealZoneGroups,
                 CurrentDealBillingSummaryRecords = currentDealBillingSummaryRecords
             };
         }
@@ -64,7 +60,6 @@ namespace TOne.WhS.Deal.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadDealBillingSummaryRecordsOutput result)
         {
-            this.AffectedDealZoneGroups.Set(context, result.AffectedDealZoneGroups);
             this.CurrentDealBillingSummaryRecords.Set(context, result.CurrentDealBillingSummaryRecords);
         }
     }

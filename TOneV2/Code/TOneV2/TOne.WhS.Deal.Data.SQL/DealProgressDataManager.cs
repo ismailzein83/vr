@@ -55,6 +55,40 @@ namespace TOne.WhS.Deal.Data.SQL
             });
         }
 
+        public void DeleteDealProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
+        {
+            DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
+            ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_DealProgress_Delete]", (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@IsSale", isSale));
+                var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
+                dtPrm.Value = dtDealZoneGroup;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+        public IEnumerable<DealZoneGroup> GetAffectedDealZoneGroups(bool isSale)
+        {
+            return GetItemsSP("[TOneWhS_Deal].[sp_AffectedDealZoneGroupsToDelete_Get]", DealZoneGroupMapper, isSale);
+        }
+
+        public void InsertAffectedDealZoneGroups(HashSet<DealZoneGroup> dealZoneGroups, bool isSale)
+        {
+            DataTable dtDealZoneGroup = BuildDealZoneGroupTable(dealZoneGroups);
+            ExecuteNonQuerySPCmd("[TOneWhS_Deal].[sp_AffectedDealZoneGroupsToDelete_Insert]", (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@IsSale", isSale));
+                var dtPrm = new SqlParameter("@DealZoneGroups", SqlDbType.Structured);
+                dtPrm.Value = dtDealZoneGroup;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+        public void DeleteAffectedDealZoneGroups()
+        {
+            ExecuteNonQuerySP("[TOneWhS_Deal].[sp_AffectedDealZoneGroupsToDelete_Delete]");
+        }
+
         #endregion
 
         #region Private Methods
@@ -142,6 +176,16 @@ namespace TOne.WhS.Deal.Data.SQL
                 CreatedTime = (DateTime)reader["CreatedTime"]
             };
             return dealProgress;
+        }
+
+        private DealZoneGroup DealZoneGroupMapper(IDataReader reader)
+        {
+            DealZoneGroup dealZoneGroup = new DealZoneGroup
+            {
+                DealId = (int)reader["DealId"],
+                ZoneGroupNb = (int)reader["ZoneGroupNb"],
+            };
+            return dealZoneGroup;
         }
 
         #endregion

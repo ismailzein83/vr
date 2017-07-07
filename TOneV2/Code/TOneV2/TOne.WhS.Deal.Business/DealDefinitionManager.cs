@@ -47,7 +47,7 @@ namespace TOne.WhS.Deal.Business
         /// used in data transformation
         /// </summary>
         /// <param name="record"></param>
-        public void FillOrigSaleValues(dynamic record)
+        public void FillOrigCDRValues(dynamic record)
         {
             record.OrigSaleRateId = record.SaleRateId;
             record.OrigSaleRateValue = record.SaleRateValue;
@@ -57,20 +57,6 @@ namespace TOne.WhS.Deal.Business
             record.OrigSaleDurationInSeconds = record.SaleDurationInSeconds;
             record.OrigSaleCurrencyId = record.SaleCurrencyId;
 
-            DealSaleZoneGroup dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
-            if (dealSaleZoneGroup != null)
-            {
-                record.OrigSaleDealId = dealSaleZoneGroup.DealId;
-                record.OrigSaleDealZoneGroupNb = dealSaleZoneGroup.DealSaleZoneGroupNb;
-            }
-        }
-
-        /// <summary>
-        /// used in data transformation
-        /// </summary>
-        /// <param name="record"></param>
-        public void FillOrigSupplierValues(dynamic record)
-        {
             record.OrigCostRateId = record.CostRateId;
             record.OrigCostRateValue = record.CostRateValue;
             record.OrigCostNet = record.CostNet;
@@ -78,12 +64,35 @@ namespace TOne.WhS.Deal.Business
             record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
             record.OrigCostDurationInSeconds = record.CostDurationInSeconds;
             record.OrigCostCurrencyId = record.CostCurrencyId;
+        }
 
+        public void FillOrigSaleDealValues(dynamic record)
+        {
+            DealSaleZoneGroup dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
+            if (dealSaleZoneGroup != null)
+            {
+                record.OrigSaleDealId = dealSaleZoneGroup.DealId;
+                record.OrigSaleDealZoneGroupNb = dealSaleZoneGroup.DealSaleZoneGroupNb;
+            }
+            else
+            {
+                record.OrigSaleDealId = null;
+                record.OrigSaleDealZoneGroupNb = null;
+            }
+        }
+
+        public void FillOrigCostDealValues(dynamic record)
+        {
             DealSupplierZoneGroup dealSupplierZoneGroup = GetAccountSupplierZoneGroup(record.SupplierId, record.SupplierZoneId, record.AttemptDateTime);
             if (dealSupplierZoneGroup != null)
             {
                 record.OrigCostDealId = dealSupplierZoneGroup.DealId;
                 record.OrigCostDealZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb;
+            }
+            else
+            {
+                record.OrigCostDealId = null;
+                record.OrigCostDealZoneGroupNb = null;
             }
         }
 

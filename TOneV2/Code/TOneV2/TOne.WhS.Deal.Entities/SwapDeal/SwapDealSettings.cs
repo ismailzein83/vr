@@ -103,7 +103,7 @@ namespace TOne.WhS.Deal.Entities
                 ExceptionRates = null,
                 Rate = swapDealInbound.Rate,
                 RetroActiveFromTierNumber = null,
-                TierNumber = 0,
+                TierNumber = 1,
                 VolumeInSeconds = swapDealInbound.Volume * 60,
                 CurrencyId = CurrencyId
             };
@@ -154,7 +154,7 @@ namespace TOne.WhS.Deal.Entities
                 ExceptionRates = null,
                 Rate = swapDealOutbound.Rate,
                 RetroActiveFromTierNumber = null,
-                TierNumber = 0,
+                TierNumber = 1,
                 VolumeInSeconds = swapDealOutbound.Volume * 60,
                 CurrencyId = CurrencyId
             };

@@ -15,13 +15,15 @@ namespace TOne.WhS.Deal.BP.Activities
     {
         public Boolean IsSale { get; set; }
 
+        public HashSet<DealZoneGroup> AffectedDealZoneGroups { get; set; }
+
         public Dictionary<DealZoneGroup, DealProgress> DealProgresses { get; set; }
 
         public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> DealDetailedProgresses { get; set; }
 
         public Dictionary<DealZoneGroup, DealProgressData> ExpectedDealProgressData { get; set; }
 
-        public Dictionary<DealDetailedZoneGroupTier, DealBillingSummary> ExpectedDealBillingSummaryRecords { get; set; }
+        public Dictionary<DealDetailedZoneGroupTierWithoutRate, DealBillingSummary> ExpectedDealBillingSummaryRecords { get; set; }
     }
 
     public class ApplyExpectedDealTrafficRecordsToDBOutput
@@ -35,6 +37,9 @@ namespace TOne.WhS.Deal.BP.Activities
         public InArgument<Boolean> IsSale { get; set; }
 
         [RequiredArgument]
+        public InArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
+
+        [RequiredArgument]
         public InArgument<Dictionary<DealZoneGroup, DealProgress>> DealProgresses { get; set; }
 
         [RequiredArgument]
@@ -44,34 +49,65 @@ namespace TOne.WhS.Deal.BP.Activities
         public InArgument<Dictionary<DealZoneGroup, DealProgressData>> ExpectedDealProgressData { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<DealDetailedZoneGroupTier, DealBillingSummary>> ExpectedDealBillingSummaryRecords { get; set; }
+        public InArgument<Dictionary<DealDetailedZoneGroupTierWithoutRate, DealBillingSummary>> ExpectedDealBillingSummaryRecords { get; set; }
 
         [RequiredArgument]
         public OutArgument<HashSet<DateTime>> DaysToReprocess { get; set; }
 
         protected override ApplyExpectedDealTrafficRecordsToDBOutput DoWorkWithResult(ApplyExpectedDealTrafficRecordsToDBInput inputArgument, AsyncActivityHandle handle)
         {
-            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffset();
+            HashSet<DealZoneGroup> dealProgressesToDelete;
+            if (inputArgument.ExpectedDealProgressData == null)
+                dealProgressesToDelete = inputArgument.AffectedDealZoneGroups;
+            else
+            {
+                Func<DealZoneGroup, bool> predicate = (dealZoneGroup) =>
+                {
+                    if (!inputArgument.ExpectedDealProgressData.Keys.Contains(dealZoneGroup))
+                        return true;
+                    return false;
+                };
+                dealProgressesToDelete = inputArgument.AffectedDealZoneGroups.FindAllRecords(predicate).ToHashSet();
+            }
+
+            DealProgressManager dealProgressManager = new DealProgressManager();
+
+            if (dealProgressesToDelete != null)
+                dealProgressManager.DeleteDealProgresses(dealProgressesToDelete, inputArgument.IsSale);
+
+            if (inputArgument.ExpectedDealBillingSummaryRecords == null)
+                return null;
+
+            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
 
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             List<DealDetailedProgress> dealDetailedProgressToAdd = new List<DealDetailedProgress>();
             List<DealDetailedProgress> dealDetailedProgressToUpdate = new List<DealDetailedProgress>();
             HashSet<long> dealDetailedProgressesToKeep = new HashSet<long>();
 
-            DealProgressManager dealProgressManager = new DealProgressManager();
+
             List<DealProgress> dealProgressesToAdd = new List<DealProgress>();
             List<DealProgress> dealProgressesToUpdate = new List<DealProgress>();
 
-            Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgresses = inputArgument.DealDetailedProgresses;
+            Dictionary<DealDetailedZoneGroupTierWithoutRate, DealDetailedProgress> dealDetailedProgresses = inputArgument.DealDetailedProgresses.ToDictionary(
+            itm => new DealDetailedZoneGroupTierWithoutRate()
+            {
+                DealId = itm.Key.DealId,
+                FromTime = itm.Key.FromTime,
+                TierNb = itm.Key.TierNb,
+                ToTime = itm.Key.ToTime,
+                ZoneGroupNb = itm.Key.ZoneGroupNb
+            },
+            itm => itm.Value);
 
             DealDetailedProgress currentDealDetailedProgresses;
 
             foreach (var kvp_expectedDealBillingSummaryRecord in inputArgument.ExpectedDealBillingSummaryRecords)
             {
-                DealDetailedZoneGroupTier dealDetailedZoneGroupTier = kvp_expectedDealBillingSummaryRecord.Key;
+                DealDetailedZoneGroupTierWithoutRate dealDetailedZoneGroupTierWithoutRate = kvp_expectedDealBillingSummaryRecord.Key;
                 DealBillingSummary expectedDealBillingSummary = kvp_expectedDealBillingSummaryRecord.Value;
 
-                if (!dealDetailedProgresses.TryGetValue(dealDetailedZoneGroupTier, out currentDealDetailedProgresses))
+                if (!dealDetailedProgresses.TryGetValue(dealDetailedZoneGroupTierWithoutRate, out currentDealDetailedProgresses))
                 {
                     dealDetailedProgressToAdd.Add(BuildDealDetailedProgress(expectedDealBillingSummary, null, intervalOffset));
                 }
@@ -105,6 +141,7 @@ namespace TOne.WhS.Deal.BP.Activities
                     dealProgressesToAdd.Add(expectedDealProgress);
                 }
             }
+
             bool shouldUpdateDealTrafficRecords = false;
             if (dealProgressesToAdd.Count > 0)
             {
@@ -164,7 +201,8 @@ namespace TOne.WhS.Deal.BP.Activities
                 DealProgresses = this.DealProgresses.Get(context),
                 DealDetailedProgresses = this.DealDetailedProgresses.Get(context),
                 ExpectedDealProgressData = this.ExpectedDealProgressData.Get(context),
-                ExpectedDealBillingSummaryRecords = this.ExpectedDealBillingSummaryRecords.Get(context)
+                ExpectedDealBillingSummaryRecords = this.ExpectedDealBillingSummaryRecords.Get(context),
+                AffectedDealZoneGroups = this.AffectedDealZoneGroups.Get(context)
             };
         }
 

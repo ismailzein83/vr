@@ -65,11 +65,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FinalizeDealEvaluator.cs" />
     <Compile Include="CalculateBeginDate.cs" />
     <Compile Include="ApplyExpectedDealTrafficRecordsToDB.cs" />
     <Compile Include="GetDealTechnicalSettingData.cs" />
     <Compile Include="LoadDealDetailedProgresses.cs" />
     <Compile Include="LoadDealBillingSummaryRecords.cs" />
+    <Compile Include="LoadPreviousAffectedDealZoneGroups.cs" />
     <Compile Include="LoadDealProgresses.cs" />
     <Compile Include="PrepareExpectedDealTrafficRecords.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

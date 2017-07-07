@@ -38,10 +38,10 @@
                 $scope.modalContext.closeModal();
             };
 
-            $scope.scopeModel.validateUpToVolume = function () {               
-                if ($scope.scopeModel.upToVolume != undefined && getPreviousTier() != undefined && parseFloat(getPreviousTier().UpToVolume) >= parseFloat($scope.scopeModel.upToVolume) )
-                    return "Up To Volume must be greater than " + getPreviousTier().UpToVolume;         
-                if ($scope.scopeModel.upToVolume != undefined && getNextTier()!= undefined && parseFloat(getNextTier().UpToVolume) <= parseFloat($scope.scopeModel.upToVolume))
+            $scope.scopeModel.validateUpToVolume = function () {
+                if ($scope.scopeModel.upToVolume != undefined && getPreviousTier() != undefined && parseFloat(getPreviousTier().UpToVolume) >= parseFloat($scope.scopeModel.upToVolume))
+                    return "Up To Volume must be greater than " + getPreviousTier().UpToVolume;
+                if ($scope.scopeModel.upToVolume != undefined && getNextTier() != undefined && parseFloat(getNextTier().UpToVolume) <= parseFloat($scope.scopeModel.upToVolume))
                     return "Up To Volume must be less than " + getNextTier().UpToVolume;
                 return null;
             };
@@ -64,9 +64,9 @@
                 $scope.scopeModel.exceptions.splice(index, 1);
             };
 
-            $scope.scopeModel.addException  = function () {
+            $scope.scopeModel.addException = function () {
                 var onVolumeCommitmentItemTierExRateAdded = function (addedObj) {
-                    $scope.scopeModel.exceptions.push(addedObj);
+                    $scope.scopeModel.exceptions.push({ Entity: addedObj });
                 };
                 WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, getContext());
             };
@@ -98,10 +98,10 @@
         }
 
         function setTitle() {
-            if (isEditMode )
+            if (isEditMode)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemTierEntity.tierName, 'Volume Commitment Item Tier');
-                else
-                    $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment Item Tier');
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment Item Tier');
         }
 
         function loadStaticData() {
@@ -116,13 +116,21 @@
                 buildExceptionZoneRatesDataSource(volumeCommitmentItemTierEntity.ExceptionZoneRates);
 
         }
-    
+
         function builVolumeCommitmentItemTierObjFromScope() {
+            var exceptions = [];
+            if ($scope.scopeModel.exceptions.length > 0) {
+                for (var i = 0, length = $scope.scopeModel.exceptions.length; i < length; i++) {
+                    var exception = $scope.scopeModel.exceptions[i];
+                    exceptions.push(exception.Entity);
+                }
+            }
+
             return {
                 UpToVolume: $scope.scopeModel.upToVolume,
                 DefaultRate: $scope.scopeModel.defaultRate,
                 RetroActiveFromTierNumber: ($scope.scopeModel.selectedRetroActive != undefined) ? $scope.scopeModel.selectedRetroActive.tierId : undefined,
-                ExceptionZoneRates: $scope.scopeModel.exceptions
+                ExceptionZoneRates: exceptions
             };
         }
 
@@ -145,9 +153,9 @@
         function editVolumeCommitmentItemTierException(dataItem) {
             var onVolumeCommitmentItemTierExRateUpdated = function (updatedItem) {
                 var index = $scope.scopeModel.exceptions.indexOf(dataItem);
-                $scope.scopeModel.exceptions[index] = updatedItem;
+                $scope.scopeModel.exceptions[index] = { Entity: updatedItem };
             };
-            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem, onVolumeCommitmentItemTierExRateUpdated,getContext());
+            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem.Entity, onVolumeCommitmentItemTierExRateUpdated, getContext());
         };
 
         function buildExceptionZoneRatesDataSource(exceptionZoneRates) {
@@ -155,9 +163,9 @@
                 var obj = filterExceptionsZoneRatesByZonesIds(exceptionZoneRates[i], getContext().getSelectedZonesIds());
                 if (obj && obj.ZoneIds) {
                     obj.ZoneNames = getContext().getZonesNames(obj.ZoneIds);
-                    $scope.scopeModel.exceptions.push(obj);
+                    $scope.scopeModel.exceptions.push({ Entity: obj });
                 }
-              
+
             }
         }
 
@@ -189,11 +197,12 @@
 
         function getTierUsedZonesIds() {
             var zonesIds;
-            var items = $scope.scopeModel.exceptions;
-            if (items.length > 0) {
+            var length = $scope.scopeModel.exceptions;
+            if (length > 0) {
                 zonesIds = [];
-                for (var i = 0; i < items.length; i++) {
-                    zonesIds = zonesIds.concat(items[i].ZoneIds);
+                for (var i = 0; i < length; i++) {
+                    var exception = $scope.scopeModel.exceptions[i];
+                    zonesIds = zonesIds.concat(exception.Entity.ZoneIds);
                 }
             }
             return zonesIds;
@@ -202,9 +211,9 @@
         function getPreviousTier() {
             var obj;
             if (!isEditMode && tiers.length > 0)
-                obj =  tiers[tiers.length - 1];
+                obj = tiers[tiers.length - 1];
             if (isEditMode && tiers.length > 0) {
-                var index = tiers.indexOf(volumeCommitmentItemTierEntity) -1 ;
+                var index = tiers.indexOf(volumeCommitmentItemTierEntity) - 1;
                 obj = tiers[index];
             }
             return obj;
@@ -214,18 +223,18 @@
             var obj;
             if (isEditMode && tiers.length > 0) {
                 var index = tiers.indexOf(volumeCommitmentItemTierEntity) + 1;
-                obj =  tiers[index];
-            }            
+                obj = tiers[index];
+            }
             return obj;
         };
 
         //  filtering retro active data source base on previouses tiers.
 
         function filterRetroActiveDataSourceArray(tiers) {
-            if(!isEditMode)
+            if (!isEditMode)
                 return tiers;
             var filteredArray = new Array();
-            for (var i = 0; i < volumeCommitmentItemTierEntity.tierId; i++) {
+            for (var i = 0; i < volumeCommitmentItemTierEntity.tierId - 1; i++) {
                 filteredArray.push(tiers[i]);
             }
             return filteredArray;
@@ -237,11 +246,11 @@
             var obj = new Object();
             if (ids == undefined)
                 return obj;
-            var zoneIds =  new Array();
+            var zoneIds = new Array();
             for (var i = 0 ; i < excep.ZoneIds.length ; i++) {
                 if (ids.indexOf(excep.ZoneIds[i]) > -1)
                     zoneIds.push(excep.ZoneIds[i]);
-            }           
+            }
             if (zoneIds.length == 0)
                 return obj;
             else {
