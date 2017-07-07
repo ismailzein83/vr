@@ -70,7 +70,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     }
                     else
                     {
-                        SaleEntityZoneRate effectiveZoneRate = ratePlanContext.RateLocator.GetSellingProductZoneRate(sellingProductId, countryZone.ZoneId);
+                        SaleEntityZoneRate effectiveZoneRate = ratePlanContext.RateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, countryZone.ZoneId);
                         if (effectiveZoneRate == null || effectiveZoneRate.Rate == null)
                             throw new DataIntegrityValidationException(string.Format("No rate was found for zone '{0}' of selling product '{1}' on '{2}'", countryZone.ZoneId, sellingProductId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
                         zoneRateCurrencyId = saleRateManager.GetCurrencyId(effectiveZoneRate.Rate);
