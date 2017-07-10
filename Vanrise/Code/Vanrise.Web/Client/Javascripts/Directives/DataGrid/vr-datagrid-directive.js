@@ -791,6 +791,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
                 gridApi.setUpdatedViewIndex = function () {
                     ctrl.selectedView = 1;
+                    ctrl.isMainItemsShown = false;
+                    calculateDataColumnsSectionWidth();
                 };
                 gridApi.itemUpdated = function (item) {
                     item.isUpdated = true;
