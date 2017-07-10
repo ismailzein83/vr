@@ -94,12 +94,14 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     ExistingRate lastExistingRate = GetLastExistingRateFromConnectedExistingRates(e.Current.Value);
                     Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
+                    int currencyId = saleRateManager.GetCurrencyId(lastExistingRate.RateEntity);
+
                     PriceListToAdd priceListToAdd = new PriceListToAdd()
                     {
                         OwnerId = owner.OwnerId,
                         OwnerType = owner.OwnerType,
                         EffectiveOn = effectiveDate,
-                        CurrencyId = saleRateManager.GetCurrencyId(lastExistingRate.RateEntity)
+                        CurrencyId = currencyId
                     };
 
                     priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
@@ -109,6 +111,7 @@ namespace TOne.WhS.CodePreparation.Business
                         PriceListToAdd = priceListToAdd,
                         Rate = lastExistingRate.RateEntity.Rate,
                         ZoneName = zoneToProcess.ZoneName,
+                        CurrencyId = currencyId
                     };
 
                     foreach (AddedZone addedZone in zoneToProcess.AddedZones)
