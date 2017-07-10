@@ -43,12 +43,11 @@
                 mailMessageTypeAPI = api;
                 mailMessageTypeReadyDeferred.resolve();
             };
-            $scope.scopeModel.isMailMessageTypeRequired = function()
-            {
+            $scope.scopeModel.isMailMessageTypeRequired = function () {
                 if (context != undefined && context.isMailMessageTypeSelected())
                     return false;
                 return true;
-            }
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();

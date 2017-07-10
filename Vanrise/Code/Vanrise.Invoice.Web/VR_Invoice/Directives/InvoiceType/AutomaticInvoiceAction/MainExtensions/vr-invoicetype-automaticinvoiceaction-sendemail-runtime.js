@@ -194,18 +194,14 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                 if (currentContext == undefined)
                     currentContext = {};
                 currentContext.AttachmentsIds = attachmentsIds;
-                currentContext.getInvoiceAttachmentsInfo = function()
-                {
+                currentContext.getInvoiceAttachmentsInfo = function () {
                     var invoiceAttachmentsInfo = [];
-                    if (currentContext.AttachmentsIds != null)
-                    {
+                    if (currentContext.AttachmentsIds != null) {
                         for (var i = 0, length = currentContext.AttachmentsIds.length; i < length; i++) {
                             var attachmentsId = currentContext.AttachmentsIds[i];
-                            if (invoiceAttachments != null)
-                            {
+                            if (invoiceAttachments != null) {
                                 var invoiceAttachment = UtilsService.getItemByVal(invoiceAttachments, attachmentsId, "InvoiceAttachmentId");
-                                if(invoiceAttachment != null)
-                                {
+                                if (invoiceAttachment != null) {
                                     invoiceAttachmentsInfo.push({
                                         InvoiceAttachmentId: attachmentsId,
                                         Title: invoiceAttachment.Title
@@ -215,7 +211,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                         }
                     }
                     return invoiceAttachmentsInfo;
-                }
+                };
                 return currentContext;
             }
         }

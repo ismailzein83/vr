@@ -58,19 +58,18 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                     return true;
 
                 };
-                ctrl.isValid = function()
-                {
+                ctrl.isValid = function () {
                     if (mailMessageTypeAPI.getSelectedIds() != undefined)
                         return null;
                     if (ctrl.datasource.length > 0) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var item = ctrl.datasource[i];
                             if (item.Entity.MailMessageTypeId != undefined)
-                                return   null;
+                                return null;
                         }
                     }
                     return "Mail message type should be selected.";
-                }
+                };
                 ctrl.removeEmailAttachmentSet = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
@@ -134,12 +133,11 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
-                currentContext.isMailMessageTypeSelected = function ()
-                {
+                currentContext.isMailMessageTypeSelected = function () {
                     if (mailMessageTypeAPI.getSelectedIds() != undefined)
                         return true;
                     return false;
-                }
+                };
                 return currentContext;
             }
 
