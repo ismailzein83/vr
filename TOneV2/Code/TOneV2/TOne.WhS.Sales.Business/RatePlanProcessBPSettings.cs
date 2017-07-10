@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.BP.Arguments;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
@@ -14,53 +15,85 @@ namespace TOne.WhS.Sales.Business
     {
         public override bool CanRunBPInstance(Vanrise.BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
+            IEnumerable<BPInstance> startedBPInstances = context.GetStartedBPInstances();
+            if (startedBPInstances == null || startedBPInstances.Count() == 0)
+                return true;
+
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             RatePlanInput inputArg = context.IntanceToRun.InputArgument.CastWithValidate<RatePlanInput>("context.IntanceToRun.InputArgument");
-            CarrierAccountManager manager = new CarrierAccountManager();
-            var sellingProductId = manager.GetSellingProductId(inputArg.OwnerId);
-            var carrierAccountIds = manager.GetCarrierAccountIdsAssignedToSellingProduct(inputArg.OwnerId);
-            foreach (var startedBPInstance in context.GetStartedBPInstances())
+
+            string reason;
+            bool canRunBPInstance;
+
+            var carrierAccountManager = new CarrierAccountManager();
+
+            if (inputArg.OwnerType == SalePriceListOwnerType.SellingProduct)
+                canRunBPInstance = CanRunBPInstanceForSellingProduct(inputArg.OwnerId, startedBPInstances, carrierAccountManager, out reason);
+            else
+                canRunBPInstance = CanRunBPInstanceForCustomer(inputArg.OwnerId, startedBPInstances, carrierAccountManager, out reason);
+
+            context.Reason = reason;
+            return canRunBPInstance;
+        }
+
+        #region Private Methods
+
+        private bool CanRunBPInstanceForSellingProduct(int sellingProductId, IEnumerable<BPInstance> startedBPInstances, CarrierAccountManager carrierAccountManager, out string reason)
+        {
+            reason = null;
+            IEnumerable<int> carrierAccountIds = carrierAccountManager.GetCarrierAccountIdsAssignedToSellingProduct(sellingProductId);
+
+            foreach (BPInstance startedBPInstance in startedBPInstances)
             {
                 RatePlanInput startedBPInstanceInputArg = startedBPInstance.InputArgument as RatePlanInput;
-                if (startedBPInstanceInputArg != null)
-                {
-                    if (inputArg.OwnerType == SalePriceListOwnerType.Customer)
-                    {
-                        if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.Customer && startedBPInstanceInputArg.OwnerId == inputArg.OwnerId)
-                        {
-                            context.Reason = "Another process is running for the same Customer";
-                            return false;
-                        }
+                if (startedBPInstanceInputArg == null)
+                    continue;
 
-                        if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.SellingProduct && sellingProductId == startedBPInstanceInputArg.OwnerId)
-                        {
-                            context.Reason = "Another process is running for customer's sellingProuct";
-                            return false;
-                        }
-                    }
-                    else
+                if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.SellingProduct && startedBPInstanceInputArg.OwnerId == sellingProductId)
+                {
+                    reason = "Another process is running for the same sellingProduct";
+                    return false;
+                }
+
+                foreach (int carrierAccountId in carrierAccountIds)
+                {
+                    if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.Customer && carrierAccountId == startedBPInstanceInputArg.OwnerId)
                     {
-                        if (inputArg.OwnerType == SalePriceListOwnerType.SellingProduct)
-                        {
-                            if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.SellingProduct && startedBPInstanceInputArg.OwnerId == inputArg.OwnerId)
-                            {
-                                context.Reason = "Another process is running for the same sellingProduct";
-                                return false;
-                            }
-                            foreach(var carrierAccountId in carrierAccountIds)
-                            {
-                                if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.Customer && carrierAccountId == startedBPInstanceInputArg.OwnerId)
-                                {
-                                    context.Reason = "A process is running of type customer for the same sellingProduct";
-                                    return false;
-                                }
-                            }
-                        }
+                        reason = "A process is running of type customer for the same sellingProduct";
+                        return false;
                     }
-                    
                 }
             }
+
             return true;
         }
+        private bool CanRunBPInstanceForCustomer(int customerId, IEnumerable<BPInstance> startedBPInstances, CarrierAccountManager carrierAccountManager, out string reason)
+        {
+            reason = null;
+            int sellingProductId = carrierAccountManager.GetSellingProductId(customerId);
+
+            foreach (BPInstance startedBPInstance in startedBPInstances)
+            {
+                RatePlanInput startedBPInstanceInputArg = startedBPInstance.InputArgument as RatePlanInput;
+                if (startedBPInstanceInputArg == null)
+                    continue;
+
+                if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.Customer && startedBPInstanceInputArg.OwnerId == customerId)
+                {
+                    reason = "Another process is running for the same Customer";
+                    return false;
+                }
+
+                if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.SellingProduct && sellingProductId == startedBPInstanceInputArg.OwnerId)
+                {
+                    reason = "Another process is running for customer's sellingProuct";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }
