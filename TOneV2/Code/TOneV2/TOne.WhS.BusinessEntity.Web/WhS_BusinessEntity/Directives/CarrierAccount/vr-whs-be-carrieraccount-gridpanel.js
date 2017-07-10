@@ -34,7 +34,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             $scope.scopeModel = {};
 
             $scope.scopeModel.addCarrierAccount = function () {
-                var carrierProfileItem = { CarrierProfileId: carrierProfileId }
+                var carrierProfileItem = { CarrierProfileId: carrierProfileId };
                 var onCarrierAccountAdded = function (obj) {
                     gridAPI.onCarrierAccountAdded(obj);
                 };
