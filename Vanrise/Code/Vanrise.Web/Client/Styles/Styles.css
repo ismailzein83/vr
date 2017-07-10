@@ -682,8 +682,8 @@ add padding .left-addon input {
     position: absolute;
     padding: 5px 2px;
     font-size: 12px;
-    left: -2px;
-    top: 20px;
+    right: 17px;
+    top: 0px;
 }
 .vr-select-disabled-item{
     color: #c1c1c1 !important;
