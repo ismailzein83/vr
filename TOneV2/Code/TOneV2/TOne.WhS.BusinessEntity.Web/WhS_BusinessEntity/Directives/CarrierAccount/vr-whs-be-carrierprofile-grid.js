@@ -101,7 +101,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         var onItemAddedCallBackFunction = function () {
                             gridAPI.setUpdatedViewIndex();
                             gridAPI.expandRow(carrierProfileObject);
-                            addCarrierAccount(carrierProfileObject);
                         };
                         gridAPI.itemAdded(carrierProfileObject, onItemAddedCallBackFunction);
 

@@ -59,10 +59,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     carrierProfileId = payload.carrierProfileId;
                     openAddOnLoad = payload.openAddOnLoad;
                 } 
-                return gridAPI.loadGrid(getGridQuery()).then(function () {
-                    if (openAddOnLoad == true)
-                        $scope.scopeModel.addCarrierAccount();
-                });
+                return gridAPI.loadGrid(getGridQuery());
               
 
             };
