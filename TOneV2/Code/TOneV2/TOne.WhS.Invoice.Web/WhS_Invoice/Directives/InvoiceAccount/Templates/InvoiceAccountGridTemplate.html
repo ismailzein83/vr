@@ -3,7 +3,7 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.gridMenuActions"
              datasource="scopeModel.invoiceAccounts"
-             idfield="Entity.InvoiceAccountId">
+             idfield="Entity.InvoiceAccountId" defaultsortbyfieldname="'Entity.BED'" defaultsortdirection="'DESC'">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.InvoiceAccountId'" widthfactor="'10'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Invoice Type'" field="'InvoiceTypeDescription'" widthfactor="'20'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'" widthfactor="'20'"></vr-datagridcolumn>
