@@ -24,6 +24,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (ratePlanContext.OwnerType == BusinessEntity.Entities.SalePriceListOwnerType.SellingProduct)
                 return true;
 
+            if (ratePlanContext.CurrencyId == ratePlanContext.SystemCurrencyId)
+                return true;
+
             var countryData = context.Target as CountryData;
 
             if (countryData.ZoneDataByZoneId == null || countryData.ZoneDataByZoneId.Count == 0)
@@ -72,7 +75,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     {
                         SaleEntityZoneRate effectiveZoneRate = ratePlanContext.RateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, countryZone.ZoneId);
                         if (effectiveZoneRate == null || effectiveZoneRate.Rate == null)
-                            throw new DataIntegrityValidationException(string.Format("No rate was found for zone '{0}' of selling product '{1}' on '{2}'", countryZone.ZoneId, sellingProductId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
+                            throw new DataIntegrityValidationException(string.Format("Neither a customer nor a selling product rate was found for zone '{0}' on '{1}'", countryZone.ZoneId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
                         zoneRateCurrencyId = saleRateManager.GetCurrencyId(effectiveZoneRate.Rate);
                     }
 
