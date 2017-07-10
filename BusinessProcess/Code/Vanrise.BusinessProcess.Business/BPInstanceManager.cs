@@ -13,19 +13,16 @@ namespace Vanrise.BusinessProcess.Business
     public class BPInstanceManager
     {
         #region public methods
-        public List<BPInstanceDetail> GetBeforeId(BPInstanceBeforeIdInput input)
+
+        public BPInstance GetBPInstance(long bpInstanceId)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            var requiredPermissionSetManager = new RequiredPermissionSetManager();
-            List<int> grantedPermissionSetIds;
-            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-            List<BPInstance> bpInstances = dataManager.GetBeforeId(input, grantedPermissionSetIds);           
-            List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
-            foreach (BPInstance bpInstance in bpInstances)
-            {
-                bpInstanceDetails.Add(BPInstanceDetailMapper(bpInstance));
-            }
-            return bpInstanceDetails;
+            return dataManager.GetBPInstance(bpInstanceId);
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
         }
 
         public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds)
@@ -49,21 +46,27 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceUpdateOutput;
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
-        {
-            return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
-        }
-
-        public BPInstance GetBPInstance(long bpInstanceId)
+        public List<BPInstanceDetail> GetBeforeId(BPInstanceBeforeIdInput input)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.GetBPInstance(bpInstanceId);
+            var requiredPermissionSetManager = new RequiredPermissionSetManager();
+            List<int> grantedPermissionSetIds;
+            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+            List<BPInstance> bpInstances = dataManager.GetBeforeId(input, grantedPermissionSetIds);
+            List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
+            foreach (BPInstance bpInstance in bpInstances)
+            {
+                bpInstanceDetails.Add(BPInstanceDetailMapper(bpInstance));
+            }
+            return bpInstanceDetails;
         }
+
         public bool HasRunningInstances(Guid definitionId, List<string> entityIds)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
         }
+
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             if (createProcessInput == null)
@@ -105,28 +108,7 @@ namespace Vanrise.BusinessProcess.Business
             return output;
         }
 
-
         #endregion
-
-        #region mapper
-        private BPInstanceDetail BPInstanceDetailMapper(BPInstance bpInstance)
-        {
-            if (bpInstance == null)
-                return null;
-            string bpDefinitionTitle = null;
-            string userName = new UserManager().GetUserName(bpInstance.InitiatorUserId);
-            var bpDefinition = new BPDefinitionManager().GetBPDefinition(bpInstance.DefinitionID);
-            if (bpDefinition != null)
-                bpDefinitionTitle = bpDefinition.Title;
-            return new BPInstanceDetail()
-            {
-                Entity = bpInstance,
-                DefinitionTitle = bpDefinitionTitle,
-                UserName = userName
-            };
-        }
-        #endregion
-
 
         #region Private Classes
 
@@ -174,7 +156,7 @@ namespace Vanrise.BusinessProcess.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Title", Width = 50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Title", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Business Processes", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Message", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
@@ -198,9 +180,30 @@ namespace Vanrise.BusinessProcess.Business
                         }
                     }
                 }
-                
+
                 context.MainSheet = sheet;
             }
+        }
+
+        #endregion
+
+        #region mapper
+
+        private BPInstanceDetail BPInstanceDetailMapper(BPInstance bpInstance)
+        {
+            if (bpInstance == null)
+                return null;
+            string bpDefinitionTitle = null;
+            string userName = new UserManager().GetUserName(bpInstance.InitiatorUserId);
+            var bpDefinition = new BPDefinitionManager().GetBPDefinition(bpInstance.DefinitionID);
+            if (bpDefinition != null)
+                bpDefinitionTitle = bpDefinition.Title;
+            return new BPInstanceDetail()
+            {
+                Entity = bpInstance,
+                DefinitionTitle = bpDefinitionTitle,
+                UserName = userName
+            };
         }
 
         #endregion
