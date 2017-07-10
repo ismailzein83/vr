@@ -78,7 +78,18 @@ namespace Vanrise.Invoice.BP.Activities
                             var partnerName = invoiceTypePartnerManager.GetPartnerName(PartnerNameManagerContext);
                             if (generatedInvoice.Result == InsertOperationResult.Succeeded)
                             {
-
+                                if (automaticInvoiceSettingPart.Actions != null)
+                                {
+                                    foreach (var action in automaticInvoiceSettingPart.Actions)
+                                    {
+                                        AutomaticSendEmailActionRuntimeSettingsContext automaticSendEmailActionContext = new Business.Context.AutomaticSendEmailActionRuntimeSettingsContext
+                                        {
+                                            Invoice = generatedInvoice.InsertedObject.Entity,
+                                            AutomaticInvoiceActionId = action.AutomaticInvoiceActionId
+                                        };
+                                        action.Settings.Execute(automaticSendEmailActionContext);
+                                    };
+                                }
                                 context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}", partnerName, billingPeriod.FromDate, billingPeriod.ToDate);
                             }
                             else

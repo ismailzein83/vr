@@ -36,7 +36,7 @@ namespace Vanrise.Invoice.Entities
             return new VRMailAttachmentExcel
             {
                 Content = this.Content,
-                Name = "Invoice.xlxs",
+                Name = "Invoice.xls",
             };
         }
     }

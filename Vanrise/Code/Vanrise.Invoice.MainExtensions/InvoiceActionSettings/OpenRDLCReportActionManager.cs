@@ -53,7 +53,15 @@ namespace Vanrise.Invoice.MainExtensions
                 if (openRDLCReportAction != null)
                 {
                     reportViewer.ProcessingMode = ProcessingMode.Local;
-                    reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(openRDLCReportAction.ReportURL);
+                    if(HttpContext.Current != null)
+                    {
+                        reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(openRDLCReportAction.ReportURL);
+                    }else
+                    {
+                        string currentDir = Environment.CurrentDirectory;
+                        reportViewer.LocalReport.ReportPath = string.Format("{0}\\{1}",currentDir,openRDLCReportAction.ReportRuntimeURL);
+
+                    }
                     reportViewer.LocalReport.DisplayName = String.Format("Invoice");
                     SetMainReportDataSources(reportViewer.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources);
                     invoiceReportParameters = GetParameters(reportViewer.LocalReport.GetParameters(), openRDLCReportAction.MainReportParameters);

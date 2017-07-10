@@ -24,6 +24,7 @@ namespace Vanrise.Invoice.Entities
     }
     public abstract class AutomaticInvoiceActionRuntimeSettings
     {
+        public abstract void Execute(IAutomaticSendEmailActionRuntimeSettingsContext context);
     }
     
 }

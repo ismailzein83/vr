@@ -59,6 +59,7 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItem.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
+    <Compile Include="IAutomaticSendEmailActionRuntimeSettingsContext.cs" />
     <Compile Include="IInvoicePartnerFilter.cs" />
     <Compile Include="InvoiceByPartnerInvoiceType.cs" />
     <Compile Include="InvoiceGeneratorException.cs" />

@@ -131,7 +131,7 @@
         }
 
         function getInvoiceEmail() {
-            return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId, invoiceActionId, invoiceMailTemplateReadyAPI.getSelectedIds()).then(function (response) {
+            return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId, invoiceMailTemplateReadyAPI.getSelectedIds()).then(function (response) {
                 invoiceTemplateEntity = response;
             });
         }

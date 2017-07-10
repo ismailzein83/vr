@@ -48,32 +48,26 @@ namespace Vanrise.Invoice.MainExtensions
             VRMailManager vrMailManager = new VRMailManager();
             vrMailManager.SendMail(input.EmailTemplate.To, input.EmailTemplate.CC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
         }
-         public VRMailEvaluatedTemplate GetEmailTemplate(long invoiceId, Guid invoiceActionId, Guid invoiceMailTemplateId)
+         public VRMailEvaluatedTemplate GetEmailTemplate(long invoiceId, Guid invoiceMailTemplateId)
          {
              InvoiceManager invoiceManager = new InvoiceManager();
-
              var invoice = invoiceManager.GetInvoice(invoiceId);
+             invoice.ThrowIfNull("invoice", invoiceId);
+             return GetEmailTemplate( invoice,  invoiceMailTemplateId);
+         }
+         public VRMailEvaluatedTemplate GetEmailTemplate(Entities.Invoice invoice, Guid invoiceMailTemplateId)
+         {
              InvoiceTypeManager manager = new InvoiceTypeManager();
              var invoiceType = manager.GetInvoiceType(invoice.InvoiceTypeId);
-             var action = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == invoiceActionId);
-             SendEmailAction sendEmailAction = null;
-             if(action != null)
-             {
-                 sendEmailAction = action.Settings as SendEmailAction;
-             }
-
              InvoiceTypeExtendedSettingsInfoContext context = new InvoiceTypeExtendedSettingsInfoContext
              {
                  InfoType = "MailTemplate",
                  Invoice = invoice
-
              };
              VRMailManager vrMailManager = new VRMailManager();
              var objects = invoiceType.Settings.ExtendedSettings.GetInfo(context);
              return vrMailManager.EvaluateMailTemplate(invoiceMailTemplateId, objects);
-              
          }
-
          public IEnumerable<SendEmailAttachmentTypeConfig> GetSendEmailAttachmentTypeConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();

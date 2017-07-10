@@ -66,6 +66,8 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
                     }
                     if (invoiceActionEntity != undefined) {
                         $scope.scopeModel.reportURL = invoiceActionEntity.ReportURL;
+                        $scope.scopeModel.reportRuntimeURL = invoiceActionEntity.ReportRuntimeURL;
+
                     }
                     var promises = [];
                     var mainReportDataSourcesLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -107,6 +109,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.OpenRDLCReportAction ,Vanrise.Invoice.MainExtensions",
                         ReportURL: $scope.scopeModel.reportURL,
+                        ReportRuntimeURL: $scope.scopeModel.reportRuntimeURL,
                         MainReportDataSources: mainReportDataSourcesDirectiveAPI.getData(),
                         MainReportParameters: mainReportParametersDirectiveAPI.getData(),
                         SubReports: subReportsDirectiveAPI.getData()
