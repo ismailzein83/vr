@@ -16,5 +16,6 @@ namespace TOne.WhS.CodePreparation.Entities
         public decimal Rate { get; set; }
 
         public int? CurrencyId { get; set; }
+        public DateTime RateBED { get; set; }
     }
 }

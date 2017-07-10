@@ -116,37 +116,48 @@ namespace TOne.WhS.CodePreparation.Business
             while (e.MoveNext())
             {
                 Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
-                int? currencyId;
-                Decimal zoneRateValue = GetHighestRate(e.Current.Value, out currencyId);
+
+                HighestRate highestRate = GetHighestRate(e.Current.Value);
+
+                if (highestRate == null) continue;
+
                 NewZoneRateEntity zoneRate = new NewZoneRateEntity
                 {
                     OwnerId = owner.OwnerId,
                     OwnerType = owner.OwnerType,
-                    CurrencyId = currencyId,
-                    Rate = zoneRateValue
+                    CurrencyId = highestRate.CurrencyId,
+                    Rate = highestRate.Value,
+                    RateBED = highestRate.BED
                 };
                 ratesEntities.Add(zoneRate);
             }
             return ratesEntities;
         }
 
-        private Decimal GetHighestRate(IEnumerable<ExistingRate> existingRates, out int? currencyId)
+        private HighestRate GetHighestRate(IEnumerable<ExistingRate> existingRates)
         {
             SaleRateManager saleRateManager = new SaleRateManager();
-            currencyId = null;
-            if (existingRates == null || !existingRates.Any()) return 0;
 
-            decimal highestRate = 0;
+            HighestRate highestRate = new HighestRate();
+            if (existingRates == null || !existingRates.Any()) return null;
+
             foreach (var existingRate in existingRates)
             {
-                if (existingRate.RateEntity.Rate > highestRate)
+                if (existingRate.RateEntity.Rate > highestRate.Value)
                 {
-                    highestRate = existingRate.RateEntity.Rate;
-                    currencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
+                    highestRate.Value = existingRate.RateEntity.Rate;
+                    highestRate.CurrencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
+                    highestRate.BED = existingRate.RateEntity.BED;
                 }
             }
             return highestRate;
         }
+    }
 
+    public class HighestRate
+    {
+        public Decimal Value { get; set; }
+        public int CurrencyId { get; set; }
+        public DateTime BED { get; set; }
     }
 }

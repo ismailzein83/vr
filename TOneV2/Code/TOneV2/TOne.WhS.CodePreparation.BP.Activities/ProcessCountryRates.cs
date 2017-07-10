@@ -80,8 +80,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 EffectiveDate = inputArgument.EffectiveDate,
                 SalePriceListsByOwner = inputArgument.SalePriceListsByOwner,
                 SellingNumberPlanId = inputArgument.SellingNumberPlanId,
-                NotImportedZones = inputArgument.NotImportedZones,
-                EffectiveExistingRatesByZoneName = inputArgument.EffectiveExistingRatesByZoneName
+                NotImportedZones = inputArgument.NotImportedZones
             };
 
             PriceListRateManager plCodeManager = new PriceListRateManager();

@@ -14,9 +14,9 @@ namespace TOne.WhS.CodePreparation.Business
     {
         private SaleRatesByOwner _allSaleRatesByOwner;
 
-        public ReadRatesToAddChanges(IEnumerable<RateToAdd> allRates, DateTime effectiveDate)
+        public ReadRatesToAddChanges(IEnumerable<RateToAdd> allRates)
         {
-            _allSaleRatesByOwner = GetAllSaleRates(allRates, effectiveDate);
+            _allSaleRatesByOwner = GetAllSaleRates(allRates);
         }
 
         public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int ownerId)
@@ -30,7 +30,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             return saleRateByOwnerType == null ? null : saleRateByOwnerType.GetRecord(ownerId);
         }
-        private SaleRatesByOwner GetAllSaleRates(IEnumerable<RateToAdd> allRates, DateTime effectiveDate)
+        private SaleRatesByOwner GetAllSaleRates(IEnumerable<RateToAdd> allRates)
         {
             SaleRatesByOwner result = new SaleRatesByOwner
             {
@@ -55,13 +55,13 @@ namespace TOne.WhS.CodePreparation.Business
                 if (existingZoneIdAtRateCreationTime == null)
                     throw new Exception(string.Format("Opening a rate without added zones for zone {0}", rateToAdd.ZoneName));
                 saleRatePriceList = saleRateByZone.GetOrCreateItem(existingZoneIdAtRateCreationTime.ZoneId);
-                saleRatePriceList.Rate = GetSaleRateFromRateToAdd(rateToAdd, existingRateCreationTime.RateId, existingZoneIdAtRateCreationTime.ZoneId, effectiveDate);
+                saleRatePriceList.Rate = GetSaleRateFromRateToAdd(rateToAdd, existingRateCreationTime.RateId, existingZoneIdAtRateCreationTime.ZoneId);
             }
 
             return result;
         }
 
-        private SaleRate GetSaleRateFromRateToAdd(RateToAdd rateToAdd, long rateId, long zoneId, DateTime effectiveDate)
+        private SaleRate GetSaleRateFromRateToAdd(RateToAdd rateToAdd, long rateId, long zoneId)
         {
             return new SaleRate
             {
@@ -69,7 +69,7 @@ namespace TOne.WhS.CodePreparation.Business
                 ZoneId = zoneId,
                 Rate = rateToAdd.Rate,
                 CurrencyId = rateToAdd.CurrencyId,
-                BED = effectiveDate,
+                BED = rateToAdd.AddedRates.First().BED,
                 RateChange = RateChangeType.New
             };
         }

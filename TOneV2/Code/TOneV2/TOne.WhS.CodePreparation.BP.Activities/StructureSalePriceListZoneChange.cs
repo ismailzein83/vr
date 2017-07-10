@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 SaleEntityZoneRateLocator ratesToAddLocator = null;
                 if (allRatesToAdd.Any())
                 {
-                    ratesToAddLocator = new SaleEntityZoneRateLocator(new ReadRatesToAddChanges(allRatesToAdd, effectiveDate));
+                    ratesToAddLocator = new SaleEntityZoneRateLocator(new ReadRatesToAddChanges(allRatesToAdd));
                 }
 
                 IEnumerable<RoutingCustomerInfoDetails> customersInfoDetails = GetCustomersInfoDetails(customersForThisSellingNumberPlan, effectiveDate);

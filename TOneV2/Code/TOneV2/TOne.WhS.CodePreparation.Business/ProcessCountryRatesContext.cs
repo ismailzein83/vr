@@ -19,6 +19,5 @@ namespace TOne.WhS.CodePreparation.Business
         public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
         public int SellingNumberPlanId { get; set; }
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
-        public ExistingRatesByZoneName EffectiveExistingRatesByZoneName { get; set; }
     }
 }

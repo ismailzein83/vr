@@ -90,7 +90,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private RatePreview NotImportedRatePreviewMapper(NotImportedRate notImportedRate)
         {
-            return new RatePreview()
+            return new RatePreview
             {
                 ZoneName = notImportedRate.ZoneName,
                 OnwerType = notImportedRate.OwnerType,
@@ -98,7 +98,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 OwnerId = notImportedRate.OwnerId,
                 Rate = notImportedRate.Rate,
                 BED = notImportedRate.BED,
-                EED = notImportedRate.EED
+                EED = notImportedRate.EED,
+                CurrencyId = notImportedRate.CurrencyId
             };
         }
 

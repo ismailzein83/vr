@@ -12,7 +12,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public string ZoneName { get; set; }
 
         public SalePriceListOwnerType OwnerType { get; set; }
-        
+
         public int OwnerId { get; set; }
 
         public DateTime BED { get; set; }
@@ -24,6 +24,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public int? RateTypeId { get; set; }
 
         public decimal Rate { get; set; }
+        public int CurrencyId { get; set; }
 
     }
 }
