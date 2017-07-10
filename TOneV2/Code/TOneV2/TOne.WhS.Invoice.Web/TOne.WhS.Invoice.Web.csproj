@@ -177,6 +177,10 @@
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\Templates\SupplierInvoiceSettingsDefinitionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\Templates\SupplierInvoiceSettingsRuntimeTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\whs-invoicetype-definition-supplierinvoicesettings.js" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\whs-invoicetype-runtime-supplierinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\CustomerInvoice\Templates\CustomerInvoiceSettingsDefinitionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\CustomerInvoice\Templates\CustomerInvoiceSettingsRuntimeTemplate.html" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\CustomerInvoice\whs-invoicetype-definition-customerinvoicesettings.js" />

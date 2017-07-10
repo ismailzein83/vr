@@ -13,15 +13,15 @@ using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
-    public class CustomerInvoiceSettings : InvoiceSettings
+    public class SupplierInvoiceSettings : InvoiceSettings
     {
         public override Guid ConfigId
         {
-            get { return new Guid("FAD2C45F-FB61-4D65-9896-4CCADC2A656F"); }
+            get { return new Guid("A5738770-EA3E-4402-A4E3-0E0CAB50B539"); }
         }
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new CustomerInvoiceGenerator();
+            return new SupplierInvoiceGenerator();
         }
         public override InvoicePartnerManager GetPartnerManager()
         {
@@ -39,7 +39,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 case "MailTemplate":
                     {
                         Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                        objects.Add("CustomerInvoice", context.Invoice);
+                        objects.Add("SupplierInvoice", context.Invoice);
                         CarrierProfile carrierProfile = null;
                         int carrierProfileId;
                         if (invoiceAccount.CarrierProfileId.HasValue)
@@ -137,17 +137,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         public override bool IsApplicableToCustomer
         {
-            get { return true; }
+            get { return false; }
         }
         public override bool IsApplicableToSupplier
         {
-            get { return false; }
+            get { return true; }
         }
         public override string RuntimeEditor
         {
             get
             {
-                return "whs-invoicetype-runtime-customerinvoicesettings";
+                return "whs-invoicetype-runtime-supplierinvoicesettings";
             }
         }
     }

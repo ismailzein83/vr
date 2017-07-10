@@ -9,9 +9,16 @@ namespace TOne.WhS.Invoice.Entities
     public class SupplierInvoiceDetails
     {
         public int TotalNumberOfCalls { get; set; }
-        public Double SupplierAmount { get; set; }
+        public decimal CostAmount { get; set; }
+        public Decimal OriginalCostAmount { get; set; }
+
         public decimal Duration { get; set; }
         public string PartnerType { get; set; }
+        public int SupplierCurrencyId { get; set; }
+        public string SupplierCurrency { get; set; }
+        public int OriginalSupplierCurrencyId { get; set; }
+        public string OriginalSupplierCurrency { get; set; }
+        public Decimal TotalAmount { get; set; }
         public SupplierInvoiceDetails() { }
         public IEnumerable<SupplierInvoiceDetails> GetSupplierInvoiceDetailsRDLCSchema()
         {

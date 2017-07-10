@@ -80,13 +80,15 @@
   <ItemGroup>
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Extensions\CarrierPartnerSettings.cs" />
+    <Compile Include="Extensions\SupplierInvoiceSettings.cs" />
+    <Compile Include="Extensions\SupplierInvoiceGenerator1.cs" />
+    <Compile Include="Extensions\SupplierInvoiceAccountSettings.cs" />
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
     <Compile Include="Extensions\CustomerInvoiceAccountSettings.cs" />
     <Compile Include="Extensions\CustomerInvoiceSettings.cs" />
     <Compile Include="Extensions\InvoiceCarrierAccountStatusChangedHandler.cs" />
     <Compile Include="Extensions\InvoiceCarrierProfileStatusChangedHandler.cs" />
     <Compile Include="Extensions\InvoiceGeneratorActionPartnerCondition.cs" />
-    <Compile Include="Extensions\SupplierInvoiceGenerator.cs" />
     <Compile Include="InvoiceAccountManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceSettings.cs" />
