@@ -10,19 +10,26 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     public class BPInstanceDataManager : BaseSQLDataManager, IBPInstanceDataManager
     {
+        #region Properties/Ctor
+
         private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
+
         static BPInstanceDataManager()
         {
             _mapper.Add("ProcessInstanceID", "ID");
             _mapper.Add("StatusDescription", "ExecutionStatus");
         }
+
         public BPInstanceDataManager()
             : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
         {
 
         }
 
+        #endregion
+
         #region public methods
+
         public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds)
         {
             string definitionsIdAsString = null;
@@ -107,16 +114,18 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
+
         public bool HasRunningInstances(Guid definitionId, List<string> entityIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses)
         {
             bool hasRunningProcesses = Convert.ToBoolean(ExecuteScalarSP("[bp].[sp_BPInstance_HasRunningInstance]", definitionId, String.Join(",", entityIds.Select(itm => (string)itm)), String.Join(",", acceptableBPStatuses.Select(itm => (int)itm))));
             return hasRunningProcesses;
         }
-        public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId,
-            object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId)
+
+        public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus,
+            int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId)
         {
             object processInstanceId;
-            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, 
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId,
                 inputArguments != null ? Serializer.Serialize(inputArguments) : null,
                 completionNotifier != null ? Serializer.Serialize(completionNotifier) : null,
                 (int)executionStatus, initiatorUserId, entityId, viewInstanceRequiredPermissionSetId) > 0)
@@ -124,9 +133,21 @@ namespace Vanrise.BusinessProcess.Data.SQL
             else
                 return 0;
         }
+
+        public void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate)
+        {
+            foreach (var pendingInstance in pendingInstancesToUpdate)
+            {
+                if (!pendingInstance.ServiceInstanceId.HasValue)
+                    throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceID));
+                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceID]", pendingInstance.ProcessInstanceID, pendingInstance.ServiceInstanceId.Value);
+            }
+        }
+
         #endregion
 
         #region mapper
+
         private BPInstance BPInstanceMapper(IDataReader reader)
         {
             BPInstance instance = new BPInstance
@@ -134,7 +155,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ProcessInstanceID = (long)reader["ID"],
                 Title = reader["Title"] as string,
                 ParentProcessID = GetReaderValue<long?>(reader, "ParentID"),
-                DefinitionID = GetReaderValue<Guid>(reader,"DefinitionID"),
+                DefinitionID = GetReaderValue<Guid>(reader, "DefinitionID"),
                 WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
                 LastMessage = reader["LastMessage"] as string,
@@ -156,17 +177,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             return instance;
         }
-           
+
         #endregion
-        
-        public void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate)
-        {
-            foreach (var pendingInstance in pendingInstancesToUpdate)
-            {
-                if (!pendingInstance.ServiceInstanceId.HasValue)
-                    throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceID));
-                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceID]", pendingInstance.ProcessInstanceID, pendingInstance.ServiceInstanceId.Value);
-            }
-        }
     }
 }
