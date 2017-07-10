@@ -31,7 +31,7 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
                     else
                         ctrl.selectedvalues = timeZoneObj.Entity;
                 };
-                VRCommon_VRTimeZoneService.addTimeZone(onTimeZoneAdded);
+                VRCommon_VRTimeZoneService.addVRTimeZone(onTimeZoneAdded);
             };
 
             ctrl.haspermission = function () {
