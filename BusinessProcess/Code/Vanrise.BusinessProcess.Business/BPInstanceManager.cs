@@ -61,6 +61,12 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceDetails;
         }
 
+        public List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId)
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.GetAfterId(processInstanceId, bpDefinitionId);
+        }
+
         public bool HasRunningInstances(Guid definitionId, List<string> entityIds)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
@@ -89,7 +95,7 @@ namespace Vanrise.BusinessProcess.Business
             string processTitle = createProcessInput.InputArguments.GetTitle();
             if (processTitle != null)
                 processTitle = processTitle.Replace("#BPDefinitionTitle#", processDefinition.Title);
-            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, createProcessInput.CompletionNotifier, processDefinition.BPDefinitionID, createProcessInput.InputArguments, 
+            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, createProcessInput.CompletionNotifier, processDefinition.BPDefinitionID, createProcessInput.InputArguments,
                 BPInstanceStatus.New, createProcessInput.InputArguments.UserId, createProcessInput.InputArguments.EntityId, viewInstanceRequiredPermissionSetId);
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage

@@ -30,6 +30,27 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         #region public methods
 
+        public BPInstance GetBPInstance(long bpInstanceId)
+        {
+            return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
+        }
+
+        public List<BPInstance> GetAllBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds)
+        {
+            string grantedPermissionSetIdsAsString = null;
+            if (grantedPermissionSetIds != null)
+                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
+
+            return GetItemsSP("[bp].[sp_BPInstance_GetFiltered]", BPInstanceMapper,
+                       query.DefinitionsId == null ? null : string.Join(",", query.DefinitionsId.Select(n => n.ToString()).ToArray()),
+                       query.InstanceStatus == null ? null : string.Join(",", query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()),
+                       query.EntityId,
+                       query.DateFrom,
+                       query.DateTo,
+                       grantedPermissionSetIdsAsString
+                  );
+        }
+
         public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds)
         {
             string definitionsIdAsString = null;
@@ -74,20 +95,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId), entityIdsString, grantedPermissionSetIdsAsString);
         }
 
-        public List<BPInstance> GetAllBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds)
+        public List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId)
         {
-            string grantedPermissionSetIdsAsString = null;
-            if (grantedPermissionSetIds != null)
-                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
-
-            return GetItemsSP("[bp].[sp_BPInstance_GetFiltered]", BPInstanceMapper,
-                       query.DefinitionsId == null ? null : string.Join(",", query.DefinitionsId.Select(n => n.ToString()).ToArray()),
-                       query.InstanceStatus == null ? null : string.Join(",", query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()),
-                       query.EntityId,
-                       query.DateFrom,
-                       query.DateTo,
-                       grantedPermissionSetIdsAsString
-                  );
+            return GetItemsSP("[BP].[sp_BPInstance_GetAfterID]", BPInstanceMapper, processInstanceId, bpDefinitionId);
         }
 
         public List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
@@ -108,11 +118,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public void UpdateInstanceLastMessage(long processInstanceId, string message)
         {
             ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateLastMessage]", processInstanceId, message);
-        }
-
-        public BPInstance GetBPInstance(long bpInstanceId)
-        {
-            return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
 
         public bool HasRunningInstances(Guid definitionId, List<string> entityIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses)

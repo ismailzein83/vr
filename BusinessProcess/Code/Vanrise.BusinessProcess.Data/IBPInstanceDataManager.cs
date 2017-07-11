@@ -7,9 +7,15 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPInstanceDataManager : IDataManager
     {
-        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds);
-        List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input, List<int> grantedPermissionSetIds);
+        BPInstance GetBPInstance(long bpInstanceId);
+
         List<BPInstance> GetAllBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds);
+
+        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds);
+
+        List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input, List<int> grantedPermissionSetIds);
+
+        List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId); 
 
         List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId);
 
@@ -19,12 +25,10 @@ namespace Vanrise.BusinessProcess.Data
 
         void UpdateInstanceLastMessage(long processInstanceId, string message);
 
-        BPInstance GetBPInstance(long bpInstanceId);
-
         long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId);
 
         void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate);
 
-        bool HasRunningInstances(Guid definitionId, List<string> entityIds , IEnumerable<BPInstanceStatus> statuses);
+        bool HasRunningInstances(Guid definitionId, List<string> entityIds, IEnumerable<BPInstanceStatus> statuses);
     }
 }
