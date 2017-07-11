@@ -14,19 +14,53 @@ namespace Mediation.Runtime.DataParser
 {
     public class DataParserTester
     {
-        public void ReadFile()
+        public void GenerateMediationSettings()
         {
+            try
+            {
+                CreateMediationSettingsFile(GetHuaweiNamibiaParserSettings(), "Huawei_Namibia");
+                CreateMediationSettingsFile(GetHuaweiIraqParserSettings(), "Huawei_Iraq");
+                CreateMediationSettingsFile(GetHuaweiIraqParserSettings_GPRS(), "Huawei_Iraq_GPRS");
+                CreateMediationSettingsFile(GetEricssonIraqParserSettings(), "Ericsson_Iraq");
+                CreateMediationSettingsFile(GetNokiaParserSettings(), "Nokia_Iraq");
+            }
+            catch (Exception ex)
+            {
 
-            string settings = GetHuaweiNamibiaParserSettings();
-            settings = GetHuaweiIraqParserSettings();
-            settings = GetHuaweiIraqParserSettings_GPRS();
-            settings = GetEricssonIraqParserSettings();
-            settings = GetNokiaParserSettings();
+                throw;
+            }
+
+
             //DateTimeOffset do1 = new DateTimeOffset(2017, 05, 22, 5, 0, 0, new TimeSpan(-5, 0, 0));
             //var newDate = do1.ToLocalTime().DateTime;
             //ParseHuaweiNamibia();
 
             //ParseEricsson();
+        }
+
+        void CreateMediationSettingsFile(string settings, string name)
+        {
+            string path = string.Format(@"D:\Mediation\{0}.txt", name);
+            //if (!File.Exists(path))
+            //{
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                using (var tw = new StreamWriter(fileStream))
+                {
+                    tw.WriteLine(settings);
+                    tw.Close();
+                }
+            }
+
+            //}
+            //else if (File.Exists(path))
+            //{
+            //    using (var tw = new StreamWriter(path, true))
+            //    {
+            //        tw.WriteLine(settings);
+            //        tw.Close();
+            //    }
+            //}
         }
 
         #region Huawei Namibia
@@ -868,7 +902,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("83", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "ServedMSISDN",
                     AIsZero = false,
@@ -888,7 +922,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("85", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "ServiceCenter",
                     AIsZero = false,
@@ -898,7 +932,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("86", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "RecordingEntity",
                     AIsZero = false,
@@ -971,7 +1005,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("8C", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "DestinationNumber",
                     AIsZero = false,
@@ -1214,9 +1248,10 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F8149", new HexTLVFieldParser
             {
-                Settings = new HexaParser
+                Settings = new NumberFieldParser
                 {
-                    FieldName = "CallReference"
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
                 }
             });
 
@@ -1376,7 +1411,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("81", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "ServiceCenter",
                     AIsZero = false,
@@ -1406,7 +1441,17 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("84", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "DestinationNumber",
+                    AIsZero = false,
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F8149", new HexTLVFieldParser
+            {
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "ServedMSISDN",
                     AIsZero = false,
@@ -1426,7 +1471,7 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("86", new HexTLVFieldParser
             {
-                Settings = new BCDNumberParser
+                Settings = new TBCDNumberParser
                 {
                     FieldName = "RecordingEntity",
                     AIsZero = false,
@@ -1720,21 +1765,22 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
-            {
-                Settings = new BCDNumberParser
-                {
-                    FieldName = "Origination",
-                    AIsZero = false,
-                    RemoveHexa = true
-                }
-            });
+            //parsers.Add("9F8149", new HexTLVFieldParser
+            //{
+            //    Settings = new BCDNumberParser
+            //    {
+            //        FieldName = "Origination",
+            //        AIsZero = false,
+            //        RemoveHexa = true
+            //    }
+            //});
 
             parsers.Add("9F814A", new HexTLVFieldParser
             {
-                Settings = new HexaParser
+                Settings = new NumberFieldParser
                 {
-                    FieldName = "CallReference"
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
                 }
             });
 
@@ -1874,8 +1920,6 @@ namespace Mediation.Runtime.DataParser
             });
             return subParser;
         }
-
-
 
         #endregion
 

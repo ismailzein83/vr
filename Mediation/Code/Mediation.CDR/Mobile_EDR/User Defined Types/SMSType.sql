@@ -29,7 +29,7 @@
     [ConcatenatedSMSReferenceNumber]  INT              NULL,
     [SequenceNumberOfCurrentSMS]      INT              NULL,
     [HotBillingTag]                   INT              NULL,
-    [CallReference]                   VARCHAR (100)    NULL,
+    [CallReference]                   BIGINT           NULL,
     [TariffCode]                      INT              NULL,
     [NetworkOperatorId]               VARCHAR (100)    NULL,
     [TypeOfSubscribers]               INT              NULL,
@@ -66,6 +66,8 @@
     [FreeFromatData]                  VARCHAR (50)     NULL,
     [CamelSMSCAddress]                VARCHAR (50)     NULL,
     [UniqueIdentifier]                UNIQUEIDENTIFIER NULL);
+
+
 
 
 

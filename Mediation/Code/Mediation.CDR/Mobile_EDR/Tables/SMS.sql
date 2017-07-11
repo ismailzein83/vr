@@ -32,7 +32,7 @@
     [ConcatenatedSMSReferenceNumber]  INT              NULL,
     [SequenceNumberOfCurrentSMS]      INT              NULL,
     [HotBillingTag]                   INT              NULL,
-    [CallReference]                   VARCHAR (100)    NULL,
+    [CallReference]                   BIGINT           NULL,
     [TariffCode]                      INT              NULL,
     [NetworkOperatorId]               VARCHAR (100)    NULL,
     [TypeOfSubscribers]               INT              NULL,
@@ -71,6 +71,8 @@
     [UniqueIdentifier]                UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_SMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

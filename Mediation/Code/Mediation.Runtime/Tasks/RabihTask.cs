@@ -26,7 +26,7 @@ namespace Mediation.Runtime.Tasks
             //var calls = StripAndGetNumbers(called);
 
             DataParserTester tester = new DataParserTester();
-            tester.ReadFile();
+            tester.GenerateMediationSettings();
 
             RunImportProcess();
         }
