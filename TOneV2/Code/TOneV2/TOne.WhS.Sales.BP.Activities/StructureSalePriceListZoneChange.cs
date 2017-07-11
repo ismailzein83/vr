@@ -169,7 +169,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             ProcessEffectiveDate = ratePlanContext.EffectiveDate,
                             RateChangeLocator = rateChangeLocator,
                             SaleCodesByZoneId = saleCodesByZoneId,
-                            CurrencyId = ratePlanContext.CurrencyId
+                            CurrencyId = ratePlanContext.CurrencyId,
+                            ActionDatesByZoneId = existingDataInfo.ActionDatesByZoneId
                         };
 
                         this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
@@ -445,7 +446,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         Rate = zoneRate.Rate.Rate,
                         ChangeType = RateChangeType.Deleted,
                         BED = zoneRate.Rate.BED, //TODO: There is a gap here that we need to fix, if the rate is got from selling product BED is not exaclty the one we sent to customer
-                        EED = countryToClose.CloseEffectiveDate,
+                        EED = context.ActionDatesByZoneId[zoneId],// countryToClose.CloseEffectiveDate,
                         CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                     });
 
@@ -792,6 +793,16 @@ namespace TOne.WhS.Sales.BP.Activities
                         if (customerRateatClosingDate != null)
                             info.CustomerRates.Add(customerRateatClosingDate);
                     }
+                    if (zone.BED > countryToClose.CloseEffectiveDate)
+                    {
+                        info.CountriesToCloseExistingZoneIds.Add(zone.SaleZoneId);
+                        info.ActionDatesByZoneId.Add(zone.SaleZoneId, zone.BED);
+
+                        IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(zone.SaleZoneId);
+                        SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(zone.BED));
+                        if (customerRateatClosingDate != null)
+                            info.CustomerRates.Add(customerRateatClosingDate);
+                    }
                 }
             }
 
@@ -1017,6 +1028,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public RoutingCustomerInfoDetails CustomerInfo { get; set; }
 
             public Dictionary<long, List<SaleCode>> SaleCodesByZoneId { get; set; }
+            public Dictionary<long, DateTime> ActionDatesByZoneId { get; set; }
 
             public DateTime ProcessEffectiveDate { get; set; }
             public int CurrencyId { get; set; }
