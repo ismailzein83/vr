@@ -80,6 +80,7 @@
     <Folder Include="Mediation_Centrex\" />
     <Folder Include="Mediation_Centrex\Tables\" />
     <Folder Include="Mediation_Centrex\User Defined Types\" />
+    <Folder Include="Mediation_WHS\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Mobile_EDR\Tables\GPRS.sql" />
@@ -110,5 +111,6 @@
     <Build Include="Security\Mediation_Centrex.sql" />
     <Build Include="Mobile_EDR\Tables\MobileCDR_Full.sql" />
     <Build Include="Mobile_EDR\User Defined Types\MobileCDR_FullType.sql" />
+    <Build Include="Mediation_WHS\Views\vw_CDRs.sql" />
   </ItemGroup>
 </Project>
