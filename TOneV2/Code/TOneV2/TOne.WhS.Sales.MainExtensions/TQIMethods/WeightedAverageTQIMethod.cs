@@ -43,7 +43,9 @@ namespace TOne.WhS.Sales.MainExtensions
             }
 
             if (sumOfDuration != 0)
-                context.Rate = sumOfRatesMultipliedByDuration / sumOfDuration;
+            {
+                context.Rate = decimal.Round(sumOfRatesMultipliedByDuration / sumOfDuration, context.LongPrecision);
+            }
         }
 
         #region Private Methods

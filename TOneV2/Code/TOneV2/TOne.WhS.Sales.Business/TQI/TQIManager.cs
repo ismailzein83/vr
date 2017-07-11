@@ -21,7 +21,11 @@ namespace TOne.WhS.Sales.Business
         private Dictionary<int, decimal> _ratesBySupplier = new Dictionary<int, decimal>();
         public TQIEvaluatedRate Evaluate(TQIMethod tqiMethod, RPRouteDetail rpRouteDetail)
         {
-            var context = new TQIMethodContext() { Route = rpRouteDetail };
+            var context = new TQIMethodContext()
+            {
+                Route = rpRouteDetail,
+                LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue()
+            };
             tqiMethod.CalculateRate(context);
             return new TQIEvaluatedRate() { EvaluatedRate = context.Rate };
         }

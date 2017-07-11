@@ -11,6 +11,7 @@ namespace TOne.WhS.Sales.Business
     public class TQIMethodContext : ITQIMethodContext
     {
         public RPRouteDetail Route { get; set; }
+        public int LongPrecision { get; set; }
         public decimal Rate { get; set; }
     }
 }

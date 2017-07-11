@@ -18,6 +18,8 @@
         var currencyId;
         var ratePlanSettings;
 
+        var longPrecision;
+
         var tqiGridAPI;
         var tqiGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -38,6 +40,7 @@
                 routingDatabaseId = parameters.context.routingDatabaseId;
                 currencyId = parameters.context.currencyId;
                 ratePlanSettings = parameters.context.ratePlanSettings;
+                longPrecision = parameters.context.longPrecision;
             }
         }
         function defineScope() {
@@ -123,7 +126,7 @@
                 $scope.zoneName = zoneItem.ZoneName;
                 $scope.rate = getRoundedNumber(zoneItem.CurrentRate);
                 $scope.rateBED = zoneItem.CurrentRateBED;
-                $scope.newRate = zoneItem.NewRate;
+                $scope.newRate = getRoundedNumber(zoneItem.NewRate);
             }
         }
         function loadTQISelectiveDirective() {
@@ -232,6 +235,9 @@
                 clearMarginPercentage();
             }
 
+            if ($scope.calculatedRate != undefined)
+                $scope.calculatedRate = getRoundedNumber($scope.calculatedRate);
+
             function clearMarginPercentage() {
                 $scope.marginPercentage = undefined;
                 $scope.showMarginPercentage = false;
@@ -245,6 +251,7 @@
         }
         function getContext() {
             var context = {
+                longPrecision: longPrecision,
                 getDuration: function () {
                     var duration = {};
 
@@ -267,7 +274,7 @@
             if (!isEmpty(number)) {
                 var castedNumber = Number(number);
                 if (!isNaN(castedNumber))
-                    return UtilsService.round(castedNumber, 4);
+                    return UtilsService.round(castedNumber, longPrecision);
             }
         }
     }

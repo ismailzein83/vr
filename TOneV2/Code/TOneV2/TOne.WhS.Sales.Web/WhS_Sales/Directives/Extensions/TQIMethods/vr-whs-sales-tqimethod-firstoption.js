@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesTqimethodFirstoption", [function () {
+app.directive("vrWhsSalesTqimethodFirstoption", ['UtilsService', function (UtilsService) {
 
     return {
         restrict: "E",
@@ -18,21 +18,36 @@ app.directive("vrWhsSalesTqimethodFirstoption", [function () {
     };
 
     function FirstOptionTQIMethod(ctrl, $scope) {
+
         this.initializeController = initializeController;
+
+        var context;
 
         function initializeController() {
             ctrl.title;
             defineAPI();
         }
-
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
-                if (payload != undefined && payload.rpRouteDetail != undefined) {
-                    ctrl.firstOption = payload.rpRouteDetail.RouteOptionsDetails[0].ConvertedSupplierRate;
+
+                var rpRouteDetail;
+
+                if (payload != undefined) {
+                    rpRouteDetail = payload.rpRouteDetail;
+                    context = payload.context;
                 }
-               
+
+                if (rpRouteDetail != undefined && rpRouteDetail.RouteOptionsDetails != null && rpRouteDetail.RouteOptionsDetails.length > 0) {
+                    var firstOptionValue = payload.rpRouteDetail.RouteOptionsDetails[0].ConvertedSupplierRate;
+
+                    if (firstOptionValue != undefined && context != undefined && context.longPrecision != undefined) {
+                        firstOptionValue = UtilsService.round(firstOptionValue, context.longPrecision);
+                    }
+
+                    ctrl.firstOption = firstOptionValue;
+                }
             };
 
             api.getData = function () {

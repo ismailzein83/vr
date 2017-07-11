@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
+app.directive("vrWhsSalesTqimethodSuggestedpercentages", ['UtilsService', function (UtilsService) {
 
     return {
         restrict: "E",
@@ -19,6 +19,8 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
 
     function SuggestedPercentagesTQIMethod(ctrl, $scope) {
         this.initializeController = initializeController;
+
+        var context;
 
         $scope.suggestedPercentages = [];
 
@@ -43,7 +45,15 @@ app.directive("vrWhsSalesTqimethodSuggestedpercentages", [function () {
             var api = {};
 
             api.load = function (payload) {
-                if (payload != undefined && payload.rpRouteDetail != undefined) {
+
+                var rpRouteDetail;
+
+                if (payload != undefined) {
+                    context = payload.context;
+                    rpRouteDetail = payload.rpRouteDetail;
+                }
+
+                if (rpRouteDetail != undefined && rpRouteDetail.RouteOptionsDetails != null) {
                     for (var i = 0; i < payload.rpRouteDetail.RouteOptionsDetails.length; i++) {
                         var routeOption = payload.rpRouteDetail.RouteOptionsDetails[i];
                         routeOption.marginPercentageValue = undefined;
