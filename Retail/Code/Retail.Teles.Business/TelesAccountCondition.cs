@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 namespace Retail.Teles.Business
 {
-    public enum ConditionType { CanChangeMapping = 0, AllowChangeUserRGs = 1, AllowRevertUserRGs = 2, AllowEnterpriseMap = 3, AllowSiteMap = 4 }
+    public enum ConditionType { CanChangeEnterpriseMapping = 0, AllowChangeUserRGs = 1, AllowRevertUserRGs = 2, AllowEnterpriseMap = 3, AllowSiteMap = 4, CanChangeSiteMapping = 5 }
     public class TelesAccountCondition : AccountCondition
     {
         public override Guid ConfigId { get { return new Guid("2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C"); } }
@@ -25,8 +25,8 @@ namespace Retail.Teles.Business
         {
             switch(this.ConditionType)
             {
-                case Business.ConditionType.CanChangeMapping:
-                    return AllowChangeMapping(context.Account, this.CompanyTypeId, this.SiteTypeId);
+                case Business.ConditionType.CanChangeEnterpriseMapping:
+                    return CanChangeCompanyMapping(context.Account, this.CompanyTypeId);
                 case Business.ConditionType.AllowChangeUserRGs:
                     return AllowChangeUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId, this.ActionType);
                 case Business.ConditionType.AllowRevertUserRGs:
@@ -35,6 +35,9 @@ namespace Retail.Teles.Business
                     return AllowEnterpriseMap(context.Account, this.CompanyTypeId, this.SiteTypeId);
                 case Business.ConditionType.AllowSiteMap:
                     return AllowSiteMap(context.Account, this.CompanyTypeId, this.SiteTypeId);
+                case Business.ConditionType.CanChangeSiteMapping :
+                    return CanChangeSiteMapping(context.Account, this.SiteTypeId);
+
                 default:
                     return false;
             }
@@ -86,7 +89,7 @@ namespace Retail.Teles.Business
             return false;
         }
 
-        public static bool AllowChangeMapping(Account account, Guid companyTypeId, Guid siteTypeId)
+        public static bool CanChangeCompanyMapping(Account account, Guid companyTypeId)
         {
             if (account.TypeId == companyTypeId)
             {
@@ -110,7 +113,11 @@ namespace Retail.Teles.Business
             
                 return true;
             }
-            else if (account.TypeId == siteTypeId)
+            return false;
+        }
+        public static bool CanChangeSiteMapping(Account account, Guid siteTypeId)
+        {
+           if (account.TypeId == siteTypeId)
             {
                 if (IsSiteNotMappedOrProvisioned(account))
                     return false;
