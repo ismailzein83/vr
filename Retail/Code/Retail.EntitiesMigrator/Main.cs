@@ -48,21 +48,91 @@ namespace Retail.EntitiesMigrator
             Helper.OnNetRuleDefinition.ChargingPolicyId = (int)numOnNetChargingPolicy.Value;
             Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value; Helper.CurrencyId = (int)cboCurrency.SelectedValue;
         }
-
         private void btnImportOutGoingRates_Click(object sender, EventArgs e)
         {
+            btnImportOutGoingRates.Enabled = false;
             List<RuleDefinitionDetails> ruleDefinitions = GetIncomingRuleDefinitions((int)numOnNetChargingPolicy.Value, (int)numOffNetChargingPolicy.Value, (int)numMobileChargingPolicy.Value, (int)numInternationalChargingPolicy.Value);
             IncomingRatesMigrator migrator = new IncomingRatesMigrator();
             migrator.Ececute();
+            MessageBox.Show("Importing Outgoing Rates rates is done");
+            btnImportOutGoingRates.Enabled = true;
 
         }
-
+        private void btnImportIntlRates_Click(object sender, EventArgs e)
+        {
+            btnImportIntlRates.Enabled = false;
+            InternationalRatesMigrator migrator = new InternationalRatesMigrator(GetZones(), (int)numInternationalChargingPolicy.Value);
+            migrator.MigrateInternationalRates();
+            MessageBox.Show("Importing International rates is done");
+            btnImportIntlRates.Enabled = true;
+        }
+        private void btnImpOffNetRates_Click(object sender, EventArgs e)
+        {
+            btnImpOffNetRates.Enabled = false;
+            OffNetRatesMigrator migrator = new OffNetRatesMigrator();
+            migrator.Execute();
+            btnImpOffNetRates.Enabled = true;
+            MessageBox.Show("Importing OffNet rates is done");
+        }
+        private void btnImportOnNet_Click(object sender, EventArgs e)
+        {
+            btnImportOnNet.Enabled = false;
+            OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator();
+            onNetMigrator.Execute();
+            MessageBox.Show("Importing OnNet rates is done");
+            btnImportOnNet.Enabled = true;
+        }
+        private void btnMobileRates_Click(object sender, EventArgs e)
+        {
+            btnMobileRates.Enabled = false;
+            MobileRatesMigrator migrator = new MobileRatesMigrator();
+            migrator.Execute();
+            btnMobileRates.Enabled = true;
+            MessageBox.Show("Importing Mobile rates is done");
+        }
+        private void btnImportMonthlyCharges_Click(object sender, EventArgs e)
+        {
+            btnImportMonthlyCharges.Enabled = false;
+            MonthlyChargesMigrator migrator = new MonthlyChargesMigrator();
+            migrator.Execute();
+            MessageBox.Show("Importing Monthly Charges is done");
+            btnImportMonthlyCharges.Enabled = true;
+        }                
+        private void cboCurrency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboCurrency.SelectedValue != null)
+                Helper.CurrencyId = (int)cboCurrency.SelectedValue;
+        }
+        private void cboSNP_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboSNP.SelectedValue != null)
+                Helper.NumberPlanId = (int)cboSNP.SelectedValue;
+        }        
+        private void numMobileChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.MobileRuleDefinition.ChargingPolicyId = (int)numMobileChargingPolicy.Value;
+        }
+        private void numOffNetChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.OffNetRuleDefinition.ChargingPolicyId = (int)numOffNetChargingPolicy.Value;
+        }
+        private void numOnNetChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.OnNetRuleDefinition.ChargingPolicyId = (int)numOnNetChargingPolicy.Value;
+        }
+        private void numInternationalChargingPolicy_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value;
+        }        
+        private void numPricingUnit_ValueChanged(object sender, EventArgs e)
+        {
+            Helper.PricingUnit = (int)numPricingUnit.Value;
+        }
         Dictionary<string, SaleZone> GetZones()
         {
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZonesEffectiveAfter(Helper.NumberPlanId, DateTime.Now).ToDictionary(z => z.Name, z => z);
         }
-
         private List<RuleDefinitionDetails> GetIncomingRuleDefinitions(int onNetPolicy, int offNetPolicy, int mobilePolicy, int internationalPolicy)
         {
             List<RuleDefinitionDetails> ruleDefinitionDetails = new List<RuleDefinitionDetails>();
@@ -107,72 +177,5 @@ namespace Retail.EntitiesMigrator
 
         }
 
-
-        private void btnImportIntlRates_Click(object sender, EventArgs e)
-        {
-            InternationalRatesMigrator migrator = new InternationalRatesMigrator(GetZones(), (int)numInternationalChargingPolicy.Value);
-            migrator.MigrateInternationalRates();
-        }
-
-        private void cboCurrency_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cboCurrency.SelectedValue != null)
-                Helper.CurrencyId = (int)cboCurrency.SelectedValue;
-        }
-
-        private void cboSNP_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cboSNP.SelectedValue != null)
-            Helper.NumberPlanId = (int)cboSNP.SelectedValue;
-        }
-
-        private void btnImpOffNetRates_Click(object sender, EventArgs e)
-        {
-            OffNetRatesMigrator migrator = new OffNetRatesMigrator();
-            migrator.Execute();
-        }
-
-        private void numMobileChargingPolicy_ValueChanged(object sender, EventArgs e)
-        {
-            Helper.MobileRuleDefinition.ChargingPolicyId = (int)numMobileChargingPolicy.Value;
-        }
-
-        private void numOffNetChargingPolicy_ValueChanged(object sender, EventArgs e)
-        {
-            Helper.OffNetRuleDefinition.ChargingPolicyId = (int)numOffNetChargingPolicy.Value;
-        }
-
-        private void numOnNetChargingPolicy_ValueChanged(object sender, EventArgs e)
-        {
-            Helper.OnNetRuleDefinition.ChargingPolicyId = (int)numOnNetChargingPolicy.Value;
-        }
-
-        private void numInternationalChargingPolicy_ValueChanged(object sender, EventArgs e)
-        {
-            Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value;
-        }
-
-        private void btnImportOnNet_Click(object sender, EventArgs e)
-        {
-            OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator();
-            onNetMigrator.Execute();
-        }
-
-        private void btnMobileRates_Click(object sender, EventArgs e)
-        {
-            MobileRatesMigrator migrator = new MobileRatesMigrator();
-            migrator.Execute();
-        }
-
-        private void btnImportMonthlyCharges_Click(object sender, EventArgs e)
-        {
-            MonthlyChargesMigrator migrator = new MonthlyChargesMigrator();
-            migrator.Execute();
-        }
-
-        private void numPricingUnit_ValueChanged(object sender, EventArgs e)
-        {
-            Helper.PricingUnit = (int)numPricingUnit.Value;
-        }
     }
 }
