@@ -240,7 +240,7 @@ namespace Retail.Teles.Business
             {
                 if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId, changeUsersRGsAccountState))
                 {
-                    context.TrackActionExecuted(null, changesByUser);
+                    context.TrackActionExecuted(accountId,null, changesByUser);
                 };
             }
 

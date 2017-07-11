@@ -89,14 +89,17 @@ namespace Retail.BusinessEntity.MainActionBPs.Activities
             }
             public void TrackActionExecuted(string actionDescription, Object technicalInformation)
             {
+                TrackActionExecuted(_accountId, actionDescription, technicalInformation);
+            }
+            public void TrackActionExecuted(long accountId, string actionDescription, Object technicalInformation)
+            {
                 var actionProvisionerTechnicalInformation = new ActionProvisionerTechnicalInformation
                 {
                     ActionDefinitionId = _accountActionDefinition.AccountActionDefinitionId,
                     ProvisionerInfo = technicalInformation
                 };
-                new AccountBEManager().TrackAndLogObjectCustomAction(_accountBEDefinitionId, _accountId, _accountActionDefinition.Name, actionDescription, actionProvisionerTechnicalInformation);
+                new AccountBEManager().TrackAndLogObjectCustomAction(_accountBEDefinitionId, accountId, _accountActionDefinition.Name, actionDescription, actionProvisionerTechnicalInformation);
             }
-
             public Guid ActionDefinitionId { get { return this._accountActionDefinition.AccountActionDefinitionId; } }
             public string ActionDefinitionName { get { return this._accountActionDefinition.Name; } }
         }

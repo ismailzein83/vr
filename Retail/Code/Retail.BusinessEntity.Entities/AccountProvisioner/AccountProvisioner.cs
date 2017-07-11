@@ -22,6 +22,7 @@ namespace Retail.BusinessEntity.Entities
         
         void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
         void TrackActionExecuted(string actionDescription, Object technicalInformation);
+        void TrackActionExecuted(long accountId, string actionDescription, Object technicalInformation);
     }
 
    
