@@ -93,7 +93,7 @@ namespace Retail.Teles.Business
 
                 foreach (dynamic changedUser in changedUsers)
                 {
-                    usersNames.Add(changedUser.loginName);
+                    usersNames.Add(changedUser.loginName.Value);
                     UpdateUser(vrConnectionId, changedUser);
                     if (usersNames.Count == 10)
                     {

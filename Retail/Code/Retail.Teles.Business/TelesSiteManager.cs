@@ -62,6 +62,7 @@ namespace Retail.Teles.Business
             response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
             var siteId = response.Headers.Location.Segments.Last();
             siteId.ThrowIfNull("siteId", siteId);
+            TelesSiteManager.SetCacheExpired();
             return Convert.ToString(siteId);
         }
         public IEnumerable<dynamic> GetSites(Guid vrConnectionId, dynamic telesEnterpriseId)

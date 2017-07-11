@@ -38,13 +38,10 @@ namespace Retail.Teles.Business
             };
             string siteId = _telesSiteManager.CreateSite(vrConnectionId, enterpriseId, centrexFeatSet, newsite);
             _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Started);
-            TelesSiteManager.SetCacheExpired();
-            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, site.AccountId, "Provision", string.Format("Teles site {0}", site.Name), null);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
             CreateScreendedNumbers(context, vrConnectionId, countryCode, site.AccountId, siteId);
             _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Completed);
-            TelesSiteManager.SetCacheExpired();
-
+            context.TrackActionExecuted(site.AccountId, string.Format("Teles site {0}", site.Name), null);
         }
 
         private void CreateScreendedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, long siteAccountId, string siteId)

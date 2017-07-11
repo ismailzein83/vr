@@ -61,6 +61,7 @@ namespace Retail.Teles.Business
             response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
             var enterpriseId = response.Headers.Location.Segments.Last();
             enterpriseId.ThrowIfNull("enterpriseId", enterpriseId);
+            TelesEnterpriseManager.SetCacheExpired();
             return Convert.ToString(enterpriseId);
         }
      
