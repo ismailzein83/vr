@@ -74,6 +74,7 @@
       <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="dealEvaluatorReprocessingCompletedEvent" />
       <Variable x:TypeArguments="twde:DealTechnicalSettingData" Name="dealTechnicalSettingData" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="daysToReprocessCompleted" />
+      <Variable x:TypeArguments="s:Nullable(x:Int64)" Name="lastBPInstanceId" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Deal Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -105,6 +106,11 @@
           <mca:CSharpValue x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpValue>
         </InArgument>
       </twdba1:CalculateBeginDate.DealEvaluatorProcessState>
+      <twdba1:CalculateBeginDate.LastBPInstanceId>
+        <OutArgument x:TypeArguments="s:Nullable(x:Int64)">
+          <mca:CSharpReference x:TypeArguments="s:Nullable(x:Int64)">lastBPInstanceId</mca:CSharpReference>
+        </OutArgument>
+      </twdba1:CalculateBeginDate.LastBPInstanceId>
     </twdba1:CalculateBeginDate>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -312,6 +318,11 @@
                 <mca:CSharpReference x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpReference>
               </OutArgument>
             </twdba1:BuildDealEvaluatorProcessState.DealEvaluatorProcessState>
+            <twdba1:BuildDealEvaluatorProcessState.LastBPInstanceId>
+              <InArgument x:TypeArguments="s:Nullable(x:Int64)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int64)">lastBPInstanceId</mca:CSharpValue>
+              </InArgument>
+            </twdba1:BuildDealEvaluatorProcessState.LastBPInstanceId>
           </twdba1:BuildDealEvaluatorProcessState>
           <vbw:SaveDefinitionObjectState sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
             <vbw:SaveDefinitionObjectState.ObjectKey>
@@ -336,7 +347,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbEdDA9QCDgIBAUwzTDYCAQJOBVQgAwGFA1UFYCQDAfACYQVsIQMB2wJtBcsCCgIBD8wCBdICIAIBA1ELUYUBAwGHA05gToIBAwGGA10LXYABAwH7AlgLWE0DAfECZAtkaAMB5gJpC2l4AwHcAnALcFwCARB0CckCFAIBGs8CC88ChQECAQXMAmDMAoABAgEEdQuRARYDAaoCkgELpgEQAwGKAqcBC7sBEAMB6gG8AQu0AhACATy1Agu7AjMCATG8AgvHAisCARzIAgvIAmUCARt5DYQBLQMBwwKFAQ2QAS0DAasClQERlQG+AQMBiwKZAQ+kARgDAZUCqgERqgG+AQMB6wGuAQ+5ARgDAfUBvwERvwGPAQIBPcMBD7ICGgIBR7gCEbgChgECATLEAhHEAmgCASe/AhG/AlMCAR18E3yWAQMB0AJ5mgF5oAEDAc8CgQETgQFiAwHEAogBE4gBlgEDAbgChQGaAYUBoQEDAbcCjQETjQFiAwGsAqEBFaEBlAEDAaACnAEVnAF5AwGWArYBFbYByAEDAYACsQEVsQF5AwH2AcQBEcoBNgMB3wHLARHWASwDAcoB1wERsQIbAgFIxwEXxwGKAQMB4AHTARfTAZEBAwHVAc4BF84BmgEDAcsB2gEX2gF4AwHAAeEBFa8CIAIBSeIBF+4BMgMBqQHvAReBAigDAZEBggIXrgIcAgFK6wEd6wGXAQMBtQHlAR3mAXwDAaoB8gEd+QEgAwGeAf4BHf4BoQEDAZMB7wHDAe8ByQEDAZIBhQIdhQLQAQIBS4kCG48CLwMBhQGSAhusAiYCAVaMAiGMAswBAwGGAZMCHZ4CJgIBbp8CHasCOAIBV5sCI5sCfAIBepYCI5YCgAECAW+oAiOoAp0BAgFjogIjowKwAQIBWA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbElDA98CDgIBAUwzTDYCAQJPBVUgAwG9A1YFYSQDAaYDYgVyIQMBhANzBdYCCgIBENcCBd0CIAIBA1ILUoUBAwG/A09gT4IBAwG+A14LXoABAwGyA1kLWU0DAacDZQtlaAMBmwNqC2p4AwGQA28Lb2wDAYUDdgt2XAIBEXoJ1AIUAgEc2gIL2gKFAQIBBdcCYNcCgAECAQR7C5cBFgMBzwKYAQusARADAawCrQELwQEQAwGJAsIBC7oCEAIBTLsCC8YCMwIBNccCC9ICKwIBHtMCC9MCZQIBHX8NigEtAwHqAosBDZYBLQMB0AKbARGbAb4BAwGtAp8BD6oBGAMBuAKwARGwAb4BAwGKArQBD78BGAMBlQLFARHFAY8BAgFNyQEPuAIaAgFYvgIRvgKGAQIBQcMCEcMCagIBNs8CEc8CaAIBKsoCEcoCUwIBH4IBE4IBlgEDAfgCf5oBf6ABAwH3AocBE4cBYgMB6wKOAROOAZYBAwHeAosBmgGLAaEBAwHdApMBE5MBYgMB0QKnARWnAZQBAwHEAqIBFaIBeQMBuQK8ARW8AcgBAwGhArcBFbcBeQMBlgLKARHQATYDAf0B0QER3AEsAwHmAd0BEbcCGwIBWc0BF80BigEDAf4B2QEX2QGRAQMB8gHUARfUAZoBAwHnAeABF+ABeAMB2wHnARW1AiACAVroARf0ATIDAcIB9QEXhwIoAwGoAYgCF7QCHAIBW/EBHfEBlwEDAc8B6wEd7AF8AwHDAfgBHf8BIAMBtgGEAh2EAqEBAwGqAfUBwwH1AckBAwGpAYsCHYsC0AECAVyPAhuVAi8DAZsBmAIbsgImAgFokgIhkgLMAQMBnAGZAh2kAiYDAYIBpQIdsQI4AgFpoQIjoQJ8AwGPAZwCI5wCgAEDAYMBrgIjrgKdAQIBdqgCI6kCsAECAWo=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

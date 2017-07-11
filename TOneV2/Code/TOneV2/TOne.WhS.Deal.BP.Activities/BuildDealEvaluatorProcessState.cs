@@ -8,12 +8,17 @@ namespace TOne.WhS.Deal.BP.Activities
     public class BuildDealEvaluatorProcessState : CodeActivity
     {
         [RequiredArgument]
+        public InArgument<long?> LastBPInstanceId { get; set; }
+
+        [RequiredArgument]
         public OutArgument<DealEvaluatorProcessState> DealEvaluatorProcessState { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
+            long? lastBPInstanceId = this.LastBPInstanceId.Get(context);
+
             Byte[] maxTimestamp = new DealDetailedProgressManager().GetMaxTimestamp();
-            DealEvaluatorProcessState dealEvaluatorProcessState = new DealEvaluatorProcessState() { MaxTimestamp = maxTimestamp };
+            DealEvaluatorProcessState dealEvaluatorProcessState = new DealEvaluatorProcessState() { DealDetailedProgressMaxTimestamp = maxTimestamp, LastBPInstanceId = lastBPInstanceId };
 
             this.DealEvaluatorProcessState.Set(context, dealEvaluatorProcessState);
         }

@@ -8,6 +8,8 @@ namespace TOne.WhS.Deal.Entities
 {
     public class DealEvaluatorProcessState
     {
-        public byte[] MaxTimestamp { get; set; }
+        public byte[] DealDetailedProgressMaxTimestamp { get; set; }
+
+        public long? LastBPInstanceId { get; set; }
     }
 }
