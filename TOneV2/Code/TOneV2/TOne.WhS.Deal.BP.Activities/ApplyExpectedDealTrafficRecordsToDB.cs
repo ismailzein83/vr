@@ -78,7 +78,7 @@ namespace TOne.WhS.Deal.BP.Activities
             if (inputArgument.ExpectedDealBillingSummaryRecords == null)
                 return null;
 
-            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
+            int intervalOffsetInMinutes = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
 
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             List<DealDetailedProgress> dealDetailedProgressToAdd = new List<DealDetailedProgress>();
@@ -109,13 +109,13 @@ namespace TOne.WhS.Deal.BP.Activities
 
                 if (!dealDetailedProgresses.TryGetValue(dealDetailedZoneGroupTierWithoutRate, out currentDealDetailedProgresses))
                 {
-                    dealDetailedProgressToAdd.Add(BuildDealDetailedProgress(expectedDealBillingSummary, null, intervalOffset));
+                    dealDetailedProgressToAdd.Add(BuildDealDetailedProgress(expectedDealBillingSummary, null, intervalOffsetInMinutes));
                 }
                 else
                 {
                     dealDetailedProgressesToKeep.Add(currentDealDetailedProgresses.DealDetailedProgressId);
                     if (!dealDetailedProgressManager.AreEqual(currentDealDetailedProgresses, expectedDealBillingSummary))
-                        dealDetailedProgressToUpdate.Add(BuildDealDetailedProgress(expectedDealBillingSummary, currentDealDetailedProgresses.DealDetailedProgressId, intervalOffset));
+                        dealDetailedProgressToUpdate.Add(BuildDealDetailedProgress(expectedDealBillingSummary, currentDealDetailedProgresses.DealDetailedProgressId, intervalOffsetInMinutes));
                 }
             }
 
@@ -213,7 +213,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
         #region Private Methods
 
-        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID, int intervalOffset)
+        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID, int intervalOffsetInMinutes)
         {
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress()
             {
@@ -223,7 +223,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 TierNb = dealBillingSummary.TierNb,
                 RateTierNb = dealBillingSummary.RateTierNb,
                 FromTime = dealBillingSummary.BatchStart,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset),
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffsetInMinutes),
                 ReachedDurationInSeconds = dealBillingSummary.DurationInSeconds
             };
 

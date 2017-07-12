@@ -56,7 +56,7 @@ app.directive('vrWhsDealTechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsSer
                         dealTechnicalSettingData = payload.data;
                     }
 
-                    $scope.scopeModel.intervalOffset = dealTechnicalSettingData.IntervalOffset;
+                    $scope.scopeModel.intervalOffsetInMinutes = dealTechnicalSettingData.IntervalOffsetInMinutes;
 
                     //Loading ReprocessDefinition selector 
                     var reprocessDefinitionSelectorLoadPromise = getReprocessDefinitionSelectorLoadPromise();
@@ -107,7 +107,7 @@ app.directive('vrWhsDealTechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsSer
                         $type: 'TOne.WhS.Deal.Entities.DealTechnicalSettingData, TOne.WhS.Deal.Entities',
                         ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
                         ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
-                        IntervalOffset: $scope.scopeModel.intervalOffset
+                        IntervalOffsetInMinutes: $scope.scopeModel.intervalOffsetInMinutes
                     };
                     return data;
                 };

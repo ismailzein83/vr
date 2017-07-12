@@ -84,11 +84,6 @@
       </twdba1:LoadPreviousAffectedDealZoneGroups.IsSale>
     </twdba1:LoadPreviousAffectedDealZoneGroups>
     <twdba1:LoadDealBillingSummaryRecords Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadDealBillingSummaryRecords_1">
-      <twdba1:LoadDealBillingSummaryRecords.AffectedDealZoneGroups>
-        <OutArgument x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">
-          <mca:CSharpReference x:TypeArguments="scg:HashSet(twde:DealZoneGroup)">affectedDealZoneGroups</mca:CSharpReference>
-        </OutArgument>
-      </twdba1:LoadDealBillingSummaryRecords.AffectedDealZoneGroups>
       <twdba1:LoadDealBillingSummaryRecords.BeginDate>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">beginDate</mca:CSharpValue>

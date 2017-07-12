@@ -27,7 +27,7 @@ namespace TOne.WhS.Deal.Business
         public int GetDealTechnicalSettingIntervalOffsetInMinutes()
         {
             DealTechnicalSettingData dealTechnicalSettingData = GetDealTechnicalSettingData();
-            return dealTechnicalSettingData.IntervalOffset;
+            return dealTechnicalSettingData.IntervalOffsetInMinutes;
         }
 
         #endregion

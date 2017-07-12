@@ -30,9 +30,6 @@ namespace TOne.WhS.Deal.BP.Activities
         public InArgument<DateTime> BeginDate { get; set; }
 
         [RequiredArgument]
-        public OutArgument<HashSet<DealZoneGroup>> AffectedDealZoneGroups { get; set; }
-
-        [RequiredArgument]
         public OutArgument<Dictionary<DealZoneGroup, List<DealBillingSummary>>> CurrentDealBillingSummaryRecords { get; set; }
 
         protected override LoadDealBillingSummaryRecordsOutput DoWorkWithResult(LoadDealBillingSummaryRecordsInput inputArgument, AsyncActivityHandle handle)

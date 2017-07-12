@@ -70,7 +70,11 @@
       <Variable x:TypeArguments="twdba:DealEvaluatorSubProcessOutput" Name="sale_DealEvaluatorSubProcessOutput" />
       <Variable x:TypeArguments="twdba:DealEvaluatorSubProcessOutput" Name="cost_DealEvaluatorSubProcessOutput" />
       <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="beginDate" />
-      <Variable x:TypeArguments="scg:HashSet(s:DateTime)" Name="daysToReprocess" />
+      <Variable x:TypeArguments="scg:HashSet(s:DateTime)" Name="daysToReprocess">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:HashSet(s:DateTime)">new HashSet&lt;DateTime&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
       <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="dealEvaluatorReprocessingCompletedEvent" />
       <Variable x:TypeArguments="twde:DealTechnicalSettingData" Name="dealTechnicalSettingData" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="daysToReprocessCompleted" />
@@ -347,7 +351,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbElDA98CDgIBAUwzTDYCAQJPBVUgAwG9A1YFYSQDAaYDYgVyIQMBhANzBdYCCgIBENcCBd0CIAIBA1ILUoUBAwG/A09gT4IBAwG+A14LXoABAwGyA1kLWU0DAacDZQtlaAMBmwNqC2p4AwGQA28Lb2wDAYUDdgt2XAIBEXoJ1AIUAgEc2gIL2gKFAQIBBdcCYNcCgAECAQR7C5cBFgMBzwKYAQusARADAawCrQELwQEQAwGJAsIBC7oCEAIBTLsCC8YCMwIBNccCC9ICKwIBHtMCC9MCZQIBHX8NigEtAwHqAosBDZYBLQMB0AKbARGbAb4BAwGtAp8BD6oBGAMBuAKwARGwAb4BAwGKArQBD78BGAMBlQLFARHFAY8BAgFNyQEPuAIaAgFYvgIRvgKGAQIBQcMCEcMCagIBNs8CEc8CaAIBKsoCEcoCUwIBH4IBE4IBlgEDAfgCf5oBf6ABAwH3AocBE4cBYgMB6wKOAROOAZYBAwHeAosBmgGLAaEBAwHdApMBE5MBYgMB0QKnARWnAZQBAwHEAqIBFaIBeQMBuQK8ARW8AcgBAwGhArcBFbcBeQMBlgLKARHQATYDAf0B0QER3AEsAwHmAd0BEbcCIwIBWc0BF80BigEDAf4B2QEX2QGRAQMB8gHUARfUAZoBAwHnAeABF+ABeAMB2wHnARW1AiACAVroARf0ATIDAcIB9QEXhwIoAwGoAYgCF7QCHAIBW/EBHfEBlwEDAc8B6wEd7AFTAwHDAfgBHf8BIAMBtgGEAh2EAqEBAwGqAfUBwwH1AckBAwGpAYsCHYsC0AECAVyPAhuVAi8DAZsBmAIbsgImAgFokgIhkgLMAQMBnAGZAh2kAiYDAYIBpQIdsQI4AgFpoQIjoQJ8AwGPAZwCI5wCgAEDAYMBrgIjrgKdAQIBdqgCI6kChwECAWo=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dw1DOlxFbXB0eS54YW1sAA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

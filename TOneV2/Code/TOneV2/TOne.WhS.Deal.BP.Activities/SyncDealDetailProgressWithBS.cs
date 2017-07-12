@@ -101,7 +101,7 @@ namespace TOne.WhS.Deal.BP.Activities
             }
 
             affectedDealZoneGroups = currentDealBillingSummaryRecords.Keys.ToHashSet();
-            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
+            int intervalOffsetInMinutes = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
             var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(isSale, beginDate, null);
 
             if (dealDetailedProgresses != null)
@@ -120,17 +120,17 @@ namespace TOne.WhS.Deal.BP.Activities
 
                 foreach (var dealBillingSummary in currentDealBillingSummaryRecord.Value)
                 {
-                    DealDetailedZoneGroupTier currentDealDetailedZoneGroupTier = BuildDealDetailedZoneGroupTier(dealBillingSummary, intervalOffset);
+                    DealDetailedZoneGroupTier currentDealDetailedZoneGroupTier = BuildDealDetailedZoneGroupTier(dealBillingSummary, intervalOffsetInMinutes);
 
                     if (dealDetailedProgresses != null && dealDetailedProgresses.TryGetValue(currentDealDetailedZoneGroupTier, out tempDealDetailedProgress))
                     {
                         dealDetailedProgressesToKeep.Add(tempDealDetailedProgress.DealDetailedProgressId);
                         if (!dealDetailedProgressManager.AreEqual(tempDealDetailedProgress, dealBillingSummary))
-                            dealDetailedProgressesToUpdate.Add(BuildDealDetailedProgress(dealBillingSummary, tempDealDetailedProgress.DealDetailedProgressId, intervalOffset));
+                            dealDetailedProgressesToUpdate.Add(BuildDealDetailedProgress(dealBillingSummary, tempDealDetailedProgress.DealDetailedProgressId, intervalOffsetInMinutes));
                     }
                     else
                     {
-                        dealDetailedProgressesToAdd.Add(BuildDealDetailedProgress(dealBillingSummary, null, intervalOffset));
+                        dealDetailedProgressesToAdd.Add(BuildDealDetailedProgress(dealBillingSummary, null, intervalOffsetInMinutes));
                     }
                 }
             }
@@ -143,7 +143,7 @@ namespace TOne.WhS.Deal.BP.Activities
             dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete.Select(itm => itm.DealDetailedProgressId).ToList());
         }
 
-        private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary, int intervalOffset)
+        private DealDetailedZoneGroupTier BuildDealDetailedZoneGroupTier(DealBillingSummary dealBillingSummary, int intervalOffsetInMinutes)
         {
             return new DealDetailedZoneGroupTier()
             {
@@ -152,11 +152,11 @@ namespace TOne.WhS.Deal.BP.Activities
                 FromTime = dealBillingSummary.BatchStart,
                 RateTierNb = dealBillingSummary.RateTierNb,
                 TierNb = dealBillingSummary.TierNb,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset)
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffsetInMinutes)
             };
         }
 
-        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID, int intervalOffset)
+        private DealDetailedProgress BuildDealDetailedProgress(DealBillingSummary dealBillingSummary, long? dealDetailedProgressID, int intervalOffsetInMinutes)
         {
             DealDetailedProgress dealDetailedProgress = new DealDetailedProgress()
             {
@@ -166,7 +166,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 TierNb = dealBillingSummary.TierNb,
                 RateTierNb = dealBillingSummary.RateTierNb,
                 FromTime = dealBillingSummary.BatchStart,
-                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffset),
+                ToTime = dealBillingSummary.BatchStart.AddMinutes(intervalOffsetInMinutes),
                 ReachedDurationInSeconds = dealBillingSummary.DurationInSeconds
             };
 

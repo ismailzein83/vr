@@ -231,7 +231,7 @@ namespace TOne.WhS.Deal.BP.Activities
         {
             var expectedDealBillingSummaryRecordDict = new Dictionary<DealDetailedZoneGroupTierWithoutRate, DealBillingSummary>();
 
-            int intervalOffset = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
+            int intervalOffsetInMinutes = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
 
             foreach (var dealBillingSummaryRecords in expectedDealBillingSummaryRecordByZoneGroupTier.Values)
             {
@@ -244,7 +244,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         TierNb = dealBillingSummaryRecord.TierNb,
                         //RateTierNb = dealBillingSummaryRecord.RateTierNb,
                         FromTime = dealBillingSummaryRecord.BatchStart,
-                        ToTime = dealBillingSummaryRecord.BatchStart.AddMinutes(intervalOffset),
+                        ToTime = dealBillingSummaryRecord.BatchStart.AddMinutes(intervalOffsetInMinutes),
                     };
 
                     expectedDealBillingSummaryRecordDict.Add(dealDetailedZoneGroupTier, dealBillingSummaryRecord);
