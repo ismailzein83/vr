@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Reprocess.BP.Arguments;
 using System.Linq;
+using Vanrise.Reprocess.Business;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -30,15 +31,26 @@ namespace TOne.WhS.Deal.BP.Activities
             long? lastBPInstanceId = dealEvaluatorProcessState.LastBPInstanceId;
 
             //Loading ReprocessMinFromTime
-            Guid reprocessBPDefinitionId = new Guid("2E5D1E80-FE3F-403B-83ED-0232C84D6DD1");
             DateTime? reprocessMinFromTime = null;
 
-            List<BPInstance> bpInstances = new BPInstanceManager().GetAfterId(lastBPInstanceId, reprocessBPDefinitionId);
+            DealTechnicalSettingData dealTechnicalSettingData = new ConfigManager().GetDealTechnicalSettingData();
+            ReprocessDefinitionManager reprocessDefinitionManager = new Vanrise.Reprocess.Business.ReprocessDefinitionManager();
+            var dealReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(dealTechnicalSettingData.ReprocessDefinitionId);
+
+            dealReprocessDefinition.ThrowIfNull("dealReprocessDefinition", dealTechnicalSettingData.ReprocessDefinitionId);
+            dealReprocessDefinition.Settings.ThrowIfNull("dealReprocessDefinition.Settings", dealTechnicalSettingData.ReprocessDefinitionId);
+
+            List<BPInstance> bpInstances = new BPInstanceManager().GetAfterId(lastBPInstanceId, ReProcessingProcessInput.BPDefinitionId);
             if (bpInstances != null && bpInstances.Count > 0)
             {
                 foreach (var bpInstance in bpInstances)
                 {
-                    var reProcessingSubProcessInput = bpInstance.InputArgument.CastWithValidate<ReProcessingSubProcessInput>("bpInstance.InputArgument", bpInstance.ProcessInstanceID);
+                    var reProcessingSubProcessInput = bpInstance.InputArgument.CastWithValidate<ReProcessingProcessInput>("bpInstance.InputArgument", bpInstance.ProcessInstanceID);
+
+                    var bpInstanceReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reProcessingSubProcessInput.ReprocessDefinitionId);
+                    if (bpInstanceReprocessDefinition == null || bpInstanceReprocessDefinition.Settings == null 
+                        || bpInstanceReprocessDefinition.Settings.ExecutionFlowDefinitionId != dealReprocessDefinition.Settings.ExecutionFlowDefinitionId)
+                        continue;
 
                     if (!reprocessMinFromTime.HasValue || reprocessMinFromTime.Value > reProcessingSubProcessInput.FromTime)
                         reprocessMinFromTime = reProcessingSubProcessInput.FromTime;

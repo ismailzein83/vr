@@ -74,6 +74,13 @@
     <Reference Include="Vanrise.Reprocess.BP.Arguments">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.BP.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Reprocess.Business">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FinalizeDealEvaluator.cs" />

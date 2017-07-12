@@ -218,12 +218,12 @@
                     </InArgument>
                   </vbw:WriteTrackingMessage.Severity>
                 </vbw:WriteTrackingMessage>
-                <ForEach x:TypeArguments="s:DateTime" DisplayName="ForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
-                  <ForEach.Values>
+                <ParallelForEach x:TypeArguments="s:DateTime" DisplayName="ParallelForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+                  <ParallelForEach.Values>
                     <InArgument x:TypeArguments="scg1:IEnumerable(s:DateTime)">
                       <mca:CSharpValue x:TypeArguments="scg1:IEnumerable(s:DateTime)">daysToReprocess</mca:CSharpValue>
                     </InArgument>
-                  </ForEach.Values>
+                  </ParallelForEach.Values>
                   <ActivityAction x:TypeArguments="s:DateTime">
                     <ActivityAction.Argument>
                       <DelegateInArgument x:TypeArguments="s:DateTime" Name="item" />
@@ -233,7 +233,7 @@
                         <vbw:WriteTrackingMessage.Message>
                           <InArgument x:TypeArguments="x:String">
                             <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">string.Format("Deal Evaluator Reprocessing From:{0} To:{1} has started", item.ToString("yyyy-MM-dd HH:mm:ss"), 
-                item.AddMinutes(dealTechnicalSettingData.IntervalOffset).ToString("yyyy-MM-dd HH:mm:ss"))</mca:CSharpValue>
+                item.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"))</mca:CSharpValue>
                           </InArgument>
                         </vbw:WriteTrackingMessage.Message>
                         <vbw:WriteTrackingMessage.Severity>
@@ -294,7 +294,7 @@
                               <vbw:WriteTrackingMessage.Message>
                                 <InArgument x:TypeArguments="x:String">
                                   <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">string.Format("Deal Evaluator Reprocessing From {0} - To {1} has completed, {2} reprocess remaining", item.ToString("yyyy-MM-dd HH:mm:ss"), 
-                item.AddMinutes(dealTechnicalSettingData.IntervalOffset).ToString("yyyy-MM-dd HH:mm:ss"), (daysToReprocess.Count - daysToReprocessCompleted))</mca:CSharpValue>
+                item.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"), (daysToReprocess.Count - daysToReprocessCompleted))</mca:CSharpValue>
                                 </InArgument>
                               </vbw:WriteTrackingMessage.Message>
                               <vbw:WriteTrackingMessage.Severity>
@@ -308,7 +308,7 @@
                       </If>
                     </Sequence>
                   </ActivityAction>
-                </ForEach>
+                </ParallelForEach>
               </Sequence>
             </If.Then>
           </If>
@@ -347,7 +347,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbElDA98CDgIBAUwzTDYCAQJPBVUgAwG9A1YFYSQDAaYDYgVyIQMBhANzBdYCCgIBENcCBd0CIAIBA1ILUoUBAwG/A09gT4IBAwG+A14LXoABAwGyA1kLWU0DAacDZQtlaAMBmwNqC2p4AwGQA28Lb2wDAYUDdgt2XAIBEXoJ1AIUAgEc2gIL2gKFAQIBBdcCYNcCgAECAQR7C5cBFgMBzwKYAQusARADAawCrQELwQEQAwGJAsIBC7oCEAIBTLsCC8YCMwIBNccCC9ICKwIBHtMCC9MCZQIBHX8NigEtAwHqAosBDZYBLQMB0AKbARGbAb4BAwGtAp8BD6oBGAMBuAKwARGwAb4BAwGKArQBD78BGAMBlQLFARHFAY8BAgFNyQEPuAIaAgFYvgIRvgKGAQIBQcMCEcMCagIBNs8CEc8CaAIBKsoCEcoCUwIBH4IBE4IBlgEDAfgCf5oBf6ABAwH3AocBE4cBYgMB6wKOAROOAZYBAwHeAosBmgGLAaEBAwHdApMBE5MBYgMB0QKnARWnAZQBAwHEAqIBFaIBeQMBuQK8ARW8AcgBAwGhArcBFbcBeQMBlgLKARHQATYDAf0B0QER3AEsAwHmAd0BEbcCGwIBWc0BF80BigEDAf4B2QEX2QGRAQMB8gHUARfUAZoBAwHnAeABF+ABeAMB2wHnARW1AiACAVroARf0ATIDAcIB9QEXhwIoAwGoAYgCF7QCHAIBW/EBHfEBlwEDAc8B6wEd7AF8AwHDAfgBHf8BIAMBtgGEAh2EAqEBAwGqAfUBwwH1AckBAwGpAYsCHYsC0AECAVyPAhuVAi8DAZsBmAIbsgImAgFokgIhkgLMAQMBnAGZAh2kAiYDAYIBpQIdsQI4AgFpoQIjoQJ8AwGPAZwCI5wCgAEDAYMBrgIjrgKdAQIBdqgCI6kCsAECAWo=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbElDA98CDgIBAUwzTDYCAQJPBVUgAwG9A1YFYSQDAaYDYgVyIQMBhANzBdYCCgIBENcCBd0CIAIBA1ILUoUBAwG/A09gT4IBAwG+A14LXoABAwGyA1kLWU0DAacDZQtlaAMBmwNqC2p4AwGQA28Lb2wDAYUDdgt2XAIBEXoJ1AIUAgEc2gIL2gKFAQIBBdcCYNcCgAECAQR7C5cBFgMBzwKYAQusARADAawCrQELwQEQAwGJAsIBC7oCEAIBTLsCC8YCMwIBNccCC9ICKwIBHtMCC9MCZQIBHX8NigEtAwHqAosBDZYBLQMB0AKbARGbAb4BAwGtAp8BD6oBGAMBuAKwARGwAb4BAwGKArQBD78BGAMBlQLFARHFAY8BAgFNyQEPuAIaAgFYvgIRvgKGAQIBQcMCEcMCagIBNs8CEc8CaAIBKsoCEcoCUwIBH4IBE4IBlgEDAfgCf5oBf6ABAwH3AocBE4cBYgMB6wKOAROOAZYBAwHeAosBmgGLAaEBAwHdApMBE5MBYgMB0QKnARWnAZQBAwHEAqIBFaIBeQMBuQK8ARW8AcgBAwGhArcBFbcBeQMBlgLKARHQATYDAf0B0QER3AEsAwHmAd0BEbcCIwIBWc0BF80BigEDAf4B2QEX2QGRAQMB8gHUARfUAZoBAwHnAeABF+ABeAMB2wHnARW1AiACAVroARf0ATIDAcIB9QEXhwIoAwGoAYgCF7QCHAIBW/EBHfEBlwEDAc8B6wEd7AFTAwHDAfgBHf8BIAMBtgGEAh2EAqEBAwGqAfUBwwH1AckBAwGpAYsCHYsC0AECAVyPAhuVAi8DAZsBmAIbsgImAgFokgIhkgLMAQMBnAGZAh2kAiYDAYIBpQIdsQI4AgFpoQIjoQJ8AwGPAZwCI5wCgAEDAYMBrgIjrgKdAQIBdqgCI6kChwECAWo=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -383,7 +383,7 @@
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="541,796" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,796" />
       <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="563,1044">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
