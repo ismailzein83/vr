@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
@@ -9,7 +10,6 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Reprocess.BP.Arguments;
-using System.Linq;
 using Vanrise.Reprocess.Business;
 
 namespace TOne.WhS.Deal.BP.Activities
@@ -35,25 +35,25 @@ namespace TOne.WhS.Deal.BP.Activities
 
             DealTechnicalSettingData dealTechnicalSettingData = new ConfigManager().GetDealTechnicalSettingData();
             ReprocessDefinitionManager reprocessDefinitionManager = new Vanrise.Reprocess.Business.ReprocessDefinitionManager();
-            var dealReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(dealTechnicalSettingData.ReprocessDefinitionId);
-
-            dealReprocessDefinition.ThrowIfNull("dealReprocessDefinition", dealTechnicalSettingData.ReprocessDefinitionId);
-            dealReprocessDefinition.Settings.ThrowIfNull("dealReprocessDefinition.Settings", dealTechnicalSettingData.ReprocessDefinitionId);
+            var dealEvaluatorReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(dealTechnicalSettingData.ReprocessDefinitionId);
+            dealEvaluatorReprocessDefinition.ThrowIfNull("dealEvaluatorReprocessDefinition", dealTechnicalSettingData.ReprocessDefinitionId);
+            dealEvaluatorReprocessDefinition.Settings.ThrowIfNull("dealEvaluatorReprocessDefinition.Settings", dealTechnicalSettingData.ReprocessDefinitionId);
 
             List<BPInstance> bpInstances = new BPInstanceManager().GetAfterId(lastBPInstanceId, ReProcessingProcessInput.BPDefinitionId);
             if (bpInstances != null && bpInstances.Count > 0)
             {
                 foreach (var bpInstance in bpInstances)
                 {
-                    var reProcessingSubProcessInput = bpInstance.InputArgument.CastWithValidate<ReProcessingProcessInput>("bpInstance.InputArgument", bpInstance.ProcessInstanceID);
+                    var reProcessingProcessInput = bpInstance.InputArgument.CastWithValidate<ReProcessingProcessInput>("bpInstance.InputArgument", bpInstance.ProcessInstanceID);
 
-                    var bpInstanceReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reProcessingSubProcessInput.ReprocessDefinitionId);
-                    if (bpInstanceReprocessDefinition == null || bpInstanceReprocessDefinition.Settings == null 
-                        || bpInstanceReprocessDefinition.Settings.ExecutionFlowDefinitionId != dealReprocessDefinition.Settings.ExecutionFlowDefinitionId)
+                    var bpInstanceReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reProcessingProcessInput.ReprocessDefinitionId);
+                    if (reProcessingProcessInput.ReprocessDefinitionId == dealTechnicalSettingData.ReprocessDefinitionId || 
+                        bpInstanceReprocessDefinition == null || bpInstanceReprocessDefinition.Settings == null ||
+                        bpInstanceReprocessDefinition.Settings.ExecutionFlowDefinitionId != dealEvaluatorReprocessDefinition.Settings.ExecutionFlowDefinitionId)
                         continue;
 
-                    if (!reprocessMinFromTime.HasValue || reprocessMinFromTime.Value > reProcessingSubProcessInput.FromTime)
-                        reprocessMinFromTime = reProcessingSubProcessInput.FromTime;
+                    if (!reprocessMinFromTime.HasValue || reprocessMinFromTime.Value > reProcessingProcessInput.FromTime)
+                        reprocessMinFromTime = reProcessingProcessInput.FromTime;
                 }
                 lastBPInstanceId = bpInstances.Select(itm => itm.ProcessInstanceID).Max();
             }
