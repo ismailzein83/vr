@@ -27,7 +27,23 @@
     [SaleRateTypeId]           INT              NULL,
     [CostRateTypeId]           INT              NULL,
     [SaleRateValue]            DECIMAL (20, 8)  NULL,
-    [CostRateValue]            DECIMAL (20, 8)  NULL);
+    [CostRateValue]            DECIMAL (20, 8)  NULL,
+    [OrigSaleDealID]           INT              NULL,
+    [OrigSaleDealZoneGroupNb]  INT              NULL,
+    [SaleDealID]               INT              NULL,
+    [SaleDealZoneGroupNb]      INT              NULL,
+    [SaleDealTierNb]           INT              NULL,
+    [SaleDealRateTierNb]       INT              NULL,
+    [SaleDealDurInSec]         DECIMAL (20, 4)  NULL,
+    [OrigCostDealID]           INT              NULL,
+    [OrigCostDealZoneGroupNb]  INT              NULL,
+    [CostDealID]               INT              NULL,
+    [CostDealZoneGroupNb]      INT              NULL,
+    [CostDealTierNb]           INT              NULL,
+    [CostDealRateTierNb]       INT              NULL,
+    [CostDealDurInSec]         DECIMAL (20, 4)  NULL);
+
+
 
 
 

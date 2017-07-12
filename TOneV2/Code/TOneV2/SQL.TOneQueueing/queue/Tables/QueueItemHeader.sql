@@ -9,9 +9,13 @@
     [ErrorMessage]               NVARCHAR (MAX)  NULL,
     [CreatedTime]                DATETIME        NULL,
     [LastUpdatedTime]            DATETIME        NULL,
+    [ProcessingTime]             DATETIME        NULL,
+    [ProcessedTime]              DATETIME        NULL,
     CONSTRAINT [PK_QueueItemHeader_1] PRIMARY KEY CLUSTERED ([ItemID] ASC),
     CONSTRAINT [FK_QueueItemHeader_QueueItemHeader] FOREIGN KEY ([ExecutionFlowTriggerItemID]) REFERENCES [queue].[QueueItemHeader] ([ItemID])
 );
+
+
 
 
 

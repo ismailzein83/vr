@@ -232,6 +232,7 @@
     <Build Include="queue\Stored Procedures\sp_HoldRequest_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_HoldRequest_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_HasRunningInstance.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetAfterID.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

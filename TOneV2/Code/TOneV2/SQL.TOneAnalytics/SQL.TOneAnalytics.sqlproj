@@ -74,6 +74,9 @@
     <Folder Include="TOneWhS_Analytics\Stored Procedures\" />
     <Folder Include="TOneWhS_Deal\" />
     <Folder Include="TOneWhS_Deal\Tables\" />
+    <Folder Include="TOneWhS_Deal\Functions\" />
+    <Folder Include="TOneWhS_Deal\Stored Procedures\" />
+    <Folder Include="TOneWhS_Deal\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_Analytics\Tables\TrafficStats15Min.sql" />
@@ -95,7 +98,25 @@
     <Build Include="TOneWhS_Analytics\User Defined Types\BillingStats30MinType.sql" />
     <Build Include="TOneWhS_Deal\Tables\DealProgress.sql" />
     <Build Include="Security\TOneWhS_Deal.sql" />
-    <Build Include="TOneWhS_Deal\Tables\DealReprocessInput.sql" />
     <Build Include="TOneWhS_Deal\Tables\DealDetailedProgress.sql" />
+    <Build Include="TOneWhS_Deal\Tables\AffectedDealZoneGroupsToDelete.sql" />
+    <Build Include="TOneWhS_Deal\Functions\ParseStringList.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_Update.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_Insert.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_GetByDealZoneGroups.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealProgress_Delete.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_Update.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_Insert.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_GetDealEvaluatorBeginDate.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_GetByDealZoneGroups.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_GetByDate.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_DeleteByDate.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_Delete.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_AffectedDealZoneGroupsToDelete_Insert.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_AffectedDealZoneGroupsToDelete_Get.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_AffectedDealZoneGroupsToDelete_Delete.sql" />
+    <Build Include="TOneWhS_Deal\User Defined Types\DealZoneGroupType.sql" />
+    <Build Include="TOneWhS_Deal\User Defined Types\DealProgressType.sql" />
+    <Build Include="TOneWhS_Deal\User Defined Types\DealDetailedProgressType.sql" />
   </ItemGroup>
 </Project>

@@ -16,6 +16,8 @@ BEGIN
 
 	UPDATE itemHeader
     SET   Status = @Status,
+		ProcessingTime = CASE WHEN @Status = 10 THEN GETDATE() ELSE ProcessingTime END,
+		ProcessedTime = CASE WHEN @Status = 30 THEN GETDATE() ELSE ProcessedTime END,
 		  RetryCount = @RetryCount,
 		  ErrorMessage = ISNULL(@ErrorMessage, ErrorMessage),
 		  LastUpdatedTime = GETDATE()
