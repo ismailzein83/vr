@@ -32,6 +32,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnImportIntlRates = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label8 = new System.Windows.Forms.Label();
             this.numInternationalChargingPolicy = new System.Windows.Forms.NumericUpDown();
             this.numOnNetChargingPolicy = new System.Windows.Forms.NumericUpDown();
             this.numOffNetChargingPolicy = new System.Windows.Forms.NumericUpDown();
@@ -40,6 +41,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.numMobileChargingPolicy = new System.Windows.Forms.NumericUpDown();
+            this.numLocalChargingPolicy = new System.Windows.Forms.NumericUpDown();
             this.btnImportOutGoingRates = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -61,6 +63,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numOnNetChargingPolicy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffNetChargingPolicy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMobileChargingPolicy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numLocalChargingPolicy)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPricingUnit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSNP)).BeginInit();
@@ -88,15 +91,15 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 22F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 22F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 22F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(750, 313);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(731, 367);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // btnImportIntlRates
             // 
             this.btnImportIntlRates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnImportIntlRates.Location = new System.Drawing.Point(3, 177);
+            this.btnImportIntlRates.Location = new System.Drawing.Point(3, 207);
             this.btnImportIntlRates.Name = "btnImportIntlRates";
-            this.btnImportIntlRates.Size = new System.Drawing.Size(369, 62);
+            this.btnImportIntlRates.Size = new System.Drawing.Size(359, 74);
             this.btnImportIntlRates.TabIndex = 4;
             this.btnImportIntlRates.Text = "Import International Rates";
             this.btnImportIntlRates.UseVisualStyleBackColor = true;
@@ -107,6 +110,7 @@
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.label8, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.numInternationalChargingPolicy, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.numOnNetChargingPolicy, 1, 2);
             this.tableLayoutPanel2.Controls.Add(this.numOffNetChargingPolicy, 1, 1);
@@ -115,22 +119,33 @@
             this.tableLayoutPanel2.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.numMobileChargingPolicy, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.numLocalChargingPolicy, 1, 4);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 4;
+            this.tableLayoutPanel2.RowCount = 5;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(369, 100);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(359, 118);
             this.tableLayoutPanel2.TabIndex = 3;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 96);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(109, 13);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "Local Charging Policy";
             // 
             // numInternationalChargingPolicy
             // 
             this.numInternationalChargingPolicy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numInternationalChargingPolicy.Location = new System.Drawing.Point(187, 78);
+            this.numInternationalChargingPolicy.Location = new System.Drawing.Point(182, 75);
             this.numInternationalChargingPolicy.Maximum = new decimal(new int[] {
             1410065408,
             2,
@@ -142,7 +157,7 @@
             0,
             0});
             this.numInternationalChargingPolicy.Name = "numInternationalChargingPolicy";
-            this.numInternationalChargingPolicy.Size = new System.Drawing.Size(179, 20);
+            this.numInternationalChargingPolicy.Size = new System.Drawing.Size(174, 20);
             this.numInternationalChargingPolicy.TabIndex = 7;
             this.numInternationalChargingPolicy.Value = new decimal(new int[] {
             5,
@@ -154,7 +169,7 @@
             // numOnNetChargingPolicy
             // 
             this.numOnNetChargingPolicy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numOnNetChargingPolicy.Location = new System.Drawing.Point(187, 53);
+            this.numOnNetChargingPolicy.Location = new System.Drawing.Point(182, 51);
             this.numOnNetChargingPolicy.Maximum = new decimal(new int[] {
             1410065408,
             2,
@@ -166,7 +181,7 @@
             0,
             0});
             this.numOnNetChargingPolicy.Name = "numOnNetChargingPolicy";
-            this.numOnNetChargingPolicy.Size = new System.Drawing.Size(179, 20);
+            this.numOnNetChargingPolicy.Size = new System.Drawing.Size(174, 20);
             this.numOnNetChargingPolicy.TabIndex = 6;
             this.numOnNetChargingPolicy.Value = new decimal(new int[] {
             2,
@@ -178,7 +193,7 @@
             // numOffNetChargingPolicy
             // 
             this.numOffNetChargingPolicy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numOffNetChargingPolicy.Location = new System.Drawing.Point(187, 28);
+            this.numOffNetChargingPolicy.Location = new System.Drawing.Point(182, 27);
             this.numOffNetChargingPolicy.Maximum = new decimal(new int[] {
             1410065408,
             2,
@@ -190,7 +205,7 @@
             0,
             0});
             this.numOffNetChargingPolicy.Name = "numOffNetChargingPolicy";
-            this.numOffNetChargingPolicy.Size = new System.Drawing.Size(179, 20);
+            this.numOffNetChargingPolicy.Size = new System.Drawing.Size(174, 20);
             this.numOffNetChargingPolicy.TabIndex = 5;
             this.numOffNetChargingPolicy.Value = new decimal(new int[] {
             3,
@@ -211,7 +226,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 25);
+            this.label2.Location = new System.Drawing.Point(3, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 1;
@@ -220,7 +235,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 50);
+            this.label3.Location = new System.Drawing.Point(3, 48);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(117, 13);
             this.label3.TabIndex = 2;
@@ -229,7 +244,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 75);
+            this.label4.Location = new System.Drawing.Point(3, 72);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(141, 13);
             this.label4.TabIndex = 3;
@@ -238,7 +253,7 @@
             // numMobileChargingPolicy
             // 
             this.numMobileChargingPolicy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numMobileChargingPolicy.Location = new System.Drawing.Point(187, 3);
+            this.numMobileChargingPolicy.Location = new System.Drawing.Point(182, 3);
             this.numMobileChargingPolicy.Maximum = new decimal(new int[] {
             1410065408,
             2,
@@ -250,7 +265,7 @@
             0,
             0});
             this.numMobileChargingPolicy.Name = "numMobileChargingPolicy";
-            this.numMobileChargingPolicy.Size = new System.Drawing.Size(179, 20);
+            this.numMobileChargingPolicy.Size = new System.Drawing.Size(174, 20);
             this.numMobileChargingPolicy.TabIndex = 4;
             this.numMobileChargingPolicy.Value = new decimal(new int[] {
             4,
@@ -259,12 +274,25 @@
             0});
             this.numMobileChargingPolicy.ValueChanged += new System.EventHandler(this.numMobileChargingPolicy_ValueChanged);
             // 
+            // numLocalChargingPolicy
+            // 
+            this.numLocalChargingPolicy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numLocalChargingPolicy.Location = new System.Drawing.Point(182, 99);
+            this.numLocalChargingPolicy.Name = "numLocalChargingPolicy";
+            this.numLocalChargingPolicy.Size = new System.Drawing.Size(174, 20);
+            this.numLocalChargingPolicy.TabIndex = 9;
+            this.numLocalChargingPolicy.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // btnImportOutGoingRates
             // 
             this.btnImportOutGoingRates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnImportOutGoingRates.Location = new System.Drawing.Point(3, 109);
+            this.btnImportOutGoingRates.Location = new System.Drawing.Point(3, 127);
             this.btnImportOutGoingRates.Name = "btnImportOutGoingRates";
-            this.btnImportOutGoingRates.Size = new System.Drawing.Size(369, 62);
+            this.btnImportOutGoingRates.Size = new System.Drawing.Size(359, 74);
             this.btnImportOutGoingRates.TabIndex = 2;
             this.btnImportOutGoingRates.Text = "Import Incoming Rates";
             this.btnImportOutGoingRates.UseVisualStyleBackColor = true;
@@ -282,14 +310,14 @@
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.numPricingUnit, 1, 2);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(378, 3);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(368, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 4;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(369, 100);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(360, 118);
             this.tableLayoutPanel3.TabIndex = 5;
             // 
             // label5
@@ -304,7 +332,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 25);
+            this.label6.Location = new System.Drawing.Point(3, 29);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(102, 13);
             this.label6.TabIndex = 1;
@@ -314,9 +342,9 @@
             // 
             this.cboCurrency.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboCurrency.FormattingEnabled = true;
-            this.cboCurrency.Location = new System.Drawing.Point(187, 3);
+            this.cboCurrency.Location = new System.Drawing.Point(183, 3);
             this.cboCurrency.Name = "cboCurrency";
-            this.cboCurrency.Size = new System.Drawing.Size(179, 21);
+            this.cboCurrency.Size = new System.Drawing.Size(174, 21);
             this.cboCurrency.TabIndex = 2;
             this.cboCurrency.SelectedIndexChanged += new System.EventHandler(this.cboCurrency_SelectedIndexChanged);
             // 
@@ -324,16 +352,16 @@
             // 
             this.cboSNP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboSNP.FormattingEnabled = true;
-            this.cboSNP.Location = new System.Drawing.Point(187, 28);
+            this.cboSNP.Location = new System.Drawing.Point(183, 32);
             this.cboSNP.Name = "cboSNP";
-            this.cboSNP.Size = new System.Drawing.Size(179, 21);
+            this.cboSNP.Size = new System.Drawing.Size(174, 21);
             this.cboSNP.TabIndex = 3;
             this.cboSNP.SelectedIndexChanged += new System.EventHandler(this.cboSNP_SelectedIndexChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 50);
+            this.label7.Location = new System.Drawing.Point(3, 58);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(61, 13);
             this.label7.TabIndex = 4;
@@ -342,9 +370,9 @@
             // numPricingUnit
             // 
             this.numPricingUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numPricingUnit.Location = new System.Drawing.Point(187, 53);
+            this.numPricingUnit.Location = new System.Drawing.Point(183, 61);
             this.numPricingUnit.Name = "numPricingUnit";
-            this.numPricingUnit.Size = new System.Drawing.Size(179, 20);
+            this.numPricingUnit.Size = new System.Drawing.Size(174, 20);
             this.numPricingUnit.TabIndex = 5;
             this.numPricingUnit.Value = new decimal(new int[] {
             60,
@@ -356,9 +384,9 @@
             // btnImpOffNetRates
             // 
             this.btnImpOffNetRates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnImpOffNetRates.Location = new System.Drawing.Point(378, 109);
+            this.btnImpOffNetRates.Location = new System.Drawing.Point(368, 127);
             this.btnImpOffNetRates.Name = "btnImpOffNetRates";
-            this.btnImpOffNetRates.Size = new System.Drawing.Size(369, 62);
+            this.btnImpOffNetRates.Size = new System.Drawing.Size(360, 74);
             this.btnImpOffNetRates.TabIndex = 6;
             this.btnImpOffNetRates.Text = "Import OffNet Rates";
             this.btnImpOffNetRates.UseVisualStyleBackColor = true;
@@ -367,9 +395,9 @@
             // btnImportOnNet
             // 
             this.btnImportOnNet.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnImportOnNet.Location = new System.Drawing.Point(378, 177);
+            this.btnImportOnNet.Location = new System.Drawing.Point(368, 207);
             this.btnImportOnNet.Name = "btnImportOnNet";
-            this.btnImportOnNet.Size = new System.Drawing.Size(369, 62);
+            this.btnImportOnNet.Size = new System.Drawing.Size(360, 74);
             this.btnImportOnNet.TabIndex = 7;
             this.btnImportOnNet.Text = "Import On Net Rates";
             this.btnImportOnNet.UseVisualStyleBackColor = true;
@@ -378,9 +406,9 @@
             // btnMobileRates
             // 
             this.btnMobileRates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMobileRates.Location = new System.Drawing.Point(3, 245);
+            this.btnMobileRates.Location = new System.Drawing.Point(3, 287);
             this.btnMobileRates.Name = "btnMobileRates";
-            this.btnMobileRates.Size = new System.Drawing.Size(369, 65);
+            this.btnMobileRates.Size = new System.Drawing.Size(359, 77);
             this.btnMobileRates.TabIndex = 8;
             this.btnMobileRates.Text = "Import Mobile Rates";
             this.btnMobileRates.UseVisualStyleBackColor = true;
@@ -389,9 +417,9 @@
             // btnImportMonthlyCharges
             // 
             this.btnImportMonthlyCharges.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnImportMonthlyCharges.Location = new System.Drawing.Point(378, 245);
+            this.btnImportMonthlyCharges.Location = new System.Drawing.Point(368, 287);
             this.btnImportMonthlyCharges.Name = "btnImportMonthlyCharges";
-            this.btnImportMonthlyCharges.Size = new System.Drawing.Size(369, 65);
+            this.btnImportMonthlyCharges.Size = new System.Drawing.Size(360, 77);
             this.btnImportMonthlyCharges.TabIndex = 9;
             this.btnImportMonthlyCharges.Text = "Import Monthly Charges";
             this.btnImportMonthlyCharges.UseVisualStyleBackColor = true;
@@ -405,7 +433,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 313);
+            this.ClientSize = new System.Drawing.Size(731, 367);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Main";
@@ -419,6 +447,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numOnNetChargingPolicy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffNetChargingPolicy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMobileChargingPolicy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numLocalChargingPolicy)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPricingUnit)).EndInit();
@@ -456,6 +485,8 @@
         private System.Windows.Forms.Button btnImportMonthlyCharges;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numPricingUnit;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numLocalChargingPolicy;
     }
 }
 

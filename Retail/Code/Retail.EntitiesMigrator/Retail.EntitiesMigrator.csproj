@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="Migrators\IncomingRatesMigrator.cs" />
     <Compile Include="Migrators\InternationalRatesMigrator.cs" />
+    <Compile Include="Migrators\LocalRatesMigrator.cs" />
     <Compile Include="Migrators\MonthlyChargesMigrator.cs" />
     <Compile Include="Migrators\OffNetRatesMigrator.cs" />
     <Compile Include="Migrators\MobileRatesMigrator .cs" />

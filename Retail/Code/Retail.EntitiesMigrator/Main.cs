@@ -46,7 +46,9 @@ namespace Retail.EntitiesMigrator
             Helper.MobileRuleDefinition.ChargingPolicyId = (int)numMobileChargingPolicy.Value;
             Helper.OffNetRuleDefinition.ChargingPolicyId = (int)numOffNetChargingPolicy.Value;
             Helper.OnNetRuleDefinition.ChargingPolicyId = (int)numOnNetChargingPolicy.Value;
-            Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value; Helper.CurrencyId = (int)cboCurrency.SelectedValue;
+            Helper.IntlRuleDefinition.ChargingPolicyId = (int)numInternationalChargingPolicy.Value;
+            Helper.LocalRuleDefinition.ChargingPolicyId = (int)numLocalChargingPolicy.Value;
+            Helper.CurrencyId = (int)cboCurrency.SelectedValue;
         }
         private void btnImportOutGoingRates_Click(object sender, EventArgs e)
         {
@@ -79,6 +81,8 @@ namespace Retail.EntitiesMigrator
             btnImportOnNet.Enabled = false;
             OnNetRatesMigrator onNetMigrator = new OnNetRatesMigrator();
             onNetMigrator.Execute();
+            LocalRatesMigrator localMigrator = new LocalRatesMigrator();
+            localMigrator.Execute();
             MessageBox.Show("Importing OnNet rates is done");
             btnImportOnNet.Enabled = true;
         }

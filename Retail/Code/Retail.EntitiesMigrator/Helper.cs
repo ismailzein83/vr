@@ -38,6 +38,7 @@ namespace Retail.EntitiesMigrator
         public static Guid MobileServiceTypeId = new Guid("e99f5894-9175-421a-b0b9-e0c8d6efa126");
         public static Guid OnNetServiceTypeId = new Guid("6423ac08-170f-4775-bcaa-211dec0b56a9");
         public static Guid OffNetServiceTypeId = new Guid("6d283ee4-6d69-40df-82c8-28eca5df5407");
+        public static Guid LocalServiceTypeId = new Guid("fb8f2a2b-6858-4e2d-ba31-f6b41c9c2f6e");
 
         public static Guid AccountBEDefinitionId = new Guid("9a427357-cf55-4f33-99f7-745206dee7cd");
         public static Guid OperatorBEDefinitionId = new Guid("A5C1852B-2C92-4D66-B959-E3F49304338A");
@@ -63,6 +64,17 @@ namespace Retail.EntitiesMigrator
             IsInternational = false,
             ServiceTypeId = Helper.OnNetServiceTypeId
         };
+
+
+        public static RuleDefinitionDetails LocalRuleDefinition = new RuleDefinitionDetails
+        {
+            Name = "Local",
+            RateDefinitionId = new Guid("85d2ab1d-a226-43e5-8d97-192de59494c8"),
+            TariffDefinitionId = new Guid("816d6ed1-b196-4a1e-8564-b14bd6c534a6"),
+            IsInternational = false,
+            ServiceTypeId = Helper.LocalServiceTypeId
+        };
+
 
         public static RuleDefinitionDetails OffNetRuleDefinition = new RuleDefinitionDetails
             {
@@ -93,11 +105,12 @@ namespace Retail.EntitiesMigrator
         {
             return string.Format("User_{0}", sourceId);
         }
-        public static Dictionary<string, GenericRuleCriteriaFieldValues> BuildCriteriaFieldsValues(Guid serviceTypeId, int chargingPolicyId, TrafficDirection trafficDirection)
+        public static Dictionary<string, GenericRuleCriteriaFieldValues> BuildCriteriaFieldsValues(Guid serviceTypeId, int chargingPolicyId, TrafficDirection? trafficDirection)
         {
             Dictionary<string, GenericRuleCriteriaFieldValues> result = new Dictionary<string, GenericRuleCriteriaFieldValues>();
 
-            Helper.AddDirectionField(result, trafficDirection);
+            if (trafficDirection.HasValue)
+                Helper.AddDirectionField(result, trafficDirection.Value);
             Helper.AddServiceTypeField(result, serviceTypeId);
             Helper.AddChargingPolicyField(result, chargingPolicyId);
 
