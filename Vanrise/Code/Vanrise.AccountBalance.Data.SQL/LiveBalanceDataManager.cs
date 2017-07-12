@@ -10,6 +10,7 @@ using System.Transactions;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.AccountBalance.Data.SQL
@@ -57,7 +58,6 @@ namespace Vanrise.AccountBalance.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@Top", query.Top));
                 cmd.Parameters.Add(new SqlParameter("@AccountTypeID", query.AccountTypeId));
                 cmd.Parameters.Add(new SqlParameter("@OrderBy", query.OrderBy));
-
             });
 
         }
@@ -122,9 +122,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                        });
         }
 
-        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal currentBalance)
+        public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal currentBalance, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
         {
-            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, currentBalance);
+            return GetItemSP("[VR_AccountBalance].[sp_LiveBalance_TryAddAndGet]", LiveBalanceAccountInfoMapper, accountId, accountTypeId, initialBalance, currencyId, currentBalance, bed, eed, status, isDeleted);
         }
         public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
@@ -203,7 +203,10 @@ namespace Vanrise.AccountBalance.Data.SQL
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 NextThreshold = GetReaderValue<decimal?>(reader, "NextAlertThreshold"),
                 LastExecutedThreshold = GetReaderValue<decimal?>(reader, "LastExecutedActionThreshold"),
-                LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader["ActiveAlertsInfo"] as string, typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo
+                LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader["ActiveAlertsInfo"] as string, typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo,
+                BED = GetReaderValue<DateTime?>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                Status = GetReaderValue<VRAccountStatus>(reader, "Status"),
             };
         }
         private Vanrise.AccountBalance.Entities.AccountBalance AccountBalanceMapper(IDataReader reader)
@@ -217,6 +220,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 InitialBalance = GetReaderValue<Decimal>(reader, "InitialBalance"),
                 AlertRuleID = GetReaderValue<int>(reader, "AlertRuleID"),
+                BED = GetReaderValue<DateTime?>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                Status = GetReaderValue<VRAccountStatus>(reader, "Status"),
 
             };
         }
@@ -227,6 +233,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                 LiveBalanceId = (long)reader["ID"],
                 AccountId = reader["AccountId"] as String,
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
+                BED = GetReaderValue<DateTime?>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                Status=GetReaderValue<VRAccountStatus>(reader, "Status"),
             };
         }
 
@@ -327,10 +336,19 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             if (query.Sign != null)
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign, query.Balance));
+           
+            if (query.Status.HasValue)
+                whereBuilder.Append(String.Format(@" AND  lb.[Status] = {0} ", (int)query.Status.Value));
 
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID 
+            if (query.IsEffectiveInFuture.HasValue)
+                whereBuilder.Append(String.Format(@" AND (({0} = 1 and (lb.EED IS NULL or lb.EED >=  GETDATE())) OR  ({0} = 0 and  lb.EED <=  GETDATE())) ", query.IsEffectiveInFuture.Value ? 1 : 0));
+
+            if (query.EffectiveDate.HasValue)
+                whereBuilder.Append(String.Format(@" AND (lb.BED <= '{0}' AND (lb.EED > '{0}' OR lb.EED IS NULL))", query.EffectiveDate.Value));
+
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID ,lb.BED,lb.EED,lb.[Status]
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
-                                                                    WHERE  (#WHEREPART#) 
+                                                                    WHERE  (#WHEREPART#) AND ISNULL(IsDeleted,0) = 0
                                                                     ORDER BY  lb.CurrentBalance #ORDERDIRECTION#
                                                                     ");
 

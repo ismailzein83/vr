@@ -15,10 +15,14 @@
 
         var accountTypeAPI;
         var accountTypeReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountTypeSelectedDeferred;
+
+        var accountStatusSelectorAPI;
+        var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountStatusSelectedDeferred;
 
         loadParameters();
         defineScope();
-        load();
 
         var filter = {};
         function loadParameters() {
@@ -31,6 +35,27 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
+                accountStatusSelectorAPI = api;
+                accountStatusSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onAccountStatusSelectionChanged = function (value) {
+                if (value != undefined) {
+                    if (accountStatusSelectedDeferred != undefined)
+                        accountStatusSelectedDeferred.resolve();
+                    else
+                    {
+                        $scope.isLoadingDirective = true;
+                        loadAccountDirective().finally(function () {
+                            $scope.isLoadingDirective = false;
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                }
+            };
 
             $scope.scopeModel.gridloadded = false;
 
@@ -68,47 +93,125 @@
 
             $scope.scopeModel.onAccountTypeSelectorSelectionChange = function () {
                 if (accountTypeAPI.getSelectedIds() != undefined) {
-                    loadAllControls().then(function () {
-                        loadGridDirective();
-                    });
+                    if (accountTypeSelectedDeferred != undefined)
+                        accountTypeSelectedDeferred.resolve();
+                    else {
+                        $scope.scopeModel.isLoading = true;
+                        loadSearchCriteria().finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
                 }
             };
 
+            UtilsService.waitMultiplePromises([accountTypeReadyDeferred.promise]).then(function () {
+                load();
+            });
         }
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAccountType();
+            loadAccountTypeAndSubsections().finally(function () {
+                $scope.scopeModel.isLoading = false;
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+        }
+
+        //Load Account Type And Subsections
+        function loadAccountTypeAndSubsections() {
+            var loadAccountTypeAndSubsectionsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+            accountTypeSelectedDeferred = UtilsService.createPromiseDeferred();
+            promises.push(accountTypeSelectedDeferred.promise);
+            promises.push(loadAccountType());
+
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                accountTypeSelectedDeferred = undefined;
+                $scope.scopeModel.hideAccountType = accountTypeAPI.hasSingleItem();
+                loadSearchCriteria().then(function () {
+                    loadAccountTypeAndSubsectionsPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadAccountTypeAndSubsectionsPromiseDeferred.reject(error);
+                });
+            }).catch(function (error) {
+                loadAccountTypeAndSubsectionsPromiseDeferred.reject(error);
+            });
+
+            return loadAccountTypeAndSubsectionsPromiseDeferred.promise;
         }
 
         function loadAccountType() {
-            var loadAccountTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-            accountTypeReadyDeferred.promise.then(function () {
-                var payLoad;
-                payLoad = {
-                    filter: {
-                        Filters: [{
-                            $type: "Vanrise.AccountBalance.Business.AccountTypeViewFilter, Vanrise.AccountBalance.Business",
-                            ViewId: viewId
-                        }]
-                    },
-                    selectfirstitem: true
-                };
-                VRUIUtilsService.callDirectiveLoad(accountTypeAPI, payLoad, loadAccountTypeSelectorPromiseDeferred);
-            });
-            return loadAccountTypeSelectorPromiseDeferred.promise.then(function () {
-                $scope.scopeModel.isLoading = false;
-                $scope.scopeModel.hideAccountType = accountTypeAPI.hasSingleItem();
+            var payLoad = {
+                filter: {
+                    Filters: [{
+                        $type: "Vanrise.AccountBalance.Business.AccountTypeViewFilter, Vanrise.AccountBalance.Business",
+                        ViewId: viewId
+                    }]
+                },
+                selectfirstitem: true
+            };
+            return accountTypeAPI.load(payLoad);
+        }
+
+        function loadSearchCriteria() {
+
+            return UtilsService.waitMultipleAsyncOperations([loadAccountSection]).then(function () {
+                loadGridDirective();
             });
         }
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAccountDirective]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
+        //Load Account Section
+        function loadAccountSection()
+        {
+            var loadAccountSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountStatusSelectedDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+            
+            promises.push(loadAccountStatusSelectorDirective());
+            promises.push(accountStatusSelectedDeferred.promise);
+
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                accountStatusSelectedDeferred = undefined;
+                loadAccountDirective().then(function () {
+                    loadAccountSectionPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadAccountSectionPromiseDeferred.reject(error);
+                });
+            }).catch(function (error) {
+                loadAccountSectionPromiseDeferred.reject(error);
             });
+            return loadAccountSectionPromiseDeferred.promise;
         }
+
+        function loadAccountStatusSelectorDirective() {
+            var loadAccountStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountStatusSelectorReadyDeferred.promise.then(function () {
+                var accountStatusSelectorPayload = { selectFirstItem: true };
+
+                VRUIUtilsService.callDirectiveLoad(accountStatusSelectorAPI, accountStatusSelectorPayload, loadAccountStatusSelectorPromiseDeferred);
+            });
+            return loadAccountStatusSelectorPromiseDeferred.promise;
+        }
+
+        function loadAccountDirective() {
+            var loadAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountDirectiveReadyDeferred.promise.then(function () {
+                var payload = {
+                    accountTypeId: accountTypeAPI.getSelectedIds(),
+                    filter: accountStatusSelectorAPI.getData()
+                };
+                VRUIUtilsService.callDirectiveLoad(accountDirectiveAPI, payload, loadAccountSelectorPromiseDeferred);
+            });
+            return loadAccountSelectorPromiseDeferred.promise
+        }
+
+
+        //Load Grid Section
 
         function loadGridDirective() {
             gridReadyDeferred.promise.then(function () {
@@ -116,22 +219,14 @@
             });
         }
 
-        function loadAccountDirective() {
-            var loadAccountPromiseDeferred = UtilsService.createPromiseDeferred();
-            accountDirectiveReadyDeferred.promise.then(function () {
-                var payload = {
-                    accountTypeId: accountTypeAPI.getSelectedIds()
-                };
-                VRUIUtilsService.callDirectiveLoad(accountDirectiveAPI, payload, loadAccountPromiseDeferred);
-            });
-            return loadAccountPromiseDeferred.promise;
-        }
-
         function getFilterObject() {
             var accountData = (accountDirectiveAPI != undefined) ? accountDirectiveAPI.getData() : undefined;
             var accountsIds;
             if(accountData != undefined)
-                accountsIds =  accountData.selectedIds;
+                accountsIds = accountData.selectedIds;
+            var accountStatusObj = accountStatusSelectorAPI.getData();
+
+
             return {
                 query:{
                     AccountTypeId: accountTypeAPI.getSelectedIds(),
@@ -139,7 +234,10 @@
                     AccountsIds: accountsIds,
                     Sign: $scope.scopeModel.sign != undefined ? $scope.scopeModel.sign.value : undefined,
                     Balance: $scope.scopeModel.sign != undefined ? $scope.scopeModel.balance : undefined,
-                    OrderBy:$scope.scopeModel.orderBy.value
+                    OrderBy: $scope.scopeModel.orderBy.value,
+                    Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
+                    EffectiveDate: accountStatusObj != undefined ? accountStatusObj.EffectiveDate : undefined,
+                    IsEffectiveInFuture: accountStatusObj != undefined ? accountStatusObj.IsEffectiveInFuture : undefined,
                 },
                 accountTypeId : accountTypeAPI.getSelectedIds()
             };

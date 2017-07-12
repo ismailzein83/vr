@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountBalance\Constants\BalanceOrderByEnum.js" />
+    <Content Include="VR_AccountBalance\Constants\AccountStatusEnum.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\Templates\AccountBalanceNotificationGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountBalanceNotification\vr-accountbalance-notifications-grid.js" />
     <Content Include="VR_AccountBalance\Directives\AccountBalances\Templates\AccountBalancesGridTemplate.html" />
@@ -172,6 +173,7 @@
     <Content Include="VR_AccountBalance\Directives\AccountStatement\Templates\AccountStatementGridTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountStatement\vr-accountbalance-accountstatement-vieweditor.js" />
     <Content Include="VR_AccountBalance\Directives\AccountStatement\vr-accountbalance-accountstatement-grid.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountStatus\vr-accountbalance-accountstatus-selector.js" />
     <Content Include="VR_AccountBalance\Directives\AccountType\vr-accountbalance-accounttype-extendedsettings.js" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\Templates\DailyAccountUsagePeriodTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\vr-accountusage-periodsettings-daily.js" />

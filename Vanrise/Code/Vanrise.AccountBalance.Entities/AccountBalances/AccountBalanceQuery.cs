@@ -17,6 +17,9 @@ namespace Vanrise.AccountBalance.Entities
         public decimal Balance { get; set; }
 
         public string OrderBy { get; set; }
+        public Vanrise.Entities.VRAccountStatus? Status { get; set; }
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsEffectiveInFuture { get; set; }
 
     }
 }

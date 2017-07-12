@@ -11,5 +11,8 @@ namespace Vanrise.AccountBalance.Entities
         public long LiveBalanceId { get; set; }
         public String AccountId { get; set; }
         public int CurrencyId { get; set; }
+        public DateTime? BED { get; set; }
+        public DateTime? EED { get; set; }
+        public Vanrise.Entities.VRAccountStatus Status { get; set; }
     }
 }

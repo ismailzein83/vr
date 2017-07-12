@@ -14,6 +14,9 @@
                 <vr-accountbalance-accounttype-selector ng-hide="scopeModel.hideAccountType" normal-col-num="2" on-ready="scopeModel.onAccountTypeSelectorReady" selectedvalues="scopeModel.accountType"
                                                         onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChange" customlabel="Account Type"
                                                         isrequired="true" hideremoveicon></vr-accountbalance-accounttype-selector>
+
+                <vr-accountbalance-accountstatus-selector hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-accountbalance-accountstatus-selector>
+
                 <vr-accountbalance-account-selector on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
                 <vr-columns colnum="1" ng-if="scopeModel.accountType && advancedSelected">
                     <vr-select hidefilterbox="true" label="Balance" datatextfield="text" datavaluefield="signValue"

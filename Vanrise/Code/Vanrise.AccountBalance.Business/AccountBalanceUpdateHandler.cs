@@ -8,6 +8,7 @@ using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -221,11 +222,11 @@ namespace Vanrise.AccountBalance.Business
         private LiveBalanceAccountInfo AddLiveAccountInfo(String accountId)
         {
             var account = manager.GetAccountInfo(_accountTypeId, accountId);
-            return TryAddLiveBalanceAndGet(accountId, account.CurrencyId);
+            return TryAddLiveBalanceAndGet(accountId, account.CurrencyId,account.BED,account.EED,account.Status,account.IsDeleted);
         }
-        private LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, int currencyId)
+        private LiveBalanceAccountInfo TryAddLiveBalanceAndGet(String accountId, int currencyId,DateTime? bed,DateTime? eed, VRAccountStatus status,bool isDeleted)
         {
-            return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0);
+            return liveBalanceDataManager.TryAddLiveBalanceAndGet(accountId, _accountTypeId, 0, currencyId, 0, bed, eed, status, isDeleted);
 
         }
         private void GroupLiveBalanceToUpdateById(Dictionary<long, LiveBalanceToUpdate> liveBalancesToUpdate, DateTime effectiveOn, int currencyId, decimal value, LiveBalanceAccountInfo liveBalanceInfo)

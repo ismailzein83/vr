@@ -22,6 +22,5 @@ namespace Vanrise.AccountBalance.Entities
         public DateTime? BED { get; set; }
         public DateTime? EED { get; set; }
         public VRAccountStatus Status { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }

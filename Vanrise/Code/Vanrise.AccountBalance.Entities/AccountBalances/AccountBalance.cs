@@ -19,6 +19,9 @@ namespace Vanrise.AccountBalance.Entities
         public decimal InitialBalance { get; set; }
 
         public decimal CurrentBalance { get; set; }
+        public DateTime? BED { get; set; }
+        public DateTime? EED { get; set; }
+        public Vanrise.Entities.VRAccountStatus Status { get; set; }
     }
 
 }

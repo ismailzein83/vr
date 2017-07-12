@@ -29,7 +29,7 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
 
         var directiveAPI;
         var directiveReadyDeferred;
-
+        var filter;
         function initializeController() {
             $scope.scopeModel = {};
 
@@ -53,6 +53,8 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
                     accountSelectorContext = payload.context;
+                    filter = payload.filter;
+
                 }
 
                 var promises = [];
@@ -91,7 +93,8 @@ app.directive('vrAccountbalanceAccountSelector', ['VR_AccountBalance_AccountType
                         var directivePayload = {
                             accountTypeId: accountTypeId,
                             context: accountSelectorContext,
-                            extendedSettings: extendedSettings
+                            extendedSettings: extendedSettings,
+                            filter:filter
                         };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
