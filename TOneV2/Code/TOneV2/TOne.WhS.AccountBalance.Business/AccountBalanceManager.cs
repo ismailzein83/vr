@@ -9,7 +9,8 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-
+using Vanrise.Entities;
+using Vanrise.Common;
 namespace TOne.WhS.AccountBalance.Business
 {
     public class AccountBalanceManager : Vanrise.AccountBalance.Entities.IAccountManager
@@ -18,12 +19,16 @@ namespace TOne.WhS.AccountBalance.Business
 
         #region Public Methods
 
-        public void GetAccountOrProfileId(string balanceEntityId, out int? carrierAccountId, out int? carrierProfileId)
+        public void GetAccountOrProfileId(string balanceEntityId, out int? carrierAccountId, out int? carrierProfileId, out DateTime? bed, out DateTime? eed,out VRAccountStatus status)
         {
             carrierAccountId = null;
             carrierProfileId = null;
             int financialAccountId = ParseFinancialAccountId(balanceEntityId);
             FinancialAccount financialAccount = new FinancialAccountManager().GetFinancialAccount(financialAccountId);
+            bed = financialAccount.BED;
+            eed = financialAccount.EED;
+            status = VRAccountStatus.Active;
+           
             if (financialAccount.CarrierProfileId.HasValue)
             {
                 carrierProfileId = financialAccount.CarrierProfileId.Value;
@@ -34,13 +39,13 @@ namespace TOne.WhS.AccountBalance.Business
             }
         }
 
-        public void GetAccountOrProfile(string balanceEntityId, out CarrierAccount carrierAccount, out CarrierProfile carrierProfile)
+        public void GetAccountOrProfile(string balanceEntityId, out CarrierAccount carrierAccount, out CarrierProfile carrierProfile, out DateTime? bed, out DateTime? eed, out VRAccountStatus status)
         {
             carrierAccount = null;
             carrierProfile = null;
             int? carrierAccountId;
             int? carrierProfileId;
-            GetAccountOrProfileId(balanceEntityId, out carrierAccountId, out carrierProfileId);
+            GetAccountOrProfileId(balanceEntityId, out carrierAccountId, out carrierProfileId, out bed,out eed, out status);
             if (carrierProfileId.HasValue)
             {
                 carrierProfile = new CarrierProfileManager().GetCarrierProfile(carrierProfileId.Value);
@@ -105,14 +110,21 @@ namespace TOne.WhS.AccountBalance.Business
         {
             CarrierAccount carrierAccount;
             CarrierProfile carrierProfile;
-            GetAccountOrProfile(context.AccountId, out carrierAccount, out carrierProfile);
+            DateTime? bed;
+            DateTime? eed;
+            VRAccountStatus status;
+            GetAccountOrProfile(context.AccountId, out carrierAccount, out carrierProfile,out bed, out eed,out status);
             if (carrierProfile != null)
             {
                 var carrierProfileManager = new CarrierProfileManager();
                 return new Vanrise.AccountBalance.Entities.AccountInfo
                 {
                     Name = carrierProfileManager.GetCarrierProfileName(carrierProfile),
-                    CurrencyId = carrierProfileManager.GetCarrierProfileCurrencyId(carrierProfile)
+                    CurrencyId = carrierProfileManager.GetCarrierProfileCurrencyId(carrierProfile),
+                    BED = bed,
+                    EED= eed,
+                    Status = status,
+                    IsDeleted = false
                 };
             }
             else
@@ -121,7 +133,11 @@ namespace TOne.WhS.AccountBalance.Business
                 return new Vanrise.AccountBalance.Entities.AccountInfo
                 {
                     Name = carrierAccountManager.GetCarrierAccountName(carrierAccount),
-                    CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(carrierAccount)
+                    CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(carrierAccount),
+                    BED = bed,
+                    EED = eed,
+                    Status = status,
+                    IsDeleted = false
                 };
             }
         }

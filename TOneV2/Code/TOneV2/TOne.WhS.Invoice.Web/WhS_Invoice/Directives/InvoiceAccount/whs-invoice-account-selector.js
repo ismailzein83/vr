@@ -31,9 +31,6 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
         var carrierTypeSelectorAPI;
         var carrierTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var carrierTypeSelectedPromiseDeferred;
-        var switchValueSelectedPromiseDeferred;
-
         var selectedIds;
         var accountSelectorAPI;
         var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -46,34 +43,16 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
 
             $scope.scopeModel.carrierTypes = [];
             ctrl.datasource = [];
-
-            $scope.scopeModel.onSwitchValueChanged = function () {
-                //if (switchValueSelectedPromiseDeferred != undefined)
-                //    switchValueSelectedPromiseDeferred.resolve();
-                //else {
-                    //loadInvoiceAccounts().finally(function () {
-                       // reloadContextFunctions();
-                   // });
-                //}
-            };
+           
             $scope.scopeModel.onCarrierTypeSelectorReady = function (api) {
                 carrierTypeSelectorAPI = api;
                 carrierTypeSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onCarrierTypeChanged = function (selectedCarrierType) {
-               // if (carrierTypeSelectedPromiseDeferred != undefined)
-                //    carrierTypeSelectedPromiseDeferred.resolve();
-                //else
-                //{
-                    $scope.scopeModel.accountDataTextField = (selectedCarrierType != undefined) ? 'Name' : 'Description';
-                    //loadInvoiceAccounts().finally(function () {
-                        //reloadContextFunctions();
-
-                        if (context != undefined && context.reloadPregeneratorActions != undefined) {
-                            context.reloadPregeneratorActions();
-                        }
-                    //});
-                //}
+               $scope.scopeModel.accountDataTextField = (selectedCarrierType != undefined) ? 'Name' : 'Description';
+                if (context != undefined && context.reloadPregeneratorActions != undefined) {
+                    context.reloadPregeneratorActions();
+                }
             };
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;
@@ -94,7 +73,6 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
           
 
             $scope.scopeModel.onCancelSearch = function (api) {
-                $scope.scopeModel.getCurrentOnly = true;
                 $scope.scopeModel.selectedCarrierType = undefined;
                 return loadInvoiceAccounts().then(function () {
                     reloadContextFunctions();
@@ -138,9 +116,6 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
                     extendedSettings = payload.extendedSettings;
                     context = payload.context;
                     selectedIds = payload.selectedIds;
-                    carrierTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                    switchValueSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-
                 }
 
                 function loadCarrierTypes() {
@@ -183,8 +158,6 @@ app.directive('whsInvoiceAccountSelector', ['WhS_Invoice_InvoiceAccountAPIServic
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'InvoiceAccountId', $attrs, ctrl);
                     }
-                    carrierTypeSelectedPromiseDeferred = undefined;
-                    switchValueSelectedPromiseDeferred = undefined;
                 }
             });
         }

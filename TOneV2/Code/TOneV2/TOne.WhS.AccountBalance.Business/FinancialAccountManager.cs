@@ -389,13 +389,69 @@ namespace TOne.WhS.AccountBalance.Business
                 {
                     if (financialAccount.Settings.AccountTypeId != filter.AccountBalanceTypeId)
                         return false;
-
+                    if (filter.CarrierType.HasValue)
+                    {
+                        if (filter.CarrierType.Value != CarrierType.Profile && financialAccount.CarrierProfileId.HasValue)
+                        {
+                            return false;
+                        }
+                        else if (filter.CarrierType.Value != CarrierType.Account && financialAccount.CarrierAccountId.HasValue)
+                        {
+                            return false;
+                        }
+                    }
+                    if (filter.Status.HasValue)
+                    {
+                        if (!CheckActivationStatus(filter.Status.Value, financialAccount))
+                            return false;
+                    }
+                    if (filter.IsEffectiveInFuture.HasValue && filter.IsEffectiveInFuture.Value)
+                    {
+                        DateTime today = DateTime.Today;
+                        if (financialAccount.EED.HasValue)
+                        {
+                            if (financialAccount.EED.Value < today)
+                                return false;
+                        }
+                    }
                     return true;
                 };
             }
 
             return allFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterFunc);
         }
+        private bool CheckActivationStatus(VRAccountStatus vrAccountStatus, FinancialAccount financialAccount)
+        {
+
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                var carrierAccount = _carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
+                return CheckActivationStatus(vrAccountStatus, carrierAccount);
+            }
+            else
+            {
+                var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, true);
+                if (carrierAccounts == null || !carrierAccounts.All(x => CheckActivationStatus(vrAccountStatus, x)))
+                    return false;
+            }
+            return true;
+        }
+        private bool CheckActivationStatus(VRAccountStatus vrAccountStatus, CarrierAccount carrierAccount)
+        {
+            switch (vrAccountStatus)
+            {
+                case VRAccountStatus.Active:
+                    if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Active)
+                        return false;
+                    return true;
+                case VRAccountStatus.InActive:
+                    if (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                        return false;
+                    return true;
+            }
+            return true;
+        }
+
         #endregion
 
         #region Private Classes

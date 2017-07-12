@@ -27,49 +27,51 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 
         this.initializeController = initializeController;
 
-        var allAccounts = [];
-
         var carrierTypeSelectorAPI;
         var carrierTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var accountSelectorAPI;
         var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var context;
+        var filter;
+        var accountTypeId;
+        var selectedIds;
 
         function initializeController() {
             $scope.scopeModel = {};
-            $scope.scopeModel.getCurrentOnly = true;
 
             $scope.scopeModel.carrierTypes = [];
-            ctrl.datasource = [];
 
-            $scope.scopeModel.onSwitchValueChanged = function () {
-            };
+            ctrl.datasource = [];
+          
             $scope.scopeModel.onCarrierTypeSelectorReady = function (api) {
                 carrierTypeSelectorAPI = api;
                 carrierTypeSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onCarrierTypeChanged = function (selectedCarrierType) {
-            };
+
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;
                 accountSelectorReadyDeferred.resolve();
             };
+
             $scope.scopeModel.onAccountSelected = function (selectedAccount) {
                 if (context != undefined && context.onAccountSelected != undefined)
                     context.onAccountSelected(selectedAccount.FinancialAccountId);
             };
+
             $scope.scopeModel.onOKSearch = function (api) {
-                filterAccounts();
+                return loadFinancialAccounts();
             };
+
             $scope.scopeModel.onCancelSearch = function (api) {
-                $scope.scopeModel.getCurrentOnly = true;
                 $scope.scopeModel.selectedCarrierType = undefined;
-                filterAccounts();
+                return loadInvoiceAccounts();
             };
+
             UtilsService.waitMultiplePromises([accountSelectorReadyDeferred.promise, carrierTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
+
             ctrl.fieldTitle = "Financial Account";
         }
         function defineAPI() {
@@ -78,15 +80,14 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 
             api.load = function (payload) {
                 carrierTypeSelectorAPI.clearDataSource();
-                allAccounts.length = 0;
                 accountSelectorAPI.clearDataSource();
-
-                var accountTypeId;
+                ctrl.datasource.length = 0;
+                selectedIds = undefined;
                 var extendedSettings;
                 var businessEntityDefinitionId;
-                var selectedIds;
                 if (payload != undefined) {
                     accountTypeId = payload.accountTypeId;
+                    filter = payload.filter;
                     extendedSettings = payload.extendedSettings;
                     context = payload.context;
                     if( payload.fieldTitle != undefined)
@@ -130,27 +131,7 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                 function loadCarrierTypes() {
                     $scope.scopeModel.carrierTypes = UtilsService.getArrayEnum(WhS_AccountBalance_FinancialAccountCarrierTypeEnum);
                 }
-                function loadFinancialAccounts() {
-                    var filter = {
-                        AccountBalanceTypeId: accountTypeId
-                    };
-                    return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccountsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        if (response != undefined) {
-                            for (var i = 0; i < response.length; i++) {
-                                var account = response[i];
-                                allAccounts.push(account);
-                                ctrl.datasource.push({
-                                    FinancialAccountId: account.FinancialAccountId,
-                                    Label: account.Description
-                                });
-                            }
-                        }
-                        filterAccounts();
-                        if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', $attrs, ctrl);
-                        }
-                    });
-                }
+               
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -160,39 +141,36 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
                     selectedIds: VRUIUtilsService.getIdSelectedIds('FinancialAccountId', $attrs, ctrl)
                 };
             };
+
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('FinancialAccountId', $attrs, ctrl);
             };
+
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
         }
+        function getFilter() {
+            if (filter == undefined)
+                filter = {};
+            filter.AccountBalanceTypeId = accountTypeId;
+            filter.CarrierType = $scope.scopeModel.selectedCarrierType != undefined ? $scope.scopeModel.selectedCarrierType.value : undefined;
+            return filter;
+        }
 
-        function filterAccounts() {
-            var getCurrentOnly = $scope.scopeModel.getCurrentOnly;
-            var carrierType = $scope.scopeModel.selectedCarrierType;
-
-            ctrl.datasource.length = 0;
-
-            if ($attrs.ismultipleselection != undefined) ctrl.selectedvalues.length = 0;
-            else ctrl.selectedvalues = undefined;
-
-            for (var i = 0; i < allAccounts.length; i++) {
-                if (!effectiveStatusFilter(allAccounts[i]) || !carrierTypeFilter(allAccounts[i]))
-                    continue;
-                ctrl.datasource.push({
-                    FinancialAccountId: allAccounts[i].FinancialAccountId,
-                    Label: (carrierType != undefined) ? allAccounts[i].Name : allAccounts[i].Description
-                });
-            }
-            function effectiveStatusFilter(targetAccount) {
-                return (!getCurrentOnly || targetAccount.EffectiveStatus == WhS_AccountBalance_FinancialAccountEffectiveStatusEnum.Current.value);
-            }
-            function carrierTypeFilter(targetAccount) {
-                return (carrierType == undefined || targetAccount.CarrierType == carrierType.value);
-            }
-
-
+        function loadFinancialAccounts() {
+            accountSelectorAPI.clearDataSource();
+            return WhS_AccountBalance_FinancialAccountAPIService.GetFinancialAccountsInfo(UtilsService.serializetoJson(getFilter())).then(function (response) {
+                if (response != undefined) {
+                    for (var i = 0; i < response.length; i++) {
+                        var account = response[i];
+                        ctrl.datasource.push(account);
+                    }
+                }
+                if (selectedIds != undefined) {
+                    VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', $attrs, ctrl);
+                }
+            });
         }
     }
     function getTemplate(attributes) {
@@ -203,14 +181,11 @@ app.directive('whsAccountbalanceAccountSelector', ['WhS_AccountBalance_Financial
 				        datasource="accountSelectorCtrl.datasource"\
                         selectedvalues="accountSelectorCtrl.selectedvalues"\
 				        datavaluefield="FinancialAccountId"\
-				        datatextfield="Label"\
+				        datatextfield="Description"\
                         onselectitem="scopeModel.onAccountSelected"\
 				        isrequired="accountSelectorCtrl.isrequired"\
 				        hideremoveicon="accountSelectorCtrl.isrequired"\
                         ' + isMultipleSelection + '>\
-                            <vr-columns colnum="12">\
-                                <vr-switch label="Current Only" value="scopeModel.getCurrentOnly" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
-                            </vr-columns>\
                             <vr-columns colnum="12">\
                                 <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
 				                    label="Carrier Type"\
