@@ -4,26 +4,20 @@ namespace Vanrise.Reprocess.Entities
 {
     public enum ReprocessChunkTimeEnum
     {
-        [ReprocessChunkTimeAttribute(5)]
-        FiveMinutes = 0,
-        [ReprocessChunkTimeAttribute(10)]
-        TenMinutes = 1,
-        [ReprocessChunkTimeAttribute(15)]
-        FifteenMinutes = 2,
         [ReprocessChunkTimeAttribute(30)]
-        ThirtyMinutes = 3,
+        ThirtyMinutes = 0,
         [ReprocessChunkTimeAttribute(60)]
-        OneHour = 4,
+        OneHour = 1,
         [ReprocessChunkTimeAttribute(120)]
-        TwoHours = 5,
+        TwoHours = 2,
         [ReprocessChunkTimeAttribute(180)]
-        ThreeHours = 6,
+        ThreeHours = 3,
         [ReprocessChunkTimeAttribute(360)]
-        SixHours = 7,
+        SixHours = 4,
         [ReprocessChunkTimeAttribute(720)]
-        TwelveHours = 8,
+        TwelveHours = 5,
         [ReprocessChunkTimeAttribute(1440)]
-        OneDay = 9
+        OneDay = 6
     }
 
     public class ReprocessChunkTimeAttribute : Attribute

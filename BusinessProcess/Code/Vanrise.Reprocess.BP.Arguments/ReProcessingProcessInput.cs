@@ -6,6 +6,8 @@ namespace Vanrise.Reprocess.BP.Arguments
 {
     public class ReProcessingProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
+        public static Guid BPDefinitionId { get { return new Guid("2E5D1E80-FE3F-403B-83ED-0232C84D6DD1"); } }
+
         public Guid ReprocessDefinitionId { get; set; }
 
         public DateTime FromTime { get; set; }
