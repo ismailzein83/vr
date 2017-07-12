@@ -284,7 +284,10 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     SaleEntityZoneRate zoneRate = lastRateNoCachelocator.GetCustomerZoneRate(customerId, sellingProductId, zone.ZoneId);
 
-                    if (zoneRate != null && zoneRate.Source == SalePriceListOwnerType.Customer)
+                    if (zoneRate == null)
+                        throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product. Additional info: customer with id {1}", zone.ZoneName, customerId));
+
+                    if (zoneRate.Source == SalePriceListOwnerType.Customer)
                         continue; // customer has explicit rate and no need to notify him with this change
 
                     if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null)
