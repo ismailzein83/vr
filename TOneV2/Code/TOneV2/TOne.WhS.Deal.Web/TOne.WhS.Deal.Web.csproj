@@ -194,6 +194,8 @@
     <Content Include="WhS_Deal\Directives\ProcessInput\vr-whs-deal-dealevaluator-process.js" />
     <Content Include="WhS_Deal\Directives\QueueActivators\Templates\QueueActivatorEvaluateDealTemplate.html" />
     <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatedeal.js" />
+    <Content Include="WhS_Deal\Directives\ScheduleTask\Templates\DealEvaluatorTaskTemplate.html" />
+    <Content Include="WhS_Deal\Directives\ScheduleTask\vr-whs-deal-dealevaluator-task.js" />
     <Content Include="WhS_Deal\Directives\Settings\DealSettings\Templates\DealTechnicalSettingsEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Settings\DealSettings\vr-whs-deal-technicalsettings-editor.js" />
     <Content Include="WhS_Deal\Directives\Settings\SwapDealSettings\Templates\SwapDealAnalysisInboundSettingsEditorTemplate.html" />
