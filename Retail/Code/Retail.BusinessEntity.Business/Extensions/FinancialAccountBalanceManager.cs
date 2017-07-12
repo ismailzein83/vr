@@ -35,7 +35,11 @@ namespace Retail.BusinessEntity.Business
             {
                 Name = financialAccountData.Account.Name,
                 StatusDescription = new StatusDefinitionManager().GetStatusDefinitionName(financialAccountData.Account.StatusId),
-                CurrencyId = s_accountBEManager.GetCurrencyId(_accountBEDefinitionId, financialAccountData.Account)
+                CurrencyId = s_accountBEManager.GetCurrencyId(_accountBEDefinitionId, financialAccountData.Account),
+                BED =financialAccountData.FinancialAccount.BED,
+                EED = financialAccountData.FinancialAccount.EED,
+                Status = Vanrise.Entities.VRAccountStatus.Active,
+                IsDeleted = false
             };
             return accountInfo;
         }
