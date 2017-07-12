@@ -217,8 +217,8 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (changesForThisCustomer.RateChanges.Any())
                     {
                         SetRoutingProductIdOnRateChange(customerInfo.CustomerId, customerInfo.SellingProductId, changesForThisCustomer.RateChanges, changesForThisCustomer.RoutingProductChanges);
+                        customerPriceListChanges.Add(changesForThisCustomer);
                     }
-                    customerPriceListChanges.Add(changesForThisCustomer);
 
                     #endregion
                 }
