@@ -16,5 +16,7 @@ namespace Vanrise.BEBridge.Entities
         public string TableName { get; set; }
 
         public DataTable Data { get; set; }
+
+        public DataSet DataSet { get; set; }
     }
 }

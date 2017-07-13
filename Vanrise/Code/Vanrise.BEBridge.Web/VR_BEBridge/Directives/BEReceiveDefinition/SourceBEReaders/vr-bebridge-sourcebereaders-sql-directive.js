@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService','UtilsService','VRUIUtilsService',
+app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService',
     function (vrNotificationService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -39,6 +39,7 @@ app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService',
                         $scope.scopeModel.timeoutInSec = payload.Setting.CommandTimeout;
                         $scope.scopeModel.basedOnId = payload.Setting.BasedOnId;
                         $scope.scopeModel.idField = payload.Setting.IdField;
+                        $scope.scopeModel.useDataSet = payload.Setting.UseDataSet;
                     }
                     var connectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -64,6 +65,7 @@ app.directive('vrBebridgeSourcebereadersSqlDirective', ['VRNotificationService',
                         CommandTimeout: $scope.scopeModel.timeoutInSec,
                         BasedOnId: $scope.scopeModel.basedOnId,
                         IdField: $scope.scopeModel.idField,
+                        UseDataSet: $scope.scopeModel.useDataSet
                     };
                     return {
                         $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.SqlSourceReader, Vanrise.BEBridge.MainExtensions",
