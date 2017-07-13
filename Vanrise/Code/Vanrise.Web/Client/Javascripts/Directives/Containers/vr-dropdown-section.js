@@ -114,8 +114,15 @@
                         }
 
                         function addBackDrop() {
-                            if (elem.parents().find('.modal-dialog').length > 0)
-                                $('vr-modalbody').last().prepend("<div class='vr-backdrop-modal'></div>");
+                            if (elem.parents().find('.modal-dialog').length > 0){
+                                $('vr-modalbody').last().prepend("<div class='vr-backdrop-modal'></div>");                                                         
+                                var style = {
+                                    overflow: 'inherit',
+                                    height: 'calc(100% - 25px)',
+                                    width: '100%'
+                                };
+                                $('.vr-backdrop-modal').css(style);
+                            }                              
                             else {
                                 $(elem.parents().find("vr-form")).prepend("<div class='vr-backdrop'></div>");
                             }
