@@ -10,6 +10,15 @@ namespace Retail.Cost.Business
     {
         #region Public Methods
 
+        public CDRCostTechnicalSettingData GetCDRCostTechnicalSettingData()
+        {
+            SettingManager settingManager = new SettingManager();
+            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = settingManager.GetSetting<CDRCostTechnicalSettingData>(Constants.CDRCostTechnicalSettings);
+            cdrCostTechnicalSettingData.ThrowIfNull("cdrCostTechnicalSettingData");
+
+            return cdrCostTechnicalSettingData;
+        }
+
         public TimeSpan GetDurationMargin()
         {
             CDRCostSettingData cdrCostSettingData = GetCDRCostSettingData();
@@ -40,6 +49,12 @@ namespace Retail.Cost.Business
             return cdrCostTechnicalSettingData.CostCDRReprocessDefinitionId;
         }
 
+        public Guid GetDataRecordTypeId()
+        {
+            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = GetCDRCostTechnicalSettingData();
+            return cdrCostTechnicalSettingData.DataRecordTypeId;
+        }
+
         public RecordFilterGroup GetRecordFilterGroup() 
         {
             CDRCostTechnicalSettingData cdrCostTechnicalSettingData = GetCDRCostTechnicalSettingData();
@@ -57,15 +72,6 @@ namespace Retail.Cost.Business
             cdrCostSettingData.ThrowIfNull("costSettingData");
 
             return cdrCostSettingData;
-        }
-
-        private CDRCostTechnicalSettingData GetCDRCostTechnicalSettingData()
-        {
-            SettingManager settingManager = new SettingManager();
-            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = settingManager.GetSetting<CDRCostTechnicalSettingData>(Constants.CDRCostTechnicalSettings);
-            cdrCostTechnicalSettingData.ThrowIfNull("cdrCostTechnicalSettingData");
-
-            return cdrCostTechnicalSettingData;
         }
 
         #endregion

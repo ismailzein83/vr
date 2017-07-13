@@ -4,15 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Cost.Business
 {
     public class CDRCostManager
     {
-        int _maxBatchDurationInMinutes = 10;
-        TimeSpan _durationMargin = new TimeSpan(0, 0, 5);
-        TimeSpan _attemptDateTimeMargin = new TimeSpan(0, 0, 5);
-        TimeSpan _attemptDateTimeOffset = new TimeSpan(0, 0, 0);
+        #region Public Methods
 
         /// <summary>
         /// used in data transformation
@@ -22,10 +21,19 @@ namespace Retail.Cost.Business
             if (cdrCostFieldNames == null)
                 return;
 
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
+            ConfigManager configManager = new ConfigManager();
+            RecordFilterGroup recordFilterGroup = configManager.GetRecordFilterGroup();
+            Guid dataRecordTypeId = configManager.GetDataRecordTypeId();
+
             List<CDRCostRequest> cdrCostRequests = new List<CDRCostRequest>();
 
             foreach (var cdr in cdrs)
             {
+                DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, dataRecordTypeId);
+                if (!recordFilterManager.IsFilterGroupMatch(recordFilterGroup, filterContext))
+                    continue;
+
                 CDRCostRequest cdrCostRequest = new CDRCostRequest()
                 {
                     OriginalCDR = cdr,
@@ -41,18 +49,46 @@ namespace Retail.Cost.Business
             FillCost(cdrCostRequests, cdrCostFieldNames);
         }
 
+        public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
+        {
+            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
+            cdrCostDataManager.UpadeOverridenCostCDRAfterId(cdrCostId);
+        }
+
+        public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)
+        {
+            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
+            return cdrCostDataManager.GetDistinctDatesAfterId(cdrCostId);
+        }
+
+        public long? GetMaxCDRCostId()
+        {
+            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
+            return cdrCostDataManager.GetMaxCDRCostId();
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private void FillCost(List<CDRCostRequest> cdrCostRequests, CDRCostFieldNames cdrCostFieldNames)
         {
             if (cdrCostRequests == null || cdrCostRequests.Count == 0)
                 return;
 
-            IOrderedEnumerable<CDRCostRequest> orderedCDRCostRequests = cdrCostRequests.Select(itm => BuildCDRCostRequest(itm, _attemptDateTimeOffset)).OrderBy(itm => itm.AttemptDateTime);
+            ConfigManager configManager = new ConfigManager();
+            int maxBatchDurationInMinutes = configManager.GetMaxBatchDurationInMinutes();
+            TimeSpan attemptDateTimeMargin = configManager.GetAttemptDateTimeMargin();
+            TimeSpan attemptDateTimeOffset = configManager.GetAttemptDateTimeOffset();
+            TimeSpan durationMargin = configManager.GetDurationMargin();
+            decimal durationMarginInSeconds = Convert.ToDecimal(durationMargin.TotalSeconds);
 
-            List<CDRCostBatchRequest> cdrCostBatchRequests = BuildCDRCostBatchRequests(orderedCDRCostRequests);
+            IOrderedEnumerable<CDRCostRequest> orderedCDRCostRequests = cdrCostRequests.Select(itm => BuildCDRCostRequest(itm, attemptDateTimeOffset)).OrderBy(itm => itm.AttemptDateTime);
+
+            List<CDRCostBatchRequest> cdrCostBatchRequests = BuildCDRCostBatchRequests(orderedCDRCostRequests, attemptDateTimeMargin, maxBatchDurationInMinutes);
 
             ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
 
-            decimal durationMarginInSeconds = Convert.ToDecimal(_durationMargin.TotalSeconds);
 
             foreach (var cdrCostBatchRequest in cdrCostBatchRequests)
             {
@@ -70,7 +106,7 @@ namespace Retail.Cost.Business
                     CDRCost matchingCDRCost = null; ;
                     foreach (var cdrCostItem in tempCDRCostList)
                     {
-                        if (!IsCDRCostMatch(cdrCostItem, cdrCostRequest, durationMarginInSeconds, _attemptDateTimeMargin))
+                        if (!IsCDRCostMatch(cdrCostItem, cdrCostRequest, durationMarginInSeconds, attemptDateTimeMargin))
                             continue;
 
                         if (matchingCDRCost == null || cdrCostItem.CDRCostId > matchingCDRCost.CDRCostId)
@@ -113,7 +149,7 @@ namespace Retail.Cost.Business
             };
         }
 
-        private List<CDRCostBatchRequest> BuildCDRCostBatchRequests(IOrderedEnumerable<CDRCostRequest> orderedCDRCostRequests)
+        private List<CDRCostBatchRequest> BuildCDRCostBatchRequests(IOrderedEnumerable<CDRCostRequest> orderedCDRCostRequests, TimeSpan attemptDateTimeMargin, int maxBatchDurationInMinutes)
         {
             CDRCostBatchRequest batchRequest = null;
             DateTime nextAttemptDateTimeThreshold = default(DateTime);
@@ -125,18 +161,18 @@ namespace Retail.Cost.Business
                 {
                     batchRequest.CDPNs.Add(cdrCostRequest.CDPN);
                     batchRequest.CDRCostRequests.Add(cdrCostRequest);
-                    batchRequest.BatchEnd = cdrCostRequest.AttemptDateTime.Add(_attemptDateTimeMargin);
+                    batchRequest.BatchEnd = cdrCostRequest.AttemptDateTime.Add(attemptDateTimeMargin);
                 }
                 else
                 {
                     batchRequest = new CDRCostBatchRequest()
                     {
                         CDPNs = new List<string>() { cdrCostRequest.CDPN },
-                        BatchStart = cdrCostRequest.AttemptDateTime.Subtract(_attemptDateTimeMargin),
-                        BatchEnd = cdrCostRequest.AttemptDateTime.Add(_attemptDateTimeMargin),
+                        BatchStart = cdrCostRequest.AttemptDateTime.Subtract(attemptDateTimeMargin),
+                        BatchEnd = cdrCostRequest.AttemptDateTime.Add(attemptDateTimeMargin),
                         CDRCostRequests = new List<CDRCostRequest>() { cdrCostRequest }
                     };
-                    nextAttemptDateTimeThreshold = cdrCostRequest.AttemptDateTime.AddMinutes(_maxBatchDurationInMinutes);
+                    nextAttemptDateTimeThreshold = cdrCostRequest.AttemptDateTime.AddMinutes(maxBatchDurationInMinutes);
                     cdrCostBatchRequests.Add(batchRequest);
                 }
             }
@@ -156,6 +192,10 @@ namespace Retail.Cost.Business
             return true;
         }
 
+        #endregion
+
+        #region Private Classes
+
         private struct UniqueCDRCostKeys
         {
             public string CGPN { get; set; }
@@ -163,23 +203,7 @@ namespace Retail.Cost.Business
             public string CDPN { get; set; }
         }
 
-        public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
-        {
-            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
-            cdrCostDataManager.UpadeOverridenCostCDRAfterId(cdrCostId);
-        }
-
-        public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)
-        {
-            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
-            return cdrCostDataManager.GetDistinctDatesAfterId(cdrCostId);
-        }
-
-        public long? GetMaxCDRCostId()
-        {
-            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
-            return cdrCostDataManager.GetMaxCDRCostId();
-        }
+        #endregion
     }
 
     public class CDRCostFieldNames

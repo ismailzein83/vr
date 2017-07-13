@@ -26,6 +26,9 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
             var reprocessDefinitionSelectorAPI;
             var reprocessDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var chunkTimeSelectorAPI;
+            var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var dataRecordTypeSelectorAPI;
             var dataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             var dataRecordTypeSelectorSelectionChangedDeferred;
@@ -40,6 +43,10 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                 $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
                     reprocessDefinitionPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onChunkTimeSelectorReady = function (api) {
+                    chunkTimeSelectorAPI = api;
+                    chunkTimeSelectorReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
@@ -86,6 +93,7 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                     var promises = [];
 
                     var costCDRReprocessDefinitionId;
+                    var chunkTime;
                     var filterGroup;
 
                     if (payload != undefined && payload.data != undefined) {
@@ -93,6 +101,7 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
 
                         if (costTechnicalSettingData != undefined) {
                             costCDRReprocessDefinitionId = costTechnicalSettingData.CostCDRReprocessDefinitionId;
+                            chunkTime = costTechnicalSettingData.ChunkTime;
                             dataRecordTypeId = costTechnicalSettingData.DataRecordTypeId;
                             filterGroup = costTechnicalSettingData.FilterGroup;
                         }
@@ -101,6 +110,10 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                     //Loading ReprocessDefinition selector 
                     var reprocessDefinitionSelectorLoadPromise = getReprocessDefinitionSelectorLoadPromise();
                     promises.push(reprocessDefinitionSelectorLoadPromise);
+
+                    //Loading ChunkTime selector 
+                    var chunktimeSelectorLoadPromise = getChunktimeSelectorLoadPromise();
+                    promises.push(chunktimeSelectorLoadPromise);
 
                     //Loading DataRecordType Selector
                     var dataRecordTypeSelectorLoadPromise = getDataRecordTypeSelectorLoadPromise();
@@ -119,14 +132,25 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                         reprocessDefinitionPromiseDeferred.promise.then(function () {
                             var reprocessDefinitionSelectorPayload;
                             if (costCDRReprocessDefinitionId != undefined) {
-                                reprocessDefinitionSelectorPayload = {
-                                    selectedIds: costCDRReprocessDefinitionId
-                                };
+                                reprocessDefinitionSelectorPayload = { selectedIds: costCDRReprocessDefinitionId };
                             }
                             VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, reprocessDefinitionSelectorPayload, reprocessDefinitionSelectorLoadDeferred);
                         });
 
                         return reprocessDefinitionSelectorLoadDeferred.promise;
+                    }
+                    function getChunktimeSelectorLoadPromise() {
+                        var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        chunkTimeSelectorReadyDeferred.promise.then(function () {
+                            var chunkTimeSelectorPayload;
+                            if (chunkTime) {
+                                chunkTimeSelectorPayload = { selectedIds: chunkTime };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
+                        });
+
+                        return chunkTimeSelectorLoadDeferred.promise;
                     }
                     function getDataRecordTypeSelectorLoadPromise() {
                         if (dataRecordTypeId != undefined)
@@ -175,6 +199,7 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                     var data = {
                         $type: 'Retail.Cost.Entities.CDRCostTechnicalSettingData, Retail.Cost.Entities',
                         CostCDRReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
+                        ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         FilterGroup: recordFilterDirectiveAPI.getData().filterObj
                     };
