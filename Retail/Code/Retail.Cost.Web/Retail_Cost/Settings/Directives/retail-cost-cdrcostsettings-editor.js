@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailCostSettingsEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailCostCdrcostsettingsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('retailCostSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_Cost/Settings/Directives/Templates/CostSettingsEditorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_Cost/Settings/Directives/Templates/CDRCostSettingsEditorTemplate.html'
         };
 
         function CostSettingsEditor($scope, ctrl, $attrs) {
@@ -34,21 +34,21 @@ app.directive('retailCostSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 api.load = function (payload) {
 
                     if (payload != undefined && payload.data != undefined) {
-                        $scope.scopeModel.maxBatchDurationInMinutes = payload.data.MaxBatchDurationInMinutes;
                         $scope.scopeModel.durationMargin = payload.data.DurationMargin;
                         $scope.scopeModel.attemptDateTimeMargin = payload.data.AttemptDateTimeMargin;
                         $scope.scopeModel.attemptDateTimeOffset = payload.data.AttemptDateTimeOffset;
+                        $scope.scopeModel.maxBatchDurationInMinutes = payload.data.MaxBatchDurationInMinutes;
                     }
                 };
 
                 api.getData = function () {
 
                     var data = {
-                        $type: 'Retail.Cost.Entities.CostSettingData, Retail.Cost.Entities',
-                        MaxBatchDurationInMinutes: $scope.scopeModel.maxBatchDurationInMinutes,
-                        DurationMargin: $scope.scopeModel.maxBatchDurationInMinutes,
+                        $type: 'Retail.Cost.Entities.CDRCostSettingData, Retail.Cost.Entities',
+                        DurationMargin: $scope.scopeModel.durationMargin,
                         AttemptDateTimeMargin: $scope.scopeModel.attemptDateTimeMargin,
-                        AttemptDateTimeOffset: $scope.scopeModel.attemptDateTimeOffset
+                        AttemptDateTimeOffset: $scope.scopeModel.attemptDateTimeOffset,
+                        MaxBatchDurationInMinutes: $scope.scopeModel.maxBatchDurationInMinutes
                     };
 
                     return data;

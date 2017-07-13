@@ -141,8 +141,10 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Retail_Cost\Settings\Directives\retail-cost-settings-editor.js" />
-    <Content Include="Retail_Cost\Settings\Directives\Templates\CostSettingsEditorTemplate.html" />
+    <Content Include="Retail_Cost\Settings\Directives\retail-cost-cdrcostsettings-editor.js" />
+    <Content Include="Retail_Cost\Settings\Directives\retail-cost-cdrcosttechnicalsettings-editor.js" />
+    <Content Include="Retail_Cost\Settings\Directives\Templates\CDRCostSettingsEditorTemplate.html" />
+    <Content Include="Retail_Cost\Settings\Directives\Templates\CDRCostTechnicalSettingsEditorTemplate.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

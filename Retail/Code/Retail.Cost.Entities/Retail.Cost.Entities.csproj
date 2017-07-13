@@ -41,6 +41,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRCost\CDRCostBatchRequest.cs" />
@@ -49,8 +55,8 @@
     <Compile Include="CDRCost\CDRCostResponse.cs" />
     <Compile Include="CDRCost\CDRCost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\CostSettingData.cs" />
-    <Compile Include="Settings\CostTechnicalSettingData.cs" />
+    <Compile Include="Settings\CDRCostSettingData.cs" />
+    <Compile Include="Settings\CDRCostTechnicalSettingData.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

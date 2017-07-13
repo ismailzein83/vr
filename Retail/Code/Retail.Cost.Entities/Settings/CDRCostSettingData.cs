@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Retail.Cost.Entities
 {
-    public class CostSettingData
-    {
-        public int MaxBatchDurationInMinutes { get; set; }
-         
+    public class CDRCostSettingData : Vanrise.Entities.SettingData 
+    {       
         public TimeSpan DurationMargin { get; set; }
 
         public TimeSpan AttemptDateTimeMargin { get; set; }
 
-        public TimeSpan AttemptDateTimeOffset { get; set; } 
+        public TimeSpan AttemptDateTimeOffset { get; set; }
+
+        public int MaxBatchDurationInMinutes { get; set; }
     }
 }
