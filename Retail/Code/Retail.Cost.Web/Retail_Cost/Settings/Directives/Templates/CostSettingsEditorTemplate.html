@@ -1,0 +1,16 @@
+﻿<vr-tabs>
+    <vr-tab header="'Cost'">
+        <vr-columns width="1/2row">
+            <vr-timespan value="scopeModel.durationMargin" label="Duration Margin" isrequired></vr-timespan>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-timespan value="scopeModel.attemptDateTimeMargin" label="Attempt DateTime Margin" isrequired></vr-timespan>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-timespan value="scopeModel.attemptDateTimeOffset" label="Attempt DateTime Offset" isrequired></vr-timespan>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.maxBatchDurationInMinutes" label="Max Batch Duration (Min)" type="number" decimalprecision="0" isrequired="true"></vr-textbox>
+        </vr-columns>
+    </vr-tab>
+</vr-tabs>

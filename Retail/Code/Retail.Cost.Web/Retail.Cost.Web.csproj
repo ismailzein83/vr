@@ -139,7 +139,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Retail_Cost\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Retail_Cost\Settings\Directives\retail-cost-settings-editor.js" />
+    <Content Include="Retail_Cost\Settings\Directives\Templates\CostSettingsEditorTemplate.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
