@@ -23,7 +23,10 @@ BEGIN
 			,AlertRuleID
 			,LastExecutedActionThreshold
 			,ActiveAlertsInfo
+			,BED
+			,EED
+			,[Status]
 	FROM	[VR_AccountBalance].LiveBalance lb  with(nolock)
-	WHERE	AccountTypeID = @AccountTypeId and AccountID = @AccountID
+	WHERE	AccountTypeID = @AccountTypeId and AccountID = @AccountID AND ISNULL(IsDeleted,0) = 0
         
 END

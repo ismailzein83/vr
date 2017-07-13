@@ -17,6 +17,9 @@ BEGIN
 			,[AlertRuleID]
 			,LastExecutedActionThreshold
 			,ActiveAlertsInfo
+			,BED
+			,EED
+			,[Status]
 	FROM	VR_AccountBalance.LiveBalance  with(nolock)
-	where	[AccountTypeID] = @AccountTypeId
+	where	[AccountTypeID] = @AccountTypeId AND ISNULL(IsDeleted,0) = 0
 END
