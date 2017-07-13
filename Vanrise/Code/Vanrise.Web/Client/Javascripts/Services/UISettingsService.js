@@ -26,6 +26,26 @@
             }
             return url;
         }
+
+        function getGoogleTrackingStatus() {
+            var status;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "GoogleAnalyticsEnabled", "Name");
+                if (param != null)
+                    status = param.Value;
+            }
+            return status;
+        }
+
+        function getGoogleTrackingAccount() {
+            var account;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "GoogleAnalyticsAccount", "Name");
+                if (param != null)
+                    account = param.Value;
+            }
+            return account;
+        }
         function getNormalPrecision() {
             var normalPrecision;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -59,7 +79,10 @@
             getNormalPrecision: getNormalPrecision,
             getLongPrecision: getLongPrecision,
             getUIParameterValue: getUIParameterValue,
-            isUISettingsHasValue: isUISettingsHasValue
+            isUISettingsHasValue: isUISettingsHasValue,
+            getGoogleTrackingStatus: getGoogleTrackingStatus,
+            getGoogleTrackingAccount: getGoogleTrackingAccount
+
         });
     }
 

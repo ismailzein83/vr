@@ -14,8 +14,10 @@ namespace Vanrise.Web.Controllers
         {
             ViewBag.Title = "Home Page";
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
-            var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
+             GeneralSettingsManager settingManager =  new GeneralSettingsManager();
+            var cacheSettingData = settingManager.GetCacheSettingData();
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
+            ViewBag.isEnabledGA = settingManager.GetGoogleAnalyticsEnabled();
             Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();
             var loginUrl = securityManager.GetLoginURL();
             if (loginUrl != null)

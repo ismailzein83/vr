@@ -2,8 +2,8 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location',
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location) {
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window',
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window) {
     Waves.displayEffect();
 
     $rootScope.$on("$destroy", function () {
@@ -29,24 +29,24 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             SecurityService.setLoginURL(loginURL);
             BaseAPIService.setLoginURL(loginURL);
         }
-    };   
+    };
     $rootScope.setVersionNumber = function (version) {
         $rootScope.version = version;
     };
-    $rootScope.onValidationMessageShown = function (e) {      
+    $rootScope.onValidationMessageShown = function (e) {
         var self = angular.element(e.currentTarget);
         var selfHeight = $(self).height();
         var TophasLable = $(self).parent().attr('label') != undefined ? 0 : (($(self).parents('.dropdown-container2').length > 0)) ? -10 : -15;
         var topVar = ($(self).parents('.dropdown-container2').length > 0) ? (selfHeight / 3) - 5 : (selfHeight / 3);
         var selfWidth = $(self).width();
         var selfOffset = $(self).offset();
-        var elleft = selfOffset.left - $(window).scrollLeft() + $(self).width() ;
+        var elleft = selfOffset.left - $(window).scrollLeft() + $(self).width();
         var left = 0;
         var tooltip = self.parent().find('.tooltip-error');
-        if (innerWidth - elleft  < 100) {
+        if (innerWidth - elleft < 100) {
             elleft = elleft - (100 + $(self).width() + 10);
             $(tooltip).addClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft , width:100 })
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 })
         }
         else {
             $(tooltip).removeClass('tooltip-error-right');
@@ -54,23 +54,23 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
         e.stopPropagation();
     };
-   
+
     VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
-            $rootScope.effectivePermissionsWrapper = response;
-        }
+        $rootScope.effectivePermissionsWrapper = response;
+    }
     );
     var dropdownHidingTimeoutHandlerc;
     $scope.currentMenuIndex = undefined;
-    $scope.showMenu = function (e,id) {
+    $scope.showMenu = function (e, id) {
         var $this = angular.element(e.currentTarget);
         $scope.currentMenuIndex = id;
         clearTimeout(dropdownHidingTimeoutHandlerc);
         if (!$this.hasClass('open')) {
-         
-            $('.dropdown-toggle', $this).dropdown('toggle');          
+
+            $('.dropdown-toggle', $this).dropdown('toggle');
             $($this).find('.dropdown-menu').first().stop(true, true).slideDown();
         }
-    };   
+    };
     $scope.hideMenu = function (e) {
         var $this = angular.element(e.currentTarget);
         dropdownHidingTimeoutHandlerc = setTimeout(function () {
@@ -105,7 +105,6 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
     };
     var timer;
-    $scope.show = false;
     $scope.mouseover = function () {
         if ($scope.pinned == true)
             return;
@@ -116,10 +115,10 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $scope.mouseout = function () {
         if ($scope.pinned == true)
             return;
-       timer = $timeout(function () {
-           $scope.toogled = false;
-           $rootScope.$broadcast("menu-collapsed");
-       }, 500);
+        timer = $timeout(function () {
+            $scope.toogled = false;
+            $rootScope.$broadcast("menu-collapsed");
+        }, 500);
 
     };
     $scope.logout = function () {
@@ -159,19 +158,19 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
     };
-   
+
     $scope.menuItemsCurrent = null;
-    $scope.setIndex = function (item) {       
+    $scope.setIndex = function (item) {
         $('.vr-menu-item').slideUp();
         if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
             $scope.menuItemsCurrent = null;
-                $('#collapse-' + item.Id).removeClass('vr-menu-item-selected');
-                $('#collapse-' + item.Id).removeAttr('style');
+            $('#collapse-' + item.Id).removeClass('vr-menu-item-selected');
+            $('#collapse-' + item.Id).removeAttr('style');
         }
-        else {            
-            $scope.menuItemsCurrent = item;        
-                $('#collapse-' + item.Id).addClass('vr-menu-item-selected');
-                $('#collapse-' + item.Id).removeAttr('style');
+        else {
+            $scope.menuItemsCurrent = item;
+            $('#collapse-' + item.Id).addClass('vr-menu-item-selected');
+            $('#collapse-' + item.Id).removeAttr('style');
             if (item.DefaultURL != null && $scope.currentPage != null && $scope.currentPage.Location != item.DefaultURL) {
                 $scope.currentPage = { Title: item.Title };
                 window.location.href = item.DefaultURL;
@@ -181,11 +180,11 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $scope.menusubItemsCurrent = null;
     $scope.setIndexSub = function (o) {
         if ($scope.menusubItemsCurrent != null && $scope.menusubItemsCurrent.Id == o.Id) {
-            $scope.menusubItemsCurrent = null;           
+            $scope.menusubItemsCurrent = null;
         }
         else {
             $scope.menusubItemsCurrent = o;
-            if (o.DefaultURL != null && $scope.currentPage!=null && $scope.currentPage.Location != o.DefaultURL) {
+            if (o.DefaultURL != null && $scope.currentPage != null && $scope.currentPage.Location != o.DefaultURL) {
                 $scope.currentPage = { Title: o.Title };
                 window.location.href = o.DefaultURL;
             }
@@ -214,30 +213,28 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
     })();
     VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
-
         angular.forEach(response, function (value, key, itm) {
             value.keyclass = key % 16;
             value.isSelected = false;
             value.parent = null;
             allMenuItems.push(value);
             matchParentNode(value);
-
         });
         $scope.menuItems = response;
         if (currentURL != undefined)
             setSelectedMenuFromURL();
         $scope.spinner = false;
     });
-    
-    function matchParentNode(obj) {       
+
+    function matchParentNode(obj) {
         if (obj.Childs != null) {
-            angular.forEach(obj.Childs, function (value, key, itm) {               
-                value.parent = obj ;
+            angular.forEach(obj.Childs, function (value, key, itm) {
+                value.parent = obj;
                 value.isSelected = false;
                 allMenuItems.push(value);
-                matchParentNode(value);               
+                matchParentNode(value);
             });
-        }      
+        }
     }
 
     var selectedMenuItem;
@@ -251,10 +248,21 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             }
             else
                 redirectToDefaultIfExist();
-        }        
+        }
         $('.vr-menu-item').removeClass('vr-menu-item-selected');
         $(window).off("resize.Viewport");
     });
+
+    $rootScope.$on('$viewContentLoaded', function (event) {
+        checkGoogleTracking();
+    });
+    function checkGoogleTracking() {
+        var status = UISettingsService.getGoogleTrackingStatus();
+        if (status != undefined &&  status == true) {
+            $window.ga('send', 'pageview', $location.path());
+        }
+    }
+
     $rootScope.$on('$locationChangeSuccess', function (evnt, newURL) {
         var decodedURL = decodeURIComponent(newURL);
         currentURL = decodedURL.substring(decodedURL.indexOf('#'), decodedURL.length);
@@ -264,7 +272,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         var pathArray = location.href.split("/");
         var protocol = pathArray[0];
         var host = pathArray[2];
-        var defaultUrl = protocol + "//" + host + "/#/default"  ;
+        var defaultUrl = protocol + "//" + host + "/#/default";
         return defaultUrl == url;
     }
 
@@ -277,7 +285,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $scope.goToHomePage = function () {
         if (window.location.href == UISettingsService.getDefaultPageURl())
             return;
-         window.location.href = "/";
+        window.location.href = "/";
     };
     function setSelectedMenuFromURL() {
         if (currentURL == undefined || allMenuItems.length == 0)
@@ -295,13 +303,13 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             selectedMenuItem = matchMenuItem;
             setMenuItemSelectedFlag(selectedMenuItem, true);
         }
-        
+
     }
-   
+
     $scope.currentPage = null;
-    function setMenuItemSelectedFlag(menuItem, isSelected) {       
+    function setMenuItemSelectedFlag(menuItem, isSelected) {
         $scope.menusubItemsCurrent = null;
-        menuItem.isSelected = isSelected;       
+        menuItem.isSelected = isSelected;
         if (menuItem.parent != null)
             setMenuItemSelectedFlag(menuItem.parent, isSelected);
         if (menuItem.isSelected == true && menuItem.Childs == null) {
@@ -312,17 +320,17 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         if (menuItem.parent == null && isSelected == true) {
             $scope.menuItemsCurrent = menuItem;
             $('#collapse-' + menuItem.Id).addClass('vr-menu-item-selected');
-        }           
+        }
         if (menuItem.parent != null && menuItem.Childs != null && isSelected == true) {
-            $scope.menusubItemsCurrent = menuItem;            
+            $scope.menusubItemsCurrent = menuItem;
         }
     }
-   
+
     var pathArray = location.href.split("/");
     var protocol = pathArray[0];
     var host = pathArray[2];
     $scope.baseurl = protocol + "//" + host;
-    $scope.operatorAccountSelectionOption = 1;   
+    $scope.operatorAccountSelectionOption = 1;
     var numberReg = /^\d+$/;
     $scope.isNumber = function (s) {
         return String(s).search(numberReg) != -1;
@@ -355,7 +363,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         var res = String(d).search(dateReg) != -1;
         return res;
     }
-   
+
 }]);
 
 app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
@@ -364,19 +372,19 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
             SecurityService.setAccessCookieName(cookieName);
     };
 });
-app.controller('DocumentCtrl',['$scope', function documentCtrl($scope) {
+app.controller('DocumentCtrl', ['$scope', function documentCtrl($scope) {
     $scope.downloadDocument = function (file) {
         window.open(file);
     };
 }]);
 app.animation('.slideanimation', function () {
     return {
-        enter: function(element, done) {
+        enter: function (element, done) {
             element.hide().slideDown();
-            return function(cancelled) {
+            return function (cancelled) {
             };
         },
-        leave: function(element, done) {
+        leave: function (element, done) {
             element.slideUp(function () {
                 element.remove();
             });
@@ -384,11 +392,26 @@ app.animation('.slideanimation', function () {
     };
 });
 angular.module('mainModule')
-.config(['$popoverProvider',function ($popoverProvider) {
+.config(['$popoverProvider', function ($popoverProvider) {
     angular.extend($popoverProvider.defaults, {
         animation: 'am-flip-x',
         trigger: 'hover',
         autoClose: true,
         delay: { show: 1, hide: 100000 }
     });
-}])
+}]);
+app.run(function ($rootScope, $window, UISettingsService) {
+    if (!UISettingsService.isUISettingsHasValue()) {
+        UISettingsService.loadUISettings().then(function () {
+            registerToGoogleAccount();
+        });
+    }
+    else {
+        registerToGoogleAccount();
+    }
+    function registerToGoogleAccount() {
+        var account = UISettingsService.getGoogleTrackingAccount();
+        if (account != undefined && account != null)
+            $window.ga('create', account, 'auto');
+    }
+});

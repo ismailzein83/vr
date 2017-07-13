@@ -40,6 +40,13 @@ namespace Vanrise.Common.Business
          
             return generalSettings;
         }
+
+        public GeneralTechnicalSettingData GetGeneralTechnicalSetting()
+        {
+            SettingManager settingManager = new SettingManager();
+            var generalSettings = settingManager.GetSetting<GeneralTechnicalSettingData>(Constants.GeneralTechnicalSettingType);
+            return generalSettings;
+        }
         public ProductInfo GetProductInfo()
         {
             SettingManager settingManager = new SettingManager();

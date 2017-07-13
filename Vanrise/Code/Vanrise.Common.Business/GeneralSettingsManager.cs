@@ -17,19 +17,31 @@ namespace Vanrise.Common.Business
             return configManager.GetGeneralSetting();
         }
 
+        public GeneralTechnicalSettingData GetGeneralTechnicalSettingData()
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetGeneralTechnicalSetting();
+        }
+
+        public bool GetGoogleAnalyticsEnabled()
+        {
+            var generalTechnicalSettingData = GetGeneralTechnicalSettingData();
+            return generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null && generalTechnicalSettingData.GAData.IsEnabled;
+        }
         public CacheSettingData GetCacheSettingData()
         {
             var generalSettingData = GetGeneralSettingData();
-            if (generalSettingData != null && generalSettingData.CacheData!=null)
-               return generalSettingData.CacheData;
+            if (generalSettingData != null && generalSettingData.CacheData != null)
+                return generalSettingData.CacheData;
             return null;
         }
         public UISettings GetUIParameters()
         {
-            UISettings uiSettings = new UISettings(){Parameters= new List<UIParameter>()};
+            UISettings uiSettings = new UISettings() { Parameters = new List<UIParameter>() };
             var generalSettingData = GetGeneralSettingData();
+            var generalTechnicalSettingData = GetGeneralTechnicalSettingData();
 
-            if (generalSettingData!=null && generalSettingData.UIData != null)
+            if (generalSettingData != null && generalSettingData.UIData != null)
             {
                 uiSettings.Parameters = new List<UIParameter>();
                 if (generalSettingData.UIData.DefaultViewId.HasValue)
@@ -77,6 +89,26 @@ namespace Vanrise.Common.Business
 
             }
 
+            if (generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null)
+            {
+
+                uiSettings.Parameters.Add(new UIParameter()
+                {
+                    Name = "GoogleAnalyticsEnabled",
+                    Value = generalTechnicalSettingData.GAData.IsEnabled
+                });
+
+                if (generalTechnicalSettingData.GAData.Account != null)
+                {
+                    uiSettings.Parameters.Add(new UIParameter()
+                    {
+                        Name = "GoogleAnalyticsAccount",
+                        Value = generalTechnicalSettingData.GAData.Account
+                    });
+                }
+                
+            }
+
             return uiSettings;
         }
 
@@ -91,14 +123,14 @@ namespace Vanrise.Common.Business
             var parameter = GetParameter("NormalPrecision");
             if (parameter == null)
                 return null;
-            return parameter.Value;
+            return parameter.Value.ToString();
         }
         public int GetNormalPrecisionValue()
         {
             var generalSettings = GetGeneralSettingData();
             if (generalSettings == null)
                 throw new NullReferenceException("generalSettings");
-            if (generalSettings.UIData == null )
+            if (generalSettings.UIData == null)
                 throw new NullReferenceException("eneralSettings.UIData");
             if (generalSettings.UIData.NormalPrecision == null)
                 throw new NullReferenceException("generalSettings.UIData.NormalPrecision");
@@ -109,7 +141,7 @@ namespace Vanrise.Common.Business
             var parameter = GetParameter("LongPrecision");
             if (parameter == null)
                 return null;
-            return parameter.Value;
+            return parameter.Value.ToString();
         }
         public int GetLongPrecisionValue()
         {
@@ -135,5 +167,5 @@ namespace Vanrise.Common.Business
             return "yyyy-MM-dd";
         }
     }
-    
+
 }

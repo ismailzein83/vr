@@ -6,6 +6,8 @@
         public const string BaseCurrencySettingType = "VR_Common_BaseCurrency";
         public const string EmailSettingType = "VR_Common_Email";
         public const string GeneralSettingType = "VR_Common_GeneralSetting";
+        public const string GeneralTechnicalSettingType = "VR_Common_GeneralTechnicalSetting";
+
 
     }
 }

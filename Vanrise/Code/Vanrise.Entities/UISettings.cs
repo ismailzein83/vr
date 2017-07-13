@@ -13,7 +13,7 @@ namespace Vanrise.Entities
     public class UIParameter
     {
         public string Name { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }
 
