@@ -13,5 +13,7 @@ namespace Retail.Cost.Entities
         public DateTime BatchEnd { get; set; }
 
         public List<string> CDPNs { get; set; }
+
+        public List<CDRCostRequest> CDRCostRequests { get; set; }
     }
 }

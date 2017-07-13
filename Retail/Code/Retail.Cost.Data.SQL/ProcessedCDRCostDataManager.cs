@@ -9,35 +9,42 @@ using Vanrise.Data.SQL;
 
 namespace Retail.Cost.Data.SQL
 {
-    public class ProcessedCDRCostDataManager : BaseSQLDataManager, IProcessedCDRCostDataManager
+    public class CDRCostDataManager : BaseSQLDataManager, ICDRCostDataManager
     {
-        public ProcessedCDRCostDataManager()
+        public CDRCostDataManager()
             : base(GetConnectionStringName("RetailCDRDBConnStringKey", "RetailCDRDBConnString"))
         {
 
         }
 
         #region Public Methods
-        public List<ProcessedCDRCost> GetProcessedCDRCostByCDPNs(CDRCostBatchRequest cdrCostBatchRequest)
+        public List<CDRCost> GetCDRCostByCDPNs(CDRCostBatchRequest cdrCostBatchRequest)
         {
-            return GetItemsSP("[Retail_CDR].[sp_ProcessedCDRCost_GetByCDPNs]", ProcessedCDRCostMapper, cdrCostBatchRequest.BatchStart, cdrCostBatchRequest.BatchEnd, String.Join(",", cdrCostBatchRequest.CDPNs));
+            string cdpnsAsString = null;
+            if (cdrCostBatchRequest.CDPNs != null)
+                cdpnsAsString = String.Join(",", cdrCostBatchRequest.CDPNs);
+
+            return GetItemsSP("[Retail_CDR].[sp_CDRCost_GetByCDPNs]", CDRCostMapper, cdrCostBatchRequest.BatchStart, cdrCostBatchRequest.BatchEnd, cdpnsAsString);
         }
         #endregion
 
         #region Mappers
-        ProcessedCDRCost ProcessedCDRCostMapper(IDataReader reader)
+        CDRCost CDRCostMapper(IDataReader reader)
         {
-            ProcessedCDRCost processedCDRCost = new ProcessedCDRCost
+            CDRCost cdrCost = new CDRCost
             {
-                ProcessedCDRCostId = (long)reader["ID"],
-                AttemptDateTime = (DateTime)reader["AttemptDateTime"],
+                CDRCostId = (long)reader["ID"],
+                SourceId = reader["SourceID"] as string,
+                AttemptDateTime = GetReaderValue<DateTime?>(reader, "AttemptDateTime"),
                 CGPN = reader["CGPN"] as string,
                 CDPN = reader["CDPN"] as string,
-                DurationInSeconds = (decimal)reader["DurationInSeconds"],
-                Rate = (decimal)reader["Rate"],
-                Amount = GetReaderValue<decimal?>(reader, "Amount")
+                DurationInSeconds = GetReaderValue<decimal?>(reader, "DurationInSeconds"),
+                Rate = GetReaderValue<decimal?>(reader, "Rate"),
+                Amount = GetReaderValue<decimal?>(reader, "Amount"),
+                SupplierName = reader["SupplierName"] as string,
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId")
             };
-            return processedCDRCost;
+            return cdrCost;
         }
         #endregion
     }
