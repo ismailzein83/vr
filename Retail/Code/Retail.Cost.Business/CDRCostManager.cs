@@ -162,6 +162,12 @@ namespace Retail.Cost.Business
 
             public string CDPN { get; set; }
         }
+
+        public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
+        {
+            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
+            cdrCostDataManager.UpadeOverridenCostCDRAfterId(cdrCostId);
+        }
     }
 
     public class CDRCostFieldNames

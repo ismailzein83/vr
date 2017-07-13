@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 
 namespace Retail.Cost.Data.SQL
@@ -25,6 +22,11 @@ namespace Retail.Cost.Data.SQL
                 cdpnsAsString = String.Join(",", cdrCostBatchRequest.CDPNs);
 
             return GetItemsSP("[Retail_CDR].[sp_CDRCost_GetByCDPNs]", CDRCostMapper, cdrCostBatchRequest.BatchStart, cdrCostBatchRequest.BatchEnd, cdpnsAsString);
+        }
+
+        public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
+        {
+            ExecuteNonQuerySP("[Retail_CDR].[sp_CDRCost_UpadeOverridenAfterId]", cdrCostId);
         }
         #endregion
 

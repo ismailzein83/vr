@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="CostDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IProcessedCDRCostDataManager.cs" />
+    <Compile Include="ICDRCostDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

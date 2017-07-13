@@ -50,6 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpadeOverridenCostCDR.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.Cost.Business\Retail.Cost.Business.csproj">
+      <Project>{72d1f349-fc2a-4f5e-bf3c-6fe371790137}</Project>
+      <Name>Retail.Cost.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Entities\Retail.Cost.Entities.csproj">
+      <Project>{84a54068-1858-4009-8687-5aab7e7b8901}</Project>
+      <Name>Retail.Cost.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

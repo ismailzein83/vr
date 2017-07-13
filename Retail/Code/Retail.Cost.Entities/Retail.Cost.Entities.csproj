@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRCost\CDRCostBatchRequest.cs" />
+    <Compile Include="CDRCost\CDRCostEvaluatorProcessState.cs" />
     <Compile Include="CDRCost\CDRCostRequest.cs" />
     <Compile Include="CDRCost\CDRCostResponse.cs" />
     <Compile Include="CDRCost\CDRCost.cs" />
@@ -51,9 +52,7 @@
     <Compile Include="Settings\CostSettingData.cs" />
     <Compile Include="Settings\CostTechnicalSettingData.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ProcessedCDRCost\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
