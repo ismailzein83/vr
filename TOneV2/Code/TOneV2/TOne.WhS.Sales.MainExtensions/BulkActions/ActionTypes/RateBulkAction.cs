@@ -134,7 +134,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
                 if (_datesByCountry == null)
                 {
-                    _datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, false);
+                    _datesByCountry = UtilitiesManager.GetDatesByCountry(context.OwnerId, DateTime.Today, true);
                 }
 
                 if (BED.HasValue && !UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED.Value, _datesByCountry))
