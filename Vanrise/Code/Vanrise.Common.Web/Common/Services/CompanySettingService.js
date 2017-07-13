@@ -11,9 +11,9 @@
             viewCompanySetting: viewCompanySetting
         };
 
-        function addCompanySetting(onCompanySettingsAdded) {
+        function addCompanySetting(onCompanySettingsAdded, setDefault) {
             var modalParameters = {
-
+                setDefault: setDefault
             };
             var modalSettings = {};
 
