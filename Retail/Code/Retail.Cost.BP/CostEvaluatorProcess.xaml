@@ -11,6 +11,8 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Core"
  xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -22,6 +24,8 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Retail.Cost.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -42,6 +46,11 @@
       <AssemblyReference>Retail.Cost.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
       <AssemblyReference>Retail.Cost.Entities</AssemblyReference>
+      <AssemblyReference>Retail.Cost.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Retail.Cost.BP</AssemblyReference>
     </sco:Collection>
@@ -50,6 +59,8 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="rce:CDRCostEvaluatorProcessState" Name="cdrCostEvaluatorProcessState" />
       <Variable x:TypeArguments="scg:HashSet(s:DateTime)" Name="daysToReprocess" />
+      <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="costEvaluatorReprocessingCompletedEvent" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="daysToReprocessCompleted" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Cost Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -84,14 +95,153 @@
         </OutArgument>
       </rcba:LoadCostCDRDataToReprocess.DaysToReprocess>
     </rcba:LoadCostCDRDataToReprocess>
-    <If>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">daysToReprocess!=null &amp;&amp; daysToReprocess.Count &gt; 0</mca:CSharpValue>
         </InArgument>
       </If.Condition>
-      <sap2010:WorkflowViewState.IdRef>If_1</sap2010:WorkflowViewState.IdRef>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="s:Guid" Name="reprocessDefinitionId" />
+          </Sequence.Variables>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="s:Guid">
+                <mca:CSharpReference x:TypeArguments="s:Guid">reprocessDefinitionId</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">new Retail.Cost.Business.ConfigManager().GetCostCDRReprocessDefinitionId()</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+            <Assign.To>
+              <OutArgument x:TypeArguments="s:Guid">
+                <mca:CSharpReference x:TypeArguments="s:Guid">reprocessDefinitionId</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="s:Guid">
+                <mca:CSharpValue x:TypeArguments="s:Guid">new Retail.Cost.Business.ConfigManager().GetCostCDRReprocessDefinitionId()</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("There is {0} day{1} To Reprocess", daysToReprocess.Count,daysToReprocess.Count==1?string.Empty:"s")</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+            <vbw:WriteTrackingMessage.Severity>
+              <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Severity>
+          </vbw:WriteTrackingMessage>
+          <ParallelForEach x:TypeArguments="s:DateTime" DisplayName="ParallelForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
+            <ParallelForEach.Values>
+              <InArgument x:TypeArguments="scg1:IEnumerable(s:DateTime)">
+                <mca:CSharpValue x:TypeArguments="scg1:IEnumerable(s:DateTime)">daysToReprocess</mca:CSharpValue>
+              </InArgument>
+            </ParallelForEach.Values>
+            <ActivityAction x:TypeArguments="s:DateTime">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="s:DateTime" Name="item" />
+              </ActivityAction.Argument>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
+                  <vbw:WriteTrackingMessage.Message>
+                    <InArgument x:TypeArguments="x:String">
+                      <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">string.Format("Cost Evaluator Reprocessing From:{0} To:{1} has started", item.ToString("yyyy-MM-dd HH:mm:ss"),
+                item.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"))</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Message>
+                  <vbw:WriteTrackingMessage.Severity>
+                    <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Severity>
+                </vbw:WriteTrackingMessage>
+                <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+                  <vbw:RunProcess.Input>
+                    <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                      <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput() { 
+                ChunkTime=Vanrise.Reprocess.Entities.ReprocessChunkTimeEnum.SixHours,
+                FromTime=item,
+                ReprocessDefinitionId=reprocessDefinitionId,
+                ToTime=item.AddDays(1),
+                UseTempStorage=true
+            }</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:RunProcess.Input>
+                  <vbw:RunProcess.ProcessCompletedEventPayload>
+                    <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                      <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">costEvaluatorReprocessingCompletedEvent</mca:CSharpReference>
+                    </OutArgument>
+                  </vbw:RunProcess.ProcessCompletedEventPayload>
+                </vbw:RunProcess>
+                <If sap2010:WorkflowViewState.IdRef="If_2">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">costEvaluatorReprocessingCompletedEvent.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                      <TerminateWorkflow.Reason>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Cost Evaluator Reprocessing has failed for DateTime Range '{0}'-'{1}'", item, item.AddDays(1))</mca:CSharpValue>
+                        </InArgument>
+                      </TerminateWorkflow.Reason>
+                    </TerminateWorkflow>
+                  </If.Then>
+                  <If.Else>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                      <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpReference x:TypeArguments="x:Int32">daysToReprocessCompleted</mca:CSharpReference>
+                          </OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">daysToReprocessCompleted + 1</mca:CSharpValue>
+                          </InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
+                        <vbw:WriteTrackingMessage.Message>
+                          <InArgument x:TypeArguments="x:String">
+                            <mca:CSharpValue x:TypeArguments="x:String" xml:space="preserve">string.Format("Cost Evaluator Reprocessing From {0} - To {1} has completed, {2} reprocess remaining", item.ToString("yyyy-MM-dd HH:mm:ss"),
+                item.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"), (daysToReprocess.Count - daysToReprocessCompleted))</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:WriteTrackingMessage.Message>
+                        <vbw:WriteTrackingMessage.Severity>
+                          <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                            <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:WriteTrackingMessage.Severity>
+                      </vbw:WriteTrackingMessage>
+                    </Sequence>
+                  </If.Else>
+                </If>
+              </Sequence>
+            </ActivityAction>
+          </ParallelForEach>
+        </Sequence>
+      </If.Then>
     </If>
+    <vbw:SaveDefinitionObjectState ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
+      <vbw:SaveDefinitionObjectState.ObjectValue>
+        <InArgument x:TypeArguments="x:Object">
+          <mca:CSharpValue x:TypeArguments="x:Object">cdrCostEvaluatorProcessState</mca:CSharpValue>
+        </InArgument>
+      </vbw:SaveDefinitionObjectState.ObjectValue>
+    </vbw:SaveDefinitionObjectState>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finish Cost Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -99,24 +249,56 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>dztDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkNvc3QuQlBcQ29zdEV2YWx1YXRvclByb2Nlc3MueGFtbBAxA2cOAgEBNgU8IAIBGj0FQyQCARZEBUoiAgESSwVWJwIBC1cFXgoCAQdfBWUgAgECOQs5hQECARw2YDaCAQIBG0ALQIUBAgEXRwtHfQIBE1MLU28CAQ9OC06FAQIBDFoLWocBAgEIYgtihQECAQRfYF+AAQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dztDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkNvc3QuQlBcQ29zdEV2YWx1YXRvclByb2Nlc3MueGFtbDI6A/0BDgIBAT8zPzYCAQJBBUcgAwGrAUgFTiQDAaUBTwVVIgMBnwFWBWEnAwGUAWIF7QEKAgEQ7gEF9AElAgEK9QEF+wEgAgEDRAtEhQEDAa0BQWBBggEDAawBSwtLhQEDAaYBUgtSfQMBoAFeC15vAwGaAVkLWYUBAwGVAWULZYcBAgERaQnrARQCARbxAQvxAWUCAQv4AQv4AYUBAgEF9QFg9QGAAQIBBG0LeBQDAYcBeQuEARQCAXqFAQuQASYCAW2RAQvqAR0CARd1EXWXAQMBjgFwEXBqAwGIAYEBEYEBlwEDAYEBfBF8agIBe40BEY0BiwECAXSIARGIAcEBAgFulAERlAFyAgFnmwEP6AEaAgEYnAERqAEsAgFYqQERugEiAgFIuwER5wEWAgEZpQEXpQGRAQIBYJ8BF6ABUwIBWawBF7IBIAIBUbcBF7cBmwECAUqpAb0BqQHDAQIBSb4BF74BygECARrCARXIASkCAUDLARXlASACASHFARvFAcYBAgFBzAEX1wEgAgEx2AEX5AEyAgEi1AEd1AF2AgE5zwEdzwF6AgEy4QEd4QGXAQIBKtsBHdwBhwECASM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="UpadeOverridenCostCDR_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="LoadCostCDRDataToReprocess_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,206" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,640">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="UpadeOverridenCostCDR_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="LoadCostCDRDataToReprocess_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="541,62" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="541,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="264,248">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Retail.Cost.BP.CostEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="526,720" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="489,398" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="511,646">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg1:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,796" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="563,1186">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg1:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="688,1336" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="710,1832">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg1:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Retail.Cost.BP.CostEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="750,1912" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -47,6 +47,14 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.WFActivities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
@@ -56,6 +64,12 @@
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.BP.Arguments">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Reprocess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +85,10 @@
     <ProjectReference Include="..\Retail.Cost.BP.Activities\Retail.Cost.BP.Activities.csproj">
       <Project>{004efc23-3577-4d54-b935-901ca21c4a4f}</Project>
       <Name>Retail.Cost.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.Business\Retail.Cost.Business.csproj">
+      <Project>{72d1f349-fc2a-4f5e-bf3c-6fe371790137}</Project>
+      <Name>Retail.Cost.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Cost.Entities\Retail.Cost.Entities.csproj">
       <Project>{84a54068-1858-4009-8687-5aab7e7b8901}</Project>
