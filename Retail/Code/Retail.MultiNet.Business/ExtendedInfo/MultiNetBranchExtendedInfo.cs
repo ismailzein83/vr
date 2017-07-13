@@ -18,6 +18,17 @@ namespace Retail.MultiNet.Business
         public string BranchCode { get; set; }
         public string ContractReferenceNumber { get; set; }
 
+        public string CNIC { get; set; }
+        public string NTN { get; set; }
+        public string RegistrationNumber { get; set; }
+        public string RefNumber { get; set; }
+        public string PassportNumber { get; set; }
+        public string AssignedNumber { get; set; }
+        public string PIN { get; set; }
+        public string BillingAddress { get; set; }
+        public string TechnicalAddress { get; set; }
+        public string OfficeAddress { get; set; }
+        public string HomeAddress { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
@@ -25,6 +36,17 @@ namespace Retail.MultiNet.Business
             {
                 case "BranchCode": return this.BranchCode;
                 case "ContractReferenceNumber": return this.ContractReferenceNumber;
+                case "BillingAddress": return this.BillingAddress;
+                case "TechnicalAddress": return this.TechnicalAddress;
+                case "OfficeAddress": return this.OfficeAddress;
+                case "HomeAddress": return this.HomeAddress;
+                case "CNIC": return this.CNIC;
+                case "NTN": return this.NTN;
+                case "PassportNumber": return this.PassportNumber;
+                case "AssignedNumber": return this.AssignedNumber;
+                case "PIN": return this.PIN;
+                case "RefNumber": return this.RefNumber;
+                case "RegistrationNumber": return this.RegistrationNumber;
                 default: return null;
             }
         }

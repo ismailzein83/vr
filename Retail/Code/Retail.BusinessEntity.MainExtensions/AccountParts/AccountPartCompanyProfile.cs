@@ -37,7 +37,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         #region IAccountProfile Memebers
 
         public List<string> PhoneNumbers { get; set; }
-
+        public List<string> MobileNumbers { get; set; }
         public List<string> Faxes { get; set; }
 
         public string Address { get; set; }
@@ -88,6 +88,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 var contact = this.Contacts.GetRecord(namePart[0]);
                 return contact != null && contact.PhoneNumbers != null ? string.Join(",", contact.PhoneNumbers) : null;
             }
+            if (FieldName.Contains("MobileNumbers"))
+            {
+                List<string> namePart = FieldName.Split('_').ToList();
+                var contact = this.Contacts.GetRecord(namePart[0]);
+                return contact != null && contact.MobileNumbers != null ? string.Join(",", contact.MobileNumbers) : null;
+            }
             if (FieldName.Contains("Title"))
             {
                 List<string> namePart = FieldName.Split('_').ToList();
@@ -105,6 +111,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public string Title { get; set; }
         public string Email { get; set; }
         public List<string> PhoneNumbers { get; set; }
+        public List<string> MobileNumbers { get; set; }
         public SalutationType? Salutation { get; set; }      
     }
 
