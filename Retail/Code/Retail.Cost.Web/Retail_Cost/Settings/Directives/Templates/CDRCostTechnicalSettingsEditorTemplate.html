@@ -3,7 +3,6 @@
         <vr-columns width="1/2row">
             <reprocess-reprocessdefinition-selector on-ready="scopeModel.onReprocessDefinitionSelectorReady" isrequired="true"></reprocess-reprocessdefinition-selector>
         </vr-columns>
-
         <vr-columns width="1/2row">
             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
                                                     selectedvalues="scopeModel.selectedDataRecordType"
@@ -11,7 +10,6 @@
                                                     isrequired="true" label="Record Type" hideremoveicon>
             </vr-genericdata-datarecordtype-selector>
         </vr-columns>
-
         <vr-columns width="fullrow">
             <span ng-show="scopeModel.showRecordFilterDirective" vr-loader="scopeModel.isRecordFilterDirectiveLoading">
                 <vr-section title="Advanced Filter" collapsible>
@@ -19,6 +17,5 @@
                 </vr-section>
             </span>
         </vr-columns>
-
     </vr-tab>
 </vr-tabs>

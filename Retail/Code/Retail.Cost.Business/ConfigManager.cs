@@ -2,6 +2,7 @@
 using System;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.Cost.Business
 {
@@ -33,6 +34,18 @@ namespace Retail.Cost.Business
             return cdrCostSettingData.MaxBatchDurationInMinutes;
         }
 
+        public Guid GetCostCDRReprocessDefinitionId()
+        {
+            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = GetCDRCostTechnicalSettingData();
+            return cdrCostTechnicalSettingData.CostCDRReprocessDefinitionId;
+        }
+
+        public RecordFilterGroup GetRecordFilterGroup() 
+        {
+            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = GetCDRCostTechnicalSettingData();
+            return cdrCostTechnicalSettingData.FilterGroup;
+        }
+
         #endregion
 
         #region private methods
@@ -44,6 +57,15 @@ namespace Retail.Cost.Business
             cdrCostSettingData.ThrowIfNull("costSettingData");
 
             return cdrCostSettingData;
+        }
+
+        private CDRCostTechnicalSettingData GetCDRCostTechnicalSettingData()
+        {
+            SettingManager settingManager = new SettingManager();
+            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = settingManager.GetSetting<CDRCostTechnicalSettingData>(Constants.CDRCostTechnicalSettings);
+            cdrCostTechnicalSettingData.ThrowIfNull("cdrCostTechnicalSettingData");
+
+            return cdrCostTechnicalSettingData;
         }
 
         #endregion
