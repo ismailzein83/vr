@@ -1,4 +1,5 @@
 ﻿using Retail.Cost.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Retail.Cost.Data
@@ -8,5 +9,9 @@ namespace Retail.Cost.Data
         List<CDRCost> GetCDRCostByCDPNs(CDRCostBatchRequest cdrCostBatchRequests);
 
         void UpadeOverridenCostCDRAfterId(long? cdrCostId);
+
+        HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId);
+
+        long? GetMaxCDRCostId();
     }
 }

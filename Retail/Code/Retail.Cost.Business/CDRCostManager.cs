@@ -168,6 +168,18 @@ namespace Retail.Cost.Business
             ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
             cdrCostDataManager.UpadeOverridenCostCDRAfterId(cdrCostId);
         }
+
+        public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)
+        {
+            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
+            return cdrCostDataManager.GetDistinctDatesAfterId(cdrCostId);
+        }
+
+        public long? GetMaxCDRCostId()
+        {
+            ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
+            return cdrCostDataManager.GetMaxCDRCostId();
+        }
     }
 
     public class CDRCostFieldNames

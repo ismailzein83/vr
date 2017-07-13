@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using Vanrise.Data.SQL;
 
 namespace Retail.Cost.Data.SQL
@@ -27,6 +28,33 @@ namespace Retail.Cost.Data.SQL
         public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
         {
             ExecuteNonQuerySP("[Retail_CDR].[sp_CDRCost_UpadeOverridenAfterId]", cdrCostId);
+        }
+
+        public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)
+        {
+            HashSet<DateTime> distinctDates = new HashSet<DateTime>();
+            ExecuteReaderSPCmd("[Retail_CDR].[sp_CDRCost_UpadeOverridenAfterId]",
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
+                       DateTime? attemptDateTime = GetReaderValue<DateTime?>(reader, "AttemptDateTime");
+                       if (attemptDateTime.HasValue)
+                           distinctDates.Add(attemptDateTime.Value);
+                   }
+               },
+               (cmd) =>
+               {
+                   cmd.Parameters.Add(new SqlParameter("@CDRCostId", cdrCostId));
+               });
+
+            return distinctDates.Count > 0 ? distinctDates : null;
+        }
+
+        public long? GetMaxCDRCostId()
+        {
+            object id = ExecuteScalarSP("[Retail_CDR].[sp_CDRCost_GetMaxId]");
+            return id != null ? (long?)id : null;
         }
         #endregion
 
