@@ -40,7 +40,7 @@ namespace Retail.Zajil.MainExtensions.Convertors
 
             foreach (var account in accounts.Values)
             {
-                if (account.Settings != null)
+                if (account.Settings != null && account.Settings.Parts != null)
                 {
                     AccountPart accountPart = null;
                     if (account.Settings.Parts.TryGetValue(ZajilCompanyExtendedInfoId, out accountPart))
