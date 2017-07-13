@@ -27,4 +27,14 @@ namespace Vanrise.Entities
     {
         public long ClientCacheNumber { get; set; }
     }
+    public class GeneralTechnicalSettingData :SettingData
+    {
+        public GoogleAnalyticsData GAData { get; set; }
+    }
+    public class GoogleAnalyticsData
+    {
+        public bool IsEnabled { get; set; }
+
+        public string Account { get; set; }
+    }
 }
