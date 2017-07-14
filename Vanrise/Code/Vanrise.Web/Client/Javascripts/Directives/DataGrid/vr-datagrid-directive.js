@@ -20,7 +20,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 showexpand: '=',
                 norowhighlightonclick: '=',
                 gridmenuactions: '=',
-                margin: '='
+                margin: '=',
+                dragdropsetting: '='
             },
             controller: function ($scope, $element, $attrs) {
                 $scope.$on("$destroy", function () {
@@ -30,7 +31,21 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     $element.remove();
                 });
                 var ctrl = this;
-                ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
+                ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };              
+                if (ctrl.dragdropsetting != undefined && typeof (ctrl.dragdropsetting) == 'object') {
+                    ctrl.itemsSortable.group = {
+                        name: ctrl.dragdropsetting.groupCorrelation.getGroupName(),
+                        pull: ctrl.dragdropsetting.canSend == true && ctrl.dragdropsetting.copyOnSend == true ? "clone" : ctrl.dragdropsetting.canSend,
+                        put: ctrl.dragdropsetting.canReceive
+                    };
+                    ctrl.itemsSortable.sort = ctrl.dragdropsetting.enableSorting;
+                    ctrl.itemsSortable.onAdd = function (/**Event*/evt) {
+                        var obj = evt.model;
+                        if (ctrl.dragdropsetting.onItemReceived != undefined && typeof (ctrl.dragdropsetting.onItemReceived) == 'function')
+                            obj = ctrl.dragdropsetting.onItemReceived(evt.model, evt.models);
+                        evt.models[evt.newIndex] = obj;
+                    };
+                }
 
                 ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
@@ -780,7 +795,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                 };
 
-                gridApi.itemAdded = function (item,callbackFunction) {
+                gridApi.itemAdded = function (item, callbackFunction) {
                     itemChanged(item, "Added");
                     if (callbackFunction != undefined && typeof (callbackFunction) == 'function')
                         callbackFunction();

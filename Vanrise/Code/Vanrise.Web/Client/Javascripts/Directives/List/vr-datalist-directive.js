@@ -11,14 +11,28 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             onremoveitem: '&',
             autoremoveitem: '=',
             onitemclicked: '=',
-            hideremoveicon: '='
+            hideremoveicon: '=',
+            dragdropsetting: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             if (ctrl.datasource == undefined)
                 ctrl.datasource = {};
-            ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
-
+            ctrl.itemsSortable = { handle: '.handeldrag', animation: 100 };
+            if (ctrl.dragdropsetting != undefined && typeof (ctrl.dragdropsetting) == 'object') {
+                ctrl.itemsSortable.group = {
+                    name: ctrl.dragdropsetting.groupCorrelation.getGroupName(),
+                    pull: ctrl.dragdropsetting.canSend == true && ctrl.dragdropsetting.copyOnSend == true ? "clone" : ctrl.dragdropsetting.canSend,
+                    put: ctrl.dragdropsetting.canReceive
+                };
+                ctrl.itemsSortable.sort = ctrl.dragdropsetting.enableSorting;
+                ctrl.itemsSortable.onAdd = function (/**Event*/evt) {
+                    var obj = evt.model;
+                    if (ctrl.dragdropsetting.onItemReceived != undefined && typeof (ctrl.dragdropsetting.onItemReceived) == 'function')
+                        obj = ctrl.dragdropsetting.onItemReceived(evt.model, evt.models);
+                    evt.models[evt.newIndex] = obj;
+                };
+            }
             ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
             ctrl.collapsible = $attrs.collapsible != undefined;
             ctrl.onInternalRemove = function (dataItem) {
@@ -81,7 +95,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             if (attrs.enabletitle != undefined)
                 title = 'title="{{dataItem}}"';
             var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}" hideremoveicon="VRDatalistCtrl.hideremoveicon"  iscollapsible="{{VRDatalistCtrl.collapsible}}">'
-                            + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
+                            + '<div style="white-space: pre-line;" ng-sortable="VRDatalistCtrl.itemsSortable" ng-class="VRDatalistCtrl.dragdropsetting &&  VRDatalistCtrl.datasource.length == 0 ?\'empty-vr-datalist-drop\':\'\'">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + '<span style="left: 22px;top: 6px;position:absolute;z-index:200" class="hand-cursor glyphicon" ng-show="VRDatalistCtrl.collapsible" ng-init="expande=true" ng-click="expande=!expande" ng-class="expande?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'"></span>'
                              + '<span style="left: 40px;top: 3px;position:absolute" ng-show="!expande" ng-if="VRDatalistCtrl.collapsible && dataItem.title"><vr-label>{{dataItem.title}}</vr-label></span>'

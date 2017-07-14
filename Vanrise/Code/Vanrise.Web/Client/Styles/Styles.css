@@ -2679,7 +2679,11 @@ vr-panel[fullscreen] .panel-body {
 vr-listitem div[class^="col"] {
     padding: 5px;
 }
-
+vr-columns[datalistitem]>div[class^="col"] {
+    float: none;
+    display: inline-block;
+    white-space:normal;
+}
 /*start of vr-cellviewer*/
 .vr-cellviewer-watermark {
     cursor: pointer;
@@ -3358,5 +3362,42 @@ vr-overall-widget  .list-group-item {
 
 /* end vr-tile*/
 
+/* start vr-drag-drop zone*/
+.vr-toolbox{
+    border: solid;
+    border: 1px solid #ccc;
+    padding:0px 5px;
+    border-radius: 4px;
+    width: 100%;
+    display: flex;
+}
 
+.vr-toolbox .item{
+    width:75px;
+    display:inline-block;
+    margin:2px ;
+    padding:2px;
+    border: 1px solid #ccc;
+    cursor: move !important;
+    border-radius:4px;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow-x:hidden;
+}
 
+.vr-toolbox .item .icon > div{
+    display:inline-block;
+    padding-right: 2px;
+}
+
+.empty-vr-datalist-drop{
+    min-height:29px;
+}
+
+.empty-vrdatagrid-drop{
+    min-height: 25px;
+    border: 1px solid #ccc;
+    border-bottom: 0px;
+}
+
+/* end vr-drag-drop zone*/

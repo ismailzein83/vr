@@ -52,7 +52,7 @@
                     <div vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                 </div>
             </div>
-            <div ng-sortable="ctrl.itemsSortable">
+            <div ng-sortable="ctrl.itemsSortable" ng-class="ctrl.dragdropsetting && ctrl.datasource.length==0  ?'empty-vrdatagrid-drop' : '' ">
                 <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
 
                 </div>
