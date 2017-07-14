@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsDealDealevaluatorTask", ['UtilsService', 'VRUIUtilsService',
+app.directive("retailCostCdrcostevaluatorTask", ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -22,7 +22,7 @@ app.directive("vrWhsDealDealevaluatorTask", ['UtilsService', 'VRUIUtilsService',
                     }
                 };
             },
-            templateUrl: "/Client/Modules/WhS_Deal/Directives/ScheduleTask/Templates/DealEvaluatorTaskTemplate.html"
+            templateUrl: '/Client/Modules/Retail_Cost/ScheduleTask/Directives/Templates/CostEvaluatorTaskTemplate.html'
         };
 
         function DirectiveConstructor($scope, ctrl) {
@@ -38,7 +38,7 @@ app.directive("vrWhsDealDealevaluatorTask", ['UtilsService', 'VRUIUtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Deal.BP.Arguments.DealEvaluatorProcessInput, TOne.WhS.Deal.BP.Arguments"
+                        $type: "Retail.Cost.BP.Arguments.CostEvaluatorProcessInput, Retail.Cost.BP.Arguments"
                     };
                 };
 

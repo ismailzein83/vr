@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsDealDealevaluatorProcess", ['UtilsService', 'VRUIUtilsService',
+app.directive("retailCostCdrcostevaluatorProcess", ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -10,7 +10,7 @@ app.directive("vrWhsDealDealevaluatorProcess", ['UtilsService', 'VRUIUtilsServic
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new DealEvaluatorProcessDirectiveConstructor($scope, ctrl);
+                var ctor = new CostEvaluatorProcessDirectiveConstructor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -22,10 +22,10 @@ app.directive("vrWhsDealDealevaluatorProcess", ['UtilsService', 'VRUIUtilsServic
                     }
                 };
             },
-            templateUrl: "/Client/Modules/WhS_Deal/Directives/ProcessInput/Templates/DealEvaluatorProcessTemplate.html"
+            templateUrl: '/Client/Modules/Retail_Cost/ProcessInput/Directives/Templates/CostEvaluatorProcessTemplate.html'
         };
 
-        function DealEvaluatorProcessDirectiveConstructor($scope, ctrl) {
+        function CostEvaluatorProcessDirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -43,7 +43,7 @@ app.directive("vrWhsDealDealevaluatorProcess", ['UtilsService', 'VRUIUtilsServic
 
                     return {
                         InputArguments: {
-                            $type: "TOne.WhS.Deal.BP.Arguments.DealEvaluatorProcessInput, TOne.WhS.Deal.BP.Arguments"
+                            $type: "Retail.Cost.BP.Arguments.CostEvaluatorProcessInput, Retail.Cost.BP.Arguments"
                         }
                     };
                 };

@@ -1,4 +1,7 @@
-﻿using System.Activities;
+﻿using System;
+using System.Activities;
+using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 using Retail.Cost.Entities;
 using Retail.Cost.Business;
 
@@ -7,15 +10,16 @@ namespace Retail.Cost.BP.Activities
     public sealed class UpadeOverridenCDRCost : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<CDRCostEvaluatorProcessState> CDRCostEvaluatorProcessState { get; set; }
+        public InArgument<DateTime> FirstDayToReprocess { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            CDRCostEvaluatorProcessState cdrCostEvaluatorProcessState = context.GetValue(this.CDRCostEvaluatorProcessState);
-            long? lastCDRCostProcessedId = cdrCostEvaluatorProcessState != null ? cdrCostEvaluatorProcessState.LastCDRCostProcessedId : null;
+            DateTime firstDayToReprocess = context.GetValue(this.FirstDayToReprocess);
 
             CDRCostManager cdrCostManager = new CDRCostManager();
-            cdrCostManager.UpadeOverridenCostCDRAfterId(lastCDRCostProcessedId);
+            cdrCostManager.UpadeOverridenCostCDRAfterDate(firstDayToReprocess);
+
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Upade Overriden CDR Cost is done", null);
         }
     }
 }

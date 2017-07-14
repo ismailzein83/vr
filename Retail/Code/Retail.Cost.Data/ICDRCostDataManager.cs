@@ -8,7 +8,7 @@ namespace Retail.Cost.Data
     {
         List<CDRCost> GetCDRCostByCDPNs(CDRCostBatchRequest cdrCostBatchRequests);
 
-        void UpadeOverridenCostCDRAfterId(long? cdrCostId);
+        void UpadeOverridenCostCDRAfterDate(DateTime? fromTime);
 
         HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId);
 

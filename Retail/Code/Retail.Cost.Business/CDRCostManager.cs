@@ -49,10 +49,10 @@ namespace Retail.Cost.Business
             FillCost(cdrCostRequests, cdrCostFieldNames);
         }
 
-        public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
+        public void UpadeOverridenCostCDRAfterDate(DateTime? fromTime)
         {
             ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
-            cdrCostDataManager.UpadeOverridenCostCDRAfterId(cdrCostId);
+            cdrCostDataManager.UpadeOverridenCostCDRAfterDate(fromTime);
         }
 
         public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)

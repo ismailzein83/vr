@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
+using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 using Retail.Cost.Entities;
 using Retail.Cost.Business;
 
@@ -30,6 +32,8 @@ namespace Retail.Cost.BP.Activities
 
             this.CDRCostEvaluatorProcessState.Set(context, cdrCostEvaluatorProcessState);
             this.DaysToReprocess.Set(context, daysToReprocess);
+
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Load CDR Cost data to Reprocess is done", null);
         }
     }
 }

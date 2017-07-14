@@ -694,6 +694,10 @@
       <Project>{47686853-e160-48ec-99bc-b81088ad84e3}</Project>
       <Name>Retail.BusinessEntity.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Cost.BP.Arguments\Retail.Cost.BP.Arguments.csproj">
+      <Project>{af85b6f6-461d-477d-8e5a-459fba704d8a}</Project>
+      <Name>Retail.Cost.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Cost.Business\Retail.Cost.Business.csproj">
       <Project>{72d1f349-fc2a-4f5e-bf3c-6fe371790137}</Project>
       <Name>Retail.Cost.Business</Name>

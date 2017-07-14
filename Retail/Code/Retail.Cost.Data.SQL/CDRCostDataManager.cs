@@ -25,9 +25,9 @@ namespace Retail.Cost.Data.SQL
             return GetItemsSP("[Retail_CDR].[sp_CDRCost_GetByCDPNs]", CDRCostMapper, cdrCostBatchRequest.BatchStart, cdrCostBatchRequest.BatchEnd, cdpnsAsString);
         }
 
-        public void UpadeOverridenCostCDRAfterId(long? cdrCostId)
+        public void UpadeOverridenCostCDRAfterDate(DateTime? fromTime)
         {
-            ExecuteNonQuerySP("[Retail_CDR].[sp_CDRCost_UpadeOverridenAfterId]", cdrCostId);
+            ExecuteNonQuerySP("[Retail_CDR].[sp_CDRCost_UpadeOverridenAfterDate]", fromTime);
         }
 
         public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)
