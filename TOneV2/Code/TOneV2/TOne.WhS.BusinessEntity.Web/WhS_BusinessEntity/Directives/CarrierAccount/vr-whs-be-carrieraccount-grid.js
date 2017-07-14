@@ -102,11 +102,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     };
                     directiveAPI.onCarrierAccountAdded = function (carrierAccountObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccountObject);
-                        var onItemAddedCallBackFunction = function () {
-                            gridAPI.setUpdatedViewIndex();
-                            gridAPI.expandRow(carrierAccountObject);
-                        };
-                        gridAPI.itemAdded(carrierAccountObject, onItemAddedCallBackFunction);
+                        gridAPI.itemAdded(carrierAccountObject);
                     };
                     return directiveAPI;
                 }

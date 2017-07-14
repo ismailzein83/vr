@@ -98,11 +98,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     };
                     directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);
-                        var onItemAddedCallBackFunction = function () {
-                            gridAPI.setUpdatedViewIndex();
-                            gridAPI.expandRow(carrierProfileObject);
-                        };
-                        gridAPI.itemAdded(carrierProfileObject, onItemAddedCallBackFunction);
+                        gridAPI.itemAdded(carrierProfileObject);
 
                     };
                     return directiveAPI;
