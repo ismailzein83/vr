@@ -104,7 +104,8 @@ namespace TOne.WhS.Sales.Business
                 }
             }
 
-            SetFutureRates(zoneItem);
+            if (zoneItem.CurrentRateBED.HasValue && zoneItem.CurrentRateBED.Value <= DateTime.Today)
+                SetFutureRates(zoneItem);
             SetZoneRateChanges(zoneItem);
             SetZoneRateTypes(zoneItem);
         }

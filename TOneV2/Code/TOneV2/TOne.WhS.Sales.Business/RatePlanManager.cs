@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
+using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
@@ -856,13 +857,57 @@ namespace TOne.WhS.Sales.Business
 
             int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
 
-            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+            var baseRatesByZone = new BaseRatesByZone();
+            var saleRateManager = new SaleRateManager();
+
+            ISaleRateReader rateReader;
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+                rateReader = new SaleRateReadWithCache(effectiveOn);
+            else
+            {
+                DateTime today = DateTime.Today;
+                IEnumerable<int> ownerIds = new List<int>() { ownerId };
+                List<long> zoneIds = saleZones.MapRecords(x => x.SaleZoneId).ToList();
+                IEnumerable<SaleRate> customerZoneRates = saleRateManager.GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType.Customer, ownerIds, zoneIds, today);
+
+                var routingCustomerInfoDetails = new RoutingCustomerInfoDetails()
+                {
+                    CustomerId = ownerId,
+                    SellingProductId = sellingProductId.Value
+                };
+
+                var effectiveDatesByZoneId = new Dictionary<long, DateTime>();
+                Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(ownerId, today, true);
+                foreach (SaleZone zone in saleZones)
+                {
+                    DateTime zoneCountryBED;
+                    if (!countryBEDsByCountryId.TryGetValue(zone.CountryId, out zoneCountryBED))
+                        throw new DataIntegrityValidationException(string.Format("The BED of the country '{0}' of zone '{1}' was not found", zone.CountryId, zone.Name));
+                    if (!effectiveDatesByZoneId.ContainsKey(zone.SaleZoneId))
+                    {
+                        DateTime effectiveZoneDate = Utilities.Max(Utilities.Max(today, zoneCountryBED), zone.BED);
+                        effectiveDatesByZoneId.Add(zone.SaleZoneId, effectiveZoneDate);
+                    }
+                }
+
+                var validCustomerZoneRates = new List<SaleRate>();
+                foreach (SaleRate customerZoneRate in customerZoneRates)
+                {
+                    DateTime zoneEffectiveDate;
+                    if (!effectiveDatesByZoneId.TryGetValue(customerZoneRate.ZoneId, out zoneEffectiveDate))
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("A fucking error has occured"));
+                    if (customerZoneRate.IsInTimeRange(zoneEffectiveDate))
+                        validCustomerZoneRates.Add(customerZoneRate);
+                }
+
+                rateReader = new SaleRateReadRPChanges(validCustomerZoneRates, routingCustomerInfoDetails, zoneIds, today, effectiveDatesByZoneId);
+            }
+
+            var rateLocator = new SaleEntityZoneRateLocator(rateReader);
             var rateManager = new ZoneRateManager(ownerType, ownerId, sellingProductId, effectiveOn, draft, currencyId, longPrecision, rateLocator);
             var rpManager = new ZoneRPManager(ownerType, ownerId, effectiveOn, draft, zoneRPLocator);
             ZoneRouteOptionManager routeOptionManager;
-
-            var baseRatesByZone = new BaseRatesByZone();
-            var saleRateManager = new SaleRateManager();
 
             Dictionary<long, ZoneItem> contextZoneItemsByZoneId = null;
 
