@@ -787,6 +787,18 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                 }
             }
+
+            function setMainItemsViewVisible() {
+                ctrl.selectedView = 0;
+                ctrl.isMainItemsShown = true;
+                ctrl.viewSelectionChanged();
+            }
+
+            function setUpdatedItemsViewVisible() {
+                ctrl.selectedView = 1;
+                ctrl.isMainItemsShown = false;
+                ctrl.viewSelectionChanged();
+            }
             function defineAPI() {
                 gridApi.resetSorting = function () {
                     if (lastSortColumnDef != undefined) {
@@ -795,23 +807,16 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     }
                 };
 
-                gridApi.itemAdded = function (item, callbackFunction) {
-                    itemChanged(item, "Added");
-                    if (callbackFunction != undefined && typeof (callbackFunction) == 'function')
-                        callbackFunction();
+                gridApi.itemAdded = function (item) {
+                    itemChanged(item, "Added");                   
+                    setUpdatedItemsViewVisible();
+                    ctrl.expandRow(item);
                 };
 
-                gridApi.setDefaultViewIndex = function () {
-                    ctrl.selectedView = 0;
-                };
-                gridApi.setUpdatedViewIndex = function () {
-                    ctrl.selectedView = 1;
-                    ctrl.isMainItemsShown = false;
-                    calculateDataColumnsSectionWidth();
-                };
                 gridApi.itemUpdated = function (item) {
                     item.isUpdated = true;
                     itemChanged(item, "Updated");
+                    ctrl.expandRow(item);
                 };
 
                 gridApi.itemDeleted = function (item) {
@@ -936,6 +941,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 gridApi.retrieveData = function (query) {
                     //retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
+                    setMainItemsViewVisible();
                     retrieveDataInput = {
                         Query: query
                     };
@@ -1147,9 +1153,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 };
                 ctrl.expandRow = function (dataItem) {
-
-                    dataItem.expandableRowTemplate = expandableRowTemplate;
-                    dataItem.isRowExpanded = true;
+                    if (expandableRowTemplate != undefined) {
+                        dataItem.expandableRowTemplate = expandableRowTemplate;
+                        dataItem.isRowExpanded = true;
+                    }
                 };
 
                 ctrl.collapseRow = function (dataItem) {
