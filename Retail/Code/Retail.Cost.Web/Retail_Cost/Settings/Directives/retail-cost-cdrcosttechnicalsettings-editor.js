@@ -174,6 +174,7 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                         var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         UtilsService.waitMultiplePromises([recordFilterDirectiveReadyDeferred.promise, dataRecordTypeSelectorSelectionChangedDeferred.promise]).then(function () {
+                            dataRecordTypeSelectorSelectionChangedDeferred = undefined;
 
                             VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
                                 var dataRecordFieldsInfo = response;
