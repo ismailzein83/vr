@@ -32,6 +32,9 @@ namespace Retail.MultiNet.Business
         private List<Guid> _wHTaxChargeableEntities;
         private Guid _inComingChargeableEntity;
         private Guid _outGoingChargeableEntity;
+        private Guid _otcChargeableEntity;
+        private Guid _lineRentChargeableEntity;
+
         private Guid _salesTaxRuleDefinitionId;
         private Guid _wHTaxRuleDefinitionId;
         private Guid _latePaymentRuleDefinitionId;
@@ -58,7 +61,7 @@ namespace Retail.MultiNet.Business
 
         #region Constructors
 
-        public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId, Guid branchTypeId, Guid companyTypeId)
+        public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId, Guid branchTypeId, Guid companyTypeId,Guid otcChargeableEntity, Guid lineRentChargeableEntity)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
             this._salesTaxChargeableEntities = salesTaxChargeableEntities;
@@ -71,6 +74,8 @@ namespace Retail.MultiNet.Business
             this._mainDataRecordStorageId = mainDataRecordStorageId;
             this._branchTypeId = branchTypeId;
             this._companyTypeId = companyTypeId;
+             this._otcChargeableEntity= otcChargeableEntity;
+             this._lineRentChargeableEntity= lineRentChargeableEntity;
         }
 
         #endregion
@@ -203,6 +208,19 @@ namespace Retail.MultiNet.Business
                         saleAmount += summaryItem.NetAmount;
                     if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
                         whAmount += summaryItem.NetAmount;
+
+                    if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
+                        whAmount += summaryItem.NetAmount;
+
+                    if (summaryItem.ChargeableEntityId == this._otcChargeableEntity)
+                        branchSummary.OTC += summaryItem.NetAmount;
+                    if (summaryItem.ChargeableEntityId == this._lineRentChargeableEntity)
+                        branchSummary.LineRent += summaryItem.NetAmount;
+                    if (summaryItem.ChargeableEntityId == this._inComingChargeableEntity)
+                        branchSummary.InComing += summaryItem.NetAmount;
+                    if (summaryItem.ChargeableEntityId == this._outGoingChargeableEntity)
+                        branchSummary.OutGoing += summaryItem.NetAmount;
+
                 }
                 decimal whAmountSaleTaxPercentage = 0;
                 whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
@@ -358,6 +376,7 @@ namespace Retail.MultiNet.Business
                             CalledNumber = billingCDR.CalledNumber,
                             CallingNumber = billingCDR.CallingNumber,
                             DurationInSeconds = Decimal.Round(billingCDR.DurationInSeconds, normalPrecisionValue),
+                            DurationDescription = TimeSpan.FromSeconds(Convert.ToDouble(billingCDR.DurationInSeconds)).ToString(),
                             ZoneId = billingCDR.ZoneId,
                             OperatorName = billingCDR.OperatorName,
                             SaleCurrencyId = billingCDR.SaleCurrencyId
@@ -524,6 +543,7 @@ namespace Retail.MultiNet.Business
             usageSummary.Quantity += countCDRs;
             usageSummary.NetAmount += netAmount;
             usageSummary.TotalDuration += totalDuration;
+            usageSummary.TotalDurationDescription = TimeSpan.FromSeconds(Convert.ToDouble(usageSummary.TotalDuration)).ToString(@"hh\:mm\:ss");
         }
 
 
@@ -646,6 +666,7 @@ namespace Retail.MultiNet.Business
                                 Amount = Convert.ToDecimal(amountMeasure.Value ?? 0.0),
                                 CountCDRs = Convert.ToInt32(countCDRsMeasure.Value),
                                 TotalDuration = totalDuration,
+                               
                                 TrafficDirection = (TrafficDirection)trafficDirection.Value,
                             };
                             Guid serviceTypeId;
@@ -753,12 +774,42 @@ namespace Retail.MultiNet.Business
                     retailSubscriberInvoiceDetails.Quantity += branchSummary.Quantity;
                     retailSubscriberInvoiceDetails.CurrentCharges += branchSummary.CurrentCharges;
                     retailSubscriberInvoiceDetails.TotalCurrentCharges += branchSummary.TotalCurrentCharges;
+
+                    retailSubscriberInvoiceDetails.OTC += branchSummary.OTC;
+                    retailSubscriberInvoiceDetails.LineRent += branchSummary.LineRent;
+                    retailSubscriberInvoiceDetails.InComing += branchSummary.InComing;
+                    retailSubscriberInvoiceDetails.OutGoing += branchSummary.OutGoing;
+
+
                 }
                 retailSubscriberInvoiceDetails.PayableByDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges;
                 retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId, issueDate);
                 retailSubscriberInvoiceDetails.PayableAfterDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges + retailSubscriberInvoiceDetails.LatePaymentCharges;
                 retailSubscriberInvoiceDetails.CurrencyId = currencyId;
                 retailSubscriberInvoiceDetails.AccountTypeId = financialAccountTypeId;
+
+                if (financialAccountTypeId == this._companyTypeId)
+                {
+                    retailSubscriberInvoiceDetails.CompanyId = account.AccountId;
+                }
+                else if (financialAccountTypeId == this._branchTypeId)
+                {
+                    var parentAccount = _accountBEManager.GetParentAccount(account);
+                    retailSubscriberInvoiceDetails.CompanyId = parentAccount.AccountId;
+                    retailSubscriberInvoiceDetails.BranchId = account.AccountId;
+                    foreach (var accountPart in account.Settings.Parts)
+                    {
+                        var multiNetBranchExtendedInfo = accountPart.Value.Settings as MultiNetBranchExtendedInfo;
+                        if (multiNetBranchExtendedInfo != null)
+                        {
+                            retailSubscriberInvoiceDetails.BranchCode = multiNetBranchExtendedInfo.BranchCode;
+                            retailSubscriberInvoiceDetails.ContractReferenceNumber = multiNetBranchExtendedInfo.ContractReferenceNumber;
+                        }
+                    }
+                }
+
+
+
             }
             return retailSubscriberInvoiceDetails;
         }
@@ -820,6 +871,14 @@ namespace Retail.MultiNet.Business
         public long AccountId { get; set; }
         public string BranchName { get; set; }
 
+
+        public decimal OTC { get; set; }
+        public decimal LineRent { get; set; }
+        public decimal InComing { get; set; }
+        public decimal OutGoing { get; set; }
+
+
+
         static AccountBEManager s_accountBEManager = new AccountBEManager();
         public void FillAdditionalFields(IInvoiceItemAdditionalFieldsContext context)
         {
@@ -838,6 +897,7 @@ namespace Retail.MultiNet.Business
         public int Quantity { get; set; }
         public Decimal NetAmount { get; set; }
         public Guid ChargeableEntityId { get; set; }
+
     }
 
     public class UsageSummary
@@ -847,6 +907,7 @@ namespace Retail.MultiNet.Business
         public string UsageDescription { get; set; }
         public int Quantity { get; set; }
         public Decimal TotalDuration { get; set; }
+        public string TotalDurationDescription { get; set; }
         public Decimal NetAmount { get; set; }
     }
 
@@ -855,6 +916,7 @@ namespace Retail.MultiNet.Business
         public string SubItemIdentifier { get; set; }
         public DateTime AttemptDateTime { get; set; }
         public decimal DurationInSeconds { get; set; }
+        public string  DurationDescription { get; set; }
         public string CallingNumber { get; set; }
         public string CalledNumber { get; set; }
         public decimal SaleAmount { get; set; }

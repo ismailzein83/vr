@@ -27,6 +27,9 @@ namespace Retail.MultiNet.Business
         public Guid InvoiceTransactionTypeId { get { return new Guid("2B3D86AB-1689-49E8-A5FA-F65227A1EC4C"); } }
         public List<Guid> UsageTransactionTypeIds { get { return new List<Guid>() { new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E") }; } }
 
+
+        public Guid OTCChargeableEntity { get { return new Guid("4a9536ea-0cf0-4db4-8242-aba8c67552b4"); } }
+        public Guid LineRentChargeableEntity { get { return new Guid("711039b3-92ee-4cb9-80e5-ac6354452c8e"); } }
         public override Guid ConfigId
         {
             get { return new Guid("3C121314-56F2-445D-91C7-896D07D09BDD"); }
@@ -63,7 +66,7 @@ namespace Retail.MultiNet.Business
         }
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new MultiNetSubscriberInvoiceGenerator(this.AccountBEDefinitionId, this.SalesTaxChargeableEntities, this.WHTaxChargeableEntities, this.InComingChargeableEntity, this.OutGoingChargeableEntity, this.SalesTaxRuleDefinitionId, this.WHTaxRuleDefinitionId, this.LatePaymentRuleDefinitionId, this.MainDataRecordStorageId, this.BranchTypeId, this.CompanyTypeId);
+            return new MultiNetSubscriberInvoiceGenerator(this.AccountBEDefinitionId, this.SalesTaxChargeableEntities, this.WHTaxChargeableEntities, this.InComingChargeableEntity, this.OutGoingChargeableEntity, this.SalesTaxRuleDefinitionId, this.WHTaxRuleDefinitionId, this.LatePaymentRuleDefinitionId, this.MainDataRecordStorageId, this.BranchTypeId, this.CompanyTypeId, this.OTCChargeableEntity,this.LineRentChargeableEntity);
         }
         public override InvoicePartnerManager GetPartnerManager()
         {

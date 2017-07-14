@@ -507,14 +507,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="TotalDuration">
+                    <Textbox Name="TotalDurationDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(DateAdd("s", Fields!TotalDuration.Value, "00:00:00"), "HH:mm:ss")</Value>
+                              <Value>=Fields!TotalDurationDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -526,7 +526,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>TotalDuration</rd:DefaultName>
+                      <rd:DefaultName>TotalDurationDescription</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -916,7 +916,7 @@
         </Field>
         <Field Name="TotalDuration">
           <DataField>TotalDuration</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="NetAmount">
           <DataField>NetAmount</DataField>
@@ -925,6 +925,10 @@
         <Field Name="AccountId">
           <DataField>AccountId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="TotalDurationDescription">
+          <DataField>TotalDurationDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>

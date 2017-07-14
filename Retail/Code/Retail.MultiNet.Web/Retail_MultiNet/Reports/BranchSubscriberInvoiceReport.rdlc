@@ -3107,6 +3107,10 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           <DataField>AccountId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
+        <Field Name="BranchName">
+          <DataField>BranchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>Retail.MultiNet.Entities</rd:DataSetName>

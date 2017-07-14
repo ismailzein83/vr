@@ -701,14 +701,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="DurationInSeconds">
+                    <Textbox Name="DurationDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(DateAdd("s", Fields!DurationInSeconds.Value, "00:00:00"), "HH:mm:ss")</Value>
+                              <Value>=Fields!DurationDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>5pt</FontSize>
@@ -720,7 +720,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>DurationInSeconds</rd:DefaultName>
+                      <rd:DefaultName>DurationDescription</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -833,7 +833,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -849,7 +849,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -994,6 +993,10 @@
           <DataField>DurationInSeconds</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="DurationDescription">
+          <DataField>DurationDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="CallingNumber">
           <DataField>CallingNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -1012,10 +1015,6 @@
         </Field>
         <Field Name="SaleCurrencyName">
           <DataField>SaleCurrencyName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PageInfo">
-          <DataField>PageInfo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

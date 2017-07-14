@@ -20,6 +20,14 @@ namespace Retail.MultiNet.Entities
         public Decimal LatePaymentCharges { get; set; }
         public Decimal PayableAfterDueDate { get; set; }
         public Guid AccountTypeId { get; set; }
+        public decimal OTC { get; set; } //first Invoice
+        public decimal LineRent { get; set; }
+        public decimal InComing { get; set; }
+        public decimal OutGoing { get; set; }
+        public string ContractReferenceNumber { get; set; } //branch only
+        public long CompanyId { get; set; }
+        public long? BranchId { get; set; }
+        public string BranchCode { get; set; }
 
     }
 }
