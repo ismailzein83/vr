@@ -16,7 +16,7 @@ namespace Vanrise.Common.Business
         public void SendMail(Guid mailMessageTemplateId, Dictionary<string, dynamic> objects)
         {
             var evaluatedMailTemplate = EvaluateMailTemplate(mailMessageTemplateId, objects);
-            SendMail(evaluatedMailTemplate.To, evaluatedMailTemplate.CC, evaluatedMailTemplate.Subject, evaluatedMailTemplate.Body);           
+            SendMail(evaluatedMailTemplate.To, evaluatedMailTemplate.CC, evaluatedMailTemplate.BCC, evaluatedMailTemplate.Subject, evaluatedMailTemplate.Body);
         }
 
         public VRMailEvaluatedTemplate EvaluateMailTemplate(Guid mailMessageTemplateId, Dictionary<string, dynamic> objects)
@@ -34,11 +34,12 @@ namespace Vanrise.Common.Business
             {
                 To = EvaluateExpression(mailMessageTemplateId, "To", mailMessageTemplate.Settings.To, mailContext),
                 CC = EvaluateExpression(mailMessageTemplateId, "CC", mailMessageTemplate.Settings.CC, mailContext),
+                BCC = EvaluateExpression(mailMessageTemplateId, "BCC", mailMessageTemplate.Settings.BCC, mailContext),
                 Subject = EvaluateExpression(mailMessageTemplateId, "Subject", mailMessageTemplate.Settings.Subject, mailContext),
                 Body = EvaluateExpression(mailMessageTemplateId, "Body", mailMessageTemplate.Settings.Body, mailContext)
             };
         }
-        
+
         public SmtpClient GetSMTPClient(EmailSettingData emailSettingData)
         {
             SmtpClient client = new SmtpClient();
@@ -68,13 +69,13 @@ namespace Vanrise.Common.Business
         //    string cc = EvaluateExpression(mailMessageTemplate.Settings.CC, mailContext);
         //    string subject = EvaluateExpression(mailMessageTemplate.Settings.Subject, mailContext);
         //    string body = EvaluateExpression(mailMessageTemplate.Settings.Body, mailContext);
-            
+
         //    SendMail(to, cc, subject, body);
         //}
 
-        public void SendMail(string to, string cc, string subject, string body)
+        public void SendMail(string to, string cc, string bcc, string subject, string body)
         {
-            SendMail(to, cc, subject, body, null);
+            SendMail(to, cc, bcc, subject, body, null);
         }
 
         public void SendTestMail(EmailSettingData emailSettingData, string to, string subject, string body)
@@ -102,7 +103,7 @@ namespace Vanrise.Common.Business
             client.Send(mailMessage);
         }
 
-        public void SendMail(string to, string cc, string subject, string body, List<VRMailAttachement> attachements)
+        public void SendMail(string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements)
         {
             if (String.IsNullOrWhiteSpace(to))
                 throw new NullReferenceException("to");
@@ -126,13 +127,22 @@ namespace Vanrise.Common.Business
                 }
             }
 
+            if (!String.IsNullOrWhiteSpace(bcc))
+            {
+                string[] bccAddresses = bcc.Split(';', ',', ':');
+                foreach (var bccAddress in bccAddresses)
+                {
+                    mailMessage.Bcc.Add(new MailAddress(bccAddress));
+                }
+            }
+
             mailMessage.Subject = subject;
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
 
-            if(attachements != null)
+            if (attachements != null)
             {
-                foreach(var vrAttachment in attachements)
+                foreach (var vrAttachment in attachements)
                 {
                     MemoryStream memStr = new MemoryStream(vrAttachment.Content);
                     var attachment = new Attachment(memStr, vrAttachment.Name);
@@ -146,7 +156,7 @@ namespace Vanrise.Common.Business
             }
 
             SmtpClient client = GetSMTPClient(emailSettingData);
-            
+
             client.Send(mailMessage);
         }
 

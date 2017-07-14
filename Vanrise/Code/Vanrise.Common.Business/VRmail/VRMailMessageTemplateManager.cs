@@ -22,8 +22,8 @@ namespace Vanrise.Common.Business
 
         public VRMailMessageTemplate GetMailMessageTemplate(Guid vrMailMessageTemplateId)
         {
-           
-            return GetMailMessageTemplate(vrMailMessageTemplateId,false);
+
+            return GetMailMessageTemplate(vrMailMessageTemplateId, false);
         }
         public IDataRetrievalResult<VRMailMessageTemplateDetail> GetFilteredMailMessageTemplates(DataRetrievalInput<VRMailMessageTemplateQuery> input)
         {
@@ -43,6 +43,12 @@ namespace Vanrise.Common.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
+            if (!IsMailTemplateValid(vrMailMessageTemplateItem))
+            {
+                insertOperationOutput.ShowExactMessage = true;
+                insertOperationOutput.Message = "Template Validation Error. Check Log";
+                return insertOperationOutput;
+            }
 
             IVRMailMessageTemplateDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRMailMessageTemplateDataManager>();
 
@@ -69,6 +75,12 @@ namespace Vanrise.Common.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+            if (!IsMailTemplateValid(vrMailMessageTemplateItem))
+            {
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = "Template Validation Error. Check Log";
+                return updateOperationOutput;
+            }
 
             IVRMailMessageTemplateDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRMailMessageTemplateDataManager>();
 
@@ -167,6 +179,51 @@ namespace Vanrise.Common.Business
 
         #region Private Methods
 
+        bool IsMailTemplateValid(VRMailMessageTemplate mailTemplate)
+        {
+            if (mailTemplate == null || mailTemplate.Settings == null)
+                return false;
+
+            if (!IsMailTemplateExpressionValid(mailTemplate.Settings.To))
+                return false;
+
+            if (!IsMailTemplateExpressionValid(mailTemplate.Settings.CC))
+                return false;
+
+            if (!IsMailTemplateExpressionValid(mailTemplate.Settings.BCC))
+                return false;
+
+            if (!IsMailTemplateExpressionValid(mailTemplate.Settings.Subject))
+                return false;
+
+            if (!IsMailTemplateExpressionValid(mailTemplate.Settings.Body))
+                return false;
+
+            return true;
+        }
+
+        bool IsMailTemplateExpressionValid(VRExpression expression)
+        {
+            if (expression != null && !string.IsNullOrEmpty(expression.ExpressionString))
+            {
+                try
+                {
+                    string templateKeyLocal = string.Format("TemplateKey_{0}", Guid.NewGuid());
+                    var key = new RazorEngine.Templating.NameOnlyTemplateKey(templateKeyLocal, RazorEngine.Templating.ResolveType.Global, null);
+                    RazorEngine.Engine.Razor.AddTemplate(key, new RazorEngine.Templating.LoadedTemplateSource(expression.ExpressionString));
+                    RazorEngine.Engine.Razor.Compile(key, typeof(VRMailContext));
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactory.GetLogger().WriteError(ex.Message.Replace('{','[').Replace('}',']'));
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
         Dictionary<Guid, VRMailMessageTemplate> GetCachedVRMailMessageTemplates()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRMailMessageTemplates",
@@ -190,7 +247,7 @@ namespace Vanrise.Common.Business
             {
                 Entity = vrMailMessageTemplate,
 
-                VRMailMessageTypeName =  vrMailMessageTypeName
+                VRMailMessageTypeName = vrMailMessageTypeName
             };
             return vrMailMessageTemplateDetail;
         }

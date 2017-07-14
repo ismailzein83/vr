@@ -120,6 +120,7 @@
                 if (mailMessageTemplateEntity.Settings != undefined) {
                     $scope.scopeModel.to = mailMessageTemplateEntity.Settings.To.ExpressionString;
                     $scope.scopeModel.cc = mailMessageTemplateEntity.Settings.CC.ExpressionString;
+                    $scope.scopeModel.bcc = mailMessageTemplateEntity.Settings.BCC != undefined ? mailMessageTemplateEntity.Settings.BCC.ExpressionString : undefined;
                     $scope.scopeModel.subject = mailMessageTemplateEntity.Settings.Subject.ExpressionString;
                     $scope.scopeModel.body = mailMessageTemplateEntity.Settings.Body.ExpressionString;
                 }
@@ -253,6 +254,7 @@
                     Variables: $scope.scopeModel.objects,
                     To: { ExpressionString: $scope.scopeModel.to },
                     CC: { ExpressionString: $scope.scopeModel.cc },
+                    BCC: { ExpressionString: $scope.scopeModel.bcc },
                     Subject: { ExpressionString: $scope.scopeModel.subject },
                     Body: { ExpressionString: $scope.scopeModel.body }
                 }

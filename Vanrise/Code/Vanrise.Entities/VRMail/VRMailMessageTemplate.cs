@@ -23,6 +23,8 @@ namespace Vanrise.Entities
 
         public VRExpression CC { get; set; }
 
+        public VRExpression BCC { get; set; }
+
         public VRExpression Subject { get; set; }
 
         public VRExpression Body { get; set; }
