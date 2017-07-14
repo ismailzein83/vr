@@ -1,8 +1,9 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Retail.Cost.BP.CostEvaluatorProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Retail.Cost.BP.CostEvaluatorProcess_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Retail.Cost.BP.CostEvaluatorProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
- xmlns:rcba="clr-namespace:Retail.Cost.BP.Activities;assembly=Retail.Cost.BP.Activities"
+ xmlns:rcba="clr-namespace:Retail.Cost.BP.Arguments;assembly=Retail.Cost.BP.Arguments"
+ xmlns:rcba1="clr-namespace:Retail.Cost.BP.Activities;assembly=Retail.Cost.BP.Activities"
  xmlns:rce="clr-namespace:Retail.Cost.Entities;assembly=Retail.Cost.Entities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
@@ -16,6 +17,11 @@
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(rcba:CostEvaluatorProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Retail.Cost.BP.CostEvaluatorProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -26,6 +32,7 @@
       <x:String>Retail.Cost.Entities</x:String>
       <x:String>Vanrise.BusinessProcess.Entities</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Retail.Cost.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -41,18 +48,19 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
-      <AssemblyReference>Retail.Cost.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
-      <AssemblyReference>Retail.Cost.Entities</AssemblyReference>
-      <AssemblyReference>Retail.Cost.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Retail.Cost.BP.Activities</AssemblyReference>
+      <AssemblyReference>Retail.Cost.Business</AssemblyReference>
+      <AssemblyReference>Retail.Cost.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Retail.Cost.BP</AssemblyReference>
+      <AssemblyReference>Retail.Cost.BP.Arguments</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -76,25 +84,25 @@
         </OutArgument>
       </vbw:GetDefinitionObjectState.Result>
     </vbw:GetDefinitionObjectState>
-    <rcba:UpadeOverridenCostCDR sap2010:WorkflowViewState.IdRef="UpadeOverridenCostCDR_1">
-      <rcba:UpadeOverridenCostCDR.CDRCostEvaluatorProcessState>
+    <rcba1:UpadeOverridenCDRCost sap2010:WorkflowViewState.IdRef="UpadeOverridenCDRCost_1">
+      <rcba1:UpadeOverridenCDRCost.CDRCostEvaluatorProcessState>
         <InArgument x:TypeArguments="rce:CDRCostEvaluatorProcessState">
           <mca:CSharpValue x:TypeArguments="rce:CDRCostEvaluatorProcessState">cdrCostEvaluatorProcessState</mca:CSharpValue>
         </InArgument>
-      </rcba:UpadeOverridenCostCDR.CDRCostEvaluatorProcessState>
-    </rcba:UpadeOverridenCostCDR>
-    <rcba:LoadCostCDRDataToReprocess sap2010:WorkflowViewState.IdRef="LoadCostCDRDataToReprocess_1">
-      <rcba:LoadCostCDRDataToReprocess.CDRCostEvaluatorProcessState>
+      </rcba1:UpadeOverridenCDRCost.CDRCostEvaluatorProcessState>
+    </rcba1:UpadeOverridenCDRCost>
+    <rcba1:LoadCDRCostDataToReprocess sap2010:WorkflowViewState.IdRef="LoadCDRCostDataToReprocess_1">
+      <rcba1:LoadCDRCostDataToReprocess.CDRCostEvaluatorProcessState>
         <InOutArgument x:TypeArguments="rce:CDRCostEvaluatorProcessState">
           <mca:CSharpReference x:TypeArguments="rce:CDRCostEvaluatorProcessState">cdrCostEvaluatorProcessState</mca:CSharpReference>
         </InOutArgument>
-      </rcba:LoadCostCDRDataToReprocess.CDRCostEvaluatorProcessState>
-      <rcba:LoadCostCDRDataToReprocess.DaysToReprocess>
+      </rcba1:LoadCDRCostDataToReprocess.CDRCostEvaluatorProcessState>
+      <rcba1:LoadCDRCostDataToReprocess.DaysToReprocess>
         <OutArgument x:TypeArguments="scg:HashSet(s:DateTime)">
           <mca:CSharpReference x:TypeArguments="scg:HashSet(s:DateTime)">daysToReprocess</mca:CSharpReference>
         </OutArgument>
-      </rcba:LoadCostCDRDataToReprocess.DaysToReprocess>
-    </rcba:LoadCostCDRDataToReprocess>
+      </rcba1:LoadCDRCostDataToReprocess.DaysToReprocess>
+    </rcba1:LoadCDRCostDataToReprocess>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
@@ -104,32 +112,8 @@
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
           <Sequence.Variables>
-            <Variable x:TypeArguments="s:Guid" Name="reprocessDefinitionId" />
+            <Variable x:TypeArguments="rce:CDRCostTechnicalSettingData" Name="cdrCostTechnicalSettingData" />
           </Sequence.Variables>
-          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-            <Assign.To>
-              <OutArgument x:TypeArguments="s:Guid">
-                <mca:CSharpReference x:TypeArguments="s:Guid">reprocessDefinitionId</mca:CSharpReference>
-              </OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">new Retail.Cost.Business.ConfigManager().GetCostCDRReprocessDefinitionId()</mca:CSharpValue>
-              </InArgument>
-            </Assign.Value>
-          </Assign>
-          <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-            <Assign.To>
-              <OutArgument x:TypeArguments="s:Guid">
-                <mca:CSharpReference x:TypeArguments="s:Guid">reprocessDefinitionId</mca:CSharpReference>
-              </OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">new Retail.Cost.Business.ConfigManager().GetCostCDRReprocessDefinitionId()</mca:CSharpValue>
-              </InArgument>
-            </Assign.Value>
-          </Assign>
           <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
             <vbw:WriteTrackingMessage.Message>
               <InArgument x:TypeArguments="x:String">
@@ -142,6 +126,13 @@
               </InArgument>
             </vbw:WriteTrackingMessage.Severity>
           </vbw:WriteTrackingMessage>
+          <rcba1:GetCDRCostTechnicalSettingsData sap2010:WorkflowViewState.IdRef="GetCDRCostTechnicalSettingsData_1">
+            <rcba1:GetCDRCostTechnicalSettingsData.CDRCostTechnicalSettingData>
+              <OutArgument x:TypeArguments="rce:CDRCostTechnicalSettingData">
+                <mca:CSharpReference x:TypeArguments="rce:CDRCostTechnicalSettingData">cdrCostTechnicalSettingData</mca:CSharpReference>
+              </OutArgument>
+            </rcba1:GetCDRCostTechnicalSettingsData.CDRCostTechnicalSettingData>
+          </rcba1:GetCDRCostTechnicalSettingsData>
           <ParallelForEach x:TypeArguments="s:DateTime" DisplayName="ParallelForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
             <ParallelForEach.Values>
               <InArgument x:TypeArguments="scg1:IEnumerable(s:DateTime)">
@@ -170,9 +161,9 @@
                   <vbw:RunProcess.Input>
                     <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                       <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput() { 
-                ChunkTime=Vanrise.Reprocess.Entities.ReprocessChunkTimeEnum.SixHours,
+                ChunkTime=cdrCostTechnicalSettingData.ChunkTime,
                 FromTime=item,
-                ReprocessDefinitionId=reprocessDefinitionId,
+                ReprocessDefinitionId=cdrCostTechnicalSettingData.CostCDRReprocessDefinitionId,
                 ToTime=item.AddDays(1),
                 UseTempStorage=true
             }</mca:CSharpValue>
@@ -249,17 +240,16 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>dztDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkNvc3QuQlBcQ29zdEV2YWx1YXRvclByb2Nlc3MueGFtbDI6A/0BDgIBAT8zPzYCAQJBBUcgAwGrAUgFTiQDAaUBTwVVIgMBnwFWBWEnAwGUAWIF7QEKAgEQ7gEF9AElAgEK9QEF+wEgAgEDRAtEhQEDAa0BQWBBggEDAawBSwtLhQEDAaYBUgtSfQMBoAFeC15vAwGaAVkLWYUBAwGVAWULZYcBAgERaQnrARQCARbxAQvxAWUCAQv4AQv4AYUBAgEF9QFg9QGAAQIBBG0LeBQDAYcBeQuEARQCAXqFAQuQASYCAW2RAQvqAR0CARd1EXWXAQMBjgFwEXBqAwGIAYEBEYEBlwEDAYEBfBF8agIBe40BEY0BiwECAXSIARGIAcEBAgFulAERlAFyAgFnmwEP6AEaAgEYnAERqAEsAgFYqQERugEiAgFIuwER5wEWAgEZpQEXpQGRAQIBYJ8BF6ABUwIBWawBF7IBIAIBUbcBF7cBmwECAUqpAb0BqQHDAQIBSb4BF74BygECARrCARXIASkCAUDLARXlASACASHFARvFAcYBAgFBzAEX1wEgAgEx2AEX5AEyAgEi1AEd1AF2AgE5zwEdzwF6AgEy4QEd4QGXAQIBKtsBHdwBhwECASM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dztDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkNvc3QuQlBcQ29zdEV2YWx1YXRvclByb2Nlc3MueGFtbC5CA/QBDgIBAUczRzYCAQJJBU8gAwGtAVAFViQDAaYBVwVdIwMBnwFeBWkoAwGSAWoF5AEKAgES5QEF6wElAgEL7AEF8gEgAgEDTAtMhQEDAa8BSWBJggEDAa4BUwtThQEDAacBWgtafQMBoAFmC2ZvAwGZAWELYYUBAwGTAW0LbYcBAgETcQniARQCARnoAQvoAWUCAQzvAQvvAYUBAgEF7AFg7AGAAQIBBHULgAEmAwGDAYEBC4cBMwIBe4gBC+EBHQIBGn0RfYsBAwGLAXgReMEBAwGEAYQBEYQBiQECAXyLARGLAXICAXSSAQ/fARoCARuTARGfASwCAWOgARGxASICAVGyARHeARYCARycARecAZEBAgFslgEXlwFTAgFkowEXqQEgAgFbrgEXrgGbAQIBU6ABvQGgAcMBAgFStQEXtQHKAQIBHbkBFb8BKQIBSMIBFdwBIAIBJbwBG7wBxgECAUnDARfOASACATfPARfbATICASbLAR3LAXYCAUDGAR3GAXoCATjYAR3YAZcBAgEv0gEd0wGHAQIBJw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="688,22" />
-      <sap2010:ViewStateData Id="UpadeOverridenCostCDR_1" sap:VirtualizedContainerService.HintSize="688,22" />
-      <sap2010:ViewStateData Id="LoadCostCDRDataToReprocess_1" sap:VirtualizedContainerService.HintSize="688,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="541,62" />
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="541,62" />
+      <sap2010:ViewStateData Id="UpadeOverridenCDRCost_1" sap:VirtualizedContainerService.HintSize="688,22" />
+      <sap2010:ViewStateData Id="LoadCDRCostDataToReprocess_1" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="541,22" />
+      <sap2010:ViewStateData Id="GetCDRCostTechnicalSettingsData_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -281,24 +271,24 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="541,796" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="563,1186">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="563,1044">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="688,1336" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="688,1194" />
       <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="688,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="710,1832">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="710,1690">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Retail.Cost.BP.CostEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="750,1912" />
+      <sap2010:ViewStateData Id="Retail.Cost.BP.CostEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="750,1770" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

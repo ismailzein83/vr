@@ -141,6 +141,10 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Cost\ProcessInput\Directives\Templates\CostEvaluatorProcessTemplate.html" />
+    <Content Include="Retail_Cost\ProcessInput\Directives\retail-cost-cdrcostevaluator-process.js" />
+    <Content Include="Retail_Cost\ScheduleTask\Directives\Templates\CostEvaluatorTaskTemplate.html" />
+    <Content Include="Retail_Cost\ScheduleTask\Directives\retail-cost-cdrcostevaluator-task.js" />
     <Content Include="Retail_Cost\Settings\Directives\retail-cost-cdrcostsettings-editor.js" />
     <Content Include="Retail_Cost\Settings\Directives\retail-cost-cdrcosttechnicalsettings-editor.js" />
     <Content Include="Retail_Cost\Settings\Directives\Templates\CDRCostSettingsEditorTemplate.html" />

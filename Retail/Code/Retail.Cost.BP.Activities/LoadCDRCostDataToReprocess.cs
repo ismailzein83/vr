@@ -6,7 +6,7 @@ using Retail.Cost.Business;
 
 namespace Retail.Cost.BP.Activities
 {
-    public sealed class LoadCostCDRDataToReprocess : CodeActivity
+    public sealed class LoadCDRCostDataToReprocess : CodeActivity
     {
         [RequiredArgument]
         public InOutArgument<CDRCostEvaluatorProcessState> CDRCostEvaluatorProcessState { get; set; }

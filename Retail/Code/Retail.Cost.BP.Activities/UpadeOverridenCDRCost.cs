@@ -4,7 +4,7 @@ using Retail.Cost.Business;
 
 namespace Retail.Cost.BP.Activities
 {
-    public sealed class UpadeOverridenCostCDR : CodeActivity
+    public sealed class UpadeOverridenCDRCost : CodeActivity
     {
         [RequiredArgument]
         public InArgument<CDRCostEvaluatorProcessState> CDRCostEvaluatorProcessState { get; set; }
