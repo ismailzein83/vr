@@ -6,8 +6,18 @@ using System.Windows.Forms;
 using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.IO;
 using System.Text;
+
+using System.Data.SqlClient;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
+using System.Collections.Specialized;
+using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
 namespace Dean.Edwards
 {
     /// <summary>
@@ -37,11 +47,15 @@ namespace Dean.Edwards
         private Button btnGroupFiles;
         private Button btnGroupSQLFiles;
         private CheckBox chkOverriddenNode;
+        private Button bnGenerateDBScript;
+        private CheckedListBox chklstDatabases;
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
+        static string ServerIP = System.Configuration.ConfigurationManager.AppSettings["ServerIP"];
+        static string ActiveDBs = System.Configuration.ConfigurationManager.AppSettings["ActiveDBs"];
         public Packer()
         {
             //
@@ -98,6 +112,8 @@ namespace Dean.Edwards
             this.btnGroupFiles = new System.Windows.Forms.Button();
             this.btnGroupSQLFiles = new System.Windows.Forms.Button();
             this.chkOverriddenNode = new System.Windows.Forms.CheckBox();
+            this.bnGenerateDBScript = new System.Windows.Forms.Button();
+            this.chklstDatabases = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // tbSource
@@ -136,7 +152,7 @@ namespace Dean.Edwards
             this.pack.BackColor = System.Drawing.Color.LightSkyBlue;
             this.pack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pack.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pack.Location = new System.Drawing.Point(8, 101);
+            this.pack.Location = new System.Drawing.Point(8, 140);
             this.pack.Name = "pack";
             this.pack.Size = new System.Drawing.Size(119, 23);
             this.pack.TabIndex = 6;
@@ -148,7 +164,7 @@ namespace Dean.Edwards
             // 
             this.Encoding.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Encoding.Location = new System.Drawing.Point(648, 172);
+            this.Encoding.Location = new System.Drawing.Point(648, 211);
             this.Encoding.Name = "Encoding";
             this.Encoding.Size = new System.Drawing.Size(121, 21);
             this.Encoding.TabIndex = 5;
@@ -159,7 +175,7 @@ namespace Dean.Edwards
             // 
             this.fastDecode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.fastDecode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.fastDecode.Location = new System.Drawing.Point(553, 174);
+            this.fastDecode.Location = new System.Drawing.Point(553, 213);
             this.fastDecode.Name = "fastDecode";
             this.fastDecode.Size = new System.Drawing.Size(92, 20);
             this.fastDecode.TabIndex = 4;
@@ -171,7 +187,7 @@ namespace Dean.Edwards
             // 
             this.specialChars.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.specialChars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.specialChars.Location = new System.Drawing.Point(422, 174);
+            this.specialChars.Location = new System.Drawing.Point(422, 213);
             this.specialChars.Name = "specialChars";
             this.specialChars.Size = new System.Drawing.Size(116, 19);
             this.specialChars.TabIndex = 3;
@@ -264,7 +280,7 @@ namespace Dean.Edwards
             this.replaceFiles.AutoSize = true;
             this.replaceFiles.Checked = true;
             this.replaceFiles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.replaceFiles.Location = new System.Drawing.Point(679, 107);
+            this.replaceFiles.Location = new System.Drawing.Point(679, 146);
             this.replaceFiles.Name = "replaceFiles";
             this.replaceFiles.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.replaceFiles.Size = new System.Drawing.Size(90, 17);
@@ -298,13 +314,13 @@ namespace Dean.Edwards
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(8, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 13);
+            this.label1.Size = new System.Drawing.Size(99, 13);
             this.label1.TabIndex = 8;
-            this.label1.Text = "JavaScript Directory:";
+            this.label1.Text = "TargetDirectory:";
             // 
             // pBar1
             // 
-            this.pBar1.Location = new System.Drawing.Point(8, 137);
+            this.pBar1.Location = new System.Drawing.Point(8, 176);
             this.pBar1.Name = "pBar1";
             this.pBar1.Size = new System.Drawing.Size(762, 23);
             this.pBar1.TabIndex = 9;
@@ -315,7 +331,7 @@ namespace Dean.Edwards
             this.btnGroupFiles.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnGroupFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGroupFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGroupFiles.Location = new System.Drawing.Point(167, 101);
+            this.btnGroupFiles.Location = new System.Drawing.Point(133, 140);
             this.btnGroupFiles.Name = "btnGroupFiles";
             this.btnGroupFiles.Size = new System.Drawing.Size(99, 23);
             this.btnGroupFiles.TabIndex = 10;
@@ -328,7 +344,7 @@ namespace Dean.Edwards
             this.btnGroupSQLFiles.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnGroupSQLFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGroupSQLFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGroupSQLFiles.Location = new System.Drawing.Point(305, 101);
+            this.btnGroupSQLFiles.Location = new System.Drawing.Point(296, 140);
             this.btnGroupSQLFiles.Name = "btnGroupSQLFiles";
             this.btnGroupSQLFiles.Size = new System.Drawing.Size(109, 23);
             this.btnGroupSQLFiles.TabIndex = 11;
@@ -339,7 +355,7 @@ namespace Dean.Edwards
             // chkOverriddenNode
             // 
             this.chkOverriddenNode.AutoSize = true;
-            this.chkOverriddenNode.Location = new System.Drawing.Point(532, 107);
+            this.chkOverriddenNode.Location = new System.Drawing.Point(532, 146);
             this.chkOverriddenNode.Name = "chkOverriddenNode";
             this.chkOverriddenNode.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chkOverriddenNode.Size = new System.Drawing.Size(129, 17);
@@ -347,12 +363,35 @@ namespace Dean.Edwards
             this.chkOverriddenNode.Text = "Override Group Name";
             this.chkOverriddenNode.UseVisualStyleBackColor = true;
             // 
+            // bnGenerateDBScript
+            // 
+            this.bnGenerateDBScript.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.bnGenerateDBScript.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bnGenerateDBScript.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bnGenerateDBScript.Location = new System.Drawing.Point(408, 140);
+            this.bnGenerateDBScript.Name = "bnGenerateDBScript";
+            this.bnGenerateDBScript.Size = new System.Drawing.Size(90, 23);
+            this.bnGenerateDBScript.TabIndex = 14;
+            this.bnGenerateDBScript.Text = "DB Structure";
+            this.bnGenerateDBScript.UseVisualStyleBackColor = false;
+            this.bnGenerateDBScript.Click += new System.EventHandler(this.bnGenerateDBScript_Click);
+            // 
+            // chklstDatabases
+            // 
+            this.chklstDatabases.FormattingEnabled = true;
+            this.chklstDatabases.Location = new System.Drawing.Point(408, 45);
+            this.chklstDatabases.Name = "chklstDatabases";
+            this.chklstDatabases.Size = new System.Drawing.Size(360, 94);
+            this.chklstDatabases.TabIndex = 16;
+            // 
             // Packer
             // 
             this.AcceptButton = this.pack;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.bClear;
-            this.ClientSize = new System.Drawing.Size(774, 205);
+            this.ClientSize = new System.Drawing.Size(774, 253);
+            this.Controls.Add(this.chklstDatabases);
+            this.Controls.Add(this.bnGenerateDBScript);
             this.Controls.Add(this.chkOverriddenNode);
             this.Controls.Add(this.btnGroupSQLFiles);
             this.Controls.Add(this.btnGroupFiles);
@@ -376,7 +415,8 @@ namespace Dean.Edwards
             this.MaximizeBox = false;
             this.Name = "Packer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Compress JavaScript files & Group to Top Directory";
+            this.Text = "Compress JavaScript files / Group to Top Directory / Create Database Structure Sc" +
+    "ript";
             this.Load += new System.EventHandler(this.Packer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -437,6 +477,23 @@ namespace Dean.Edwards
             Encoding.Items.Add(ECMAScriptPacker.PackerEncoding.Normal);
             Encoding.Items.Add(ECMAScriptPacker.PackerEncoding.HighAscii);
             Encoding.SelectedItem = ECMAScriptPacker.PackerEncoding.None;
+
+            //load DBs
+            if (string.IsNullOrEmpty(ActiveDBs))
+            {
+                Server myServer = new Server(ServerIP);
+                foreach (Database db in myServer.Databases)
+                {
+                    if (db.Name.StartsWith("Standard"))
+                    {
+                        chklstDatabases.Items.Add(db.Name);
+                    }
+                }
+            }
+            else
+            {
+                chklstDatabases.Items.AddRange(ActiveDBs.Split('#'));
+            }
         }
 
         private void Encoding_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -625,6 +682,147 @@ namespace Dean.Edwards
             {
                 MessageBox.Show("Please select a directory!");
             }
+        }
+
+        private void bnGenerateDBScript_Click(object sender, EventArgs e)
+        {
+            string sqlFilesOutputPath = txtDirectory.Text;
+
+            if (string.IsNullOrEmpty(sqlFilesOutputPath))
+            {
+                MessageBox.Show("Please select Output directory!");
+                txtDirectory.Focus();
+                return;
+            }
+
+            if (chklstDatabases.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Please select Database!");
+                chklstDatabases.Focus();
+                return;
+            }
+
+            string currentDate = DateTime.Now.ToString("yyyMMddHHmm");
+            string currentDateShort = DateTime.Now.ToString("yyyMMdd");
+
+            List<string> lstDBs = new List<string>();
+            for (int i = 0; i < chklstDatabases.Items.Count; i++)
+            {
+                if (chklstDatabases.GetItemCheckState(i) == CheckState.Checked)
+                {
+                    lstDBs.Add(chklstDatabases.Items[i].ToString());
+                }
+            }
+
+            DisplayProgressBar(lstDBs.Count);
+
+            //foreach (string item in lstDBs)
+            //{
+            //    GenerateSQLDBScript(item, sqlFilesOutputPath, currentDate, currentDateShort);
+            //}
+
+            Parallel.ForEach(lstDBs, item =>
+            {
+                GenerateSQLDBScript(item, sqlFilesOutputPath, currentDate, currentDateShort);
+            });
+        }
+
+        private void DisplayProgressBar(int maximum)
+        {
+            // Display the ProgressBar control.
+            pBar1.Visible = true;
+            // Set Minimum to 1 to represent the first file being copied.
+            pBar1.Minimum = 1;
+            // Set Maximum to the total number of files to copy.
+            pBar1.Maximum = maximum;
+            // Set the initial value of the ProgressBar.
+            pBar1.Value = 1;
+            // Set the Step property to a value of 1 to represent each file being copied.
+            pBar1.Step = 1;
+        }
+        private void GenerateSQLDBScript(string item, string sqlFilesOutputPath, string currentDate, string currentDateShort)
+        {
+            var sb = new StringBuilder();
+
+            Server myServer = new Server(ServerIP);
+            Scripter scripter = new Scripter(myServer);
+            Database dbname = myServer.Databases[item];
+
+            StringCollection transferScript = GetTransferScript(dbname);
+
+            ScriptingOptions scriptOptions = new ScriptingOptions();
+            scriptOptions.ScriptDrops = true;
+            scriptOptions.WithDependencies = false;
+            scriptOptions.IncludeHeaders = true;
+            scriptOptions.IncludeIfNotExists = true;
+            scriptOptions.Indexes = true;
+            scriptOptions.NoIdentities = true;
+            scriptOptions.NonClusteredIndexes = true;
+            scriptOptions.SchemaQualify = true;
+            scriptOptions.AllowSystemObjects = true;
+
+            foreach (string script in dbname.Script(scriptOptions))
+            {
+                sb.AppendLine(script);
+                sb.AppendLine("GO");
+            }
+
+            Urn[] DatabaseURNs = new Urn[] { dbname.Urn };
+            StringCollection scriptCollection = scripter.Script(DatabaseURNs);
+            foreach (string script in scriptCollection)
+            {
+                if (script.Contains("CREATE DATABASE"))
+                {
+                    sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
+                    sb.AppendLine("GO");
+
+                    sb.AppendLine(string.Format("USE [{0}]", item));
+                    sb.AppendLine("GO");
+                }
+                else
+                {
+                    sb.AppendLine(script);
+                    sb.AppendLine("GO");
+                }
+            }
+
+            foreach (string script in GetTransferScript(dbname))
+            {
+                if (!script.Contains("CREATE USER") && !script.Contains("sys.sp_addrolemember"))
+                {
+                    sb.AppendLine(script);
+                    sb.AppendLine("GO");
+                }
+            }
+
+            sb = sb.Replace(item, string.Format("{0}_{1}", item, currentDateShort));
+            File.WriteAllText(string.Format("{0}\\{1}_{2}.sql", sqlFilesOutputPath, item, currentDate), sb.ToString());
+        }
+
+        private StringCollection GetTransferScript(Database database)
+        {
+
+            var transfer = new Transfer(database);
+
+            transfer.CopyAllObjects = true;
+            transfer.CopyAllSynonyms = true;
+            transfer.CopyData = false;
+
+            transfer.CopyAllRoles = false;
+
+            // additional options
+            transfer.Options.WithDependencies = true;
+            transfer.Options.DriAll = true;
+            transfer.Options.Triggers = true;
+            transfer.Options.Indexes = true;
+            transfer.Options.SchemaQualifyForeignKeysReferences = true;
+            transfer.Options.ExtendedProperties = true;
+            transfer.Options.IncludeDatabaseRoleMemberships = true;
+            transfer.Options.Permissions = true;
+            transfer.PreserveDbo = true;
+
+            // generates script
+            return transfer.ScriptTransfer();
         }
     }
 }
