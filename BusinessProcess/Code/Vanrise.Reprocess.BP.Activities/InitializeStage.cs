@@ -19,8 +19,7 @@ namespace Vanrise.Reprocess.BP.Activities
         {
             ReprocessStage stage = this.Stage.Get(context.ActivityContext);
             Dictionary<string, object> initializationOutputByStage = this.InitializationOutputByStage.Get(context.ActivityContext);
-            long currentProcessId = context.ActivityContext.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? 
-                context.ActivityContext.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.ActivityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long currentProcessId = context.ActivityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 
             var initializatingContext = new ReprocessStageActivatorInitializingContext(currentProcessId);
             var initStageOutput = stage.Activator.InitializeStage(initializatingContext);
