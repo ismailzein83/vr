@@ -107,7 +107,10 @@
     <Compile Include="AccountManagerManager.cs" />
     <Compile Include="BECacheExpirationChecker.cs" />
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
+    <Compile Include="CarrierAccounts\CarrierAccountBE360DegreeNodeType.cs" />
     <Compile Include="CarrierProfiles\BaseCarrierProfileEventPayload.cs" />
+    <Compile Include="CarrierProfiles\CarrierProfileAccountsBE360DegreeNodeType.cs" />
+    <Compile Include="CarrierProfiles\CarrierProfileBE360DegreeNodeType.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="CarrierAccounts\CustomerGroupContext.cs" />
     <Compile Include="CarrierAccounts\SupplierGroupContext.cs" />
