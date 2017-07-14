@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -38,11 +39,24 @@ namespace Retail.BusinessEntity.Entities
             return true;
         }
 
+        public virtual bool TryConvertToBE360DegreeNode(IAccountViewDefinitionTryConvertToBE360DegreeNodeContext context)
+        {
+            return false;
+        }
     }
 
     public interface IAccountViewDefinitionCheckAccessContext
     {
         Guid AccountBEDefinitionId { get; }
         int UserId { get; }
+    }
+
+    public interface IAccountViewDefinitionTryConvertToBE360DegreeNodeContext
+    {
+        Guid AccountBEDefinitionId { get; }
+
+        long AccountId { get; }
+
+        BE360DegreeNode Node { set; }
     }
 }

@@ -147,6 +147,7 @@
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
+    <Compile Include="Extensions\AccountBE360DegreeNodeType.cs" />
     <Compile Include="Extensions\AccountBERuntimeSelectorFilter.cs" />
     <Compile Include="Extensions\AccountMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\DIDSynchronizer.cs" />

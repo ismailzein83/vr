@@ -263,7 +263,7 @@ namespace Retail.BusinessEntity.Business
                 case TargetType.Parent:
                     var parentAccount = GetParentAccount(account);
                     return new AccountConditionEvaluationContext { Account = parentAccount };
-                case TargetType.Self: 
+                case TargetType.Self:
                     return new AccountConditionEvaluationContext { Account = account };
             }
             return null;
@@ -366,7 +366,7 @@ namespace Retail.BusinessEntity.Business
             var companySettings = GetCompanySetting(accountId);
             return companySettings.BankDetails;
         }
-       
+
         public Account GetAccountBySourceId(Guid accountBEDefinitionId, string sourceId)
         {
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);
@@ -719,7 +719,7 @@ namespace Retail.BusinessEntity.Business
                 accountToInsert.StatusId = accountType.Settings.InitialStatusId;
             }
 
-            ValidateAccountToAdd(accountToInsert, donotValidateParent);            
+            ValidateAccountToAdd(accountToInsert, donotValidateParent);
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
 
@@ -999,8 +999,8 @@ namespace Retail.BusinessEntity.Business
             accountType.ThrowIfNull("accountType", account.TypeId);
             if (accountType.AccountBEDefinitionId != accountBEDefinitionId)
                 throw new DataIntegrityValidationException(string.Format("accountType.AccountBEDefinitionId '{0}' is different than passed accountBEDefinitionId '{1}'", accountType.AccountBEDefinitionId, accountBEDefinitionId));
-            
-            if(account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.Count > 0)
+
+            if (account.Settings != null && account.Settings.Parts != null && account.Settings.Parts.Count > 0)
             {
                 accountType.Settings.ThrowIfNull("accountType.Settings", accountType.AccountTypeId);
                 accountType.Settings.PartDefinitionSettings.ThrowIfNull("accountType.Settings.PartDefinitionSettings", accountType.AccountTypeId);
@@ -1033,9 +1033,9 @@ namespace Retail.BusinessEntity.Business
             {
                 account.Settings.ThrowIfNull("account.Settings");
                 account.Settings.Parts.ThrowIfNull("account.Settings.Parts");
-                foreach(var accountTypePart in accountType.Settings.PartDefinitionSettings)
+                foreach (var accountTypePart in accountType.Settings.PartDefinitionSettings)
                 {
-                    if(accountTypePart.RequiredSettings == AccountPartRequiredOptions.Required)
+                    if (accountTypePart.RequiredSettings == AccountPartRequiredOptions.Required)
                     {
                         if (!account.Settings.Parts.ContainsKey(accountTypePart.PartDefinitionId))
                             throw new Exception(String.Format("Part '{0}' is not supplied", accountTypePart.PartDefinitionId));
@@ -1149,6 +1149,8 @@ namespace Retail.BusinessEntity.Business
         private string BuildAccountFullName(Guid accountBEDefinitionId, long accountId, string name)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
+            if (account == null)
+                return null;
             name = string.Format("{0} -> {1}", account.Name, name);
             if (account.ParentAccountId.HasValue)
             {
@@ -1218,6 +1220,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
     }
 
+    
 
     internal class AccountTreeNode
     {
