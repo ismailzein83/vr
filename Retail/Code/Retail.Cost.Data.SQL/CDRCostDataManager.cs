@@ -33,7 +33,7 @@ namespace Retail.Cost.Data.SQL
         public HashSet<DateTime> GetDistinctDatesAfterId(long? cdrCostId)
         {
             HashSet<DateTime> distinctDates = new HashSet<DateTime>();
-            ExecuteReaderSPCmd("[Retail_CDR].[sp_CDRCost_UpadeOverridenAfterId]",
+            ExecuteReaderSPCmd("[Retail_CDR].[sp_CDRCost_GetDistinctDatesAfterId]",
                (reader) =>
                {
                    while (reader.Read())
@@ -45,7 +45,12 @@ namespace Retail.Cost.Data.SQL
                },
                (cmd) =>
                {
-                   cmd.Parameters.Add(new SqlParameter("@CDRCostId", cdrCostId));
+                   SqlParameter cdrCostIdParameter = new SqlParameter() { ParameterName = "@CDRCostId" };
+                   if (cdrCostId.HasValue)
+                       cdrCostIdParameter.Value = cdrCostId.Value;
+                   else
+                       cdrCostIdParameter.Value = DBNull.Value;
+                   cmd.Parameters.Add(cdrCostIdParameter);
                });
 
             return distinctDates.Count > 0 ? distinctDates : null;

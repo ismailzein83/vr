@@ -37,10 +37,10 @@ namespace Retail.Cost.Business
                 CDRCostRequest cdrCostRequest = new CDRCostRequest()
                 {
                     OriginalCDR = cdr,
-                    AttemptDateTime = cdr.GetFieldValue(attemptDateTimeFieldName),  // Vanrise.Common.Utilities.GetPropValueReader(AttemptDateTimeFieldName).GetPropertyValue(cdr),
-                    CGPN = cdr.GetFieldValue(cgpnFieldName),    //Vanrise.Common.Utilities.GetPropValueReader(CGPNFieldName).GetPropertyValue(cdr),
-                    CDPN = cdr.GetFieldValue(cdpnFieldName),    //Vanrise.Common.Utilities.GetPropValueReader(CDPNFieldName).GetPropertyValue(cdr),
-                    Duration = cdr.GetFieldValue(durationInSecondsFieldName)    //Vanrise.Common.Utilities.GetPropValueReader(durationInSecondsFieldName).GetPropertyValue(cdr)
+                    AttemptDateTime = cdr.GetFieldValue(attemptDateTimeFieldName),
+                    CGPN = cdr.GetFieldValue(cgpnFieldName),
+                    CDPN = cdr.GetFieldValue(cdpnFieldName),
+                    Duration = cdr.GetFieldValue(durationInSecondsFieldName)
                 };
 
                 cdrCostRequests.Add(cdrCostRequest);
@@ -96,7 +96,7 @@ namespace Retail.Cost.Business
                 if (cdrCostList == null || cdrCostList.Count == 0)
                     continue;
 
-                Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = null;
+                Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = BuildUniqueCDRCostKeysDict(cdrCostList);
                 foreach (CDRCostRequest cdrCostRequest in cdrCostBatchRequest.CDRCostRequests)
                 {
                     List<CDRCost> tempCDRCostList;
@@ -119,6 +119,20 @@ namespace Retail.Cost.Business
             }
         }
 
+        private Dictionary<UniqueCDRCostKeys, List<CDRCost>> BuildUniqueCDRCostKeysDict(List<CDRCost> cdrCostList)
+        {
+            Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = new Dictionary<UniqueCDRCostKeys,List<CDRCost>>();
+            
+            foreach(var cdrCost in cdrCostList)
+            {
+                UniqueCDRCostKeys uniqueCDRCostKey = new UniqueCDRCostKeys() { CDPN = cdrCost.CDPN, CGPN = cdrCost.CGPN };
+                List<CDRCost> cdrCosts = uniqueCDRCostKeysDict.GetOrCreateItem(uniqueCDRCostKey);
+                cdrCosts.Add(cdrCost);
+            }
+
+            return uniqueCDRCostKeysDict;
+        }
+
         private void FillCDRCostData(dynamic cdr, CDRCost cdrCost, CDRCostFieldNames cdrCostFieldNames)
         {
             if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
@@ -133,8 +147,8 @@ namespace Retail.Cost.Business
             if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
                 cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, cdrCost.CurrencyId);
 
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCDRId))
-                cdr.SetFieldValue(cdrCostFieldNames.CostCDRId, cdrCost.CDRCostId);
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
+                cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, cdrCost.CDRCostId);
         }
 
         private CDRCostRequest BuildCDRCostRequest(CDRCostRequest itm, TimeSpan attemptDateTimeOffset)
@@ -208,10 +222,10 @@ namespace Retail.Cost.Business
 
     public class CDRCostFieldNames
     {
-        public string CostAmount { get; set; }
-        public string CostRate { get; set; }
+        public string CDRCostId { get; set; }
         public string SupplierName { get; set; }
+        public string CostRate { get; set; }
+        public string CostAmount { get; set; }
         public string CostCurrency { get; set; }
-        public string CostCDRId { get; set; }
     }
 }
