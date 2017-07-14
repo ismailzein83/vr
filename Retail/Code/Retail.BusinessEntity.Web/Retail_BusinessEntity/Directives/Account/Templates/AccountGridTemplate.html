@@ -6,7 +6,7 @@
              pagingtype="'Pager'"
              menuactions="scopeModel.menuActions"
              idfield="AccountId"
-             defaultsortbyfieldname="'AccountId'" enableautoexport="true">
+             defaultsortbyfieldname="'AccountId'" enableautoexport="true" normalcell>
     <vr-datagridcolumn headertext="'ID'" field="'AccountId'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
 
