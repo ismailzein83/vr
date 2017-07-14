@@ -5,7 +5,7 @@
                 <vr-columns width="1/2row">
                     <vr-textbox value="scopeModel.header" label="Header" isrequired="true"></vr-textbox>
                 </vr-columns>
-                <vr-common-gridcolumnwidth-editor on-ready="scopeModel.onGridWidthFactorEditorReady"></vr-common-gridcolumnwidth-editor>
+                <vr-common-gridcolumnwidth-editor on-ready="scopeModel.onGridWidthFactorEditorReady" normal-col-num="6"></vr-common-gridcolumnwidth-editor>
                 <vr-columns width="1/2row">
                     <vr-select datasource="scopeModel.invoiceFields"
                                datatextfield="description"
@@ -24,6 +24,11 @@
                                entityname="Field Name"
                                isrequired="scopeModel.isCustomFieldRequired()">
                     </vr-select>
+                </vr-columns>
+                <vr-columns width="1/2row" ng-if="scopeModel.isCustomFieldRequired()">
+                    <vr-switch label="Use Description"
+                               value="scopeModel.useDescription"
+                    </vr-switch>
                 </vr-columns>
         </vr-row>
         </vr-form>

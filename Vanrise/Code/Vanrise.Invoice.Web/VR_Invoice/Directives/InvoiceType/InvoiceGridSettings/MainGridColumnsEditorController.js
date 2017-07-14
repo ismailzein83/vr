@@ -55,7 +55,8 @@
                     Header: $scope.scopeModel.header,
                     Field: $scope.scopeModel.selectedInvoiceField.value,
                     CustomFieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined,
-                    GridColumnSettings: gridWidthFactorEditorAPI.getData()
+                    GridColumnSettings: gridWidthFactorEditorAPI.getData(),
+                    UseDescription: $scope.scopeModel.isCustomFieldRequired() ?$scope.scopeModel.useDescription : undefined,
                 };
             }
 
@@ -95,6 +96,7 @@
                         $scope.scopeModel.header = columnEntity.Header;
                         $scope.scopeModel.selectedRecordField = UtilsService.getItemByVal($scope.scopeModel.recordFields, columnEntity.CustomFieldName, "FieldName");
                         $scope.scopeModel.selectedInvoiceField = UtilsService.getItemByVal($scope.scopeModel.invoiceFields, columnEntity.Field, "value");
+                        $scope.scopeModel.useDescription = columnEntity.UseDescription;
                     }
                 }
 

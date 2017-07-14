@@ -8,6 +8,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Business.Extensions;
 using Vanrise.Invoice.Data;
@@ -33,16 +34,20 @@ namespace Vanrise.Invoice.Business
         {
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(input.Query.InvoiceTypeId);
-
-            var bigResult = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler()) as Vanrise.Entities.BigResult<InvoiceDetail>;
-            if (!getClientInvoices && bigResult.Data != null && input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler());
+            if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-                foreach (var accountDetail in bigResult.Data)
+               var  bigResult = result as Vanrise.Entities.BigResult<InvoiceDetail>;
+               if (!getClientInvoices && bigResult.Data != null)
                 {
-                    InvoiceDetailMapper2(accountDetail, invoiceType);
+                    foreach (var accountDetail in bigResult.Data)
+                    {
+                        InvoiceDetailMapper2(accountDetail, invoiceType);
+                    }
                 }
+               return bigResult;
             }
-            return bigResult;
+            return result;
         }
         public Entities.Invoice GetInvoice(long invoiceId)
         {
@@ -505,11 +510,10 @@ namespace Vanrise.Invoice.Business
                         invoiceDetail.Items.Add(new InvoiceDetailObject
                         {
                             FieldName = field.Name,
-                            Description = description,
+                            Description = item.UseDescription ? description : fieldValue != null ? fieldValue.ToString() : null,
                             Value = fieldValue
                         });
                     }
-
                 }
             }
 
@@ -567,8 +571,153 @@ namespace Vanrise.Invoice.Business
                 IInvoiceDataManager _dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
                 return _dataManager.GetFilteredInvoices(input);
             }
+            protected override ResultProcessingHandler<InvoiceDetail> GetResultProcessingHandler(DataRetrievalInput<InvoiceQuery> input, BigResult<InvoiceDetail> bigResult)
+            {
+                return new ResultProcessingHandler<InvoiceDetail>
+                {
+                    ExportExcelHandler = new InvoiceExcelExportHandler(input.Query)
+                };
+            }
         }
+        private class InvoiceExcelExportHandler : ExcelExportHandler<InvoiceDetail>
+        {
+            InvoiceQuery _query;
+            public InvoiceExcelExportHandler(InvoiceQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<InvoiceDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Invoices",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType",_query.InvoiceTypeId);
+                invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
+                invoiceType.Settings.InvoiceGridSettings.ThrowIfNull("invoiceType.Settings.InvoiceGridSettings");
+                invoiceType.Settings.InvoiceGridSettings.MainGridColumns.ThrowIfNull("invoiceType.Settings.InvoiceGridSettings.MainGridColumns");
+                var dataRecordType = new DataRecordTypeManager().GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell {
+                Title = "Invoice ID"
+                });
 
+                foreach (var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
+                {
+                    ExportExcelHeaderCell cell = new ExportExcelHeaderCell
+                    {
+                        Title = gridColumn.Header,
+                    };
+
+                    switch (gridColumn.Field)
+                    {
+                        case InvoiceField.CreatedTime:
+                        case InvoiceField.FromDate:
+                        case InvoiceField.ToDate:
+                            cell.CellType = ExcelCellType.DateTime;
+                            cell.DateTimeType = DateTimeType.DateTime;
+                            break;
+                        case InvoiceField.DueDate:
+                        case InvoiceField.IssueDate:
+                            cell.CellType = ExcelCellType.DateTime;
+                            cell.DateTimeType = DateTimeType.Date;
+                            break;
+                        case InvoiceField.CustomField:
+                            foreach (var field in dataRecordType.Fields)
+                            {
+                                if (gridColumn.Field == InvoiceField.CustomField && gridColumn.CustomFieldName == field.Name)
+                                {
+
+                                    var dateTimeFieldType = field.Type as FieldDateTimeType;
+                                    if (dateTimeFieldType != null)
+                                    {
+                                        cell.CellType = ExcelCellType.DateTime;
+                                        cell.DateTimeType = DateTimeType.Date;
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                    sheet.Header.Cells.Add(cell);
+
+                }
+
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    var results = context.BigResult as BigResult<InvoiceDetail>;
+
+                    if (results != null && results.Data != null)
+                    {
+                        sheet.Rows = new List<ExportExcelRow>();
+                        foreach(var item in results.Data)
+                        {
+
+
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell { Value = item.Entity.InvoiceId });
+                            foreach (var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
+                            {
+                                dynamic value = null;
+                                switch (gridColumn.Field)
+                                {
+                                    case InvoiceField.CreatedTime: value = item.Entity.CreatedTime;
+                                        break;
+
+                                    case InvoiceField.DueDate: value = item.Entity.DueDate;
+                                        break;
+                                    case InvoiceField.FromDate: value = item.Entity.FromDate;
+                                        break;
+                                    case InvoiceField.InvoiceId: value = item.Entity.InvoiceId;
+                                        break;
+                                    case InvoiceField.IssueDate: value = item.Entity.IssueDate;
+                                        break;
+                                    case InvoiceField.Lock: value = item.Lock;
+                                        break;
+                                    case InvoiceField.Note: value = item.Entity.Note;
+                                        break;
+                                    case InvoiceField.Paid: value = item.Paid;
+                                        break;
+                                    case InvoiceField.Partner: value = item.PartnerName;
+                                        break;
+                                    case InvoiceField.SerialNumber: value = item.Entity.SerialNumber;
+                                        break;
+                                    case InvoiceField.TimeZone: value = item.TimeZoneName;
+                                        break;
+                                    case InvoiceField.TimeZoneOffset: value = item.Entity.TimeZoneOffset;
+                                        break;
+                                    case InvoiceField.ToDate: value = item.Entity.ToDate;
+                                        break;
+                                    case InvoiceField.UserId: value = item.UserName;
+                                        break;
+                                    case InvoiceField.CustomField:
+                                        foreach (var field in dataRecordType.Fields)
+                                        {
+                                            if (gridColumn.Field == InvoiceField.CustomField && gridColumn.CustomFieldName == field.Name)
+                                            {
+                                                var fieldValue = Utilities.GetPropValueReader(gridColumn.CustomFieldName).GetPropertyValue(item.Entity.Details);
+                                                string description = fieldValue != null ? field.Type.GetDescription(fieldValue) : null;
+                                                value = gridColumn.UseDescription ? description : fieldValue;
+                                                 
+                                            }
+                                        }
+                                        break;
+
+                                }
+                                row.Cells.Add(new ExportExcelCell { Value = value });
+                            
+                            }
+                             sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
 
         #endregion
 

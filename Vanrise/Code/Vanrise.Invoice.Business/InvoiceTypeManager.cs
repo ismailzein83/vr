@@ -84,7 +84,8 @@ namespace Vanrise.Invoice.Business
                     Field = gridColumn.Field,
                     Header = gridColumn.Header,
                     WidthFactor = widthFactor,
-                    FixedWidth = fixedWidth
+                    FixedWidth = fixedWidth,
+                    UseDescription = gridColumn.UseDescription
                 });
             }
             invoiceTypeRuntime.InvoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();

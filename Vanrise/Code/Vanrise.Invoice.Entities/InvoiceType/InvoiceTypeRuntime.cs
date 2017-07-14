@@ -21,5 +21,6 @@ namespace Vanrise.Invoice.Entities
         public InvoiceField Field { get; set; }
         public string CustomFieldName { get; set; }
         public GridColumnAttribute Attribute { get; set; }
+        public bool UseDescription { get; set; }
     }
 }

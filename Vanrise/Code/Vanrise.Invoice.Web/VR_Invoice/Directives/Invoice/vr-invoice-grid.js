@@ -136,7 +136,13 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     for (var j = 0; j < dataItem.Items.length; j++) {
                                         var item = dataItem.Items[j];
                                         if (item.FieldName == mainGridColumn.CustomFieldName) {
-                                            field = "Items[" + j + "].Description";
+                                            if (mainGridColumn.UseDescription)
+                                            {
+                                                field = "Items[" + j + "].Description";
+                                            }else
+                                            {
+                                                field = "Items[" + j + "].Value";
+                                            }
                                         }
                                     }
                                 }
