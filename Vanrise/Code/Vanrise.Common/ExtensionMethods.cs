@@ -465,6 +465,14 @@ namespace Vanrise.Common
             return castedObject;
         }
 
+        public static T CastWithValidateStruct<T>(this Object obj, string objectName) where T : struct
+        {
+            if(!(obj is T))
+                throw new Exception(String.Format("{0} '{1}' is not of type {2}. it is of type {3}", objectName, obj, typeof(T), obj.GetType()));
+            T castedObject = (T)obj;
+            return castedObject;
+        }
+
         public static void SkipBytes(this Stream stream, int numberOfBytes)
         {
             stream.Seek(numberOfBytes, SeekOrigin.Current);

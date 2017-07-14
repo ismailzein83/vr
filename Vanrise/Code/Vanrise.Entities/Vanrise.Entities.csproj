@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BE360Degree\BE360DegreeNode.cs" />
+    <Compile Include="BE360Degree\BE360DegreeNodeType.cs" />
     <Compile Include="BigData\BigDataService.cs" />
     <Compile Include="CacheRefreshHandle.cs" />
     <Compile Include="City\CityInfo.cs" />
