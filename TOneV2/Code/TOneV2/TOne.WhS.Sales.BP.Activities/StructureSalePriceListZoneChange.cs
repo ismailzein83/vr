@@ -379,7 +379,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             ZoneName = zoneName,
                             Rate = zoneRate.Rate.Rate,
                             ChangeType = RateChangeType.New,
-                            BED = countryToAdd.BED,
+                            BED = countryToAdd.BED > zoneRate.Rate.BED ? countryToAdd.BED : zoneRate.Rate.BED,
                             CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                         });
 
@@ -763,7 +763,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 foreach (var zone in countryExistingZones)
                 {
-                    if (zone.IsInTimeRange(countryToAdd.BED))
+                    if (zone.IsInTimeRange(countryToAdd.BED) || zone.BED > countryToAdd.BED)
                     {
                         List<long> zoneIds = info.CountriesToAddExistingZoneIdsByCountryId.GetOrCreateItem(countryToAdd.CountryId);
                         zoneIds.Add(zone.SaleZoneId);
