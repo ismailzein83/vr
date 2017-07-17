@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -16,6 +17,19 @@ namespace Retail.BusinessEntity.Business
         static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
       
         #region Public Methods
+
+        public void UpdateAccountStatus(Guid accountDefinitionId, long accountId)
+        {
+            AccountBEFinancialAccountsSettings accountFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountDefinitionId, accountId);
+            if (accountFinancialAccountsSettings != null && accountFinancialAccountsSettings.FinancialAccounts != null)
+            {
+                foreach (var financialAccount in accountFinancialAccountsSettings.FinancialAccounts)
+                {
+                    UpdateAccountStatus(accountDefinitionId, accountId, financialAccount);
+                }
+            }
+        }
+
         public IDataRetrievalResult<FinancialAccountDetail> GetFilteredFinancialAccounts(DataRetrievalInput<FinancialAccountQuery> input)
         {
             var cachedFinancialAccounts = GetFinancialAccounts(input.Query.AccountBEDefinitionId, input.Query.AccountId, false);
@@ -115,7 +129,7 @@ namespace Retail.BusinessEntity.Business
                 accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
                 if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
                 {
-                    UpdateVRInvoiceAccount(financialAccountToEdit.AccountId,financialAccountToEdit.AccountBEDefinitionId,financialAccountToEdit.FinancialAccount);
+                    UpdateAccountStatus(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount);
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
                 }
@@ -461,19 +475,26 @@ namespace Retail.BusinessEntity.Business
            return description.ToString();
         }
 
-        private bool UpdateVRInvoiceAccount(long accountId, Guid accountBEDefinitionId, FinancialAccount financialAccount)
+        private bool UpdateAccountStatus(Guid accountBEDefinitionId, long accountId, FinancialAccount financialAccount)
         {
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
             VRAccountStatus vrAccountStatus = VRAccountStatus.InActive;
             if(s_accountManager.IsAccountActive(accountBEDefinitionId, accountId))
                 vrAccountStatus = VRAccountStatus.InActive;
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+            var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
+            var result = false;
             if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
             {
-                var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
-                return invoiceAccountManager.TryUpdateInvoiceAccount(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId, financialAccount.BED, financialAccount.EED, vrAccountStatus, false);
+              result= invoiceAccountManager.TryUpdateInvoiceAccount(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId, financialAccount.BED, financialAccount.EED, vrAccountStatus, false);
+              
             }
-            return false;
+            if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
+            {
+               result = new LiveBalanceManager().TryUpdateLiveBalanceStatus(financialAccountId, financialAccountDefinitionSettings.BalanceAccountTypeId.Value, financialAccount.BED, financialAccount.EED, vrAccountStatus, false);
+            }
+
+            return result;
         }
         #endregion
 

@@ -193,6 +193,8 @@ namespace Retail.BusinessEntity.Business
             Account account;
             if (TryUpdateAccount(accountToEdit, out account))
             {
+                FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                financialAccountManager.UpdateAccountStatus(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AccountDetailMapper(account);
             }
@@ -560,7 +562,15 @@ namespace Retail.BusinessEntity.Business
         }
         public bool IsAccountActive(Guid accountBEDefinitionId, long accountId)
         {
-            return true;
+
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+            var accountStatusDefinition = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinition(account.StatusId);
+            accountStatusDefinition.ThrowIfNull("accountStatusDefinition", account.StatusId);
+            accountStatusDefinition.Settings.ThrowIfNull("account.Settings");
+            if (accountStatusDefinition.Settings.IsActive)
+                return true;
+            return false;
         }
 
         #endregion

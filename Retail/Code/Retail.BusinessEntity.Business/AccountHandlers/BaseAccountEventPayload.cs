@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Retail.BusinessEntity.Business.AccountHandlers
+namespace Retail.BusinessEntity.Business
 {
     public abstract class BaseAccountEventPayload : VREventPayload
     {
@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.Business.AccountHandlers
         public const string S_EventType = "StatusChanged";
         public override string GetEventType()
         {
-            return S_EventType;
+            return string.Format("{0}_{1}",S_EventType,this.AccountBEDefinitionId);
         }
     }
     public abstract class BaseAccountEventHandler : VREventHandlerExtendedSettings
