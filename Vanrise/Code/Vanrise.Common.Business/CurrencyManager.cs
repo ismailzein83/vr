@@ -49,6 +49,12 @@ namespace Vanrise.Common.Business
             return GetCurrency(currencyId, false);
         }
 
+        public Currency GetCurrencyBySymbol(string currencySymbol)
+        {
+            var currencies = GetCachedCurrenciesBySymbol();
+            return currencies.GetRecord(currencySymbol);
+        }
+
         public Currency GetCurrencyBySourceId(string sourceId)
         {
             return GetCachedCurrenciesBySourceId().GetRecord(sourceId);
@@ -99,6 +105,17 @@ namespace Vanrise.Common.Business
                     return GetCachedCurrencies().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
                 });
         }
+
+
+        public Dictionary<string, Currency> GetCachedCurrenciesBySymbol()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCurrenciesBySymbol",
+                () =>
+                {
+                    return GetCachedCurrencies().Where(v => !string.IsNullOrEmpty(v.Value.Symbol)).ToDictionary(kvp => kvp.Value.Symbol, kvp => kvp.Value);
+                });
+        }
+
         public Vanrise.Entities.InsertOperationOutput<CurrencyDetail> AddCurrency(Currency currency)
         {
             Vanrise.Entities.InsertOperationOutput<CurrencyDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CurrencyDetail>();

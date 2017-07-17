@@ -10,7 +10,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             ismultipleselection: "@",
             hideselectedvaluessection: '@',
             onselectionchanged: '=',
-            isrequired: '@',
+            isrequired: "=",
             isdisabled: "=",
             selectedvalues: "=",
             showaddbutton: '@',
@@ -68,7 +68,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem"'
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem"'
                + 'entityname="Type" ' + label + '></vr-select>';
 
     }
