@@ -99,6 +99,7 @@
                 $scope.scopeModel.name = statusDefinitionEntity.Name;
                 $scope.scopeModel.HasInitialCharge = statusDefinitionEntity.Settings.HasInitialCharge;
                 $scope.scopeModel.HasRecurringCharge = statusDefinitionEntity.Settings.HasRecurringCharge;
+                $scope.scopeModel.isActive = statusDefinitionEntity.Settings.IsActive;
             }
             function loadStyleDefinitionSelector() {
                 var styleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -170,7 +171,8 @@
             var settings = {
                 StyleDefinitionId: styleDefinitionAPI.getSelectedIds(),
                 HasInitialCharge: $scope.scopeModel.HasInitialCharge,
-                HasRecurringCharge: $scope.scopeModel.HasRecurringCharge
+                HasRecurringCharge: $scope.scopeModel.HasRecurringCharge,
+                IsActive: $scope.scopeModel.isActive
             };
             return {
                 StatusDefinitionId: statusDefinitionEntity != undefined ? statusDefinitionEntity.StatusDefinitionId : undefined,

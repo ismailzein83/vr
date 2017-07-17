@@ -68,7 +68,8 @@ namespace Vanrise.AccountBalance.Business
 
         public bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
         {
-            return false;
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            return dataManager.TryUpdateLiveBalanceStatus(accountId, accountTypeId, bed, eed, status, isDeleted);
         }
 
         #region Private Classes

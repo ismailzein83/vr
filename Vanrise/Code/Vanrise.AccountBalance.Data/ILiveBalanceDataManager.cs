@@ -22,5 +22,6 @@ namespace Vanrise.AccountBalance.Data
         void GetLiveBalancesToAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
         void GetLiveBalancesToClearAlert(Guid accountTypeId, Action<LiveBalance> onLiveBalanceReady);
         bool CheckIfAccountHasTransactions(Guid accountTypeId, String accountId);
+        bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted);
     }
 }

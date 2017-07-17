@@ -21,5 +21,6 @@ namespace Vanrise.Entities
         public bool HasInitialCharge { get; set; }
 
         public bool HasRecurringCharge { get; set; }
+        public bool IsActive { get; set; }
     }
 }

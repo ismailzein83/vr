@@ -186,7 +186,10 @@ namespace Vanrise.AccountBalance.Data.SQL
             ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_CheckIfHasTransactions]", out hasTransactions, accountTypeId, accountId);
             return (bool)hasTransactions;
         }
-
+        public bool TryUpdateLiveBalanceStatus(string accountId, Guid accountTypeId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_TryUpdateStatus]", accountId, accountTypeId, bed, eed, status, isDeleted) > 0);
+        }
         #endregion
 
         #region Mappers
@@ -361,5 +364,8 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
 
         #endregion
+
+
+      
     }
 }
