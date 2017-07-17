@@ -1,16 +1,21 @@
 ﻿<vr-tabs>
     <vr-tab header="'Cost Technical'">
         <vr-columns width="1/2row">
-            <reprocess-reprocessdefinition-selector on-ready="scopeModel.onReprocessDefinitionSelectorReady" isrequired="true"></reprocess-reprocessdefinition-selector>
+            <vr-switch value="scopeModel.isCostIncluded" label="Cost Included"></vr-switch>
         </vr-columns>
 
-        <reprocess-chunktime-selector on-ready="scopeModel.onChunkTimeSelectorReady" isrequired="true" normal-col-num="6"></reprocess-chunktime-selector>
+
+        <vr-columns width="1/2row">
+            <reprocess-reprocessdefinition-selector on-ready="scopeModel.onReprocessDefinitionSelectorReady" isrequired="scopeModel.isCostIncluded"></reprocess-reprocessdefinition-selector>
+        </vr-columns>
+
+        <reprocess-chunktime-selector on-ready="scopeModel.onChunkTimeSelectorReady" isrequired="scopeModel.isCostIncluded" normal-col-num="6"></reprocess-chunktime-selector>
 
         <vr-columns width="1/2row">
             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
                                                     selectedvalues="scopeModel.selectedDataRecordType"
                                                     onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"
-                                                    isrequired="true" label="Record Type" hideremoveicon>
+                                                    isrequired="scopeModel.isCostIncluded" label="Record Type" hideremoveicon>
             </vr-genericdata-datarecordtype-selector>
         </vr-columns>
 

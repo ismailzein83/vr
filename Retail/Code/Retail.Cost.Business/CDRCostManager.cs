@@ -1,11 +1,11 @@
-﻿using Retail.Cost.Data;
-using Retail.Cost.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Retail.Cost.Data;
+using Retail.Cost.Entities;
 
 namespace Retail.Cost.Business
 {
@@ -21,15 +21,23 @@ namespace Retail.Cost.Business
             if (cdrCostFieldNames == null)
                 return;
 
+            CDRCostTechnicalSettingData cdrCostTechnicalSettingData = new ConfigManager().GetCDRCostTechnicalSettingData();
+            if (!cdrCostTechnicalSettingData.IsCostIncluded)
+                return;
+
             RecordFilterManager recordFilterManager = new RecordFilterManager();
-            ConfigManager configManager = new ConfigManager();
-            RecordFilterGroup recordFilterGroup = configManager.GetRecordFilterGroup();
-            Guid dataRecordTypeId = configManager.GetDataRecordTypeId();
+            RecordFilterGroup recordFilterGroup = cdrCostTechnicalSettingData.FilterGroup;
+
+            if (!cdrCostTechnicalSettingData.DataRecordTypeId.HasValue)
+                throw new NullReferenceException("cdrCostTechnicalSettingData.DataRecordTypeId");
+
+            Guid dataRecordTypeId = cdrCostTechnicalSettingData.DataRecordTypeId.Value;
 
             List<CDRCostRequest> cdrCostRequests = new List<CDRCostRequest>();
 
             foreach (var cdr in cdrs)
             {
+                RemoveCDRCostData(cdr, cdrCostFieldNames);
                 DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, dataRecordTypeId);
                 if (!recordFilterManager.IsFilterGroupMatch(recordFilterGroup, filterContext))
                     continue;
@@ -121,9 +129,9 @@ namespace Retail.Cost.Business
 
         private Dictionary<UniqueCDRCostKeys, List<CDRCost>> BuildUniqueCDRCostKeysDict(List<CDRCost> cdrCostList)
         {
-            Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = new Dictionary<UniqueCDRCostKeys,List<CDRCost>>();
-            
-            foreach(var cdrCost in cdrCostList)
+            Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = new Dictionary<UniqueCDRCostKeys, List<CDRCost>>();
+
+            foreach (var cdrCost in cdrCostList)
             {
                 UniqueCDRCostKeys uniqueCDRCostKey = new UniqueCDRCostKeys() { CDPN = cdrCost.CDPN, CGPN = cdrCost.CGPN };
                 List<CDRCost> cdrCosts = uniqueCDRCostKeysDict.GetOrCreateItem(uniqueCDRCostKey);
@@ -149,6 +157,24 @@ namespace Retail.Cost.Business
 
             if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
                 cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, cdrCost.CDRCostId);
+        }
+
+        private void RemoveCDRCostData(dynamic cdr, CDRCostFieldNames cdrCostFieldNames)
+        {
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
+                cdr.SetFieldValue(cdrCostFieldNames.CostAmount, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
+                cdr.SetFieldValue(cdrCostFieldNames.CostRate, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.SupplierName))
+                cdr.SetFieldValue(cdrCostFieldNames.SupplierName, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
+                cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
+                cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, null);
         }
 
         private CDRCostRequest BuildCDRCostRequest(CDRCostRequest itm, TimeSpan attemptDateTimeOffset)

@@ -104,6 +104,7 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                             chunkTime = costTechnicalSettingData.ChunkTime;
                             dataRecordTypeId = costTechnicalSettingData.DataRecordTypeId;
                             filterGroup = costTechnicalSettingData.FilterGroup;
+                            $scope.scopeModel.isCostIncluded = costTechnicalSettingData.IsCostIncluded;
                         }
                     }
 
@@ -202,7 +203,8 @@ app.directive('retailCostCdrcosttechnicalsettingsEditor', ['UtilsService', 'VRUI
                         CostCDRReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
                         ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                        FilterGroup: recordFilterDirectiveAPI.getData().filterObj
+                        FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
+                        IsCostIncluded: $scope.scopeModel.isCostIncluded
                     };
 
                     return data;

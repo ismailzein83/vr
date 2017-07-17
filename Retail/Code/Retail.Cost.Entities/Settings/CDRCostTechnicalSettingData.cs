@@ -8,14 +8,16 @@ using Vanrise.Reprocess.Entities;
 
 namespace Retail.Cost.Entities
 {
-    public class CDRCostTechnicalSettingData : Vanrise.Entities.SettingData 
+    public class CDRCostTechnicalSettingData : Vanrise.Entities.SettingData
     {
-        public Guid CostCDRReprocessDefinitionId { get; set; }
+        public bool IsCostIncluded { get; set; }
 
-        public ReprocessChunkTimeEnum ChunkTime { get; set; }
+        public Guid? CostCDRReprocessDefinitionId { get; set; }
 
-        public Guid DataRecordTypeId { get; set; }
+        public ReprocessChunkTimeEnum? ChunkTime { get; set; }
+
+        public Guid? DataRecordTypeId { get; set; }
 
         public RecordFilterGroup FilterGroup { get; set; }
-    }  
+    }
 }
