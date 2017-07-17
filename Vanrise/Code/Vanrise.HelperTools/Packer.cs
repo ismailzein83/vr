@@ -714,8 +714,8 @@ namespace Dean.Edwards
                 }
             }
 
-            DisplayProgressBar(lstDBs.Count);
-
+            DisplayProgressBar(3);
+            pBar1.PerformStep();
             //foreach (string item in lstDBs)
             //{
             //    GenerateSQLDBScript(item, sqlFilesOutputPath, currentDate, currentDateShort);
@@ -725,6 +725,8 @@ namespace Dean.Edwards
             {
                 GenerateSQLDBScript(item, sqlFilesOutputPath, currentDate, currentDateShort);
             });
+
+            pBar1.PerformStep();
         }
 
         private void DisplayProgressBar(int maximum)

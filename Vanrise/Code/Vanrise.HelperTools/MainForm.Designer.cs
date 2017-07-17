@@ -70,7 +70,7 @@
             this.CompressJS.Name = "CompressJS";
             this.CompressJS.Size = new System.Drawing.Size(140, 23);
             this.CompressJS.TabIndex = 3;
-            this.CompressJS.Text = "Compress Javascript";
+            this.CompressJS.Text = "Compress / Generate";
             this.CompressJS.UseVisualStyleBackColor = true;
             this.CompressJS.Click += new System.EventHandler(this.CompressJS_Click);
             // 
