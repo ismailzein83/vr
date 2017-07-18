@@ -395,6 +395,28 @@ namespace Vanrise.Common
             return Vanrise.Common.Serializer.Deserialize<T>(Vanrise.Common.Serializer.Serialize(obj));
         }
 
+        public static decimal? SumOfNullables(decimal? firstNumber, decimal? secondNumber)
+        {
+            if (!firstNumber.HasValue)
+                return secondNumber;
+
+            if (!secondNumber.HasValue)
+                return firstNumber;
+
+            return firstNumber + secondNumber;
+        }
+
+        public static int? SumOfNullables(int? firstNumber, int? secondNumber)
+        {
+            if (!firstNumber.HasValue)
+                return secondNumber;
+
+            if (!secondNumber.HasValue)
+                return firstNumber;
+
+            return firstNumber + secondNumber;
+        }
+
         public static IEnumerable<R> MergeUnionWithQForce<T, Q, R>(List<T> Tlist, List<Q> Qlist, Action<T, R> mapTtoR, Action<Q, R> mapQtoR)
             where T : class, IDateEffectiveSettingsEditable
             where Q : class, IDateEffectiveSettingsEditable
