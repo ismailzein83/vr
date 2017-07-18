@@ -3383,8 +3383,13 @@ vr-overall-widget  .list-group-item {
     text-overflow:ellipsis;
     white-space: nowrap;
     overflow-x:hidden;
+    transition: all .2s ease-in-out;
 }
-
+.vr-toolbox .item:hover{
+    border-color: gray;
+    font-weight:bold;
+    transform: scale(1.1);
+}
 .vr-toolbox .item .icon > div{
     display:inline-block;
     padding-right: 2px;
