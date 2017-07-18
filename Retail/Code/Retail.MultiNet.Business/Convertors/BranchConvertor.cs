@@ -33,11 +33,47 @@ namespace Retail.MultiNet.Business.Convertors
         public Guid InitialStatusId { get; set; }
         public Guid CompanyProfilePartDefinitionId { get; set; }
         public Guid BranchInfoPartDefinitionId { get; set; }
+
+        #region Branche Columns 
         public string BranchIdColumnName { get; set; }
         public string CompanyIdColumnName { get; set; }
+        public string AccountHolderColumnName { get; set; }
+        public string AccountStateColumnName { get; set; }
+        public string InsertDateColumnName { get; set; }
+        public string BranchCodeColumnName { get; set; }
+        public string ContractRefNoColumnName { get; set;}
+        public string CurrencyIdColumnName { get; set; }
+        public string EmailColumnName { get; set; }
+        public string ActivationDateColumnName { get; set; }
+
+        #endregion
+
+        #region Address Columns
+        public string SmaOwnerIdColumnName { get; set; }
+        public string SmaAddressColumnName { get; set; }
+        public string AtTypeIdColumnName { get; set; }
+
+        #endregion
+
+
+        #region Phone Numbers Columns
+        public string SmpOwnerIdColumnName { get; set; }
+        public string PhoneTypeColumnName { get; set; }
+        public string SmpPhoneNumberColumnName { get; set; }
+       
+        #endregion
+
+        #region Identity Columns
+        public string IdentityIdColumnName { get; set; }
+        public string SmniOwnerIdColumnName { get; set; }
+        public string SmniValueColumnName { get; set; }
+
+        #endregion
+
         public Guid FinancialPartDefinitionId { get; set; }
         public Guid FinancialAccountDefinitionId { get; set; }
         public int CreditClassId { get; set; }
+
         #endregion
 
         #region Cstr
@@ -84,7 +120,7 @@ namespace Retail.MultiNet.Business.Convertors
                 ITargetBE targetMultiNetAccount;
                 var sourceId = (Int64)row[BranchIdColumnName];
                 var parentId = string.Format("Company_{0}", (Int64)row[CompanyIdColumnName]);
-                string accountName = row["AC_ACCTHOLDERNAME"] as string;
+                string accountName = row[AccountHolderColumnName] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
                     try
@@ -99,9 +135,9 @@ namespace Retail.MultiNet.Business.Convertors
                         {
                             accountData.Account.ParentAccountId = parentAccount.AccountId;
                         }
-                        int state = (int)row["AS_ACCTSTATEID"];
+                        int state = (int)row[AccountStateColumnName];
                         accountData.Account.Name = accountName;
-                        accountData.Account.CreatedTime = row["SU_INSERTDATE"] != DBNull.Value ? (DateTime)row["SU_INSERTDATE"] : default(DateTime);
+                        accountData.Account.CreatedTime = row[InsertDateColumnName] != DBNull.Value ? (DateTime)row[InsertDateColumnName] : default(DateTime);
                         accountData.Account.SourceId = string.Format("Branch_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         Guid statusId = accountsInitializationData.Statuses.GetOrCreateItem(state, () => this.InitialStatusId);
@@ -176,8 +212,8 @@ namespace Retail.MultiNet.Business.Convertors
         {
             MultiNetBranchExtendedInfo settings = new MultiNetBranchExtendedInfo
             {
-                BranchCode = row["AC_BRANCHCODE"] as string,
-                ContractReferenceNumber = row["AC_CONTRACTREFNO"] as string
+                BranchCode = row[BranchCodeColumnName] as string,
+                ContractReferenceNumber = row[ContractRefNoColumnName] as string
             };
 
             FillBranchExtendedSettingAddresses(addresses, settings);
@@ -193,7 +229,7 @@ namespace Retail.MultiNet.Business.Convertors
         void FillFinancialInfo(SourceAccountData accountData, DataRow row)
         {
             CurrencyManager currencyManager = new CurrencyManager();
-            Currency currency = currencyManager.GetCurrencyBySourceId(((int)row["C_CURRENCYID"]).ToString());
+            Currency currency = currencyManager.GetCurrencyBySourceId(((int)row[CurrencyIdColumnName]).ToString());
 
             accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
             {
@@ -291,7 +327,7 @@ namespace Retail.MultiNet.Business.Convertors
 
             contacts.Add("Main", new AccountCompanyContact
             {
-                Email = row["AC_EMAIL"] as string,
+                Email = row[EmailColumnName] as string,
             });
 
             return contacts;
@@ -310,13 +346,13 @@ namespace Retail.MultiNet.Business.Convertors
 
             foreach (DataRow row in dataTable.Rows)
             {
-                int branchId = (int)row["SMP_OWNERID"];
-                NumberType numberType = (NumberType)row["Type"];
+                int branchId = (int)row[SmpOwnerIdColumnName];
+                NumberType numberType = (NumberType)row[PhoneTypeColumnName];
                 Dictionary<NumberType, List<AccountNumber>> dicNumbers = numbers.GetOrCreateItem(branchId, () => new Dictionary<NumberType, List<AccountNumber>>());
                 List<AccountNumber> lstnumbers = dicNumbers.GetOrCreateItem(numberType, () => new List<AccountNumber>());
                 lstnumbers.Add(new AccountNumber
                 {
-                    Number = row["SMP_PHONENUMBER"] as string,
+                    Number = row[SmpPhoneNumberColumnName] as string,
                     BranchId = branchId,
                     Type = numberType
                 });
@@ -328,13 +364,13 @@ namespace Retail.MultiNet.Business.Convertors
             Dictionary<long, List<BranchAddress>> addresses = new Dictionary<long, List<BranchAddress>>();
             foreach (DataRow row in dataTable.Rows)
             {
-                int branchId = (int)row["SMA_OWNERID"];
+                int branchId = (int)row[SmaOwnerIdColumnName];
                 List<BranchAddress> lstAddresses = addresses.GetOrCreateItem(branchId, () => new List<BranchAddress>());
                 lstAddresses.Add(new BranchAddress
                 {
-                    Address = row["SMA_ADDRESS"] as string,
+                    Address = row[SmaAddressColumnName] as string,
                     BranchId = branchId,
-                    Type = (AddressType)row["AT_TYPEID_1"],
+                    Type = (AddressType)row[AtTypeIdColumnName],
                     CityId = row["CI_CITYID"] == DBNull.Value ? null : (int?)row["CI_CITYID"]
                 });
             }
@@ -347,13 +383,13 @@ namespace Retail.MultiNet.Business.Convertors
 
             foreach (DataRow row in dataTable.Rows)
             {
-                IdentityType identityType = (IdentityType)row["NI_IDENTITYID"];
-                int branchId = (int)row["SMNI_OWNERID"];
+                IdentityType identityType = (IdentityType)row[IdentityIdColumnName];
+                int branchId = (int)row[SmniOwnerIdColumnName];
                 List<Identity> lstIdentities = identities.GetOrCreateItem(branchId, () => new List<Identity>());
 
                 lstIdentities.Add(new Identity
                 {
-                    Value = row["SMNI_VALUE"] as string,
+                    Value = row[SmniValueColumnName] as string,
                     BranchId = branchId,
                     Type = identityType
                 });
@@ -363,9 +399,9 @@ namespace Retail.MultiNet.Business.Convertors
         }
         void CreateFinancialAccount(Account account, DataRow row)
         {
-            if (row["AC_ACTIVATIONDATE"] != DBNull.Value)
+            if (row[ActivationDateColumnName] != DBNull.Value)
             {
-                DateTime bed = (DateTime)row["AC_ACTIVATIONDATE"];
+                DateTime bed = (DateTime)row[ActivationDateColumnName];
                 FinancialAccount financialAccount = new FinancialAccount
                 {
                     FinancialAccountDefinitionId = this.FinancialAccountDefinitionId,

@@ -55,25 +55,12 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.cNIC = payload.partSettings.CNIC;
                     $scope.scopeModel.nTN = payload.partSettings.NTN;
-                    $scope.scopeModel.passportNumber = payload.partSettings.PassportNumber;
-                    $scope.scopeModel.assignedNumber = payload.partSettings.AssignedNumber;
-                    $scope.scopeModel.inventoryDetails = payload.partSettings.InventoryDetails;
                     $scope.scopeModel.gPSiteID = payload.partSettings.GPSiteID;
                 }
 
-                promises.push(loadAddressTypeSelector());
                 promises.push(loadAccountTypeSelector());
 
-                function loadAddressTypeSelector() {
-                    var addressSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    addressTypeSelectorReadyDeferred.promise.then(function () {
-                        var selectorPayload = {
-                            selectedIds: payload != undefined && payload.partSettings != undefined ? payload.partSettings.AddressType : undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(addressTypeAPI, selectorPayload, addressSelectorLoadDeferred);
-                    });
-                    return addressSelectorLoadDeferred.promise;
-                };
+               
 
                 function loadAccountTypeSelector() {
                     var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -94,10 +81,6 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     $type: 'Retail.MultiNet.Business.MultiNetCompanyExtendedInfo, Retail.MultiNet.Business',
                     CNIC: $scope.scopeModel.cNIC,
                     NTN: $scope.scopeModel.nTN,
-                    PassportNumber: $scope.scopeModel.passportNumber,
-                    AssignedNumber: $scope.scopeModel.assignedNumber,
-                    AddressType: addressTypeAPI.getSelectedIds(),
-                    InventoryDetails: $scope.scopeModel.inventoryDetails,
                     GPSiteID: $scope.scopeModel.gPSiteID,
                     AccountType: accountTypeAPI.getSelectedIds()
                 }

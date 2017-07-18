@@ -145,6 +145,23 @@ app.directive('retailMultinetBrancheConvertorEditor', ['UtilsService', 'VRUIUtil
 
                         $scope.scopeModel.branchColumnName = payload.BranchIdColumnName;
                         $scope.scopeModel.companyColumnName = payload.CompanyIdColumnName;
+                        $scope.scopeModel.accountHolderColumnName = payload.AccountHolderColumnName;
+                        $scope.scopeModel.accountStateColumnName = payload.AccountStateColumnName;
+                        $scope.scopeModel.insertDateColumnName = payload.InsertDateColumnName;
+                        $scope.scopeModel.branchCodeColumnName = payload.BranchCodeColumnName;
+                        $scope.scopeModel.contractRefNoColumnName = payload.ContractRefNoColumnName;
+                        $scope.scopeModel.currencyIdColumnName = payload.CurrencyIdColumnName;
+                        $scope.scopeModel.emailColumnName = payload.EmailColumnName;
+                        $scope.scopeModel.activationDateColumnName = payload.ActivationDateColumnName
+                        $scope.scopeModel.smaOwnerIdColumnName = payload.SmaOwnerIdColumnName;
+                        $scope.scopeModel.smaAddressColumnName = payload.SmaAddressColumnName;
+                        $scope.scopeModel.atTypeIdColumnName = payload.AtTypeIdColumnName;
+                        $scope.scopeModel.smpOwnerIdColumnName = payload.SmpOwnerIdColumnName;
+                        $scope.scopeModel.phoneTypeColumnName = payload.PhoneTypeColumnName;
+                        $scope.scopeModel.smpPhoneNumberColumnName = payload.SmpPhoneNumberColumnName
+                        $scope.scopeModel.identityIdColumnName = payload.IdentityIdColumnName;
+                        $scope.scopeModel.smniOwnerIdColumnName = payload.SmniOwnerIdColumnName;
+                        $scope.scopeModel.smniValueColumnName = payload.SmniValueColumnName;
 
 
                        
@@ -256,7 +273,26 @@ app.directive('retailMultinetBrancheConvertorEditor', ['UtilsService', 'VRUIUtil
                         FinancialPartDefinitionId: financialDefinitionSelectorAPI.getSelectedIds(),
                         BranchInfoPartDefinitionId: branchInfoDefinitionSelectorAPI.getSelectedIds(),
                         BranchIdColumnName: $scope.scopeModel.branchColumnName,
-                        CompanyIdColumnName: $scope.scopeModel.companyColumnName
+                        CompanyIdColumnName: $scope.scopeModel.companyColumnName,
+                        AccountHolderColumnName: $scope.scopeModel.accountHolderColumnName,
+                        AccountStateColumnName: $scope.scopeModel.accountStateColumnName,
+                        InsertDateColumnName: $scope.scopeModel.insertDateColumnName,
+                        BranchCodeColumnName: $scope.scopeModel.branchCodeColumnName,
+                        ContractRefNoColumnName: $scope.scopeModel.contractRefNoColumnName,
+                        CurrencyIdColumnName: $scope.scopeModel.currencyIdColumnName,
+                        EmailColumnName: $scope.scopeModel.emailColumnName,
+                        ActivationDateColumnName: $scope.scopeModel.activationDateColumnName,
+                        SmaOwnerIdColumnName: $scope.scopeModel.smaOwnerIdColumnName,
+                        SmaAddressColumnName: $scope.scopeModel.smaAddressColumnName,
+                        AtTypeIdColumnName: $scope.scopeModel.atTypeIdColumnName,
+                        SmpOwnerIdColumnName: $scope.scopeModel.smpOwnerIdColumnName,
+                        PhoneTypeColumnName: $scope.scopeModel.phoneTypeColumnName,
+                        SmpPhoneNumberColumnName: $scope.scopeModel.smpPhoneNumberColumnName,
+                        IdentityIdColumnName: $scope.scopeModel.identityIdColumnName,
+                        SmniOwnerIdColumnName: $scope.scopeModel.smniOwnerIdColumnName,
+                        SmniValueColumnName: $scope.scopeModel.smniValueColumnName
+
+
                     };
                     return data;
                 };

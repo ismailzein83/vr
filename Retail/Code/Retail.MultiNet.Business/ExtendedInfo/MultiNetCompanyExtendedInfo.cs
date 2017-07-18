@@ -19,13 +19,6 @@ namespace Retail.MultiNet.Business
 
         public string NTN { get; set; }
 
-        public string PassportNumber { get; set; }
-
-        public string AssignedNumber { get; set; }
-
-        public AddressType? AddressType { get; set; }
-
-        public string InventoryDetails { get; set; }
 
         public string GPSiteID { get; set; }
 
@@ -37,10 +30,6 @@ namespace Retail.MultiNet.Business
             {
                 case "CNIC": return this.CNIC;
                 case "NTN": return this.NTN;
-                case "PassportNumber": return this.PassportNumber;
-                case "AssignedNumber": return this.AssignedNumber;
-                case "AddressType": return this.AddressType;
-                case "InventoryDetails": return this.InventoryDetails;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;
                 default: return null;

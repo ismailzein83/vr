@@ -1,4 +1,4 @@
-﻿<vr-section header="Branche Definition">
+﻿<vr-section title="Branch Definition" >
     <vr-columns width="1/3row" vr-loader="scopeModel.isAccountTypeSelectorLoading">
         <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
                                                           onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
@@ -31,11 +31,70 @@
                                               normal-col-num="4"
                                               customlabel="Branche Info Part"
                                               isrequired="true">
-    </retail-be-accountpartdefinition-selector>
+    </retail-be-accountpartdefinition-selector>    
+</vr-section>
+<vr-section title="Branch Columns">
     <vr-columns width="1/3row">
         <vr-textbox value="scopeModel.branchColumnName" label="Branch ID Column Name" isrequired="true"></vr-textbox>
     </vr-columns>
     <vr-columns width="1/3row">
         <vr-textbox value="scopeModel.companyColumnName" label="Company ID Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.accountHolderColumnName" label="Account Holder Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.accountStateColumnName" label="Account State Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.insertDateColumnName" label="Insert Date Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.branchCodeColumnName" label="Branche Code Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.contractRefNoColumnName" label="Contract Ref No Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.currencyIdColumnName" label="Currency Id Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.emailColumnName" label="Email Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.activationDateColumnName" label="Activation Date Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>    
+</vr-section>
+<vr-section title="Address Columns">
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.smaOwnerIdColumnName" label="SMA Owner Id Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.smaAddressColumnName" label="SMA Address Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>   
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.atTypeIdColumnName" label="Type ID Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>   
+</vr-section>
+<vr-section title="Phone Numbers Columns">
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.smpOwnerIdColumnName" label="SMP Owner Id Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.phoneTypeColumnName" label="Phone Type Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.smpPhoneNumberColumnName" label="SMP Phone Number Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>
+<vr-section title="Identities Columns">
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.identityIdColumnName" label="Identity ID Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.smniOwnerIdColumnName" label="SMNI Owner ID Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.smniValueColumnName" label="SMNI Value Column Name" isrequired="true"></vr-textbox>
     </vr-columns>
 </vr-section>
