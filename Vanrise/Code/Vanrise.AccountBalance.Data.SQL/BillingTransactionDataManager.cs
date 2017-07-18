@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Data.SQL
 {
@@ -93,7 +94,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 transactionTypeIds = string.Join<Guid>(",", query.TransactionTypeIds);
 
 
-            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds, transactionTypeIds, query.AccountTypeId, query.FromTime, query.ToTime);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetFiltered]", BillingTransactionMapper, accountsIds, transactionTypeIds, query.AccountTypeId, query.FromTime, query.ToTime,query.Status,query.EffectiveDate,query.IsEffectiveInFuture);
         }
         public bool UpdateBillingTransactionBalanceStatus(IEnumerable<long> billingTransactionIds)
         {
@@ -174,9 +175,9 @@ namespace Vanrise.AccountBalance.Data.SQL
                 accountTypeIDs = string.Join<Guid>(",", accountTypeIds);
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetByPeriod]", BillingTransactionMapper, accountTypeIDs, accountsIDs, transactionTypeIDs, fromDate, toDate);
         }
-        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, string accountId)
+        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, string accountId, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
-            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetByAccount]", BillingTransactionMapper, accountTypeId, accountId);
+            return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetByAccount]", BillingTransactionMapper, accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
         }
         public IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionTypeIds, Guid accountTypeId)
         {

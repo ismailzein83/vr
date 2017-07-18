@@ -1,10 +1,13 @@
 ﻿<vr-panel ng-controller="VR_AccountBalance_AccountStatementManagementController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+        <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
             <vr-row removeline>
                 <vr-accountbalance-accounttype-selector ng-hide="scopeModel.hideAccountType" normal-col-num="2" on-ready="scopeModel.onAccountTypeSelectorReady" selectedvalues="scopeModel.accountType"
                                                         onselectionchanged="scopeModel.onAccountTypeSelectorSelectionChange" customlabel="Account Type"
                                                         isrequired="true" hideremoveicon></vr-accountbalance-accounttype-selector>
+
+                <vr-accountbalance-accountstatus-selector hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" onselectionchanged="scopeModel.onAccountStatusSelectionChanged" isrequired="true"></vr-accountbalance-accountstatus-selector>
+
                 <vr-accountbalance-account-selector on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" isrequired="true"></vr-accountbalance-account-selector>
                 <vr-columns width="normal" ng-show="scopeModel.accountType">
                     <vr-datetimepicker type="datetime" label="From" value="scopeModel.fromDate" isrequired="true"></vr-datetimepicker>
@@ -20,7 +23,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-accountbalance-accountstatement-grid ng-if="scopeModel.gridloadded" on-ready="scopeModel.onGridReady"></vr-accountbalance-accountstatement-grid>
+                <vr-accountbalance-accountstatement-grid  on-ready="scopeModel.onGridReady"></vr-accountbalance-accountstatement-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

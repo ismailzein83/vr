@@ -11,5 +11,8 @@ namespace Vanrise.AccountBalance.Entities
         public String AccountId { get; set; }
         public Guid AccountTypeId { get; set; }
         public DateTime FromDate { get; set; }
+        public Vanrise.Entities.VRAccountStatus? Status { get; set; }
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsEffectiveInFuture { get; set; }
     }
 }

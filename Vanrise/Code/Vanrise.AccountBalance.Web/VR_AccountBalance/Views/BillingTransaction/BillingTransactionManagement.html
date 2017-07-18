@@ -22,7 +22,10 @@
                 <span ng-show="scopeModel.accountType && advancedSelected">
                     <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onBillingTransactionTypeReady" ismultipleselection="true" normal-col-num="2"></vr-accountbalance-billingtransactiontype-selector>
                 </span>
-                <vr-accountbalance-account-selector ng-show="advancedSelected" on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
+
+                <vr-accountbalance-accountstatus-selector hideremoveicon ng-show="advancedSelected" on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-accountbalance-accountstatus-selector>
+
+                  <vr-accountbalance-account-selector ng-show="advancedSelected" on-ready="scopeModel.onAccountDirectiveReady" normal-col-num="2" ng-if="scopeModel.accountType!=undefined" ismultipleselection></vr-accountbalance-account-selector>
             </vr-row>
         </div>
         <vr-row removeline>
@@ -35,7 +38,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-accountbalance-billingtransaction-grid ng-if="scopeModel.gridloadded" on-ready="scopeModel.onGridReady"></vr-accountbalance-billingtransaction-grid>
+                <vr-accountbalance-billingtransaction-grid  on-ready="scopeModel.onGridReady"></vr-accountbalance-billingtransaction-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

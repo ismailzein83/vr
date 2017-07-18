@@ -41,7 +41,7 @@ namespace Vanrise.AccountBalance.Business
 
                 bool shouldGroupUsagesByTransactionType = new AccountTypeManager().ShouldGroupUsagesByTransactionType(input.Query.AccountTypeId);
 
-                return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, accountCurrencyId, shouldGroupUsagesByTransactionType);
+                return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, accountCurrencyId, shouldGroupUsagesByTransactionType,input.Query.Status, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture);
             }
 
             protected override BigResult<AccountStatementItem> AllRecordsToBigResult(DataRetrievalInput<AccountStatementQuery> input, IEnumerable<AccountStatementItem> allRecords)
@@ -78,12 +78,12 @@ namespace Vanrise.AccountBalance.Business
 
             #region Private Methods
 
-            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int accountCurrencyId, bool shouldGroupUsagesByTransactionType)
+            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int accountCurrencyId, bool shouldGroupUsagesByTransactionType,VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
             {
                 var transactionManager = new BillingTransactionManager();
-                IEnumerable<BillingTransaction> transactions = transactionManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
+                IEnumerable<BillingTransaction> transactions = transactionManager.GetBillingTransactionsByAccountId(accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
 
-                IEnumerable<AccountUsage> accountUsages = new AccountUsageManager().GetAccountUsagesByAccount(accountTypeId, accountId);
+                IEnumerable<AccountUsage> accountUsages = new AccountUsageManager().GetAccountUsagesByAccount(accountTypeId, accountId, status,effectiveDate,isEffectiveInFuture);
                 IEnumerable<BillingTransaction> convertedTransactions = transactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages, shouldGroupUsagesByTransactionType);
 
                 var allTransactions = new List<BillingTransaction>();

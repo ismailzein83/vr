@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Data.SQL
 {
@@ -83,9 +84,9 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForFilteredForBillingTransaction]", AccountUsageMapper, accountTypeId, transactionTypeIdsString, accountIdsString, fromTime, toTime);
         }
-        public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId)
+        public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
-            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByAccount]", AccountUsageMapper, accountTypeId, accountId);
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByAccount]", AccountUsageMapper, accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
         }
         public List<AccountUsage> GetAccountUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
         {

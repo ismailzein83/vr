@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -31,10 +32,10 @@ namespace Vanrise.AccountBalance.Business
             IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
             return dataManager.GetAccountUsageForBillingTransactions(accountTypeId, transactionTypeIds, accountIds, fromTime, toTime);
         }
-        public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId)
+        public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId,VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
             IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
-            return dataManager.GetAccountUsagesByAccount(accountTypeId, accountId);
+            return dataManager.GetAccountUsagesByAccount(accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
         }
         public IEnumerable<AccountUsage> GetAccountUsagesByTransactionAccountUsageQueries(IEnumerable<TransactionAccountUsageQuery> transactionAccountUsageQueries)
         {

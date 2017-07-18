@@ -16,6 +16,9 @@ namespace Vanrise.AccountBalance.Entities
         public DateTime FromTime { get; set; }
 
         public DateTime? ToTime { get; set; }
+        public Vanrise.Entities.VRAccountStatus? Status { get; set; }
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsEffectiveInFuture { get; set; }
 
     }
 }

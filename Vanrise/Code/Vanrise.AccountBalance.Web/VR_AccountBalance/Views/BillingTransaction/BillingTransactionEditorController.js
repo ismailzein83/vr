@@ -9,6 +9,11 @@
         var accountId;
         var accountTypeId;
 
+
+        var accountStatusSelectorAPI;
+        var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountStatusSelectedDeferred;
+
         var accountSelectorAPI;
         var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var accountSelectorContext;
@@ -36,6 +41,26 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+
+
+            $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
+                accountStatusSelectorAPI = api;
+                accountStatusSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onAccountStatusSelectionChanged = function (value) {
+                if (value != undefined) {
+                    if (accountStatusSelectedDeferred != undefined)
+                        accountStatusSelectedDeferred.resolve();
+                    else {
+                        $scope.isLoadingDirective = true;
+                        loadAccountDirective().finally(function () {
+                            $scope.isLoadingDirective = false;
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                }
+            };
             $scope.scopeModel.showAccountSelector = accountId == undefined;
             $scope.scopeModel.date = new Date();
 
@@ -82,7 +107,7 @@
             getAccountTypeSettings()
             .then(function () {
                 if (accountId == undefined) {
-                    loadAccountSelector().then(function (response) {
+                    loadAccountSection().then(function (response) {
                         loadAllControls();
                     });
                 }
@@ -112,17 +137,59 @@
         function loadStaticData() {
 
         }
-        function loadAccountSelector() {
-            var loadAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        function loadAccountSection() {
+            var loadAccountSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountStatusSelectedDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+
+            promises.push(loadAccountStatusSelectorDirective());
+            promises.push(accountStatusSelectedDeferred.promise);
+
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                accountStatusSelectedDeferred = undefined;
+                loadAccountDirective().then(function () {
+                    loadAccountSectionPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadAccountSectionPromiseDeferred.reject(error);
+                });
+            }).catch(function (error) {
+                loadAccountSectionPromiseDeferred.reject(error);
+            });
+            return loadAccountSectionPromiseDeferred.promise;
+        }
+
+        function loadAccountStatusSelectorDirective() {
+            var loadAccountStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            accountStatusSelectorReadyDeferred.promise.then(function () {
+                var accountStatusSelectorPayload = { selectFirstItem: true };
+
+                VRUIUtilsService.callDirectiveLoad(accountStatusSelectorAPI, accountStatusSelectorPayload, loadAccountStatusSelectorPromiseDeferred);
+            });
+            return loadAccountStatusSelectorPromiseDeferred.promise;
+        }
+
+        function loadAccountDirective() {
+            var loadAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             accountSelectorReadyDeferred.promise.then(function () {
                 var payload = {
                     accountTypeId: accountTypeId,
+                    filter: accountStatusSelectorAPI.getData(),
                     context: accountSelectorContext
                 };
-                VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, loadAccountPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, loadAccountSelectorPromiseDeferred);
             });
-            return loadAccountPromiseDeferred.promise;
+            return loadAccountSelectorPromiseDeferred.promise
         }
+
+
+        function loadGridDirective() {
+            gridReadyDeferred.promise.then(function () {
+                gridAPI.loadGrid(getFilterObject());
+            });
+        }
+
         function loadCurrencySelector() {
             var promises = [];
 

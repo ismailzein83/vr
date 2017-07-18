@@ -142,10 +142,10 @@ namespace Vanrise.AccountBalance.Business
                 return transactions;
             }
         }
-        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId)
+        public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId,VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
-            return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId);
+            return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
         }
         public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {
