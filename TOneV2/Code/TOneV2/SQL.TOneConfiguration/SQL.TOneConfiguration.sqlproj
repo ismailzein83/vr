@@ -702,6 +702,7 @@
     <None Include="TOne.DefaultData.PostDeployment.sql" />
     <None Include="Mediation_Mobile.Nokia.PostDeployment.sql" />
     <None Include="Retail_Multinet_DevData.sql" />
+    <None Include="Retail_Cost.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
