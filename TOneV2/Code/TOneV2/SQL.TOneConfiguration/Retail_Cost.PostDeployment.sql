@@ -192,7 +192,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[ExecutionFlowDefinitionID])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('8F5414AA-06D1-4BAD-B6F2-6BD822B5ED9E','Import CDR Cost For MultiNet','DCDE6A57-5637-4599-AE1D-52DDBE0F4D98')
+('8F5414AA-06D1-4BAD-B6F2-6BD822B5ED9E','Import CDR Cost','DCDE6A57-5637-4599-AE1D-52DDBE0F4D98')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[ExecutionFlowDefinitionID]))
 merge	[queue].[ExecutionFlow] as t
