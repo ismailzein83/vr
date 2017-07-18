@@ -3,7 +3,11 @@
 	@TransactionTypeIds varchar(max),
 	@AccountTypeID uniqueidentifier,
 	@FromTime datetime,
-	@ToTime datetime = null
+	@ToTime datetime = null,
+	@Status int = null,
+	@EffectiveDate  datetime = null,
+	@IsEffectiveInFuture bit
+	
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -21,7 +25,13 @@ BEGIN
 
 		SELECT	bt.[ID],bt.AccountID,bt.AccountTypeID, bt.TransactionTypeID,bt.Amount,bt.CurrencyId,bt.TransactionTime,bt.Notes,bt.Reference,bt.IsBalanceUpdated,bt.ClosingPeriodId, SourceID, bt.Settings, bt.IsDeleted, bt.IsSubtractedFromBalance
 		FROM	[VR_AccountBalance].BillingTransaction bt  with(nolock)
-		
+		Inner Join [VR_AccountBalance].LiveBalance vrlb
+	    on vrlb.AccountTypeID = bt.AccountTypeID and 
+		   vrlb.AccountID = bt.AccountID and 
+	       ISNULL(vrlb.IsDeleted, 0) = 0 and
+	       (@Status IS NULL OR vrlb.[Status] = @Status) AND
+	       (@EffectiveDate IS NULL OR (vrlb.BED <= @EffectiveDate AND (vrlb.EED > @EffectiveDate OR vrlb.EED IS NULL))) AND
+	       (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrlb.EED IS NULL or vrlb.EED >=  GETDATE()))  OR  (@IsEffectiveInFuture = 0 and  vrlb.EED <=  GETDATE()))
         WHERE	
 				 isnull(bt.IsDeleted, 0) = 0
 				 and (@AccountsIds  is null or bt.AccountID in (select AccountID from @AccountsIdsTable))
