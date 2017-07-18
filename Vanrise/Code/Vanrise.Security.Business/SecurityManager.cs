@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
@@ -48,6 +49,7 @@ namespace Vanrise.Security.Business
                 if (!manager.IsUserEnable(user))
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
+                    VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try Login Inactive User");
                 }
                 else
                 {
@@ -69,6 +71,8 @@ namespace Vanrise.Security.Business
                         authenticationOperationOutput.AuthenticationObject = authToken;
 
                         dataManager.UpdateLastLogin(user.UserId);
+                        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance,"Login",false, user,"Login Successfully");
+
                     }
                     else
                     {
@@ -76,11 +80,15 @@ namespace Vanrise.Security.Business
                         if (HashingUtility.VerifyHash(password, "", loggedInUserTempPassword))
                         {
                             authenticationOperationOutput.Result = AuthenticateOperationResult.ActivationNeeded;
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try Login With Activation Needed");
+
                         }
 
                         else
                         {
                             authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try Login With Wrong Credentials");
+
                         }
                     }
                 }
@@ -89,6 +97,7 @@ namespace Vanrise.Security.Business
             else
             {
                 authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
+                LoggerFactory.GetLogger().WriteError("Login with user not exists");
             }
 
             return authenticationOperationOutput;
