@@ -94,7 +94,7 @@
                                        disablesorting="true">
                     </vr-datagridcolumn>
 
-                    
+
 
                     <vr-datagridcolumn headertext="'N.Rate'" widthfactor="7" disablesorting="true">
                         <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
@@ -135,12 +135,14 @@
                                                        customvalidate="dataItem.validateRateChangeDates()" disablefocus>
                                     </vr-datetimepicker>
                                 </span>
-                                <vr-datetimepicker type="date"
-                                                   value="dataItem.NewRateEED"
-                                                   ng-show="dataItem.NewRate != null"
-                                                   customvalidate="dataItem.validateNewRateDates()"
-                                                   disablefocus>
-                                </vr-datetimepicker>
+                                <span vr-disabled="true">
+                                    <vr-datetimepicker type="date"
+                                                       value="dataItem.NewRateEED"
+                                                       ng-show="dataItem.NewRate != null"
+                                                       customvalidate="dataItem.validateNewRateDates()"
+                                                       disablefocus>
+                                    </vr-datetimepicker>
+                                </span>
                             </span>
                         </span>
                     </vr-datagridcolumn>

@@ -25,13 +25,18 @@
         }
 
         function setNewRateDates(dataItem, settings) {
-            if (!isStringEmpty(dataItem.NewRate))
-            {
+            if (!isStringEmpty(dataItem.NewRate)) {
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
                 var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
                 var newRateBED = getNewRateBED(dataItem.CurrentRate, dataItem.NewRate, settings);
                 dataItem.NewRateBED = (newRateBED > zoneBED) ? newRateBED : zoneBED;
+
+                if (dataItem.CountryBED != null) {
+                    var countryBED = new Date(dataItem.CountryBED);
+                    if (countryBED > dataItem.NewRateBED)
+                        dataItem.NewRateBED = countryBED;
+                }
             }
             else {
                 dataItem.NewRateBED = null;
@@ -42,34 +47,34 @@
                 dataItem.NewRateEED = dataItem.ZoneEED;
         }
         function getNewRateBED(currentRate, newRate, settings) {
-        	var dayOffset = 0;
+            var dayOffset = 0;
 
-        	if (currentRate == undefined) {
-        		dayOffset = settings.newRateDayOffset;
-        	}
-        	else {
-        		var currentRateAsNumber = Number(currentRate);
-        		var newRateAsNumber = Number(newRate);
+            if (currentRate == undefined) {
+                dayOffset = settings.newRateDayOffset;
+            }
+            else {
+                var currentRateAsNumber = Number(currentRate);
+                var newRateAsNumber = Number(newRate);
 
-        		if (newRateAsNumber > currentRateAsNumber) {
-        			dayOffset = settings.increasedRateDayOffset;
-        		}
-        		else if (newRateAsNumber < currentRateAsNumber) {
-        			dayOffset = settings.decreasedRateDayOffset;
-        		}
-        	}
+                if (newRateAsNumber > currentRateAsNumber) {
+                    dayOffset = settings.increasedRateDayOffset;
+                }
+                else if (newRateAsNumber < currentRateAsNumber) {
+                    dayOffset = settings.decreasedRateDayOffset;
+                }
+            }
 
-        	return getNowPlusDays(dayOffset);
+            return getNowPlusDays(dayOffset);
         }
         function getNowPlusDays(daysToAdd) {
-        	var dayOfToday = new Date().getDate();
-        	var totalDays = dayOfToday + daysToAdd;
-        	var todayWithoutTime = UtilsService.getDateFromDateTime(new Date());
-        	var todayPlusDays = todayWithoutTime.setDate(totalDays); // setDate returns the number of milliseconds between the date object and midnight January 1 1970
-        	return new Date(todayPlusDays);
+            var dayOfToday = new Date().getDate();
+            var totalDays = dayOfToday + daysToAdd;
+            var todayWithoutTime = UtilsService.getDateFromDateTime(new Date());
+            var todayPlusDays = todayWithoutTime.setDate(totalDays); // setDate returns the number of milliseconds between the date object and midnight January 1 1970
+            return new Date(todayPlusDays);
         }
         function getNowMinusDays(days) {
-        	return new Date(new Date().setDate(new Date().getDate() - days));
+            return new Date(new Date().setDate(new Date().getDate() - days));
         }
 
         function formatNewRate(dataItem) {
@@ -103,10 +108,9 @@
             }
         }
 
-        function validateNewRate(dataItem, ownerCurrencyId)
-        {
+        function validateNewRate(dataItem, ownerCurrencyId) {
             var newRate = Number(dataItem.NewRate);
-            
+
             if (isNaN(newRate))
                 return 'New rate must be a number';
             if (newRate <= 0)

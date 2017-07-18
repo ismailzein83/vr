@@ -27,6 +27,8 @@ namespace TOne.WhS.Sales.Entities
 
         public DateTime EffectiveOn { get; set; }
 
+        public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
+
         #region Routing Properties
 
         public int RoutingDatabaseId { get; set; }

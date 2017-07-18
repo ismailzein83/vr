@@ -540,6 +540,10 @@ namespace TOne.WhS.Sales.Business
             var routingProductManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft, zoneRPLocator);
             var saleRateManager = new SaleRateManager();
 
+            var countryBEDsByCountryId = new Dictionary<int, DateTime>();
+            if (input.OwnerType == SalePriceListOwnerType.Customer)
+                countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(input.OwnerId, input.EffectiveOn, true);
+
             Dictionary<long, ZoneItem> contextZoneItemsByZoneId = null;
 
             Func<Dictionary<long, ZoneItem>> getContextZoneItems = () =>
@@ -556,6 +560,7 @@ namespace TOne.WhS.Sales.Business
                         SellingProductId = sellingProductId.Value,
                         ChangedCountryIds = changedCountryIds,
                         EffectiveOn = input.EffectiveOn,
+                        CountryBEDsByCountryId = countryBEDsByCountryId,
                         RoutingDatabaseId = input.RoutingDatabaseId,
                         PolicyConfigId = input.PolicyConfigId,
                         NumberOfOptions = input.NumberOfOptions,
@@ -862,6 +867,10 @@ namespace TOne.WhS.Sales.Business
 
             ISaleRateReader rateReader;
 
+            var countryBEDsByCountryId = new Dictionary<int, DateTime>();
+            if (ownerType == SalePriceListOwnerType.Customer)
+                countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true);
+
             if (ownerType == SalePriceListOwnerType.SellingProduct)
                 rateReader = new SaleRateReadWithCache(effectiveOn);
             else
@@ -878,7 +887,6 @@ namespace TOne.WhS.Sales.Business
                 };
 
                 var effectiveDatesByZoneId = new Dictionary<long, DateTime>();
-                Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(ownerId, today, true);
                 foreach (SaleZone zone in saleZones)
                 {
                     DateTime zoneCountryBED;
@@ -925,6 +933,7 @@ namespace TOne.WhS.Sales.Business
                         SellingProductId = sellingProductId.Value,
                         ChangedCountryIds = closedCountryIds,
                         EffectiveOn = effectiveOn,
+                        CountryBEDsByCountryId = countryBEDsByCountryId,
                         RoutingDatabaseId = routingDatabaseId,
                         PolicyConfigId = policyConfigId,
                         NumberOfOptions = numberOfOptions,
@@ -959,6 +968,10 @@ namespace TOne.WhS.Sales.Business
                     ZoneBED = saleZone.BED,
                     ZoneEED = saleZone.EED
                 };
+
+                DateTime countryBED;
+                if (countryBEDsByCountryId.TryGetValue(saleZone.CountryId, out countryBED))
+                    zoneItem.CountryBED = countryBED;
 
                 ZoneChanges zoneDraft = zoneDraftsByZone.GetRecord(saleZone.SaleZoneId);
 
@@ -1023,6 +1036,10 @@ namespace TOne.WhS.Sales.Business
                     ZoneBED = saleZone.BED,
                     ZoneEED = saleZone.EED
                 };
+
+                DateTime countryBED;
+                if (input.CountryBEDsByCountryId.TryGetValue(saleZone.CountryId, out countryBED))
+                    contextZoneItem.CountryBED = countryBED;
 
                 ZoneChanges zoneDraft = input.ZoneDraftsByZoneId.GetRecord(saleZone.SaleZoneId);
 
