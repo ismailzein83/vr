@@ -53,15 +53,15 @@ app.directive('retailVoiceTechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsS
 
                     var accountIdentification;
                     var internationalIdentification;
-                    var retailCentrexImportCDRSettings;
+                    var importCDRSettings;
 
                     if (payload != undefined && payload.data != undefined) {
                         accountIdentification = payload.data.AccountIdentification;
                         internationalIdentification = payload.data.InternationalIdentification
-                        retailCentrexImportCDRSettings = payload.data.RetailCentrexImportCDRSettings;
+                        importCDRSettings = payload.data.ImportCDRSettings;
                     }
 
-                    $scope.scopeModel.saleAmountPrecision = retailCentrexImportCDRSettings != undefined ? retailCentrexImportCDRSettings.SaleAmountPrecision : undefined;
+                    $scope.scopeModel.saleAmountPrecision = importCDRSettings != undefined ? importCDRSettings.SaleAmountPrecision : undefined;
 
                     var loadAccountIdentificationTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
                     accountIdentificationTemplateReadyPromiseDeferred.promise.then(function () {
@@ -92,7 +92,7 @@ app.directive('retailVoiceTechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsS
                         $type: "Retail.Voice.Entities.VoiceTechnicalSettings, Retail.Voice.Entities",
                         AccountIdentification: accountIdentificationTemplateDirectiveApi.getData(),
                         InternationalIdentification: internationalIdentificationTemplateDirectiveApi.getData(),
-                        RetailCentrexImportCDRSettings: {
+                        ImportCDRSettings: {
                             SaleAmountPrecision: $scope.scopeModel.saleAmountPrecision
                         }
                     };

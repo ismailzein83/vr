@@ -25,8 +25,8 @@ namespace Retail.Voice.Business
 
         public int? GetSaleAmountPrecision()
         {
-            RetailCentrexImportCDRSettings retailCentrexImportCDRSettings = GetRetailCentrexImportCDRSettings();
-            return retailCentrexImportCDRSettings.SaleAmountPrecision;
+            ImportCDRSettings importCDRSettings = GetImportCDRSettings();
+            return importCDRSettings.SaleAmountPrecision;
         }
 
         #endregion
@@ -41,11 +41,11 @@ namespace Retail.Voice.Business
             return voiceTechnicalSettings;
         }
 
-        private RetailCentrexImportCDRSettings GetRetailCentrexImportCDRSettings()
+        private ImportCDRSettings GetImportCDRSettings()
         {
             VoiceTechnicalSettings voiceTechnicalSettings = GetVoiceTechnicalSettings();
-            voiceTechnicalSettings.RetailCentrexImportCDRSettings.ThrowIfNull("voiceTechnicalSettings.RetailCentrexImportCDRSettings");
-            return voiceTechnicalSettings.RetailCentrexImportCDRSettings;
+            voiceTechnicalSettings.ImportCDRSettings.ThrowIfNull("voiceTechnicalSettings.ImportCDRSettings");
+            return voiceTechnicalSettings.ImportCDRSettings;
         }
 
         #endregion

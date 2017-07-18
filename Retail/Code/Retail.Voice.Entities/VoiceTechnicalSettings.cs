@@ -11,7 +11,7 @@ namespace Retail.Voice.Entities
 
         public InternationalIdentification InternationalIdentification { get; set; }
 
-        public RetailCentrexImportCDRSettings RetailCentrexImportCDRSettings { get; set; } 
+        public ImportCDRSettings ImportCDRSettings { get; set; } 
     }
 
     public abstract class AccountIdentification
@@ -28,7 +28,7 @@ namespace Retail.Voice.Entities
         public abstract void Execute(IInternationalIdentificationContext context);
     }
 
-    public class RetailCentrexImportCDRSettings
+    public class ImportCDRSettings
     {
         public int? SaleAmountPrecision { get; set; }
     }

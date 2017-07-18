@@ -1,17 +1,17 @@
 ﻿<vr-columns width="fullrow">
     <vr-tabs>
         <vr-tab header="'Rules Identification'">
-            <vr-section title="Account">
+            <vr-section header="Account">
                 <retail-voice-accountidentification-template normal-col-num="4" on-ready="onAccountIdentificationTemplateReady"></retail-voice-accountidentification-template>
             </vr-section>
-            <vr-section title="International">
+            <vr-section header="International">
                 <retail-voice-internationalidentification-template normal-col-num="4" on-ready="onInternationalIdentificationTemplateReady"></retail-voice-internationalidentification-template>
             </vr-section>
         </vr-tab>
         <vr-tab header="'Import CDR'">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.saleAmountPrecision" label="Sale Amount Precision" type="number" decimalprecision="0" hint="No Rounding is Done for null Sale Amount Precision"></vr-textbox>
+                    <vr-textbox value="scopeModel.saleAmountPrecision" label="Sale Amount Precision" type="number" decimalprecision="0" hint="If empty, Sale Amount will not be rounded"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </vr-tab>
