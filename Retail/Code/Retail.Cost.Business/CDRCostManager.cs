@@ -38,9 +38,18 @@ namespace Retail.Cost.Business
             foreach (var cdr in cdrs)
             {
                 RemoveCDRCostData(cdr, cdrCostFieldNames);
+
                 DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, dataRecordTypeId);
                 if (!recordFilterManager.IsFilterGroupMatch(recordFilterGroup, filterContext))
+                {
+                    if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
+                        cdr.SetFieldValue(cdrCostFieldNames.CostAmount, 0);
+
+                    if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
+                        cdr.SetFieldValue(cdrCostFieldNames.CostRate, 0);
+
                     continue;
+                }
 
                 CDRCostRequest cdrCostRequest = new CDRCostRequest()
                 {
