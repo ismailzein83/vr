@@ -786,7 +786,7 @@ namespace Vanrise.Security.Business
             }
         }
 
-        private class UserLoggableEntity : VRLoggableEntityBase
+        public class UserLoggableEntity : VRLoggableEntityBase
         {
             public static UserLoggableEntity Instance = new UserLoggableEntity();
 
