@@ -38,7 +38,7 @@ app.directive('vrNpSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.NumberingPlan.Entities.CPSettingsData, Vanrise.NumberingPlan.Entities",
+                        $type: "Vanrise.NumberingPlan.Entities.NPSettingsData, Vanrise.NumberingPlan.Entities",
                         EffectiveDateOffset: ctrl.effectiveDateOffset
                     };
                 };
