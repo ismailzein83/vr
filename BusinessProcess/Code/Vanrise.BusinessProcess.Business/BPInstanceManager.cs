@@ -80,7 +80,10 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
         }
-
+        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
+        {
+            return CreateNewProcess(createProcessInput, false);
+        }
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput, bool isViewedFromUI)
         {
             if (createProcessInput == null)

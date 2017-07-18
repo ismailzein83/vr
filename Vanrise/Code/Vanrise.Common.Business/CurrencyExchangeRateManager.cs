@@ -181,6 +181,18 @@ namespace Vanrise.Common.Business
                     last = current;
                 }
             }
+            CurrencyManager currencyManager = new CurrencyManager();
+            var systemCurrency = currencyManager.GetSystemCurrency();
+            systemCurrency.ThrowIfNull("systemCurrency");
+            if (!newrates.Any(x => x.CurrencyId == systemCurrency.CurrencyId))
+            {
+                newrates.Add(new ExchangeRateWithEED
+                {
+                    BED = new DateTime(2000,01,01),
+                    CurrencyId = systemCurrency.CurrencyId,
+                    Rate = 1
+                });
+            }
             foreach (var c in connectionStrings)
             {
                 ICurrencyExchangeRateWithEEDDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateWithEEDDataManager>();
@@ -188,8 +200,6 @@ namespace Vanrise.Common.Business
                 dataManager.ConnectionStringName = c.ConnectionStringName;
                 dataManager.ApplyExchangeRateWithEESInDB(newrates);
             }
-
-
 
         }
 
