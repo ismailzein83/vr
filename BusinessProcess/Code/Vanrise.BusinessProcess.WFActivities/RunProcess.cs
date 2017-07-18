@@ -43,7 +43,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             };
             input.InputArguments.UserId = sharedData.InstanceInfo.InitiatorUserId;
             BPInstanceManager manager = new BPInstanceManager();
-            var output = manager.CreateNewProcess(input);
+            var output = manager.CreateNewProcess(input,false);
             this.ProcessInstanceId.Set(context, output.ProcessInstanceId);
 
             if (this.WaitProcessCompleted.Get(context))

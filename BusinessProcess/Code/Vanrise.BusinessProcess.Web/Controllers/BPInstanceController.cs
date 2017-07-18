@@ -56,7 +56,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
             BPInstanceManager manager = new BPInstanceManager();
             createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            return manager.CreateNewProcess(createProcessInput);
+            return manager.CreateNewProcess(createProcessInput,true);
         }
         [HttpPost]
         [Route("HasRunningInstances")]

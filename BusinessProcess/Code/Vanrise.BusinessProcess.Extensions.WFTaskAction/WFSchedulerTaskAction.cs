@@ -31,7 +31,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             var createProcessOutput = bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = inputArguments
-            });
+            },false);
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
 

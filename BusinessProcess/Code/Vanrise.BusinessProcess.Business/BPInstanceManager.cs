@@ -19,7 +19,15 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.GetBPInstance(bpInstanceId);
         }
-
+        public string GetBPInstanceName(long bpInstanceId)
+        {
+            BPInstance bpInstance = GetBPInstance(bpInstanceId);
+            return GetBPInstanceName(bpInstance);
+        }
+        public string GetBPInstanceName(BPInstance bpInstance)
+        {
+            return bpInstance != null ? bpInstance.Title : null;
+        }
         public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
@@ -73,7 +81,7 @@ namespace Vanrise.BusinessProcess.Business
             return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
         }
 
-        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
+        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput, bool isViewedFromUI)
         {
             if (createProcessInput == null)
                 throw new ArgumentNullException("createProcessInput");
@@ -106,6 +114,11 @@ namespace Vanrise.BusinessProcess.Business
                 Severity = LogEntryType.Information,
                 EventTime = DateTime.Now
             });
+            BPInstance bpInstance = GetBPInstance(processInstanceId);
+            if (bpInstance != null && isViewedFromUI)
+            {
+                VRActionLogger.Current.LogObjectCustomAction(new BPInstanceLoggableEntity(createProcessInput.InputArguments.GetDefinitionTitle()),"Start Process",false, bpInstance);
+            }
             CreateProcessOutput output = new CreateProcessOutput
             {
                 ProcessInstanceId = processInstanceId,
@@ -191,6 +204,48 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
+
+        public class BPInstanceLoggableEntity : VRLoggableEntityBase
+        {
+            string _entityDisplayName;
+            public BPInstanceLoggableEntity(string entityDisplayName)
+            {
+                _entityDisplayName = entityDisplayName;
+            }
+
+            static BPInstanceManager s_bpInstanceManager = new BPInstanceManager();
+            public override string EntityUniqueName
+            {
+                get { return "VR_BusinessProcess_BPInstance"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Process"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return this._entityDisplayName; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_BusinessProcess_BPInstance_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                BPInstance bpInstance = context.Object.CastWithValidate<BPInstance>("context.Object");
+                return bpInstance.ProcessInstanceID;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                BPInstance bpInstance = context.Object.CastWithValidate<BPInstance>("context.Object");
+                return s_bpInstanceManager.GetBPInstanceName(bpInstance);
+            }
+        }
         #endregion
 
         #region mapper
