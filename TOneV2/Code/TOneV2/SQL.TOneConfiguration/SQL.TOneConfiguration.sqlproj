@@ -642,6 +642,7 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetByPeriod.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Delete.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_SetAsDeletedByInvoiceId.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryUpdateStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
