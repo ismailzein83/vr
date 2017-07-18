@@ -152,13 +152,13 @@ app.directive('retailMultinetBrancheConvertorEditor', ['UtilsService', 'VRUIUtil
                         $scope.scopeModel.contractRefNoColumnName = payload.ContractRefNoColumnName;
                         $scope.scopeModel.currencyIdColumnName = payload.CurrencyIdColumnName;
                         $scope.scopeModel.emailColumnName = payload.EmailColumnName;
-                        $scope.scopeModel.activationDateColumnName = payload.ActivationDateColumnName
+                        $scope.scopeModel.activationDateColumnName = payload.ActivationDateColumnName;
                         $scope.scopeModel.smaOwnerIdColumnName = payload.SmaOwnerIdColumnName;
                         $scope.scopeModel.smaAddressColumnName = payload.SmaAddressColumnName;
                         $scope.scopeModel.atTypeIdColumnName = payload.AtTypeIdColumnName;
                         $scope.scopeModel.smpOwnerIdColumnName = payload.SmpOwnerIdColumnName;
                         $scope.scopeModel.phoneTypeColumnName = payload.PhoneTypeColumnName;
-                        $scope.scopeModel.smpPhoneNumberColumnName = payload.SmpPhoneNumberColumnName
+                        $scope.scopeModel.smpPhoneNumberColumnName = payload.SmpPhoneNumberColumnName;
                         $scope.scopeModel.identityIdColumnName = payload.IdentityIdColumnName;
                         $scope.scopeModel.smniOwnerIdColumnName = payload.SmniOwnerIdColumnName;
                         $scope.scopeModel.smniValueColumnName = payload.SmniValueColumnName;
