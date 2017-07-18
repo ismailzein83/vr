@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace Retail.Voice.MainExtensions.TransformationSteps
@@ -33,7 +29,7 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         public string SaleRateTypeRuleId { get; set; }
         public string SaleTariffRuleId { get; set; }
         public string SaleExtraChargeRuleId { get; set; }
-        
+
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             var voiceChargingManagerVariableName = context.GenerateUniqueMemberName("voiceChargingManager");
@@ -41,10 +37,10 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
 
             var voiceEventPriceVariableName = context.GenerateUniqueMemberName("voiceEventPrice");
             context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7},{8});", voiceEventPriceVariableName,
-                voiceChargingManagerVariableName,this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
+                voiceChargingManagerVariableName, this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
 
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", voiceEventPriceVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{"); 
+            context.AddCodeToCurrentInstanceExecutionBlock("{");
 
             if (this.PackageId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.PackageId;", this.PackageId, voiceEventPriceVariableName);
