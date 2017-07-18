@@ -429,9 +429,9 @@ set nocount on;
 ;with cte_data([ID],[Name],[BusinessEntityDefinitionID],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('BFE0CF8B-463F-4878-9B46-28E217BF1C1A','Active','8CE3297F-A22D-4CAC-AA0A-30129DEBB459'	,'{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false}'),
+('BFE0CF8B-463F-4878-9B46-28E217BF1C1A','Active','8CE3297F-A22D-4CAC-AA0A-30129DEBB459','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true}'),
 ('E4D19026-604F-4878-BC03-EF615AB62F0A','Blocked','8CE3297F-A22D-4CAC-AA0A-30129DEBB459','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"61a682f3-e00c-4b31-b2f5-26dd5f5e4c2f","HasInitialCharge":false,"HasRecurringCharge":false}'),
-('9DB875FB-0632-492C-BB95-55129E5E81EA','Active','347AE3E2-6698-4B00-A516-B56F9E037E12'	,'{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false}')
+('9DB875FB-0632-492C-BB95-55129E5E81EA','Active','347AE3E2-6698-4B00-A516-B56F9E037E12','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BusinessEntityDefinitionID],[Settings]))
 merge	[common].[StatusDefinition] as t
