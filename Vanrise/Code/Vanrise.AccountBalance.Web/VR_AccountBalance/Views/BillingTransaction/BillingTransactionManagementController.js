@@ -6,15 +6,21 @@
 
     function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService, VRValidationService) {
         var gridAPI;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
+
         var viewId;
 
     
         var accountTypeAPI;
         var accountTypeReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountTypeSelectedDeferred;
 
         var accountDirectiveAPI;
         var accountDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var accountStatusSelectorAPI;
+        var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var accountStatusSelectedDeferred;
 
         var transactionTypeDirectiveAPI;
         var transactionTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -22,7 +28,6 @@
 
         loadParameters();
         defineScope();
-        load();
 
         var filter = {};
         function loadParameters() {
