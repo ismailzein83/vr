@@ -163,3 +163,46 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 END
+
+--[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([Id],[Name],[Title],[ExecutionTree],[Stages])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('DCDE6A57-5637-4599-AE1D-52DDBE0F4D98','ImportCDRCost','Import CDR Costt',null,'{"$type":"System.Collections.Generic.List`1[[Vanrise.Queueing.Entities.QueueExecutionFlowStage, Vanrise.Queueing.Entities]], mscorlib","$values":[{"$type":"Vanrise.Queueing.Entities.QueueExecutionFlowStage, Vanrise.Queueing.Entities","StageName":"CDR Cost Storage Stage","QueueNameTemplate":"Queue_#FlowId#_#StageName#","QueueTitleTemplate":"#StageName# Queue (#FlowName#)","QueueItemType":{"$type":"Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators","DataRecordTypeId":"5c624ed4-4f6a-49e6-a489-488df161f7bb","BatchDescription":"#RECORDSCOUNT# of CDRs"},"QueueActivator":{"$type":"Vanrise.GenericData.QueueActivators.StoreBatchQueueActivator, Vanrise.GenericData.QueueActivators","DataRecordStorageId":"32641539-8549-484f-8d84-e55bf49d8b67","NbOfMaxConcurrentActivators":10,"ConfigId":1},"IsSequential":false}]}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ExecutionTree],[Stages]))
+merge	[queue].[ExecutionFlowDefinition] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ExecutionTree] = s.[ExecutionTree],[Stages] = s.[Stages]
+when not matched by target then
+	insert([Id],[Name],[Title],[ExecutionTree],[Stages])
+	values(s.[Id],s.[Name],s.[Title],s.[ExecutionTree],s.[Stages]);
+----------------------------------------------------------------------------------------------------
+END
+
+
+--[queue].[ExecutionFlow]---------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([Id],[Name],[ExecutionFlowDefinitionID])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('8F5414AA-06D1-4BAD-B6F2-6BD822B5ED9E','Import CDR Cost For MultiNet','DCDE6A57-5637-4599-AE1D-52DDBE0F4D98')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ExecutionFlowDefinitionID]))
+merge	[queue].[ExecutionFlow] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
+when not matched by target then
+	insert([Id],[Name],[ExecutionFlowDefinitionID])
+	values(s.[Id],s.[Name],s.[ExecutionFlowDefinitionID]);
+----------------------------------------------------------------------------------------------------
+END
