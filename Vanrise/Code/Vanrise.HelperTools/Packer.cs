@@ -452,21 +452,36 @@ namespace Dean.Edwards
 
                 string ExtraFilename = replaceFiles.Checked ? string.Empty : ".min";
                 tbSource.Text = string.Empty;
-                foreach (var file in allFiles)
+                //foreach (var file in allFiles)
+                //{
+                //    tbSource.Text = string.Format("Current: {0}\r\n", Path.GetFullPath(file));
+                //    tbSource.Text += string.Format("New: {0}\\{1}{2}{3}\r\n", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file));
+
+                //    File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
+
+                //    // Perform the increment on the ProgressBar.
+                //    pBar1.PerformStep();
+                //}
+
+                Parallel.ForEach(allFiles, file =>
                 {
-                    tbSource.Text = string.Format("Current: {0}\r\n", Path.GetFullPath(file));
-                    tbSource.Text += string.Format("New: {0}\\{1}{2}{3}\r\n", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file));
-
-                    File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
-
-                    // Perform the increment on the ProgressBar.
-                    pBar1.PerformStep();
-                }
+                    CompressFile(file, ExtraFilename, p);
+                });
             }
             else
             {
                 MessageBox.Show("Please select a directory!");
             }
+        }
+
+        private void CompressFile(string file, string ExtraFilename, ECMAScriptPacker p)
+        {
+            tbSource.Text = string.Format("Current: {0}\r\n", Path.GetFullPath(file));
+            tbSource.Text += string.Format("New: {0}\\{1}{2}{3}\r\n", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file));
+
+            File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
+
+            pBar1.PerformStep();
         }
 
         private void Packer_Load(object sender, System.EventArgs e)
@@ -579,14 +594,43 @@ namespace Dean.Edwards
                 // Set the Step property to a value of 1 to represent each file being copied.
                 pBar1.Step = 1;
 
-                foreach (var directory in allDirectories)
+                //foreach (var directory in allDirectories)
+                //{
+                //    var allFiles = Directory.GetFiles(directory, "*.js", SearchOption.AllDirectories);
+
+                //    pBar1.PerformStep();
+
+                //    //var directoryName = Path.GetFileName(directory);
+                    
+                //    var orgDirectoryName = Path.GetFileName(directory);
+                //    var directoryName = chkOverriddenNode.Checked ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
+
+                //    //create file if not exisit
+                //    if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
+                //    {
+                //        StringBuilder fileContent = new StringBuilder();
+
+                //        //add folder content to created file
+                //        foreach (var file in allFiles)
+                //        {
+                //            fileContent.Append(File.ReadAllText(file));
+                //            fileContent.Append(";");
+                //            //rename or remove file
+                //            File.Delete(file);
+                //            //File.Move(file, string.Format("{0}{1}", file, "processed"));
+                //        }
+
+                //        File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
+                //    }
+                //}
+                Parallel.ForEach(allDirectories, directory =>
                 {
                     var allFiles = Directory.GetFiles(directory, "*.js", SearchOption.AllDirectories);
 
                     pBar1.PerformStep();
 
                     //var directoryName = Path.GetFileName(directory);
-                    
+
                     var orgDirectoryName = Path.GetFileName(directory);
                     var directoryName = chkOverriddenNode.Checked ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
 
@@ -607,7 +651,7 @@ namespace Dean.Edwards
 
                         File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
                     }
-                }
+                });
             }
             else
             {
