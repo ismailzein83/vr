@@ -118,3 +118,48 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 END
+
+--[runtime].[ScheduleTask]------------------------------------------------------------------------------
+BEGIN
+
+set nocount on;
+;with cte_data([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('1ED9CCD7-1DE4-495C-A1F5-29B5054EE334','Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B','B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":1.0,"IntervalType":0,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","IgnoreSkippedIntervals":false},"StartEffDate":"2017-07-17T14:41:33.309"}',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId]))
+merge	[runtime].[ScheduleTask] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]
+when not matched by target then
+	insert([ID],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
+	values(s.[ID],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);
+----------------------------------------------------------------------------------------------------
+END
+
+--[integration].[DataSource]------------------------------------------------------------------------
+BEGIN
+
+set nocount on;
+
+;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('906B69DE-C9A5-42AD-9CDC-2FD16AEF1777','Cost CDR Import Multinet FTP','396A4933-DF4F-49CD-9799-BF605B9F4597',null,'1ED9CCD7-1DE4-495C-A1F5-29B5054EE334','{"$type":"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities","AdapterArgument":{"$type":"Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments","Extension":".csv","Mask":"","Directory":"/BCPFiles","ServerIP":"192.168.110.185","UserName":"devftpuser","Password":"P@ssw0rd","ActionAfterImport":0,"BasedOnLastModifiedTime":true,"MaxParallelRuntimeInstances":1},"MapperCustomCode":"LogVerbose(\"Started\");\n            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));\n            var cdrs = new List<dynamic>();\n\n            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\n            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\"CDRCost\");\n            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(\"CDRCost\");\n\n            var currentItemCount = 21;\n            System.IO.StreamReader sr = ImportedData.StreamReader;\n            Vanrise.Common.Business.CurrencyManager currencyManager = new Vanrise.Common.Business.CurrencyManager();\n\n            while (!sr.EndOfStream)\n            {\n                string currentLine = sr.ReadLine();\n                if (string.IsNullOrEmpty(currentLine))\n                    continue;\n\n                string[] rowData = currentLine.Split('','');\n                if (rowData.Length != currentItemCount)\n                    continue;\n\n                string customerName = rowData[18];\n                string durationAsString;\n                string amountAsString;\n\n                if (string.Compare(customerName, \"FLL-Incoming (Dom)\", true) == 0)\n                {\n                    durationAsString = rowData[17];\n                    amountAsString = rowData[14];\n                }\n                else if (string.Compare(customerName, \"FLL-Incoming (IDD)\", true) == 0)\n                {\n                    durationAsString = rowData[16];\n                    amountAsString = rowData[13];\n                }\n                else\n                    continue;\n\n\n                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;\n                cdr.SourceID = rowData[0];\n                cdr.AttemptDateTime = DateTime.ParseExact(rowData[1], \"yyyy-MM-dd HH:mm:ss\", System.Globalization.CultureInfo.InvariantCulture);\n                cdr.CGPN = rowData[4];\n                cdr.CDPN = rowData[5];\n                cdr.DurationInSeconds = !string.IsNullOrEmpty(durationAsString) ? decimal.Parse(durationAsString) : default(decimal?);\n                cdr.Amount = !string.IsNullOrEmpty(amountAsString) ? decimal.Parse(amountAsString) : default(decimal?);\n\n                string rateAsString = rowData[12];\n                cdr.Rate = !string.IsNullOrEmpty(rateAsString) ? decimal.Parse(rateAsString) : default(decimal?);\n\n                cdr.SupplierName = rowData[19];\n                string currencySymbol = rowData[10];\n                if (!string.IsNullOrEmpty(currencySymbol))\n                {\n                    var currency = currencyManager.GetCurrencyBySymbol(currencySymbol);\n                    if (currency != null)\n                        cdr.Currency = currency.CurrencyId;\n                }\n                string statusAsString = rowData[20];\n                if (!string.IsNullOrEmpty(statusAsString) && string.Compare(statusAsString, \"R\", true) == 0)\n                    cdr.IsReRate = true;\n\n                cdrs.Add(cdr);\n            }\n\n            if (cdrs.Count > 0)\n            {\n                long startingId;\n                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);\n                long currentCDRId = startingId;\n\n                foreach (var cdr in cdrs)\n                {\n                    cdr.ID = currentCDRId;\n                    currentCDRId++;\n                }\n                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, \"#RECORDSCOUNT# of Raw CDRs\", \"CDRCost\");\n                mappedBatches.Add(\"CDR Cost Storage Stage\", batch);\n            }\n\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\n            LogVerbose(\"Finished\");\n\n            return result;","ExecutionFlowId":"8f5414aa-06d1-4bad-b6f2-6bd822b5ed9e"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings]))
+merge	[integration].[DataSource] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+END
