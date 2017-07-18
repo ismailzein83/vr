@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [Mediation_Centrex].[CookedCDR] (
+    [CDRID]                BIGINT          IDENTITY (1, 1) NOT NULL,
     [CallId]               NVARCHAR (200)  NULL,
     [ConnectDateTime]      DATETIME        NULL,
     [DisconnectDateTime]   DATETIME        NULL,
@@ -21,8 +22,11 @@
     [FileName]             NVARCHAR (255)  NULL,
     [ReplacedCallId]       NVARCHAR (255)  NULL,
     [OriginatorExtension]  VARCHAR (10)    NULL,
-    [TerminatorExtension]  VARCHAR (10)    NULL
+    [TerminatorExtension]  VARCHAR (10)    NULL,
+    CONSTRAINT [PK_CookedCDR] PRIMARY KEY CLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

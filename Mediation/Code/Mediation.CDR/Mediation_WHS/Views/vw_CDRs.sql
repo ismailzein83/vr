@@ -3,22 +3,24 @@ AS
 SELECT        c.CallReference AS ID, c.callreference AS IDonSwitch, c.CDPN, c.CGPN, c.MSCIncomingRoute AS In_Carrier, c.MSCOutgoingRoute AS Out_Carrier, 
                          c.MSCIncomingRoute AS In_Trunk, c.MSCOutgoingRoute AS Out_Trunk, c.ConnectDateTime AS AttemptDateTime, c.ConnectDateTime, c.DisconnectDateTime, 
                          c.DurationInSeconds, NULL AS ServiceCenter, RecordType, c.CauseForTermination AS CAUSE_FROM_RELEASE_CODE, NULL AS CAUSE_TO_RELEASE_CODE, NULL
-                          AS Tag, NULL AS AlertDateTime
+                          AS Tag, NULL AS AlertDateTime, SwitchId
 FROM            Mediation_WHS.CDR AS c
 UNION ALL
-SELECT        s.CallReference AS ID, callreference AS IDonSwitch,case when s.destinationNumber like '085%' then '26485' + substring(destinationNumber, 4, len(destinationNumber)-3) else s.destinationnumber end AS cdpn, s.ServedMSISDN AS cgpn, 'MTC_SMS' AS In_Carrier, 'TN_Mobile_SMS' AS Out_Carrier, 
+SELECT        s.CallReference AS ID, callreference AS IDonSwitch, CASE WHEN s.destinationNumber LIKE '085%' THEN '26485' + substring(destinationNumber, 4, 
+                         len(destinationNumber) - 3) ELSE s.destinationnumber END AS cdpn, s.ServedMSISDN AS cgpn, 'MTC_SMS' AS In_Carrier, 'TN_Mobile_SMS' AS Out_Carrier, 
                          'MTC_SMS' AS In_Trunk, 'TN_Mobile_SMS' AS Out_Trunk, s.MessageTime AS AttemptDateTime, NULL AS ConnectDateTime, NULL AS DisconnectDateTime, 
                          1 AS DurationInSeconds, s.ServiceCenter, RecordType, NULL AS CAUSE_FROM_RELEASE_CODE, NULL AS CAUSE_TO_RELEASE_CODE, NULL AS Tag, NULL 
-                         AS AlertDateTime
+                         AS AlertDateTime, s.SwitchId
 FROM            Mobile_EDR.SMS AS s
 WHERE        RecordType = 6 AND (ServiceCenter LIKE '192648119002%' OR
                          ServiceCenter LIKE '198119002%' OR
-                         ServiceCenter IN ('19264851000008', '19851000008')) and (destinationnumber like '1926485%' or destinationnumber like '085%')
+                         ServiceCenter IN ('19264851000008', '19851000008')) AND (destinationnumber LIKE '1926485%' OR
+                         destinationnumber LIKE '085%')
 UNION ALL
-SELECT        s.CallReference AS ID, callreference AS IDonSwitch, s.destinationnumber AS cdpn, s.ServedMSISDN AS cgpn, 'TN_Mobile_SMS' AS In_Carrier, 'MTC_SMS' AS Out_Carrier, 
-                         'TN_Mobile_SMS' AS In_Trunk, 'MTC_SMS' AS Out_Trunk, s.MessageTime AS AttemptDateTime, NULL AS ConnectDateTime, NULL AS DisconnectDateTime, 
-                         1 AS DurationInSeconds, s.ServiceCenter, RecordType, NULL AS CAUSE_FROM_RELEASE_CODE, NULL AS CAUSE_TO_RELEASE_CODE, NULL AS Tag, NULL 
-                         AS AlertDateTime
+SELECT        s.CallReference AS ID, callreference AS IDonSwitch, s.destinationnumber AS cdpn, s.ServedMSISDN AS cgpn, 'TN_Mobile_SMS' AS In_Carrier, 
+                         'MTC_SMS' AS Out_Carrier, 'TN_Mobile_SMS' AS In_Trunk, 'MTC_SMS' AS Out_Trunk, s.MessageTime AS AttemptDateTime, NULL AS ConnectDateTime, NULL 
+                         AS DisconnectDateTime, 1 AS DurationInSeconds, s.ServiceCenter, RecordType, NULL AS CAUSE_FROM_RELEASE_CODE, NULL 
+                         AS CAUSE_TO_RELEASE_CODE, NULL AS Tag, NULL AS AlertDateTime, SwitchId
 FROM            Mobile_EDR.SMS AS s
 WHERE        RecordType = 7 AND (ServiceCenter LIKE '192648119002%' OR
                          ServiceCenter LIKE '198119002%' OR
