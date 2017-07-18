@@ -18,8 +18,15 @@
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
     [NumberOfCDRs]           INT              NULL,
     [SubscriberAccountId]    BIGINT           NULL,
+    [SupplierName]           NVARCHAR (255)   NULL,
+    [CostAmount]             DECIMAL (22, 6)  NULL,
+    [CostCurrencyId]         INT              NULL,
+    [CostAvailable]          BIT              NULL,
+    [CostRate]               DECIMAL (20, 8)  NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

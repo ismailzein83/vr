@@ -30,10 +30,15 @@
     [SaleRateTypeRuleId]     INT              NULL,
     [SaleTariffRuleId]       INT              NULL,
     [SaleExtraChargeRuleId]  INT              NULL,
+    [CDRCostId]              BIGINT           NULL,
+    [SupplierName]           NVARCHAR (255)   NULL,
     [CostRate]               DECIMAL (20, 8)  NULL,
     [CostAmount]             DECIMAL (22, 6)  NULL,
+    [CostCurrencyId]         INT              NULL,
     [Extension]              VARCHAR (20)     NULL,
     [QueueItemId]            BIGINT           NULL);
+
+
 
 
 

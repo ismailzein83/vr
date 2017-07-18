@@ -127,10 +127,7 @@
     <Build Include="Retail_EDR\Tables\EDR.sql" />
     <Build Include="Retail_EDR\User Defined Types\vw_EDRsType.sql" />
     <Build Include="Retail_EDR\User Defined Types\EDRType.sql" />
-    <Build Include="Retail_CDR\Tables\ReceivedCDRCost.sql" />
-    <Build Include="Retail_CDR\Tables\ProcessedCDRCost.sql" />
     <Build Include="Retail_CDR\Functions\ParseStringList.sql" />
-    <Build Include="Retail_CDR\Stored Procedures\sp_ProcessedCDRCost_GetByCDPNs.sql" />
     <Build Include="Retail_CDR\User Defined Types\ReceivedCostCDRType.sql" />
     <Build Include="VR_Invoice\Tables\InvoiceItem.sql" />
     <Build Include="VR_Invoice\Functions\ParseStringList.sql" />
@@ -139,5 +136,11 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceItem_GetFiltered.sql" />
     <Build Include="VR_Invoice\User Defined Types\InvoiceItemType.sql" />
     <Build Include="Security\VR_Invoice.sql" />
+    <Build Include="Retail_CDR\Tables\CDRCost_1.sql" />
+    <Build Include="Retail_CDR\Stored Procedures\sp_CDRCost_UpadeOverridenAfterDate_1.sql" />
+    <Build Include="Retail_CDR\Stored Procedures\sp_CDRCost_GetMaxId_1.sql" />
+    <Build Include="Retail_CDR\Stored Procedures\sp_CDRCost_GetDistinctDatesAfterId_1.sql" />
+    <Build Include="Retail_CDR\Stored Procedures\sp_CDRCost_GetByCDPNs_1.sql" />
+    <Build Include="Retail_CDR\User Defined Types\CDRCostType_1.sql" />
   </ItemGroup>
 </Project>
