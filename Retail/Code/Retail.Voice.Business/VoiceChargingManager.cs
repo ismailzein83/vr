@@ -64,6 +64,9 @@ namespace Retail.Voice.Business
             if (voiceEventPrice.VoiceEventPricedParts.Count > 1)
                 throw new NotSupportedException("Case of multipler VoiceEventPricedParts not supported yet.");
 
+            ConfigManager configManager = new ConfigManager();
+            int? saleAmountPrecision = configManager.GetSaleAmountPrecision();
+
             if (voiceEventPrice.VoiceEventPricedParts.Count > 0)
             {
                 if (remainingDurationToPrice > 0)
@@ -73,7 +76,6 @@ namespace Retail.Voice.Business
                 voiceEventPrice.PackageId = voiceEventPricedPart.PackageId;
                 voiceEventPrice.UsageChargingPolicyId = voiceEventPricedPart.UsageChargingPolicyId;
                 voiceEventPrice.SaleRate = voiceEventPricedPart.SaleRate;
-                voiceEventPrice.SaleAmount = voiceEventPricedPart.SaleAmount;
                 voiceEventPrice.SaleRateTypeId = voiceEventPricedPart.SaleRateTypeId;
                 voiceEventPrice.SaleCurrencyId = voiceEventPricedPart.SaleCurrencyId;
                 voiceEventPrice.SaleDurationInSeconds = voiceEventPricedPart.SaleDurationInSeconds;
@@ -81,6 +83,11 @@ namespace Retail.Voice.Business
                 voiceEventPrice.SaleRateTypeRuleId = voiceEventPricedPart.SaleRateTypeRuleId;
                 voiceEventPrice.SaleTariffRuleId = voiceEventPricedPart.SaleTariffRuleId;
                 voiceEventPrice.SaleExtraChargeRuleId = voiceEventPricedPart.SaleExtraChargeRuleId;
+
+                if (saleAmountPrecision.HasValue && voiceEventPricedPart.SaleAmount.HasValue)
+                    voiceEventPrice.SaleAmount = Math.Round(voiceEventPricedPart.SaleAmount.Value, saleAmountPrecision.Value, MidpointRounding.AwayFromZero);
+                else
+                    voiceEventPrice.SaleAmount = voiceEventPricedPart.SaleAmount;
 
                 foreach (var entry in chargersChargingInfos)
                 {
@@ -260,11 +267,11 @@ namespace Retail.Voice.Business
 
         public long PackageAccountId { get; set; }
 
-        public Guid ServiceTypeId{ get; set; }
+        public Guid ServiceTypeId { get; set; }
 
         public dynamic RawCDR { get; set; }
 
-        public dynamic MappedCDR{ get; set; }
+        public dynamic MappedCDR { get; set; }
 
         public decimal Duration { get; set; }
 
@@ -314,7 +321,7 @@ namespace Retail.Voice.Business
 
         public long PackageAccountId { get; set; }
 
-        public Entities.VoiceEventPricingInfo EventPricingInfo  { get; set; }
+        public Entities.VoiceEventPricingInfo EventPricingInfo { get; set; }
     }
 
     public class VoiceUsageChargerWithParentPackage
