@@ -5799,10 +5799,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "CallingLocationInformation_First"
+                        NumberType = NumberType.Int,
+                        FieldName = "CallingLocationInformation_First",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -5813,10 +5814,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "CallingLocationInformation_Last"
+                        NumberType = NumberType.Int,
+                        FieldName = "CallingLocationInformation_Last",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -5827,10 +5829,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "FirstSiteId"
+                        NumberType = NumberType.Int,
+                        FieldName = "FirstSiteId",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -5841,10 +5844,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "LastSiteId"
+                        NumberType = NumberType.Int,
+                        FieldName = "LastSiteId",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -6050,10 +6054,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "CalledLocationInformation_First"
+                        NumberType = NumberType.Int,
+                        FieldName = "CalledLocationInformation_First",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -6064,10 +6069,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "CalledLocationInformation_Last"
+                        NumberType = NumberType.Int,
+                        FieldName = "CalledLocationInformation_Last",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -6078,10 +6084,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "FirstSiteId"
+                        NumberType = NumberType.Int,
+                        FieldName = "FirstSiteId",
+                        Reverse = true
                     }
                 },
                 Length = 2,
@@ -6092,10 +6099,11 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new HexTLVFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new NumberFieldParser
                     {
-                        RemoveHexa = true,
-                        FieldName = "LastSiteId"
+                        NumberType = NumberType.Int,
+                        FieldName = "LastSiteId",
+                        Reverse = true
                     }
                 },
                 Length = 2,

@@ -33,15 +33,17 @@
     [SwitchID]                         INT              NULL,
     [CallingIMSI]                      VARCHAR (50)     NULL,
     [CallingIMEI]                      VARCHAR (50)     NULL,
-    [FisrtSiteId]                      VARCHAR (50)     NULL,
-    [LastSiteId]                       VARCHAR (50)     NULL,
-    [CallingLocationInformation_First] VARCHAR (50)     NULL,
-    [CallingLocationInformation_Last]  VARCHAR (50)     NULL,
-    [CalledLocationInformation_First]  VARCHAR (50)     NULL,
-    [CalledLocationInformation_Last]   VARCHAR (50)     NULL,
+    [FisrtSiteId]                      INT              NULL,
+    [LastSiteId]                       INT              NULL,
+    [CallingLocationInformation_First] INT              NULL,
+    [CallingLocationInformation_Last]  INT              NULL,
+    [CalledLocationInformation_First]  INT              NULL,
+    [CalledLocationInformation_Last]   INT              NULL,
     [ConnectTimestamp]                 BIGINT           NULL,
     [DisconnectTimestamp]              BIGINT           NULL,
     [UniqueIdentifier]                 UNIQUEIDENTIFIER NULL);
+
+
 
 
 
