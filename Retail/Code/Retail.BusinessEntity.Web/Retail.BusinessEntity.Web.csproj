@@ -623,7 +623,9 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\retail-be-servicetype-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\OverriddenConfigurationServiceType.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-centrextechnical-settings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-didtechnicalsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\CentrexTechnicalSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\DIDTechnicalSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
