@@ -10,17 +10,22 @@ using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
 namespace Retail.Zajil.MainExtensions
 {
     public class ZajilSubscriberInvoiceGenerator : InvoiceGenerator
     {
         Guid _acountBEDefinitionId;
         Guid _companyExtendedInfoPartdefinitionId;
-        public ZajilSubscriberInvoiceGenerator(Guid acountBEDefinitionId, Guid companyExtendedInfoPartdefinitionId)
+
+         Guid _invoiceTransactionTypeId;
+         List<Guid> _usageTransactionTypeIds;
+        public ZajilSubscriberInvoiceGenerator(Guid acountBEDefinitionId, Guid companyExtendedInfoPartdefinitionId, Guid invoiceTransactionTypeId, List<Guid> usageTransactionTypeIds)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
             this._companyExtendedInfoPartdefinitionId = companyExtendedInfoPartdefinitionId;
+            this._invoiceTransactionTypeId = invoiceTransactionTypeId;
+            this._usageTransactionTypeIds = usageTransactionTypeIds;
         }
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
@@ -61,6 +66,7 @@ namespace Retail.Zajil.MainExtensions
                     retailSubscriberInvoiceDetails.CustomerPO = zajilCompanyExtendedInfo.CustomerPO;
                 }
             }
+            SetInvoiceBillingTransactions(context, retailSubscriberInvoiceDetails);
             context.Invoice = new GeneratedInvoice
             {
                 InvoiceDetails = retailSubscriberInvoiceDetails,
@@ -219,7 +225,32 @@ namespace Retail.Zajil.MainExtensions
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, InvoiceDetails invoiceDetails)
+        {
+            var accountBalanceManager = new AccountBalanceManager();
+            Guid accountTypeId = accountBalanceManager.GetAccountBalanceTypeId(_acountBEDefinitionId);
+            var billingTransaction = new GeneratedInvoiceBillingTransaction()
+            {
+                AccountTypeId = accountTypeId,
+                AccountId = context.PartnerId,
+                TransactionTypeId = this._invoiceTransactionTypeId,
+                Amount = invoiceDetails.TotalAmount,
+                CurrencyId = invoiceDetails.CurrencyId
+            };
+            billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
+            billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
+            if (this._usageTransactionTypeIds != null)
+            {
+                foreach (Guid usageTransactionTypeId in this._usageTransactionTypeIds)
+                {
+                    billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                    {
+                        TransactionTypeId = usageTransactionTypeId
+                    });
+                }
+            }
+            context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
+        }
         public class InvoiceBillingRecord
         {
             public decimal Amount { get; set; }
