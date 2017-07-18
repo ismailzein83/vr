@@ -14,7 +14,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 
         public string FieldName { get; set; }
         public NumberType NumberType { get; set; }
-
+        public bool Reverse { get; set; }
         public override void Execute(IHexTLVFieldParserContext context)
         {
             switch (this.NumberType)
@@ -23,10 +23,10 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
                     //context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToDecimal(ParserHelper.ByteArrayToString(context.FieldValue)));
                     break;
                 case NumberType.Int:
-                    context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToInt32(ParserHelper.ByteArrayToString(context.FieldValue)));
+                    context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToInt32(ParserHelper.ByteArrayToString(context.FieldValue, this.Reverse)));
                     break;
                 case NumberType.BigInt:
-                    context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToInt64(ParserHelper.ByteArrayToString(context.FieldValue)));
+                    context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToInt64(ParserHelper.ByteArrayToString(context.FieldValue, this.Reverse)));
                     break;
             }
         }

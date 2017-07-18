@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Vanrise.Common;
 using Vanrise.DataParser.Entities;
+using System.Linq;
 
 namespace Vanrise.DataParser.Business
 {
@@ -87,9 +88,9 @@ namespace Vanrise.DataParser.Business
         {
             return value.ToString("X2");
         }
-        public static string ByteArrayToString(byte[] ba)
+        public static string ByteArrayToString(byte[] ba, bool reverse)
         {
-            string hex = BitConverter.ToString(ba);
+            string hex = BitConverter.ToString(reverse ? ba.Reverse().ToArray() : ba);
             return hex.Replace("-", "");
         }
 
