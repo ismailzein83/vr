@@ -12,6 +12,7 @@ using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using System.Threading;
+using System.IO;
 namespace Vanrise.Invoice.MainExtensions
 {
     public class OpenRDLCReportActionManager
@@ -58,8 +59,8 @@ namespace Vanrise.Invoice.MainExtensions
                         reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(openRDLCReportAction.ReportURL);
                     }else
                     {
-                        string currentDir = Environment.CurrentDirectory;
-                        reportViewer.LocalReport.ReportPath = string.Format("{0}\\{1}",currentDir,openRDLCReportAction.ReportRuntimeURL);
+                        string currentDir = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(OpenRDLCReportActionManager)).Location);
+                        reportViewer.LocalReport.ReportPath = Path.Combine(currentDir, openRDLCReportAction.ReportRuntimeURL);
 
                     }
                     reportViewer.LocalReport.DisplayName = String.Format("Invoice");
