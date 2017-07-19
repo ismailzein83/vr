@@ -209,9 +209,6 @@ namespace Retail.MultiNet.Business
                     if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
                         whAmount += summaryItem.NetAmount;
 
-                    if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
-                        whAmount += summaryItem.NetAmount;
-
                     if (summaryItem.ChargeableEntityId == this._otcChargeableEntity)
                         branchSummary.OTC += summaryItem.NetAmount;
                     if (summaryItem.ChargeableEntityId == this._lineRentChargeableEntity)
@@ -780,7 +777,8 @@ namespace Retail.MultiNet.Business
                     retailSubscriberInvoiceDetails.InComing += branchSummary.InComing;
                     retailSubscriberInvoiceDetails.OutGoing += branchSummary.OutGoing;
 
-
+                    //retailSubscriberInvoiceDetails.SalesTaxAmount += branchSummary.SalesTaxAmount;
+                    //retailSubscriberInvoiceDetails.WHTaxAmount += branchSummary.WHTaxAmount;
                 }
                 retailSubscriberInvoiceDetails.PayableByDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges;
                 retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId, issueDate);
