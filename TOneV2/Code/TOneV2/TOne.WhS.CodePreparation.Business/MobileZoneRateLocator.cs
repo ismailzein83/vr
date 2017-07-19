@@ -43,6 +43,10 @@ namespace TOne.WhS.CodePreparation.Business
             Dictionary<int, NewZoneRateEntity> defaultRates = new Dictionary<int, NewZoneRateEntity>();
 
             SalePriceListManager priceListManager = new SalePriceListManager();
+            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            int systemCurrencyId = configManager.GetSystemCurrencyId();
             foreach (string zoneName in fixedZoneNames)
             {
                 List<ExistingRate> effectiveExistingRates = null;
@@ -60,7 +64,9 @@ namespace TOne.WhS.CodePreparation.Business
                                 OwnerType = pricelist.OwnerType,
                                 CurrencyId = newRateCurrencyId,
                                 //TODO: make sure to convert from default rate currency to selling product currency later
-                                Rate = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct ? base.SaleAreaSettings.DefaultRate : effectiveRate.RateEntity.Rate
+                                Rate = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
+                                        ? base.SaleAreaSettings.DefaultRate
+                                        : currencyExchangeRateManager.ConvertValueToCurrency(SaleAreaSettings.DefaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now)
                             };
                             defaultRates.Add(pricelist.OwnerId, rate);
                         }
