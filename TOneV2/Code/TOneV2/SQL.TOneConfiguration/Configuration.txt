@@ -20,6 +20,7 @@ Deals.PostDeployment.sql
 TOneV1Transition.PostDeployment.sql
 WhS_AccountBalance.PostDeployment.sql
 TOne.PostDeployment.sql
+DataAnalysis.PostDeployment.sql
 
 BI
 BI.PostDeployemnt.sql
