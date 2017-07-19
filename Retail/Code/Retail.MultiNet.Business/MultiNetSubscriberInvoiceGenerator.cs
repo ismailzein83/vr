@@ -217,7 +217,6 @@ namespace Retail.MultiNet.Business
                         branchSummary.InComing += summaryItem.NetAmount;
                     if (summaryItem.ChargeableEntityId == this._outGoingChargeableEntity)
                         branchSummary.OutGoing += summaryItem.NetAmount;
-
                 }
                 decimal whAmountSaleTaxPercentage = 0;
                 whAmount += GetSaleTaxAmount(account, whAmount, currencyId, multiNetInvoiceGeneratorContext.IssueDate, out whAmountSaleTaxPercentage);
@@ -295,7 +294,7 @@ namespace Retail.MultiNet.Business
                 int normalPrecisionValue = _generalSettingsManager.GetNormalPrecisionValue();
                 foreach (var usageSummary in usagesSummariesBySubItemIdentifier.Values)
                 {
-                    usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration * 60, normalPrecisionValue);
+                    usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration, normalPrecisionValue);
                     usageSummary.NetAmount = Decimal.Round(usageSummary.NetAmount, normalPrecisionValue);
                 }
                 if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
@@ -373,7 +372,7 @@ namespace Retail.MultiNet.Business
                             CalledNumber = billingCDR.CalledNumber,
                             CallingNumber = billingCDR.CallingNumber,
                             DurationInSeconds = Decimal.Round(billingCDR.DurationInSeconds, normalPrecisionValue),
-                            DurationDescription = TimeSpan.FromSeconds(Convert.ToDouble(billingCDR.DurationInSeconds)).ToString(),
+                            DurationDescription = TimeSpan.FromSeconds(Convert.ToDouble(billingCDR.DurationInSeconds)).ToString(@"hh\:mm\:ss"),
                             ZoneId = billingCDR.ZoneId,
                             OperatorName = billingCDR.OperatorName,
                             SaleCurrencyId = billingCDR.SaleCurrencyId
@@ -597,7 +596,7 @@ namespace Retail.MultiNet.Business
         {
             if (multiNetInvoiceGeneratorContext.BillingSummariesByBranch == null)
             {
-                List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDuration" };
+                List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDurationInSeconds" };
                 List<string> listDimensions = new List<string> { "TrafficDirection", "ServiceType" };
                 if (multiNetInvoiceGeneratorContext.FinancialAccount.TypeId == this._companyTypeId)
                 {
@@ -654,7 +653,7 @@ namespace Retail.MultiNet.Business
                         {
                             MeasureValue amountMeasure = GetMeasureValue(analyticRecord, "Amount");
                             MeasureValue countCDRsMeasure = GetMeasureValue(analyticRecord, "CountCDRs");
-                            MeasureValue totalDurationMeasure = GetMeasureValue(analyticRecord, "TotalDuration");
+                            MeasureValue totalDurationMeasure = GetMeasureValue(analyticRecord, "TotalDurationInSeconds");
                             decimal amount = Convert.ToDecimal(amountMeasure.Value ?? 0.0);
                             int countCDRs = Convert.ToInt32(countCDRsMeasure.Value);
                             Decimal totalDuration = Convert.ToDecimal(totalDurationMeasure.Value);
@@ -777,8 +776,10 @@ namespace Retail.MultiNet.Business
                     retailSubscriberInvoiceDetails.InComing += branchSummary.InComing;
                     retailSubscriberInvoiceDetails.OutGoing += branchSummary.OutGoing;
 
-                    //retailSubscriberInvoiceDetails.SalesTaxAmount += branchSummary.SalesTaxAmount;
-                    //retailSubscriberInvoiceDetails.WHTaxAmount += branchSummary.WHTaxAmount;
+                    retailSubscriberInvoiceDetails.SalesTaxAmount += branchSummary.SalesTaxAmount;
+                    retailSubscriberInvoiceDetails.WHTaxAmount += branchSummary.WHTaxAmount;
+                    retailSubscriberInvoiceDetails.SalesTax += branchSummary.SalesTax;
+                    retailSubscriberInvoiceDetails.WHTax += branchSummary.WHTax;
                 }
                 retailSubscriberInvoiceDetails.PayableByDueDate = retailSubscriberInvoiceDetails.TotalCurrentCharges;
                 retailSubscriberInvoiceDetails.LatePaymentCharges = GetLatePaymentCharges(account, retailSubscriberInvoiceDetails.TotalCurrentCharges, currencyId, issueDate);

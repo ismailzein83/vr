@@ -44,7 +44,10 @@ namespace Retail.MultiNet.Business
                 case "MailTemplate":
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Account", financialAccountData.Account);
-                    objects.Add("Invoice", context.Invoice);
+                    if (financialAccountData.Account.TypeId == this.BranchTypeId)
+                         objects.Add("MultiNet Branch Invoice", context.Invoice);
+                    else if (financialAccountData.Account.TypeId == this.CompanyTypeId)
+                      objects.Add("MultiNet Company Invoice", context.Invoice);
                     return objects;
                 case "BankDetails":
                     {
