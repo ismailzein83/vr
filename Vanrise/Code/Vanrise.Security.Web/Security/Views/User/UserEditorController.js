@@ -2,16 +2,20 @@
 
     'use strict';
 
-    UserEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_SecurityAPIService', 'VRUIUtilsService'];
+    UserEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_SecurityAPIService', 'VRUIUtilsService', 'VR_Sec_GroupAPIService'];
 
-    function UserEditorController($scope, VR_Sec_UserAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_SecurityAPIService, VRUIUtilsService) {
+    function UserEditorController($scope, VR_Sec_UserAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_SecurityAPIService, VRUIUtilsService, VR_Sec_GroupAPIService) {
         var isEditMode;
         var userId;
+        var groupIds;
         var userEntity;
         var context;
         var isViewHistoryMode;
         var tenantSelectorAPI;
         var tenantReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var groupSelectorAPI;
+        var groupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -30,6 +34,8 @@
 
         function defineScope() {
             $scope.showTenantSelector = true;
+
+            $scope.showPasswordSection = !isEditMode;
 
             $scope.save = function () {
                 if (isEditMode)
@@ -57,6 +63,15 @@
                 tenantReadyPromiseDeferred.resolve();
             };
 
+            $scope.onGroupSelectorReady = function (api) {
+                groupSelectorAPI = api;
+                groupReadyPromiseDeferred.resolve();
+            };
+            $scope.validatePasswords = function () {
+                if ($scope.password != $scope.confirmedPassword)
+                    return 'Passwords do not match';
+                return null;
+            };
             $scope.hideTenantSelectorIfNotNeeded = function () {
                 $scope.showTenantSelector = false;
             };
@@ -66,9 +81,13 @@
 
             if (isEditMode) {
                 getUser().then(function () {
-                    loadAllControls().finally(function () {
-                        userEntity = undefined;
+                    getUserGroups().finally(function () {
+                        loadAllControls().finally(function () {
+                            userEntity = undefined;
+                            groupIds =  undefined;
+                        });
                     });
+                    
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -96,6 +115,12 @@
                 $scope.isInEditMode = true;
             });
         }
+
+        function getUserGroups() {
+            return VR_Sec_GroupAPIService.GetAssignedUserGroups(userId).then(function (response) {
+                groupIds = response;
+            });
+        }
         function getUserHistory() {
             return VR_Sec_UserAPIService.GetUserHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 userEntity = response;
@@ -103,7 +128,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector, loadGroupSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -124,6 +149,19 @@
             });
 
             return loadTenantPromiseDeferred.promise;
+        }
+        function loadGroupSelector() {
+            var loadGroupPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var payload = undefined;
+            if (groupIds != undefined) {
+                payload = { selectedIds: groupIds };
+            }
+            groupReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(groupSelectorAPI, payload, loadGroupPromiseDeferred);
+            });
+
+            return loadGroupPromiseDeferred.promise;
         }
 
         function hasAuthServer() {
@@ -159,9 +197,11 @@
                 Email: $scope.scopemodel.email,
                 Description: $scope.scopemodel.description,
                 EnabledTill: $scope.scopemodel.enabledTill,
-                TenantId: tenantSelectorAPI.getSelectedIds()
+                TenantId: tenantSelectorAPI.getSelectedIds(),
+                GroupIds: groupSelectorAPI.getSelectedIds()
             };
-
+            if (!isEditMode)
+                userObject.Password = $scope.password;
             return userObject;
         }
 
