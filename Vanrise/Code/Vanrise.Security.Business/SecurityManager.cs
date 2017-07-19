@@ -49,7 +49,7 @@ namespace Vanrise.Security.Business
                 if (!manager.IsUserEnable(user))
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
-                    VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try Login Inactive User");
+                    VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with inactive user");
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace Vanrise.Security.Business
                         authenticationOperationOutput.AuthenticationObject = authToken;
 
                         dataManager.UpdateLastLogin(user.UserId);
-                        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance,"Login",false, user,"Login Successfully");
+                        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance,"Login",false, user,"Login successfully");
 
                     }
                     else
@@ -80,14 +80,14 @@ namespace Vanrise.Security.Business
                         if (HashingUtility.VerifyHash(password, "", loggedInUserTempPassword))
                         {
                             authenticationOperationOutput.Result = AuthenticateOperationResult.ActivationNeeded;
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try Login With Activation Needed");
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with activation needed");
 
                         }
 
                         else
                         {
                             authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try Login With Wrong Credentials");
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with wrong credentials");
 
                         }
                     }
@@ -97,7 +97,7 @@ namespace Vanrise.Security.Business
             else
             {
                 authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
-                LoggerFactory.GetLogger().WriteError("Login with user not exists");
+                LoggerFactory.GetLogger().WriteError("Try login with user not exists");
             }
 
             return authenticationOperationOutput;
