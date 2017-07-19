@@ -9,5 +9,7 @@ namespace Vanrise.GenericData.Entities
     public interface IBusinessEntityDefinitionManager : IBusinessManager
     {
         string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId);
+
+        BusinessEntityDefinition GetBusinessEntityDefinition(Guid businessEntityDefinitionId);
     }
 }

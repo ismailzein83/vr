@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -18,8 +18,8 @@ namespace Vanrise.Common.Business
 
        public GenericLKUPDefinitionExtendedSettings GetGenericLKUPDefinitionExtendedSetings(Guid BusinessEntityDefinitionId)
        {
-          
-           BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
+
+           IBusinessEntityDefinitionManager manager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IBusinessEntityDefinitionManager>();
            var genericLKUPDefinition=manager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
            if (genericLKUPDefinition != null)
            {
