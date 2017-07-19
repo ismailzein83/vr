@@ -661,7 +661,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(DateAdd("s", Sum(Fields!TotalDuration.Value), "00:00:00"), "HH:mm:ss")</Value>
+                              <Value>= String.Format("{0}:{1:mm}:{1:ss}",  Int(TimeSpan.FromSeconds(Sum(Fields!TotalDuration.Value)).TotalHours), TimeSpan.FromSeconds(Sum(Fields!TotalDuration.Value)))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -790,6 +790,12 @@
                             </Parameter>
                             <Parameter Name="BranchName">
                               <Value>=Parameters!BranchName.Value</Value>
+                            </Parameter>
+                            <Parameter Name="NetAmount">
+                              <Value>=Fields!NetAmount.Value</Value>
+                            </Parameter>
+                            <Parameter Name="DurationDescription">
+                              <Value>=Fields!TotalDurationDescription.Value</Value>
                             </Parameter>
                           </Parameters>
                           <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>

@@ -43,11 +43,11 @@ namespace Retail.MultiNet.Business
             {
                 case "MailTemplate":
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("Account", financialAccountData.Account);
+                    objects.Add("Invoice", context.Invoice);
                     if (financialAccountData.Account.TypeId == this.BranchTypeId)
-                         objects.Add("MultiNet Branch Invoice", context.Invoice);
+                        objects.Add("Branch", financialAccountData.Account);
                     else if (financialAccountData.Account.TypeId == this.CompanyTypeId)
-                      objects.Add("MultiNet Company Invoice", context.Invoice);
+                        objects.Add("Company", financialAccountData.Account);       
                     return objects;
                 case "BankDetails":
                     {

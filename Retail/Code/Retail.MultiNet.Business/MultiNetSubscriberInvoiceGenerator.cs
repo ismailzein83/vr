@@ -271,6 +271,8 @@ namespace Retail.MultiNet.Business
                 {
                     AccountId = account.AccountId
                 };
+                bool hasCallAggregations = false;
+                bool hasOutgoingCall = false;
                 foreach (var billingSummary in billingSummaries)
                 {
                     string usageDescription = null;
@@ -278,12 +280,14 @@ namespace Retail.MultiNet.Business
                     switch (billingSummary.TrafficDirection)
                     {
                         case TrafficDirection.InComming:
+                            hasCallAggregations = true;
                             ModifySummaryItem(callAggregationSummary, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, this._inComingChargeableEntity);
                             subItemIdentifier = GetSubItemIdentifier(account.AccountId, null);
                             usageDescription = _genericLKUPManager.GetGenericLKUPItemName(this._inComingChargeableEntity);
                             AddUsageSummary(usagesSummariesBySubItemIdentifier, account.AccountId, subItemIdentifier, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, usageDescription);
                             break;
                         case TrafficDirection.OutGoing:
+                            hasOutgoingCall = true;
                             ModifySummaryItem(outgoingCallsSummary, billingSummary.CountCDRs, billingSummary.Amount, billingSummary.TotalDuration, this._outGoingChargeableEntity);
                             subItemIdentifier = GetSubItemIdentifier(account.AccountId, billingSummary.ServiceTypeId);
                             usageDescription = _serviceTypeManager.GetServiceTypeName(billingSummary.ServiceTypeId);
@@ -294,17 +298,23 @@ namespace Retail.MultiNet.Business
                 int normalPrecisionValue = _generalSettingsManager.GetNormalPrecisionValue();
                 foreach (var usageSummary in usagesSummariesBySubItemIdentifier.Values)
                 {
-                    usageSummary.TotalDuration = Decimal.Round(usageSummary.TotalDuration, normalPrecisionValue);
+                    usageSummary.TotalDuration = usageSummary.TotalDuration;
                     usageSummary.NetAmount = Decimal.Round(usageSummary.NetAmount, normalPrecisionValue);
                 }
                 if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
                     multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
                 var summaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
 
-                summaryItems.Add(callAggregationSummary);
-                callAggregationSummary.NetAmount = Decimal.Round(callAggregationSummary.NetAmount, normalPrecisionValue);
-                summaryItems.Add(outgoingCallsSummary);
-                outgoingCallsSummary.NetAmount = decimal.Round(outgoingCallsSummary.NetAmount, normalPrecisionValue);
+                if (hasCallAggregations)
+                {
+                    summaryItems.Add(callAggregationSummary);
+                    callAggregationSummary.NetAmount = Decimal.Round(callAggregationSummary.NetAmount, normalPrecisionValue);
+                }
+                if (hasOutgoingCall)
+                {
+                    summaryItems.Add(outgoingCallsSummary);
+                    outgoingCallsSummary.NetAmount = decimal.Round(outgoingCallsSummary.NetAmount, normalPrecisionValue);
+                }
                 BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
                 LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, currencyId, fromDate, toDate, branchTypeId);
             }
@@ -371,8 +381,8 @@ namespace Retail.MultiNet.Business
                             AttemptDateTime = billingCDR.AttemptDateTime,
                             CalledNumber = billingCDR.CalledNumber,
                             CallingNumber = billingCDR.CallingNumber,
-                            DurationInSeconds = Decimal.Round(billingCDR.DurationInSeconds, normalPrecisionValue),
-                            DurationDescription = TimeSpan.FromSeconds(Convert.ToDouble(billingCDR.DurationInSeconds)).ToString(@"hh\:mm\:ss"),
+                            DurationInSeconds = billingCDR.DurationInSeconds,
+                            DurationDescription = FormatDuration((Double)billingCDR.DurationInSeconds),
                             ZoneId = billingCDR.ZoneId,
                             OperatorName = billingCDR.OperatorName,
                             SaleCurrencyId = billingCDR.SaleCurrencyId
@@ -396,6 +406,12 @@ namespace Retail.MultiNet.Business
                     BuildGeneratedUsageCDRsItemSet(multiNetInvoiceGeneratorContext, cdrsBySubItemIdentifier);
                 }
             }
+        }
+
+        private string FormatDuration(double durationInSeconds)
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(durationInSeconds);
+            return String.Format("{0}:{1:mm}:{1:ss}", (int)timeSpan.TotalHours, timeSpan);
         }
 
         #region  Load And Build Usage CDRs
@@ -539,7 +555,7 @@ namespace Retail.MultiNet.Business
             usageSummary.Quantity += countCDRs;
             usageSummary.NetAmount += netAmount;
             usageSummary.TotalDuration += totalDuration;
-            usageSummary.TotalDurationDescription = TimeSpan.FromSeconds(Convert.ToDouble(usageSummary.TotalDuration)).ToString(@"hh\:mm\:ss");
+            usageSummary.TotalDurationDescription = FormatDuration((Double)usageSummary.TotalDuration);
         }
 
 
@@ -919,6 +935,7 @@ namespace Retail.MultiNet.Business
         public string CallingNumber { get; set; }
         public string CalledNumber { get; set; }
         public decimal SaleAmount { get; set; }
+
         public long? ZoneId { get; set; }
         public string OperatorName { get; set; }
         public string ZoneName { get; set; }
