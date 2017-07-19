@@ -10,5 +10,5 @@ AS
 BEGIN
 	SELECT	ID,InvoiceId,ItemSetName,Name,Details
 	FROM	VR_Invoice.InvoiceItem with(nolock)
-	where	(@InvoiceId is null OR InvoiceId = @InvoiceId) AND ItemSetName = @ItemSetName
+	where	(@InvoiceId is null OR InvoiceId = @InvoiceId) AND ItemSetName like @ItemSetName
 END
