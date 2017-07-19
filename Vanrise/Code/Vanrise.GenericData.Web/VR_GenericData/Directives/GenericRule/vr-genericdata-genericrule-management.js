@@ -33,7 +33,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
         var criteriaFieldsToHide;
         var ruleDefinitionId;
-        var criteriaFieldValues;
+        var predefinedCriteriaFieldValues;
         var accessibility;
 
         this.initializeController = initializeController;
@@ -41,7 +41,6 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.criteriaFieldValues;
 
             $scope.scopeModel.filters = [];
             $scope.scopeModel.effectiveDate;
@@ -70,9 +69,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
                 var preDefinedData = {};
                 preDefinedData.criteriaFieldsValues = {};
-                for (var key in criteriaFieldValues)
-                    preDefinedData.criteriaFieldsValues[key] = GetValues([criteriaFieldValues[key]]);
-
+                if (predefinedCriteriaFieldValues != undefined) {
+                    for (var key in predefinedCriteriaFieldValues)
+                        preDefinedData.criteriaFieldsValues[key] = GetValues([predefinedCriteriaFieldValues[key]]);
+                }
                 VR_GenericData_GenericRule.addGenericRule(ruleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility);
             };
 
@@ -102,8 +102,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 if (payload != undefined) {
                     ruleDefinitionId = payload.RuleDefinitionId;
                     criteriaFieldsToHide = payload.criteriaFieldsToHide;
-                    criteriaFieldValues = payload.CriteriaFieldValues;
-                    $scope.scopeModel.criteriaFieldValues = payload.CriteriaFieldValues;
+                    predefinedCriteriaFieldValues = payload.CriteriaFieldValues;
                     accessibility = payload.accessibility;
 
                     var hasAddGenericRulePermissionPromise = hasAddGenericRulePermission();
@@ -182,7 +181,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     }
                 }
             }
-
+            if (predefinedCriteriaFieldValues != undefined) {
+                for (var key in predefinedCriteriaFieldValues) {
+                    gridQuery.CriteriaFieldValues[key] = predefinedCriteriaFieldValues[key];
+                    criteriaFilterValuesExist = true;
+                }
+            }
 
             if (!criteriaFilterValuesExist) {
                 gridQuery.CriteriaFieldValues = undefined;
@@ -272,7 +276,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     var directivePayload = {
                         fieldTitle: criteriaField.Title,
                         fieldType: criteriaField.FieldType,
-                        fieldValue: ($scope.scopeModel.criteriaFieldValues != undefined) ? $scope.scopeModel.criteriaFieldValues[criteriaField.FieldName] : undefined
+                        fieldValue: (predefinedCriteriaFieldValues != undefined) ? predefinedCriteriaFieldValues[criteriaField.FieldName] : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
                 };

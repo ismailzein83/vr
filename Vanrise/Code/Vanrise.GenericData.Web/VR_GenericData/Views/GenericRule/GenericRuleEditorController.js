@@ -37,11 +37,7 @@
             if (parameters != undefined && parameters != null) {
                 genericRuleId = parameters.genericRuleId;
                 genericRuleDefinitionId = parameters.genericRuleDefinitionId;
-                preDefinedData = parameters.preDefinedData;
-                if (preDefinedData != undefined)
-                {
-                    criteriaFieldsValues = preDefinedData.criteriaFieldsValues;
-                }
+                preDefinedData = parameters.preDefinedData;                
                 accessibility = parameters.accessibility;
             }
             isEditMode = (genericRuleId != undefined);
