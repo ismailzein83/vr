@@ -57,7 +57,7 @@ app.directive('retailVoiceTechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsS
 
                     if (payload != undefined && payload.data != undefined) {
                         accountIdentification = payload.data.AccountIdentification;
-                        internationalIdentification = payload.data.InternationalIdentification
+                        internationalIdentification = payload.data.InternationalIdentification;
                         importCDRSettings = payload.data.ImportCDRSettings;
                     }
 
