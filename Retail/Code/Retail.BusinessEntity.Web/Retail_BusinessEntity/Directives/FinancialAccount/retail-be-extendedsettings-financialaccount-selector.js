@@ -41,7 +41,9 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
 
             var directiveReadyAPI;
             var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+            var status;
+            var effectiveDate;
+            var isEffectiveInFuture;
             function initializeController() {
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
@@ -62,6 +64,11 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                         accountTypeId = payload.accountTypeId;
                         extendedSettings = payload.extendedSettings;
                         selectedIds = payload.selectedIds;
+                        if (payload.filter != undefined) {
+                            status = payload.filter.Status;
+                            effectiveDate = payload.filter.EffectiveDate;
+                            isEffectiveInFuture = payload.filter.IsEffectiveInFuture;
+                        }
                     }
 
                     var promises = [];
@@ -72,7 +79,10 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                     directiveReadyPromiseDeferred.promise.then(function () {
                         var selectorPayload = {
                             filter: getAccountSelectorFilter(),
-                            selectedIds: selectedIds
+                            selectedIds: selectedIds,
+                            status: status,
+                            effectiveDate: effectiveDate,
+                            isEffectiveInFuture: isEffectiveInFuture,
                         };
                         if (extendedSettings != undefined)
                             selectorPayload.AccountBEDefinitionId = extendedSettings.AccountBEDefinitionId;
