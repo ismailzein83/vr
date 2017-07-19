@@ -225,25 +225,3 @@ when not matched by target then
 	values(s.[ID],s.[TableId],s.[ItemType],s.[Name],s.[Title],s.[Config]);
 ----------------------------------------------------------------------------------------------------
 END
-
-
---[common].[Setting]--------------------------------------------------------------------------------
-BEGIN
-set nocount on;
-;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('556652A0-4A52-4396-9D00-15916E3997C2','Cost Technical','Retail_Cost_CDRCostTechnicalSettings','General','{"Editor" : "retail-cost-cdrcosttechnicalsettings-editor"}','{"$type":"Retail.Cost.Entities.CDRCostTechnicalSettingData, Retail.Cost.Entities","IsCostIncluded":false}',1)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
-merge	[common].[Setting] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
-when not matched by target then
-	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
-	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-----------------------------------------------------------------------------------------------------
-END
