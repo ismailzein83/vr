@@ -480,7 +480,7 @@ namespace Retail.BusinessEntity.Business
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
             VRAccountStatus vrAccountStatus = VRAccountStatus.InActive;
             if(s_accountManager.IsAccountActive(accountBEDefinitionId, accountId))
-                vrAccountStatus = VRAccountStatus.InActive;
+                vrAccountStatus = VRAccountStatus.Active;
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
             var result = false;
