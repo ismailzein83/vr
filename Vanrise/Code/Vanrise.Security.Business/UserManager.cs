@@ -221,7 +221,7 @@ namespace Vanrise.Security.Business
                     {
                         Task sendMailTask = new Task(() =>
                         {
-                            StartSendMailTask(newUserId, userObject, pwd);
+                            StartSendMailTask(newUserId, addedUser, pwd);
                         });
                         sendMailTask.Start();
                     }
