@@ -33,11 +33,15 @@
         load();
 
         function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);            
+            var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 genericRuleId = parameters.genericRuleId;
                 genericRuleDefinitionId = parameters.genericRuleDefinitionId;
                 preDefinedData = parameters.preDefinedData;
+                if (preDefinedData != undefined)
+                {
+                    criteriaFieldsValues = preDefinedData.criteriaFieldsValues;
+                }
                 accessibility = parameters.accessibility;
             }
             isEditMode = (genericRuleId != undefined);
