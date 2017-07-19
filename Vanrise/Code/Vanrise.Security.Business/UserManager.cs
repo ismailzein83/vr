@@ -235,15 +235,15 @@ namespace Vanrise.Security.Business
 
                 VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, addedUser);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-
-                foreach(int groupId in userObject.GroupIds)
-                { 
-                    UserGroup userGroup = new UserGroup(){
-                        UserId = addedUser.UserId,
-                        GroupId= groupId
-                    };
-                    _groupManager.AssignUserToGroup(userGroup);
-                }
+                if (userObject.GroupIds != null && userObject.GroupIds.Count() > 0)
+                    foreach(int groupId in userObject.GroupIds)
+                    { 
+                        UserGroup userGroup = new UserGroup(){
+                            UserId = addedUser.UserId,
+                            GroupId= groupId
+                        };
+                        _groupManager.AssignUserToGroup(userGroup);
+                    }
                 insertOperationOutput.InsertedObject = UserDetailMapper(addedUser);
             }
             else
