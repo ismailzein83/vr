@@ -101,16 +101,16 @@
                 };
 
                 function buildRuleManagementPayload() {
-                    var ruleGridQuery = {};
+                    var payload = {};
 
-                    ruleGridQuery.RuleDefinitionId = ruleDefinition.RuleDefinitionId;
+                    payload.RuleDefinitionId = ruleDefinition.RuleDefinitionId;
 
-                    ruleGridQuery.CriteriaFieldValues = {};
+                    payload.CriteriaFieldValues = {};
                     for (var key in criteriaFieldValues)
-                        ruleGridQuery.CriteriaFieldValues[key] = buildBusinessEntityFieldTypeFilter(criteriaFieldValues[key]);
+                        payload.CriteriaFieldValues[key] = buildBusinessEntityFieldTypeFilter(criteriaFieldValues[key]);
 
-                    
-                    ruleGridQuery.criteriaFieldsToHide = ['ServiceType', 'ChargingPolicy', 'Package'];
+                    payload.accessibility = buildAccessibilityObj();
+                    payload.criteriaFieldsToHide = ['ServiceType', 'ChargingPolicy', 'Package'];
 
                     function buildBusinessEntityFieldTypeFilter(filterValue) {
                         return {
@@ -119,7 +119,7 @@
                         };
                     }
 
-                    return ruleGridQuery;
+                    return payload;
                 }
 
                 drillDownTabs.push(drillDownTab);
@@ -134,6 +134,17 @@
                 for (var i = 0; i < menuActions.length; i++) {
                     dataItem.menuActions.push(menuActions[i]);
                 }
+            }
+
+            function buildAccessibilityObj() {
+                return {
+                    criteriaAccessibility: {
+                        'ServiceType': { notAccessible: true },
+                        'ChargingPolicy': { notAccessible: true },
+                        'Package': { notAccessible: true }
+                    },
+                    settingNotAccessible: false
+                };
             }
 
         }
