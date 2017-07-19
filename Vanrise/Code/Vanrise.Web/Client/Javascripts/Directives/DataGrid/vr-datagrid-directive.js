@@ -816,7 +816,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 gridApi.itemUpdated = function (item) {
                     item.isUpdated = true;
                     itemChanged(item, "Updated");
-                    ctrl.expandRow(item);
+                    //ctrl.expandRow(item);
                 };
 
                 gridApi.itemDeleted = function (item) {
