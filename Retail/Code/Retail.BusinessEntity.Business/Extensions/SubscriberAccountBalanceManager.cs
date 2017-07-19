@@ -28,6 +28,12 @@ namespace Retail.BusinessEntity.Business
             AccountBEManager accountBEManager = new AccountBEManager();
             var account = accountBEManager.GetAccount(this._accountBEDefinitionId, Convert.ToInt64(context.AccountId));
             account.ThrowIfNull("account", context.AccountId);
+
+            Vanrise.Entities.VRAccountStatus status = Vanrise.Entities.VRAccountStatus.InActive;
+            if (accountBEManager.IsAccountActive(account))
+            {
+                status = Vanrise.Entities.VRAccountStatus.Active;
+            }
             Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
             {
                 Name = account.Name,
@@ -35,8 +41,7 @@ namespace Retail.BusinessEntity.Business
                 CurrencyId = s_accountBEManager.GetCurrencyId(_accountBEDefinitionId, account),
                 BED  = null,
                 EED = null,
-                IsDeleted = false,
-                Status = Vanrise.Entities.VRAccountStatus.Active
+                Status = status
             };
             return accountInfo;
         }

@@ -565,6 +565,10 @@ namespace Retail.BusinessEntity.Business
 
             var account = GetAccount(accountBEDefinitionId, accountId);
             account.ThrowIfNull("account", accountId);
+           return  IsAccountActive(account);
+        }
+        public bool IsAccountActive(Account account)
+        {
             var accountStatusDefinition = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinition(account.StatusId);
             accountStatusDefinition.ThrowIfNull("accountStatusDefinition", account.StatusId);
             accountStatusDefinition.Settings.ThrowIfNull("account.Settings");
@@ -572,7 +576,6 @@ namespace Retail.BusinessEntity.Business
                 return true;
             return false;
         }
-
         #endregion
 
         #region ExtendedSettings
