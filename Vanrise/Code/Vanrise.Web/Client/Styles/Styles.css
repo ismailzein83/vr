@@ -293,6 +293,10 @@ vr-button .btn:focus,vr-button .btn:active:focus,vr-button .btn.active:focus,vr-
     outline: none;
     outline-offset:0px;
 }
+
+vr-button[type="Add"][standalone] div>span{
+  color: #5cb85c;
+}
 /* override  bootstrap btn class focus and active behavior */
 .modal-x-lg {
     width: 97%;
