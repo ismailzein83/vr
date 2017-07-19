@@ -90,7 +90,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'VRMailMessageTemplateId', attrs, ctrl);
-                            } else if (selectFirstItem) {
+                            } else if (selectFirstItem && ctrl.datasource.length > 0) {
                                 var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].VRMailMessageTemplateId] : ctrl.datasource[0].VRMailMessageTemplateId;
                                 VRUIUtilsService.setSelectedValues(defaultValue, 'VRMailMessageTemplateId', attrs, ctrl);
                             }

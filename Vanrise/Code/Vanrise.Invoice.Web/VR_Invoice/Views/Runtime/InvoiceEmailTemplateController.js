@@ -131,9 +131,12 @@
         }
 
         function getInvoiceEmail() {
-            return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId, invoiceMailTemplateReadyAPI.getSelectedIds()).then(function (response) {
-                invoiceTemplateEntity = response;
-            });
+            var invoiceMailTemplateId = invoiceMailTemplateReadyAPI.getSelectedIds();
+            if (invoiceMailTemplateId != undefined) {
+                return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId, invoiceMailTemplateId).then(function (response) {
+                    invoiceTemplateEntity = response;
+                });
+            }
         }
 
         function buildInvoiceTemplateObjFromScope() {
