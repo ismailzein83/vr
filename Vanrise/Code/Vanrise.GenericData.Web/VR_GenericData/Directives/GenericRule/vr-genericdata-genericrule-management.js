@@ -84,7 +84,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function GetValues(fieldValues) {
             var obj = {
                 Values: []
-            }
+            };
             for (var i = 0; i < fieldValues.length; i++) {
                 var bes = fieldValues[i];
                 for (var j = 0; j < bes.BusinessEntityIds.length; j++) {
