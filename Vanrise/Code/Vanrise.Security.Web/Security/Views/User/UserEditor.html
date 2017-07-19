@@ -14,11 +14,24 @@
                 <vr-columns width="1/2row">
                     <vr-datetimepicker type="dateTime" label="Enabled Till" value="scopemodel.enabledTill"></vr-datetimepicker>
                 </vr-columns>
+                <vr-columns width="fullrow" haschildcolumns ng-show="showPasswordSection">
+                    <vr-validator validate="validatePasswords()">
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Password" type="password" value="password"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Confirm Password" type="password" value="confirmedPassword"></vr-textbox>
+                        </vr-columns>
+                    </vr-validator>
+                </vr-columns>
                 <vr-columns width="1/2row" ng-show="showTenantSelector">
                     <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon vr-disabled="isInEditMode" customlabel="Tenant"></vr-sec-tenant-selector>
                 </vr-columns>
+                <vr-columns width="1/2row" >
+                    <vr-sec-group-selector on-ready="onGroupSelectorReady" ismultipleselection ></vr-sec-group-selector>
+                </vr-columns>
 
-</vr-row>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

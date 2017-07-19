@@ -16,5 +16,9 @@ namespace Vanrise.Security.Entities
         {
             return false;
         }
+        public virtual bool TryRemoveUser(ITryAddUserGroupSettingsContext context)
+        {
+            return false;
+        }
     }
 }

@@ -42,6 +42,13 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetAssignedUserGroups")]
+        public List<int> GetAssignedUserGroups(int userId)
+        {
+            return _manager.GetAssignedUserGroups(userId);
+        }
+
+        [HttpGet]
         [Route("GetGroupHistoryDetailbyHistoryId")]
         public Group GetGroupHistoryDetailbyHistoryId(int groupHistoryId)
         {

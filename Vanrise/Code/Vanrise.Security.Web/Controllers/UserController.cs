@@ -62,7 +62,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("UpdateUser")]
-        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(UserToUpdate userObject)
         {
             return _manager.UpdateUser(userObject);
         }
@@ -82,7 +82,7 @@ namespace Vanrise.Security.Web.Controllers
         }
         [HttpPost]
         [Route("AddUser")]
-        public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
+        public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(UserToAdd userObject)
         {
             return _manager.AddUser(userObject);
         }

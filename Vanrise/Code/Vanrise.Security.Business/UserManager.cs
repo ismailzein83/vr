@@ -18,6 +18,13 @@ namespace Vanrise.Security.Business
     {
         static TimeSpan s_tempPasswordValidity;
 
+        GroupManager _groupManager;
+        public UserManager()
+        {
+
+            _groupManager =  new GroupManager();
+
+        }
         static UserManager()
         {
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["TempPasswordValidity"], out s_tempPasswordValidity))
@@ -138,10 +145,9 @@ namespace Vanrise.Security.Business
             return dataManager.GetUserTempPassword(userId);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
+        public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(UserToAdd userObject)
         {
             InsertOperationOutput<UserDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<UserDetail>();
-
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
@@ -154,7 +160,7 @@ namespace Vanrise.Security.Business
             }
 
             var cloudServiceProxy = GetCloudServiceProxy();
-
+            User addedUser = null;
             if (cloudServiceProxy != null)
             {
                 var output = cloudServiceProxy.AddUserToApplication(new AddUserToApplicationInput
@@ -167,7 +173,7 @@ namespace Vanrise.Security.Business
                 if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
                 {
                     insertActionSucc = true;
-                    userObject = MapCloudUserToUser(output.OperationOutput.InsertedObject);
+                    addedUser = GetUserbyId(output.OperationOutput.InsertedObject.User.UserId);
                 }
                 else
                 {
@@ -186,13 +192,23 @@ namespace Vanrise.Security.Business
             else
             {
                 PasswordGenerator passwordGenerator = new PasswordGenerator();
-                string pwd = passwordGenerator.Generate();
+                string pwd = (string.IsNullOrEmpty(userObject.Password)) ? passwordGenerator.Generate() : userObject.Password;
                 string encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
 
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
+                addedUser = new User
+                {
+                    Email = userObject.Email,
+                    Name = userObject.Name,
+                    EnabledTill = userObject.EnabledTill,
+                    Description = userObject.Description,
+                    TenantId = userObject.TenantId
+                };
+                insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
+                
                 if (insertActionSucc)
                 {
+                    addedUser.UserId = userId;
                     //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
                     //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.NewPasswordType);
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
@@ -216,10 +232,19 @@ namespace Vanrise.Security.Business
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                userObject.UserId = userId;
-                VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, userObject);
+
+                VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, addedUser);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = UserDetailMapper(userObject);
+
+                foreach(int groupId in userObject.GroupIds)
+                { 
+                    UserGroup userGroup = new UserGroup(){
+                        UserId = addedUser.UserId,
+                        GroupId= groupId
+                    };
+                    _groupManager.AssignUserToGroup(userGroup);
+                }
+                insertOperationOutput.InsertedObject = UserDetailMapper(addedUser);
             }
             else
             {
@@ -231,7 +256,7 @@ namespace Vanrise.Security.Business
 
 
 
-        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(UserToUpdate userObject)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
 
@@ -240,6 +265,7 @@ namespace Vanrise.Security.Business
 
             bool updateActionSucc;
             var cloudServiceProxy = GetCloudServiceProxy();
+            User updatedUser = null;
             if (cloudServiceProxy != null)
             {
                 var output = cloudServiceProxy.UpdateUserToApplication(new UpdateUserToApplicationInput
@@ -252,6 +278,8 @@ namespace Vanrise.Security.Business
                 if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
                 {
                     updateActionSucc = true;
+                    updatedUser = GetUserbyId(output.OperationOutput.UpdatedObject.User.UserId);
+
                 }
                 else
                 {
@@ -260,16 +288,52 @@ namespace Vanrise.Security.Business
             }
             else
             {
+                updatedUser = new User()
+                {
+                    UserId = userObject.UserId,
+                    Email = userObject.Email,
+                    Name = userObject.Name,
+                    EnabledTill = userObject.EnabledTill,
+                    Description = userObject.Description,
+                    TenantId = userObject.TenantId
+                };
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.UpdateUser(userObject);
+                updateActionSucc = dataManager.UpdateUser(updatedUser);
             }
 
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectUpdated(UserLoggableEntity.Instance, userObject);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(UserLoggableEntity.Instance, updatedUser);
+
+                var currentGroupsIds = _groupManager.GetUserGroups(userObject.UserId);
+                var updatedGroupIds = userObject.GroupIds!=null? userObject.GroupIds : new List<int>();
+
+                List<int> groupsToAdd = updatedGroupIds.FindAllRecords(x => !currentGroupsIds.Contains(x)).ToList();
+                List<int> groupsToRemove = currentGroupsIds.FindAllRecords(y => !updatedGroupIds.Contains(y)).ToList();
+                if (groupsToAdd!=null && groupsToAdd.Count() > 0)
+                    foreach (int groupId in groupsToAdd)
+                    {
+                        UserGroup userGroup = new UserGroup()
+                        {
+                            UserId = userObject.UserId,
+                            GroupId = groupId
+                        };
+                        _groupManager.AssignUserToGroup(userGroup);
+                    }
+                if (groupsToRemove != null && groupsToRemove.Count() > 0)
+                    foreach (int groupId in groupsToRemove)
+                    {
+                        UserGroup userGroup = new UserGroup()
+                        {
+                            UserId = userObject.UserId,
+                            GroupId = groupId
+                        };
+                        _groupManager.UnAssignUserToGroup(userGroup);
+                    }
+
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = UserDetailMapper(userObject);
+                updateOperationOutput.UpdatedObject = UserDetailMapper(updatedUser);
             }
             else
             {
@@ -840,6 +904,7 @@ namespace Vanrise.Security.Business
             UserDetail userDetail = new UserDetail();
             userDetail.Entity = userObject;
             userDetail.Status = IsUserEnable(userObject) ? UserStatus.Active : UserStatus.Inactive;
+            userDetail.GroupNames = GetGroupNames(userObject.UserId);
             return userDetail;
         }
 
@@ -851,6 +916,17 @@ namespace Vanrise.Security.Business
             userInfo.Status = IsUserEnable(userObject) ? UserStatus.Active : UserStatus.Inactive;
             userInfo.UserId = userObject.UserId;
             return userInfo;
+        }
+
+        private string GetGroupNames(int userId)
+        {
+           var groupIds = _groupManager.GetUserGroups(userId);
+           List<string> names = new List<string>();
+           foreach(var id in groupIds){
+               string groupName = _groupManager.GetGroupName(id);
+               names.Add(groupName);
+           }
+           return string.Join(",", names);
         }
 
         #endregion

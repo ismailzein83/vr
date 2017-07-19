@@ -114,6 +114,8 @@
     <Compile Include="User\UserInfo.cs" />
     <Compile Include="User\UserProfile.cs" />
     <Compile Include="User\UserQuery.cs" />
+    <Compile Include="User\UserToUpdate.cs" />
+    <Compile Include="User\UserToAdd.cs" />
     <Compile Include="View\View.cs" />
     <Compile Include="View\ViewContentItem.cs" />
     <Compile Include="View\ViewContent.cs" />

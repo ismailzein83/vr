@@ -15,7 +15,9 @@
             HasAddGroupPermission: HasAddGroupPermission,
             HasEditGroupPermission: HasEditGroupPermission,
             GetGroupTemplate: GetGroupTemplate,
-            GetGroupHistoryDetailbyHistoryId: GetGroupHistoryDetailbyHistoryId
+            GetGroupHistoryDetailbyHistoryId: GetGroupHistoryDetailbyHistoryId,
+            AssignUserToGroup: AssignUserToGroup,
+            GetAssignedUserGroups:GetAssignedUserGroups
         });
 
         function GetFilteredGroups(input) {
@@ -36,7 +38,11 @@
                 groupId: groupId
             });
         }
-
+        function GetAssignedUserGroups(userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetAssignedUserGroups"), {
+                userId: userId
+            });
+        }
         function GetGroupHistoryDetailbyHistoryId(groupHistoryId) {
 
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetGroupHistoryDetailbyHistoryId'), {
@@ -51,7 +57,9 @@
         function UpdateGroup(group) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "UpdateGroup"), group);
         }
-
+        function AssignUserToGroup(userGroup) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "AssignUserToGroup"), userGroup);
+        }
         function HasAddGroupPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddGroup']));
         }

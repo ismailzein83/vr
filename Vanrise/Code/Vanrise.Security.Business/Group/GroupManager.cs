@@ -18,9 +18,15 @@ namespace Vanrise.Security.Business
 
         public IDataRetrievalResult<GroupDetail> GetFilteredGroups(DataRetrievalInput<GroupQuery> input)
         {
-            var allItems = GetCachedGroups();
+            var allItems = GetCachedGroups();       
+            Func<Group, bool> filterExpression = (itemObject) =>
+            {
+                if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
 
-            Func<Group, bool> filterExpression = (itemObject) => (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
+                return true;
+            };
+
             VRActionLogger.Current.LogGetFilteredAction(GroupLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, GroupDetailMapper));
         }
@@ -186,6 +192,44 @@ namespace Vanrise.Security.Business
             {
                 updateOperationOutput.Result = UpdateOperationResult.Failed;
                 updateOperationOutput.Message = string.Format("User Id {0} cannot be assigned to the Group Id {1}", userGroup.UserId, userGroup.GroupId);
+                updateOperationOutput.ShowExactMessage = true;
+            }
+            return updateOperationOutput;
+        }
+
+
+        public UpdateOperationOutput<UserGroupDetail> UnAssignUserToGroup(UserGroup userGroup)
+        {
+            UpdateOperationOutput<UserGroupDetail> updateOperationOutput = new UpdateOperationOutput<UserGroupDetail>();
+
+            if (userGroup == null)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.Message = "No data receieved for user and group";
+                return updateOperationOutput;
+            }
+
+            var cachedGroups = this.GetCachedGroups();
+            Group group = cachedGroups.GetRecord(userGroup.GroupId);
+            if (group == null)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.Message = string.Format("Group {0} doesn't exist", userGroup.GroupId);
+                return updateOperationOutput;
+            }
+
+            bool removeUserToGroupResult = group.Settings.TryRemoveUser(new TryAddUserGroupSettingsContext() { UserId = userGroup.UserId });
+
+            if (removeUserToGroupResult)
+            {
+                UpdateGroup(group);
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = new UserGroupDetail() { GroupId = userGroup.GroupId, UserId = userGroup.UserId };
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.Message = string.Format("User Id {0} cannot be unassigned from the Group Id {1}", userGroup.UserId, userGroup.GroupId);
                 updateOperationOutput.ShowExactMessage = true;
             }
             return updateOperationOutput;

@@ -35,5 +35,16 @@ namespace Vanrise.Security.Business
 
             return true;
         }
+
+        public override bool TryRemoveUser(ITryAddUserGroupSettingsContext context)
+        {
+            if (this.MemberIds == null)
+                this.MemberIds = new List<int>();
+
+            if (this.MemberIds.Contains(context.UserId))
+                this.MemberIds.Remove(context.UserId);
+
+            return true;
+        }
     }
 }
