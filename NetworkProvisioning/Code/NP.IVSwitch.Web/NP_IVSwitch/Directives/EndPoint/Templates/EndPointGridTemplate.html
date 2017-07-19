@@ -1,14 +1,24 @@
-﻿
-<vr-datagrid on-ready="scopeModel.onGridReady"
-             datasource="scopeModel.endPoint"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             menuactions="scopeModel.menuActions"
-             idfield="Entity.EndPointId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.EndPointId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Type'" field="'CurrentEndPointType'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Host'" field="'Entity.Host'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Sip Login'" field="'Entity.SipLogin'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'State'" field="'CurrentStateDescription'"></vr-datagridcolumn>
-</vr-datagrid>
+﻿<span vr-loader="scopeModel.isLoading">
+    <vr-row removeline>
+        <vr-columns width="normal">
+            <vr-button type="Add" standalone data-onclick="scopeModel.addEndPoint" haspemission="scopeModel.hadAddEndPointPermission"></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="fullrow">
+            <vr-datagrid on-ready="scopeModel.onGridReady"
+                         datasource="scopeModel.endPoint"
+                         dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         menuactions="scopeModel.menuActions"
+                         idfield="Entity.EndPointId">
+                <vr-datagridcolumn headertext="'ID'" field="'Entity.EndPointId'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Type'" field="'CurrentEndPointType'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Host'" field="'Entity.Host'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Sip Login'" field="'Entity.SipLogin'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'State'" field="'CurrentStateDescription'"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</span>

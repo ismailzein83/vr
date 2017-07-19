@@ -1,13 +1,23 @@
-﻿
-<vr-datagrid on-ready="scopeModel.onGridReady"
-             datasource="scopeModel.route"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             menuactions="scopeModel.menuActions"
-             idfield="Entity.RouteId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.RouteId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Route'" field="'Entity.Description'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Host'" field="'Entity.Host'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'State'" field="'CurrentStateDescription'"></vr-datagridcolumn>
+﻿<span vr-loader="scopeModel.isLoading">
+    <vr-row removeline>
+        <vr-columns width="normal">
+            <vr-button type="Add" standalone data-onclick="scopeModel.addRoute" haspemission="scopeModel.hadAddRoutePermission"></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="fullrow">
 
-</vr-datagrid>
+            <vr-datagrid on-ready="scopeModel.onGridReady"
+                         datasource="scopeModel.route"
+                         dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         menuactions="scopeModel.menuActions"
+                         idfield="Entity.RouteId">
+                <vr-datagridcolumn headertext="'ID'" field="'Entity.RouteId'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Route'" field="'Entity.Description'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Host'" field="'Entity.Host'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'State'" field="'CurrentStateDescription'"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</span>

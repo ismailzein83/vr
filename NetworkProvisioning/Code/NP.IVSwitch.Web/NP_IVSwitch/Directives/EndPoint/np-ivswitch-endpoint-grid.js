@@ -20,15 +20,22 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
         function EndPointGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var gridAPI;
-
+            var carrierAccountId;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.endPoint = [];
                 $scope.scopeModel.menuActions = [];
                 $scope.scopeModel.Type = {};
  
-
-
+                $scope.scopeModel.addEndPoint = function () {;
+                    var onEndPointAdded = function (addedEndPoint) {
+                        gridAPI.itemAdded(addedEndPoint);
+                    };
+                    NP_IVSwitch_EndPointService.addEndPoint(carrierAccountId, onEndPointAdded);
+                };
+                $scope.scopeModel.hadAddEndPointPermission = function () {
+                    return NP_IVSwitch_EndPointAPIService.HasAddEndPointPermission();
+                };
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -60,6 +67,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                 var api = {};
 
                 api.load = function (query) {
+                    carrierAccountId = query != undefined && query.CarrierAccountId != undefined ? query.CarrierAccountId : undefined;
                     return gridAPI.retrieveData(query);
                 };
 
