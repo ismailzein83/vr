@@ -33,19 +33,6 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 + actionsMenuTemplate + '</div>';
 
         }
-        else if (attrs.standalone != undefined && type=="Add") {
-            return '<button style="position:relative;display:inline-block;margin-bottom: 5px;padding: 4px 4px !important;height: 24px !important;top: 2px;" class="btn btn-success" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonAttributes.text + '" '
-           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
-               + '<span style="font-size:17px;top: -1px;left: -1px;" class="' + buttonAttributes.class + ' hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()">'
-                   + '<span style="font-size: 14px;position: relative;top: -3px;padding-left: 3px;">'
-                   + buttonAttributes.text
-                   + customLabelTag
-                   +'</span>'
-               + '</span>'
-               + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
-                + actionsMenuTemplate + '</button>';
-        }
-
         else if (attrs.standalone != undefined) {
             return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonAttributes.text + '" '
            + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
