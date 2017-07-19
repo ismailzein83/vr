@@ -41,6 +41,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -81,10 +89,15 @@
     <Compile Include="CDRCostManager.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CostEvaluatorBPDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueActivators\ApplyCostQueueActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.Cost.BP.Arguments\Retail.Cost.BP.Arguments.csproj">
+      <Project>{af85b6f6-461d-477d-8e5a-459fba704d8a}</Project>
+      <Name>Retail.Cost.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Cost.Data\Retail.Cost.Data.csproj">
       <Project>{2e3d5dc7-5e87-4196-bf49-168f5470a319}</Project>
       <Name>Retail.Cost.Data</Name>
