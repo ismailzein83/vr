@@ -34,6 +34,26 @@ namespace Vanrise.Common.Data.SQL
         public void GenerateScript(List<Setting> settings, Action<string, string> addEntityScript)
         {
             StringBuilder scriptBuilder = new StringBuilder();
+            var technicalSettings = settings.Where(s => s.IsTechnical).ToList();
+            if (technicalSettings.Count > 0)
+                scriptBuilder.Append(GenerateSettingsScript(technicalSettings, true));
+            var nonTechnicalSettings = settings.Where(s => !s.IsTechnical).ToList();
+            if (nonTechnicalSettings.Count > 0)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.AppendLine();
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.Append(GenerateSettingsScript(nonTechnicalSettings, false));
+            }
+
+            addEntityScript("[common].[Setting]", scriptBuilder.ToString());
+        }
+
+        private static string GenerateSettingsScript(List<Setting> settings, bool withUpdate)
+        {
+            StringBuilder scriptBuilder = new StringBuilder();
             foreach (var setting in settings)
             {
                 if (scriptBuilder.Length > 0)
@@ -52,14 +72,17 @@ as (select * from (values
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
---when matched then
---	update set
---	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+on		1=1 and t.[ID] = s.[ID]"
+                + (withUpdate ? 
+@"
+when matched then
+	update set
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]": "") +
+@"
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);", scriptBuilder);
-            addEntityScript("[common].[Setting]", script);
+            return script;
         }
 
         #region Mappers

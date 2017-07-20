@@ -160,13 +160,13 @@ namespace Vanrise.AccountBalance.Business
         public void CorrectBalanceFromBalanceUsageQueue(long balanceUsageQueueId, Guid transactionTypeId, IEnumerable<CorrectUsageBalanceItem> correctUsageBalanceItems, DateTime periodDate, Guid correctionProcessId, bool isLastBatch)
         {
             BillingTransactionType transactionType = new BillingTransactionTypeManager().GetBillingTransactionType(transactionTypeId);
-
+            transactionType.ThrowIfNull("transactionType", transactionTypeId);
+            var accountUsagesToUpdate = new List<AccountUsageToUpdate>();
+            var liveBalancesToUpdate = new List<LiveBalanceToUpdate>();
+            List<string> accountIds = null;
             if (correctUsageBalanceItems != null)
             {
-                var accountUsagesToUpdate = new List<AccountUsageToUpdate>();
-                var liveBalancesToUpdate = new List<LiveBalanceToUpdate>();
-
-                List<string> accountIds = correctUsageBalanceItems.MapRecords(x => x.AccountId).ToList();
+                accountIds = correctUsageBalanceItems.MapRecords(x => x.AccountId).ToList();
                 IEnumerable<AccountUsage> accountUsages = GetAccountUsageForSpecificPeriodByAccountIds(_accountTypeId, transactionTypeId, periodDate, accountIds);
 
                 foreach (CorrectUsageBalanceItem correctUsageBalanceItem in correctUsageBalanceItems)
@@ -174,28 +174,22 @@ namespace Vanrise.AccountBalance.Business
                     AccountUsage accountUsage = accountUsages.FirstOrDefault(x => x.AccountId == correctUsageBalanceItem.AccountId);
                     CorrectLiveBalanceAndAccountUsage(liveBalancesToUpdate, accountUsagesToUpdate, correctUsageBalanceItem.AccountId, transactionType, correctUsageBalanceItem.Value, correctUsageBalanceItem.CurrencyId, accountUsage, periodDate);
                 }
-
-                if (liveBalancesToUpdate.Count > 0 || accountUsagesToUpdate.Count > 0)
-                    UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalancesToUpdate, accountUsagesToUpdate, correctionProcessId);
             }
 
             if (isLastBatch)
             {
                 List<AccountUsage> faultyAccountUsages = GetAccountUsageErrorData(transactionTypeId, correctionProcessId, periodDate);
-
                 if (faultyAccountUsages != null && faultyAccountUsages.Count > 0)
                 {
-                    var accountUsagesToUpdate = new List<AccountUsageToUpdate>();
-                    var liveBalancesToUpdate = new List<LiveBalanceToUpdate>();
-
                     foreach (AccountUsage faultyAccountUsage in faultyAccountUsages)
                     {
+                        if (accountIds != null && accountIds.Contains(faultyAccountUsage.AccountId))//account received usage in current batch
+                            continue;
                         CorrectLiveBalanceAndAccountUsage(liveBalancesToUpdate, accountUsagesToUpdate, faultyAccountUsage.AccountId, transactionType, 0, faultyAccountUsage.CurrencyId, faultyAccountUsage, periodDate);
                     }
-
-                    UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalancesToUpdate, accountUsagesToUpdate, correctionProcessId);
                 }
             }
+            UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(balanceUsageQueueId, liveBalancesToUpdate, accountUsagesToUpdate, correctionProcessId);
         }
 
         #endregion
