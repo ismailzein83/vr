@@ -126,17 +126,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 name: "Edit",
                 clicked: editCarrierProfile,
                 haspermission: hasUpdateCarrierProfilePermission
-            },
-                {
-                    name: "New Carrier Account",
-                    clicked: addCarrierAccount,
-                    haspermission: hasAddCarrierAccountPermission
-                }
-            ];
-        }
-
-        function hasAddCarrierAccountPermission() {
-            return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
+            }];
         }
 
         function hasUpdateCarrierProfilePermission() {
