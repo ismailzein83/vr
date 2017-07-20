@@ -50,22 +50,9 @@
                 var payload = {
                     CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
                 };
-                //     hideCustomerColumn: true
-                //  };
                 return carrierAccountItem.ivSwitchEndPointGridAPI.load(payload);
             };
-            drillDownDefinition.parentMenuActions = [{
-                name: 'Add  EndPoint',
-                clicked: function (carrierAccountItem) {
-                    //if (EndPointTab.setTabSelected != undefined)
-                    //    EndPointTab.setTabSelected(parentAccount);
-                    var onEndPointAdded = function (addedEndPoint) {
-                        if (carrierAccountItem.ivSwitchEndPointGridAPI != undefined)
-                            carrierAccountItem.ivSwitchEndPointGridAPI.onEndPointAdded(addedEndPoint);
-                    };
-                    addEndPoint(carrierAccountItem.Entity.CarrierAccountId, onEndPointAdded);
-                },
-            }];
+          
 
             WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
 

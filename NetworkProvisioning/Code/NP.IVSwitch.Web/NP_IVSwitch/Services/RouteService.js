@@ -52,23 +52,8 @@
                 var payload = {
                     CarrierAccountId: carrierAccountItem.Entity.CarrierAccountId
                 };
-                //     hideCustomerColumn: true
-                //  };
                 return carrierAccountItem.ivSwitchRouteGridAPI.load(payload);
-            };
-            drillDownDefinition.parentMenuActions = [{
-                name: 'Add  Route',
-                clicked: function (carrierAccountItem) {
-                    //if (EndPointTab.setTabSelected != undefined)
-                    //    EndPointTab.setTabSelected(parentAccount);
-                    var onRouteAdded = function (addedRoute) {
-                         if (carrierAccountItem.ivSwitchRouteGridAPI != undefined)
-                            carrierAccountItem.ivSwitchRouteGridAPI.onRouteAdded(addedRoute);
-                    };
-                    addRoute(carrierAccountItem.Entity.CarrierAccountId, onRouteAdded);
-                },
-            }];
-
+            };           
             WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
 
         }
