@@ -219,6 +219,8 @@ namespace Mediation.Teles.Business
             cookedCDR.FileName = stopRecord.FileName;
             cookedCDR.OriginatorExtension = originatorExtension;
             cookedCDR.TerminatorExtension = terminatorExtension;
+            cookedCDR.OriginatorIp = stopRecord.TC_ORIGINATORIP;
+            cookedCDR.TerminatorIp = stopRecord.TC_TERMINATORIP;
             cookedCDR.DurationInSeconds = (disconnectDateTime.HasValue && !isZeroDuration ? (decimal)(cookedCDR.DiconnectDateTime - cookedCDR.ConnectDateTime).TotalSeconds : 0);
             return cookedCDR;
         }
