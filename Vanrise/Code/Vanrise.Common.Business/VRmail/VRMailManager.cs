@@ -184,8 +184,9 @@ namespace Vanrise.Common.Business
 
         private static string EvaluateExpression(Guid mailMessageTemplateId, string fieldName, VRExpression expression, VRMailContext mailContext)
         {
-            if (expression.ExpressionString == null)
+            if (expression == null || expression.ExpressionString == null)
                 return null;
+
             string cacheName = String.Format("EmailTemplate_{0}_{1}", mailMessageTemplateId, fieldName);
             string templateKey = Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRMailMessageTemplateManager.CacheManager>()
                 .GetOrCreateObject(cacheName, () =>
