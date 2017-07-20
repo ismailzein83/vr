@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (customerZoneNotifications.Count > 0)
                     {
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications);
+                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications,context.EffectiveDate);
                         SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
@@ -543,7 +543,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Pricelist Management
 
-        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications)
+        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime EffectiveDate)
         {
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
             int priceListTemplateId = _carrierAccountManager.GetSalePriceListTemplateId(carrierAccountId);
@@ -562,14 +562,14 @@ namespace TOne.WhS.BusinessEntity.Business
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
             string customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
             string extension = GetExtensionString(priceListExtensionFormat);
-            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today, extension);
+            string fileName = string.Concat("Pricelist_", customerName, "_", EffectiveDate, extension);
             return new VRFile
             {
                 Content = salePlTemplateBytes,
                 Name = fileName,
                 ModuleName = "WhS_BE_SalePriceList",
                 Extension = extension,
-                CreatedTime = DateTime.Today
+                CreatedTime = EffectiveDate
             };
         }
 
@@ -866,7 +866,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
             {
                 CustomerChanges = new List<CustomerPriceListChange> { customerPriceListChange },
-                EffectiveDate = salePriceList.CreatedTime.Date,
+                EffectiveDate = salePriceList.CreatedTime,
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = salePriceList.ProcessInstanceId,
                 SaleCodes = saleCodeSnapshot
@@ -893,7 +893,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerZoneNotifications.Count > 0)
             {
                 AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications);
+                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications, salePriceListContext.EffectiveDate);
             }
 
             return file;
@@ -1064,9 +1064,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Owner Type" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Owner Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Type" });
@@ -1079,8 +1077,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (record.Entity != null)
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.PriceListId });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.OwnerType });
                             row.Cells.Add(new ExportExcelCell() { Value = record.OwnerName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreatedTime });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
