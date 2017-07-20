@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (customerZoneNotifications.Count > 0)
                     {
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications,context.EffectiveDate);
+                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate);
                         SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
@@ -98,7 +98,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return file != null && notificationManager.SendSalePriceList(userId, customerPriceList, file);
         }
 
-        public VRMailEvaluatedTemplate EvaluateEmail(long pricelistId)
+        public VRMailEvaluatedTemplate EvaluateEmail(long pricelistId, SalePriceListType salePriceListType)
         {
             SalePriceListManager priceListManager = new SalePriceListManager();
             var customerPricelist = priceListManager.GetPriceList((int)pricelistId);
@@ -106,9 +106,13 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerPricelist == null)
                 return null;
 
+            var clonedPriceList = Utilities.CloneObject(customerPricelist);
+            clonedPriceList.PriceListType = salePriceListType;
+
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var customer = carrierAccountManager.GetCarrierAccount(customerPricelist.OwnerId);
-            var salePlmailTemplateId = carrierAccountManager.GetSalePLMailTemplateId(customerPricelist.OwnerId);
+            int ownerId = clonedPriceList.OwnerId;
+            var customer = carrierAccountManager.GetCarrierAccount(ownerId);
+            var salePlmailTemplateId = carrierAccountManager.GetSalePLMailTemplateId(ownerId);
 
             UserManager userManager = new UserManager();
             User initiator = userManager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
@@ -117,7 +121,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 {"Customer", customer},
                 {"User", initiator},
-                {"Sale Pricelist", customerPricelist}
+                {"Sale Pricelist", clonedPriceList}
             };
             VRMailManager vrMailManager = new VRMailManager();
             return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);

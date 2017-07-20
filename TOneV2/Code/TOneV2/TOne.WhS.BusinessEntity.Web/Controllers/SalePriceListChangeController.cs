@@ -77,7 +77,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             VRFile file = salePriceListManager.GenerateSalePriceListFile(salepriceListId, salePriceListType);
             VRFileManager fileManager = new VRFileManager();
             long fileId = fileManager.AddFile(file);
-            var evaluatedObject = salePriceListManager.EvaluateEmail(salepriceListId);
+            var evaluatedObject = salePriceListManager.EvaluateEmail(salepriceListId, salePriceListType);
             return new SalePriceListEvaluatedEmail
             {
                 FileId = fileId,
