@@ -59,6 +59,19 @@ namespace Vanrise.Data.SQL
 
         #endregion
 
+        #region Public Methods
+
+        protected DateTimeRange GetSQLDateTimeRange()
+        {
+            return new DateTimeRange()
+            {
+                From = new DateTime(1753, 1, 1, 0, 0, 0),
+                To = new DateTime(9999, 12, 31, 23, 59, 59)
+            };
+        }
+
+        #endregion
+
         #region ExecuteNonQuery
 
         protected int ExecuteNonQuerySP(string spName, params object[] parameters)
@@ -230,7 +243,6 @@ namespace Vanrise.Data.SQL
             return obj;
         }
 
-
         protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<DbCommand> prepareCommand)
         {
             T obj = default(T);
@@ -323,7 +335,6 @@ namespace Vanrise.Data.SQL
             string filePath = GetFilePathForBulkInsert();
             return new StreamForBulkInsert(filePath);
         }
-
 
         protected string GetFilePathForBulkInsert()
         {
