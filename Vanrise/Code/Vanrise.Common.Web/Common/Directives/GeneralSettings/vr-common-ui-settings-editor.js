@@ -40,11 +40,11 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-
+                    $scope.scopeModel.maxSearchRecordCount = 1000;
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.normalPrecision = payload.data.NormalPrecision;
                         $scope.scopeModel.longPrecision = payload.data.LongPrecision;
-
+                        $scope.scopeModel.maxSearchRecordCount = payload.data.MaxSearchRecordCount;
                     }
 
                     var promises = [];
@@ -78,7 +78,8 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         DefaultViewId: viewSelectorAPI.getSelectedIds(),
                         NormalPrecision: $scope.scopeModel.normalPrecision,
                         LongPrecision: $scope.scopeModel.longPrecision,
-                        GridPageSize: pagesizeSelectorAPI.getSelectedIds()
+                        GridPageSize: pagesizeSelectorAPI.getSelectedIds(),
+                        MaxSearchRecordCount: $scope.scopeModel.maxSearchRecordCount
                     };
                 };
               

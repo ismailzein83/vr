@@ -21,6 +21,8 @@ namespace Vanrise.Entities
         public int? LongPrecision { get; set; }
 
         public int? GridPageSize { get; set; }
+
+        public long MaxSearchRecordCount { get; set; }
     }
 
     public class CacheSettingData

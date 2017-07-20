@@ -36,7 +36,7 @@
             }
             return status;
         }
-
+       
         function getGoogleTrackingAccount() {
             var account;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -46,6 +46,7 @@
             }
             return account;
         }
+
         function getNormalPrecision() {
             var normalPrecision;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -55,6 +56,7 @@
             }
             return normalPrecision;
         }
+
         function getLongPrecision() {
             var longPrecision;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -64,6 +66,17 @@
             }
             return longPrecision;
         }
+
+        function getMaxSearchRecordCount() {
+            var recordCount;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MaxSearchRecordCount", "Name");
+                if (param != null)
+                    recordCount = param.Value;
+            }
+            return recordCount;
+        }
+
         function getUIParameterValue(name) {
             var val;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -81,7 +94,8 @@
             getUIParameterValue: getUIParameterValue,
             isUISettingsHasValue: isUISettingsHasValue,
             getGoogleTrackingStatus: getGoogleTrackingStatus,
-            getGoogleTrackingAccount: getGoogleTrackingAccount
+            getGoogleTrackingAccount: getGoogleTrackingAccount,
+            getMaxSearchRecordCount: getMaxSearchRecordCount
 
         });
     }

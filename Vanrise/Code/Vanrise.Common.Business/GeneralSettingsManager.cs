@@ -87,6 +87,13 @@ namespace Vanrise.Common.Business
                     });
                 }
 
+              
+                uiSettings.Parameters.Add(new UIParameter()
+                {
+                    Name = "MaxSearchRecordCount",
+                    Value = generalSettingData.UIData.MaxSearchRecordCount > 0 ? generalSettingData.UIData.MaxSearchRecordCount : 1000
+                });
+
             }
 
             if (generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null)
