@@ -265,7 +265,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomerList = GetDataByCustomer(customerIdsWithChanges, context.EffectiveDate);
 
-            var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomerList, context.EffectiveDate));
+            var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomerList, context.EffectiveDate.Date.AddSeconds(-1)));
             //var salePriceListChanges = new SalePriceListChangeManager();
             var notSentChanges = new Dictionary<int, List<CustomerPriceListChange>>();// salePriceListChanges.GetNotSentChangesByCustomer(customerIdsWithChanges);
             return new SalePriceListOutputContext
