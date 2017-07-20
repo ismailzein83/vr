@@ -80,7 +80,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Module"});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Entity", Width = 30});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Action" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Object Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Entity Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Notes", Width = 120 });
 
                 sheet.Rows = new List<ExportExcelRow>();
