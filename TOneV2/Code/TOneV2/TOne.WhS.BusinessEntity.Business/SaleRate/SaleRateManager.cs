@@ -520,8 +520,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Change Type" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });

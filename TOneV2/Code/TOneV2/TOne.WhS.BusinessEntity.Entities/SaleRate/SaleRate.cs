@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public enum RateChangeType
     {
-        [Description("Not Changed")]
+        [Description("Same")]
         NotChanged = 0,
 
         [Description("New")]
