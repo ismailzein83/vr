@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -25,6 +26,7 @@ namespace Vanrise.Queueing
               });
 
         }
+
         public IOrderedEnumerable<HoldRequest> GetCachedOrderedHoldRequests()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedOrderedHoldRequests",
@@ -102,6 +104,14 @@ namespace Vanrise.Queueing
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
+        public DateTimeRange GetDBDateTimeRange()
+        {
+            IHoldRequestDataManager dataManager = QDataManagerFactory.GetDataManager<IHoldRequestDataManager>();
+            return dataManager.GetDBDateTimeRange();
+        }
+
+        #region Private Methods
+
         private Dictionary<long, HoldRequest> GetCachedHoldRequests()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedHoldRequests",
@@ -111,6 +121,9 @@ namespace Vanrise.Queueing
                    return dataManager.GetAllHoldRequests().ToDictionary(itm => itm.BPInstanceId, itm => itm);
                });
         }
+
+
+        #endregion
 
         #region Private Classes
 

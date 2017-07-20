@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data
@@ -15,5 +16,7 @@ namespace Vanrise.Queueing.Data
         void Insert(long BPInstanceID, Guid executionFlowDefinitionId, DateTime from, DateTime to, List<int> queuesToHold, List<int> queuesToProcess, HoldRequestStatus status);
 
         void UpdateStatus(long holdRequestId, HoldRequestStatus status);
+
+        DateTimeRange GetDBDateTimeRange();
     }
 }

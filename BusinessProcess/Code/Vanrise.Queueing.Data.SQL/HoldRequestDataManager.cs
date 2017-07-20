@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data.SQL
@@ -39,6 +40,11 @@ namespace Vanrise.Queueing.Data.SQL
         public bool AreHoldRequestsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("queue.HoldRequest", ref updateHandle);
+        }
+
+        public DateTimeRange GetDBDateTimeRange()
+        {
+            return base.GetSQLDateTimeRange();
         }
 
         #region Mappers
