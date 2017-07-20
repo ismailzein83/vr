@@ -10,6 +10,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public int RoutingDatabaseId { get; set; }
         public string Title { get; set; }
+        public RoutingDatabaseType Type { get; set; }
         public RoutingDatabaseInformation Information { get; set; }
     }
 }

@@ -22,6 +22,7 @@ namespace TOne.WhS.Routing.Business
                 {
 					var item = RoutingDatabaseInfoMapper(database);
                     item.Title = routingDatabaseType.ToString();
+                    item.Type = database.Type;
                     routingDatabases.Add(item);
                 }
             }

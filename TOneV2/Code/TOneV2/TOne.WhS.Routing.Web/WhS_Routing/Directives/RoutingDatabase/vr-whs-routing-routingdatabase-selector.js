@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDatabaseAPIService', 'WhS_Routing_RoutingProcessTypeEnum', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_Routing_RoutingDatabaseAPIService, WhS_Routing_RoutingProcessTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDatabaseAPIService', 'WhS_Routing_RoutingProcessTypeEnum', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum',
+    function (WhS_Routing_RoutingDatabaseAPIService, WhS_Routing_RoutingProcessTypeEnum, UtilsService, VRUIUtilsService, WhS_Routing_RoutingDatabaseTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -96,7 +96,11 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                         });
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingDatabaseId', $attrs, ctrl);
-
+                        else {
+                            var currentRoutingDBTypeValue = WhS_Routing_RoutingDatabaseTypeEnum.Current.value;
+                            var defaultSelectedIds = ($attrs.ismultipleselection != undefined) ? [currentRoutingDBTypeValue] : currentRoutingDBTypeValue;
+                            VRUIUtilsService.setSelectedValues(defaultSelectedIds, 'Type', $attrs, ctrl);
+                        }
                     });
                 };
 
