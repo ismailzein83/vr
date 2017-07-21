@@ -88,24 +88,31 @@ namespace TOne.WhS.Invoice.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            string message = null;
+            string errorrMessage = null;
 
-            if (CheckIsAllowToAddInvoiceAccount(invoiceAccount, true, out message))
+            if (CheckIsAllowToAddInvoiceAccount(invoiceAccount, true, out errorrMessage))
             {
-                bool updateActionSucc = dataManager.Update(invoiceAccount);
-                if (updateActionSucc)
+                if(UpdateVRInvoiceAccount(invoiceAccount, out errorrMessage))
                 {
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    UpdateVRInvoiceAccount(invoiceAccount);
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = InvoiceAccountDetailMapper(invoiceAccount);
-                }
-                else
-                {
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                    bool updateActionSucc = dataManager.Update(invoiceAccount);
+                    if (updateActionSucc)
+                    {
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                        updateOperationOutput.UpdatedObject = InvoiceAccountDetailMapper(invoiceAccount);
+                    }
+                    else
+                    {
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                    }
                 }
             }
-            updateOperationOutput.Message = message;
+            if (errorrMessage != null)
+            {
+                updateOperationOutput.Message = errorrMessage;
+                updateOperationOutput.ShowExactMessage = true;
+            }
             return updateOperationOutput;
         }
         public InvoiceAccount GetInvoiceAccount(int invoiceAccountId)
@@ -801,29 +808,11 @@ namespace TOne.WhS.Invoice.Business
             }
         }
 
-        private bool UpdateVRInvoiceAccount(InvoiceAccount invoiceAccount)
+        private bool UpdateVRInvoiceAccount(InvoiceAccount invoiceAccount, out string errorMessage)
         {
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
-            VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
-            if (invoiceAccount.CarrierAccountId.HasValue)
-            {
-                var carrierAccount = _carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
-                switch (carrierAccount.CarrierAccountSettings.ActivationStatus)
-                {
-                    case BusinessEntity.Entities.ActivationStatus.Active: vrAccountStatus = VRAccountStatus.Active; break;
-                    case BusinessEntity.Entities.ActivationStatus.Inactive: vrAccountStatus = VRAccountStatus.InActive; break;
-                }
-                return invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrAccountStatus, false);
-            }else
-            {
-                var carrierProfile = _carrierProfileManager.GetCarrierProfile(invoiceAccount.CarrierProfileId.Value);
-                switch (carrierProfile.Settings.ActivationStatus)
-                {
-                    case CarrierProfileActivationStatus.Active: vrAccountStatus = VRAccountStatus.Active; break;
-                    case CarrierProfileActivationStatus.InActive: vrAccountStatus = VRAccountStatus.InActive; break;
-                }
-                return invoiceAccountManager.TryUpdateInvoiceAccount(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, vrAccountStatus, false);
-            }
+
+            return invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), invoiceAccount.BED, invoiceAccount.EED, out errorMessage);
         }
         #endregion
 

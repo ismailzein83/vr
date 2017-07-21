@@ -3,18 +3,18 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [VR_AccountBalance].[sp_LiveBalance_TryUpdateStatus] 
+create PROCEDURE [VR_AccountBalance].[sp_LiveBalance_TryUpdateEffectiveDate] 
 	@AccountID varchar(50),
 	@AccountTypeID uniqueidentifier,
-	@Status int,
-	@IsDeleted bit
+	@BED datetime ,
+	@EED datetime
 AS
 BEGIN
 IF  EXISTS(select 1 from [VR_AccountBalance].LiveBalance where AccountId = @AccountID and AccountTypeID =@AccountTypeID) 
 	BEGIN
 	UPDATE	[VR_AccountBalance].LiveBalance 
-	SET		[Status] =@Status,
-			IsDeleted = @IsDeleted
+	SET		BED = @BED,
+			EED = @EED
 	WHERE	 AccountId = @AccountID and AccountTypeID =@AccountTypeID
 	END
 END

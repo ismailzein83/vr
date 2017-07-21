@@ -98,6 +98,7 @@ namespace TOne.WhS.AccountBalance.Business
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccount);
+                    new LiveBalanceManager().TryUpdateLiveBalanceEffectiveDate(financialAccount.FinancialAccountId.ToString(), financialAccount.Settings.AccountTypeId, financialAccount.BED, financialAccount.EED);
                 }
                 else
                 {

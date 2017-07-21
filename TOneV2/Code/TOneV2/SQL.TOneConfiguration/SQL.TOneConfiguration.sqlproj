@@ -643,6 +643,10 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_Delete.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_SetAsDeletedByInvoiceId.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryUpdateStatus.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_TryUpdateStatus.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_TryUpdateEffectiveDate.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetPopulatedPeriod.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryUpdateEffectiveDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

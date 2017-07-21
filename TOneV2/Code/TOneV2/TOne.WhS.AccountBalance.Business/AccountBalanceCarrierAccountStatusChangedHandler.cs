@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business.CarrierAccounts;
 using Vanrise.Entities;
 using Vanrise.Common;
-using Vanrise.Invoice.Entities;
 using TOne.WhS.BusinessEntity.Business;
-namespace TOne.WhS.Invoice.Business
+using Vanrise.AccountBalance.Business;
+namespace TOne.WhS.AccountBalance.Business
 {
-    public class InvoiceCarrierAccountStatusChangedHandler : CarrierAccountStatusChangedEventHandler
+    public class AccountBalanceCarrierAccountStatusChangedHandler : CarrierAccountStatusChangedEventHandler
     {
         public override Guid ConfigId
         {
-            get { return new Guid("7B2F94DE-AFF7-47FD-AC27-A9FEDA93886F"); }
+            get { return new Guid("863498D8-FF33-4FC3-8380-A87DEA068AD8"); }
         }
 
         public override void Execute(IVREventHandlerContext context)
@@ -23,20 +23,20 @@ namespace TOne.WhS.Invoice.Business
             eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierAccount = carrierAccountManager.GetCarrierAccount(eventPayload.CarrierAccountId);
-            Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
+            LiveBalanceManager liveBalanceManager = new LiveBalanceManager();
             VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
             switch (carrierAccount.CarrierAccountSettings.ActivationStatus)
             {
                 case BusinessEntity.Entities.ActivationStatus.Active: vrAccountStatus = VRAccountStatus.Active; break;
                 case BusinessEntity.Entities.ActivationStatus.Inactive: vrAccountStatus = VRAccountStatus.InActive; break;
             }
-            InvoiceAccountManager carrierInvoiceAccountManager = new Business.InvoiceAccountManager();
-            var invoiceAccounts = carrierInvoiceAccountManager.GetInvoiceAccountsByCarrierAccountId(eventPayload.CarrierAccountId);
-            if (invoiceAccounts != null)
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccounts = financialAccountManager.GetFinancialAccountsByCarrierAccountId(eventPayload.CarrierAccountId);
+            if (financialAccounts != null)
             {
-                foreach (var invoiceAccount in invoiceAccounts)
+                foreach (var financialAccount in financialAccounts)
                 {
-                    invoiceAccountManager.TryUpdateInvoiceAccountStatus(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), vrAccountStatus, false);
+                    liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccount.FinancialAccountId.ToString(), financialAccount.Settings.AccountTypeId, vrAccountStatus, false);
                 }
             }
         }

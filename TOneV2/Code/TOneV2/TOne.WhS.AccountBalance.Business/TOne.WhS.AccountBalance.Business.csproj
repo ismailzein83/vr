@@ -79,6 +79,8 @@
     <Compile Include="FinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccountManager.cs" />
     <Compile Include="IAccountTypeInfoFilter\FinancialAccountTypeFilter.cs" />
+    <Compile Include="AccountBalanceCarrierAccountStatusChangedHandler.cs" />
+    <Compile Include="AccountBalanceCarrierProfileStatusChangedHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
