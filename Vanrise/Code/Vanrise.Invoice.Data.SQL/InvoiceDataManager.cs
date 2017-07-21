@@ -291,8 +291,8 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return new VRPopulatedPeriod
             {
-                FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
-                ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
+                FromDate = GetReaderValue<DateTime?>(reader, "FromDate"),
+                ToDate = GetReaderValue<DateTime?>(reader, "ToDate"),
             };
         }
 

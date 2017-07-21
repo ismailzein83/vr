@@ -44,7 +44,7 @@ namespace Vanrise.Invoice.Business
             if(validationResult)
             {
                 IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
-                return  dataManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeId, partnerId, bed, eed);
+                dataManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeId, partnerId, bed, eed);
             }
             return validationResult;
         }
