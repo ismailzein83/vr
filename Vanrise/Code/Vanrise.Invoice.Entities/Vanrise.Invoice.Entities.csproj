@@ -151,6 +151,7 @@
     <Compile Include="RDLCBankDetails.cs" />
     <Compile Include="RDLCTaxItemDetail.cs" />
     <Compile Include="SourceInvoice.cs" />
+    <Compile Include="VRPopulatedPeriod.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">

@@ -66,11 +66,18 @@ namespace Vanrise.AccountBalance.Business
          
         }
 
-        public bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
+        public bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId,VRAccountStatus status, bool isDeleted)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
-            return dataManager.TryUpdateLiveBalanceStatus(accountId, accountTypeId, bed, eed, status, isDeleted);
+            return dataManager.TryUpdateLiveBalanceStatus(accountId, accountTypeId, status, isDeleted);
         }
+
+        public bool TryUpdateLiveBalanceEffectiveDate(String accountId, Guid accountTypeId, DateTime? bed, DateTime? eed)
+        {
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            return dataManager.TryUpdateLiveBalanceEffectiveDate(accountId, accountTypeId, bed, eed);
+        }
+
 
         #region Private Classes
         private class AccountBalanceRequestHandler : BigDataRequestHandler<AccountBalanceQuery, AccountBalanceEntity, AccountBalanceDetail>

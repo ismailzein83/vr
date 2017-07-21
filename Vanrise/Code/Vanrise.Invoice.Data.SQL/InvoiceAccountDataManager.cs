@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data.SQL
@@ -31,9 +32,15 @@ namespace Vanrise.Invoice.Data.SQL
            }
            return (affectedRows > -1);
         }
-        public bool TryUpdateInvoiceAccount(VRInvoiceAccount invoiceAccount)
+
+        public bool TryUpdateInvoiceAccountStatus(Guid invoiceTypeId, string partnerId, VRAccountStatus status, bool isDeleted)
         {
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceAccount_TryUpdate", invoiceAccount.InvoiceAccountId, invoiceAccount.InvoiceTypeId, invoiceAccount.PartnerId, invoiceAccount.BED, invoiceAccount.EED, invoiceAccount.Status, invoiceAccount.IsDeleted);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceAccount_TryUpdateStatus", invoiceTypeId, partnerId, status, isDeleted);
+            return (affectedRows > -1);
+        }
+        public bool TryUpdateInvoiceAccountEffectiveDate(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceAccount_TryUpdateEffectiveDate", invoiceTypeId, partnerId, bed, eed);
             return (affectedRows > -1);
         }
     }

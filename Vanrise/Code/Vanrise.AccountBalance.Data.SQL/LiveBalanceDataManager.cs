@@ -186,9 +186,13 @@ namespace Vanrise.AccountBalance.Data.SQL
             ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_CheckIfHasTransactions]", out hasTransactions, accountTypeId, accountId);
             return (bool)hasTransactions;
         }
-        public bool TryUpdateLiveBalanceStatus(string accountId, Guid accountTypeId, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
+        public bool TryUpdateLiveBalanceStatus(string accountId, Guid accountTypeId, VRAccountStatus status, bool isDeleted)
         {
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_TryUpdateStatus]", accountId, accountTypeId, bed, eed, status, isDeleted) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_TryUpdateStatus]", accountId, accountTypeId, status, isDeleted) > 0);
+        }
+        public bool TryUpdateLiveBalanceEffectiveDate(string accountId, Guid accountTypeId, DateTime? bed, DateTime? eed)
+        {
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_LiveBalance_TryUpdateEffectiveDate]", accountId, accountTypeId, bed, eed) > 0);
         }
         #endregion
 

@@ -212,7 +212,7 @@ namespace Vanrise.Invoice.Data.SQL
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
         }
 
-
+        
         public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetLast", InvoiceMapper, invoiceTypeId, partnerId);
@@ -222,7 +222,10 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemsSP("VR_Invoice.sp_Invoice_GetLastInvoices", InvoiceMapper, invoiceTypeId, partnerId, beforeDate, lastInvoices);
         }
-
+        public VRPopulatedPeriod GetInvoicesPopulatedPeriod(Guid invoiceTypeId, string partnerId)
+        {
+            return GetItemSP("VR_Invoice.sp_Invoice_GetPopulatedPeriod", VRPopulatedPeriodMapper, invoiceTypeId, partnerId);
+        }
         #endregion
 
         #region Private Methods
@@ -283,6 +286,19 @@ namespace Vanrise.Invoice.Data.SQL
             };
             return invoice;
         }
+
+        public VRPopulatedPeriod VRPopulatedPeriodMapper(IDataReader reader)
+        {
+            return new VRPopulatedPeriod
+            {
+                FromDate = GetReaderValue<DateTime>(reader, "FromDate"),
+                ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
+            };
+        }
+
         #endregion
+
+
+      
     }
 }
