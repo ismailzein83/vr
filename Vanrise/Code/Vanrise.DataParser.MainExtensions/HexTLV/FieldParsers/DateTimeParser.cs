@@ -56,12 +56,13 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
                                                            ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex])),
                                               "dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
 
-                    if (dateParsed && WithOffset)
-                    {
-                        int offset = (int)context.FieldValue[TimeShiftIndicatorIndex] == 43 ? 1 : -1;
-                        DateTimeOffset offsetDateTime = new DateTimeOffset(value, new TimeSpan(context.FieldValue[HoursTimeShiftIndex] * offset, context.FieldValue[MinutesTimeShiftIndex] * offset, 0));
-                        value = offsetDateTime.ToLocalTime().DateTime;
-                    }
+                    //Removed As discussed with Sari, date should be saved without time shift from mediation
+                    //if (dateParsed && WithOffset)
+                    //{
+                    //    int offset = (int)context.FieldValue[TimeShiftIndicatorIndex] == 43 ? 1 : -1;
+                    //    DateTimeOffset offsetDateTime = new DateTimeOffset(value, new TimeSpan(context.FieldValue[HoursTimeShiftIndex] * offset, context.FieldValue[MinutesTimeShiftIndex] * offset, 0));
+                    //    value = offsetDateTime.ToLocalTime().DateTime;
+                    //}
 
                     break;
             }
