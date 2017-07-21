@@ -55,8 +55,8 @@
     [SMSUserDataLength]               INT              NULL,
     [Origination]                     VARCHAR (100)    NULL,
     [MTSMSBlackListFlag]              BIT              NULL,
-    [SAC]                             VARCHAR (100)    NULL,
-    [LocationAreaCode]                VARCHAR (100)    NULL,
+    [SAC]                             INT              NULL,
+    [LocationAreaCode]                INT              NULL,
     [SwitchID]                        INT              NULL,
     [CallingNumber]                   VARCHAR (50)     NULL,
     [CalledNumber]                    VARCHAR (50)     NULL,
@@ -71,6 +71,8 @@
     [UniqueIdentifier]                UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_SMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

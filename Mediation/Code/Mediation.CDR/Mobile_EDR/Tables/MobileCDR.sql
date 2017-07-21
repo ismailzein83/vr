@@ -5,8 +5,8 @@
     [ServedIMEI]                       VARCHAR (100)    NULL,
     [CallingNumber]                    VARCHAR (100)    NULL,
     [CalledNumber]                     VARCHAR (100)    NULL,
-    [SAC]                              VARCHAR (100)    NULL,
-    [LocationAreaCode]                 VARCHAR (100)    NULL,
+    [SAC]                              INT              NULL,
+    [LocationAreaCode]                 INT              NULL,
     [CallDuration]                     INT              NULL,
     [SequenceNumber]                   INT              NULL,
     [PartialRecordType]                INT              NULL,
@@ -38,15 +38,21 @@
     [CallingIMEI]                      VARCHAR (50)     NULL,
     [FisrtSiteId]                      INT              NULL,
     [LastSiteId]                       INT              NULL,
-    [CallingLocationInformation_First] INT              NULL,
-    [CallingLocationInformation_Last]  INT              NULL,
-    [CalledLocationInformation_First]  INT              NULL,
-    [CalledLocationInformation_Last]   INT              NULL,
+    [CallingLocationInformation_First] VARCHAR (100)    NULL,
+    [CallingLocationInformation_Last]  VARCHAR (100)    NULL,
+    [CalledLocationInformation_First]  VARCHAR (100)    NULL,
+    [CalledLocationInformation_Last]   VARCHAR (100)    NULL,
     [ConnectTimestamp]                 BIGINT           NULL,
     [DisconnectTimestamp]              BIGINT           NULL,
     [UniqueIdentifier]                 UNIQUEIDENTIFIER NULL,
+    [Subs_First_CI]                    INT              NULL,
+    [Subs_Last_CI]                     INT              NULL,
+    [Subs_First_LAC]                   INT              NULL,
+    [Subs_Last_LAC]                    INT              NULL,
     CONSTRAINT [PK_MobileCDR_1] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

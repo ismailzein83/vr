@@ -2796,7 +2796,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "MessageTime",
                     DateTimeParsingType = DateTimeParsingType.Time,
-                    WithOffset = false
+                    WithOffset = false,
+                    HoursIndex = 0,
+                    MinutesIndex = 1,
+                    SecondsIndex = 2
                 }
             });
 
@@ -2854,7 +2857,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "MessageTime",
                     DateTimeParsingType = DateTimeParsingType.Time,
-                    WithOffset = false
+                    WithOffset = false,
+                    HoursIndex = 0,
+                    MinutesIndex = 1,
+                    SecondsIndex = 2
                 }
             });
 
@@ -2886,14 +2892,6 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            //parsers.Add("9F53", new HexTLVFieldParser
-            //{
-            //    Settings = new TBCDNumberParser
-            //    {
-            //        FieldName = "CallingChargeAreaCode",
-            //        RemoveHexa = true
-            //    }
-            //});
             return parsers;
         }
 
@@ -3217,6 +3215,14 @@ namespace Mediation.Runtime.DataParser
                 Settings = new TBCDNumberParser
                 {
                     FieldName = "ServedIMEI",
+                    RemoveHexa = true
+                }
+            });
+            parsers.Add("83", new HexTLVFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "ServedMSISDN",
                     RemoveHexa = true
                 }
             });
@@ -4507,9 +4513,10 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("9F814A", new HexTLVFieldParser
             {
-                Settings = new HexaParser
+                Settings = new NumberFieldParser
                 {
-                    FieldName = "CallReference"
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
                 }
             });
 
@@ -4592,17 +4599,19 @@ namespace Mediation.Runtime.DataParser
                         {
                             {"81", new HexTLVFieldParser
                                 {
-                                     Settings = new StringParser
+                                     Settings = new NumberFieldParser
                                      {
-                                          FieldName = "SAC"
+                                          FieldName = "SAC",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             },
                             {"80", new HexTLVFieldParser
                                 {
-                                     Settings = new StringParser
+                                     Settings = new NumberFieldParser
                                      {
-                                          FieldName = "LocationAreaCode"
+                                          FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
                                      }                            
                                 }
                             }
@@ -5802,7 +5811,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "CallingLocationInformation_First",
+                        FieldName = "Subs_First_LAC",
                         Reverse = true
                     }
                 },
@@ -5817,7 +5826,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "CallingLocationInformation_Last",
+                        FieldName = "Subs_Last_LAC",
                         Reverse = true
                     }
                 },
@@ -5832,7 +5841,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "FirstSiteId",
+                        FieldName = "Subs_First_CI",
                         Reverse = true
                     }
                 },
@@ -5847,7 +5856,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "LastSiteId",
+                        FieldName = "Subs_Last_CI",
                         Reverse = true
                     }
                 },
@@ -6057,7 +6066,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "CalledLocationInformation_First",
+                        FieldName = "Subs_First_LAC",
                         Reverse = true
                     }
                 },
@@ -6072,7 +6081,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "CalledLocationInformation_Last",
+                        FieldName = "Subs_Last_LAC",
                         Reverse = true
                     }
                 },
@@ -6087,7 +6096,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "FirstSiteId",
+                        FieldName = "Subs_First_CI",
                         Reverse = true
                     }
                 },
@@ -6102,7 +6111,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "LastSiteId",
+                        FieldName = "Subs_Last_CI",
                         Reverse = true
                     }
                 },
