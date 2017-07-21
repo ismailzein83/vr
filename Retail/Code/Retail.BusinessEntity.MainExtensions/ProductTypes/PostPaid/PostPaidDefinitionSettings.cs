@@ -21,5 +21,7 @@ namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid
                 return "retail-be-productextendedsettings-postpaid";
             }
         }
+
+        public bool OptionalCreditLimit { get; set; }
     }
 }

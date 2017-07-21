@@ -9,6 +9,6 @@ namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid
 {
     public class PostPaidSettings : ProductExtendedSettings
     {
-        public Decimal CreditLimit { get; set; }
+        public Decimal? CreditLimit { get; set; }
     }
 }

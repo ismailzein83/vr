@@ -46,8 +46,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
                 product.Settings.ThrowIfNull("product.Settings", accountPartFinancial.ProductId);
 
                 var postPaidSettings = product.Settings.ExtendedSettings.CastWithValidate<PostPaidSettings>("product.Settings.ExtendedSettings", accountPartFinancial.ProductId);
-
-                creditLimit = s_currencyExRateManager.ConvertValueToCurrency(postPaidSettings.CreditLimit, product.Settings.PricingCurrencyId, context.EntityBalanceInfo.CurrencyId, DateTime.Now);
+                if (!postPaidSettings.CreditLimit.HasValue)
+                    throw new NullReferenceException(String.Format("postPaidSettings.CreditLimit, Product '{0}'", accountPartFinancial.ProductId));
+                creditLimit = s_currencyExRateManager.ConvertValueToCurrency(postPaidSettings.CreditLimit.Value, product.Settings.PricingCurrencyId, context.EntityBalanceInfo.CurrencyId, DateTime.Now);
             }
 
 
