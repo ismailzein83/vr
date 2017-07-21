@@ -114,35 +114,39 @@ namespace Retail.BusinessEntity.Business
             financialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
             accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccount);
         }
-        
+
         public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            string message = null;
-            if (CheckFinancialAccountOverlaping(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out  message))
+            string errorrMessage = null;
+            if (CheckFinancialAccountOverlaping(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out  errorrMessage))
             {
                 var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
                 var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
                 accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
                 accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
-                if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
-                {
-                    UpdateAccountStatus(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount);
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
-                }
-                else
-                {
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-                }
-            }
-            else
-            {
-                updateOperationOutput.Message = message;
-            }
 
+                if (UpdateAccountEffectiveDate(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out errorrMessage))
+                {
+                    if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
+                    {
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                        updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
+                    }
+                    else
+                    {
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                    }
+
+                }
+            }
+            if (errorrMessage != null)
+            {
+                updateOperationOutput.Message = errorrMessage;
+                updateOperationOutput.ShowExactMessage = true;
+            }
             return updateOperationOutput;
         }
          
@@ -486,12 +490,31 @@ namespace Retail.BusinessEntity.Business
             var result = false;
             if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
             {
-              result= invoiceAccountManager.TryUpdateInvoiceAccount(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId, financialAccount.BED, financialAccount.EED, vrAccountStatus, false);
+              result= invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId,  vrAccountStatus, false);
               
             }
             if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
             {
-               result = new LiveBalanceManager().TryUpdateLiveBalanceStatus(financialAccountId, financialAccountDefinitionSettings.BalanceAccountTypeId.Value, financialAccount.BED, financialAccount.EED, vrAccountStatus, false);
+               result = new LiveBalanceManager().TryUpdateLiveBalanceStatus(financialAccountId, financialAccountDefinitionSettings.BalanceAccountTypeId.Value ,vrAccountStatus, false);
+            }
+
+            return result;
+        }
+
+        private bool UpdateAccountEffectiveDate(Guid accountBEDefinitionId, long accountId, FinancialAccount financialAccount, out string errorMessage)
+        {
+            Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
+            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+            var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
+            var result = false;
+            errorMessage = null;
+            if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
+            {
+                result = invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId, financialAccount.BED, financialAccount.EED, out errorMessage);
+            }
+            if (result && financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
+            {
+                result = new LiveBalanceManager().TryUpdateLiveBalanceEffectiveDate(financialAccountId, financialAccountDefinitionSettings.BalanceAccountTypeId.Value, financialAccount.BED, financialAccount.EED);
             }
 
             return result;

@@ -18,23 +18,23 @@ namespace Retail.MultiNet.Business
         public override void Execute(IVREventHandlerContext context)
         {
             var eventPayload = context.EventPayload as AccountStatusChangedEventPayload;
-            eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
+            //eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
 
-            AccountBEManager accountBEManager = new AccountBEManager();
-            var account = accountBEManager.GetAccount(eventPayload.AccountBEDefinitionId, eventPayload.AccountId);
-            Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
-            VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            FinancialAccountDefinitionManager financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
-            var financialAccounts = financialAccountManager.GetFinancialAccounts(eventPayload.AccountBEDefinitionId, eventPayload.AccountId,false);
-            if (financialAccounts != null)
-            {
-                foreach (var financialAccount in financialAccounts)
-                {
-                    var financialAccountDefinition = financialAccountDefinitionManager.GetFinancialAccountDefinition(financialAccount.FinancialAccount.FinancialAccountDefinitionId);
-                    invoiceAccountManager.TryUpdateInvoiceAccount(financialAccountDefinition.Settings.InvoiceTypeId.Value , financialAccount.FinancialAccountId, financialAccount.FinancialAccount.BED, financialAccount.FinancialAccount.EED, vrAccountStatus, false);
-                }
-            }
+            //AccountBEManager accountBEManager = new AccountBEManager();
+            //var account = accountBEManager.GetAccount(eventPayload.AccountBEDefinitionId, eventPayload.AccountId);
+            //Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
+            //VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
+            //FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            //FinancialAccountDefinitionManager financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
+            //var financialAccounts = financialAccountManager.GetFinancialAccounts(eventPayload.AccountBEDefinitionId, eventPayload.AccountId,false);
+            //if (financialAccounts != null)
+            //{
+            //    foreach (var financialAccount in financialAccounts)
+            //    {
+            //        var financialAccountDefinition = financialAccountDefinitionManager.GetFinancialAccountDefinition(financialAccount.FinancialAccount.FinancialAccountDefinitionId);
+            //        invoiceAccountManager.TryUpdateInvoiceAccount(financialAccountDefinition.Settings.InvoiceTypeId.Value , financialAccount.FinancialAccountId, financialAccount.FinancialAccount.BED, financialAccount.FinancialAccount.EED, vrAccountStatus, false);
+            //    }
+            //}
         }
     }
 }
