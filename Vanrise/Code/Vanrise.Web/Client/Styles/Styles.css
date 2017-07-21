@@ -3375,13 +3375,15 @@ vr-overall-widget  .list-group-item {
     border-radius: 4px;
     width: 100%;
     display: flex;
+    min-height:26px;
+    font-size:12px
 }
 
 .vr-toolbox .item{
-    width:75px;
+    width:100px;
     display:inline-block;
     margin:2px ;
-    padding:2px;
+    padding:0px 2px;
     border: 1px solid #ccc;
     cursor: move !important;
     border-radius:4px;
@@ -3390,10 +3392,22 @@ vr-overall-widget  .list-group-item {
     overflow-x:hidden;
     transition: all .2s ease-in-out;
 }
+vr-toolbox[medium] .item{
+    width:150px;   
+}
+vr-toolbox[large] .item{
+    width:200px;   
+}
 .vr-toolbox .item:hover{
-    border-color: gray;
+    /*border-color: gray;
     font-weight:bold;
-    transform: scale(1.1);
+    transform: scale(1.1);*/
+
+    border-color: gray;
+    font-weight: bold;
+    transform: scale(1.07);
+    background-color: #fff;
+    box-shadow: 5px 5px 5px #ccc;
 }
 .vr-toolbox .item .icon > div{
     display:inline-block;
