@@ -114,6 +114,7 @@
     <Compile Include="Serializer.cs" />
     <Compile Include="VRDictionary.cs" />
     <Compile Include="VRWebAPIClient.cs" />
+    <Compile Include="ZipUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Resources\Resources.csproj">
