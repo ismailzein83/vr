@@ -787,19 +787,39 @@ namespace Vanrise.Analytic.Business
                 {
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
+                AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+                var dimensions = analyticItemConfigManager.GetDimensions(_query.TableId);
+                dimensions.ThrowIfNull("dimensions", _query.TableId);
+                var measures = analyticItemConfigManager.GetMeasures(_query.TableId);
+                measures.ThrowIfNull("measures", _query.TableId);
+
                 if (_query.DimensionFields != null)
                 {
                     foreach (var dimName in _query.DimensionFields)
                     {
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
+                        var dimension = dimensions.GetRecord(dimName);
+                        dimension.ThrowIfNull("dimension", dimName);
+                        dimension.Config.ThrowIfNull("dimension.Config", dimName);
+                        dimension.Config.FieldType.ThrowIfNull("dimension.Config.FieldType", dimName);
+                        var excelHeaderCell = new ExportExcelHeaderCell{ Title = dimName };
+                        var setTypeContext = new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = excelHeaderCell };
+                        dimension.Config.FieldType.SetExcelCellType(setTypeContext);
+                        sheet.Header.Cells.Add(excelHeaderCell);
                     }
                 }
                 if (_query.MeasureFields != null)
                 {
                     foreach (var measureName in _query.MeasureFields)
                     {
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = measureName });
+                        var measure = measures.GetRecord(measureName);
+                        measure.ThrowIfNull("measure", measureName);
+                        measure.Config.ThrowIfNull("measure.Config", measureName);
+                        measure.Config.FieldType.ThrowIfNull("measure.Config.FieldType", measureName);
+                        var excelHeaderCell = new ExportExcelHeaderCell { Title = measureName };
+                        var setTypeContext = new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = excelHeaderCell };
+                        measure.Config.FieldType.SetExcelCellType(setTypeContext);
+                        sheet.Header.Cells.Add(excelHeaderCell);
                     }
                 }
                 sheet.Rows = new List<ExportExcelRow>();
@@ -832,6 +852,16 @@ namespace Vanrise.Analytic.Business
                 
                 context.MainSheet = sheet;
             }
+
+            private class DataRecordFieldTypeSetExcelCellTypeContext : IDataRecordFieldTypeSetExcelCellTypeContext
+            {
+                public ExportExcelHeaderCell HeaderCell
+                {
+                    get;
+                    set;
+                }
+            }
+
         }
 
         private class RecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext

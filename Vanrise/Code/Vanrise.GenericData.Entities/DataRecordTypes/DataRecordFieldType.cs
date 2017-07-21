@@ -26,6 +26,11 @@ namespace Vanrise.GenericData.Entities
 
         public abstract RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues);
 
+        public virtual void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
+        {
+
+        }
+
         protected Type GetNullableType(Type type)
         {
             return (type.IsValueType) ? typeof(Nullable<>).MakeGenericType(type) : type;
@@ -43,6 +48,11 @@ namespace Vanrise.GenericData.Entities
 
         public string ConvertFilterMethod { get; set; }
     }   
+
+    public interface IDataRecordFieldTypeSetExcelCellTypeContext
+    {
+        ExportExcelHeaderCell HeaderCell { get; }
+    }
 
     public interface IDataRecordFieldEvaluator
     {

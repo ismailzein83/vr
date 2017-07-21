@@ -64,6 +64,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return false;
         }
+
+        public override void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
+        {
+            context.HeaderCell.ThrowIfNull("context.HeaderCell");
+            var headerCell = context.HeaderCell;
+            headerCell.CellType = ExcelCellType.DateTime;
+            switch(this.DataType)
+            {
+                case FieldDateTimeDataType.DateTime: headerCell.DateTimeType = DateTimeType.LongDateTime; break;
+                case FieldDateTimeDataType.Date: headerCell.DateTimeType = DateTimeType.Date; break;
+                default: headerCell.DateTimeType = DateTimeType.LongDateTime; break;
+            }
+        }
         #endregion
 
         #region Private Methods
