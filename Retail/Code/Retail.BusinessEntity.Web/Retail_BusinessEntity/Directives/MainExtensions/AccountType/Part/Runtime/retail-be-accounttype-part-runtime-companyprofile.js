@@ -34,7 +34,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 contacts: [],
                 faxes: [],
                 phoneNumbers: [],
-                mobileNumbers:[]
+                mobileNumbers: []
 
             };
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
@@ -132,14 +132,14 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         $scope.scopeModel.address = payload.partSettings.Address;
 
                         $scope.scopeModel.phoneNumbers = [];
-                        if (payload.partSettings.PhoneNumbers.length>0) {
+                        if (payload.partSettings.PhoneNumbers && payload.partSettings.PhoneNumbers.length > 0) {
                             for (var i = 0; i < payload.partSettings.PhoneNumbers.length; i++) {
-                                if (payload.partSettings.PhoneNumbers[i]!=null)
-                                    $scope.scopeModel.phoneNumbers.push( payload.partSettings.PhoneNumbers[i]);
+                                if (payload.partSettings.PhoneNumbers[i] != null)
+                                    $scope.scopeModel.phoneNumbers.push(payload.partSettings.PhoneNumbers[i]);
                             }
                         }
                         $scope.scopeModel.faxes = [];
-                        if (payload.partSettings.Faxes.length > 0) {
+                        if (payload.partSettings.Faxes && payload.partSettings.Faxes.length > 0) {
                             for (var j = 0; j < payload.partSettings.Faxes.length; j++) {
                                 if (payload.partSettings.Faxes[j] != null)
                                     $scope.scopeModel.faxes.push(payload.partSettings.Faxes[j]);
@@ -147,7 +147,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         }
 
                         $scope.scopeModel.mobileNumbers = [];
-                        if (payload.partSettings.MobileNumbers.length > 0) {
+                        if (payload.partSettings.MobileNumbers && payload.partSettings.MobileNumbers.length > 0) {
                             for (var k = 0; k < payload.partSettings.MobileNumbers.length; k++) {
                                 if (payload.partSettings.MobileNumbers[k] != null)
                                     $scope.scopeModel.mobileNumbers.push(payload.partSettings.MobileNumbers[k]);
