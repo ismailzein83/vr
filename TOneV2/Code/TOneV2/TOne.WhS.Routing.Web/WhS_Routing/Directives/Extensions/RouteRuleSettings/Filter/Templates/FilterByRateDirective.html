@@ -1,13 +1,14 @@
-﻿<vr-columns width="1/3row">
-    <vr-select entityname="Rate Option" datatextfield="description" datavaluefield="value"
-               datasource="rateOptions" selectedvalues="scopeModel.rateOption" isrequired="true"></vr-select>
-</vr-columns>
-<vr-columns width="1/3row">
-    <vr-select entityname="Rate Option Type" datatextfield="description" datavaluefield="value"
-               datasource="rateOptionTypes" selectedvalues="scopeModel.rateOptionType" isrequired="true"></vr-select>
-</vr-columns>
-<vr-columns width="1/3row">
-    <vr-validator validate="validateRateOptionValue()">
-        <vr-textbox value="scopeModel.rateOptionValue" isrequired="true" type="number"></vr-textbox>
-    </vr-validator>
-</vr-columns>
+﻿<vr-row removeline>
+    <vr-columns width="1/3row">
+        <vr-select entityname="Rate Option" datatextfield="description" datavaluefield="value"
+                   datasource="rateOptions" selectedvalues="scopeModel.rateOption" isrequired="true"></vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select entityname="Rate Option Type" datatextfield="description" datavaluefield="value"
+                   datasource="rateOptionTypes" selectedvalues="scopeModel.rateOptionType" isrequired="true"></vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.rateOptionValue" isrequired="true" type="number" customvalidate="validateRateOptionValue()"></vr-textbox>
+    </vr-columns>
+</vr-row>
+

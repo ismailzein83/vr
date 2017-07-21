@@ -1,22 +1,13 @@
 ﻿<div>
     <vr-row>
-        <vr-columns width="1/3row">
-            <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" text="None"
-                       label="Filter Type" datasource="ctrl.optionFilterSettingsGroupTemplates" selectedvalues="ctrl.selectedOptionFilterSettingsGroupTemplate">
-            </vr-select>
-        </vr-columns>
-
-        <vr-columns width="normal">
-            <div style="position: absolute; top: 25px;" vr-disabled="disableAddButton">
-                <vr-button type="Add" vr-disabled="ctrl.selectedOptionFilterSettingsGroupTemplate == undefined" data-onclick="ctrl.addFilter" standalone></vr-button>
-            </div>
-        </vr-columns>
+         <vr-columns width="2/3row">
+             <vr-toolbox label="Filter Type" medium datasource="ctrl.optionFilterSettingsGroupTemplates" datatextfield="Title" datavaluefield="ExtensionConfigurationId" groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
+        </vr-columns>    
     </vr-row>
-
     <vr-row>
         <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
             <vr-datagrid datasource="ctrl.datasource"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu enabledraggablerow>
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu dragdropsetting="ctrl.dragdropSetting">
                 <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="5"></vr-datagridcolumn>
                 <vr-datagridcolumn>
                     <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />

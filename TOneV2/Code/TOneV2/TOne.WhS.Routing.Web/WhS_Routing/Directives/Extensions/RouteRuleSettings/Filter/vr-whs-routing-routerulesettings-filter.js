@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingRouterulesettingsFilter', ['WhS_Routing_RoutRuleSettingsAPIService', 'UtilsService', 'VRUIUtilsService',
-function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRouterulesettingsFilter', ['WhS_Routing_RoutRuleSettingsAPIService', 'UtilsService', 'VRUIUtilsService','VRDragdropService',
+function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService, VRDragdropService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -33,33 +33,38 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
         ctrl.optionFilterSettingsGroupTemplates = [];
         ctrl.datasource = [];
+        ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+        ctrl.dragdropSetting = {
+            groupCorrelation: ctrl.dragdropGroupCorrelation,
+            canReceive: true,
+            onItemReceived: function (itemAdded, dataSource) {
+                var dataItem = {
+                    id: ctrl.datasource.length + 1,
+                    configId: itemAdded.ExtensionConfigurationId,
+                    editor: itemAdded.Editor,
+                    name: itemAdded.Title
+                };
 
-        ctrl.addFilter = function () {
-            var dataItem = {
-                id: ctrl.datasource.length + 1,
-                configId: ctrl.selectedOptionFilterSettingsGroupTemplate.ExtensionConfigurationId,
-                editor: ctrl.selectedOptionFilterSettingsGroupTemplate.Editor,
-                name: ctrl.selectedOptionFilterSettingsGroupTemplate.Title
-            };
+                dataItem.onDirectiveReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                };
 
-            dataItem.onDirectiveReady = function (api) {
-                dataItem.directiveAPI = api;
-                var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-            };
-
-            for (var x = 0; x < ctrl.optionFilterSettingsGroupTemplates.length; x++) {
-                if (ctrl.optionFilterSettingsGroupTemplates[x].ExtensionConfigurationId == ctrl.selectedOptionFilterSettingsGroupTemplate.ExtensionConfigurationId) {
-                    existingItems.push(ctrl.optionFilterSettingsGroupTemplates[x]);
-                    ctrl.optionFilterSettingsGroupTemplates.splice(x, 1);
-                    break;
+                for (var x = 0; x < ctrl.optionFilterSettingsGroupTemplates.length; x++) {
+                    if (ctrl.optionFilterSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
+                        existingItems.push(ctrl.optionFilterSettingsGroupTemplates[x]);
+                        ctrl.optionFilterSettingsGroupTemplates.splice(x, 1);
+                        break;
+                    }
                 }
-            }
 
-            ctrl.datasource.push(dataItem);
-            ctrl.selectedOptionFilterSettingsGroupTemplate = undefined;
+             
+                return dataItem;
+            },
+            enableSorting: true
         };
-
+        
         ctrl.removeFilter = function (dataItem) {
             var configId = dataItem.configId;
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);

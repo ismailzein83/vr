@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouterulesettingsOrder', ['WhS_Routing_RoutRuleSettingsAPIService', 'WhS_Routing_OrderTypeEnum', 'UtilsService', 'VRUIUtilsService',
-function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRouterulesettingsOrder', ['WhS_Routing_RoutRuleSettingsAPIService', 'WhS_Routing_OrderTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRDragdropService',
+function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, UtilsService, VRUIUtilsService, VRDragdropService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -36,6 +36,37 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
         var routeRuleSettingsOrderTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         ctrl.optionOrderSettingsGroupTemplates = [];
+        ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+        ctrl.dragdropSetting = {
+            groupCorrelation: ctrl.dragdropGroupCorrelation,
+            canReceive: true,
+            onItemReceived: function (itemAdded, dataSource) {             
+
+                var dataItem = {
+                    id: ctrl.datasource.length + 1,
+                    configId: itemAdded.ExtensionConfigurationId,
+                    editor: itemAdded.Editor,
+                    name: itemAdded.Title,
+                    percentageValue: undefined
+                };
+
+                dataItem.onDirectiveReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                };
+
+                for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
+                    if (ctrl.optionOrderSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
+                        existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
+                        ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
+                        break;
+                    }
+                }
+                return dataItem;
+            },
+            enableSorting: true
+        };
         ctrl.datasource = [];
         ctrl.isValid = function () {
             var result = checkRequiredFilters();
@@ -62,10 +93,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
             }
             return null;
         };
-        ctrl.addOptionOrderType = function () {
-            addNewItem(ctrl.selectedOptionOrderSettingsGroupTemplate);
-            ctrl.selectedOptionOrderSettingsGroupTemplate = undefined;
-        };
+      
         ctrl.removeOption = function (dataItem) {
             var configId = dataItem.configId;
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
