@@ -104,6 +104,7 @@
 
                             $scope.scopeModel.sqlExpression = configEntity.SQLExpression;
                             $scope.scopeModel.sqlExpressionMethod = configEntity.GetValueMethod;
+                            $scope.scopeModel.currencySQLColumnName = configEntity.CurrencySQLColumnName;
 
                             if ($scope.scopeModel.sqlExpression != undefined) {
                                 $scope.scopeModel.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpression;
@@ -243,7 +244,8 @@
                         Parents: parents,
                         RequiredParentDimension: requiredParentDimension,
                         FieldType: fieldType,
-                        DimensionFieldMappings: dimensionFieldMappings
+                        DimensionFieldMappings: dimensionFieldMappings,
+                        CurrencySQLColumnName: $scope.scopeModel.currencySQLColumnName
 
                     };
                     return dimension;

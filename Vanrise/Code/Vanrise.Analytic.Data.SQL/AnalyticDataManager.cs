@@ -78,11 +78,12 @@ namespace Vanrise.Analytic.Data.SQL
             includedSQLDimensionNames = GetIncludedSQLDimensionNames(input.Query.DimensionFields, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup);
             int parameterIndex = 0;
             string groupByPart = null;
-            groupByPart = BuildQueryGrouping(selectPartBuilder, includedSQLDimensionNames, input.Query.TimeGroupingUnit, includeJoinConfigNames);
-            includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
             HashSet<string> joinStatements = new HashSet<string>();
             var toTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.Now;
-            BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, toTime, parameterValues, ref parameterIndex);
+            List<string> listCurrencySQLColumnNames = new List<string>();
+            groupByPart = BuildQueryGrouping(selectPartBuilder, input.Query.CurrencyId, listCurrencySQLColumnNames, includedSQLDimensionNames, input.Query.TimeGroupingUnit, includeJoinConfigNames, joinStatements, input.Query.FromTime, toTime, parameterValues, ref parameterIndex);
+            includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
+            BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, listCurrencySQLColumnNames, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, toTime, parameterValues, ref parameterIndex);
             string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames, parameterValues, ref parameterIndex);
             string joinPart = BuildQueryJoins(includeJoinConfigNames, joinStatements);
 
@@ -256,7 +257,7 @@ namespace Vanrise.Analytic.Data.SQL
             return singleTableQueryBodyBuilder.ToString();
         }
 
-        private string BuildQueryGrouping(StringBuilder selectPartBuilder, IEnumerable<string> sqlDimensionNames, TimeGroupingUnit? timeGroupingUnit, HashSet<string> includeJoinConfigNames)
+        private string BuildQueryGrouping(StringBuilder selectPartBuilder, int? requestedCurrencyId, List<string> listCurrencySQLColumnNames, IEnumerable<string> sqlDimensionNames, TimeGroupingUnit? timeGroupingUnit, HashSet<string> includeJoinConfigNames, HashSet<string> joinStatements, DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, ref int parameterIndex)
         {
             StringBuilder groupByPartBuilder = new StringBuilder();
             if (sqlDimensionNames != null)
@@ -274,8 +275,18 @@ namespace Vanrise.Analytic.Data.SQL
                             includeJoinConfigNames.Add(join);
                         }
                     }
-                    AddColumnToStringBuilder(groupByPartBuilder, dimensionConfig.Config.SQLExpression);
-                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", dimensionConfig.Config.SQLExpression, GetDimensionIdColumnAlias(dimensionConfig)));
+                    string columnSQLExpression;
+                    if (!String.IsNullOrEmpty(dimensionConfig.Config.CurrencySQLColumnName))
+                    {
+                        string currencyConversionStatement = GetCurrencyConversionStatement(requestedCurrencyId, listCurrencySQLColumnNames, dimensionConfig.Config.CurrencySQLColumnName, joinStatements, fromTime, toTime, parameterValues, ref parameterIndex);
+                        columnSQLExpression = String.Format("CONVERT(DECIMAL(20, 8), {0}{1})", dimensionConfig.Config.SQLExpression, currencyConversionStatement);
+                    }
+                    else
+                    {
+                        columnSQLExpression = dimensionConfig.Config.SQLExpression;
+                    }
+                    AddColumnToStringBuilder(groupByPartBuilder, columnSQLExpression);
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", columnSQLExpression, GetDimensionIdColumnAlias(dimensionConfig)));
                 }
             }
             if(timeGroupingUnit.HasValue)
@@ -293,40 +304,15 @@ namespace Vanrise.Analytic.Data.SQL
             return groupByPartBuilder.ToString();
         }
 
-        private void BuildQueryAggregates(StringBuilder selectPartBuilder, int? requestedCurrencyId, IEnumerable<string> aggregateNames, HashSet<string> includeJoinConfigNames, HashSet<string> joinStatements, DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, ref int parameterIndex)
+        private void BuildQueryAggregates(StringBuilder selectPartBuilder, int? requestedCurrencyId, List<string> listCurrencySQLColumnNames, IEnumerable<string> aggregateNames, HashSet<string> includeJoinConfigNames, HashSet<string> joinStatements, DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, ref int parameterIndex)
         {
-            List<string> listCurrencySQLColumnName = new List<string>();
             foreach (var aggName in aggregateNames)
             {
                 var aggregateConfig = GetAggregateConfig(aggName);
 
                 if (!String.IsNullOrEmpty(aggregateConfig.Config.CurrencySQLColumnName))
                 {
-                    string currencySQLColumnNameLower = aggregateConfig.Config.CurrencySQLColumnName.Trim().ToLower();
-                    string currencyTableAlias = String.Format("CurrExch_{0}", currencySQLColumnNameLower);
-                    if (!listCurrencySQLColumnName.Contains(currencySQLColumnNameLower))
-                    {                        
-                        string currencyTableStatement;
-                        string fromTimePrm = GenerateParameterName(ref parameterIndex);
-                        parameterValues.Add(fromTimePrm, fromTime);
-                        string toTimePrm = GenerateParameterName(ref parameterIndex);
-                        parameterValues.Add(toTimePrm, toTime);
-                        if (requestedCurrencyId.HasValue)
-                        {
-                            string currencyIdPrm = GenerateParameterName(ref parameterIndex);
-                            parameterValues.Add(currencyIdPrm, requestedCurrencyId.Value);
-                            currencyTableStatement = String.Format("(select * from Common.getExchangeRatesConvertedToCurrency({0} , {1}, {2}))", currencyIdPrm, fromTimePrm, toTimePrm);
-                        }
-                        else
-                            currencyTableStatement = String.Format("(select * from Common.getExchangeRates({0} , {1}))", fromTimePrm, toTimePrm);
-                        joinStatements.Add(String.Format(@"LEFT JOIN {0} AS {1} 
-                                                            ON ant.{2} = {1}.CurrencyID AND ant.{3} >= {1}.BED AND ({1}.EED IS NULL OR ant.{3} < {1}.EED)"
-                                        , currencyTableStatement, currencyTableAlias, aggregateConfig.Config.CurrencySQLColumnName, GetTable().Settings.TimeColumnName));
-
-                        listCurrencySQLColumnName.Add(currencySQLColumnNameLower);
-                    }
-                   
-                    string currencyConversionStatement = String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
+                    string currencyConversionStatement = GetCurrencyConversionStatement(requestedCurrencyId, listCurrencySQLColumnNames, aggregateConfig.Config.CurrencySQLColumnName, joinStatements, fromTime, toTime, parameterValues, ref parameterIndex);
                     AddColumnToStringBuilder(selectPartBuilder, String.Format("CONVERT(DECIMAL(20, 8), {0}({1}{2})) AS {3}", aggregateConfig.Config.AggregateType, aggregateConfig.Config.SQLColumn, currencyConversionStatement, GetAggregateColumnAlias(aggregateConfig)));
                 }
                 else
@@ -342,6 +328,34 @@ namespace Vanrise.Analytic.Data.SQL
                     }
                 }
             }
+        }
+
+        private string GetCurrencyConversionStatement(int? requestedCurrencyId, List<string> listCurrencySQLColumnNames, string currencySQLColumnName, HashSet<string> joinStatements, DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, ref int parameterIndex)
+        {
+            string currencySQLColumnNameLower = currencySQLColumnName.Trim().ToLower();
+            string currencyTableAlias = String.Format("CurrExch_{0}", currencySQLColumnNameLower);
+            if (!listCurrencySQLColumnNames.Contains(currencySQLColumnNameLower))
+            {
+                string currencyTableStatement;
+                string fromTimePrm = GenerateParameterName(ref parameterIndex);
+                parameterValues.Add(fromTimePrm, fromTime);
+                string toTimePrm = GenerateParameterName(ref parameterIndex);
+                parameterValues.Add(toTimePrm, toTime);
+                if (requestedCurrencyId.HasValue)
+                {
+                    string currencyIdPrm = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(currencyIdPrm, requestedCurrencyId.Value);
+                    currencyTableStatement = String.Format("(select * from Common.getExchangeRatesConvertedToCurrency({0} , {1}, {2}))", currencyIdPrm, fromTimePrm, toTimePrm);
+                }
+                else
+                    currencyTableStatement = String.Format("(select * from Common.getExchangeRates({0} , {1}))", fromTimePrm, toTimePrm);
+                joinStatements.Add(String.Format(@"LEFT JOIN {0} AS {1} ON ant.{2} = {1}.CurrencyID AND ant.{3} >= {1}.BED AND ({1}.EED IS NULL OR ant.{3} < {1}.EED)"
+                                , currencyTableStatement, currencyTableAlias, currencySQLColumnName, GetTable().Settings.TimeColumnName));
+
+                listCurrencySQLColumnNames.Add(currencySQLColumnNameLower);
+            }
+
+            return String.Format("/ ISNULL({0}.Rate, 1)", currencyTableAlias);
         }
 
         private void BuildQueryMeasures(StringBuilder selectPartBuilder, List<string> allIncludedDimensions, List<string> measureFields, HashSet<string> includeJoinConfigNames)

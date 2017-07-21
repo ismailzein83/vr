@@ -30,6 +30,8 @@ namespace Vanrise.Analytic.Entities
       //  public bool IsRequiredFromParent { get; set; }
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
         public List<DimensionFieldMapping> DimensionFieldMappings { get; set; }
+
+        public string CurrencySQLColumnName { get; set; }
     }
 
     public class DimensionFieldMapping
