@@ -10,7 +10,8 @@
 
         var translationRuleId;
         var translationRuleEntity;
-
+        var context;
+        var isViewHistoryMode;
         loadParameters();
 
         defineScope();
@@ -23,9 +24,10 @@
 
             if (parameters != undefined && parameters != null) {
                 translationRuleId = parameters.TranslationRuleId;
+                context = parameters.context;
             }
 
-
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (translationRuleId != undefined);
         }
         function defineScope() {
@@ -66,13 +68,27 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getTranslationRuleHistory().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    vrNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
             else {
                 loadAllControls();
             }
 
 
         }
+        function getTranslationRuleHistory() {
+            return NP_IVSwitch_TranslationRuleAPIService.GetTranslationRuleHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                translationRuleEntity = response;
 
+            });
+        }
         function getTranslationRule() {
             return NP_IVSwitch_TranslationRuleAPIService.GetTranslationRule(translationRuleId).then(function (response) {
                 translationRuleEntity = response;
@@ -91,6 +107,8 @@
                     var translationRuleName = (translationRuleEntity != undefined) ? translationRuleEntity.Name : null;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(translationRuleName, 'Translation Rule');
                 }
+                else if (isViewHistoryMode && translationRuleEntity != undefined)
+                    $scope.title = "View Translation Rule: " + translationRuleEntity.Name;
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor('Translation Rule');
                 }
@@ -135,6 +153,7 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                translationRuleEntity = undefined;
             });
         }
 

@@ -44,6 +44,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetSwitchDateTime'));
         }
 
+        function GetRouteHistoryDetailbyHistoryId(routeHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetRouteHistoryDetailbyHistoryId'), {
+                routeHistoryId: routeHistoryId
+            });
+        }
+
         return ({
             GetFilteredRoutes: GetFilteredRoutes,
             GetRoute: GetRoute,
@@ -52,7 +59,8 @@
             HasAddRoutePermission: HasAddRoutePermission,
             HasEditRoutePermission: HasEditRoutePermission,
             GetSwitchDateTime: GetSwitchDateTime,
-            GetRoutesInfo: GetRoutesInfo
+            GetRoutesInfo: GetRoutesInfo,
+            GetRouteHistoryDetailbyHistoryId: GetRouteHistoryDetailbyHistoryId
         });
     }
 

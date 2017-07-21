@@ -14,16 +14,33 @@ using Vanrise.GenericData.Transformation.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 using Vanrise.GenericData.Business;
+using Vanrise.Common.Business;
 
 namespace NP.IVSwitch.Business
 {
     public class EndPointManager
     {
         #region Public Methods
-        public EndPoint GetEndPoint(int endPointId)
+
+        public EndPoint GetEndPointHistoryDetailbyHistoryId(int endPointHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var endPoint = s_vrObjectTrackingManager.GetObjectDetailById(endPointHistoryId);
+            return endPoint.CastWithValidate<EndPoint>("endPoint : historyId", endPointHistoryId);
+        }
+
+        public EndPoint GetEndPoint(int endPointId, bool isViewedFromUI)
         {
             Dictionary<int, EndPoint> cachedEndPoint = this.GetCachedEndPoint();
-            return cachedEndPoint.GetRecord(endPointId);
+            var endPoint = cachedEndPoint.GetRecord(endPointId);
+            if (endPoint != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(EndPointLoggableEntity.Instance, endPoint);
+            return endPoint;
+        }
+
+        public EndPoint GetEndPoint(int endPointId)
+        {
+            return GetEndPoint(endPointId, false);
         }
 
         public string GetEndPointDescription(EndPoint endPoint)
@@ -136,7 +153,7 @@ namespace NP.IVSwitch.Business
             var allEndPoints = GetCachedEndPoint();
             Func<EndPoint, bool> filterExpression =
                 x => (aclEndPointDic.ContainsKey(x.EndPointId) || (userEendPointDic.ContainsKey(x.EndPointId)));
-
+            VRActionLogger.Current.LogGetFilteredAction(EndPointLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allEndPoints.ToBigResult(input, filterExpression, EndPointDetailMapper));
         }
         public List<EndPointInfo> GetAclList(int carrierId)
@@ -198,8 +215,9 @@ namespace NP.IVSwitch.Business
             if (dataManager.Update(endPointItem.Entity))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                VRActionLogger.Current.TrackAndLogObjectUpdated(EndPointLoggableEntity.Instance, endPointItem.Entity);
                 EndPoint updatedEndPoint = GetEndPoint(endPointItem.Entity.EndPointId);
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = EndPointDetailMapper(updatedEndPoint);
                 AccountManager accountManager = new AccountManager();
                 accountManager.UpdateChannelLimit(updatedEndPoint.AccountId);
@@ -283,6 +301,52 @@ namespace NP.IVSwitch.Business
             protected override bool IsTimeExpirable { get { return true; } }
 
         }
+
+
+        private class EndPointLoggableEntity : VRLoggableEntityBase
+        {
+            public static EndPointLoggableEntity Instance = new EndPointLoggableEntity();
+
+            private EndPointLoggableEntity()
+            {
+
+            }
+
+            static EndPointManager endPointManager = new EndPointManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "NP_IVSwitch_EndPoint"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "IVSwitch"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "End Point"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "NP_IVSwitch_EndPoint_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                EndPoint endPoint = context.Object.CastWithValidate<EndPoint>("context.Object");
+                return endPoint.EndPointId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                EndPoint endPoint = context.Object.CastWithValidate<EndPoint>("context.Object");
+                return endPointManager.GetEndPointDescription(endPoint);
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -329,6 +393,7 @@ namespace NP.IVSwitch.Business
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
                 return insertOperationOutput;
             }
+
             AccountManager accountManager = new AccountManager();
             accountManager.UpdateChannelLimit(endPointItem.Entity.AccountId);
             EndPointInfo endPointInfo = new EndPointInfo { EndPointId = endPointId };
@@ -339,7 +404,9 @@ namespace NP.IVSwitch.Business
 
             carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(
                 endPointItem.CarrierAccountId, endPointsExtendedSettings);
+            endPointItem.Entity.EndPointId = endPointId;
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            VRActionLogger.Current.TrackAndLogObjectAdded(EndPointLoggableEntity.Instance, endPointItem.Entity);
             insertOperationOutput.Result = InsertOperationResult.Succeeded;
             insertOperationOutput.InsertedObject = EndPointDetailMapper(GetEndPoint(endPointId));
             GenerateRule(endPointItem.CarrierAccountId, endPointId, carrierAccountName);
@@ -378,7 +445,9 @@ namespace NP.IVSwitch.Business
             endPointsExtendedSettings.UserEndPointInfo.Add(endPointInfo);
             carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(
                 endPointItem.CarrierAccountId, endPointsExtendedSettings);
+            endPointItem.Entity.EndPointId = endPointId;
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            VRActionLogger.Current.TrackAndLogObjectAdded(EndPointLoggableEntity.Instance, endPointItem.Entity);
             insertOperationOutput.Result = InsertOperationResult.Succeeded;
             insertOperationOutput.InsertedObject = EndPointDetailMapper(GetEndPoint(endPointId));
             GenerateRule(endPointItem.CarrierAccountId, endPointId, carrierAccountName);

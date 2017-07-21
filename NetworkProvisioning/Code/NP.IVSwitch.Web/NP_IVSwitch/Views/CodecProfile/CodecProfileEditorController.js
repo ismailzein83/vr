@@ -13,7 +13,8 @@
         var codecDefEntity;
         var codecDefList = new Array();
         var codecDefIds = new Array();
-
+        var context;
+        var isViewHistoryMode;
 
         var gridAPI;
   
@@ -31,8 +32,9 @@
 
             if (parameters != undefined && parameters != null) {
                 codecProfileId = parameters.CodecProfileId;
+                context = parameters.context;
             };
-
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (codecProfileId != undefined);
         }
 
@@ -88,11 +90,27 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getCodecProfileHistory().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
             }
         }
-
+        function getCodecProfileHistory() {
+            return NP_IVSwitch_CodecProfileAPIService.GetCodecProfileHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                codecProfileEditorRuntimeEntity = response;
+                codecProfileEntity = codecProfileEditorRuntimeEntity.Entity;
+                codecDefEntity = codecProfileEditorRuntimeEntity.CodecDefList;
+            });
+        }
         function getCodecProfile() {
             return NP_IVSwitch_CodecProfileAPIService.GetCodecProfileEditorRuntime(codecProfileId).then(function (response) {
                 codecProfileEditorRuntimeEntity = response;
@@ -113,6 +131,10 @@
                     var codecProfileName = (codecProfileEntity != undefined) ? codecProfileEntity.ProfileName : null;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(codecProfileName, 'Codec Profile');
                 }
+
+                else if (isViewHistoryMode && codecProfileEntity != undefined)
+                    $scope.title = "Codec Profile: " + codecProfileEntity.ProfileName;
+
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor('Codec Profile');
                 } 
@@ -159,6 +181,8 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                codecProfileEntity = undefined;
+                codecProfileEditorRuntimeEntity = undefined;
             });
         }
 

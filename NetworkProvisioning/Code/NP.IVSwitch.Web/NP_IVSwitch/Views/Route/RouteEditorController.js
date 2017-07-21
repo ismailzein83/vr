@@ -19,6 +19,8 @@
         var selectorTranslationRuleAPI;
         var selectorTranslationRuleReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var context;
+        var isViewHistoryMode;
 
         loadParameters();
 
@@ -33,9 +35,11 @@
             if (parameters != undefined && parameters != null) {
                 routeId = parameters.RouteId;
                 carrierAccountId = parameters.CarrierAccountId;
+                context = parameters.context;
             }
 
             isEditMode = (routeId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
 
         function defineScope() {
@@ -113,12 +117,28 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+
+            else if (isViewHistoryMode) {
+                getRouteHistory().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
             }
         }
 
+        function getRouteHistory() {
+            return npIvSwitchRouteApiService.GetRouteHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                routeEntity = response;
 
+            });
+        }
         function getRoute() {
             return npIvSwitchRouteApiService.GetRoute(routeId).then(function (response) {
                 routeEntity = response;
@@ -137,6 +157,8 @@
                 var routeName = (routeEntity != undefined) ? routeEntity.Description : null;
                 $scope.title = UtilsService.buildTitleForUpdateEditor(routeName, 'Route');
             }
+            else if (isViewHistoryMode && routeEntity != undefined)
+                $scope.title = "View Route: " + routeEntity.Description;
             else {
                 $scope.title = UtilsService.buildTitleForAddEditor('Route');
             }
@@ -236,6 +258,7 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                routeEntity = undefined;
             });
         }
 

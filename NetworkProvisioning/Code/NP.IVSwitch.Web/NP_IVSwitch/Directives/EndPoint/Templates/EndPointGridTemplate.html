@@ -18,6 +18,12 @@
                 <vr-datagridcolumn headertext="'Host'" field="'Entity.Host'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Sip Login'" field="'Entity.SipLogin'"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'State'" field="'CurrentStateDescription'"></vr-datagridcolumn>
+
+                <vr-datagridexpandablerow>
+                    <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+                </vr-datagridexpandablerow>
+
+
             </vr-datagrid>
         </vr-columns>
     </vr-row>

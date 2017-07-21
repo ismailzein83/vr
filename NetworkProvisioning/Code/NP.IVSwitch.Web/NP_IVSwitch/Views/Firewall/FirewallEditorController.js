@@ -9,7 +9,8 @@
         var isEditMode;
         var firewallId;
         var firewallEntity;
-
+        var context;
+        var isViewHistoryMode;
         loadParameters();
 
         defineScope();
@@ -22,7 +23,9 @@
 
             if (parameters != undefined && parameters != null) {
                 firewallId = parameters.Id;
+                context = parameters.context;
             }
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
             isEditMode = (firewallId != undefined);
         }
         function defineScope() {
@@ -61,11 +64,26 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getFirewallHistory().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    vrNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
             }
         }
+        function getFirewallHistory() {
+            return npIvSwitchFirewallApiService.GetFirewallHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                firewallEntity = response;
 
+            });
+        }
         function getFirewall() {
             return npIvSwitchFirewallApiService.GetFirewall(firewallId).then(function (response) {
                 firewallEntity = response;
@@ -77,6 +95,7 @@
                 vrNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+               
             });
 
             function setTitle() {
@@ -84,6 +103,9 @@
                     var description = (firewallEntity != undefined) ? firewallEntity.Description : null;
                     $scope.title = utilsService.buildTitleForUpdateEditor(description, 'Firewall');
                 }
+                else if (isViewHistoryMode && firewallEntity != undefined)
+                    $scope.title = "View Firewall: " + firewallEntity.Description;
+
                 else {
                     $scope.title = utilsService.buildTitleForAddEditor('Firewall');
                 }
@@ -123,6 +145,7 @@
                 vrNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                firewallEntity = undefined;
             });
         }
 

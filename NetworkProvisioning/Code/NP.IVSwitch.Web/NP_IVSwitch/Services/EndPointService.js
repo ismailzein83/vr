@@ -3,10 +3,10 @@
 
     "use strict";
 
-    EndPointService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum','UtilsService'];
+    EndPointService.$inject = ['VRModalService', 'WhS_BE_CarrierAccountService', 'NP_IVSwitch_CarrierAccountTypeEnum', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
-    function EndPointService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService) {
-
+    function EndPointService(NPModalService, WhS_BE_CarrierAccountService, NP_IVSwitch_CarrierAccountTypeEnum, UtilsService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
         function addEndPoint(CarrierAccountId, onEndPointAdded) {
             var settings = {};
 
@@ -57,10 +57,77 @@
             WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
 
         }
+
+        function viewHistoryEndPoint(context) {
+            var modalParameters = {
+                context: context
+            };
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', modalParameters, modalSettings);
+        };
+
+        function registerHistoryViewAction() {
+
+            var actionHistory = {
+                actionHistoryName: "NP_IVSwitch_EndPoint_ViewHistoryItem",
+                actionMethod: function (payload) {
+
+                    var context = {
+                        historyId: payload.historyId
+                    };
+
+                    viewHistoryEndPoint(context);
+                }
+            };
+            VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
+        }
+
+
+        function getEntityUniqueName() {
+            return "NP_IVSwitch_EndPoint";
+        }
+
+        function registerObjectTrackingDrillDownToEndPoint() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, endPointItem) {
+
+                endPointItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: endPointItem.Entity.EndPointId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return endPointItem.objectTrackingGridAPI.load(query);
+            };
+
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
         return {
             addEndPoint: addEndPoint,
             editEndPoint: editEndPoint,
-           registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount
+            registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToEndPoint: registerObjectTrackingDrillDownToEndPoint,
+            registerHistoryViewAction: registerHistoryViewAction
         };
     }
 

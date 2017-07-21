@@ -35,7 +35,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("GetCodecProfile")]
         public CodecProfile GetCodecProfile(int CodecProfileId)
         {
-            return _manager.GetCodecProfile(CodecProfileId);
+            return _manager.GetCodecProfile(CodecProfileId,true);
         }
 
         [HttpPost]
@@ -57,9 +57,14 @@ namespace NP.IVSwitch.Web.Controllers
         public CodecProfileEditorRuntime GetCodecProfileEditorRuntime(int CodecProfileId)
         {
             CodecProfileManager manager = new CodecProfileManager();
-            return manager.GetCodecProfileEditorRuntime(CodecProfileId);
+            return manager.GetCodecProfileEditorRuntime(CodecProfileId,true);
         }
 
-
+        [HttpGet]
+        [Route("GetCodecProfileHistoryDetailbyHistoryId")]
+        public CodecProfileEditorRuntime GetCodecProfileHistoryDetailbyHistoryId(int codecProfileHistoryId)
+        {
+            return _manager.GetCodecProfileHistoryDetailbyHistoryId(codecProfileHistoryId);
+        }
     }
 }

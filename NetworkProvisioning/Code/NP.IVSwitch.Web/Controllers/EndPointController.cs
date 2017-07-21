@@ -26,7 +26,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("GetEndPoint")]
         public EndPoint GetEndPoint(int endPointId)
         {
-            return _manager.GetEndPoint(endPointId);
+            return _manager.GetEndPoint(endPointId,true);
         }
 
         [HttpGet]
@@ -48,6 +48,13 @@ namespace NP.IVSwitch.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
             return _manager.UpdateEndPoint(endPointItem);
+        }
+
+        [HttpGet]
+        [Route("GetEndPointHistoryDetailbyHistoryId")]
+        public EndPoint GetEndPointHistoryDetailbyHistoryId(int endPointHistoryId)
+        {
+            return _manager.GetEndPointHistoryDetailbyHistoryId(endPointHistoryId);
         }
     }
 }

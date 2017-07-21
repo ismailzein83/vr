@@ -42,6 +42,11 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['UpdateEndPoint']));
         }
 
+        function GetEndPointHistoryDetailbyHistoryId(endPointHistoryId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetEndPointHistoryDetailbyHistoryId'), {
+                endPointHistoryId: endPointHistoryId
+            });
+        }
 
         return ({
             GetFilteredEndPoints: GetFilteredEndPoints,
@@ -50,7 +55,8 @@
             UpdateEndPoint: UpdateEndPoint,
             HasAddEndPointPermission: HasAddEndPointPermission,
             HasEditEndPointPermission: HasEditEndPointPermission,
-            GetEndPointsInfo: GetEndPointsInfo
+            GetEndPointsInfo: GetEndPointsInfo,
+            GetEndPointHistoryDetailbyHistoryId: GetEndPointHistoryDetailbyHistoryId
         });
     }
 

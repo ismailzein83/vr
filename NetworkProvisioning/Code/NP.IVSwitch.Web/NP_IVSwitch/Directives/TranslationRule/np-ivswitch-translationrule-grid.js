@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIService', 'NP_IVSwitch_TranslationRuleService', 'VRNotificationService',
-    function (NP_IVSwitch_TranslationRuleAPIService, NP_IVSwitch_TranslationRuleService, VRNotificationService) {
+app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIService', 'NP_IVSwitch_TranslationRuleService', 'VRNotificationService', 'VRUIUtilsService',
+    function (NP_IVSwitch_TranslationRuleAPIService, NP_IVSwitch_TranslationRuleService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.translationRule = [];
@@ -29,11 +29,18 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = NP_IVSwitch_TranslationRuleService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return NP_IVSwitch_TranslationRuleAPIService.GetFilteredTranslationRules(dataRetrievalInput).then(function (response) { 
+                    return NP_IVSwitch_TranslationRuleAPIService.GetFilteredTranslationRules(dataRetrievalInput).then(function (response) {
+                        if (response !=undefined && response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +58,7 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
                 };
 
                 api.onTranslationRuleAdded = function (addedTranslationRule) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedTranslationRule);
                     gridAPI.itemAdded(addedTranslationRule);
                 };
 
@@ -67,6 +75,7 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
             }
             function editTranslationRule(translationRuleItem) {
                 var onTranslationRuleUpdated = function (updatedTranslationRule) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedTranslationRule);
                     gridAPI.itemUpdated(updatedTranslationRule);
                 };
 

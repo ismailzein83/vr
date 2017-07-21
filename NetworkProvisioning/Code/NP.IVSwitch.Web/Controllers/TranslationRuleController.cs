@@ -35,7 +35,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("GetTranslationRule")]
         public TranslationRule GetTranslationRule(int translationRuleId)
         {
-            return _manager.GetTranslationRule(translationRuleId);
+            return _manager.GetTranslationRule(translationRuleId,true);
         }
 
         [HttpPost]
@@ -52,6 +52,12 @@ namespace NP.IVSwitch.Web.Controllers
             return _manager.UpdateTranslationRule(translationRuleItem);
         }
 
+        [HttpGet]
+        [Route("GetTranslationRuleHistoryDetailbyHistoryId")]
+        public TranslationRule GetTranslationRuleHistoryDetailbyHistoryId(int translationRuleHistoryId)
+        {
+            return _manager.GetTranslationRuleHistoryDetailbyHistoryId(translationRuleHistoryId);
+        }
     
     }
 }

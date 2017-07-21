@@ -9,16 +9,33 @@ using Vanrise.Common;
 using NP.IVSwitch.Data;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace NP.IVSwitch.Business
 {
     public class RouteManager
     {
         #region Public Methods
-        public Route GetRoute(int routeId)
+
+        public Route GetRouteHistoryDetailbyHistoryId(int routeHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var route = s_vrObjectTrackingManager.GetObjectDetailById(routeHistoryId);
+            return route.CastWithValidate<Route>("Route : historyId ", routeHistoryId);
+        }
+
+        public Route GetRoute(int routeId, bool isViewedFromUI)
         {
             Dictionary<int, Route> cachedRoute = this.GetCachedRoutes();
-            return cachedRoute.GetRecord(routeId);
+            var route = cachedRoute.GetRecord(routeId);
+            if (route != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(RouteLoggableEntity.Instance, route);
+            return route;
+        }
+
+        public Route GetRoute(int routeId)
+        {
+            return GetRoute(routeId,false);
         }
 
         public string GetRouteDescription(Route route)
@@ -166,6 +183,7 @@ namespace NP.IVSwitch.Business
                 }
             }
             Func<Route, bool> filterExpression = (x) => (routeDic.ContainsKey(x.RouteId));
+            VRActionLogger.Current.LogGetFilteredAction(RouteLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeDic.ToBigResult(input, filterExpression, RouteDetailMapper));
         }
 
@@ -180,7 +198,9 @@ namespace NP.IVSwitch.Business
             string mssg;
             if (Insert(routeItem, out routeId, out mssg))
             {
+                routeItem.Entity.RouteId = routeId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(RouteLoggableEntity.Instance, routeItem.Entity);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = RouteDetailMapper(GetRoute(routeId));
             }
@@ -317,6 +337,7 @@ namespace NP.IVSwitch.Business
                     }
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     Route updatedRoute = GetRoute(routeItem.Entity.RouteId);
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(RouteLoggableEntity.Instance, updatedRoute);
                     dataManager.UpdateVendorUSer(updatedRoute);
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = RouteDetailMapper(updatedRoute);
@@ -347,6 +368,51 @@ namespace NP.IVSwitch.Business
             protected override bool IsTimeExpirable { get { return true; } }
 
         }
+
+        private class RouteLoggableEntity : VRLoggableEntityBase
+        {
+            public static RouteLoggableEntity Instance = new RouteLoggableEntity();
+
+            private RouteLoggableEntity()
+            {
+
+            }
+
+            static RouteManager routeManager = new RouteManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "NP_IVSwitch_Route"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "IVSwitch"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Route"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "NP_IVSwitch_Route_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Route route = context.Object.CastWithValidate<Route>("context.Object");
+                return route.RouteId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Route route = context.Object.CastWithValidate<Route>("context.Object");
+                return routeManager.GetRouteDescription(route.RouteId);
+            }
+        }
+
         #endregion
 
         #region Private Methods

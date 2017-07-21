@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("npIvswitchFirewallGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_FirewallAPIService", "NP_IVSwitch_FirewallService",
-function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npIvSwitchFirewallService) {
+app.directive("npIvswitchFirewallGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_FirewallAPIService", "NP_IVSwitch_FirewallService", "VRUIUtilsService",
+function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npIvSwitchFirewallService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -22,7 +22,7 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
 
     function FirewallGrid($scope, ctrl, $attrs) {
         var gridAPI;
-
+        var gridDrillDownTabsObj;
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.menuActions = [];
@@ -30,11 +30,18 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = npIvSwitchFirewallService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 defineAPI();
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return npIvSwitchFirewallApiService.GetFilteredFirewalls(dataRetrievalInput)
                    .then(function (response) {
+                       if (response !=undefined && response.Data != undefined) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                           }
+                       }
                        onResponseReady(response);
                    })
                    .catch(function (error) {
@@ -52,6 +59,7 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
             };
 
             api.onFirewallAdded = function (addedFirewall) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(addedFirewall);
                 gridAPI.itemAdded(addedFirewall);
             };
 
@@ -68,6 +76,7 @@ function (utilsService, vrNotificationService, npIvSwitchFirewallApiService, npI
         }
         function editFirewall(firewallItem) {
             var onFirewallUpdated = function (updatedFirewall) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(updatedFirewall);
                 gridAPI.itemUpdated(updatedFirewall);
             };
             npIvSwitchFirewallService.editFirewall(firewallItem.Entity.Id, onFirewallUpdated);

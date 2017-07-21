@@ -32,13 +32,22 @@
         function HasEditFirewallPermission() {
             return securityService.HasPermissionToActions(utilsService.getSystemActionNames(npIvSwitchModuleConfig.moduleName, controllerName, ['UpdateFirewall']));
         }
+
+        function GetFirewallHistoryDetailbyHistoryId(firewallHistoryId) {
+
+            return baseApiService.get(utilsService.getServiceURL(npIvSwitchModuleConfig.moduleName, controllerName, 'GetFirewallHistoryDetailbyHistoryId'), {
+                firewallHistoryId: firewallHistoryId
+            });
+        }
+
         return ({
             GetFilteredFirewalls: GetFilteredFirewalls,
             GetFirewall: GetFirewall,
             AddFirewall: AddFirewall,
             UpdateFirewall: UpdateFirewall,
             HasEditFirewallPermission: HasEditFirewallPermission,
-            HasAddFirewallPermission: HasAddFirewallPermission
+            HasAddFirewallPermission: HasAddFirewallPermission,
+            GetFirewallHistoryDetailbyHistoryId: GetFirewallHistoryDetailbyHistoryId
 
         });
     }

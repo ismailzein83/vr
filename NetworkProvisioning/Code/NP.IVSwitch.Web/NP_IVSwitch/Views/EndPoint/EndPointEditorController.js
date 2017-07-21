@@ -25,6 +25,8 @@
         var selectorDomainAPI;
         var selectorDomainReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var context;
+        var isViewHistoryMode;
 
         loadParameters();
 
@@ -39,9 +41,11 @@
             if (parameters != undefined && parameters != null) {
                 endPointId = parameters.EndPointId;
                 carrierAccountId = parameters.CarrierAccountId;
+                context = parameters.context;
             }
 
             isEditMode = (endPointId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -151,13 +155,28 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getEndPointHistory().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    vrNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
 
             }
         }
 
+        function getEndPointHistory() {
+            return NP_IVSwitch_EndPointAPIService.GetEndPointHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                endPointEntity = response;
 
+            });
+        }
 
         function getEndPoint() {
             return NP_IVSwitch_EndPointAPIService.GetEndPoint(endPointId).then(function (response) {
@@ -177,6 +196,8 @@
                     var endPointName = (endPointEntity != undefined) ? endPointEntity.Description : null;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(endPointName, 'EndPoint');
                 }
+                else if (isViewHistoryMode && endPointEntity != undefined)
+                    $scope.title = "View End Point: " + endPointEntity.Description;
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor('EndPoint');
                 }
@@ -317,6 +338,7 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+                endPointEntity = undefined;
             });
         }
 

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService', 'NP_IVSwitch_CodecProfileService', 'VRNotificationService',
-    function (NP_IVSwitch_CodecProfileAPIService, NP_IVSwitch_CodecProfileService, VRNotificationService) {
+app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService', 'NP_IVSwitch_CodecProfileService', 'VRNotificationService', 'VRUIUtilsService',
+    function (NP_IVSwitch_CodecProfileAPIService, NP_IVSwitch_CodecProfileService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -21,7 +21,7 @@ app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var gridDrillDownTabsObj;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.codecProfile = [];
@@ -29,11 +29,18 @@ app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = NP_IVSwitch_CodecProfileService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return NP_IVSwitch_CodecProfileAPIService.GetFilteredCodecProfiles(dataRetrievalInput).then(function (response) {
+                        if (response !=undefined && response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                           onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -51,6 +58,7 @@ app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService
                 };
 
                 api.onCodecProfileAdded = function (addedCodecProfile) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedCodecProfile);
                     gridAPI.itemAdded(addedCodecProfile);
                 };
 
@@ -67,6 +75,7 @@ app.directive('npIvswitchCodecprofileGrid', ['NP_IVSwitch_CodecProfileAPIService
             }
             function editCodecProfile(codecProfileItem) {
                 var onCodecProfileUpdated = function (updatedCodecProfile) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedCodecProfile);
                     gridAPI.itemUpdated(updatedCodecProfile);
                 };
 

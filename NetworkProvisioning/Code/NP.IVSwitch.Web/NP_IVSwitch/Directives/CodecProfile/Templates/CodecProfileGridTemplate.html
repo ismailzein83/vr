@@ -7,4 +7,7 @@
              idfield="Entity.CodecProfileId">
     <vr-datagridcolumn headertext="'Profile Name'" field="'Entity.ProfileName'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreateDate'" type="'Datetime'"></vr-datagridcolumn>  
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

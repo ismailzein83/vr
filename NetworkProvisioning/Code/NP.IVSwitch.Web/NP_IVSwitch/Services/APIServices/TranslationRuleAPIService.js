@@ -42,7 +42,12 @@
         function HasEditTranslationRulePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['UpdateTranslationRule']));
         }
+        function GetTranslationRuleHistoryDetailbyHistoryId(translationRuleHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetTranslationRuleHistoryDetailbyHistoryId'), {
+                translationRuleHistoryId: translationRuleHistoryId
+            });
+        }
 
         return ({
             GetFilteredTranslationRules: GetFilteredTranslationRules,
@@ -52,6 +57,7 @@
             GetTranslationRulesInfo: GetTranslationRulesInfo,
             HasAddTranslationRulePermission: HasAddTranslationRulePermission,
             HasEditTranslationRulePermission: HasEditTranslationRulePermission,
+            GetTranslationRuleHistoryDetailbyHistoryId: GetTranslationRuleHistoryDetailbyHistoryId
         });
     }
 

@@ -47,6 +47,12 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['UpdateCodecProfile']));
         }
 
+        function GetCodecProfileHistoryDetailbyHistoryId(codecProfileHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetCodecProfileHistoryDetailbyHistoryId'), {
+                codecProfileHistoryId: codecProfileHistoryId
+            });
+        }
 
         return ({
             GetFilteredCodecProfiles: GetFilteredCodecProfiles,
@@ -57,6 +63,7 @@
             GetCodecProfilesInfo: GetCodecProfilesInfo,
             HasAddCodecProfilePermission: HasAddCodecProfilePermission,
             HasEditCodecProfilePermission: HasEditCodecProfilePermission,
+            GetCodecProfileHistoryDetailbyHistoryId: GetCodecProfileHistoryDetailbyHistoryId
         });
     }
 

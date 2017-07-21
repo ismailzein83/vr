@@ -27,7 +27,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("GetRoute")]
         public Route GetRoute(int routeId)
         {
-            return _manager.GetRoute(routeId);
+            return _manager.GetRoute(routeId,true);
         }
         [HttpGet]
         [Route("GetRoutesInfo")]
@@ -56,5 +56,13 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return _manager.GetSwitchDateTime();
         }
+
+        [HttpGet]
+        [Route("GetRouteHistoryDetailbyHistoryId")]
+        public Route GetRouteHistoryDetailbyHistoryId(int routeHistoryId)
+        {
+            return _manager.GetRouteHistoryDetailbyHistoryId(routeHistoryId);
+        }
+
     }
 }

@@ -20,7 +20,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("GetFirewall")]
         public Firewall GetFirewall(int firewallId)
         {
-            return _manager.GetFirewall(firewallId);
+            return _manager.GetFirewall(firewallId,true);
         }
 
         [HttpPost]
@@ -36,5 +36,13 @@ namespace NP.IVSwitch.Web.Controllers
         {
             return _manager.UpdateFirewall(firewallItem);
         }
+
+        [HttpGet]
+        [Route("GetFirewallHistoryDetailbyHistoryId")]
+        public Firewall GetFirewallHistoryDetailbyHistoryId(int firewallHistoryId)
+        {
+            return _manager.GetFirewallHistoryDetailbyHistoryId(firewallHistoryId);
+        }
+
     }
 }
