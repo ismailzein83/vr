@@ -42,8 +42,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 analyticQuery.Query.DimensionFields.Add("Supplier");
 
             analyticQuery.Query.DimensionFields.Add("SaleZone");
-            analyticQuery.Query.DimensionFields.Add("SaleRate");
-            analyticQuery.Query.DimensionFields.Add("CostRate");
+            analyticQuery.Query.DimensionFields.Add("SaleRateConvCurr");
+            analyticQuery.Query.DimensionFields.Add("CostRateConvCurr");
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
