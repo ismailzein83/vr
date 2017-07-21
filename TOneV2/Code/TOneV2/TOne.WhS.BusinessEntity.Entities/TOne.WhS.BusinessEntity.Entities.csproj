@@ -135,6 +135,7 @@
     <Compile Include="SalePricelistChanges\SalePricelistRPChange.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRPChangeDetail.cs" />
     <Compile Include="SalePricelistChanges\SalePriceListSnapshot.cs" />
+    <Compile Include="SalePriceList\SalePriceListInput.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRates.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryQuery.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryRecord.cs" />
