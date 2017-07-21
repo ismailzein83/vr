@@ -36,28 +36,13 @@
     </vr-row>
     <vr-row removeline>
         <vr-columns width="1/2row">
-            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModel.onPhoneValueChange" value="scopeModel.phoneNumberValue"></vr-textbox>
-        </vr-columns>
-        <vr-columns withemptyline width="1/2row">
-            <vr-button type="Add" data-onclick="scopeModel.addPhoneNumberOption" vr-disabled="scopeModel.disabledphone" standalone></vr-button>
-        </vr-columns>
-
-        <vr-columns width="fullrow">
-            <vr-datalist maxitemsperrow="4" datasource="scopeModel.phoneNumbers" autoremoveitem="true">
-                {{dataItem.phoneNumber}}
-            </vr-datalist>
-        </vr-columns>
-
+            <vr-textbox-multiple label="Phones" datatype="number" value="scopeModel.phoneNumbers"></vr-textbox-multiple>
+        </vr-columns>       
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.faxvalue" type="number" onvaluechanged="scopeModel.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
+            <vr-textbox-multiple label="Faxes" datatype="number" value="scopeModel.faxes"></vr-textbox-multiple>
         </vr-columns>
-        <vr-columns withemptyline width="1/2row">
-            <vr-button type="Add" data-onclick="scopeModel.addFaxOption" vr-disabled="scopeModel.disabledfax" standalone></vr-button>
-        </vr-columns>
-        <vr-columns width="fullrow">
-            <vr-datalist maxitemsperrow="4" datasource="scopeModel.faxes" autoremoveitem="true">
-                {{dataItem.fax}}
-            </vr-datalist>
+        <vr-columns width="1/2row">
+            <vr-textbox-multiple label="Mobiles" datatype="number" value="scopeModel.mobileNumbers"></vr-textbox-multiple>
         </vr-columns>
     </vr-row>
 </vr-tab>

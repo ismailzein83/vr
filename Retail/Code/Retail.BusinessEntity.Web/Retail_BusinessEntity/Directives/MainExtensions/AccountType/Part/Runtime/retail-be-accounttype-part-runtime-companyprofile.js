@@ -33,7 +33,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
             $scope.scopeModel = {
                 contacts: [],
                 faxes: [],
-                phoneNumbers: []
+                phoneNumbers: [],
+                mobileNumbers:[]
 
             };
             $scope.scopeModel.onCountryDirectiveReady = function (api) {
@@ -45,26 +46,6 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             };
-
-            $scope.scopeModel.disabledfax = true;
-            $scope.scopeModel.onFaxValueChange = function (value) {
-                $scope.scopeModel.disabledfax = (value == undefined);
-            };
-            $scope.scopeModel.disabledphone = true;
-            $scope.scopeModel.onPhoneValueChange = function (value) {
-                $scope.scopeModel.disabledphone = (value == undefined);
-            };
-
-            $scope.scopeModel.addPhoneNumberOption = function () {
-
-                $scope.scopeModel.phoneNumbers.push({
-                    phoneNumber: $scope.scopeModel.phoneNumberValue
-                });
-                $scope.scopeModel.phoneNumberValue = undefined;
-                $scope.scopeModel.disabledphone = true;
-            };
-
-
             $scope.scopeModel.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
@@ -77,18 +58,6 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 else if (cityDirectiveAPI != undefined)
                     cityDirectiveAPI.clearDataSource();
             };
-
-
-            $scope.scopeModel.addFaxOption = function () {
-                var fax = $scope.scopeModel.faxvalue;
-                $scope.scopeModel.faxes.push({
-                    fax: fax
-                });
-                $scope.scopeModel.faxvalue = undefined;
-                $scope.scopeModel.disabledfax = true;
-            };
-
-
 
             defineAPI();
         }
@@ -163,19 +132,25 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                         $scope.scopeModel.address = payload.partSettings.Address;
 
                         $scope.scopeModel.phoneNumbers = [];
-                        if (payload.partSettings.PhoneNumbers != undefined) {
+                        if (payload.partSettings.PhoneNumbers.length>0) {
                             for (var i = 0; i < payload.partSettings.PhoneNumbers.length; i++) {
-                                $scope.scopeModel.phoneNumbers.push({
-                                    phoneNumber: payload.partSettings.PhoneNumbers[i]
-                                });
+                                if (payload.partSettings.PhoneNumbers[i]!=null)
+                                    $scope.scopeModel.phoneNumbers.push( payload.partSettings.PhoneNumbers[i]);
                             }
                         }
                         $scope.scopeModel.faxes = [];
-                        if (payload.partSettings.Faxes != undefined) {
+                        if (payload.partSettings.Faxes.length > 0) {
                             for (var j = 0; j < payload.partSettings.Faxes.length; j++) {
-                                $scope.scopeModel.faxes.push({
-                                    fax: payload.partSettings.Faxes[j]
-                                });
+                                if (payload.partSettings.Faxes[j] != null)
+                                    $scope.scopeModel.faxes.push(payload.partSettings.Faxes[j]);
+                            }
+                        }
+
+                        $scope.scopeModel.mobileNumbers = [];
+                        if (payload.partSettings.MobileNumbers.length > 0) {
+                            for (var k = 0; k < payload.partSettings.MobileNumbers.length; k++) {
+                                if (payload.partSettings.MobileNumbers[k] != null)
+                                    $scope.scopeModel.mobileNumbers.push(payload.partSettings.MobileNumbers[k]);
                             }
                         }
 
@@ -211,8 +186,9 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     Street: $scope.scopeModel.street,
                     Website: $scope.scopeModel.website,
                     POBox: $scope.scopeModel.poBox,
-                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModel.phoneNumbers, "phoneNumber"),
-                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModel.faxes, "fax"),
+                    PhoneNumbers: $scope.scopeModel.phoneNumbers,
+                    Faxes: $scope.scopeModel.faxes,
+                    MobileNumbers: $scope.scopeModel.mobileNumbers,
                     Contacts: contacts,
                     ArabicName: $scope.scopeModel.arabicName,
                     Address: $scope.scopeModel.address
