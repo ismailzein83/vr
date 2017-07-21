@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrRulesPricingrulesettingsRatetype', ['UtilsService', '$compile', 'VR_Rules_PricingRuleAPIService', 'VRUIUtilsService',
-function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsService) {
+app.directive('vrRulesPricingrulesettingsRatetype', ['UtilsService', '$compile', 'VR_Rules_PricingRuleAPIService', 'VRUIUtilsService','VRDragdropService',
+function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsService, VRDragdropService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -34,33 +34,35 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                     return null;
                 return "You Should Select at least one filter type ";
             };
-            ctrl.disableAddButton = true;
-            ctrl.addFilter = function () {
-                var dataItem = {
-                    id: ctrl.datasource.length + 1,
-                    configId: ctrl.selectedTemplate.ExtensionConfigurationId,
-                    editor: ctrl.selectedTemplate.Editor,
-                    name: ctrl.selectedTemplate.Title
-                };
-                dataItem.onDirectiveReady = function (api) {
-                    dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-                };
+            ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+            ctrl.dragdropSetting = {
+                groupCorrelation: ctrl.dragdropGroupCorrelation,
+                canReceive: true,
+                onItemReceived: function (item, dataSource) {
+                    var dataItem = {
+                        id: ctrl.datasource.length + 1,
+                        configId: item.ExtensionConfigurationId,
+                        editor: item.Editor,
+                        name: item.Title
+                    };
+                    dataItem.onDirectiveReady = function (api) {
+                        dataItem.directiveAPI = api;
+                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                    };
 
-                dataItem.onRateTypeSelectorReady = function (api) {
-                    dataItem.rateTypeSelectorAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingRateTypeDirective = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rateTypeSelectorAPI, undefined, setLoader);
-                };
+                    dataItem.onRateTypeSelectorReady = function (api) {
+                        dataItem.rateTypeSelectorAPI = api;
+                        var setLoader = function (value) { ctrl.isLoadingRateTypeDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rateTypeSelectorAPI, undefined, setLoader);
+                    };
 
-                ctrl.datasource.push(dataItem);
-
-                ctrl.selectedTemplate = undefined;
+                    return dataItem;
+                },
+                enableSorting: true
             };
-            ctrl.onActionTemplateChanged = function () {
-                ctrl.disableAddButton = (ctrl.selectedTemplate == undefined);
-            };
+
+           
             ctrl.removeFilter = function (dataItem) {
                 var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
                 ctrl.datasource.splice(index, 1);

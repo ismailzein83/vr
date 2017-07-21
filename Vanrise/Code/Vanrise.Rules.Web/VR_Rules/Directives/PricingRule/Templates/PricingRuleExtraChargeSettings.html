@@ -1,11 +1,6 @@
 ﻿<vr-row>
-    <vr-columns width="1/4row">
-        <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId"
-                   label="Filter Type" datasource="ctrl.extraChargeTemplates" selectedvalues="ctrl.selectedTemplate" onselectionchanged="ctrl.onActionTemplateChanged">
-        </vr-select>
-    </vr-columns>
-    <vr-columns width="normal" withemptyline>
-        <vr-button type="Add" data-onclick="ctrl.addFilter" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
+    <vr-columns width="2/3row" withemptyline>
+        <vr-toolbox medium datasource="ctrl.extraChargeTemplates" datatextfield="Title" datavaluefield="ExtensionConfigurationId" groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
     </vr-columns>
     <vr-common-currency-selector on-ready="ctrl.onCurrencySelectReady" isrequired="true" normal-col-num="3"></vr-common-currency-selector>
 </vr-row>
@@ -13,7 +8,7 @@
     <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
         <vr-validator validate="ctrl.isValid()">
             <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu dragdropsetting="ctrl.dragdropSetting">
                 <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="10"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'From Rate'" widthfactor="10">
                     <vr-textbox value="dataItem.fromRate" customvalidate="dataItem.validate(dataItem)" type="number" label="From Rate" isrequired minvalue="0"></vr-textbox>

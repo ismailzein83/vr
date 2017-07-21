@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrRulesPricingrulesettingsExtracharge', ['UtilsService', '$compile', 'VR_Rules_PricingRuleAPIService', 'VRUIUtilsService',
-function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsService) {
+app.directive('vrRulesPricingrulesettingsExtracharge', ['UtilsService', '$compile', 'VR_Rules_PricingRuleAPIService', 'VRUIUtilsService','VRDragdropService',
+function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsService, VRDragdropService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -37,7 +37,32 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 currencyDirectiveAPI = api;
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
+            ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+            ctrl.dragdropSetting = {
+                groupCorrelation: ctrl.dragdropGroupCorrelation,
+                canReceive: true,
+                onItemReceived: function (item, dataSource) {                   
+                    var dataItem = {
+                        id: ctrl.datasource.length + 1,
+                        configId: item.ExtensionConfigurationId,
+                        editor: item.Editor,
+                        name: item.Title,
+                        validate: function (item) {
+                            if (item.fromRate != undefined && item.toRate != undefined && parseFloat(item.fromRate) >= parseFloat(item.toRate))
+                                return 'From Rate should be less than To Rate';
+                            return null;
+                        }
+                    };
+                    dataItem.onDirectiveReady = function (api) {
+                        dataItem.directiveAPI = api;
+                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                    };
 
+                    return dataItem;
+                },
+                enableSorting: true
+            };
             ctrl.isValid = function () {
                 if (ctrl.datasource.length == 0)
                     return "You Should Select at least one filter type ";
@@ -64,22 +89,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
             ctrl.disableAddButton = true;
             ctrl.addFilter = function () {
-                var dataItem = {
-                    id: ctrl.datasource.length + 1,
-                    configId: ctrl.selectedTemplate.ExtensionConfigurationId,
-                    editor: ctrl.selectedTemplate.Editor,
-                    name: ctrl.selectedTemplate.Title,
-                    validate: function (item) {
-                        if (item.fromRate != undefined && item.toRate != undefined && parseFloat(item.fromRate) >= parseFloat(item.toRate))
-                            return 'From Rate should be less than To Rate';
-                        return null;
-                    }
-                };
-                dataItem.onDirectiveReady = function (api) {
-                    dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-                };
+               
                 ctrl.datasource.push(dataItem);
 
 

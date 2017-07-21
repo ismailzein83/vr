@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPIService", "UtilsService", "VRNotificationService", "VRUIUtilsService", function (VRCommon_TextManipulationAPIService, UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPIService", "UtilsService", "VRNotificationService", "VRUIUtilsService", "VRDragdropService", function (VRCommon_TextManipulationAPIService, UtilsService, VRNotificationService, VRUIUtilsService, VRDragdropService) {
 
     var directiveDefinitionObj = {
         restrict: "E",
@@ -36,13 +36,8 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
         var counter = 0;
         function initializeController() {
             ctrl.templates = [];
-            ctrl.selectedActionTemplate = undefined;
-            ctrl.disableAddButton = true;
             ctrl.datasource = [];
 
-            ctrl.onActionTemplateChanged = function () {
-                ctrl.disableAddButton = (ctrl.selectedActionTemplate == undefined);
-            };
             ctrl.isValid = function () {
                 if (isNotRequired === true)
                     return null;
@@ -50,31 +45,37 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
                     return null;
                 return "You must add at least one action";
             };
-            ctrl.addFilter = function () {
-                var dataItem = {
-                    id: counter++,
-                    configId: ctrl.selectedActionTemplate.ExtensionConfigurationId,
-                    editor: ctrl.selectedActionTemplate.Editor,
-                    name: ctrl.selectedActionTemplate.Title
-                };
 
-                dataItem.onDirectiveReady = function (api) {
-                    dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-                };
+            ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+            ctrl.dragdropSetting = {
+                groupCorrelation: ctrl.dragdropGroupCorrelation,
+                canReceive: true,
+                onItemReceived: function (item, dataSource) {
+                    var dataItem = {
+                        id: counter++,
+                        configId: item.ExtensionConfigurationId,
+                        editor: item.Editor,
+                        name:item.Title
+                    };
 
-                ctrl.datasource.push(dataItem);
-                ctrl.selectedActionTemplate = undefined;
+                    dataItem.onDirectiveReady = function (api) {
+                        dataItem.directiveAPI = api;
+                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+                    };
+
+                    return dataItem;
+                },
+                enableSorting: true
             };
+
             ctrl.removeFilter = function (dataItem) {
                 var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
                 ctrl.datasource.splice(index, 1);
             };
-            ctrl.templatesSelectorReady = function (api) {
-                templatesSelectorAPI = api;
-                defineAPI();
-            };
+
+            defineAPI();
+
 
         }
 
@@ -108,7 +109,7 @@ app.directive("vrCommonTextmanipulationsettings", ["VRCommon_TextManipulationAPI
                 }
                 ctrl.templates.length = 0;
                 var loadTemplatesPromise = VRCommon_TextManipulationAPIService.GetTextManipulationActionSettingsConfigs().then(function (response) {
-                    templatesSelectorAPI.clearDataSource();
+
                     angular.forEach(response, function (item) {
                         ctrl.templates.push(item);
                     });
