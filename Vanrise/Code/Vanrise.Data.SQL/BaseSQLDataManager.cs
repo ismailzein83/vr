@@ -68,7 +68,7 @@ namespace Vanrise.Data.SQL
                 From = new DateTime(1753, 1, 1, 0, 0, 0),
                 To = new DateTime(9999, 12, 31, 23, 59, 59)
             };
-        }
+        } 
 
         #endregion
 
