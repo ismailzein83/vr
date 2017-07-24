@@ -189,7 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DLLs\Aspose.Cells.lic" />
-    <None Include="Internship Program\Training Plan.docx" />
+    <None Include="Documents\Internship Program.docx" />
     <None Include="Packages\SharedManagementObjects .msi" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
