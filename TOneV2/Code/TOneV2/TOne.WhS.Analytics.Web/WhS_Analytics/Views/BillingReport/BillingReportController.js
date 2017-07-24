@@ -164,7 +164,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
             }
             else {
-                $scope.selectedPeriod = $scope.periods[1];
+                $scope.selectedPeriod = $scope.periods[6];
             }
             $scope.params = {
                 groupByCustomer: false,
