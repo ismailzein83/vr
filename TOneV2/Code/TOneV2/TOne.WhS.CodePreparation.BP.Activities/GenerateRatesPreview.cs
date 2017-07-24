@@ -41,13 +41,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ratesPreview.AddRange(zoneToProcess.RatesToAdd.MapRecords(RateToAddPreviewMapper));
                 foreach (var notImportedRate in zoneToProcess.NotImportedNormalRates)
                 {
-                    CarrierAccount customer = carrierAccountManager.GetCarrierAccount(notImportedRate.OwnerId);
-                    if (customer.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive)
+                    if (notImportedRate.OwnerType == SalePriceListOwnerType.Customer)
                     {
-                        ratesPreview.Add(NotImportedRatePreviewMapper(notImportedRate));
+                        if (!carrierAccountManager.IsCarrierAccountActive(notImportedRate.OwnerId))
+                            continue;
                     }
+                    ratesPreview.Add(NotImportedRatePreviewMapper(notImportedRate));
                 }
-                // ratesPreview.AddRange(zoneToProcess.NotImportedNormalRates.MapRecords(NotImportedRatePreviewMapper));
             }
 
             foreach (NotImportedZone notImportedZone in notImportedZones)
