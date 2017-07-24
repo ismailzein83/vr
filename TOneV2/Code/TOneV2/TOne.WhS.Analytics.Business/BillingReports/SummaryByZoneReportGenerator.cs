@@ -38,31 +38,26 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listDimensions.Add("SaleRateType");
                 listDimensions.Add("SaleRate");
             }
-                
 
-            if (parameters.IsCost)
+            if (parameters.GroupBySupplier)
             {
-                if (parameters.GroupBySupplier)
+                if (parameters.IsCost)
                 {
+                    
                     listDimensions.Add("Supplier");
                     if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
+
                 }
-                
-            }
-            else
-            {
-                if (parameters.GroupBySupplier)
-                {
-                    listDimensions.Add("Supplier");
-                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
-                }
+
                 else
                 {
                     listDimensions.Add("Customer");
                     if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile");
                 }
-                
+
             }
+
+
 
             if (parameters.IsCost)
             {
@@ -143,7 +138,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     if (parameters.IsCost && parameters.GroupBySupplier)
                     {
-                        var supplierValue = analyticRecord.DimensionValues[2];
+                        var supplierValue = analyticRecord.DimensionValues[3];
                         if (supplierValue != null)
                             summaryByZone.SupplierID = supplierValue.Name;
                     }
