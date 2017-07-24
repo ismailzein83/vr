@@ -2017,6 +2017,10 @@ vr-button[class*="divDisabled"] > div{
     pointer-events: none;
     opacity: 0.5;
 }
+
+vr-button[class*="divDisabled"][type="Add"][standalone] div>span{
+  color: #333;
+}
 vr-switch[class*="divDisabled"] .switch {
     pointer-events: none;
     opacity: 0.5;
