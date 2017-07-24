@@ -17,6 +17,7 @@
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:vqba="clr-namespace:Vanrise.Queueing.BP.Activities;assembly=Vanrise.Queueing.BP.Activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twdba:DealEvaluatorProcessInput)" />
@@ -60,6 +61,7 @@
       <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.BP.Activities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
     </sco:Collection>
@@ -79,6 +81,7 @@
       <Variable x:TypeArguments="twde:DealTechnicalSettingData" Name="dealTechnicalSettingData" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="daysToReprocessCompleted" />
       <Variable x:TypeArguments="s:Nullable(x:Int64)" Name="lastBPInstanceId" />
+      <Variable x:TypeArguments="s:Byte[]" Name="DealDetailedProgressMaxTimeStamp" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Deal Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -153,6 +156,19 @@
               </local:DealEvaluatorSubProcess.beginDate>
             </local:DealEvaluatorSubProcess>
           </Parallel>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+            <Assign.To>
+              <OutArgument x:TypeArguments="s:Byte[]">
+                <mca:CSharpReference x:TypeArguments="s:Byte[]">DealDetailedProgressMaxTimeStamp</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="s:Byte[]">
+                <mca:CSharpValue x:TypeArguments="s:Byte[]">new TOne.WhS.Deal.Business.DealDetailedProgressManager().GetMaxTimestamp();</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <vqba:DeleteHoldRequest sap2010:WorkflowViewState.IdRef="DeleteHoldRequest_1" />
           <If sap2010:WorkflowViewState.IdRef="If_4">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
@@ -195,14 +211,14 @@
               </Assign>
             </If.Then>
           </If>
-          <If>
+          <If sap2010:WorkflowViewState.IdRef="If_6">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
                 <mca:CSharpValue x:TypeArguments="x:Boolean">daysToReprocess != null &amp;&amp; daysToReprocess.Count == 0</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
-              <vbw:WriteTrackingMessage>
+              <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6">
                 <vbw:WriteTrackingMessage.Message>
                   <InArgument x:TypeArguments="x:String">
                     <mca:CSharpValue x:TypeArguments="x:String">string.Format("No days To Reprocess", daysToReprocess.Count)</mca:CSharpValue>
@@ -213,10 +229,8 @@
                     <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                   </InArgument>
                 </vbw:WriteTrackingMessage.Severity>
-                <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_6</sap2010:WorkflowViewState.IdRef>
               </vbw:WriteTrackingMessage>
             </If.Then>
-            <sap2010:WorkflowViewState.IdRef>If_6</sap2010:WorkflowViewState.IdRef>
           </If>
           <If sap2010:WorkflowViewState.IdRef="If_2">
             <If.Condition>
@@ -340,6 +354,11 @@
             </If.Then>
           </If>
           <twdba1:BuildDealEvaluatorProcessState sap2010:WorkflowViewState.IdRef="BuildDealEvaluatorProcessState_1">
+            <twdba1:BuildDealEvaluatorProcessState.DealDetailedProgressMaxTimestamp>
+              <InArgument x:TypeArguments="s:Byte[]">
+                <mca:CSharpValue x:TypeArguments="s:Byte[]">DealDetailedProgressMaxTimeStamp</mca:CSharpValue>
+              </InArgument>
+            </twdba1:BuildDealEvaluatorProcessState.DealDetailedProgressMaxTimestamp>
             <twdba1:BuildDealEvaluatorProcessState.DealEvaluatorProcessState>
               <OutArgument x:TypeArguments="twde:DealEvaluatorProcessState">
                 <mca:CSharpReference x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpReference>
@@ -374,7 +393,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbE9DA/oCDgIBAUsLS3UCAQNQM1A2AgECUwVZIAMB6wNaBWUkAwHUA2YFdiEDAbIDdwXxAgoCARvyAgX4AiACAQ5WC1aFAQMB7QNTYFOCAQMB7ANiC2KAAQMB4ANdC11NAwHVA2kLaWgDAckDbgtueAMBvgNzC3NsAwGzA3oLelwCARx+Ce8CFAIBJ/UCC/UChQECARDyAmDyAoABAgEPfwubARYDAf0CnAELsAEQAwHaArEBC8UBEAMBtwLGAQvcARADAZQC3QEL1QIQAgFX1gIL4QIzAgFA4gIL7QIrAgEp7gIL7gJlAgEogwENjgEtAwGYA48BDZoBLQMB/gKfARGfAb4BAwHbAqMBD64BGAMB5gK0ARG0Ab4BAwG4ArgBD8MBGAMBwwLJARHJAY0BAwGVAs0BD9kBKgMBoALgARHgAY8BAgFY5AEP0wIaAgFj2QIR2QKGAQIBTN4CEd4CagIBQeoCEeoCaAIBNeUCEeUCUwIBKoYBE4YBlgEDAaYDgwGaAYMBoAEDAaUDiwETiwFiAwGZA5IBE5IBlgEDAYwDjwGaAY8BoQEDAYsDlwETlwFiAwH/AqsBFasBlAEDAfICpgEVpgF5AwHnAsABFcAByAEDAc8CuwEVuwF5AwHEAtUBFdUBjwEDAawC0AEV0AGPAQMBoQLlARHrATYDAYgC7AER9wEsAwHxAfgBEdICIwIBZOgBF+gBigEDAYkC9AEX9AGRAQMB/QHvARfvAZoBAwHyAfsBF/sBeAMB5gGCAhXQAiACAWWDAhePAjIDAc0BkAIXogIoAwGzAaMCF88CHAIBZowCHYwClwEDAdoBhgIdhwJTAwHOAZMCHZoCIAMBwQGfAh2fAqEBAwG1AZACwwGQAskBAwG0AaYCHaYC0AECAWeqAhuwAi8DAaYBswIbzQImAgFzrQIhrQLMAQMBpwG0Ah2/AiYDAY0BwAIdzAI4AgF0vAIjvAJ8AwGaAbcCI7cCgAEDAY4ByQIjyQKdAQMBgQHDAiPEAocBAgF1</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbFRFA40DDgIBAU0LTXUCAQNSM1I2AgECVgVcIAMBuQRdBWgkAwGgBGkFeSEDAfsDegWEAwoCAR2FAwWLAyACAQ9ZC1mFAQMBuwRWYFaCAQMBugRlC2WAAQMBrQRgC2BNAwGhBGwLbGgDAZQEcQtxeAMBiAR2C3ZsAwH8A30LfVwCAR6BAQmCAxQCASqIAwuIA4UBAgERhQNghQOAAQIBEIIBC54BFgMBwgOfAQuqARQDAakDqwELqwFbAwGoA6wBC8ABEAMBggPBAQvVARADAdwC1gEL6gEQAwG2AusBC+MCEAIBauQCC/QCMwIBRfUCC4ADKwIBLIEDC4EDZQIBK4YBDZEBLQMB3wOSAQ2dAS0DAcMDpwERpwGaAQMBtgOiARGiAXcDAaoDrwERrwG+AQMBgwOzAQ++ARgDAY8DxAERxAG+AQMB3QLIAQ/TARgDAekC2QER2QGNAQMBtwLdAQ/oASoDAcMC7gER7gGPAQIBa/IBD+ECGgIBd+wCEewChgECAV7xAhHxAmoCAVLnAhHnAm8CAUb9AhH9AmgCATn4AhH4AlMCAS2JAROJAZYBAwHuA4YBmgGGAaABAwHtA44BE44BYgMB4AOVAROVAZYBAwHSA5IBmgGSAaEBAwHRA5oBE5oBYgMBxAO7ARW7AZQBAwGcA7YBFbYBeQMBkAPQARXQAcgBAwH2AssBFcsBeQMB6gLlARXlAY8BAwHQAuABFeABjwEDAcQC8wER+QE2AwGpAvoBEYUCLAMBkAKGAhHgAiMCAXj2ARf2AYoBAwGqAoICF4ICkQEDAZ0C/QEX/QGaAQMBkQKJAheJAngDAYQCkAIV3gIgAgF5kQIXnQIyAwHpAZ4CF7ACKAMBzQGxAhfdAhwCAXqaAh2aApcBAwH3AZQCHZUCUwMB6gGhAh2oAiADAdwBrQIdrQKhAQMBzwGeAsMBngLJAQMBzgG0Ah20AtABAgF7uAIbvgIvAwG/AcECG9sCJgMBiAG7AiG7AswBAwHAAcICHc0CJgMBpAHOAh3aAjgDAYkBygIjygJ8AwGyAcUCI8UCgAEDAaUB1wIj1wKdAQMBlwHRAiPSAocBAwGKAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -384,6 +403,8 @@
       <sap2010:ViewStateData Id="DealEvaluatorSubProcess_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="DealEvaluatorSubProcess_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="688,86" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="688,62" />
+      <sap2010:ViewStateData Id="DeleteHoldRequest_1" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="688,212" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -424,23 +445,23 @@
       <sap2010:ViewStateData Id="BuildDealEvaluatorProcessState_1" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="688,22" />
       <sap2010:ViewStateData Id="FinalizeDealEvaluator_1" sap:VirtualizedContainerService.HintSize="688,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="710,2384">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="710,2548">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="835,2534" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="835,2698" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="835,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="857,2906">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="857,3070">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="897,2986" />
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.DealEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="897,3150" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

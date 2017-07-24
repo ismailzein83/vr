@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Queueing;
@@ -11,7 +12,13 @@ namespace TOne.WhS.Deal.Business
 {
     public class DealEvaluatorBPDefinitionSettings : Vanrise.BusinessProcess.Business.DefaultBPDefinitionExtendedSettings 
     {
-        public override bool CanRunBPInstance(Vanrise.BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
+        public override void OnBPExecutionCompleted(IBPDefinitionBPExecutionCompletedContext context)
+        {
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            holdRequestManager.DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
+        }
+
+        public override bool CanRunBPInstance(IBPDefinitionCanRunBPInstanceContext context)
         {
             ConfigManager configManager = new ConfigManager();
             var dealTechnicalSettingData = configManager.GetDealTechnicalSettingData();
@@ -42,10 +49,10 @@ namespace TOne.WhS.Deal.Business
             if (existingHoldRequest == null)
             {
                 ReprocessDefinitionManager reprocessDefinitionManager = new ReprocessDefinitionManager();
-                ReprocessDefinition reprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(dealEvaluatorReprocessDefinitionId);
+                ReprocessDefinition dealEvaluatorReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(dealEvaluatorReprocessDefinitionId);
 
-                holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, reprocessDefinition.Settings.ExecutionFlowDefinitionId, dateTimeRange.From, dateTimeRange.To,
-                    reprocessDefinition.Settings.StagesToHoldNames, reprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
+                holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, dealEvaluatorReprocessDefinition.Settings.ExecutionFlowDefinitionId, dateTimeRange.From, 
+                    dateTimeRange.To, dealEvaluatorReprocessDefinition.Settings.StagesToHoldNames, dealEvaluatorReprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
 
                 context.Reason = "Waiting CDR Import";
                 return false;
@@ -58,6 +65,7 @@ namespace TOne.WhS.Deal.Business
 
             return true;
         }
+
 
         static Vanrise.Reprocess.Business.ReprocessDefinitionManager s_reprocessDefinitionManager = new Vanrise.Reprocess.Business.ReprocessDefinitionManager();
         private Guid GetExecFlowDefByReprocessDefId(Guid reprocessDefinitionId, Dictionary<Guid, Guid> execFlowDefIdsByReprocessDefId)
