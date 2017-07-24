@@ -42,7 +42,7 @@ namespace Vanrise.Queueing.Data.SQL
             return base.IsDataUpdated("queue.HoldRequest", ref updateHandle);
         }
 
-        public DateTimeRange GetDBDateTimeRange()
+        public DateTimeRange GetDBDateTimeRange() 
         {
             return base.GetSQLDateTimeRange();
         }

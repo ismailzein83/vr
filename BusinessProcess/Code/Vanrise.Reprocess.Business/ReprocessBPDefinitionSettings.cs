@@ -13,9 +13,7 @@ namespace Vanrise.Reprocess.Business
         public override void OnBPExecutionCompleted(BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
         {
             HoldRequestManager holdRequestManager = new HoldRequestManager();
-            HoldRequest holdRequest = holdRequestManager.GetHoldRequest(context.BPInstance.ProcessInstanceID);
-            if (holdRequest != null)
-                holdRequestManager.DeleteHoldRequest(holdRequest.HoldRequestId);
+            holdRequestManager.DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
         }
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {

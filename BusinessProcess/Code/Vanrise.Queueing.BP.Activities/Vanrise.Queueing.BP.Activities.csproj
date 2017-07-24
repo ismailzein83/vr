@@ -41,18 +41,35 @@
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteHoldRequest.cs" />
     <Compile Include="GetExecutionFlowDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
+      <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
+      <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj">
+      <Project>{a5ee3349-b642-4cc7-b575-7c338821d63d}</Project>
+      <Name>Vanrise.BusinessProcess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Queueing.Entities\Vanrise.Queueing.Entities.csproj">
       <Project>{a511dce7-1fa4-46dc-b04e-01c4ccdd7f1c}</Project>
       <Name>Vanrise.Queueing.Entities</Name>

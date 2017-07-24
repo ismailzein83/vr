@@ -104,11 +104,19 @@ namespace Vanrise.Queueing
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
+        public void DeleteHoldRequestByBPInstanceId(long bpInstanceId)
+        {
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            HoldRequest holdRequest = holdRequestManager.GetHoldRequest(bpInstanceId);
+            if (holdRequest != null)
+                DeleteHoldRequest(holdRequest.HoldRequestId);
+        } 
+
         public DateTimeRange GetDBDateTimeRange()
         {
             IHoldRequestDataManager dataManager = QDataManagerFactory.GetDataManager<IHoldRequestDataManager>();
             return dataManager.GetDBDateTimeRange();
-        }
+        } 
 
         #region Private Methods
 

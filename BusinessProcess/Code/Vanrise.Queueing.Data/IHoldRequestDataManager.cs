@@ -17,6 +17,6 @@ namespace Vanrise.Queueing.Data
 
         void UpdateStatus(long holdRequestId, HoldRequestStatus status);
 
-        DateTimeRange GetDBDateTimeRange();
+        DateTimeRange GetDBDateTimeRange(); 
     }
 }
