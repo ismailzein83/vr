@@ -96,10 +96,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SaleEntityZoneRate GetCachedCustomerZoneRate(int customerId, long saleZoneId, DateTime effectiveOn)
         {
+            if (!IsCountrySellToCustomer(customerId, saleZoneId, effectiveOn))
+                return null;
+
             CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
             CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
             if (customerSellingProduct == null)
                 return null;
+
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
             return customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, saleZoneId);
         }
@@ -536,7 +540,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Rate });
-                            row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange)});
+                            row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
                             row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
@@ -548,6 +552,19 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 context.MainSheet = sheet;
             }
+        }
+
+        private bool IsCountrySellToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
+        {
+            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
+            if (!saleZoneCountryId.HasValue)
+                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
+
+            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
+            if (customerCountry == null)
+                return false;
+
+            return true;
         }
 
         #endregion
