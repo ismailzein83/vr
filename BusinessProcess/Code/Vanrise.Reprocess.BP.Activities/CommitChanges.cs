@@ -66,28 +66,25 @@ namespace Vanrise.Reprocess.BP.Activities
 
             if (storageRowCount.HasValue)
             {
-                if (storageRowCount.Value > 0)
+                int batchCount = (storageRowCount.Value > 0) ? ((int)Math.Ceiling((double)storageRowCount.Value / inputArgument.RecordCountPerTransaction)) : 1;
+                TimeSpan reprocessDuration = inputArgument.To.Subtract(inputArgument.From);
+                TimeSpan batchDuration = TimeSpan.FromMinutes(reprocessDuration.TotalMinutes / batchCount);
+
+                //batchDuration = new TimeSpan(batchDuration.Ticks - (batchDuration.Ticks % 10000000)); //To Remove Milliseconds and Ticks
+                batchDuration = new TimeSpan(batchDuration.Days, batchDuration.Hours, batchDuration.Minutes, batchDuration.Seconds); //To Remove Milliseconds and Ticks
+
+                IEnumerable<DateTimeRange> dateTimeRanges = Vanrise.Common.Utilities.GenerateDateTimeRanges(inputArgument.From, inputArgument.To, batchDuration);
+
+                foreach (var dateTimeRange in dateTimeRanges)
                 {
-                    int batchCount = (int)Math.Ceiling((double)storageRowCount.Value / inputArgument.RecordCountPerTransaction);
-                    TimeSpan reprocessDuration = inputArgument.To.Subtract(inputArgument.From);
-                    TimeSpan batchDuration = TimeSpan.FromMinutes(reprocessDuration.TotalMinutes / batchCount);
+                    //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Starting Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
+                    //    inputArgument.Stage.StageName, dateTimeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), dateTimeRange.To.ToString("yyyy-MM-dd HH:mm:ss"));
 
-                    //batchDuration = new TimeSpan(batchDuration.Ticks - (batchDuration.Ticks % 10000000)); //To Remove Milliseconds and Ticks
-                    batchDuration = new TimeSpan(batchDuration.Days, batchDuration.Hours, batchDuration.Minutes, batchDuration.Seconds); //To Remove Milliseconds and Ticks
+                    var commitChangesContext = new ReprocessStageActivatorCommitChangesContext(initializationStageOutput, dateTimeRange.From, dateTimeRange.To);
+                    inputArgument.Stage.Activator.CommitChanges(commitChangesContext);
 
-                    IEnumerable<DateTimeRange> dateTimeRanges = Vanrise.Common.Utilities.GenerateDateTimeRanges(inputArgument.From, inputArgument.To, batchDuration);
-                    
-                    foreach (var dateTimeRange in dateTimeRanges)
-                    {
-                        //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Starting Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
-                        //    inputArgument.Stage.StageName, dateTimeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), dateTimeRange.To.ToString("yyyy-MM-dd HH:mm:ss"));
-
-                        var commitChangesContext = new ReprocessStageActivatorCommitChangesContext(initializationStageOutput, dateTimeRange.From, dateTimeRange.To);
-                        inputArgument.Stage.Activator.CommitChanges(commitChangesContext);
-
-                        //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finishing Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
-                        //    inputArgument.Stage.StageName, dateTimeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), dateTimeRange.To.ToString("yyyy-MM-dd HH:mm:ss"));
-                    }
+                    //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finishing Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
+                    //    inputArgument.Stage.StageName, dateTimeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), dateTimeRange.To.ToString("yyyy-MM-dd HH:mm:ss"));
                 }
 
                 var initializatingContext = new ReprocessStageActivatorDropStorageContext(initializationStageOutput);
