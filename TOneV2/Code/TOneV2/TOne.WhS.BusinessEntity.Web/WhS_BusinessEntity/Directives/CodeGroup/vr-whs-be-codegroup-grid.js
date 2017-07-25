@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCodegroupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CodeGroupAPIService", "WhS_BE_CodeGroupService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_BE_CodeGroupService, VRUIUtilsService) {
+app.directive("vrWhsBeCodegroupGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CodeGroupAPIService", "WhS_BE_CodeGroupService", "VRUIUtilsService", "WhS_BE_SaleCodeAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_BE_CodeGroupService, VRUIUtilsService, WhS_BE_SaleCodeAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -29,6 +29,8 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
         var gridAPI;
         var disabCountry;
         var gridDrillDownTabsObj;
+        var codes;
+        var menuActions;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -75,15 +77,27 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
         }
 
 
-
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editCodeGroupe,
-                haspermission: hasUpdateCodeGroupPermission
-            }];
-        }
+            
+            $scope.gridMenuActions = function (dataItem) {
 
+                var menuItems = [] ;
+             
+                if(dataItem.AllowEdit ==  true)
+                    menuItems[menuItems.length] = {
+                        name: "Edit",
+                        clicked: editCodeGroupe,
+                        haspermission: hasUpdateCodeGroupPermission
+
+                    }
+
+                return menuItems; 
+            };
+
+
+            
+        }
+        
         function hasUpdateCodeGroupPermission() {
             return WhS_BE_CodeGroupAPIService.HasUpdateCodeGroupPermission();
         }

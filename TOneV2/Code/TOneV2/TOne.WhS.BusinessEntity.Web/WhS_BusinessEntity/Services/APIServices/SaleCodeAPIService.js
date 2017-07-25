@@ -9,9 +9,14 @@
         function GetFilteredSaleCodes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredSaleCodes"), input);
         }
+        function GetSaleCodesByCodeGroups(codeGroupsIds) {
+            console.log(codeGroupsIds);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSaleCodesByCodeGroups"), codeGroupsIds);
 
+        }
         return ({
-            GetFilteredSaleCodes: GetFilteredSaleCodes
+            GetFilteredSaleCodes: GetFilteredSaleCodes,
+            GetSaleCodesByCodeGroups: GetSaleCodesByCodeGroups
         });
     }
 

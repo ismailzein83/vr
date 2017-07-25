@@ -22,6 +22,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleCodeManager manager = new SaleCodeManager();
             return GetWebResponse(input, manager.GetFilteredSaleCodes(input));
         }
+
+        [HttpPost]
+        [Route("GetSaleCodesByCodeGroups")]
+        public List<SaleCode> GetSaleCodesByCodeGroups(List<int> codeGroupsIds)
+        {
+            SaleCodeManager manager = new SaleCodeManager();
+            return manager.GetSaleCodesByCodeGroups(codeGroupsIds);
+        }
     }
 
 }

@@ -488,6 +488,8 @@ namespace TOne.WhS.BusinessEntity.Business
             codeGroupDetail.Entity = codeGroup;
 
 
+            codeGroupDetail.AllowEdit = new SaleCodeManager().GetSaleCodesByCodeGroups(codeGroup.CodeGroupId).Count() == 0;
+
             codeGroupDetail.CountryName = _countryManager.GetCountryName(codeGroup.CountryId);
 
             return codeGroupDetail;

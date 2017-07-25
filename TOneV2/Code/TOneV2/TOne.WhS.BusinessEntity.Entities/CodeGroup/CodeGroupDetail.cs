@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CodeGroup Entity { get; set; }
 
         public string CountryName { get; set; }
+
+        public bool AllowEdit { get; set; }
     }
 }
