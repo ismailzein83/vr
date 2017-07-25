@@ -1,1 +1,32 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="2/3row">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="ConditionalCellMappingCtrl.datasource"
+                   datatextfield="FieldName"
+                   datavaluefield="FieldName"
+                   selectedvalues="ConditionalCellMappingCtrl.selectedvalues"
+                   label="Filter Field Mappings">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row" withemptyline>
+        <vr-button type="Add" data-onclick="ConditionalCellMappingCtrl.addConditionalCell" vr-disabled="ConditionalCellMappingCtrl.selectedvalues == undefined" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid on-ready="onGridReady"
+                     datasource="ConditionalCellMappingCtrl.datasourcemapping"
+                     maxheight="250px" ondeleterow="ConditionalCellMappingCtrl.removeField">
+            <vr-datagridcolumn headertext="'Field Value'" field="'FieldTitle'" widthfactor="10">
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-textbox value="dataItem.RowFieldValue"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Field Mapping Choices'" widthfactor="15">
+                <vr-excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="true" customvalidate="dataItem.validate()" type="dataItem.type"> </vr-excelconversion-fieldmapping-selective>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>    
+</vr-row>

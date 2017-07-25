@@ -2,9 +2,9 @@
 
     'use strict';
 
-    concatenatedpartSelective.$inject = ['VR_ExcelConversion_ExcelAPIService', 'UtilsService', 'VRUIUtilsService'];
+    concatenatedpartSelective.$inject = ['VR_ExcelConversion_ExcelAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_ExcelConversion_ConcatenatedPartTypeEnum'];
 
-    function concatenatedpartSelective(VR_ExcelConversion_ExcelAPIService, UtilsService, VRUIUtilsService) {
+    function concatenatedpartSelective(VR_ExcelConversion_ExcelAPIService, UtilsService, VRUIUtilsService, VR_ExcelConversion_ConcatenatedPartTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -71,6 +71,8 @@
 
                     $scope.selectedTemplateConfig = undefined;
                 };
+
+
                 ctrl.disableAddButton = true;
 
                 ctrl.isValid = function () {
@@ -99,16 +101,14 @@
                     var promises = [];
                     var parts;
                     var filterItems;
-         
 
-                   
+
+
                     if (payload != undefined) {
                         context = payload.context;
-                        if(payload.fieldMapping !=undefined)
-                        {
+                        if (payload.fieldMapping != undefined) {
                             parts = payload.fieldMapping.Parts;
-                            if (parts != undefined && parts.length > 0)
-                            {
+                            if (parts != undefined && parts.length > 0) {
                                 filterItems = [];
                                 for (var i = 0; i < parts.length; i++) {
                                     var filterItem = {
@@ -120,20 +120,49 @@
                                     filterItems.push(filterItem);
                                 }
                             }
-                            
+
                         }
                     }
                     var getFieldMappingTemplateConfigsPromise = getFieldMappingTemplateConfigs();
                     promises.push(getFieldMappingTemplateConfigsPromise);
 
+                    var loadConcatenatedPartsDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadConcatenatedPartsDeferred.promise);
+
                     getFieldMappingTemplateConfigsPromise.then(function () {
+
+                        var concatenatedPartPromises = [];
+
                         if (filterItems != undefined) {
                             for (var i = 0; i < filterItems.length; i++) {
                                 addFilterItemToGrid(filterItems[i]);
                             }
                         } else {
-                            $scope.selectedTemplateConfig = $scope.templateConfigs[0];
+                            var cellFieldExtensionConfig = UtilsService.getItemByVal($scope.templateConfigs, VR_ExcelConversion_ConcatenatedPartTypeEnum.CellField.value, 'Type');
+                            var constantExtensionConfig = UtilsService.getItemByVal($scope.templateConfigs, VR_ExcelConversion_ConcatenatedPartTypeEnum.Constant.value, 'Type');
+
+                            var dataItem;
+
+                            dataItem = getDataItem(cellFieldExtensionConfig);
+                            concatenatedPartPromises.push(dataItem.directiveLoadDeferred.promise);
+                            ctrl.datasource.push(dataItem);
+
+                            dataItem = getDataItem(constantExtensionConfig);
+                            concatenatedPartPromises.push(dataItem.directiveLoadDeferred.promise);
+                            ctrl.datasource.push(dataItem);
+
+                            dataItem = getDataItem(cellFieldExtensionConfig);
+                            concatenatedPartPromises.push(dataItem.directiveLoadDeferred.promise);
+                            ctrl.datasource.push(dataItem);
+
+                            $scope.selectedTemplateConfig = constantExtensionConfig;
                         }
+
+                        UtilsService.waitMultiplePromises(concatenatedPartPromises).then(function () {
+                            loadConcatenatedPartsDeferred.resolve();
+                        }).catch(function (error) {
+                            loadConcatenatedPartsDeferred.reject(error);
+                        });
                     });
 
                     function getFieldMappingTemplateConfigs() {
@@ -174,7 +203,7 @@
                     }
 
 
-                 
+
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -211,6 +240,31 @@
                     return data;
                 }
             }
+
+            function getDataItem(templateConfig) {
+                var dataItem = {
+                    id: ctrl.datasource.length + 1,
+                    configId: templateConfig.ExtensionConfigurationId,
+                    editor: templateConfig.Editor,
+                    name: templateConfig.Name
+                };
+
+                dataItem.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                dataItem.onDirectiveReady = function (api) {
+                    dataItem.directiveAPI = api;
+                    var payload = {
+                        context: getContext(),
+                        concatenatedPart: {
+                            Constant: (templateConfig.Type == VR_ExcelConversion_ConcatenatedPartTypeEnum.Constant.value) ? "-" : undefined
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.directiveLoadDeferred);
+                };
+
+                return dataItem;
+            }
+
             function getContext() {
 
                 if (context != undefined) {

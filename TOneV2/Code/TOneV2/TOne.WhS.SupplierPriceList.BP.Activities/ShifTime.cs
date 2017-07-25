@@ -67,10 +67,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private DateTime? ShiftDateTime(DateTime? date, TimeSpan offSet)
         {
             if (!date.HasValue) return null;
-
-            if (date == DateTime.MinValue)
-                throw new Exception("Cannot shift a date with Min Value");
-
             return date.Value.Subtract(offSet);
         }
 

@@ -87,8 +87,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                     string codeGroup = null;
                     if (obj.Fields.TryGetValue("CodeGroup", out codeGroupField))
                     {
-                        if (codeGroupField.FieldValue != null && !String.IsNullOrWhiteSpace(codeGroupField.FieldValue.ToString()))
-                            codeGroup = codeGroupField.FieldValue.ToString();
+                        if (codeGroupField.FieldValue == null || String.IsNullOrWhiteSpace(codeGroupField.FieldValue.ToString()))
+                            throw new Vanrise.Entities.VRBusinessException(string.Format("A code group is missing"));
+                        
+                        codeGroup = codeGroupField.FieldValue.ToString();
                     };
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {

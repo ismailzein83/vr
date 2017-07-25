@@ -110,13 +110,13 @@ namespace Vanrise.ExcelConversion.Business
                 {
                     break;
                 }
-
+                Dictionary<string, Object> fieldValueByFieldName = new Dictionary<string, object>();
                 if (fieldTypeByFieldName != null)
                 {
                     RecordFilterManager manager = new RecordFilterManager();
                     MappingFilterMatchContext context = new MappingFilterMatchContext();
                     context.fieldTypeByFieldName = fieldTypeByFieldName;
-                    Dictionary<string, Object> fieldValueByFieldName = new Dictionary<string, object>() ;
+                   
                     foreach(var field in listMapping.Filter.Fields)
                     {
                         object fieldValue = null;
@@ -138,7 +138,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, null)
+                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName)
                     };
                     convertedRecord.Fields.Add(fld);
                 }
@@ -167,6 +167,10 @@ namespace Vanrise.ExcelConversion.Business
                 else
                 {
                     DateTime result;
+                    if (dateTimeFormat.Contains("Y"))
+                    {
+                      dateTimeFormat = dateTimeFormat.Replace("Y","y");
+                    }
                     if (DateTime.TryParseExact(fldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
                     {
                         return result;

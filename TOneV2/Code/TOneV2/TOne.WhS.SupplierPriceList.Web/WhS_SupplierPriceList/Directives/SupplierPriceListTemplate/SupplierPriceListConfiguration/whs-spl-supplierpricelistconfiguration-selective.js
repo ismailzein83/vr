@@ -48,7 +48,7 @@
               + 'hideremoveicon>'
           + '</vr-select>'
            + '</vr-row>'
-              + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" vr-loader="isLoadingDirective" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
+              + '<vr-directivewrapper directive="selectedTemplateConfig.Editor"  on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
             return template;
 
         }

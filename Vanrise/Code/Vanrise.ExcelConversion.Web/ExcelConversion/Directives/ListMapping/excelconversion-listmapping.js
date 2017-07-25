@@ -157,6 +157,7 @@
                         context = payload.context;
                         listName = payload.listName;
                         listMappingData = payload.listMappingData;
+                        ctrl.filterFieldsMappings.length = 0;
                         ctrl.lastRowIndex = undefined;
                         ctrl.firstRowIndex = undefined;
                         $scope.scopeModel.labelName = payload.listName + " Date Time Format";
@@ -316,10 +317,10 @@
                     currentContext.getFirstRowIndex = function () {
                         return ctrl.firstRowIndex;
                     };
-                    //currentContext.getFilterFieldsMappings = function()
-                    //{
-                    //    return ctrl.filterFieldsMappings;
-                    //}
+                    currentContext.getFilterFieldsMappings = function()
+                    {
+                        return ctrl.filterFieldsMappings;
+                    }
 
                     return currentContext;
                 }

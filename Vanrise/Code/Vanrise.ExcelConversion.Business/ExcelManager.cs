@@ -208,7 +208,7 @@ namespace Vanrise.ExcelConversion.Business
         public IEnumerable<FieldMappingConfig> GetFieldMappingTemplateConfigs()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurations<FieldMappingConfig>(FieldMappingConfig.EXTENSION_TYPE);
+            return manager.GetExtensionConfigurations<FieldMappingConfig>(FieldMappingConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
         }
         public IEnumerable<ConcatenatedPartConfig> GetConcatenatedPartTemplateConfigs()
         {
