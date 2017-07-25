@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             switch (this.SalePriceListField)
             {
                 case MainExtensions.SalePriceListField.PriceListDate:
-                    return salePriceList.EffectiveOn;
+                    return salePriceList.CreatedTime;
                 case MainExtensions.SalePriceListField.PriceListType:
                     return salePriceList.PriceListType;
             }
