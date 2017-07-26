@@ -1271,7 +1271,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2676,6 +2675,7 @@
                     <FontSize>8pt</FontSize>
                   </Style>
                 </ChartAxisTitle>
+                <Interval>1</Interval>
                 <ChartMajorGridLines>
                   <Enabled>False</Enabled>
                   <Style>
@@ -2710,6 +2710,7 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
@@ -2787,13 +2788,12 @@
                 <ChartMinorTickMarks>
                   <Type>None</Type>
                 </ChartMinorTickMarks>
-                <CrossAt>0</CrossAt>
+                <CrossAt>NaN</CrossAt>
                 <Scalar>true</Scalar>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
                 <PreventFontShrink>true</PreventFontShrink>
                 <PreventFontGrow>true</PreventFontGrow>
-                <IncludeZero>false</IncludeZero>
                 <ChartAxisScaleBreak>
                   <Style />
                 </ChartAxisScaleBreak>
