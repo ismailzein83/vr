@@ -319,7 +319,7 @@
                     if (response != undefined)
                         priceListTemplateEntity = response.InsertedObject;
 
-                    VRNotificationService.notifyOnItemAdded('Supplier Price List Template', response, 'Name');
+                    VRNotificationService.notifyOnItemAdded('Supplier Pricelist Template', response, 'Name');
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
@@ -338,7 +338,7 @@
                 return updatePriceListTemplate(priceListTemplateObject).then(function (response) {
                     if (response != undefined)
                         priceListTemplateEntity = response.UpdatedObject;
-                    VRNotificationService.notifyOnItemAdded('Supplier Price List Template', response, 'Name');
+                    VRNotificationService.notifyOnItemAdded('Supplier Pricelist Template', response, 'Name');
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
