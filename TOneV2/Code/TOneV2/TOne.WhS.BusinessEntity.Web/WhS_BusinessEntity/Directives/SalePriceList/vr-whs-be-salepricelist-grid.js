@@ -8,7 +8,10 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
 
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            defaultSortDirection: "@",
+            defaultSortByFieldName: "@"
+
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

@@ -3,7 +3,7 @@
         <vr-form name="formSendPriceList">
             <vr-row>
                 <vr-columns width="fullrow" ng-show="scopeModel.doCustomerPriceListsExist">
-                    <vr-whs-be-salepricelist-grid on-ready="scopeModel.onSalePriceListGridReady"></vr-whs-be-salepricelist-grid>
+                    <vr-whs-be-salepricelist-grid on-ready="scopeModel.onSalePriceListGridReady" default-sort-by-field-name="OwnerName" default-sort-direction="ASC"></vr-whs-be-salepricelist-grid>
                 </vr-columns>
                 <vr-columns width="fullrow" ng-hide="scopeModel.doCustomerPriceListsExist">
                     <vr-label isvalue>No customer pricelists were found</vr-label>
