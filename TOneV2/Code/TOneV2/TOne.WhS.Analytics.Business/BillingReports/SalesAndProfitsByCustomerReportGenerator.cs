@@ -79,13 +79,24 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     salesAndProfitsByCustomer.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
                     salesAndProfitsByCustomer.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.CostDuration);
 
-                    salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0;
-                    salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
-                    salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet > 0)
-                        ? ReportHelpers.FormatNumberPercentage(((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet))
-                        : ReportHelpers.FormatNumberPercentage(0);
+                    #region positive result
+                    //salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0;
+                    //salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit((salesAndProfitsByCustomer.SaleNet > 0) ? ((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet)) : 0);
+                    //salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet > 0)
+                    //    ? ReportHelpers.FormatNumberPercentage(((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet))
+                    //    : ReportHelpers.FormatNumberPercentage(0);
 
-                    if (salesAndProfitsByCustomer.Profit > 0 && !String.IsNullOrEmpty(salesAndProfitsByCustomer.Customer))
+                    //if (salesAndProfitsByCustomer.Profit > 0 && !String.IsNullOrEmpty(salesAndProfitsByCustomer.Customer))
+                    //    listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer); 
+
+                    #endregion
+
+
+                    salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet);
+                    salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet);
+                    salesAndProfitsByCustomer.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet);
+
+                    if (!String.IsNullOrEmpty(salesAndProfitsByCustomer.Customer))
                         listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
                 }
 
@@ -116,11 +127,21 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         }
         private List<ProfitSummary> GetCustomerProfitSummary(List<SalesAndProfitsByCustomer> summarieslist)
         {
+            //List<ProfitSummary> lstProfitSummary = new List<ProfitSummary>();
+            //lstProfitSummary = summarieslist.Select(r => new ProfitSummary
+            //{
+            //    Profit = Math.Truncate((double)((r.SaleNet - r.CostNet) * 100)) / 100 ,
+            //    FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet - r.CostNet)),
+            //    Customer = r.Customer.ToString()
+            //}).OrderByDescending(r => r.Profit).Take(10).ToList();
+            //return lstProfitSummary;
+
+
             List<ProfitSummary> lstProfitSummary = new List<ProfitSummary>();
             lstProfitSummary = summarieslist.Select(r => new ProfitSummary
             {
-                Profit = (r.SaleNet > 0) ? Math.Truncate((double)((r.SaleNet - r.CostNet) * 100)) / 100 : 0,
-                FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet > 0) ? ((r.SaleNet - r.CostNet)) : 0),
+                Profit = Math.Truncate((double)((r.SaleNet - r.CostNet) * 100)) / 100,
+                FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet - r.CostNet)),
                 Customer = r.Customer.ToString()
             }).OrderByDescending(r => r.Profit).Take(10).ToList();
             return lstProfitSummary;
