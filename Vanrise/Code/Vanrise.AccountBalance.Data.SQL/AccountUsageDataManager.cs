@@ -121,7 +121,10 @@ namespace Vanrise.AccountBalance.Data.SQL
             string deletedTransactionsAsString = (deletedTransactionIds != null) ? string.Join(",", deletedTransactionIds) : null;
             return GetItemsSP("VR_AccountBalance.sp_AccountUsage_GetOverridenByDeletedTransactionIds", AccountUsageMapper, deletedTransactionsAsString);
         }
-
+        public AccountUsage GetLastAccountUsage(Guid accountTypeId, string accountId)
+        {
+            return GetItemSP("VR_AccountBalance.sp_AccountUsage_GetLast", AccountUsageMapper, accountTypeId, accountId);
+        }
         #endregion
 
         #region Mappers
@@ -165,5 +168,8 @@ namespace Vanrise.AccountBalance.Data.SQL
             };
         }
         #endregion
+
+
+       
     }
 }

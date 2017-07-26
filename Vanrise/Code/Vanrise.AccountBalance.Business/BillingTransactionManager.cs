@@ -153,6 +153,33 @@ namespace Vanrise.AccountBalance.Business
             return dataManager.GetBillingTransactions(accountTypes, accountIds, transactionTypeIds, fromDate, toDate);
         }
 
+        public DateTime? GetLastBillingTransactionDate(Guid accountTypeId, string accountId)
+        {
+            var lastBillingTransaction = GetLastBillingTransaction(accountTypeId, accountId);
+            return lastBillingTransaction != null ? lastBillingTransaction.TransactionTime : default(DateTime?);
+        }
+
+        public DateTime? GetLastTransactionDate(Guid accountTypeId, string accountId)
+        {
+
+            var lastBillingTransactionDate =GetLastBillingTransactionDate(accountTypeId,  accountId);
+            var lastAccountUsageDate = new AccountUsageManager().GetLastAccountUsageDate(accountTypeId, accountId);
+            if (lastBillingTransactionDate.HasValue && lastAccountUsageDate.HasValue)
+            {
+                return lastBillingTransactionDate.Value > lastAccountUsageDate.Value ? lastBillingTransactionDate.Value : lastAccountUsageDate.Value;
+            }
+            else if (lastBillingTransactionDate.HasValue)
+                return lastBillingTransactionDate.Value;
+            else if (lastAccountUsageDate.HasValue)
+                return lastAccountUsageDate.Value;
+            else
+                return null;
+        }
+        public BillingTransaction GetLastBillingTransaction(Guid accountTypeId, string accountId)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetLastBillingTransaction(accountTypeId, accountId);
+        }
         #region Private Classes
 
         private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransactionResultItem, BillingTransactionDetail>

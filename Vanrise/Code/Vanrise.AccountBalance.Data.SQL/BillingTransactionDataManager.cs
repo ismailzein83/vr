@@ -129,7 +129,7 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return Insert(billingTransaction, null, out billingTransactionId);
         }
-
+      
         public bool Insert(BillingTransaction billingTransaction, long? invoiceId, out long billingTransactionId)
         {
             object billingTransactionID;
@@ -187,6 +187,10 @@ namespace Vanrise.AccountBalance.Data.SQL
             return GetItemsSP("[VR_AccountBalance].[sp_BillingTransaction_GetForSynchronizerProcess]", BillingTransactionMapper, transactionTypeIds, accountTypeId);
         }
 
+        public BillingTransaction GetLastBillingTransaction(Guid accountTypeId, string accountId)
+        {
+            return GetItemSP("[VR_AccountBalance].[sp_BillingTransaction_GetLast]", BillingTransactionMapper, accountTypeId, accountId);
+        }
         #endregion
 
         #region Mappers
@@ -226,5 +230,11 @@ namespace Vanrise.AccountBalance.Data.SQL
         };
         }
         #endregion
+
+
+
+
+
+      
     }
 }

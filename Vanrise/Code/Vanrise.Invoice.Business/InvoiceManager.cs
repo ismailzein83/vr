@@ -420,6 +420,14 @@ namespace Vanrise.Invoice.Business
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
             return InvoiceDetailMapper1(invoice, invoiceType);
         }
+        public DateTime? GetLastInvoiceToDate(Guid invoiceTypeId, string partnerId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            var invoice = dataManager.GetLastInvoice(invoiceTypeId, partnerId);
+            if (invoice == null)
+                return null;
+            return invoice.ToDate;
+        }
         public Guid GetInvoiceTypeId(long invoiceId)
         {
             var invoice = GetInvoice(invoiceId);

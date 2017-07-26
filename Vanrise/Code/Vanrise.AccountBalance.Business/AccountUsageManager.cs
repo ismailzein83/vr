@@ -47,5 +47,15 @@ namespace Vanrise.AccountBalance.Business
             IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
             return dataManager.GetOverridenAccountUsagesByDeletedTransactionIds(deletedTransactionIds);
         }
+        public DateTime? GetLastAccountUsageDate(Guid accountTypeId, string accountId)
+        {
+            var lastAccountUsage = GetLastAccountUsage(accountTypeId, accountId);
+            return lastAccountUsage != null ? lastAccountUsage.PeriodEnd : default(DateTime?);
+        }
+        public AccountUsage GetLastAccountUsage(Guid accountTypeId, string accountId)
+        {
+            IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
+            return dataManager.GetLastAccountUsage(accountTypeId, accountId);
+        }
     }
 }
