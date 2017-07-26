@@ -647,6 +647,8 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_TryUpdateEffectiveDate.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetPopulatedPeriod.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryUpdateEffectiveDate.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetLast.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetLast.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
