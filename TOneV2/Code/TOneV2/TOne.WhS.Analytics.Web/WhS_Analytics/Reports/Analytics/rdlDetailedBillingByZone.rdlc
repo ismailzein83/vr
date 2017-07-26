@@ -3032,27 +3032,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(
-	Parameters!IsService.Value = "True" , 
-	IIf(
-		Parameters!IsCommission.Value = "True",
-		IIf(
-			Parameters!IsCost.Value = "True",
-			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value),
-			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
-			),
-		FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
-		),
-	IIf(
-		Parameters!IsCommission.Value = "True",
-		IIf(
-			Parameters!IsCost.Value = "True",
-			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1),Parameters!DigitRate.Value),
-			FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1),Parameters!DigitRate.Value)
-			),
-		FormatNumber(CDbl(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)),Parameters!DigitRate.Value)
-		)
-	)</Value>
+                              <Value>=FormatNumber(Sum(Fields!Net.Value) + Sum(Fields!OffPeakNet.Value) + Sum(Fields!ExtraChargeValue.Value) ,Parameters!DigitRate.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
