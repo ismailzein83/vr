@@ -74,6 +74,8 @@
     <Compile Include="RouteRuleCriteria\RouteRuleCriteriaConfig.cs" />
     <Compile Include="RouteRuleCriteria\RouteRuleCriteria.cs" />
     <Compile Include="Routes\IFinalizeRouteContext.cs" />
+    <Compile Include="Settings\QualityConfiguration.cs" />
+    <Compile Include="Settings\TechnicalQualityConfiguration.cs" />
     <Compile Include="SpecialRequestRouteRule\SpecialRequestRouteOptionSettings.cs" />
     <Compile Include="ProcessRuleConfig.cs" />
     <Compile Include="RouteOptionRuleConfig.cs" />

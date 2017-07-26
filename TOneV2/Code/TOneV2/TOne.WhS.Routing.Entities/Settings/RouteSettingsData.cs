@@ -13,5 +13,12 @@ namespace TOne.WhS.Routing.Entities
         public RouteBuildConfiguration RouteBuildConfiguration { get; set; }
 
         public RouteOptionRuleConfiguration RouteOptionRuleConfiguration { get; set; }
+
+        public QualityConfiguration QualityConfiguration { get; set; }
+
+        public override bool IsValid()
+        {
+            return base.IsValid();
+        }
     }
 }
