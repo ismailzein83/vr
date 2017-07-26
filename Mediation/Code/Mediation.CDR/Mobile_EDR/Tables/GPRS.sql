@@ -49,8 +49,11 @@
     [UniqueIdentifier]           UNIQUEIDENTIFIER NULL,
     [RecordOpeningTimestamp]     BIGINT           NULL,
     [ChangeTimestamp]            BIGINT           NULL,
+    [FileName]                   NVARCHAR (200)   NULL,
     CONSTRAINT [PK_GPRS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

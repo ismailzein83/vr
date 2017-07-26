@@ -120,7 +120,8 @@ namespace Mediation.Runtime.DataParser
                     RecordType = "WHS_CDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
-                    }
+                    },
+                    CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
                 }
 
             });
@@ -135,7 +136,8 @@ namespace Mediation.Runtime.DataParser
                     RecordType = "WHS_CDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
-                    }
+                    },
+                    CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
                 }
             });
 
@@ -150,7 +152,9 @@ namespace Mediation.Runtime.DataParser
                     RecordType = "SMS",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
-                    }
+                    },
+                    CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
+
                 }
             });
 
@@ -165,10 +169,22 @@ namespace Mediation.Runtime.DataParser
                     RecordType = "SMS",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
-                    }
+                    },
+                    CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
                 }
             });
             return parsers;
+        }
+
+        private List<CompositeFieldsParser> GetHuaweiNamibiaCompositeParsers()
+        {
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
+            new FileNameCompositeParser{
+             FieldName = "FileName"
+            }
+            };
+
+            return fieldParsers;
         }
 
         private Dictionary<string, HexTLVFieldParser> Get_A3_FieldParsers_Huawei()
@@ -2213,7 +2229,10 @@ namespace Mediation.Runtime.DataParser
                             DateTimeFieldName = "DisconnectDateTime",
                             DateTimeShift = new DateTime(1970, 01, 01)
                         },
-                        new GuidCompositeParser{FieldName="UniqueIdentifier"}
+                        new GuidCompositeParser{FieldName="UniqueIdentifier"},
+                        new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
                     };
         }
 
@@ -2226,7 +2245,10 @@ namespace Mediation.Runtime.DataParser
                             DateTimeFieldName = "MessageTime",
                             DateTimeShift = new DateTime(1970, 01, 01)
                          },
-                        new GuidCompositeParser{FieldName="UniqueIdentifier"}
+                        new GuidCompositeParser{FieldName="UniqueIdentifier"},
+                        new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
                     };
         }
 
@@ -3143,7 +3165,10 @@ namespace Mediation.Runtime.DataParser
                         new GuidCompositeParser
                     {
                         FieldName = "UniqueIdentifier"
-                    }
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
             };
 
             return fieldParsers;
@@ -3166,7 +3191,10 @@ namespace Mediation.Runtime.DataParser
                         new GuidCompositeParser
                     {
                         FieldName = "UniqueIdentifier"
-                    }
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
             };
 
             return fieldParsers;
@@ -3183,7 +3211,10 @@ namespace Mediation.Runtime.DataParser
                         new GuidCompositeParser
                     {
                         FieldName = "UniqueIdentifier"
-                    }
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
             };
 
             return fieldParsers;
@@ -5886,7 +5917,10 @@ namespace Mediation.Runtime.DataParser
                     },
                     new GuidCompositeParser{
                      FieldName = "UniqueIdentifier"
-                    }
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
                     };
         }
 
@@ -5902,7 +5936,10 @@ namespace Mediation.Runtime.DataParser
                     },
                     new GuidCompositeParser{
                      FieldName = "UniqueIdentifier"
-                    }
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
                     };
         }
         private List<PositionedFieldParser> Get_PositionedFieldParsers_MOT_Call()

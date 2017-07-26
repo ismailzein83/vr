@@ -45,7 +45,10 @@
     [Subs_First_CI]                    INT              NULL,
     [Subs_Last_CI]                     INT              NULL,
     [Subs_First_LAC]                   INT              NULL,
-    [Subs_Last_LAC]                    INT              NULL);
+    [Subs_Last_LAC]                    INT              NULL,
+    [FileName]                         NVARCHAR (200)   NULL);
+
+
 
 
 

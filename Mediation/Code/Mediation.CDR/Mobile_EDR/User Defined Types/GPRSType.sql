@@ -47,7 +47,10 @@
     [ChangeTime]                 DATETIME         NULL,
     [UniqueIdentifier]           UNIQUEIDENTIFIER NULL,
     [RecordOpeningTimestamp]     BIGINT           NULL,
-    [ChangeTimestamp]            BIGINT           NULL);
+    [ChangeTimestamp]            BIGINT           NULL,
+    [FileName]                   NVARCHAR (200)   NULL);
+
+
 
 
 

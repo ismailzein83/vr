@@ -65,7 +65,10 @@
     [DefaultSMSHandling]              INT              NULL,
     [FreeFromatData]                  VARCHAR (50)     NULL,
     [CamelSMSCAddress]                VARCHAR (50)     NULL,
-    [UniqueIdentifier]                UNIQUEIDENTIFIER NULL);
+    [UniqueIdentifier]                UNIQUEIDENTIFIER NULL,
+    [FileName]                        NVARCHAR (200)   NULL);
+
+
 
 
 
