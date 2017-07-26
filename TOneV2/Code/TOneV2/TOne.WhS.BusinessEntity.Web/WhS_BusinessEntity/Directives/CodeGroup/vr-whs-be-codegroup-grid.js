@@ -82,8 +82,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             $scope.gridMenuActions = function (dataItem) {
 
                 var menuItems = [] ;
-             
-                if(dataItem.AllowEdit ==  true)
                     menuItems[menuItems.length] = {
                         name: "Edit",
                         clicked: editCodeGroupe,

@@ -24,6 +24,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_CodeGroup_GetAll", CodeGroupMapper);
         }
+
+        public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
+        {
+            if (ExecuteScalarSP("TOneWhS_BE.sp_checkIfCodeGroupHasRelatedCodes", codeGroupId).Equals(0))
+                return true;
+            else
+                return false;
+        }
         public bool Update(CodeGroupToEdit codeGroup)
         {
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Update", codeGroup.CodeGroupId, codeGroup.CountryId, codeGroup.Code);

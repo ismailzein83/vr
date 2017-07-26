@@ -64,7 +64,12 @@
         function HasUploadCodeGroupListPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UploadCodeGroupList']));
         }
+        function CheckIfCodeGroupHasRelatedCodes(codeGroupId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "CheckIfCodeGroupHasRelatedCodes"), {
+                codeGroupId: codeGroupId
+            });
 
+        }
         return ({
             GetFilteredCodeGroups: GetFilteredCodeGroups,
             GetAllCodeGroups: GetAllCodeGroups,
@@ -78,7 +83,8 @@
             HasAddCodeGroupPermission: HasAddCodeGroupPermission,
             HasDownloadCodeGroupListTemplatePermission: HasDownloadCodeGroupListTemplatePermission,
             HasDownloadCodeGroupLogPermission: HasDownloadCodeGroupLogPermission,
-            HasUploadCodeGroupListPermission: HasUploadCodeGroupListPermission
+            HasUploadCodeGroupListPermission: HasUploadCodeGroupListPermission,
+            CheckIfCodeGroupHasRelatedCodes: CheckIfCodeGroupHasRelatedCodes
         });
     }
 

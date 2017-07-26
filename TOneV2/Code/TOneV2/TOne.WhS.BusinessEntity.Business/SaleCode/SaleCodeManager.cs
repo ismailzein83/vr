@@ -26,13 +26,6 @@ namespace TOne.WhS.BusinessEntity.Business
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetSaleCodesByZoneID(zoneID, effectiveDate);
         }
-        public List<SaleCode> GetSaleCodesByCodeGroups(int codeGroupsId)
-        {
-            List<int> l = new List<int>(){
-                codeGroupsId
-            };
-            return GetSaleCodesByCodeGroups(l);
-        }
         public List<SaleCode> GetSaleCodesByCodeGroups(List<int> codeGroupsIds)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();

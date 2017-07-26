@@ -84,6 +84,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             byte[] bytes = manager.DownloadCodeGroupLog(fileID);
             return GetExcelResponse(bytes, "ImportedCodeGroupResults.xls");  
         }
-       
+
+        [HttpGet]
+        [Route("CheckIfCodeGroupHasRelatedCodes")]
+        public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
+        {
+            CodeGroupManager manager = new CodeGroupManager();
+            return manager.CheckIfCodeGroupHasRelatedCodes(codeGroupId);
+        }
     }
 }

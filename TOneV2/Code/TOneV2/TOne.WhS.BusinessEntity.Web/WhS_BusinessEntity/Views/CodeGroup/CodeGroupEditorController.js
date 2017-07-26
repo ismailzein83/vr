@@ -28,7 +28,8 @@
         }
 
         function defineScope() {
-
+            $scope.hideEditorController = false;
+            $scope.disabledSaveButton = false;
             $scope.hasSaveCodeGroupPermission = function () {
                 if (editMode)
                     return WhS_BE_CodeGroupAPIService.HasUpdateCodeGroupPermission();
@@ -60,21 +61,41 @@
         function load() {
             $scope.isGettingData = true;
             if (editMode) {
-                getCodeGroup().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            codeGroupEntity = undefined;
+                checkIfCodeGroupHasRelatedCodes().then(function () {
+                    if (!$scope.hideEditorController) {
+                        getCodeGroup().then(function () {
+                            loadAllControls()
+                                .finally(function () {
+                                    codeGroupEntity = undefined;
+                                });
+                        }).catch(function () {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
                         });
-                }).catch(function () {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
+                        $scope.disabledSaveButton = false;
+                    }
+                    else {
+                        $scope.isGettingData = false;
+                        $scope.disabledSaveButton = true;
+                        $scope.msgOfConnotEdit = "Cannot edit Code Group because it has related codes";
+                    }
+                })
+               
             }
             else {
                 loadAllControls();
             }
 
         }
+        function checkIfCodeGroupHasRelatedCodes()
+        {
+            return WhS_BE_CodeGroupAPIService.CheckIfCodeGroupHasRelatedCodes(codeGroupId).then(function (hideEditorController) {
+                $scope.hideEditorController = hideEditorController;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
 
+            });
+        }
         function getCodeGroup() {
             return WhS_BE_CodeGroupAPIService.GetCodeGroup(codeGroupId).then(function (codeGroupeObj) {
                 codeGroupEntity = codeGroupeObj;

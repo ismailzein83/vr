@@ -57,7 +57,12 @@ namespace TOne.WhS.BusinessEntity.Business
                    return result;
                });
         }
-
+        public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
+        {
+       
+            ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+            return dataManager.CheckIfCodeGroupHasRelatedCodes(codeGroupId);
+        }
         public Vanrise.Entities.IDataRetrievalResult<CodeGroupDetail> GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
         {
             var allCodeGroups = GetCachedCodeGroups();
@@ -170,6 +175,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public UpdateOperationOutput<CodeGroupDetail> UpdateCodeGroup(CodeGroupToEdit codeGroupToEdit)
         {
+            if (CheckIfCodeGroupHasRelatedCodes(codeGroupToEdit.CodeGroupId))
+            {
+                throw new Vanrise.Entities.VRBusinessException(string.Format("Cannot edit Code Group '{0}' because it has related codes", codeGroupToEdit.Code));
+            }
             ValidateCodeGroupToEdit(codeGroupToEdit);
 
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
@@ -486,10 +495,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             CodeGroupDetail codeGroupDetail = new CodeGroupDetail();
             codeGroupDetail.Entity = codeGroup;
-
-
-            codeGroupDetail.AllowEdit = new SaleCodeManager().GetSaleCodesByCodeGroups(codeGroup.CodeGroupId).Count() == 0;
-
             codeGroupDetail.CountryName = _countryManager.GetCountryName(codeGroup.CountryId);
 
             return codeGroupDetail;
