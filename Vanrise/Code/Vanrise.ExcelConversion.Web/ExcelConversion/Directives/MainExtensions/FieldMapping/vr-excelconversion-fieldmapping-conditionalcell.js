@@ -114,7 +114,6 @@
             function loadSelectorFieldMapping(payload) {
                 if (payload != undefined && payload.fieldMapping != undefined && payload.fieldMapping.RowFieldName != undefined) {
                     VRUIUtilsService.setSelectedValues(payload.fieldMapping.RowFieldName, 'FieldName', $attrs, ctrl);
-                    selectorloadDeferred.resolve();
                 }
             }
 
