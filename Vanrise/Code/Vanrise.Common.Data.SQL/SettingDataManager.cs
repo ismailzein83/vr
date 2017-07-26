@@ -73,11 +73,11 @@ as (select * from (values
 merge	[common].[Setting] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]"
-                + (withUpdate ? 
+                + (withUpdate ?
 @"
 when matched then
 	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]": "") +
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]" : "") +
 @"
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
@@ -92,13 +92,13 @@ when not matched by target then
             var data = reader["Data"] as string;
             return new Setting
             {
-                SettingId = GetReaderValue<Guid>(reader,"ID"),
+                SettingId = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
                 Type = reader["Type"] as string,
                 Category = reader["Category"] as string,
                 Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<SettingConfiguration>(settings) : null,
-                Data = !string.IsNullOrEmpty(data) ? Vanrise.Common.Serializer.Deserialize(data) : null,
-                IsTechnical = GetReaderValue<Boolean>(reader,"IsTechnical")
+                Data = !string.IsNullOrEmpty(data) ? Vanrise.Common.Serializer.Deserialize<SettingData>(data) : null,
+                IsTechnical = GetReaderValue<Boolean>(reader, "IsTechnical")
             };
         }
         #endregion

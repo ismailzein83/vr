@@ -13,7 +13,7 @@ namespace Vanrise.Entities
 
         public SettingConfiguration Settings { get; set; }
 
-        public object Data { get; set; }
+        public SettingData Data { get; set; }
 
         public bool IsTechnical { get; set; }
     }
@@ -25,7 +25,10 @@ namespace Vanrise.Entities
 
     public abstract class SettingData
     {
-
+        public virtual bool IsValid()
+        {
+            return true;
+        }
     }
 
     public class SettingToEdit
@@ -33,7 +36,7 @@ namespace Vanrise.Entities
         public Guid SettingId { get; set; }
 
         public string Name { get; set; }
- 
-        public object Data { get; set; }
+
+        public SettingData Data { get; set; }
     }
 }

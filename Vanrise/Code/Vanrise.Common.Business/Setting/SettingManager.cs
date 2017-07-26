@@ -88,20 +88,29 @@ namespace Vanrise.Common.Business
 
         public UpdateOperationOutput<SettingDetail> UpdateSetting(SettingToEdit settingToEdit)
         {
-            ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
-            bool updateActionSucc = dataManager.UpdateSetting(settingToEdit);
             UpdateOperationOutput<SettingDetail> updateOperationOutput = new UpdateOperationOutput<SettingDetail>();
-
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            if (updateActionSucc)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                Setting updatedSetting = GetSetting(settingToEdit.SettingId);
 
-                VRActionLogger.Current.TrackAndLogObjectUpdated(SettingLoggableEntity.Instance, updatedSetting);
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SettingDetailMapper(updatedSetting);
+            if (settingToEdit.Data.IsValid())
+            {
+                ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
+                bool updateActionSucc = dataManager.UpdateSetting(settingToEdit);
+
+                if (updateActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    Setting updatedSetting = GetSetting(settingToEdit.SettingId);
+
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(SettingLoggableEntity.Instance, updatedSetting);
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = SettingDetailMapper(updatedSetting);
+                }
+            }
+            else
+            {
+                updateOperationOutput.Message = "Validation Errors occured.";
+                updateOperationOutput.ShowExactMessage = true;
             }
             return updateOperationOutput;
         }

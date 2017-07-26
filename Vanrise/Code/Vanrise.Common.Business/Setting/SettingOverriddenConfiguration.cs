@@ -21,7 +21,7 @@ namespace Vanrise.Common.Business
 
         public string OverriddenCategory { get; set; }
 
-        public object OverriddenData { get; set; }
+        public SettingData OverriddenData { get; set; }
 
         public override Type GetBehaviorType(IOverriddenConfigurationGetBehaviorContext context)
         {
