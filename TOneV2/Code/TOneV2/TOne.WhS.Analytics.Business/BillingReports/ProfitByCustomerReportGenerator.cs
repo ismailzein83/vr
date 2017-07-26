@@ -144,13 +144,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (parameters.IsCommission)
                 netProft = netProft - totalSaleExtraChrg - totalCostExtraChrg;
 
-            totalProftPerc = (totalSaleNt - totalCostNt) / totalSaleNt;
+            totalProftPerc = totalProft / totalSaleNt;
             totalCostDuration = ReportHelpers.FormatNormalNumberDigit(totalCostDur);
             totalSaleDuration = ReportHelpers.FormatNormalNumberDigit(totalSaleDur);
             totalSaleNet = ReportHelpers.FormatNormalNumberDigit(totalSaleNt);
             totalCostNet = ReportHelpers.FormatNormalNumberDigit(totalCostNt);
             totalProfit = ReportHelpers.FormatNormalNumberDigit(totalProft);
-            totalProfitPerc = ReportHelpers.FormatNormalNumberDigit(totalProftPerc);
+            totalProfitPerc = ReportHelpers.FormatLongNumberDigit(totalProftPerc);
             totalAvgMinutes = ReportHelpers.FormatLongNumberDigit(totalAvgMin);
             totalCostExtraCharge = ReportHelpers.FormatLongNumberDigit(totalCostExtraChrg);
             totalSaleExtraCharge = ReportHelpers.FormatLongNumberDigit(totalSaleExtraChrg);
